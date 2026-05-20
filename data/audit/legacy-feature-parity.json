@@ -1,0 +1,59 @@
+{
+  "reportKind": "legacy_feature_parity",
+  "generatedAt": "2026-04-14T23:59:00.000Z",
+  "methodology": "Cross-reference to existing inventories and docs; not a live diff against an external legacy export unless mounted.",
+  "sources": [
+    "docs/legacy-restoration-map.md",
+    "data/audit/full-system-gap-analysis.json",
+    "data/audit/legacy-vs-current-gap-analysis.json",
+    "data/audit/legacy-activities-inventory.json",
+    "data/audit/legacy-games-interactives-inventory.json",
+    "data/audit/legacy-tools-calculators-inventory.json",
+    "data/audit/legacy-dashboard-progress-inventory.json",
+    "data/audit/migration-opportunities-by-category.json"
+  ],
+  "requestedAdminAutomationRestores": [
+    {
+      "id": "fake_student_accounts",
+      "legacyIntent": "QA/demo accounts with simulated progress",
+      "currentCodebaseSignal": "No dedicated fake-student admin module found in quick scan; would require new admin-only APIs + seed scripts + audit trail.",
+      "risk": "high_if_misconfigured_account_creation_or_leaks_into_prod",
+      "status": "not_implemented_this_pass"
+    },
+    {
+      "id": "screenshot_generator",
+      "legacyIntent": "Automated marketing/platform screenshots",
+      "currentCodebaseSignal": "Marketing uses screenshot-registry.ts (CDN assets); not a headless capture pipeline.",
+      "status": "not_implemented_this_pass"
+    },
+    {
+      "id": "bulk_content_actions",
+      "legacyIntent": "Batch publish/import/edit",
+      "currentCodebaseSignal": "Partial: admin routes exist (content, blog import, generation, inventory); parity vs legacy needs feature matrix review.",
+      "status": "partial_existing_surface"
+    },
+    {
+      "id": "system_health_dashboard",
+      "legacyIntent": "Completeness + routes + paywall status",
+      "currentCodebaseSignal": "admin/system-status, admin/content-coverage, admin/content-quality, admin/diagnostics exist; unify metrics TBD.",
+      "status": "partial_existing_surface"
+    }
+  ],
+  "featureAreas": {
+    "activities": { "inventoryRef": "legacy-activities-inventory.json", "parity": "unknown_until_mapped" },
+    "interactiveTools": { "inventoryRef": "legacy-games-interactives-inventory.json", "parity": "unknown_until_mapped" },
+    "learningWorkflows": { "note": "See legacy-restoration-map.md feature matrix" },
+    "automationScripts": { "paths": ["scripts/", "nursenest-core/scripts/", "data/audit/_generate-full-audit-artifacts.mjs"] },
+    "reporting": { "inventoryRef": "legacy-dashboard-progress-inventory.json" }
+  },
+  "missingOrPartialVsLegacy": [
+    "External full-site tree may be unavailable for exact parity (legacy-vs-current-gap-analysis.json).",
+    "Admin automation items above are either absent or partial; require product/security sign-off before implementation.",
+    "Lesson/quiz volume and strict section completeness remain below 100% per final-system-status.json snapshots."
+  ],
+  "safeRestorationPrinciples": [
+    "Additive only; admin-protected; no paywall bypass.",
+    "Batch imports with checkpoints; no monolithic dumps.",
+    "Reuse legacy code paths where documented in legacy-restoration-map.md."
+  ]
+}

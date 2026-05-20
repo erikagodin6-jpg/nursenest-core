@@ -1,0 +1,3207 @@
+{
+  "generatedAt": "2026-05-14T19:10:35.503Z",
+  "rankingCriteria": {
+    "seoOpportunity": "Search demand and ranking upside for exam-specific commercial/informational keywords.",
+    "conversionValue": "Likelihood the page can move a visitor toward questions, CAT, flashcards, lessons, checkout, or email capture.",
+    "existingContentAvailability": "How much substantive product, lesson, question, or cluster content already exists.",
+    "internalLinkPotential": "How naturally the page can receive and send pathway-aware internal links.",
+    "implementationEffort": "1 is easiest, 10 is hardest; total score rewards lower effort."
+  },
+  "counts": {
+    "plannedRows": 58,
+    "phase1": 12,
+    "phase2": 5,
+    "phase3": 41
+  },
+  "roadmap": [
+    {
+      "rank": 1,
+      "phase": "Phase 1",
+      "id": "us-rn-nclex-rn-test-bank",
+      "family": "nclex-rn",
+      "kind": "ecosystem",
+      "targetRoute": "/us/rn/nclex-rn/test-bank",
+      "plannedAliasPath": "/nclex-rn/test-bank",
+      "primaryKeyword": "NCLEX-RN test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/us/rn/nclex-rn/questions",
+      "internalLinksIn": [
+        "/us/rn/nclex-rn",
+        "/nclex-question-bank",
+        "/free-nclex-practice-questions"
+      ],
+      "internalLinksOut": [
+        "/us/rn/nclex-rn",
+        "/us/rn/nclex-rn/questions",
+        "/us/rn/nclex-rn/lessons",
+        "/us/rn/nclex-rn/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 9,
+        "internalLinkPotential": 9,
+        "implementationEffort": 4,
+        "total": 45
+      }
+    },
+    {
+      "rank": 2,
+      "phase": "Phase 1",
+      "id": "ca-rpn-rex-pn-test-bank",
+      "family": "rex-pn",
+      "kind": "ecosystem",
+      "targetRoute": "/canada/rpn/rex-pn/test-bank",
+      "plannedAliasPath": "/rex-pn/test-bank",
+      "primaryKeyword": "REx-PN test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/canada/rpn/rex-pn/questions",
+      "internalLinksIn": [
+        "/canada/rpn/rex-pn",
+        "/canada/rpn/rex-pn/questions"
+      ],
+      "internalLinksOut": [
+        "/canada/rpn/rex-pn",
+        "/canada/rpn/rex-pn/questions",
+        "/canada/rpn/rex-pn/lessons",
+        "/canada/rpn/rex-pn/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 8,
+        "internalLinkPotential": 9,
+        "implementationEffort": 4,
+        "total": 44
+      }
+    },
+    {
+      "rank": 3,
+      "phase": "Phase 1",
+      "id": "ca-np-cnple-test-bank",
+      "family": "cnple",
+      "kind": "ecosystem",
+      "targetRoute": "/canada/np/cnple/test-bank",
+      "plannedAliasPath": "/cnple/test-bank",
+      "primaryKeyword": "CNPLE test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/canada/np/cnple/questions",
+      "internalLinksIn": [
+        "/canada/np/cnple",
+        "/canada/np/cnple/questions"
+      ],
+      "internalLinksOut": [
+        "/canada/np/cnple",
+        "/canada/np/cnple/questions",
+        "/canada/np/cnple/lessons",
+        "/canada/np/cnple/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 8,
+        "internalLinkPotential": 9,
+        "implementationEffort": 4,
+        "total": 44
+      }
+    },
+    {
+      "rank": 4,
+      "phase": "Phase 1",
+      "id": "us-np-fnp-test-bank",
+      "family": "np",
+      "kind": "ecosystem",
+      "targetRoute": "/us/np/fnp/test-bank",
+      "plannedAliasPath": "/np/test-bank",
+      "primaryKeyword": "NP test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/us/np/fnp/questions",
+      "internalLinksIn": [
+        "/us/np/fnp",
+        "/us/np/agpcnp",
+        "/us/np/pmhnp"
+      ],
+      "internalLinksOut": [
+        "/us/np/fnp",
+        "/us/np/fnp/questions",
+        "/us/np/fnp/lessons",
+        "/us/np/fnp/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 4,
+        "total": 42
+      }
+    },
+    {
+      "rank": 5,
+      "phase": "Phase 1",
+      "id": "us-np-agpcnp-test-bank",
+      "family": "np",
+      "kind": "ecosystem",
+      "targetRoute": "/us/np/agpcnp/test-bank",
+      "plannedAliasPath": "/np/test-bank",
+      "primaryKeyword": "NP test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/us/np/agpcnp/questions",
+      "internalLinksIn": [
+        "/us/np/agpcnp",
+        "/us/np/fnp",
+        "/us/np/pmhnp"
+      ],
+      "internalLinksOut": [
+        "/us/np/agpcnp",
+        "/us/np/agpcnp/questions",
+        "/us/np/agpcnp/lessons",
+        "/us/np/agpcnp/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 4,
+        "total": 42
+      }
+    },
+    {
+      "rank": 6,
+      "phase": "Phase 1",
+      "id": "us-np-pmhnp-test-bank",
+      "family": "np",
+      "kind": "ecosystem",
+      "targetRoute": "/us/np/pmhnp/test-bank",
+      "plannedAliasPath": "/np/test-bank",
+      "primaryKeyword": "NP test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/us/np/pmhnp/questions",
+      "internalLinksIn": [
+        "/us/np/pmhnp",
+        "/us/np/fnp",
+        "/us/np/agpcnp"
+      ],
+      "internalLinksOut": [
+        "/us/np/pmhnp",
+        "/us/np/pmhnp/questions",
+        "/us/np/pmhnp/lessons",
+        "/us/np/pmhnp/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 4,
+        "total": 42
+      }
+    },
+    {
+      "rank": 7,
+      "phase": "Phase 1",
+      "id": "us-rn-nclex-rn-study-guide",
+      "family": "nclex-rn",
+      "kind": "ecosystem",
+      "targetRoute": "/us/rn/nclex-rn/study-guide",
+      "plannedAliasPath": "/nclex-rn/study-guide",
+      "primaryKeyword": "NCLEX-RN study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/us/rn/nclex-rn/lessons",
+      "internalLinksIn": [
+        "/us/rn/nclex-rn",
+        "/nclex-question-bank",
+        "/free-nclex-practice-questions"
+      ],
+      "internalLinksOut": [
+        "/us/rn/nclex-rn",
+        "/us/rn/nclex-rn/questions",
+        "/us/rn/nclex-rn/lessons",
+        "/us/rn/nclex-rn/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 7,
+        "existingContentAvailability": 9,
+        "internalLinkPotential": 9,
+        "implementationEffort": 5,
+        "total": 41
+      }
+    },
+    {
+      "rank": 8,
+      "phase": "Phase 1",
+      "id": "ca-rpn-rex-pn-study-guide",
+      "family": "rex-pn",
+      "kind": "ecosystem",
+      "targetRoute": "/canada/rpn/rex-pn/study-guide",
+      "plannedAliasPath": "/rex-pn/study-guide",
+      "primaryKeyword": "REx-PN study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/canada/rpn/rex-pn/lessons",
+      "internalLinksIn": [
+        "/canada/rpn/rex-pn",
+        "/canada/rpn/rex-pn/questions"
+      ],
+      "internalLinksOut": [
+        "/canada/rpn/rex-pn",
+        "/canada/rpn/rex-pn/questions",
+        "/canada/rpn/rex-pn/lessons",
+        "/canada/rpn/rex-pn/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 7,
+        "existingContentAvailability": 8,
+        "internalLinkPotential": 9,
+        "implementationEffort": 5,
+        "total": 40
+      }
+    },
+    {
+      "rank": 9,
+      "phase": "Phase 1",
+      "id": "ca-np-cnple-study-guide",
+      "family": "cnple",
+      "kind": "ecosystem",
+      "targetRoute": "/canada/np/cnple/study-guide",
+      "plannedAliasPath": "/cnple/study-guide",
+      "primaryKeyword": "CNPLE study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/canada/np/cnple/lessons",
+      "internalLinksIn": [
+        "/canada/np/cnple",
+        "/canada/np/cnple/questions"
+      ],
+      "internalLinksOut": [
+        "/canada/np/cnple",
+        "/canada/np/cnple/questions",
+        "/canada/np/cnple/lessons",
+        "/canada/np/cnple/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 7,
+        "existingContentAvailability": 8,
+        "internalLinkPotential": 9,
+        "implementationEffort": 5,
+        "total": 40
+      }
+    },
+    {
+      "rank": 10,
+      "phase": "Phase 1",
+      "id": "us-np-fnp-study-guide",
+      "family": "np",
+      "kind": "ecosystem",
+      "targetRoute": "/us/np/fnp/study-guide",
+      "plannedAliasPath": "/np/study-guide",
+      "primaryKeyword": "NP study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/us/np/fnp/lessons",
+      "internalLinksIn": [
+        "/us/np/fnp",
+        "/us/np/agpcnp",
+        "/us/np/pmhnp"
+      ],
+      "internalLinksOut": [
+        "/us/np/fnp",
+        "/us/np/fnp/questions",
+        "/us/np/fnp/lessons",
+        "/us/np/fnp/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 7,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 5,
+        "total": 37
+      }
+    },
+    {
+      "rank": 11,
+      "phase": "Phase 1",
+      "id": "us-np-agpcnp-study-guide",
+      "family": "np",
+      "kind": "ecosystem",
+      "targetRoute": "/us/np/agpcnp/study-guide",
+      "plannedAliasPath": "/np/study-guide",
+      "primaryKeyword": "NP study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/us/np/agpcnp/lessons",
+      "internalLinksIn": [
+        "/us/np/agpcnp",
+        "/us/np/fnp",
+        "/us/np/pmhnp"
+      ],
+      "internalLinksOut": [
+        "/us/np/agpcnp",
+        "/us/np/agpcnp/questions",
+        "/us/np/agpcnp/lessons",
+        "/us/np/agpcnp/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 7,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 5,
+        "total": 37
+      }
+    },
+    {
+      "rank": 12,
+      "phase": "Phase 1",
+      "id": "us-np-pmhnp-study-guide",
+      "family": "np",
+      "kind": "ecosystem",
+      "targetRoute": "/us/np/pmhnp/study-guide",
+      "plannedAliasPath": "/np/study-guide",
+      "primaryKeyword": "NP study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/us/np/pmhnp/lessons",
+      "internalLinksIn": [
+        "/us/np/pmhnp",
+        "/us/np/fnp",
+        "/us/np/agpcnp"
+      ],
+      "internalLinksOut": [
+        "/us/np/pmhnp",
+        "/us/np/pmhnp/questions",
+        "/us/np/pmhnp/lessons",
+        "/us/np/pmhnp/cat"
+      ],
+      "indexableImmediately": true,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 7,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 5,
+        "total": 37
+      }
+    },
+    {
+      "rank": 13,
+      "phase": "Phase 2",
+      "id": "insulin-nursing-questions",
+      "family": "nclex-rn",
+      "kind": "topic-cluster",
+      "targetRoute": "/seo-cluster/insulin-nursing-questions",
+      "primaryKeyword": "insulin nursing questions",
+      "secondaryKeywords": [
+        "diabetes nursing questions",
+        "insulin NCLEX questions"
+      ],
+      "sourceContentNeeded": [
+        "high-performing lessons or clinical topic outlines",
+        "5-10 sample question/rationale previews",
+        "linked pathway/product CTAs",
+        "medical review notes for terminology accuracy"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList"
+      ],
+      "ctaTarget": "/us/rn/nclex-rn/questions",
+      "internalLinksIn": [
+        "/us/rn/nclex-rn",
+        "/nclex-question-bank",
+        "/free-nclex-practice-questions"
+      ],
+      "internalLinksOut": [
+        "/us/rn/nclex-rn",
+        "/us/rn/nclex-rn/questions",
+        "/us/rn/nclex-rn/lessons",
+        "/us/rn/nclex-rn/cat"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build only with substantive content and QA; do not index a placeholder.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 7,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 6,
+        "total": 37
+      }
+    },
+    {
+      "rank": 14,
+      "phase": "Phase 3",
+      "id": "allied-mlt-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/mlt/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/mlt/questions",
+      "internalLinksIn": [
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/mlt",
+        "/allied/mlt/questions",
+        "/allied/mlt/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 7,
+        "total": 37
+      }
+    },
+    {
+      "rank": 15,
+      "phase": "Phase 3",
+      "id": "allied-paramedic-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/paramedic/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/paramedic/questions",
+      "internalLinksIn": [
+        "/allied/paramedic",
+        "/allied/mlt",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/paramedic",
+        "/allied/paramedic/questions",
+        "/allied/paramedic/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 7,
+        "total": 37
+      }
+    },
+    {
+      "rank": 16,
+      "phase": "Phase 3",
+      "id": "allied-respiratory-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/respiratory/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/respiratory/questions",
+      "internalLinksIn": [
+        "/allied/respiratory",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/respiratory",
+        "/allied/respiratory/questions",
+        "/allied/respiratory/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 7,
+        "total": 37
+      }
+    },
+    {
+      "rank": 17,
+      "phase": "Phase 3",
+      "id": "allied-mlt-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/mlt/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/mlt/questions",
+      "internalLinksIn": [
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/mlt",
+        "/allied/mlt/questions",
+        "/allied/mlt/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 36
+      }
+    },
+    {
+      "rank": 18,
+      "phase": "Phase 3",
+      "id": "allied-paramedic-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/paramedic/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/paramedic/questions",
+      "internalLinksIn": [
+        "/allied/paramedic",
+        "/allied/mlt",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/paramedic",
+        "/allied/paramedic/questions",
+        "/allied/paramedic/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 36
+      }
+    },
+    {
+      "rank": 19,
+      "phase": "Phase 3",
+      "id": "allied-respiratory-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/respiratory/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/respiratory/questions",
+      "internalLinksIn": [
+        "/allied/respiratory",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/respiratory",
+        "/allied/respiratory/questions",
+        "/allied/respiratory/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 36
+      }
+    },
+    {
+      "rank": 20,
+      "phase": "Phase 2",
+      "id": "copd-respiratory-questions",
+      "family": "nclex-rn",
+      "kind": "topic-cluster",
+      "targetRoute": "/seo-cluster/copd-respiratory-questions",
+      "primaryKeyword": "COPD nursing questions",
+      "secondaryKeywords": [
+        "respiratory therapy ABG questions",
+        "oxygen therapy questions"
+      ],
+      "sourceContentNeeded": [
+        "high-performing lessons or clinical topic outlines",
+        "5-10 sample question/rationale previews",
+        "linked pathway/product CTAs",
+        "medical review notes for terminology accuracy"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList"
+      ],
+      "ctaTarget": "/us/rn/nclex-rn/questions",
+      "internalLinksIn": [
+        "/us/rn/nclex-rn",
+        "/nclex-question-bank",
+        "/free-nclex-practice-questions"
+      ],
+      "internalLinksOut": [
+        "/us/rn/nclex-rn",
+        "/us/rn/nclex-rn/questions",
+        "/us/rn/nclex-rn/lessons",
+        "/us/rn/nclex-rn/cat"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build only with substantive content and QA; do not index a placeholder.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 6,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 6,
+        "total": 36
+      }
+    },
+    {
+      "rank": 21,
+      "phase": "Phase 2",
+      "id": "dosage-calculations",
+      "family": "nclex-rn",
+      "kind": "topic-cluster",
+      "targetRoute": "/seo-cluster/dosage-calculations",
+      "primaryKeyword": "dosage calculations",
+      "secondaryKeywords": [
+        "med math nursing questions",
+        "dosage calculation practice test"
+      ],
+      "sourceContentNeeded": [
+        "high-performing lessons or clinical topic outlines",
+        "5-10 sample question/rationale previews",
+        "linked pathway/product CTAs",
+        "medical review notes for terminology accuracy"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList"
+      ],
+      "ctaTarget": "/us/rn/nclex-rn/questions",
+      "internalLinksIn": [
+        "/us/rn/nclex-rn",
+        "/nclex-question-bank",
+        "/free-nclex-practice-questions"
+      ],
+      "internalLinksOut": [
+        "/us/rn/nclex-rn",
+        "/us/rn/nclex-rn/questions",
+        "/us/rn/nclex-rn/lessons",
+        "/us/rn/nclex-rn/cat",
+        "/tools/dosage-calculator"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build only with substantive content and QA; do not index a placeholder.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 6,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 6,
+        "total": 36
+      }
+    },
+    {
+      "rank": 22,
+      "phase": "Phase 2",
+      "id": "np-case-studies-diagnostics",
+      "family": "cnple",
+      "kind": "topic-cluster",
+      "targetRoute": "/seo-cluster/np-case-studies-diagnostics",
+      "primaryKeyword": "hypertension case studies NP",
+      "secondaryKeywords": [
+        "SOAP note examples",
+        "diagnostic interpretation NP",
+        "prescribing safety"
+      ],
+      "sourceContentNeeded": [
+        "high-performing lessons or clinical topic outlines",
+        "5-10 sample question/rationale previews",
+        "linked pathway/product CTAs",
+        "medical review notes for terminology accuracy"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList"
+      ],
+      "ctaTarget": "/canada/np/cnple/questions",
+      "internalLinksIn": [
+        "/canada/np/cnple",
+        "/canada/np/cnple/questions"
+      ],
+      "internalLinksOut": [
+        "/canada/np/cnple",
+        "/canada/np/cnple/questions",
+        "/canada/np/cnple/lessons",
+        "/canada/np/cnple/cat"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build only with substantive content and QA; do not index a placeholder.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 6,
+        "existingContentAvailability": 7,
+        "internalLinkPotential": 8,
+        "implementationEffort": 6,
+        "total": 36
+      }
+    },
+    {
+      "rank": 23,
+      "phase": "Phase 2",
+      "id": "prioritization-delegation-sata",
+      "family": "nclex-rn",
+      "kind": "topic-cluster",
+      "targetRoute": "/seo-cluster/prioritization-delegation-sata",
+      "primaryKeyword": "prioritization nursing questions",
+      "secondaryKeywords": [
+        "delegation NCLEX questions",
+        "SATA nursing questions"
+      ],
+      "sourceContentNeeded": [
+        "high-performing lessons or clinical topic outlines",
+        "5-10 sample question/rationale previews",
+        "linked pathway/product CTAs",
+        "medical review notes for terminology accuracy"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList"
+      ],
+      "ctaTarget": "/us/rn/nclex-rn/questions",
+      "internalLinksIn": [
+        "/us/rn/nclex-rn",
+        "/nclex-question-bank",
+        "/free-nclex-practice-questions"
+      ],
+      "internalLinksOut": [
+        "/us/rn/nclex-rn",
+        "/us/rn/nclex-rn/questions",
+        "/us/rn/nclex-rn/lessons",
+        "/us/rn/nclex-rn/cat"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build only with substantive content and QA; do not index a placeholder.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 7,
+        "existingContentAvailability": 5,
+        "internalLinkPotential": 8,
+        "implementationEffort": 6,
+        "total": 35
+      }
+    },
+    {
+      "rank": 24,
+      "phase": "Phase 3",
+      "id": "allied-mlt-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/mlt/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/mlt/lessons",
+      "internalLinksIn": [
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/mlt",
+        "/allied/mlt/questions",
+        "/allied/mlt/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 33
+      }
+    },
+    {
+      "rank": 25,
+      "phase": "Phase 3",
+      "id": "allied-paramedic-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/paramedic/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/paramedic/lessons",
+      "internalLinksIn": [
+        "/allied/paramedic",
+        "/allied/mlt",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/paramedic",
+        "/allied/paramedic/questions",
+        "/allied/paramedic/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 33
+      }
+    },
+    {
+      "rank": 26,
+      "phase": "Phase 3",
+      "id": "allied-respiratory-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/respiratory/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/respiratory/lessons",
+      "internalLinksIn": [
+        "/allied/respiratory",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/respiratory",
+        "/allied/respiratory/questions",
+        "/allied/respiratory/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 33
+      }
+    },
+    {
+      "rank": 27,
+      "phase": "Phase 3",
+      "id": "allied-social-work-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/social-work/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/social-work/questions",
+      "internalLinksIn": [
+        "/allied/social-work",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/social-work",
+        "/allied/social-work/questions",
+        "/allied/social-work/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 7,
+        "total": 33
+      }
+    },
+    {
+      "rank": 28,
+      "phase": "Phase 3",
+      "id": "allied-occupational-therapy-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/occupational-therapy/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/occupational-therapy/questions",
+      "internalLinksIn": [
+        "/allied/occupational-therapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/occupational-therapy",
+        "/allied/occupational-therapy/questions",
+        "/allied/occupational-therapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 7,
+        "total": 33
+      }
+    },
+    {
+      "rank": 29,
+      "phase": "Phase 3",
+      "id": "allied-physiotherapy-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/physiotherapy/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/physiotherapy/questions",
+      "internalLinksIn": [
+        "/allied/physiotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/physiotherapy",
+        "/allied/physiotherapy/questions",
+        "/allied/physiotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 7,
+        "total": 33
+      }
+    },
+    {
+      "rank": 30,
+      "phase": "Phase 3",
+      "id": "allied-psychotherapy-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psychotherapy/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psychotherapy/questions",
+      "internalLinksIn": [
+        "/allied/psychotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/psychotherapy",
+        "/allied/psychotherapy/questions",
+        "/allied/psychotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 7,
+        "total": 33
+      }
+    },
+    {
+      "rank": 31,
+      "phase": "Phase 3",
+      "id": "allied-psw-hca-test-bank",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psw-hca/test-bank",
+      "plannedAliasPath": "/allied/test-bank",
+      "primaryKeyword": "test bank",
+      "secondaryKeywords": [
+        "question bank",
+        "qbank",
+        "practice questions with rationales",
+        "adaptive testing",
+        "performance analytics"
+      ],
+      "sourceContentNeeded": [
+        "published question counts",
+        "CAT/readiness explanation",
+        "SATA/clinical judgment coverage",
+        "analytics/remediation copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psw-hca/questions",
+      "internalLinksIn": [
+        "/allied/psw-hca",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy"
+      ],
+      "internalLinksOut": [
+        "/allied/psw-hca",
+        "/allied/psw-hca/questions",
+        "/allied/psw-hca/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 10,
+        "conversionValue": 10,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 7,
+        "total": 33
+      }
+    },
+    {
+      "rank": 32,
+      "phase": "Phase 3",
+      "id": "allied-social-work-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/social-work/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/social-work/questions",
+      "internalLinksIn": [
+        "/allied/social-work",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/social-work",
+        "/allied/social-work/questions",
+        "/allied/social-work/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 32
+      }
+    },
+    {
+      "rank": 33,
+      "phase": "Phase 3",
+      "id": "allied-occupational-therapy-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/occupational-therapy/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/occupational-therapy/questions",
+      "internalLinksIn": [
+        "/allied/occupational-therapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/occupational-therapy",
+        "/allied/occupational-therapy/questions",
+        "/allied/occupational-therapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 32
+      }
+    },
+    {
+      "rank": 34,
+      "phase": "Phase 3",
+      "id": "allied-physiotherapy-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/physiotherapy/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/physiotherapy/questions",
+      "internalLinksIn": [
+        "/allied/physiotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/physiotherapy",
+        "/allied/physiotherapy/questions",
+        "/allied/physiotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 32
+      }
+    },
+    {
+      "rank": 35,
+      "phase": "Phase 3",
+      "id": "allied-psychotherapy-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psychotherapy/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psychotherapy/questions",
+      "internalLinksIn": [
+        "/allied/psychotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/psychotherapy",
+        "/allied/psychotherapy/questions",
+        "/allied/psychotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 32
+      }
+    },
+    {
+      "rank": 36,
+      "phase": "Phase 3",
+      "id": "allied-psw-hca-practice-questions",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psw-hca/questions",
+      "plannedAliasPath": "/allied/practice-questions",
+      "primaryKeyword": "practice questions",
+      "secondaryKeywords": [
+        "exam questions with rationales",
+        "free practice questions",
+        "rationales",
+        "case-based questions",
+        "weak-area remediation"
+      ],
+      "sourceContentNeeded": [
+        "5-15 free question previews",
+        "rationales",
+        "upgrade gate copy",
+        "email capture/remediation preview"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psw-hca/questions",
+      "internalLinksIn": [
+        "/allied/psw-hca",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy"
+      ],
+      "internalLinksOut": [
+        "/allied/psw-hca",
+        "/allied/psw-hca/questions",
+        "/allied/psw-hca/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 9,
+        "conversionValue": 9,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 32
+      }
+    },
+    {
+      "rank": 37,
+      "phase": "Phase 3",
+      "id": "allied-competency-clusters",
+      "family": "allied",
+      "kind": "topic-cluster",
+      "targetRoute": "/seo-cluster/allied-competency-clusters",
+      "primaryKeyword": "paramedic test bank",
+      "secondaryKeywords": [
+        "MLT hematology questions",
+        "OT case studies",
+        "psychotherapy ethics scenarios"
+      ],
+      "sourceContentNeeded": [
+        "high-performing lessons or clinical topic outlines",
+        "5-10 sample question/rationale previews",
+        "linked pathway/product CTAs",
+        "medical review notes for terminology accuracy"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList"
+      ],
+      "ctaTarget": "/allied/allied-health/questions",
+      "internalLinksIn": [
+        "/allied/psw-hca",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy"
+      ],
+      "internalLinksOut": [
+        "/allied/psw-hca",
+        "/allied/psw-hca/questions",
+        "/allied/psw-hca/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build only with substantive content and QA; do not index a placeholder.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 6,
+        "existingContentAvailability": 5,
+        "internalLinkPotential": 8,
+        "implementationEffort": 6,
+        "total": 32
+      }
+    },
+    {
+      "rank": 38,
+      "phase": "Phase 3",
+      "id": "allied-mlt-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/mlt/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/mlt/cat",
+      "internalLinksIn": [
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/mlt",
+        "/allied/mlt/questions",
+        "/allied/mlt/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 8,
+        "total": 31
+      }
+    },
+    {
+      "rank": 39,
+      "phase": "Phase 3",
+      "id": "allied-paramedic-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/paramedic/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/paramedic/cat",
+      "internalLinksIn": [
+        "/allied/paramedic",
+        "/allied/mlt",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/paramedic",
+        "/allied/paramedic/questions",
+        "/allied/paramedic/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 8,
+        "total": 31
+      }
+    },
+    {
+      "rank": 40,
+      "phase": "Phase 3",
+      "id": "allied-respiratory-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/respiratory/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/respiratory/cat",
+      "internalLinksIn": [
+        "/allied/respiratory",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/respiratory",
+        "/allied/respiratory/questions",
+        "/allied/respiratory/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 8,
+        "total": 31
+      }
+    },
+    {
+      "rank": 41,
+      "phase": "Phase 3",
+      "id": "allied-mlt-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/mlt/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/mlt/flashcards",
+      "internalLinksIn": [
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/mlt",
+        "/allied/mlt/questions",
+        "/allied/mlt/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 42,
+      "phase": "Phase 3",
+      "id": "allied-paramedic-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/paramedic/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/paramedic/flashcards",
+      "internalLinksIn": [
+        "/allied/paramedic",
+        "/allied/mlt",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/paramedic",
+        "/allied/paramedic/questions",
+        "/allied/paramedic/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 43,
+      "phase": "Phase 3",
+      "id": "allied-respiratory-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/respiratory/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/respiratory/flashcards",
+      "internalLinksIn": [
+        "/allied/respiratory",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/respiratory",
+        "/allied/respiratory/questions",
+        "/allied/respiratory/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 6,
+        "internalLinkPotential": 7,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 44,
+      "phase": "Phase 3",
+      "id": "allied-social-work-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/social-work/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/social-work/lessons",
+      "internalLinksIn": [
+        "/allied/social-work",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/social-work",
+        "/allied/social-work/questions",
+        "/allied/social-work/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 45,
+      "phase": "Phase 3",
+      "id": "allied-occupational-therapy-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/occupational-therapy/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/occupational-therapy/lessons",
+      "internalLinksIn": [
+        "/allied/occupational-therapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/occupational-therapy",
+        "/allied/occupational-therapy/questions",
+        "/allied/occupational-therapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 46,
+      "phase": "Phase 3",
+      "id": "allied-physiotherapy-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/physiotherapy/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/physiotherapy/lessons",
+      "internalLinksIn": [
+        "/allied/physiotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/physiotherapy",
+        "/allied/physiotherapy/questions",
+        "/allied/physiotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 47,
+      "phase": "Phase 3",
+      "id": "allied-psychotherapy-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psychotherapy/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/psychotherapy/lessons",
+      "internalLinksIn": [
+        "/allied/psychotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/psychotherapy",
+        "/allied/psychotherapy/questions",
+        "/allied/psychotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 48,
+      "phase": "Phase 3",
+      "id": "allied-psw-hca-study-guide",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psw-hca/study-guide",
+      "plannedAliasPath": "/allied/study-guide",
+      "primaryKeyword": "study guide",
+      "secondaryKeywords": [
+        "exam study plan",
+        "exam prep guide",
+        "study plan",
+        "high-yield topics",
+        "clinical judgment"
+      ],
+      "sourceContentNeeded": [
+        "exam format overview",
+        "study schedule",
+        "high-yield content map",
+        "links to lessons/questions/flashcards"
+      ],
+      "schemaType": [
+        "Article",
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList"
+      ],
+      "ctaTarget": "/allied/psw-hca/lessons",
+      "internalLinksIn": [
+        "/allied/psw-hca",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy"
+      ],
+      "internalLinksOut": [
+        "/allied/psw-hca",
+        "/allied/psw-hca/questions",
+        "/allied/psw-hca/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 8,
+        "conversionValue": 7,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 29
+      }
+    },
+    {
+      "rank": 49,
+      "phase": "Phase 3",
+      "id": "allied-social-work-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/social-work/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/social-work/cat",
+      "internalLinksIn": [
+        "/allied/social-work",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/social-work",
+        "/allied/social-work/questions",
+        "/allied/social-work/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 8,
+        "total": 27
+      }
+    },
+    {
+      "rank": 50,
+      "phase": "Phase 3",
+      "id": "allied-occupational-therapy-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/occupational-therapy/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/occupational-therapy/cat",
+      "internalLinksIn": [
+        "/allied/occupational-therapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/occupational-therapy",
+        "/allied/occupational-therapy/questions",
+        "/allied/occupational-therapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 8,
+        "total": 27
+      }
+    },
+    {
+      "rank": 51,
+      "phase": "Phase 3",
+      "id": "allied-physiotherapy-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/physiotherapy/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/physiotherapy/cat",
+      "internalLinksIn": [
+        "/allied/physiotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/physiotherapy",
+        "/allied/physiotherapy/questions",
+        "/allied/physiotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 8,
+        "total": 27
+      }
+    },
+    {
+      "rank": 52,
+      "phase": "Phase 3",
+      "id": "allied-psychotherapy-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psychotherapy/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psychotherapy/cat",
+      "internalLinksIn": [
+        "/allied/psychotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/psychotherapy",
+        "/allied/psychotherapy/questions",
+        "/allied/psychotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 8,
+        "total": 27
+      }
+    },
+    {
+      "rank": 53,
+      "phase": "Phase 3",
+      "id": "allied-psw-hca-cat-exam",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psw-hca/cat",
+      "plannedAliasPath": "/allied/cat-exams",
+      "primaryKeyword": "CAT exam",
+      "secondaryKeywords": [
+        "adaptive exam",
+        "computer adaptive testing",
+        "CAT simulator",
+        "readiness score",
+        "exam pacing"
+      ],
+      "sourceContentNeeded": [
+        "CAT eligibility rules",
+        "adaptive testing explanation",
+        "readiness screenshots/copy",
+        "fallback links to questions and lessons"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psw-hca/cat",
+      "internalLinksIn": [
+        "/allied/psw-hca",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy"
+      ],
+      "internalLinksOut": [
+        "/allied/psw-hca",
+        "/allied/psw-hca/questions",
+        "/allied/psw-hca/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 7,
+        "conversionValue": 8,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 8,
+        "total": 27
+      }
+    },
+    {
+      "rank": 54,
+      "phase": "Phase 3",
+      "id": "allied-social-work-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/social-work/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/social-work/flashcards",
+      "internalLinksIn": [
+        "/allied/social-work",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/social-work",
+        "/allied/social-work/questions",
+        "/allied/social-work/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 25
+      }
+    },
+    {
+      "rank": 55,
+      "phase": "Phase 3",
+      "id": "allied-occupational-therapy-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/occupational-therapy/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/occupational-therapy/flashcards",
+      "internalLinksIn": [
+        "/allied/occupational-therapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/occupational-therapy",
+        "/allied/occupational-therapy/questions",
+        "/allied/occupational-therapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 25
+      }
+    },
+    {
+      "rank": 56,
+      "phase": "Phase 3",
+      "id": "allied-physiotherapy-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/physiotherapy/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/physiotherapy/flashcards",
+      "internalLinksIn": [
+        "/allied/physiotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/psychotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/physiotherapy",
+        "/allied/physiotherapy/questions",
+        "/allied/physiotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 25
+      }
+    },
+    {
+      "rank": 57,
+      "phase": "Phase 3",
+      "id": "allied-psychotherapy-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psychotherapy/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psychotherapy/flashcards",
+      "internalLinksIn": [
+        "/allied/psychotherapy",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psw-hca"
+      ],
+      "internalLinksOut": [
+        "/allied/psychotherapy",
+        "/allied/psychotherapy/questions",
+        "/allied/psychotherapy/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 25
+      }
+    },
+    {
+      "rank": 58,
+      "phase": "Phase 3",
+      "id": "allied-psw-hca-flashcards",
+      "family": "allied",
+      "kind": "ecosystem",
+      "targetRoute": "/allied/psw-hca/flashcards",
+      "plannedAliasPath": "/allied/flashcards",
+      "primaryKeyword": "flashcards",
+      "secondaryKeywords": [
+        "pharmacology flashcards",
+        "clinical judgment flashcards",
+        "spaced repetition"
+      ],
+      "sourceContentNeeded": [
+        "curated flashcard categories",
+        "spaced-repetition explanation",
+        "pathway-specific CTA copy"
+      ],
+      "schemaType": [
+        "FAQPage",
+        "BreadcrumbList",
+        "ItemList",
+        "EducationalCourse"
+      ],
+      "ctaTarget": "/allied/psw-hca/flashcards",
+      "internalLinksIn": [
+        "/allied/psw-hca",
+        "/allied/mlt",
+        "/allied/paramedic",
+        "/allied/respiratory",
+        "/allied/social-work",
+        "/allied/occupational-therapy",
+        "/allied/physiotherapy",
+        "/allied/psychotherapy"
+      ],
+      "internalLinksOut": [
+        "/allied/psw-hca",
+        "/allied/psw-hca/questions",
+        "/allied/psw-hca/lessons",
+        "/allied/allied-health",
+        "/allied/allied-health/questions",
+        "/allied/allied-health/lessons"
+      ],
+      "indexableImmediately": false,
+      "notes": "Build substantive canonical page first. Keep short alias inactive until content exists and canonical strategy is approved.",
+      "scoring": {
+        "seoOpportunity": 6,
+        "conversionValue": 5,
+        "existingContentAvailability": 4,
+        "internalLinkPotential": 5,
+        "implementationEffort": 6,
+        "total": 25
+      }
+    }
+  ]
+}

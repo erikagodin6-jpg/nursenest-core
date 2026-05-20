@@ -1,0 +1,50 @@
+{
+  "name": "nursenest-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo run:ios",
+    "android": "expo run:android",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . -c eslint.config.cjs --max-warnings 0",
+    "export:web": "expo export --platform web",
+    "eas:build": "eas build --non-interactive",
+    "doctor": "npx expo-doctor",
+    "release:readiness": "bash scripts/release-readiness.sh"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^14.0.4",
+    "@nursenest/mobile-shared": "file:../../packages/nursenest-mobile-shared",
+    "@react-native-community/netinfo": "11.4.1",
+    "@sentry/react-native": "~6.10.0",
+    "@tanstack/react-query": "^5.60.5",
+    "expo": "~52.0.47",
+    "expo-constants": "~17.0.8",
+    "expo-image": "~2.0.7",
+    "expo-linking": "~7.0.5",
+    "expo-notifications": "~0.29.14",
+    "expo-router": "~4.0.21",
+    "expo-secure-store": "~14.0.1",
+    "expo-status-bar": "~2.0.1",
+    "posthog-react-native": "^3.16.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.9",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-reanimated": "~3.16.7",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.4.0",
+    "react-native-svg": "15.8.0",
+    "react-native-web": "~0.19.13",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@types/react": "~18.3.12",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "typescript": "~5.6.3"
+  }
+}

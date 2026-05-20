@@ -1,0 +1,359 @@
+"use client";
+
+import Link from "next/link";
+import type { ReactNode } from "react";
+import { BookOpen, CheckCircle2, Lightbulb, Ban, Sparkles, Star } from "lucide-react";
+import {
+  PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS,
+  type PracticeRationaleFullPanelCopy,
+} from "@/components/study/practice-rationale-full-panel.types";
+import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
+
+/** Shown when a distractor row has no stored per-option rationale (never invent clinical text). */
+export const PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK =
+  PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS.missingDistractorFallback;
+
+function RationaleReviewBoardHeader({ title }: { title: string }) {
+  return (
+    <div className="nn-premium-cat-rationale-head mb-2 flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2.5">
+      <BookOpen className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
+      <h2 className="m-0 text-sm font-semibold text-[var(--semantic-brand)]">{title}</h2>
+    </div>
+  );
+}
+
+/** Shared scroll frame for linear practice and CAT study rationale columns. */
+export function RationaleFullFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="nn-practice-rationale-full">
+      <div className="nn-practice-rationale-full__scroll">{children}</div>
+    </div>
+  );
+}
+
+// ── PracticeRationaleSection ───────────────────────────────────────────────
+
+type SectionVariant = "success" | "info" | "error" | "muted" | "takeaway" | "pearl";
+
+/**
+ * PracticeRationaleSection — styled content block within the rationale panel.
+ *
+ * Variants map to CSS class `.nn-practice-rsection--{variant}`.
+ */
+export function PracticeRationaleSection({
+  variant,
+  label,
+  children,
+  icon,
+}: {
+  variant: SectionVariant;
+  label: string;
+  children: ReactNode;
+  /** Optional leading icon (e.g. lightbulb, ban) before the uppercase label. */
+  icon?: ReactNode;
+}) {
+  return (
+    <div className={`nn-practice-rsection nn-practice-rsection--${variant}`}>
+      <p className="nn-practice-rsection__label">
+        {icon ? (
+          <span className="inline-flex items-center gap-1.5">
+            {icon}
+            {label}
+          </span>
+        ) : (
+          label
+        )}
+      </p>
+      <div className="nn-practice-rsection__body">{children}</div>
+    </div>
+  );
+}
+
+// ── PracticeIncorrectOptionRow ─────────────────────────────────────────────
+
+const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+/**
+ * PracticeIncorrectOptionRow — shows one incorrect option with its individual
+ * distractor explanation (spec §5: "each incorrect option must be shown separately").
+ */
+export function PracticeIncorrectOptionRow({
+  index,
+  optionText,
+  explanation,
+  optionTextTone = "secondary",
+  missingExplanationFallback,
+}: {
+  index: number;
+  optionText: string;
+  explanation?: string | null;
+  /** `danger` tints option labels red (UWorld-style distractor review). */
+  optionTextTone?: "secondary" | "danger";
+  /** When set and `explanation` is empty, shows this copy (practice exam contract). */
+  missingExplanationFallback?: string | null;
+}) {
+  const letter = LETTERS[index] ?? String(index + 1);
+  const fallback =
+    !explanation?.trim() && missingExplanationFallback?.trim() ? missingExplanationFallback.trim() : null;
+  return (
+    <div
+      className={`nn-practice-incorrect-opt-row${optionTextTone === "danger" ? " nn-practice-incorrect-opt-row--danger-label" : ""}`}
+    >
+      <span className="nn-practice-incorrect-opt-row__letter" aria-hidden="true">
+        {letter}
+      </span>
+      <div className="nn-practice-incorrect-opt-row__content">
+        <p className="nn-practice-incorrect-opt-row__text">{optionText}</p>
+        {explanation?.trim() ? (
+          <p className="nn-practice-incorrect-opt-row__explanation">{explanation}</p>
+        ) : fallback ? (
+          <p className="nn-practice-incorrect-opt-row__explanation text-[var(--semantic-text-muted)]">
+            {fallback}
+          </p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+// ── PracticeRelatedLessons ─────────────────────────────────────────────────
+
+/**
+ * PracticeRelatedLessons — list of 2–4 lesson links (spec §5 / §7).
+ * Uses real hrefs resolved by `resolveRationaleLessonLinksForQuestion`.
+ */
+export function PracticeRelatedLessons({
+  lessons,
+  sectionLabel = PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS.relatedLessonsSection,
+}: {
+  lessons: { title: string; href: string }[];
+  sectionLabel?: string;
+}) {
+  if (lessons.length === 0) return null;
+  return (
+    <div>
+      <p className="nn-practice-rsection__label mb-2">{sectionLabel}</p>
+      <div className="nn-practice-lessons">
+        {lessons.map(({ title, href }) => (
+          <Link
+            key={href}
+            href={href}
+            className="nn-practice-lesson-link"
+            target={href.startsWith("http") ? "_blank" : undefined}
+            rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+          >
+            <BookOpen
+              className="nn-practice-lesson-link__icon mt-0.5 h-4 w-4"
+              aria-hidden
+            />
+            <span className="nn-practice-lesson-link__title">{title}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── PracticeRationaleFullPanel ─────────────────────────────────────────────
+
+export type PracticeRationaleFullPanelStatus =
+  | "waiting"
+  | "correct"
+  | "incorrect"
+  | "exam_locked"
+  | null;
+
+export interface PracticeRationaleFullPanelProps {
+  status: PracticeRationaleFullPanelStatus;
+  /** Canonical keys of the correct answer(s). */
+  correctKeys?: string[];
+  /** Display text for every option, indexed by canonical key. */
+  optionDisplayMap?: Record<string, string>;
+  /** All canonical option keys in display order. */
+  allOptionKeys?: string[];
+  /** Why the correct answer is right. Preferred over `rationale`. */
+  correctAnswerExplanation?: string | null;
+  /** Main rationale — fallback when `correctAnswerExplanation` is absent. */
+  rationale?: string | null;
+  /**
+   * Per-option distractor explanations: `{ [canonicalKey]: explanation }`.
+   * When absent, incorrect option rows show the option text only.
+   */
+  distractorRationalesMap?: Record<string, string> | null;
+  /** Short key takeaway (1–2 sentences). */
+  keyTakeaway?: string | null;
+  /** Resolved lesson links (0–4). */
+  relatedLessons?: { title: string; href: string }[];
+  /** Confidence rating selected for this question — shown as a chip (spec §10). */
+  confidenceLevel?: ConfidenceLevel | null;
+  /** Resolved clinical teaching line (DB pearl / reasoning / strategy / hook). */
+  clinicalPearlDisplay?: string | null;
+  referenceSource?: string | null;
+  /** When true, incorrect option rows without stored text show {@link PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK}. */
+  showDistractorFallback?: boolean;
+  /** Resolved UI strings — typically from `tx()` in the practice test runner. */
+  copy?: Partial<PracticeRationaleFullPanelCopy>;
+}
+
+/**
+ * PracticeRationaleFullPanel — right-column rationale panel for linear practice mode.
+ *
+ * After submitting an answer shows ALL explanations simultaneously (spec §5):
+ *   1. Correct Answer
+ *   2. Why This Is Correct
+ *   3. Why The Other Options Are Incorrect (each option individually)
+ *   4. Key Takeaway
+ *   5. Related Lessons
+ *
+ * Before submission: shows a placeholder (spec §12).
+ * In exam-locked mode (linear exam): shows a locked message.
+ */
+export function PracticeRationaleFullPanel({
+  status,
+  correctKeys = [],
+  optionDisplayMap = {},
+  allOptionKeys = [],
+  correctAnswerExplanation,
+  rationale,
+  distractorRationalesMap,
+  keyTakeaway,
+  relatedLessons = [],
+  confidenceLevel,
+  clinicalPearlDisplay,
+  referenceSource,
+  showDistractorFallback = false,
+  copy: copyOverrides,
+}: PracticeRationaleFullPanelProps) {
+  const c: PracticeRationaleFullPanelCopy = { ...PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS, ...copyOverrides };
+
+  // ── Waiting / not-yet-submitted ──────────────────────────────────────────
+  if (status === "waiting" || status === null) {
+    return (
+      <RationaleFullFrame>
+        <div className="nn-practice-rationale-waiting">
+          <BookOpen
+            className="h-6 w-6 text-[var(--semantic-text-muted)]"
+            aria-hidden
+          />
+          <p className="nn-practice-rationale-waiting__text">{c.waitingPrimary}</p>
+          <p className="nn-practice-rationale-waiting__sub">{c.waitingSecondary}</p>
+        </div>
+      </RationaleFullFrame>
+    );
+  }
+
+  // ── Exam locked ──────────────────────────────────────────────────────────
+  if (status === "exam_locked") {
+    return (
+      <RationaleFullFrame>
+        <div className="nn-practice-rationale-locked">
+          <p className="nn-practice-rationale-locked__title">{c.lockedTitle}</p>
+          <p className="nn-practice-rationale-locked__body">{c.lockedBody}</p>
+        </div>
+      </RationaleFullFrame>
+    );
+  }
+
+  // ── Feedback (correct or incorrect) ─────────────────────────────────────
+  const correctSet = new Set(correctKeys);
+  const incorrectKeys = allOptionKeys.filter((k) => !correctSet.has(k));
+
+  // "Why This Is Correct" — prefer dedicated field, fall back to rationale
+  const whyCorrectText = correctAnswerExplanation ?? rationale;
+
+  // Correct option display text
+  const correctDisplayTexts = correctKeys
+    .map((k) => optionDisplayMap[k] ?? k)
+    .join(", ");
+
+  return (
+    <RationaleFullFrame>
+      <RationaleReviewBoardHeader title={c.panelTitle} />
+      {/* Confidence chip — shown when user rated their confidence */}
+      {confidenceLevel ? (
+        <div className="flex items-center gap-2">
+          <ConfidenceChip level={confidenceLevel} />
+        </div>
+      ) : null}
+
+      {/* 1 ─ Correct Answer (info panel — matches CAT / UWorld review boards) */}
+      <PracticeRationaleSection
+        variant="info"
+        label={c.correctAnswer}
+        icon={<CheckCircle2 className="h-3.5 w-3.5 text-[var(--semantic-info)]" aria-hidden />}
+      >
+        <p>{correctDisplayTexts || "—"}</p>
+      </PracticeRationaleSection>
+
+      {/* 2 ─ Why This Is Correct ──────────────────────────────────────────── */}
+      {whyCorrectText ? (
+        <PracticeRationaleSection
+          variant="muted"
+          label={c.whyCorrect}
+          icon={<Lightbulb className="h-3.5 w-3.5 text-[var(--semantic-warning)]" aria-hidden />}
+        >
+          <p>{whyCorrectText}</p>
+        </PracticeRationaleSection>
+      ) : null}
+
+      {/* 3 ─ Why The Other Options Are Incorrect ─────────────────────────── */}
+      {incorrectKeys.length > 0 ? (
+        <PracticeRationaleSection
+          variant="muted"
+          label={c.whyOthersIncorrect}
+          icon={<Ban className="h-3.5 w-3.5 text-[var(--semantic-danger)]" aria-hidden />}
+        >
+          {incorrectKeys.map((key, i) => {
+            const displayIdx = allOptionKeys.indexOf(key);
+            const optionText = optionDisplayMap[key] ?? key;
+            const explanation = distractorRationalesMap?.[key] ?? null;
+            return (
+              <PracticeIncorrectOptionRow
+                key={key}
+                index={displayIdx >= 0 ? displayIdx : i}
+                optionText={optionText}
+                explanation={explanation}
+                optionTextTone="danger"
+                missingExplanationFallback={
+                  showDistractorFallback ? c.missingDistractorFallback : null
+                }
+              />
+            );
+          })}
+        </PracticeRationaleSection>
+      ) : null}
+
+      {clinicalPearlDisplay?.trim() ? (
+        <PracticeRationaleSection
+          variant="pearl"
+          label={c.clinicalPearl}
+          icon={<Star className="h-3.5 w-3.5 text-[var(--semantic-warning)]" aria-hidden />}
+        >
+          <p>{clinicalPearlDisplay.trim()}</p>
+        </PracticeRationaleSection>
+      ) : null}
+
+      {/* 4 ─ Key Takeaway ────────────────────────────────────────────────── */}
+      {keyTakeaway ? (
+        <PracticeRationaleSection
+          variant="takeaway"
+          label={c.keyTakeawayHeading}
+          icon={<Sparkles className="h-3.5 w-3.5 text-[var(--semantic-brand)]" aria-hidden />}
+        >
+          <p>{keyTakeaway}</p>
+        </PracticeRationaleSection>
+      ) : null}
+
+      {referenceSource?.trim() ? (
+        <PracticeRationaleSection variant="muted" label={c.referencesSource}>
+          <p className="m-0 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{referenceSource.trim()}</p>
+        </PracticeRationaleSection>
+      ) : null}
+
+      {/* 5 ─ Related Lessons ─────────────────────────────────────────────── */}
+      {relatedLessons.length > 0 ? (
+        <PracticeRelatedLessons lessons={relatedLessons} sectionLabel={c.relatedLessonsSection} />
+      ) : null}
+    </RationaleFullFrame>
+  );
+}

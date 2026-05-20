@@ -1,0 +1,163 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
+import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
+import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
+import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
+import { HUB, loginWithCallback, rnQuestions, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
+import {
+  MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+  MARKETING_PAGE_BODY_MESSAGE_SHARDS,
+} from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import {
+  defaultPublicLessonsMetaDescription,
+  defaultPublicLessonsMetaTitle,
+} from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 600;
+const MARKETING_BUILD_PHASE = "phase-production-build";
+const LESSONS_BUILD_MESSAGE_SHARDS = [...MARKETING_PAGE_BODY_MESSAGE_SHARDS, "billing"] as const;
+
+function lessonsPageMessageShards() {
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
+    ? LESSONS_BUILD_MESSAGE_SHARDS
+    : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const shards = lessonsPageMessageShards();
+      let m: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+      let en: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+      try {
+        m = await loadMarketingMessageShards(locale, shards);
+      } catch {
+        m = loadMarketingMessageShardsSync(locale, shards);
+      }
+      try {
+        en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards);
+      } catch {
+        en = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+      }
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = getRequiredPublicMetadataLine(
+        m,
+        `pages.publicLessons.metaTitle${metaSfx}`,
+        en,
+        defaultPublicLessonsMetaTitle(marketingRegion),
+      );
+      const description = getRequiredPublicMetadataLine(
+        m,
+        `pages.publicLessons.metaDescription${metaSfx}`,
+        en,
+        defaultPublicLessonsMetaDescription(marketingRegion),
+      );
+      const alt = marketingAlternatesSharedPage(locale, "/lessons");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title, description, url: alt.canonical, type: "website" },
+      };
+    },
+    { pathname: "/lessons", routeGroup: "marketing.default.lessons" },
+  );
+}
+
+export default async function PublicLessonsLandingPage() {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
+  const shards = lessonsPageMessageShards();
+  let m: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+  let en: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+  try {
+    m = await loadMarketingMessageShards(locale, shards);
+  } catch {
+    m = loadMarketingMessageShardsSync(locale, shards);
+  }
+  try {
+    en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards);
+  } catch {
+    en = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+  }
+  const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+  const h1Key = marketingRegion === "US" ? "pages.publicLessons.h1US" : "pages.publicLessons.h1CA";
+  const introKey = marketingRegion === "US" ? "pages.publicLessons.introUS" : "pages.publicLessons.introCA";
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = getRequiredPublicMetadataLine(
+    m,
+    `pages.publicLessons.metaTitle${metaSfx}`,
+    en,
+    defaultPublicLessonsMetaTitle(marketingRegion),
+  );
+  const description = getRequiredPublicMetadataLine(
+    m,
+    `pages.publicLessons.metaDescription${metaSfx}`,
+    en,
+    defaultPublicLessonsMetaDescription(marketingRegion),
+  );
+
+  const signupLessons = withMarketingLocale(locale, signupWithCallback(HUB.examLessons));
+
+  const { crumbs, schemaItems } = examLessonsIndexBreadcrumbs();
+
+  return (
+    <>
+      <WebPageJsonLd
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/lessons",
+          title,
+          description,
+        })}
+      />
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
+        <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
+      </div>
+      <MarketingPublicStudyLanding
+        containerWidth="wide"
+        h1={t(h1Key)}
+        intro={t(introKey)}
+        primaryCta={{
+          href: `${withMarketingLocale(locale, "/lessons")}#exam-pathways`,
+          label: t("pages.publicLessons.ctaBrowseByExam"),
+        }}
+        secondaryCta={{
+          href: withMarketingLocale(locale, rnQuestions(marketingRegion)),
+          label: t("pages.publicLessons.ctaPracticeQuestions"),
+        }}
+        signupCta={{ href: signupLessons, label: t("pages.publicLessons.ctaCreateAccount") }}
+      >
+        <PublicLessonsPathwaySections locale={locale} region={marketingRegion} />
+        <p className="nn-marketing-body-sm text-muted">
+          {t("pages.examLessons.appLessonsLead")}{" "}
+          <Link href={loginWithCallback(HUB.examLessons)} className="font-semibold text-primary">
+            {t("pages.examLessons.appLessonsLink")}
+          </Link>
+        </p>
+        <MarketingStudyCrossLinks className="mt-4" />
+      </MarketingPublicStudyLanding>
+    </>
+  );
+}

@@ -1,0 +1,126 @@
+{
+  "generatedAt": "2026-04-13T20:27:29.361Z",
+  "totalRows": 24,
+  "rows": [
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    }
+  ]
+}

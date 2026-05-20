@@ -1,0 +1,42 @@
+import { Suspense } from "react";
+import { FlashcardWeakStudyClient } from "@/components/flashcards/flashcard-weak-study-client";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+
+export default async function FlashcardWeakAreasPage() {
+  const session = await getProtectedRouteSession("(student).app.(learner).flashcards.weak-areas");
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = await resolveEntitlementForPage(userId);
+  const email = (session?.user as { email?: string | null })?.email ?? null;
+  const protectionFlags = getServerPremiumProtectionFlags();
+  const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
+  const { t } = await getLearnerMarketingBundle();
+
+  if (entitlement === "error") {
+    return <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailedShort")}</p>;
+  }
+  if (!entitlement.hasAccess) {
+    return (
+      <div className="space-y-4">
+        <h1 className="text-2xl font-bold">{t("learner.flashcards.weakAreas.heading")}</h1>
+        <SubscriptionPaywall context="dashboard" />
+      </div>
+    );
+  }
+
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">
+          Loading weak-area study…
+        </div>
+      }
+    >
+      <FlashcardWeakStudyClient userId={userId} userLabel={userLabel} protectionFlags={protectionFlags} />
+    </Suspense>
+  );
+}

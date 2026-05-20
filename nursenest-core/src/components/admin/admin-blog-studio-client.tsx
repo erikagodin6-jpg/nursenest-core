@@ -1,0 +1,834 @@
+"use client";
+
+import { useCallback, useRef, useState } from "react";
+import Link from "next/link";
+import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
+import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import {
+  parseBlogSeoBundle,
+  resolveBlogOgImageAbsolute,
+  resolvePublicCanonicalUrl,
+} from "@/lib/blog/blog-seo-automation";
+import { parsePublishingPackage } from "@/lib/blog/blog-publishing-package";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
+import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
+
+const templates = Object.values(BlogPostTemplate);
+
+type PostPayload = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  category?: string | null;
+  tags?: string[];
+  exam?: string | null;
+  countryTarget?: string | null;
+  coverImage?: string | null;
+  outlineJson: unknown;
+  faqBlock: unknown;
+  internalLinkPlan: unknown;
+  apaReferences: string[];
+  schemaSummary: string | null;
+  workflowStatus?: string | null;
+  medicalRiskFlags?: string[];
+  coverImagePrompt?: string | null;
+  coverImageAlt?: string | null;
+  postStatus: string;
+};
+
+function PackageSection({
+  title,
+  children,
+  review,
+  className = "",
+}: {
+  title: string;
+  children: React.ReactNode;
+  review?: boolean;
+  className?: string;
+}) {
+  return (
+    <section className={`rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4 shadow-sm ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-2">
+        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{title}</h3>
+        {review ? (
+          <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-900 dark:text-amber-100">
+            Review
+          </span>
+        ) : null}
+      </div>
+      <div className="mt-3 text-sm text-muted-foreground">{children}</div>
+    </section>
+  );
+}
+
+export function AdminBlogStudioClient() {
+  const aiGate = useAdminAiGenerationGate();
+  const [topic, setTopic] = useState("");
+  const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
+  const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
+  const [keywords, setKeywords] = useState("");
+  const [targetKeyword, setTargetKeyword] = useState("");
+  const [keywordCluster, setKeywordCluster] = useState("");
+  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
+  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
+  const [includeImage, setIncludeImage] = useState(true);
+  const [includeAiImage, setIncludeAiImage] = useState(false);
+  const [fixedSlug, setFixedSlug] = useState("");
+  const fixedSlugInputRef = useRef<HTMLInputElement | null>(null);
+  const [sourceRecordsJson, setSourceRecordsJson] = useState("[]");
+  const [allowInsufficientCitations, setAllowInsufficientCitations] = useState(false);
+  const [publishToLiveBlog, setPublishToLiveBlog] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [warnings, setWarnings] = useState<string[]>([]);
+  const [plan, setPlan] = useState<BlogControlPanelPlan | null>(null);
+  const [post, setPost] = useState<PostPayload | null>(null);
+  const [prePub, setPrePub] = useState<{ okToPublish: boolean; blocking: unknown[]; warnings: unknown[] } | null>(null);
+  const [prePubErr, setPrePubErr] = useState<string | null>(null);
+  const [seoRegenBusy, setSeoRegenBusy] = useState<null | "refresh" | "overwrite">(null);
+  const [seoRegenErr, setSeoRegenErr] = useState<string | null>(null);
+  const [bodyRegenBusy, setBodyRegenBusy] = useState(false);
+  const [bodyRegenErr, setBodyRegenErr] = useState<string | null>(null);
+
+  const resetResult = useCallback(() => {
+    setPlan(null);
+    setPost(null);
+    setWarnings([]);
+    setPrePub(null);
+    setPrePubErr(null);
+  }, []);
+
+  async function onGenerate(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setErr(null);
+    resetResult();
+    try {
+      let sourceRecords: unknown[] | undefined;
+      try {
+        const parsed = JSON.parse(sourceRecordsJson.trim() || "[]");
+        sourceRecords = Array.isArray(parsed) ? parsed : undefined;
+      } catch {
+        setErr("Source records must be valid JSON array (use [] if none).");
+        setBusy(false);
+        return;
+      }
+      const res = await fetch("/api/admin/blog/control-panel/generate", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic,
+          exam,
+          country,
+          keywords: keywords || undefined,
+          targetKeyword: targetKeyword || undefined,
+          keywordCluster: keywordCluster || undefined,
+          template,
+          intent,
+          funnelStage,
+          tone,
+          includeImage,
+          includeAiImage,
+          fixedSlug: fixedSlug.trim() || undefined,
+          sourceRecords,
+          allowInsufficientCitations: allowInsufficientCitations || undefined,
+          publishImmediately: publishToLiveBlog,
+        }),
+      });
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+        code?: string;
+        plan?: BlogControlPanelPlan;
+        bodyHtml?: string;
+        post?: PostPayload;
+        draftPost?: { id: string } | null;
+        warnings?: string[];
+        hint?: string;
+        existingSlug?: string;
+      };
+      if (res.status === 409) {
+        setErr(json.hint ?? `Duplicate topic — see ${json.existingSlug ?? "existing post"}.`);
+        return;
+      }
+      if (res.status === 422 && (json.error === "insufficient_citations" || json.code === "INSUFFICIENT_CITATIONS")) {
+        setErr(json.message ?? json.error ?? "Citation gate blocked save. Add verified sources or allow override.");
+        if (json.plan) setPlan(json.plan);
+        return;
+      }
+      if (res.status === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
+        const draftId = json.draftPost?.id;
+        if (draftId) {
+          const g = await fetch(`/api/admin/blog/${draftId}`, { method: "GET", credentials: "include", cache: "no-store" });
+          const gj = (await g.json()) as { post?: PostPayload };
+          if (g.ok && gj.post) setPost(gj.post);
+        }
+        if (json.plan) setPlan(json.plan);
+        setErr(
+          json.hint ??
+            json.message ??
+            "Pre-publish blocked: draft saved. Fix issues in the editor and publish from the post, or disable “Publish to live blog”.",
+        );
+        return;
+      }
+      if (res.status === 422) {
+        setErr(json.message ?? json.error ?? "Request blocked (422). Check plan or citations.");
+        if (json.plan) setPlan(json.plan);
+        return;
+      }
+      if (!res.ok) {
+        const base =
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : (json.message ?? json.error ?? `Generation failed (HTTP ${res.status})`);
+        let detail = "";
+        if ("details" in json && json.details != null) {
+          try {
+            detail =
+              typeof json.details === "string" ? json.details : JSON.stringify(json.details as unknown);
+          } catch {
+            detail = "";
+          }
+        }
+        setErr(detail && !base.includes(detail.slice(0, 80)) ? `${base}\n${detail}` : base);
+        if (json.plan) setPlan(json.plan);
+        return;
+      }
+      if (json.post) {
+        setPost(json.post);
+        setPlan(json.plan ?? null);
+        setWarnings(json.warnings ?? []);
+      } else {
+        setErr("No post returned — check API logs.");
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function runRegenerateBody() {
+    if (!post?.id) return;
+    if (
+      !window.confirm(
+        "Regenerate the article HTML from the stored outline and FAQs? This replaces the body in the database (SEO fields are unchanged unless you run SEO actions separately).",
+      )
+    ) {
+      return;
+    }
+    setBodyRegenErr(null);
+    setBodyRegenBusy(true);
+    try {
+      const res = await fetch(`/api/admin/blog/${post.id}/body/regenerate`, {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+        post?: Partial<PostPayload> & { id: string; body?: string };
+      };
+      if (!res.ok || !json.ok || !json.post) {
+        setBodyRegenErr(json.message ?? json.error ?? `Body regenerate failed (${res.status})`);
+        return;
+      }
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              body: json.post?.body ?? prev.body,
+            }
+          : prev,
+      );
+    } catch (e) {
+      setBodyRegenErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBodyRegenBusy(false);
+    }
+  }
+
+  async function runRegenerateSeo(mode: "refresh" | "overwrite") {
+    if (!post?.id) return;
+    setSeoRegenErr(null);
+    setSeoRegenBusy(mode);
+    try {
+      const res = await fetch(`/api/admin/blog/${post.id}/seo/regenerate`, {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ overwrite: mode === "overwrite" }),
+      });
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        post?: Partial<PostPayload> & { id: string };
+      };
+      if (!res.ok || !json.ok || !json.post) {
+        setSeoRegenErr(json.error ?? `SEO regenerate failed (${res.status})`);
+        return;
+      }
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...json.post,
+              body: prev.body,
+              outlineJson: prev.outlineJson,
+              faqBlock: prev.faqBlock,
+              apaReferences: prev.apaReferences,
+              postStatus: prev.postStatus,
+              workflowStatus: prev.workflowStatus,
+              medicalRiskFlags: prev.medicalRiskFlags,
+              coverImagePrompt: prev.coverImagePrompt,
+              coverImageAlt: prev.coverImageAlt,
+            }
+          : prev,
+      );
+    } catch (e) {
+      setSeoRegenErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setSeoRegenBusy(null);
+    }
+  }
+
+  async function runPrePublishCheck() {
+    if (!post?.id) return;
+    setPrePubErr(null);
+    setPrePub(null);
+    try {
+      const res = await fetch(`/api/admin/blog/${post.id}/pre-publish-validation`, {
+        cache: "no-store",
+        credentials: "include",
+      });
+      const json = (await res.json()) as {
+        prePublish?: { okToPublish: boolean; blocking: unknown[]; warnings: unknown[] };
+        error?: string;
+      };
+      if (!res.ok) {
+        setPrePubErr(json.error ?? "Validation failed");
+        return;
+      }
+      if (json.prePublish) setPrePub(json.prePublish);
+    } catch (e) {
+      setPrePubErr(e instanceof Error ? e.message : String(e));
+    }
+  }
+
+  const seo = post?.internalLinkPlan
+    ? parseBlogSeoBundle((post.internalLinkPlan as { seo?: unknown }).seo)
+    : null;
+
+  const canonicalPreview = post ? resolvePublicCanonicalUrl(post.slug, seo) : "";
+  const ogImagePreview = post ? resolveBlogOgImageAbsolute(seo, post.coverImage ?? null) : undefined;
+
+  const publishingPkg =
+    post?.internalLinkPlan && typeof post.internalLinkPlan === "object"
+      ? parsePublishingPackage((post.internalLinkPlan as Record<string, unknown>).publishingPackage)
+      : null;
+
+  type SchemaSummaryJson = {
+    version?: number;
+    emitFaqSchema?: boolean;
+    schemaOpportunities?: Array<{ type: string; rationale: string }>;
+  };
+  let schemaParsed: SchemaSummaryJson | null = null;
+  if (post?.schemaSummary) {
+    try {
+      schemaParsed = JSON.parse(post.schemaSummary) as SchemaSummaryJson;
+    } catch {
+      schemaParsed = null;
+    }
+  }
+
+  const faqItems = (post?.faqBlock as { items?: { q: string; a: string }[] } | null)?.items ?? [];
+
+  return (
+    <div className="space-y-10">
+      <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-transparent to-emerald-500/[0.04] p-6">
+        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Topic → structured package → draft</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Uses the same two-stage pipeline as the{" "}
+          <Link href="/admin/blog" className="font-semibold text-primary underline">
+            blog console
+          </Link>
+          : editorial JSON plan, then HTML body, then a real <code className="rounded bg-muted px-1">DRAFT</code> row. Add verified
+          sources (HTTPS or DOI + metadata) to satisfy the citation gate on high-risk topics. Future locales: store English first;
+          translate from approved <code className="rounded bg-muted px-1">BlogPost</code> rows.
+        </p>
+      </div>
+
+      <form noValidate onSubmit={onGenerate} className="grid gap-6 rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 lg:grid-cols-2">
+        <div className="space-y-4 lg:col-span-2">
+          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">1. Brief</h2>
+        </div>
+        <label className="block space-y-1 lg:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">Topic *</span>
+          <input
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            required
+            minLength={3}
+            placeholder="e.g. SpO2 interpretation before NCLEX-style prioritization"
+          />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Exam / track *</span>
+          <select className="w-full rounded-lg border border-border px-3 py-2 text-sm" value={exam} onChange={(e) => setExam(e.target.value)}>
+            {ADMIN_BLOG_TARGET_EXAM_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Country context</span>
+          <select
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm"
+            value={country}
+            onChange={(e) => setCountry(e.target.value as typeof country)}
+          >
+            <option value="unspecified">Unspecified</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+          </select>
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Template</span>
+          <select
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm"
+            value={template}
+            onChange={(e) => setTemplate(e.target.value as BlogPostTemplate)}
+          >
+            {templates.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Intent / funnel / tone</span>
+          <div className="flex flex-wrap gap-2">
+            <select
+              className="min-w-0 flex-1 rounded-lg border border-border px-2 py-2 text-xs"
+              value={intent}
+              onChange={(e) => setIntent(e.target.value as BlogPostIntent)}
+            >
+              {Object.values(BlogPostIntent).map((x) => (
+                <option key={x} value={x}>
+                  {x}
+                </option>
+              ))}
+            </select>
+            <select
+              className="min-w-0 flex-1 rounded-lg border border-border px-2 py-2 text-xs"
+              value={funnelStage}
+              onChange={(e) => setFunnelStage(e.target.value as BlogFunnelStage)}
+            >
+              {Object.values(BlogFunnelStage).map((x) => (
+                <option key={x} value={x}>
+                  {x}
+                </option>
+              ))}
+            </select>
+            <select
+              className="min-w-0 flex-1 rounded-lg border border-border px-2 py-2 text-xs"
+              value={tone}
+              onChange={(e) => setTone(e.target.value as typeof tone)}
+            >
+              <option value="professional">Professional</option>
+              <option value="supportive">Supportive</option>
+              <option value="direct">Direct</option>
+            </select>
+          </div>
+        </label>
+        <label className="block space-y-1 lg:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">Keywords (comma-separated)</span>
+          <input
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm"
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+            placeholder="optional"
+          />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Primary keyword</span>
+          <input className="w-full rounded-lg border border-border px-3 py-2 text-sm" value={targetKeyword} onChange={(e) => setTargetKeyword(e.target.value)} />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Keyword cluster</span>
+          <input className="w-full rounded-lg border border-border px-3 py-2 text-sm" value={keywordCluster} onChange={(e) => setKeywordCluster(e.target.value)} />
+        </label>
+        <label className="block space-y-1 lg:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">
+            Optional slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+          </span>
+          <input
+            ref={fixedSlugInputRef}
+            className="w-full rounded-lg border border-border px-3 py-2 text-sm font-mono text-xs"
+            value={fixedSlug}
+            onChange={(e) => {
+              const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+              setFixedSlug(normalized);
+              fixedSlugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+            }}
+            placeholder="leave blank to auto-generate"
+          />
+        </label>
+        <label className="flex items-center gap-2 text-sm lg:col-span-2">
+          <input type="checkbox" checked={includeImage} onChange={(e) => setIncludeImage(e.target.checked)} />
+          Plan hero / inline image slots (prompts + alt ideas)
+        </label>
+        <label className="flex items-center gap-2 text-sm lg:col-span-2">
+          <input type="checkbox" checked={includeAiImage} onChange={(e) => setIncludeAiImage(e.target.checked)} />
+          Request AI hero generation (stores prompt; run image workflow separately)
+        </label>
+        <label className="block space-y-1 lg:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">Verified sources JSON (APA inputs)</span>
+          <textarea
+            className="min-h-[100px] w-full rounded-lg border border-border px-3 py-2 font-mono text-xs"
+            value={sourceRecordsJson}
+            onChange={(e) => setSourceRecordsJson(e.target.value)}
+            placeholder='[{"title":"...","year":"2024","url":"https://..."}]'
+          />
+        </label>
+        <label className="flex items-center gap-2 text-sm text-amber-900 dark:text-amber-100 lg:col-span-2">
+          <input type="checkbox" checked={allowInsufficientCitations} onChange={(e) => setAllowInsufficientCitations(e.target.checked)} />
+          Allow save without verified citations (high-risk topics — not recommended)
+        </label>
+        <label className="flex items-center gap-2 text-sm lg:col-span-2">
+          <input type="checkbox" checked={publishToLiveBlog} onChange={(e) => setPublishToLiveBlog(e.target.checked)} />
+          Publish to live blog after generation (pre-publish checks; off = draft only)
+        </label>
+        <div className="lg:col-span-2">
+          <button
+            type="submit"
+            formNoValidate
+            disabled={busy || !aiGate.runnable}
+            className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          >
+            {busy ? "Generating…" : publishToLiveBlog ? "Generate and publish to /blog" : "Generate draft only"}
+          </button>
+        </div>
+        {err ? <p className="lg:col-span-2 text-sm text-rose-700">{err}</p> : null}
+      </form>
+
+      {warnings.length > 0 ? (
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
+          <p className="font-semibold text-amber-950 dark:text-amber-50">Warnings</p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-muted-foreground">
+            {warnings.map((w) => (
+              <li key={w}>{w}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {post ? (
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">2. Generated package</h2>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href={`/admin/blog?id=${encodeURIComponent(post.id)}`}
+                className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm font-semibold hover:bg-muted/50"
+              >
+                Open in full editor
+              </Link>
+              <Link href={`/blog/${post.slug}`} className="rounded-lg border border-border px-3 py-2 text-sm font-semibold hover:bg-muted/50" target="_blank" rel="noreferrer">
+                Preview public URL
+              </Link>
+              <button type="button" onClick={runPrePublishCheck} className="rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-sm font-semibold text-primary">
+                Run publish validation
+              </button>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Post ID: <code className="rounded bg-muted px-1">{post.id}</code> · Status: {post.postStatus} · Workflow: {post.workflowStatus ?? "—"}
+          </p>
+          {prePubErr ? <p className="text-sm text-rose-700">{prePubErr}</p> : null}
+          {prePub ? (
+            <div
+              className={`rounded-xl border p-4 text-sm ${
+                prePub.okToPublish ? "border-emerald-500/40 bg-emerald-500/10" : "border-rose-500/40 bg-rose-500/10"
+              }`}
+            >
+              <p className="font-semibold">{prePub.okToPublish ? "Ready to publish (no blockers)" : "Blocked — fix issues before publish"}</p>
+              {prePub.blocking.length > 0 ? (
+                <ul className="mt-2 list-inside list-disc">
+                  {(prePub.blocking as { message: string }[]).map((b, i) => (
+                    <li key={i}>{b.message}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {prePub.warnings.length > 0 ? (
+                <ul className="mt-2 list-inside list-disc text-muted-foreground">
+                  {(prePub.warnings as { message: string }[]).map((b, i) => (
+                    <li key={i}>{b.message}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
+
+          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-2">
+              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">SERP & social preview</h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={Boolean(seoRegenBusy) || bodyRegenBusy}
+                  onClick={() => void runRegenerateBody()}
+                  className="rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-1.5 text-xs font-semibold text-sky-950 dark:text-sky-50 disabled:opacity-50"
+                  title="Re-runs the long-form HTML pass from outline + FAQs. Does not change meta title/description columns."
+                >
+                  {bodyRegenBusy ? "…" : "Regenerate article body"}
+                </button>
+                <button
+                  type="button"
+                  disabled={Boolean(seoRegenBusy) || bodyRegenBusy}
+                  onClick={() => void runRegenerateSeo("refresh")}
+                  className="rounded-lg border border-border bg-muted/30 px-3 py-1.5 text-xs font-semibold hover:bg-muted/50 disabled:opacity-50"
+                  title="Rebuilds JSON SEO bundle (canonical, OG/Twitter, breadcrumbs) from current fields. Keeps stored meta title/description unless they are empty."
+                >
+                  {seoRegenBusy === "refresh" ? "…" : "Regenerate SEO bundle"}
+                </button>
+                <button
+                  type="button"
+                  disabled={Boolean(seoRegenBusy) || bodyRegenBusy}
+                  onClick={() => void runRegenerateSeo("overwrite")}
+                  className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-950 dark:text-amber-50 disabled:opacity-50"
+                  title="Also replaces stored meta title and meta description columns using deterministic SEO."
+                >
+                  {seoRegenBusy === "overwrite" ? "…" : "Regenerate SEO + meta columns"}
+                </button>
+              </div>
+            </div>
+            {bodyRegenErr ? <p className="mt-2 text-sm text-rose-700">{bodyRegenErr}</p> : null}
+            {seoRegenErr ? <p className="mt-2 text-sm text-rose-700">{seoRegenErr}</p> : null}
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              SEO refresh updates the persisted bundle and live related-blog suggestions; it does not rewrite HTML. Use{" "}
+              <strong className="text-foreground">Regenerate article body</strong> only when you intend to replace the draft HTML.
+            </p>
+            <dl className="mt-3 grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
+              <div>
+                <dt className="font-medium text-foreground">Slug</dt>
+                <dd>
+                  <code className="text-foreground">{post.slug}</code>
+                </dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">Canonical</dt>
+                <dd className="break-all text-foreground">{canonicalPreview || "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">Meta title</dt>
+                <dd className="text-foreground">{post.seoTitle ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">Meta description</dt>
+                <dd className="text-foreground">{post.seoDescription ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">H1</dt>
+                <dd className="text-foreground">{post.title}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">OG / Twitter image</dt>
+                <dd className="break-all text-foreground">{ogImagePreview ?? "—"}</dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="font-medium text-foreground">Breadcrumb trail</dt>
+                <dd className="text-foreground">
+                  {seo?.normalizedBreadcrumbs?.length
+                    ? seo.normalizedBreadcrumbs.map((b) => b.label).join(" › ")
+                    : "—"}
+                </dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="font-medium text-foreground">Open Graph (stored bundle)</dt>
+                <dd className="text-foreground">
+                  <span className="block">og:title — {seo?.openGraphTitle ?? post.seoTitle ?? post.title}</span>
+                  <span className="block">og:description — {seo?.openGraphDescription ?? post.seoDescription ?? post.excerpt}</span>
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <PackageSection title="SEO title (meta)" review>
+              <p className="text-foreground">{post.seoTitle ?? "—"}</p>
+            </PackageSection>
+            <PackageSection title="Meta description" review>
+              <p className="text-foreground">{post.seoDescription ?? "—"}</p>
+            </PackageSection>
+            <PackageSection title="Slug suggestion" review>
+              <code className="text-foreground">{post.slug}</code>
+            </PackageSection>
+            <PackageSection title="H1 (on-page title)" review>
+              <p className="text-foreground">{post.title}</p>
+            </PackageSection>
+            <PackageSection title="Structured outline" review className="lg:col-span-2">
+              <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/30 p-3 text-xs text-foreground">
+                {JSON.stringify(post.outlineJson, null, 2)}
+              </pre>
+            </PackageSection>
+            <PackageSection title="Full article draft (HTML)" review className="lg:col-span-2">
+              <p className="mb-2 text-xs">Length: {post.body.length.toLocaleString()} chars</p>
+              <pre className="max-h-80 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/30 p-3 text-xs text-foreground">
+                {post.body.slice(0, 12000)}
+                {post.body.length > 12000 ? "\n… truncated — use full editor for complete body." : ""}
+              </pre>
+            </PackageSection>
+            <PackageSection title="FAQ section" review className="lg:col-span-2">
+              {faqItems.length === 0 ? (
+                <p>None stored on post.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {faqItems.map((f, i) => (
+                    <li key={i}>
+                      <strong className="text-foreground">{f.q}</strong>
+                      <p className="mt-1 whitespace-pre-wrap">{f.a}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </PackageSection>
+            <PackageSection title="Breadcrumb recommendations" review className="lg:col-span-2">
+              {seo?.normalizedBreadcrumbs?.length ? (
+                <ol className="list-inside list-decimal space-y-1 text-foreground">
+                  {seo.normalizedBreadcrumbs.map((b, i) => (
+                    <li key={i}>
+                      {b.label} → <code className="text-xs">{b.href}</code>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p>—</p>
+              )}
+            </PackageSection>
+            <PackageSection title="Internal link recommendations" review className="lg:col-span-2">
+              <pre className="max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/30 p-3 text-xs">
+                {JSON.stringify((post.internalLinkPlan as { lessons?: unknown })?.lessons ?? [], null, 2)}
+              </pre>
+            </PackageSection>
+            <PackageSection title="Related blog posts (live index)" review className="lg:col-span-2">
+              {publishingPkg?.relatedBlogPosts?.length ? (
+                <ul className="space-y-2 text-foreground">
+                  {publishingPkg.relatedBlogPosts.map((r) => (
+                    <li key={r.slug}>
+                      <Link href={`/blog/${r.slug}`} className="font-semibold text-primary underline" target="_blank" rel="noreferrer">
+                        {r.title}
+                      </Link>
+                      <span className="text-muted-foreground"> — </span>
+                      <code className="text-xs">{r.slug}</code>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs">None yet — run &quot;Regenerate SEO bundle&quot; after publish peers exist, or generate a new draft after this feature ships.</p>
+              )}
+            </PackageSection>
+            <PackageSection title="Internal anchor opportunities" review className="lg:col-span-2">
+              {publishingPkg?.internalAnchorOpportunities?.length ? (
+                <ul className="space-y-3">
+                  {publishingPkg.internalAnchorOpportunities.map((a, i) => (
+                    <li key={`${a.phrase}-${i}`} className="text-foreground">
+                      <strong>{a.suggestedAnchorText}</strong> for phrase &quot;{a.phrase}&quot; →{" "}
+                      <code className="text-xs">{a.targetSuggestedPath}</code>
+                      {a.rationale ? <p className="mt-1 text-xs text-muted-foreground">{a.rationale}</p> : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs">Planner did not emit anchor rows — older drafts may lack this block.</p>
+              )}
+            </PackageSection>
+            <PackageSection title="Image recommendations & placement" review className="lg:col-span-2">
+              <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/30 p-3 text-xs">
+                {JSON.stringify((post.internalLinkPlan as { imagePlacements?: unknown })?.imagePlacements ?? [], null, 2)}
+              </pre>
+              {post.coverImagePrompt ? (
+                <p className="mt-2 text-xs">
+                  <span className="font-medium text-foreground">Hero prompt: </span>
+                  {post.coverImagePrompt}
+                </p>
+              ) : null}
+            </PackageSection>
+            <PackageSection title="APA 7 references (verified rows)" review className="lg:col-span-2">
+              {post.apaReferences?.length ? (
+                <ul className="list-inside list-decimal space-y-1 text-foreground">
+                  {post.apaReferences.map((line, i) => (
+                    <li key={i} className="whitespace-pre-wrap">
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>None yet — add sources JSON and regenerate, or edit in full panel.</p>
+              )}
+            </PackageSection>
+            <PackageSection title="Schema & structured data opportunities" review className="lg:col-span-2">
+              <p className="mb-2 text-xs">
+                Summary JSON v{schemaParsed?.version ?? "?"} · emit FAQ schema:{" "}
+                {String(seo?.emitFaqSchema ?? schemaParsed?.emitFaqSchema ?? false)}
+              </p>
+              {schemaParsed?.schemaOpportunities?.length ? (
+                <ul className="space-y-2">
+                  {schemaParsed.schemaOpportunities.map((s: { type: string; rationale: string }, i: number) => (
+                    <li key={i}>
+                      <strong className="text-foreground">{s.type}</strong>: {s.rationale}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs">No extra opportunities in summary — defaults still include BlogPosting on public templates.</p>
+              )}
+            </PackageSection>
+            <PackageSection
+              title="Manual review & guardrails"
+              review
+              className="lg:col-span-2"
+            >
+              <ul className="space-y-1">
+                <li>
+                  Medical / policy flags: {(post.medicalRiskFlags ?? []).join(", ") || "None recorded"}
+                </li>
+                <li>Requires references flag is enforced by citation gate + editor review before live publish.</li>
+                <li>For unsupported clinical claims, edit body in the full panel and add authoritative sources.</li>
+              </ul>
+            </PackageSection>
+          </div>
+        </div>
+      ) : null}
+
+      {plan && !post ? (
+        <div className="rounded-xl border border-sky-500/40 bg-sky-500/10 p-4 text-sm text-foreground">
+          <p className="font-semibold">Plan recovered (persist blocked or partial failure)</p>
+          <p className="mt-1 text-muted-foreground">Open the control panel to persist draft manually or fix citations.</p>
+          <pre className="mt-3 max-h-64 overflow-auto rounded-lg bg-muted/30 p-3 text-xs">{JSON.stringify(plan, null, 2)}</pre>
+        </div>
+      ) : null}
+    </div>
+  );
+}

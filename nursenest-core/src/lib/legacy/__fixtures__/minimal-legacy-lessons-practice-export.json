@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "lessons": [],
+  "questions": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "stem": "Which action should the nurse take first when a client reports sudden chest pain?",
+      "options": [
+        "Obtain vital signs and assess airway, breathing, circulation",
+        "Administer prescribed nitroglycerin without assessment",
+        "Tell the client to walk it off",
+        "Discharge the client if pain resolves"
+      ],
+      "correctAnswer": ["Obtain vital signs and assess airway, breathing, circulation"],
+      "questionType": "MCQ",
+      "rationale": "Assessment before intervention — ABCs first.",
+      "topic": "Prioritization",
+      "bodySystem": "Cardiovascular",
+      "difficulty": 3,
+      "status": "published",
+      "access": "public"
+    }
+  ],
+  "practiceTests": [
+    {
+      "legacyKey": "demo-test-1",
+      "title": "Demo",
+      "questionLegacyIds": ["nonexistent-question-id"]
+    }
+  ]
+}

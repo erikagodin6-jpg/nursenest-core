@@ -1,0 +1,168 @@
+import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
+import type { ExamPathwayDefinition } from "./types";
+
+/**
+ * International RN foundation hubs (UK NMC, Australia IQNM, Philippines PNLE, India, Nigeria, Saudi Arabia).
+ * Marketing-only shells: `GENERIC` exam family, empty `contentExamKeys`, `upcoming` + `waitlist`.
+ * Readiness treats these via {@link isIntlRnFoundationPathwayId} — not sitemap-`published` until separately approved.
+ */
+export const EXAM_PATHWAYS_SEGMENT_E: ExamPathwayDefinition[] = [
+  {
+    id: "uk-rn-nmc-test-of-competence",
+    countrySlug: "uk",
+    countryCode: CountryCode.GB,
+    roleTrack: "rn",
+    examCode: "nmc-test-of-competence",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "NMC_TOC",
+    displayName: "UK RN registration / NMC Test of Competence (CBT + OSCE)",
+    shortName: "NMC CBT + OSCE",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "UK NMC CBT & OSCE RN Exam Prep | NurseNest",
+    seoDescription:
+      "Independent preparation context for internationally educated nurses targeting UK NMC registration: CBT and OSCE orientation, transferable clinical judgement practice, and links to official NMC guidance.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with NMC. OSCE link is product surface when present; verify station rules with the NMC and test centre.",
+  },
+  {
+    id: "au-rn-iqnm-pathway",
+    countrySlug: "australia",
+    countryCode: CountryCode.AU,
+    roleTrack: "rn",
+    examCode: "iqnm-pathway",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "IQNM",
+    displayName: "Australia RN registration / NMBA–AHPRA IQNM pathway",
+    shortName: "NMBA/AHPRA IQNM pathway",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "Australia RN Registration Exam Prep | NurseNest",
+    seoDescription:
+      "Orientation for internationally qualified nurses on the NMBA/AHPRA IQNM pathway: self-check, portfolio-style evidence, and examination components where applicable — plus transferable study practice; always confirm requirements with AHPRA/NMBA.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with AHPRA/NMBA. Wording must stay aligned to IQNM stages without claiming to replicate regulator assessments.",
+  },
+  {
+    id: "ph-rn-prc-pnle",
+    countrySlug: "philippines",
+    countryCode: CountryCode.PH,
+    roleTrack: "rn",
+    examCode: "prc-pnle",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "PNLE",
+    displayName: "Philippines RN / PRC Nurses Licensure Examination (PNLE)",
+    shortName: "PRC PNLE",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "Philippines PNLE Nursing Board Exam Prep | NurseNest",
+    seoDescription:
+      "Independent study support for nurses preparing for the Philippine nursing licensure examination (PNLE) under the PRC: domain-level orientation and transferable clinical reasoning; verify bulletins and tables of specifications with the PRC.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with PRC. Do not imply a copy of proprietary PNLE item banks.",
+  },
+  {
+    id: "in-rn-state-nursing-council-registration",
+    countrySlug: "india",
+    countryCode: CountryCode.IN,
+    roleTrack: "rn",
+    examCode: "state-nursing-council-registration",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "IN_RN_REG",
+    displayName: "India RN / state nursing council registration (INC-aligned)",
+    shortName: "State nursing council registration (INC aligned)",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "India RN Registration Exam Prep | NurseNest",
+    seoDescription:
+      "Independent study context for nurses preparing for Indian state nursing council registration aligned with Indian Nursing Council (INC) expectations: transferable clinical judgement, documentation habits, and safety practice—always confirm circulars and eligibility with your state council.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with INC or any state nursing council. Do not imply official examination replication.",
+  },
+  {
+    id: "ng-rn-nmcn-licensure",
+    countrySlug: "nigeria",
+    countryCode: CountryCode.NG,
+    roleTrack: "rn",
+    examCode: "nmcn-licensure",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "NMCN_RN",
+    displayName: "Nigeria RN / NMCN licensure pathway",
+    shortName: "NMCN RN licensure",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "Nigeria RN Licensure Exam Prep | NurseNest",
+    seoDescription:
+      "Orientation support for nurses preparing for Nursing and Midwifery Council of Nigeria (NMCN) RN licensure: transferable clinical reasoning and study structure—verify eligibility, documentation, and examination bulletins with NMCN.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with NMCN. No proprietary NMCN item bank claims.",
+  },
+  {
+    id: "sa-rn-scfhs-licensure",
+    countrySlug: "saudi-arabia",
+    countryCode: CountryCode.SA,
+    roleTrack: "rn",
+    examCode: "scfhs-licensure",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "SCFHS_RN",
+    displayName: "Saudi Arabia RN / SCFHS licensure pathway",
+    shortName: "SCFHS RN licensure",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "Saudi RN Licensure Exam Prep | NurseNest",
+    seoDescription:
+      "Independent preparation context for nurses navigating Saudi Commission for Health Specialties (SCFHS) licensing steps: clinical judgement drills and study planning—always follow official SCFHS communications for your category.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with SCFHS. Arabic UI may be layered later; default marketing shell remains English-first.",
+  },
+  /** Pre-Nursing paid tier — learner `/app/practice-tests` + CAT; `exam_questions.tier` uses `prenursing` (see {@link examQuestionTierStringsForProfileTier}). */
+  {
+    id: "pre-nursing",
+    countrySlug: "us",
+    countryCode: CountryCode.US,
+    roleTrack: "rn",
+    examCode: "pre-nursing",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "PRE_NURSING",
+    displayName: "Pre-Nursing Foundations (US)",
+    shortName: "Pre-Nursing",
+    stripeTier: TierCode.PRE_NURSING,
+    contentExamKeys: ["PRE_NURSING"],
+    seoTitle: "Pre-Nursing practice questions | NurseNest",
+    seoDescription: "Foundational practice with rationales for pre-nursing learners in the US market.",
+    status: "active",
+    acquisitionMode: "subscribe",
+    internalNotes:
+      "Not an NCLEX marketing hub. Canonical `pathwayId` for US Pre-Nursing subscribers; CA uses `pre-nursing-ca`.",
+  },
+  {
+    id: "pre-nursing-ca",
+    countrySlug: "canada",
+    countryCode: CountryCode.CA,
+    roleTrack: "rn",
+    examCode: "pre-nursing",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "PRE_NURSING",
+    displayName: "Pre-Nursing Foundations (Canada)",
+    shortName: "Pre-Nursing",
+    stripeTier: TierCode.PRE_NURSING,
+    contentExamKeys: ["PRE_NURSING"],
+    seoTitle: "Pre-Nursing practice questions | NurseNest",
+    seoDescription: "Foundational practice with rationales for pre-nursing learners in Canada.",
+    status: "active",
+    acquisitionMode: "subscribe",
+    internalNotes: "Parallel catalog row for CA `CountryCode` + subscription matching; shared PRE_NURSING exam key.",
+  },
+];

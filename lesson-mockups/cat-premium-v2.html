@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest CAT — Premium v2 · No Rail</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+button,input,select,textarea{font-family:inherit}svg{display:block;flex-shrink:0}
+
+.chrome{background:#0a0f1a;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.08em;text-transform:uppercase}
+.chrome-note{font-size:10px;color:#475569}
+.tabs{background:#0f1623;padding:0 20px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:40px;z-index:299;padding-top:7px}
+.tabs::-webkit-scrollbar{display:none}
+.tsep{width:1px;height:13px;background:#1e293b;margin:0 5px 7px;align-self:center}
+.tab{padding:5px 11px 7px;font-size:10px;font-weight:600;color:#475569;border-radius:4px 4px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+.tg{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;padding:7px 5px 0;align-self:flex-start}
+
+.frame{display:none;width:1440px;height:900px;overflow:hidden;position:relative}
+.frame.mob{width:390px;height:844px}
+.frame.on{display:block}
+
+/* ═══ TOKENS ═══════════════════════════════════════════════════ */
+.oc{
+  --bg:#f0f5fa;--surf:#fff;--panel:#f7fafd;--panel2:#eef4fa;
+  --bdr:rgba(180,218,240,.7);--bdr2:rgba(140,196,228,.8);--div:rgba(180,218,240,.4);
+  --muted:#647894;--subtle:#94a3b8;
+  --acc:#1aaee0;--acc-d:#0d7aaa;--acc-s:rgba(13,122,170,.07);
+  --sel-bg:rgba(13,122,170,.07);--sel-bdr:#0d7aaa;
+  --nav:#fff;--nav-bdr:rgba(180,218,240,.8);--nav-sh:0 1px 0 rgba(0,0,0,.04),0 4px 12px -6px rgba(6,88,140,.08);
+  --bot:#fff;--bot-bdr:rgba(180,218,240,.8);--bot-sh:0 -1px 0 rgba(0,0,0,.03),0 -8px 24px -12px rgba(6,88,140,.06);
+  --txt:#0f172a;--txt2:#455569;--muted2:#647894;
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.07);--ok-bdr:rgba(22,163,74,.22);
+  --err:#dc2626;--err-bg:rgba(220,38,38,.06);--err-bdr:rgba(220,38,38,.2);
+  --warn:#d97706;--warn-bg:rgba(217,119,6,.07);
+  --lbg:#f1f5f9;--lfg:#647894;--lsel:#0d7aaa;--lself:#fff;
+  --chip-bg:rgba(13,122,170,.09);--chip-bdr:rgba(13,122,170,.22);--chip-fg:#0d7aaa;
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(6,88,140,.07);
+  --prog-t:rgba(180,218,240,.4);--prog-f:#1aaee0;
+}
+.mn{
+  --bg:#07111f;--surf:#111827;--panel:#0d1826;--panel2:#152032;
+  --bdr:rgba(49,68,102,.85);--bdr2:rgba(56,189,248,.22);--div:rgba(49,68,102,.5);
+  --muted:#5e7a98;--subtle:#47607c;
+  --acc:#38bdf8;--acc-d:#0ea5e9;--acc-s:rgba(56,189,248,.08);
+  --sel-bg:rgba(56,189,248,.1);--sel-bdr:#38bdf8;
+  --nav:#0b1220;--nav-bdr:rgba(49,68,102,.9);--nav-sh:0 1px 0 rgba(0,0,0,.25),0 4px 16px -6px rgba(0,0,0,.35);
+  --bot:#0b1220;--bot-bdr:rgba(49,68,102,.9);--bot-sh:0 -1px 0 rgba(0,0,0,.2),0 -8px 24px -12px rgba(0,0,0,.4);
+  --txt:#f0f6ff;--txt2:#c8d8ed;--muted2:#5e7a98;
+  --ok:#34d399;--ok-bg:rgba(52,211,153,.1);--ok-bdr:rgba(52,211,153,.25);
+  --err:#f87171;--err-bg:rgba(248,113,113,.1);--err-bdr:rgba(248,113,113,.22);
+  --warn:#fbbf24;--warn-bg:rgba(251,191,36,.09);
+  --lbg:#1e2d42;--lfg:#5e7a98;--lsel:#38bdf8;--lself:#07111f;
+  --chip-bg:rgba(56,189,248,.12);--chip-bdr:rgba(56,189,248,.25);--chip-fg:#7dd3fc;
+  --sh:0 2px 0 rgba(0,0,0,.2),0 6px 24px -10px rgba(0,0,0,.35);
+  --prog-t:rgba(49,68,102,.55);--prog-f:#38bdf8;
+}
+.bl{
+  --bg:#fdf2fb;--surf:#fff;--panel:#fdf7fc;--panel2:#f8eef7;
+  --bdr:rgba(232,200,226,.75);--bdr2:rgba(217,72,168,.25);--div:rgba(232,200,226,.45);
+  --muted:#7a6b84;--subtle:#9d8da8;
+  --acc:#d948a8;--acc-d:#b3359a;--acc-s:rgba(217,72,168,.08);
+  --sel-bg:rgba(217,72,168,.07);--sel-bdr:#d948a8;
+  --nav:#fff;--nav-bdr:rgba(232,200,226,.75);--nav-sh:0 1px 0 rgba(0,0,0,.03),0 4px 12px -6px rgba(180,60,160,.07);
+  --bot:#fff;--bot-bdr:rgba(232,200,226,.75);--bot-sh:0 -1px 0 rgba(0,0,0,.02),0 -8px 24px -12px rgba(180,60,160,.05);
+  --txt:#10182f;--txt2:#455569;--muted2:#7a6b84;
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.07);--ok-bdr:rgba(22,163,74,.22);
+  --err:#dc2626;--err-bg:rgba(220,38,38,.06);--err-bdr:rgba(220,38,38,.2);
+  --warn:#d97706;--warn-bg:rgba(217,119,6,.07);
+  --lbg:#f8f0f7;--lfg:#7a6b84;--lsel:#d948a8;--lself:#fff;
+  --chip-bg:rgba(217,72,168,.1);--chip-bdr:rgba(217,72,168,.25);--chip-fg:#b3359a;
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(180,60,160,.06);
+  --prog-t:rgba(232,200,226,.4);--prog-f:#d948a8;
+}
+
+/* ═══ SHELL ═════════════════════════════════════════════════════ */
+.cat{display:flex;flex-direction:column;background:var(--bg);height:900px;width:1440px;overflow:hidden}
+.cat.mob{height:844px;width:390px}
+
+/* TOP BAR */
+.tb{
+  height:48px;flex-shrink:0;
+  background:var(--nav);
+  border-bottom:1px solid var(--nav-bdr);
+  box-shadow:var(--nav-sh);
+  display:flex;align-items:center;padding:0 24px;gap:0;
+  position:relative;z-index:10;
+}
+.tb-brand{font-size:14px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.tb-dot{color:var(--acc)}
+.tb-chip{
+  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border-radius:4px;margin-left:10px;
+  background:var(--chip-bg);border:1px solid var(--chip-bdr);color:var(--chip-fg);
+}
+.tb-pulse{
+  display:flex;align-items:center;gap:4px;
+  font-size:9px;font-weight:600;letter-spacing:.05em;color:var(--muted);
+  margin-left:10px;
+}
+.tb-pulse-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 2.5px rgba(34,197,94,.18)}
+
+.tb-center{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;
+}
+.tb-qn{font-size:13px;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tb-of{font-size:13px;color:var(--muted);font-weight:400}
+.tb-prog{width:100px;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.tb-pfill{height:100%;border-radius:99px;background:var(--prog-f);transition:width .4s ease}
+
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.tb-timer{
+  font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.04em;
+  color:var(--txt);padding:5px 10px;border-radius:7px;
+  background:var(--panel);border:1px solid var(--bdr);margin-right:6px;
+}
+.tb-timer.warn{color:var(--err)}
+.tb-ico{
+  width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid transparent;cursor:pointer;transition:.12s;
+}
+.tb-ico:hover{background:var(--panel);border-color:var(--bdr)}
+.tb-ico svg{stroke:var(--muted)}
+.tb-sep{width:1px;height:16px;background:var(--bdr);margin:0 3px}
+.tb-exit{
+  font-size:11px;font-weight:600;color:var(--muted);
+  padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);
+  background:transparent;cursor:pointer;margin-left:4px;transition:.12s;
+}
+.tb-exit:hover{color:var(--txt);background:var(--panel)}
+
+/* BODY — no rail, full width */
+.body{flex:1;display:flex;min-height:0;overflow:hidden}
+
+/* QUESTION CANVAS — centered, no rail */
+.qcanvas{
+  flex:1;overflow:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:32px 48px;
+  gap:0;
+}
+.qwrap{width:100%;max-width:720px;display:flex;flex-direction:column;gap:14px}
+
+/* QUESTION CARD */
+.qcard{
+  background:var(--surf);
+  border:1px solid var(--bdr);
+  border-radius:18px;
+  padding:32px 36px;
+  box-shadow:var(--sh);
+}
+.qhead{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:14px;border-bottom:1px solid var(--div);margin-bottom:22px;
+}
+.qmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qpill{
+  font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);
+  padding:3px 10px;border-radius:5px;
+}
+.qdiff{display:flex;gap:2px;align-items:center}
+.qpip{width:7px;height:7px;border-radius:2px}
+.qpip.f{background:var(--acc)}
+.qpip.e{background:var(--bdr2);opacity:.3}
+.qflag{
+  width:30px;height:30px;border-radius:7px;
+  background:transparent;border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.qflag svg{stroke:var(--muted)}
+
+/* STEM */
+.stem{
+  font-size:16px;line-height:1.78;letter-spacing:-.015em;
+  color:var(--txt);font-weight:400;max-width:66ch;
+}
+.stem strong{font-weight:700}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:24px}
+.opt{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:15px 18px;
+  border:1.5px solid var(--bdr);border-radius:13px;
+  cursor:pointer;background:var(--surf);
+  transition:border-color .12s,background .12s;
+  position:relative;overflow:hidden;text-align:left;width:100%;
+}
+.opt::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:0;border-radius:13px 0 0 13px;
+  background:var(--sel-bdr);transition:width .12s ease;
+}
+.opt:hover{border-color:var(--bdr2);background:var(--panel)}
+.opt.sel{border-color:var(--sel-bdr);background:var(--sel-bg)}
+.opt.sel::before{width:4px}
+.opt.ok{border-color:var(--ok-bdr);background:var(--ok-bg)}
+.opt.ok::before{width:4px;background:var(--ok)}
+.opt.err{border-color:var(--err-bdr);background:var(--err-bg)}
+.opt.err::before{width:4px;background:var(--err)}
+.opt.dim{opacity:.45}
+.oletter{
+  width:26px;height:26px;border-radius:6px;
+  background:var(--lbg);color:var(--lfg);
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;transition:.12s;
+}
+.opt.sel .oletter{background:var(--lsel);color:var(--lself)}
+.opt.ok .oletter{background:var(--ok);color:#fff}
+.opt.err .oletter{background:var(--err);color:#fff}
+.otext{font-size:14px;color:var(--txt2);line-height:1.58;flex:1}
+.opt.sel .otext{color:var(--txt);font-weight:500}
+
+/* SATA checkbox */
+.scheck{
+  width:18px;height:18px;border-radius:4px;
+  border:2px solid var(--bdr2);background:var(--surf);
+  flex-shrink:0;margin-top:3px;display:flex;align-items:center;justify-content:center;transition:.12s;
+}
+.opt.sel .scheck{background:var(--acc);border-color:var(--acc)}
+
+/* RATIONALE */
+.rationale{
+  background:var(--panel);border:1px solid var(--bdr);border-radius:12px;
+  padding:16px 18px;margin-top:4px;
+}
+.rat-label{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.rat-text{font-size:13px;color:var(--txt2);line-height:1.65}
+
+/* BOTTOM BAR */
+.bot{
+  height:60px;flex-shrink:0;
+  background:var(--bot);border-top:1px solid var(--bot-bdr);
+  box-shadow:var(--bot-sh);
+  display:flex;align-items:center;padding:0 36px;
+  justify-content:space-between;gap:16px;
+}
+.bot-l{display:flex;align-items:center;gap:8px}
+.bot-r{display:flex;align-items:center;gap:8px}
+.btn-ghost{
+  font-size:13px;font-weight:600;color:var(--muted);
+  background:transparent;border:1px solid var(--bdr);
+  padding:8px 18px;border-radius:9px;cursor:pointer;transition:.12s;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-ghost:hover{color:var(--txt);background:var(--panel);border-color:var(--bdr2)}
+.btn-flag{
+  font-size:12.5px;font-weight:600;color:var(--muted);
+  background:transparent;border:1px solid var(--bdr);
+  padding:7px 14px;border-radius:9px;cursor:pointer;transition:.12s;
+  display:flex;align-items:center;gap:5px;
+}
+.btn-flag svg{stroke:var(--muted)}
+.btn-primary{
+  font-size:13px;font-weight:700;color:#fff;
+  background:var(--acc-d);
+  padding:9px 24px;border-radius:9px;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  box-shadow:0 1px 0 rgba(0,0,0,.1),0 4px 12px -4px rgba(13,122,170,.28);
+  transition:.12s;
+}
+.mn .btn-primary{background:var(--acc);color:#07111f;box-shadow:0 1px 0 rgba(0,0,0,.15),0 4px 14px -4px rgba(56,189,248,.32)}
+.bl .btn-primary{box-shadow:0 1px 0 rgba(0,0,0,.08),0 4px 12px -4px rgba(179,53,154,.28)}
+.btn-primary:hover{opacity:.9}
+.kbd{font-size:9.5px;font-weight:600;background:var(--panel);border:1px solid var(--bdr);border-bottom-width:2px;padding:1px 5px;border-radius:4px;color:var(--muted);font-family:monospace}
+.kbhint{font-size:10.5px;color:var(--subtle);display:flex;align-items:center;gap:3px}
+
+/* EXHIBIT PANEL (case study only) */
+.exhibit{
+  width:280px;flex-shrink:0;
+  background:var(--panel);
+  border-right:1px solid var(--bdr);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.ex-hdr{padding:12px 14px 0;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.ex-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle);margin-bottom:8px}
+.ex-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.ex-tabs::-webkit-scrollbar{display:none}
+.ex-tab{font-size:11px;font-weight:500;color:var(--muted);padding:6px 11px 8px;border-radius:6px 6px 0 0;cursor:pointer;background:transparent;border:none;white-space:nowrap;transition:.1s;position:relative}
+.ex-tab.on{color:var(--txt);font-weight:600;background:var(--surf);box-shadow:0 -1px 0 var(--bdr) inset}
+.ex-tab .dot{position:absolute;top:4px;right:5px;width:5px;height:5px;border-radius:50%;background:var(--err)}
+.ex-body{flex:1;overflow-y:auto;padding:12px 14px;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent}
+.ls{margin-bottom:14px}
+.ls-title{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle);padding:3px 0 5px;border-bottom:1px solid var(--div);margin-bottom:6px}
+.lr{display:flex;align-items:center;justify-content:space-between;padding:4px 5px;border-radius:5px;font-size:11.5px}
+.lr:hover{background:var(--panel2)}
+.ln{color:var(--txt2);font-weight:500;flex:1}
+.lv{font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums;margin-right:5px}
+.lref{font-size:10px;color:var(--subtle);margin-right:5px}
+.lf{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px}
+.lf.lo{background:var(--err-bg);color:var(--err)}
+.lf.hi{background:var(--warn-bg);color:var(--warn)}
+.lf.cr{background:var(--err-bg);color:var(--err);border:1px solid var(--err-bdr)}
+
+/* CASE BANNER */
+.cbanner{
+  background:var(--panel);border-bottom:1px solid var(--bdr);
+  padding:8px 24px;flex-shrink:0;
+  display:flex;align-items:center;gap:12px;
+}
+.cpatient{font-size:12.5px;font-weight:600;color:var(--txt)}
+.cdots{display:flex;gap:4px;align-items:center}
+.cdot{width:7px;height:7px;border-radius:50%}
+.cdot.dn{background:var(--ok)}
+.cdot.ac{background:var(--acc)}
+.cdot.td{background:var(--bdr2);opacity:.4}
+
+/* BOWTIE */
+.btcanvas{
+  flex:1;display:flex;flex-direction:column;
+  padding:24px 32px 0;overflow:hidden;
+}
+.btgrid{
+  display:grid;grid-template-columns:1fr 260px 1fr;
+  gap:24px;align-items:start;
+}
+.btcol{display:flex;flex-direction:column;gap:10px}
+.btcolhdr{
+  font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  text-align:center;padding:5px 12px;border-radius:6px;margin-bottom:4px;
+  background:var(--chip-bg);border:1px solid var(--chip-bdr);color:var(--chip-fg);
+}
+.btslot{
+  background:var(--surf);border:1.5px solid var(--bdr);border-radius:11px;
+  padding:12px 14px;min-height:58px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;transition:border-color .12s;
+}
+.btslot:hover{border-color:var(--bdr2)}
+.btslot.filled{border-color:var(--sel-bdr);background:var(--sel-bg)}
+.btslot.ok{border-color:var(--ok-bdr);background:var(--ok-bg)}
+.btslot.err{border-color:var(--err-bdr);background:var(--err-bg)}
+.btsn{
+  width:22px;height:22px;border-radius:5px;
+  background:var(--lbg);color:var(--lfg);
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.12s;
+}
+.btslot.filled .btsn{background:var(--lsel);color:var(--lself)}
+.btstxt{font-size:12.5px;color:var(--txt2);line-height:1.42;flex:1}
+.btslot.filled .btstxt{color:var(--txt);font-weight:500}
+.btslot-empty{font-size:12px;color:var(--subtle);font-style:italic}
+.btrem{font-size:10px;font-weight:600;color:var(--acc);background:none;border:none;cursor:pointer;flex-shrink:0;white-space:nowrap}
+
+.btcenter{display:flex;flex-direction:column;align-items:center;gap:0}
+.btsep{height:20px;display:flex;align-items:center;width:100%;gap:0}
+.btarrow{flex:1;height:1.5px;background:linear-gradient(90deg,transparent,var(--bdr2),transparent);opacity:.6}
+.bthd{width:7px;height:7px;border-top:1.5px solid var(--bdr2);border-right:1.5px solid var(--bdr2);transform:rotate(45deg);opacity:.6;flex-shrink:0}
+.btscenario{
+  background:var(--surf);border:2px solid var(--bdr2);border-radius:17px;
+  padding:18px 16px;text-align:center;box-shadow:var(--sh);width:100%;
+}
+.btscenlbl{font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:8px}
+.btav{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--chip-bg);border:2px solid var(--chip-bdr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:var(--chip-fg);margin:0 auto 8px;
+}
+.btname{font-size:13.5px;font-weight:700;color:var(--txt)}
+.btmeta{font-size:10.5px;color:var(--muted);margin-top:2px;margin-bottom:8px}
+.btdiv{height:1px;background:var(--div);margin:8px 0}
+.btscentext{font-size:11px;color:var(--txt2);line-height:1.58;text-align:left}
+.btvitals{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px}
+.bvchip{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--panel);border:1px solid var(--bdr);color:var(--txt2)}
+.bvchip.crit{background:var(--err-bg);border-color:var(--err-bdr);color:var(--err)}
+
+.btbank{padding:12px 32px 0;max-width:100%}
+.btbanklbl{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--subtle);text-align:center;margin-bottom:8px}
+.btbankpills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.bkpill{
+  font-size:12.5px;font-weight:500;color:var(--txt2);
+  background:var(--surf);border:1.5px solid var(--bdr);
+  padding:7px 13px;border-radius:8px;cursor:pointer;transition:.12s;text-align:left;
+}
+.bkpill:hover{border-color:var(--sel-bdr);background:var(--sel-bg)}
+.bkpill.placed{border-color:var(--acc);background:var(--acc-s);color:var(--chip-fg);font-weight:600;opacity:.5}
+
+/* MATRIX */
+.mxwrap{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+.mxtbl{width:100%;border-collapse:collapse}
+.mxtbl th{padding:10px 16px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle);background:var(--panel);border-bottom:2px solid var(--bdr);text-align:center}
+.mxtbl th:first-child{text-align:left;width:42%}
+.mxtbl td{border-bottom:1px solid var(--div);padding:0}
+.mxtbl tr:last-child td{border-bottom:none}
+.mxtbl tr:hover td{background:var(--panel)}
+.mxact{padding:11px 16px;font-size:12.5px;color:var(--txt);line-height:1.42;font-weight:500}
+.mxsub{font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px}
+.mxcell{padding:10px;text-align:center}
+.mxcola{background:var(--ok-bg)}
+.mxcolb{background:var(--err-bg)}
+.mxrad{width:20px;height:20px;border-radius:50%;border:2px solid var(--bdr2);background:var(--surf);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.12s}
+.mxrad.sa{border-color:var(--ok);background:var(--ok)}
+.mxrad.sa::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+.mxrad.sb{border-color:var(--err);background:var(--err)}
+.mxrad.sb::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+.mxrad.sc{border-color:var(--acc);background:var(--acc)}
+.mxrad.sc::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+
+/* MOBILE */
+.mob .tb{height:44px;padding:0 12px}
+.mob .tb-brand{font-size:13px}
+.mob .qcanvas{padding:14px 12px}
+.mob .qcard{padding:18px 16px}
+.mob .stem{font-size:15px}
+.mob .opts{gap:7px;margin-top:18px}
+.mob .opt{padding:13px 14px}
+.mob .otext{font-size:13px}
+.mob .bot{height:56px;padding:0 10px;gap:6px}
+.mob .btn-ghost{padding:8px 12px;font-size:12px}
+.mob .btn-flag{padding:7px 12px;font-size:12px}
+.mob .btn-primary{padding:9px 16px;font-size:12.5px}
+.mob .body{flex-direction:column;height:calc(844px - 44px - 56px)}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <span class="chrome-title">NurseNest CAT · Premium v2 · Rail-free</span>
+  <span class="chrome-note">Ocean · Midnight · Blossom · Mobile — no left rail</span>
+</div>
+<div class="tabs">
+  <span class="tg">OCEAN</span>
+  <button class="tab on" onclick="s(0)">1 MCQ</button>
+  <button class="tab" onclick="s(1)">2 Review</button>
+  <button class="tab" onclick="s(2)">3 SATA</button>
+  <button class="tab" onclick="s(3)">4 Case Study</button>
+  <button class="tab" onclick="s(4)">5 Bowtie</button>
+  <button class="tab" onclick="s(5)">6 Matrix</button>
+  <div class="tsep"></div>
+  <span class="tg">MIDNIGHT</span>
+  <button class="tab" onclick="s(6)">7 MCQ</button>
+  <button class="tab" onclick="s(7)">8 Bowtie</button>
+  <button class="tab" onclick="s(8)">9 Case Study</button>
+  <div class="tsep"></div>
+  <span class="tg">BLOSSOM</span>
+  <button class="tab" onclick="s(9)">10 MCQ</button>
+  <button class="tab" onclick="s(10)">11 Review</button>
+  <div class="tsep"></div>
+  <span class="tg">MOBILE</span>
+  <button class="tab" onclick="s(11)">12 Ocean MCQ</button>
+  <button class="tab" onclick="s(12)">13 Ocean SATA</button>
+  <button class="tab" onclick="s(13)">14 Midnight MCQ</button>
+  <button class="tab" onclick="s(14)">15 Bowtie Mobile</button>
+</div>
+
+<!-- shared topbar macro -->
+<script>
+function TB(theme,q,tot,pct,timer,extra){return`<header class="tb"><span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT Exam</span>${extra||''}<div class="tb-center"><span class="tb-qn">${q}</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">${tot}</span><div class="tb-prog"><div class="tb-pfill" style="width:${pct}%"></div></div></div><div class="tb-right"><div class="tb-timer">${timer}</div><button class="tb-ico" title="Flag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button><div class="tb-sep"></div><button class="tb-ico" title="Calculator"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></button><button class="tb-ico" title="Labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div></header>`}
+function BOT(){return`<footer class="bot"><div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div><div class="kbhint"><span class="kbd">A–D</span>&nbsp;select&nbsp;·&nbsp;<span class="kbd">Enter</span>&nbsp;submit</div><div class="bot-r"><button class="btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button><button class="btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div></footer>`}
+</script>
+
+<!-- ══ FRAME 1 · Ocean MCQ Active ═══════════════════════════════ -->
+<div class="frame" id="f0">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip">CAT Exam</span>
+    <span class="tb-pulse"><span class="tb-pulse-dot"></span>Adaptive</span>
+    <div class="tb-center">
+      <span class="tb-qn">Question 23</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span>
+      <div class="tb-prog"><div class="tb-pfill" style="width:30.6%"></div></div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-timer">00:42:15</div>
+      <button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+      <div class="tb-sep"></div>
+      <button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></button>
+      <button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button>
+      <div class="tb-sep"></div>
+      <button class="tb-exit">End Exam</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="qcanvas">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Cardiovascular &amp; Oxygenation</span>
+              <div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip e"></div></div>
+              <span style="font-size:10.5px;color:var(--muted)">Hard</span>
+            </div>
+            <button class="qflag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Assessment: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema bilateral lower extremities, and jugular venous distension. Current medications include lisinopril 10 mg daily and metoprolol 25 mg twice daily. The provider has been notified. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="opts" role="radiogroup">
+            <button class="opt"><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></button>
+            <button class="opt sel"><span class="oletter">B</span><span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span></button>
+            <button class="opt"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+            <button class="opt"><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="kbhint"><span class="kbd">A–D</span>&nbsp;select&nbsp;·&nbsp;<span class="kbd">Enter</span>&nbsp;submit</div>
+    <div class="bot-r">
+      <button class="btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button>
+      <button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+    </div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 2 · Ocean MCQ Review ═══════════════════════════════ -->
+<div class="frame" id="f1">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip" style="background:var(--ok-bg);border-color:var(--ok-bdr);color:var(--ok)">Review Mode</span>
+    <div class="tb-center"><span class="tb-qn">Question 23</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:30.6%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer" style="color:var(--muted);background:none;border:none;font-size:11px">Session reviewed</div><button class="tb-exit">Exit Review</button></div>
+  </header>
+  <div class="body">
+    <div class="qcanvas">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Cardiovascular</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ok);font-weight:600"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>Correct</span>
+            </div>
+            <span style="font-size:10.5px;color:var(--subtle)">Item 23 · Hard</span>
+          </div>
+          <p class="stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Assessment: HR 104, BP 158/92, RR 22, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema, and JVD. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="opts">
+            <button class="opt dim" disabled><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></button>
+            <button class="opt ok" disabled><span class="oletter">B</span><span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></button>
+            <button class="opt dim" disabled><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+            <button class="opt dim" disabled><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to maintain adequate preload and cardiac output</span></button>
+          </div>
+          <div class="rationale">
+            <div class="rat-label">Why B is Correct</div>
+            <div class="rat-text">SpO₂ 92% indicates hypoxemia requiring immediate oxygenation. High-Fowler's positioning reduces venous return to the heart, decreasing preload and relieving pulmonary congestion. This addresses airway and breathing (ABCs priority) before pharmacological intervention. Furosemide, while appropriate, follows stabilizing oxygenation.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span style="font-size:11px;color:var(--muted)">Reviewing completed session · 75 questions</span>
+    <div class="bot-r"><button class="btn-primary">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 3 · Ocean SATA ═════════════════════════════════════ -->
+<div class="frame" id="f2">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip">CAT Exam</span>
+    <span class="tb-pulse"><span class="tb-pulse-dot"></span>Adaptive</span>
+    <div class="tb-center"><span class="tb-qn">Question 31</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:41.3%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">00:29:04</div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button><div class="tb-sep"></div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></button><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="body">
+    <div class="qcanvas">
+      <div class="qwrap">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Respiratory &amp; Oxygenation</span>
+              <span style="font-size:9.5px;font-weight:700;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">SATA</span>
+              <div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div></div>
+            </div>
+            <button class="qflag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="stem">A nurse is caring for a <strong>client with community-acquired pneumonia</strong> receiving antibiotic therapy. Vital signs: T 38.9°C, HR 98, BP 136/82, RR 24, SpO₂ 91% on 4 L/min nasal cannula. Which nursing interventions are appropriate at this time? <strong>Select all that apply.</strong></p>
+          <div class="opts" role="group">
+            <label class="opt sel" style="cursor:pointer">
+              <span class="scheck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="oletter">A</span><span class="otext">Elevate the head of the bed to 45° to optimize lung expansion and reduce aspiration risk</span>
+            </label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">B</span><span class="otext">Apply a non-rebreather mask at 15 L/min for the SpO₂ of 91% on 4 L nasal cannula</span></label>
+            <label class="opt sel" style="cursor:pointer">
+              <span class="scheck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="oletter">C</span><span class="otext">Encourage fluid intake of 2–3 L/day to thin secretions and facilitate expectoration</span>
+            </label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">D</span><span class="otext">Administer acetaminophen 650 mg PO PRN for fever and discomfort as ordered</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">E</span><span class="otext">Notify the provider immediately and prepare for intubation based on the current SpO₂</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="kbhint"><span class="kbd">Space</span>&nbsp;check/uncheck&nbsp;·&nbsp;<span class="kbd">↑↓</span>&nbsp;navigate&nbsp;·&nbsp;2 selected</div>
+    <div class="bot-r"><button class="btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button><button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 4 · Ocean Case Study (slim exhibit) ════════════════ -->
+<div class="frame" id="f3">
+<div class="cat oc" style="flex-direction:column">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip">CAT Exam</span>
+    <span class="tb-chip" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.22);color:#6d28d9;margin-left:6px">NGN</span>
+    <div class="tb-center">
+      <span class="tb-qn">Case Study</span><span class="tb-of"> · </span><span class="tb-qn" style="color:var(--muted)">Q 3 of 6</span>
+      <div style="display:flex;gap:4px;margin-left:12px">
+        <div class="cdot dn"></div><div class="cdot dn"></div><div class="cdot ac"></div><div class="cdot td"></div><div class="cdot td"></div><div class="cdot td"></div>
+      </div>
+    </div>
+    <div class="tb-right"><div class="tb-timer">01:12:44</div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <!-- slim case banner -->
+  <div class="cbanner">
+    <span class="cpatient">Mrs. Helena Park · 71F · Med-Surg · Respiratory</span>
+    <span style="font-size:11px;color:var(--muted)">T 38.7°C · HR 92 · BP 142/88 · RR 24 · SpO₂ 89% on 2L NC · COPD GOLD II · HTN · T2DM</span>
+    <span style="margin-left:auto;font-size:9.5px;font-weight:700;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 9px;border-radius:4px">6 Questions</span>
+  </div>
+  <!-- body: slim exhibit + question -->
+  <div style="display:flex;flex:1;min-height:0;overflow:hidden">
+    <div class="exhibit">
+      <div class="ex-hdr">
+        <div class="ex-lbl">Exhibit Panel</div>
+        <div class="ex-tabs">
+          <button class="ex-tab">H&amp;P</button>
+          <button class="ex-tab">Vitals</button>
+          <button class="ex-tab on">Labs<span class="dot"></span></button>
+          <button class="ex-tab">Imaging</button>
+          <button class="ex-tab">Meds</button>
+        </div>
+      </div>
+      <div class="ex-body">
+        <div class="ls"><div class="ls-title">Complete Blood Count</div>
+          <div class="lr"><span class="ln">WBC</span><span class="lv">14.2</span><span class="lref">4.5–11.0</span><span class="lf hi">↑ HIGH</span></div>
+          <div class="lr"><span class="ln">Hemoglobin</span><span class="lv">10.8</span><span class="lref">12.0–16.0</span><span class="lf lo">↓ LOW</span></div>
+          <div class="lr"><span class="ln">Hematocrit</span><span class="lv">32%</span><span class="lref">36–46%</span><span class="lf lo">↓</span></div>
+          <div class="lr"><span class="ln">Platelets</span><span class="lv">218</span><span class="lref">150–400</span></div>
+          <div class="lr"><span class="ln">Neutrophils</span><span class="lv">88%</span><span class="lref">50–70%</span><span class="lf hi">↑</span></div>
+        </div>
+        <div class="ls"><div class="ls-title">Basic Metabolic Panel</div>
+          <div class="lr"><span class="ln">Sodium</span><span class="lv">136</span><span class="lref">136–145</span></div>
+          <div class="lr"><span class="ln">Potassium</span><span class="lv">3.1</span><span class="lref">3.5–5.0</span><span class="lf cr">⚠ CRIT</span></div>
+          <div class="lr"><span class="ln">BUN</span><span class="lv">28</span><span class="lref">7–20</span><span class="lf hi">↑</span></div>
+          <div class="lr"><span class="ln">Creatinine</span><span class="lv">1.4</span><span class="lref">0.6–1.2</span><span class="lf hi">↑</span></div>
+          <div class="lr"><span class="ln">Glucose</span><span class="lv">188</span><span class="lref">70–100</span><span class="lf hi">↑</span></div>
+        </div>
+        <div class="ls"><div class="ls-title">Arterial Blood Gas</div>
+          <div class="lr"><span class="ln">pH</span><span class="lv">7.32</span><span class="lref">7.35–7.45</span><span class="lf lo">↓</span></div>
+          <div class="lr"><span class="ln">PaCO₂</span><span class="lv">52</span><span class="lref">35–45</span><span class="lf hi">↑</span></div>
+          <div class="lr"><span class="ln">PaO₂</span><span class="lv">58</span><span class="lref">80–100</span><span class="lf cr">⚠ CRIT</span></div>
+          <div class="lr"><span class="ln">HCO₃⁻</span><span class="lv">26</span><span class="lref">22–26</span></div>
+          <div class="lr"><span class="ln">SaO₂</span><span class="lv">89%</span><span class="lref">95–100%</span><span class="lf cr">⚠ CRIT</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- question area -->
+    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:24px 40px;gap:0">
+      <div style="width:100%;max-width:680px">
+        <div class="qcard">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="qpill">Respiratory</span>
+              <span style="font-size:9.5px;font-weight:700;color:#6d28d9;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">SATA · NGN</span>
+            </div>
+            <span style="font-size:10.5px;color:var(--subtle)">Q 3 of 6</span>
+          </div>
+          <p class="stem" style="font-size:15px">Based on <strong>Mrs. Park's laboratory results and clinical presentation</strong>, which findings require <strong>priority nursing intervention</strong>? <strong>Select all that apply.</strong></p>
+          <div class="opts" role="group" style="margin-top:20px;gap:8px">
+            <label class="opt sel" style="cursor:pointer"><span class="scheck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="oletter">A</span><span class="otext" style="font-size:13.5px">Critically low PaO₂ of 58 mmHg indicating respiratory failure requiring immediate oxygen titration</span></label>
+            <label class="opt sel" style="cursor:pointer"><span class="scheck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="oletter">B</span><span class="otext" style="font-size:13.5px">Critical hypokalemia (K⁺ 3.1 mEq/L) with risk for cardiac dysrhythmia requiring immediate provider notification</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">C</span><span class="otext" style="font-size:13.5px">Elevated WBC count indicating systemic infection requiring blood culture collection prior to antibiotics</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">D</span><span class="otext" style="font-size:13.5px">Elevated BUN/Creatinine suggesting dehydration requiring increased IV fluid rate</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">E</span><span class="otext" style="font-size:13.5px">Hemoglobin 10.8 g/dL indicating anemia requiring urgent packed red blood cell transfusion</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span style="font-size:11px;color:var(--muted)">2 selected · Select all that apply</span>
+    <div class="bot-r"><button class="btn-primary">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 5 · Ocean Bowtie ═══════════════════════════════════ -->
+<div class="frame" id="f4">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip">CAT Exam</span>
+    <span class="tb-chip" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.22);color:#0f766e;margin-left:6px">Bowtie</span>
+    <div class="tb-center"><span class="tb-qn">Question 47</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:62.6%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">00:28:04</div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="body" style="flex-direction:column;overflow:hidden">
+    <div class="btcanvas">
+      <div class="btgrid">
+        <!-- LEFT -->
+        <div class="btcol">
+          <div class="btcolhdr">Actions to Take</div>
+          <div class="btslot filled"><span class="btsn">1</span><span class="btstxt">Elevate head of bed to 30–45°</span><button class="btrem">Remove</button></div>
+          <div class="btslot filled"><span class="btsn">2</span><span class="btstxt">Administer IV furosemide as ordered</span><button class="btrem">Remove</button></div>
+        </div>
+        <!-- CENTER -->
+        <div class="btcenter">
+          <div class="btsep"><div class="btarrow"></div><div class="bthd"></div><div style="width:28px"></div><div class="bthd" style="transform:rotate(-135deg)"></div><div class="btarrow"></div></div>
+          <div class="btscenario">
+            <div class="btscenlbl">Client Condition</div>
+            <div class="btav">RC</div>
+            <div class="btname">Mr. Robert Chen</div>
+            <div class="btmeta">82M · CVICU · Post-op Day 2</div>
+            <div class="btdiv"></div>
+            <div class="btscentext"><strong>Acute decompensated heart failure</strong> following CABG. Bilateral pulmonary edema. SpO₂ trending 95% → 90%.</div>
+            <div class="btvitals">
+              <span class="bvchip crit">HR 112 ↑</span><span class="bvchip crit">SpO₂ 90% ↓</span><span class="bvchip crit">BP 162/98 ↑</span><span class="bvchip">RR 22</span><span class="bvchip crit">+3.2 kg ↑</span>
+            </div>
+          </div>
+        </div>
+        <!-- RIGHT -->
+        <div class="btcol">
+          <div class="btcolhdr" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.22);color:#0f766e">Parameters to Monitor</div>
+          <div class="btslot filled" style="border-color:rgba(13,148,136,.45);background:rgba(13,148,136,.06)"><span class="btsn" style="background:rgba(13,148,136,.15);color:#0f766e">1</span><span class="btstxt">Urinary output hourly (goal &gt;30 mL/hr)</span><button class="btrem" style="color:#0f766e">Remove</button></div>
+          <div class="btslot filled" style="border-color:rgba(13,148,136,.45);background:rgba(13,148,136,.06)"><span class="btsn" style="background:rgba(13,148,136,.15);color:#0f766e">2</span><span class="btstxt">SpO₂ and breath sounds q2h</span><button class="btrem" style="color:#0f766e">Remove</button></div>
+        </div>
+      </div>
+      <!-- Option bank -->
+      <div class="btbank" style="margin-top:16px">
+        <div class="btbanklbl">Option Bank — tap to assign</div>
+        <div class="btbankpills">
+          <button class="bkpill placed">Elevate head of bed to 30–45°</button>
+          <button class="bkpill placed">Administer IV furosemide as ordered</button>
+          <button class="bkpill">Administer 500 mL NS bolus over 1 hour</button>
+          <button class="bkpill placed">Urinary output hourly (goal >30 mL/hr)</button>
+          <button class="bkpill placed">SpO₂ and breath sounds q2h</button>
+          <button class="bkpill">Place client in Trendelenburg position</button>
+          <button class="bkpill">Serum potassium after each diuretic dose</button>
+          <button class="bkpill">Blood glucose every 6 hours</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <span style="font-size:11.5px;color:var(--ok);font-weight:600;background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:4px 12px;border-radius:7px">✓ All 4 slots filled</span>
+    <div class="bot-r"><button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAME 6 · Ocean Matrix ════════════════════════════════════ -->
+<div class="frame" id="f5">
+<div class="cat oc">
+  <header class="tb">
+    <span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span>
+    <span class="tb-chip">CAT Exam</span>
+    <span class="tb-chip" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.22);color:#0f766e;margin-left:6px">Matrix</span>
+    <div class="tb-center"><span class="tb-qn">Question 58</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:77.3%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">00:14:32</div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button><div class="tb-sep"></div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="body">
+    <div class="qcanvas">
+      <div class="qwrap" style="max-width:900px">
+        <div class="qcard" style="padding:28px 32px">
+          <div class="qhead"><div class="qmeta"><span class="qpill">Pharmacology &amp; Safety</span><div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div></div></div><button class="qflag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button></div>
+          <p class="stem" style="font-size:14.5px">A nurse is caring for <strong>Mr. Torres, 58M</strong>, admitted with hypertensive urgency (BP 196/114 mmHg). For each medication, indicate whether the action is <strong>Indicated</strong>, <strong>Contraindicated</strong>, or has <strong>No Effect</strong> on BP.</p>
+          <div class="mxwrap" style="margin-top:18px">
+            <table class="mxtbl">
+              <thead><tr><th>Medication / Action</th><th class="mxcola" style="color:var(--ok)">Indicated</th><th class="mxcolb" style="color:var(--err)">Contraindicated</th><th>No Effect on BP</th></tr></thead>
+              <tbody>
+                <tr><td><div class="mxact">Labetalol 20 mg IV push over 2 min<div class="mxsub">Alpha &amp; beta blocker · Fast-acting antihypertensive</div></div></td><td class="mxcell mxcola"><div class="mxrad sa"></div></td><td class="mxcell mxcolb"><div class="mxrad"></div></td><td class="mxcell"><div class="mxrad"></div></td></tr>
+                <tr><td><div class="mxact">Furosemide 40 mg IV<div class="mxsub">Loop diuretic · Reduces preload and volume</div></div></td><td class="mxcell mxcola"><div class="mxrad"></div></td><td class="mxcell mxcolb"><div class="mxrad"></div></td><td class="mxcell"><div class="mxrad sc"></div></td></tr>
+                <tr><td><div class="mxact">Morphine 4 mg IV PRN<div class="mxsub">Opioid analgesic · Respiratory depression risk</div></div></td><td class="mxcell mxcola"><div class="mxrad"></div></td><td class="mxcell mxcolb"><div class="mxrad sb"></div></td><td class="mxcell"><div class="mxrad"></div></td></tr>
+                <tr><td><div class="mxact">Nicardipine 5 mg/hr IV infusion<div class="mxsub">Calcium channel blocker · Titrated antihypertensive</div></div></td><td class="mxcell mxcola"><div class="mxrad sa"></div></td><td class="mxcell mxcolb"><div class="mxrad"></div></td><td class="mxcell"><div class="mxrad"></div></td></tr>
+                <tr><td><div class="mxact">Normal Saline 500 mL bolus<div class="mxsub">IV fluid · Volume expansion</div></div></td><td class="mxcell mxcola"><div class="mxrad"></div></td><td class="mxcell mxcolb"><div class="mxrad sb"></div></td><td class="mxcell"><div class="mxrad"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:10px;font-size:11px;color:var(--subtle)">
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block"></span>Indicated</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--err);display:inline-block"></span>Contraindicated</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--acc);display:inline-block"></span>No Effect</span>
+            <span style="margin-left:auto;color:var(--ok);font-weight:600">✓ 5/5 complete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot">
+    <div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="kbhint"><span class="kbd">←→</span>&nbsp;column&nbsp;·&nbsp;<span class="kbd">↑↓</span>&nbsp;row</div>
+    <div class="bot-r"><button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- ══ FRAMES 7-9 · Midnight ══════════════════════════════════ -->
+<div class="frame" id="f6">
+<div class="cat mn">
+  <header class="tb"><span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT Exam</span><span class="tb-pulse" style="margin-left:10px"><span class="tb-pulse-dot"></span>Adaptive</span>
+    <div class="tb-center"><span class="tb-qn">Question 23</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:30.6%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">00:42:15</div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button><div class="tb-sep"></div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></button><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="body"><div class="qcanvas"><div class="qwrap">
+    <div class="qcard">
+      <div class="qhead"><div class="qmeta"><span class="qpill">Cardiovascular &amp; Oxygenation</span><div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip e"></div></div><span style="font-size:10.5px;color:var(--muted)">Hard</span></div><button class="qflag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button></div>
+      <p class="stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Assessment: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema, and jugular venous distension. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="opts" role="radiogroup">
+        <button class="opt"><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></button>
+        <button class="opt sel"><span class="oletter">B</span><span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span></button>
+        <button class="opt"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+        <button class="opt"><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></button>
+      </div>
+    </div>
+  </div></div></div>
+  <footer class="bot"><div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div><div class="kbhint"><span class="kbd">A–D</span>&nbsp;select&nbsp;·&nbsp;<span class="kbd">Enter</span>&nbsp;submit</div><div class="bot-r"><button class="btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button><button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div></footer>
+</div>
+</div>
+
+<!-- FRAME 8 · Midnight Bowtie -->
+<div class="frame" id="f7">
+<div class="cat mn">
+  <header class="tb"><span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT Exam</span><span class="tb-chip" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.22);color:#34d399;margin-left:6px">Bowtie</span>
+    <div class="tb-center"><span class="tb-qn">Question 47</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:62.6%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">00:28:04</div><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="body" style="flex-direction:column">
+    <div class="btcanvas">
+      <div class="btgrid">
+        <div class="btcol"><div class="btcolhdr">Actions to Take</div><div class="btslot filled"><span class="btsn">1</span><span class="btstxt">Elevate head of bed to 30–45°</span><button class="btrem">Remove</button></div><div class="btslot filled"><span class="btsn">2</span><span class="btstxt">Administer IV furosemide as ordered</span><button class="btrem">Remove</button></div></div>
+        <div class="btcenter"><div class="btsep"><div class="btarrow"></div><div class="bthd"></div><div style="width:28px"></div><div class="bthd" style="transform:rotate(-135deg)"></div><div class="btarrow"></div></div><div class="btscenario"><div class="btscenlbl">Client Condition</div><div class="btav">RC</div><div class="btname">Mr. Robert Chen</div><div class="btmeta">82M · CVICU · Post-op Day 2</div><div class="btdiv"></div><div class="btscentext"><strong>Acute decompensated heart failure</strong> following CABG. Bilateral pulmonary edema. SpO₂ 95% → 90%.</div><div class="btvitals"><span class="bvchip crit">HR 112 ↑</span><span class="bvchip crit">SpO₂ 90% ↓</span><span class="bvchip crit">BP 162/98 ↑</span><span class="bvchip">RR 22</span></div></div></div>
+        <div class="btcol"><div class="btcolhdr" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.22);color:#34d399">Parameters to Monitor</div><div class="btslot filled" style="border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.07)"><span class="btsn" style="background:rgba(52,211,153,.15);color:#34d399">1</span><span class="btstxt">Urinary output hourly (goal &gt;30 mL/hr)</span><button class="btrem" style="color:#34d399">Remove</button></div><div class="btslot filled" style="border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.07)"><span class="btsn" style="background:rgba(52,211,153,.15);color:#34d399">2</span><span class="btstxt">SpO₂ and breath sounds q2h</span><button class="btrem" style="color:#34d399">Remove</button></div></div>
+      </div>
+      <div class="btbank" style="margin-top:14px"><div class="btbanklbl">Option Bank</div><div class="btbankpills"><button class="bkpill placed">Elevate head of bed to 30–45°</button><button class="bkpill placed">Administer IV furosemide</button><button class="bkpill">500 mL NS bolus over 1 hour</button><button class="bkpill placed">Urinary output hourly</button><button class="bkpill placed">SpO₂ and breath sounds q2h</button><button class="bkpill">Trendelenburg position</button><button class="bkpill">Serum K after diuretic</button></div></div>
+    </div>
+  </div>
+  <footer class="bot"><div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div><span style="font-size:11.5px;color:var(--ok);font-weight:600;background:var(--ok-bg);border:1px solid var(--ok-bdr);padding:4px 12px;border-radius:7px">✓ All 4 slots filled</span><div class="bot-r"><button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div></footer>
+</div>
+</div>
+
+<!-- FRAME 9 · Midnight Case Study -->
+<div class="frame" id="f8">
+<div class="cat mn" style="flex-direction:column">
+  <header class="tb"><span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT Exam</span><span class="tb-chip" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.22);color:#60a5fa;margin-left:6px">NGN</span>
+    <div class="tb-center"><span class="tb-qn">Case Study</span><span class="tb-of"> · </span><span class="tb-qn" style="color:var(--muted)">Q 2 of 6</span><div style="display:flex;gap:4px;margin-left:12px"><div class="cdot dn"></div><div class="cdot ac"></div><div class="cdot td"></div><div class="cdot td"></div><div class="cdot td"></div><div class="cdot td"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">01:18:22</div><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="cbanner"><span class="cpatient">Mrs. Helena Park · 71F · Respiratory Failure</span><span style="font-size:11px;color:var(--muted)">SpO₂ 89% · PaO₂ 58 · K⁺ 3.1 · pH 7.32 · WBC 14.2</span><span style="margin-left:auto;font-size:9.5px;font-weight:700;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 9px;border-radius:4px">Active Case</span></div>
+  <div style="display:flex;flex:1;min-height:0;overflow:hidden">
+    <div class="exhibit">
+      <div class="ex-hdr"><div class="ex-lbl">Exhibit Panel</div><div class="ex-tabs"><button class="ex-tab">H&amp;P</button><button class="ex-tab on">Labs<span class="dot"></span></button><button class="ex-tab">Imaging</button><button class="ex-tab">Meds</button></div></div>
+      <div class="ex-body">
+        <div class="ls"><div class="ls-title">Basic Metabolic</div><div class="lr"><span class="ln">Potassium</span><span class="lv">3.1</span><span class="lref">3.5–5.0</span><span class="lf cr">⚠ CRIT</span></div><div class="lr"><span class="ln">Sodium</span><span class="lv">136</span><span class="lref">136–145</span></div><div class="lr"><span class="ln">Glucose</span><span class="lv">188</span><span class="lref">70–100</span><span class="lf hi">↑</span></div></div>
+        <div class="ls"><div class="ls-title">Arterial Blood Gas</div><div class="lr"><span class="ln">pH</span><span class="lv">7.32</span><span class="lref">7.35–7.45</span><span class="lf lo">↓</span></div><div class="lr"><span class="ln">PaCO₂</span><span class="lv">52</span><span class="lref">35–45</span><span class="lf hi">↑</span></div><div class="lr"><span class="ln">PaO₂</span><span class="lv">58</span><span class="lref">80–100</span><span class="lf cr">⚠ CRIT</span></div><div class="lr"><span class="ln">SaO₂</span><span class="lv">89%</span><span class="lref">95–100%</span><span class="lf cr">⚠ CRIT</span></div></div>
+        <div class="ls"><div class="ls-title">CBC</div><div class="lr"><span class="ln">WBC</span><span class="lv">14.2</span><span class="lref">4.5–11.0</span><span class="lf hi">↑</span></div><div class="lr"><span class="ln">Hemoglobin</span><span class="lv">10.8</span><span class="lref">12.0–16.0</span><span class="lf lo">↓</span></div></div>
+      </div>
+    </div>
+    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:22px 36px">
+      <div style="width:100%;max-width:660px">
+        <div class="qcard">
+          <div class="qhead"><div class="qmeta"><span class="qpill">Respiratory</span><span style="font-size:9.5px;font-weight:700;color:#60a5fa;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">SATA</span></div><span style="font-size:10.5px;color:var(--subtle)">Q 2 of 6</span></div>
+          <p class="stem" style="font-size:15px">Based on <strong>Mrs. Park's lab values and clinical presentation</strong>, which findings require <strong>priority nursing intervention</strong>? <strong>Select all that apply.</strong></p>
+          <div class="opts" role="group" style="margin-top:18px;gap:8px">
+            <label class="opt sel" style="cursor:pointer"><span class="scheck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="oletter">A</span><span class="otext" style="font-size:13.5px">Critically low PaO₂ of 58 mmHg indicating respiratory failure requiring immediate oxygen titration</span></label>
+            <label class="opt sel" style="cursor:pointer"><span class="scheck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="oletter">B</span><span class="otext" style="font-size:13.5px">Critical hypokalemia (K⁺ 3.1 mEq/L) with risk for cardiac dysrhythmia requiring immediate notification</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">C</span><span class="otext" style="font-size:13.5px">Elevated WBC count indicating infection requiring blood culture prior to antibiotics</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">D</span><span class="otext" style="font-size:13.5px">Elevated BUN/Creatinine suggesting dehydration requiring increased IV fluid rate</span></label>
+            <label class="opt" style="cursor:pointer"><span class="scheck"></span><span class="oletter">E</span><span class="otext" style="font-size:13.5px">Hemoglobin 10.8 g/dL indicating anemia requiring urgent blood transfusion</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="bot"><div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div><span style="font-size:11px;color:var(--muted)">2 selected · Select all that apply</span><div class="bot-r"><button class="btn-primary">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div></footer>
+</div>
+</div>
+
+<!-- ══ FRAMES 10-11 · Blossom ══════════════════════════════════ -->
+<div class="frame" id="f9">
+<div class="cat bl">
+  <header class="tb"><span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT Exam</span><span class="tb-pulse" style="margin-left:10px"><span class="tb-pulse-dot"></span>Adaptive</span>
+    <div class="tb-center"><span class="tb-qn">Question 23</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span><div class="tb-prog"><div class="tb-pfill" style="width:30.6%"></div></div></div>
+    <div class="tb-right"><div class="tb-timer">00:42:15</div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button><div class="tb-sep"></div><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></button><button class="tb-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button><div class="tb-sep"></div><button class="tb-exit">End Exam</button></div>
+  </header>
+  <div class="body"><div class="qcanvas"><div class="qwrap">
+    <div class="qcard">
+      <div class="qhead"><div class="qmeta"><span class="qpill">Cardiovascular &amp; Oxygenation</span><div class="qdiff"><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip f"></div><div class="qpip e"></div></div></div><button class="qflag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button></div>
+      <p class="stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Assessment: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema bilateral lower extremities, and jugular venous distension. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="opts" role="radiogroup">
+        <button class="opt"><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></button>
+        <button class="opt sel"><span class="oletter">B</span><span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span></button>
+        <button class="opt"><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+        <button class="opt"><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></button>
+      </div>
+    </div>
+  </div></div></div>
+  <footer class="bot"><div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div><div class="kbhint"><span class="kbd">A–D</span>&nbsp;select&nbsp;·&nbsp;<span class="kbd">Enter</span>&nbsp;submit</div><div class="bot-r"><button class="btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button><button class="btn-primary">Submit Answer <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div></footer>
+</div>
+</div>
+
+<!-- FRAME 11 · Blossom Review -->
+<div class="frame" id="f10">
+<div class="cat bl">
+  <header class="tb"><span class="tb-brand">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip" style="background:var(--ok-bg);border-color:var(--ok-bdr);color:var(--ok)">Review Mode</span>
+    <div class="tb-center"><span class="tb-qn">Question 23</span><span class="tb-of"> of </span><span class="tb-qn" style="color:var(--muted)">75</span></div>
+    <div class="tb-right"><div class="tb-timer" style="color:var(--muted);background:none;border:none;font-size:11px">Session reviewed</div><button class="tb-exit">Exit Review</button></div>
+  </header>
+  <div class="body"><div class="qcanvas"><div class="qwrap">
+    <div class="qcard">
+      <div class="qhead"><div class="qmeta"><span class="qpill">Cardiovascular</span><span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ok);font-weight:600"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>Correct</span></div><span style="font-size:10.5px;color:var(--subtle)">Item 23 · Hard</span></div>
+      <p class="stem">A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92% on room air, bilateral crackles, 2+ pitting edema, JVD. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="opts">
+        <button class="opt dim" disabled><span class="oletter">A</span><span class="otext">Administer furosemide 40 mg IV as ordered to relieve acute volume overload</span></button>
+        <button class="opt ok" disabled><span class="oletter">B</span><span class="otext">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></button>
+        <button class="opt dim" disabled><span class="oletter">C</span><span class="otext">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+        <button class="opt dim" disabled><span class="oletter">D</span><span class="otext">Increase the IV infusion rate to maintain adequate preload and cardiac output</span></button>
+      </div>
+      <div class="rationale"><div class="rat-label">Why B is Correct</div><div class="rat-text">SpO₂ 92% indicates hypoxemia requiring immediate oxygenation. High-Fowler's reduces venous return, decreasing preload and relieving pulmonary congestion. ABCs: Airway → Breathing before pharmacological intervention.</div></div>
+    </div>
+  </div></div></div>
+  <footer class="bot"><div class="bot-l"><button class="btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div><span style="font-size:11px;color:var(--muted)">Session reviewed · 75 questions</span><div class="bot-r"><button class="btn-primary">Next Question <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div></footer>
+</div>
+</div>
+
+<!-- ══ FRAMES 12-15 · Mobile (390×844) ════════════════════════ -->
+<div class="frame mob" id="f11">
+<div class="cat oc mob">
+  <header class="tb" style="height:44px;padding:0 12px">
+    <span class="tb-brand" style="font-size:13px">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT</span>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:var(--txt)">Q23</span>
+      <div style="width:64px;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden"><div style="width:30.6%;height:100%;border-radius:99px;background:var(--prog-f)"></div></div>
+      <span style="font-size:12px;color:var(--muted)">75</span>
+    </div>
+    <div style="margin-left:auto"><div class="tb-timer" style="font-size:12.5px;padding:4px 8px">42:15</div></div>
+  </header>
+  <div style="background:var(--panel);border-bottom:1px solid var(--bdr);padding:6px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <span style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 7px;border-radius:4px">Cardiovascular</span>
+    <span style="font-size:9.5px;color:var(--muted)">Single Best Answer</span>
+    <span style="margin-left:auto;font-size:9px;font-weight:700;color:var(--acc-d)">Hard · ⚡</span>
+  </div>
+  <div style="flex:1;overflow:hidden;padding:14px 12px;display:flex;flex-direction:column">
+    <div class="qcard" style="padding:18px 16px">
+      <p class="stem" style="font-size:15px;line-height:1.72">A <strong>68-year-old client</strong> is admitted with acute heart failure exacerbation. HR 104, BP 158/92, SpO₂ 92% on room air, bilateral crackles. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="opts" style="margin-top:16px;gap:7px">
+        <button class="opt" style="padding:13px 14px"><span class="oletter">A</span><span class="otext" style="font-size:13px">Administer furosemide 40 mg IV stat</span></button>
+        <button class="opt sel" style="padding:13px 14px"><span class="oletter">B</span><span class="otext" style="font-size:13px">Position in high-Fowler's and apply supplemental O₂ at 2–4 L/min</span></button>
+        <button class="opt" style="padding:13px 14px"><span class="oletter">C</span><span class="otext" style="font-size:13px">Obtain 12-lead ECG and document cardiac rhythm</span></button>
+        <button class="opt" style="padding:13px 14px"><span class="oletter">D</span><span class="otext" style="font-size:13px">Increase IV fluid rate to 125 mL/hr to maintain preload</span></button>
+      </div>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--bot);border-top:1px solid var(--bot-bdr);box-shadow:var(--bot-sh);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+    <button class="btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+    <button class="btn-flag" style="flex:1;font-size:12px;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button>
+    <button class="btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px">Submit Answer</button>
+  </footer>
+</div>
+</div>
+
+<div class="frame mob" id="f12">
+<div class="cat oc mob">
+  <header class="tb" style="height:44px;padding:0 12px"><span class="tb-brand" style="font-size:13px">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT</span><div style="position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px"><span style="font-size:12px;font-weight:700;color:var(--txt)">Q31</span><div style="width:64px;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden"><div style="width:41.3%;height:100%;border-radius:99px;background:var(--prog-f)"></div></div><span style="font-size:12px;color:var(--muted)">75</span></div><div style="margin-left:auto"><div class="tb-timer" style="font-size:12.5px;padding:4px 8px">29:04</div></div></header>
+  <div style="background:var(--panel);border-bottom:1px solid var(--bdr);padding:6px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 7px;border-radius:4px">Respiratory</span><span style="font-size:9px;font-weight:700;color:#6d28d9;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:2px 7px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">SATA</span><span style="margin-left:auto;font-size:9px;font-weight:700;color:var(--acc-d)">2 selected</span></div>
+  <div style="flex:1;overflow:hidden;padding:14px 12px">
+    <div class="qcard" style="padding:18px 16px">
+      <p class="stem" style="font-size:15px;line-height:1.72">A client with community-acquired pneumonia has SpO₂ 91% on 4L NC, T 38.9°C, RR 24. Which nursing interventions are appropriate? <strong>Select all that apply.</strong></p>
+      <div class="opts" role="group" style="margin-top:16px;gap:7px">
+        <label class="opt sel" style="cursor:pointer;padding:12px 14px"><span class="scheck" style="width:16px;height:16px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="oletter">A</span><span class="otext" style="font-size:13px">Elevate head of bed to 45° to optimize lung expansion</span></label>
+        <label class="opt" style="cursor:pointer;padding:12px 14px"><span class="scheck" style="width:16px;height:16px"></span><span class="oletter">B</span><span class="otext" style="font-size:13px">Apply non-rebreather mask at 15 L/min immediately</span></label>
+        <label class="opt sel" style="cursor:pointer;padding:12px 14px"><span class="scheck" style="width:16px;height:16px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="oletter">C</span><span class="otext" style="font-size:13px">Encourage fluid intake 2–3 L/day to thin secretions</span></label>
+        <label class="opt" style="cursor:pointer;padding:12px 14px"><span class="scheck" style="width:16px;height:16px"></span><span class="oletter">D</span><span class="otext" style="font-size:13px">Administer acetaminophen 650 mg PO PRN for fever</span></label>
+        <label class="opt" style="cursor:pointer;padding:12px 14px"><span class="scheck" style="width:16px;height:16px"></span><span class="oletter">E</span><span class="otext" style="font-size:13px">Notify provider and prepare for intubation immediately</span></label>
+      </div>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--bot);border-top:1px solid var(--bot-bdr);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0"><button class="btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button><button class="btn-flag" style="flex:1;font-size:12px;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button><button class="btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px">Submit Answer</button></footer>
+</div>
+</div>
+
+<div class="frame mob" id="f13">
+<div class="cat mn mob">
+  <header class="tb" style="height:44px;padding:0 12px"><span class="tb-brand" style="font-size:13px">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT</span><div style="position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px"><span style="font-size:12px;font-weight:700;color:var(--txt)">Q23</span><div style="width:64px;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden"><div style="width:30.6%;height:100%;border-radius:99px;background:var(--prog-f)"></div></div><span style="font-size:12px;color:var(--muted)">75</span></div><div style="margin-left:auto"><div class="tb-timer" style="font-size:12.5px;padding:4px 8px">42:15</div></div></header>
+  <div style="background:var(--panel);border-bottom:1px solid var(--bdr);padding:6px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:2px 7px;border-radius:4px">Cardiovascular</span><span style="margin-left:auto;font-size:9px;font-weight:700;color:var(--acc)">Hard · ⚡</span></div>
+  <div style="flex:1;overflow:hidden;padding:14px 12px">
+    <div class="qcard" style="padding:18px 16px">
+      <p class="stem" style="font-size:15px;line-height:1.72">A <strong>68-year-old client</strong> admitted with acute HF exacerbation has HR 104, BP 158/92, SpO₂ 92%, bilateral crackles. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="opts" style="margin-top:16px;gap:7px">
+        <button class="opt" style="padding:13px 14px"><span class="oletter">A</span><span class="otext" style="font-size:13px">Administer furosemide 40 mg IV stat</span></button>
+        <button class="opt sel" style="padding:13px 14px"><span class="oletter">B</span><span class="otext" style="font-size:13px">Position in high-Fowler's and apply supplemental O₂ at 2–4 L/min</span></button>
+        <button class="opt" style="padding:13px 14px"><span class="oletter">C</span><span class="otext" style="font-size:13px">Obtain 12-lead ECG and document cardiac rhythm</span></button>
+        <button class="opt" style="padding:13px 14px"><span class="oletter">D</span><span class="otext" style="font-size:13px">Increase IV fluid rate to 125 mL/hr</span></button>
+      </div>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--bot);border-top:1px solid var(--bot-bdr);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0"><button class="btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button><button class="btn-flag" style="flex:1;font-size:12px;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button><button class="btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px">Submit Answer</button></footer>
+</div>
+</div>
+
+<div class="frame mob" id="f14">
+<div class="cat oc mob">
+  <header class="tb" style="height:44px;padding:0 12px"><span class="tb-brand" style="font-size:13px">Nurse<span class="tb-dot">Nest</span></span><span class="tb-chip">CAT</span><span class="tb-chip" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.22);color:#0f766e;margin-left:4px">Bowtie</span><div style="margin-left:auto"><div class="tb-timer" style="font-size:12.5px;padding:4px 8px">28:04</div></div></header>
+  <div style="flex:1;overflow-y:auto;padding:12px">
+    <div style="background:var(--surf);border:2px solid var(--bdr2);border-radius:14px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:38px;height:38px;border-radius:10px;background:var(--chip-bg);border:2px solid var(--chip-bdr);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--chip-fg);flex-shrink:0">RC</div><div><div style="font-size:13px;font-weight:700;color:var(--txt)">Mr. Robert Chen</div><div style="font-size:10px;color:var(--muted)">82M · CVICU · Post-op Day 2 · Acute decompensated HF</div></div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span style="font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--err-bg);border:1px solid var(--err-bdr);color:var(--err)">HR 112 ↑</span><span style="font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--err-bg);border:1px solid var(--err-bdr);color:var(--err)">SpO₂ 90% ↓</span><span style="font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--err-bg);border:1px solid var(--err-bdr);color:var(--err)">BP 162/98 ↑</span><span style="font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--panel);border:1px solid var(--bdr);color:var(--txt2)">RR 22</span></div>
+    </div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);border-radius:5px;padding:4px;text-align:center;margin-bottom:8px">Actions to Take (2)</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+      <div class="btslot filled" style="padding:10px 12px"><span class="btsn">1</span><span class="btstxt" style="font-size:12.5px">Elevate head of bed to 30–45°</span><button class="btrem" style="font-size:10px">Remove</button></div>
+      <div class="btslot filled" style="padding:10px 12px"><span class="btsn">2</span><span class="btstxt" style="font-size:12.5px">Administer IV furosemide as ordered</span><button class="btrem" style="font-size:10px">Remove</button></div>
+    </div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#0f766e;background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.22);border-radius:5px;padding:4px;text-align:center;margin-bottom:8px">Parameters to Monitor (2)</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+      <div class="btslot filled" style="border-color:rgba(13,148,136,.4);background:rgba(13,148,136,.06);padding:10px 12px"><span class="btsn" style="background:rgba(13,148,136,.15);color:#0f766e">1</span><span class="btstxt" style="font-size:12.5px">Urinary output hourly (goal &gt;30 mL/hr)</span><button class="btrem" style="color:#0f766e;font-size:10px">Remove</button></div>
+      <div class="btslot filled" style="border-color:rgba(13,148,136,.4);background:rgba(13,148,136,.06);padding:10px 12px"><span class="btsn" style="background:rgba(13,148,136,.15);color:#0f766e">2</span><span class="btstxt" style="font-size:12.5px">SpO₂ and breath sounds q2h</span><button class="btrem" style="color:#0f766e;font-size:10px">Remove</button></div>
+    </div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--subtle);text-align:center;margin-bottom:8px">Option Bank</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <button class="bkpill placed" style="font-size:12px;padding:7px 11px">Elevate head of bed</button>
+      <button class="bkpill placed" style="font-size:12px;padding:7px 11px">IV furosemide</button>
+      <button class="bkpill" style="font-size:12px;padding:7px 11px">500 mL NS bolus</button>
+      <button class="bkpill placed" style="font-size:12px;padding:7px 11px">Urinary output hourly</button>
+      <button class="bkpill placed" style="font-size:12px;padding:7px 11px">SpO₂ + breath sounds</button>
+      <button class="bkpill" style="font-size:12px;padding:7px 11px">Trendelenburg</button>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--bot);border-top:1px solid var(--bot-bdr);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0"><button class="btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button><span style="flex:1;font-size:11px;color:var(--ok);font-weight:600;text-align:center">✓ All 4 filled</span><button class="btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px">Submit</button></footer>
+</div>
+</div>
+
+<script>
+const fs=document.querySelectorAll('.frame'),ts=document.querySelectorAll('.tab');
+function s(i){fs.forEach((f,j)=>{f.style.display=j===i?'block':'none'});ts.forEach((t,j)=>{t.classList.toggle('on',j===i)});window.scrollTo({top:0,behavior:'instant'})}
+s(0);
+(function(){const p=new URLSearchParams(location.search).get('frame');if(p!=null){const n=parseInt(p);if(!isNaN(n))s(n);}})();
+</script></body></html>

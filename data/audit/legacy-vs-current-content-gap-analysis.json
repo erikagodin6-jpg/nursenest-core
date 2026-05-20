@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T17:57:09.531Z",
+  "gitHead": "b7090578",
+  "dedupeKeys": [
+    "slug",
+    "normalizedTitle",
+    "topicSlug",
+    "stemHash (questions)",
+    "translationKey",
+    "blog slug"
+  ],
+  "summary": {
+    "legacyLessonRows": 4223,
+    "currentCatalogPathways": 8,
+    "approximateMissingLessonTopics": 4084,
+    "lessonClassification": {
+      "A_alreadyImportedMaterialized": 29,
+      "B_partialMasterMapOnly": 107,
+      "B_partialMergeIntoExisting": 3,
+      "C_notOnCatalogOrMaster": 4084
+    },
+    "pathwayGuessOnMissing": {
+      "RN": 658,
+      "PN": 928,
+      "NP": 1190,
+      "Allied": 240,
+      "unknown": 1068
+    },
+    "questionsLegacyItems": 22742,
+    "parityNote": "Majority of legacy lesson keys are not imported as pathway lessons; see unimported-legacy-content.json classification."
+  },
+  "byCategory": {
+    "lessons": {
+      "legacyTotal": 4223,
+      "currentApprox": "pathway catalog + DB (see current-content-inventory)",
+      "matchedApprox": 139,
+      "missingApprox": 4084,
+      "partialIncomplete": 110,
+      "duplicateCandidatesFile": "data/audit/legacy-duplicate-lessons.json",
+      "confidence": "high for classification buckets; per-lesson fuzzy match in legacy-to-current-lesson-map.json"
+    },
+    "questions": {
+      "legacyTotal": 22742,
+      "currentTotal": "Prisma exam_questions when DB connected",
+      "matched": "partial — see testbank-content-completeness-audit.json",
+      "missing": "see high-value-import-candidates.json"
+    },
+    "preTestsPostTests": {
+      "legacy": "sampled in legacy scans; not fully enumerated in this pass",
+      "current": "PathwayLesson sections + nnLessonPayloadV2 preTest/postTest",
+      "gap": "Align legacy lesson quiz JSON to exam question bank + lesson payload importers"
+    },
+    "catReadiness": {
+      "legacyFiles": 19,
+      "currentFiles": 22,
+      "gap": "Compare legacy-cat-practice-inventory vs current adaptive exam routes"
+    },
+    "flashcards": {
+      "legacy": 32,
+      "current": "Prisma flashcard_decks + deck JSON pipelines",
+      "gapReport": "flashcard-content-completeness-audit.json"
+    },
+    "activities": {
+      "legacy": 55,
+      "current": "marketing + learner activities routes (see restoration map)"
+    },
+    "blogPosts": {
+      "parity": "blog-current-vs-legacy.json",
+      "dedupe": "blog-deduplication-from-legacy.json"
+    },
+    "translations": {
+      "audit": "i18n-global-audit.json",
+      "gap": "tools/i18n compile pipeline is canonical — do not add parallel runtime loaders"
+    },
+    "seoProgrammatic": {
+      "notes": "country-exam-locale-parity.json + programmatic SEO modules"
+    },
+    "toolsCalculators": {
+      "note": "Scan client + core app routes; no single legacy total without external mirror"
+    }
+  },
+  "fuzzyMatching": {
+    "usedWhereExactFails": true,
+    "artifacts": [
+      "legacy-to-current-lesson-map.json",
+      "legacy-duplicate-lessons.json"
+    ]
+  }
+}

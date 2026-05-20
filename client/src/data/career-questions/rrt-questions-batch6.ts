@@ -1,0 +1,1504 @@
+import type { CareerQuestion } from "./rrt-questions";
+
+export const rrtQuestionsBatch6: CareerQuestion[] = [
+  {
+    id: "rrt-2050",
+    stem: "A patient's ABG results show pH 7.35, PaCO2 45 mmHg, HCO3 24 mEq/L, and PaO2 95 mmHg on room air. How should the respiratory therapist interpret these results?",
+    options: [
+      "Normal ABG values",
+      "Compensated respiratory acidosis",
+      "Compensated metabolic alkalosis",
+      "Uncompensated respiratory alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "All values fall within normal ranges: pH 7.35-7.45, PaCO2 35-45 mmHg, HCO3 22-26 mEq/L, and PaO2 80-100 mmHg. No acid-base disturbance is present.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Normal ABG Values"
+  },
+  {
+    id: "rrt-2051",
+    stem: "Which of the following is the normal range for arterial pH?",
+    options: [
+      "7.35 to 7.45",
+      "7.25 to 7.35",
+      "7.45 to 7.55",
+      "7.30 to 7.40"
+    ],
+    correctIndex: 0,
+    rationale: "The normal arterial pH range is 7.35 to 7.45. Values below 7.35 indicate acidosis and values above 7.45 indicate alkalosis.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Normal ABG Values"
+  },
+  {
+    id: "rrt-2052",
+    stem: "An ABG shows pH 7.28, PaCO2 60 mmHg, HCO3 24 mEq/L. What is the acid-base disturbance?",
+    options: [
+      "Uncompensated respiratory acidosis",
+      "Compensated respiratory acidosis",
+      "Uncompensated metabolic acidosis",
+      "Mixed acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "The low pH indicates acidosis. The elevated PaCO2 identifies a respiratory cause. The normal HCO3 indicates no renal compensation has occurred yet, making this uncompensated respiratory acidosis.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Respiratory Acidosis"
+  },
+  {
+    id: "rrt-2053",
+    stem: "What is the normal range for PaCO2 in an arterial blood gas?",
+    options: [
+      "35 to 45 mmHg",
+      "22 to 26 mEq/L",
+      "80 to 100 mmHg",
+      "45 to 55 mmHg"
+    ],
+    correctIndex: 0,
+    rationale: "Normal PaCO2 is 35 to 45 mmHg. PaCO2 reflects the respiratory component of acid-base balance. Values above 45 indicate hypoventilation; values below 35 indicate hyperventilation.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Normal ABG Values"
+  },
+  {
+    id: "rrt-2054",
+    stem: "An ABG shows pH 7.50, PaCO2 30 mmHg, HCO3 24 mEq/L. What is the interpretation?",
+    options: [
+      "Uncompensated respiratory alkalosis",
+      "Compensated metabolic alkalosis",
+      "Uncompensated metabolic alkalosis",
+      "Compensated respiratory alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "The elevated pH indicates alkalosis. The low PaCO2 identifies a respiratory cause (hyperventilation). The normal HCO3 shows no renal compensation, making this uncompensated respiratory alkalosis.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Respiratory Alkalosis"
+  },
+  {
+    id: "rrt-2055",
+    stem: "Which component of the ABG reflects the metabolic contribution to acid-base balance?",
+    options: [
+      "HCO3",
+      "PaCO2",
+      "PaO2",
+      "SaO2"
+    ],
+    correctIndex: 0,
+    rationale: "Bicarbonate (HCO3) reflects the metabolic (renal) component of acid-base balance. PaCO2 reflects the respiratory component. PaO2 and SaO2 reflect oxygenation status.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "ABG Components"
+  },
+  {
+    id: "rrt-2056",
+    stem: "A patient breathing room air has a PaO2 of 60 mmHg. What is the patient's oxygenation status?",
+    options: [
+      "Moderate hypoxemia",
+      "Normal oxygenation",
+      "Mild hypoxemia",
+      "Severe hypoxemia"
+    ],
+    correctIndex: 0,
+    rationale: "A PaO2 of 60 mmHg on room air indicates moderate hypoxemia. Normal PaO2 is 80-100 mmHg, mild hypoxemia is 60-79 mmHg, and severe hypoxemia is below 40 mmHg. At 60 mmHg, the value is at the lower boundary of moderate hypoxemia.",
+    difficulty: 1,
+    category: "Blood Gas Analysis",
+    topic: "Oxygenation Assessment"
+  },
+  {
+    id: "rrt-2057",
+    stem: "What is the normal range for arterial HCO3?",
+    options: [
+      "22 to 26 mEq/L",
+      "35 to 45 mmHg",
+      "80 to 100 mmHg",
+      "15 to 20 mEq/L"
+    ],
+    correctIndex: 0,
+    rationale: "Normal arterial bicarbonate (HCO3) is 22 to 26 mEq/L. Values below 22 suggest metabolic acidosis, and values above 26 suggest metabolic alkalosis.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Normal ABG Values"
+  },
+  {
+    id: "rrt-2058",
+    stem: "An ABG shows pH 7.30, PaCO2 40 mmHg, HCO3 18 mEq/L. What is the acid-base disturbance?",
+    options: [
+      "Uncompensated metabolic acidosis",
+      "Uncompensated respiratory acidosis",
+      "Compensated metabolic acidosis",
+      "Mixed alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "The low pH indicates acidosis. The normal PaCO2 rules out a respiratory cause. The low HCO3 identifies a metabolic cause. With PaCO2 still normal, there is no respiratory compensation yet.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Metabolic Acidosis"
+  },
+  {
+    id: "rrt-2059",
+    stem: "Which blood gas value is the primary indicator used to assess ventilation?",
+    options: [
+      "PaCO2",
+      "PaO2",
+      "HCO3",
+      "SaO2"
+    ],
+    correctIndex: 0,
+    rationale: "PaCO2 is the primary indicator of ventilation. An elevated PaCO2 indicates hypoventilation, while a low PaCO2 indicates hyperventilation. PaO2 and SaO2 assess oxygenation, and HCO3 assesses the metabolic component.",
+    difficulty: 1,
+    category: "Blood Gas Analysis",
+    topic: "Ventilation Assessment"
+  },
+  {
+    id: "rrt-2060",
+    stem: "An arterial blood sample has a PaO2 of 92 mmHg and SaO2 of 97%. These values indicate:",
+    options: [
+      "Normal oxygenation",
+      "Mild hypoxemia",
+      "Hyperoxia",
+      "Moderate hypoxemia"
+    ],
+    correctIndex: 0,
+    rationale: "PaO2 of 92 mmHg (normal 80-100) and SaO2 of 97% (normal 95-100%) both fall within normal ranges, indicating adequate oxygenation.",
+    difficulty: 1,
+    category: "Blood Gas Analysis",
+    topic: "Oxygenation Assessment"
+  },
+  {
+    id: "rrt-2061",
+    stem: "When collecting an arterial blood gas sample, the preferred site for arterial puncture in adults is the:",
+    options: [
+      "Radial artery",
+      "Femoral artery",
+      "Brachial artery",
+      "Dorsalis pedis artery"
+    ],
+    correctIndex: 0,
+    rationale: "The radial artery is the preferred site because it is superficial, easy to palpate, has collateral circulation via the ulnar artery, and is associated with fewer complications than other sites.",
+    difficulty: 1,
+    category: "Blood Gas Analysis",
+    topic: "ABG Sampling"
+  },
+  {
+    id: "rrt-2062",
+    stem: "An ABG shows pH 7.48, PaCO2 40 mmHg, HCO3 30 mEq/L. What is the interpretation?",
+    options: [
+      "Uncompensated metabolic alkalosis",
+      "Compensated respiratory alkalosis",
+      "Uncompensated respiratory alkalosis",
+      "Compensated metabolic alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "The elevated pH indicates alkalosis. The normal PaCO2 rules out respiratory cause. The elevated HCO3 identifies a metabolic cause. No respiratory compensation is evident since PaCO2 is normal.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "Metabolic Alkalosis"
+  },
+  {
+    id: "rrt-2063",
+    stem: "What test should be performed before puncturing the radial artery for an ABG?",
+    options: [
+      "Modified Allen test",
+      "Trendelenburg test",
+      "Romberg test",
+      "Phalen test"
+    ],
+    correctIndex: 0,
+    rationale: "The modified Allen test evaluates collateral circulation through the ulnar artery before radial artery puncture. A positive result (return of color within 5-10 seconds) confirms adequate collateral flow.",
+    difficulty: 1,
+    category: "Blood Gas Analysis",
+    topic: "ABG Sampling"
+  },
+  {
+    id: "rrt-2064",
+    stem: "A pH of 7.25 would be classified as:",
+    options: [
+      "Acidosis",
+      "Alkalosis",
+      "Normal",
+      "Compensated"
+    ],
+    correctIndex: 0,
+    rationale: "A pH of 7.25 is below the normal range of 7.35-7.45, indicating acidosis. The further the pH falls below 7.35, the more severe the acidosis.",
+    difficulty: 1,
+    category: "ABG Interpretation",
+    topic: "pH Interpretation"
+  },
+  {
+    id: "rrt-2065",
+    stem: "An ABG result shows pH 7.52, PaCO2 28 mmHg, HCO3 22 mEq/L. What is the primary problem?",
+    options: [
+      "Hyperventilation causing respiratory alkalosis",
+      "Metabolic alkalosis from bicarbonate excess",
+      "Respiratory acidosis from hypoventilation",
+      "Metabolic acidosis from bicarbonate loss"
+    ],
+    correctIndex: 0,
+    rationale: "The elevated pH indicates alkalosis. The low PaCO2 of 28 mmHg indicates the patient is hyperventilating, blowing off CO2, which raises the pH. This is respiratory alkalosis.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Respiratory Alkalosis"
+  },
+  {
+    id: "rrt-2066",
+    stem: "Which of the following ABG values is consistent with chronic respiratory acidosis?",
+    options: [
+      "pH 7.36, PaCO2 55 mmHg, HCO3 32 mEq/L",
+      "pH 7.28, PaCO2 55 mmHg, HCO3 24 mEq/L",
+      "pH 7.50, PaCO2 28 mmHg, HCO3 22 mEq/L",
+      "pH 7.48, PaCO2 40 mmHg, HCO3 30 mEq/L"
+    ],
+    correctIndex: 0,
+    rationale: "In chronic respiratory acidosis, the kidneys have had time to retain HCO3 to compensate. The pH is near-normal (7.36), PaCO2 is elevated (55), and HCO3 is elevated (32) showing full renal compensation.",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Compensation"
+  },
+  {
+    id: "rrt-2067",
+    stem: "A patient with diabetic ketoacidosis would most likely have which ABG pattern?",
+    options: [
+      "pH 7.22, PaCO2 20 mmHg, HCO3 10 mEq/L",
+      "pH 7.50, PaCO2 50 mmHg, HCO3 36 mEq/L",
+      "pH 7.30, PaCO2 55 mmHg, HCO3 26 mEq/L",
+      "pH 7.48, PaCO2 30 mmHg, HCO3 22 mEq/L"
+    ],
+    correctIndex: 0,
+    rationale: "DKA causes metabolic acidosis from ketoacid accumulation. The pH is low (7.22), HCO3 is very low (10) from buffering ketoacids, and PaCO2 is low (20) due to respiratory compensation (Kussmaul breathing).",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Metabolic Acidosis"
+  },
+  {
+    id: "rrt-2068",
+    stem: "A patient is receiving mechanical ventilation with the following ABG: pH 7.55, PaCO2 25 mmHg, HCO3 24 mEq/L. What ventilator adjustment is most appropriate?",
+    options: [
+      "Decrease the respiratory rate or tidal volume",
+      "Increase the respiratory rate",
+      "Increase the FiO2",
+      "Add PEEP"
+    ],
+    correctIndex: 0,
+    rationale: "The ABG shows respiratory alkalosis from overventilation (low PaCO2). Decreasing minute ventilation by reducing rate or tidal volume will allow PaCO2 to rise and pH to normalize.",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Ventilator Management"
+  },
+  {
+    id: "rrt-2069",
+    stem: "The P/F ratio (PaO2/FiO2) is used to assess the severity of:",
+    options: [
+      "Hypoxemic respiratory failure",
+      "Hypercapnic respiratory failure",
+      "Metabolic acidosis",
+      "Ventilatory failure"
+    ],
+    correctIndex: 0,
+    rationale: "The P/F ratio assesses the severity of oxygenation impairment. A ratio < 300 indicates ALI, and < 200 indicates ARDS. It standardizes PaO2 assessment regardless of FiO2 being delivered.",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "Oxygenation Indices"
+  },
+  {
+    id: "rrt-2070",
+    stem: "A patient on 40% FiO2 has a PaO2 of 80 mmHg. What is the P/F ratio?",
+    options: [
+      "200",
+      "300",
+      "320",
+      "400"
+    ],
+    correctIndex: 0,
+    rationale: "The P/F ratio is calculated by dividing PaO2 by FiO2: 80 / 0.40 = 200. A P/F ratio of 200 meets the criteria for ARDS by the Berlin definition.",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "Oxygenation Indices"
+  },
+  {
+    id: "rrt-2071",
+    stem: "An ABG shows pH 7.33, PaCO2 50 mmHg, HCO3 28 mEq/L. This represents:",
+    options: [
+      "Partially compensated respiratory acidosis",
+      "Fully compensated respiratory acidosis",
+      "Uncompensated respiratory acidosis",
+      "Mixed acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "The pH is low (acidotic), PaCO2 is elevated (respiratory cause), and HCO3 is elevated showing renal compensation. Since the pH has not returned to normal range, compensation is partial.",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Compensation"
+  },
+  {
+    id: "rrt-2072",
+    stem: "What happens to the oxyhemoglobin dissociation curve with a decrease in pH?",
+    options: [
+      "The curve shifts to the right",
+      "The curve shifts to the left",
+      "The curve remains unchanged",
+      "The curve becomes linear"
+    ],
+    correctIndex: 0,
+    rationale: "A decrease in pH (acidosis) causes a right shift of the oxyhemoglobin dissociation curve, which means hemoglobin has reduced affinity for oxygen and releases oxygen more readily to tissues (Bohr effect).",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "Oxyhemoglobin Dissociation"
+  },
+  {
+    id: "rrt-2073",
+    stem: "Base excess (BE) of -8 mEq/L indicates:",
+    options: [
+      "Metabolic acidosis",
+      "Metabolic alkalosis",
+      "Respiratory acidosis",
+      "Normal metabolic status"
+    ],
+    correctIndex: 0,
+    rationale: "A negative base excess (base deficit) indicates metabolic acidosis. Normal BE is -2 to +2 mEq/L. A BE of -8 means there is an 8 mEq/L deficit of base, indicating significant metabolic acidosis.",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "Base Excess"
+  },
+  {
+    id: "rrt-2074",
+    stem: "A patient's ABG shows pH 7.40, PaCO2 25 mmHg, HCO3 15 mEq/L. This is best described as:",
+    options: [
+      "Fully compensated metabolic acidosis",
+      "Normal ABG",
+      "Mixed alkalosis",
+      "Uncompensated respiratory alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "The pH is normal (7.40), but the low PaCO2 and low HCO3 indicate an underlying disorder with compensation. The low HCO3 is the primary metabolic acidosis, and the low PaCO2 represents full respiratory compensation bringing pH to normal.",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Compensation"
+  },
+  {
+    id: "rrt-2075",
+    stem: "The alveolar-arterial (A-a) gradient is useful for differentiating:",
+    options: [
+      "Causes of hypoxemia",
+      "Types of metabolic acidosis",
+      "Ventilatory failure from oxygenation failure",
+      "Acute from chronic respiratory acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "The A-a gradient helps differentiate causes of hypoxemia. A normal gradient (5-15 mmHg) suggests hypoventilation as the cause, while an elevated gradient points to V/Q mismatch, shunt, or diffusion impairment.",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "A-a Gradient"
+  },
+  {
+    id: "rrt-2076",
+    stem: "What is the expected PaCO2 compensation for a metabolic acidosis with HCO3 of 12 mEq/L using Winter's formula?",
+    options: [
+      "Approximately 27 mmHg",
+      "Approximately 35 mmHg",
+      "Approximately 40 mmHg",
+      "Approximately 20 mmHg"
+    ],
+    correctIndex: 0,
+    rationale: "Winter's formula: Expected PaCO2 = (1.5 × HCO3) + 8 ± 2. With HCO3 of 12: (1.5 × 12) + 8 = 26, ±2 gives a range of 24-28 mmHg, approximately 27 mmHg.",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Compensation Formulas"
+  },
+  {
+    id: "rrt-2077",
+    stem: "An air bubble left in an ABG sample will most likely cause:",
+    options: [
+      "Falsely elevated PaO2 and falsely low PaCO2",
+      "Falsely low PaO2 and falsely high PaCO2",
+      "No effect on the results",
+      "Falsely elevated HCO3"
+    ],
+    correctIndex: 0,
+    rationale: "Room air has a higher PO2 (~150 mmHg) and lower PCO2 (~0.3 mmHg) than arterial blood. Air bubbles cause gas equilibration, falsely elevating PaO2 and lowering PaCO2.",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "Pre-analytical Errors"
+  },
+  {
+    id: "rrt-2078",
+    stem: "A venous blood gas (VBG) sample analyzed as an ABG would show:",
+    options: [
+      "Lower pH, higher PaCO2, and lower PaO2 than arterial values",
+      "Higher pH, lower PaCO2, and higher PaO2 than arterial values",
+      "Identical values to an arterial sample",
+      "Higher pH and higher PaCO2 than arterial values"
+    ],
+    correctIndex: 0,
+    rationale: "Venous blood has a lower pH (~7.35), higher PCO2 (~45-46 mmHg), and much lower PO2 (~40 mmHg) compared to arterial blood, because tissues have extracted oxygen and added CO2.",
+    difficulty: 2,
+    category: "Blood Gas Analysis",
+    topic: "Sample Types"
+  },
+  {
+    id: "rrt-2079",
+    stem: "The Henderson-Hasselbalch equation relates pH to which two components?",
+    options: [
+      "HCO3 and PaCO2",
+      "PaO2 and SaO2",
+      "Base excess and anion gap",
+      "PaCO2 and PaO2"
+    ],
+    correctIndex: 0,
+    rationale: "The Henderson-Hasselbalch equation is pH = 6.1 + log(HCO3 / 0.03 × PaCO2). It mathematically defines the relationship between pH, the metabolic component (HCO3), and the respiratory component (PaCO2).",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "ABG Fundamentals"
+  },
+  {
+    id: "rrt-2080",
+    stem: "A patient presents with anxiety and tingling in the fingers. ABG: pH 7.52, PaCO2 26 mmHg, HCO3 23 mEq/L. The most likely cause is:",
+    options: [
+      "Hyperventilation syndrome",
+      "Pulmonary embolism",
+      "COPD exacerbation",
+      "Renal failure"
+    ],
+    correctIndex: 0,
+    rationale: "The ABG shows respiratory alkalosis from hyperventilation (low PaCO2). Anxiety commonly causes hyperventilation syndrome, and the resulting alkalosis causes hypocalcemia symptoms like tingling and paresthesias.",
+    difficulty: 2,
+    category: "ABG Interpretation",
+    topic: "Clinical Correlation"
+  },
+  {
+    id: "rrt-2081",
+    stem: "A patient with COPD has the following ABG: pH 7.38, PaCO2 58 mmHg, HCO3 34 mEq/L, PaO2 62 mmHg. The respiratory therapist should recognize this as:",
+    options: [
+      "Fully compensated respiratory acidosis with mild hypoxemia",
+      "Normal ABG for a COPD patient",
+      "Uncompensated metabolic alkalosis",
+      "Acute respiratory acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "The near-normal pH with elevated PaCO2 and elevated HCO3 indicates fully compensated respiratory acidosis, typical of chronic COPD. The PaO2 of 62 indicates mild hypoxemia. The pH returning to normal range indicates full compensation.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Chronic Compensation"
+  },
+  {
+    id: "rrt-2082",
+    stem: "A patient on a ventilator has ABG: pH 7.25, PaCO2 65 mmHg, HCO3 28 mEq/L, PaO2 55 mmHg on FiO2 0.50. Which ventilator change should be made first?",
+    options: [
+      "Increase the respiratory rate to reduce PaCO2",
+      "Increase FiO2 to 0.80",
+      "Add 10 cmH2O PEEP",
+      "Switch to pressure support ventilation"
+    ],
+    correctIndex: 0,
+    rationale: "The primary problem is severe respiratory acidosis (pH 7.25, PaCO2 65). Increasing the respiratory rate will increase minute ventilation, reduce PaCO2, and improve pH. While oxygenation is also low, the severe acidosis is the most urgent issue.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Ventilator Management"
+  },
+  {
+    id: "rrt-2083",
+    stem: "An ABG shows pH 7.20, PaCO2 55 mmHg, HCO3 14 mEq/L. What type of acid-base disturbance is present?",
+    options: [
+      "Combined respiratory and metabolic acidosis",
+      "Partially compensated respiratory acidosis",
+      "Partially compensated metabolic acidosis",
+      "Uncompensated respiratory acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "Both PaCO2 is elevated (respiratory acidosis) and HCO3 is low (metabolic acidosis). In compensation, these values move in the same direction; here they move in opposite directions from normal, indicating a mixed or combined acidosis.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Mixed Disorders"
+  },
+  {
+    id: "rrt-2084",
+    stem: "A patient with a serum sodium of 140, chloride of 100, and HCO3 of 12 has an anion gap of:",
+    options: [
+      "28 mEq/L",
+      "12 mEq/L",
+      "16 mEq/L",
+      "8 mEq/L"
+    ],
+    correctIndex: 0,
+    rationale: "Anion gap = Na - (Cl + HCO3) = 140 - (100 + 12) = 28 mEq/L. Normal anion gap is 8-12 mEq/L. An elevated anion gap of 28 suggests anion gap metabolic acidosis (e.g., DKA, lactic acidosis, renal failure, toxins).",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Anion Gap"
+  },
+  {
+    id: "rrt-2085",
+    stem: "Which mnemonic helps remember causes of elevated anion gap metabolic acidosis?",
+    options: [
+      "MUDPILES",
+      "ABCDEF",
+      "SAMPLE",
+      "OPQRST"
+    ],
+    correctIndex: 0,
+    rationale: "MUDPILES stands for Methanol, Uremia, Diabetic ketoacidosis, Propylene glycol/Paraldehyde, Isoniazid/Iron, Lactic acidosis, Ethylene glycol, Salicylates. These are common causes of elevated anion gap metabolic acidosis.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Anion Gap"
+  },
+  {
+    id: "rrt-2086",
+    stem: "A patient has an ABG showing pH 7.10, PaCO2 22 mmHg, HCO3 7 mEq/L. The calculated anion gap is 30. Which condition is most likely?",
+    options: [
+      "Lactic acidosis from septic shock",
+      "Chronic diarrhea",
+      "Renal tubular acidosis",
+      "Normal saline overinfusion"
+    ],
+    correctIndex: 0,
+    rationale: "The severely elevated anion gap (30) with profound metabolic acidosis points to lactic acidosis, which is common in septic shock. Diarrhea and RTA cause non-anion gap acidosis. Normal saline overinfusion causes hyperchloremic non-gap acidosis.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Clinical Correlation"
+  },
+  {
+    id: "rrt-2087",
+    stem: "A post-operative patient develops rapid shallow breathing. ABG: pH 7.48, PaCO2 32 mmHg, HCO3 23 mEq/L, PaO2 68 mmHg on room air. The A-a gradient is elevated. The most likely diagnosis is:",
+    options: [
+      "Pulmonary embolism",
+      "Anxiety-induced hyperventilation",
+      "Atelectasis",
+      "Pneumothorax"
+    ],
+    correctIndex: 0,
+    rationale: "Respiratory alkalosis with hypoxemia and elevated A-a gradient in a post-operative patient is classic for pulmonary embolism. Anxiety-induced hyperventilation would have a normal A-a gradient. PE causes V/Q mismatch leading to an elevated gradient.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Clinical Correlation"
+  },
+  {
+    id: "rrt-2088",
+    stem: "How is the alveolar PO2 (PAO2) calculated using the alveolar gas equation at sea level on room air?",
+    options: [
+      "PAO2 = FiO2 × (Pb - PH2O) - (PaCO2 / 0.8)",
+      "PAO2 = FiO2 × Pb - PaCO2",
+      "PAO2 = PaO2 + (A-a gradient)",
+      "PAO2 = (Pb - PH2O) / FiO2"
+    ],
+    correctIndex: 0,
+    rationale: "The alveolar gas equation is PAO2 = FiO2 × (Pb - PH2O) - (PaCO2 / R), where Pb is barometric pressure (760 mmHg at sea level), PH2O is water vapor pressure (47 mmHg), and R is the respiratory quotient (typically 0.8).",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Alveolar Gas Equation"
+  },
+  {
+    id: "rrt-2089",
+    stem: "A patient breathing room air at sea level has a PaCO2 of 40 mmHg. Using the alveolar gas equation, what is the approximate PAO2?",
+    options: [
+      "100 mmHg",
+      "80 mmHg",
+      "120 mmHg",
+      "150 mmHg"
+    ],
+    correctIndex: 0,
+    rationale: "PAO2 = 0.21 × (760 - 47) - (40 / 0.8) = 0.21 × 713 - 50 = 149.7 - 50 = 99.7, approximately 100 mmHg. This is the expected alveolar oxygen tension on room air at sea level.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Alveolar Gas Equation"
+  },
+  {
+    id: "rrt-2090",
+    stem: "A patient with chronic renal failure presents with Kussmaul breathing. The expected ABG pattern is:",
+    options: [
+      "Metabolic acidosis with respiratory compensation",
+      "Respiratory acidosis with metabolic compensation",
+      "Respiratory alkalosis with metabolic compensation",
+      "Metabolic alkalosis with respiratory compensation"
+    ],
+    correctIndex: 0,
+    rationale: "Chronic renal failure causes metabolic acidosis from inability to excrete acids and regenerate bicarbonate. Kussmaul breathing (deep, rapid) is the respiratory compensation attempting to blow off CO2 and raise pH.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Clinical Correlation"
+  },
+  {
+    id: "rrt-2091",
+    stem: "An ABG sample is placed on ice because:",
+    options: [
+      "Metabolism of white blood cells can alter PaO2 and PaCO2 values",
+      "It prevents hemolysis of red blood cells",
+      "It maintains the heparin concentration",
+      "It prevents clotting of the sample"
+    ],
+    correctIndex: 0,
+    rationale: "Blood cells continue to metabolize after sampling, consuming O2 and producing CO2. Icing the sample slows this metabolism, preserving accurate PaO2 and PaCO2 values. This is especially important if analysis will be delayed beyond 10-15 minutes.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Pre-analytical Factors"
+  },
+  {
+    id: "rrt-2092",
+    stem: "A patient receiving BiPAP with IPAP 16/EPAP 6 has an ABG showing pH 7.30, PaCO2 58 mmHg, HCO3 28 mEq/L. The appropriate adjustment is to:",
+    options: [
+      "Increase IPAP to improve ventilation",
+      "Increase EPAP to improve oxygenation",
+      "Decrease IPAP to reduce auto-PEEP",
+      "Discontinue BiPAP and intubate"
+    ],
+    correctIndex: 0,
+    rationale: "The elevated PaCO2 indicates inadequate ventilation. Increasing IPAP increases the pressure support driving tidal volume, which will increase minute ventilation and lower PaCO2. EPAP affects oxygenation, not ventilation.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "NIV Adjustment"
+  },
+  {
+    id: "rrt-2093",
+    stem: "A patient on 60% FiO2 via high-flow nasal cannula has PaO2 of 55 mmHg. The P/F ratio indicates:",
+    options: [
+      "Moderate ARDS (P/F ratio ~92)",
+      "Mild ARDS (P/F ratio ~200)",
+      "No ARDS (P/F ratio > 300)",
+      "Severe ARDS (P/F ratio < 50)"
+    ],
+    correctIndex: 0,
+    rationale: "P/F ratio = 55 / 0.60 = 91.7, approximately 92. According to Berlin criteria: mild ARDS 200-300, moderate 100-200, severe < 100. A P/F ratio of 92 indicates severe ARDS (< 100).",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "ARDS Classification"
+  },
+  {
+    id: "rrt-2094",
+    stem: "Which factor causes a leftward shift of the oxyhemoglobin dissociation curve?",
+    options: [
+      "Hypothermia",
+      "Acidosis",
+      "Hyperthermia",
+      "Increased 2,3-DPG"
+    ],
+    correctIndex: 0,
+    rationale: "Hypothermia causes a left shift, increasing hemoglobin's affinity for oxygen and decreasing oxygen release to tissues. Right shift factors (decreased affinity) include acidosis, hyperthermia, and increased 2,3-DPG.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Oxyhemoglobin Dissociation"
+  },
+  {
+    id: "rrt-2095",
+    stem: "Carboxyhemoglobin (COHb) levels are elevated in a patient with suspected carbon monoxide poisoning. What effect does this have on SpO2 readings?",
+    options: [
+      "SpO2 will be falsely elevated",
+      "SpO2 will be falsely low",
+      "SpO2 will be accurate",
+      "SpO2 will read zero"
+    ],
+    correctIndex: 0,
+    rationale: "Standard pulse oximeters cannot distinguish between oxyhemoglobin and carboxyhemoglobin because they absorb light at similar wavelengths. This gives falsely elevated SpO2 readings in CO poisoning. CO-oximetry is needed for accurate assessment.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "CO-Oximetry"
+  },
+  {
+    id: "rrt-2096",
+    stem: "A co-oximeter measures which of the following that a standard pulse oximeter cannot?",
+    options: [
+      "Carboxyhemoglobin and methemoglobin",
+      "PaCO2 and HCO3",
+      "pH and base excess",
+      "Anion gap and lactate"
+    ],
+    correctIndex: 0,
+    rationale: "A co-oximeter uses multiple wavelengths of light to measure total hemoglobin, oxyhemoglobin, deoxyhemoglobin, carboxyhemoglobin, and methemoglobin. Standard pulse oximeters only use two wavelengths and cannot detect dyshemoglobins.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "CO-Oximetry"
+  },
+  {
+    id: "rrt-2097",
+    stem: "A patient's ABG shows pH 7.32, PaCO2 48 mmHg, HCO3 18 mEq/L. This pattern suggests:",
+    options: [
+      "Combined respiratory and metabolic acidosis",
+      "Partially compensated respiratory acidosis",
+      "Partially compensated metabolic acidosis",
+      "Fully compensated metabolic acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "Both the elevated PaCO2 (respiratory acidosis) and low HCO3 (metabolic acidosis) are driving the pH downward. In compensation, HCO3 would rise to buffer respiratory acidosis, or PaCO2 would drop to buffer metabolic acidosis. Both abnormal in the same acidotic direction indicates a mixed disorder.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Mixed Disorders"
+  },
+  {
+    id: "rrt-2098",
+    stem: "A mechanically ventilated patient has the following ABG: pH 7.18, PaCO2 80 mmHg, HCO3 26 mEq/L, PaO2 70 mmHg on FiO2 0.40. The most likely cause is:",
+    options: [
+      "Inadequate minute ventilation",
+      "V/Q mismatch",
+      "Diffusion impairment",
+      "Intrapulmonary shunt"
+    ],
+    correctIndex: 0,
+    rationale: "The severely elevated PaCO2 with acute respiratory acidosis and relatively preserved oxygenation on moderate FiO2 indicates the primary problem is inadequate ventilation. The PaO2 is adequate on the current FiO2, so this is a ventilation problem, not an oxygenation problem.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Ventilator Management"
+  },
+  {
+    id: "rrt-2099",
+    stem: "Which of the following conditions causes a non-anion gap (hyperchloremic) metabolic acidosis?",
+    options: [
+      "Diarrhea",
+      "Diabetic ketoacidosis",
+      "Lactic acidosis",
+      "Methanol ingestion"
+    ],
+    correctIndex: 0,
+    rationale: "Diarrhea causes loss of bicarbonate from the GI tract, leading to non-anion gap metabolic acidosis. The kidneys retain chloride to maintain electroneutrality, causing hyperchloremia. DKA, lactic acidosis, and methanol ingestion cause anion gap acidosis.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Anion Gap"
+  },
+  {
+    id: "rrt-2100",
+    stem: "During permissive hypercapnia in ARDS management, which of the following is an acceptable target pH?",
+    options: [
+      "7.25",
+      "7.10",
+      "7.00",
+      "6.90"
+    ],
+    correctIndex: 0,
+    rationale: "In permissive hypercapnia, PaCO2 is allowed to rise to use lung-protective tidal volumes. Most guidelines consider pH > 7.20-7.25 acceptable. Below 7.20, the acidosis may cause hemodynamic instability and bicarbonate infusion may be considered.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "ARDS Management"
+  },
+  {
+    id: "rrt-2101",
+    stem: "A patient with a nasogastric tube on continuous suction develops the following ABG: pH 7.52, PaCO2 48 mmHg, HCO3 36 mEq/L. What is the interpretation?",
+    options: [
+      "Partially compensated metabolic alkalosis",
+      "Uncompensated respiratory acidosis",
+      "Combined respiratory and metabolic alkalosis",
+      "Fully compensated respiratory acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "NG suction removes HCl from the stomach, causing metabolic alkalosis (elevated pH, elevated HCO3). The elevated PaCO2 shows partial respiratory compensation (hypoventilation to retain CO2 and lower pH). pH remains alkalotic, so compensation is partial.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Metabolic Alkalosis"
+  },
+  {
+    id: "rrt-2102",
+    stem: "The oxygen content (CaO2) of arterial blood is calculated using which formula?",
+    options: [
+      "CaO2 = (Hb × 1.34 × SaO2) + (0.003 × PaO2)",
+      "CaO2 = (Hb × 1.34) + (SaO2 × PaO2)",
+      "CaO2 = PaO2 / FiO2",
+      "CaO2 = Hb × SaO2 × PaO2"
+    ],
+    correctIndex: 0,
+    rationale: "Arterial oxygen content = oxygen bound to hemoglobin (Hb × 1.34 mL O2/g × SaO2) plus dissolved oxygen (0.003 × PaO2). The majority of oxygen is carried by hemoglobin; dissolved oxygen contributes minimally.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Oxygen Content"
+  },
+  {
+    id: "rrt-2103",
+    stem: "A patient has Hb 15 g/dL, SaO2 98%, PaO2 100 mmHg. What is the approximate CaO2?",
+    options: [
+      "20.0 mL/dL",
+      "15.0 mL/dL",
+      "25.0 mL/dL",
+      "10.0 mL/dL"
+    ],
+    correctIndex: 0,
+    rationale: "CaO2 = (15 × 1.34 × 0.98) + (0.003 × 100) = 19.70 + 0.30 = 20.0 mL/dL. This is a normal arterial oxygen content value.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Oxygen Content"
+  },
+  {
+    id: "rrt-2104",
+    stem: "A patient with severe anemia (Hb 7 g/dL) has PaO2 95 mmHg and SaO2 98%. The CaO2 will be:",
+    options: [
+      "Significantly reduced despite normal PaO2 and SaO2",
+      "Normal because PaO2 and SaO2 are normal",
+      "Elevated due to compensatory mechanisms",
+      "Unchanged from a patient with normal hemoglobin"
+    ],
+    correctIndex: 0,
+    rationale: "CaO2 = (7 × 1.34 × 0.98) + (0.003 × 95) = 9.19 + 0.29 = 9.48 mL/dL. Despite normal PaO2 and SaO2, oxygen content is markedly reduced because hemoglobin is the primary oxygen carrier. Normal CaO2 is approximately 20 mL/dL.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Oxygen Content"
+  },
+  {
+    id: "rrt-2105",
+    stem: "A spontaneously breathing patient has an ABG: pH 7.56, PaCO2 20 mmHg, HCO3 18 mEq/L, PaO2 110 mmHg on 2L NC. The respiratory therapist suspects:",
+    options: [
+      "Acute respiratory alkalosis with secondary metabolic response",
+      "Combined respiratory and metabolic alkalosis",
+      "Primary metabolic acidosis with respiratory compensation",
+      "Compensated metabolic alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "The severely low PaCO2 (20) indicates primary hyperventilation causing respiratory alkalosis. The slightly low HCO3 (18) represents the kidney's initial attempt to excrete bicarbonate in response to the alkalosis. This is a secondary metabolic response, not a primary disorder.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Acute vs Chronic"
+  },
+  {
+    id: "rrt-2106",
+    stem: "A patient with a pH of 7.38 and PaCO2 of 60 mmHg likely has which condition?",
+    options: [
+      "Chronic COPD with renal compensation",
+      "Acute asthma attack",
+      "Normal ventilation",
+      "Acute respiratory failure"
+    ],
+    correctIndex: 0,
+    rationale: "A normal pH with elevated PaCO2 indicates fully compensated respiratory acidosis, characteristic of chronic COPD. The kidneys have retained bicarbonate over time to normalize the pH. Acute conditions would show pH derangement.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Chronic Compensation"
+  },
+  {
+    id: "rrt-2107",
+    stem: "A blood gas analyzer reports a lactate level of 6 mmol/L. This finding is most consistent with:",
+    options: [
+      "Tissue hypoperfusion and anaerobic metabolism",
+      "Normal resting metabolism",
+      "Respiratory alkalosis",
+      "Metabolic alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "Normal lactate is < 2 mmol/L. A level of 6 mmol/L indicates significant lactic acidosis from anaerobic metabolism, commonly seen in shock, sepsis, or tissue hypoperfusion. Lactate is a marker of inadequate oxygen delivery to tissues.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Lactate"
+  },
+  {
+    id: "rrt-2108",
+    stem: "A patient at high altitude (barometric pressure 520 mmHg) breathing room air would have an expected PAO2 of approximately:",
+    options: [
+      "60 mmHg",
+      "100 mmHg",
+      "150 mmHg",
+      "80 mmHg"
+    ],
+    correctIndex: 0,
+    rationale: "Using the alveolar gas equation: PAO2 = 0.21 × (520 - 47) - (40 / 0.8) = 0.21 × 473 - 50 = 99.3 - 50 = 49.3 mmHg, approximately 50-60 mmHg. The reduced barometric pressure at altitude significantly lowers alveolar PO2.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Altitude Effects"
+  },
+  {
+    id: "rrt-2109",
+    stem: "A patient's ABG shows pH 7.44, PaCO2 30 mmHg, HCO3 20 mEq/L. The pH is within normal range but the patient has an underlying:",
+    options: [
+      "Respiratory alkalosis with metabolic compensation",
+      "Metabolic acidosis with respiratory compensation",
+      "Normal acid-base status",
+      "Combined disorder"
+    ],
+    correctIndex: 0,
+    rationale: "The pH is on the alkalotic side of normal (7.44). The low PaCO2 (30) indicates primary respiratory alkalosis. The low HCO3 (20) represents renal compensation by excreting bicarbonate. The pH is near-normal indicating effective compensation.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Compensation"
+  },
+  {
+    id: "rrt-2110",
+    stem: "During cardiopulmonary resuscitation, which type of blood gas is most reflective of tissue acid-base status?",
+    options: [
+      "Venous blood gas",
+      "Arterial blood gas",
+      "Capillary blood gas",
+      "Mixed venous blood gas from pulmonary artery"
+    ],
+    correctIndex: 0,
+    rationale: "During CPR, venous blood gas more accurately reflects tissue-level acid-base status because cardiac output is severely reduced. Arterial blood may show relatively normal values while tissues are profoundly acidotic due to poor perfusion.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Special Situations"
+  },
+  {
+    id: "rrt-2111",
+    stem: "A patient with salicylate (aspirin) overdose classically presents with which ABG pattern?",
+    options: [
+      "Mixed respiratory alkalosis and metabolic acidosis",
+      "Pure metabolic acidosis",
+      "Pure respiratory alkalosis",
+      "Combined respiratory and metabolic alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "Salicylate toxicity initially stimulates the respiratory center causing respiratory alkalosis. It also causes metabolic acidosis through uncoupling of oxidative phosphorylation and accumulation of organic acids. This classic mixed pattern is characteristic of aspirin overdose.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Toxicology"
+  },
+  {
+    id: "rrt-2112",
+    stem: "A patient has an ABG: pH 7.36, PaCO2 60 mmHg, HCO3 34 mEq/L. The delta-delta ratio (change in anion gap / change in HCO3) is used to identify:",
+    options: [
+      "A coexisting non-anion gap metabolic acidosis or metabolic alkalosis",
+      "Whether the respiratory compensation is appropriate",
+      "The severity of hypoxemia",
+      "Whether the sample is arterial or venous"
+    ],
+    correctIndex: 0,
+    rationale: "The delta-delta ratio compares the change in anion gap to the change in bicarbonate. A ratio < 1 suggests a coexisting non-anion gap acidosis; a ratio > 2 suggests a coexisting metabolic alkalosis. It helps identify hidden mixed metabolic disorders.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Delta-Delta Ratio"
+  },
+  {
+    id: "rrt-2113",
+    stem: "A patient with ARDS is on volume-controlled ventilation with Vt 350 mL, RR 28, FiO2 0.80, PEEP 14 cmH2O. ABG: pH 7.22, PaCO2 62 mmHg, HCO3 25 mEq/L, PaO2 58 mmHg. The best strategy is to:",
+    options: [
+      "Accept the hypercapnia and increase PEEP to improve oxygenation",
+      "Increase tidal volume to 600 mL to reduce PaCO2",
+      "Increase respiratory rate to 35 to lower PaCO2",
+      "Switch to high-frequency oscillatory ventilation immediately"
+    ],
+    correctIndex: 0,
+    rationale: "In ARDS with lung-protective ventilation, permissive hypercapnia is accepted (pH > 7.20 is generally tolerated). Increasing tidal volume would risk ventilator-induced lung injury. The primary oxygenation issue should be addressed with PEEP optimization. RR of 35 risks auto-PEEP.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "ARDS Management"
+  },
+  {
+    id: "rrt-2114",
+    stem: "A patient has the following ABG: pH 7.40, PaCO2 40 mmHg, HCO3 24 mEq/L, PaO2 60 mmHg on FiO2 0.21. The A-a gradient is approximately 40 mmHg. This suggests:",
+    options: [
+      "Intrapulmonary shunt or V/Q mismatch",
+      "Hypoventilation as the sole cause",
+      "Normal gas exchange",
+      "Diffusion impairment only"
+    ],
+    correctIndex: 0,
+    rationale: "A normal A-a gradient is approximately 5-15 mmHg in young adults. An elevated gradient of 40 mmHg with normal PaCO2 indicates the hypoxemia is due to V/Q mismatch or shunt, not hypoventilation. Hypoventilation alone would have a normal A-a gradient with elevated PaCO2.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "A-a Gradient"
+  },
+  {
+    id: "rrt-2115",
+    stem: "A patient with methemoglobinemia would show which characteristic on co-oximetry and pulse oximetry?",
+    options: [
+      "Co-oximetry shows elevated MetHb; SpO2 reads approximately 85% regardless of true SaO2",
+      "Co-oximetry and SpO2 both read accurately",
+      "SpO2 reads 100% while co-oximetry shows low SaO2",
+      "Co-oximetry shows elevated COHb; SpO2 reads normally"
+    ],
+    correctIndex: 0,
+    rationale: "In methemoglobinemia, co-oximetry accurately detects elevated MetHb. Pulse oximetry converges toward 85% because methemoglobin has equal absorption at both wavelengths (660 and 940 nm), producing a ratio of approximately 1, which corresponds to ~85% SpO2.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "CO-Oximetry"
+  },
+  {
+    id: "rrt-2116",
+    stem: "A patient on mechanical ventilation has auto-PEEP of 8 cmH2O. How does this affect blood gas interpretation?",
+    options: [
+      "Auto-PEEP traps gas, increases dead space, and may elevate PaCO2 despite adequate set minute ventilation",
+      "Auto-PEEP improves ventilation and reduces PaCO2",
+      "Auto-PEEP only affects oxygenation, not PaCO2",
+      "Auto-PEEP has no effect on blood gas values"
+    ],
+    correctIndex: 0,
+    rationale: "Auto-PEEP (intrinsic PEEP) causes gas trapping, hyperinflation, and increased dead space ventilation. Despite seemingly adequate minute ventilation settings, the effective alveolar ventilation is reduced, potentially elevating PaCO2 and causing respiratory acidosis.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Ventilator Mechanics"
+  },
+  {
+    id: "rrt-2117",
+    stem: "A critically ill patient has ABG: pH 7.15, PaCO2 25 mmHg, HCO3 8 mEq/L, lactate 12 mmol/L, anion gap 32. Despite aggressive fluid resuscitation, the lactate continues to rise. The most concerning implication is:",
+    options: [
+      "Ongoing tissue ischemia with inadequate oxygen delivery requiring vasopressor support",
+      "The patient needs more sodium bicarbonate infusion",
+      "The ventilator settings need to be adjusted to lower PaCO2 further",
+      "The blood gas analyzer is malfunctioning"
+    ],
+    correctIndex: 0,
+    rationale: "Rising lactate despite fluid resuscitation indicates persistent tissue hypoperfusion and inadequate oxygen delivery. This suggests the need for vasopressors to improve perfusion pressure. Simply treating the acidosis with bicarbonate without addressing the underlying cause is ineffective.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Lactic Acidosis"
+  },
+  {
+    id: "rrt-2118",
+    stem: "In a patient with acute respiratory acidosis, for every 10 mmHg increase in PaCO2 above 40, the expected acute change in pH is approximately:",
+    options: [
+      "0.08 decrease in pH",
+      "0.03 decrease in pH",
+      "0.15 decrease in pH",
+      "0.08 increase in pH"
+    ],
+    correctIndex: 0,
+    rationale: "In acute respiratory acidosis, the rule of thumb is that pH decreases by approximately 0.08 for every 10 mmHg increase in PaCO2. In chronic respiratory acidosis, it's approximately 0.03 per 10 mmHg due to renal compensation.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Acute vs Chronic Rules"
+  },
+  {
+    id: "rrt-2119",
+    stem: "A patient has ABG: pH 7.45, PaCO2 50 mmHg, HCO3 35 mEq/L. The anion gap is 10. Using the delta-delta ratio, you calculate a ratio of 0.5. This indicates:",
+    options: [
+      "A coexisting non-anion gap metabolic acidosis",
+      "Pure metabolic alkalosis",
+      "A coexisting metabolic alkalosis",
+      "Appropriate respiratory compensation"
+    ],
+    correctIndex: 0,
+    rationale: "A delta-delta ratio < 1 indicates that the bicarbonate has dropped more than expected relative to the anion gap increase, suggesting a concurrent non-anion gap metabolic acidosis. A ratio of 1-2 is pure anion gap acidosis, and > 2 suggests concurrent metabolic alkalosis.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Delta-Delta Ratio"
+  },
+  {
+    id: "rrt-2120",
+    stem: "A patient with severe COPD is found unresponsive. ABG on room air: pH 7.12, PaCO2 95 mmHg, HCO3 30 mEq/L, PaO2 35 mmHg. The first priority is to:",
+    options: [
+      "Secure the airway and provide assisted ventilation",
+      "Administer IV sodium bicarbonate",
+      "Place on 2L nasal cannula and recheck ABG in 30 minutes",
+      "Start a beta-agonist nebulizer treatment"
+    ],
+    correctIndex: 0,
+    rationale: "The patient is unresponsive with severe acute-on-chronic respiratory acidosis (pH 7.12) and severe hypoxemia (PaO2 35). Immediate airway management and assisted ventilation are required. The markedly elevated PaCO2 and low pH indicate ventilatory failure requiring emergency intervention.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Emergency Management"
+  },
+  {
+    id: "rrt-2121",
+    stem: "The strong ion difference (SID) approach to acid-base analysis is based on the principle that pH is determined by:",
+    options: [
+      "Independent variables: SID, total weak acid concentration, and PaCO2",
+      "Only PaCO2 and HCO3",
+      "Only strong ion concentrations",
+      "Anion gap alone"
+    ],
+    correctIndex: 0,
+    rationale: "Stewart's strong ion difference approach identifies three independent variables that determine pH: the strong ion difference (SID = strong cations minus strong anions), total weak acid concentration (mainly albumin and phosphate), and PaCO2. HCO3 is a dependent variable in this model.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Stewart Approach"
+  },
+  {
+    id: "rrt-2122",
+    stem: "A trauma patient has ABG: pH 7.18, PaCO2 30 mmHg, HCO3 11 mEq/L, lactate 8 mmol/L. The expected PaCO2 by Winter's formula would be approximately 24.5 mmHg. The actual PaCO2 of 30 suggests:",
+    options: [
+      "A superimposed respiratory acidosis with inadequate compensation",
+      "Appropriate respiratory compensation",
+      "The patient is overcompensating",
+      "The blood gas sample was contaminated"
+    ],
+    correctIndex: 0,
+    rationale: "Winter's formula: expected PaCO2 = (1.5 × 11) + 8 ± 2 = 24.5 ± 2 (22.5-26.5). The actual PaCO2 of 30 is higher than expected, indicating the patient is not ventilating adequately for the degree of metabolic acidosis, suggesting a concurrent respiratory acidosis.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Mixed Disorders"
+  },
+  {
+    id: "rrt-2123",
+    stem: "A patient with end-stage liver disease has ABG: pH 7.50, PaCO2 28 mmHg, HCO3 22 mEq/L, PaO2 65 mmHg. The pathophysiology of this acid-base disorder in liver failure is:",
+    options: [
+      "Progesterone and ammonia stimulate central respiratory drive causing chronic hyperventilation",
+      "Decreased hepatic metabolism of bicarbonate causes alkalosis",
+      "Portal hypertension directly raises pH",
+      "Hepatorenal syndrome causes metabolic alkalosis"
+    ],
+    correctIndex: 0,
+    rationale: "Chronic liver disease causes respiratory alkalosis through multiple mechanisms: elevated progesterone (not cleared by the liver) and ammonia stimulate the central respiratory center, causing chronic hyperventilation with low PaCO2. The hypoxemia is from intrapulmonary shunting (hepatopulmonary syndrome).",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Clinical Correlation"
+  },
+  {
+    id: "rrt-2124",
+    stem: "When interpreting an ABG from a patient with significant hypoalbuminemia (albumin 2.0 g/dL), the anion gap should be:",
+    options: [
+      "Corrected upward by approximately 2.5 mEq/L for each 1 g/dL decrease in albumin below normal",
+      "Left uncorrected since albumin does not affect anion gap",
+      "Corrected downward by 2.5 mEq/L per 1 g/dL decrease",
+      "Calculated using chloride and phosphate only"
+    ],
+    correctIndex: 0,
+    rationale: "Albumin is a major unmeasured anion. Low albumin decreases the anion gap by approximately 2.5 mEq/L for each 1 g/dL below normal (4.0). Without correction, a significant anion gap acidosis may be masked. Corrected AG = calculated AG + 2.5 × (4.0 - measured albumin).",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Corrected Anion Gap"
+  },
+  {
+    id: "rrt-2125",
+    stem: "A patient receiving continuous renal replacement therapy (CRRT) with citrate anticoagulation develops metabolic alkalosis. The most likely cause is:",
+    options: [
+      "Citrate is metabolized to bicarbonate in the liver",
+      "CRRT is removing too much CO2",
+      "The replacement fluid has excessive sodium",
+      "The dialysate is too acidic"
+    ],
+    correctIndex: 0,
+    rationale: "Citrate used for anticoagulation in CRRT is metabolized in the liver, and each citrate molecule generates three bicarbonate molecules. If citrate delivery exceeds its removal, progressive metabolic alkalosis develops. This is monitored by following ionized calcium and bicarbonate levels.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Renal Replacement"
+  },
+  {
+    id: "rrt-2126",
+    stem: "A neonate has the following capillary blood gas: pH 7.28, PCO2 55 mmHg, HCO3 20 mEq/L, PO2 45 mmHg. Which value is least reliable from a capillary sample?",
+    options: [
+      "PO2",
+      "pH",
+      "PCO2",
+      "HCO3"
+    ],
+    correctIndex: 0,
+    rationale: "Capillary blood gas PO2 values are significantly lower than arterial values and are unreliable for assessing oxygenation. Capillary pH and PCO2 correlate reasonably well with arterial values when the sample is collected from a well-perfused, warmed site.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Capillary Blood Gas"
+  },
+  {
+    id: "rrt-2127",
+    stem: "A patient with known COPD baseline ABG of pH 7.38, PaCO2 55, HCO3 32 now presents with ABG: pH 7.22, PaCO2 80, HCO3 33. The acute change in PaCO2 is 25 mmHg. The expected pH change is:",
+    options: [
+      "0.20 decrease from baseline (acute-on-chronic respiratory acidosis)",
+      "0.08 decrease from baseline",
+      "0.03 decrease from baseline",
+      "No change since the patient has chronic COPD"
+    ],
+    correctIndex: 0,
+    rationale: "The acute PaCO2 rise of 25 mmHg on top of chronic retention follows the acute rule: 0.08 pH decrease per 10 mmHg PaCO2 rise. Expected: 0.08 × 2.5 = 0.20 pH decrease from baseline 7.38, giving expected pH of 7.18, close to the measured 7.22. This confirms acute-on-chronic respiratory acidosis.",
+    difficulty: 4,
+    category: "ABG Interpretation",
+    topic: "Acute-on-Chronic"
+  },
+  {
+    id: "rrt-2128",
+    stem: "A patient with suspected cyanide poisoning has ABG: pH 7.15, PaCO2 18 mmHg, HCO3 6 mEq/L, PaO2 350 mmHg on 100% FiO2, lactate 15 mmol/L. The venous PO2 is 80 mmHg. The elevated venous PO2 indicates:",
+    options: [
+      "Tissues cannot utilize oxygen due to cytochrome oxidase inhibition",
+      "The sample is contaminated with arterial blood",
+      "The patient has adequate tissue perfusion",
+      "The co-oximeter is malfunctioning"
+    ],
+    correctIndex: 0,
+    rationale: "Cyanide inhibits cytochrome oxidase, blocking cellular oxygen utilization. Despite adequate oxygen delivery (high PaO2), tissues cannot extract and use oxygen, resulting in an abnormally high venous PO2 with simultaneous severe lactic acidosis from anaerobic metabolism.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Toxicology"
+  },
+  {
+    id: "rrt-2129",
+    stem: "A mechanically ventilated patient with severe ARDS has the following: FiO2 1.0, PEEP 20 cmH2O, PaO2 62 mmHg, PaCO2 65 mmHg, pH 7.18. Qs/Qt is calculated at 35%. The intrapulmonary shunt fraction indicates:",
+    options: [
+      "Severe refractory hypoxemia unlikely to respond to further increases in FiO2",
+      "Mild shunt that should respond to supplemental oxygen",
+      "Normal intrapulmonary shunt physiology",
+      "The patient needs higher tidal volumes"
+    ],
+    correctIndex: 0,
+    rationale: "An intrapulmonary shunt fraction of 35% is severe (normal < 5%). Shunt fractions above 30% are considered refractory to oxygen therapy because blood passing through non-ventilated alveoli receives no additional oxygen regardless of FiO2. Recruitment maneuvers, prone positioning, or ECMO may be needed.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Shunt Calculation"
+  },
+  {
+    id: "rrt-2130",
+    stem: "A patient's ABG on FiO2 0.21 shows PaO2 50 mmHg. The respiratory therapist calculates the estimated shunt using the clinical shunt equation and finds it to be 20%. After increasing FiO2 to 0.50, PaO2 only increases to 60 mmHg. This response suggests:",
+    options: [
+      "True shunt physiology where blood bypasses ventilated alveoli",
+      "V/Q mismatch that is responsive to oxygen therapy",
+      "Diffusion impairment from interstitial lung disease",
+      "Pre-analytical error in the ABG sample"
+    ],
+    correctIndex: 0,
+    rationale: "A poor PaO2 response to increased FiO2 is characteristic of true shunt. In V/Q mismatch, increasing FiO2 effectively improves PaO2 in low V/Q units. In true shunt, blood passes through non-ventilated alveoli and cannot participate in gas exchange regardless of FiO2.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Shunt vs V/Q Mismatch"
+  },
+  {
+    id: "rrt-2131",
+    stem: "A patient with severe sepsis has the following simultaneous arterial and mixed venous blood gases: CaO2 18 mL/dL, CvO2 14 mL/dL, cardiac output 10 L/min. The oxygen delivery (DO2) and consumption (VO2) are:",
+    options: [
+      "DO2 = 1800 mL/min, VO2 = 400 mL/min, O2 extraction ratio 22%",
+      "DO2 = 1800 mL/min, VO2 = 180 mL/min, O2 extraction ratio 10%",
+      "DO2 = 900 mL/min, VO2 = 400 mL/min, O2 extraction ratio 44%",
+      "DO2 = 1400 mL/min, VO2 = 200 mL/min, O2 extraction ratio 14%"
+    ],
+    correctIndex: 0,
+    rationale: "DO2 = CaO2 × CO × 10 = 18 × 10 × 10 = 1800 mL/min. VO2 = (CaO2 - CvO2) × CO × 10 = (18 - 14) × 10 × 10 = 400 mL/min. O2 extraction ratio = VO2/DO2 = 400/1800 = 22%. Normal ER is 25%, so the low extraction despite high delivery suggests impaired oxygen utilization in sepsis.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "Oxygen Delivery and Consumption"
+  },
+  {
+    id: "rrt-2132",
+    stem: "A patient on ECMO has an arterial blood gas showing PaO2 of 150 mmHg and a post-membrane (circuit) PO2 of 450 mmHg. The significant gradient between these values indicates:",
+    options: [
+      "Significant native lung contribution with mixing of poorly oxygenated pulmonary blood and ECMO return blood",
+      "The ECMO membrane oxygenator is failing",
+      "The blood gas analyzer is calibrated incorrectly",
+      "The patient has carbon monoxide poisoning"
+    ],
+    correctIndex: 0,
+    rationale: "In VV-ECMO, oxygenated blood from the circuit mixes with deoxygenated blood from the native pulmonary circulation. A large gradient between post-membrane and arterial PO2 indicates the native lungs are contributing significant venous admixture, or there is recirculation in the ECMO circuit.",
+    difficulty: 3,
+    category: "Blood Gas Analysis",
+    topic: "ECMO Management"
+  },
+  {
+    id: "rrt-2133",
+    stem: "A patient has triple acid-base disorder: ABG shows pH 7.30, PaCO2 30 mmHg, HCO3 14 mEq/L, Na 140, Cl 100, albumin 4.0. Anion gap is 26. Delta AG is 14. Delta HCO3 is 10. The delta-delta ratio is 1.4. However, the PaCO2 by Winter's formula should be ~29 mmHg, and the actual is 30 mmHg. This indicates:",
+    options: [
+      "Appropriate respiratory compensation for the metabolic acidosis with a concurrent anion gap metabolic acidosis",
+      "A triple acid-base disorder with concurrent metabolic alkalosis",
+      "Pure anion gap metabolic acidosis with appropriate compensation",
+      "The delta-delta ratio is unreliable in this case"
+    ],
+    correctIndex: 2,
+    rationale: "The delta-delta ratio of 1.4 is between 1 and 2, indicating a pure anion gap metabolic acidosis without concurrent metabolic alkalosis or non-gap acidosis. The PaCO2 of 30 matches Winter's formula prediction of 29 ± 2, confirming appropriate respiratory compensation. This is a straightforward anion gap metabolic acidosis.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Complex Acid-Base"
+  },
+  {
+    id: "rrt-2134",
+    stem: "A patient with severe status asthmaticus has sequential ABGs: Initial: pH 7.48, PaCO2 32, PaO2 65. Two hours later: pH 7.38, PaCO2 40, PaO2 60. The normalization of PaCO2 in this context should be interpreted as:",
+    options: [
+      "An ominous sign of impending respiratory failure from muscle fatigue",
+      "Clinical improvement in the patient's asthma",
+      "Expected progression showing appropriate bronchodilator response",
+      "A lab error requiring repeat ABG"
+    ],
+    correctIndex: 0,
+    rationale: "In acute severe asthma, initial hyperventilation with low PaCO2 is expected. A 'normalizing' PaCO2 (rising toward 40) while the patient remains in distress is an ominous sign of respiratory muscle fatigue and impending ventilatory failure. The patient may require intubation.",
+    difficulty: 3,
+    category: "ABG Interpretation",
+    topic: "Trending ABGs"
+  },
+  {
+    id: "rrt-2135",
+    stem: "A patient receiving high-dose sodium bicarbonate infusion for severe metabolic acidosis (pH 7.05, HCO3 5) now has ABG: pH 7.35, PaCO2 55 mmHg, HCO3 30 mEq/L, PaO2 60 mmHg. The complication of bicarbonate therapy evident from this ABG is:",
+    options: [
+      "Overshoot alkalosis with CO2 generation worsening intracellular acidosis and impaired ventilation",
+      "Successful correction of acidosis with no complications",
+      "Respiratory compensation is appropriate",
+      "The patient needs more bicarbonate"
+    ],
+    correctIndex: 0,
+    rationale: "Bicarbonate therapy generates CO2 (H+ + HCO3- → H2CO3 → CO2 + H2O). If ventilation is impaired, CO2 accumulates (PaCO2 55), worsening intracellular acidosis paradoxically. The HCO3 of 30 with elevated PaCO2 suggests overshoot with CO2 retention. This is why bicarbonate therapy is controversial in severe acidosis.",
+    difficulty: 5,
+    category: "ABG Interpretation",
+    topic: "Bicarbonate Therapy"
+  },
+  {
+    id: "rrt-2136",
+    stem: "In the evaluation of a dead space to tidal volume ratio (VD/VT), a calculated value of 0.65 in a mechanically ventilated patient indicates:",
+    options: [
+      "Markedly elevated dead space ventilation suggesting pulmonary embolism or overdistension",
+      "Normal dead space fraction",
+      "Improved alveolar ventilation",
+      "Excessive minute ventilation"
+    ],
+    correctIndex: 0,
+    rationale: "Normal VD/VT is 0.20-0.40 (20-40%). A value of 0.65 means 65% of each breath is wasted on dead space. This is markedly elevated and can be caused by pulmonary embolism, lung overdistension, low cardiac output, or high PEEP causing alveolar overdistension.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Dead Space"
+  },
+  {
+    id: "rrt-2137",
+    stem: "An ABG analyzer reports a potassium level of 7.2 mEq/L, but the patient's serum potassium drawn simultaneously is 5.0 mEq/L. The most likely explanation for the discrepancy is:",
+    options: [
+      "Hemolysis of the ABG sample releasing intracellular potassium",
+      "The ABG analyzer is more accurate than the chemistry analyzer",
+      "The patient has pseudohyperkalemia from leukocytosis",
+      "The chemistry sample was collected incorrectly"
+    ],
+    correctIndex: 0,
+    rationale: "Hemolysis during ABG collection (traumatic puncture, excessive syringe aspiration, or delayed analysis) releases intracellular potassium, falsely elevating the ABG potassium. The serum chemistry value from a properly handled venous sample is more reliable in this scenario.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Electrolyte Analysis"
+  },
+  {
+    id: "rrt-2138",
+    stem: "A patient with Guillain-Barré syndrome has the following sequential vital capacity measurements: Day 1: 3.5L, Day 2: 2.5L, Day 3: 1.8L, Day 4: 1.2L. Today's ABG shows pH 7.35, PaCO2 42, HCO3 23, PaO2 78. Despite the normal ABG, the respiratory therapist should:",
+    options: [
+      "Prepare for elective intubation based on the declining vital capacity trend",
+      "Continue to monitor since the ABG is normal",
+      "Start BiPAP to support ventilation",
+      "Recommend discharge as the ABG shows no respiratory compromise"
+    ],
+    correctIndex: 0,
+    rationale: "In neuromuscular disease, ABG changes are a late finding. By the time PaCO2 rises, the patient may be near respiratory arrest. The 20/30/40 rule suggests intubation when VC < 20 mL/kg, MIP > -30 cmH2O, or MEP < 40 cmH2O. The declining VC trend from 3.5L to 1.2L over 4 days indicates impending respiratory failure requiring proactive airway management.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Neuromuscular Disease"
+  },
+  {
+    id: "rrt-2139",
+    stem: "The oxygen extraction ratio (O2ER) in a patient with septic shock is found to be 15% (normal 22-30%). Mixed venous oxygen saturation (SvO2) is 82%. These values suggest:",
+    options: [
+      "Impaired cellular oxygen extraction due to mitochondrial dysfunction",
+      "Adequate tissue oxygenation",
+      "The patient needs more fluids to increase oxygen delivery",
+      "The cardiac output is too low"
+    ],
+    correctIndex: 0,
+    rationale: "In septic shock, distributive pathology impairs cellular oxygen extraction despite adequate delivery. A low O2ER (15%) and high SvO2 (82%) indicate oxygen is being delivered but tissues cannot extract or utilize it effectively, characteristic of mitochondrial dysfunction and microcirculatory failure in sepsis.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Oxygen Extraction"
+  },
+  {
+    id: "rrt-2140",
+    stem: "A point-of-care blood gas analyzer uses which technology to measure pH, PaCO2, and PaO2?",
+    options: [
+      "Ion-selective electrodes (potentiometry) for pH, Severinghaus electrode for PaCO2, Clark electrode for PaO2",
+      "Spectrophotometry for all three values",
+      "Fluorescence quenching for all parameters",
+      "Mass spectrometry for gas analysis"
+    ],
+    correctIndex: 0,
+    rationale: "Traditional blood gas analyzers use three electrodes: a glass pH electrode (ion-selective/potentiometric), the Severinghaus electrode (modified pH electrode with CO2-permeable membrane) for PaCO2, and the Clark polarographic electrode for PaO2. Some newer analyzers use optical/fluorescence methods.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Analyzer Technology"
+  },
+  {
+    id: "rrt-2141",
+    stem: "A patient with acute liver failure develops the following ABG: pH 7.55, PaCO2 20 mmHg, HCO3 17 mEq/L, lactate 10 mmol/L, anion gap 28. The complex acid-base disorder includes:",
+    options: [
+      "Respiratory alkalosis, anion gap metabolic acidosis, and concurrent metabolic alkalosis",
+      "Simple respiratory alkalosis only",
+      "Metabolic acidosis with appropriate compensation",
+      "Mixed respiratory and metabolic acidosis"
+    ],
+    correctIndex: 0,
+    rationale: "The pH is alkalotic with very low PaCO2 (respiratory alkalosis). The elevated anion gap (28) indicates anion gap metabolic acidosis from lactate. However, the HCO3 of 17 is higher than expected if only AG acidosis were present (expected HCO3 = 24 - delta AG = 24 - 16 = 8). The delta-delta ratio > 2 indicates a concurrent metabolic alkalosis. This triple disorder is common in acute liver failure.",
+    difficulty: 5,
+    category: "ABG Interpretation",
+    topic: "Triple Acid-Base Disorders"
+  },
+  {
+    id: "rrt-2142",
+    stem: "A neonate on mechanical ventilation has a pre-ductal PaO2 of 90 mmHg and post-ductal PaO2 of 55 mmHg. This gradient suggests:",
+    options: [
+      "Persistent pulmonary hypertension of the newborn with right-to-left ductal shunting",
+      "Normal transitional circulation",
+      "Coarctation of the aorta",
+      "Patent foramen ovale with left-to-right shunt"
+    ],
+    correctIndex: 0,
+    rationale: "A pre-ductal to post-ductal PaO2 difference > 10-15 mmHg indicates right-to-left shunting through the patent ductus arteriosus, characteristic of persistent pulmonary hypertension of the newborn (PPHN). Deoxygenated blood from the pulmonary artery crosses the PDA and mixes with oxygenated aortic blood below the ductus.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Neonatal Blood Gas"
+  },
+  {
+    id: "rrt-2143",
+    stem: "A patient is being evaluated for brain death. The apnea test ABG at baseline shows PaCO2 35 mmHg. After 8 minutes of disconnection from the ventilator with oxygen insufflation, the PaCO2 is 58 mmHg. The result:",
+    options: [
+      "Is consistent with brain death since PaCO2 rose above 60 mmHg or 20 mmHg above baseline without respiratory effort",
+      "Rules out brain death because PaCO2 did not reach 60 mmHg",
+      "Is inconclusive and the test must be repeated",
+      "Confirms the patient has intact brainstem function"
+    ],
+    correctIndex: 0,
+    rationale: "Brain death apnea testing criteria require PaCO2 to rise ≥ 60 mmHg OR ≥ 20 mmHg above baseline without respiratory effort. Here, PaCO2 rose 23 mmHg above baseline (35 to 58), meeting the 20 mmHg above baseline criterion. Although it did not reach absolute 60, the 20 mmHg rise criterion is met.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Brain Death Testing"
+  },
+  {
+    id: "rrt-2144",
+    stem: "In a patient receiving prone positioning for ARDS, the ABG obtained after 16 hours of proning shows improvement from P/F ratio of 85 to 180. Upon returning to supine position, the P/F ratio drops to 120. This patient is classified as a:",
+    options: [
+      "Prone responder with partial derecruitment upon repositioning",
+      "Non-responder to prone positioning",
+      "Full responder with sustained recruitment",
+      "Prone positioning failure requiring ECMO"
+    ],
+    correctIndex: 0,
+    rationale: "The patient showed significant improvement in P/F ratio during proning (85 to 180), qualifying as a responder. The drop to 120 upon supination indicates partial derecruitment but the P/F remains improved from baseline (85). Some loss of recruitment upon repositioning is expected. Sustained benefit and repeated proning sessions are typically employed.",
+    difficulty: 5,
+    category: "Blood Gas Analysis",
+    topic: "Prone Positioning"
+  },
+  {
+    id: "rrt-2145",
+    stem: "A blood gas sample has excess heparin (dilution error). Which ABG values will be most affected?",
+    options: [
+      "PaCO2 and HCO3 will be falsely decreased",
+      "PaO2 will be falsely decreased",
+      "pH will be falsely decreased",
+      "All values will be falsely elevated"
+    ],
+    correctIndex: 0,
+    rationale: "Excess liquid heparin dilutes the blood sample. Since heparin solution has a PaCO2 near zero and an acidic pH (~6.0), dilution primarily decreases PaCO2 and calculated HCO3. PaO2 may be slightly affected depending on the heparin solution's PO2. Using pre-heparinized syringes with lyophilized heparin minimizes this error.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Pre-analytical Errors"
+  },
+  {
+    id: "rrt-2146",
+    stem: "A patient's ABG reveals a methemoglobin level of 25%. The appropriate treatment is:",
+    options: [
+      "Methylene blue 1-2 mg/kg IV",
+      "100% oxygen via non-rebreather mask",
+      "Hyperbaric oxygen therapy",
+      "N-acetylcysteine infusion"
+    ],
+    correctIndex: 0,
+    rationale: "Methylene blue is the antidote for methemoglobinemia when levels exceed 20% or the patient is symptomatic. It acts as an electron carrier in the NADPH-methemoglobin reductase pathway, reducing methemoglobin back to functional hemoglobin. High-flow oxygen alone is insufficient for significant methemoglobinemia.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Dyshemoglobins"
+  },
+  {
+    id: "rrt-2147",
+    stem: "The oxygenation index (OI) is calculated as (MAP × FiO2 × 100) / PaO2. A patient on mechanical ventilation has MAP 25 cmH2O, FiO2 0.80, PaO2 60 mmHg. The OI is:",
+    options: [
+      "33",
+      "12",
+      "20",
+      "45"
+    ],
+    correctIndex: 0,
+    rationale: "OI = (25 × 0.80 × 100) / 60 = 2000 / 60 = 33.3. An OI > 40 sustained for hours is one criterion for ECMO consideration in neonates. Higher OI indicates worse oxygenation failure relative to the support being provided.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Oxygenation Indices"
+  },
+  {
+    id: "rrt-2148",
+    stem: "A temperature-corrected ABG versus uncorrected ABG is clinically important because:",
+    options: [
+      "Hypothermic patients have increased gas solubility, which affects PaO2 and PaCO2 values",
+      "Temperature has no effect on blood gas values",
+      "Only pH is affected by temperature changes",
+      "Temperature correction is only needed for neonatal patients"
+    ],
+    correctIndex: 0,
+    rationale: "Blood gas analyzers warm samples to 37°C. In hypothermic patients, gases are more soluble at lower temperatures, meaning in vivo PaO2 and PaCO2 are actually lower than the analyzer reports. The alpha-stat vs pH-stat debate centers on whether to correct for temperature during hypothermic conditions like cardiac surgery.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Temperature Correction"
+  },
+  {
+    id: "rrt-2149",
+    stem: "A patient with type A lactic acidosis versus type B lactic acidosis can be differentiated by:",
+    options: [
+      "Type A is caused by tissue hypoperfusion/hypoxia while type B occurs without overt hypoperfusion",
+      "Type A occurs only in diabetic patients while type B occurs in non-diabetic patients",
+      "Type A has a higher lactate level than type B",
+      "Type A responds to bicarbonate therapy while type B does not"
+    ],
+    correctIndex: 0,
+    rationale: "Type A lactic acidosis results from inadequate oxygen delivery or utilization (shock, severe hypoxemia, cardiac arrest). Type B occurs without evidence of tissue hypoperfusion and is caused by drugs (metformin), liver failure, malignancy, or metabolic disorders. The distinction guides treatment: Type A requires restoring perfusion, Type B requires treating the underlying cause.",
+    difficulty: 4,
+    category: "Blood Gas Analysis",
+    topic: "Lactic Acidosis Classification"
+  }
+];

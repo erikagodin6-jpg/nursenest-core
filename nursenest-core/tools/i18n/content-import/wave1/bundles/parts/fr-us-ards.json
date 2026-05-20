@@ -1,0 +1,185 @@
+{
+  "us-rn-nclex-rn:us-rn-ards": {
+    "title": "SDRA (NCLEX-RN, États-Unis)",
+    "topic": "SDRA",
+    "seoTitle": "SDRA | NCLEX-RN US | NurseNest",
+    "seoDescription": "NCLEX-RN (É.-U.) : SDRA (ARDS) — oxygénation, ventilation protectrice et surveillance.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Signification clinique",
+        "body": "Les questions sur la **SDRA (ARDS)** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l’examen",
+        "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+      },
+      "core_concept": {
+        "heading": "Concept central",
+        "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+      },
+      "takeaways": {
+        "heading": "Points à retenir",
+        "body": "- Reliez **signes vitaux + gaz du sang + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** items `topic:ards`."
+      }
+    },
+    "preTest": [
+      {
+        "question": "Un client de 50 ans atteint de SDRA voit sa fonction rénale se détériorer. BUN 38 mg/dL, créatinine 2,8 mg/dL. TA 88/54, FC 116, FR 20 (ventilateur), SpO2 90 % sous FiO2 70 % avec PEEP 14. Diurèse 80 mL en 8 h. Quelle complication se développe le plus probablement ?",
+        "options": [
+          "Syndrome de dysfonction multiorganique (SDMO) : la SDRA avec insuffisance rénale et instabilité hémodynamique indique une détérioration systémique",
+          "Insuffisance rénale aiguë isolée due au produit de contraste",
+          "Réponse rénale normale à la ventilation mécanique",
+          "Néphrotoxicité médicamenteuse qui se corrigera avec l’ajustement des doses"
+        ],
+        "rationale": "La SDRA peut déclencher une réponse inflammatoire systémique menant au SDMO. La détérioration rénale (BUN/créatinine élevés, oligurie) avec hypotension et tachycardie dans ce contexte suggère fortement le SDMO, une situation à très haut risque nécessitant des soins de support agressifs."
+      },
+      {
+        "question": "Un client présente une pancréatite aiguë sévère ; le score de Ranson à l’admission est de 6. L’infirmière doit reconnaître que cela indique :",
+        "options": [
+          "Risque de mortalité élevé nécessitant surveillance de niveau USI et soins de support agressifs",
+          "Pancréatite légère avec récupération attendue complète",
+          "Pancréatite modérée nécessitant une prise en charge médicale standard",
+          "Indication à une chirurgie précoce"
+        ],
+        "rationale": "Les critères de Ranson estiment la gravité et la mortalité. Un score de 5–6 indique une mortalité d’environ 40 % et une prise en charge en USI avec surveillance rapprochée des complications (pancréatite nécrosante, SDRA, défaillance multiorganique)."
+      },
+      {
+        "question": "Une patiente de 75 ans ayant des antécédents de BPCO est admise pour détresse respiratoire aiguë. Sa saturation est de 88 % à l’air ambiant. Que doit faire l’IP en premier ?",
+        "options": [
+          "Administrer de l’oxygène supplémentaire selon l’ordonnance",
+          "Encourager la respiration avec les lèvres pincées",
+          "Ausculter les poumons et évaluer l’effort respiratoire",
+          "Obtenir une numération formule sanguine complète selon l’ordonnance"
+        ],
+        "rationale": "En détresse respiratoire aiguë, l’évaluation des bruits pulmonaires et de l’effort respiratoire précède les interventions : elle oriente la gravité de l’hypoxie et les prochaines actions, y compris l’oxygène."
+      },
+      {
+        "question": "Une infirmière surveille un patient atteint de pneumonie sous oxygénothérapie. Quel résultat indique le besoin d’intervention supplémentaire ?",
+        "options": [
+          "Fréquence respiratoire de 20/min",
+          "Saturation en oxygène de 88 % sous 2 L/min au masque à lunettes",
+          "Utilisation du diaphragme pour respirer",
+          "Murmure vésiculaire net à l’auscultation"
+        ],
+        "rationale": "Une SpO2 de 88 % sous 2 L/min indique une hypoxémie et nécessite une réévaluation et souvent une adaptation de l’oxygénothérapie ; l’objectif est généralement au-dessus de 92 % selon le contexte clinique."
+      },
+      {
+        "question": "Un client en transfusion sanguine développe un œdème aigu du poumon lié à la transfusion (TRALI). L’infirmière doit :",
+        "options": [
+          "Poursuivre la transfusion plus lentement",
+          "Arrêter immédiatement la transfusion et assurer une prise en charge respiratoire de support",
+          "Administrer des diurétiques pour l’œdème pulmonaire",
+          "Relancer la transfusion avec un nouveau filtre"
+        ],
+        "rationale": "TRALI : détresse respiratoire hypoxémique aiguë dans les 6 h suivant la transfusion. Arrêt de la transfusion, soins de support (oxygène, ventilation si nécessaire). Les diurétiques ne sont pas indiqués comme dans l’SRO liée à la surcharge (TACO)."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Quel signe d’évaluation correspond le mieux au syndrome de détresse respiratoire aiguë (SDRA) ?",
+        "options": [
+          "Poumons hyperinsufflés",
+          "Infiltrats pulmonaires bilatéraux",
+          "Épanchement pleural",
+          "Auscultation pulmonaire nette"
+        ],
+        "rationale": "La SDRA se caractérise notamment par des infiltrats bilatéraux sur l’imagerie et une hypoxémie sévère non corrigeable simplement par l’O2."
+      },
+      {
+        "question": "Quels constats cliniques sont associés à la SDRA ?",
+        "options": [
+          "Hypoxémie sévère",
+          "Infiltrats pulmonaires bilatéraux",
+          "Compliance pulmonaire diminuée",
+          "Atteinte alvéolaire diffuse",
+          "Saturation en oxygène normale"
+        ],
+        "rationale": "La SDRA associe hypoxémie sévère, infiltrats bilatéraux, compliance diminuée et atteinte alvéolaire diffuse ; la saturation n’est pas normale."
+      },
+      {
+        "question": "Une infirmière prend en charge un homme de 68 ans atteint de pneumonie et de BPCO : toux productive, dyspnée accrue. Quelle est l’action prioritaire ?",
+        "options": [
+          "Administrer un bronchodilatateur selon l’ordonnance",
+          "Obtenir un échantillon d’expectoration pour culture",
+          "Augmenter le débit d’oxygène",
+          "Encourager toux et respirations profondes"
+        ],
+        "rationale": "En détresse respiratoire aiguë avec BPCO, ouvrir les voies aériennes avec un bronchodilatateur prescrit est souvent la priorité pour réduire la dyspnée ; les autres mesures suivent selon l’évaluation."
+      },
+      {
+        "question": "Un client de 55 ans atteint de SDRA est sous ventilation mécanique (FiO2 80 %, PEEP 12 cmH2O). TA 106/64, FC 98, SpO2 90 %. La SpO2 chute soudainement à 82 % avec augmentation des pressions de crête. Quelle complication suspecter en premier ?",
+        "options": [
+          "Pneumothorax par barotraumatisme lié aux pressions élevées et à la PEEP",
+          "Pneumonie associée au ventilateur évoluant en quelques minutes",
+          "Amélioration de la compliance réduisant le besoin de PEEP",
+          "Défaillance du saturimètre"
+        ],
+        "rationale": "Une désaturation brutale avec pics de pression évoque un pneumothorax sous ventilation à haute PEEP/FiO2 : urgence (auscultation, déviation trachéale, décompression si indiqué)."
+      },
+      {
+        "question": "Un homme de 30 ans présente une détresse respiratoire aiguë après exposition à la fumée de cigarette. Quelle intervention prioriser ?",
+        "options": [
+          "Administrer un corticostéroïde",
+          "Placer le patient en position haute (Fowler élevé)",
+          "Appliquer une compresse chaude sur le thorax",
+          "Initier la kinésithérapie respiratoire"
+        ],
+        "rationale": "La position haute optimise l’expansion pulmonaire et le confort ventilatoire en détresse aiguë ; les autres options ne traitent pas l’urgence immédiate."
+      },
+      {
+        "question": "Une infirmière prend en charge un client BPCO en détresse respiratoire aiguë. GSA : pH 7,28, PaCO2 58 mmHg, PaO2 55 mmHg, HCO3 26 mmol/L. Comment interpréter ?",
+        "options": [
+          "Acidose métabolique avec compensation respiratoire",
+          "Alcalose respiratoire par hyperventilation",
+          "Acidose respiratoire non compensée indiquant une défaillance ventilatoire aiguë",
+          "Gaz du sang artériels normaux"
+        ],
+        "rationale": "pH bas, PaCO2 élevé, HCO3 normal : acidose respiratoire non compensée avec hypoxémie — défaillance ventilatoire aiguë possible ; peut nécessiter VNI ou intubation selon le contexte."
+      },
+      {
+        "question": "Un client sous ventilation mécanique pour SDRA a un rapport P/F de 85. Cela indique :",
+        "options": [
+          "SDRA légère",
+          "SDRA modérée",
+          "SDRA sévère — envisager la décubitus ventral",
+          "Oxygénation normale"
+        ],
+        "rationale": "Critères de Berlin : P/F < 100 = SDRA sévère ; décubitus ventral prolongé, blocage neuro-musculaire, ECMO possibles selon les protocoles."
+      },
+      {
+        "question": "Un client atteint de SDRA est intubé et ventilé. GSA : pH 7,28, PaCO2 52 mmHg, PaO2 58 mmHg, HCO3 24 mEq/L. Comment interpréter ?",
+        "options": [
+          "Acidose respiratoire non compensée avec hypoxémie",
+          "Alcalose métabolique compensée",
+          "Acidose mixte respiratoire et métabolique",
+          "Acidose métabolique non compensée"
+        ],
+        "rationale": "pH bas, PaCO2 élevé, PaO2 bas, HCO3 normal : acidose respiratoire avec hypoxémie — ajustements ventilatoires pour améliorer ventilation et oxygénation."
+      },
+      {
+        "question": "Un client atteint de SDRA nécessite une ventilation « protectrice ». Cela inclut :",
+        "options": [
+          "Volumes courants élevés pour maximiser l’oxygénation",
+          "Faibles volumes courants (6 mL/kg du poids idéal) avec pression de plateau < 30 cmH2O",
+          "PEEP maximale sans surveillance de la compliance",
+          "Fréquence ventilatoire très rapide"
+        ],
+        "rationale": "Protocole ARDSNet : faibles volumes pour limiter le volutrauma ; plateau < 30 cmH2O ; PEEP pour recrutement ; hypercapnie permissive possible."
+      },
+      {
+        "question": "Une infirmière prend en charge un homme de 30 ans atteint de mucoviscidose en kinésithérapie pulmonaire ; aggravation soudaine de la toux et de la dyspnée. Quelle est l’action prioritaire ?",
+        "options": [
+          "Administrer un bronchodilatateur selon l’ordonnance",
+          "Prévenir immédiatement le médecin traitant",
+          "Évaluer la saturation en oxygène du patient",
+          "Encourager le spiromètre d’incitation"
+        ],
+        "rationale": "Évaluer d’abord la SpO2 pour quantifier la détresse respiratoire aiguë ; oriente l’oxygène et les escalades ; les bronchodilatateurs peuvent suivre selon l’évaluation."
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+---
+description: Lab Values — educational depth (clinical interpretation, not range memorization).
+globs:
+  - nursenest-core/src/components/labs/**/*
+  - nursenest-core/src/lib/labs/**/*
+  - nursenest-core/src/app/**/labs/**/*
+alwaysApply: false
+---
+
+# Lab Values educational depth
+
+The Labs ecosystem (`/app/labs`, `labs-engine`) must deliver **adaptive clinical interpretation training**, not isolated normal ranges or static tables.
+
+## Must teach
+
+- Interpretation, pattern recognition, clinical reasoning  
+- Relationships **between** labs and combined abnormality patterns  
+- Pathophysiology correlations, prioritization, trend analysis, bedside significance  
+- Nursing implications, medication implications, deterioration indicators  
+- **NGN-style** judgment where lesson format supports it  
+- **ECG / telemetry correlations** where clinically appropriate (e.g. electrolytes, cardiac markers)
+
+## Must avoid as primary experience
+
+- Range-only memorization, superficial flashcards, spreadsheet-first layouts  
+- Teaching norms without **context, escalation, and trend meaning**
+
+## Tier scaling (use existing `tierFocus` / track fields)
+
+| Track | Emphasis |
+|-------|----------|
+| **RN** | Broad interpretation, prioritization, NCLEX/clinical readiness |
+| **PN/RPN** | Bedside recognition, practical escalation, stable vs unpredictable client |
+| **NP** | Deeper diagnostic reasoning, pathophysiology, advanced trends |
+| **Allied** | Profession-aware depth |
+| **New Grad** | Unit/specialty framing, ICU/ER/telemetry integration, deterioration cues |
+
+*(New Grad may map to pathway metadata + RN depth — do not fork routes.)*
+
+## Integrated reasoning examples (content targets)
+
+Hgb+Hct coherence; viral vs bacterial patterns; neutrophilia; bandemia; left vs right shift; sepsis indicators; dilutional states; renal injury progression; electrolyte + ECG; ABG; inflammatory markers; liver patterns; coagulation; cardiac marker progression.
+
+## Ecosystem integration
+
+Labs content and CTAs should link naturally into ECG, telemetry, med safety, NGN, simulations, OSCE, adaptive remediation, and future report-card mastery — **reuse** `buildLabsStudyLinks` and shared shells; **no** parallel lab product IA.
+
+## Related
+
+- `.cursor/rules/ecosystem-platform-guardrails.mdc` §2 Lab Values  
+- `docs/planning/lab-values-educational-depth.md`

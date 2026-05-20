@@ -1,0 +1,91 @@
+# Explicit inventory lines (one topic per line) — extend freely; lines starting with # are ignored.
+Abdominal Aortic Aneurysm
+Myocardial Infarction
+Acute Coronary Syndrome
+Heart Failure
+Atrial Fibrillation
+CABG and Postoperative CABG Complications
+Post-CABG Complications
+Cardiac Tamponade
+Hypertensive Encephalopathy
+Peripheral Artery Disease
+Infective Endocarditis
+Acute Rheumatic Fever
+Tetralogy of Fallot
+Carotid Endarterectomy
+Ventricular Bigeminy
+Malignant Dysrhythmia Red Flags
+Phlebostatic Axis
+Defibrillation vs Synchronized Cardioversion
+Hemodynamic Monitoring Concepts
+Cardiogenic Shock
+Pulmonary Edema in Heart Failure
+Cardiogenic Shock after MI
+Dysrhythmias after MI
+Pericarditis after MI
+Mitral Valve Insufficiency after MI
+Ventricular Rupture after MI
+Graft Leakage after AAA Repair
+Cardiac Tamponade after CABG
+Cerebral Ischemia after Carotid Endarterectomy
+Hemorrhage after Carotid Endarterectomy
+Thromboembolism
+Tissue Necrosis from PAD
+Gangrene in PAD
+Dopamine
+Digoxin
+Milrinone
+ACE Inhibitors
+ARBs
+Heparin and aPTT Monitoring
+Factor Xa Inhibitors
+Statins
+Thiazide Diuretics
+Beta Blockers in ACS / MI
+Intravenous Nitroglycerin for ACS
+Thrombolytics / tPA
+Anticoagulation in ACS and PE
+COPD
+Chronic Bronchitis
+Emphysema
+ARDS
+Bronchiolitis and RSV
+Epiglottitis
+Pertussis
+Cystic Fibrosis
+Pleurisy
+Positive Pressure Ventilation
+Chest Tubes
+Pulmonary Embolism
+Sepsis
+Increased Intracranial Pressure
+Bacterial Meningitis
+Autonomic Dysreflexia
+Phenytoin
+Memantine
+Magnesium Sulfate
+Cholecystitis
+Appendicitis
+Bowel Obstruction (Mechanical and Functional)
+Peptic Ulcer Disease
+Cirrhosis
+Diverticulosis vs Diverticulitis
+ERCP and Post-Procedure Pancreatitis
+Diabetic Ketoacidosis
+Hypoglycemia
+Addison Disease / Primary Adrenal Insufficiency
+Hyperkalemia: Recognition and Correction
+Acute Lymphoblastic Leukemia
+Sickle Cell Disease
+Hemophilia
+Wilms Tumor
+HELLP Syndrome
+Preeclampsia and Eclampsia
+Neuroleptic Malignant Syndrome
+Isolation Precautions: Contact, Droplet, and Airborne
+Nursing Prioritization: ABCs and Urgent vs Important
+Shock: Recognition, Classification, and Nursing Priorities
+Loop Diuretics
+Proton Pump Inhibitors
+Loperamide
+Morphine: ACS, PE, and Respiratory Depression Monitoring

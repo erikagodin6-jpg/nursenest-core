@@ -1,0 +1,241 @@
+{
+  "wave": 3,
+  "name": "Rationale-driven multilingual overlays",
+  "locales": ["fr", "es", "tl"],
+  "englishSourcePolicy": {
+    "examQuestions": {
+      "description": "Use only ExamQuestion rows whose English teaching fields are upgraded (strong rationale package) before translation.",
+      "qualitySignals": [
+        "rationale length >= 300 characters",
+        "distractor_rationales populated (non-empty JSON)",
+        "correct_answer_explanation non-empty",
+        "clinical_pearl non-empty"
+      ],
+      "referenceImplementation": "server/content-integrity-scanner.ts getNonCATQuestionsNeedingRationaleUpgrade (inverse filter = upgraded set), countNonCATRationaleAudit",
+      "excludeByDefault": [
+        "adaptive_eligible CAT pool items if product policy reserves them from overlay import",
+        "image-only stems until exhibit alt-text + rationale are stable"
+      ]
+    },
+    "pathwayLessons": {
+      "description": "For lesson preTest/postTest, translate display strings from catalog English only after rationales in JSON are upgraded (no empty or placeholder rationale lines).",
+      "reference": "nursenest-core/src/content/pathway-lessons/catalog.json pathway lesson preTest/postTest"
+    }
+  },
+  "importKinds": {
+    "primary": "EXAM_QUESTION",
+    "secondary": "PATHWAY_LESSON",
+    "deferred": ["FLASHCARD_DECK", "FLASHCARD", "FLASHCARD_TAG"]
+  },
+  "pathwaysPrimary": ["ca-rn-nclex-rn", "us-rn-nclex-rn"],
+  "pathwaysSecondary": ["ca-rpn-rex-pn", "us-lpn-nclex-pn"],
+  "pathwaysNpIfActive": ["us-fnp-aanp", "us-fnp-ancc"],
+  "nextTopicsSelected": [
+    {
+      "id": "wave1_followthrough_prepost",
+      "cluster": "Wave 1 lesson assessments",
+      "slugs": [
+        "ca-rn-copd-respiratory",
+        "us-rn-copd-respiratory",
+        "ca-rn-heart-failure",
+        "us-rn-heart-failure",
+        "ca-rn-insulin-hypoglycemia",
+        "us-rn-insulin-hypoglycemia",
+        "ca-rn-sepsis",
+        "us-rn-sepsis",
+        "ca-rn-fluid-balance",
+        "us-rn-fluid-balance"
+      ],
+      "why": "Wave 1 translated lesson bodies but English pre/post on most lessons; upgraded English rationales in checks unlock full localized review.",
+      "examImportance": "high",
+      "multilingualValue": "high",
+      "overlayKinds": ["PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "scoped per pathwayId:slug; Canada vs US wording where units/scope differ"
+    },
+    {
+      "id": "management_of_care",
+      "cluster": "Prioritization, delegation, safety sequencing",
+      "examTags": ["prioritization", "delegation", "safety", "infection-control"],
+      "why": "Largest NCLEX client-needs weight; rationales must teach why wrong options are unsafe or out-of-scope.",
+      "examImportance": "critical",
+      "multilingualValue": "critical",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "shared clinical core; RPN/LPN vs RN scope overlays for lower tiers"
+    },
+    {
+      "id": "cardiovascular_acs_shock",
+      "cluster": "ACS / MI / angina / shock / dysrhythmias",
+      "slugsLesson": [
+        "ca-rn-myocardial-infarction",
+        "us-rn-myocardial-infarction",
+        "ca-rn-angina",
+        "us-rn-angina",
+        "ca-rn-shock",
+        "us-rn-shock",
+        "ca-rn-dysrhythmias",
+        "us-rn-dysrhythmias"
+      ],
+      "why": "High-stakes time-sensitive content; upgraded rationales translate well to fr/es/tl clinical teaching.",
+      "examImportance": "critical",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "yes"
+    },
+    {
+      "id": "respiratory_common",
+      "cluster": "Asthma, pneumonia, PE",
+      "slugsLesson": [
+        "ca-rn-asthma",
+        "us-rn-asthma",
+        "ca-rn-pneumonia",
+        "us-rn-pneumonia",
+        "ca-rn-pulmonary-embolism",
+        "us-rn-pulmonary-embolism"
+      ],
+      "why": "Very high exam frequency; complements Wave 1 COPD/ARDS.",
+      "examImportance": "high",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "yes"
+    },
+    {
+      "id": "fluids_electrolytes_abg",
+      "cluster": "ABG, acid-base, sodium, potassium",
+      "slugsLesson": [
+        "ca-rn-abg-interpretation",
+        "us-rn-abg-interpretation",
+        "ca-rn-acid-base-advanced",
+        "us-rn-acid-base-advanced",
+        "ca-rn-sodium-imbalance",
+        "us-rn-sodium-imbalance",
+        "ca-rn-potassium-imbalance",
+        "us-rn-potassium-imbalance"
+      ],
+      "why": "Heavy reasoning content; distractor teaching in upgraded English is the main learner value.",
+      "examImportance": "high",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION"],
+      "sharedCoreScopedOverlay": "yes; unit labels (SI) emphasized for Canada"
+    },
+    {
+      "id": "pharm_safety_high_alert",
+      "cluster": "Anticoagulants, opioids, insulin (beyond Wave 1 lesson), antibiotics",
+      "slugsLesson": [
+        "ca-rn-anticoagulants",
+        "us-rn-anticoagulants",
+        "opioids-respiratory-depression",
+        "ca-rn-antibiotics",
+        "us-rn-antibiotics"
+      ],
+      "why": "Pharmacological therapies domain; harm reduction narratives must survive translation.",
+      "examImportance": "high",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "yes"
+    },
+    {
+      "id": "renal_gi",
+      "cluster": "AKI, dialysis access, UTI vs pyelo, GI bleed, pancreatitis",
+      "slugsLesson": [
+        "aki-prerenal-vs-intrarenal",
+        "hemodialysis-access-care",
+        "uti-vs-pyelonephritis",
+        "acute-pancreatitis-nursing-care",
+        "gi-bleed-assessment"
+      ],
+      "why": "Cross-topic prioritization; strong rationales reduce memorization-only studying.",
+      "examImportance": "medium-high",
+      "multilingualValue": "medium-high",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "yes"
+    },
+    {
+      "id": "neuro_endocrine",
+      "cluster": "Stroke window, ICP, seizure precautions; DKA/HHS, SIADH vs DI",
+      "slugsLesson": [
+        "stroke-assessment-tpa-window",
+        "increased-icp-positioning",
+        "seizure-precautions-rescue-meds",
+        "dka-vs-hhs-priorities-hy",
+        "siadh-vs-di-basics"
+      ],
+      "why": "Time windows and discriminator questions need precise translated teaching.",
+      "examImportance": "high",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "yes"
+    },
+    {
+      "id": "infection_isolation",
+      "cluster": "Isolation, C. diff, meningitis, TB",
+      "slugsLesson": [
+        "ca-rn-infection-control",
+        "us-rn-infection-control",
+        "isolation-precautions-in-practice",
+        "c-diff-contact-precautions",
+        "meningitis-isolation-assessment",
+        "tb-isolation-compliance"
+      ],
+      "why": "Safety and infection control domain; procedure language must be accurate in every locale.",
+      "examImportance": "high",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION", "PATHWAY_LESSON"],
+      "sharedCoreScopedOverlay": "yes; institution/policy nuance may need CA vs US"
+    },
+    {
+      "id": "maternity_peds_mh",
+      "cluster": "Preeclampsia, PPH; peds fever/RSV; suicide risk, psychotropics",
+      "slugsLesson": [
+        "preeclampsia-vs-eclampsia",
+        "postpartum-hemorrhage",
+        "pediatric-fever-dehydration",
+        "rsv-pediatric-resp-distress",
+        "suicide-risk-assessment-hy",
+        "psychotropic-side-effects"
+      ],
+      "why": "High learner confusion + scope differences; only import after English rationale upgrades are clinician-reviewed.",
+      "examImportance": "medium-high",
+      "multilingualValue": "high",
+      "overlayKinds": ["EXAM_QUESTION"],
+      "sharedCoreScopedOverlay": "scoped-heavy (RPN/LPN vs RN when items exist per tier)"
+    }
+  ],
+  "recommendedBuildOrder": [
+    "1. Export UUID lists: upgraded ExamQuestion ids per topic/tag/tier (exclude non-upgraded rows).",
+    "2. Author fr/es/tl EXAM_QUESTION payloads (stem, options display labels, rationale, correctAnswerExplanation, distractorRationales, clinicalPearl, optional teaching fields) from English source strings.",
+    "3. Author PATHWAY_LESSON overlays for remaining Wave 1 pre/post + high-traffic lesson slugs (preTest/postTest question/options/rationale only; never correct indices).",
+    "4. Merge per locale into wave3-{locale}.manifest.json (version 1, items[]).",
+    "5. Dry-run: npm run i18n:import:content -- --file tools/i18n/content-import/wave3/wave3-fr.manifest.json --dry-run (repeat es, tl).",
+    "6. Apply imports; rerun dry-run to confirm idempotent unchanged counts."
+  ],
+  "importReadinessByLocale": {
+    "fr": {
+      "pipelineReady": true,
+      "authoringStatus": "pending",
+      "notes": "Canadian French nursing register for rationales; protect NCLEX, REx-PN, RN, PN, NP, FNP, NurseNest."
+    },
+    "es": {
+      "pipelineReady": true,
+      "authoringStatus": "pending",
+      "notes": "Neutral clinical Spanish; keep drug names where standard."
+    },
+    "tl": {
+      "pipelineReady": true,
+      "authoringStatus": "pending",
+      "notes": "Natural Tagalog + English clinical terms where clearer; same protected tokens."
+    }
+  },
+  "sourceQualityBlockers": [
+    "ExamQuestion rows missing the full upgraded rationale package cannot be translated until English remediation completes (avoid translating thin or placeholder teaching).",
+    "Stable ExamQuestion.id must exist in target database — IDs are not in git; export required per environment.",
+    "Overlay options[] length must match canonical ExamQuestion.options count or import validation fails.",
+    "SATA / NGN / ordered items need per-format payload discipline; validate on dry-run.",
+    "CAT / adaptive-eligible items: confirm product policy before overlaying (may be excluded from learner review merge).",
+    "RPN/LPN and NP tiers: English rationales must be scope-reviewed before translation to avoid embedding RN-only reasoning in PN overlays.",
+    "Flashcards remain out of Wave 3 unless deck/card IDs are pinned (same as Wave 1)."
+  ],
+  "estimatedScopeNotes": {
+    "examQuestionOverlays": "Primary volume driver — prioritize by topic tags tied to upgraded bank rows.",
+    "pathwayLessonOverlays": "Secondary — closes Wave 1 gap (localized lesson checks with strong translated rationales)."
+  }
+}

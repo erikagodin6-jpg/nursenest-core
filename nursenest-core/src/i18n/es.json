@@ -1,0 +1,44 @@
+{
+  "session.start": "Iniciar sesión de aprendizaje",
+  "session.end": "Finalizar sesión",
+  "session.progress": "Progreso de la sesión",
+
+  "item.next": "Siguiente elemento",
+  "item.question": "Pregunta",
+  "item.lesson": "Lección",
+  "item.simulation": "Simulación",
+
+  "progress.accuracy": "Precisión",
+  "progress.totalEvents": "Eventos totales",
+  "progress.dueReviews": "Revisiones pendientes",
+
+  "status.strength": "Fortaleza",
+  "status.weakness": "Debilidad",
+  "status.due": "Pendiente de revisión",
+
+  "difficulty.easy": "Fácil",
+  "difficulty.medium": "Medio",
+  "difficulty.hard": "Difícil",
+
+  "domain.respiratory": "Terapia Respiratoria",
+  "domain.pharmacyTech": "Técnico de Farmacia",
+  "domain.mlt": "Laboratorio Clínico",
+  "domain.imaging": "Imagenología Médica",
+  "domain.sonography": "Ecografía",
+  "domain.emt": "Técnico en Emergencias Médicas",
+  "domain.paramedic": "Paramédico",
+  "domain.medicalAssistant": "Asistente Médico",
+  "domain.dentalHygiene": "Higiene Dental",
+  "domain.dentalAssistant": "Asistente Dental",
+  "domain.physiotherapy": "Fisioterapia",
+  "domain.pta": "Asistente de Fisioterapia",
+  "domain.occupationalTherapy": "Terapia Ocupacional",
+  "domain.ota": "Asistente de Terapia Ocupacional",
+  "domain.socialWork": "Trabajo Social",
+  "domain.psychotherapy": "Psicoterapia",
+  "domain.mentalHealth": "Salud Mental y Adicciones",
+  "domain.psw": "Cuidador Personal",
+  "domain.communityHealth": "Salud Comunitaria",
+  "domain.dietetic": "Técnico Dietético",
+  "domain.labAssistant": "Asistente de Laboratorio"
+}

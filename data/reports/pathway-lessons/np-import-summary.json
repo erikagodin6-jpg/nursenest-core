@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-04-13T20:27:29.361Z",
+  "apply": true,
+  "batchSize": 120,
+  "candidateRows": 8566,
+  "processedRows": 2898,
+  "inserted": 2898,
+  "updated": 0,
+  "skipped": 0,
+  "failed": 0,
+  "generatedNpGapLessons": 0
+}

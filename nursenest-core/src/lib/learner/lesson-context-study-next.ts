@@ -1,0 +1,131 @@
+import "server-only";
+
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { filterWeakTopicsForAlliedEntitlement } from "@/lib/allied/allied-weak-topic-filter";
+import {
+  recommendNextActionsForLessonContinue,
+  type PostTestRemediationInputRow,
+  type PostTestStudyNextBundle,
+} from "@/lib/learner/adaptive-recommendations";
+import { findNextPathwayLessonSameBodySystem } from "@/lib/learner/pathway-body-system-next-lesson";
+import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { resolveTopicRemediationLinks } from "@/lib/learner/topic-remediation-links";
+import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import {
+  pathwayLessonMetadataListSelectForReads,
+  pathwayLessonStructuralCompleteWhereInput,
+} from "@/lib/db/pathway-lesson-structural-column-runtime";
+import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+
+export type LessonContinueContext =
+  | { variant: "pathway"; lessonId: string; pathwayId: string; topicSlug: string }
+  | { variant: "content"; lessonId: string; anchorNorm: string; topicCode: string | null }
+  | { variant: "legacy"; lessonId: string; anchorNorm: string; topicCode: string | null };
+
+function weakOverlapsCurrentLesson(w: WeakTopicRow, anchorNorm: string, topicCode: string | null): boolean {
+  const wn = w.normalizedTopic ?? normalizeTopicKey(w.topic);
+  if (wn === anchorNorm) return true;
+  if (topicCode) {
+    const tc = normalizeTopicKey(topicCode);
+    if (wn === tc) return true;
+  }
+  return false;
+}
+
+async function findNextPathwayLessonInAppOrder(
+  pathwayId: string,
+  currentLessonId: string,
+  entitlement: AccessScope,
+  learnerPath: string | null,
+): Promise<{ id: string; title: string } | null> {
+  const baseWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
+  const select = await pathwayLessonMetadataListSelectForReads();
+  const rows = await prisma.pathwayLesson.findMany({
+    where: { AND: [baseWhere, { pathwayId, ...structuralWhere }] },
+    orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
+    select,
+  });
+  const idx = rows.findIndex((r) => r.id === currentLessonId);
+  if (idx < 0 || idx >= rows.length - 1) return null;
+  const n = rows[idx + 1]!;
+  return { id: n.id, title: n.title };
+}
+
+/**
+ * Snapshot: pathway position + scoped weak topics (same source as dashboard), then Study Next lesson-end ranking.
+ */
+export async function loadLessonContinueStudyNext(
+  userId: string,
+  entitlement: AccessScope,
+  learnerPath: string | null,
+  ctx: LessonContinueContext,
+): Promise<PostTestStudyNextBundle | null> {
+  if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+
+  let nextPathwayLesson: { id: string; title: string } | null = null;
+  let sameBodySystemLesson: { id: string; title: string } | null = null;
+  let anchorNorm: string;
+  let topicCode: string | null;
+
+  if (ctx.variant === "pathway") {
+    anchorNorm = normalizeTopicKey(ctx.topicSlug);
+    topicCode = ctx.topicSlug.trim() || null;
+    nextPathwayLesson = await findNextPathwayLessonInAppOrder(ctx.pathwayId, ctx.lessonId, entitlement, learnerPath);
+    const [pathwayListWhere, currentMeta] = await Promise.all([
+      pathwayLessonsAppListWhere(entitlement, learnerPath),
+      prisma.pathwayLesson.findUnique({
+        where: { id: ctx.lessonId },
+        select: { bodySystem: true },
+      }),
+    ]);
+    const bs = currentMeta?.bodySystem?.trim();
+    if (bs && bs.length >= 2) {
+      sameBodySystemLesson = await findNextPathwayLessonSameBodySystem({
+        pathwayWhere: pathwayListWhere,
+        pathwayId: ctx.pathwayId,
+        currentLessonId: ctx.lessonId,
+        bodySystem: bs,
+      });
+    }
+  } else {
+    anchorNorm = ctx.anchorNorm;
+    topicCode = ctx.topicCode;
+  }
+
+  let weakTopics: WeakTopicRow[] = [];
+  try {
+    const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+    weakTopics = perf.weakTopics;
+  } catch {
+    weakTopics = [];
+  }
+
+  weakTopics = filterWeakTopicsForAlliedEntitlement(weakTopics, entitlement, learnerPath);
+
+  const filtered = weakTopics.filter((w) => !weakOverlapsCurrentLesson(w, anchorNorm, topicCode));
+
+  const enriched: PostTestRemediationInputRow[] = [];
+  for (const w of filtered.slice(0, 8)) {
+    const topicLabel = formatTopicLabelForDisplay(w.normalizedTopic ?? normalizeTopicKey(w.topic));
+    const code = w.normalizedTopic ?? normalizeTopicKey(w.topic);
+    const { lessonHref, qbankHref } = await resolveTopicRemediationLinks(code, topicLabel, entitlement, learnerPath);
+    enriched.push({
+      topicLabel,
+      topicCode: code,
+      missCount: Math.max(1, w.missed ?? 1),
+      lessonHref,
+      qbankHref,
+    });
+  }
+
+  return recommendNextActionsForLessonContinue({
+    currentLessonId: ctx.lessonId,
+    nextPathwayLesson,
+    sameBodySystemLesson: ctx.variant === "pathway" ? sameBodySystemLesson : null,
+    weakRows: enriched,
+  });
+}

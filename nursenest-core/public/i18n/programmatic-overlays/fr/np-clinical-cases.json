@@ -1,0 +1,21 @@
+{
+  "title": "Cas cliniques NP | Schémas de décision pour la préparation à l’examen",
+  "h1": "Cas cliniques NP pour un raisonnement de type examen",
+  "description": "Entraînez le raisonnement clinique de niveau NP : signaux d’alarme, bifurcations diagnostiques, enchaînement thérapeutique et escalade, alignés sur la façon dont les examens avancés sont rédigés.",
+  "sections": [
+    {
+      "heading": "Les cas face aux faits isolés",
+      "level": 2,
+      "body": [
+        "Un cas relie symptômes, médicaments, comorbidités et surveillance en une trajectoire. Votre tâche est de choisir la meilleure action suivante, pas de lister toutes les interventions possibles."
+      ]
+    },
+    {
+      "heading": "Construire une taxonomie personnelle des erreurs",
+      "level": 2,
+      "body": [
+        "Suivez si les erreurs se regroupent en diagnostic, choix médicamenteux, surveillance ou suivi. Réinjectez cette taxonomie dans votre prochain bloc de cas pour corriger le raisonnement, pas la chance."
+      ]
+    }
+  ]
+}

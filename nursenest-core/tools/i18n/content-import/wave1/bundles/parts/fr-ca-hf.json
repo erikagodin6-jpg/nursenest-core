@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-heart-failure": {
+    "title": "Insuffisance cardiaque (NCLEX-RN, Canada)",
+    "topic": "Insuffisance cardiaque",
+    "seoTitle": "Insuffisance cardiaque | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Contexte infirmier au Canada : insuffisance cardiaque — données métriques et formulation adaptée au périmètre.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Signification clinique",
+        "body": "Les questions sur l’**insuffisance cardiaque** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** lorsque l’énoncé indique des mmol/L et interprétez-les avec le contexte clinique. Les normes provinciales et les politiques de l’employeur encadrent la délégation et les actions autonomes."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l’examen",
+        "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal. Les items canadiens peuvent utiliser des unités métriques; le raisonnement clinique reste le même."
+      },
+      "core_concept": {
+        "heading": "Concept central",
+        "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque. Utilisez le contexte des soins aigus au Canada lorsque l’énoncé mentionne des unités ou des rôles."
+      },
+      "takeaways": {
+        "heading": "Points à retenir",
+        "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** travaillez les items étiquetés `topic:heart-failure`.\n- **Canada :** attention aux **laboratoires métriques** et au langage du **périmètre du collège**."
+      }
+    }
+  }
+}

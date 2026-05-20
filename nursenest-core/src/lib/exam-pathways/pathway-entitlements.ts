@@ -1,0 +1,82 @@
+import { ExamFamily, type CountryCode, type TierCode } from "@prisma/client";
+import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+
+export { pathwayAllowsCatAdaptiveStart, subscriptionCoversPathwayBase } from "./pathway-entitlements-policy";
+
+/**
+ * Phase 1: subscription still uses Prisma `TierCode` + `CountryCode`.
+ * Pathway compatibility = same stripe tier + same country + active subscription (or admin).
+ * NP specialties share the NP tier until Stripe supports per-pathway prices — use `User.learnerPath` = pathway.id to pick content.
+ */
+export async function listPathwaysCompatibleWithSubscription(scope: AccessScope): Promise<ExamPathwayDefinition[]> {
+  const { EXAM_PATHWAYS } = await import("@/lib/exam-pathways/exam-pathways-catalog");
+  if (!scope.hasAccess || scope.reason === "no_access") return [];
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
+    return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
+  }
+  const tier = scope.tier as TierCode | null;
+  const country = scope.country as CountryCode | null;
+  if (!tier || !country) return [];
+  const allowedTiers = accessibleTiersForUserTier(tier);
+  return EXAM_PATHWAYS.filter(
+    (p) => allowedTiers.includes(p.stripeTier) && p.countryCode === country && p.status !== "hidden",
+  );
+}
+
+/**
+ * Practice-tests / learner practice pickers: NP subscribers must choose an **NP exam** pathway, not
+ * RN/NCLEX marketing tracks that happen to sit on the same Stripe ladder.
+ */
+export function examPathwaysForStudyHubSubscription(
+  scope: AccessScope,
+  compatible: ExamPathwayDefinition[],
+): ExamPathwayDefinition[] {
+  if (!scope.hasAccess || scope.reason === "no_access") return compatible;
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) return compatible;
+  if (scope.tier !== "NP") return compatible;
+  const npOnly = compatible.filter((p) => p.examFamily === ExamFamily.NP);
+  return npOnly.length > 0 ? npOnly : compatible;
+}
+
+/**
+ * When User.learnerPath is set to a registry id, scope NP (and other) content to that track.
+ * Returns null if unset or unknown id.
+ */
+export async function pathwayFromLearnerPath(
+  learnerPath: string | null | undefined,
+): Promise<ExamPathwayDefinition | undefined> {
+  if (!learnerPath || learnerPath.trim().length === 0) return undefined;
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
+  return getExamPathwayById(learnerPath.trim());
+}
+
+/**
+ * Default pathway for practice-test builder: profile pathway if entitled, else RN NCLEX-RN for country, else first compatible.
+ */
+export async function defaultPracticeTestPathwayId(
+  compatible: ExamPathwayDefinition[],
+  learnerPath: string | null | undefined,
+  countryHint: string | null,
+): Promise<string | null> {
+  if (compatible.length === 0) return null;
+  const fromLp = await pathwayFromLearnerPath(learnerPath);
+  if (fromLp && compatible.some((p) => p.id === fromLp.id)) {
+    return fromLp.id;
+  }
+  const onlyNpTracks = compatible.length > 0 && compatible.every((p) => p.examFamily === ExamFamily.NP);
+  if (onlyNpTracks) {
+    const sorted = [...compatible].sort((a, b) => a.id.localeCompare(b.id));
+    return sorted[0]!.id;
+  }
+  const nclexRn = compatible.find(
+    (p) =>
+      p.examFamily === ExamFamily.NCLEX_RN &&
+      p.roleTrack === "rn" &&
+      (countryHint ? p.countryCode === countryHint : true),
+  );
+  if (nclexRn) return nclexRn.id;
+  return compatible[0]!.id;
+}

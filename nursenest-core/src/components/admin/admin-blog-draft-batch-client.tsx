@@ -1,0 +1,918 @@
+"use client";
+
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  BlogDraftGenerationBatchItemStatus,
+  BlogDraftGenerationBatchStatus,
+  BlogFunnelStage,
+  BlogPostIntent,
+  BlogPostTemplate,
+  CountryCode,
+} from "@prisma/client";
+import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
+import {
+  DRAFT_BATCH_MAX_ITEMS_PER_PROCESS,
+  DRAFT_BATCH_MAX_TOPICS,
+} from "@/lib/blog/blog-draft-generation-batch-constants";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
+
+function newIdempotencyKey(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `idem_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+}
+
+async function safeJson<T>(res: Response): Promise<T | null> {
+  try {
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
+const templates: BlogPostTemplate[] = [
+  BlogPostTemplate.HOW_TO_PASS,
+  BlogPostTemplate.TOPIC_EXPLAINED,
+  BlogPostTemplate.TOP_MISTAKES,
+  BlogPostTemplate.PRACTICE_QUESTIONS,
+  BlogPostTemplate.STUDY_PLAN,
+];
+
+type BatchRow = {
+  id: string;
+  status: BlogDraftGenerationBatchStatus;
+  exam: string;
+  country: string;
+  totalItems: number;
+  completedCount: number;
+  failedCount: number;
+  skippedCount: number;
+  allowDuplicateCanonicalTopic: boolean;
+  backgroundProcessing?: boolean;
+  createdAt: string;
+};
+
+type ItemRepairMeta = { repairAttempts: number | null; terminal: boolean | null; message: string };
+
+type ItemRow = {
+  id: string;
+  ordinal: number;
+  topicRaw: string;
+  status: BlogDraftGenerationBatchItemStatus;
+  blogPostId: string | null;
+  error: string | null;
+  blogPost: { id: string; slug: string; title: string } | null;
+  repairMeta?: ItemRepairMeta;
+};
+
+type BatchDetail = BatchRow & {
+  defaultTemplate: BlogPostTemplate;
+  defaultIntent: BlogPostIntent | null;
+  funnelStage: BlogFunnelStage | null;
+  tone: string;
+  keywords: string | null;
+  keywordCluster: string | null;
+  countryTarget: CountryCode | null;
+  includeImage: boolean;
+  includeAiImage: boolean;
+  items: ItemRow[];
+  /** Accurate job-wide counts (use when `items` is truncated for lite polling). */
+  pendingItems?: number;
+  generatingItems?: number;
+  /** Present when API returned a prefix slice (`?lite=1`) for fast polling. */
+  itemsTruncated?: boolean;
+  jobPhase?: "queued" | "running" | "completed" | "cancelled" | "partial";
+  lastProcessorError?: string | null;
+};
+
+type GenerationJobApiPayload = {
+  id: string;
+  phase: NonNullable<BatchDetail["jobPhase"]>;
+  rnTopicMapShellJob?: boolean;
+  batchStatus: BlogDraftGenerationBatchStatus;
+  exam: string;
+  country: string;
+  backgroundProcessing: boolean;
+  defaultTemplate: BlogPostTemplate;
+  defaultIntent: BlogPostIntent | null;
+  funnelStage: BlogFunnelStage | null;
+  tone: string;
+  keywords: string | null;
+  keywordCluster: string | null;
+  countryTarget: CountryCode | null;
+  includeImage: boolean;
+  includeAiImage: boolean;
+  allowDuplicateCanonicalTopic: boolean;
+  totalItems: number;
+  completedItems: number;
+  failedItems: number;
+  skippedItems: number;
+  pendingItems?: number;
+  generatingItems?: number;
+  lastProcessorError: string | null;
+  items: ItemRow[];
+  itemsTruncated?: boolean;
+  /** Server-built counts-only poll snapshot (`?statusPoll=1`). */
+  statusPoll?: boolean;
+};
+
+type CreateGenerationJobResponse = {
+  ok?: boolean;
+  error?: string;
+  message?: string;
+  jobId?: string;
+  status?: NonNullable<BatchDetail["jobPhase"]>;
+  createdAt?: string;
+  job?: GenerationJobApiPayload;
+  droppedShortLines?: number;
+  idempotentReplay?: boolean;
+};
+
+const JOB_STATUS_POLL_TIMEOUT_MS = 28_000;
+
+const POLLING_SOFT_FAILURE =
+  "Job created, but status polling timed out. The worker may still process it.";
+
+/** Full/detail loads: suggest refresh when the gateway drops the body or times out. */
+const JOB_DETAIL_FETCH_GATEWAY_SOFT =
+  "Could not load full job details (gateway or timeout). Click Refresh or reload the page — the background job may still be running.";
+
+function isAuthOrNotFoundStatus(status: number): boolean {
+  return status === 401 || status === 403 || status === 404;
+}
+
+function isCloudflareGatewayStatus(status: number): boolean {
+  return status === 524 || (status >= 520 && status < 530);
+}
+
+/** Unreadable or slow gateway responses while polling should not look like hard failures. */
+function shouldSoftenUnreadableJobFetch(
+  res: Response,
+  mode: "full" | "poll",
+  json: unknown,
+): boolean {
+  if (json != null) return false;
+  if (isAuthOrNotFoundStatus(res.status)) return false;
+  if (res.status === 429) return false;
+  if (res.status === 0 || res.status >= 500 || res.status === 408) return true;
+  if (isCloudflareGatewayStatus(res.status)) return true;
+  if (mode === "poll") return true;
+  return false;
+}
+
+function mapJobPayloadToBatchDetail(job: GenerationJobApiPayload): BatchDetail {
+  const pendingFallback = job.items.filter(
+    (i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING,
+  ).length;
+  const generatingFallback = job.items.filter(
+    (i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING,
+  ).length;
+  return {
+    id: job.id,
+    status: job.batchStatus,
+    exam: job.exam,
+    country: job.country,
+    totalItems: job.totalItems,
+    completedCount: job.completedItems,
+    failedCount: job.failedItems,
+    skippedCount: job.skippedItems,
+    allowDuplicateCanonicalTopic: job.allowDuplicateCanonicalTopic,
+    backgroundProcessing: job.backgroundProcessing,
+    createdAt: "",
+    defaultTemplate: job.defaultTemplate,
+    defaultIntent: job.defaultIntent,
+    funnelStage: job.funnelStage,
+    tone: job.tone,
+    keywords: job.keywords,
+    keywordCluster: job.keywordCluster,
+    countryTarget: job.countryTarget,
+    includeImage: job.includeImage,
+    includeAiImage: job.includeAiImage,
+    items: job.items,
+    pendingItems: typeof job.pendingItems === "number" ? job.pendingItems : pendingFallback,
+    generatingItems: typeof job.generatingItems === "number" ? job.generatingItems : generatingFallback,
+    itemsTruncated: job.itemsTruncated,
+    jobPhase: job.phase,
+    lastProcessorError: job.lastProcessorError,
+  };
+}
+
+function jobPhaseBadge(phase: NonNullable<BatchDetail["jobPhase"]>) {
+  const base = "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold";
+  switch (phase) {
+    case "queued":
+      return `${base} bg-sky-500/15 text-sky-950 dark:text-sky-100`;
+    case "running":
+      return `${base} bg-amber-500/20 text-amber-950 dark:text-amber-100`;
+    case "partial":
+      return `${base} bg-amber-500/15 text-amber-950 dark:text-amber-100`;
+    case "completed":
+      return `${base} bg-emerald-500/15 text-emerald-950 dark:text-emerald-100`;
+    case "cancelled":
+      return `${base} bg-zinc-500/15 text-zinc-800 dark:text-zinc-200`;
+    default:
+      return `${base} bg-muted text-foreground`;
+  }
+}
+
+function repairSummary(meta: ItemRepairMeta | undefined): string | null {
+  if (!meta || (meta.repairAttempts == null && meta.terminal == null)) return null;
+  const parts: string[] = [];
+  if (meta.repairAttempts != null) parts.push(`repair rounds: ${meta.repairAttempts}`);
+  if (meta.terminal === true) parts.push("failure is terminal (auto-repair exhausted)");
+  else if (meta.terminal === false) parts.push("may be re-queued");
+  return parts.join(" · ");
+}
+
+function statusBadge(status: BlogDraftGenerationBatchItemStatus | BlogDraftGenerationBatchStatus) {
+  const base = "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold";
+  switch (status) {
+    case BlogDraftGenerationBatchItemStatus.PENDING:
+      return `${base} bg-slate-500/15 text-slate-900 dark:text-slate-100`;
+    case BlogDraftGenerationBatchItemStatus.GENERATING:
+      return `${base} bg-amber-500/20 text-amber-950 dark:text-amber-100`;
+    case BlogDraftGenerationBatchItemStatus.COMPLETED:
+      return `${base} bg-emerald-500/15 text-emerald-950 dark:text-emerald-100`;
+    case BlogDraftGenerationBatchItemStatus.FAILED:
+      return `${base} bg-rose-500/15 text-rose-950 dark:text-rose-100`;
+    case BlogDraftGenerationBatchItemStatus.SKIPPED:
+      return `${base} bg-zinc-500/15 text-zinc-800 dark:text-zinc-200`;
+    case BlogDraftGenerationBatchStatus.ACTIVE:
+      return `${base} bg-sky-500/15 text-sky-950 dark:text-sky-100`;
+    case BlogDraftGenerationBatchStatus.COMPLETED:
+      return `${base} bg-emerald-500/15 text-emerald-950 dark:text-emerald-100`;
+    case BlogDraftGenerationBatchStatus.CANCELLED:
+      return `${base} bg-zinc-500/15 text-zinc-800 dark:text-zinc-200`;
+    default:
+      return `${base} bg-muted text-foreground`;
+  }
+}
+
+export function AdminBlogDraftBatchClient() {
+  const aiGate = useAdminAiGenerationGate();
+  const [topicsText, setTopicsText] = useState("");
+  const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
+  const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
+  const [countryTarget, setCountryTarget] = useState<"" | CountryCode>("");
+  const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
+  const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
+  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [keywords, setKeywords] = useState("");
+  const [keywordCluster, setKeywordCluster] = useState("");
+  const [includeImage, setIncludeImage] = useState(true);
+  const [includeAiImage, setIncludeAiImage] = useState(false);
+  const [allowDuplicateCanonicalTopic, setAllowDuplicateCanonicalTopic] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [batchId, setBatchId] = useState<string | null>(null);
+  const [batch, setBatch] = useState<BatchDetail | null>(null);
+  const [recent, setRecent] = useState<BatchRow[]>([]);
+  const [processChunk, setProcessChunk] = useState(2);
+  const [idempotencyKey, setIdempotencyKey] = useState(newIdempotencyKey);
+
+  const loadRecent = useCallback(async () => {
+    const res = await fetch("/api/admin/blog/draft-batch?limit=15", { credentials: "include", cache: "no-store" });
+    const json = (await res.json()) as { ok?: boolean; batches?: BatchRow[] };
+    if (res.ok && json.batches) setRecent(json.batches);
+  }, []);
+
+  const loadBatch = useCallback(async (id: string, mode: "full" | "poll" = "poll") => {
+    const qs = mode === "poll" ? "statusPoll=1" : "lite=1&maxItems=48";
+    const ac = mode === "poll" ? new AbortController() : null;
+    const timer =
+      ac != null
+        ? setTimeout(() => {
+            ac.abort();
+          }, JOB_STATUS_POLL_TIMEOUT_MS)
+        : null;
+    try {
+      const res = await fetch(`/api/admin/blog/generation-jobs/${encodeURIComponent(id)}?${qs}`, {
+        credentials: "include",
+        cache: "no-store",
+        signal: ac?.signal,
+      });
+      const json = await safeJson<{
+        ok?: boolean;
+        job?: GenerationJobApiPayload;
+        error?: string;
+        message?: string;
+        code?: string;
+        details?: unknown;
+      }>(res);
+      if (!json) {
+        if (shouldSoftenUnreadableJobFetch(res, mode, json)) {
+          setMsg(mode === "poll" ? POLLING_SOFT_FAILURE : JOB_DETAIL_FETCH_GATEWAY_SOFT);
+          setErr(null);
+          return;
+        }
+        setErr(`Could not read job response (HTTP ${res.status}).`);
+        return;
+      }
+      if (json.code === "JOB_RESPONSE_TIMEOUT") {
+        setMsg(mode === "poll" ? POLLING_SOFT_FAILURE : JOB_DETAIL_FETCH_GATEWAY_SOFT);
+        setErr(null);
+        return;
+      }
+      if (!res.ok || !json.job) {
+        const fromBody =
+          (typeof json.message === "string" && json.message.trim()) ||
+          (typeof json.error === "string" && json.error.trim()) ||
+          "";
+        let detail = "";
+        if (json.details != null) {
+          try {
+            detail = typeof json.details === "string" ? json.details : JSON.stringify(json.details);
+          } catch {
+            detail = "";
+          }
+        }
+        const combined = [fromBody, detail].filter(Boolean).join(detail ? "\n" : "");
+        if (
+          mode === "poll" &&
+          !isAuthOrNotFoundStatus(res.status) &&
+          (res.status === 503 ||
+            res.status === 504 ||
+            res.status === 502 ||
+            res.status >= 500 ||
+            isCloudflareGatewayStatus(res.status))
+        ) {
+          setMsg(POLLING_SOFT_FAILURE);
+          setErr(null);
+          return;
+        }
+        setErr(
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : combined.trim() || `Request failed (HTTP ${res.status}).`,
+        );
+        return;
+      }
+      if (json.job.statusPoll) {
+        setBatch((prev) => {
+          if (prev && prev.id === json.job!.id) {
+            return mapJobPayloadToBatchDetail({
+              ...json.job!,
+              items: prev.items,
+            });
+          }
+          return mapJobPayloadToBatchDetail(json.job!);
+        });
+      } else {
+        setBatch(mapJobPayloadToBatchDetail(json.job));
+      }
+      setErr(null);
+    } catch (e) {
+      const aborted = e instanceof DOMException && e.name === "AbortError";
+      if (aborted || (e instanceof Error && e.name === "AbortError")) {
+        setMsg(POLLING_SOFT_FAILURE);
+        setErr(null);
+        return;
+      }
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }, []);
+
+  const retryRepairItem = useCallback(
+    async (itemId: string) => {
+      if (!batchId) return;
+      setBusy(true);
+      setErr(null);
+      try {
+        const res = await fetch(`/api/admin/blog/draft-batch/items/${encodeURIComponent(itemId)}/retry-repair`, {
+          method: "POST",
+          credentials: "include",
+        });
+        const json = (await res.json()) as { ok?: boolean; error?: string };
+        if (!res.ok || !json.ok) {
+          setErr(json.error || `HTTP ${res.status}`);
+          return;
+        }
+        await loadBatch(batchId, "full");
+      } catch (e) {
+        setErr(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(false);
+      }
+    },
+    [batchId, loadBatch],
+  );
+
+  useEffect(() => {
+    void loadRecent();
+  }, [loadRecent]);
+
+  useEffect(() => {
+    const q = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    const fromUrl = q.get("batch");
+    if (fromUrl) {
+      setBatchId(fromUrl);
+      void loadBatch(fromUrl, "full");
+    }
+  }, [loadBatch]);
+
+  const pendingCount = useMemo(() => {
+    if (!batch) return 0;
+    if (typeof batch.pendingItems === "number") return batch.pendingItems;
+    return batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING).length;
+  }, [batch]);
+
+  const isProcessing = useMemo(() => {
+    if (!batch) return false;
+    if (typeof batch.generatingItems === "number" && batch.generatingItems > 0) return true;
+    return batch.items.some((i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING);
+  }, [batch]);
+
+  const shouldPollJob = useMemo(() => {
+    if (!batchId) return false;
+    if (!batch) return false;
+    if (batch.status !== BlogDraftGenerationBatchStatus.ACTIVE) return false;
+    if (!batch.backgroundProcessing) return false;
+    const ph = batch.jobPhase;
+    if (ph === "queued" || ph === "running") return true;
+    return pendingCount > 0 || isProcessing;
+  }, [batchId, batch, pendingCount, isProcessing]);
+
+  useEffect(() => {
+    if (!batchId || !shouldPollJob) return;
+    const t = setInterval(() => {
+      void loadBatch(batchId, "poll");
+    }, 3000);
+    return () => clearInterval(t);
+  }, [batchId, shouldPollJob, loadBatch]);
+
+  async function onCreate(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setMsg(null);
+    setErr(null);
+    try {
+      const body = {
+        topicsText,
+        exam,
+        country,
+        template,
+        tone,
+        intent,
+        funnelStage,
+        keywords: keywords || undefined,
+        keywordCluster: keywordCluster || undefined,
+        countryTarget: countryTarget || undefined,
+        includeImage,
+        includeAiImage,
+        allowDuplicateCanonicalTopic,
+        idempotencyKey,
+      };
+      const createJob = async () => {
+        const res = await fetch("/api/admin/blog/generation-jobs", {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const json = await safeJson<CreateGenerationJobResponse>(res);
+        return { res, json };
+      };
+
+      let recoveredFromTimeout = false;
+      let { res, json } = await createJob();
+      if (!json && (res.status === 504 || res.status === 502 || res.status === 503)) {
+        const retry = await createJob();
+        res = retry.res;
+        json = retry.json;
+        recoveredFromTimeout = Boolean(json?.jobId || json?.job?.id);
+      }
+      if (!json) {
+        const createTimedOut =
+          res.status === 0 || res.status >= 500 || res.status === 408;
+        if (createTimedOut) {
+          setMsg(POLLING_SOFT_FAILURE);
+        }
+        setErr(
+          createTimedOut
+            ? null
+            : `Could not read create response (HTTP ${res.status}).`,
+        );
+        if (!createTimedOut) return;
+        await loadRecent();
+        return;
+      }
+      if (!res.ok) {
+        setErr(res.status === 429 ? formatAdminRateLimitMessageFromJson(json) : (json.error ?? "Create failed"));
+        return;
+      }
+      const id = json.jobId ?? json.job?.id;
+      if (!id) {
+        setErr("Missing job id");
+        return;
+      }
+      setBatchId(id);
+      if (json.job) setBatch(mapJobPayloadToBatchDetail(json.job));
+      else {
+        setBatch(null);
+        void loadBatch(id, "poll");
+      }
+      if (!json.idempotentReplay) {
+        setIdempotencyKey(newIdempotencyKey());
+      }
+      const createdMessage = recoveredFromTimeout
+        ? "Server job exists; initial response timed out while reading, so status polling recovered it."
+        : (json.message ?? (json.idempotentReplay ? "Returned existing job (same idempotency key)." : "Server job created."));
+      setMsg(`${createdMessage} Progress updates automatically; cron runs every few minutes. Use “Process chunk” to nudge sooner.${json.droppedShortLines ? ` Dropped ${json.droppedShortLines} short lines.` : ""}`);
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        url.searchParams.set("batch", id);
+        window.history.replaceState({}, "", url.toString());
+      }
+      await loadRecent();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onProcess(limit: number) {
+    if (!batchId) return;
+    setBusy(true);
+    setErr(null);
+    try {
+      const useTick = batch?.backgroundProcessing === true;
+      const safeLimit = Math.min(DRAFT_BATCH_MAX_ITEMS_PER_PROCESS, Math.max(1, limit));
+      const url = useTick
+        ? `/api/admin/blog/generation-jobs/${batchId}/tick`
+        : `/api/admin/blog/draft-batch/${batchId}/process`;
+      const res = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true, limit: safeLimit }),
+      });
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+        code?: string;
+        processed?: number;
+        errors?: string[];
+        results?: Array<{ outcome?: string; message?: string; topicRaw?: string }>;
+        job?: GenerationJobApiPayload;
+      };
+      if (!res.ok) {
+        const failedItem = json.results?.find((r) => r.outcome === "failed");
+        const parts = [
+          typeof json.message === "string" ? json.message.trim() : "",
+          typeof json.code === "string" ? json.code.trim() : "",
+          typeof json.error === "string" ? json.error.trim() : "",
+          ...(Array.isArray(json.errors) ? json.errors.map((e) => String(e)) : []),
+          failedItem?.message ? `Item: ${failedItem.message}` : "",
+        ].filter(Boolean);
+        setErr(
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : (parts.join("\n").trim() || "Process failed"),
+        );
+        return;
+      }
+      setMsg(`Processed ${json.processed ?? 0} item(s) in this request.`);
+      if (useTick && json.job) {
+        setBatch(mapJobPayloadToBatchDetail(json.job));
+      } else {
+        await loadBatch(batchId, "full");
+      }
+      await loadRecent();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function openBatch(id: string) {
+    setBatchId(id);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("batch", id);
+      window.history.replaceState({}, "", url.toString());
+    }
+    void loadBatch(id, "full");
+  }
+
+  const lineCount = topicsText.split(/\r?\n/).filter((l) => l.trim().length >= 3).length;
+
+  return (
+    <div className="space-y-8">
+      <form onSubmit={onCreate} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Batch AI draft generation</h2>
+        <p className="text-sm text-muted-foreground">
+          One draft per non-empty line. Create starts a single server job (no browser loop): the platform cron advances
+          items every few minutes; this page polls status. Use “Process chunk” to nudge up to{" "}
+          {DRAFT_BATCH_MAX_ITEMS_PER_PROCESS} items sooner. Requires{" "}
+          <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and a funded AI provider.
+        </p>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">
+            Topics (one per line, max {DRAFT_BATCH_MAX_TOPICS}) — {lineCount} valid lines
+          </span>
+          <textarea
+            className="min-h-[180px] w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
+            value={topicsText}
+            onChange={(e) => setTopicsText(e.target.value)}
+            placeholder={"Fluid balance for NCLEX\nElectrolyte emergencies\n..."}
+            required
+          />
+        </label>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Exam focus *</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={exam}
+              onChange={(e) => setExam(e.target.value)}
+            >
+              {ADMIN_BLOG_TARGET_EXAM_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Country context</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={country}
+              onChange={(e) => setCountry(e.target.value as typeof country)}
+            >
+              <option value="unspecified">Unspecified</option>
+              <option value="US">US</option>
+              <option value="CA">Canada</option>
+            </select>
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Country target (SEO)</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={countryTarget}
+              onChange={(e) => setCountryTarget(e.target.value as "" | CountryCode)}
+            >
+              <option value="">—</option>
+              <option value={CountryCode.US}>US</option>
+              <option value={CountryCode.CA}>CA</option>
+            </select>
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Template</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={template}
+              onChange={(e) => setTemplate(e.target.value as BlogPostTemplate)}
+            >
+              {templates.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Intent</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={intent}
+              onChange={(e) => setIntent(e.target.value as BlogPostIntent)}
+            >
+              {Object.values(BlogPostIntent).map((i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Funnel stage</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={funnelStage}
+              onChange={(e) => setFunnelStage(e.target.value as BlogFunnelStage)}
+            >
+              {Object.values(BlogFunnelStage).map((i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Tone</span>
+            <select
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={tone}
+              onChange={(e) => setTone(e.target.value as typeof tone)}
+            >
+              <option value="professional">Professional</option>
+              <option value="supportive">Supportive</option>
+              <option value="direct">Direct</option>
+            </select>
+          </label>
+          <label className="block space-y-1 sm:col-span-2">
+            <span className="text-xs font-medium text-muted-foreground">Keywords (comma-separated, applied to every item)</span>
+            <input
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+            />
+          </label>
+          <label className="block space-y-1 sm:col-span-2">
+            <span className="text-xs font-medium text-muted-foreground">Keyword cluster (optional)</span>
+            <input
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={keywordCluster}
+              onChange={(e) => setKeywordCluster(e.target.value)}
+            />
+          </label>
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input type="checkbox" checked={includeImage} onChange={(e) => setIncludeImage(e.target.checked)} />
+            Request featured image workflow
+          </label>
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input type="checkbox" checked={includeAiImage} onChange={(e) => setIncludeAiImage(e.target.checked)} />
+            Request AI-generated image (async)
+          </label>
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input
+              type="checkbox"
+              checked={allowDuplicateCanonicalTopic}
+              onChange={(e) => setAllowDuplicateCanonicalTopic(e.target.checked)}
+            />
+            Allow duplicate canonical topic (skips intent dedupe; slugs still unique)
+          </label>
+        </div>
+        <button
+          type="submit"
+          disabled={busy || !aiGate.runnable}
+          className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+        >
+          {busy ? "Working…" : "Create server job"}
+        </button>
+        {msg ? <p className="text-sm text-emerald-700 dark:text-emerald-300">{msg}</p> : null}
+        {err ? <p className="text-sm text-rose-700 dark:text-rose-300">{err}</p> : null}
+      </form>
+
+      {batchId && batch ? (
+        <section className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Current batch</h3>
+              <p className="text-xs text-muted-foreground">
+                ID <code className="rounded bg-muted px-1">{batchId}</code> ·{" "}
+                <span className={statusBadge(batch.status)}>{batch.status}</span>
+                {batch.jobPhase ? (
+                  <>
+                    {" "}
+                    · job <span className={jobPhaseBadge(batch.jobPhase)}>{batch.jobPhase}</span>
+                  </>
+                ) : null}{" "}
+                · pending {pendingCount} / {batch.totalItems}
+              </p>
+              {batch.lastProcessorError ? (
+                <p className="mt-1 max-w-2xl text-xs text-rose-700 dark:text-rose-300">
+                  Last processor note: {batch.lastProcessorError}
+                </p>
+              ) : null}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <label className="flex items-center gap-2 text-sm">
+                Chunk
+                <select
+                  className="rounded-md border border-border px-2 py-1 text-sm"
+                  value={processChunk}
+                  onChange={(e) => setProcessChunk(Number(e.target.value))}
+                >
+                  {Array.from({ length: DRAFT_BATCH_MAX_ITEMS_PER_PROCESS }, (_, i) => i + 1).map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                disabled={busy || pendingCount === 0 || !aiGate.runnable}
+                className="rounded-full border border-border px-4 py-2 text-sm font-semibold disabled:opacity-50"
+                onClick={() => void onProcess(processChunk)}
+              >
+                {batch.backgroundProcessing ? "Nudge server (chunk)" : "Process chunk"}
+              </button>
+              {batch.backgroundProcessing ? (
+                <p className="w-full max-w-xl text-xs text-muted-foreground sm:w-auto">
+                  No tab-long loops: cron plus optional nudges advance this job. Large batches stay within rate limits.
+                </p>
+              ) : null}
+              <Link
+                href="/admin/blog"
+                className="rounded-full border border-primary/40 px-4 py-2 text-sm font-semibold text-primary"
+              >
+                Open control panel
+              </Link>
+            </div>
+          </div>
+          {batch.itemsTruncated ? (
+            <p className="mb-2 max-w-3xl text-xs text-muted-foreground">
+              Showing the first {batch.items.length} of {batch.totalItems} rows in this view for fast polling; queued /
+              running counts above reflect the full job.
+            </p>
+          ) : null}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-border text-xs uppercase text-muted-foreground">
+                  <th className="py-2 pr-2">#</th>
+                  <th className="py-2 pr-2">Topic</th>
+                  <th className="py-2 pr-2">Status</th>
+                  <th className="py-2 pr-2">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                {batch.items.map((row) => {
+                  const repairLine = repairSummary(row.repairMeta);
+                  return (
+                  <tr key={row.id} className="border-b border-border/60">
+                    <td className="py-2 pr-2 align-top text-muted-foreground">{row.ordinal + 1}</td>
+                    <td className="py-2 pr-2 align-top">{row.topicRaw}</td>
+                    <td className="py-2 pr-2 align-top">
+                      <span className={statusBadge(row.status)}>{row.status}</span>
+                    </td>
+                    <td className="py-2 pr-2 align-top">
+                      {row.blogPost ? (
+                        <div className="space-y-1">
+                          <span className="font-mono text-xs text-foreground">{row.blogPost.slug}</span>
+                          <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
+                            <Link href={`/admin/blog?id=${row.blogPost.id}`} className="font-medium text-primary underline">
+                              Admin
+                            </Link>
+                            <a
+                              className="text-primary underline"
+                              href={`/blog/${encodeURIComponent(row.blogPost.slug)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Public preview
+                            </a>
+                          </div>
+                        </div>
+                      ) : null}
+                      {row.repairMeta?.message || row.error ? (
+                        <p className="mt-1 max-w-md text-xs text-rose-700 dark:text-rose-300">
+                          {row.repairMeta?.message || row.error}
+                        </p>
+                      ) : null}
+                      {repairLine ? (
+                        <p className="mt-1 max-w-md text-xs text-muted-foreground">{repairLine}</p>
+                      ) : null}
+                      {row.status === BlogDraftGenerationBatchItemStatus.FAILED ? (
+                        <button
+                          type="button"
+                          disabled={busy}
+                          className="mt-2 rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground disabled:opacity-50"
+                          onClick={() => void retryRepairItem(row.id)}
+                        >
+                          Retry repair (re-queue)
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="rounded-xl border border-border/70 bg-muted/15 p-6">
+        <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Recent batches</h3>
+        <ul className="mt-3 space-y-2 text-sm">
+          {recent.map((b) => (
+            <li key={b.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/50 bg-[var(--theme-card-bg)] px-3 py-2">
+              <button type="button" className="text-left font-mono text-xs text-primary underline" onClick={() => openBatch(b.id)}>
+                {b.id.slice(0, 8)}…
+              </button>
+              <span className="text-muted-foreground">
+                {b.exam} · {b.completedCount}/{b.totalItems} ok · {b.failedCount} fail · {b.skippedCount} skip
+              </span>
+              <span className={statusBadge(b.status)}>{b.status}</span>
+            </li>
+          ))}
+          {recent.length === 0 ? <li className="text-muted-foreground">No batches yet.</li> : null}
+        </ul>
+      </section>
+    </div>
+  );
+}

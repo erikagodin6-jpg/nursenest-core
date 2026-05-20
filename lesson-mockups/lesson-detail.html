@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hypertension — NurseNest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font:'DM Sans',system-ui,sans-serif;
+  --primary:#9d82dd;
+  --primary-soft:#f3efff;
+  --primary-border:#e9e2ff;
+  --primary-deep:#6d4fc4;
+  --ink:#111827;
+  --body:#6b7280;
+  --muted:#9ca3af;
+  --page:#fdfcfa;
+  --card:#ffffff;
+  --border:#f0ecff;
+  --sep:#f3f4f6;
+  --success:#16a34a;
+  --success-soft:#f0fdf4;
+  --danger:#ef4444;
+  --danger-soft:#fff1f1;
+  --warning:#d97706;
+  --warning-soft:#fffbeb;
+  --r-sm:.375rem;--r-md:.625rem;--r-lg:.875rem;--r-xl:1rem;
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.02);
+  --shadow-md:0 4px 12px -4px rgba(0,0,0,.08),0 2px 6px -2px rgba(0,0,0,.04);
+}
+body{font-family:var(--font);background:var(--page);color:var(--body);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+
+/* ── NAVIGATION ─────────────────────────────────────────────── */
+.nav-wrap{background:var(--card);border-bottom:1px solid var(--primary-border);position:sticky;top:0;z-index:50}
+.nav-eco{background:var(--primary);height:28px;display:flex;align-items:center;justify-content:center;gap:20px;padding:0 16px}
+.nav-eco a{font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.8);text-decoration:none}
+.nav-eco-sep{color:rgba(255,255,255,.25);font-size:9px}
+.nav-main{max-width:1280px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;gap:4px}
+.nav-logo{display:flex;align-items:center;gap:6px;font-weight:700;font-size:.9375rem;color:var(--ink);text-decoration:none;margin-right:16px;flex-shrink:0}
+.nav-logo-leaf{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--primary-soft);color:var(--primary)}
+.nav-logo-leaf svg{width:15px;height:15px;fill:currentColor}
+.nav-link{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:6px;font-size:.8125rem;font-weight:500;color:var(--body);text-decoration:none;transition:all .15s;cursor:pointer;border:none;background:none}
+.nav-link:hover{background:var(--primary-soft);color:var(--primary)}
+.nav-chevron{width:12px;height:12px;opacity:.6}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav-region{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;font-size:.75rem;font-weight:600;border:1px solid var(--border);color:var(--muted);cursor:pointer}
+.btn-ghost{padding:6px 14px;border-radius:6px;font-size:.8125rem;font-weight:500;color:var(--body);border:1px solid var(--sep);background:transparent;cursor:pointer}
+.btn-primary{padding:7px 16px;border-radius:8px;font-size:.8125rem;font-weight:600;color:#fff;background:var(--primary);border:none;cursor:pointer}
+
+/* ── LESSON NAV BAR ─────────────────────────────────────────── */
+.lesson-nav{background:var(--card);border-bottom:1px solid var(--sep);padding:0 24px}
+.lesson-nav-in{max-width:1280px;margin:0 auto;height:40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lesson-nav-crumb{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)}
+.lesson-nav-crumb a{color:var(--muted);text-decoration:none}
+.lesson-nav-crumb a:hover{color:var(--primary)}
+.crumb-sep{opacity:.4;margin:0 2px}
+.lesson-nav-actions{display:flex;align-items:center;gap:8px}
+.lesson-nav-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:6px;font-size:.75rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.lesson-nav-btn:hover{border-color:var(--primary-border);color:var(--primary)}
+
+/* ── PROGRESS BAR ───────────────────────────────────────────── */
+.prog-strip{background:var(--card);border-bottom:1px solid var(--sep);padding:0 24px}
+.prog-strip-in{max-width:1280px;margin:0 auto;height:36px;display:flex;align-items:center;gap:14px}
+.prog-track{flex:1;height:4px;border-radius:9999px;background:#f0ecff;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--primary),#b8a4eb);border-radius:9999px}
+.prog-label{font-size:.72rem;font-weight:500;color:var(--muted);white-space:nowrap}
+
+/* ── HERO ───────────────────────────────────────────────────── */
+.hero{background:linear-gradient(150deg,#0f0a1a 0%,#1a1030 55%,#1d1540 100%);padding:36px 24px 30px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 130% 80% at 85% -10%,rgba(157,130,221,.3),transparent 60%),radial-gradient(ellipse 60% 50% at 5% 110%,rgba(157,130,221,.12),transparent 55%);pointer-events:none}
+.hero-in{max-width:1280px;margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.6875rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.eyebrow-pip{width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.hero h1{font-size:clamp(1.5rem,3vw,2.125rem);font-weight:700;letter-spacing:-.025em;line-height:1.15;color:#fff;margin-bottom:12px;max-width:36rem}
+.hero-meta{display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:.8rem;color:rgba(255,255,255,.5)}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:9999px;font-size:.7rem;font-weight:600}
+.badge-rpn{background:rgba(157,130,221,.22);border:1px solid rgba(157,130,221,.35);color:#c4b3f5}
+.badge-diff{background:rgba(253,230,138,.15);border:1px solid rgba(253,230,138,.25);color:#fde68a}
+.badge-time{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65)}
+.badge-time svg,.badge-diff svg,.badge-rpn svg{width:11px;height:11px}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.layout{max-width:1280px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:220px 1fr 280px;gap:24px;align-items:start}
+@media(max-width:1100px){.layout{grid-template-columns:1fr 260px}}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+/* ── LEFT NAV ───────────────────────────────────────────────── */
+.side-nav{position:sticky;top:120px}
+.side-nav-label{font-size:.625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 8px;margin-bottom:6px}
+.side-nav ul{list-style:none;display:flex;flex-direction:column;gap:1px}
+.side-nav a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:.8rem;font-weight:500;color:var(--body);text-decoration:none;transition:all .15s}
+.side-nav a:hover,.side-nav .active a{background:var(--primary-soft);color:var(--primary)}
+.nav-pip{width:5px;height:5px;border-radius:50%;background:#d1d5db;flex-shrink:0;transition:background .15s}
+.side-nav .active .nav-pip{background:var(--primary)}
+.side-nav-section{margin-top:20px}
+
+/* ── ARTICLE ────────────────────────────────────────────────── */
+.article{min-width:0;display:flex;flex-direction:column;gap:20px}
+
+/* Content blocks */
+.block{background:var(--card);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--sep);overflow:hidden}
+.block-hdr{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--sep)}
+.block-icon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;flex-shrink:0}
+.block-icon svg{width:16px;height:16px}
+.block-title{font-size:.9375rem;font-weight:700;color:var(--ink)}
+.block-body{padding:18px 20px}
+
+/* Overview */
+.overview-text{font-size:.9rem;color:var(--body);line-height:1.75;margin-bottom:14px}
+.key-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.fact-chip{background:#f9f9fb;border:1px solid var(--sep);border-radius:8px;padding:10px 12px}
+.fact-chip strong{display:block;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.fact-chip span{font-size:.8125rem;color:var(--ink);font-weight:500}
+
+/* Objectives */
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.obj-item{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:var(--body)}
+.obj-check{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--primary-soft);border:1px solid var(--primary-border);flex-shrink:0;margin-top:1px}
+.obj-check svg{width:11px;height:11px;stroke:var(--primary)}
+
+/* Pathophysiology block */
+.path-text{font-size:.875rem;line-height:1.8;color:var(--body)}
+.path-text strong{color:var(--ink);font-weight:600}
+
+/* Clinical pearls */
+.pearl{display:flex;gap:12px;padding:12px 14px;border-radius:10px;margin-bottom:8px}
+.pearl:last-child{margin-bottom:0}
+.pearl-info{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15)}
+.pearl-warn{background:var(--warning-soft);border:1px solid rgba(217,119,6,.2)}
+.pearl-danger{background:var(--danger-soft);border:1px solid rgba(239,68,68,.15)}
+.pearl-success{background:var(--success-soft);border:1px solid rgba(22,163,74,.2)}
+.pearl-icon{flex-shrink:0;width:18px;height:18px;margin-top:1px}
+.pearl-icon svg{width:18px;height:18px}
+.pearl-text{font-size:.8125rem;line-height:1.65;color:var(--body)}
+.pearl-text strong{font-weight:600;color:var(--ink)}
+
+/* Two-col comparison */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.compare-col{border-radius:10px;padding:14px}
+.compare-col h4{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.compare-col ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.compare-col li{display:flex;align-items:flex-start;gap:7px;font-size:.8rem;color:var(--body)}
+.compare-col li::before{content:'';display:block;width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.compare-left{background:#fff7ed;border:1px solid rgba(217,119,6,.15)}
+.compare-left h4{color:#92400e}
+.compare-left li::before{background:#d97706}
+.compare-right{background:#f0fdf4;border:1px solid rgba(22,163,74,.15)}
+.compare-right h4{color:#166534}
+.compare-right li::before{background:#16a34a}
+
+/* Medications */
+.med-block{background:#f9f9fb;border:1px solid var(--sep);border-radius:10px;padding:14px 16px;margin-bottom:8px}
+.med-block:last-child{margin-bottom:0}
+.med-name{font-size:.875rem;font-weight:700;color:var(--ink);margin-bottom:2px}
+.med-class{font-size:.72rem;font-weight:600;color:var(--primary);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.med-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.med-detail strong{display:block;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.med-detail span{font-size:.78rem;color:var(--body)}
+
+/* ── RIGHT SIDEBAR ──────────────────────────────────────────── */
+.sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:120px}
+.sbar-card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--sep);padding:16px}
+.sbar-card h3{font-size:.8125rem;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sbar-card h3 svg{width:14px;height:14px;color:var(--primary)}
+
+/* Quiz widget */
+.quiz-q{font-size:.8125rem;font-weight:600;color:var(--ink);line-height:1.55;margin-bottom:12px}
+.quiz-opt{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border-radius:8px;border:1.5px solid var(--sep);background:transparent;cursor:pointer;width:100%;text-align:left;font-family:var(--font);font-size:.78rem;color:var(--body);margin-bottom:6px;transition:all .15s}
+.quiz-opt:hover{border-color:var(--primary-border);background:var(--primary-soft);color:var(--primary)}
+.quiz-opt-correct{border-color:#16a34a;background:#f0fdf4;color:#15803d}
+.quiz-opt-wrong{border-color:#ef4444;background:#fff1f1;color:#b91c1c}
+.quiz-letter{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#f3f4f6;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.quiz-correct .quiz-letter{background:#dcfce7;color:#16a34a}
+.quiz-wrong .quiz-letter{background:#fee2e2;color:#ef4444}
+
+/* Related lessons */
+.related-list{display:flex;flex-direction:column;gap:4px}
+.related-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:background .15s}
+.related-item:hover{background:var(--primary-soft)}
+.related-dot{width:5px;height:5px;border-radius:50%;background:var(--primary);flex-shrink:0}
+.related-name{font-size:.78rem;font-weight:500;color:var(--body);flex:1;line-height:1.4}
+.related-chev{width:12px;height:12px;color:var(--muted);flex-shrink:0}
+
+/* Study tools */
+.study-tools{display:flex;flex-direction:column;gap:6px}
+.study-tool{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;border:1px solid var(--sep);cursor:pointer;transition:all .15s;background:transparent;width:100%;text-align:left;font-family:var(--font)}
+.study-tool:hover{border-color:var(--primary-border);background:var(--primary-soft)}
+.study-tool-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.study-tool-icon svg{width:14px;height:14px}
+.study-tool-body strong{display:block;font-size:.78rem;font-weight:600;color:var(--ink)}
+.study-tool-body small{font-size:.7rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ──────────────────────────────────────────────── -->
+<nav class="nav-wrap">
+  <div class="nav-eco">
+    <a href="#">Nursing</a>
+    <span class="nav-eco-sep">·</span>
+    <a href="#">Allied Health</a>
+    <span class="nav-eco-sep">·</span>
+    <a href="#">Specialties</a>
+    <span class="nav-eco-sep">·</span>
+    <a href="#">Behavioral Health</a>
+  </div>
+  <div class="nav-main">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-leaf">
+        <svg viewBox="0 0 20 20"><path d="M10 2C7 2 4 5 4 9c0 3.5 2.5 6.5 6 8 3.5-1.5 6-4.5 6-8 0-4-3-7-6-7zm0 2c2 0 4 2 4 5s-2 4.5-4 5.5C8 13.5 6 12 6 9c0-3 2-5 4-5z"/></svg>
+      </span>
+      NurseNest
+    </a>
+    <button class="nav-link">Learning
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="nav-link">Practice
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="nav-link">Resources
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="nav-link">Pricing</button>
+    <div class="nav-right">
+      <span class="nav-region">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        CA
+      </span>
+      <button class="btn-ghost">Sign In</button>
+      <button class="btn-primary">Start Free</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── LESSON NAV BAR ──────────────────────────────────────────── -->
+<div class="lesson-nav">
+  <div class="lesson-nav-in">
+    <div class="lesson-nav-crumb">
+      <a href="#">Lessons</a>
+      <span class="crumb-sep">›</span>
+      <a href="#">Cardiovascular</a>
+      <span class="crumb-sep">›</span>
+      <span>Hypertension</span>
+    </div>
+    <div class="lesson-nav-actions">
+      <button class="lesson-nav-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Previous
+      </button>
+      <button class="lesson-nav-btn">
+        Next
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROGRESS BAR ────────────────────────────────────────────── -->
+<div class="prog-strip">
+  <div class="prog-strip-in">
+    <span class="prog-label">Cardiovascular</span>
+    <div class="prog-track"><div class="prog-fill" style="width:14%"></div></div>
+    <span class="prog-label" style="color:var(--primary);font-weight:600">4 / 28 lessons</span>
+  </div>
+</div>
+
+<!-- ── HERO ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-pip"></span>
+      Cardiovascular System · RPN Track
+    </div>
+    <h1>Hypertension</h1>
+    <div class="hero-meta">
+      <span class="hero-badge badge-rpn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        RPN / REx-PN
+      </span>
+      <span class="hero-badge badge-diff">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Easy
+      </span>
+      <span class="hero-badge badge-time">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        7 min read
+      </span>
+      <span style="color:rgba(255,255,255,.35)">Updated May 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── 3-COLUMN LAYOUT ─────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- LEFT: section nav -->
+  <aside class="side-nav">
+    <div class="side-nav-label">On this page</div>
+    <ul>
+      <li class="active"><a href="#"><span class="nav-pip"></span>Overview</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Objectives</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Pathophysiology</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Classification</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Clinical Presentation</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Diagnosis</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Pharmacology</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Nursing Priorities</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Patient Education</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Quiz</a></li>
+    </ul>
+    <div class="side-nav-section">
+      <div class="side-nav-label" style="margin-top:0">Resources</div>
+      <ul>
+        <li><a href="#">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Practice Questions
+        </a></li>
+        <li><a href="#">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a></li>
+        <li><a href="#">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Micro-Lecture
+        </a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- CENTER: article -->
+  <article class="article">
+
+    <!-- Overview -->
+    <div class="block">
+      <div class="block-hdr">
+        <div class="block-icon" style="background:#fff1f1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <span class="block-title">Overview</span>
+      </div>
+      <div class="block-body">
+        <p class="overview-text">Hypertension (HTN) is a chronic condition defined as persistently elevated blood pressure ≥ 130/80 mmHg (ACC/AHA 2017 guidelines) or ≥ 140/90 mmHg (Canadian guidelines). It is one of the most prevalent modifiable cardiovascular risk factors and a leading cause of stroke, MI, heart failure, CKD, and aortic dissection.</p>
+        <p class="overview-text">The condition is classified as <strong>primary (essential)</strong> in ~90–95% of cases, with no identifiable single cause, or <strong>secondary</strong>, where an underlying condition drives the elevation.</p>
+        <div class="key-facts">
+          <div class="fact-chip">
+            <strong>Prevalence</strong>
+            <span>~1 in 4 Canadian adults</span>
+          </div>
+          <div class="fact-chip">
+            <strong>Risk</strong>
+            <span>Stroke, MI, CKD, HF</span>
+          </div>
+          <div class="fact-chip">
+            <strong>Goal BP (most adults)</strong>
+            <span>&lt; 130/80 mmHg</span>
+          </div>
+          <div class="fact-chip">
+            <strong>First-line med class</strong>
+            <span>ACE-i / ARB / CCB / Thiazide</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Objectives -->
+    <div class="block">
+      <div class="block-hdr">
+        <div class="block-icon" style="background:var(--primary-soft)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <span class="block-title">Learning Objectives</span>
+      </div>
+      <div class="block-body">
+        <ul class="obj-list">
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Define hypertension and distinguish primary from secondary HTN
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Describe the renin-angiotensin-aldosterone system (RAAS) and its role in BP regulation
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Identify signs of hypertensive urgency vs. hypertensive emergency
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Explain the mechanism of action, nursing considerations, and patient teaching for first-line antihypertensive agents
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Apply appropriate nursing interventions for a patient admitted with hypertensive emergency
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pathophysiology -->
+    <div class="block">
+      <div class="block-hdr">
+        <div class="block-icon" style="background:#fef3c7">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M8 12s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <span class="block-title">Pathophysiology</span>
+      </div>
+      <div class="block-body">
+        <p class="path-text">Blood pressure is determined by <strong>cardiac output (CO)</strong> × <strong>systemic vascular resistance (SVR)</strong>. In essential hypertension, multiple mechanisms converge to chronically elevate SVR:</p>
+        <br>
+        <p class="path-text"><strong>RAAS Activation:</strong> Reduced renal perfusion triggers renin release → angiotensin I → ACE converts to angiotensin II (potent vasoconstrictor) → aldosterone release → sodium and water retention → increased preload and BP.</p>
+        <br>
+        <p class="path-text"><strong>Sympathetic Nervous System:</strong> Chronic SNS activation increases heart rate and contractility (CO↑) and causes arteriolar vasoconstriction (SVR↑). Stress, obesity, and sleep apnea all amplify SNS tone.</p>
+        <br>
+        <p class="path-text"><strong>Endothelial Dysfunction:</strong> Sustained pressure injury damages the endothelium, reducing nitric oxide (vasodilator) bioavailability and promoting atherosclerosis — a self-perpetuating cycle.</p>
+        <br>
+
+        <div class="pearl pearl-warn">
+          <svg class="pearl-icon" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p class="pearl-text"><strong>Exam Tip:</strong> RAAS is the key mechanism targeted by ACE inhibitors and ARBs. Know that ACE inhibitors cause a dry cough (bradykinin accumulation), which is why ARBs are prescribed as an alternative.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clinical presentation comparison -->
+    <div class="block">
+      <div class="block-hdr">
+        <div class="block-icon" style="background:#f0f9ff">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <span class="block-title">Urgency vs. Emergency</span>
+      </div>
+      <div class="block-body">
+        <p class="path-text" style="margin-bottom:14px">Distinguishing hypertensive urgency (≥ 180/120 without end-organ damage) from emergency (same BP <em>with</em> acute end-organ damage) dictates urgency of intervention and setting of care.</p>
+        <div class="compare-grid">
+          <div class="compare-col compare-left">
+            <h4>Urgency (no EOD)</h4>
+            <ul>
+              <li>BP ≥ 180/120 mmHg</li>
+              <li>Severe headache</li>
+              <li>Epistaxis</li>
+              <li>Anxiety / diaphoresis</li>
+              <li>No acute organ injury</li>
+              <li>Manage orally (clinic/ED)</li>
+              <li>Target: gradual BP ↓ over 24–48 h</li>
+            </ul>
+          </div>
+          <div class="compare-col compare-right">
+            <h4>Emergency (with EOD)</h4>
+            <ul>
+              <li>BP ≥ 180/120 mmHg</li>
+              <li>Encephalopathy / stroke</li>
+              <li>Acute MI / unstable angina</li>
+              <li>Acute LV failure / pulmonary edema</li>
+              <li>Aortic dissection</li>
+              <li>IV antihypertensives (ICU)</li>
+              <li>Target: ↓ MAP by 25% in 1 h</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pearl pearl-danger" style="margin-top:14px">
+          <svg class="pearl-icon" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p class="pearl-text"><strong>Critical:</strong> In aortic dissection, BP must be lowered within <em>minutes</em> targeting SBP &lt; 120 mmHg. Labetalol or esmolol IV are agents of choice — do <em>not</em> use vasodilators (hydralazine, nitroprusside) without beta-blockade first, as reflex tachycardia worsens dissection.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pharmacology -->
+    <div class="block">
+      <div class="block-hdr">
+        <div class="block-icon" style="background:#f5f3ff">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <span class="block-title">First-Line Pharmacology</span>
+      </div>
+      <div class="block-body">
+
+        <div class="med-block">
+          <div class="med-name">Ramipril (Altace)</div>
+          <div class="med-class">ACE Inhibitor</div>
+          <div class="med-grid">
+            <div class="med-detail"><strong>Mechanism</strong><span>Blocks conversion of Ang I → Ang II; reduces vasoconstriction and aldosterone</span></div>
+            <div class="med-detail"><strong>Key ADRs</strong><span>Dry cough (bradykinin), hyperkalemia, angioedema (rare but serious)</span></div>
+            <div class="med-detail"><strong>Contraindications</strong><span>Pregnancy (teratogenic), bilateral renal artery stenosis, angioedema history</span></div>
+            <div class="med-detail"><strong>Nursing Pearl</strong><span>Hold if Cr rises &gt;30% from baseline; monitor K⁺. Switch to ARB if cough intolerable.</span></div>
+          </div>
+        </div>
+
+        <div class="med-block">
+          <div class="med-name">Amlodipine (Norvasc)</div>
+          <div class="med-class">Calcium Channel Blocker (Dihydropyridine)</div>
+          <div class="med-grid">
+            <div class="med-detail"><strong>Mechanism</strong><span>Blocks L-type Ca²⁺ channels → arteriolar vasodilation → ↓ SVR</span></div>
+            <div class="med-detail"><strong>Key ADRs</strong><span>Peripheral edema (ankles), headache, reflex tachycardia, flushing</span></div>
+            <div class="med-detail"><strong>Contraindications</strong><span>Severe aortic stenosis; caution in HF (non-dihydropyridines only)</span></div>
+            <div class="med-detail"><strong>Nursing Pearl</strong><span>Ankle edema is common — elevate legs. Not related to sodium/fluid retention, so diuretics don't resolve it well.</span></div>
+          </div>
+        </div>
+
+        <div class="med-block">
+          <div class="med-name">Hydrochlorothiazide (HCTZ)</div>
+          <div class="med-class">Thiazide Diuretic</div>
+          <div class="med-grid">
+            <div class="med-detail"><strong>Mechanism</strong><span>Inhibits NaCl reabsorption in distal convoluted tubule → ↓ extracellular volume</span></div>
+            <div class="med-detail"><strong>Key ADRs</strong><span>Hypokalemia, hyponatremia, hyperuricemia, glucose intolerance</span></div>
+            <div class="med-detail"><strong>Contraindications</strong><span>Sulfa allergy, anuria, severe renal impairment (eGFR &lt;30)</span></div>
+            <div class="med-detail"><strong>Nursing Pearl</strong><span>Monitor K⁺ and creatinine. Encourage dietary potassium or co-prescribe K⁺-sparing diuretic if K⁺ falls &lt;3.5.</span></div>
+          </div>
+        </div>
+
+        <div class="pearl pearl-info" style="margin-top:4px">
+          <svg class="pearl-icon" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <p class="pearl-text"><strong>Clinical Note:</strong> Most patients require 2–3 agents to achieve target BP. A common first-step combination is ACE-i/ARB + CCB ± thiazide. Avoid combining ACE-i and ARB (↑ renal risk without added BP benefit — ONTARGET trial).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nursing Priorities -->
+    <div class="block">
+      <div class="block-hdr">
+        <div class="block-icon" style="background:#f0fdf4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <span class="block-title">RPN Nursing Priorities</span>
+      </div>
+      <div class="block-body">
+        <div class="pearl pearl-success">
+          <svg class="pearl-icon" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <p class="pearl-text"><strong>Assess first:</strong> Bilateral arm BPs, neuro status (LOC, pupils, slurred speech), chest pain, SOB, visual changes, urinary output. Identify if emergency vs urgency before any intervention.</p>
+        </div>
+        <br>
+        <ul class="obj-list">
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Position patient in semi-Fowler's; ensure quiet, calm environment to reduce SNS activation
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Administer antihypertensives as ordered; never hold without provider notification if BP is dangerously elevated
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Monitor BP every 15 min after new medication or dose change; document trends
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Restrict sodium intake (≤ 2 g/day); coordinate with dietitian for DASH diet education
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Assess for orthostatic hypotension before ambulation (especially post-diuretic or new CCB initiation)
+          </li>
+          <li class="obj-item">
+            <span class="obj-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Reinforce adherence; many patients are asymptomatic and discontinue meds when feeling well
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- RIGHT: sidebar -->
+  <aside class="sidebar">
+
+    <!-- Quick Quiz -->
+    <div class="sbar-card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Quick Check
+      </h3>
+      <p class="quiz-q">A nurse notes a patient's BP is 196/118 mmHg. The patient complains of a severe headache but has no neuro changes, chest pain, or visual changes. Which action is the priority?</p>
+      <button class="quiz-opt quiz-opt-wrong quiz-wrong">
+        <span class="quiz-letter">A</span>
+        Administer IV labetalol immediately
+      </button>
+      <button class="quiz-opt quiz-opt-correct quiz-correct">
+        <span class="quiz-letter">B</span>
+        Notify the provider and prepare to give oral antihypertensive
+      </button>
+      <button class="quiz-opt">
+        <span class="quiz-letter">C</span>
+        Position supine and recheck in 30 minutes
+      </button>
+      <button class="quiz-opt">
+        <span class="quiz-letter">D</span>
+        Activate rapid response immediately
+      </button>
+    </div>
+
+    <!-- Study tools -->
+    <div class="sbar-card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Study Tools
+      </h3>
+      <div class="study-tools">
+        <button class="study-tool">
+          <div class="study-tool-icon" style="background:var(--primary-soft)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="study-tool-body"><strong>Flashcards</strong><small>12 cards for this lesson</small></div>
+        </button>
+        <button class="study-tool">
+          <div class="study-tool-icon" style="background:#dbeafe">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="study-tool-body"><strong>Practice Questions</strong><small>18 HTN-tagged questions</small></div>
+        </button>
+        <button class="study-tool">
+          <div class="study-tool-icon" style="background:#dcfce7">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="10 15 15 12 10 9 10 15"/></svg>
+          </div>
+          <div class="study-tool-body"><strong>Micro-Lecture</strong><small>9 min video overview</small></div>
+        </button>
+        <button class="study-tool">
+          <div class="study-tool-icon" style="background:#fff7ed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <div class="study-tool-body"><strong>Add a Note</strong><small>Save personal notes here</small></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Related lessons -->
+    <div class="sbar-card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        In This Module
+      </h3>
+      <div class="related-list">
+        <div class="related-item">
+          <span class="related-dot"></span>
+          <span class="related-name">Heart Failure</span>
+          <svg class="related-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="related-item" style="background:var(--primary-soft)">
+          <span class="related-dot" style="background:var(--primary-deep)"></span>
+          <span class="related-name" style="color:var(--ink);font-weight:600">Hypertension <span style="font-size:.68rem;color:var(--primary);font-weight:600;margin-left:4px">Current</span></span>
+        </div>
+        <div class="related-item">
+          <span class="related-dot"></span>
+          <span class="related-name">Cardiac Assessment and ECG</span>
+          <svg class="related-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="related-item">
+          <span class="related-dot"></span>
+          <span class="related-name">Conduction System and Dysrhythmias</span>
+          <svg class="related-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="related-item">
+          <span class="related-dot"></span>
+          <span class="related-name">Pulmonary Embolism</span>
+          <svg class="related-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="related-item">
+          <span class="related-dot"></span>
+          <span class="related-name">Shock Types: Hypovolemic, Cardiogenic</span>
+          <svg class="related-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────── -->
+<footer style="background:#fff;border-top:1px solid var(--sep);padding:24px;text-align:center">
+  <p style="font-size:.75rem;color:var(--muted)">© 2026 NurseNest · Evidence-based nursing exam prep for RPN, RN, and NP</p>
+</footer>
+
+</body>
+</html>

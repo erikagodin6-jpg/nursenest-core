@@ -1,0 +1,470 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound, permanentRedirect } from "next/navigation";
+import { buildAlliedGlobalHubPath, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
+import { BookOpen, ClipboardList, Layers } from "lucide-react";
+import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
+import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
+import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
+import {
+  humanizeTopicSlug,
+  pathwayAppQuestionBankTopicHref,
+} from "@/components/lessons/pathway-lesson-link-practice";
+import {
+  marketingExamHubBasePath,
+  marketingPathwayLessonsIndexPath,
+  mergeMarketingPathQuery,
+  withAlliedProfessionMarketingQuery,
+} from "@/lib/lessons/lesson-routes";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { isAlliedMarketingCorePathwayId, ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
+import { resolveTopicSlugForPathwayTopicLabel } from "@/lib/lessons/lesson-question-cross-links";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import {
+  getRelatedPathwayLessons,
+  RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+  RELATED_LESSONS_FOR_TOPIC_CAP,
+  RELATED_PATHWAY_LESSONS_LIMIT,
+  listTopicClusters,
+} from "@/lib/lessons/pathway-lesson-loader";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import {
+  pathwayQuestionsMarketingHubDefaultSubtitle,
+  pathwayQuestionsMarketingHubH1,
+  pathwayQuestionsMarketingHubMetaTitle,
+} from "@/lib/lessons/pathway-questions-hub-seo";
+import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { PathwayHero } from "@/components/study/pathway-hero";
+import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
+import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { MarketingPracticeQuestionsHubClient } from "@/components/marketing/marketing-practice-questions-hub-client";
+import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
+import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/pathway-practice-body-system-aggregates";
+import {
+  marketingCatCompletePoolUsable,
+  marketingLinearPracticeBankUsable,
+} from "@/lib/exam-pathways/pathway-marketing-practice-gates";
+
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 86400;
+
+type Props = {
+  params: Promise<{ locale: string; slug: string; examCode: string }>;
+  searchParams?: Promise<{ topic?: string; topicSlug?: string; alliedProfession?: string }>;
+};
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { locale, slug, examCode } = await params;
+  const pathname = `/${locale}/${slug}/${examCode}`;
+  const questionsPath = `${pathname}/questions`;
+  const sp = searchParams ? await searchParams : {};
+  const topicFilter = sp.topic?.trim() ?? "";
+  const topicSlugParam = sp.topicSlug?.trim().toLowerCase() ?? "";
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: questionsPath });
+      if (!pathway) return {};
+      const canonicalPath = buildExamPathwayPath(pathway, "questions");
+      const canonical = absoluteUrl(canonicalPath);
+      const narrowedLabel = topicFilter || (topicSlugParam ? humanizeTopicSlug(topicSlugParam) : "");
+      const title = narrowedLabel
+        ? `${narrowedLabel} · Practice questions · ${pathway.displayName} | NurseNest`
+        : pathwayQuestionsMarketingHubMetaTitle(pathway);
+      const description = narrowedLabel
+        ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam's scope.`
+        : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
+      return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: { title, description, url: canonical, type: "website" },
+        ...(narrowedLabel ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: questionsPath, locale, routeGroup: "marketing.exam_hub.questions" },
+  );
+}
+
+export default async function ExamPathwayQuestionsHubPage({ params, searchParams }: Props) {
+  const { locale, slug, examCode } = await params;
+  const pathname = `/${locale}/${slug}/${examCode}`;
+  const sp = searchParams ? await searchParams : {};
+  const topicFilter = sp.topic?.trim() ?? "";
+  const topicSlugFromUrl = sp.topicSlug?.trim().toLowerCase() ?? "";
+  const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
+  if (!pathway) notFound();
+  if (isAlliedHealthPathway(pathway)) {
+    const spEntries = searchParams ? await searchParams : {};
+    const qs = new URLSearchParams();
+    for (const [key, value] of Object.entries(spEntries)) {
+      if (typeof value === "string" && value.trim()) qs.set(key, value);
+    }
+    const dest = buildAlliedGlobalHubPath("questions");
+    permanentRedirect(qs.size > 0 ? `${dest}?${qs.toString()}` : dest);
+  }
+
+  const rawAlliedProf = typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
+  const alliedProfessionResolved =
+    isAlliedMarketingCorePathwayId(pathway.id) && rawAlliedProf
+      ? getAlliedProfessionByProfessionKey(rawAlliedProf)
+      : null;
+  const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
+
+  const { questionSnapshot, questionSnapshotLoadRejected, pathwayLessonCount } =
+    await loadMarketingExamHubOptionalBlocks(pathway, {
+      pathname: `${pathname}/questions`,
+      locale,
+      country: locale,
+      examCode,
+      pathwayId: pathway.id,
+      roleTrack: slug,
+    });
+
+  const topicFilterTrim = topicFilter.trim();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  let relatedLessonsForTopic: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
+
+  let clusterSlugForLessons: string | null = topicSlugFromUrl || null;
+  if (!clusterSlugForLessons && topicFilterTrim) {
+    try {
+      clusterSlugForLessons = await resolveTopicSlugForPathwayTopicLabel(pathway.id, topicFilterTrim);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+        event: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        locale,
+        country: locale,
+        examCode,
+        dependency: "resolveTopicSlugForPathwayTopicLabel",
+        error_message: message.slice(0, 500),
+      });
+      recordRouteRenderFallback({
+        fallbackType: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        pathwayId: pathway.id,
+        examCode,
+        country: locale,
+        dependencyName: "resolveTopicSlugForPathwayTopicLabel",
+      });
+      clusterSlugForLessons = null;
+    }
+  }
+
+  if (clusterSlugForLessons) {
+    try {
+      relatedLessonsForTopic = (
+        await getRelatedPathwayLessons(
+          pathway.id,
+          clusterSlugForLessons,
+          RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+          Math.min(RELATED_PATHWAY_LESSONS_LIMIT, RELATED_LESSONS_FOR_TOPIC_CAP),
+          lessonContentLocale,
+        )
+      ).filter(pathwayLessonHasRenderableHubSlug);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+        event: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        locale,
+        country: locale,
+        examCode,
+        dependency: "getRelatedPathwayLessons",
+        error_message: message.slice(0, 500),
+      });
+      recordRouteRenderFallback({
+        fallbackType: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        pathwayId: pathway.id,
+        examCode,
+        country: locale,
+        dependencyName: "getRelatedPathwayLessons",
+      });
+      relatedLessonsForTopic = [];
+    }
+  }
+
+  const displayTopicLabel = topicFilterTrim || (topicSlugFromUrl ? humanizeTopicSlug(topicSlugFromUrl) : "");
+  const isTopicNarrowed = Boolean(topicFilterTrim || topicSlugFromUrl);
+
+  const hubBase = marketingExamHubBasePath(pathway);
+  const { crumbs, schemaItems } = pathwayQuestionsHubBreadcrumbs(pathway);
+  const overviewHref = hubBase;
+  const npAliasSegment = getNpPracticeTestLandingCopy(locale, slug, examCode) ? examCode : undefined;
+  const boardLinkContext = pathwayMarketingHubLinkContext(pathway, npAliasSegment);
+  const examName = pathwayRegionAwareExamName(pathway);
+  const lessonsHref = marketingPathwayLessonsIndexPath(pathway);
+  const lessonsHrefWithProfession = alliedProfessionKey
+    ? mergeMarketingPathQuery(lessonsHref, { [ALLIED_PROFESSION_QUERY_PARAM]: alliedProfessionKey })
+    : lessonsHref;
+  const catHref = buildExamPathwayPath(pathway, "cat");
+  const catHrefWithProfession = alliedProfessionKey
+    ? withAlliedProfessionMarketingQuery(catHref, alliedProfessionKey)
+    : catHref;
+  const catShortLabel = catPathwayShortCatLabel(pathway);
+  const questionsHubPath = buildExamPathwayPath(pathway, "questions");
+  const questionsHubPathWithProfession = alliedProfessionKey
+    ? withAlliedProfessionMarketingQuery(questionsHubPath, alliedProfessionKey)
+    : questionsHubPath;
+
+  const appQuestionsScoped = isTopicNarrowed
+    ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined, {
+        alliedProfession: alliedProfessionKey || undefined,
+      })
+    : loginWithCallback(
+        `/app/questions?${new URLSearchParams({
+          pathwayId: pathway.id,
+          preset: "pathway_mixed",
+          ...(alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : {}),
+        }).toString()}`,
+      );
+
+  // Stat card values — use snapshot counts when available
+  const questionCount = questionSnapshot?.status === "ok" ? questionSnapshot.pathwayScopedCount : null;
+  const adaptiveCount = questionSnapshot?.status === "ok" ? questionSnapshot.adaptiveEligibleCount : null;
+
+  const heroSubtitle = isTopicNarrowed
+    ? `Showing questions for ${displayTopicLabel} — scoped to ${pathway.shortName} (${pathwayCountryLabel(pathway)}), aligned with ${examName}.`
+    : pathwayQuestionsMarketingHubDefaultSubtitle(pathway);
+
+  const topicClustersForDrawer = isTopicNarrowed ? [] : await listTopicClusters(pathway.id, lessonContentLocale);
+  const hubAggregates = isTopicNarrowed ? [] : await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
+  if (process.env.NODE_ENV === "development" && !isTopicNarrowed) {
+    const totalQ = hubAggregates.reduce((s, a) => s + a.questionCount, 0);
+    const unc = hubAggregates.find((a) => a.id === "uncategorized")?.questionCount ?? 0;
+    safeServerLog("practice_questions_hub", "hub_inventory_dev", {
+      pathwayId: pathway.id,
+      categoryRowCount: hubAggregates.length,
+      totalQuestionCount: totalQ,
+      uncategorizedCount: unc,
+      normalizedCategoryUsageIds: hubAggregates
+        .filter((a) => a.questionCount > 0)
+        .map((a) => a.id)
+        .join(","),
+      fetchNote: "aggregates_hydrated",
+    });
+  }
+  const mixedAllTopicsHref = loginWithCallback(
+    `/app/questions?${new URLSearchParams({
+      pathwayId: pathway.id,
+      preset: "pathway_mixed",
+      ...(alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : {}),
+    }).toString()}`,
+  );
+
+  const linearPracticeUsable = marketingLinearPracticeBankUsable(questionSnapshot);
+  const catCompletePoolUsable = marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
+  const canStartCatChip = !questionSnapshotLoadRejected && catCompletePoolUsable;
+
+  const heroPrimaryCta = linearPracticeUsable
+    ? isTopicNarrowed
+      ? {
+          label: "Open Question Bank" as const,
+          href: appQuestionsScoped,
+          variant: "primary" as const,
+        }
+      : {
+          label: "Start Mixed Practice" as const,
+          href: mixedAllTopicsHref,
+          variant: "primary" as const,
+        }
+    : {
+        label: "Browse Clinical Lessons" as const,
+        href: lessonsHrefWithProfession,
+        variant: "primary" as const,
+      };
+
+  const heroOutlineCtas: { label: string; href: string; variant: "outline" | "ghost" }[] = [];
+  if (linearPracticeUsable) {
+    heroOutlineCtas.push({ label: "Browse Lessons", href: lessonsHrefWithProfession, variant: "outline" });
+  } else {
+    heroOutlineCtas.push({ label: `${pathway.shortName} overview`, href: overviewHref, variant: "outline" });
+  }
+  heroOutlineCtas.push({ label: "Create Account", href: "/signup", variant: "ghost" });
+
+  const heroTitle = isTopicNarrowed
+    ? `${displayTopicLabel} · ${examName} practice questions`
+    : pathwayQuestionsMarketingHubH1(pathway);
+
+  const questionHubSurfaceChips = [
+    { label: "Clinical lessons", href: lessonsHrefWithProfession },
+    {
+      label: questionSnapshotLoadRejected
+        ? "Adaptive CAT — status unavailable"
+        : canStartCatChip
+          ? "Adaptive CAT"
+          : "Adaptive CAT unavailable",
+      href: catHrefWithProfession,
+    },
+    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+    { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+    { label: "Exam overview", href: overviewHref },
+  ];
+
+  return (
+    <div
+      className="nn-premium-pathway-hub mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8"
+      data-nn-qa-marketing-pathway-questions-hub="true"
+      data-premium-layout-version="2026-05-tests-hubs-v1"
+    >
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+
+      {/* 1. Hero — spacing matches pathway lessons hub shell (`LessonsPageShell` → chips `mt-2`). */}
+      <PathwayHero
+        eyebrow={
+          <p className="nn-marketing-eyebrow text-[var(--semantic-text-muted)]">
+            {(pathway.shortName.trim() || pathway.displayName) + " · " + pathwayCountryLabel(pathway)}
+          </p>
+        }
+        title={heroTitle}
+        subtitle={heroSubtitle}
+        backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
+        ctas={[heroPrimaryCta, ...heroOutlineCtas]}
+      />
+
+      <LessonHubSurfaceChips links={questionHubSurfaceChips} />
+
+      {/* 2. Stat cards — never foreground a “0 practice questions” tile */}
+      {(questionCount !== null || adaptiveCount !== null || pathwayLessonCount !== undefined) ? (
+        <div className="mt-5">
+          <PathwayStatsCards
+            stats={[
+              ...(questionCount !== null && questionCount > 0
+                ? [{ value: questionCount, label: "Practice questions", icon: ClipboardList, accent: "brand" as const }]
+                : []),
+              ...(adaptiveCount !== null && adaptiveCount > 0
+                ? [{ value: adaptiveCount, label: "CAT-eligible items", icon: Layers, accent: "info" as const }]
+                : []),
+              ...(typeof pathwayLessonCount === "number"
+                ? [{ value: pathwayLessonCount, label: "Lessons available", icon: BookOpen, accent: "success" as const }]
+                : []),
+            ]}
+          />
+        </div>
+      ) : null}
+
+      {/* Bank ramping: constructive framing — not an inventory failure callout */}
+      {questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0 ? (
+        <div
+          className="mt-6 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
+          data-nn-marketing-questions-bank-ramping
+        >
+          <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+            Study modes stay available while the scored bank fills in
+          </p>
+          <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Clinical lessons and adaptive prep surfaces stay open. When pathway-scoped scored items are still ramping,
+            start with lessons and CAT-style practice — full linear bank counts appear here as publishing catches up.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href={lessonsHrefWithProfession}
+              className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-brand-contrast)]"
+            >
+              Browse Clinical Lessons
+            </a>
+            {catCompletePoolUsable ? (
+              <a
+                href={catHrefWithProfession}
+                className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm"
+              >
+                Open {catShortLabel}
+              </a>
+            ) : null}
+            <a
+              href="/signup"
+              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+            >
+              Create Account
+            </a>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Keep hub mounted when bank count is 0 so gated CAT/linear modes stay co-visible with ramping copy (E2E + consistency). */}
+      {!isTopicNarrowed ? (
+        <div className="mt-8">
+          <MarketingPracticeQuestionsHubClient
+            pathway={pathway}
+            examDisplayName={examName}
+            aggregates={hubAggregates}
+            topicClusters={topicClustersForDrawer.map((c) => ({
+              topicSlug: c.topicSlug,
+              label: c.label,
+              count: c.count,
+            }))}
+            lessonsHref={lessonsHrefWithProfession}
+            marketingCatHref={catHrefWithProfession}
+            alliedProfessionKey={alliedProfessionKey || undefined}
+            linearPracticePoolUsable={linearPracticeUsable}
+            catCompletePoolUsable={catCompletePoolUsable}
+          />
+        </div>
+      ) : null}
+
+      {/* 4. Content area — topic-narrowed view or NP board links */}
+      {isTopicNarrowed ? (
+        <div className="mt-8 space-y-4">
+          <aside className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-5">
+            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Filtered to one clinical topic</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--theme-muted-text)]">
+              You landed here from a lesson or topic link. Open the full hub to see every topic for this pathway.
+            </p>
+            <a
+              href={questionsHubPathWithProfession}
+              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2 hover:no-underline"
+            >
+              ← Clear topic filter
+            </a>
+          </aside>
+          <PathwayQuestionHubRelatedLessons
+            topicLabel={displayTopicLabel}
+            lessonsBasePath={lessonsHrefWithProfession}
+            lessons={relatedLessonsForTopic}
+          />
+        </div>
+      ) : null}
+
+      {pathway.roleTrack === "np" ? (
+        <div className="mt-8 rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-5 shadow-[var(--semantic-shadow-soft)]">
+          <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />
+        </div>
+      ) : null}
+
+      <p className="mt-8 text-sm text-[var(--semantic-text-secondary)]">
+        <Link
+          href={overviewHref}
+          className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+        >
+          Full study toolkit, labs, and readiness modules — on the {pathway.shortName} hub
+        </Link>
+      </p>
+
+      {/* Bottom nav */}
+      <StudyBottomNav
+        compact
+        relatedLinks={[
+          { label: "Clinical lessons", href: lessonsHrefWithProfession },
+          ...(catCompletePoolUsable ? [{ label: "Adaptive CAT", href: catHrefWithProfession }] : []),
+          { label: "Practice exams", href: HUB.practiceExams },
+          { label: "Exam overview", href: overviewHref },
+        ]}
+      />
+    </div>
+  );
+}

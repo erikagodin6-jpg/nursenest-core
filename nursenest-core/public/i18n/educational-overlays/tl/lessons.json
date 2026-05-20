@@ -1,0 +1,754 @@
+{
+  "us-lpn-nclex-pn:copd-clinical-judgment-gold": {
+    "title": "COPD: klinikal na hatulan (NCLEX-PN, US)",
+    "seoTitle": "COPD — klinikal na hatulan | NCLEX-PN US | NurseNest",
+    "seoDescription": "Saklaw ng US LPN/LVN: pagsusuri, ligtas na delegasyon, oxygen at bronchodilator ayon sa order, escalation — hindi RN-level na hatol mag-isa.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**NCLEX-PN (LPN/LVN)**  \nGinagantimpalaan ang **ligtas at angkop sa papel na pangangalaga**: obserbahan at iulat ang pagbabago, isagawa ang **mga order**, palakasin ang turuan, protektahan ang **oxygen delivery ayon sa reseta**, at **mag-escalate** kapag lumampas ang mga nakita sa stable na COPD.\n\n**Hangganan ng saklaw**  \nAng praktis ng PN/LVN **nag-iiba ayon sa estado at patakaran ng pasilidad**. Sa exam, piliin ang mga aksyon na **nananatili sa set ng order / direksyon ng RN** kapag nagte-test ng delegasyon — iwasan ang **titrate nang mag-isa**, bagong reseta, o **diagnosis** lampas sa nursing data collection."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization** (sino ang unahin), **kaligtasan ng oxygen na nakatali sa order**, **senyales ng impeksiyon/exacerbation**, at **patient teaching** na kayang palakasin. **Bitag**: gawing **RN-level triage** bilang aksyon ng LPN, **antalahin ang urgent report**, o **routine tasks** bago **acute respiratory change**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "**Pathophysiology**  \nAng COPD ay may **makitid na maliliit na daanan ng hangin**, **air trapping**, at madalas **ubo na may plema** kasama ang **pagkawala ng alveoli / elastic recoil** — maraming pasyente ay halo. Ang fixed obstruction ay nagpapataas ng trabaho ng paghinga; ang **exacerbation** ay tuloy-tuloy na paglala, kadalasang sanhi ng impeksiyon o irritant.\n\n**Bantayan**  \nIsama ang **respiratory rate**, **accessory muscles**, **mental status**, **SpO₂** (at device), **plema**, at **baseline** (home O₂, inhaler, kamakailang steroid/antibiotic). Pag **tumataas ang CO₂** na may **pagka-antok**: isipin ang **acute ventilatory failure**.\n\n**Mga interbensyon na madalas sa exam**  \nBronchodilator, steroid, antibiotic kung may hinalang impeksiyon, **oxygen ayon sa order/target**, maagang mobilization kung ligtas, at **patient teaching** (inhaler, pursed-lip, energy conservation, smoking cessation, bakuna, plano kailan humingi ng agarang tulong)."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "**Med-surg floor (US)**  \nMay COPD ang pasyente: **2 L/min nasal cannula** ayon sa order. Napapansin mo **RR 32**, **tripod**, **SpO₂ 84%** sa parehong flow. Anxious pero alert.\n\n**Angkop na PN**  \nUnang galaw: **reassess delivery at escalation sa loob ng order**: suriin ang kumpanya, turuan ang **pursed-lip breathing**, manatili sa pasyente, at **agad ipaalam sa RN o provider** para sa bagong pagsusuri/order. **Mali**: tahimik na **taasan ang oxygen** o magbigay ng **sedative** para “kalmahin” ang hindi pa natutukoy na respiratory distress."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Iulat** ang biglaang pagbabago sa paghinga; huwag maghintay sa kritikal na desaturation.  \n• Ang pagbabago sa **oxygen** sa COPD ay **karaniwang may order/protocol** — trabaho mo ang ligtas na pagbibigay at mabilis na escalation.  \n• **Palakasin** ang itinurong inhaler, pursed-lip, energy conservation, smoking cessation.  \n• Pair sa **question bank** na may respiratory/COPD filter."
+      }
+    },
+    "preTest": [
+      {
+        "question": "Ang PN ay nag-aalaga sa COPD na may 2 L/min ayon sa order. Bumagsak ang SpO₂ 92%→84% at tumataas ang RR. Ano ang unahin?",
+        "options": [
+          "Itaas ang oxygen sa 6 L/min nang walang nagpapalam.",
+          "Suriin ang pasyente at oxygen delivery, pagkatapos ay ipaalam sa RN/provider ang acute change.",
+          "Ipahiga nang flat para “magpahinga ang diaphragm”.",
+          "Magbigay ng PRN sedative para sa anxiety."
+        ],
+        "rationale": "Suriin at i-escalate para sa bagong pagsusuri/order. Mag-titrate o mag-sedate nang mag-isa ay maaaring delikado at hindi saklaw; ang flat position ay puwedeng lumala ang dyspnea."
+      },
+      {
+        "question": "Alin ang pinakamahusay na naglalarawan ng pursed-lip breathing sa COPD?",
+        "options": [
+          "Pinapataas nito ang RR para maalis ang CO₂.",
+          "Gumagawa ng bahagyang back-pressure para humaba ang pag-hinga palabas at mabawasan ang air trapping.",
+          "Pinapalitan nito ang bronchodilator kapag stable.",
+          "Para lang sa tulog, hindi sa activity."
+        ],
+        "rationale": "Pinapahaba ang expiration; hindi pumapalit sa gamot o oxygen na prescribed."
+      },
+      {
+        "question": "Sa exacerbation anong finding ang **dapat agad iulat**?",
+        "options": [
+          "Humihingi ng dagdag unan.",
+          "Bagong confusion o tumataas na antok kasabay ng lumalalang trabaho ng paghinga.",
+          "Stable SpO₂ sa dating baseline sa home oxygen.",
+          "Tuyong bibig dahil sa cannula."
+        ],
+        "rationale": "Pagbabago sa isip na may respiratory decline: posibleng hypercapnic failure — iulat agad."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Aling aksyon ng PN ang pinaka-suportado sa **infection prevention teaching** sa COPD?",
+        "options": [
+          "Hikayatin ang taunang flu vaccine kung nasa plan of care at turuan ang hand hygiene.",
+          "Sabihing itigil na ang lahat ng exercise.",
+          "Ihinto ang inhaler kapag may sipon.",
+          "Payuhang doblehin ang home oxygen kapag pagod."
+        ],
+        "rationale": "Bakuna at hygiene ay nagbabawas ng trigger; ang activity ay naka-pace; oxygen at gamot ay sumusunod sa order."
+      },
+      {
+        "question": "Sabi ng pasyente: “Konti lang sigarilyo, wala na ring saysay.” Ano ang pinakamahusay na sagot?",
+        "options": [
+          "Tama — bawasan lang.",
+          "Kahit maliit na usok ay nagpapanatili ng pamamaga; ang pagtigil ay nakakatulong pa rin sa exacerbations — tingnan natin ang suporta sa plan.",
+          "Vape na lang.",
+          "Mas ligtas ang cigar."
+        ],
+        "rationale": "Ang usok ay pumapaslang sa progresyon; motivational na turuan sa saklaw ng nurse."
+      },
+      {
+        "question": "Aling gawain ang **pinaka-angkop** para sa PN kapag nag-delegate ang RN ng stable na teaching reinforcement?",
+        "options": [
+          "Mag-order mag-isa ng STAT CT para sa PE.",
+          "Obserbahan ang inhaler technique at iulat ang mali para sa RN/provider.",
+          "Mag-reseta ng antibiotic dahil purulent ang plema.",
+          "Mag-discharge nang walang RN."
+        ],
+        "rationale": "Reinforce skills at report; hindi mag-reseta o mag-discharge nang mag-isa sa NCLEX-PN."
+      }
+    ]
+  },
+  "ca-rpn-rex-pn:copd-clinical-judgment-gold": {
+    "title": "COPD: klinikal na hatulan (REx-PN, Canada)",
+    "seoTitle": "COPD — klinikal na hatulan | REx-PN Canada | NurseNest",
+    "seoDescription": "Canadian practical nursing: metric na konteksto, saklaw ng college, ligtas na delegasyon, escalation alinsunod sa REx-PN.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**REx-PN / practical nursing sa Canada**  \nInaasahan ang **saklaw na tinukoy ng college**, **metric vitals at SI labs** kung may ipinakita, at malinaw na escalation kapag **lampas** sa kaya ng practical nurse na simulan nang mag-isa.\n\n**Kahulugan**  \nIkonekta ang **work of breathing**, **oxygen therapy ayon sa order**, **senyales ng impeksiyon/exacerbation**, at **patient education** — habang **wala sa saklaw** ang **independent prescribing** o **unsupervised titration** maliban kung may standing order/protocol na eksplisitong pinapayagan."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Hanapin ang **prioritization**, **therapeutic communication**, **ligtas na pag-administer**, at **kailan magpaalam sa RN/NP/physician**. Karaniwang bitag: **RPN** na pinapagana ng **RN primary assessment** o **tahimik na titrate ng oxygen** nang walang order."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "**Pathophysiology**  \nAng COPD ay may **makitid na maliliit na daanan ng hangin**, **air trapping**, at madalas **ubo na may plema** kasama ang **pagkawala ng alveoli / elastic recoil** — maraming pasyente ay halo. Ang fixed obstruction ay nagpapataas ng trabaho ng paghinga; ang **exacerbation** ay tuloy-tuloy na paglala, kadalasang sanhi ng impeksiyon o irritant.\n\n**Bantayan**  \nIsama ang **respiratory rate**, **accessory muscles**, **mental status**, **SpO₂** (at device), **plema**, at **baseline** (home O₂, inhaler, kamakailang steroid/antibiotic). Pag **tumataas ang CO₂** na may **pagka-antok**: isipin ang **acute ventilatory failure**.\n\n**Mga interbensyon na madalas sa exam**  \nBronchodilator, steroid, antibiotic kung may hinalang impeksiyon, **oxygen ayon sa order/target**, maagang mobilization kung ligtas, at **patient teaching** (inhaler, pursed-lip, energy conservation, smoking cessation, bakuna, plano kailan humingi ng agarang tulong)."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "**Acute unit (Canada)**  \nMay COPD ang pasyente na may **low-flow oxygen** na inorder. Sa loob ng isang oras, **tumataas ang RR**, **bumabagsak ang SpO₂** sa parehong delivery, **tripod**.\n\n**RPN fork**  \nSuriin ang equipment at pasyente, **comfort positioning**, **pursed-lip**, at **ipaalam sa RN** para sa reassessment/order. **Iwasan** ang **mag-titrate ng oxygen** maliban kung may malinaw na protocol."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Metric** at **Canadian setting** ay maaaring lumabas — parehong pattern: assess → escalate kung unstable.  \n• **College standards** ang humahawak sa maaaring simulan; kung may alinlangan, **collaboration** kaysa **solo prescription-level changes**.  \n• Palakasin ang **smoking cessation**, **immunization**, at **exacerbation action plans**.  \n• Mag-drill ng **REx-PN** respiratory items pagkatapos."
+      }
+    },
+    "preTest": [
+      {
+        "question": "May RPN na nakakita ng SpO₂ 86% sa ordered oxygen sa COPD, mas mabigat ang trabaho ng paghinga. Ano ang unang aksyon?",
+        "options": [
+          "Taasan ang oxygen nang mag-isa para max ang saturation.",
+          "Suriin ulit ang delivery at pasyente, ipaalam sa RN, sundin ang order/protocol.",
+          "Paglakarin sa hallway para sa secreto.",
+          "Mag dokumento lang at bumalik sa 2 oras."
+        ],
+        "rationale": "Reassess at escalate; ang walang supervision na titration ay maaaring hindi angkop; ang paglalakad ay puwedeng lumala ang distress."
+      },
+      {
+        "question": "Alin ang **pinakamadali** para sa agad na ulat sa exacerbation?",
+        "options": [
+          "Mild dry cough, walang pagbabago sa vitals.",
+          "Tumataas na confusion na may CO₂ pattern at lumalalang antok.",
+          "Humihingi ng pangalawang kumot.",
+          "Stable appetite sa dating oxygen."
+        ],
+        "rationale": "Altered LOC na may ventilatory failure pattern — emergency escalation."
+      },
+      {
+        "question": "Ang energy conservation teaching ay dapat **idiin**:",
+        "options": [
+          "I-cluster ang mga gawain sa may pagpapahinga.",
+          "Tapusin ang lahat ng mabilis nang walang pahinga.",
+          "Iwasan ang lahat ng activity magpakailanman.",
+          "Itigil ang bronchodilator para bumaba ang gamot."
+        ],
+        "rationale": "Ang pacing ay nakakabawas ng dyspnea; biglaang pag-alis ng prescribed meds ay delikado."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Aling pahayag ang **tamang wika ng saklaw** para sa oxygen changes sa Canada RPN?",
+        "options": [
+          "Titrate ako sa sarili kong target nang walang dokumento.",
+          "Sumusunod ako sa authorized orders/protocols at nakikipagtulungan kapag unstable ang pasyente.",
+          "Nagre-reseta ako ng antibiotic kapag nagiba ang kulay ng plema.",
+          "Nagdi-discharge ako kapag mas ginhawa na sila."
+        ],
+        "rationale": "Collaboration at protocol ang nag-iingat ng saklaw; ang mag-reseta at mag-discharge nang mag-isa ay hindi sa framing na ito."
+      },
+      {
+        "question": "Bakit kapaki-pakinabang ang pursed-lip breathing sa COPD?",
+        "options": [
+          "Pinapabilis ang pagbuga para tumaas ang CO₂.",
+          "Maaaring humaba ang expiration at mabawasan ang dynamic airway collapse.",
+          "Pumapalit sa oxygen therapy.",
+          "Para lang sa asthma."
+        ],
+        "rationale": "Mekanika ng air trapping; **kumpleto** sa ordered therapy, hindi pumapalit."
+      },
+      {
+        "question": "May lagnat, purulent plema, at lumalalang dyspnea ang COPD. Ano ang inaasahan sa collaborative care?",
+        "options": [
+          "Balewalain ang vitals dahil lagi na silang may lagnat.",
+          "Suriin nang matalas ang vitals at respiratory status at agad mag-ulat.",
+          "Itigil ang fluids para mabawasan ang plema.",
+          "Patayin ang oxygen para mas malalim ang hinga."
+        ],
+        "rationale": "Exacerbation ay maaaring mangailangan ng bagong pagsusuri; monitoring at reporting ay core."
+      }
+    ]
+  },
+  "us-rn-nclex-rn:copd-clinical-judgment-gold": {
+    "title": "COPD: klinikal na hatulan (NCLEX-RN, US)",
+    "seoTitle": "COPD — klinikal na hatulan | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: oxygen targets, pag-manage ng exacerbation, seguridad sa CO₂ retention, prioritization, patient teaching.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**NCLEX-RN**  \nSinusukat ang **clinical judgment**: sino ang unahin, aling assessment ang nagpapalinaw ng panganib, at aling intervention ang tumutugma sa **pathophysiology** at **orders**.\n\nSa COPD: **oxygenation targets** (kadalasang **titrate sa prescribed SpO₂ range**, madalas **~88–92%** kung iyon ang plano — hindi numero sa vacuum), **timing ng bronchodilator/steroid/antibiotic**, **early mobility kung stable**, at **ventilatory failure** (pagka-antok, tumataas na CO₂) na nangangailangan ng mabilis na escalation."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Mataas na yield: **prioritization**, **ligtas na oxygen**, **infection vs heart failure**, **teaching**, at **iwasan ang sedation** na nagtatago ng respiratory failure."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "**Pathophysiology**  \nAng COPD ay may **makitid na maliliit na daanan ng hangin**, **air trapping**, at madalas **ubo na may plema** kasama ang **pagkawala ng alveoli / elastic recoil** — maraming pasyente ay halo. Ang fixed obstruction ay nagpapataas ng trabaho ng paghinga; ang **exacerbation** ay tuloy-tuloy na paglala, kadalasang sanhi ng impeksiyon o irritant.\n\n**Bantayan**  \nIsama ang **respiratory rate**, **accessory muscles**, **mental status**, **SpO₂** (at device), **plema**, at **baseline** (home O₂, inhaler, kamakailang steroid/antibiotic). Pag **tumataas ang CO₂** na may **pagka-antok**: isipin ang **acute ventilatory failure**.\n\n**Mga interbensyon na madalas sa exam**  \nBronchodilator, steroid, antibiotic kung may hinalang impeksiyon, **oxygen ayon sa order/target**, maagang mobilization kung ligtas, at **patient teaching** (inhaler, pursed-lip, energy conservation, smoking cessation, bakuna, plano kailan humingi ng agarang tulong)."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "**ED holding**  \n68-year-old na may COPD: **mas umuubo**, **purulent sputum**, **38.3 °C**, **RR 30**, **SpO₂ 86% room air**. Alert pero pagod.\n\n**RN fork**  \nSundin ang orders: **oxygen sa target**, **IV kung inorden**, **labs/ABG kung inorden**, **bronchodilators**, **positioning**, **close monitoring** para sa **CO₂ narcosis** kung tumataas ang pangangailangan sa O₂. Ang bitag ay **routine paperwork** bago maayos ang **oxygenation**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• Isama ang **SpO₂** sa **work of breathing** at **mental status**.  \n• **Exacerbation bundle**: O₂, gamot, monitoring, infection control, mobilization kung ligtas.  \n• **Turuan** ang warning signs at tamang device.  \n• Mag-**timed respiratory block** sa question bank pagkatapos."
+      }
+    },
+    "preTest": [
+      {
+        "question": "Pinakamataas na priyoridad sa acute COPD exacerbation na SpO₂ 86% sa room air at moderate distress?",
+        "options": [
+          "Tapusin ang discharge teaching tungkol sa low-sodium diet.",
+          "Maglagay ng oxygen ayon sa order/protocol at suriin ang tugon, handa kung kailangan mag-escalate.",
+          "Unahin ang wound care sa ibang unit.",
+          "Hikayatin ang masiglang exercise para sa secretions."
+        ],
+        "rationale": "Unahin ang buhay-at-baga panganib; sumunod sa oxygen per order."
+      },
+      {
+        "question": "Aling finding ang pinakamahusay na nagpapahiwatig ng acute ventilatory failure sa COPD na may oxygen?",
+        "options": [
+          "Humihingi ng paboritong pagkain.",
+          "Tumataas na antok, sakit ng ulo, at CO₂ pattern sa ABG.",
+          "Stable SpO₂ sa target na madaling magsalita.",
+          "Mild anxiety na walang pagbabago sa vitals."
+        ],
+        "rationale": "Tumataas na CO₂ na may pagbabago sa isip — urgent intervention."
+      },
+      {
+        "question": "Ang home teaching ay dapat may:",
+        "options": [
+          "Itigil ang inhaler kapag wala nang sintomas.",
+          "Nakasulat na plano: kailan tumawag sa kliniko vs 911.",
+          "Iwasan lahat ng bakuna.",
+          "Sedative gabi-gabi nang walang respiratory check."
+        ],
+        "rationale": "Action plans at tamang bakuna; iwas sedasyon nang walang assessment."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Bakit maaaring mapanganib ang mataas na oxygen sa ilang COPD nang walang maingat na monitoring?",
+        "options": [
+          "Laging gumagaling ang hypercapnia.",
+          "Maaaring lumala ang CO₂ retention at mental status—bantayan ang ABG ayon sa order.",
+          "Bawal ang oxygen sa lahat ng COPD.",
+          "Hindi naaapektuhan ang ventilation."
+        ],
+        "rationale": "Nag-iiba ang tugon; bantayan ang CO₂ narcosis."
+      },
+      {
+        "question": "Aling pahayag ang nagpapakita ng pursed-lip breathing?",
+        "options": [
+          "Mabilis huminga palabas para mawala ang CO₂.",
+          "Humihinga sa ilong, humihinga palabas nang dahan-dahan gamit ang pursed lips.",
+          "Tumitigil sa paghinga bawat minuto.",
+          "Gamit ito imbes sa bronchodilator."
+        ],
+        "rationale": "Kontroladong pag-expire; ang bronchodilator ay prescribed therapy."
+      },
+      {
+        "question": "Sa shift report, sino ang unang suriin ng RN?",
+        "options": [
+          "Nanunuod ng TV, stable sa 2 L/min.",
+          "Bagong confusion, RR 32, at bumabagsak ang SpO₂ kahit may oxygen.",
+          "Humihingi ng unan, stable SpO₂.",
+          "Humihingi ng yelo, normal mentation."
+        ],
+        "rationale": "Agad na pagbabago sa oxygenation at isip — unahin."
+      }
+    ]
+  },
+  "ca-rn-nclex-rn:copd-clinical-judgment-gold": {
+    "title": "COPD: klinikal na hatulan (NCLEX-RN, Canada)",
+    "seoTitle": "COPD — klinikal na hatulan | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Canadian RN: COPD exacerbation, SI/metric, provincial scope language, oxygen targets, NCLEX-style prioritization.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**NCLEX-RN (Canada)**  \nSinusukat ang **clinical judgment**: sino ang unahin, aling datos ang nagpapakita ng panganib, at aling aksyon ang tumutugma sa **orders** at **provincial/employer standards**.\n\nSa COPD: **oxygen strategy ayon sa order**, **pagkilala sa exacerbation**, **ventilatory failure** (pagka-antok, CO₂/acidosis kung may ABG), at **teaching** na angkop sa pasyente."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Parehong **prioritization spine** tulad ng US RN, na may **SI units**, **Canadian terminology**, at **role language**. Bitag: **routine tasks** o **discharge teaching** bago **respiratory stability**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "**Pathophysiology**  \nAng COPD ay may **makitid na maliliit na daanan ng hangin**, **air trapping**, at madalas **ubo na may plema** kasama ang **pagkawala ng alveoli / elastic recoil** — maraming pasyente ay halo. Ang fixed obstruction ay nagpapataas ng trabaho ng paghinga; ang **exacerbation** ay tuloy-tuloy na paglala, kadalasang sanhi ng impeksiyon o irritant.\n\n**Bantayan**  \nIsama ang **respiratory rate**, **accessory muscles**, **mental status**, **SpO₂** (at device), **plema**, at **baseline** (home O₂, inhaler, kamakailang steroid/antibiotic). Pag **tumataas ang CO₂** na may **pagka-antok**: isipin ang **acute ventilatory failure**.\n\n**Mga interbensyon na madalas sa exam**  \nBronchodilator, steroid, antibiotic kung may hinalang impeksiyon, **oxygen ayon sa order/target**, maagang mobilization kung ligtas, at **patient teaching** (inhaler, pursed-lip, energy conservation, smoking cessation, bakuna, plano kailan humingi ng agarang tulong)."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "**Medical ward (Canada)**  \nKilalang COPD: **lumalalang dyspnea**, **purulent sputum**, **38.1 °C**, **RR 28**, **SpO₂ 88%** sa **2 L/min** ayon sa order.\n\n**RN fork**  \nSuriin ang **oxygen delivery at response**, ipaalam sa **NP/physician** para sa posibleng **escalation** ng therapy, **ituro ang ordered bronchodilators/steroids/antibiotics**, bantayan ang **CO₂ retention** kung tumataas ang O₂. **Iwas** ang **discharge** bago **stability**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• Basahin ang **Canadian units**; mag-reason mula sa stem.  \n• **Stability first**: airway, breathing, circulation, then comfort.  \n• **Infection** + **oxygenation** + close monitoring.  \n• Mag-practice ng **Canada RN** respiratory drills sa bank."
+      }
+    },
+    "preTest": [
+      {
+        "question": "Canadian RN may COPD exacerbation, SpO₂ 88% sa kasalukuyang oxygen. Priyoridad?",
+        "options": [
+          "Tapusin ang charting ng med error ng nakaraang shift.",
+          "Suriin ang respiratory status at oxygen therapy, pagkatapos mag-collaborate para sa adjustment ayon sa protocol/order.",
+          "Simulan ang discharge planning para bukas.",
+          "HIIT sa hallway."
+        ],
+        "rationale": "Stabilize muna; charting at discharge pagkatapos ng immediate risk."
+      },
+      {
+        "question": "Alin ang dapat mag-trigger ng urgent reassessment?",
+        "options": [
+          "Stable mentation na gumaganda ang SpO₂ pagkatapos ng therapy.",
+          "Bagong confusion at tumataas na antok kasabay ng mas mabigat na trabaho ng paghinga.",
+          "Nagbabasa ng libro sa 2 L/min.",
+          "Mild dry cough, walang pagbabago sa vitals."
+        ],
+        "rationale": "Altered mental status + respiratory decline: posibleng hypercapnic failure."
+      },
+      {
+        "question": "Ang COPD self-management teaching sa Canada ay dapat bigyang-diin:",
+        "options": [
+          "Itigil ang steroids kapag mas ginhawa na.",
+          "Kilalanin ang mga trigger ng exacerbation at kailan humingi ng emergency care.",
+          "Iwasan ang lahat ng activity magpakailanman.",
+          "Hiram na inhaler kapag naubusan."
+        ],
+        "rationale": "Action plans at adherence; maintenance meds ay nagpapababa ng flares; ang activity ay naka-pace."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Tungkol sa oxygen sa COPD, alin ang pinaka-angkop sa exam reasoning?",
+        "options": [
+          "Laging target 100% SpO₂ sa lahat.",
+          "Titrate sa prescribed targets; bantayan ang CO₂ retention sa susceptible.",
+          "Kontraindikado ang oxygen sa lahat ng COPD.",
+          "Hindi kailanman ng humidification o skin care ang cannula."
+        ],
+        "rationale": "Individualized targets at monitoring; ang absolutes ay madalas mali."
+      },
+      {
+        "question": "Sabi ng pasyente: “Itinigil ko ang inhaler kasi okay na ako.” Ano ang sagot?",
+        "options": [
+          "Mabuti — gamot lang kapag may sakit.",
+          "Ang maintenance therapy ay nagkokontrol ng pamamaga at bronchospasm kahit okay ang pakiramdam; pagtigil ay puwedeng mag-trigger ng flares — balikan natin ang regimen kasama ang team.",
+          "Herbal steam na lang.",
+          "Doblehin ang dose sa susunod na linggo nang walang doktor."
+        ],
+        "rationale": "Adherence teaching nang hindi nagbabago mag-isa ng prescription."
+      },
+      {
+        "question": "Aling gawain ang maaaring **i-delegate** sa competent assistive personnel sa stable COPD?",
+        "options": [
+          "Mag-interpret ng ABG at baguhin ang oxygen order nang mag-isa.",
+          "Magtanghal at mag-record ng vital signs at mag-ulat ng abnormal.",
+          "Magturo ng inhaler technique from scratch nang walang verification.",
+          "Magpasya ng medical diagnosis para sa billing."
+        ],
+        "rationale": "Data collection + reporting oo; clinical interpretation at order changes hindi."
+      }
+    ]
+  },
+  "us-np-fnp:copd-clinical-judgment-gold": {
+    "title": "COPD: hatol sa primary care (FNP, US)",
+    "seoTitle": "COPD sa primary care | FNP US | NurseNest",
+    "seoDescription": "Adult primary-care FNP: GOLD-style concepts, exacerbation triage, differential vs CHF/PE, shared decision-making, safe escalation.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**FNP / adult primary care**  \nIsinasama mo ang **history**, **spirometry context kung mayroon**, **comorbidity burden**, **infection risk**, at **functional status** sa plano na tumutugma sa **evidence-based COPD management** at **collaborative agreement**.\n\nSa item-style reasoning: **risk stratification** (exacerbation history, hospitalizations), **step-up/step-down** ng gamot, **non-pharmacologic** (cessation, vaccines, pulmonary rehab referral), at **kailan mas ligtas ang ED** kaysa “phone tweaks.”"
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Hanapin ang **differentiation** (COPD exacerbation vs **acute HF** vs **PE red flags**), **appropriate diagnostics**, **antibiotic/steroid decisions** alinsunod sa guidelines, **oxygen safety**, at **patient-centered counseling** nang hindi lumalampas sa ligtas na papel."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "**Pathophysiology**  \nAng COPD ay may **makitid na maliliit na daanan ng hangin**, **air trapping**, at madalas **ubo na may plema** kasama ang **pagkawala ng alveoli / elastic recoil** — maraming pasyente ay halo. Ang fixed obstruction ay nagpapataas ng trabaho ng paghinga; ang **exacerbation** ay tuloy-tuloy na paglala, kadalasang sanhi ng impeksiyon o irritant.\n\n**Bantayan**  \nIsama ang **respiratory rate**, **accessory muscles**, **mental status**, **SpO₂** (at device), **plema**, at **baseline** (home O₂, inhaler, kamakailang steroid/antibiotic). Pag **tumataas ang CO₂** na may **pagka-antok**: isipin ang **acute ventilatory failure**.\n\n**Mga interbensyon na madalas sa exam**  \nBronchodilator, steroid, antibiotic kung may hinalang impeksiyon, **oxygen ayon sa order/target**, maagang mobilization kung ligtas, at **patient teaching** (inhaler, pursed-lip, energy conservation, smoking cessation, bakuna, plano kailan humingi ng agarang tulong)."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "**Outpatient follow-up pagkatapos ng ED**  \n62-year-old na may COPD bumalik matapos **steroid taper at antibiotics** para sa exacerbation. May **dyspnea** pa ring **isang bloke**, **araw-araw na plema**, **dalawang ED visit** ngayong taon.\n\n**FNP fork**  \nI-optimize ang **controller therapy**, **inhaler technique**, **smoking cessation**, **vaccinations**, **pulmonary rehab**, at nakasulat na **exacerbation plan**. **Red-flag**: syncope, **severe resting hypoxemia**, **rapid mental status change**, **hemoptysis** — urgent evaluation. **Bitag**: **binabawas ang madalas na exacerbations** bilang “normal” nang hindi nag-i-intensify ng prevention."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Exacerbations** = outcomes na dapat pigilan: vaccines, cessation, rehab, optimized inhaler regimen, malinaw na rescue instructions.  \n• **Differential** na buhay kapag biglang lumala ang dyspnea (PE, ACS, HF, pneumothorax).  \n• **Dokumentuhin** ang shared decisions at follow-up intervals.  \n• Gumamit ng **NP-level** practice questions na **management synthesis** ang sinusukat."
+      }
+    },
+    "preTest": [
+      {
+        "question": "Aling history feature ang pinaka-supportive sa pag-intensify ng COPD maintenance therapy sa primary care?",
+        "options": [
+          "Isang exacerbation sampung taon na ang nakalipas.",
+          "Paulit-ulit na exacerbation o hospitalization sa nakaraang taon kahit may baseline therapy.",
+          "Remote appendectomy.",
+          "Mild occasional headache na walang respiratory symptoms."
+        ],
+        "rationale": "Madalas na exacerbations ang nagtuturo sa guideline-informed escalation."
+      },
+      {
+        "question": "May acute pleuritic chest pain, unilateral leg swelling, at tachypnea ang COPD patient. Unang priyoridad?",
+        "options": [
+          "Taasan lang ang home ICS dose.",
+          "Kilalanin ang posibleng PE/ACS at **ituro sa emergency evaluation**.",
+          "Doblehin ang home oxygen nang walang assessment.",
+          "Mag-antala ng 2 linggo."
+        ],
+        "rationale": "Red-flag cardiopulmonary symptoms — hindi routine COPD tweak."
+      },
+      {
+        "question": "Aling intervention ang may pinakamalakas na long-term benefit sa smokers na may COPD?",
+        "options": [
+          "Occasional albuterol na walang smoking cessation.",
+          "Tuluy-tuloy na **tobacco cessation** na may counseling at pharmacotherapy kung angkop.",
+          "Araw-araw na sedative para sa anxiety.",
+          "Iwasan ang lahat ng exercise."
+        ],
+        "rationale": "Smoking cessation ang pundasyon; sedatives at inactivity ay harmful."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Aling elemento ang dapat nasa COPD exacerbation action plan para sa naaangkop na primary-care patients?",
+        "options": [
+          "Lihim na doblehin ang antibiyotikong hiniram sa kaibigan.",
+          "Malinaw na **threshold** para sa rescue oral steroids/antibiotics kapag prescribed, at kailan tumawag sa 911.",
+          "Itigil ang lahat ng inhaler kapag may sipon.",
+          "Iwasan ang flu vaccine dahil sa mito."
+        ],
+        "rationale": "Nakasulat na plano ay nakakabawas ng pinsala; ad hoc borrowing at vaccine refusal ay nagpapataas ng risk."
+      },
+      {
+        "question": "Bakit i-refer ang eligible COPD patients sa pulmonary rehabilitation?",
+        "options": [
+          "Pinapalitan nito ang lahat ng gamot.",
+          "Nakakapagbuti ng dyspnea, exercise capacity, at kalidad ng buhay sa maraming pasyente.",
+          "Para lang sa post–lung transplant.",
+          "Ginagamot ang emphysema."
+        ],
+        "rationale": "Evidence-based adjunct; hindi pumapalit sa pharmacotherapy."
+      },
+      {
+        "question": "Aling outpatient finding ang pinakamahusay na nagpapahiwatig ng same-day escalation o ED referral?",
+        "options": [
+          "Stable walk mula parking nang walang distress.",
+          "Resting SpO₂ sa 70s% kahit may prescribed oxygen at acute symptoms.",
+          "Mild pagod pagkatapos ng buong araw ng trabaho na stable vitals.",
+          "Humihingi ng work note nang walang respiratory change."
+        ],
+        "rationale": "Severe hypoxemia at rest na may acute illness — emergency pattern."
+      }
+    ]
+  },
+  "ca-rn-nclex-rn:ca-rn-heart-failure": {
+    "title": "Heart failure (NCLEX-RN, Canada)",
+    "seoTitle": "Heart failure | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Canadian RN: heart failure na may metric units at scope language.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Sinusukat ng mga item sa **heart failure** kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto.\n\n**RN Canada:** gamitin ang **SI labs** kapag **mmol/L** ang nasa stem (glucose, electrolytes) at bigyang-kahulugan kasama ang clinical picture. Ang provincial standards at employer policy ay namamahala pa rin sa delegasyon."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding. Ang Canadian items ay maaaring gumamit ng **metric units** at Canadian care settings; pareho ang judgment pattern."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma. Gamitin ang Canadian acute-care context kapag may units o roles sa stem."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• Ikonekta ang **vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng items na may tag na `topic:heart-failure`.  \n• **Canada:** tingnan ang **metric labs** at **college scope** language sa PN stems."
+      }
+    }
+  },
+  "us-rn-nclex-rn:us-rn-heart-failure": {
+    "title": "Heart failure (NCLEX-RN, US)",
+    "seoTitle": "Heart failure | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: heart failure — limang section na leksyon at item bank.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Sinusukat kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• Ikonekta ang **vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng `topic:heart-failure`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:diabetes-self-management-teaching": {
+    "title": "Diabetes self-management teaching (NCLEX-RN, Canada)",
+    "seoTitle": "Diabetes self-management | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Endocrine clinical judgment: data, risk, first safe action, delegation — Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diabetes self-management teaching** (Endocrine) ay **clinical judgment** na tema: ikonekta ang **assessment data sa panganib**, piliin ang **unang ligtas na nursing action**, at alamin kailan **i-delegate** vs **panatilihin** ang responsibilidad. Maaaring may **SI units** at Canadian wording ang mga item; pareho ang NCLEX-RN prioritization logic."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Ginagamit ito para sukatin ang **prioritization**, **monitoring**, at **escalation**. May **distractors** na mukhang tama pero nag-aatras ng assessment, lumalaktaw sa unstable client, o hindi tamang nagde-delegate ng RN-level judgment."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame ang **diabetes self-management** sa **Endocrine**: iugnay ang inaasahang **assessment** findings sa **interventions** at **monitoring** na nagpapakita na gumagana ang plano. Default difficulty sa topic map: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Isipin ang maraming pasyente o gawain: piliin ang opsyon na **pinakamabilis bawasan ang pinsala** para sa taong **lumala** o **high risk** kung walang atensyon. Kung stable ang stem, piliin pa rin ang aksyon na **una ang data gap** bago ang routines."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge teaching.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may risk.  \n• Pair sa **topic slug `endocrine`** sa hub at timed blocks.  \n\n**Related topics:** `dka-vs-hhs-priorities`, `thyroid-storm-myxedema-clues`, `addisonian-crisis`, `cushing-syndrome-assessment`, `siadh-vs-di-basics`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:diabetes-self-management-teaching": {
+    "title": "Diabetes self-management teaching (NCLEX-RN, US)",
+    "seoTitle": "Diabetes self-management | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: unstable vs stable, delegation, first action sa diabetes teaching.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diabetes self-management teaching** (Endocrine) ay **clinical judgment** na tema: ikonekta ang **data sa panganib**, piliin ang **unang ligtas na aksyon**, at alamin kailan **mag-delegate** vs **panatilihin** ang responsibilidad. Ang US NCLEX-RN ay madalas mag-test ng **unstable vs stable**, **delegation**, at **first action**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Sinusukat ang **prioritization**, **monitoring**, at **escalation**. May **distractors** na mukhang makatwiran pero nag-aatras ng assessment."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Endocrine**: **assessment** → **interventions** → **monitoring** na nagpapatunay na gumagana ang plano. Difficulty: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Maraming pasyente/gawain: unahin ang **pinakamabilis na pinsala** kung may **deterioration** o **high risk**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Iwasan ang **skip assessment** / **delay escalation**.  \n• Pair sa `endocrine`.  \n\n**Related:** `dka-vs-hhs-priorities`, `thyroid-storm-myxedema-clues`, `addisonian-crisis`, `cushing-syndrome-assessment`, `siadh-vs-di-basics`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:diuretics-electrolyte-shifts": {
+    "title": "Diuretics & electrolyte shifts (NCLEX-RN, Canada)",
+    "seoTitle": "Diuretics & electrolytes | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Pharmacology: diuretics, K, Mg, acid-base — Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diuretics & electrolyte shifts** (Pharmacology) ay **clinical judgment** na tema: ikonekta ang **data sa panganib**, piliin ang **unang ligtas na aksyon**, at alamin kailan **mag-delegate** vs **panatilihin** ang RN-level judgment. Maaaring may **SI** ang Canadian items."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Sinusukat ang **prioritization**, **monitoring**, at **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Pharmacology**: **assessment** → **interventions** → **monitoring**. Difficulty: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamataas na risk** na kailangan ng nursing intervention."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `pharmacology`.  \n\n**Related:** `insulin-hypoglycemia`, `anticoagulants-bleeding-risk`, `antibiotic-classes-allergies`, `opioids-respiratory-depression`, `cardiac-glycosides-toxicity`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:diuretics-electrolyte-shifts": {
+    "title": "Diuretics & electrolyte shifts (NCLEX-RN, US)",
+    "seoTitle": "Diuretics & electrolytes | NCLEX-RN US | NurseNest",
+    "seoDescription": "US NCLEX-RN pharmacology: diuretics at electrolyte monitoring.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Diuretics & electrolyte shifts** (Pharmacology) — **clinical judgment**: **data → risk → first action**, **delegation** vs **retain**. US items: **unstable vs stable**, **delegation**, **first action**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "**Prioritization**, **monitoring**, **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Pharmacology**. Difficulty: **3**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamataas na risk** na kailangan ng intervention."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `pharmacology`.  \n\n**Related:** `insulin-hypoglycemia`, `anticoagulants-bleeding-risk`, `antibiotic-classes-allergies`, `opioids-respiratory-depression`, `cardiac-glycosides-toxicity`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:sepsis-early-recognition-hy": {
+    "title": "Sepsis early recognition (NCLEX-RN, Canada)",
+    "seoTitle": "Sepsis early recognition | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Infectious disease: maagang pagkilala, monitor, escalate — Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Sepsis early recognition** (Infectious disease) — **clinical judgment**: **data → risk → first action**, **delegation** vs **retain**. Canadian items: maaaring may **SI**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "**Prioritization**, **monitoring**, **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Infectious disease**. Difficulty: **4**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamabilis na pinsala** kung may **deterioration**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `infectious`.  \n\n**Related:** `sepsis-early-recognition`, `hiv-confidentiality-pep-basics`, `isolation-precautions-in-practice`, `wound-infection-vs-colonization`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:sepsis-early-recognition-hy": {
+    "title": "Sepsis early recognition (NCLEX-RN, US)",
+    "seoTitle": "Sepsis early recognition | NCLEX-RN US | NurseNest",
+    "seoDescription": "US NCLEX-RN infectious: prioritization at escalation sa sepsis.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "**Sepsis early recognition** (Infectious disease). US items: **unstable vs stable**, **delegation**, **first action**."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "**Prioritization**, **monitoring**, **escalation**."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "I-frame sa **Infectious disease**. Difficulty: **4**; priority: **high_yield**."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Unahin ang **pinakamataas na risk**."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago comfort o discharge.  \n• Pair sa `infectious`.  \n\n**Related:** `sepsis-early-recognition`, `hiv-confidentiality-pep-basics`, `isolation-precautions-in-practice`, `wound-infection-vs-colonization`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:ca-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, Canada)",
+    "seoTitle": "Sepsis | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Canadian RN: sepsis na may metric/scope framing.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Ang mga item sa **sepsis** ay sinusukat kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto.\n\n**RN Canada:** gamitin ang **SI labs** kapag **mmol/L** ang nasa stem at bigyang-kahulugan kasama ang clinical picture. Ang provincial standards at employer policy ay namamahala pa rin sa delegasyon."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding. Ang Canadian items ay maaaring gumamit ng **metric units** at Canadian care settings; pareho ang judgment pattern."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma. Gamitin ang Canadian acute-care context kapag may units o roles sa stem."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng `topic:sepsis`.  \n• **Canada:** tingnan ang **metric labs** at **college scope** sa PN stems."
+      }
+    }
+  },
+  "us-rn-nclex-rn:us-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, US)",
+    "seoTitle": "Sepsis | NCLEX-RN US | NurseNest",
+    "seoDescription": "US RN: sepsis — limang section na leksyon at item bank.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Ang mga item sa **sepsis** ay sinusukat kung naikonekta mo ang **assessment data sa panganib**: ano ang unang nagbabago, ano ang nangangailangan ng escalation, at aling teaching o order ang **hindi ligtas** sa konteksto."
+      },
+      "exam_relevance": {
+        "heading": "Bakit mahalaga sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding."
+      },
+      "core_concept": {
+        "heading": "Core concept — pathophysiology at monitoring",
+        "body": "Ikonekta ang mga interbensyon sa **underlying pattern** (perfusion, oxygenation, infection burden, electrolyte shifts, o glucose–insulin dynamics) at sa **monitoring** na nagpapatunay na gumagana ang plano."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Namamahala ng magkakumpitensyang priyoridad. Piliin ang pasyenteng **pinakamabilis tumaas ang panganib** kung walang nursing intervention — pagkatapos ang assessment o order na tumutugma."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "• **Vitals + labs + kwento** bago magturo o mag-discharge.  \n• Alisin ang mga sagot na **lumalaktaw sa assessment** o **natatagalan ang escalation** kapag may instability.  \n• **Bank:** mag-drill ng `topic:sepsis`."
+      }
+    }
+  },
+  "us-np-fnp:fnp-overlay-respiratory-acute": {
+    "title": "COPD, asthma, ARDS, pneumonia, PE — NP respiratory overlay (FNP)",
+    "seoTitle": "NP acute respiratory overlay | FNP US | NurseNest",
+    "seoDescription": "APRN overlay para sa acute respiratory conditions — pair sa buong RN lesson sa catalog.",
+    "sections": {
+      "intro": {
+        "heading": "Introduction",
+        "body": "Ito ay **NP overlay** para sa **COPD, asthma, ARDS, pneumonia, PE** — hindi ulit ng buong RN lesson. Pair sa `us-rn-copd-respiratory` sa pathway catalog para sa pathophysiology at NCLEX-style drills; gamitin ang block na ito para sa **APRN-level** na desisyon."
+      },
+      "diagnosis_np": {
+        "heading": "Diagnosis considerations",
+        "body": "I-frame ang **problem representation**, **red flags**, at **must-not-miss** diagnoses. Mas gusto ng boards ang **next diagnostic step** kaysa **premature treatment** — iugnay ang history, exam, at targeted testing sa pre-test probability."
+      },
+      "management_np": {
+        "heading": "Management plans",
+        "body": "Ilahad ang **initial stabilization** (kung ipinahiwatig ng stem), **guideline-concordant** therapy kung pinapayagan ng stem, **consult triggers**, at **kailan mag-defer** sa specialty o ED. Piliin ang opsyon na tumutugma sa **severity** at **comorbid constraints**."
+      },
+      "meds_np": {
+        "heading": "Medication adjustments",
+        "body": "Asahan ang **dose adjustment** para sa renal/hepatic function, **interaction** at **contraindication** traps, **deprescribing** kung angkop, at **monitoring** pagkatapos ng pagbabago (labs, vitals, toxicity screens)."
+      },
+      "followup_np": {
+        "heading": "Follow-up & monitoring",
+        "body": "Piliin ang **follow-up interval**, **patient education**, **safety netting**, at **reassessment targets** (symptoms, labs, adherence). Ang NP items ay madalas sumusukat kung **nasa-sara mo ang loop** sa panganib — hindi lang ang unang aksyon sa visit."
+      }
+    }
+  }
+}

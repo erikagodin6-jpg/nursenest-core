@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Library — NurseNest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font:'DM Sans',system-ui,sans-serif;
+  --primary:#9d82dd;
+  --primary-soft:#f3efff;
+  --primary-border:#e9e2ff;
+  --primary-deep:#6d4fc4;
+  --ink:#111827;
+  --body:#6b7280;
+  --muted:#9ca3af;
+  --page:#fdfcfa;
+  --card:#ffffff;
+  --border:#f0ecff;
+  --sep:#f3f4f6;
+  --success:#16a34a;
+  --success-soft:#f0fdf4;
+  --r-sm:.375rem;--r-md:.625rem;--r-lg:.875rem;--r-xl:1rem;--r-2xl:1.25rem;
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.02);
+  --shadow-md:0 4px 12px -4px rgba(0,0,0,.08),0 2px 6px -2px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 28px -8px rgba(0,0,0,.10),0 4px 12px -4px rgba(0,0,0,.06);
+}
+body{font-family:var(--font);background:var(--page);color:var(--body);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+
+/* ── NAVIGATION ─────────────────────────────────────────────── */
+.nav-wrap{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--primary-border)}
+.nav-eco{background:var(--primary);height:28px;display:flex;align-items:center;justify-content:center;gap:20px;padding:0 16px}
+.nav-eco a{font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.8);text-decoration:none;transition:color .15s}
+.nav-eco a:hover{color:#fff}
+.nav-eco-sep{color:rgba(255,255,255,.25);font-size:9px}
+.nav-main{max-width:1280px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;gap:4px}
+.nav-logo{display:flex;align-items:center;gap:6px;font-weight:700;font-size:.9375rem;color:var(--ink);text-decoration:none;margin-right:16px;flex-shrink:0}
+.nav-logo-leaf{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--primary-soft);color:var(--primary)}
+.nav-logo-leaf svg{width:15px;height:15px;fill:currentColor}
+.nav-link{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:6px;font-size:.8125rem;font-weight:500;color:var(--body);text-decoration:none;transition:all .15s;cursor:pointer;border:none;background:none}
+.nav-link:hover{background:var(--primary-soft);color:var(--primary)}
+.nav-link-active{background:var(--primary-soft);color:var(--primary)}
+.nav-chevron{width:12px;height:12px;opacity:.6}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav-region{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;font-size:.75rem;font-weight:600;border:1px solid var(--border);color:var(--muted);cursor:pointer}
+.btn-ghost{padding:6px 14px;border-radius:6px;font-size:.8125rem;font-weight:500;color:var(--body);border:1px solid var(--sep);background:transparent;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:var(--primary-border);color:var(--primary)}
+.btn-primary{padding:7px 16px;border-radius:8px;font-size:.8125rem;font-weight:600;color:#fff;background:var(--primary);border:none;cursor:pointer;transition:opacity .15s}
+.btn-primary:hover{opacity:.9}
+
+/* ── HERO ───────────────────────────────────────────────────── */
+.hero{background:linear-gradient(150deg,#f5f1fe 0%,#fdfcfa 50%,#f0f4ff 100%);padding:56px 24px 48px;position:relative;overflow:hidden;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 75% 20%,rgba(157,130,221,.12),transparent 60%),radial-gradient(ellipse 50% 50% at 25% 80%,rgba(157,130,221,.08),transparent 60%);pointer-events:none}
+.hero-in{max-width:700px;margin:0 auto;position:relative}
+.hero-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:20px}
+.hero-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:9999px;font-size:.6875rem;font-weight:600;letter-spacing:.02em}
+.badge-green{background:#dcfce7;color:#15803d}
+.badge-blue{background:#dbeafe;color:#1d4ed8}
+.badge-purple{background:var(--primary-soft);color:var(--primary-deep)}
+.hero h1{font-size:2.25rem;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:var(--ink);margin-bottom:14px}
+.hero p{font-size:1.0625rem;color:var(--body);max-width:520px;margin:0 auto 32px;line-height:1.65}
+.hero-stats{display:flex;justify-content:center;gap:40px;margin-bottom:32px}
+.stat-val{font-size:1.75rem;font-weight:700;color:var(--primary);display:block}
+.stat-label{font-size:.75rem;color:var(--muted);font-weight:500;margin-top:2px}
+.hero-ctas{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.cta-primary{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:var(--primary);color:#fff;border-radius:9999px;font-size:.875rem;font-weight:600;text-decoration:none;transition:opacity .15s;box-shadow:0 4px 14px rgba(157,130,221,.35)}
+.cta-primary:hover{opacity:.9}
+.cta-secondary{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border:2px solid #d1d5db;color:var(--body);border-radius:9999px;font-size:.875rem;font-weight:600;text-decoration:none;transition:border-color .15s}
+.cta-secondary:hover{border-color:var(--primary-border)}
+.arrow{width:15px;height:15px}
+
+/* ── FEATURE STRIP ──────────────────────────────────────────── */
+.feature-strip{background:#fff;border-top:1px solid var(--sep);border-bottom:1px solid var(--sep);padding:14px 24px}
+.feature-strip-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap}
+.feature-item{display:flex;align-items:center;gap:8px;font-size:.8125rem;font-weight:500;color:var(--body)}
+.feature-dot{width:7px;height:7px;border-radius:50%;background:var(--primary);flex-shrink:0}
+.feature-label{color:var(--ink)}
+
+/* ── MAIN ───────────────────────────────────────────────────── */
+.main{max-width:1280px;margin:0 auto;padding:40px 24px 80px}
+
+/* ── SECTION HEADER ─────────────────────────────────────────── */
+.sec-hdr{text-align:center;margin-bottom:32px}
+.sec-hdr h2{font-size:1.625rem;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:8px}
+.sec-hdr p{font-size:.9375rem;color:var(--body);max-width:560px;margin:0 auto}
+
+/* ── TABS ───────────────────────────────────────────────────── */
+.tabs-wrap{display:flex;justify-content:center;margin-bottom:28px}
+.tabs{display:inline-flex;background:#f3f4f6;border-radius:9999px;padding:4px;gap:2px}
+.tab{padding:7px 20px;border-radius:9999px;font-size:.8125rem;font-weight:500;color:var(--body);cursor:pointer;border:none;background:transparent;transition:all .2s}
+.tab:hover{color:var(--ink)}
+.tab-active{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* ── TOOLBAR ────────────────────────────────────────────────── */
+.toolbar{display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto 32px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
+.search-icon svg{width:15px;height:15px}
+.search-input{width:100%;height:40px;padding:0 12px 0 36px;border-radius:9999px;border:1px solid #e5e7eb;background:#fff;font-family:var(--font);font-size:.8125rem;color:var(--ink);box-shadow:var(--shadow);outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--primary-border);box-shadow:0 0 0 3px rgba(157,130,221,.12)}
+.search-input::placeholder{color:var(--muted)}
+.filter-select{height:40px;padding:0 32px 0 14px;border-radius:9999px;border:1px solid #e5e7eb;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;font-family:var(--font);font-size:.8125rem;color:var(--body);box-shadow:var(--shadow);outline:none;appearance:none;cursor:pointer;min-width:190px}
+
+/* ── UPGRADE BANNER ─────────────────────────────────────────── */
+.upgrade-banner{background:linear-gradient(135deg,rgba(157,130,221,.06) 0%,#fff 50%,rgba(157,130,221,.05) 100%);border:1px solid var(--primary-border);border-radius:16px;padding:20px 24px;text-align:center;margin-bottom:32px}
+.upgrade-banner h3{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.upgrade-banner p{font-size:.8125rem;color:var(--body);max-width:540px;margin:0 auto 14px;line-height:1.6}
+
+/* ── FEATURED + PROGRESS ROW ────────────────────────────────── */
+.dash-row{display:grid;grid-template-columns:1fr 340px;gap:20px;margin-bottom:36px}
+@media(max-width:900px){.dash-row{grid-template-columns:1fr}}
+.featured-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow-md);padding:22px 24px;border:1px solid var(--sep)}
+.featured-card h3{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.featured-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--primary-soft);color:var(--primary)}
+.featured-icon svg{width:14px;height:14px}
+.featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.featured-topic{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary-border);cursor:pointer;transition:all .15s}
+.featured-topic:hover{background:rgba(157,130,221,.18);border-color:var(--primary)}
+.ft-icon{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;flex-shrink:0}
+.ft-body span{display:block;font-size:.8rem;font-weight:600;color:var(--ink);line-height:1.3}
+.ft-body small{font-size:.7rem;color:var(--muted)}
+.ft-chev{width:14px;height:14px;color:var(--primary);margin-left:auto;flex-shrink:0}
+.progress-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow-md);padding:22px 24px;border:1px solid var(--sep)}
+.progress-card h3{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.progress-card p{font-size:.8rem;color:var(--muted);margin-bottom:18px}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.prog-label{font-size:.8rem;font-weight:500;color:var(--ink)}
+.prog-num{font-size:.75rem;color:var(--muted);font-weight:500}
+.prog-track{height:5px;border-radius:9999px;background:#f0ecff;overflow:hidden;margin-bottom:12px}
+.prog-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,var(--primary),#b8a4eb)}
+.prog-mini-stats{display:flex;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--sep)}
+.prog-mini-stat{text-align:center;flex:1}
+.prog-mini-val{font-size:1.1rem;font-weight:700;color:var(--ink);display:block}
+.prog-mini-label{font-size:.7rem;color:var(--muted)}
+.prog-cta{display:block;width:100%;margin-top:14px;padding:9px;border-radius:9999px;background:var(--primary);color:#fff;font-size:.8125rem;font-weight:600;text-align:center;text-decoration:none;border:none;cursor:pointer;transition:opacity .15s}
+.prog-cta:hover{opacity:.9}
+
+/* ── LESSON GRID ────────────────────────────────────────────── */
+.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:1024px){.lesson-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.lesson-grid{grid-template-columns:1fr}}
+.sys-card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--sep);transition:box-shadow .2s}
+.sys-card:hover{box-shadow:var(--shadow-lg)}
+.sys-card-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--sep)}
+.sys-icon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;flex-shrink:0}
+.sys-icon svg{width:15px;height:15px}
+.sys-title{font-size:.875rem;font-weight:700;color:var(--ink);flex:1;min-width:0}
+.sys-count{font-size:.7rem;font-weight:500;background:#f3f4f6;color:var(--muted);padding:2px 8px;border-radius:9999px;white-space:nowrap}
+.sys-body{padding:10px 14px 12px}
+.lesson-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;border:1px solid transparent;margin-bottom:3px;cursor:pointer;transition:all .15s}
+.lesson-row:hover,.lesson-row-active{background:var(--primary-soft);border-color:var(--primary-border)}
+.lesson-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot-available{background:var(--primary)}
+.dot-locked{background:#d1d5db}
+.lesson-name{font-size:.78rem;font-weight:500;color:var(--ink);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson-meta{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:4px}
+.lesson-time{font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:2px}
+.lesson-time svg{width:11px;height:11px}
+.diff-badge{font-size:.625rem;font-weight:700;padding:2px 6px;border-radius:9999px;white-space:nowrap}
+.diff-1{background:#dcfce7;color:#15803d}
+.diff-2{background:#dbeafe;color:#1d4ed8}
+.diff-3{background:#fef9c3;color:#854d0e}
+.diff-4{background:#fee2e2;color:#b91c1c}
+.lesson-chev{width:13px;height:13px;color:var(--primary);flex-shrink:0}
+.lesson-lock{width:12px;height:12px;color:#d1d5db;flex-shrink:0}
+.show-more{width:100%;padding:7px;text-align:center;font-size:.75rem;font-weight:600;color:var(--primary);background:transparent;border:none;cursor:pointer;border-radius:8px;margin-top:3px;transition:background .15s}
+.show-more:hover{background:var(--primary-soft)}
+
+/* ── PILL LOCKED ────────────────────────────────────────────── */
+.lesson-row-locked{opacity:.55;cursor:not-allowed}
+.lesson-row-locked:hover{background:transparent;border-color:transparent}
+
+/* Red/rose card accent */
+.sys-hdr-red{background:#fff1f1}
+.sys-icon-red{background:#fee2e2;color:#ef4444}
+/* Amber */
+.sys-hdr-amber{background:#fffbf0}
+.sys-icon-amber{background:#fef3c7;color:#d97706}
+/* Teal */
+.sys-hdr-teal{background:#f0fdf9}
+.sys-icon-teal{background:#d1fae5;color:#0d9488}
+/* Purple */
+.sys-hdr-purple{background:var(--primary-soft)}
+.sys-icon-purple{background:rgba(157,130,221,.18);color:var(--primary)}
+/* Indigo */
+.sys-hdr-indigo{background:#eef2ff}
+.sys-icon-indigo{background:#e0e7ff;color:#4f46e5}
+/* Emerald */
+.sys-hdr-emerald{background:#f0fdf4}
+.sys-icon-emerald{background:#dcfce7;color:#059669}
+/* Pink */
+.sys-hdr-pink{background:#fdf2f8}
+.sys-icon-pink{background:#fce7f3;color:#db2777}
+/* Stone */
+.sys-hdr-stone{background:#fafaf9}
+.sys-icon-stone{background:#e7e5e4;color:#78716c}
+/* Green */
+.sys-hdr-green{background:#f0fdf4}
+.sys-icon-green{background:#dcfce7;color:#16a34a}
+/* Violet */
+.sys-hdr-violet{background:#f5f3ff}
+.sys-icon-violet{background:#ede9fe;color:#7c3aed}
+/* Orange */
+.sys-hdr-orange{background:#fff7ed}
+.sys-icon-orange{background:#ffedd5;color:#ea580c}
+/* Fuchsia */
+.sys-hdr-fuchsia{background:#fdf4ff}
+.sys-icon-fuchsia{background:#fae8ff;color:#a21caf}
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ──────────────────────────────────────────────── -->
+<nav class="nav-wrap">
+  <div class="nav-eco">
+    <a href="#">Nursing</a>
+    <span class="nav-eco-sep">·</span>
+    <a href="#">Allied Health</a>
+    <span class="nav-eco-sep">·</span>
+    <a href="#">Specialties</a>
+    <span class="nav-eco-sep">·</span>
+    <a href="#">Behavioral Health</a>
+  </div>
+  <div class="nav-main">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-leaf">
+        <svg viewBox="0 0 20 20"><path d="M10 2C7 2 4 5 4 9c0 3.5 2.5 6.5 6 8 3.5-1.5 6-4.5 6-8 0-4-3-7-6-7zm0 2c2 0 4 2 4 5s-2 4.5-4 5.5C8 13.5 6 12 6 9c0-3 2-5 4-5z"/></svg>
+      </span>
+      NurseNest
+    </a>
+
+    <button class="nav-link">
+      Learning
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="nav-link">
+      Practice
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="nav-link">
+      Resources
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="nav-link nav-link-active">Lessons</button>
+    <button class="nav-link">Pricing</button>
+
+    <div class="nav-right">
+      <span class="nav-region">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        CA
+      </span>
+      <button class="btn-ghost">Sign In</button>
+      <button class="btn-primary">Start Free</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-badges">
+      <span class="hero-badge badge-green">Active Recall Learning</span>
+      <span class="hero-badge badge-blue">REx-PN Aligned</span>
+      <span class="hero-badge badge-purple">Spaced Repetition</span>
+    </div>
+    <h1>Retain More. Stress Less.<br>Pass the REx-PN.</h1>
+    <p>Our retention-focused learning system uses active recall and spaced repetition to help you master nursing concepts — so you remember what matters on exam day.</p>
+    <div class="hero-stats">
+      <div>
+        <span class="stat-val">240+</span>
+        <div class="stat-label">RPN Lessons</div>
+      </div>
+      <div>
+        <span class="stat-val">12</span>
+        <div class="stat-label">Body Systems</div>
+      </div>
+      <div>
+        <span class="stat-val">1,000+</span>
+        <div class="stat-label">Practice Questions</div>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#" class="cta-primary">
+        Start Studying Smarter
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#" class="cta-secondary">Explore Practice Questions</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURE STRIP ───────────────────────────────────────────── -->
+<div class="feature-strip">
+  <div class="feature-strip-in">
+    <div class="feature-item"><span class="feature-dot"></span><span class="feature-label">Evidence-based content</span></div>
+    <div class="feature-item"><span class="feature-dot"></span><span class="feature-label">Exam-focused lessons</span></div>
+    <div class="feature-item"><span class="feature-dot"></span><span class="feature-label">Created by nurses</span></div>
+    <div class="feature-item"><span class="feature-dot"></span><span class="feature-label">Updated regularly</span></div>
+    <div class="feature-item"><span class="feature-dot"></span><span class="feature-label">Progress tracking</span></div>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Section header & tabs -->
+  <div class="sec-hdr">
+    <h2>Clinical Lesson Library</h2>
+    <p>Explore structured nursing lessons organized by body system and clinical area.</p>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab tab-active">RPN Preview</button>
+      <button class="tab">RN Preview</button>
+      <button class="tab">NP Preview</button>
+    </div>
+  </div>
+
+  <!-- Toolbar: search + filter -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <input class="search-input" type="text" placeholder="Search lessons by title...">
+    </div>
+    <select class="filter-select">
+      <option>All Systems</option>
+      <option>Nursing Fundamentals (6)</option>
+      <option>Delegation &amp; Prioritization (6)</option>
+      <option>Clinical Scenarios (10)</option>
+      <option>Med Math &amp; Calculations (9)</option>
+      <option>Cardiovascular (28)</option>
+      <option>Respiratory (18)</option>
+      <option>Neurological (14)</option>
+    </select>
+  </div>
+
+  <!-- Upgrade banner (free user) -->
+  <div class="upgrade-banner">
+    <h3>Unlock the Full Lesson Library</h3>
+    <p>You're viewing a preview of available lessons. Subscribe to access the complete RPN lesson library with detailed content, quizzes, and progress tracking.</p>
+    <button class="btn-primary" style="border-radius:9999px;padding:8px 22px">View Plans</button>
+  </div>
+
+  <!-- Featured + Progress row -->
+  <div class="dash-row">
+    <div class="featured-card">
+      <h3>
+        <span class="featured-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </span>
+        Featured Topics
+      </h3>
+      <div class="featured-grid">
+        <div class="featured-topic">
+          <div class="ft-icon" style="background:#fee2e2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="ft-body"><span>Cardiovascular</span><small>28 lessons</small></div>
+          <svg class="ft-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="featured-topic">
+          <div class="ft-icon" style="background:#dbeafe">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          </div>
+          <div class="ft-body"><span>Respiratory</span><small>18 lessons</small></div>
+          <svg class="ft-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="featured-topic">
+          <div class="ft-icon" style="background:#ede9fe">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="ft-body"><span>Neurological</span><small>14 lessons</small></div>
+          <svg class="ft-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="featured-topic">
+          <div class="ft-icon" style="background:#dcfce7">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <div class="ft-body"><span>Pharmacology</span><small>22 lessons</small></div>
+          <svg class="ft-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="featured-topic">
+          <div class="ft-icon" style="background:#fce7f3">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="ft-body"><span>Maternal &amp; Reproductive</span><small>12 lessons</small></div>
+          <svg class="ft-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="featured-topic">
+          <div class="ft-icon" style="background:#e0e7ff">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M20 12h-2M4 12H2m10-8V2m0 20v-2m7.07-14.07-1.41 1.41M5.34 18.66l-1.41 1.41m14.14 0-1.41-1.41M5.34 5.34 3.93 3.93"/></svg>
+          </div>
+          <div class="ft-body"><span>Med Math</span><small>9 lessons</small></div>
+          <svg class="ft-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="progress-card">
+      <h3>Your Study Progress</h3>
+      <p>RPN Track · 3 of 82 lessons done</p>
+      <div class="prog-row">
+        <span class="prog-label">Overall Progress</span>
+        <span class="prog-num">4%</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" style="width:4%"></div></div>
+      <div class="prog-row">
+        <span class="prog-label">Cardiovascular</span>
+        <span class="prog-num">2 / 28</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" style="width:7%"></div></div>
+      <div class="prog-row">
+        <span class="prog-label">Neurological</span>
+        <span class="prog-num">1 / 14</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" style="width:7%"></div></div>
+      <div class="prog-mini-stats">
+        <div class="prog-mini-stat">
+          <span class="prog-mini-val">3</span>
+          <div class="prog-mini-label">Completed</div>
+        </div>
+        <div class="prog-mini-stat">
+          <span class="prog-mini-val">82</span>
+          <div class="prog-mini-label">Total</div>
+        </div>
+        <div class="prog-mini-stat">
+          <span class="prog-mini-val">5</span>
+          <div class="prog-mini-label">Day Streak</div>
+        </div>
+      </div>
+      <a href="#" class="prog-cta">Continue Studying</a>
+    </div>
+  </div>
+
+  <!-- ── LESSON SYSTEM CARDS ─────────────────────────────────── -->
+  <div class="lesson-grid">
+
+    <!-- Nursing Fundamentals -->
+    <div class="sys-card">
+      <div class="sys-card-hdr sys-hdr-teal">
+        <div class="sys-icon sys-icon-teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <span class="sys-title">Nursing Fundamentals</span>
+        <span class="sys-count">6 lessons</span>
+      </div>
+      <div class="sys-body">
+        <div class="lesson-row lesson-row-active">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Nursing Process (ADPIE) &amp; Clinical Reasoning</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Vital Signs: Red Flags &amp; Rapid Response</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Medication Administration: Rights &amp; Safety</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Infection Prevention &amp; PPE Standards</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Clinical Documentation: SBAR, DAR &amp; Legal</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Fluid Balance: I&amp;O, Dehydration &amp; Overload</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delegation -->
+    <div class="sys-card">
+      <div class="sys-card-hdr sys-hdr-amber">
+        <div class="sys-icon sys-icon-amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="sys-title">Delegation &amp; Prioritization</span>
+        <span class="sys-count">6 lessons</span>
+      </div>
+      <div class="sys-body">
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">ABCs &amp; Immediate Life Threat Prioritization</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Unstable vs Stable: Prioritization Framework</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Who to See First: Clinical Decision Framework</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Delegation Rules &amp; Scope of Practice</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">SBAR Escalation: When &amp; How to Escalate</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Post-Op Complications: Prioritization</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cardiovascular -->
+    <div class="sys-card">
+      <div class="sys-card-hdr sys-hdr-red">
+        <div class="sys-icon sys-icon-red">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <span class="sys-title">Cardiovascular</span>
+        <span class="sys-count">28 lessons</span>
+      </div>
+      <div class="sys-body">
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Heart Failure</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Hypertension</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Cardiac Assessment and ECG</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Conduction System and Dysrhythmias</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Pulmonary Embolism</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Shock Types: Hypovolemic, Cardiogenic, Septic</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <button class="show-more">Show 22 more</button>
+      </div>
+    </div>
+
+    <!-- Med Math -->
+    <div class="sys-card">
+      <div class="sys-card-hdr sys-hdr-indigo">
+        <div class="sys-icon sys-icon-indigo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+        </div>
+        <span class="sys-title">Med Math &amp; Calculations</span>
+        <span class="sys-count">9 lessons</span>
+      </div>
+      <div class="sys-body">
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Dosage Calculation Fundamentals</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">IV Flow Rate Calculations</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Weight-Based Dosing Calculations</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Infusion Rate &amp; Titration Calculations</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Pediatric Dosing &amp; Safety</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <button class="show-more">Show 4 more</button>
+      </div>
+    </div>
+
+    <!-- Maternal -->
+    <div class="sys-card">
+      <div class="sys-card-hdr sys-hdr-pink">
+        <div class="sys-icon sys-icon-pink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <span class="sys-title">Maternal &amp; Reproductive</span>
+        <span class="sys-count">6 lessons</span>
+      </div>
+      <div class="sys-body">
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Antenatal Corticosteroids (Betamethasone)</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Antenatal Diagnostic Testing</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Fetal Monitoring: Late &amp; Variable Decels</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Contraceptive Methods</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Multiple Gestation</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">Mastectomy Post-Operative Care</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mental Health -->
+    <div class="sys-card">
+      <div class="sys-card-hdr sys-hdr-violet">
+        <div class="sys-icon sys-icon-violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        <span class="sys-title">Mental Health</span>
+        <span class="sys-count">8 lessons</span>
+      </div>
+      <div class="sys-body">
+        <div class="lesson-row">
+          <span class="lesson-dot dot-available"></span>
+          <span class="lesson-name">DSM-5 Personality Disorders (Cluster A/B/C)</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row lesson-row-locked">
+          <span class="lesson-dot dot-locked"></span>
+          <span class="lesson-name">Schizophrenia Spectrum Disorders</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</span>
+            <span class="diff-badge diff-4">Hard</span>
+            <svg class="lesson-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row lesson-row-locked">
+          <span class="lesson-dot dot-locked"></span>
+          <span class="lesson-name">Mood Disorders: Depression &amp; Bipolar</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-3">Moderate</span>
+            <svg class="lesson-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+        </div>
+        <div class="lesson-row lesson-row-locked">
+          <span class="lesson-dot dot-locked"></span>
+          <span class="lesson-name">Anxiety Disorders &amp; Therapeutic Interventions</span>
+          <div class="lesson-meta">
+            <span class="lesson-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</span>
+            <span class="diff-badge diff-2">Easy</span>
+            <svg class="lesson-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+        </div>
+        <button class="show-more">Show 4 more</button>
+      </div>
+    </div>
+
+  </div><!-- /lesson-grid -->
+
+</main>
+
+<!-- ── FOOTER STUB ─────────────────────────────────────────────── -->
+<footer style="background:#fff;border-top:1px solid var(--sep);padding:24px;text-align:center">
+  <p style="font-size:.75rem;color:var(--muted)">© 2026 NurseNest · Evidence-based nursing exam prep for RPN, RN, and NP</p>
+</footer>
+
+</body>
+</html>

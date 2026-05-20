@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "portugal",
+  "entries": [
+    {
+      "slug": "pt-sample-001-ordem-en",
+      "title": "Portuguese nursing regulation — orientation (sample)",
+      "language": "en",
+      "countryTargets": ["PT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-pt-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "pt-sample-002-pt",
+      "title": "Ordem dos Enfermeiros — visão geral (exemplo)",
+      "language": "pt",
+      "countryTargets": ["PT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-pt-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "pt-sample-003-uk-en",
+      "title": "UK NMC — migration pathway framing (sample)",
+      "language": "en",
+      "countryTargets": ["PT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-pt-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "pt-sample-004-nclex-en",
+      "title": "US NCLEX-RN — parallel prep notes (sample)",
+      "language": "en",
+      "countryTargets": ["PT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-pt-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "pt-sample-005-eu-en",
+      "title": "EU mobility — educational overview (sample)",
+      "language": "en",
+      "countryTargets": ["PT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-pt-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "pt-sample-006-reasoning-en",
+      "title": "Clinical reasoning — NurseNest inventory alignment (sample)",
+      "language": "en",
+      "countryTargets": ["PT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-pt-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

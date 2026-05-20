@@ -1,0 +1,1418 @@
+{
+  "batchId": "np-advanced-batch-01",
+  "generatedDate": "2026-04-11",
+  "sourceBlueprint": "nursenest-core/data/blueprints/advanced-practice/np-advanced-practice-blueprint.json",
+  "status": "draft",
+  "scope": "NP advanced practice — 13 topics across all 7 multi-axis case combinations",
+  "targetExams": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+  "axisMap": {
+    "case1": "core + intermediate + adult",
+    "case2": "core + advanced + chronic-disease",
+    "case3": "high-risk + advanced + urgent-care",
+    "case4": "high-risk + intermediate",
+    "case5": "special-population + advanced + LGBTQ+",
+    "case6": "special-population + intermediate/advanced + older-adult",
+    "case7": "supporting + intermediate"
+  },
+  "lessons": [
+
+    {
+      "topicSlug": "knee-pain-differential",
+      "topicName": "Knee Pain Differential: Structural vs Inflammatory vs Referred",
+      "caseAxis": "case1",
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": ["adult"],
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Knee pain is among the top 10 outpatient musculoskeletal complaints NPs manage. The central challenge is separating benign, self-limited structural injuries from inflammatory arthropathies and referred pain, which require distinct management pathways. Missing septic arthritis or an acute ligamentous tear requiring surgical consultation is a high-stakes error in primary care.",
+
+        "coreConceptsAndDifferential": {
+          "structuralMechanical": [
+            {
+              "condition": "Osteoarthritis (OA)",
+              "features": "Insidious onset, age >45, morning stiffness <30 minutes, worse with activity, crepitus, bony enlargement, no systemic symptoms. Most common cause in older adults.",
+              "diagnostics": "Clinical diagnosis; X-ray (joint space narrowing, osteophytes, subchondral sclerosis) confirms if >45 with typical features.",
+              "management": "First-line: exercise therapy + weight loss; acetaminophen PRN; topical NSAIDs (diclofenac gel); oral NSAIDs if renal function adequate; intra-articular corticosteroid injections for moderate-severe flares."
+            },
+            {
+              "condition": "Patellofemoral Pain Syndrome (PFPS)",
+              "features": "Anterior knee pain, worse with stairs, squatting, prolonged sitting ('movie sign'). Common in young active adults and adolescents. No effusion.",
+              "diagnostics": "Clinical; Clarke's test (patellar grind). X-ray to rule out osteochondral lesion if acute or atypical.",
+              "management": "PT with quadriceps strengthening (VMO focus), activity modification, taping, NSAIDs short-term."
+            },
+            {
+              "condition": "Meniscal Injury",
+              "features": "Medial or lateral joint line tenderness, McMurray's test positive, joint effusion common, locking or clicking. Acute (twisting mechanism) or degenerative (older adult, no trauma).",
+              "diagnostics": "Clinical assessment + MRI for acute tears; X-ray to rule out fracture if acute traumatic.",
+              "management": "Degenerative: conservative (PT, analgesics); acute bucket-handle or locking: orthopedic referral."
+            },
+            {
+              "condition": "Prepatellar / Pes Anserine Bursitis",
+              "features": "Prepatellar: localized anterior swelling over patella, occupation-related (kneeling). Pes anserine: medial pain 2–3 cm below medial joint line, common in obese older adults with OA.",
+              "diagnostics": "Clinical. Aspirate prepatellar bursa only if septic bursitis suspected (warmth, fever, history of skin breach).",
+              "management": "RICE, NSAIDs, padding, avoid kneeling; corticosteroid injection if refractory."
+            },
+            {
+              "condition": "Ligamentous Sprain (MCL/LCL/ACL/PCL)",
+              "features": "Traumatic mechanism (valgus stress for MCL, varus for LCL, pivot/deceleration for ACL). Acute swelling, instability, positive stress tests.",
+              "diagnostics": "Clinical stress tests + X-ray (Ottawa Knee Rules to exclude fracture); MRI for surgical planning.",
+              "management": "MCL/LCL grade I-II: conservative. ACL/PCL complete tear: orthopedic referral."
+            }
+          ],
+          "inflammatory": [
+            {
+              "condition": "Gout",
+              "features": "Acute monoarthritis, severe pain peaking within 24 hours, swollen erythematous warm joint, often 1st MTP but can affect knee. Associated with hyperuricemia, alcohol, diuretic use.",
+              "diagnostics": "Joint aspiration (gold standard): negatively birefringent urate crystals. Serum uric acid may be normal during acute attack. X-ray shows punched-out erosions with overhanging edge in chronic gout.",
+              "management": "Acute: colchicine (0.6 mg BID x 3 days or until resolved), or NSAIDs, or systemic corticosteroids if contraindicated. Long-term: urate-lowering therapy (allopurinol) if ≥2 flares/year or tophi."
+            },
+            {
+              "condition": "Septic Arthritis",
+              "features": "EMERGENCY. Acute monoarthritis with fever, severe pain, limited ROM, hot joint. Risk factors: immunocompromised, IV drug use, recent joint injection, prior joint disease, skin infection.",
+              "diagnostics": "Joint aspiration STAT: WBC >50,000/mm³ (often >100,000), PMN predominance, Gram stain + culture. Blood cultures. CBC, ESR, CRP elevated.",
+              "management": "Immediate ED referral + joint washout. Do NOT give antibiotics before aspiration if possible — confirm diagnosis first."
+            },
+            {
+              "condition": "Rheumatoid Arthritis",
+              "features": "Symmetric polyarthritis, morning stiffness >1 hour, affects MCPs/PIPs/wrists preferentially; knee involvement in established disease. Systemic: fatigue, low-grade fever, RF/anti-CCP positive.",
+              "diagnostics": "RF, anti-CCP, ESR, CRP, joint X-rays (juxta-articular osteopenia, erosions); rheumatology referral.",
+              "management": "DMARDs (methotrexate first-line); bridge with NSAIDs/prednisone."
+            },
+            {
+              "condition": "Pseudogout (CPPD)",
+              "features": "Calcium pyrophosphate deposition; elderly, involves knee (wrist, MCP also). Presents similarly to gout. X-ray shows chondrocalcinosis (linear calcification in cartilage).",
+              "diagnostics": "Aspiration: positively birefringent rhomboid crystals.",
+              "management": "Same as gout acutely (colchicine, NSAIDs, steroids); no equivalent urate-lowering therapy."
+            }
+          ],
+          "referred": [
+            {
+              "condition": "Hip OA / Hip Pathology",
+              "features": "Anterior knee or medial thigh pain referred from hip; reduced internal rotation of hip on exam. Key: knee exam is normal. ALWAYS examine the hip when knee pain is atypical.",
+              "management": "Address hip pathology; hip X-ray."
+            },
+            {
+              "condition": "Lumbar Radiculopathy (L3-L4)",
+              "features": "Anterior thigh/knee pain in L3-L4 dermatomal pattern; associated with low back pain, positive femoral stretch test.",
+              "management": "Spine imaging + PT."
+            }
+          ]
+        },
+
+        "managementApproach": {
+          "initialEvaluation": [
+            "History: onset (acute vs insidious), mechanism (trauma vs atraumatic), location (anterior/medial/lateral/posterior), aggravating factors (stairs, squatting, rest pain), morning stiffness duration, systemic symptoms",
+            "Physical exam: gait, alignment (valgus/varus), effusion assessment (ballottement, bulge sign), palpation (joint lines, patella, bursae), ROM active/passive, special tests (McMurray, Lachman, valgus/varus stress, Clarke's)",
+            "ALWAYS examine the hip and lower lumbar spine in every knee complaint"
+          ],
+          "imagingDecision": {
+            "Ottawa_Knee_Rules_indications": "Age ≥55, fibular head tenderness, isolated patellar tenderness, inability to flex to 90°, inability to bear weight for 4 steps — if any present, X-ray indicated",
+            "MRI_indications": "Suspected ligamentous tear, meniscal injury in surgical candidate, atypical presentation, prior X-ray negative but significant functional impairment"
+          },
+          "conservativeManagement": "RICE (Rest, Ice, Compression, Elevation) for acute injuries; scheduled acetaminophen for OA; short-course NSAIDs with GI protection; PT referral; activity modification; weight loss counseling for OA/PFPS"
+        },
+
+        "redFlagsEscalation": [
+          "Fever + monoarthritis → septic arthritis until proven otherwise → JOINT ASPIRATION or ED",
+          "Inability to bear weight + suspected fracture → Ottawa rules positive → X-ray, then orthopedic if fracture",
+          "Acute locked knee (unable to extend) → acute meniscal bucket-handle → orthopedic same-day/next-day referral",
+          "Rapidly expanding effusion, warmth disproportionate to trauma → consider hemarthrosis or infection",
+          "Suspected ACL/PCL complete tear with significant instability → orthopedic referral within 1-2 weeks",
+          "Suspected malignancy: night pain, bone tenderness, systemic symptoms in child/young adult → urgent imaging"
+        ],
+
+        "populationConsiderations": {
+          "adult_general": "Multi-step decision making around imaging (Ottawa rules), medication selection (NSAIDs vs acetaminophen based on renal function, GI risk), and PT vs injection timing",
+          "older_adult": "OA predominates; NSAIDs require caution (GI, cardiovascular, renal); topical NSAIDs preferred; intra-articular injections as bridge; total knee arthroplasty for refractory severe OA",
+          "young_active_adult": "PFPS and ligamentous injuries predominate; avoid premature escalation to imaging before conservative trial"
+        },
+
+        "followUpAndMonitoring": {
+          "conservativeCourse": "Reassess at 4-6 weeks for structural/mechanical diagnoses treated conservatively",
+          "escalationTriggers": "No improvement after 6-8 weeks of conservative therapy → X-ray if not done; consider orthopedic referral",
+          "goutyArthritis": "After acute gout resolves, check serum uric acid (goal <6 mg/dL on ULT); initiate allopurinol if indicated; reassess adherence at 4-6 weeks",
+          "OA": "Quarterly assessment of pain, function, and BMI; review NSAID use and GI/renal safety annually"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "topicName": "UTI Management: Uncomplicated vs Complicated, Antibiotic Stewardship",
+      "caseAxis": "case1",
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": ["adult", "reproductive-health"],
+      "domain": "Acute Primary Care Presentations",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "UTI is the most common reason antibiotics are prescribed in outpatient settings. NPs must distinguish uncomplicated from complicated UTI to select the safest, most effective antibiotic and avoid contributing to resistance. Inappropriate fluoroquinolone prescribing for uncomplicated UTI is a major stewardship failure. Missed pyelonephritis and missed UTI in pregnancy carry serious consequences.",
+
+        "coreConceptsAndDifferential": {
+          "definitions": {
+            "uncomplicatedUTI": "Acute cystitis in a non-pregnant adult woman with normal urinary tract anatomy and immune status. Symptoms: dysuria, frequency, urgency, suprapubic discomfort. No fever, no flank pain, no systemic illness.",
+            "complicatedUTI": "Any UTI with features suggesting upper tract involvement, systemic illness, or host/structural factors that increase treatment failure risk",
+            "complicatingFactors": ["Male sex", "Pregnancy", "Diabetes mellitus (especially poorly controlled)", "Indwelling urinary catheter", "Urinary tract anatomic abnormality or obstruction", "Immunocompromised state", "Symptoms present >7 days before presentation", "Prior treatment failure or recurrence within 2 weeks", "Recent urinary tract instrumentation"]
+          },
+          "pyelonephritis": {
+            "features": "Flank pain (costovertebral angle tenderness), fever ≥38°C, nausea/vomiting, rigors. May also have lower urinary symptoms. CBC: leukocytosis. Urinalysis: pyuria + bacteriuria, WBC casts pathognomonic.",
+            "admissionCriteria": "Inability to tolerate oral fluids, severe illness, immunocompromise, pregnancy, compliance concerns, failure of outpatient therapy"
+          },
+          "asymptomatic_bacteriuria": {
+            "definition": "Significant bacteriuria (≥10^5 CFU/mL) without UTI symptoms",
+            "treatWhen": "Pregnancy (screen and treat) and pre-urological procedure only",
+            "doNotTreat": "Elderly, diabetics, catheterized patients, otherwise healthy adults — treatment increases resistance without benefit"
+          }
+        },
+
+        "managementApproach": {
+          "diagnosis": [
+            "Urinalysis with microscopy: pyuria (≥5 WBC/hpf), nitrites (gram-negative bacteria), leukocyte esterase; dipstick has ~80% sensitivity for pyuria",
+            "Urine culture: indicated for complicated UTI, recurrent UTI, pyelonephritis, pregnancy, treatment failure; not required for straightforward uncomplicated cystitis in healthy women",
+            "Clinical diagnosis without culture is acceptable for uncomplicated cystitis if symptoms are classic"
+          ],
+          "antibioticSelection": {
+            "uncomplicatedCystitis_firstLine": [
+              "Nitrofurantoin monohydrate/macrocrystals (Macrobid): 100 mg BID x 5 days — preferred due to minimal resistance and low collateral damage. AVOID if CrCl <30 mL/min or pyelonephritis (poor tissue penetration).",
+              "Trimethoprim-sulfamethoxazole (TMP-SMX): 160/800 mg (DS) BID x 3 days — use only if local resistance <20%. Avoid in first trimester and at term.",
+              "Fosfomycin: 3 g sachet single dose — convenient, good for E. coli; less effective against Klebsiella."
+            ],
+            "avoid_uncomplicated": "Fluoroquinolones (ciprofloxacin, levofloxacin): AVOID for uncomplicated cystitis — high collateral damage, tendinopathy/aortic aneurysm risk, reserve for complicated UTI and pyelonephritis when other agents unsuitable.",
+            "complicatedUTI_pyelonephritis_outpatient": [
+              "Ciprofloxacin 500 mg BID x 7 days (if local susceptibility adequate, avoid if community fluoroquinolone resistance >10%)",
+              "TMP-SMX DS BID x 14 days (culture-guided)",
+              "Oral cephalosporin (cephalexin 500 mg QID x 7-10 days) — less preferred for pyelonephritis but adequate for complicated cystitis",
+              "Obtain culture BEFORE starting antibiotics for all complicated UTI; adjust based on susceptibilities"
+            ],
+            "maleSex": "Consider 7-10 day course; exclude prostatitis (perineal pain, tender boggy prostate on DRE). If prostatitis suspected: 4-6 weeks fluoroquinolone or TMP-SMX (excellent prostate penetration).",
+            "catheterAssociated": "Treat only if symptomatic (CAUTI). Remove or replace catheter if possible. Culture-directed therapy 5-7 days."
+          },
+          "pregnancy": {
+            "screening": "Screen all pregnant patients for asymptomatic bacteriuria at first prenatal visit; treat if positive (reduces pyelonephritis, preterm labor).",
+            "safeAntibiotics": [
+              "Nitrofurantoin: safe in 2nd trimester; avoid at 38+ weeks (theoretical hemolytic anemia in neonate)",
+              "Cephalexin: safe throughout pregnancy",
+              "Amoxicillin-clavulanate: acceptable but higher resistance"
+            ],
+            "avoid_pregnancy": ["TMP-SMX (first trimester — folate antagonist; near term — kernicterus risk)", "Fluoroquinolones (theoretical cartilage risk)"],
+            "pyelonephritis_pregnancy": "Hospitalize in most cases due to risk of preterm labor and sepsis"
+          },
+          "recurrentUTI": {
+            "definition": "≥2 episodes in 6 months or ≥3 in 12 months",
+            "workup": "Urine culture, consider urology referral to rule out structural abnormality",
+            "prevention": [
+              "Behavioral: post-coital voiding, front-to-back hygiene, avoid spermicides",
+              "Vaginal estrogen cream for postmenopausal women — reduces recurrence significantly",
+              "Post-coital prophylaxis (single dose TMP-SMX or nitrofurantoin) if coitally-related",
+              "Continuous low-dose prophylaxis (nitrofurantoin 50-100 mg nightly x 6-12 months) for frequent recurrence",
+              "Cranberry products: modest evidence, safe adjunct"
+            ]
+          }
+        },
+
+        "redFlagsEscalation": [
+          "Fever + flank pain + nausea → pyelonephritis → obtain culture, treat with fluoroquinolone or cephalosporin, admit if cannot tolerate orals",
+          "Sepsis signs (HR >100, BP <90, altered mentation) → urosepsis → ED IMMEDIATELY",
+          "UTI in pregnancy with systemic symptoms → hospitalize",
+          "Treatment failure at 72 hours → culture and susceptibilities essential → escalate antibiotic",
+          "Recurrent UTI in males → prostate workup, urology referral"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": "Bacteriuria very common in elderly (>50% in women, >30% in men in long-term care) — DO NOT TREAT without symptoms. Atypical presentations: confusion, falls, decline in function may be the only symptoms of UTI in frail elderly. However, bacteriuria + atypical symptoms is not always causal — clinical judgment required.",
+          "reproductive_health": "Pregnancy screening mandatory. Use pregnancy-safe antibiotics. Postmenopausal women benefit from vaginal estrogen for recurrence prevention.",
+          "diabetes": "Higher risk for complications; obtain culture; consider 7-10 day course; monitor for emphysematous pyelonephritis (CT if not improving)"
+        },
+
+        "followUpAndMonitoring": {
+          "uncomplicated": "No test-of-cure culture needed if symptoms resolve completely; reassess if symptoms persist at 48-72 hours",
+          "pyelonephritis": "Test-of-cure culture 1 week post-treatment; follow-up visit at 48-72 hours if outpatient",
+          "pregnancy": "Test-of-cure culture essential after treatment; repeat screening at 28-32 weeks",
+          "recurrentUTI": "Culture-direct all episodes; reassess prevention strategy at 6-12 months"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "topicName": "Type 2 Diabetes: Intensification Beyond Metformin",
+      "caseAxis": "case2",
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "older-adult", "chronic-disease"],
+      "domain": "Chronic Disease Management",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Metformin remains the foundational agent for T2DM, but >50% of patients require intensification within 3 years. The NP's challenge at intensification is not just picking an antihyperglycemic — it is selecting the agent that simultaneously treats the most important comorbidity risk. GLP-1 receptor agonists and SGLT-2 inhibitors have transformed T2DM management by offering cardiovascular and renal protection independent of A1c lowering. Knowing when and how to prescribe these agents, including dosing, monitoring, and contraindications, is now core NP competency.",
+
+        "coreConceptsAndDifferential": {
+          "whenToIntensify": [
+            "A1c not at individualized goal after 3 months of maximum tolerated metformin",
+            "At diagnosis: if A1c ≥10% or patient is symptomatic (polyuria, weight loss) → start dual therapy or insulin initially",
+            "Progressive beta-cell failure over time despite prior adherence"
+          ],
+          "individualizedA1cTargets": {
+            "general_healthy": "<7.0% (ADA 2024)",
+            "older_adult_healthy_longExpectancy": "<7.5%",
+            "older_adult_complex_comorbidities": "7.5-8.0% — tighter control risks hypoglycemia, falls",
+            "older_adult_veryComplex_limitedExpectancy": "<8.5% — avoid hypoglycemia as primary goal"
+          },
+          "drugClasses": {
+            "GLP1_receptorAgonists": {
+              "examples": "Semaglutide (Ozempic SC, Rybelsus oral), liraglutide (Victoza), dulaglutide (Trulicity)",
+              "mechanism": "Incretin mimetic: glucose-dependent insulin secretion, glucagon suppression, delayed gastric emptying, satiety",
+              "keyBenefits": ["Cardiovascular: MACE reduction in ASCVD-proven patients (LEADER, SUSTAIN-6)", "Weight loss (average 5-10 lbs, semaglutide up to 15 lbs)", "Low intrinsic hypoglycemia risk"],
+              "semaglutide_dosing": "Start 0.25 mg SC weekly x 4 weeks → 0.5 mg weekly → titrate to 1 mg then 2 mg at 4-week intervals based on response/tolerability",
+              "semaglutide_oral": "3 mg daily x 1 month → 7 mg → 14 mg; must take on empty stomach with ≤120 mL water; NO food for 30 min after",
+              "contraindications": ["Personal or family history of medullary thyroid carcinoma", "Multiple endocrine neoplasia type 2 (MEN2)", "Prior pancreatitis (relative — use with caution)"],
+              "sideEffects": "Nausea, vomiting, diarrhea (especially initial titration — most resolve); rare: pancreatitis, gallbladder disease",
+              "monitoring": "A1c q3 months until stable; weight; GI symptoms; renal function baseline"
+            },
+            "SGLT2_inhibitors": {
+              "examples": "Empagliflozin (Jardiance), dapagliflozin (Farxiga), canagliflozin (Invokana)",
+              "mechanism": "Block renal glucose reabsorption → glycosuria; also reduces sodium reabsorption → blood pressure, weight loss, volume reduction",
+              "keyBenefits": [
+                "Heart failure: reduced HHF (EMPEROR-Reduced, DAPA-HF) — beneficial even without T2DM",
+                "CKD: slows GFR decline (CREDENCE, DAPA-CKD)",
+                "ASCVD: modest CV benefit (EMPA-REG)",
+                "Weight loss 2-4 kg",
+                "BP reduction 2-4 mmHg systolic"
+              ],
+              "empagliflozin_dosing": "10 mg daily (start); may increase to 25 mg daily",
+              "dapagliflozin_dosing": "10 mg daily (approved for HFrEF and CKD even without T2DM)",
+              "contraindications": ["eGFR <30 (no glycemic effect; still CKD-protective role for dapagliflozin/empagliflozin down to eGFR ≥20 for HF/CKD indication)", "Type 1 DM (DKA risk)", "Recurrent UTIs or genital mycotic infections (relative)"],
+              "sideEffects": "Genital mycotic infections (most common — counsel on hygiene), UTI, polyuria; rare: DKA (euglycemic — measure ketones not just glucose if symptomatic), Fournier's gangrene, volume depletion",
+              "hold_perioperative": "Hold SGLT-2 inhibitors 3 days before major surgery (euglycemic DKA risk)",
+              "monitoring": "eGFR and potassium q6 months; genital symptoms; weight"
+            },
+            "DPP4_inhibitors": {
+              "examples": "Sitagliptin (Januvia), saxagliptin, linagliptin",
+              "mechanism": "Inhibit DPP-4 enzyme → increased endogenous GLP-1 → glucose-dependent insulin secretion",
+              "keyBenefits": ["Weight neutral", "Low hypoglycemia risk", "Renal dose adjustment available (sitagliptin)", "CV safety confirmed (TECOS, SAVOR-TIMI)"],
+              "linagliptin_advantage": "No renal dose adjustment required — preferred in CKD across all stages",
+              "saxagliptin_caution": "Increased HHF risk — AVOID in heart failure",
+              "dosing": "Sitagliptin 100 mg daily (reduce to 50 mg if CrCl 30-50; 25 mg if <30); Linagliptin 5 mg daily",
+              "modest_A1c_lowering": "0.5-0.8% — less potent than GLP-1 or SGLT-2"
+            },
+            "sulfonylureas": {
+              "examples": "Glipizide, glimepiride, glyburide",
+              "mechanism": "Stimulate beta-cell insulin secretion independent of glucose",
+              "keyBenefits": ["Inexpensive", "Significant A1c lowering (1-2%)", "Oral"],
+              "majorRisk": "HYPOGLYCEMIA — especially in elderly, CKD, missed meals",
+              "doNotUse": "Glyburide in older adults (long-acting, active metabolites accumulate) — Beers Criteria",
+              "preferred": "Glipizide (shorter-acting, less hypoglycemia) if sulfonylurea needed",
+              "weightGain": "2-4 kg typical; not preferred in obese patients"
+            },
+            "insulin": {
+              "when": "A1c >10%, symptomatic hyperglycemia, failure of oral agents, acute illness, pregnancy",
+              "initiation": "Basal insulin (glargine, detemir) starting at 10 units SC nightly (or 0.1-0.2 units/kg); titrate by 2 units every 3 days to fasting glucose 80-130",
+              "olderAdult_caution": "Avoid complex regimens; use prefilled pens; titrate slowly; consider CGM to detect nocturnal hypoglycemia"
+            }
+          },
+          "comorbidityDrivenSelection": {
+            "ASCVD_confirmed": "Add GLP-1 RA (semaglutide, liraglutide) or SGLT-2 inhibitor (empagliflozin, dapagliflozin) — both reduce MACE",
+            "HFrEF": "SGLT-2 inhibitor first (dapagliflozin or empagliflozin) — strongest HHF evidence; AVOID saxagliptin (DPP-4), thiazolidinediones",
+            "CKD_stage3b4": "SGLT-2 inhibitor for nephroprotection; GLP-1 RA safe; avoid metformin if eGFR <30; avoid sulfonylureas",
+            "weightLoss_needed": "GLP-1 RA > SGLT-2 inhibitor > DPP-4 > sulfonylureas/insulin",
+            "costConstrained": "Sulfonylureas or NPH insulin as least expensive options; generic metformin+glipizide combination"
+          }
+        },
+
+        "managementApproach": {
+          "stepwiseIntensification": [
+            "Step 1: Optimize metformin (max tolerated dose with food); add GI-protective strategies",
+            "Step 2: If A1c not at goal after 3 months — add second agent based on comorbidity driver (ASCVD → GLP-1 or SGLT-2; HF → SGLT-2; CKD → SGLT-2; weight → GLP-1; cost → sulfonylurea)",
+            "Step 3: Triple therapy if needed — GLP-1 + SGLT-2 + metformin is well-tolerated combination with complementary mechanisms",
+            "Step 4: Add basal insulin if oral/injectable non-insulin agents inadequate"
+          ],
+          "prescribingWorkflow_GLP1": [
+            "Check contraindications (thyroid cancer personal/family history, MEN2, pancreatitis history)",
+            "Start lowest dose; titrate monthly",
+            "Counsel on GI side effects (nausea resolves in 4-8 weeks for most); take with small meal",
+            "Ensure patient has auto-injector training or practice in office",
+            "Monitor weight, A1c at 3 months"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "Euglycemic DKA on SGLT-2 inhibitor: normal or mildly elevated glucose, but ketonemia — check serum/urine ketones if abdominal pain, nausea, fatigue; hold SGLT-2 and send to ED",
+          "Severe hypoglycemia on sulfonylurea or insulin: blood glucose <54 mg/dL with symptoms — oral glucose if conscious; glucagon kit if unconscious; reduce sulfonylurea dose",
+          "Pancreatitis symptoms (persistent severe epigastric pain radiating to back) on GLP-1 RA → hold medication → ED evaluation",
+          "Rapid A1c decline from >10% → do NOT target <7% immediately (increased risk of MACE events) — gradual reduction over 3-6 months"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": {
+            "targets": "Liberalize A1c target to 7.5-8.0%; primary goal is avoiding hypoglycemia and functional decline",
+            "preferred_agents": "GLP-1 RA (no hypoglycemia risk), DPP-4 inhibitors (safe, weight neutral), linagliptin (no renal adjustment)",
+            "avoid": "Glyburide (Beers Criteria); long-acting sulfonylureas; complex insulin regimens without adequate support; NSAIDs concurrently",
+            "renal_dosing": "Metformin: hold if eGFR <30; reduce if eGFR 30-45. Sitagliptin: dose-reduce based on eGFR. SGLT-2: check indication-specific eGFR thresholds.",
+            "polypharmacy": "Review entire medication list at every visit; deprescribing opportunities often arise as T2DM improves with GLP-1/SGLT-2"
+          },
+          "chronic_disease": "Longitudinal monitoring: A1c q3-6 months; annual microalbuminuria, eGFR, lipids, foot exam, dilated eye exam, blood pressure; dental and depression screening"
+        },
+
+        "followUpAndMonitoring": {
+          "schedule": "A1c every 3 months until at goal, then every 6 months; BP at every visit; weight at every visit",
+          "labs": "BMP (renal function, potassium) every 6-12 months; annual lipid panel; annual urine albumin-to-creatinine ratio (UACR); LFTs if on thiazolidinediones",
+          "complications_surveillance": "Annual dilated fundus exam; annual foot exam with monofilament; dental referral; depression screening (PHQ-9)",
+          "selfMonitoring": "SMBG most useful for those on insulin or sulfonylureas; CGM preferred if on insulin; discuss hypoglycemia recognition and treatment plan",
+          "referral_triggers": "Nephrology if eGFR <30 or rapidly declining; ophthalmology for any retinopathy; endocrinology if A1c uncontrolled despite triple therapy or complex insulin needs"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "topicName": "COPD: GOLD Staging, Inhaler Selection, and Exacerbation Prevention",
+      "caseAxis": "case2",
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "older-adult", "chronic-disease"],
+      "domain": "Chronic Disease Management",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "COPD is the third leading cause of death in the US and is profoundly under-treated in primary care. NPs frequently manage COPD longitudinally, including initial spirometric diagnosis, GOLD-based inhaler escalation, exacerbation management, and admission triage. The most common errors are: under-diagnosing COPD, under-treating with only PRN SABA, over-relying on ICS without clear indication, and delaying pulmonary rehabilitation referral.",
+
+        "coreConceptsAndDifferential": {
+          "diagnosis": {
+            "spirometry": "Post-bronchodilator FEV1/FVC <0.70 confirms airflow obstruction. Required for diagnosis — do NOT diagnose COPD by symptoms alone.",
+            "GOLD_spirometric_grades": {
+              "GOLD_1": "FEV1 ≥80% predicted — mild",
+              "GOLD_2": "FEV1 50-79% — moderate",
+              "GOLD_3": "FEV1 30-49% — severe",
+              "GOLD_4": "FEV1 <30% — very severe"
+            }
+          },
+          "GOLD_ABE_assessment": {
+            "description": "GOLD 2024 ABE replaces ABCD. Uses symptom burden + exacerbation history (NOT spirometry grade) for inhaler escalation decisions.",
+            "symptomTools": "CAT (COPD Assessment Test): ≥10 = more symptoms; mMRC dyspnea scale ≥2 = more symptoms",
+            "groupA": "0-1 moderate exacerbations/year, not leading to hospitalization, AND fewer symptoms (CAT <10 or mMRC 0-1)",
+            "groupB": "0-1 moderate exacerbations, not hospitalizing, AND more symptoms (CAT ≥10 or mMRC ≥2)",
+            "groupE": "≥2 moderate exacerbations OR ≥1 leading to hospitalization (regardless of symptom burden)"
+          },
+          "inhalerClasses": {
+            "SABA": "Short-acting beta-2 agonist (albuterol MDI) — rescue only; no scheduled use as sole therapy",
+            "SAMA": "Short-acting muscarinic antagonist (ipratropium) — rescue alternative; less bronchospasm rebound than SABA",
+            "LAMA": "Long-acting muscarinic antagonist (tiotropium HandiHaler or Respimat; umeclidinium; aclidinium) — cornerstone maintenance; once daily",
+            "LABA": "Long-acting beta-2 agonist (salmeterol, formoterol, indacaterol) — BID or QD; do NOT use without LAMA in COPD (unlike asthma)",
+            "ICS": "Inhaled corticosteroid (fluticasone, budesonide) — NOT first-line in COPD; adds benefit in eosinophilic phenotype (blood eosinophils ≥300) or frequent exacerbators"
+          },
+          "initialInhalerSelection_GOLD2024": {
+            "groupA": "Offer bronchodilator (any class) — SABA PRN or LAMA if more persistent symptoms",
+            "groupB": "LAMA alone or LAMA + LABA (if highly symptomatic)",
+            "groupE": "LAMA + LABA as initial therapy; add ICS if blood eosinophils ≥300 cells/μL or frequent exacerbations despite LAMA+LABA"
+          },
+          "ICS_appropriateUse": {
+            "add_when": "Blood eosinophils ≥300 cells/μL, ≥2 exacerbations/year despite LAMA+LABA, concurrent asthma-COPD overlap",
+            "avoid_when": "Recurrent pneumonia (ICS increases risk), blood eosinophils <100 cells/μL, mycobacterial infection",
+            "triple_therapy": "LAMA + LABA + ICS (e.g., fluticasone/umeclidinium/vilanterol — Trelegy Ellipta) — highest benefit in eosinophilic/exacerbation-prone; proven to reduce all-cause mortality (IMPACT trial)"
+          }
+        },
+
+        "managementApproach": {
+          "exacerbation_inPrimaryCare": {
+            "definition": "Acute worsening of respiratory symptoms beyond normal day-to-day variation requiring change in medication",
+            "antibiotics": [
+              "Indicated when: change in sputum color AND increased dyspnea AND increased sputum volume (Anthonisen criteria all 3, or 2 of 3 in moderate-severe exacerbation)",
+              "Azithromycin 500 mg day 1, then 250 mg x 4 days — first-line (covers atypicals + H. influenzae)",
+              "Doxycycline 100 mg BID x 5 days — alternative",
+              "Amoxicillin-clavulanate 875/125 mg BID x 5-7 days — if Moraxella or beta-lactamase concern",
+              "Fluoroquinolones: reserve for severe exacerbation with risk factors for P. aeruginosa (frequent hospitalizations, prior Pseudomonas culture, severe COPD)"
+            ],
+            "systemicSteroids": "Prednisone 40 mg daily x 5 days — reduces treatment failure and duration of hospitalization; NO benefit to longer courses",
+            "SABA_escalation": "Increase frequency of SABA MDI (albuterol 2-4 puffs q4h); add ipratropium if not already on SAMA",
+            "oxygen": "Maintain SpO2 88-92% in known CO2 retainers — avoid driving SpO2 >95% (blunts hypoxic drive)"
+          },
+          "admissionCriteria": [
+            "Severe dyspnea not responding to initial bronchodilators",
+            "SpO2 <88% on room air or acute respiratory failure",
+            "Altered mental status",
+            "Failure of outpatient treatment within 48-72 hours",
+            "Significant comorbidities (pneumonia, cardiac arrhythmia, heart failure)",
+            "Poor social support or inability to manage at home"
+          ],
+          "nonPharmacologic": [
+            "Pulmonary rehabilitation: strongest evidence for improved exercise tolerance and quality of life; refer all GOLD 2-4 patients",
+            "Smoking cessation: single most important intervention — slows FEV1 decline",
+            "Vaccinations: annual influenza, RSV (adults ≥60), pneumococcal (PPSV23 and/or PCV20)",
+            "Oxygen therapy: if PaO2 ≤55 mmHg or SpO2 ≤88% at rest — improves survival; prescribe for ≥15 hours/day"
+          ],
+          "inhalerTechnique": "Assess at every visit. Common errors: not shaking MDI, not breath-holding, pressing canister too early. Spacer use improves delivery. DPI (dry powder inhalers): require sufficient inspiratory flow — may be problematic in severe COPD."
+        },
+
+        "redFlagsEscalation": [
+          "SpO2 <88% at rest → supplemental oxygen + ED evaluation",
+          "Acute-on-chronic respiratory failure (PCO2 rising, pH falling) → ED/hospital",
+          "Failure to respond to antibiotics + steroids at 72 hours → escalate care",
+          "New hemoptysis + weight loss → consider malignancy → CT chest",
+          "First exacerbation in a previously stable patient → re-evaluate diagnosis (rule out pneumonia, pneumothorax, PE, cardiac cause)",
+          "Bullae or pneumothorax on imaging → avoid high-flow oxygen; thoracic surgery consultation"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": {
+            "inhalerChallenges": "Arthritis may prevent proper MDI actuation — switch to soft-mist inhaler (Respimat) or DPI with spacer; assess technique at every visit",
+            "cognitive_decline": "Simplified once-daily regimens preferred (tiotropium HandiHaler or umeclidinium); caregiver involvement",
+            "polypharmacy": "Beta-blockers generally safe in COPD (cardioselective) but may worsen bronchoconstriction in very severe disease; avoid high-dose anticholinergics (risk of urinary retention, cognitive effects)",
+            "oxygen_titration": "Target SpO2 88-92%; do not over-oxygenate"
+          },
+          "chronic_disease": "Longitudinal spirometry annually; CAT or mMRC at each visit; exacerbation log review; comorbidity burden (cardiovascular disease, depression, osteoporosis, muscle wasting)"
+        },
+
+        "followUpAndMonitoring": {
+          "schedule": "Stable COPD: every 3-6 months; after exacerbation: 4-6 week follow-up (reassess recovery, adjust therapy, check spirometry at 8+ weeks post-exacerbation)",
+          "monitoring": "SpO2 at each visit; spirometry annually or with significant change; sputum characteristics; exacerbation log; weight (muscle wasting/cachexia is poor prognostic sign); depression/anxiety screening (PHQ-9, GAD-7)",
+          "bloodEosinophils": "Check annually to guide ICS use decisions",
+          "referrals": "Pulmonology for GOLD 3-4, diagnostic uncertainty, frequent exacerbators, lung transplant evaluation; palliative care for advanced COPD with declining trajectory"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "headache-differential-red-flags",
+      "topicName": "Headache Differential: Benign vs Emergent Red Flags",
+      "caseAxis": "case3",
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "urgent-care"],
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Headache is one of the most common NP presentations — yet missing a subarachnoid hemorrhage (SAH), meningitis, or hypertensive emergency is catastrophic. The primary care NP's job is not to diagnose every secondary headache type but to reliably identify who is safe to manage outpatient and who requires immediate escalation. The SNOOP4 framework is essential and must become reflex.",
+
+        "redFlagsFirst": {
+          "SNOOP4_mnemonic": {
+            "S": "Systemic symptoms — fever, stiff neck, rash, weight loss, night sweats, immunocompromise",
+            "N": "Neurological signs — diplopia, focal deficits, papilledema, altered level of consciousness",
+            "O": "Onset sudden — thunderclap: 'worst headache of my life' reaching maximum intensity in seconds",
+            "O2": "Older age — new headache pattern in patients >50 (temporal arteritis, intracranial mass, malignancy)",
+            "P": "Papilledema — elevated ICP",
+            "P2": "Positional — worse lying flat (ICP elevation) or worse upright (low pressure/post-LP)",
+            "P3": "Progressive worsening over days to weeks",
+            "P4": "Prior history — significant change from patient's established headache pattern"
+          },
+          "highRiskEtiologies": [
+            {
+              "condition": "Subarachnoid Hemorrhage (SAH)",
+              "keyFeature": "Thunderclap headache — 'worst headache of my life,' maximal in seconds. May follow Valsalva. NEVER reassure as benign until ruled out.",
+              "workup": "Non-contrast CT head FIRST (90-98% sensitive in first 6 hours); if CT negative and strong clinical suspicion → LUMBAR PUNCTURE (xanthochromia or elevated RBCs in CSF confirms SAH even with normal CT)",
+              "disposition": "ED IMMEDIATELY — neurosurgical emergency"
+            },
+            {
+              "condition": "Bacterial Meningitis",
+              "keyFeature": "Fever + headache + neck stiffness (Kernig's, Brudzinski's) + photophobia. Petechial/purpuric rash (meningococcal) = extreme emergency.",
+              "workup": "Blood cultures → LP (if no papilledema or focal deficit; otherwise CT first). Do NOT delay antibiotics for imaging.",
+              "disposition": "ED IMMEDIATELY; empiric ceftriaxone + dexamethasone if meningococcal suspected — do not wait for culture results"
+            },
+            {
+              "condition": "Temporal (Giant Cell) Arteritis",
+              "keyFeature": "Age >50, new temporal headache, scalp/temporal artery tenderness, jaw claudication, visual symptoms (amaurosis fugax, diplopia). ESR >50 mm/hr, CRP elevated.",
+              "workup": "ESR + CRP → start high-dose prednisone 40-60 mg/day BEFORE biopsy to prevent irreversible vision loss. Temporal artery biopsy within 2 weeks.",
+              "disposition": "SAME DAY rheumatology or ophthalmology. Do NOT wait for biopsy to treat — vision loss is permanent."
+            },
+            {
+              "condition": "Hypertensive Encephalopathy",
+              "keyFeature": "BP ≥180/120 + headache + altered mentation or visual changes. End-organ involvement distinguishes emergency from urgency.",
+              "disposition": "ED for IV antihypertensive management"
+            },
+            {
+              "condition": "Intracranial Mass / Increased ICP",
+              "keyFeature": "Progressive headache over weeks, worse in morning, worsened by Valsalva, vomiting without nausea, papilledema on fundoscopy. History of malignancy.",
+              "workup": "Non-contrast CT head (then MRI with contrast for definitive characterization); urgent neurosurgery or neurology referral"
+            },
+            {
+              "condition": "Carbon Monoxide Poisoning",
+              "keyFeature": "Headache + nausea + multiple people affected in enclosed space + clears with fresh air. Cherry-red lips (late finding). CO-oximetry required — standard pulse oximetry CANNOT detect CO.",
+              "disposition": "ED; high-flow 100% O2"
+            }
+          ]
+        },
+
+        "primaryHeadaches": {
+          "migraine": {
+            "criteria": "POUND mnemonic: Pulsating, duration 4-72 hOurs, Unilateral, Nausea/vomiting, Disabling. Photophobia/phonophobia. Aura in 30% (visual scotoma, fortification spectra, sensory/motor aura).",
+            "acuteManagement": [
+              "NSAIDs (ibuprofen 400-800 mg) or acetaminophen — first-line for mild-moderate",
+              "Triptans (sumatriptan 50-100 mg PO or 6 mg SC) — first-line for moderate-severe; vasoconstriction mechanism; avoid in uncontrolled HTN, CAD, stroke history",
+              "Gepants (rimegepant, ubrogepant) — CGRP antagonists; safe in cardiovascular disease",
+              "Antiemetics: metoclopramide 10 mg IV or prochlorperazine 10 mg IV if nausea predominates"
+            ],
+            "prophylaxis_indications": "≥4 migraines/month OR migraines lasting >48 hours OR significant disability (MIDAS ≥11)",
+            "prophylaxis_options": ["Topiramate 25-100 mg daily (avoid in pregnancy — teratogen)", "Propranolol 40-240 mg/day", "Amitriptyline 25-75 mg nightly", "CGRP monoclonal antibodies (erenumab, fremanezumab) — approved for chronic and episodic migraine"]
+          },
+          "tensionTypeHeadache": {
+            "features": "Bilateral, band-like or pressure quality, mild-moderate intensity, no nausea, no photophobia (or only one), not worsened by routine activity. Most common headache type overall.",
+            "management": "NSAIDs, acetaminophen, stress management, sleep hygiene, physical therapy; avoid analgesic overuse (MOH risk)"
+          },
+          "cluster": {
+            "features": "Periorbital/unilateral severe pain, lacrimation, rhinorrhea, ptosis, Horner's, restlessness. Episodes 15-180 min, 1-8/day during cluster period. Predominantly males.",
+            "acuteManagement": "High-flow 100% oxygen 7-12 L/min via non-rebreather x 15 min; sumatriptan SC 6 mg (fastest onset)",
+            "prophylaxis": "Verapamil 240-480 mg/day; short-course prednisone as bridge during new cluster cycle"
+          },
+          "medicationOveruseHeadache_MOH": {
+            "features": "Headache on ≥15 days/month with regular analgesic/triptan use >10-15 days/month for >3 months. Pattern: present on awakening, rebound pattern.",
+            "management": "Withdraw offending analgesic (can taper); bridge with NSAID or corticosteroid short-course; prevent with headache diary and patient education"
+          }
+        },
+
+        "managementApproach": {
+          "assessment_flow": [
+            "Step 1: Screen for SNOOP4 red flags — if ANY present → imaging and/or ED",
+            "Step 2: If no red flags → characterize the headache (onset, location, quality, duration, associated symptoms, triggers)",
+            "Step 3: Match to primary headache diagnosis",
+            "Step 4: Treat acute attack; assess need for prophylaxis",
+            "Step 5: Neuroimaging in primary care: NOT routinely indicated for classic migraine/tension; indicated for: atypical features, progressive pattern, new headache in >50, focal neuro signs, immunocompromise, malignancy history"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "Thunderclap → ED immediately → CT head + LP if CT negative",
+          "Fever + headache + stiff neck → meningitis → ED, blood cultures, empiric antibiotics without delay",
+          "Age >50 + new unilateral temporal headache → GCA → start steroids SAME DAY before vision lost",
+          "Headache + progressive neuro symptoms → mass/ICP → urgent CT head",
+          "Headache + rash (especially petechial) → meningococcemia → 911 / ED immediately",
+          "Postcoital, exertional, or cough-related thunderclap → SAH until proven otherwise"
+        ],
+
+        "populationConsiderations": {
+          "urgent_care": "All red flag headaches should be dispositioned to ED from urgent care, not managed and discharged. Document that red flags were screened.",
+          "adult": "In reproductive-age women: consider hormonal triggers for migraine; avoid topiramate and valproate if pregnancy possible (teratogenic). Estrogen-containing OCP may worsen migraine with aura (increased stroke risk).",
+          "older_adult": "New headache >50 requires imaging to exclude mass, subdural, or vasculitis; GCA must be ruled out"
+        },
+
+        "followUpAndMonitoring": {
+          "primary_headache": "1-2 month follow-up after initiating prophylaxis; headache diary review; functional status assessment (MIDAS)",
+          "prophylaxis_trial": "Minimum 8-12 week trial at therapeutic dose before declaring failure",
+          "neurology_referral": "Failure of ≥2 prophylactic agents; status migrainosus (>72h continuous migraine); diagnostic uncertainty; suspected secondary headache"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "topicName": "Syncope Differential: Vasovagal vs Cardiac vs Neurological",
+      "caseAxis": "case3",
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "urgent-care"],
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Syncope causes 1-3% of ED visits and ~6% of hospital admissions. The central challenge for NPs: roughly 15% of syncope has a cardiac etiology with significantly higher 1-year mortality. Missing structural heart disease or a serious arrhythmia in a patient who 'just fainted' is a preventable catastrophe. Vasovagal syncope — the most common cause — is a diagnosis of exclusion established by pattern, not by absence of workup.",
+
+        "coreConceptsAndDifferential": {
+          "definitions": {
+            "syncope": "Transient loss of consciousness (TLOC) due to global cerebral hypoperfusion, with spontaneous recovery. Distinguishes from seizure, hypoglycemia, and psychogenic unresponsiveness.",
+            "presyncope": "Near-fainting — lightheadedness, visual dimming, weakness without TLOC. Managed and risk-stratified similarly."
+          },
+          "categories": {
+            "vasovagal": {
+              "features": "Prodrome (nausea, diaphoresis, blurred vision, lightheadedness lasting seconds to minutes), triggered by emotion/pain/prolonged standing/hot environment, brief LOC <5 min, rapid full recovery, no postictal confusion",
+              "riskFactors": "Young, healthy; typical story is compelling; most benign etiology",
+              "subtypes": "Classic vasovagal; carotid sinus hypersensitivity (elderly, syncope with head turning/collar pressure); situational (cough, micturition, defecation)"
+            },
+            "orthostatic_hypotension": {
+              "features": "Syncope or presyncope within 3 minutes of standing, BP drop ≥20/10 mmHg systolic/diastolic",
+              "causes": "Dehydration, medications (antihypertensives, alpha-blockers, diuretics, tricyclics), autonomic neuropathy (DM, Parkinson's), adrenal insufficiency",
+              "evaluation": "Orthostatic vital signs (supine → standing at 1, 2, 3 min)"
+            },
+            "cardiac_arrhythmic": {
+              "features": "No prodrome or extremely brief prodrome, occurs seated or supine, exercise-related syncope, palpitations before LOC, prolonged LOC, rapid recovery",
+              "highRiskArrhythmias": ["Ventricular tachycardia", "Ventricular fibrillation", "Complete heart block / high-degree AV block", "Sick sinus syndrome", "Wolff-Parkinson-White (WPW) with pre-excitation → AF → rapid VF"],
+              "ECG_red_flags": [
+                "QTc prolongation >470 ms (females) or >450 ms (males) — risk of torsades de pointes",
+                "Brugada pattern — coved ST elevation V1-V2 with RBBB morphology",
+                "Delta wave (short PR + slurred QRS upstroke) — WPW",
+                "Complete LBBB in a patient with syncope — consider structural disease",
+                "Epsilon wave in V1-V3 — ARVC (arrhythmogenic right ventricular cardiomyopathy)",
+                "Sinus bradycardia <40 bpm; long pauses >3 seconds",
+                "ST elevation or significant ST depression — ACS"
+              ]
+            },
+            "cardiac_structural": {
+              "features": "Exertional syncope is HIGH RISK until proven otherwise (rule out HOCM, severe AS, pulmonary hypertension, coronary artery disease)",
+              "conditions": ["Hypertrophic obstructive cardiomyopathy (HOCM)", "Severe aortic stenosis", "Pulmonary arterial hypertension", "Arrhythmogenic cardiomyopathy"],
+              "evaluation": "Echocardiogram mandatory if structural suspected"
+            },
+            "neurological": {
+              "seizure_vs_syncope": {
+                "favorSeizure": "Prolonged LOC >5 min, postictal confusion, tongue biting (lateral), incontinence during event, tonic-clonic movements persisting >30 seconds, no prodrome",
+                "favorSyncope": "Brief LOC <60 sec, rapid full recovery, clear prodrome, provoked by situational trigger",
+                "note": "Brief myoclonic jerks can occur in syncope (anoxic seizure) — do not over-diagnose epilepsy"
+              },
+              "TIA_vs_syncope": "TIA does NOT typically cause TLOC (vertebrobasilar TIA rarely does; carotid TIA essentially never). New-onset syncope labeled as TIA without focal deficit is usually incorrect."
+            }
+          },
+          "riskStratification": {
+            "ROSE_rule_highRisk": ["Bradycardia <50 on ECG or monitoring", "Troponin elevation", "Signs of heart failure", "Hematocrit <30%", "Oxygen saturation <94%", "BNP >300 pg/mL"],
+            "SanFrancisco_rule": "Congestive heart failure history, hematocrit <30%, EKG abnormality, shortness of breath, SBP <90 — if any present → hospital admission",
+            "lowRisk_outpatient": "Age <40, no structural heart disease, classic vasovagal story, normal ECG, asymptomatic vital signs, no family history of sudden cardiac death"
+          }
+        },
+
+        "managementApproach": {
+          "mandatoryInitialWorkup": [
+            "12-lead ECG — mandatory for ALL patients with syncope",
+            "Orthostatic vital signs",
+            "Detailed history: duration, prodrome, position, activity at onset, recovery time, witnesses account, prior episodes, medications",
+            "Blood glucose check",
+            "Pregnancy test in women of reproductive age with syncope"
+          ],
+          "additionalWorkup_based_onRisk": [
+            "Echocardiogram: if structural heart disease suspected (murmur, exertional syncope, abnormal ECG)",
+            "Holter monitor or event recorder: for recurrent unexplained syncope — arrhythmia detection",
+            "Tilt table testing: for recurrent vasovagal when diagnosis uncertain",
+            "Troponin: if cardiac ischemia possible",
+            "Neuroimaging (CT/MRI): NOT routinely indicated — only if focal neuro deficit, head trauma during fall, or atypical presentation suggesting seizure"
+          ],
+          "vasovagal_management": [
+            "Education and reassurance",
+            "Counterpressure maneuvers during prodrome (leg crossing, arm tensing, squatting) — proven to abort many episodes",
+            "Increase fluid and salt intake (if not hypertensive or cardiac compromised)",
+            "Avoid triggers (prolonged standing, hot environments, dehydration)",
+            "Fludrocortisone: 0.1 mg daily — second-line for recurrent vasovagal with volume depletion",
+            "Midodrine: 5-10 mg TID — alpha-agonist; increases venous tone; useful in orthostatic hypotension"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "Exertional syncope → structural heart disease until proven otherwise → ECG + ECHO + cardiology same-day to next-day",
+          "Syncope with abnormal ECG (QTc >500, Brugada, WPW) → cardiology or ED",
+          "Syncope without prodrome in older adult → high arrhythmic suspicion → hospital admission",
+          "Syncope with chest pain or dyspnea → ACS or PE → ED",
+          "Syncope with heart failure signs → ROSE/SF criteria → admit",
+          "Family history of sudden cardiac death + young patient with exertional syncope → HOCM workup emergently"
+        ],
+
+        "populationConsiderations": {
+          "urgent_care": "Disposition decision is key. Use validated risk tool (ROSE, SF Syncope Rule). Cannot safely send home: exertional syncope, abnormal ECG, structural heart disease, no prodrome, troponin elevation.",
+          "older_adult": "Higher baseline cardiac risk; more likely orthostatic (polypharmacy, autonomic dysfunction); falls injury secondary to syncope may be primary morbidity concern; review medication list for offending agents (antihypertensives, diuretics, alpha-blockers, PDE-5 inhibitors)"
+        },
+
+        "followUpAndMonitoring": {
+          "vasovagal_outpatient": "Close follow-up in 1-2 weeks; episode log; driving restrictions discussion (state law varies — typically restrict driving until event-free for specified period)",
+          "cardiac_unexplained": "Holter/event monitor; cardiology referral within 1-2 weeks; restrict strenuous activity until clearance",
+          "driving_counseling": "All syncope patients require explicit discussion about driving — document. Most states require reporting to DMV for recurrent or high-risk syncope."
+        }
+      }
+    },
+
+    {
+      "topicSlug": "hypertension-red-flags-referral",
+      "topicName": "Red Flags in Hypertension: When to Refer or Admit",
+      "caseAxis": "case4",
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": ["adult", "older-adult", "urgent-care"],
+      "domain": "Red Flags & Safety",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Most hypertension is asymptomatic and managed longitudinally. However, the NP must reliably distinguish hypertensive urgency from emergency — and within emergency, identify which organ is acutely damaged to direct immediate ED transfer. The critical error to avoid: rapidly lowering BP in urgency (causing ischemic harm) or failing to recognize an emergency and managing as urgency.",
+
+        "coreConceptsAndDifferential": {
+          "definitions": {
+            "hypertensiveUrgency": "BP ≥180/120 mmHg WITHOUT acute end-organ damage. Patient may have headache, anxiety, or be asymptomatic. Managed by restarting/adjusting medications and close outpatient follow-up — NOT acute IV agents.",
+            "hypertensiveEmergency": "BP ≥180/120 mmHg WITH acute end-organ damage. Requires immediate ED transfer for IV antihypertensive therapy.",
+            "endOrganDamage_markers": [
+              "Brain: hypertensive encephalopathy (confusion, severe headache, cortical blindness, seizure), stroke, intracranial hemorrhage",
+              "Eye: papilledema, flame hemorrhages, exudates on fundoscopy (hypertensive retinopathy grade III-IV)",
+              "Heart: acute decompensated heart failure (dyspnea, pulmonary edema), ACS (chest pain + ECG changes), aortic dissection",
+              "Kidney: acute kidney injury (creatinine doubling or rapid rise), microangiopathic hemolytic anemia (MAHA) in malignant HTN",
+              "Eclampsia: seizures + HTN in pregnancy"
+            ]
+          },
+          "specialEmergencies": {
+            "aorticDissection": {
+              "keyFeatures": "Tearing/ripping chest or back pain, radiating to interscapular area; BP differential between arms (>20 mmHg); pulse deficits; history of Marfan's, bicuspid aortic valve, uncontrolled HTN",
+              "management": "ED IMMEDIATELY; target SBP <120 mmHg with IV labetalol + esmolol; avoid pure vasodilators without HR control (reflex tachycardia worsens shear force)"
+            },
+            "hypertensiveEncephalopathy": {
+              "keyFeatures": "Severe headache, confusion, visual disturbances, seizure; BP markedly elevated; PRES (posterior reversible encephalopathy syndrome) on MRI",
+              "management": "ED; IV agents (nicardipine, labetalol); reduce MAP by 10-15% in first hour, then 15% over next 23 hours — NOT a rapid drop"
+            },
+            "eclampsia": {
+              "keyFeatures": "Pregnant or postpartum (up to 6 weeks), BP ≥160/110, seizure, headache, visual changes, RUQ pain (HELLP syndrome)",
+              "management": "911/ED; magnesium sulfate for seizure prophylaxis; labetalol or hydralazine for BP; immediate delivery consideration"
+            }
+          },
+          "resistantHypertension": {
+            "definition": "BP above goal despite ≥3 antihypertensives at maximum tolerated doses including a diuretic",
+            "secondaryCauses": ["Primary hyperaldosteronism (check aldosterone/renin ratio)", "CKD (check eGFR, urine albumin)", "Obstructive sleep apnea (STOP-BANG questionnaire)", "Renal artery stenosis (bruit, flash pulmonary edema, renal function worsening on ACEi/ARB)", "Thyroid disease (TSH)", "Pheochromocytoma (rare — headache, palpitations, diaphoresis triad)"],
+            "management": "Optimize existing regimen; consider adding spironolactone 25-50 mg for primary aldosteronism; refer to nephrology or hypertension specialist"
+          }
+        },
+
+        "managementApproach": {
+          "urgency_approach": [
+            "Do NOT administer rapid-acting oral antihypertensives (sublingual nifedipine is DANGEROUS — precipitates stroke, MI)",
+            "Reassess BP after the patient rests in quiet room for 20-30 minutes — white coat effect is real",
+            "If still ≥180/120 without end-organ damage: restart medications if patient was non-adherent; adjust existing regimen; add or increase second agent",
+            "Arrange follow-up within 24-48 hours",
+            "Ensure the patient is not symptomatic in a way that suggests emergency"
+          ],
+          "emergency_approach": [
+            "Transfer to ED IMMEDIATELY — do not treat empirically in outpatient setting with IV agents",
+            "Call 911 if patient is hemodynamically unstable, seizing, or severely altered",
+            "Document findings clearly: BP, symptoms, neuro exam, and rationale for transfer"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "Any neurological symptom + markedly elevated BP → stroke vs hypertensive encephalopathy → ED",
+          "Tearing chest/back pain → aortic dissection → ED + call 911",
+          "Acute pulmonary edema (dyspnea, orthopnea, crackles) → hypertensive emergency with HF → ED",
+          "Visual changes (blurring, scotoma) + severely elevated BP → hypertensive retinopathy or PRES → ED with ophthalmology",
+          "Pregnancy + BP ≥160/110 + any symptom → preeclampsia/eclampsia → obstetric emergency"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": [
+            "Isolated systolic HTN most common — SBP ≥140 with DBP <90; treat SBP to <130-140",
+            "Orthostatic hypotension more common — check standing BP before intensifying therapy",
+            "Medication interactions: NSAIDs raise BP significantly in older adults on antihypertensives",
+            "Volume depletion from diuretics can precipitate acute kidney injury; check BMP periodically",
+            "Caution with dihydropyridine calcium channel blockers (amlodipine) — can cause dependent edema; not a sign of heart failure"
+          ],
+          "urgent_care": "BP reading in urgent care: always confirm with repeat measurement after rest; check both arms; rule out measurement error before escalating"
+        },
+
+        "followUpAndMonitoring": {
+          "urgency": "24-48 hour follow-up; repeat BP; medication reconciliation; lifestyle reinforcement",
+          "newlyDiagnosed_severeHTN": "Basic metabolic panel, lipid panel, urinalysis, urine albumin, EKG at baseline; reassess in 1 month",
+          "resistantHTN": "Secondary workup; nephrology or hypertension specialist; minimize salt intake (<2g/day); optimize diuretic; CPAP if OSA"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "cancer-red-flags-primary-care",
+      "topicName": "Cancer Red Flags in Primary Care: When to Expedite Workup",
+      "caseAxis": "case4",
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": ["adult", "older-adult", "preventive-care"],
+      "domain": "Red Flags & Safety",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "NPs in primary care are the first to detect cancer. The challenge: cancer symptoms are often insidious and nonspecific. The risk of under-investigation must be balanced against anxiety-inducing over-investigation. Knowing which symptom combinations warrant expedited workup versus watchful waiting is a high-stakes NP judgment call. NICE NG12 cancer referral guidelines provide structure for this decision.",
+
+        "coreConceptsAndDifferential": {
+          "constitutionalRedFlags": {
+            "unexplainedWeightLoss": "Loss of >5% body weight over 6-12 months without clear cause (depression, new diet, intentional) — warrants systematic cancer workup: CBC, CMP, LFTs, LDH, UA, TSH, CXR. If >50, add PSA (males) and consider colonoscopy.",
+            "nightSweats": "Drenching night sweats requiring change of clothes/bedding + weight loss + lymphadenopathy = classic lymphoma presentation → CBC with differential, LDH, uric acid, CT scan",
+            "fatigue_unexplained": "Profound, new fatigue not explained by thyroid, anemia, depression, sleep apnea — CBC (rule out leukemia), calcium (hypercalcemia of malignancy), ESR/CRP"
+          },
+          "systemSpecificRedFlags": {
+            "GI_ALARM": [
+              "Dysphagia (progressive) — upper GI malignancy; alarm symptom requiring upper endoscopy",
+              "Hematemesis or melena — upper GI bleeding; urgent endoscopy",
+              "New rectal bleeding in >40 without clear anorectal source — colorectal cancer workup",
+              "Iron deficiency anemia in postmenopausal woman or any man — upper + lower GI endoscopy (bi-directional) until source found",
+              "Unexplained abdominal pain + weight loss in older adult — pancreatic or GI malignancy",
+              "Change in bowel habits >6 weeks in adult >50 — colonoscopy",
+              "Unexplained palpable abdominal mass — CT abdomen/pelvis"
+            ],
+            "respiratory": [
+              "Hemoptysis (any) in adult >40 + smoker — chest CT; bronchoscopy if CT negative but clinical suspicion",
+              "Persistent cough >8 weeks not explained by URTI, ACEi, GERD, or asthma — CXR; if smoker >50, low-dose CT lung cancer screening (LDCT)",
+              "Unexplained hoarseness >3 weeks — laryngoscopy referral"
+            ],
+            "breast": [
+              "New palpable breast lump — diagnostic mammogram + ultrasound; do NOT dismiss in any age group",
+              "Nipple discharge (spontaneous, unilateral, bloody) — mammogram + ductography referral",
+              "Skin changes (peau d'orange, nipple retraction, inflammatory changes) — urgent referral"
+            ],
+            "urological": [
+              "Visible hematuria (gross) in adult — CT urogram + cystoscopy referral regardless of absence of pain",
+              "Microscopic hematuria in adult >35 — urology referral for cystoscopy",
+              "New palpable testicular mass — urgent ultrasound (tumor marker: AFP, hCG, LDH)"
+            ],
+            "neurological": [
+              "New seizure in adult >40 with no prior seizure disorder — brain MRI with contrast",
+              "Progressive headache with vomiting, worse in the morning — mass effect → CT/MRI"
+            ],
+            "skin": [
+              "ABCDEs: Asymmetry, Border irregularity, Color variegation, Diameter >6mm, Evolution — any E (change) = urgent dermatology referral or biopsy",
+              "New non-healing ulcer or nodule with induration in sun-exposed area — squamous cell carcinoma"
+            ],
+            "lymphadenopathy": [
+              "Painless, firm, progressively enlarging lymph node >1 cm persistent >4 weeks without infectious cause",
+              "Supraclavicular lymphadenopathy is ALWAYS concerning (Virchow's node) — urgent workup"
+            ]
+          },
+          "screeningVsWorkup": {
+            "screening_recommended": "Colon cancer (colonoscopy 45-75), lung (LDCT 50-80 with 20-pack-year history), breast (mammography 40-74), cervical (Pap/HPV 21-65), prostate (shared decision making 50-74)",
+            "expedited_workup": "For patients presenting with symptoms — NOT routine screening; diagnostic workup guided by symptom + risk factor combination"
+          }
+        },
+
+        "managementApproach": {
+          "workupTiers": {
+            "expedite_within2weeks": ["Visible hematuria", "New palpable breast lump", "Supraclavicular lymphadenopathy", "Progressive dysphagia", "Hemoptysis in smoker", "Testicular mass"],
+            "urgent_but_not_immediate": ["Iron deficiency anemia (source unknown)", "Unexplained weight loss >5%", "Change in bowel habits >6 weeks in >50", "Suspicious skin lesion"],
+            "watchful_waiting_appropriate": ["Single episode of microscopic hematuria in young patient with infection (repeat UA after treatment)", "Benign lymph node features with clear infection source — reassess in 4-6 weeks"]
+          }
+        },
+
+        "redFlagsEscalation": [
+          "Supraclavicular lymphadenopathy → malignancy until proven otherwise → urgent CT + oncology referral",
+          "Palpable abdominal mass or hepatomegaly → CT abdomen/pelvis within days",
+          "Gross hematuria → urology within 2 weeks regardless of pain status",
+          "New adult seizure → MRI brain with contrast → neurology",
+          "New bone pain + weight loss + hypercalcemia → metastatic disease → oncology",
+          "Progressive jaundice + weight loss + back pain → pancreatic malignancy → CT + GI/surgery"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": "Higher baseline cancer risk — lower threshold for workup; atypical presentations (functional decline, confusion, falls as primary cancer presentation); competing comorbidities complicate workup decisions; shared decision-making about extent of workup based on life expectancy and patient goals",
+          "preventive_care": "Distinguish presentation-triggered workup from routine screening; ensure all age-appropriate screening is up to date at each visit; document conversations about declined screening"
+        },
+
+        "followUpAndMonitoring": {
+          "whenWorkupNegative": "Reassess if symptoms persist or worsen; document 'safety net' — instruct patient to return if symptoms progress; repeat CBC/CMP in 4-6 weeks for unexplained constitutional symptoms",
+          "positiveResult": "Expedite referral based on finding; document urgency in referral note; follow up to ensure referral was completed",
+          "cancelledReferrals": "Patients who decline workup: document informed refusal, re-address at future visits, respect autonomy while clearly communicating risk"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "topicName": "PrEP for HIV Prevention: Eligibility, Prescribing, and Monitoring",
+      "caseAxis": "case5",
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "preventive-care", "LGBTQ+"],
+      "domain": "Health Promotion & Screening",
+      "prerequisiteTopicSlugs": [],
+      "batchNote": "Blueprint marks as intermediate; content generated at advanced depth due to prescribing specificity, LGBTQ+ screening adaptations, and injectable regimen complexity.",
+
+      "lesson": {
+        "clinicalFraming": "PrEP (pre-exposure prophylaxis) for HIV is an NP-level prescribing competency with profound public health impact. Gay and bisexual men, transgender women, people with injection drug use (PWID), and serodiscordant couples represent the populations with highest PrEP benefit. Effective NP-led PrEP programs require: inclusive assessment language, evidence-based eligibility determination, correct regimen selection, and rigorous monitoring. Stigma and assumptions are the primary barriers to PrEP access — the NP encounter must actively counter both.",
+
+        "coreConceptsAndDifferential": {
+          "eligibility": {
+            "HIV_negative_confirmed": "Recent (within 1 week) negative HIV-1 RNA or HIV antibody test required before initiation — do NOT start on clinical assumption alone",
+            "substancialRisk_criteria": [
+              "MSM or transgender women: condomless anal sex with HIV-positive or unknown-status partner, recent bacterial STI (gonorrhea, syphilis, chlamydia), >1 sexual partner in past 6 months",
+              "Heterosexual adults: serodiscordant couple (partner known HIV-positive), condomless vaginal/anal sex with high-prevalence population",
+              "Persons who inject drugs (PWID): shared needles/injection equipment, recent drug treatment program",
+              "Serodiscordant couples: either partner can use PrEP"
+            ],
+            "absoluteContraindications": "Active HIV infection (PrEP resistance risk); unknown HIV status without testing",
+            "relativeConsiderations": "eGFR <30 (Truvada/TDF/FTC: avoid; Descovy/TAF/FTC: approved to eGFR ≥30)"
+          },
+          "regimens": {
+            "TDF_FTC_Truvada": {
+              "dosing": "One tablet daily (tenofovir disoproxil fumarate 300mg / emtricitabine 200mg)",
+              "protectionTimeline": "Rectal tissue: 7 days of consistent use; vaginal tissue and injection drug use: 21 days",
+              "monitoring_interval": "HIV test every 3 months; renal function (CrCl) every 6 months; STI screening every 3-6 months",
+              "renalConcern": "TDF (tenofovir DF) can reduce bone mineral density and proximal renal tubular function — monitor CrCl; caution if CrCl <60",
+              "preference": "Approved for all eligible groups; generic available (more affordable)"
+            },
+            "TAF_FTC_Descovy": {
+              "dosing": "One tablet daily (tenofovir alafenamide 25mg / emtricitabine 200mg)",
+              "protectionTimeline": "Rectal: 7 days; NOT studied and NOT approved for receptive vaginal sex (cisgender women and transgender men with vagina)",
+              "renalProfile": "Better renal and bone safety than Truvada; preferred in those with renal impairment (eGFR 30-59) or bone density concerns",
+              "approved_for": "MSM, transgender women, PWID — NOT approved for cisgender women or transgender men for vaginal exposure"
+            },
+            "Cabotegravir_injectable_Apretude": {
+              "dosing": "Cabotegravir 600 mg IM gluteal injection; first two injections 1 month apart, then every 2 months",
+              "advantage": "Eliminates daily pill adherence barrier; superior efficacy demonstrated in HPTN 083 (MSM/TGW) and HPTN 084 (cisgender women)",
+              "monitoring": "HIV test before each injection; no oral lead-in required (can give first injection after negative HIV test)",
+              "limitations": "Cost; administration burden (clinic visit every 2 months); cabotegravir resistance if started during undetected infection",
+              "LGBTQ_relevance": "Injectable PrEP addresses pill fatigue, privacy concerns (no pill bottles), and daily reminder of HIV risk — particularly beneficial for LGBTQ+ patients navigating stigma"
+            }
+          },
+          "LGBTQ_specific_assessment": {
+            "inclusiveHistory": [
+              "Ask about gender identity and sexual orientation using open, non-binary language",
+              "Assess anatomy: sex of partners, types of sex (insertive/receptive anal, vaginal, oral) — to determine exposure type and appropriate regimen",
+              "Use patient's preferred pronouns and language",
+              "Avoid assumptions: a patient identifying as straight may have sex with same-sex partners; a patient identifying as gay may have sex with cisgender women"
+            ],
+            "LGBTQ_specificScreening": [
+              "Anal Pap smear for anal dysplasia: recommended for MSM with HIV, should be offered to MSM/transgender women regardless of HIV status (high HPV exposure)",
+              "STI screening: rectal, urethral, pharyngeal — anatomic site-specific NAAT testing; do NOT rely on a single genital swab",
+              "Hepatitis A + B vaccination if not immune",
+              "Hepatitis C screening annually for MSM with HIV or multiple partners",
+              "Mental health screening: depression, anxiety, PTSD — LGBTQ+ populations have significantly higher rates",
+              "Substance use: methamphetamine and poppers (amyl nitrite) use common in chemsex contexts — screen with AUDIT-C, DAST"
+            ],
+            "GenderAffirmingCare_considerations": [
+              "Transgender women on estrogen: no significant drug-drug interactions with PrEP",
+              "Transgender men on testosterone: no PrEP interactions; use Truvada (covers vaginal exposure); assess relationship to risk",
+              "Discuss impact of gender-affirming surgery on exposure anatomy and appropriate regimen"
+            ]
+          }
+        },
+
+        "managementApproach": {
+          "baseline_workup": [
+            "HIV-1 RNA (4th-generation antigen/antibody test or NAT) — MUST BE NEGATIVE within 1 week of prescribing",
+            "Hepatitis B surface antigen (HBsAg), surface antibody (anti-HBs) — TDF/FTC and TAF/FTC active against HBV; do NOT stop PrEP without plan for HBV management (flare risk)",
+            "Hepatitis C antibody",
+            "STI: gonorrhea/chlamydia (urethral + rectal + pharyngeal NAAT), syphilis RPR",
+            "Creatinine/eGFR",
+            "Pregnancy test if applicable"
+          ],
+          "followUp_monitoring": {
+            "HIV_test": "Every 3 months — MANDATORY. If patient tests positive at any follow-up → STOP PrEP immediately → refer to HIV specialist for resistance testing and ART initiation",
+            "renalFunction": "Every 6 months (Truvada); annually (Descovy); immediately if symptoms of renal tubular dysfunction",
+            "STI_screening": "Every 3-6 months (site-specific NAAT); syphilis RPR every 6 months minimum",
+            "hepatitis_C": "Annually for MSM or PWID",
+            "adherence_counseling": "At every visit — review missed doses, discuss barriers; PrEP only effective if taken correctly"
+          },
+          "adherence_counseling": [
+            "Discuss 7-day vs 21-day coverage window based on exposure type",
+            "Address stigma: some patients prefer not to fill at local pharmacy — mail-order options",
+            "Mobile apps, pill organizers as adherence tools",
+            "Event-driven (2+1+1) PrEP: not FDA-approved in US but used off-label for MSM with infrequent exposures — 2 pills 2-24h before, 1 pill 24h after, 1 pill 48h after"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "HIV-positive result at any monitoring visit → STOP PrEP → urgent HIV specialist referral within days → resistance testing → ART initiation",
+          "Significant renal function decline on Truvada → switch to Descovy or injectable cabotegravir",
+          "Hepatitis B flare if TDF/FTC discontinued without HBV management plan → hepatology consultation",
+          "Worsening STI incidence despite PrEP → intensify behavioral counseling; increase screening frequency; ensure treatment of partners"
+        ],
+
+        "populationConsiderations": {
+          "LGBTQ+": "Create affirming environment: visible safe space signage, non-binary forms, staff training. PrEP access is a health equity issue. LGBTQ+ patients face higher refusal rates and more stigmatizing encounters in healthcare settings. NP-led PrEP programs have demonstrated success in reaching populations with highest HIV risk.",
+          "PWID": "Offer harm reduction counseling: syringe services, naloxone coprescription for OUD, fentanyl test strips; PrEP adherence is challenging with unstable housing — discuss injectable PrEP as superior option"
+        },
+
+        "followUpAndMonitoring": {
+          "monitoring_summary": "HIV q3m, STI q3-6m, renal q6m, HCV annually, adherence every visit, mental health screening annually",
+          "insuranceCoverage": "ACA-compliant plans must cover FDA-approved PrEP without cost-sharing; Ready, Set, PrEP program for uninsured; manufacturer patient assistance programs",
+          "discontinuation": "Counsel on appropriate discontinuation: switch to event-driven or injectable if daily not sustainable; always retest HIV before restarting after any gap >7 days"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "topicName": "Geriatric Assessment: Falls, Polypharmacy, Functional Status, and Frailty",
+      "caseAxis": "case6",
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "older-adult", "chronic-disease"],
+      "domain": "Adult Primary Care",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Comprehensive geriatric assessment (CGA) is the gold standard for NP-led care of complex older adults. Falls cause 20,000 deaths/year in the US; polypharmacy causes more preventable hospitalizations than any single disease; frailty predicts outcomes from surgery to chemo to ICU better than age alone. NPs who conduct even abbreviated CGA detect actionable problems invisible to problem-focused visits.",
+
+        "coreConceptsAndDifferential": {
+          "falls": {
+            "epidemiology": "1 in 3 adults >65 fall annually; most do not report falls unless asked. 10% result in serious injury (hip fracture, subdural hematoma).",
+            "CDC_STEADI_toolkit": "Standardized falls assessment framework: Ask, Assess, Intervene",
+            "ask_about_falls": "ALWAYS ask: 'Have you fallen in the past year?' and 'Do you feel unsteady when standing or walking?'",
+            "functional_tests": {
+              "TUG_test": "Timed Up and Go: patient rises from chair, walks 10 feet, returns, sits. ≥12 seconds = increased fall risk. Normal <10 seconds.",
+              "30secChairStand": "Counts how many times patient can rise from chair in 30 seconds; assesses lower extremity strength",
+              "4StageBalance": "Feet together, semi-tandem, tandem, single-leg stance — inability to hold 10 seconds each = fall risk"
+            },
+            "intrinsicRiskFactors": ["Previous fall (strongest predictor)", "Gait/balance impairment", "Cognitive decline", "Lower extremity weakness", "Visual impairment", "Depression", "Postural hypotension"],
+            "medicationContributors": {
+              "high_risk_classes": ["Benzodiazepines (psychomotor slowing, sedation)", "Z-drugs (zolpidem — Beers Criteria)", "Tricyclic antidepressants (anticholinergic, orthostatic)", "First-generation antihistamines (diphenhydramine)", "Opioids", "Antihypertensives in excess — orthostatic hypotension", "Diuretics — dehydration, orthostatic", "Antipsychotics (extrapyramidal effects)", "Gabapentin/pregabalin — dizziness"],
+              "action": "Deprescribe fall-risk medications whenever possible; if essential, lowest effective dose + fall prevention strategies"
+            },
+            "extrinsicFactors": ["Poor lighting", "Loose rugs", "Clutter on stairs", "No grab bars in bathroom", "Inappropriate footwear"],
+            "intervention": "Multi-component falls prevention: exercise (balance/strength training), medication review, home safety assessment, vision correction, vitamin D supplementation if deficient"
+          },
+          "polypharmacy": {
+            "definition": "Concurrent use of ≥5 medications (some define ≥10 as hyper-polypharmacy)",
+            "prevalence": ">50% of adults >65 take ≥5 medications; >10% take ≥10",
+            "risks": "Adverse drug reactions, drug-drug interactions, cascade prescribing, non-adherence, cognitive burden, falls, hospitalization",
+            "cascadePrescribing": "New medication added to treat a symptom caused by another medication — result is layered iatrogenic harm. Example: NSAID → ankle edema → added amlodipine increased → more edema → added furosemide → electrolyte imbalance → added potassium.",
+            "STOPPStart_criteria": "Screening Tool of Older Person's Prescriptions (STOPP) and Screening Tool to Alert to Right Treatment (START) — validated tools for identifying inappropriate and missing medications in older adults",
+            "MRPrescribing_NP_role": "Conduct medication reconciliation at every visit; review OTCs, supplements, PRN medications; ask about adherence and cost barriers"
+          },
+          "frailty": {
+            "friedCriteria": {
+              "description": "Five component phenotypic model",
+              "components": [
+                "Unintentional weight loss >4.5 kg (10 lbs) in past year",
+                "Self-reported exhaustion (CES-D questionnaire)",
+                "Weakness (grip strength below sex/BMI threshold)",
+                "Slow gait speed (<0.8 m/s or <6 m in 6 seconds)",
+                "Low physical activity (kcal/week below sex threshold)"
+              ],
+              "scoring": "0 = robust; 1-2 = pre-frail; ≥3 = frail",
+              "clinicalImplication": "Frail older adults have 2-4x higher mortality, hospitalization, and ADL disability; frailty predicts surgical outcomes better than age"
+            },
+            "clinicalFrailtyScale": "9-point scale (1=very fit to 9=terminally ill) used for rapid clinical estimation without formal testing — widely used in acute settings",
+            "frailty_intervention": "Resistance exercise is the most evidence-based intervention; address malnutrition; optimize chronic disease management; reduce unnecessary medications"
+          },
+          "functionalStatus": {
+            "ADLs": "Activities of Daily Living: bathing, dressing, grooming, toileting, transferring, continence, feeding — decline indicates need for supportive services",
+            "IADLs": "Instrumental ADLs: phone use, shopping, cooking, housekeeping, laundry, transportation, medications, finances — more sensitive to early cognitive decline",
+            "assessment_tools": "Barthel Index (ADLs), Lawton Scale (IADLs)",
+            "clinicalRule": "New or progressive ADL/IADL decline in an older adult is a red flag — evaluate for acute illness, medication side effect, depression, or cognitive decline before attributing to 'just aging'"
+          },
+          "cognitiveScreening": {
+            "tools": ["Mini-Cog (3-word recall + clock draw) — quick 3 min; high sensitivity in primary care", "MoCA (Montreal Cognitive Assessment) — 10 min; detects MCI; preferred for more thorough screening", "MMSE — less sensitive for MCI than MoCA"],
+            "depression": "GDS-15 (Geriatric Depression Scale) — 15-item; specifically validated in older adults; scores ≥6 = probable depression"
+          }
+        },
+
+        "managementApproach": {
+          "cga_components": [
+            "1. Medication review: reconcile ALL medications including OTCs, supplements; apply Beers and STOPP criteria; deprescribe where possible",
+            "2. Falls assessment: STEADI toolkit; TUG test; identify and address medications and environment",
+            "3. Functional status: ADL/IADL screen; PT/OT referral if impairment",
+            "4. Cognitive screen: Mini-Cog or MoCA; assess driving safety if cognitive impairment suspected",
+            "5. Mood screen: GDS-15 or PHQ-9; depression is underdiagnosed and undertreated in older adults",
+            "6. Nutritional status: MNA (Mini Nutritional Assessment); weight trend; albumin",
+            "7. Social support: living situation, caregiver burden, community resources, advance directives"
+          ],
+          "prescribing_principles_older_adult": [
+            "Start low, go slow — initial doses at 50% of standard adult dose for most medications",
+            "Prioritize renal dosing: calculate CrCl (Cockcroft-Gault, not eGFR) for dosing — muscle mass is low in elderly, making creatinine-based eGFR unreliable",
+            "Avoid Beers Criteria medications when alternatives exist",
+            "Review anticholinergic burden at every visit (Anticholinergic Risk Scale or Anticholinergic Cognitive Burden Scale)",
+            "Document the indication for every medication at initiation; reassess indication at every annual review"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "New fall with head injury → CT head to rule out subdural hematoma (even on anticoagulants)",
+          "Acute functional decline (ADLs declining over days to 2 weeks) → rule out acute infection, medication toxicity, MI, acute delirium",
+          "MoCA score <18 + driving → assess driving safety; consider formal evaluation; document discussion; notify DMV if required by state",
+          "Severe frailty + acute illness → goals of care discussion; palliative care referral; avoid aggressive interventions without consent",
+          "Multiple falls + anticoagulant + high bleeding risk → risk-benefit review of anticoagulation"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": "Every aspect of this lesson is population-specific — older adult care defines this topic. Avoid ageism: older adults are not a homogeneous group; a 75-year-old triathlete and a 75-year-old with dementia and HF require completely different frameworks.",
+          "polypharmacy": "Polypharmacy risk compounds with frailty — frail patients have less physiologic reserve to tolerate adverse drug effects"
+        },
+
+        "followUpAndMonitoring": {
+          "schedule": "Annual comprehensive geriatric assessment for adults >75 or any adult with frailty/multimorbidity; quarterly for frail or high-fall-risk patients",
+          "outcomeMetrics": "Fall frequency (monthly log); ADL/IADL stability; medication count; weight trend; quality of life (patient-reported)",
+          "advanceDirectives": "Discuss POLST/MOLST at each annual visit in frail patients; ensure healthcare proxy identified and documented"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "topicName": "Deprescribing in Older Adults: Beers Criteria and High-Risk Medications",
+      "caseAxis": "case6",
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": ["adult", "older-adult", "chronic-disease"],
+      "domain": "Adult Primary Care",
+      "prerequisiteTopicSlugs": ["geriatric-assessment-falls-polypharmacy-frailty"],
+
+      "lesson": {
+        "clinicalFraming": "Medications cause more hospital admissions in older adults than most individual diseases. The American Geriatrics Society Beers Criteria is a validated, regularly updated list of medications that are potentially inappropriate in older adults (PIMs). NPs are uniquely positioned to deprescribe — often patients and other providers are reluctant to stop medications. Knowing WHAT to deprescribe, HOW to taper safely, and HOW to communicate the rationale to patients is essential clinical skill.",
+
+        "coreConceptsAndDifferential": {
+          "beersCriteria_categories": {
+            "avoidInAllOlderAdults": [
+              {
+                "class": "Benzodiazepines (lorazepam, diazepam, alprazolam)",
+                "reason": "Fall risk (2x), cognitive impairment, paradoxical agitation in dementia, rebound insomnia",
+                "alternative": "Cognitive behavioral therapy for insomnia (CBT-I) first-line; melatonin; low-dose doxepin 3-6 mg for sleep maintenance insomnia in older adults (FDA-approved)"
+              },
+              {
+                "class": "Z-drugs (zolpidem, eszopiclone, zaleplon)",
+                "reason": "Similar to benzodiazepines — fall risk, cognitive impairment; zolpidem specifically associated with next-day driving impairment",
+                "alternative": "CBT-I; sleep hygiene; melatonin; low-dose doxepin"
+              },
+              {
+                "class": "First-generation antihistamines (diphenhydramine — Benadryl, PM sleep aids)",
+                "reason": "Anticholinergic effects: confusion, urinary retention, constipation, paradoxical CNS stimulation",
+                "alternative": "Loratadine, cetirizine (lower anticholinergic burden) for allergies"
+              },
+              {
+                "class": "Tricyclic antidepressants (amitriptyline, doxepin >6 mg for depression)",
+                "reason": "Anticholinergic, orthostatic hypotension, cardiac arrhythmia (QTc prolongation), fall risk",
+                "alternative": "SSRIs or SNRIs for depression; escitalopram/sertraline preferred (fewer interactions, low anticholinergic burden)"
+              },
+              {
+                "class": "NSAIDs (regular use: ibuprofen, naproxen, indomethacin)",
+                "reason": "GI bleed risk (2-3x higher in older adults), fluid retention and HTN exacerbation, acute kidney injury, increased cardiovascular events with regular use",
+                "alternative": "Acetaminophen (adequate analgesia for OA); topical NSAIDs (diclofenac gel) — minimal systemic absorption; PPI if NSAID cannot be avoided"
+              },
+              {
+                "class": "Long-acting sulfonylureas (glyburide, glipizide extended-release)",
+                "reason": "Prolonged hypoglycemia — particularly dangerous in older adults who may not perceive warning symptoms",
+                "alternative": "Glipizide immediate release (shorter acting); DPP-4 inhibitors (linagliptin — no renal dose needed); GLP-1 RA"
+              },
+              {
+                "class": "Antipsychotics in dementia patients (quetiapine, olanzapine, haloperidol)",
+                "reason": "Black box warning: increased risk of death and stroke in dementia patients with behavioral symptoms",
+                "alternative": "Non-pharmacological behavioral interventions FIRST; if medication necessary after failure of alternatives — escitalopram or citalopram (evidence for agitation); document informed consent regarding mortality risk"
+              },
+              {
+                "class": "Muscle relaxants (cyclobenzaprine, methocarbamol, carisoprodol)",
+                "reason": "Anticholinergic, sedation, fall risk; effectiveness in older adults unproven",
+                "alternative": "PT, heat, NSAIDs topically, low-dose cyclobenzaprine only if truly necessary with close monitoring"
+              }
+            ],
+            "useWithCaution": [
+              "Gabapentinoids (gabapentin, pregabalin) — increased fall risk and dizziness; dose reduction often needed",
+              "SSRIs — GI bleed risk when combined with anticoagulants; hyponatremia (SIADH) risk; monitor sodium annually",
+              "Warfarin — narrow therapeutic index; multiple drug and food interactions; falls risk with anticoagulation; consider DOAC if appropriate"
+            ],
+            "avoidInSpecificConditions": [
+              "Anticholinergics in bladder outlet obstruction (BPH) — urinary retention",
+              "NSAIDs in CKD stages 3-5 — accelerate GFR decline",
+              "Beta-blockers in severe COPD (non-cardioselective) — bronchoconstriction",
+              "PPIs long-term without ongoing indication — C. diff risk, bone density reduction, B12 malabsorption, hypomagnesemia"
+            ]
+          },
+          "anticholinergicBurden": {
+            "concept": "Many medications have anticholinergic properties; cumulative burden from multiple drugs compounds cognitive and physical risk",
+            "drugburden_scale": "Anticholinergic Risk Scale or Anticholinergic Cognitive Burden Scale — assign scores per medication; total >3 = high burden",
+            "highBurdenDrugs": "Oxybutynin, tolterodine (bladder anticholinergics), diphenhydramine, tricyclics, promethazine, chlorpheniramine, hydroxyzine",
+            "clinicalImpact": "Each point increase in anticholinergic burden score associated with 25% increase in fall risk, cognitive decline"
+          },
+          "deprescribingProcess": {
+            "steps": [
+              "1. Identify potentially inappropriate medications using Beers/STOPP criteria",
+              "2. For each PIM: confirm current indication (ask patient — many prescriptions outlive their indication)",
+              "3. Assess risk of stopping vs. risk of continuing",
+              "4. Prioritize: highest risk PIMs first (benzos, antipsychotics in dementia, anticoagulants after falls)",
+              "5. Involve patient and caregiver in shared decision making",
+              "6. Taper vs. abrupt discontinuation decision"
+            ],
+            "taperRequired": ["Benzodiazepines: taper slowly (10% dose reduction every 2-4 weeks) to avoid withdrawal seizures", "Opioids: 10-25% dose reduction every 2-4 weeks if chronic use", "SSRIs and SNRIs: taper over 2-4 weeks to avoid discontinuation syndrome (especially paroxetine and venlafaxine)", "Corticosteroids: if >3 weeks use — taper (adrenal suppression)", "Beta-blockers: taper if chronic use — rebound tachycardia/angina if abrupt stop"],
+            "canStopAbruptly": ["PPIs if no clear ongoing indication", "Statins in patients with very limited life expectancy (QOL benefit of stopping may outweigh CV prevention)", "Antihistamines"],
+            "patientCommunication": "Frame deprescribing as 'simplifying your medications to reduce side effects and drug interactions' — not as 'taking away your medications.' Validate concerns. Explain the symptoms to watch for after stopping."
+          }
+        },
+
+        "managementApproach": {
+          "annualMedicationReview": [
+            "List ALL medications including OTCs and supplements",
+            "For each medication: What is it for? Is the indication still active? What is the current dose? Does it interact with other medications? Is it a Beers Criteria PIM?",
+            "Use pharmacist collaboration when available — pharmacist-NP collaborative medication reviews improve deprescribing rates",
+            "Document medication changes with clear rationale"
+          ]
+        },
+
+        "redFlagsEscalation": [
+          "Benzodiazepine withdrawal: seizures, delirium tremens equivalent (if high-dose, long-duration use) → do NOT abruptly stop; escalate to addiction medicine or hospital if high-risk",
+          "Antipsychotic withdrawal in dementia: behavioral rebound — monitor closely; very gradual taper",
+          "Statin discontinuation in high ASCVD risk patient: discuss risk explicitly; document patient preference",
+          "Warfarin discontinuation: verify AF/VTE indication is truly resolved; consult cardiology if uncertain"
+        ],
+
+        "populationConsiderations": {
+          "older_adult": "Deprescribing is the most impactful medication intervention in this population. Every clinic visit in a frail older adult is an opportunity to review and simplify the medication regimen. The 'prescribing cascade' is the most common form of iatrogenic polypharmacy — always ask: 'Could this symptom be a medication side effect?' before adding a new drug.",
+          "cognitive_decline": "Patients with mild-moderate dementia often have reduced ability to self-monitor for medication side effects — caregiver involvement in monitoring is essential after deprescribing"
+        },
+
+        "followUpAndMonitoring": {
+          "afterDeprescribing": "Follow up within 2-4 weeks after stopping or significantly reducing a medication — assess symptom control, withdrawal effects, and patient's perception of change",
+          "documentation": "Document the medication that was stopped, the indication for stopping, the deprescribing rationale, and any monitoring plan",
+          "longtermReview": "Annual comprehensive medication review; update medication list at every hospitalization (common source of polypharmacy accumulation)"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "topicName": "Psoriasis and Atopic Dermatitis: Stepwise Treatment and Biologic Referral Criteria",
+      "caseAxis": "case7",
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": ["adult", "chronic-disease"],
+      "domain": "Chronic Disease Management",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Psoriasis and atopic dermatitis (AD) are the two most common chronic inflammatory skin conditions managed in primary care. NPs should be competent to initiate and escalate topical therapy and recognize when patients need dermatology referral for systemic or biologic therapy. Both conditions have significant quality-of-life impact often underestimated in clinical encounters.",
+
+        "coreConceptsAndDifferential": {
+          "psoriasis": {
+            "presentation": "Well-demarcated, salmon-pink plaques with thick, silvery scale; Auspitz sign (pinpoint bleeding when scale removed); Koebner phenomenon (lesions at trauma sites); common on extensor surfaces (elbows, knees), scalp, lumbosacral, nails (pitting, onycholysis)",
+            "psoriatic_arthritis": "Affects ~30% of psoriasis patients; asymmetric oligoarthritis, dactylitis ('sausage digit'), enthesitis, spondylitis; refer to rheumatology; joint destruction if untreated",
+            "comorbidities": "Metabolic syndrome, cardiovascular disease, depression, inflammatory bowel disease — screen at annual visits",
+            "severity_assessment": {
+              "PASI": "Psoriasis Area and Severity Index: scores erythema, induration, desquamation across BSA; >10 = moderate-severe",
+              "BSA": "Body surface area; >10% = moderate-severe (palm = ~1%)",
+              "DLQI": "Dermatology Life Quality Index; >10 = significant QoL impact — biologic criteria"
+            },
+            "stepwiseTreatment": {
+              "mild_topical": [
+                "High-potency topical corticosteroids (betamethasone dipropionate, clobetasol propionate) — first-line; limit to 2 weeks on face/flexures; 4-8 weeks on body; use lowest potency that controls disease",
+                "Vitamin D analogues (calcipotriol/calcipotriene): steroid-sparing, no atrophy risk; excellent for maintenance after steroid induction; combine with betamethasone dipropionate (Taclonex) for initial control",
+                "Tazarotene (retinoid): for thick plaques; irritating — use with emollient; avoid pregnancy",
+                "Coal tar: less cosmetically acceptable but effective for scalp psoriasis"
+              ],
+              "moderate_severe_systemic": [
+                "Methotrexate (MTX): weekly dosing (7.5-25 mg/week PO or IM); monitor CBC, LFTs monthly initially; contraindicated in pregnancy (Category X); add folic acid 1 mg daily to reduce side effects",
+                "Cyclosporine: rapid onset; monitor BP and renal function monthly; 2-year limit; bridges to biologic",
+                "Acitretin (oral retinoid): teratogenic for 3 years after stopping in women; effective for palmoplantar and nail psoriasis"
+              ],
+              "biologics_referralCriteria": [
+                "PASI >10 or BSA >10% or DLQI >10 (i.e., moderate-severe affecting quality of life)",
+                "Failure of adequate trials of ≥2 topical therapies",
+                "Psoriatic arthritis with active joint disease",
+                "NPs should refer to dermatology or rheumatology for biologic initiation — these are prescribable by NPs in some states but require specialist workup in most settings"
+              ],
+              "biologic_classes": ["TNF-alpha inhibitors: adalimumab (Humira), etanercept — older class; effective; screen for TB and hepatitis B before initiation", "IL-17 inhibitors: secukinumab (Cosentyx), ixekizumab — highly effective for plaque psoriasis and PsA", "IL-23 inhibitors: risankizumab (Skyrizi), guselkumab — long dosing intervals; very high efficacy"]
+            }
+          },
+          "atopicDermatitis": {
+            "presentation": "Intensely pruritic, eczematous plaques; chronic-relapsing; FLEXURAL distribution (antecubital/popliteal fossae, neck, wrists) in older children/adults; cheeks and extensor surfaces in infants; lichenification from chronic scratching; associated with atopic triad (asthma, allergic rhinitis)",
+            "itchScratchCycle": "Pruritus → scratching → skin barrier disruption → secondary colonization (S. aureus in >90%) → worsening inflammation → worsening pruritus",
+            "diagnosis": "Clinical diagnosis; no specific lab test. Elevated IgE and eosinophilia supportive but non-specific.",
+            "severity": "Mild: limited areas, infrequent itching; Moderate: widespread, frequent itch, sleep disruption; Severe: widespread, constant itch, significant QoL impact",
+            "stepwiseTreatment": {
+              "foundation_allStages": [
+                "Emollients: cornerstone of all AD management; apply within 3 minutes of bathing (soak-and-seal); thick creams or ointments (CeraVe, Vanicream, petroleum jelly) preferred over lotions",
+                "Trigger avoidance: identify and avoid soaps/detergents, specific foods (if confirmed), environmental allergens, wool",
+                "Gentle skin care: lukewarm water, fragrance-free detergents, pat dry"
+              ],
+              "mild_moderate_topical": [
+                "Topical corticosteroids: dose frequency and potency based on severity and location; hydrocortisone 1% for face/flexures; triamcinolone 0.1% for trunk/extremities; fluocinonide or clobetasol for thick or resistant plaques — use pulse dosing to maintain remission",
+                "Topical calcineurin inhibitors (TCIs): tacrolimus 0.03-0.1% ointment, pimecrolimus 1% cream — steroid-sparing; safe for face and eyelids; first-line for sensitive areas; black box warning for theoretical malignancy risk (clinical significance uncertain)",
+                "Crisaborole (Eucrisa): PDE-4 inhibitor; mild-moderate AD; twice daily; low side-effect profile"
+              ],
+              "moderate_severe_systemic": [
+                "Dupilumab (Dupixent): IL-4/IL-13 inhibitor; first biologic approved for AD; 300 mg SC every 2 weeks; dramatically effective; ophthalmology follow-up (conjunctivitis side effect); approved ≥6 months old",
+                "JAK inhibitors (upadacitinib — Rinvoq; abrocitinib — Cibinqo): oral; very effective; monitor CBC, lipids, liver; not first-line for most; risk of serious infections, malignancy",
+                "Cyclosporine: off-label; rapid onset; bridge to biologic",
+                "Phototherapy: narrowband UVB; effective for widespread moderate AD"
+              ],
+              "biologic_referralCriteria": [
+                "Inadequate response to topical therapy over 3-6 months",
+                "Moderate-severe disease with significant QoL impact (SCORAD >50 or POEM >16)",
+                "Frequent flares requiring systemic steroids (>2 courses/year)",
+                "Refer to dermatology or allergy/immunology for dupilumab initiation and monitoring"
+              ]
+            },
+            "infection_management": "S. aureus colonization is nearly universal — decolonization bleach baths (0.5 cup per full bathtub, 2-3x/week) reduce flares; treat secondary impetiginization with mupirocin topically (localized) or dicloxacillin/cephalexin orally (widespread)"
+          }
+        },
+
+        "managementApproach": {
+          "NP_role": "Initiate and escalate topical therapy; counsel on skin care fundamentals; treat acute flares; identify complications (secondary infection, contact dermatitis, erythroderma); refer to dermatology for moderate-severe disease, diagnostic uncertainty, or biologic need",
+          "commonError": "Under-treating with hydrocortisone 0.5-1% for all patients regardless of severity — insufficient potency leads to chronic under-control and eventual extensive disease"
+        },
+
+        "redFlagsEscalation": [
+          "Erythroderma: >90% BSA involvement → ED (thermoregulation failure, sepsis risk)",
+          "Eczema herpeticum (Kaposi varicelliform eruption): punched-out, clustered vesicular lesions + fever in AD patient → suspect HSV superinfection → acyclovir or valacyclovir; may require hospitalization",
+          "Generalized pustular psoriasis: acute eruption of sterile pustules + fever + systemic illness → dermatology emergency",
+          "Psoriatic arthritis joint destruction: aggressive joint swelling + elevated markers → rheumatology urgently"
+        ],
+
+        "populationConsiderations": {
+          "adult": "Assess work and QoL impact — AD and psoriasis affect employment (visible lesions), relationships, and sleep; address psychological burden; depression screening with PHQ-9 at diagnosis and annually",
+          "chronic_disease": "Both conditions are lifelong; patient education on maintenance therapy (not just acute treatment) is essential to prevent the boom-bust cycle of intensive treatment → stop → relapse"
+        },
+
+        "followUpAndMonitoring": {
+          "psoriasis": "4-8 week follow-up after initiating topical therapy; MTX: CBC + LFTs every 4-12 weeks; annual metabolic/cardiovascular screening; skin cancer screening",
+          "AD": "2-4 week follow-up during flares; 3-6 monthly when stable; review trigger diary; monitor for secondary infection; ophthalmology annually if on dupilumab"
+        }
+      }
+    },
+
+    {
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "topicName": "Smoking Cessation: Pharmacotherapy Options and Counseling Strategies",
+      "caseAxis": "case7",
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": ["adult", "preventive-care"],
+      "domain": "Adult Primary Care",
+      "prerequisiteTopicSlugs": [],
+
+      "lesson": {
+        "clinicalFraming": "Tobacco use is the leading preventable cause of death in the US, responsible for 480,000 deaths/year. Smoking cessation is the single most cost-effective intervention across virtually every chronic disease. NPs have both the opportunity and the clinical mandate to address tobacco at every encounter. Brief cessation counseling in primary care combined with pharmacotherapy triples quit rates compared to willpower alone.",
+
+        "coreConceptsAndDifferential": {
+          "5A_framework": {
+            "Ask": "Ask about tobacco use at EVERY visit — smoking status should be documented as a vital sign",
+            "Advise": "Provide clear, personalized advice to quit: 'Quitting is the most important thing you can do for your health right now'",
+            "Assess": "Assess readiness to quit: 'Are you thinking about quitting in the next 30 days?' — motivational interviewing for those not ready",
+            "Assist": "Provide pharmacotherapy + behavioral support; set a quit date; brief counseling or refer to Quitline (1-800-QUIT-NOW)",
+            "Arrange": "Follow-up contact within 1 week of quit date; 1 month; 3 months; 6 months"
+          },
+          "motivationalInterviewing": {
+            "FRAMES": ["Feedback: personalized risk (spirometry, cardiac risk, etc.)", "Responsibility: emphasize personal control", "Advice: clear recommendation to quit", "Menu: offer a choice of cessation methods", "Empathy: non-judgmental, reflective listening", "Self-efficacy: reinforce patient's ability to succeed"],
+            "forPrecontemplation": "Avoid confrontation; explore pros and cons of smoking; plant a seed; document 5R discussion (Relevance, Risks, Rewards, Roadblocks, Repetition)"
+          },
+          "pharmacotherapy": {
+            "vareniclien_Chantix": {
+              "mechanism": "Partial alpha-4-beta-2 nicotinic receptor agonist — reduces withdrawal symptoms AND reduces reward from smoking",
+              "efficacy": "Most effective single agent — 2-3x quit rate vs placebo; superior to NRT monotherapy and bupropion",
+              "dosing": "0.5 mg daily days 1-3 → 0.5 mg BID days 4-7 → 1 mg BID thereafter; start 1 week before target quit date; 12-week standard course; extend to 24 weeks for additional benefit",
+              "safety": "EAGLES trial definitively cleared cardiovascular safety concerns; neuropsychiatric safety acceptable; monitor for nausea (most common side effect — take with food and water); vivid dreams; mood monitoring recommended",
+              "contraindications": "End-stage renal disease (significant dose reduction: 0.5 mg daily); use with caution in patients with psychiatric illness — monitor mood, behavior changes",
+              "renal_dosing": "CrCl 30-60: start at 0.5 mg daily → max 0.5 mg BID; CrCl <30: max 0.5 mg daily"
+            },
+            "bupropion_Wellbutrin_Zyban": {
+              "mechanism": "Dopamine and norepinephrine reuptake inhibitor; reduces nicotine withdrawal and craving",
+              "efficacy": "~1.5-2x quit rate vs placebo; less effective than varenicline",
+              "dosing": "150 mg daily days 1-3 → 150 mg BID (at least 8 hours apart) starting day 4; begin 1-2 weeks before quit date; 7-12 weeks standard",
+              "advantage": "Can be used in patients with comorbid depression; prevents post-cessation weight gain (modest effect)",
+              "contraindications": "Seizure disorder, eating disorder (anorexia/bulimia — lowers seizure threshold), MAOI use within 14 days, abrupt alcohol/benzo discontinuation",
+              "sideEffects": "Insomnia (give second dose by 2 PM), dry mouth, agitation; do NOT take at bedtime"
+            },
+            "NRT_nicotineReplacementTherapy": {
+              "mechanism": "Delivers nicotine without tobacco toxins; reduces withdrawal symptoms",
+              "forms": {
+                "patch": "21 mg, 14 mg, 7 mg; wear 16-24 hours; change site daily; effective for background craving; takes 2-4 hours to peak",
+                "gum": "2 mg (<25 cigarettes/day) or 4 mg (≥25 cigarettes/day); chew-and-park technique; 9-15 pieces/day max; avoid eating/drinking 15 min before use",
+                "lozenge": "Similar dosing to gum; do not chew; dissolves in 20-30 min",
+                "inhaler": "Prescription; mimics hand-to-mouth behavior; delivers 4 mg/cartridge; 6-16 cartridges/day",
+                "nasal_spray": "Fastest onset (10 min); 0.5 mg/dose; 1-2 doses/hour; preferred for high-dependency smokers"
+              },
+              "combination_NRT": "Patch (long-acting) + gum or lozenge (short-acting) = most effective NRT strategy; ~60% more effective than patch alone",
+              "OTC_availability": "Patch, gum, lozenge available OTC; inhaler and nasal spray require prescription"
+            },
+            "combinationTherapy": "Varenicline + NRT patch or bupropion + NRT — some evidence for improved quit rates; acceptable and reasonable in motivated patients with multiple prior quit attempts"
+          }
+        },
+
+        "managementApproach": {
+          "quitDateSetting": "Set a specific quit date within 1-2 weeks; remove cigarettes and smoking paraphernalia from home and car on quit date; anticipate high-risk situations",
+          "quitline": "1-800-QUIT-NOW: free, evidence-based telephone counseling + free NRT in most states; refer all patients",
+          "electronicCigarettes": "Not FDA-approved cessation tools; evidence insufficient to recommend; use as harm reduction only if patient refuses other methods and unable to quit; counsel on lack of long-term safety data",
+          "relapsePrevention": "Most ex-smokers relapse multiple times before sustained abstinence; normalize this; celebrate any period of abstinence; reassess pharmacotherapy; do NOT express disappointment"
+        },
+
+        "redFlagsEscalation": [
+          "Varenicline: new onset or worsening depression, suicidal ideation, aggressive behavior → stop medication; refer to mental health",
+          "Bupropion: new seizure → stop immediately; ER evaluation",
+          "NRT in active ACS: use with caution — stop if chest pain worsens; NRT is safer than continued smoking but requires monitoring"
+        ],
+
+        "populationConsiderations": {
+          "adult": "Individualize pharmacotherapy choice based on comorbidities: cardiac disease → NRT patch + lozenge; psychiatric comorbidity → bupropion or varenicline with close monitoring; renal failure → dose-adjust varenicline; pregnancy → NRT preferred over pharmacotherapy but smoking is more harmful",
+          "preventive_care": "Update cessation attempt history at each visit; avoid stigmatizing language ('smoker' vs 'person who smokes'); link cessation to patient's specific chronic disease burden (COPD, CVD, T2DM)"
+        },
+
+        "followUpAndMonitoring": {
+          "week1": "Contact within 1 week of quit date — highest relapse period; assess withdrawal symptoms, medication tolerability, adherence",
+          "month1": "Assess abstinence; if relapsed: discuss barriers, adjust pharmacotherapy; if abstinent: reinforce, address triggers, plan for extended therapy if needed",
+          "month3and6": "Sustained abstinence confirmation; weight monitoring (average 5-10 lb gain with cessation — address with PA and dietary guidance); mental health monitoring",
+          "extendedTherapy": "Varenicline 24-week course for those at high risk of relapse; combination NRT indefinitely preferred over return to smoking"
+        }
+      }
+    }
+
+  ]
+}

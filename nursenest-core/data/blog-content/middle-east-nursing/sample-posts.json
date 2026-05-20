@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "countrySlug": "middle-east",
+  "entries": [
+    {
+      "slug": "me-sample-001-prometric-overview-en",
+      "title": "Prometric nursing exams in the Gulf — regulator-first mental model",
+      "language": "en",
+      "countryTargets": ["GCC"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-001",
+      "canonicalClusterId": "prometric-gulf",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-002-dha-dubai-en",
+      "title": "DHA nursing licence orientation for Dubai-bound nurses",
+      "language": "en",
+      "countryTargets": ["AE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-002",
+      "canonicalClusterId": "dha-exam-nursing",
+      "publicationPriority": 96,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-003-haad-abu-dhabi-en",
+      "title": "Abu Dhabi (DOH/HAAD-era) nursing licence — emirate-specific rules",
+      "language": "en",
+      "countryTargets": ["AE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-003",
+      "canonicalClusterId": "haad-exam-nurse",
+      "publicationPriority": 94,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-004-saudi-scfhs-en",
+      "title": "Saudi nursing classification and licensing — high-level candidate map",
+      "language": "en",
+      "countryTargets": ["SA"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-004",
+      "canonicalClusterId": "saudi-nursing-exam",
+      "publicationPriority": 92,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-005-dataflow-uae-en",
+      "title": "DataFlow verification and UAE nursing applications — what it does not replace",
+      "language": "en",
+      "countryTargets": ["GCC"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-005",
+      "canonicalClusterId": "dataflow-gulf",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-006-philippines-to-gulf-en",
+      "title": "Philippines to Gulf: common credential stacks for nurses",
+      "language": "en",
+      "countryTargets": ["GCC"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-006",
+      "canonicalClusterId": "expat-gulf",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-007-india-to-gulf-en",
+      "title": "India to Gulf nursing: verification, exams, and employer sequencing",
+      "language": "en",
+      "countryTargets": ["GCC", "IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-007",
+      "canonicalClusterId": "india-to-gulf",
+      "publicationPriority": 88,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-008-nclex-parallel-en",
+      "title": "Gulf licence vs US NCLEX — separate systems, shared study skills",
+      "language": "en",
+      "countryTargets": ["GCC"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-008",
+      "canonicalClusterId": "nclex-parallel-me",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-009-arabic-support-ar",
+      "title": "امتحانات الترخيص للممرضين في الخليج — إطار عملي (للتوعية فقط)",
+      "language": "ar",
+      "countryTargets": ["GCC"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-009",
+      "canonicalClusterId": "gulf-licensing-ar",
+      "publicationPriority": 98,
+      "status": "sample"
+    },
+    {
+      "slug": "me-sample-010-qatar-moph-en",
+      "title": "Qatar MOPH nursing licence pathway — planning notes",
+      "language": "en",
+      "countryTargets": ["QA"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-me-010",
+      "canonicalClusterId": "qatar-nursing",
+      "publicationPriority": 86,
+      "status": "sample"
+    }
+  ]
+}

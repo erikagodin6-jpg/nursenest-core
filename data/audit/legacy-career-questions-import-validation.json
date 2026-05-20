@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-04-15T20:57:51.449Z",
+  "phase": "legacy_career_ts",
+  "dryRun": true,
+  "resume": false,
+  "filesScanned": 199,
+  "rawQuestions": 2,
+  "normalizedOk": 2,
+  "normalizeErrors": 0,
+  "scopeRejections": 0,
+  "skippedDuplicateStemInDb": 0,
+  "skippedDuplicateInRun": 0,
+  "inserted": 0,
+  "insertErrors": [],
+  "fileSummaries": [],
+  "errorSamples": []
+}

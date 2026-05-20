@@ -1,0 +1,223 @@
+{
+  "generatedAt": "2026-04-15T02:06:23.915Z",
+  "methodology": "Heuristic intent from slug+title keywords (clinical_concept, comparison, prioritization, management_treatment, migration_international_nurse, exam_strategy). Not GSC-backed.",
+  "byIntent": {
+    "clinical_concept": 119,
+    "exam_strategy": 638,
+    "migration_international_nurse": 5,
+    "prioritization": 40,
+    "comparison": 4
+  },
+  "thinClusterWarnings": [
+    "Many blog-topic-clusters and long-form *topics* are metadata-only until imported to Prisma.",
+    "Regional manifests under nursenest-core/data/blog-manifest may be empty placeholders — check each file.",
+    "Sitemap lists only DB-published slugs — repo-only definitions are invisible to sitemap XML."
+  ],
+  "strongLongTailCandidates": [
+    {
+      "slug": "clinical-judgment-on-exam-day",
+      "title": "Clinical judgment on exam day: turning cues into safe decisions",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "pharmacology-without-memorization-chaos",
+      "title": "Pharmacology study that sticks (without memorization chaos)",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "lab-trends-and-acute-kidney-injury",
+      "title": "Lab trends that matter in acute kidney injury",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-from-the-philippines",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-as-nigerian-nurse",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-rn-preparation-guide-for-indian-nurses",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-as-kenyan-nurse",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-rn-for-uk-nurses-complete-preparation-guide",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-practice-questions-for-filipino-nurses",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "best-nclex-study-plan-for-indian-nurses-budget",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "best-nclex-study-plan-nigerian-nurses",
+      "title": null,
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-study-plan-for-filipino-nurses-working-full-time",
+      "title": "Top 10 NCLEX-RN Mistakes Filipino Test-Takers Make (and How to Avoid Them)",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "top-nclex-mistakes-filipino-nurses-make",
+      "title": "NCLEX-RN Pharmacology Review: What Filipino Nurses Need to Know",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-pharmacology-review-for-filipino-nurses",
+      "title": "NCLEX-RN Practice Questions: Free Sample Questions for Filipino Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "how-nclex-cat-format-works-philippine-nurses",
+      "title": "Fluid and Electrolyte NCLEX Questions: A Filipino Nurse",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "fluid-electrolyte-nclex-questions-filipino-nurses",
+      "title": "NCLEX-RN Readiness: How to Know If You",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-readiness-how-to-know-you-are-ready",
+      "title": "Cardiac NCLEX Questions Every Filipino Nurse Should Master",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "cardiac-nclex-questions-for-filipino-nurses",
+      "title": "Affordable NCLEX Review Options for Filipino Nurses (2025)",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "affordable-nclex-review-options-for-filipino-nurses",
+      "title": "NCLEX-RN Maternal and Newborn Nursing Review for Filipino Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-maternal-newborn-nursing-review-philippines",
+      "title": "How to Study for the NCLEX-RN in 30 Days: Philippines Edition",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "study-nclex-in-30-days-philippines",
+      "title": "NCLEX-RN Sepsis and Infection Control: What Filipino Nurses Must Know",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-sepsis-infection-control-filipino-nurses",
+      "title": "Pediatric Nursing NCLEX Questions: Study Guide for Filipino Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "pediatric-nursing-nclex-questions-filipino-nurses",
+      "title": "Clinical Judgment on the NCLEX: Why It Matters for Filipino Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "clinical-judgment-nclex-why-it-matters-filipino-nurses",
+      "title": "NCLEX-RN Results: How to Interpret the Quick Results and What to Do Next",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-results-quick-results-what-to-do-next",
+      "title": "NCLEX-RN Application Process for Philippine-Educated Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-application-process-philippine-nurses",
+      "title": "Shock Nursing NCLEX Review: Types, Assessment, and Interventions",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "shock-nursing-nclex-review-types-assessment",
+      "title": "NCLEX-RN Prioritization and Delegation Questions Explained",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-prioritization-delegation-questions-explained",
+      "title": "NCLEX Renal and Dialysis Questions: Essential Review for Filipino Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-renal-dialysis-questions-filipino-nurses",
+      "title": "NCLEX-RN Preparation Guide for Indian Nurses: Everything You Need to Know",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "top-nclex-mistakes-indian-nurses-make",
+      "title": "NCLEX-RN Pharmacology Tips for Indian Nursing Graduates",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-pharmacology-tips-for-indian-nursing-graduates",
+      "title": "NCLEX-RN Practice Questions for Indian Nurses: Try Free Samples",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-practice-questions-for-indian-nurses-free",
+      "title": "How Indian Nurses Can Apply for the NCLEX-RN: Step-by-Step",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "how-indian-nurses-apply-nclex-rn-step-by-step",
+      "title": "NCLEX-RN Clinical Judgment Questions: What Indian Nurses Need to Know",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-clinical-judgment-questions-indian-nurses",
+      "title": "NCLEX-RN vs Indian Nursing Exams: Key Differences You Must Know",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-vs-indian-nursing-exams-key-differences",
+      "title": "Cardiac and Cardiovascular NCLEX Review for Indian Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "cardiac-cardiovascular-nclex-review-indian-nurses",
+      "title": "How to Study for the NCLEX-RN in 60 Days: Indian Nurse Edition",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "study-nclex-in-60-days-indian-nurse-edition",
+      "title": "NCLEX-RN Infection Control and Sepsis Review for Indian Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-infection-control-sepsis-review-indian-nurses",
+      "title": "NCLEX-RN Maternal Child Nursing Questions for Indian Nurses",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-maternal-child-nursing-indian-nurses",
+      "title": "NCLEX-RN Fluid and Electrolyte Imbalances Made Simple",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    },
+    {
+      "slug": "nclex-fluid-electrolyte-imbalances-made-simple-india",
+      "title": "NCLEX-RN Prioritization Strategies Indian Nurses Struggle With",
+      "reason": "High-intent nursing/exam keywords in slug or title"
+    }
+  ],
+  "missingTopicsGuess": [
+    "State-specific NCLEX jurisprudence deep-dives (only if not in DB)",
+    "Condition-specific medication comparison matrices (verify DB coverage)",
+    "Employer-sponsored IEN onboarding checklists (migration cluster)"
+  ]
+}

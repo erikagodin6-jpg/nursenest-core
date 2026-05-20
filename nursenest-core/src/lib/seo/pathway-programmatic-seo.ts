@@ -1,0 +1,40 @@
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
+
+/**
+ * Primary indexable programmatic URL for each product pathway (`/{slug}`).
+ * Labels come from `getProgrammaticSeoPage(slug).h1` so breadcrumbs match the public page title.
+ *
+ * **US NCLEX-PN → `rex-pn-practice-questions`:** there is no separate NCLEX-PN-only slug in
+ * `programmatic-registry`; that page’s h1 explicitly includes NCLEX-PN alongside REx-PN.
+ *
+ * **Allied → `allied-health-career-guides`:** only allied-themed programmatic entry today;
+ * it leans career context while hubs are exam prep. Still the closest registry parent.
+ *
+ * **US NP → `np-exam-prep`; Canada CNPLE → `canada-np-exam-prep`:** generic discovery hubs stay
+ * specialty-neutral instead of collapsing to FNP-only CTAs.
+ */
+const PATHWAY_ID_TO_PROGRAMMATIC_SLUG: Record<string, string> = {
+  "ca-rpn-rex-pn": "rex-pn-practice-questions",
+  "ca-rn-nclex-rn": "nclex-rn-practice-questions",
+  "us-rn-nclex-rn": "nclex-rn-practice-questions",
+  "us-lpn-nclex-pn": "rex-pn-practice-questions",
+  "us-np-fnp": "np-exam-prep",
+  "us-np-agpcnp": "np-exam-prep",
+  "us-np-whnp": "np-exam-prep",
+  "us-np-pnp-pc": "np-exam-prep",
+  "us-np-pmhnp": "np-exam-prep",
+  "ca-np-cnple": "canada-np-exam-prep",
+  "ca-allied-core": "allied-health-career-guides",
+  "us-allied-core": "allied-health-career-guides",
+};
+
+export async function getPathwayProgrammaticSeoLanding(
+  pathway: ExamPathwayDefinition,
+): Promise<{ path: string; label: string } | null> {
+  const slug = PATHWAY_ID_TO_PROGRAMMATIC_SLUG[pathway.id];
+  if (!slug) return null;
+  const page = await getProgrammaticSeoPage(slug);
+  if (!page) return null;
+  return { path: `/${slug}`, label: page.h1 };
+}

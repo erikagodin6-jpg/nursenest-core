@@ -1,0 +1,624 @@
+{
+  "generatedAt": "2026-04-12T21:51:29.739Z",
+  "planFile": "data/reports/pathway-lessons/np-execution-plan.json",
+  "dbAccessEnabled": true,
+  "applyEnabled": false,
+  "summary": {
+    "DEFERRED": 0,
+    "WOULD_APPLY": 0,
+    "APPLIED": 0,
+    "REJECTED": 0,
+    "UNCHANGED": 32,
+    "totalRows": 32
+  },
+  "rows": [
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "mens-bph",
+      "mergeTargetTopicSlug": "renal-bph",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jg00030nstop09vwzd"
+      ],
+      "targetLessonSlugs": [
+        "renal-bph"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "mens-ed",
+      "mergeTargetTopicSlug": "renal-ed",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jk00040nstbi3vm81j"
+      ],
+      "targetLessonSlugs": [
+        "renal-ed"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "mens-infertility",
+      "mergeTargetTopicSlug": "renal-male-infertility",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jp00050nstinyaya26"
+      ],
+      "targetLessonSlugs": [
+        "renal-male-infertility"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "mens-prostatitis",
+      "mergeTargetTopicSlug": "renal-prostatitis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0ju00060nstp95y4siq"
+      ],
+      "targetLessonSlugs": [
+        "renal-prostatitis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "msk-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0j800010nstyxwpbh67"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "pharm-polypharm-cross",
+      "mergeTargetTopicSlug": "geri-polypharm",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jd00020nstl6n8gh1y"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "resp-pe",
+      "mergeTargetTopicSlug": "cv-pe",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0ir00000nstdi7btrkv"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "topicSlug": "wh-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0j800010nstyxwpbh67"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "mens-bph",
+      "mergeTargetTopicSlug": "renal-bph",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kb000a0nsto82wef89"
+      ],
+      "targetLessonSlugs": [
+        "renal-bph"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "mens-ed",
+      "mergeTargetTopicSlug": "renal-ed",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kf000b0nstsyhk0gtc"
+      ],
+      "targetLessonSlugs": [
+        "renal-ed"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "mens-infertility",
+      "mergeTargetTopicSlug": "renal-male-infertility",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kj000c0nst71woed32"
+      ],
+      "targetLessonSlugs": [
+        "renal-male-infertility"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "mens-prostatitis",
+      "mergeTargetTopicSlug": "renal-prostatitis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kn000d0nstfc40bniu"
+      ],
+      "targetLessonSlugs": [
+        "renal-prostatitis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "msk-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0k300080nstmqevl33m"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "pharm-polypharm-cross",
+      "mergeTargetTopicSlug": "geri-polypharm",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0k700090nstmpob8nzd"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "resp-pe",
+      "mergeTargetTopicSlug": "cv-pe",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jy00070nstms7zrsut"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "topicSlug": "wh-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0k300080nstmqevl33m"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "mens-bph",
+      "mergeTargetTopicSlug": "renal-bph",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0l2000h0nsta4b8ifc3"
+      ],
+      "targetLessonSlugs": [
+        "renal-bph"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "mens-ed",
+      "mergeTargetTopicSlug": "renal-ed",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0l7000i0nstcuzeypjq"
+      ],
+      "targetLessonSlugs": [
+        "renal-ed"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "mens-infertility",
+      "mergeTargetTopicSlug": "renal-male-infertility",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lb000j0nst1phuiaqq"
+      ],
+      "targetLessonSlugs": [
+        "renal-male-infertility"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "mens-prostatitis",
+      "mergeTargetTopicSlug": "renal-prostatitis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lf000k0nsth94bdgma"
+      ],
+      "targetLessonSlugs": [
+        "renal-prostatitis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "msk-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kv000f0nstsqh5kbx0"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "pharm-polypharm-cross",
+      "mergeTargetTopicSlug": "geri-polypharm",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kz000g0nst3bf7tsgt"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "resp-pe",
+      "mergeTargetTopicSlug": "cv-pe",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kr000e0nstycd7dm6v"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "topicSlug": "wh-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kv000f0nstsqh5kbx0"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-pmhnp",
+      "topicSlug": "pharm-polypharm-cross",
+      "mergeTargetTopicSlug": "geri-polypharm",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lj000l0nstrd4kc93a"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "topicSlug": "msk-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lr000n0nstnzad4twu"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "topicSlug": "pharm-polypharm-cross",
+      "mergeTargetTopicSlug": "geri-polypharm",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lv000o0nst1g2et4rt"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "topicSlug": "resp-pe",
+      "mergeTargetTopicSlug": "cv-pe",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lo000m0nstd4g74cod"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "topicSlug": "msk-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0m2000q0nst4keoks16"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "topicSlug": "pharm-polypharm-cross",
+      "mergeTargetTopicSlug": "geri-polypharm",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0m5000r0nstwb1ai19y"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "topicSlug": "resp-pe",
+      "mergeTargetTopicSlug": "cv-pe",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lz000p0nstccvvskqx"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "topicSlug": "wh-osteoporosis",
+      "mergeTargetTopicSlug": "endo-osteoporosis",
+      "sourceLessonIds": [],
+      "sourceLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0m2000q0nst4keoks16"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
+      "appliedArchiveCount": 0,
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
+      "notes": [
+        "No published source rows remain; merge is already satisfied or previously suppressed."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+[
+  {
+    "route": "/us/new-grad/med-surg",
+    "file": "hub-us-med-surg-desktop.png",
+    "error": "page.goto: Timeout 120000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/med-surg\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/emergency-department",
+    "file": "hub-us-emergency-department-desktop.png",
+    "error": "page.goto: net::ERR_EMPTY_RESPONSE at http://127.0.0.1:3010/us/new-grad/emergency-department\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/emergency-department\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/icu",
+    "file": "hub-us-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/pediatric-icu",
+    "file": "hub-us-pediatric-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/pediatric-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/pediatric-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/neonatal-icu",
+    "file": "hub-us-neonatal-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/neonatal-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/neonatal-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/cardiac-icu",
+    "file": "hub-us-cardiac-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/cardiac-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/cardiac-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/neuro-icu",
+    "file": "hub-us-neuro-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/neuro-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/neuro-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/trauma",
+    "file": "hub-us-trauma-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/trauma\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/trauma\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/long-term-care",
+    "file": "hub-us-long-term-care-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/long-term-care\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/long-term-care\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/rehabilitation",
+    "file": "hub-us-rehabilitation-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/rehabilitation\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/rehabilitation\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/mental-health",
+    "file": "hub-us-mental-health-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/mental-health\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/mental-health\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/pediatrics",
+    "file": "hub-us-pediatrics-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/pediatrics\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/pediatrics\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/maternal-newborn",
+    "file": "hub-us-maternal-newborn-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/maternal-newborn\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/maternal-newborn\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/labour-delivery",
+    "file": "hub-us-labour-delivery-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/labour-delivery\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/labour-delivery\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/oncology-hematology",
+    "file": "hub-us-oncology-hematology-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/oncology-hematology\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/oncology-hematology\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/renal-dialysis",
+    "file": "hub-us-renal-dialysis-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/renal-dialysis\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/renal-dialysis\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/operating-room",
+    "file": "hub-us-operating-room-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/operating-room\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/operating-room\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/pacu",
+    "file": "hub-us-pacu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/pacu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/pacu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/community-public-health",
+    "file": "hub-us-community-public-health-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/community-public-health\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/community-public-health\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/primary-care-clinics",
+    "file": "hub-us-primary-care-clinics-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/primary-care-clinics\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/primary-care-clinics\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/home-care",
+    "file": "hub-us-home-care-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/home-care\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/home-care\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/new-grad/hospice-palliative-care",
+    "file": "hub-us-hospice-palliative-care-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/new-grad/hospice-palliative-care\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/new-grad/hospice-palliative-care\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/med-surg",
+    "file": "hub-canada-med-surg-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/med-surg\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/med-surg\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/emergency-department",
+    "file": "hub-canada-emergency-department-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/emergency-department\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/emergency-department\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/icu",
+    "file": "hub-canada-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/pediatric-icu",
+    "file": "hub-canada-pediatric-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/pediatric-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/pediatric-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/neonatal-icu",
+    "file": "hub-canada-neonatal-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/neonatal-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/neonatal-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/cardiac-icu",
+    "file": "hub-canada-cardiac-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/cardiac-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/cardiac-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/neuro-icu",
+    "file": "hub-canada-neuro-icu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/neuro-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/neuro-icu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/trauma",
+    "file": "hub-canada-trauma-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/trauma\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/trauma\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/long-term-care",
+    "file": "hub-canada-long-term-care-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/long-term-care\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/long-term-care\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/rehabilitation",
+    "file": "hub-canada-rehabilitation-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/rehabilitation\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/rehabilitation\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/mental-health",
+    "file": "hub-canada-mental-health-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/mental-health\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/mental-health\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/pediatrics",
+    "file": "hub-canada-pediatrics-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/pediatrics\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/pediatrics\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/maternal-newborn",
+    "file": "hub-canada-maternal-newborn-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/maternal-newborn\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/maternal-newborn\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/labour-delivery",
+    "file": "hub-canada-labour-delivery-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/labour-delivery\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/labour-delivery\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/oncology-hematology",
+    "file": "hub-canada-oncology-hematology-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/oncology-hematology\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/oncology-hematology\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/renal-dialysis",
+    "file": "hub-canada-renal-dialysis-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/renal-dialysis\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/renal-dialysis\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/operating-room",
+    "file": "hub-canada-operating-room-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/operating-room\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/operating-room\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/pacu",
+    "file": "hub-canada-pacu-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/pacu\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/pacu\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/community-public-health",
+    "file": "hub-canada-community-public-health-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/community-public-health\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/community-public-health\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/primary-care-clinics",
+    "file": "hub-canada-primary-care-clinics-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/primary-care-clinics\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/primary-care-clinics\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/home-care",
+    "file": "hub-canada-home-care-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/home-care\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/home-care\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/canada/new-grad/hospice-palliative-care",
+    "file": "hub-canada-hospice-palliative-care-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/canada/new-grad/hospice-palliative-care\nCall log:\n  - navigating to \"http://127.0.0.1:3010/canada/new-grad/hospice-palliative-care\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/rn/new-grad-transition/lessons",
+    "file": "z-study-us-lessons-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/rn/new-grad-transition/lessons\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/rn/new-grad-transition/lessons\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/rn/new-grad-transition/questions",
+    "file": "z-study-us-questions-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/rn/new-grad-transition/questions\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/rn/new-grad-transition/questions\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/us/rn/new-grad-transition/cat",
+    "file": "z-study-us-cat-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/us/rn/new-grad-transition/cat\nCall log:\n  - navigating to \"http://127.0.0.1:3010/us/rn/new-grad-transition/cat\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons",
+    "file": "z-signup-callback-newgrad-lessons-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons\nCall log:\n  - navigating to \"http://127.0.0.1:3010/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+    "route": "/en/new-grad",
+    "file": "05b-en-new-grad-redirect-check-desktop.png",
+    "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3010/en/new-grad\nCall log:\n  - navigating to \"http://127.0.0.1:3010/en/new-grad\", waiting until \"domcontentloaded\"\n"
+  }
+]

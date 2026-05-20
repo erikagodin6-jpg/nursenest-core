@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-04-14T18:00:00.000Z",
+  "step0_architectureGuard": {
+    "status": "VERIFIED",
+    "lessons": "Pathway lessons load from DB/catalog with overlays merged at runtime via `src/lib/i18n/educational-content-overlay.ts` → `public/i18n/educational-overlays/<locale>/{lessons,questions,flashcards}.json`.",
+    "quizzesQuestions": "Exam questions remain canonical in DB; display overlays per question id in `questions.json` (labels/rationales for presentation — grading uses canonical fields).",
+    "uiStrings": "Compiled from `tools/i18n/source/i18n-{lang}.ts` + `tools/i18n/marketing/` → merged to `nursenest-core/public/i18n/{lang}.json` (`npm run i18n:compile`).",
+    "routing": "Exam hubs use country-first paths (`/us`, `/canada`) and pathway segments; marketing locales may use `/{locale}/…` for non-default languages per `marketing-locale-policy.ts`.",
+    "blog": "Blog posts in Prisma `BlogPost`; localized variants via `LocalizedBlogArticle` / blog SEO modules — not the same as lesson file overlays.",
+    "massTranslationBlockedUntil": "Adapter layer is existing overlay merge + compile pipeline. Do not bulk-translate DB source rows; extend overlays or approved DB translation tables per `docs/i18n-architecture.md`."
+  },
+  "supportedLocales": {
+    "compilePipelineLanguages": [
+      "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
+      "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru"
+    ],
+    "count": 22,
+    "meets20PlusLanguagesRequirement": true,
+    "marketingSwitcherListedLocales": ["en", "fr", "es", "tl", "hi"],
+    "note": "Routable marketing codes include incomplete-tier locales (hidden from switcher) — see `marketing-languages.ts`."
+  },
+  "educationalOverlaysPresent": {
+    "localesWithFilesSample": ["fr", "es", "tl"],
+    "paths": "nursenest-core/public/i18n/educational-overlays/<locale>/",
+    "gapVsRequestedPaths": "User-requested `data/i18n/lessons/{locale}.json` is NOT the canonical layout; use `public/i18n/educational-overlays` or add a thin adapter that re-exports — avoid duplicate trees."
+  },
+  "seoRouting": {
+    "canonicalStrategy": "Per-domain canonical helpers in `src/lib/seo/`; sitemap routes under `src/app/sitemap.xml` and `sitemaps/*`.",
+    "hreflang": "Not fully centralized in one matrix file today — `global-locale-matrix.json` + future layout work should emit alternates without duplicate canonicals.",
+    "risks": ["Cross-locale duplicate URLs if same content is published under multiple paths without canonical discipline"]
+  },
+  "paywallEntitlements": {
+    "enforcement": "Server-side: `resolveEntitlementForPage`, pathway access helpers, API 401 where required — locale switching must not bypass (verify on each new localized route).",
+    "localeBypassRisk": "MITIGATED_BY_DESIGN",
+    "note": "Re-test when adding new `[locale]` surface areas."
+  },
+  "hardcodedEnglish": {
+    "detection": "Run `npm run i18n:scan` / CI from repo root per `i18n-scan.config.json`.",
+    "missingKeyPolicy": "Non-English: `[missing:key]` style — not silent English backfill in marketing formatters (see docs)."
+  },
+  "inconsistencies": [
+    "DB `content_translations` may exist for legacy paths while new work prefers overlays — coordinate before duplicating strings.",
+    "Blog vs lesson overlay locations differ by subsystem."
+  ],
+  "recommendedNextSteps": [
+    "Wire `data/config/global-locale-matrix.json` into SEO hreflang + exam label helpers (incremental).",
+    "Expand educational overlays for priority locales (batched, reversible JSON commits).",
+    "Keep batch translation / MT outside runtime until human QA for clinical accuracy."
+  ]
+}

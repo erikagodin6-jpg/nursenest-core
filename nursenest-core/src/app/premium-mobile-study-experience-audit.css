@@ -1,0 +1,256 @@
+/**
+ * Premium Mobile Study Experience Audit
+ *
+ * Additive mobile integrity layer for study usability, brand consistency,
+ * overlap prevention, safe-area behavior, and App Store-quality polish.
+ * Presentation only: no route, SEO, entitlement, i18n, or adaptive changes.
+ */
+
+:root {
+  --nn-mobile-study-theme-covered: 0;
+  --nn-mobile-study-safe-bottom: max(0.85rem, env(safe-area-inset-bottom, 0px));
+  --nn-mobile-study-safe-top: max(0.35rem, env(safe-area-inset-top, 0px));
+  --nn-mobile-study-tap-target: max(var(--nn-mobile-touch-min, 2.75rem), 44px);
+  --nn-mobile-study-gutter: clamp(1rem, 4.8vw, 1.35rem);
+  --nn-mobile-study-stack-gap: clamp(0.85rem, 3.5vw, 1.15rem);
+  --nn-mobile-study-card-gap: clamp(0.75rem, 3.2vw, 1rem);
+  --nn-mobile-study-reading-measure: min(100%, 42rem);
+  --nn-mobile-study-sticky-reserve: calc(var(--nn-mobile-study-tap-target) + var(--nn-mobile-study-safe-bottom) + 1rem);
+  --nn-mobile-study-brand-surface:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-brand) 8%),
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--nn-atmosphere-lavender, var(--semantic-brand)) 10%)
+    );
+  --nn-mobile-study-panel:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--nn-atmosphere-mint, var(--semantic-info)) 10%),
+      color-mix(in srgb, var(--semantic-surface) 92%, var(--nn-atmosphere-aqua, var(--semantic-brand)) 8%)
+    );
+  --nn-mobile-study-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 68%, transparent) inset,
+    0 12px 30px -26px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent);
+}
+
+html[data-theme="ocean"] [data-nn-premium-full-platform-convergence],
+html[data-theme="blossom"] [data-nn-premium-full-platform-convergence],
+html[data-theme="midnight"] [data-nn-premium-full-platform-convergence],
+html[data-theme="sunset"] [data-nn-premium-full-platform-convergence],
+html[data-theme="aurora"] [data-nn-premium-full-platform-convergence],
+html[data-theme="ocean"] .nn-learner-app,
+html[data-theme="blossom"] .nn-learner-app,
+html[data-theme="midnight"] .nn-learner-app,
+html[data-theme="sunset"] .nn-learner-app,
+html[data-theme="aurora"] .nn-learner-app {
+  --nn-mobile-study-theme-covered: 1;
+}
+
+@media (max-width: 767.98px) {
+  html,
+  body {
+    overscroll-behavior-x: none;
+  }
+
+  :is(
+    [data-nn-premium-full-platform-convergence],
+    .nn-learner-app,
+    .nn-premium-auth-system,
+    .nn-premium-lessons-system,
+    .nn-premium-lesson-detail-shell,
+    .nn-flashcards-hub-premium,
+    .nn-flashcard-study-stack-premium,
+    .nn-premium-practice-hub,
+    .nn-practice-session,
+    .nn-exam-session-premium,
+    .nn-dash--learner-home,
+    .nn-labs-hub,
+    [data-nn-med-calc-hub],
+    [data-nn-scenario-study-shell],
+    .nn-pre-nursing-marketing-hub,
+    .nn-new-grad-hub,
+    .nn-allied-health-hub
+  ) {
+    min-width: 0;
+    overflow-x: clip;
+    scroll-padding-top: calc(var(--nn-mobile-study-tap-target) + var(--nn-mobile-study-safe-top));
+    scroll-padding-bottom: var(--nn-mobile-study-sticky-reserve);
+  }
+
+  :is(
+    [data-nn-premium-full-platform-convergence],
+    .nn-learner-app,
+    .nn-premium-auth-system,
+    .nn-premium-lessons-system,
+    .nn-premium-lesson-detail-shell,
+    .nn-flashcards-hub-premium,
+    .nn-premium-practice-hub,
+    .nn-dash--learner-home,
+    .nn-labs-hub,
+    [data-nn-med-calc-hub],
+    [data-nn-scenario-study-shell]
+  ) :is(section, article, aside, header, footer, nav, form, fieldset, .grid, .flex) {
+    min-width: 0;
+  }
+
+  :is(
+    .nn-learner-page-hero,
+    .nn-dash-page-header,
+    .nn-premium-lessons-hub-hero,
+    .nn-premium-practice-hub-hero,
+    .nn-flashcards-hub-hero,
+    .nn-labs-hub__hero,
+    [data-nn-scenario-study-shell] > header,
+    .nn-premium-auth-card,
+    .nn-premium-auth-story
+  ) {
+    padding-inline: max(var(--nn-mobile-study-gutter), env(safe-area-inset-left, 0px));
+    padding-block: clamp(1rem, 4vw, 1.35rem);
+    background: var(--nn-mobile-study-panel);
+    box-shadow: var(--nn-mobile-study-shadow);
+  }
+
+  :is(
+    [data-nn-premium-full-platform-convergence] .nn-card,
+    [data-nn-premium-full-platform-convergence] .lv-card,
+    [data-nn-premium-full-platform-convergence] .nn-ls-surface,
+    .nn-flashcards-deck-library-surface,
+    .nn-flashcards-deck-match-band,
+    .nn-practice-exam-rationale-panel__card,
+    .nn-report-card-topic-signal,
+    .nn-cockpit-readiness-card,
+    .nn-cockpit-mastery-key,
+    .nn-labs-hub article,
+    [data-nn-med-calc-hub] article
+  ) {
+    margin-inline: 0;
+    padding: clamp(0.9rem, 4vw, 1.1rem);
+    box-shadow: var(--nn-mobile-study-shadow);
+  }
+
+  :is(
+    [data-nn-premium-full-platform-convergence] .grid,
+    .nn-flashcards-hub-premium .grid,
+    .nn-premium-lessons-system .grid,
+    .nn-dash--learner-home .grid,
+    .nn-labs-hub .grid,
+    [data-nn-med-calc-hub] .grid
+  ) {
+    gap: var(--nn-mobile-study-card-gap);
+  }
+
+  :is(
+    .nn-lesson-prose,
+    .nn-lesson-content,
+    .nn-premium-lesson-detail-shell main,
+    .nn-practice-exam-rationale-premium,
+    .nn-practice-rationale-full__scroll
+  ) {
+    max-width: var(--nn-mobile-study-reading-measure);
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+  }
+
+  :is(
+    button,
+    [role="button"],
+    a.nn-btn-primary,
+    a.nn-btn-secondary,
+    .nn-learner-shell-link,
+    .nn-learner-shell-bottom-link,
+    .nn-mobile-nav a,
+    .nn-header-marketing-row4 a,
+    .nn-question-nav-actions button,
+    .nn-practice-q-nav button,
+    .nn-cat-question-nav button
+  ) {
+    min-height: var(--nn-mobile-study-tap-target);
+    touch-action: manipulation;
+  }
+
+  :is(.nn-brand-header-logo-slot, .nn-brand-learner-logo-slot, .nn-brand-auth-logo-slot, .nn-header-logo-link) {
+    flex-shrink: 0;
+    max-width: min(62vw, 14rem);
+    overflow: visible;
+  }
+
+  :is(.nn-brand-header-logo-slot img, .nn-brand-learner-logo-slot img, .nn-brand-auth-logo-slot img) {
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  :is(.nn-learner-shell-sticky, .nn-learner-shell-nav-row, .nn-mobile-nav, .nn-header-mobile-only-flex) {
+    background: var(--nn-mobile-study-brand-surface);
+    box-shadow: var(--nn-mobile-study-shadow);
+  }
+
+  :is(.nn-learner-shell-sticky, .nn-header-mobile-only-flex) {
+    top: 0;
+    padding-top: var(--nn-mobile-study-safe-top);
+  }
+
+  :is(.nn-learner-shell-bottom-scroll, .nn-mobile-nav) {
+    padding-bottom: var(--nn-mobile-study-safe-bottom);
+    scroll-padding-inline: var(--nn-mobile-study-gutter);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :is(.nn-question-nav-actions, .nn-practice-q-nav, .nn-cat-question-nav, .nn-cat-question-card__exam-footer--anchored) {
+    padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--semantic-surface) 82%, transparent),
+        color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted))
+      );
+    box-shadow:
+      0 -1px 0 var(--semantic-border-soft),
+      0 -18px 38px -34px color-mix(in srgb, var(--semantic-text-primary) 26%, transparent);
+  }
+
+  :is(.nn-cat-question-card--exam-stack, .nn-exam-session-premium, .nn-exam-session) {
+    scroll-padding-bottom: calc(var(--nn-mobile-study-sticky-reserve) + 1rem);
+  }
+
+  :is(.nn-exam-session-premium, .nn-cat-question-card--exam-stack) .nn-brand-header-logo-slot,
+  :is(.nn-exam-session-premium, .nn-cat-question-card--exam-stack) .nn-brand-learner-logo-slot {
+    max-width: min(46vw, 10rem);
+  }
+
+  :is([role="dialog"], .fixed, .nn-modal, .nn-sheet) {
+    max-width: calc(100vw - max(1.25rem, env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px)));
+  }
+
+  :is([role="dialog"], .nn-modal, .nn-sheet) {
+    max-height: calc(100dvh - var(--nn-mobile-study-safe-top) - var(--nn-mobile-study-safe-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  :is(input, textarea, select) {
+    min-height: var(--nn-mobile-study-tap-target);
+    font-size: max(1rem, 16px);
+  }
+
+  :is(svg, canvas, img, video) {
+    max-width: 100%;
+  }
+
+  :is(.recharts-wrapper, .recharts-surface, canvas) {
+    max-width: 100%;
+    overflow: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(
+    [data-nn-premium-full-platform-convergence],
+    .nn-learner-app,
+    .nn-premium-lessons-system,
+    .nn-flashcards-hub-premium,
+    .nn-exam-session-premium,
+    .nn-practice-session
+  ) * {
+    scroll-behavior: auto !important;
+  }
+}

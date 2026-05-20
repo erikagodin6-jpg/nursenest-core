@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "scanStatus": "aborted",
+  "reason": "No external files were readable; gap analysis requires inventory first.",
+  "comparisonBaseRepo": "nursenest-core/ (current site in-repo)",
+  "items": [],
+  "summary": {
+    "alreadyInCurrentSite": 0,
+    "partiallyImplemented": 0,
+    "missingHighValue": 0,
+    "missingLowValue": 0,
+    "notWorthMigrating": 0
+  },
+  "classificationKeys": [
+    "lessons",
+    "questionBanks",
+    "blogPosts",
+    "caseStudies",
+    "activities",
+    "toolsCalculators",
+    "translations",
+    "newGradContent",
+    "alliedContent",
+    "scriptsWithContent"
+  ],
+  "nextStep": "Provide a mounted path or copy external trees into the workspace, then re-run classification."
+}

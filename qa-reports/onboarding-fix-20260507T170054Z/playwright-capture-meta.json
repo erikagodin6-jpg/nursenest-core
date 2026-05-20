@@ -1,0 +1,37 @@
+{
+  "consoleSample": [
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=T_AXRKvBG0Mt86O5CZNyE' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=T_AXRKvBG0Mt86O5CZNyE' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=T_AXRKvBG0Mt86O5CZNyE' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    }
+  ],
+  "scrollChecks": [
+    {
+      "viewport": "desktop-1440x900",
+      "doc": 1440,
+      "client": 1440
+    },
+    {
+      "viewport": "tablet-768x1024",
+      "doc": 768,
+      "client": 768
+    },
+    {
+      "viewport": "mobile-375x812",
+      "doc": 375,
+      "client": 375
+    }
+  ]
+}

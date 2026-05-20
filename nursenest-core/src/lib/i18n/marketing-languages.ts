@@ -1,0 +1,73 @@
+/**
+ * Locale codes aligned with legacy `client/src/lib/i18n.tsx` for marketing shell links.
+ * Core-hosted locales use `/{code}/…` routes; see `marketing-locale-policy.ts` and `LOCALE_REGION_THEME.md`.
+ *
+ * **Switcher tiers** (translation completeness for what we advertise in the header/footer picker):
+ * - **full** — Fully supported: shown without a qualifier.
+ * - **partial** — Shown with a “(partial)” label (known gaps vs English).
+ * - **incomplete** — Routable and merged, but **hidden** from the switcher so users are not steered into mostly-English experiences.
+ *
+ * `MARKETING_LOCALE_CODES` in `marketing-locale-policy.ts` still lists every code for routing, cookies, and SEO.
+ */
+export type MarketingLanguageTier = "full" | "partial" | "incomplete";
+
+export type MarketingLanguage = {
+  code: string;
+  name: string;
+  flag: string;
+  tier: MarketingLanguageTier;
+};
+
+export const MARKETING_LANGUAGES: MarketingLanguage[] = [
+  { code: "en", name: "English", flag: "\uD83C\uDDEC\uD83C\uDDE7", tier: "full" },
+  { code: "fr", name: "Fran\u00e7ais", flag: "\uD83C\uDDEB\uD83C\uDDF7", tier: "partial" },
+  { code: "es", name: "Espa\u00f1ol", flag: "\uD83C\uDDEA\uD83C\uDDF8", tier: "full" },
+  { code: "tl", name: "Tagalog", flag: "\uD83C\uDDF5\uD83C\uDDED", tier: "full" },
+  { code: "hi", name: "\u0939\u093f\u0928\u094d\u0926\u0940", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "full" },
+  /** India regional locales — routable; promote tier when navigation + core pages are translated. */
+  { code: "ta", name: "Tamil (\u0ba4\u0bae\u0bbf\u0bb4\u0bcd)", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "incomplete" },
+  { code: "te", name: "Telugu (\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41)", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "incomplete" },
+  { code: "bn", name: "Bengali (\u09ac\u09be\u0982\u09b2\u09be)", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "incomplete" },
+  { code: "mr", name: "Marathi (\u092e\u0930\u093e\u0920\u0940)", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "incomplete" },
+  { code: "gu", name: "Gujarati (\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0)", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "incomplete" },
+  { code: "zh", name: "\u4e2d\u6587", flag: "\uD83C\uDDE8\uD83C\uDDF3", tier: "incomplete" },
+  { code: "zh-tw", name: "\u7e41\u9ad4\u4e2d\u6587", flag: "\uD83C\uDDF9\uD83C\uDDFC", tier: "incomplete" },
+  { code: "ar", name: "\u0627\u0644\u0639\u0631\u0628\u064a\u0629", flag: "\uD83C\uDDF8\uD83C\uDDE6", tier: "incomplete" },
+  { code: "ko", name: "\ud55c\uad6d\uc5b4", flag: "\uD83C\uDDF0\uD83C\uDDF7", tier: "incomplete" },
+  { code: "pt", name: "Portugu\u00eas (Brasil)", flag: "\uD83C\uDDE7\uD83C\uDDF7", tier: "full" },
+  { code: "pa", name: "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40", flag: "\uD83C\uDDE8\uD83C\uDDE6", tier: "incomplete" },
+  { code: "vi", name: "Ti\u1ebfng Vi\u1ec7t", flag: "\uD83C\uDDFB\uD83C\uDDF3", tier: "incomplete" },
+  { code: "ht", name: "Krey\u00f2l", flag: "\uD83C\uDDED\uD83C\uDDF9", tier: "incomplete" },
+  { code: "ur", name: "\u0627\u0631\u062f\u0648", flag: "\uD83C\uDDF5\uD83C\uDDF0", tier: "incomplete" },
+  { code: "ja", name: "\u65e5\u672c\u8a9e", flag: "\uD83C\uDDEF\uD83C\uDDF5", tier: "incomplete" },
+  { code: "fa", name: "\u0641\u0627\u0631\u0633\u06cc", flag: "\uD83C\uDDEE\uD83C\uDDF7", tier: "incomplete" },
+  { code: "de", name: "Deutsch", flag: "\uD83C\uDDE9\uD83C\uDDEA", tier: "incomplete" },
+  { code: "th", name: "\u0e44\u0e17\u0e22", flag: "\uD83C\uDDF9\uD83C\uDDED", tier: "incomplete" },
+  { code: "tr", name: "T\u00fcrk\u00e7e", flag: "\uD83C\uDDF9\uD83C\uDDF7", tier: "incomplete" },
+  { code: "id", name: "Indonesia", flag: "\uD83C\uDDEE\uD83C\uDDE9", tier: "incomplete" },
+  { code: "it", name: "Italiano", flag: "\uD83C\uDDEE\uD83C\uDDF9", tier: "incomplete" },
+  { code: "hu", name: "Magyar", flag: "\uD83C\uDDED\uD83C\uDDFA", tier: "incomplete" },
+  { code: "ru", name: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", flag: "\uD83C\uDDF7\uD83C\uDDFA", tier: "incomplete" },
+];
+
+/** Suffix for partial-tier locales in the switcher (English meta-label on the picker). */
+export const MARKETING_LANGUAGE_PARTIAL_SWITCHER_SUFFIX = " (partial)";
+
+/**
+ * Header/footer language picker order: fully supported first, then partial (labeled).
+ * Locales with tier `incomplete` are not listed here and stay off the switcher.
+ */
+const SWITCHER_CODES_ORDER: readonly string[] = ["en", "fr", "es", "tl", "hi", "pt"];
+
+export function getMarketingLanguagesForSwitcher(): MarketingLanguage[] {
+  return SWITCHER_CODES_ORDER.map((code) => MARKETING_LANGUAGES.find((l) => l.code === code)).filter(
+    (l): l is MarketingLanguage => l != null && (l.tier === "full" || l.tier === "partial"),
+  );
+}
+
+export function marketingLanguageDisplayNameForSwitcher(lang: MarketingLanguage): string {
+  if (lang.tier === "partial") {
+    return `${lang.name}${MARKETING_LANGUAGE_PARTIAL_SWITCHER_SUFFIX}`;
+  }
+  return lang.name;
+}

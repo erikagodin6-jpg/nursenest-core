@@ -1,0 +1,30 @@
+# Example Caddy v2 site for NurseNest Core.
+# Copy to /etc/caddy/Caddyfile (merge with your server block) or use a snippet include.
+#
+# Replace:
+#   your.domain.example
+#   your-email@example.com
+#
+# App listens on 127.0.0.1:3000 (see ecosystem.config.cjs).
+
+your.domain.example {
+	encode gzip zstd
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+
+	# Optional: respond to ACME HTTP-01; Caddy handles HTTPS automatically.
+	tls your-email@example.com
+
+	reverse_proxy 127.0.0.1:3000 {
+		header_up X-Forwarded-Host {host}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-For {remote_host}
+	}
+
+	# Liveness for external monitors (optional separate subdomain without extra TLS cost is also fine)
+	# handle_path /healthz* {
+	# 	reverse_proxy 127.0.0.1:3000
+	# }
+}

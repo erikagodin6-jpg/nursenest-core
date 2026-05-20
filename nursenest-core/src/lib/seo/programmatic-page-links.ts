@@ -1,0 +1,295 @@
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import {
+  HUB,
+  PN,
+  alliedQuestions,
+  npDiscoveryCatForRegion,
+  npDiscoveryLessonsForRegion,
+  npNpQuestionsForRegion,
+  pnLessons,
+  pnQuestions,
+  rnLessons,
+  rnQuestions,
+} from "@/lib/marketing/marketing-entry-routes";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
+import { clusterQuestionBankHref } from "@/lib/seo/programmatic-seo-cluster-links";
+import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
+import { absoluteUrl } from "@/lib/seo/site-origin";
+
+export type ProgrammaticProductLinks = {
+  lessons: string;
+  questions: string;
+  /** Pathway-scoped CAT practice landing (public marketing route). */
+  cat: string;
+  testBank: string;
+  exams: string;
+  tools: string;
+  flashcards: string;
+};
+
+function catPathForPathwayId(id: string): string | null {
+  const p = getExamPathwayById(id);
+  return p ? buildExamPathwayPath(p, "cat") : null;
+}
+
+function npDiscoveryLinksForRegion(region: MarketingRegionToggle): { lessons: string; questions: string; cat: string } {
+  return {
+    lessons: npDiscoveryLessonsForRegion(region),
+    questions: npNpQuestionsForRegion(region),
+    cat: npDiscoveryCatForRegion(region),
+  };
+}
+
+/**
+ * Public `/…/cat` route for the same pathway as lessons/questions (sign-in to run a session).
+ */
+function resolveProgrammaticCatHref(
+  page: SeoPageDefinition,
+  marketingRegion: MarketingRegionToggle,
+  loc: (p: string) => string,
+): string {
+  const slug = page.slug;
+  if (slug.startsWith("rex-pn")) {
+    const raw = catPathForPathwayId("ca-rpn-rex-pn");
+    return raw ? loc(raw) : loc(HUB.practiceExams);
+  }
+  if (slug.startsWith("nclex-pn")) {
+    const raw = catPathForPathwayId("us-lpn-nclex-pn");
+    return raw ? loc(raw) : loc(HUB.practiceExams);
+  }
+  if (slug === "cnple-practice-questions" || slug === "np-study-guide-canada" || slug === "canada-np-exam-prep") {
+    return loc(npDiscoveryCatForRegion("CA"));
+  }
+  if (slug === "np-exam-practice-questions" || slug === "np-exam-prep" || slug === "np-clinical-cases") {
+    return loc(npDiscoveryCatForRegion(marketingRegion));
+  }
+
+  const pack = page.linkPack ?? inferLinkPackFromCluster(page.cluster);
+  switch (pack) {
+    case "nclex-rn": {
+      const id = marketingRegion === "US" ? "us-rn-nclex-rn" : "ca-rn-nclex-rn";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "nclex-pn": {
+      const id = marketingRegion === "US" ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "np": {
+      return loc(npDiscoveryCatForRegion(marketingRegion));
+    }
+    case "allied": {
+      const id = marketingRegion === "US" ? "us-allied-core" : "ca-allied-core";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "general":
+    default: {
+      const id = marketingRegion === "US" ? "us-rn-nclex-rn" : "ca-rn-nclex-rn";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+  }
+}
+
+/**
+ * Map programmatic slug → canonical pathway lessons/questions when the slug encodes a specific exam
+ * (REx-PN vs NCLEX-PN; CNPLE vs US NP). Umbrella NP slugs follow the marketing region cookie.
+ */
+function finalizeProgrammaticProductLinks(links: ProgrammaticProductLinks, pageSlug: string): ProgrammaticProductLinks {
+  (Object.keys(links) as (keyof ProgrammaticProductLinks)[]).forEach((key) => {
+    const href = links[key];
+    const abs = href.startsWith("http://") || href.startsWith("https://") ? href : absoluteUrl(href);
+    const r = isValidPublicUrl(abs);
+    if (!r.ok) {
+      safeServerLog("seo", "programmatic_product_link_rejected", {
+        pageSlug,
+        key,
+        href: abs.slice(0, 400),
+        code: r.code,
+        detail: (r.detail ?? "").slice(0, 120),
+      });
+    }
+  });
+  logSeoEmittedUrlBatch(
+    "programmatic_product_links",
+    (Object.keys(links) as (keyof ProgrammaticProductLinks)[]).map((key) => {
+      const href = links[key];
+      return href.startsWith("http://") || href.startsWith("https://") ? href : absoluteUrl(href);
+    }),
+    { pageSlug },
+  );
+  return links;
+}
+
+function pathwayLessonsQuestionsFromProgrammaticSlug(
+  slug: string,
+  region: MarketingRegionToggle,
+): { lessons: string; questions: string } | null {
+  if (slug.startsWith("rex-pn")) {
+    return { lessons: PN.caLessons, questions: PN.caQuestions };
+  }
+  if (slug.startsWith("nclex-pn")) {
+    return { lessons: PN.usLessons, questions: PN.usQuestions };
+  }
+  if (slug === "cnple-practice-questions" || slug === "np-study-guide-canada" || slug === "canada-np-exam-prep") {
+    const links = npDiscoveryLinksForRegion("CA");
+    return { lessons: links.lessons, questions: links.questions };
+  }
+  if (slug === "np-exam-practice-questions" || slug === "np-exam-prep") {
+    const links = npDiscoveryLinksForRegion(region);
+    return { lessons: links.lessons, questions: links.questions };
+  }
+  if (slug === "np-clinical-cases") {
+    const links = npDiscoveryLinksForRegion(region);
+    return { lessons: links.lessons, questions: links.questions };
+  }
+  return null;
+}
+
+/**
+ * Resolves marketing-safe URLs for lessons, pathway questions, public hubs, tools, and flashcards.
+ * Subscriber app links are avoided for core product surfaces so SEO pages do not funnel straight to login walls.
+ */
+export function resolveProgrammaticProductLinks(
+  page: SeoPageDefinition,
+  locale: string,
+  marketingRegion: MarketingRegionToggle = "US",
+  /** When the page is rendered under a specific exam hub, link into that hub’s lessons, bank, and CAT. */
+  pathway?: ExamPathwayDefinition | null,
+): ProgrammaticProductLinks {
+  const loc = (p: string) => withMarketingLocale(locale, p);
+  const pack = page.linkPack ?? inferLinkPackFromCluster(page.cluster);
+
+  const tools = loc(HUB.tools);
+  const testBank = loc(HUB.questionBank);
+  const exams = loc(HUB.practiceExams);
+  const flashcards = loc("/flashcards");
+  const cat = pathway
+    ? loc(buildExamPathwayPath(pathway, "cat"))
+    : resolveProgrammaticCatHref(page, marketingRegion, loc);
+
+  if (pathway) {
+    return finalizeProgrammaticProductLinks(
+      {
+        lessons: loc(buildExamPathwayPath(pathway, "lessons")),
+        questions: loc(buildExamPathwayPath(pathway, "questions")),
+        cat,
+        testBank,
+        exams,
+        tools,
+        flashcards,
+      },
+      page.slug,
+    );
+  }
+
+  const slugHub = pathwayLessonsQuestionsFromProgrammaticSlug(page.slug, marketingRegion);
+  if (slugHub) {
+    return finalizeProgrammaticProductLinks(
+      {
+        lessons: loc(slugHub.lessons),
+        questions: loc(slugHub.questions),
+        cat,
+        testBank,
+        exams,
+        tools,
+        flashcards,
+      },
+      page.slug,
+    );
+  }
+
+  switch (pack) {
+    case "nclex-rn":
+      return finalizeProgrammaticProductLinks(
+        {
+          lessons: loc(rnLessons(marketingRegion)),
+          questions: loc(rnQuestions(marketingRegion)),
+          cat,
+          testBank,
+          exams,
+          tools,
+          flashcards,
+        },
+        page.slug,
+      );
+    case "nclex-pn":
+      return finalizeProgrammaticProductLinks(
+        {
+          lessons: loc(pnLessons(marketingRegion)),
+          questions: loc(pnQuestions(marketingRegion)),
+          cat,
+          testBank,
+          exams,
+          tools,
+          flashcards,
+        },
+        page.slug,
+      );
+    case "np": {
+      const npLinks = npDiscoveryLinksForRegion(marketingRegion);
+      return finalizeProgrammaticProductLinks(
+        {
+          lessons: loc(npLinks.lessons),
+          questions: loc(npLinks.questions),
+          cat,
+          testBank,
+          exams,
+          tools,
+          flashcards,
+        },
+        page.slug,
+      );
+    }
+    case "allied":
+      return finalizeProgrammaticProductLinks(
+        {
+          lessons: loc(HUB.examLessons),
+          questions: loc(alliedQuestions(marketingRegion)),
+          cat,
+          testBank,
+          exams,
+          tools,
+          flashcards,
+        },
+        page.slug,
+      );
+    case "general":
+    default:
+      return finalizeProgrammaticProductLinks(
+        {
+          lessons: loc(HUB.examLessons),
+          questions: clusterQuestionBankHref(locale, page.cluster, marketingRegion),
+          cat,
+          testBank,
+          exams,
+          tools,
+          flashcards,
+        },
+        page.slug,
+      );
+  }
+}
+
+function inferLinkPackFromCluster(cluster: SeoCluster): SeoPageDefinition["linkPack"] {
+  switch (cluster) {
+    case "exam-nclex":
+      return "nclex-rn";
+    case "exam-pn":
+      return "nclex-pn";
+    case "exam-np":
+      return "np";
+    case "allied":
+      return "allied";
+    default:
+      return "general";
+  }
+}

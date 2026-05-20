@@ -1,0 +1,5375 @@
+{
+  "_meta": {
+    "description": "Coverage audit of generated content against new-grad-transition blueprint",
+    "generatedAt": "2026-04-11T15:20:32.460Z",
+    "program": "new-grad-transition",
+    "pathwayId": "new-grad-transition",
+    "sourceFiles": {
+      "blueprint": "output/new-grad-transition-blueprint.json",
+      "content": "output/new-grad-transition-linked.json"
+    },
+    "slugRemaps": {
+      "first-30-minutes-shift-rituals-build-your-own": "first-30-minutes-shift-non-negotiable-routine",
+      "time-blocking-first-hour-map-clinical-priorities": "time-blocking-first-hour-getting-ahead",
+      "nursing-brain-sheet-personalized-system-built": "building-nursing-brain-shift-worksheets-templates",
+      "end-of-shift-rituals-logging-off-before-you-leave": "end-of-shift-completion-before-you-leave"
+    },
+    "thresholds": {
+      "strongQCoverage": 0.8,
+      "adequateQCoverage": 0.5
+    }
+  },
+  "topicAudit": [
+    {
+      "topicSlug": "abcde-framework-clinical-prioritization-floor",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "ABCDE Framework for Clinical Prioritization on the Floor",
+      "setting": "acute care",
+      "tags": [
+        "prioritization",
+        "ABCDE",
+        "clinical-judgment",
+        "new-grad",
+        "patient-safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "abcde-framework-clinical-prioritization-floor"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "maslow-hierarchy-nursing-priority-same-shift",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "Maslow's Hierarchy Applied to Same-Shift Nursing Priority",
+      "setting": "acute care",
+      "tags": [
+        "Maslow",
+        "prioritization",
+        "basic-needs",
+        "clinical-judgment",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "maslow-hierarchy-nursing-priority-same-shift"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "prioritizing-multiple-patients-who-first",
+      "domain": "Prioritization",
+      "subdomain": "Multi-Patient Assignment",
+      "topic": "Prioritizing Multiple Patients: Who Do You See First?",
+      "setting": "med-surg floor",
+      "tags": [
+        "multi-patient",
+        "prioritization",
+        "assignment",
+        "new-grad",
+        "clinical-judgment"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "prioritizing-multiple-patients-who-first"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "critical-lab-values-recognizing-acting-documenting",
+      "domain": "Prioritization",
+      "subdomain": "Lab Values",
+      "topic": "Critical Lab Values: Recognizing, Acting, and Documenting Immediately",
+      "setting": "acute care",
+      "tags": [
+        "lab-values",
+        "critical-values",
+        "prioritization",
+        "escalation",
+        "documentation"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "critical-lab-values-recognizing-acting-documenting"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "post-op-vs-chronic-care-competing-priorities",
+      "domain": "Prioritization",
+      "subdomain": "Multi-Patient Assignment",
+      "topic": "Post-Op vs Chronic Care: Setting Competing Priorities",
+      "setting": "med-surg floor",
+      "tags": [
+        "post-op",
+        "chronic-care",
+        "prioritization",
+        "multi-patient",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "post-op-vs-chronic-care-competing-priorities"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "when-everything-urgent-triage-thinking-medical-floor",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "When Everything Feels Urgent: Triage Thinking on the Medical Floor",
+      "setting": "med-surg floor",
+      "tags": [
+        "triage",
+        "prioritization",
+        "overwhelming",
+        "new-grad",
+        "clinical-judgment"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "when-everything-urgent-triage-thinking-medical-floor"
+      ],
+      "difficultyBreakdown": {
+        "medium": 2
+      }
+    },
+    {
+      "topicSlug": "medication-priority-which-meds-cannot-be-late",
+      "domain": "Prioritization",
+      "subdomain": "Medication Prioritization",
+      "topic": "Medication Priority: Which Meds Cannot Be Late and Why",
+      "setting": "acute care",
+      "tags": [
+        "medication-priority",
+        "time-sensitive",
+        "insulin",
+        "antibiotics",
+        "anticoagulants"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "medication-priority-which-meds-cannot-be-late"
+      ],
+      "difficultyBreakdown": {
+        "hard": 2
+      }
+    },
+    {
+      "topicSlug": "recognizing-patient-who-cannot-wait",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "Recognizing the Patient Who Cannot Wait: Subtle Cues and Gut Instinct",
+      "setting": "acute care",
+      "tags": [
+        "clinical-intuition",
+        "deterioration",
+        "prioritization",
+        "new-grad",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "recognizing-patient-who-cannot-wait"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1,
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "five-rights-delegation-new-grad-guide",
+      "domain": "Delegation",
+      "subdomain": "Delegation Principles",
+      "topic": "The Five Rights of Delegation: A New Grad's Practical Guide",
+      "setting": "acute care",
+      "tags": [
+        "delegation",
+        "five-rights",
+        "scope",
+        "new-grad",
+        "accountability"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "five-rights-delegation-new-grad-guide"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "what-can-cannot-delegate-psw-uap",
+      "domain": "Delegation",
+      "subdomain": "Task Allocation",
+      "topic": "What You Can and Cannot Delegate to PSW and UAP",
+      "setting": "med-surg floor",
+      "tags": [
+        "delegation",
+        "UAP",
+        "PSW",
+        "scope-of-practice",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "what-can-cannot-delegate-psw-uap"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "delegating-when-overwhelmed-asking-without-guilt",
+      "domain": "Delegation",
+      "subdomain": "Task Allocation",
+      "topic": "Delegating When You're Overwhelmed: Asking Without Guilt",
+      "setting": "med-surg floor",
+      "tags": [
+        "delegation",
+        "overwhelmed",
+        "new-grad",
+        "teamwork",
+        "asking-for-help"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "delegating-when-overwhelmed-asking-without-guilt"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "following-up-after-delegation-closing-loop",
+      "domain": "Delegation",
+      "subdomain": "Accountability",
+      "topic": "Following Up After Delegation: Closing the Loop",
+      "setting": "acute care",
+      "tags": [
+        "delegation",
+        "follow-up",
+        "accountability",
+        "supervision",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "following-up-after-delegation-closing-loop"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "rn-rpn-lpn-collaboration-assign-how",
+      "domain": "Delegation",
+      "subdomain": "Interprofessional",
+      "topic": "RN–RPN/LPN Collaboration: What You Can Assign and How",
+      "setting": "acute care",
+      "tags": [
+        "delegation",
+        "RPN",
+        "LPN",
+        "collaboration",
+        "scope-of-practice"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "rn-rpn-lpn-collaboration-assign-how"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "documenting-delegation-legal-record",
+      "domain": "Delegation",
+      "subdomain": "Documentation",
+      "topic": "Documenting Delegation: What the Legal Record Requires",
+      "setting": "any clinical setting",
+      "tags": [
+        "delegation",
+        "documentation",
+        "legal",
+        "accountability",
+        "charting"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "documenting-delegation-legal-record"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "building-nursing-brain-shift-worksheets-templates",
+      "domain": "Time Management",
+      "subdomain": "Nursing Brain",
+      "topic": "Building Your Nursing Brain: Shift Worksheets and Organizational Templates",
+      "setting": "med-surg floor",
+      "tags": [
+        "time-management",
+        "nursing-brain",
+        "organization",
+        "worksheets",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "building-nursing-brain-shift-worksheets-templates"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "time-blocking-first-hour-getting-ahead",
+      "domain": "Time Management",
+      "subdomain": "Shift Planning",
+      "topic": "Time-Blocking Your First Hour: Getting Ahead Before It Gets Busy",
+      "setting": "acute care",
+      "tags": [
+        "time-management",
+        "shift-planning",
+        "first-hour",
+        "organization",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "time-blocking-first-hour-getting-ahead"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "batching-tasks-efficient-purposeful-rounding",
+      "domain": "Time Management",
+      "subdomain": "Efficiency",
+      "topic": "Batching Tasks and Efficient Purposeful Rounding",
+      "setting": "med-surg floor",
+      "tags": [
+        "time-management",
+        "rounding",
+        "batching",
+        "efficiency",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "batching-tasks-efficient-purposeful-rounding"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "when-plan-falls-apart-replanning-mid-shift",
+      "domain": "Time Management",
+      "subdomain": "Adaptability",
+      "topic": "When Your Plan Falls Apart: Replanning Mid-Shift Without Panic",
+      "setting": "acute care",
+      "tags": [
+        "time-management",
+        "adaptability",
+        "replanning",
+        "new-grad",
+        "resilience"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "when-plan-falls-apart-replanning-mid-shift"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "managing-interruptions-without-losing-focus",
+      "domain": "Time Management",
+      "subdomain": "Interruptions",
+      "topic": "Managing Interruptions Without Losing Your Train of Thought",
+      "setting": "med-surg floor",
+      "tags": [
+        "time-management",
+        "interruptions",
+        "focus",
+        "safety",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "managing-interruptions-without-losing-focus"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "end-of-shift-completion-before-you-leave",
+      "domain": "Time Management",
+      "subdomain": "End of Shift",
+      "topic": "End-of-Shift Completion: What Must Be Done Before You Leave",
+      "setting": "acute care",
+      "tags": [
+        "end-of-shift",
+        "completion",
+        "time-management",
+        "accountability",
+        "handoff"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "end-of-shift-completion-before-you-leave"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "getting-report-listen-flag-document",
+      "domain": "Shift Organization",
+      "subdomain": "Receiving Report",
+      "topic": "Getting Report: What to Listen For, Flag, and Document",
+      "setting": "acute care",
+      "tags": [
+        "report",
+        "handoff",
+        "shift-organization",
+        "new-grad",
+        "listening"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 0,
+      "questionCount": 0,
+      "lessonGap": 1,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "missing",
+      "questionStatus": "missing",
+      "coverageStatus": "no_content",
+      "generatedLessonSlugs": [],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "organizing-assignment-report-to-handoff-systematic",
+      "domain": "Shift Organization",
+      "subdomain": "Assignment Planning",
+      "topic": "Organizing Your Assignment from Report to Handoff: A Systematic Approach",
+      "setting": "med-surg floor",
+      "tags": [
+        "shift-organization",
+        "assignment",
+        "planning",
+        "new-grad",
+        "systematic"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "organizing-assignment-report-to-handoff-systematic"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "first-30-minutes-shift-non-negotiable-routine",
+      "domain": "Shift Organization",
+      "subdomain": "Shift Start",
+      "topic": "The First 30 Minutes of Shift: Your Non-Negotiable Routine",
+      "setting": "med-surg floor",
+      "tags": [
+        "shift-start",
+        "routine",
+        "organization",
+        "assessment",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "first-30-minutes-shift-non-negotiable-routine"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "medication-administration-timing-realistic-workflow",
+      "domain": "Shift Organization",
+      "subdomain": "Medication Workflow",
+      "topic": "Medication Administration Timing: Building a Realistic Workflow",
+      "setting": "acute care",
+      "tags": [
+        "medication-administration",
+        "timing",
+        "workflow",
+        "organization",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "medication-administration-timing-realistic-workflow"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "balancing-bedside-care-documentation-not-either-or",
+      "domain": "Shift Organization",
+      "subdomain": "Balancing Priorities",
+      "topic": "Balancing Bedside Care with Documentation: Not Either/Or",
+      "setting": "acute care",
+      "tags": [
+        "bedside-care",
+        "documentation",
+        "balance",
+        "time-management",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "balancing-bedside-care-documentation-not-either-or"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "if-not-charted-not-done-legal-safety-stakes",
+      "domain": "Charting and Documentation",
+      "subdomain": "Documentation Principles",
+      "topic": "If It Wasn't Charted It Wasn't Done: The Legal and Safety Stakes",
+      "setting": "any clinical setting",
+      "tags": [
+        "charting",
+        "documentation",
+        "legal",
+        "safety",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "if-not-charted-not-done-legal-safety-stakes"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "soapie-dar-narrative-charting-choosing-format",
+      "domain": "Charting and Documentation",
+      "subdomain": "Charting Formats",
+      "topic": "SOAPIE, DAR, and Narrative Charting: Choosing the Right Format",
+      "setting": "any clinical setting",
+      "tags": [
+        "SOAPIE",
+        "DAR",
+        "narrative",
+        "charting-format",
+        "documentation"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "soapie-dar-narrative-charting-choosing-format"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "charting-assessment-what-belongs-what-doesnt",
+      "domain": "Charting and Documentation",
+      "subdomain": "Assessment Documentation",
+      "topic": "Charting Your Assessment: What Belongs in the Record and What Doesn't",
+      "setting": "acute care",
+      "tags": [
+        "assessment-documentation",
+        "charting",
+        "subjective-objective",
+        "new-grad",
+        "legal"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "charting-assessment-what-belongs-what-doesnt"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "late-entries-corrections-addenda-legal-safe",
+      "domain": "Charting and Documentation",
+      "subdomain": "Corrections and Late Entries",
+      "topic": "Late Entries, Corrections, and Addenda: Doing It Legally and Safely",
+      "setting": "any clinical setting",
+      "tags": [
+        "late-entry",
+        "corrections",
+        "addenda",
+        "legal",
+        "EHR"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "late-entries-corrections-addenda-legal-safe"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "charting-physician-telephone-orders-getting-right",
+      "domain": "Charting and Documentation",
+      "subdomain": "Physician Orders",
+      "topic": "Charting Physician Orders and Telephone Orders: Getting It Right",
+      "setting": "acute care",
+      "tags": [
+        "physician-orders",
+        "telephone-orders",
+        "charting",
+        "CUBED",
+        "read-back"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "charting-physician-telephone-orders-getting-right"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "documenting-patient-education-taught-understood",
+      "domain": "Charting and Documentation",
+      "subdomain": "Patient Education",
+      "topic": "Documenting Patient Education: What Was Taught and What Was Understood",
+      "setting": "any clinical setting",
+      "tags": [
+        "patient-education",
+        "documentation",
+        "teach-back",
+        "charting",
+        "health-literacy"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "documenting-patient-education-taught-understood"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "when-to-call-doctor-escalation-threshold",
+      "domain": "Escalation",
+      "subdomain": "Calling for Help",
+      "topic": "When to Call the Doctor: Recognizing Your Escalation Threshold",
+      "setting": "acute care",
+      "tags": [
+        "escalation",
+        "physician-call",
+        "new-grad",
+        "clinical-judgment",
+        "patient-safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "when-to-call-doctor-escalation-threshold"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "sbar-escalation-script-before-you-dial",
+      "domain": "Escalation",
+      "subdomain": "SBAR",
+      "topic": "SBAR for Escalation: Script It Before You Dial",
+      "setting": "acute care",
+      "tags": [
+        "SBAR",
+        "escalation",
+        "communication",
+        "physician-call",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "sbar-escalation-script-before-you-dial"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "rapid-response-team-activate-what-to-expect",
+      "domain": "Escalation",
+      "subdomain": "Rapid Response",
+      "topic": "Rapid Response Team: How to Activate and What to Expect",
+      "setting": "med-surg floor",
+      "tags": [
+        "rapid-response",
+        "RRT",
+        "escalation",
+        "deterioration",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "rapid-response-team-activate-what-to-expect"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "when-doctor-doesnt-respond-escalation-chain-command",
+      "domain": "Escalation",
+      "subdomain": "Escalation Chain",
+      "topic": "When the Doctor Doesn't Respond: The Escalation Chain of Command",
+      "setting": "acute care",
+      "tags": [
+        "escalation-chain",
+        "non-response",
+        "chain-of-command",
+        "patient-advocacy",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "when-doctor-doesnt-respond-escalation-chain-command"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "advocating-patient-when-dismissed",
+      "domain": "Escalation",
+      "subdomain": "Patient Advocacy",
+      "topic": "Advocating for Your Patient When You Feel Dismissed",
+      "setting": "acute care",
+      "tags": [
+        "advocacy",
+        "patient-safety",
+        "dismissed",
+        "escalation",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "advocating-patient-when-dismissed"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "escalating-family-concerns-interprofessional-team",
+      "domain": "Escalation",
+      "subdomain": "Family Concerns",
+      "topic": "Escalating Family Concerns to the Interprofessional Team",
+      "setting": "acute care",
+      "tags": [
+        "family",
+        "escalation",
+        "interprofessional",
+        "communication",
+        "patient-centred"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "escalating-family-concerns-interprofessional-team"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "how-to-call-physician-without-feeling-intimidated",
+      "domain": "Communication with Physicians",
+      "subdomain": "Physician Calls",
+      "topic": "How to Call a Physician Without Feeling Intimidated",
+      "setting": "acute care",
+      "tags": [
+        "physician-communication",
+        "intimidation",
+        "new-grad",
+        "confidence",
+        "SBAR"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "how-to-call-physician-without-feeling-intimidated"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "reading-room-how-physicians-prefer-receive-information",
+      "domain": "Communication with Physicians",
+      "subdomain": "Physician Calls",
+      "topic": "Reading the Room: How Physicians Prefer to Receive Clinical Information",
+      "setting": "acute care",
+      "tags": [
+        "physician-communication",
+        "clinical-information",
+        "new-grad",
+        "professional",
+        "relationship"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "reading-room-how-physicians-prefer-receive-information"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "pushing-back-respectfully-disagree-medical-order",
+      "domain": "Communication with Physicians",
+      "subdomain": "Professional Assertiveness",
+      "topic": "Pushing Back Respectfully: When You Disagree with a Medical Order",
+      "setting": "acute care",
+      "tags": [
+        "assertiveness",
+        "disagreement",
+        "medical-order",
+        "patient-safety",
+        "professional"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "pushing-back-respectfully-disagree-medical-order"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "verbal-telephone-orders-receive-readback-document",
+      "domain": "Communication with Physicians",
+      "subdomain": "Verbal Orders",
+      "topic": "Verbal and Telephone Orders: Receiving, Reading Back, and Documenting",
+      "setting": "acute care",
+      "tags": [
+        "verbal-orders",
+        "telephone-orders",
+        "read-back",
+        "documentation",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "verbal-telephone-orders-receive-readback-document"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "building-relationships-physicians-residents-specialists",
+      "domain": "Communication with Physicians",
+      "subdomain": "Relationship Building",
+      "topic": "Building Working Relationships with Physicians, Residents, and Specialists",
+      "setting": "acute care",
+      "tags": [
+        "physician-relationship",
+        "teamwork",
+        "professional",
+        "new-grad",
+        "interprofessional"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 6,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "building-relationships-physicians-residents-specialists"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "isbar-handoff-giving-report-protects-patients",
+      "domain": "Handoff",
+      "subdomain": "Giving Report",
+      "topic": "ISBAR Handoff: Giving Report That Protects Your Patients",
+      "setting": "acute care",
+      "tags": [
+        "ISBAR",
+        "handoff",
+        "report",
+        "patient-safety",
+        "communication"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "isbar-handoff-giving-report-protects-patients"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "receiving-report-red-flags-clarifying-accountability",
+      "domain": "Handoff",
+      "subdomain": "Receiving Report",
+      "topic": "Receiving Report: Red Flags, Clarifying Questions, and Accountability",
+      "setting": "acute care",
+      "tags": [
+        "receiving-report",
+        "red-flags",
+        "accountability",
+        "handoff",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "receiving-report-red-flags-clarifying-accountability"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "bedside-handoff-engaging-patient-transition-care",
+      "domain": "Handoff",
+      "subdomain": "Bedside Handoff",
+      "topic": "Bedside Handoff: Engaging the Patient in Their Own Transition of Care",
+      "setting": "med-surg floor",
+      "tags": [
+        "bedside-handoff",
+        "patient-engagement",
+        "transition-of-care",
+        "communication",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "bedside-handoff-engaging-patient-transition-care"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "incomplete-handoff-when-dont-get-enough-information",
+      "domain": "Handoff",
+      "subdomain": "Incomplete Report",
+      "topic": "Incomplete Handoff: What To Do When You Don't Get Enough Information",
+      "setting": "acute care",
+      "tags": [
+        "incomplete-handoff",
+        "information-gaps",
+        "safety",
+        "accountability",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "incomplete-handoff-when-dont-get-enough-information"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "lateral-violence-nurse-bullying-recognizing-responding",
+      "domain": "Workplace Conflict",
+      "subdomain": "Lateral Violence",
+      "topic": "Lateral Violence and Nurse Bullying: Recognizing and Responding",
+      "setting": "any clinical setting",
+      "tags": [
+        "lateral-violence",
+        "bullying",
+        "workplace-conflict",
+        "new-grad",
+        "professional"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "lateral-violence-nurse-bullying-recognizing-responding"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "navigating-conflict-colleagues-assertive-professional",
+      "domain": "Workplace Conflict",
+      "subdomain": "Colleague Conflict",
+      "topic": "Navigating Conflict with Colleagues: Assertive but Professional",
+      "setting": "any clinical setting",
+      "tags": [
+        "conflict",
+        "colleagues",
+        "assertiveness",
+        "professional",
+        "communication"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "navigating-conflict-colleagues-assertive-professional"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "when-colleague-makes-mistake-speaking-up-safely",
+      "domain": "Workplace Conflict",
+      "subdomain": "Whistleblowing",
+      "topic": "When a Colleague Makes a Mistake: Speaking Up Safely and Professionally",
+      "setting": "any clinical setting",
+      "tags": [
+        "speaking-up",
+        "colleague-error",
+        "safety",
+        "professional",
+        "reporting"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "when-colleague-makes-mistake-speaking-up-safely"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "conflict-management-appropriate-channels-professional",
+      "domain": "Workplace Conflict",
+      "subdomain": "Management",
+      "topic": "Conflict with Management: Using Appropriate Channels and Staying Professional",
+      "setting": "any clinical setting",
+      "tags": [
+        "management-conflict",
+        "professionalism",
+        "channels",
+        "new-grad",
+        "workplace"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "conflict-management-appropriate-channels-professional"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "new-grad-established-team-fitting-in-without-losing-self",
+      "domain": "Workplace Conflict",
+      "subdomain": "Team Dynamics",
+      "topic": "Being the New Grad on an Established Team: Fitting In Without Losing Yourself",
+      "setting": "any clinical setting",
+      "tags": [
+        "team-dynamics",
+        "new-grad",
+        "fitting-in",
+        "professional-identity",
+        "workplace"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "new-grad-established-team-fitting-in-without-losing-self"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "swiss-cheese-model-healthcare-errors-prevention",
+      "domain": "Patient Safety",
+      "subdomain": "Error Theory",
+      "topic": "The Swiss Cheese Model: Why Healthcare Errors Happen and How to Prevent Them",
+      "setting": "any clinical setting",
+      "tags": [
+        "patient-safety",
+        "Swiss-cheese",
+        "error-theory",
+        "system-thinking",
+        "prevention"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "swiss-cheese-model-healthcare-errors-prevention"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "near-misses-incident-reports-ethical-legal-obligation",
+      "domain": "Patient Safety",
+      "subdomain": "Incident Reporting",
+      "topic": "Near Misses and Incident Reports: Your Ethical and Legal Obligation",
+      "setting": "any clinical setting",
+      "tags": [
+        "near-miss",
+        "incident-report",
+        "patient-safety",
+        "legal",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "near-misses-incident-reports-ethical-legal-obligation"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "double-checks-high-alert-medications-verify",
+      "domain": "Patient Safety",
+      "subdomain": "High-Alert Medications",
+      "topic": "Double-Checks for High-Alert Medications: When and How to Verify",
+      "setting": "acute care",
+      "tags": [
+        "double-check",
+        "high-alert",
+        "medication-safety",
+        "verification",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "double-checks-high-alert-medications-verify"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1,
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "patient-falls-prevention-witnessing-post-fall-response",
+      "domain": "Patient Safety",
+      "subdomain": "Falls",
+      "topic": "Patient Falls: Your Role in Prevention, Witnessing, and Post-Fall Response",
+      "setting": "med-surg floor",
+      "tags": [
+        "falls",
+        "fall-prevention",
+        "post-fall",
+        "safety",
+        "documentation"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "patient-falls-prevention-witnessing-post-fall-response"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "infection-control-busy-floor-beyond-basics",
+      "domain": "Patient Safety",
+      "subdomain": "Infection Control",
+      "topic": "Infection Control on the Busy Floor: Beyond the Basics",
+      "setting": "med-surg floor",
+      "tags": [
+        "infection-control",
+        "hand-hygiene",
+        "PPE",
+        "isolation",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "infection-control-busy-floor-beyond-basics"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "over-relying-memory-write-it-down",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Cognitive Errors",
+      "topic": "Over-Relying on Memory: Why You Must Write It Down Every Time",
+      "setting": "any clinical setting",
+      "tags": [
+        "memory",
+        "cognitive-error",
+        "safety",
+        "documentation",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "over-relying-memory-write-it-down"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "skipping-assessment-save-time-hidden-risk",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Assessment Shortcuts",
+      "topic": "Skipping Assessment to Save Time: The Hidden Patient Safety Risk",
+      "setting": "acute care",
+      "tags": [
+        "assessment",
+        "shortcuts",
+        "patient-safety",
+        "time-pressure",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "skipping-assessment-save-time-hidden-risk"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "not-asking-help-pride-patient-safety-issue",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Asking for Help",
+      "topic": "Not Asking for Help: When Pride Becomes a Patient Safety Issue",
+      "setting": "any clinical setting",
+      "tags": [
+        "asking-for-help",
+        "pride",
+        "patient-safety",
+        "new-grad",
+        "confidence"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "not-asking-help-pride-patient-safety-issue"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "misunderstanding-scope-knowing-limits-before-tested",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Scope Awareness",
+      "topic": "Misunderstanding Scope: Knowing Your Limits Before You're Tested",
+      "setting": "any clinical setting",
+      "tags": [
+        "scope-of-practice",
+        "limits",
+        "new-grad",
+        "safety",
+        "accountability"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "misunderstanding-scope-knowing-limits-before-tested"
+      ],
+      "difficultyBreakdown": {
+        "hard": 2
+      }
+    },
+    {
+      "topicSlug": "alarm-fatigue-desensitization-staying-alert",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Alarm Management",
+      "topic": "Alarm Fatigue and Desensitization: Staying Alert When Alarms Are Constant",
+      "setting": "acute care",
+      "tags": [
+        "alarm-fatigue",
+        "desensitization",
+        "patient-safety",
+        "monitoring",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "alarm-fatigue-desensitization-staying-alert"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "imposter-syndrome-new-grads-normal-work-through",
+      "domain": "Confidence Building",
+      "subdomain": "Imposter Syndrome",
+      "topic": "Imposter Syndrome in New Grads: It's Normal and Here's How to Work Through It",
+      "setting": "any clinical setting",
+      "tags": [
+        "imposter-syndrome",
+        "confidence",
+        "new-grad",
+        "wellbeing",
+        "professional-identity"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "imposter-syndrome-new-grads-normal-work-through"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "finding-clinical-voice-speaking-up-huddles-rounds",
+      "domain": "Confidence Building",
+      "subdomain": "Clinical Voice",
+      "topic": "Finding Your Clinical Voice: Speaking Up at Huddles, Rounds, and Handoffs",
+      "setting": "any clinical setting",
+      "tags": [
+        "clinical-voice",
+        "speaking-up",
+        "confidence",
+        "new-grad",
+        "communication"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "finding-clinical-voice-speaking-up-huddles-rounds"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "debriefing-difficult-shifts-processing-without-rumination",
+      "domain": "Confidence Building",
+      "subdomain": "Reflective Practice",
+      "topic": "Debriefing After Difficult Shifts: Processing Without Rumination",
+      "setting": "any clinical setting",
+      "tags": [
+        "debriefing",
+        "reflection",
+        "difficult-shift",
+        "wellbeing",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "debriefing-difficult-shifts-processing-without-rumination"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "building-competence-reflection-rolfe-gibbs-cycle",
+      "domain": "Confidence Building",
+      "subdomain": "Reflective Practice",
+      "topic": "Building Competence Through Reflection: The Rolfe Model and Gibbs Cycle",
+      "setting": "any clinical setting",
+      "tags": [
+        "reflection",
+        "Rolfe",
+        "Gibbs",
+        "competence",
+        "professional-development"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "building-competence-reflection-rolfe-gibbs-cycle"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "unstable-patient-shift-start-stabilize-prioritize",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "The Unstable Patient at Shift Start: Stabilize, Prioritize, Communicate",
+      "setting": "acute care",
+      "tags": [
+        "simulation",
+        "unstable-patient",
+        "shift-start",
+        "prioritization",
+        "escalation"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "unstable-patient-shift-start-stabilize-prioritize"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "family-demands-vs-clinical-priorities-navigating-tension",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "Family Member Demands vs Clinical Priorities: Navigating the Tension",
+      "setting": "med-surg floor",
+      "tags": [
+        "family",
+        "demands",
+        "clinical-priorities",
+        "communication",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "family-demands-vs-clinical-priorities-navigating-tension"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "four-patients-all-need-you-real-time-decisions",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "When Four Patients All Need You at Once: Real-Time Decision Making",
+      "setting": "med-surg floor",
+      "tags": [
+        "multi-patient",
+        "real-time-decisions",
+        "prioritization",
+        "stress",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 12,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "four-patients-all-need-you-real-time-decisions"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "confused-elderly-patient-3am-delirium-safety-options",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "The Confused Elderly Patient at 3AM: Safety, Delirium, and Your Options",
+      "setting": "med-surg floor",
+      "tags": [
+        "delirium",
+        "confusion",
+        "elderly",
+        "nights",
+        "safety"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "confused-elderly-patient-3am-delirium-safety-options"
+      ],
+      "difficultyBreakdown": {
+        "medium": 2
+      }
+    },
+    {
+      "topicSlug": "first-code-blue-what-to-do-never-been-in-one",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "Your First Code Blue: What to Do When You've Never Been in One",
+      "setting": "acute care",
+      "tags": [
+        "code-blue",
+        "CPR",
+        "first-code",
+        "new-grad",
+        "emergency"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "first-code-blue-what-to-do-never-been-in-one"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1,
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "news2-mews-early-warning-scores-bedside",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Early Warning Systems",
+      "topic": "NEWS2 and MEWS Early Warning Scores: Using Them at the Bedside",
+      "setting": "med-surg floor",
+      "tags": [
+        "NEWS2",
+        "MEWS",
+        "early-warning",
+        "deterioration",
+        "escalation"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "news2-mews-early-warning-scores-bedside"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "recognizing-sepsis-early-new-grad-bedside-checklist",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Sepsis",
+      "topic": "Recognizing Sepsis Early: A New Grad's Bedside Checklist",
+      "setting": "acute care",
+      "tags": [
+        "sepsis",
+        "early-recognition",
+        "SIRS",
+        "qSOFA",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "recognizing-sepsis-early-new-grad-bedside-checklist"
+      ],
+      "difficultyBreakdown": {
+        "hard": 2
+      }
+    },
+    {
+      "topicSlug": "signs-respiratory-decline-cannot-afford-to-miss",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Respiratory Decline",
+      "topic": "Signs of Respiratory Decline You Cannot Afford to Miss",
+      "setting": "acute care",
+      "tags": [
+        "respiratory-decline",
+        "work-of-breathing",
+        "SpO2-trends",
+        "early-warning",
+        "deterioration"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "signs-respiratory-decline-cannot-afford-to-miss"
+      ],
+      "difficultyBreakdown": {
+        "hard": 2
+      }
+    },
+    {
+      "topicSlug": "neuro-changes-bedside-brain-sending-warning",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Neurological Changes",
+      "topic": "Neuro Changes at the Bedside: When the Brain Is Sending a Warning",
+      "setting": "acute care",
+      "tags": [
+        "neuro-changes",
+        "GCS",
+        "LOC",
+        "deterioration",
+        "escalation"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "neuro-changes-bedside-brain-sending-warning"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "hemodynamic-instability-reading-trend-not-single-number",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Hemodynamic Instability",
+      "topic": "Hemodynamic Instability: Reading the Trend, Not Just the Single Number",
+      "setting": "acute care",
+      "tags": [
+        "hemodynamic",
+        "blood-pressure-trends",
+        "heart-rate",
+        "deterioration",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "hemodynamic-instability-reading-trend-not-single-number"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "therapeutic-vs-social-relationships-patients-line",
+      "domain": "Professional Boundaries",
+      "subdomain": "Therapeutic Relationship",
+      "topic": "Therapeutic vs Social Relationships with Patients: Where Is the Line?",
+      "setting": "any clinical setting",
+      "tags": [
+        "professional-boundaries",
+        "therapeutic-relationship",
+        "new-grad",
+        "ethics",
+        "professionalism"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "therapeutic-vs-social-relationships-patients-line"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "social-media-patient-privacy-what-cannot-post-ever",
+      "domain": "Professional Boundaries",
+      "subdomain": "Social Media",
+      "topic": "Social Media and Patient Privacy: What You Cannot Post, Ever",
+      "setting": "any clinical setting",
+      "tags": [
+        "social-media",
+        "privacy",
+        "HIPAA",
+        "PIPEDA",
+        "professionalism"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "social-media-patient-privacy-what-cannot-post-ever"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "gift-giving-dependency-over-attachment-recognizing-redirecting",
+      "domain": "Professional Boundaries",
+      "subdomain": "Patient Dependency",
+      "topic": "Gift-Giving, Dependency, and Over-Attachment: Recognizing and Redirecting",
+      "setting": "any clinical setting",
+      "tags": [
+        "boundaries",
+        "gift-giving",
+        "dependency",
+        "attachment",
+        "ethics"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "gift-giving-dependency-over-attachment-recognizing-redirecting"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "boundaries-families-involvement-becomes-enmeshment",
+      "domain": "Professional Boundaries",
+      "subdomain": "Family Boundaries",
+      "topic": "Boundaries with Families: When Involvement Becomes Enmeshment",
+      "setting": "any clinical setting",
+      "tags": [
+        "family-boundaries",
+        "enmeshment",
+        "professional",
+        "therapeutic",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "boundaries-families-involvement-becomes-enmeshment"
+      ],
+      "difficultyBreakdown": {
+        "hard": 1
+      }
+    },
+    {
+      "topicSlug": "compassion-fatigue-first-year-recognizing-before-takes-over",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Compassion Fatigue",
+      "topic": "Compassion Fatigue in the First Year: Recognizing It Before It Takes Over",
+      "setting": "any clinical setting",
+      "tags": [
+        "compassion-fatigue",
+        "burnout",
+        "first-year",
+        "wellbeing",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 8,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "compassion-fatigue-first-year-recognizing-before-takes-over"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "post-shift-decompression-routine-actually-works",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Post-Shift Recovery",
+      "topic": "Building a Post-Shift Decompression Routine That Actually Works",
+      "setting": "any clinical setting",
+      "tags": [
+        "decompression",
+        "post-shift",
+        "routine",
+        "wellbeing",
+        "self-care"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 6,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "post-shift-decompression-routine-actually-works"
+      ],
+      "difficultyBreakdown": {}
+    },
+    {
+      "topicSlug": "setting-limits-protecting-days-off-personal-life",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Boundaries at Work",
+      "topic": "Setting Limits: Protecting Your Days Off and Personal Life",
+      "setting": "any clinical setting",
+      "tags": [
+        "limits",
+        "days-off",
+        "work-life-balance",
+        "burnout-prevention",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "setting-limits-protecting-days-off-personal-life"
+      ],
+      "difficultyBreakdown": {
+        "medium": 1
+      }
+    },
+    {
+      "topicSlug": "peer-support-systems-who-to-talk-saves-careers",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Peer Support",
+      "topic": "Peer Support Systems: Who to Talk to and Why It Saves Careers",
+      "setting": "any clinical setting",
+      "tags": [
+        "peer-support",
+        "mental-health",
+        "wellbeing",
+        "team",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17,
+      "lessonStatus": "met",
+      "questionStatus": "weak",
+      "coverageStatus": "weak",
+      "generatedLessonSlugs": [
+        "peer-support-systems-who-to-talk-saves-careers"
+      ],
+      "difficultyBreakdown": {
+        "easy": 1
+      }
+    },
+    {
+      "topicSlug": "finding-meaning-purpose-driven-practice-hard-days",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Meaning and Purpose",
+      "topic": "Finding Meaning: Purpose-Driven Practice on the Hard Days",
+      "setting": "any clinical setting",
+      "tags": [
+        "meaning",
+        "purpose",
+        "motivation",
+        "resilience",
+        "new-grad"
+      ],
+      "lessonTargetCount": 1,
+      "questionTargetCount": 6,
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 6,
+      "qCoverageRatio": 0,
+      "lessonStatus": "met",
+      "questionStatus": "missing",
+      "coverageStatus": "partial",
+      "generatedLessonSlugs": [
+        "finding-meaning-purpose-driven-practice-hard-days"
+      ],
+      "difficultyBreakdown": {}
+    }
+  ],
+  "summary": {
+    "generatedAt": "2026-04-11",
+    "program": "new-grad-transition",
+    "country": "both (CA + US)",
+    "exam": "NCLEX-RN",
+    "totals": {
+      "blueprintTopics": 84,
+      "lessonTargetTotal": 84,
+      "questionTargetTotal": 746,
+      "lessonsGenerated": 83,
+      "questionsGenerated": 63,
+      "lessonCoverageRatio": 99,
+      "questionCoverageRatio": 8
+    },
+    "topicStatusDistribution": {
+      "partial": 29,
+      "weak": 54,
+      "no_content": 1
+    },
+    "byProgram": {
+      "new-grad-transition": {
+        "total": 84,
+        "lessonTargetTotal": 84,
+        "questionTargetTotal": 746,
+        "lessonGenerated": 83,
+        "questionGenerated": 63,
+        "lessonCoverageRatio": 99,
+        "questionCoverageRatio": 8,
+        "topicsByStatus": {
+          "partial": 29,
+          "weak": 54,
+          "no_content": 1
+        }
+      }
+    },
+    "byDomain": {
+      "Prioritization": {
+        "total": 8,
+        "lessonTargetTotal": 8,
+        "questionTargetTotal": 80,
+        "lessonGenerated": 8,
+        "questionGenerated": 9,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 11,
+        "topicsByStatus": {
+          "partial": 2,
+          "weak": 6
+        }
+      },
+      "Delegation": {
+        "total": 6,
+        "lessonTargetTotal": 6,
+        "questionTargetTotal": 56,
+        "lessonGenerated": 6,
+        "questionGenerated": 3,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 5,
+        "topicsByStatus": {
+          "partial": 3,
+          "weak": 3
+        }
+      },
+      "Time Management": {
+        "total": 6,
+        "lessonTargetTotal": 6,
+        "questionTargetTotal": 48,
+        "lessonGenerated": 6,
+        "questionGenerated": 5,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 5,
+          "partial": 1
+        }
+      },
+      "Shift Organization": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 48,
+        "lessonGenerated": 4,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 80,
+        "questionCoverageRatio": 4,
+        "topicsByStatus": {
+          "no_content": 1,
+          "partial": 2,
+          "weak": 2
+        }
+      },
+      "Charting and Documentation": {
+        "total": 6,
+        "lessonTargetTotal": 6,
+        "questionTargetTotal": 52,
+        "lessonGenerated": 6,
+        "questionGenerated": 3,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 6,
+        "topicsByStatus": {
+          "partial": 3,
+          "weak": 3
+        }
+      },
+      "Escalation": {
+        "total": 6,
+        "lessonTargetTotal": 6,
+        "questionTargetTotal": 56,
+        "lessonGenerated": 6,
+        "questionGenerated": 3,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 5,
+        "topicsByStatus": {
+          "partial": 3,
+          "weak": 3
+        }
+      },
+      "Communication with Physicians": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 42,
+        "lessonGenerated": 5,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 5,
+        "topicsByStatus": {
+          "partial": 3,
+          "weak": 2
+        }
+      },
+      "Handoff": {
+        "total": 4,
+        "lessonTargetTotal": 4,
+        "questionTargetTotal": 36,
+        "lessonGenerated": 4,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 6,
+        "topicsByStatus": {
+          "partial": 2,
+          "weak": 2
+        }
+      },
+      "Workplace Conflict": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 42,
+        "lessonGenerated": 5,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 5,
+        "topicsByStatus": {
+          "weak": 2,
+          "partial": 3
+        }
+      },
+      "Patient Safety": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 46,
+        "lessonGenerated": 5,
+        "questionGenerated": 5,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 11,
+        "topicsByStatus": {
+          "partial": 1,
+          "weak": 4
+        }
+      },
+      "Common First-Year Mistakes": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 42,
+        "lessonGenerated": 5,
+        "questionGenerated": 5,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 12,
+        "topicsByStatus": {
+          "weak": 4,
+          "partial": 1
+        }
+      },
+      "Confidence Building": {
+        "total": 4,
+        "lessonTargetTotal": 4,
+        "questionTargetTotal": 24,
+        "lessonGenerated": 4,
+        "questionGenerated": 4,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 4
+        }
+      },
+      "Realistic Floor Scenarios": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 54,
+        "lessonGenerated": 5,
+        "questionGenerated": 5,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 9,
+        "topicsByStatus": {
+          "weak": 3,
+          "partial": 2
+        }
+      },
+      "Rapid Recognition of Deterioration": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 58,
+        "lessonGenerated": 5,
+        "questionGenerated": 7,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 12,
+        "topicsByStatus": {
+          "weak": 5
+        }
+      },
+      "Professional Boundaries": {
+        "total": 4,
+        "lessonTargetTotal": 4,
+        "questionTargetTotal": 30,
+        "lessonGenerated": 4,
+        "questionGenerated": 3,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 3,
+          "partial": 1
+        }
+      },
+      "Burnout Prevention Foundations": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 32,
+        "lessonGenerated": 5,
+        "questionGenerated": 3,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 9,
+        "topicsByStatus": {
+          "weak": 3,
+          "partial": 2
+        }
+      }
+    },
+    "bySubdomain": {
+      "Prioritization > Clinical Frameworks": {
+        "total": 4,
+        "lessonTargetTotal": 4,
+        "questionTargetTotal": 38,
+        "lessonGenerated": 4,
+        "questionGenerated": 5,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "partial": 1,
+          "weak": 3
+        }
+      },
+      "Prioritization > Multi-Patient Assignment": {
+        "total": 2,
+        "lessonTargetTotal": 2,
+        "questionTargetTotal": 22,
+        "lessonGenerated": 2,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 5,
+        "topicsByStatus": {
+          "weak": 1,
+          "partial": 1
+        }
+      },
+      "Prioritization > Lab Values": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Prioritization > Medication Prioritization": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 20,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Delegation > Delegation Principles": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Delegation > Task Allocation": {
+        "total": 2,
+        "lessonTargetTotal": 2,
+        "questionTargetTotal": 20,
+        "lessonGenerated": 2,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 5,
+        "topicsByStatus": {
+          "weak": 1,
+          "partial": 1
+        }
+      },
+      "Delegation > Accountability": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Delegation > Interprofessional": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Delegation > Documentation": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Time Management > Nursing Brain": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Time Management > Shift Planning": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Time Management > Efficiency": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Time Management > Adaptability": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Time Management > Interruptions": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Time Management > End of Shift": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Shift Organization > Receiving Report": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 0,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 0,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "no_content": 1
+        }
+      },
+      "Shift Organization > Assignment Planning": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Shift Organization > Shift Start": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Shift Organization > Medication Workflow": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Shift Organization > Balancing Priorities": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Charting and Documentation > Documentation Principles": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Charting and Documentation > Charting Formats": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Charting and Documentation > Assessment Documentation": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Charting and Documentation > Corrections and Late Entries": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Charting and Documentation > Physician Orders": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Charting and Documentation > Patient Education": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Escalation > Calling for Help": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Escalation > SBAR": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Escalation > Rapid Response": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Escalation > Escalation Chain": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Escalation > Patient Advocacy": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Escalation > Family Concerns": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Communication with Physicians > Physician Calls": {
+        "total": 2,
+        "lessonTargetTotal": 2,
+        "questionTargetTotal": 18,
+        "lessonGenerated": 2,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 2
+        }
+      },
+      "Communication with Physicians > Professional Assertiveness": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Communication with Physicians > Verbal Orders": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Communication with Physicians > Relationship Building": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Handoff > Giving Report": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Handoff > Receiving Report": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Handoff > Bedside Handoff": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Handoff > Incomplete Report": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Workplace Conflict > Lateral Violence": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Workplace Conflict > Colleague Conflict": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Workplace Conflict > Whistleblowing": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Workplace Conflict > Management": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Workplace Conflict > Team Dynamics": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Patient Safety > Error Theory": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Patient Safety > Incident Reporting": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Patient Safety > High-Alert Medications": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 20,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Patient Safety > Falls": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Patient Safety > Infection Control": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Common First-Year Mistakes > Cognitive Errors": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Common First-Year Mistakes > Assessment Shortcuts": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Common First-Year Mistakes > Asking for Help": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Common First-Year Mistakes > Scope Awareness": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 20,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Common First-Year Mistakes > Alarm Management": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Confidence Building > Imposter Syndrome": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Confidence Building > Clinical Voice": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Confidence Building > Reflective Practice": {
+        "total": 2,
+        "lessonTargetTotal": 2,
+        "questionTargetTotal": 12,
+        "lessonGenerated": 2,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 2
+        }
+      },
+      "Realistic Floor Scenarios > Clinical Simulation": {
+        "total": 5,
+        "lessonTargetTotal": 5,
+        "questionTargetTotal": 54,
+        "lessonGenerated": 5,
+        "questionGenerated": 5,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 9,
+        "topicsByStatus": {
+          "weak": 3,
+          "partial": 2
+        }
+      },
+      "Rapid Recognition of Deterioration > Early Warning Systems": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 10,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 10,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Rapid Recognition of Deterioration > Sepsis": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 12,
+        "lessonGenerated": 1,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Rapid Recognition of Deterioration > Respiratory Decline": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 12,
+        "lessonGenerated": 1,
+        "questionGenerated": 2,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Rapid Recognition of Deterioration > Neurological Changes": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 12,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 8,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Rapid Recognition of Deterioration > Hemodynamic Instability": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 12,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 8,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Professional Boundaries > Therapeutic Relationship": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Professional Boundaries > Social Media": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Professional Boundaries > Patient Dependency": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Professional Boundaries > Family Boundaries": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Burnout Prevention Foundations > Compassion Fatigue": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 8,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 13,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Burnout Prevention Foundations > Post-Shift Recovery": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      },
+      "Burnout Prevention Foundations > Boundaries at Work": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Burnout Prevention Foundations > Peer Support": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 1,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 17,
+        "topicsByStatus": {
+          "weak": 1
+        }
+      },
+      "Burnout Prevention Foundations > Meaning and Purpose": {
+        "total": 1,
+        "lessonTargetTotal": 1,
+        "questionTargetTotal": 6,
+        "lessonGenerated": 1,
+        "questionGenerated": 0,
+        "lessonCoverageRatio": 100,
+        "questionCoverageRatio": 0,
+        "topicsByStatus": {
+          "partial": 1
+        }
+      }
+    },
+    "underCoveredTopicCount": 84,
+    "strongTopicCount": 0,
+    "adequateTopicCount": 0
+  },
+  "underCoveredTopics": [
+    {
+      "topicSlug": "four-patients-all-need-you-real-time-decisions",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "When Four Patients All Need You at Once: Real-Time Decision Making",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 12,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "prioritizing-multiple-patients-who-first",
+      "domain": "Prioritization",
+      "subdomain": "Multi-Patient Assignment",
+      "topic": "Prioritizing Multiple Patients: Who Do You See First?",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08
+    },
+    {
+      "topicSlug": "what-can-cannot-delegate-psw-uap",
+      "domain": "Delegation",
+      "subdomain": "Task Allocation",
+      "topic": "What You Can and Cannot Delegate to PSW and UAP",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08
+    },
+    {
+      "topicSlug": "unstable-patient-shift-start-stabilize-prioritize",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "The Unstable Patient at Shift Start: Stabilize, Prioritize, Communicate",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08
+    },
+    {
+      "topicSlug": "neuro-changes-bedside-brain-sending-warning",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Neurological Changes",
+      "topic": "Neuro Changes at the Bedside: When the Brain Is Sending a Warning",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08
+    },
+    {
+      "topicSlug": "hemodynamic-instability-reading-trend-not-single-number",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Hemodynamic Instability",
+      "topic": "Hemodynamic Instability: Reading the Trend, Not Just the Single Number",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 11,
+      "qCoverageRatio": 0.08
+    },
+    {
+      "topicSlug": "abcde-framework-clinical-prioritization-floor",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "ABCDE Framework for Clinical Prioritization on the Floor",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "post-op-vs-chronic-care-competing-priorities",
+      "domain": "Prioritization",
+      "subdomain": "Multi-Patient Assignment",
+      "topic": "Post-Op vs Chronic Care: Setting Competing Priorities",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "five-rights-delegation-new-grad-guide",
+      "domain": "Delegation",
+      "subdomain": "Delegation Principles",
+      "topic": "The Five Rights of Delegation: A New Grad's Practical Guide",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "getting-report-listen-flag-document",
+      "domain": "Shift Organization",
+      "subdomain": "Receiving Report",
+      "topic": "Getting Report: What to Listen For, Flag, and Document",
+      "coverageStatus": "no_content",
+      "lessonCount": 0,
+      "questionCount": 0,
+      "lessonGap": 1,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "organizing-assignment-report-to-handoff-systematic",
+      "domain": "Shift Organization",
+      "subdomain": "Assignment Planning",
+      "topic": "Organizing Your Assignment from Report to Handoff: A Systematic Approach",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "medication-administration-timing-realistic-workflow",
+      "domain": "Shift Organization",
+      "subdomain": "Medication Workflow",
+      "topic": "Medication Administration Timing: Building a Realistic Workflow",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "if-not-charted-not-done-legal-safety-stakes",
+      "domain": "Charting and Documentation",
+      "subdomain": "Documentation Principles",
+      "topic": "If It Wasn't Charted It Wasn't Done: The Legal and Safety Stakes",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "when-to-call-doctor-escalation-threshold",
+      "domain": "Escalation",
+      "subdomain": "Calling for Help",
+      "topic": "When to Call the Doctor: Recognizing Your Escalation Threshold",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "rapid-response-team-activate-what-to-expect",
+      "domain": "Escalation",
+      "subdomain": "Rapid Response",
+      "topic": "Rapid Response Team: How to Activate and What to Expect",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "how-to-call-physician-without-feeling-intimidated",
+      "domain": "Communication with Physicians",
+      "subdomain": "Physician Calls",
+      "topic": "How to Call a Physician Without Feeling Intimidated",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "isbar-handoff-giving-report-protects-patients",
+      "domain": "Handoff",
+      "subdomain": "Giving Report",
+      "topic": "ISBAR Handoff: Giving Report That Protects Your Patients",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "family-demands-vs-clinical-priorities-navigating-tension",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "Family Member Demands vs Clinical Priorities: Navigating the Tension",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "recognizing-sepsis-early-new-grad-bedside-checklist",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Sepsis",
+      "topic": "Recognizing Sepsis Early: A New Grad's Bedside Checklist",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "signs-respiratory-decline-cannot-afford-to-miss",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Respiratory Decline",
+      "topic": "Signs of Respiratory Decline You Cannot Afford to Miss",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 10,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "critical-lab-values-recognizing-acting-documenting",
+      "domain": "Prioritization",
+      "subdomain": "Lab Values",
+      "topic": "Critical Lab Values: Recognizing, Acting, and Documenting Immediately",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "rn-rpn-lpn-collaboration-assign-how",
+      "domain": "Delegation",
+      "subdomain": "Interprofessional",
+      "topic": "RN–RPN/LPN Collaboration: What You Can Assign and How",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "first-30-minutes-shift-non-negotiable-routine",
+      "domain": "Shift Organization",
+      "subdomain": "Shift Start",
+      "topic": "The First 30 Minutes of Shift: Your Non-Negotiable Routine",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "charting-assessment-what-belongs-what-doesnt",
+      "domain": "Charting and Documentation",
+      "subdomain": "Assessment Documentation",
+      "topic": "Charting Your Assessment: What Belongs in the Record and What Doesn't",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "sbar-escalation-script-before-you-dial",
+      "domain": "Escalation",
+      "subdomain": "SBAR",
+      "topic": "SBAR for Escalation: Script It Before You Dial",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "when-doctor-doesnt-respond-escalation-chain-command",
+      "domain": "Escalation",
+      "subdomain": "Escalation Chain",
+      "topic": "When the Doctor Doesn't Respond: The Escalation Chain of Command",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "pushing-back-respectfully-disagree-medical-order",
+      "domain": "Communication with Physicians",
+      "subdomain": "Professional Assertiveness",
+      "topic": "Pushing Back Respectfully: When You Disagree with a Medical Order",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "receiving-report-red-flags-clarifying-accountability",
+      "domain": "Handoff",
+      "subdomain": "Receiving Report",
+      "topic": "Receiving Report: Red Flags, Clarifying Questions, and Accountability",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "lateral-violence-nurse-bullying-recognizing-responding",
+      "domain": "Workplace Conflict",
+      "subdomain": "Lateral Violence",
+      "topic": "Lateral Violence and Nurse Bullying: Recognizing and Responding",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "near-misses-incident-reports-ethical-legal-obligation",
+      "domain": "Patient Safety",
+      "subdomain": "Incident Reporting",
+      "topic": "Near Misses and Incident Reports: Your Ethical and Legal Obligation",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "patient-falls-prevention-witnessing-post-fall-response",
+      "domain": "Patient Safety",
+      "subdomain": "Falls",
+      "topic": "Patient Falls: Your Role in Prevention, Witnessing, and Post-Fall Response",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "news2-mews-early-warning-scores-bedside",
+      "domain": "Rapid Recognition of Deterioration",
+      "subdomain": "Early Warning Systems",
+      "topic": "NEWS2 and MEWS Early Warning Scores: Using Them at the Bedside",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 9,
+      "qCoverageRatio": 0.1
+    },
+    {
+      "topicSlug": "when-everything-urgent-triage-thinking-medical-floor",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "When Everything Feels Urgent: Triage Thinking on the Medical Floor",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "medication-priority-which-meds-cannot-be-late",
+      "domain": "Prioritization",
+      "subdomain": "Medication Prioritization",
+      "topic": "Medication Priority: Which Meds Cannot Be Late and Why",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "recognizing-patient-who-cannot-wait",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "Recognizing the Patient Who Cannot Wait: Subtle Cues and Gut Instinct",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "delegating-when-overwhelmed-asking-without-guilt",
+      "domain": "Delegation",
+      "subdomain": "Task Allocation",
+      "topic": "Delegating When You're Overwhelmed: Asking Without Guilt",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "documenting-delegation-legal-record",
+      "domain": "Delegation",
+      "subdomain": "Documentation",
+      "topic": "Documenting Delegation: What the Legal Record Requires",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "batching-tasks-efficient-purposeful-rounding",
+      "domain": "Time Management",
+      "subdomain": "Efficiency",
+      "topic": "Batching Tasks and Efficient Purposeful Rounding",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "soapie-dar-narrative-charting-choosing-format",
+      "domain": "Charting and Documentation",
+      "subdomain": "Charting Formats",
+      "topic": "SOAPIE, DAR, and Narrative Charting: Choosing the Right Format",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "charting-physician-telephone-orders-getting-right",
+      "domain": "Charting and Documentation",
+      "subdomain": "Physician Orders",
+      "topic": "Charting Physician Orders and Telephone Orders: Getting It Right",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "escalating-family-concerns-interprofessional-team",
+      "domain": "Escalation",
+      "subdomain": "Family Concerns",
+      "topic": "Escalating Family Concerns to the Interprofessional Team",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "reading-room-how-physicians-prefer-receive-information",
+      "domain": "Communication with Physicians",
+      "subdomain": "Physician Calls",
+      "topic": "Reading the Room: How Physicians Prefer to Receive Clinical Information",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "incomplete-handoff-when-dont-get-enough-information",
+      "domain": "Handoff",
+      "subdomain": "Incomplete Report",
+      "topic": "Incomplete Handoff: What To Do When You Don't Get Enough Information",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "navigating-conflict-colleagues-assertive-professional",
+      "domain": "Workplace Conflict",
+      "subdomain": "Colleague Conflict",
+      "topic": "Navigating Conflict with Colleagues: Assertive but Professional",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "conflict-management-appropriate-channels-professional",
+      "domain": "Workplace Conflict",
+      "subdomain": "Management",
+      "topic": "Conflict with Management: Using Appropriate Channels and Staying Professional",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "new-grad-established-team-fitting-in-without-losing-self",
+      "domain": "Workplace Conflict",
+      "subdomain": "Team Dynamics",
+      "topic": "Being the New Grad on an Established Team: Fitting In Without Losing Yourself",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "swiss-cheese-model-healthcare-errors-prevention",
+      "domain": "Patient Safety",
+      "subdomain": "Error Theory",
+      "topic": "The Swiss Cheese Model: Why Healthcare Errors Happen and How to Prevent Them",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "double-checks-high-alert-medications-verify",
+      "domain": "Patient Safety",
+      "subdomain": "High-Alert Medications",
+      "topic": "Double-Checks for High-Alert Medications: When and How to Verify",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "skipping-assessment-save-time-hidden-risk",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Assessment Shortcuts",
+      "topic": "Skipping Assessment to Save Time: The Hidden Patient Safety Risk",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "misunderstanding-scope-knowing-limits-before-tested",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Scope Awareness",
+      "topic": "Misunderstanding Scope: Knowing Your Limits Before You're Tested",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "confused-elderly-patient-3am-delirium-safety-options",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "The Confused Elderly Patient at 3AM: Safety, Delirium, and Your Options",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "first-code-blue-what-to-do-never-been-in-one",
+      "domain": "Realistic Floor Scenarios",
+      "subdomain": "Clinical Simulation",
+      "topic": "Your First Code Blue: What to Do When You've Never Been in One",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 2,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0.2
+    },
+    {
+      "topicSlug": "gift-giving-dependency-over-attachment-recognizing-redirecting",
+      "domain": "Professional Boundaries",
+      "subdomain": "Patient Dependency",
+      "topic": "Gift-Giving, Dependency, and Over-Attachment: Recognizing and Redirecting",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 8,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "maslow-hierarchy-nursing-priority-same-shift",
+      "domain": "Prioritization",
+      "subdomain": "Clinical Frameworks",
+      "topic": "Maslow's Hierarchy Applied to Same-Shift Nursing Priority",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "following-up-after-delegation-closing-loop",
+      "domain": "Delegation",
+      "subdomain": "Accountability",
+      "topic": "Following Up After Delegation: Closing the Loop",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "building-nursing-brain-shift-worksheets-templates",
+      "domain": "Time Management",
+      "subdomain": "Nursing Brain",
+      "topic": "Building Your Nursing Brain: Shift Worksheets and Organizational Templates",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "time-blocking-first-hour-getting-ahead",
+      "domain": "Time Management",
+      "subdomain": "Shift Planning",
+      "topic": "Time-Blocking Your First Hour: Getting Ahead Before It Gets Busy",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "when-plan-falls-apart-replanning-mid-shift",
+      "domain": "Time Management",
+      "subdomain": "Adaptability",
+      "topic": "When Your Plan Falls Apart: Replanning Mid-Shift Without Panic",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "managing-interruptions-without-losing-focus",
+      "domain": "Time Management",
+      "subdomain": "Interruptions",
+      "topic": "Managing Interruptions Without Losing Your Train of Thought",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "end-of-shift-completion-before-you-leave",
+      "domain": "Time Management",
+      "subdomain": "End of Shift",
+      "topic": "End-of-Shift Completion: What Must Be Done Before You Leave",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "balancing-bedside-care-documentation-not-either-or",
+      "domain": "Shift Organization",
+      "subdomain": "Balancing Priorities",
+      "topic": "Balancing Bedside Care with Documentation: Not Either/Or",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "late-entries-corrections-addenda-legal-safe",
+      "domain": "Charting and Documentation",
+      "subdomain": "Corrections and Late Entries",
+      "topic": "Late Entries, Corrections, and Addenda: Doing It Legally and Safely",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "documenting-patient-education-taught-understood",
+      "domain": "Charting and Documentation",
+      "subdomain": "Patient Education",
+      "topic": "Documenting Patient Education: What Was Taught and What Was Understood",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "advocating-patient-when-dismissed",
+      "domain": "Escalation",
+      "subdomain": "Patient Advocacy",
+      "topic": "Advocating for Your Patient When You Feel Dismissed",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "verbal-telephone-orders-receive-readback-document",
+      "domain": "Communication with Physicians",
+      "subdomain": "Verbal Orders",
+      "topic": "Verbal and Telephone Orders: Receiving, Reading Back, and Documenting",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "bedside-handoff-engaging-patient-transition-care",
+      "domain": "Handoff",
+      "subdomain": "Bedside Handoff",
+      "topic": "Bedside Handoff: Engaging the Patient in Their Own Transition of Care",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "when-colleague-makes-mistake-speaking-up-safely",
+      "domain": "Workplace Conflict",
+      "subdomain": "Whistleblowing",
+      "topic": "When a Colleague Makes a Mistake: Speaking Up Safely and Professionally",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "infection-control-busy-floor-beyond-basics",
+      "domain": "Patient Safety",
+      "subdomain": "Infection Control",
+      "topic": "Infection Control on the Busy Floor: Beyond the Basics",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "over-relying-memory-write-it-down",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Cognitive Errors",
+      "topic": "Over-Relying on Memory: Why You Must Write It Down Every Time",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "not-asking-help-pride-patient-safety-issue",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Asking for Help",
+      "topic": "Not Asking for Help: When Pride Becomes a Patient Safety Issue",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "alarm-fatigue-desensitization-staying-alert",
+      "domain": "Common First-Year Mistakes",
+      "subdomain": "Alarm Management",
+      "topic": "Alarm Fatigue and Desensitization: Staying Alert When Alarms Are Constant",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "therapeutic-vs-social-relationships-patients-line",
+      "domain": "Professional Boundaries",
+      "subdomain": "Therapeutic Relationship",
+      "topic": "Therapeutic vs Social Relationships with Patients: Where Is the Line?",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "social-media-patient-privacy-what-cannot-post-ever",
+      "domain": "Professional Boundaries",
+      "subdomain": "Social Media",
+      "topic": "Social Media and Patient Privacy: What You Cannot Post, Ever",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "compassion-fatigue-first-year-recognizing-before-takes-over",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Compassion Fatigue",
+      "topic": "Compassion Fatigue in the First Year: Recognizing It Before It Takes Over",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 7,
+      "qCoverageRatio": 0.13
+    },
+    {
+      "topicSlug": "building-relationships-physicians-residents-specialists",
+      "domain": "Communication with Physicians",
+      "subdomain": "Relationship Building",
+      "topic": "Building Working Relationships with Physicians, Residents, and Specialists",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 6,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "post-shift-decompression-routine-actually-works",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Post-Shift Recovery",
+      "topic": "Building a Post-Shift Decompression Routine That Actually Works",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 6,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "finding-meaning-purpose-driven-practice-hard-days",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Meaning and Purpose",
+      "topic": "Finding Meaning: Purpose-Driven Practice on the Hard Days",
+      "coverageStatus": "partial",
+      "lessonCount": 1,
+      "questionCount": 0,
+      "lessonGap": 0,
+      "questionGap": 6,
+      "qCoverageRatio": 0
+    },
+    {
+      "topicSlug": "imposter-syndrome-new-grads-normal-work-through",
+      "domain": "Confidence Building",
+      "subdomain": "Imposter Syndrome",
+      "topic": "Imposter Syndrome in New Grads: It's Normal and Here's How to Work Through It",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "finding-clinical-voice-speaking-up-huddles-rounds",
+      "domain": "Confidence Building",
+      "subdomain": "Clinical Voice",
+      "topic": "Finding Your Clinical Voice: Speaking Up at Huddles, Rounds, and Handoffs",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "debriefing-difficult-shifts-processing-without-rumination",
+      "domain": "Confidence Building",
+      "subdomain": "Reflective Practice",
+      "topic": "Debriefing After Difficult Shifts: Processing Without Rumination",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "building-competence-reflection-rolfe-gibbs-cycle",
+      "domain": "Confidence Building",
+      "subdomain": "Reflective Practice",
+      "topic": "Building Competence Through Reflection: The Rolfe Model and Gibbs Cycle",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "boundaries-families-involvement-becomes-enmeshment",
+      "domain": "Professional Boundaries",
+      "subdomain": "Family Boundaries",
+      "topic": "Boundaries with Families: When Involvement Becomes Enmeshment",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "setting-limits-protecting-days-off-personal-life",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Boundaries at Work",
+      "topic": "Setting Limits: Protecting Your Days Off and Personal Life",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    },
+    {
+      "topicSlug": "peer-support-systems-who-to-talk-saves-careers",
+      "domain": "Burnout Prevention Foundations",
+      "subdomain": "Peer Support",
+      "topic": "Peer Support Systems: Who to Talk to and Why It Saves Careers",
+      "coverageStatus": "weak",
+      "lessonCount": 1,
+      "questionCount": 1,
+      "lessonGap": 0,
+      "questionGap": 5,
+      "qCoverageRatio": 0.17
+    }
+  ],
+  "recommendedNextBatches": [
+    {
+      "batchId": "batch-01-prioritization",
+      "domain": "Prioritization",
+      "priority": 1,
+      "rationale": "8 under-covered topics in this domain; 71 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "prioritizing-multiple-patients-who-first",
+          "topic": "Prioritizing Multiple Patients: Who Do You See First?",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 11
+        },
+        {
+          "topicSlug": "abcde-framework-clinical-prioritization-floor",
+          "topic": "ABCDE Framework for Clinical Prioritization on the Floor",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "post-op-vs-chronic-care-competing-priorities",
+          "topic": "Post-Op vs Chronic Care: Setting Competing Priorities",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "critical-lab-values-recognizing-acting-documenting",
+          "topic": "Critical Lab Values: Recognizing, Acting, and Documenting Immediately",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "when-everything-urgent-triage-thinking-medical-floor",
+          "topic": "When Everything Feels Urgent: Triage Thinking on the Medical Floor",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "medication-priority-which-meds-cannot-be-late",
+          "topic": "Medication Priority: Which Meds Cannot Be Late and Why",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "recognizing-patient-who-cannot-wait",
+          "topic": "Recognizing the Patient Who Cannot Wait: Subtle Cues and Gut Instinct",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "maslow-hierarchy-nursing-priority-same-shift",
+          "topic": "Maslow's Hierarchy Applied to Same-Shift Nursing Priority",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 71,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-02-delegation",
+      "domain": "Delegation",
+      "priority": 2,
+      "rationale": "6 under-covered topics in this domain; 53 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "what-can-cannot-delegate-psw-uap",
+          "topic": "What You Can and Cannot Delegate to PSW and UAP",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 11
+        },
+        {
+          "topicSlug": "five-rights-delegation-new-grad-guide",
+          "topic": "The Five Rights of Delegation: A New Grad's Practical Guide",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "rn-rpn-lpn-collaboration-assign-how",
+          "topic": "RN–RPN/LPN Collaboration: What You Can Assign and How",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "delegating-when-overwhelmed-asking-without-guilt",
+          "topic": "Delegating When You're Overwhelmed: Asking Without Guilt",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "documenting-delegation-legal-record",
+          "topic": "Documenting Delegation: What the Legal Record Requires",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "following-up-after-delegation-closing-loop",
+          "topic": "Following Up After Delegation: Closing the Loop",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 53,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-03-escalation",
+      "domain": "Escalation",
+      "priority": 3,
+      "rationale": "6 under-covered topics in this domain; 53 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "when-to-call-doctor-escalation-threshold",
+          "topic": "When to Call the Doctor: Recognizing Your Escalation Threshold",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "rapid-response-team-activate-what-to-expect",
+          "topic": "Rapid Response Team: How to Activate and What to Expect",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "sbar-escalation-script-before-you-dial",
+          "topic": "SBAR for Escalation: Script It Before You Dial",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "when-doctor-doesnt-respond-escalation-chain-command",
+          "topic": "When the Doctor Doesn't Respond: The Escalation Chain of Command",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "escalating-family-concerns-interprofessional-team",
+          "topic": "Escalating Family Concerns to the Interprofessional Team",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "advocating-patient-when-dismissed",
+          "topic": "Advocating for Your Patient When You Feel Dismissed",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 53,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-04-rapid-recognition-of-deterioration",
+      "domain": "Rapid Recognition of Deterioration",
+      "priority": 4,
+      "rationale": "5 under-covered topics in this domain; 51 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "neuro-changes-bedside-brain-sending-warning",
+          "topic": "Neuro Changes at the Bedside: When the Brain Is Sending a Warning",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 11
+        },
+        {
+          "topicSlug": "hemodynamic-instability-reading-trend-not-single-number",
+          "topic": "Hemodynamic Instability: Reading the Trend, Not Just the Single Number",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 11
+        },
+        {
+          "topicSlug": "recognizing-sepsis-early-new-grad-bedside-checklist",
+          "topic": "Recognizing Sepsis Early: A New Grad's Bedside Checklist",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "signs-respiratory-decline-cannot-afford-to-miss",
+          "topic": "Signs of Respiratory Decline You Cannot Afford to Miss",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "news2-mews-early-warning-scores-bedside",
+          "topic": "NEWS2 and MEWS Early Warning Scores: Using Them at the Bedside",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        }
+      ],
+      "estimatedQuestionsNeeded": 51,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-05-realistic-floor-scenarios",
+      "domain": "Realistic Floor Scenarios",
+      "priority": 5,
+      "rationale": "5 under-covered topics in this domain; 49 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "four-patients-all-need-you-real-time-decisions",
+          "topic": "When Four Patients All Need You at Once: Real-Time Decision Making",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 12
+        },
+        {
+          "topicSlug": "unstable-patient-shift-start-stabilize-prioritize",
+          "topic": "The Unstable Patient at Shift Start: Stabilize, Prioritize, Communicate",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 11
+        },
+        {
+          "topicSlug": "family-demands-vs-clinical-priorities-navigating-tension",
+          "topic": "Family Member Demands vs Clinical Priorities: Navigating the Tension",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "confused-elderly-patient-3am-delirium-safety-options",
+          "topic": "The Confused Elderly Patient at 3AM: Safety, Delirium, and Your Options",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "first-code-blue-what-to-do-never-been-in-one",
+          "topic": "Your First Code Blue: What to Do When You've Never Been in One",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        }
+      ],
+      "estimatedQuestionsNeeded": 49,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-06-charting-and-documentation",
+      "domain": "Charting and Documentation",
+      "priority": 6,
+      "rationale": "6 under-covered topics in this domain; 49 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "if-not-charted-not-done-legal-safety-stakes",
+          "topic": "If It Wasn't Charted It Wasn't Done: The Legal and Safety Stakes",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "charting-assessment-what-belongs-what-doesnt",
+          "topic": "Charting Your Assessment: What Belongs in the Record and What Doesn't",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "soapie-dar-narrative-charting-choosing-format",
+          "topic": "SOAPIE, DAR, and Narrative Charting: Choosing the Right Format",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "charting-physician-telephone-orders-getting-right",
+          "topic": "Charting Physician Orders and Telephone Orders: Getting It Right",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "late-entries-corrections-addenda-legal-safe",
+          "topic": "Late Entries, Corrections, and Addenda: Doing It Legally and Safely",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "documenting-patient-education-taught-understood",
+          "topic": "Documenting Patient Education: What Was Taught and What Was Understood",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 49,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-07-shift-organization",
+      "domain": "Shift Organization",
+      "priority": 7,
+      "rationale": "5 under-covered topics in this domain; 46 questions and 1 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "getting-report-listen-flag-document",
+          "topic": "Getting Report: What to Listen For, Flag, and Document",
+          "coverageStatus": "no_content",
+          "lessonGap": 1,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "organizing-assignment-report-to-handoff-systematic",
+          "topic": "Organizing Your Assignment from Report to Handoff: A Systematic Approach",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "medication-administration-timing-realistic-workflow",
+          "topic": "Medication Administration Timing: Building a Realistic Workflow",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "first-30-minutes-shift-non-negotiable-routine",
+          "topic": "The First 30 Minutes of Shift: Your Non-Negotiable Routine",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "balancing-bedside-care-documentation-not-either-or",
+          "topic": "Balancing Bedside Care with Documentation: Not Either/Or",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 46,
+      "estimatedLessonsNeeded": 1
+    },
+    {
+      "batchId": "batch-08-time-management",
+      "domain": "Time Management",
+      "priority": 8,
+      "rationale": "6 under-covered topics in this domain; 43 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "batching-tasks-efficient-purposeful-rounding",
+          "topic": "Batching Tasks and Efficient Purposeful Rounding",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "building-nursing-brain-shift-worksheets-templates",
+          "topic": "Building Your Nursing Brain: Shift Worksheets and Organizational Templates",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "time-blocking-first-hour-getting-ahead",
+          "topic": "Time-Blocking Your First Hour: Getting Ahead Before It Gets Busy",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "when-plan-falls-apart-replanning-mid-shift",
+          "topic": "When Your Plan Falls Apart: Replanning Mid-Shift Without Panic",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "managing-interruptions-without-losing-focus",
+          "topic": "Managing Interruptions Without Losing Your Train of Thought",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "end-of-shift-completion-before-you-leave",
+          "topic": "End-of-Shift Completion: What Must Be Done Before You Leave",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 43,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-09-patient-safety",
+      "domain": "Patient Safety",
+      "priority": 9,
+      "rationale": "5 under-covered topics in this domain; 41 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "near-misses-incident-reports-ethical-legal-obligation",
+          "topic": "Near Misses and Incident Reports: Your Ethical and Legal Obligation",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "patient-falls-prevention-witnessing-post-fall-response",
+          "topic": "Patient Falls: Your Role in Prevention, Witnessing, and Post-Fall Response",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "swiss-cheese-model-healthcare-errors-prevention",
+          "topic": "The Swiss Cheese Model: Why Healthcare Errors Happen and How to Prevent Them",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "double-checks-high-alert-medications-verify",
+          "topic": "Double-Checks for High-Alert Medications: When and How to Verify",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "infection-control-busy-floor-beyond-basics",
+          "topic": "Infection Control on the Busy Floor: Beyond the Basics",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 41,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-10-communication-with-physicians",
+      "domain": "Communication with Physicians",
+      "priority": 10,
+      "rationale": "5 under-covered topics in this domain; 40 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "how-to-call-physician-without-feeling-intimidated",
+          "topic": "How to Call a Physician Without Feeling Intimidated",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "pushing-back-respectfully-disagree-medical-order",
+          "topic": "Pushing Back Respectfully: When You Disagree with a Medical Order",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "reading-room-how-physicians-prefer-receive-information",
+          "topic": "Reading the Room: How Physicians Prefer to Receive Clinical Information",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "verbal-telephone-orders-receive-readback-document",
+          "topic": "Verbal and Telephone Orders: Receiving, Reading Back, and Documenting",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "building-relationships-physicians-residents-specialists",
+          "topic": "Building Working Relationships with Physicians, Residents, and Specialists",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 6
+        }
+      ],
+      "estimatedQuestionsNeeded": 40,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-11-workplace-conflict",
+      "domain": "Workplace Conflict",
+      "priority": 11,
+      "rationale": "5 under-covered topics in this domain; 40 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "lateral-violence-nurse-bullying-recognizing-responding",
+          "topic": "Lateral Violence and Nurse Bullying: Recognizing and Responding",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "navigating-conflict-colleagues-assertive-professional",
+          "topic": "Navigating Conflict with Colleagues: Assertive but Professional",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "conflict-management-appropriate-channels-professional",
+          "topic": "Conflict with Management: Using Appropriate Channels and Staying Professional",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "new-grad-established-team-fitting-in-without-losing-self",
+          "topic": "Being the New Grad on an Established Team: Fitting In Without Losing Yourself",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "when-colleague-makes-mistake-speaking-up-safely",
+          "topic": "When a Colleague Makes a Mistake: Speaking Up Safely and Professionally",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 40,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-12-common-first-year-mistakes",
+      "domain": "Common First-Year Mistakes",
+      "priority": 12,
+      "rationale": "5 under-covered topics in this domain; 37 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "skipping-assessment-save-time-hidden-risk",
+          "topic": "Skipping Assessment to Save Time: The Hidden Patient Safety Risk",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "misunderstanding-scope-knowing-limits-before-tested",
+          "topic": "Misunderstanding Scope: Knowing Your Limits Before You're Tested",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "over-relying-memory-write-it-down",
+          "topic": "Over-Relying on Memory: Why You Must Write It Down Every Time",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "not-asking-help-pride-patient-safety-issue",
+          "topic": "Not Asking for Help: When Pride Becomes a Patient Safety Issue",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "alarm-fatigue-desensitization-staying-alert",
+          "topic": "Alarm Fatigue and Desensitization: Staying Alert When Alarms Are Constant",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 37,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-13-handoff",
+      "domain": "Handoff",
+      "priority": 13,
+      "rationale": "4 under-covered topics in this domain; 34 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "isbar-handoff-giving-report-protects-patients",
+          "topic": "ISBAR Handoff: Giving Report That Protects Your Patients",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 10
+        },
+        {
+          "topicSlug": "receiving-report-red-flags-clarifying-accountability",
+          "topic": "Receiving Report: Red Flags, Clarifying Questions, and Accountability",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 9
+        },
+        {
+          "topicSlug": "incomplete-handoff-when-dont-get-enough-information",
+          "topic": "Incomplete Handoff: What To Do When You Don't Get Enough Information",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "bedside-handoff-engaging-patient-transition-care",
+          "topic": "Bedside Handoff: Engaging the Patient in Their Own Transition of Care",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        }
+      ],
+      "estimatedQuestionsNeeded": 34,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-14-burnout-prevention-foundations",
+      "domain": "Burnout Prevention Foundations",
+      "priority": 14,
+      "rationale": "5 under-covered topics in this domain; 29 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "compassion-fatigue-first-year-recognizing-before-takes-over",
+          "topic": "Compassion Fatigue in the First Year: Recognizing It Before It Takes Over",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "post-shift-decompression-routine-actually-works",
+          "topic": "Building a Post-Shift Decompression Routine That Actually Works",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 6
+        },
+        {
+          "topicSlug": "finding-meaning-purpose-driven-practice-hard-days",
+          "topic": "Finding Meaning: Purpose-Driven Practice on the Hard Days",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 6
+        },
+        {
+          "topicSlug": "setting-limits-protecting-days-off-personal-life",
+          "topic": "Setting Limits: Protecting Your Days Off and Personal Life",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        },
+        {
+          "topicSlug": "peer-support-systems-who-to-talk-saves-careers",
+          "topic": "Peer Support Systems: Who to Talk to and Why It Saves Careers",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        }
+      ],
+      "estimatedQuestionsNeeded": 29,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-15-professional-boundaries",
+      "domain": "Professional Boundaries",
+      "priority": 15,
+      "rationale": "4 under-covered topics in this domain; 27 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "gift-giving-dependency-over-attachment-recognizing-redirecting",
+          "topic": "Gift-Giving, Dependency, and Over-Attachment: Recognizing and Redirecting",
+          "coverageStatus": "partial",
+          "lessonGap": 0,
+          "questionGap": 8
+        },
+        {
+          "topicSlug": "therapeutic-vs-social-relationships-patients-line",
+          "topic": "Therapeutic vs Social Relationships with Patients: Where Is the Line?",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "social-media-patient-privacy-what-cannot-post-ever",
+          "topic": "Social Media and Patient Privacy: What You Cannot Post, Ever",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 7
+        },
+        {
+          "topicSlug": "boundaries-families-involvement-becomes-enmeshment",
+          "topic": "Boundaries with Families: When Involvement Becomes Enmeshment",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        }
+      ],
+      "estimatedQuestionsNeeded": 27,
+      "estimatedLessonsNeeded": 0
+    },
+    {
+      "batchId": "batch-16-confidence-building",
+      "domain": "Confidence Building",
+      "priority": 16,
+      "rationale": "4 under-covered topics in this domain; 20 questions and 0 lessons still needed",
+      "topics": [
+        {
+          "topicSlug": "imposter-syndrome-new-grads-normal-work-through",
+          "topic": "Imposter Syndrome in New Grads: It's Normal and Here's How to Work Through It",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        },
+        {
+          "topicSlug": "finding-clinical-voice-speaking-up-huddles-rounds",
+          "topic": "Finding Your Clinical Voice: Speaking Up at Huddles, Rounds, and Handoffs",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        },
+        {
+          "topicSlug": "debriefing-difficult-shifts-processing-without-rumination",
+          "topic": "Debriefing After Difficult Shifts: Processing Without Rumination",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        },
+        {
+          "topicSlug": "building-competence-reflection-rolfe-gibbs-cycle",
+          "topic": "Building Competence Through Reflection: The Rolfe Model and Gibbs Cycle",
+          "coverageStatus": "weak",
+          "lessonGap": 0,
+          "questionGap": 5
+        }
+      ],
+      "estimatedQuestionsNeeded": 20,
+      "estimatedLessonsNeeded": 0
+    }
+  ]
+}

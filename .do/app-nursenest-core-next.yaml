@@ -1,0 +1,371 @@
+name: nursenest-core-next
+region: tor
+domains:
+  - domain: nursenest.ca
+    type: PRIMARY
+    zone: nursenest.ca
+  - domain: www.nursenest.ca
+    type: ALIAS
+    zone: nursenest.ca
+ingress:
+  rules:
+    - component:
+        name: web
+      match:
+        path:
+          prefix: /
+services:
+  - name: web
+    image:
+      registry_type: GHCR
+      registry: ghcr.io
+      repository: erikagodin6-jpg/nursenest
+      tag: latest
+    run_command: node scripts/start-standalone.mjs
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-s
+    health_check:
+      http_path: /readyz
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
+      success_threshold: 1
+      failure_threshold: 12
+    liveness_health_check:
+      http_path: /healthz
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
+      success_threshold: 1
+      failure_threshold: 12
+    envs:
+      # ── Node / Build ───────────────────────────────────────────────────────
+      - key: NODE_VERSION
+        scope: RUN_AND_BUILD_TIME
+        value: 22.22.2
+      - key: NODE_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: production
+      - key: NODE_OPTIONS
+        scope: RUN_AND_BUILD_TIME
+        value: --max-old-space-size=4096
+      - key: NODE_MAX_OLD_SPACE_SIZE_MB
+        scope: RUN_AND_BUILD_TIME
+        value: "1280"
+      - key: NEXT_TELEMETRY_DISABLED
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+      - key: TMPDIR
+        scope: RUN_AND_BUILD_TIME
+        value: /tmp
+      - key: PORT
+        scope: RUN_AND_BUILD_TIME
+        value: "8080"
+      - key: HOSTNAME
+        scope: RUN_AND_BUILD_TIME
+        value: 0.0.0.0
+
+      # ── Build tuning ───────────────────────────────────────────────────────
+      - key: RUN_HEAVY_BUILD_TASKS
+        scope: RUN_AND_BUILD_TIME
+        value: "false"
+      - key: SKIP_I18N_PREBUILD
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+      - key: NN_APP_PLATFORM_BUILD
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NN_LESSON_INDEX_VERIFY_MODE
+        scope: RUN_AND_BUILD_TIME
+        value: manifest
+      - key: NN_SKIP_HEAVY_BUILD_REPORTS
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+      - key: NN_LOW_MEMORY_BUILD
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+      - key: NN_FORCE_SINGLE_BUILD_WORKER
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NN_TIMED_INCLUDE_NPM_PRUNE
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+      - key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
+        scope: RUN_AND_BUILD_TIME
+        value: "4096"
+      - key: BUILD_WEBPACK_PARALLELISM
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+      - key: SENTRY_ENABLED
+        scope: RUN_AND_BUILD_TIME
+        value: "false"
+
+      # ── Runtime identity ───────────────────────────────────────────────────
+      - key: NN_BUILD_COMMIT
+        scope: RUN_AND_BUILD_TIME
+        value: ${web.COMMIT_HASH}
+      - key: NN_BUILD_BRANCH
+        scope: RUN_AND_BUILD_TIME
+        value: main
+      - key: NN_BOOTSTRAP_TEST_DELAY_MS
+        scope: RUN_AND_BUILD_TIME
+        value: "5000"
+      - key: NN_CHILD_HEALTH_TIMEOUT_MS
+        scope: RUN_AND_BUILD_TIME
+        value: "3000"
+      - key: NN_ENV_VALIDATION_MODE
+        scope: RUN_AND_BUILD_TIME
+
+      # ── App URL (required for Stripe checkout return URLs) ─────────────────
+      - key: NEXT_PUBLIC_APP_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://nursenest.ca
+
+      # ── Auth ───────────────────────────────────────────────────────────────
+      - key: AUTH_TRUST_HOST
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: AUTH_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://nursenest.ca
+      - key: NEXTAUTH_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://nursenest.ca
+      # Secret: set value in DO dashboard — DO preserves existing value when type=SECRET
+      # RUN_TIME only: GHCR pre-built images skip App Platform build; RUN_AND_BUILD_TIME secrets
+      # are not injected into the running container (see docs/ops/ghcr-runtime-database-url.md).
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      # Legacy alias kept for compatibility
+      - key: NEXTAUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── Database ───────────────────────────────────────────────────────────
+      # Pooled connection URL (PgBouncer). Used by all runtime queries.
+      # Secret: set value in DO dashboard
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      # Direct (non-pooled) connection. Required by Prisma schema.prisma directUrl.
+      # Falls back to DATABASE_URL if unset, but should be explicitly set for
+      # migrations and introspection to bypass PgBouncer.
+      - key: DIRECT_URL
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── AI / OpenAI ────────────────────────────────────────────────────────
+      - key: AI_ADMIN_GENERATION_ENABLED
+        scope: RUN_AND_BUILD_TIME
+        value: "false"
+      - key: AI_PROVIDER
+        scope: RUN_AND_BUILD_TIME
+        value: OPENAI
+      - key: OPENROUTER_MODEL
+        scope: RUN_AND_BUILD_TIME
+        value: anthropic/claude-3.5-sonnet
+      # Secrets
+      - key: AI_INTEGRATIONS_OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: OPENROUTER_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── Storage (DigitalOcean Spaces) ──────────────────────────────────────
+      - key: SPACES_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: SPACES_SECRET
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── Cron ───────────────────────────────────────────────────────────────
+      - key: CRON_SECRET
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── Stripe API keys (secrets — set in DO dashboard) ────────────────────
+      - key: STRIPE_SECRET_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      # NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is currently empty in production.
+      # Set via DO dashboard: pk_live_... (required for Stripe.js on checkout page).
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── ECG module flags ────────────────────────────────────────────────────
+      - key: ENABLE_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ENABLE_ADVANCED_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ALLOW_ECG_EARLY_ACCESS_CHECKOUT
+        scope: RUN_AND_BUILD_TIME
+        value: "false"
+
+      # ── Hemodynamics module flags ────────────────────────────────────────────
+      - key: ENABLE_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ENABLE_ADVANCED_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ADVANCED_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+
+      # ── Stripe price IDs ────────────────────────────────────────────────────
+      # Price IDs are safe to commit (not secret). Values sourced from live spec 2026-05-13.
+      # To update: get new price_id from Stripe dashboard, update value here, run:
+      #   doctl apps update d6a4b825-4d70-4dd4-8d71-04b354d36f43 --spec .do/app-nursenest-core-next.yaml
+
+      # Advanced ECG add-on (single price ID covers all durations)
+      - key: STRIPE_PRICE_ADVANCED_ECG
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TXlpKFbgp0Ub5P71bDALZDb
+      # Advanced Hemodynamic Monitoring add-on (one-time)
+      - key: STRIPE_PRICE_ADVANCED_HEMODYNAMICS
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TXlpKFbgp0Ub5P71bDALZDb
+      # Advanced Labs add-on (one-time)
+      - key: STRIPE_PRICE_ADVANCED_LABS
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TXlvwFbgp0Ub5P7NGdy9MM1
+      # Critical Care Bundle (one-time — Advanced ECG + Advanced Hemodynamics)
+      - key: STRIPE_PRICE_CRITICAL_CARE_BUNDLE
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TXlpoFbgp0Ub5P7W7r5rDeN
+      # Alias kept for backward compatibility with older webhook handlers
+      - key: STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TXlpKFbgp0Ub5P71bDALZDb
+
+      # NP — Nurse Practitioner (CNPLE)
+      - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuJ7Fbgp0Ub5P79Kd4k3Lh
+      - key: STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuJiFbgp0Ub5P7XIK12Ehi
+      - key: STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuK8Fbgp0Ub5P7skiOC7II
+      - key: STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuKUFbgp0Ub5P7iEkkFK6U
+
+      # RN — NCLEX-RN
+      - key: STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuH6Fbgp0Ub5P7DNYL5O29
+      - key: STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuHiFbgp0Ub5P7Hotw3mXB
+      - key: STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuIJFbgp0Ub5P7usPDQcUI
+      - key: STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuIkFbgp0Ub5P70KbakVqE
+
+      # RPN — REx-PN / NCLEX-PN Canada
+      - key: STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuEQFbgp0Ub5P7RAwQFwAk
+      - key: STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuErFbgp0Ub5P7cdM8iw5E
+      - key: STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuFJFbgp0Ub5P7AaESIas9
+      - key: STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAuGVFbgp0Ub5P7jVg3Mb4m
+
+      # New Grad — legacy canonical keys (app reads STRIPE_PRICE_NEW_GRAD_*)
+      - key: STRIPE_PRICE_NEW_GRAD_MONTHLY
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TLnGhFbgp0Ub5P7FHBxwfu5
+      - key: STRIPE_PRICE_NEW_GRAD_6MONTH
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TLnHJFbgp0Ub5P7QmMOs84F
+      - key: STRIPE_PRICE_NEW_GRAD_YEARLY
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TLnHkFbgp0Ub5P7baczDA2H
+      # Canonical New Grad keys (set in Stripe; kept for reference/webhook reconciliation)
+      - key: STRIPE_PRICE_NURSENEST_NEW_GRAD_PREP_MONTHLY
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxJDFbgp0Ub5P768ga9tYh
+      - key: STRIPE_PRICE_NURSENEST_NEW_GRAD_PREP_6_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxJqFbgp0Ub5P7oOfRUN9h
+      - key: STRIPE_PRICE_NURSENEST_NEW_GRAD_PREP_YEARLY
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxKhFbgp0Ub5P7tmbTwHlE
+
+      # Allied Health — 4 shared prices cover all 7 career tracks
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxCeFbgp0Ub5P7ocyarmgy
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxDbFbgp0Ub5P75l3KCWEs
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxEaFbgp0Ub5P7FEOyr7ZN
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TAxF7Fbgp0Ub5P731jFKbBY
+
+      # LVN/LPN — NCLEX-PN US (Stripe prices not yet created; set in DO dashboard when ready)
+      - key: STRIPE_PRICE_LVN_LPN_MONTHLY
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_PRICE_LVN_LPN_3MONTH
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_PRICE_LVN_LPN_6MONTH
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_PRICE_LVN_LPN_YEARLY
+        scope: RUN_TIME
+        type: SECRET
+
+      # ── QA + reliability runtime keys ─────────────────────────────────────
+      - key: BASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: NURSENEST_PRODUCTION_BASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: NURSENEST_RELIABILITY_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: PRODUCTION_CRON_BASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: QA_PAID_EMAIL
+        scope: RUN_TIME
+        type: SECRET
+      - key: QA_PAID_PASSWORD
+        scope: RUN_TIME
+        type: SECRET

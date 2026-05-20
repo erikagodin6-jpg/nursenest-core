@@ -1,0 +1,105 @@
+import { formatTitleCase } from "@/lib/format/text-case";
+import { normalizeVisibleLessonTitle } from "@/lib/lessons/lesson-taxonomy";
+
+const PATHWAY_LABEL_PATTERN = /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)\b/i;
+const COUNTRY_PATTERN = /\b(?:canada|us|u\.s\.|united states)\b/i;
+const MEDICAL_ACRONYMS = new Map<string, string>([
+  ["acs", "ACS"],
+  ["abg", "ABG"],
+  ["cad", "CAD"],
+  ["cabg", "CABG"],
+  ["copd", "COPD"],
+  ["cva", "CVA"],
+  ["dka", "DKA"],
+  ["ecg", "ECG"],
+  ["ekg", "EKG"],
+  ["hr", "HR"],
+  ["icu", "ICU"],
+  ["iv", "IV"],
+  ["mi", "MI"],
+  ["nicu", "NICU"],
+  ["npo", "NPO"],
+  ["o2", "O2"],
+  ["pe", "PE"],
+  ["pn", "PN"],
+  ["rn", "RN"],
+  ["spo2", "SpO2"],
+  ["uti", "UTI"],
+]);
+
+const INSTRUCTIONAL_TITLE_SUFFIX_PATTERN =
+  /\s*[:–—-]\s*(?:recognition(?:\s+and\s+priorit(?:y|ies))?|priorit(?:y|ies)|nursing\s+priorit(?:y|ies)|what\s+do\s+you\s+do\s+first\??|teaching\s+points?(?:\s+and\s+safety\s+monitoring)?|safety\s+monitoring|monitoring\s+and\s+safety|pre-?\s*and\s+post-?\s*procedure\s+nursing(?:\s+care)?|pre-?procedure\s+and\s+post-?procedure\s+nursing(?:\s+care)?|management\s+and\s+teaching|assessment\s+and\s+interventions?|clinical\s+judgment|exam\s+priorit(?:y|ies))\s*$/i;
+
+function normalizeSpacing(value: string): string {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function stripPathwaySuffixParentheticals(value: string): string {
+  return value.replace(/\s*\(([^)]*)\)/gi, (match, inner: string) => {
+    if (PATHWAY_LABEL_PATTERN.test(inner) || COUNTRY_PATTERN.test(inner)) return " ";
+    return match;
+  });
+}
+
+function stripPathwaySegments(value: string): string {
+  return value
+    .replace(
+      /\s*[-–—,:|]\s*(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)(?:\s*(?:exam|test))?\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi,
+      " ",
+    )
+    .replace(
+      /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)(?:\s*(?:exam|test))?\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi,
+      " ",
+    );
+}
+
+function stripInstructionalSuffix(value: string): string {
+  let next = value;
+  for (let i = 0; i < 3; i += 1) {
+    const stripped = normalizeSpacing(next.replace(INSTRUCTIONAL_TITLE_SUFFIX_PATTERN, ""));
+    if (stripped === next) break;
+    next = stripped;
+  }
+  return next;
+}
+
+function restoreAcronymCasing(value: string, sourceTitle: string): string {
+  const dynamicAcronyms = new Set(
+    [...sourceTitle.matchAll(/\b[A-Z]{2,}(?:\/[A-Z]{2,})*\b/g)]
+      .map((match) => match[0])
+      .filter((token) => !PATHWAY_LABEL_PATTERN.test(token)),
+  );
+
+  let updated = value;
+  for (const token of dynamicAcronyms) {
+    updated = updated.replace(new RegExp(`\\b${token}\\b`, "gi"), token);
+  }
+
+  for (const [lower, token] of MEDICAL_ACRONYMS.entries()) {
+    updated = updated.replace(new RegExp(`\\b${lower}\\b`, "gi"), token);
+  }
+
+  return updated;
+}
+
+export function cleanLessonTitleForDisplay(rawTitle: string): string {
+  const source = normalizeSpacing(normalizeVisibleLessonTitle(normalizeSpacing(rawTitle)));
+  if (!source) return "";
+
+  const stripped = normalizeSpacing(
+    stripInstructionalSuffix(stripPathwaySegments(stripPathwaySuffixParentheticals(source)))
+      .replace(/\(\s*\)/g, " ")
+      .replace(/\s+([,;:.!?])/g, "$1")
+      .replace(/[-–—,:|]\s*$/g, ""),
+  );
+
+  const titleCased = formatTitleCase(stripped);
+  return restoreAcronymCasing(titleCased, source);
+}
+
+export function compactPathwayLabel(value: string): string {
+  if (/nclex[\s-]?rn/i.test(value)) return "RN";
+  if (/nclex[\s-]?pn/i.test(value) || /rex[\s-]?pn/i.test(value)) return "PN";
+  if (/\b(?:cnple|fnp|aanp|ancc|np)\b/i.test(value)) return "NP";
+  return value;
+}

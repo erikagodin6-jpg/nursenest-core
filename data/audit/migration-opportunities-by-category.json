@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-04-14T14:22:28.207Z",
+  "categories": [
+    {
+      "id": "nursing_lessons",
+      "oldProxy": "client/src/data/lessons/*.ts, nursenest-core/src/lib/lessons/scoped-lessons/*",
+      "current": "Prisma lessons + pathway registry + scoped TS modules",
+      "missingOrPartial": [
+        "Thousands of legacy lesson IDs mapped to create_missing in legacy-to-current-lesson-map.json",
+        "Pre/post/activities parity per lesson varies — enrichments JSON under data/lesson-enrichments/"
+      ],
+      "migrationValue": "critical"
+    },
+    {
+      "id": "question_banks",
+      "oldProxy": "server + client exam question references, data exports",
+      "current": "Prisma exam_questions + pathway snapshots",
+      "missingOrPartial": [
+        "Dedupe and crosswalk in legacy-question-duplicates.json"
+      ],
+      "migrationValue": "high"
+    },
+    {
+      "id": "allied_health",
+      "oldProxy": "allied* lesson files in client data",
+      "current": "allied-health marketing routes + lessons",
+      "missingOrPartial": [
+        "Coverage vs full legacy allied corpus — verify per pathway"
+      ],
+      "migrationValue": "high"
+    },
+    {
+      "id": "new_grad",
+      "oldProxy": "scattered in legacy lessons / marketing",
+      "current": "Dedicated routes if present — verify programmatic registry",
+      "missingOrPartial": [
+        "Needs explicit content audit vs legacy"
+      ],
+      "migrationValue": "medium"
+    },
+    {
+      "id": "case_studies_activities_tests",
+      "oldProxy": "embedded in lesson TS, activities flags in legacy-lesson-source-inventory",
+      "current": "pathway lesson body + bank assessments",
+      "missingOrPartial": [
+        "Activity depth may be lower until enrichments imported"
+      ],
+      "migrationValue": "high"
+    },
+    {
+      "id": "tools_calculators",
+      "oldProxy": "client pages tools",
+      "current": "src/app/(marketing)/.../tools/",
+      "missingOrPartial": [
+        "Compare route registry vs client tool pages"
+      ],
+      "migrationValue": "medium_conversion"
+    },
+    {
+      "id": "blog_seo",
+      "oldProxy": "tools/i18n marketing, blog manifests",
+      "current": "blog pipelines under src/lib/blog, data/blog-manifest",
+      "missingOrPartial": [
+        "Batch imports in data/blog-manifest — ongoing"
+      ],
+      "migrationValue": "high_seo"
+    },
+    {
+      "id": "translations",
+      "oldProxy": "tools/i18n",
+      "current": "public/i18n, compile pipeline",
+      "missingOrPartial": [
+        "Locale parity — compare compiled bundles"
+      ],
+      "migrationValue": "high"
+    },
+    {
+      "id": "flashcards_quick_review",
+      "oldProxy": "legacy flashcard inventory JSON",
+      "current": "src/components/flashcards",
+      "missingOrPartial": [
+        "Deck coverage vs legacy — see flashcards audit JSONs"
+      ],
+      "migrationValue": "medium"
+    },
+    {
+      "id": "cat_adaptive",
+      "oldProxy": "client mock exam + server cat-session-api",
+      "current": "lib/exams/cat-engine, Prisma sessions",
+      "missingOrPartial": [
+        "Resume/checkpoint UX from legacy (see gap analysis)"
+      ],
+      "migrationValue": "high_trust"
+    }
+  ]
+}

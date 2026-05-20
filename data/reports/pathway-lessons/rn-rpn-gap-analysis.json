@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-04-13T20:23:53.044Z",
+  "note": "Post-import snapshot. Compare to pre-import totals in git history if needed.",
+  "currentDbPublishedByPathway": {
+    "us-rn-nclex-rn": 1026,
+    "ca-rn-nclex-rn": 742,
+    "us-lpn-nclex-pn": 1052,
+    "ca-rpn-rex-pn": 1041
+  },
+  "historicalEstimateBySource": {
+    "legacyContentMapRN": 587,
+    "legacyContentMapRPN": 922,
+    "catalogRN": 273,
+    "catalogRPN": 198,
+    "materializedRN": 37,
+    "materializedRPN": 37
+  },
+  "expectedByPathwayFromLegacy": {
+    "us-rn-nclex-rn": 587,
+    "ca-rn-nclex-rn": 587,
+    "us-lpn-nclex-pn": 922,
+    "ca-rpn-rex-pn": 922
+  },
+  "missingLessonCountByPathway": {
+    "us-rn-nclex-rn": 0,
+    "ca-rn-nclex-rn": 0,
+    "us-lpn-nclex-pn": 0,
+    "ca-rpn-rex-pn": 0
+  },
+  "missingStillExistsInSourceByPathway": {
+    "us-rn-nclex-rn": 0,
+    "ca-rn-nclex-rn": 0,
+    "us-lpn-nclex-pn": 0,
+    "ca-rpn-rex-pn": 0
+  },
+  "trulyAbsentFromSourceByPathway": {
+    "us-rn-nclex-rn": 0,
+    "ca-rn-nclex-rn": 0,
+    "us-lpn-nclex-pn": 0,
+    "ca-rpn-rex-pn": 0
+  }
+}

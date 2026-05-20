@@ -1,0 +1,224 @@
+#!/usr/bin/env npx tsx
+import { BlogPostStatus, BlogWorkflowStatus, ContentStatus, PrismaClient } from "@prisma/client";
+import { loadBlogAuditEnv } from "../../src/lib/db/blog-audit-env-load";
+import {
+  RN_LESSON_BLOG_PATHWAY_IDS,
+  buildRnLessonSeoDraft,
+  buildRnLessonSeoVariants,
+  keywordClusterFromDuplicateHash,
+  lessonHasHighQualityBody,
+  rnLessonBlogPublicPath,
+  type RnLessonSource,
+} from "../../src/lib/blog/rn-lesson-seo-blog-generator";
+import { adminBlogPublicUrl } from "../../src/lib/blog/admin-blog-generation-service";
+import { getCatalogPathwayLessonsSync } from "../../src/lib/lessons/pathway-lesson-catalog-sync";
+
+type LessonSourceMode = "db" | "catalog";
+
+type CliArgs = {
+  apply: boolean;
+  limit: number;
+  minLessonWords: number;
+  source: LessonSourceMode;
+};
+
+function parseArgs(argv: string[]): CliArgs {
+  let apply = false;
+  let limit = 12;
+  let minLessonWords = 700;
+  let source: LessonSourceMode = "db";
+  for (const arg of argv) {
+    if (arg === "--apply") apply = true;
+    if (arg === "--source=catalog") source = "catalog";
+    if (arg === "--source=db") source = "db";
+    if (arg.startsWith("--limit=")) {
+      const n = Number(arg.slice("--limit=".length));
+      if (Number.isFinite(n) && n > 0) limit = Math.floor(n);
+    }
+    if (arg.startsWith("--min-lesson-words=")) {
+      const n = Number(arg.slice("--min-lesson-words=".length));
+      if (Number.isFinite(n) && n > 0) minLessonWords = Math.floor(n);
+    }
+  }
+  return { apply, limit, minLessonWords, source };
+}
+
+function toIsoDateOnly(value: Date): string {
+  return value.toISOString().slice(0, 10);
+}
+
+async function main(): Promise<void> {
+  const args = parseArgs(process.argv.slice(2));
+  const env = await loadBlogAuditEnv({
+    appRoot: process.cwd(),
+    repoRoot: process.cwd(),
+    whenMissingDatabaseUrlLog:
+      "[rn-lesson-seo] DATABASE_URL missing; run with configured DB to read lessons and write blog posts.",
+  });
+  const needsDatabase = args.apply || args.source === "db";
+  if (needsDatabase && !env.databaseUrlSet) {
+    console.error("[rn-lesson-seo] DATABASE_URL is required for DB lesson reads or writes.");
+    process.exit(1);
+  }
+
+  const prisma = env.databaseUrlSet ? new PrismaClient() : null;
+  const now = new Date();
+  const CAREER_SLUG_RN = "rn" as const;
+  try {
+    let lessons: RnLessonSource[];
+    if (args.source === "catalog") {
+      const merged: RnLessonSource[] = [];
+      for (const pathwayId of RN_LESSON_BLOG_PATHWAY_IDS) {
+        for (const l of getCatalogPathwayLessonsSync(pathwayId)) {
+          if (!l.structuralQuality?.publicComplete) continue;
+          merged.push({
+            pathwayId,
+            slug: l.slug,
+            title: l.title,
+            topic: l.topic,
+            topicSlug: l.topicSlug,
+            bodySystem: l.bodySystem,
+            sections: l.sections,
+          });
+        }
+      }
+      lessons = merged;
+    } else {
+      if (!prisma) {
+        throw new Error("DATABASE_URL is required when --source=db is used.");
+      }
+      const rows = await prisma.pathwayLesson.findMany({
+        where: {
+          pathwayId: { in: [...RN_LESSON_BLOG_PATHWAY_IDS] },
+          status: ContentStatus.PUBLISHED,
+          structuralPublicComplete: true,
+          locale: "en",
+        },
+        orderBy: [{ updatedAt: "desc" }],
+        select: {
+          pathwayId: true,
+          slug: true,
+          title: true,
+          topic: true,
+          topicSlug: true,
+          bodySystem: true,
+          sections: true,
+        },
+        take: Math.max(args.limit * 5, 60),
+      });
+      lessons = rows;
+    }
+
+    const highQuality = lessons.filter((lesson) => lessonHasHighQualityBody(lesson.sections, args.minLessonWords));
+    const plannedRows: Array<Record<string, string>> = [];
+    let created = 0;
+    let skipped = 0;
+
+    for (const lesson of highQuality) {
+      const variants = buildRnLessonSeoVariants(lesson.topic || lesson.title);
+      for (const variant of variants) {
+        if (created >= args.limit) break;
+        const draft = buildRnLessonSeoDraft({ lesson, variant });
+        const keywordCluster = keywordClusterFromDuplicateHash(draft.hash);
+
+        const existing = prisma
+          ? await prisma.blogPost.findFirst({
+              where: {
+                careerSlug: CAREER_SLUG_RN,
+                OR: [{ keywordCluster }, { slug: draft.slug }],
+              },
+              select: { id: true, slug: true, title: true, careerSlug: true },
+            })
+          : null;
+
+        if (existing) {
+          skipped += 1;
+          plannedRows.push({
+            status: "skipped_duplicate",
+            topicSlug: lesson.topicSlug,
+            title: draft.title,
+            slug: existing.slug,
+            lesson: lesson.slug,
+            url: adminBlogPublicUrl(existing.slug, existing.careerSlug ?? CAREER_SLUG_RN),
+          });
+          continue;
+        }
+
+        const row = {
+          slug: draft.slug,
+          title: draft.title,
+          excerpt: draft.excerpt,
+          body: draft.body,
+          tags: ["rn", "nclex-rn", lesson.topicSlug, "practice-questions"],
+          category: `RN ${lesson.bodySystem}`,
+          postStatus: BlogPostStatus.PUBLISHED,
+          workflowStatus: BlogWorkflowStatus.PUBLISHED,
+          publishAt: now,
+          exam: "RN",
+          seoTitle: `${draft.title} | NurseNest`,
+          seoDescription: draft.excerpt,
+          postTemplate: null,
+          relatedLessonPaths: [draft.lessonPath],
+          relatedQuestionIds: [],
+          relatedTools: [],
+          adminPublishLog: [],
+          targetKeyword: draft.topicLabel,
+          keywordCluster,
+          intent: "PRACTICE_QUESTIONS" as const,
+          funnelStage: "CONVERSION" as const,
+          ctaType: "free_trial",
+          ctaText: "Start free trial",
+          ctaHref: "/pricing",
+          legacySource: "rn-lesson-seo-auto-v1",
+          careerSlug: CAREER_SLUG_RN,
+          locale: "en",
+          sourceLocale: "en",
+        };
+
+        if (args.apply) {
+          if (!prisma) {
+            throw new Error("DATABASE_URL is required when --apply is used.");
+          }
+          await prisma.blogPost.create({ data: row });
+        }
+        created += 1;
+        plannedRows.push({
+          status: args.apply ? "published" : "dry_run",
+          topicSlug: lesson.topicSlug,
+          title: draft.title,
+          slug: draft.slug,
+          lesson: lesson.slug,
+          url: rnLessonBlogPublicPath(draft.slug),
+        });
+      }
+      if (created >= args.limit) break;
+    }
+
+    console.log(
+      JSON.stringify(
+        {
+          mode: args.apply ? "apply" : "dry_run",
+          source: args.source,
+          databaseBackedDedupe: prisma ? "enabled" : "skipped",
+          generatedAt: now.toISOString(),
+          publishDate: toIsoDateOnly(now),
+          pathways: RN_LESSON_BLOG_PATHWAY_IDS,
+          lessonCandidates: lessons.length,
+          highQualityLessons: highQuality.length,
+          created,
+          skipped,
+          rows: plannedRows,
+        },
+        null,
+        2,
+      ),
+    );
+  } finally {
+    if (prisma) await prisma.$disconnect();
+  }
+}
+
+main().catch((error) => {
+  console.error("[rn-lesson-seo] failed", error);
+  process.exit(1);
+});

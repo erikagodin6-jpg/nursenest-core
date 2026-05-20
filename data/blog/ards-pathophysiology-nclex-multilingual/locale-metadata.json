@@ -1,0 +1,242 @@
+{
+  "en": {
+    "locale": "en",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "ARDS Pathophysiology for NCLEX & NP Exams: Alveolar Injury, Shunt, and Lung-Protective Care",
+    "metaDescription": "ARDS pathophysiology for NCLEX-RN, REx-PN & NP: diffuse alveolar damage, intrapulmonary shunt, PaO₂/FiO₂, PEEP, prone positioning, labs, complications, pearls & traps.",
+    "primaryKeyword": "ARDS pathophysiology NCLEX",
+    "secondaryKeywords": [
+      "refractory hypoxemia",
+      "Berlin definition ARDS",
+      "lung protective ventilation",
+      "intrapulmonary shunt",
+      "PEEP rationale nursing"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "Browse the lesson library and search respiratory pathophysiology topics to pair with your weak areas."
+      },
+      {
+        "href": "/tools",
+        "anchor": "Use NurseNest clinical study tools alongside practice to connect gas-exchange concepts with safe calculations and pacing."
+      }
+    ]
+  },
+  "fr": {
+    "locale": "fr",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "Physiopathologie du SDRA (NCLEX, NP) : lésion alvéolaire, shunt et ventilation protectrice",
+    "metaDescription": "SDRA / ARDS : pathophysiologie pour NCLEX-RN, REx-PN et NP — shunt, PaO₂/FiO₂, Berlin, PEEP, décubitus ventral, pièges et références APA.",
+    "primaryKeyword": "physiopathologie SDRA NCLEX",
+    "secondaryKeywords": [
+      "hypoxémie réfractaire",
+      "définition Berlin SDRA",
+      "ventilation protectrice",
+      "shunt intrapulmonaire",
+      "PEEP soins infirmiers"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "Parcourez la bibliothèque de leçons NurseNest et recherchez sepsis, SDRA ou oxygénation pour cibler vos lacunes."
+      },
+      {
+        "href": "/tools",
+        "anchor": "Ouvrez les outils d’étude clinique NurseNest pour renforcer calculs, priorités et raisonnement sécuritaire."
+      }
+    ]
+  },
+  "es": {
+    "locale": "es",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "Fisiopatología del SDRA para NCLEX y NP: lesión alveolar, shunt y ventilación protectora",
+    "metaDescription": "Fisiopatología ARDS/SDRA para NCLEX-RN, REx-PN y NP: shunt, PaO₂/FiO₂, definición de Berlín, PEEP, decúbito prono, laboratorios y trampas del examen.",
+    "primaryKeyword": "fisiopatología SDRA NCLEX",
+    "secondaryKeywords": [
+      "hipoxemia refractaria",
+      "definición de Berlín ARDS",
+      "ventilación protectora pulmón",
+      "shunt intrapulmonar",
+      "PEEP enfermería"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "Explora la biblioteca de lecciones NurseNest y busca sepsis, SDRA u oxigenación para reforzar tus temas débiles."
+      },
+      {
+        "href": "/tools",
+        "anchor": "Usa las herramientas clínicas NurseNest para integrar cálculos y estudio estructurado."
+      }
+    ]
+  },
+  "pt": {
+    "locale": "pt",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "Fisiopatologia da SARA/ARDS para NCLEX e NP: lesão alveolar, shunt e ventilação protetora",
+    "metaDescription": "Fisiopatologia da SARA para NCLEX-RN, REx-PN e NP: shunt, PaO₂/FiO₂, definição de Berlim, PEEP, decúbito ventral, exames e armadilhas de prova.",
+    "primaryKeyword": "fisiopatologia SARA NCLEX",
+    "secondaryKeywords": [
+      "hipoxemia refratária",
+      "definição Berlim ARDS",
+      "ventilação protetora",
+      "shunt intrapulmonar",
+      "PEEP enfermagem"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "Acesse a biblioteca de lições NurseNest e pesquise sepse, SARA ou oxigenação para focar revisões."
+      },
+      {
+        "href": "/tools",
+        "anchor": "Use as ferramentas clínicas NurseNest para apoiar estudo e segurança no raciocínio."
+      }
+    ]
+  },
+  "tl": {
+    "locale": "tl",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "ARDS Pathophysiology para NCLEX at NP: pinsala sa baga, shunt, at lung-protective na alaga",
+    "metaDescription": "ARDS pathophysiology para NCLEX-RN, REx-PN at NP: shunt, PaO₂/FiO₂, Berlin, PEEP, prone, labs, komplikasyon, at NCLEX traps.",
+    "primaryKeyword": "ARDS pathophysiology NCLEX",
+    "secondaryKeywords": [
+      "refractory hypoxemia",
+      "Berlin definition ARDS",
+      "lung protective ventilation",
+      "intrapulmonary shunt",
+      "PEEP nursing"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "Galugarin ang lesson library ng NurseNest at maghanap ng sepsis, ARDS, o oxygenation para sa targeted review."
+      },
+      {
+        "href": "/tools",
+        "anchor": "Gamitin ang mga clinical study tool ng NurseNest para sa mas ligtas na pagsasanay."
+      }
+    ]
+  },
+  "ar": {
+    "locale": "ar",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "فسيولوجيا المرض لمتلازمة الضائقة التنفسية الحادة لامتحان NCLEX وNP: إصابة حويصلية وشنت وتهوية واقية",
+    "metaDescription": "ARDS لامتحاني NCLEX-RN وREx-PN وNP: شنت، PaO₂/FiO₂، تعريف برلين، PEEP، وضع مستلقي، مختبرات، مضاعفات، وفخاخ امتحان.",
+    "primaryKeyword": "فسيولوجيا ARDS NCLEX",
+    "secondaryKeywords": [
+      "نقص أكسجة مقاوم",
+      "تعريف برلين ARDS",
+      "تهوية واقية للرئة",
+      "تحويلة داخل الرئة",
+      "PEEP تمريض"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "تصفح مكتبة الدروس في NurseNest وابحث عن الإنتان أو ARDS أو الأكسجة لمراجعة موجهة."
+      },
+      {
+        "href": "/tools",
+        "anchor": "استخدم أدوات الدراسة السريرية في NurseNest لدعم الحسابات والتفكير الآمن."
+      }
+    ]
+  },
+  "hi": {
+    "locale": "hi",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "NCLEX और NP परीक्षा के लिए ARDS रोग-क्रिया: एल्वियोलर क्षति, शंट और फेफड़ा-सुरक्षित देखभाल",
+    "metaDescription": "NCLEX-RN, REx-PN, NP हेतु ARDS रोग-क्रिया: शंट, PaO₂/FiO₂, बर्लिन, PEEP, प्रोन, जांच, जटिलताएँ और परीक्षा जाल।",
+    "primaryKeyword": "ARDS pathophysiology NCLEX",
+    "secondaryKeywords": [
+      "प्रतिरोधी हाइपॉक्सेमिया",
+      "बर्लिन परिभाषा ARDS",
+      "लंग प्रोटेक्टिव वेंटिलेशन",
+      "अंतःपल्मोनरी शंट",
+      "PEEP नर्सिंग"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "NurseNest पाठ पुस्तकालय में सेफ्सिस, ARDS या ऑक्सीजनेशन खोजकर लक्षित अध्ययन करें।"
+      },
+      {
+        "href": "/tools",
+        "anchor": "सुरक्षित गणना और अध्ययन के लिए NurseNest क्लिनिकल टूल उपयोग करें।"
+      }
+    ]
+  },
+  "zh": {
+    "locale": "zh",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "NCLEX与NP考试ARDS病理生理学：肺泡损伤、分流与肺保护通气",
+    "metaDescription": "面向NCLEX-RN、REx-PN与NP的ARDS病理生理学：分流、PaO₂/FiO₂、柏林定义、PEEP、俯卧位、实验室、并发症与应试陷阱。",
+    "primaryKeyword": "ARDS病理生理学 NCLEX",
+    "secondaryKeywords": [
+      "难治性低氧血症",
+      "柏林定义 ARDS",
+      "肺保护性通气",
+      "肺内分流",
+      "PEEP 护理"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "在NurseNest课程库中检索脓毒症、ARDS或氧合主题，进行针对性复习。"
+      },
+      {
+        "href": "/tools",
+        "anchor": "使用NurseNest临床学习工具辅助计算与安全推理。"
+      }
+    ]
+  },
+  "pa": {
+    "locale": "pa",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "NCLEX ਤੇ NP ਇਮਤਿਹਾਨਾਂ ਲਈ ARDS ਰੋਗ-ਵਿਗਿਆਨ: ਐਲਵੀਓਲਰ ਜ਼ਖਮ, ਸ਼ੰਟ ਤੇ ਫੇਫੜਾ-ਸੁਰੱਖਿਅਤ ਦੇਖਭਾਲ",
+    "metaDescription": "NCLEX-RN, REx-PN, NP ਲਈ ARDS ਰੋਗ-ਵਿਗਿਆਨ: ਸ਼ੰਟ, PaO₂/FiO₂, ਬਰਲਿਨ, PEEP, ਪ੍ਰੋਨ, ਜਾਂਚ, ਜਟਿਲਤਾਵਾਂ ਤੇ ਇਮਤਿਹਾਨ ਜਾਲ।",
+    "primaryKeyword": "ARDS pathophysiology NCLEX",
+    "secondaryKeywords": [
+      "ਮੁਸ਼ਕਿਲ-ਇਲਾਜ਼ ਹਾਈਪੌਕਸੀਮੀਆ",
+      "ਬਰਲਿਨ ਪਰਿਭਾਸ਼ਾ ARDS",
+      "ਲੰਗ ਪ੍ਰੋਟੈਕਟਿਵ ਵੈਂਟੀਲੇਸ਼ਨ",
+      "ਇੰਟਰਾਪਲਮਨਰੀ ਸ਼ੰਟ",
+      "PEEP ਨਰਸਿੰਗ"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "NurseNest ਪਾਠ ਲਾਇਬ੍ਰੇਰੀ ਵਿੱਚ ਸੇਪਸਿਸ, ARDS ਜਾਂ ਆਕਸੀਜਨੇਸ਼ਨ ਲੱਭੋ—ਨਿਸ਼ਾਨਾ ਬਣਾਈ ਰਿਵਿਊ ਕਰੋ।"
+      },
+      {
+        "href": "/tools",
+        "anchor": "ਸੁਰੱਖਿਅਤ ਅਭਿਆਸ ਲਈ NurseNest ਕਲੀਨਿਕਲ ਟੂਲ ਵਰਤੋ।"
+      }
+    ]
+  },
+  "vi": {
+    "locale": "vi",
+    "slug": "ards-pathophysiology-nclex-nursing-exam-guide",
+    "seoTitle": "Sinh bệnh học ARDS cho NCLEX và NP: tổn thương phế nang, shunt và thông khí bảo vệ phổi",
+    "metaDescription": "Sinh bệnh học ARDS cho NCLEX-RN, REx-PN và NP: shunt, PaO₂/FiO₂, Berlin, PEEP, nằm sấp, xét nghiệm, biến chứng và bẫy đề.",
+    "primaryKeyword": "sinh bệnh học ARDS NCLEX",
+    "secondaryKeywords": [
+      "thiểu oxy máu khó điều trị",
+      "định nghĩa Berlin ARDS",
+      "thông khí bảo vệ phổi",
+      "shunt nội phổi",
+      "PEEP điều dưỡng"
+    ],
+    "internalLinks": [
+      {
+        "href": "/lessons",
+        "anchor": "Duyệt thư viện bài học NurseNest và tìm nhiễm trùng huyết, ARDS hoặc ôxy hóa để ôn có trọng tâm."
+      },
+      {
+        "href": "/tools",
+        "anchor": "Dùng công cụ học lâm sàng NurseNest để luyện tính toán và tư duy an toàn."
+      }
+    ]
+  }
+}

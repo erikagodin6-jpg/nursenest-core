@@ -1,0 +1,235 @@
+{
+  "version": 1,
+  "label": "NP Phase 1 — ADJ-01 Shortfall Questions",
+  "generatedDate": "2026-04-11",
+  "adjustmentRef": "ADJ-01 from np-phase1-finalization.json",
+  "idRange": "np-p1-134 to np-p1-147",
+  "phase": 1,
+  "phase1GenerationRules": "Recognition and differential reasoning only. No prescribing content. Hard or expert difficulty. Unique stem anchors (no overlap with np-p1-001 to np-p1-133).",
+  "questions": [
+    {
+      "questionId": "np-p1-134",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "68yo-male-flank-pain-pulsatile-abdominal-mass-BP-difference-arms-AAA-vs-renal-colic",
+      "stem": "A 68-year-old male with hypertension and a 50 pack-year smoking history presents to urgent care with sudden-onset severe left flank pain radiating to the groin, diaphoresis, and nausea. He describes the pain as 'tearing.' Vital signs: BP 168/94 mmHg right arm, 142/86 mmHg left arm; HR 112 bpm; RR 22. The abdomen is mildly distended and a pulsatile midline mass is palpable above the umbilicus. Urinalysis shows 5–10 RBCs/hpf but no casts. Which of the following is the most important immediate next step in the diagnostic evaluation?",
+      "options": {
+        "A": "Order a non-contrast CT of the abdomen/pelvis to evaluate for nephrolithiasis",
+        "B": "Obtain emergent bedside ultrasonography and prepare for immediate surgical consultation for suspected ruptured abdominal aortic aneurysm",
+        "C": "Administer parenteral NSAIDs for renal colic and re-evaluate pain response in 60 minutes",
+        "D": "Order a urologic referral for cystoscopy to evaluate the microscopic hematuria"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation — older male, smoking history, tearing flank pain, BP differential between arms, pulsatile abdominal mass, and diaphoresis — is the classic high-yield trap distinguishing ruptured AAA from renal colic. Microscopic hematuria can occur in both. The pulsatile abdominal mass and hemodynamic instability (HR 112, BP differential) are red flags that mandate immediate vascular surgery evaluation and emergent ultrasound, not a urologic workup. Non-contrast CT (A) and NSAIDs (C) are appropriate for classic renal colic but are dangerous delays when AAA rupture is possible — the mortality of ruptured AAA approaches 50% even with surgery, and 90% without. Cystoscopy (D) is never appropriate in the acute setting. Recognition principle: age + smoking + tearing pain + pulsatile mass = vascular emergency until proven otherwise; microscopic hematuria does NOT exclude AAA."
+    },
+    {
+      "questionId": "np-p1-135",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "7yo-female-recurrent-UTIs-DMSA-scan-cortical-scar-vesicoureteral-reflux-grading",
+      "stem": "A 7-year-old girl presents with her third febrile UTI in 18 months. Her mother reports that each episode was confirmed by urine culture growing E. coli and was treated with antibiotics. Between infections, she has no urinary symptoms and has normal voiding patterns. A renal-bladder ultrasound shows mild right pelvicaliectasis. A DMSA nuclear scan demonstrates a focal cortical scar in the upper pole of the right kidney. Which of the following is the most likely underlying diagnosis and the primary clinical significance of the cortical scar?",
+      "options": {
+        "A": "Obstructive uropathy from a congenital ureteropelvic junction obstruction; the scar indicates chronic obstruction-related atrophy",
+        "B": "Vesicoureteral reflux (VUR) with reflux nephropathy; the scar represents permanent renal parenchymal damage from recurrent pyelonephritis, increasing risk for hypertension and CKD",
+        "C": "Medullary sponge kidney; the scar reflects intrarenal calcium deposition from nephrocalcinosis",
+        "D": "Renal tuberculosis from hematogenous spread; the upper pole scar is a Ghon focus equivalent in the kidney"
+      },
+      "correctAnswer": "B",
+      "rationale": "Vesicoureteral reflux (VUR) is the most common structural cause of recurrent febrile UTIs in children and is the prototype condition leading to reflux nephropathy. During febrile UTIs (pyelonephritis), bacteria ascend via refluxing urine into the renal pelvis and parenchyma. Repeated insults produce focal cortical scars visible on DMSA scanning — the gold standard for detecting renal scarring. The DMSA scan is preferred over ultrasound for early scar detection as it captures functional parenchymal damage before structural changes are apparent on ultrasound. Cortical scars from reflux nephropathy are clinically significant because they increase lifetime risk of hypertension (from renin-angiotensin activation in ischemic scar tissue) and CKD. UPJ obstruction (A) presents with hydronephrosis but without recurrent infection as the primary mechanism of scarring. Medullary sponge kidney (C) causes nephrocalcinosis in the medulla, not cortical scars. Renal TB (D) typically presents in adults with sterile pyuria and an irregular upper pole lesion, not febrile UTIs with E. coli cultures. Recognition principle: child + recurrent febrile UTI + cortical scar on DMSA = VUR with reflux nephropathy until proven otherwise."
+    },
+    {
+      "questionId": "np-p1-136",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "42yo-female-bilateral-knee-synovitis-morning-stiffness-90min-RF-anti-CCP-positive",
+      "stem": "A 42-year-old female presents with bilateral knee pain and swelling that has persisted for 3 months. She describes morning stiffness lasting approximately 90 minutes that improves with activity throughout the day. Physical examination reveals warm, boggy synovial thickening and a small knee effusion bilaterally. She also notes symmetric swelling and tenderness in the MCP and PIP joints of both hands. Labs show: ESR 68 mm/hr, CRP 3.2 mg/dL, RF 1:320, anti-CCP antibody strongly positive, CBC shows normocytic anemia. Radiographs of the hands show periarticular osteopenia. Which of the following most accurately characterizes the underlying diagnosis and its hallmark pathophysiological mechanism?",
+      "options": {
+        "A": "Osteoarthritis; cartilage matrix proteoglycan depletion with secondary synovial inflammation, distinguished by DIP joint involvement and Heberden's nodes",
+        "B": "Psoriatic arthritis; enthesopathy with distal joint predominance and asymmetric dactylitis, distinguished by negative RF and nail changes",
+        "C": "Rheumatoid arthritis; T-cell–mediated synovitis with pannus formation causing cartilage and bone erosion, distinguished by symmetric small joint polyarthritis, morning stiffness >1 hour, and positive anti-CCP",
+        "D": "Reactive arthritis; sterile joint inflammation following a triggering Chlamydia or Salmonella infection, distinguished by urethritis, uveitis, and the classic triad"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is the classic rheumatoid arthritis (RA) presentation. The 2010 ACR/EULAR classification criteria for RA are met: symmetric polyarthritis involving MCP, PIP, and knee joints (large + small joints, bilateral); morning stiffness >60 minutes (90 minutes here); elevated inflammatory markers (ESR, CRP); strongly positive RF and anti-CCP (the most specific serologic marker for RA, with ~98% specificity); normocytic anemia of chronic disease; periarticular osteopenia on radiograph. The pathophysiological hallmark is T-cell driven synovitis → synoviocyte hyperplasia → pannus formation → progressive cartilage and bone erosion. Anti-CCP positivity at diagnosis predicts more aggressive erosive disease. OA (A) favors DIP joints, has minimal morning stiffness (<30 min), negative serology, and osteophytes rather than periarticular osteopenia. Psoriatic arthritis (B) is seronegative, affects DIP joints asymmetrically, and is associated with psoriatic skin/nail changes. Reactive arthritis (D) involves a classic post-infectious trigger and is asymmetric, oligoarticular, seronegative, with extra-articular features. Recognition principle: symmetric MCP/PIP/knee polyarthritis + morning stiffness >1 hour + positive anti-CCP = RA."
+    },
+    {
+      "questionId": "np-p1-137",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "58yo-male-acute-knee-effusion-synovial-fluid-WBC-100000-septic-arthritis-vs-crystal",
+      "stem": "A 58-year-old male with a history of gout and type 2 diabetes presents with a 36-hour history of severe right knee swelling, warmth, erythema, and inability to bear weight. Temperature is 38.9°C. The knee is markedly effusive and extremely painful with any passive range of motion. Joint aspiration yields 40 mL of cloudy yellow fluid. Synovial fluid analysis: WBC 98,000 cells/μL (88% PMNs), Gram stain negative, crystals absent on polarizing microscopy. Serum uric acid is 9.1 mg/dL. Which of the following most accurately characterizes the diagnostic interpretation and appropriate next clinical action?",
+      "options": {
+        "A": "The synovial fluid WBC of 98,000 with 88% PMNs is consistent with gout; the negative crystals are a known false negative finding; initiate colchicine",
+        "B": "The synovial fluid WBC of 98,000 with 88% PMNs crosses the threshold highly suspicious for septic arthritis; negative Gram stain does not exclude it; culture results must guide treatment and orthopedic surgery should be urgently involved",
+        "C": "The synovial fluid WBC of 98,000 with 88% PMNs is consistent with pseudogout (CPPD); the absence of urate crystals supports calcium pyrophosphate disease; initiate NSAIDs",
+        "D": "Synovial fluid WBC >50,000 reliably excludes crystal arthropathy; the negative Gram stain confirms non-infectious etiology; this is likely reactive arthritis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Synovial fluid WBC thresholds are the critical distinguishing tool between inflammatory, crystal, and septic arthritis. Traditional thresholds: <2,000 = non-inflammatory (OA, trauma); 2,000–50,000 = inflammatory (RA, crystal); >50,000 = presumed septic until proven otherwise. WBC >100,000 has ~75% positive predictive value for septic arthritis. This patient's WBC of 98,000 with 88% PMNs mandates treating as septic arthritis until cultures return, even though: (1) he has known gout and elevated uric acid — crystal arthropathy can coexist with septic arthritis; (2) Gram stain is negative in ~50% of septic arthritis cases (especially non-gonococcal); (3) no crystals were found — crystal arthropathy typically produces WBC <50,000, though can rarely exceed this. The key teaching: a negative Gram stain never excludes septic arthritis, and crystal arthropathy with WBC >50,000 should always prompt simultaneous culture-based workup. Septic arthritis untreated causes irreversible joint destruction within 72 hours and mandates orthopedic involvement for washout. Option A is dangerous — gout does not cause WBC >80,000 typically, and the fever + high PMN% demands septic exclusion. Option C is incorrect — CPPD (pseudogout) similarly does not routinely produce WBC >50,000. Option D mischaracterizes the threshold — WBC >50,000 does NOT exclude crystal disease; it raises suspicion for septic and mandates cultures."
+    },
+    {
+      "questionId": "np-p1-138",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "19yo-female-marathon-runner-anterior-knee-pain-worse-stairs-descending-positive-patellar-grind",
+      "stem": "A 19-year-old female collegiate cross-country runner presents with a 6-week history of bilateral anterior knee pain, worse when descending stairs, squatting, or sitting for prolonged periods ('theater sign'). She increased her training mileage by 40% over the past 2 months. Examination shows pain with patellar compression and grind testing (Clarke sign positive), mild lateral patellar tracking with VMO weakness noted. There is no joint effusion, no joint line tenderness, no ligamentous laxity. Radiographs are normal. Which of the following is the most accurate diagnosis?",
+      "options": {
+        "A": "Patellar tendinopathy ('jumper's knee'); characterized by localized tenderness at the inferior patellar pole exacerbated by jumping and resisted knee extension",
+        "B": "Patellofemoral pain syndrome (PFPS); characterized by peripatellar or retropatellar pain associated with overuse, malalignment, and VMO weakness without structural pathology",
+        "C": "Medial meniscus tear; medial joint line tenderness with positive McMurray test following a twisting mechanism",
+        "D": "Osgood-Schlatter disease; tibial tuberosity pain and prominence in a skeletally immature adolescent"
+      },
+      "correctAnswer": "B",
+      "rationale": "Patellofemoral pain syndrome (PFPS) is the most common overuse injury of the knee in runners and young active women. The diagnostic triad: anterior/peripatellar pain, activity-related (stairs, squatting, prolonged sitting — 'theater sign'), and absence of other structural diagnosis on physical exam and imaging. Pathophysiology involves abnormal patellar tracking — often due to VMO weakness, hip abductor weakness, or anatomical malalignment — causing excessive lateral patellar stress on the femoral trochlea. The rapid 40% training increase (the '10% rule' violation), Clarke sign positive, VMO weakness, and bilateral presentation with normal radiographs in a young female runner are all classic. Key differentiator from patellar tendinopathy (A): PFPS pain is peripatellar/retropatellar and worsened by compression (sitting, stairs); patellar tendinopathy produces focal inferior pole tenderness, classic in jumping athletes. Medial meniscus tear (C) requires a twisting mechanism and has medial joint line tenderness and McMurray positive. Osgood-Schlatter (D) occurs in skeletally immature adolescents (typically 10–15), at the tibial tuberosity, not peripatellar, and is not bilateral symmetrically in a 19-year-old. Recognition principle: bilateral anterior knee pain in a young female runner + theater sign + no effusion + VMO weakness = PFPS."
+    },
+    {
+      "questionId": "np-p1-139",
+      "topicSlug": "rash-differential-primary-care",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "45yo-male-DRESS-syndrome-allopurinol-fever-eosinophilia-lymphadenopathy-vs-SJS",
+      "stem": "A 45-year-old male was started on allopurinol 6 weeks ago for gout. He now presents with fever to 38.8°C, a widespread morbilliform erythematous rash covering his trunk and arms, bilateral cervical lymphadenopathy, and facial edema. Lab work shows: WBC 14,200 with eosinophilia (AEC 2,800/μL), ALT 220 U/L, AST 188 U/L, creatinine 1.9 mg/dL (baseline 1.0). Mucous membranes are intact. Which of the following most accurately characterizes the diagnosis and distinguishes it from Stevens-Johnson syndrome?",
+      "options": {
+        "A": "Stevens-Johnson syndrome (SJS); mucosal involvement is absent in early SJS, and the eosinophilia and lymphadenopathy confirm the toxic epidermal keratinocyte pathway",
+        "B": "Drug Reaction with Eosinophilia and Systemic Symptoms (DRESS); distinguished from SJS by intact mucous membranes, eosinophilia, systemic organ involvement (hepatitis, nephritis), lymphadenopathy, and prolonged latency of 2–8 weeks after drug initiation",
+        "C": "Serum sickness-like reaction; characterized by arthralgia, urticaria, and fever 7–21 days post-exposure without eosinophilia or end-organ damage",
+        "D": "Acute generalized exanthematous pustulosis (AGEP); characterized by rapid-onset (<4 days) sterile pustular rash with neutrophilia, not eosinophilia"
+      },
+      "correctAnswer": "B",
+      "rationale": "DRESS syndrome (Drug Reaction with Eosinophilia and Systemic Symptoms) is a life-threatening hypersensitivity reaction with a distinct clinical profile. RegiSCAR criteria for DRESS require: hospitalization, drug-related reaction, skin rash involving >50% BSA, 2+ of [lymphadenopathy, fever >38.5°C, liver involvement, leukocyte abnormalities], and at least 1 of [relative lymphocytosis, atypical lymphocytosis, eosinophilia]. This case satisfies all criteria. Key distinguishing features from SJS/TEN: (1) DRESS has INTACT mucous membranes — SJS/TEN requires mucosal erosion as a criterion; (2) DRESS has eosinophilia — SJS/TEN does not characteristically; (3) DRESS onset is 2–8 weeks post-drug (allopurinol here = 6 weeks — classic); SJS/TEN occurs in days to 2 weeks; (4) DRESS causes visceral organ involvement — hepatitis and nephritis here; (5) DRESS causes lymphadenopathy — uncommon in SJS/TEN. Allopurinol is a classic DRESS-causing drug, especially in HLA-B*58:01 carriers. The intact mucous membranes make SJS incorrect (A). Serum sickness (C) does not produce eosinophilia or organ damage. AGEP (D) is neutrophilic and rapid-onset, with sterile pustules, not morbilliform rash. Recognition principle: allopurinol/anticonvulsant + 6-week latency + morbilliform rash + intact mucosa + eosinophilia + organ involvement = DRESS."
+    },
+    {
+      "questionId": "np-p1-140",
+      "topicSlug": "rash-differential-primary-care",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "72yo-female-dermatomal-vesicular-rash-left-thoracic-allodynia-immunocompromised",
+      "stem": "A 72-year-old female with type 2 diabetes and a history of completed solid organ transplant evaluation presents with a 3-day history of intense burning pain and hyperesthesia along the left lateral chest wall, followed by the appearance of clustered vesicles on an erythematous base in a dermatomal distribution from T6 to T8 on the left. She reports not crossing the midline. She is afebrile. No facial involvement. Which of the following is the most accurate diagnosis, and which feature would most urgently change the risk stratification of this presentation?",
+      "options": {
+        "A": "Primary varicella (chickenpox); febrile prodrome followed by centripetal vesicular rash in multiple stages of healing, beginning on the face and trunk — distinguished by bilateral distribution",
+        "B": "Herpes zoster (shingles); reactivation of latent VZV in a dorsal root ganglion, presenting as a painful dermatomal unilateral vesicular eruption; risk stratification changes urgently if V1 (ophthalmic) dermatomal involvement is detected or if the patient is immunocompromised, as both warrant systemic antiviral therapy within 72 hours and ophthalmology referral for V1 involvement",
+        "C": "Contact dermatitis; linear vesicular eruption from repeated skin contact with a chemical irritant; distinguished by pruritus predominating over pain and non-dermatomal distribution",
+        "D": "Impetigo; honey-crusted vesicles caused by S. aureus or Group A Streptococcus; distinguished by absence of prodromal pain and superficial superficial skin infection without dermatomal pattern"
+      },
+      "correctAnswer": "B",
+      "rationale": "Herpes zoster is reactivation of varicella-zoster virus (VZV) from latent infection in a dorsal root ganglion. Risk factors include age >60, immunosuppression (diabetes, transplant, HIV, steroids, chemotherapy), and prior primary varicella. Classic presentation: prodrome of burning pain and allodynia (skin sensitivity without overt lesion) followed within days by a unilateral dermatomal vesicular eruption that does NOT cross the midline. Recognition anchors: (1) Unilateral dermatomal distribution; (2) Allodynia/hyperesthesia preceding rash; (3) Older or immunocompromised host. Risk stratification flags that urgently modify management: (a) V1 (ophthalmic) involvement → Herpes Zoster Ophthalmicus (HZO) → risk of keratitis, retinal necrosis, vision loss → mandates same-day ophthalmology referral; (b) Ear canal or pinna vesicles with facial nerve palsy → Ramsay Hunt syndrome (VZV geniculate ganglion); (c) Immunocompromised host → higher risk of disseminated or visceral zoster; (d) Dissemination — vesicles crossing multiple non-contiguous dermatomes. Primary varicella (A) is bilateral, centripetal, involves face first, and is febrile — this patient's localized left thoracic pattern is inconsistent. Contact dermatitis (C) is pruritic, not dermatomal, and lacks prodromal pain. Impetigo (D) is superficial, honey-crusted, non-dermatomal, without prodrome. Recognition principle: unilateral dermatomal vesicular rash with pain prodrome = herpes zoster; always check V1 involvement."
+    },
+    {
+      "questionId": "np-p1-141",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "38yo-male-sudden-painless-flat-bright-red-patch-sclera-subconjunctival-hemorrhage",
+      "stem": "A 38-year-old male presents reporting that his wife noticed a 'bright red spot' on his right eye this morning when he woke up. He denies pain, photophobia, discharge, or visual changes. He does not wear contact lenses. He reports straining during a coughing spell yesterday. Examination shows a well-demarcated, flat, bright red area under the conjunctiva in the nasal quadrant of the right eye without elevation. Visual acuity is 20/20 bilaterally. The anterior chamber is clear and intraocular pressure is 14 mmHg. Which of the following is the most appropriate management?",
+      "options": {
+        "A": "Urgent ophthalmology referral today for IOP measurement and gonioscopy to rule out acute angle-closure glaucoma",
+        "B": "Topical antibiotic drops for 7 days for presumed bacterial conjunctivitis with hemorrhagic component",
+        "C": "Reassurance that this is a subconjunctival hemorrhage — benign self-limiting rupture of a conjunctival vessel requiring no treatment; the blood will resorb in 1–3 weeks. Recheck if recurrent or bilateral without explanation.",
+        "D": "Emergent CT angiography of the head and neck to evaluate for a posterior communicating artery aneurysm presenting with a sentinel bleed"
+      },
+      "correctAnswer": "C",
+      "rationale": "Subconjunctival hemorrhage is the rupture of a small conjunctival blood vessel beneath the conjunctiva, producing a striking bright red flat patch that is completely benign in the absence of trauma, anticoagulants, or recurrence. This case has all the benign features: (1) painless; (2) no photophobia; (3) no discharge; (4) normal visual acuity; (5) clear anterior chamber; (6) normal IOP; (7) identifiable precipitant (Valsalva/cough); (8) flat, non-elevated lesion. Subconjunctival hemorrhage does not impair vision, does not affect IOP, and resolves spontaneously over 1–3 weeks (progressing through color changes like a skin bruise). No treatment is required. The distinguishing features that make acute angle-closure glaucoma (A) incorrect: AAG produces pain, halos, hazy cornea, fixed mid-dilated pupil, nausea/vomiting, markedly elevated IOP — none present here. Bacterial conjunctivitis (B) produces mucopurulent discharge and conjunctival injection (not a flat hemorrhage). A posterior communicating artery aneurysm sentinel bleed (D) presents as a sudden severe headache (thunderclap), cranial nerve III palsy with pupillary involvement — not as an isolated subconjunctival hemorrhage. Recognition principle: painless, flat, bright red patch, no visual change, clear AC, normal IOP, identifiable trigger = subconjunctival hemorrhage; reassure and observe."
+    },
+    {
+      "questionId": "np-p1-142",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "16yo-male-bilateral-itchy-red-eyes-seasonal-giant-papillae-tarsal-conjunctiva-cobblestone",
+      "stem": "A 16-year-old male presents in spring with a 3-week history of intense bilateral eye itching, tearing, and mucoid discharge. He has a history of asthma and eczema. Examination shows bilateral conjunctival injection, moderate chemosis, and giant papillae on the tarsal conjunctiva of the upper lids ('cobblestone appearance') with a stringy mucous discharge. The cornea appears intact. He reports wearing contact lenses only occasionally and this has happened every spring for 3 years. Which of the following most accurately distinguishes this presentation from simple seasonal allergic conjunctivitis?",
+      "options": {
+        "A": "This is bacterial conjunctivitis; the mucoid discharge and cobblestone papillae indicate a mixed Gram-positive/Gram-negative infection requiring broad-spectrum topical antibiotics",
+        "B": "This is vernal keratoconjunctivitis (VKC); distinguished from simple seasonal allergic conjunctivitis by the presence of giant papillae (>1 mm cobblestone), shields ulcers risk, stringy mucous, atopic comorbidity, and male sex predominance — requires specialist referral for topical calcineurin inhibitor or corticosteroid management",
+        "C": "This is viral conjunctivitis; the bilateral presentation and mucoid discharge indicate adenoviral infection; distinguished by follicular rather than papillary hypertrophy",
+        "D": "This is giant papillary conjunctivitis (GPC); distinguished by its exclusive association with contact lens wear or ocular prostheses, and this patient confirms regular contact lens use"
+      },
+      "correctAnswer": "B",
+      "rationale": "Vernal keratoconjunctivitis (VKC) is a chronic, severe, bilateral allergic condition that predominantly affects atopic boys in temperate climates, with recurrence each spring-summer. The classic distinguishing features from simple seasonal allergic conjunctivitis (SAC): (1) Giant papillae >1 mm on tarsal conjunctiva producing the classic 'cobblestone' appearance — SAC produces fine papillae; (2) Stringy ropey mucous discharge — SAC produces watery discharge; (3) Atopic comorbidity (asthma, eczema, allergic rhinitis); (4) Male predominance; (5) Corneal shield ulcers (steroid-responsive, vision-threatening in severe cases) — not seen in SAC; (6) Limbal form can show Horner-Trantas dots (eosinophilic accumulations at limbus). VKC requires specialist management because topical steroids are often needed (unlike SAC which is managed with antihistamine drops), and corneal involvement risk mandates monitoring. Bacterial conjunctivitis (A) produces purulent not stringy discharge, and papillae in bacterial conjunctivitis are fine, not giant cobblestone. Viral conjunctivitis (C) produces follicular hypertrophy (not papillae), watery discharge, and is associated with URI/preauricular lymphadenopathy. Giant papillary conjunctivitis (D) is an important differential — identical papillae — but is exclusively caused by contact lens wear or prostheses; this patient's occasional lens use and recurrent springtime pattern without lens correlation favor VKC. Recognition principle: bilateral giant cobblestone tarsal papillae + atopic triad + male + springtime = vernal keratoconjunctivitis."
+    },
+    {
+      "questionId": "np-p1-143",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "28yo-contact-lens-wearer-painful-red-eye-fluorescein-dendritic-ulcer-herpetic-keratitis",
+      "stem": "A 28-year-old male presents with a 2-day history of painful right eye, photophobia, foreign body sensation, tearing, and blurred vision. He has a history of oral cold sores. He wears soft contact lenses daily. Slit-lamp examination with fluorescein staining reveals a dendritic (branching, linear) ulcer with terminal bulbs on the corneal surface of the right eye. The conjunctiva is injected. Visual acuity is 20/60 in the right eye and 20/20 in the left. Which of the following is the most accurate diagnosis and the critical management principle?",
+      "options": {
+        "A": "Pseudomonas corneal ulcer from contact lens use; a round ulcer with dense infiltrate and hypopyon — treated with topical fluoroquinolone; a dendritic pattern is not associated with bacterial infection",
+        "B": "Herpes simplex keratitis (HSK); the dendritic ulcer with terminal bulbs is the pathognomonic finding; topical corticosteroids are contraindicated as they cause viral replication and corneal perforation — refer urgently to ophthalmology",
+        "C": "Acanthamoeba keratitis; associated with contact lens use and tap water exposure; produces a characteristic pseudodendrite that lacks true terminal bulbs — treated with polyhexamethylene biguanide (PHMB)",
+        "D": "Chlamydial conjunctivitis; causes pannus formation and follicular reaction in sexually active young adults — treated with systemic azithromycin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Herpes simplex keratitis (HSK) is characterized by the pathognomonic dendritic ulcer — a branching, linear fluorescein-staining defect with terminal bulbs (end knobs). This is reactivation of HSV-1 (same virus as oral cold sores) in the corneal epithelium. Recognition anchors: (1) History of HSV labialis (cold sores); (2) Dendritic ulcer with terminal bulbs on fluorescein; (3) Unilateral red eye with photophobia and reduced VA. The most critical management principle: topical corticosteroids are ABSOLUTELY CONTRAINDICATED in HSK — they suppress immune control of viral replication, leading to geographic ulceration, stromal keratitis, corneal perforation, and vision loss. This is a tested high-yield safety point. Management requires urgent ophthalmology referral and topical antiviral (trifluridine or ganciclovir gel) or systemic acyclovir. Pseudomonas ulcer (A) produces a round/oval infiltrate with hypopyon, not a dendritic pattern. Acanthamoeba keratitis (C) is an important differential — contact lens use + tap water exposure — but produces a pseudodendrite without true terminal bulbs and severe pain out of proportion to exam; treated with PHMB + propamidine, not antivirals. Chlamydial conjunctivitis (D) is a chronic follicular conjunctivitis without ulceration. Recognition principle: dendritic ulcer with terminal bulbs on fluorescein = HSK; NEVER use topical steroids → refer urgently to ophthalmology."
+    },
+    {
+      "questionId": "np-p1-144",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "38yo-male-hemoptysis-chronic-sinusitis-saddle-nose-deformity-c-ANCA-GPA-wegeners",
+      "stem": "A 38-year-old male presents with a 3-month history of recurrent epistaxis, persistent nasal crusting, and now two episodes of hemoptysis producing approximately 20–30 mL of blood-streaked sputum. He reports chronic bilateral nasal congestion and sinus pain despite multiple antibiotic courses. Physical examination reveals a saddle-nose deformity. CXR shows bilateral pulmonary infiltrates. Urinalysis shows 3+ blood with RBC casts. Serum creatinine is 2.1 mg/dL (baseline unknown). Anti-neutrophil cytoplasmic antibody (ANCA) testing is positive: c-ANCA pattern. Anti-proteinase 3 (PR3) antibody is strongly positive. Which of the following is the most likely diagnosis, and how does the ANCA pattern distinguish it from Goodpasture syndrome (anti-GBM disease)?",
+      "options": {
+        "A": "Goodpasture syndrome (anti-GBM disease); distinguished by linear IgG deposition on renal biopsy and positive anti-GBM antibody — c-ANCA positivity is a false-positive finding in the setting of active pulmonary hemorrhage",
+        "B": "Granulomatosis with polyangiitis (GPA, formerly Wegener's); distinguished from anti-GBM disease by c-ANCA/PR3 positivity (vs anti-GBM antibody), upper respiratory tract involvement (sinusitis, saddle nose deformity from septal granulomata), and pauci-immune glomerulonephritis on biopsy (vs linear IgG in Goodpasture)",
+        "C": "Microscopic polyangiitis (MPA); distinguished by p-ANCA/MPO positivity rather than c-ANCA/PR3, and absence of upper respiratory tract granulomatous disease",
+        "D": "Churg-Strauss syndrome (EGPA); distinguished by asthma, peripheral eosinophilia, and p-ANCA/MPO positivity — upper respiratory granulomata do not occur"
+      },
+      "correctAnswer": "B",
+      "rationale": "Granulomatosis with polyangiitis (GPA) is the classic ANCA-associated vasculitis with the highest-yield distinguishing features from Goodpasture syndrome (anti-GBM disease) — both cause pulmonary-renal syndrome. GPA recognition triad: (1) Upper respiratory tract — sinusitis, nasal crusting/epistaxis, saddle-nose deformity from granulomatous destruction of the nasal septum; (2) Lower respiratory tract — pulmonary infiltrates, hemoptysis; (3) Kidneys — rapidly progressive glomerulonephritis (RBC casts). ANCA pattern distinguishing ANCA vasculitides: GPA = c-ANCA (cytoplasmic pattern) + anti-PR3; MPA = p-ANCA (perinuclear) + anti-MPO; EGPA/Churg-Strauss = p-ANCA/MPO + asthma + eosinophilia. Distinguishing GPA from Goodpasture: (a) Goodpasture is anti-GBM antibody positive (not ANCA); (b) Goodpasture renal biopsy shows linear IgG deposition along GBM; (c) GPA biopsy shows pauci-immune crescentic GN (minimal immune deposits); (d) Goodpasture has NO upper respiratory/sinus involvement; (e) Saddle-nose deformity is pathognomonic of GPA from granulomatous septal destruction. Note: anti-GBM was tested in np-p1-119 (distinct stem anchor). This question tests the c-ANCA/GPA recognition specifically with upper airway features — a non-overlapping clinical scenario. MPA (C) lacks upper airway involvement and is p-ANCA/MPO. EGPA (D) requires asthma and eosinophilia. Recognition principle: hemoptysis + chronic sinusitis/saddle nose + RBC casts + c-ANCA/PR3 = GPA."
+    },
+    {
+      "questionId": "np-p1-145",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-male-bilateral-tender-LAD-phenytoin-started-3-weeks-ago-drug-induced-lymphadenopathy",
+      "stem": "A 35-year-old male with a new diagnosis of epilepsy was started on phenytoin 3 weeks ago. He now presents with bilateral tender cervical and axillary lymphadenopathy, low-grade fever (37.9°C), and a diffuse morbilliform rash. WBC shows atypical lymphocytes. Liver function tests are mildly elevated. Which of the following most accurately characterizes this presentation?",
+      "options": {
+        "A": "Infectious mononucleosis from EBV; the lymphadenopathy, atypical lymphocytes, and pharyngitis represent the classic triad — send Monospot and EBV titers",
+        "B": "Drug-induced lymphadenopathy (pseudolymphoma) from phenytoin; the syndrome is distinguished by onset 1–6 weeks after drug initiation, bilateral tender LAD, rash, fever, mild LFT elevation, and complete resolution upon drug discontinuation — overlaps clinically with DRESS in severe cases",
+        "C": "Hodgkin lymphoma; the bilateral cervical and axillary LAD in a young male with systemic symptoms confirms the diagnosis — CT-PET staging should be ordered",
+        "D": "Toxoplasma lymphadenitis; the posterior cervical LAD with atypical lymphocytes and systemic symptoms represents the classic monolike presentation of acquired toxoplasmosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Phenytoin-induced lymphadenopathy (drug-induced pseudolymphoma) is a well-established adverse drug reaction caused by phenytoin, hydralazine, and several anticonvulsants. The reaction mimics lymphoma or infectious mononucleosis clinically. Key diagnostic features: (1) Temporal relationship — LAD onset 1–6 weeks after drug initiation (here, 3 weeks for phenytoin); (2) Bilateral tender LAD; (3) Low-grade fever; (4) Morbilliform rash; (5) Atypical lymphocytes; (6) Mild LFT elevation; (7) Complete resolution typically within weeks of stopping the offending drug. In severe cases, phenytoin hypersensitivity can progress to a DRESS-like syndrome (note shared features). Management: discontinue phenytoin and substitute an alternative anticonvulsant. Infectious mononucleosis (A) is plausible given the atypical lymphocytes and LAD, but the clear temporal drug initiation, the morbilliform rash, and absence of pharyngitis/splenomegaly make drug reaction the priority diagnosis. The Monospot/EBV test may be sent to exclude EBV, but the drug temporal relationship is the discriminating factor. Hodgkin lymphoma (C) does NOT produce tender LAD — Hodgkin nodes are characteristically non-tender, rubbery, and do not have a drug temporal trigger. Toxoplasma (D) is an excellent differential for mono-like LAD but produces posterior cervical (not axillary) LAD and lacks a drug trigger. Recognition principle: bilateral tender LAD + rash + fever + 1–6 weeks after phenytoin/hydralazine initiation = drug-induced lymphadenopathy; discontinue offending agent."
+    },
+    {
+      "questionId": "np-p1-146",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "52yo-female-right-axillary-LAD-6-weeks-no-tender-1.5cm-firm-mobile-biopsy-decision",
+      "stem": "A 52-year-old female presents with a right axillary lymph node that she noticed 6 weeks ago. She denies fever, night sweats, or weight loss. She has no recent infection and is not on any medications. Examination shows a 1.5 cm, firm, non-tender, mobile lymph node in the right axilla. No other lymph node groups are enlarged. Bilateral breast examination is normal. CBC, CRP, LDH, and thyroid function are all within normal limits. Which of the following most accurately characterizes the appropriate next step and the clinical rationale?",
+      "options": {
+        "A": "Reassure and observe for another 8 weeks; reactive lymphadenopathy from an undetected minor infection will resolve spontaneously in >90% of cases regardless of size or duration",
+        "B": "Order CT chest/abdomen/pelvis and refer for lymph node excision biopsy; the combination of duration >4–6 weeks, size >1 cm, firm consistency, non-tenderness, and absence of an identified infectious trigger in a woman >50 reaches the threshold for histological evaluation to exclude malignancy",
+        "C": "Fine needle aspiration (FNA) only; FNA cytology is sufficient to definitively diagnose all lymphoma subtypes and is the preferred diagnostic method for all unexplained lymphadenopathy",
+        "D": "Empiric antibiotics for 10 days and re-assess; non-tender firm LAD in the axilla frequently represents a subclinical bacterial infection responsive to amoxicillin-clavulanate"
+      },
+      "correctAnswer": "B",
+      "rationale": "The clinical rule for biopsy threshold in peripheral lymphadenopathy integrates size, character, duration, and absence of identifiable benign cause. High-risk features requiring histological evaluation: (1) Size >1 cm in a non-inguinal, non-axillary location (>1.5 cm in axilla/inguinal); (2) Firm or hard consistency (vs soft/rubbery reactive); (3) Non-tender (tender LAD suggests reactive/inflammatory; painless LAD raises malignancy concern); (4) Duration >4–6 weeks without resolution or identifiable infectious cause; (5) Supraclavicular location (high malignancy risk regardless of size); (6) Patient age >40 (decreasing likelihood of benign reactive etiology); (7) Systemic B-symptoms (fever, night sweats, weight loss — especially for lymphoma). This patient meets criteria 1–4 and 6, with an isolated 1.5 cm, firm, non-tender, 6-week right axillary node in a 52-year-old woman, mandating workup. Right axillary LAD in a woman requires breast cancer exclusion — the normal bilateral breast exam is reassuring but not sufficient without histology. Option A is incorrect — the '4–6 week observation' principle applies to smaller, tender, reactive nodes with a plausible infectious etiology; this case already exceeds that threshold. FNA (C) is insufficient for lymphoma subtyping — excisional biopsy is preferred for definitive lymphoma diagnosis as it preserves architecture; FNA can miss lymphoma or misclassify subtype. Empiric antibiotics (D) are inappropriate for non-tender firm LAD with no infectious signs — this risks delaying a malignancy diagnosis. Recognition principle: >1 cm, firm, non-tender, >4–6 weeks, no infection = biopsy threshold reached."
+    },
+    {
+      "questionId": "np-p1-147",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-immunocompetent-male-posterior-cervical-LAD-fatigue-mild-fever-toxoplasma-serologies",
+      "stem": "A 28-year-old immunocompetent male presents with 3 weeks of fatigue, mild fever (37.8°C), and posterior cervical lymphadenopathy. He recently adopted a new kitten and reports that his diet includes occasionally eating undercooked pork. He has no pharyngitis, no rash, and no hepatosplenomegaly. CBC shows mild lymphocytosis with atypical lymphocytes. Monospot test is negative. EBV and CMV titers are negative. Toxoplasma gondii IgG is positive (high titer), IgM is positive. Which of the following is the most likely diagnosis?",
+      "options": {
+        "A": "Infectious mononucleosis from EBV; the negative Monospot has poor sensitivity in the first week of illness and should be repeated — atypical lymphocytes and pharyngitis are pathognomonic",
+        "B": "Cat scratch disease from Bartonella henselae; the kitten contact confirms the diagnosis — characterized by unilateral tender regional LAD at the site of a cat scratch/bite wound, typically cervical or axillary",
+        "C": "Acquired toxoplasma lymphadenitis; the most common cause of a mono-like illness with posterior cervical LAD, fatigue, and lymphocytosis when EBV/CMV are negative, particularly with kitten exposure and undercooked meat risk factors — IgG + IgM seropositivity confirms acute primary infection",
+        "D": "Cytomegalovirus (CMV) mononucleosis; produces posterior cervical LAD and atypical lymphocytes without pharyngitis in immunocompetent adults — negative CMV titers exclude this"
+      },
+      "correctAnswer": "C",
+      "rationale": "Toxoplasma gondii is an obligate intracellular protozoan acquired through: (1) ingestion of oocysts from cat feces (litter box handling with cats, especially kittens who shed oocysts for 1–2 weeks after primary infection); (2) ingestion of tissue cysts in undercooked meat (pork, lamb, venison). In immunocompetent hosts, primary infection is typically asymptomatic (70%) or produces a mild self-limited mono-like illness: posterior cervical LAD (classic — often bilateral), fatigue, mild fever, atypical lymphocytosis. Pharyngitis is absent (distinguishing from EBV mononucleosis). Serological diagnosis: IgG + IgM positive = acute primary infection (IgM typically detectable for 3–6 months post-exposure; high-titer IgG with concurrent IgM indicates recent acquisition). In immunocompetent hosts, toxoplasma lymphadenitis requires no treatment as it is self-limiting (unlike immunocompromised where CNS toxoplasmosis is life-threatening). EBV mononucleosis (A) produces anterior and posterior cervical LAD with pharyngitis and splenomegaly; the negative EBV titers exclude this. Cat scratch disease/Bartonella (B) produces tender regional LAD at the site of a skin inoculation wound — not bilateral posterior cervical; also does not produce significant atypical lymphocytosis. CMV mononucleosis (D) is an important differential — posterior cervical LAD without pharyngitis, atypical lymphocytes — but is excluded by the negative CMV titers here; toxoplasma is the correct answer given seroconversion evidence. Recognition principle: posterior cervical LAD + mono-like illness + negative EBV/CMV + cat/undercooked meat exposure + IgG + IgM positive = acute toxoplasma lymphadenitis."
+    }
+  ]
+}

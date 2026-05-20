@@ -1,0 +1,315 @@
+import "server-only";
+
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+
+import type { TierCode } from "@prisma/client";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+
+type QuizQuestion = {
+  question: string;
+  options: string[];
+  correct: number;
+  rationale: string | string[];
+};
+
+type MedicationEntry =
+  | {
+      name: string;
+      type: string;
+      action: string;
+      sideEffects: string | string[];
+      contra: string | string[];
+      pearl: string;
+    }
+  | { name: string; dose: string; route: string; purpose: string };
+
+type LessonContent = {
+  title: string;
+  cellular: { title: string; content: string; image?: string } | string;
+  medications?: MedicationEntry[];
+  quiz?: Array<QuizQuestion | undefined>;
+  preTest?: Array<QuizQuestion | undefined>;
+  postTest?: Array<QuizQuestion | undefined>;
+  image?: string;
+  tier?: string;
+  riskFactors?: string[];
+  diagnostics?: string[];
+  management?: string[];
+  nursingActions?: string[];
+  assessmentFindings?: string[];
+  signs?: { left: string[]; right: string[] } | string[];
+  pearls?: string[];
+  lifespan?: { title: string; content: string };
+  [key: string]: unknown;
+};
+
+type LegacyLessonsModule = {
+  contentMap: Record<string, LessonContent>;
+  loadNpGeneratedBatches?: () => Promise<void>;
+};
+
+let lessonsModulePromise: Promise<LegacyLessonsModule> | null = null;
+
+function importWithoutTsModuleGraph(specifier: string): Promise<unknown> {
+  return new Function("s", "return import(s)")(specifier) as Promise<unknown>;
+}
+
+function asStringArray(value: unknown): string[] | undefined {
+  return Array.isArray(value) && value.every((entry) => typeof entry === "string") ? value : undefined;
+}
+
+function normalizeLegacyLessonTitle(value: unknown, fallback: string): string {
+  if (typeof value === "string" && value.trim()) return value;
+  if (value && typeof value === "object" && "en" in value && typeof (value as { en?: unknown }).en === "string") {
+    const englishTitle = (value as { en: string }).en.trim();
+    if (englishTitle) return englishTitle;
+  }
+  return fallback;
+}
+
+function normalizeLegacyLessonCellular(value: unknown): LessonContent["cellular"] {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object") {
+    const record = value as { title?: unknown; content?: unknown; image?: unknown };
+    return {
+      title: typeof record.title === "string" ? record.title : "",
+      content: typeof record.content === "string" ? record.content : "",
+      ...(typeof record.image === "string" ? { image: record.image } : {}),
+    };
+  }
+  return "";
+}
+
+function normalizeLegacyLessonContent(id: string, value: unknown): LessonContent {
+  const source = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+
+  return {
+    ...source,
+    title: normalizeLegacyLessonTitle(source.title, id),
+    cellular: normalizeLegacyLessonCellular(source.cellular),
+    medications: Array.isArray(source.medications) ? (source.medications as MedicationEntry[]) : undefined,
+    quiz: Array.isArray(source.quiz) ? (source.quiz as Array<QuizQuestion | undefined>) : undefined,
+    preTest: Array.isArray(source.preTest) ? (source.preTest as Array<QuizQuestion | undefined>) : undefined,
+    postTest: Array.isArray(source.postTest) ? (source.postTest as Array<QuizQuestion | undefined>) : undefined,
+    image: typeof source.image === "string" ? source.image : undefined,
+    tier: typeof source.tier === "string" ? source.tier : undefined,
+    riskFactors: asStringArray(source.riskFactors),
+    diagnostics: asStringArray(source.diagnostics),
+    management: asStringArray(source.management),
+    nursingActions: asStringArray(source.nursingActions),
+    assessmentFindings: asStringArray(source.assessmentFindings),
+    signs: source.signs as LessonContent["signs"],
+    pearls: asStringArray(source.pearls),
+    lifespan:
+      source.lifespan && typeof source.lifespan === "object"
+        ? {
+            title: typeof (source.lifespan as { title?: unknown }).title === "string" ? (source.lifespan as { title: string }).title : "",
+            content:
+              typeof (source.lifespan as { content?: unknown }).content === "string"
+                ? (source.lifespan as { content: string }).content
+                : "",
+          }
+        : undefined,
+  };
+}
+
+async function loadLegacyLessonsModule(): Promise<LegacyLessonsModule> {
+  if (lessonsModulePromise) return lessonsModulePromise;
+  lessonsModulePromise = (async () => {
+    const modulePath = path.resolve(
+      /* turbopackIgnore: true */ process.cwd(),
+      "..",
+      "client",
+      "src",
+      "data",
+      "lessons",
+      "index.ts",
+    );
+    const href = pathToFileURL(modulePath).href;
+    const mod = (await importWithoutTsModuleGraph(href)) as Partial<LegacyLessonsModule>;
+    const rawContentMap = mod.contentMap && typeof mod.contentMap === "object" ? (mod.contentMap as Record<string, unknown>) : {};
+    const contentMap = Object.fromEntries(
+      Object.entries(rawContentMap).map(([id, lesson]) => [id, normalizeLegacyLessonContent(id, lesson)]),
+    ) as Record<string, LessonContent>;
+    return {
+      contentMap,
+      loadNpGeneratedBatches:
+        typeof mod.loadNpGeneratedBatches === "function"
+          ? mod.loadNpGeneratedBatches.bind(mod)
+          : undefined,
+    };
+  })();
+  return lessonsModulePromise;
+}
+
+/**
+ * Mirrors `server/lesson-content-api.ts` deriveTier — slug / optional embedded tier metadata.
+ */
+export function deriveTier(id: string, metadata?: { tier?: string }): string {
+  if (metadata?.tier && ["rpn", "rn", "np", "free", "allied", "imaging", "newgrad"].includes(metadata.tier)) {
+    return metadata.tier;
+  }
+  if (/-np$/.test(id) || /-advanced-np$/.test(id) || /-management-np$/.test(id) || /-np-/.test(id)) return "np";
+  if (/-rn$/.test(id) || /-basics-rn$/.test(id) || /-rn-/.test(id)) return "rn";
+  if (/-rpn$/.test(id) || /-basics-rpn$/.test(id) || /-rpn-/.test(id)) return "rpn";
+  if (id.startsWith("free-") || id.endsWith("-free")) return "free";
+  return "rpn";
+}
+
+/** Mirrors `server/lesson-content-api.ts` deriveCategory — title keyword heuristics. */
+export function deriveCategory(lesson: { title?: unknown }): string {
+  const raw = lesson.title;
+  const title =
+    typeof raw === "object" && raw !== null && "en" in (raw as object)
+      ? String((raw as { en?: string }).en ?? "")
+      : String(raw ?? "");
+  const t = title.toLowerCase();
+  if (/cardiac|heart|ecg|ekg|arrhyth|hypertens|chf|angina|mi\b/.test(t)) return "Cardiovascular";
+  if (/respiratory|lung|asthma|copd|pneum|oxygen|airway|breath/.test(t)) return "Respiratory";
+  if (/neuro|brain|stroke|seizure|parkinson|alzheim|ms\b|meningit/.test(t)) return "Neurological";
+  if (/gi\b|gastro|bowel|liver|hepat|pancrea|colon|abdomin|constip/.test(t)) return "Gastrointestinal";
+  if (/renal|kidney|dialysis|uti\b|bladder|urinar/.test(t)) return "Renal/Urinary";
+  if (/diabet|thyroid|adrenal|endocrin|insulin|glucose|a1c|cushing|addison/.test(t)) return "Endocrine";
+  if (/blood|anemia|hemato|platelet|coagul|leukemia|lymph|transfus|hemophil|thalass/.test(t)) return "Hematology";
+  if (/pedia|child|infant|neonat|newborn|apgar/.test(t)) return "Pediatrics";
+  if (/matern|pregnan|labor|delivery|obstet|prenatal|postpartum|lochia|antepartum/.test(t)) return "Maternity";
+  if (/mental|psych|depress|anxiety|bipolar|schizo|suicid/.test(t)) return "Mental Health";
+  if (/infect|sepsis|mrsa|vre|clostrid|hiv|aids|hepatitis|tb\b|tuberculosis/.test(t)) return "Infection Control";
+  if (/pharm|medic|drug|dose|dosage/.test(t)) return "Pharmacology";
+  if (/skin|wound|burn|dermat|rash|cellulitis|shingles|pressure/.test(t)) return "Integumentary";
+  if (/eye|ear|vision|hearing|glauco|cataract|macula/.test(t)) return "HEENT";
+  if (/bone|fracture|joint|musculo|ortho|arthr|osteopor/.test(t)) return "Musculoskeletal";
+  if (/cancer|oncolog|tumor|chemo|radiation|malignan/.test(t)) return "Oncology";
+  if (/electrolyte|sodium|potassium|calcium|magnesium|phosph|fluid|dehydr|acid.base/.test(t)) return "Fluid & Electrolytes";
+  if (/assessment|vital|physical exam/.test(t)) return "Assessment";
+  if (/safety|fall|restrain|error|ethic|legal|delegation|priorit/.test(t)) return "Fundamentals";
+  if (/pain|comfort|palliative|hospice/.test(t)) return "Pain Management";
+  if (/nutrition|diet|feed|ngt|peg|enteral|parenteral/.test(t)) return "Nutrition";
+  if (/bph|prostat/.test(t)) return "Renal/Urinary";
+  return "General";
+}
+
+/** Same ladder as `server/paywall-tier-rules.ts` allowedLessonContentTiersForUser. */
+export function allowedLessonContentTiersForUser(userTier: string): string[] {
+  const t = (userTier || "free").toLowerCase();
+  if (t === "admin") return ["free", "rpn", "rn", "np", "allied", "imaging", "newgrad", "lvn"];
+  if (t === "free") return ["free"];
+  if (t === "rpn") return ["free", "rpn"];
+  if (t === "rn") return ["free", "rpn", "rn"];
+  if (t === "np") return ["free", "rpn", "rn", "np"];
+  if (t === "allied") return ["free", "allied"];
+  if (t === "imaging") return ["free", "imaging"];
+  if (t === "full_access" || t === "certification_prep" || t === "new_grad_toolkit") {
+    return ["free", "rpn", "rn", "np", "allied", "imaging"];
+  }
+  return ["free", t];
+}
+
+/** Map Prisma subscription scope → monolith lesson paywall tier string. */
+export function prismaTierToLegacyLessonUserTier(scope: AccessScope): string {
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) return "admin";
+  const tier = scope.tier as TierCode | null;
+  if (!tier) return "free";
+  switch (tier) {
+    case "RPN":
+      return "rpn";
+    case "LVN_LPN":
+      return "rn";
+    case "RN":
+      return "rn";
+    case "NP":
+      return "np";
+    case "ALLIED":
+      return "allied";
+    default:
+      return "free";
+  }
+}
+
+let npBatchesEnsured = false;
+
+async function ensureNpBatchesLoaded(): Promise<void> {
+  if (npBatchesEnsured) return;
+  const mod = await loadLegacyLessonsModule();
+  await mod.loadNpGeneratedBatches?.();
+  npBatchesEnsured = true;
+}
+
+/** Display title for a monolith {@link LessonContent} row (supports `title.en` from older bundles). */
+export function legacyContentMapLessonTitle(lesson: LessonContent, id: string): string {
+  return lesson.title.trim() || id;
+}
+
+function lessonSummarySnippet(lesson: LessonContent): string | null {
+  const cellular = typeof lesson.cellular === "string" ? lesson.cellular : lesson.cellular?.content ?? "";
+  const t = cellular.trim();
+  if (!t) return null;
+  return t.length > 220 ? `${t.slice(0, 217)}…` : t;
+}
+
+export type LegacyContentMapListRow = {
+  id: string;
+  title: string;
+  summary: string | null;
+  category: string;
+};
+
+export function canAccessLegacyContentMapLesson(scope: AccessScope, lessonId: string, lesson: LessonContent): boolean {
+  const userKey = prismaTierToLegacyLessonUserTier(scope);
+  const allowed = new Set(allowedLessonContentTiersForUser(userKey));
+  const lt = deriveTier(lessonId, lesson as { tier?: string });
+  return allowed.has(lt);
+}
+
+/** All list rows for the subscriber tier (sorted by title). */
+export async function listLegacyContentMapLessonsForScope(scope: AccessScope): Promise<LegacyContentMapListRow[]> {
+  await ensureNpBatchesLoaded();
+  const { contentMap } = await loadLegacyLessonsModule();
+  const userKey = prismaTierToLegacyLessonUserTier(scope);
+  const allowed = new Set(allowedLessonContentTiersForUser(userKey));
+  const out: LegacyContentMapListRow[] = [];
+  for (const [id, lesson] of Object.entries(contentMap) as [string, LessonContent][]) {
+    const lt = deriveTier(id, lesson as { tier?: string });
+    if (!allowed.has(lt)) continue;
+    out.push({
+      id,
+      title: legacyContentMapLessonTitle(lesson, id),
+      summary: lessonSummarySnippet(lesson),
+      category: deriveCategory(lesson),
+    });
+  }
+  out.sort((a, b) => a.title.localeCompare(b.title));
+  return out;
+}
+
+export async function paginateLegacyContentMapLessons(
+  scope: AccessScope,
+  page: number,
+  pageSize: number,
+  q?: string | null,
+): Promise<{ total: number; page: number; pageCount: number; rows: LegacyContentMapListRow[] }> {
+  const all = await listLegacyContentMapLessonsForScope(scope);
+  const qn = q?.trim().toLowerCase() ?? "";
+  const filtered =
+    qn.length > 0
+      ? all.filter((r) => {
+          const s = (r.summary ?? "").toLowerCase();
+          return r.title.toLowerCase().includes(qn) || s.includes(qn) || r.category.toLowerCase().includes(qn);
+        })
+      : all;
+  const total = filtered.length;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize) || 1);
+  const safePage = Math.min(Math.max(1, page), pageCount);
+  const start = (safePage - 1) * pageSize;
+  const rows = filtered.slice(start, start + pageSize);
+  return { total, page: safePage, pageCount, rows };
+}
+
+export async function getLegacyContentMapLessonById(id: string): Promise<LessonContent | null> {
+  await ensureNpBatchesLoaded();
+  const { contentMap } = await loadLegacyLessonsModule();
+  const hit = contentMap[id];
+  return hit ?? null;
+}

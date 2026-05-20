@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "purpose": "Inventory of legacy NurseNest / Replit blog generation, scheduling, and import surfaces in this repository (read-only map for safe recovery).",
+  "legacySources": {
+    "replitExports": {
+      "expectedPaths": [
+        "data/replit-exports/imaging_blog_articles.json",
+        "data/replit-exports/seo_articles.json",
+        "data/replit-exports/blog_config.json",
+        "data/replit-exports/content_items.json"
+      ],
+      "notes": "Blog rows were historically aligned with `content_items` and allied SEO dumps; canonical DB import for public blog uses JSON/HTML fields (`content_html`, `content_md`, `meta_title`, `meta_description`, `slug`, `published_at`). Copy exports into `data/replit-exports/` before import (see docs/replit-question-recovery-inventory.md for import dir conventions)."
+    },
+    "staticClientSeo": {
+      "path": "client/src/data/seo-content-articles.ts",
+      "structure": "TypeScript array `SEO_CONTENT_ARTICLES`: title, slug, sections[{heading, content, items?, tip?}], faqs, relatedLinks, seo fields — flattened to markdown-like body in `scripts/import-blog.ts`."
+    },
+    "digitalOceanSpaces": {
+      "schemaReference": "Prisma model `BinaryAsset` / admin copy references Spaces for blog images; blog `body` is DB text, not bucket HTML. Image workflows: `src/lib/blog/blog-image-workflow.ts`.",
+      "rule": "Do not reintroduce raw `gs://` URLs per project guardrails; use current CDN/Spaces helpers."
+    }
+  },
+  "legacyGeneratorBehavior": {
+    "description": "Original Replit-era flow: topic → AI/HTML article; allied static content used structured sections.",
+    "currentEquivalentModules": [
+      "nursenest-core/src/lib/blog/generate-blog-ai-draft.ts — `generateBlogAiDraft` / `generateBlogPost`",
+      "nursenest-core/src/lib/blog/blog-article-generation-pipeline.ts — control-panel plan + body + persist",
+      "nursenest-core/src/lib/blog/blog-batch-schedule.ts — topic paste → `BlogBatchScheduleItem` rows with planned publish times",
+      "nursenest-core/src/lib/blog/seo-campaign-engine.ts — outlines, risk flags"
+    ],
+    "restoredCli": "nursenest-core/scripts/blog/legacy-generator.ts (wraps `generateBlogPost` with legacy section scaffolding + batching)"
+  },
+  "legacySchedulerBehavior": {
+    "description": "Staggered publish slots via `BlogBatchSchedule`, queue refill (`ensureDailyBlogQueue`), and time-based promotion of `BlogPost` rows whose `publishAt`/`scheduledAt` is due.",
+    "currentEquivalentModules": [
+      "nursenest-core/src/lib/blog/blog-batch-schedule.ts — `processDueBlogBatchScheduleItems` (max 12 items per cron invocation)",
+      "nursenest-core/src/lib/blog/blog-publish-scheduler.ts — `promoteScheduledBlogPosts` (retries, FAILED after max attempts)",
+      "nursenest-core/src/app/api/cron/blog-batch-schedule/route.ts — POST cron: ensureDailyBlogQueue + processDue + promoteScheduled + revalidate paths"
+    ],
+    "restoredCli": "nursenest-core/scripts/blog/legacy-scheduler.ts (invokes the same functions as the cron route for production-safe batch runs)"
+  },
+  "contentShape": {
+    "database": "BlogPost.body is HTML text; SEO: seoTitle, seoDescription, slug, tags, category, relatedLessonPaths, relatedTools, internalLinkPlan JSON",
+    "importNormalization": "Replit JSON → HTML or markdown body; `source-key:` tag for stable dedupe"
+  },
+  "cronIntegration": {
+    "endpoint": "/api/cron/blog-batch-schedule",
+    "auth": "Authorization: Bearer $CRON_SECRET",
+    "recommendedCadence": "Every 5–10 minutes (DigitalOcean Scheduled Job POST)"
+  }
+}

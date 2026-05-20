@@ -1,0 +1,825 @@
+/* ======================================================================
+   learner-premium-ds.css
+   Learner-specific premium visual styles extracted from premium-redesign-2026.css.
+   Imported by the learner layout only — not shipped to marketing routes.
+   ======================================================================= */
+
+
+/* ---------------------------------------------------------------------
+   Authenticated learner shell — homepage-adjacent ambient (scoped to
+   [data-nn-learner-ds] only; does not affect marketing routes).
+   --------------------------------------------------------------------- */
+
+.nn-learner-ds-ambient {
+  background:
+    radial-gradient(720px 420px at 6% 0%, color-mix(in srgb, var(--semantic-chart-1) 14%, transparent) 0%, transparent 58%),
+    radial-gradient(680px 400px at 100% 4%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent) 0%, transparent 55%),
+    radial-gradient(520px 320px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent) 0%, transparent 60%),
+    radial-gradient(540px 320px at 88% 78%, color-mix(in srgb, var(--semantic-chart-7) 8%, transparent) 0%, transparent 58%),
+    radial-gradient(460px 280px at 18% 88%, color-mix(in srgb, var(--semantic-chart-8) 7%, transparent) 0%, transparent 58%),
+    var(--semantic-bg-base, var(--semantic-surface));
+}
+
+/* Dashboard study-home hero: clinical command-center depth (token grid veil). */
+.nn-learner-dashboard-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-learner-dashboard-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(520px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-6) 9%, transparent), transparent 60%),
+    radial-gradient(460px 200px at 0% 100%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 58%),
+    linear-gradient(125deg, transparent 40%, color-mix(in srgb, var(--semantic-chart-3) 6%, transparent) 100%);
+  opacity: 0.9;
+}
+
+.nn-learner-dashboard-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-learner-account-workspace {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-learner-dashboard-hero::after {
+    opacity: 0.65;
+  }
+}
+
+
+/* =====================================================================
+   CAT learner — premium surface lift (start page + in-exam shell accents).
+   Scope: /app practice-tests start, adaptive exam chrome, study rationale.
+   Token-only; does not alter CAT logic or copy.
+   ===================================================================== */
+
+.nn-premium-cat-section {
+  position: relative;
+  isolation: isolate;
+  --nn-premium-cat-accent: var(--semantic-brand);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-warm)) 100%
+    );
+  border-color: color-mix(in srgb, var(--nn-premium-cat-accent) 16%, var(--semantic-border-soft));
+  box-shadow:
+    0 22px 48px -38px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 55%, transparent) inset;
+}
+
+.nn-premium-cat-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(680px 240px at 0% 0%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
+    radial-gradient(520px 200px at 100% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 55%),
+    radial-gradient(460px 180px at 72% 4%, color-mix(in srgb, var(--semantic-chart-7) 7%, transparent), transparent 58%);
+  z-index: 0;
+}
+
+.nn-premium-cat-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-cat-tools-rail {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool))
+    );
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 14%, var(--semantic-border-soft));
+}
+
+.nn-premium-cat-rationale-head {
+  border-radius: var(--radius-md, 0.75rem);
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+  margin-left: -0.35rem;
+  margin-right: -0.35rem;
+  background: color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--semantic-surface));
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session {
+  background:
+    radial-gradient(120% 90% at 100% -8%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent) 0%, transparent 55%),
+    radial-gradient(90% 70% at -5% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent) 0%, transparent 50%),
+    color-mix(in srgb, var(--semantic-panel-muted) 28%, var(--semantic-surface));
+}
+
+.nn-premium-cat-adaptive-footer {
+  box-shadow: 0 -10px 28px -20px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent);
+  background: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-surface));
+}
+
+/* Direct CAT launch bridge — matches pathway start premium lift */
+.nn-premium-cat-direct-card {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-warm)) 100%
+    );
+  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
+  box-shadow:
+    0 20px 44px -36px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent),
+    var(--semantic-shadow-soft, 0 1px 2px rgba(15, 23, 42, 0.06));
+}
+
+.nn-premium-cat-direct-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(520px 200px at 100% 0%, color-mix(in srgb, var(--semantic-chart-3) 9%, transparent), transparent 55%),
+    radial-gradient(480px 180px at 0% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 52%);
+  z-index: 0;
+}
+
+.nn-premium-cat-direct-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Summary chips — distinct semantic hues (not single-brand wash) */
+.nn-premium-cat-hero-chips > div:nth-child(4n + 1) {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 26%, var(--semantic-border-soft));
+}
+.nn-premium-cat-hero-chips > div:nth-child(4n + 2) {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 26%, var(--semantic-border-soft));
+}
+.nn-premium-cat-hero-chips > div:nth-child(4n + 3) {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 26%, var(--semantic-border-soft));
+}
+.nn-premium-cat-hero-chips > div:nth-child(4n + 4) {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 26%, var(--semantic-border-soft));
+}
+
+/* Optional live calibration strip — semantic surfaces only (no scoring impact). */
+.nn-premium-cat-transparency-strip {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-surface) 65%, transparent) inset;
+}
+
+.nn-premium-cat-transparency-bar--1 {
+  background: color-mix(in srgb, var(--semantic-chart-1) 74%, var(--semantic-border-soft));
+}
+.nn-premium-cat-transparency-bar--2 {
+  background: color-mix(in srgb, var(--semantic-chart-3) 74%, var(--semantic-border-soft));
+}
+.nn-premium-cat-transparency-bar--3 {
+  background: color-mix(in srgb, var(--semantic-chart-4) 74%, var(--semantic-border-soft));
+}
+.nn-premium-cat-transparency-bar--4 {
+  background: color-mix(in srgb, var(--semantic-chart-5) 74%, var(--semantic-border-soft));
+}
+
+/* CAT exam chrome — progress segment uses multi-hue band (fill width still driven by session logic). */
+.nn-cat-exam-chrome .nn-cat-top-bar__progress-fill {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 86%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-brand) 84%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-chart-7) 82%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-success) 80%, var(--semantic-text-primary))
+  );
+}
+
+/* Marketing pathway CAT — premium card lift (public hub) */
+.nn-premium-marketing-cat-card {
+  position: relative;
+  isolation: isolate;
+  border-color: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  box-shadow:
+    0 18px 40px -32px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 50%, transparent) inset;
+  background:
+    linear-gradient(
+      175deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--semantic-surface)),
+      var(--semantic-surface)
+    );
+}
+
+.nn-premium-marketing-cat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(560px 220px at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 8%, transparent), transparent 58%),
+    radial-gradient(480px 200px at 100% 100%, color-mix(in srgb, var(--semantic-chart-4) 7%, transparent), transparent 55%);
+  z-index: 0;
+}
+
+.nn-premium-marketing-cat-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =====================================================================
+   Linear practice exam runner — premium shell (visual only).
+   Scope: `.nn-practice-exam-runner` on `/app/practice-tests/[id]` split review.
+   Multi-hue progress + rationale card lift; no scoring or content logic.
+   ===================================================================== */
+
+.nn-practice-exam-runner {
+  --nn-premium-meter-session: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-chart-6) 88%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-success) 85%, var(--semantic-text-primary))
+  );
+}
+
+.nn-practice-exam-runner.nn-cat-exam-chrome:not(.nn-cat-adaptive-exam-session) {
+  background:
+    radial-gradient(115% 88% at 96% -6%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent) 0%, transparent 54%),
+    radial-gradient(92% 72% at -4% 102%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent) 0%, transparent 50%),
+    color-mix(in srgb, var(--semantic-panel-muted) 24%, var(--semantic-surface));
+}
+
+.nn-practice-exam-runner .nn-practice-exam-rationale-panel.nn-premium-practice-exam-rationale .nn-practice-exam-rationale-panel__card {
+  border-radius: 1.35rem;
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-border-soft));
+  box-shadow:
+    0 26px 56px -42px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 52%, transparent) inset;
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 9%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-cool)) 100%
+  );
+}
+
+.nn-practice-exam-runner .nn-practice-exam-progress {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 28%, var(--semantic-surface));
+  border-bottom-color: color-mix(in srgb, var(--semantic-chart-3) 12%, var(--semantic-border-soft));
+}
+
+.nn-practice-exam-runner .nn-practice-exam-progress__fill {
+  background: var(--nn-premium-meter-session);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-surface) 35%, transparent) inset;
+}
+
+.nn-practice-exam-runner .nn-premium-practice-exam-footer {
+  box-shadow: 0 -12px 32px -22px color-mix(in srgb, var(--semantic-text-primary) 16%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 98%, var(--semantic-panel-muted))
+  );
+  border-top-color: color-mix(in srgb, var(--semantic-chart-3) 14%, var(--semantic-border-soft));
+}
+
+@media (max-width: 420px) {
+  .nn-practice-exam-runner .nn-practice-exam-split {
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* Split stack: keep scroll regions bounded on short mobile viewports (visual only). */
+.nn-practice-exam-runner .nn-practice-exam-split__primary,
+.nn-practice-exam-runner .nn-practice-exam-rationale-panel {
+  min-height: 0;
+}
+
+@media (max-width: 1023px) {
+  .nn-practice-exam-runner .nn-practice-exam-rationale-panel {
+    min-height: min(52vh, 28rem);
+    max-height: min(62vh, 36rem);
+  }
+}
+
+/* Practice-tests hub — additive hero/builder accents (tokens only). */
+.nn-premium-practice-hub-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-premium-practice-hub-hero::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    560px 240px at 10% 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 9%, transparent),
+    transparent 58%
+  );
+  z-index: 0;
+}
+
+.nn-premium-practice-hub-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-practice-hub-builder {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 12%, var(--semantic-border-soft));
+}
+
+/* When CAT is available — success-tinted lift without flat single-fill */
+.nn-premium-marketing-cat-card.nn-premium-marketing-cat-card--cta-ready {
+  border-color: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      175deg,
+      color-mix(in srgb, var(--semantic-panel-positive) 42%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface))
+    );
+}
+
+/* ---------------------------------------------------------------------
+   Allied + New Grad marketing parity — narrow grids + module polish.
+   Scoped data attributes only; no routing or copy changes.
+   --------------------------------------------------------------------- */
+[data-nn-allied-pathway-hub="1"] .nn-qa-pathway-lessons-grid > li,
+[data-nn-new-grad-marketing-landing="1"] .nn-qa-pathway-lessons-grid > li {
+  min-width: 0;
+}
+
+.nn-premium-allied-module-card {
+  transition:
+    border-color 180ms var(--brand-motion-ease-calm-out, ease-out),
+    box-shadow 180ms var(--brand-motion-ease-calm-out, ease-out);
+}
+
+.nn-premium-allied-module-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-allied-module-card {
+    transition: none;
+  }
+}
+
+
+/* =====================================================================
+   Flashcards — learner study surfaces (hub/session visuals only).
+   Scope: `/app/flashcards`, deck study client. Tokens + light transforms.
+   ===================================================================== */
+
+.nn-premium-flashcard-session-root {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-premium-flashcard-session-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(620px 260px at 8% 0%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
+    radial-gradient(540px 220px at 96% 92%, color-mix(in srgb, var(--semantic-chart-4) 9%, transparent), transparent 52%),
+    radial-gradient(460px 190px at 78% 12%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 56%);
+  z-index: 0;
+}
+
+.nn-premium-flashcard-session-root > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-flashcard-stack[data-nn-revealed="0"] .nn-flashcard-session-rail.nn-flashcard-rail-utility {
+  opacity: 0.92;
+  transform: translate3d(0, 3px, 0);
+}
+
+.nn-premium-flashcard-stack[data-nn-revealed="1"] .nn-flashcard-session-rail.nn-flashcard-rail-utility {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.nn-flashcard-session-rail.nn-flashcard-rail-utility {
+  transition: opacity 180ms ease-out, transform 180ms ease-out;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-flashcard-session-rail.nn-flashcard-rail-utility {
+    transition: none;
+    will-change: auto;
+  }
+
+  .nn-premium-flashcard-stack[data-nn-revealed="0"] .nn-flashcard-session-rail.nn-flashcard-rail-utility {
+    transform: none;
+  }
+}
+
+.nn-premium-flashcard-session-header {
+  border-radius: var(--radius-xl, 1rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-3) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-flashcard-completion {
+  border-radius: var(--radius-xl, 1.25rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 28%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-warm))
+  );
+  box-shadow: 0 22px 48px -38px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent);
+}
+
+.nn-premium-flashcard-nav-btn {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: var(--radius-lg, 0.75rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface));
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.nn-premium-flashcard-nav-btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface));
+}
+
+.nn-premium-flashcard-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.nn-premium-flashcard-nav-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--semantic-brand) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.nn-premium-flashcard-resume-card {
+  border-radius: var(--radius-xl, 1.25rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 16%, var(--semantic-border-soft));
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 14%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-flashcard-gate-card {
+  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft)) !important;
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  ) !important;
+  box-shadow: 0 24px 56px -40px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent) !important;
+}
+
+@media (max-width: 420px) {
+  .nn-premium-flashcard-stack {
+    gap: 1rem;
+  }
+}
+
+/* Flashcard deck session — dominant main column + narrower utility rail (Figma ~72/28). */
+.nn-premium-flashcard-stack-outer {
+  width: 100%;
+}
+
+.nn-flashcard-session-ambient {
+  height: clamp(72px, 12vw, 120px);
+  width: 100%;
+  flex-shrink: 0;
+  border-radius: 1.15rem;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
+    color-mix(in srgb, var(--semantic-chart-5) 8%, transparent) 45%,
+    color-mix(in srgb, var(--semantic-chart-4) 10%, transparent)
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 35%, transparent);
+}
+
+.nn-flashcard-layered-stack__underlay {
+  height: 2.25rem;
+  margin-bottom: -0.4rem;
+  border-radius: 1.15rem;
+  background: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-panel-muted));
+}
+
+.nn-flashcard-session-layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.nn-flashcard-session-main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nn-flashcard-rail-surface {
+  border-radius: 1.15rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-flashcard-session-layout {
+    grid-template-columns: minmax(0, 2.35fr) minmax(272px, 336px);
+    gap: 1.5rem;
+  }
+
+  .nn-flashcard-session-main {
+    grid-column: 1;
+  }
+
+  .nn-flashcard-session-rail {
+    position: sticky;
+    top: 0.75rem;
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+    max-width: 336px;
+  }
+}
+
+.nn-flashcard-rail-utility {
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-3) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+  padding: 0.85rem;
+}
+
+/* Ocean — cool ambient wash (default tokens lean clinical blue). */
+html[data-theme="ocean"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 16%, transparent),
+    color-mix(in srgb, var(--semantic-chart-5) 9%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-4) 11%, transparent)
+  );
+}
+
+/* Aurora / Blossom — muted rose / lilac / mint accents (no neon pink blocks). */
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-1) 11%, transparent),
+    color-mix(in srgb, var(--semantic-chart-2) 9%, transparent) 50%,
+    color-mix(in srgb, var(--semantic-warning) 7%, transparent)
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-panel-warm));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-chart-2) 7%, var(--semantic-panel-muted)),
+    color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted))
+  );
+}
+
+/* Sunset — warm coral wash + sky lift (semantic multi-hue). */
+html[data-theme="sunset"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-1) 10%, transparent),
+    color-mix(in srgb, var(--semantic-chart-3) 11%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-4) 8%, transparent)
+  );
+}
+
+html[data-theme="sunset"] .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-3) 10%, var(--semantic-panel-warm));
+}
+
+html[data-theme="sunset"] .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 16%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool))
+  );
+}
+
+html[data-theme="sunset"] .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--semantic-panel-muted)),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted))
+  );
+}
+
+/* Midnight — depth + clinical cyan/teal glow (not flat black). */
+html[data-theme="midnight"] .nn-premium-flashcard-session-root::before {
+  background:
+    radial-gradient(620px 260px at 8% 0%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 58%),
+    radial-gradient(540px 220px at 96% 92%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 52%);
+}
+
+html[data-theme="midnight"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-info) 22%, transparent),
+    color-mix(in srgb, var(--semantic-chart-3) 14%, transparent) 55%,
+    transparent
+  );
+}
+
+html[data-theme="midnight"] .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-3) 24%, var(--semantic-panel-muted));
+}
+
+html[data-theme="midnight"] .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-cool))
+  );
+  box-shadow:
+    0 28px 60px -34px color-mix(in srgb, var(--semantic-info) 28%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 22%, transparent);
+}
+
+html[data-theme="midnight"] .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 65%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 82%, var(--semantic-panel-cool))
+  );
+}
+
+html[data-theme="midnight"] .nn-flashcard-rail-tile {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 45%, var(--semantic-surface)) !important;
+}
+
+.nn-flashcard-kbd {
+  display: inline-block;
+  border-radius: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-chart-3));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+  padding: 0.1rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--semantic-text-primary);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 55%, transparent);
+}
+
+.nn-premium-flashcard-reveal-panel {
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-flashcard-hero-surface {
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool)),
+    color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted))
+  );
+  box-shadow:
+    0 28px 56px -36px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 65%, transparent);
+}
+
+.nn-flashcard-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nn-flashcard-chip--mode {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 45%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-flashcard-chip--topic {
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-2) 8%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+}
+
+.nn-flashcard-chip--kind {
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  color: var(--semantic-info);
+}
+
+/* -----------------------------------------------------------------------
+
+/* Shared stat tile classes — imported from single source of truth.
+   See src/app/styles/shared/premium-stat-tiles.css for the definitions.
+   The --rail modifier variants below extend these base classes. */
+@import "./styles/shared/premium-stat-tiles.css";
+
+.nn-premium-hero-stats--rail {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 0;
+  gap: 8px;
+}
+
+.nn-premium-hero-stats--rail .nn-premium-hero-stat {
+  min-height: 0;
+  padding: 10px 12px;
+}
+
+.nn-premium-hero-stats--rail .nn-premium-hero-stat__value {
+  font-size: 17px;
+}
+
+.nn-flashcard-session-rail .nn-premium-hero-stat__label {
+  color: var(--semantic-text-muted);
+}
+
+.nn-flashcard-session-rail .nn-premium-hero-stat__value {
+  color: var(--semantic-text-primary);
+}
+
+/* Optional: simple study surface — `FlashcardViewer` (batch / API cursors) */
+.nn-flashcard-face-animate {
+  animation: nn-flashcard-face-in 220ms ease-out both;
+}
+
+@keyframes nn-flashcard-face-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 5px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-flashcard-face-animate {
+    animation: none;
+  }
+}
+

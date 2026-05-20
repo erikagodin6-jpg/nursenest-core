@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "countrySlug": "australia",
+  "entries": [
+    {
+      "slug": "au-sample-001-ahpra-nmba-en",
+      "title": "AHPRA and NMBA: registration-first framing for Australian nursing",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-001",
+      "canonicalClusterId": "ahpra-registration",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-002-en-rn-scope-en",
+      "title": "EN vs RN vs NP in Australia — scope without flattening titles",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-002",
+      "canonicalClusterId": "nursing-scopes-au",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-003-oba-osce-en",
+      "title": "OBA and OSCE for internationally qualified RNs — pathway mindset",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-003",
+      "canonicalClusterId": "oba-osce-australia",
+      "publicationPriority": 93,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-004-india-to-au-en",
+      "title": "India to Australia nursing: evidence discipline and English tests",
+      "language": "en",
+      "countryTargets": ["AU", "IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-004",
+      "canonicalClusterId": "india-to-australia-nursing",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-005-philippines-to-au-en",
+      "title": "Philippines to Australia: common strengths and paperwork pitfalls",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-005",
+      "canonicalClusterId": "philippines-to-australia-nursing",
+      "publicationPriority": 88,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-006-uk-to-au-en",
+      "title": "UK to Australia: NMC registration does not auto-transfer",
+      "language": "en",
+      "countryTargets": ["AU", "UK"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-006",
+      "canonicalClusterId": "uk-to-australia-nursing",
+      "publicationPriority": 86,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-007-salary-jobs-en",
+      "title": "Nursing employers and readiness in Australia — orientation",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-007",
+      "canonicalClusterId": "salary-jobs-australia",
+      "publicationPriority": 82,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-008-allied-parallel-en",
+      "title": "Allied health boards vs nursing registration — separate tracks",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-008",
+      "canonicalClusterId": "allied-health-au",
+      "publicationPriority": 78,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-009-ielts-oet-en",
+      "title": "IELTS Academic vs OET for Nursing — evidence categories matter",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-009",
+      "canonicalClusterId": "english-tests-au",
+      "publicationPriority": 84,
+      "status": "sample"
+    },
+    {
+      "slug": "au-sample-010-study-parallel-en",
+      "title": "Using NCLEX-style practice alongside an AHPRA timeline",
+      "language": "en",
+      "countryTargets": ["AU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-au-010",
+      "canonicalClusterId": "study-parallel-au",
+      "publicationPriority": 80,
+      "status": "sample"
+    }
+  ]
+}

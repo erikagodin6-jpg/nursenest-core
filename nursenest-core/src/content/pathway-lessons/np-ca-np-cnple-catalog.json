@@ -1,0 +1,493 @@
+{
+  "version": 2,
+  "generatedAt": "2026-05-12T00:00:00.000Z",
+  "source": "manually curated — CNPLE 2026 Canadian NP single-classification model",
+  "metadata": {
+    "description": "Lesson topics for the ca-np-cnple pathway, mapped to Canadian NP entry-level competency domains. Domain names are NurseNest internal labels — not official CNPLE blueprint percentages.",
+    "pathwayId": "ca-np-cnple",
+    "examName": "Canadian Nurse Practitioner Licensure Examination (CNPLE)",
+    "examMode": "LOFT",
+    "country": "CA",
+    "countryScope": "ca",
+    "disclaimer": "NurseNest practice content. Not official CNPLE questions. CNPLE uses LOFT, not CAT."
+  },
+  "pathwayMetadata": {
+    "examName": "Canadian Nurse Practitioner Licensure Examination (CNPLE)",
+    "shortName": "CNPLE",
+    "country": "CA",
+    "countryScope": "ca",
+    "examMode": "LOFT",
+    "singleClassificationModel": true,
+    "goLiveDate": "2026-07-01"
+  },
+  "lessonDomains": [
+    {
+      "slug": "clinical-assessment",
+      "label": "Clinical Assessment",
+      "cnpleDomainSlug": "clinical-assessment",
+      "lessons": [
+        {
+          "slug": "np-ca-assessment-history-taking",
+          "title": "History Taking and the Clinical Interview",
+          "sections": ["assessment-red-flags", "lifespan-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-assessment-physical-exam",
+          "title": "Physical Examination Across the Lifespan",
+          "sections": ["assessment-red-flags", "lifespan-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-assessment-functional-psychosocial",
+          "title": "Functional and Psychosocial Assessment",
+          "sections": ["assessment-red-flags", "patient-education", "canadian-practice-considerations"]
+        }
+      ]
+    },
+    {
+      "slug": "diagnosis-differential",
+      "label": "Diagnosis and Differential Diagnosis",
+      "cnpleDomainSlug": "diagnosis-differential",
+      "lessons": [
+        {
+          "slug": "np-ca-diagnosis-clinical-reasoning-framework",
+          "title": "Clinical Reasoning and Diagnostic Framework",
+          "sections": ["differential-diagnosis", "assessment-red-flags", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-diagnosis-cardiovascular",
+          "title": "Cardiovascular Differential Diagnosis",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-diagnosis-respiratory",
+          "title": "Respiratory Differential Diagnosis",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-diagnosis-endocrine",
+          "title": "Endocrine Differential Diagnosis",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "pharmacologic-management", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "pharmacotherapeutics",
+      "label": "Pharmacotherapeutics and Prescribing Safety",
+      "cnpleDomainSlug": "pharmacotherapeutics",
+      "lessons": [
+        {
+          "slug": "np-ca-pharma-safe-prescribing-principles",
+          "title": "Safe Prescribing Principles for Canadian NPs",
+          "sections": ["pharmacologic-management", "canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-pharma-cardiovascular-drugs",
+          "title": "Cardiovascular Pharmacology",
+          "sections": ["pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-pharma-diabetes-medications",
+          "title": "Diabetes Pharmacology and Insulin Management",
+          "sections": ["pharmacologic-management", "follow-up-monitoring", "patient-education", "lifespan-considerations"]
+        },
+        {
+          "slug": "np-ca-pharma-respiratory-drugs",
+          "title": "Respiratory Pharmacology (Inhalers, Steroids, Biologics)",
+          "sections": ["pharmacologic-management", "patient-education", "follow-up-monitoring", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-pharma-controlled-substances",
+          "title": "Controlled Substances and Opioid Prescribing in Canada",
+          "sections": ["pharmacologic-management", "canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-pharma-polypharmacy-older-adults",
+          "title": "Polypharmacy and the Beers Criteria in Older Adults",
+          "sections": ["pharmacologic-management", "lifespan-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-pharma-mental-health-medications",
+          "title": "Mental Health Pharmacology",
+          "sections": ["pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "diagnostics-labs",
+      "label": "Diagnostics and Laboratory Interpretation",
+      "cnpleDomainSlug": "diagnostics-labs",
+      "lessons": [
+        {
+          "slug": "np-ca-labs-cbc-interpretation",
+          "title": "CBC Interpretation in Primary Care",
+          "sections": ["diagnostics-labs-imaging", "differential-diagnosis", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-labs-metabolic-panels",
+          "title": "Basic and Comprehensive Metabolic Panels",
+          "sections": ["diagnostics-labs-imaging", "follow-up-monitoring", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-labs-lipids-thyroid-hba1c",
+          "title": "Lipids, Thyroid Function, and HbA1c",
+          "sections": ["diagnostics-labs-imaging", "follow-up-monitoring", "pharmacologic-management", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-labs-urinalysis-renal",
+          "title": "Urinalysis, Renal Function, and CKD Staging",
+          "sections": ["diagnostics-labs-imaging", "differential-diagnosis", "follow-up-monitoring", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-labs-ecg-basics",
+          "title": "ECG Interpretation for the NP",
+          "sections": ["diagnostics-labs-imaging", "assessment-red-flags", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-labs-imaging-selection",
+          "title": "Appropriate Imaging Selection in Primary Care",
+          "sections": ["diagnostics-labs-imaging", "clinical-judgment-pearls", "common-exam-traps"]
+        }
+      ]
+    },
+    {
+      "slug": "health-promotion-prevention",
+      "label": "Health Promotion and Disease Prevention",
+      "cnpleDomainSlug": "health-promotion-prevention",
+      "lessons": [
+        {
+          "slug": "np-ca-prevention-canadian-screening-guidelines",
+          "title": "Canadian Screening Guidelines (Canadian Task Force)",
+          "sections": ["patient-education", "lifespan-considerations", "canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-prevention-immunisation-naci",
+          "title": "Immunisation Schedules and NACI Recommendations",
+          "sections": ["patient-education", "lifespan-considerations", "canadian-practice-considerations"]
+        },
+        {
+          "slug": "np-ca-prevention-lifestyle-counselling",
+          "title": "Lifestyle Counselling: Nutrition, Physical Activity, Smoking Cessation",
+          "sections": ["non-pharmacologic-management", "patient-education", "follow-up-monitoring"]
+        },
+        {
+          "slug": "np-ca-prevention-sdoh",
+          "title": "Social Determinants of Health in Canadian Primary Care",
+          "sections": ["assessment-red-flags", "patient-education", "canadian-practice-considerations"]
+        }
+      ]
+    },
+    {
+      "slug": "chronic-disease-management",
+      "label": "Chronic Disease Management",
+      "cnpleDomainSlug": "chronic-disease-management",
+      "lessons": [
+        {
+          "slug": "np-ca-chronic-hypertension",
+          "title": "Hypertension: Assessment, Guidelines, and Management",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-diabetes",
+          "title": "Diabetes Mellitus: Type 1, Type 2, and Gestational",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "patient-education", "lifespan-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-copd",
+          "title": "COPD: Diagnosis, Staging, and Long-Term Management",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "referral-thresholds", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-heart-failure",
+          "title": "Heart Failure: Recognition and Chronic Management",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-dyslipidemia",
+          "title": "Dyslipidemia and Cardiovascular Risk Reduction",
+          "sections": ["diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-ckd",
+          "title": "Chronic Kidney Disease: Staging and NP Management",
+          "sections": ["diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-osteoporosis",
+          "title": "Osteoporosis: Screening, FRAX, and Treatment",
+          "sections": ["diagnostics-labs-imaging", "pharmacologic-management", "patient-education", "lifespan-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-chronic-thyroid",
+          "title": "Thyroid Disorders: Hypothyroidism and Hyperthyroidism",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "acute-urgent-care",
+      "label": "Acute Deterioration and Urgent Referral Recognition",
+      "cnpleDomainSlug": "acute-urgent-care",
+      "lessons": [
+        {
+          "slug": "np-ca-acute-chest-pain-acs",
+          "title": "Chest Pain and Acute Coronary Syndrome Recognition",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-acute-stroke-tia",
+          "title": "Stroke and TIA: Recognition and Urgent Referral",
+          "sections": ["assessment-red-flags", "referral-thresholds", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-acute-sepsis",
+          "title": "Sepsis Recognition and Early Management",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-acute-anaphylaxis",
+          "title": "Anaphylaxis: Recognition and Emergency Management",
+          "sections": ["assessment-red-flags", "pharmacologic-management", "referral-thresholds", "patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-acute-respiratory-failure",
+          "title": "Acute Respiratory Failure and Deterioration",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "pediatrics",
+      "label": "Pediatrics",
+      "cnpleDomainSlug": "pediatrics",
+      "lessons": [
+        {
+          "slug": "np-ca-peds-well-child-visit",
+          "title": "Well-Child Visits and Developmental Milestones",
+          "sections": ["assessment-red-flags", "patient-education", "lifespan-considerations", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-peds-common-infections",
+          "title": "Common Pediatric Infections: Otitis, Pharyngitis, Pneumonia",
+          "sections": ["differential-diagnosis", "diagnostics-labs-imaging", "pharmacologic-management", "patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-peds-asthma",
+          "title": "Pediatric Asthma: Assessment and Management",
+          "sections": ["assessment-red-flags", "pharmacologic-management", "patient-education", "follow-up-monitoring", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-peds-dosing-safety",
+          "title": "Pediatric Dosing and Medication Safety",
+          "sections": ["pharmacologic-management", "patient-education", "clinical-judgment-pearls", "common-exam-traps"]
+        }
+      ]
+    },
+    {
+      "slug": "adult-care",
+      "label": "Adult Primary Care",
+      "cnpleDomainSlug": "adult-care",
+      "lessons": [
+        {
+          "slug": "np-ca-adult-preventive-care",
+          "title": "Preventive Care for Working-Age Adults",
+          "sections": ["patient-education", "canadian-practice-considerations", "follow-up-monitoring"]
+        },
+        {
+          "slug": "np-ca-adult-musculoskeletal",
+          "title": "MSK: Low Back Pain, Osteoarthritis, and Common Injuries",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "non-pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-adult-dermatology",
+          "title": "Dermatology in Primary Care",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-adult-gi",
+          "title": "GI Presentations: GERD, IBS, Liver Disease Screening",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-adult-neuro",
+          "title": "Neurology: Headache, Vertigo, and Seizure Evaluation",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "diagnostics-labs-imaging", "referral-thresholds", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-adult-infectious-disease",
+          "title": "Infectious Disease: Common Infections and Antimicrobial Stewardship",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "follow-up-monitoring", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "older-adult-care",
+      "label": "Older Adult Care and Geriatrics",
+      "cnpleDomainSlug": "older-adult-care",
+      "lessons": [
+        {
+          "slug": "np-ca-geri-frailty-screening",
+          "title": "Frailty Screening and Comprehensive Geriatric Assessment",
+          "sections": ["assessment-red-flags", "clinical-judgment-pearls", "lifespan-considerations"]
+        },
+        {
+          "slug": "np-ca-geri-dementia-delirium",
+          "title": "Dementia and Delirium: Assessment and Management",
+          "sections": ["assessment-red-flags", "differential-diagnosis", "pharmacologic-management", "patient-education", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-geri-falls-prevention",
+          "title": "Falls Prevention in Older Adults",
+          "sections": ["assessment-red-flags", "non-pharmacologic-management", "patient-education", "referral-thresholds"]
+        },
+        {
+          "slug": "np-ca-geri-advance-care-planning",
+          "title": "Advance Care Planning and Goals of Care",
+          "sections": ["patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "reproductive-sexual-health",
+      "label": "Reproductive and Sexual Health",
+      "cnpleDomainSlug": "reproductive-sexual-health",
+      "lessons": [
+        {
+          "slug": "np-ca-repro-prenatal-care",
+          "title": "Prenatal Care and Obstetric Screening",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "referral-thresholds", "patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-repro-contraception",
+          "title": "Contraception: Options, Selection, and Counselling",
+          "sections": ["pharmacologic-management", "patient-education", "lifespan-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-repro-sti",
+          "title": "STI Screening, Diagnosis, and Treatment in Canada",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "patient-education", "canadian-practice-considerations"]
+        },
+        {
+          "slug": "np-ca-repro-menopause",
+          "title": "Menopause: Assessment and Management",
+          "sections": ["assessment-red-flags", "pharmacologic-management", "non-pharmacologic-management", "patient-education", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "mental-health",
+      "label": "Mental Health",
+      "cnpleDomainSlug": "mental-health",
+      "lessons": [
+        {
+          "slug": "np-ca-mh-depression-anxiety",
+          "title": "Depression and Anxiety: Assessment and Management",
+          "sections": ["assessment-red-flags", "diagnostics-labs-imaging", "pharmacologic-management", "non-pharmacologic-management", "follow-up-monitoring", "patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-mh-substance-use",
+          "title": "Substance Use Disorders: Screening and Management",
+          "sections": ["assessment-red-flags", "pharmacologic-management", "referral-thresholds", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-mh-ptsd-trauma",
+          "title": "PTSD and Trauma-Informed Care",
+          "sections": ["assessment-red-flags", "pharmacologic-management", "non-pharmacologic-management", "patient-education", "canadian-practice-considerations"]
+        },
+        {
+          "slug": "np-ca-mh-psychosis-risk",
+          "title": "Psychosis Risk Recognition and Safe Prescribing",
+          "sections": ["assessment-red-flags", "pharmacologic-management", "referral-thresholds", "clinical-judgment-pearls", "common-exam-traps"]
+        }
+      ]
+    },
+    {
+      "slug": "indigenous-health-cultural-safety",
+      "label": "Indigenous Health and Culturally Safe Care",
+      "cnpleDomainSlug": "indigenous-health-cultural-safety",
+      "lessons": [
+        {
+          "slug": "np-ca-indigenous-cultural-safety-framework",
+          "title": "Cultural Safety and Trauma-Informed Practice in Canada",
+          "sections": ["patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-indigenous-health-disparities",
+          "title": "Health Disparities and Equity in Indigenous Populations",
+          "sections": ["assessment-red-flags", "patient-education", "canadian-practice-considerations"]
+        }
+      ]
+    },
+    {
+      "slug": "ethics-legal-professional",
+      "label": "Ethics, Legal, and Professional Responsibility",
+      "cnpleDomainSlug": "ethics-legal-professional",
+      "lessons": [
+        {
+          "slug": "np-ca-ethics-informed-consent-capacity",
+          "title": "Informed Consent and Capacity Assessment",
+          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-ethics-privacy-legislation",
+          "title": "Privacy Legislation in Canada: PIPEDA and Provincial Acts",
+          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-ethics-mandatory-reporting",
+          "title": "Mandatory Reporting Obligations for Canadian NPs",
+          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-ethics-scope-of-practice",
+          "title": "NP Scope of Practice Across Canadian Jurisdictions",
+          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-ethics-documentation",
+          "title": "Documentation Standards and Professional Accountability",
+          "sections": ["canadian-practice-considerations", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "interprofessional-collaboration",
+      "label": "Interprofessional Care and Consultation",
+      "cnpleDomainSlug": "interprofessional-collaboration",
+      "lessons": [
+        {
+          "slug": "np-ca-ipc-referral-thresholds",
+          "title": "When to Refer: Consultation and Referral Decision-Making",
+          "sections": ["referral-thresholds", "clinical-judgment-pearls", "common-exam-traps"]
+        },
+        {
+          "slug": "np-ca-ipc-team-communication",
+          "title": "Effective Communication in Team-Based Care",
+          "sections": ["patient-education", "canadian-practice-considerations", "clinical-judgment-pearls"]
+        }
+      ]
+    },
+    {
+      "slug": "patient-education-shared-decision",
+      "label": "Patient Education and Shared Decision-Making",
+      "cnpleDomainSlug": "patient-education-shared-decision",
+      "lessons": [
+        {
+          "slug": "np-ca-edu-health-literacy",
+          "title": "Health Literacy and Plain-Language Communication",
+          "sections": ["patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-edu-motivational-interviewing",
+          "title": "Motivational Interviewing in Primary Care",
+          "sections": ["non-pharmacologic-management", "patient-education", "clinical-judgment-pearls"]
+        },
+        {
+          "slug": "np-ca-edu-self-management-support",
+          "title": "Chronic Disease Self-Management Support",
+          "sections": ["patient-education", "follow-up-monitoring", "clinical-judgment-pearls"]
+        }
+      ]
+    }
+  ],
+  "lessons": []
+}

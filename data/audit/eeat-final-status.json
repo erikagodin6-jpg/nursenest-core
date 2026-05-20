@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-04-21T19:49:32.255Z",
+  "runMode": "safe_batch",
+  "averageEeatScore": 65.8,
+  "pagesBelowThreshold70": 433,
+  "totalPagesScored": 601,
+  "missingAuthorSignals": {
+    "blogPostsWithoutNamedAuthor": 0,
+    "note": "Lessons use institutional author in JSON-LD (Organization); optional per-lesson bylines are future work."
+  },
+  "missingSchema": 0,
+  "internalLinkingGaps": 534,
+  "contentCompletenessPercent": 91,
+  "seoReadinessScore": 70,
+  "trustPages": {
+    "about": "/about",
+    "editorialPolicy": "/editorial-policy",
+    "contentReviewPolicy": "/content-review-policy",
+    "contact": "/contact",
+    "privacy": "/privacy"
+  },
+  "paywallSeo": {
+    "status": "preview_only_indexing",
+    "notes": "Marketing lessons: index public URL with preview sections; full body gated. Subscriber /app remains noindex."
+  },
+  "programmaticSeo": {
+    "slugCount": 39,
+    "thinFlags": 26
+  },
+  "prioritizedActions": [
+    "Backfill blog authorDisplayName for published posts missing a named author",
+    "Raise internal links to 3+ on pages flagged internal_links_low",
+    "Complete lesson spine sections on structure_incomplete rows (do not auto-fill thin copy)",
+    "Refresh stale blog posts listed in content-freshness.json"
+  ],
+  "rankingReadiness": "moderate_needs_content_ops"
+}

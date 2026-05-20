@@ -1,0 +1,36 @@
+# Weekly optional lesson completion batch (server must set CONTENT_COMPLETION_CRON_ENABLED=true).
+# Secrets: PRODUCTION_CRON_BASE_URL, CRON_SECRET
+name: scheduled-cron-content-completion-weekly
+
+on:
+  schedule:
+    - cron: "0 10 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: scheduled-cron-content-completion-weekly
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/cron/content-completion
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "${BASE:-}" && test -n "${CRON_SECRET:-}" || { echo "Missing PRODUCTION_CRON_BASE_URL or CRON_SECRET"; exit 1; }
+          curl -fsS -X POST "${BASE}/api/cron/content-completion" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -o content-completion.json
+          jq -e '.ok == true or .skipped == true' content-completion.json
+      - name: Upload response
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-completion-${{ github.run_id }}
+          path: content-completion.json
+          if-no-files-found: ignore

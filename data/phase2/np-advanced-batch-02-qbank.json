@@ -1,0 +1,1434 @@
+{
+  "batchId": "np-advanced-batch-02",
+  "component": "qbank",
+  "generatedDate": "2026-04-11",
+  "questionCount": 80,
+  "cognitiveDistribution": {
+    "L1": 13,
+    "L2": 33,
+    "L3": 34
+  },
+  "questions": [
+    {
+      "id": "KP-001",
+      "topicSlug": "knee-pain-differential",
+      "lessonSlug": "knee-pain-differential-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 58-year-old man presents with right knee pain following prolonged yard work. He denies fever, chills, or recent trauma. Examination shows crepitus on passive flexion, bony enlargement of the joint margins, and pain with end-range motion. There is no effusion and no warmth. Which clinical finding most strongly supports osteoarthritis as the primary diagnosis?",
+      "options": {
+        "A": "Morning stiffness lasting 2.5 hours",
+        "B": "Bilateral symmetric involvement with metacarpophalangeal joint tenderness",
+        "C": "Crepitus, bony enlargement, and morning stiffness lasting less than 30 minutes",
+        "D": "Extreme tenderness with low-grade fever and joint effusion"
+      },
+      "correctAnswer": "C",
+      "rationale": "Osteoarthritis is characterized by crepitus, bony enlargement (osteophyte formation), pain with motion, and morning stiffness lasting less than 30 minutes — activity-related stiffness that resolves quickly distinguishes it from inflammatory arthropathies. Option A is incorrect: stiffness of 2.5 hours is typical of rheumatoid arthritis (>60 minutes is the RA threshold) or other inflammatory joint disease. Option B is incorrect: bilateral symmetric MCP involvement is a hallmark of rheumatoid arthritis, not OA. Option D is incorrect: extreme tenderness with fever and effusion raises concern for septic arthritis or acute crystal arthropathy, not OA.",
+      "difficulty": "medium",
+      "tags": ["knee-pain", "osteoarthritis", "musculoskeletal", "diagnosis"]
+    },
+    {
+      "id": "KP-002",
+      "topicSlug": "knee-pain-differential",
+      "lessonSlug": "knee-pain-differential-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 34-year-old female soccer player reports anterior knee pain that worsens when walking down stairs and after sitting for 90 minutes in a lecture. She has no history of trauma, swelling, or giving way. Examination reveals no effusion, normal ligament stability, and pain with compression of the patella against the femur. What is the most likely diagnosis?",
+      "options": {
+        "A": "Anterior cruciate ligament (ACL) tear",
+        "B": "Patellofemoral pain syndrome (PFPS)",
+        "C": "Medial meniscal tear",
+        "D": "Prepatellar bursitis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Patellofemoral pain syndrome (PFPS) classically presents in young active individuals with anterior knee pain worsened by stair descent, squatting, and prolonged sitting (the 'movie sign'). Pain with patellar compression (Clarke's test) without effusion or instability is characteristic. Option A is incorrect: ACL tears present with acute hemarthrosis, a 'pop' sensation, and positive anterior drawer or Lachman test. Option C is incorrect: meniscal tears cause joint line tenderness, positive McMurray test, and often mechanical symptoms (locking, catching). Option D is incorrect: prepatellar bursitis presents with a discrete fluctuant swelling directly over the patella, not diffuse anterior pain worsened by sitting.",
+      "difficulty": "medium",
+      "tags": ["knee-pain", "patellofemoral", "musculoskeletal", "diagnosis"]
+    },
+    {
+      "id": "KP-003",
+      "topicSlug": "knee-pain-differential",
+      "lessonSlug": "knee-pain-differential-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 72-year-old man with hypertension, CKD stage 3b (eGFR 38), and bilateral knee OA presents for routine follow-up. He rates his knee pain 6/10 and requests medication for better control. Current medications include amlodipine and lisinopril. He uses ibuprofen 400mg three times daily PRN with moderate relief. Which analgesic adjustment is most appropriate?",
+      "options": {
+        "A": "Continue ibuprofen and add omeprazole for GI protection",
+        "B": "Switch ibuprofen to celecoxib 200mg daily",
+        "C": "Switch ibuprofen to topical diclofenac 1% gel applied to both knees TID",
+        "D": "Prescribe tramadol 50mg TID as a safer renal alternative"
+      },
+      "correctAnswer": "C",
+      "rationale": "Topical diclofenac gel is the preferred analgesic for this patient because it provides effective local analgesia for knee OA with minimal systemic absorption, avoiding the renal, cardiovascular, and GI risks of systemic NSAIDs. With CKD stage 3b and concurrent ACEi (lisinopril), systemic NSAIDs pose a 'triple whammy' risk: reduced GFR, impaired prostaglandin-mediated renal afferent arteriolar tone, and inhibited aldosterone — together causing acute kidney injury. Option A is incorrect: adding a PPI does not address the nephrotoxic and cardiovascular risk of systemic ibuprofen in CKD. Option B is incorrect: celecoxib is still a systemic NSAID and carries the same renal and CV risk profile; it reduces GI risk but not renal or cardiovascular risk. Option D is incorrect: tramadol is a weak opioid and serotonergic agent with its own risks in elderly patients — sedation, fall risk, serotonin syndrome potential — and is not appropriate as first escalation.",
+      "difficulty": "hard",
+      "tags": ["knee-pain", "OA", "analgesics", "CKD", "polypharmacy", "prescribing"]
+    },
+    {
+      "id": "KP-004",
+      "topicSlug": "knee-pain-differential",
+      "lessonSlug": "knee-pain-differential-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 67-year-old man presents with sudden onset severe left knee pain and swelling after waking from sleep. He has no fever but reports prior similar episodes involving his great toe. Synovial fluid analysis shows positively birefringent rhomboid-shaped crystals. X-ray shows chondrocalcinosis of the medial meniscus. Which medication is most appropriate for acute management?",
+      "options": {
+        "A": "Allopurinol 100mg daily started immediately",
+        "B": "Colchicine 0.6mg BID for 3 days",
+        "C": "Doxycycline 100mg BID for 7 days",
+        "D": "Intravenous vancomycin and piperacillin-tazobactam"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation is consistent with pseudogout (CPPD disease): acute crystal arthritis with positively birefringent rhomboid crystals (distinguishing from gout's negatively birefringent needle-shaped crystals), chondrocalcinosis on imaging, and acute onset in an older adult. Management of acute CPPD mirrors gout: colchicine, NSAIDs, or corticosteroids. Option A is incorrect: allopurinol targets uric acid reduction for gout prevention — it has no role in CPPD; furthermore, urate-lowering therapy should NEVER be initiated during an acute gout or pseudogout flare (it can prolong or trigger a flare). Option C is incorrect: doxycycline is an antibiotic with no role in crystal arthritis. Option D is incorrect: although IV antibiotics would be appropriate for septic arthritis, the crystal identification on aspirate makes septic arthritis effectively excluded — treating empirically for infection after crystal diagnosis is identified is inappropriate.",
+      "difficulty": "hard",
+      "tags": ["knee-pain", "CPPD", "pseudogout", "crystal-arthritis", "acute-management"]
+    },
+    {
+      "id": "KP-005",
+      "topicSlug": "knee-pain-differential",
+      "lessonSlug": "knee-pain-differential-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 55-year-old woman with bilateral knee OA has been receiving physical therapy, has reduced her weight by 12 pounds, and uses topical diclofenac with partial relief. She now reports significant functional limitation — unable to walk more than one block without pain. She asks if there is any other option before surgery. On examination, there is a moderate effusion in the right knee and crepitus throughout range of motion. What is the most appropriate next step?",
+      "options": {
+        "A": "Refer to orthopedic surgery for bilateral total knee replacement",
+        "B": "Start oral celecoxib 200mg daily and schedule MRI",
+        "C": "Perform intra-articular corticosteroid injection to the right knee and reassess",
+        "D": "Order bone scan to evaluate for avascular necrosis"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has optimized conservative therapy (PT, weight loss, topical NSAIDs) but has ongoing functional limitation and an active effusion — the next appropriate step in the OA stepwise ladder is intra-articular corticosteroid injection. Corticosteroid injections are effective for moderate-to-severe OA with effusion and can provide 4-12 weeks of pain relief, allowing continued function. Option A is incorrect: surgical referral is appropriate when conservative therapy, including injections, has failed — it is premature at this stage; bilateral surgery is particularly high-risk and is not the immediate next step. Option B is incorrect: adding oral celecoxib may help but does not address the active effusion; MRI is not indicated in established OA management — it is for surgical planning or when diagnosis is uncertain. Option D is incorrect: bone scan is not indicated; AVN would present with acute severe pain and risk factors (corticosteroid use, alcohol, sickle cell), not bilateral chronic OA pattern.",
+      "difficulty": "hard",
+      "tags": ["knee-pain", "OA", "treatment-escalation", "injection", "stepwise-care"]
+    },
+    {
+      "id": "KP-006",
+      "topicSlug": "knee-pain-differential",
+      "lessonSlug": "knee-pain-differential-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 61-year-old woman presents with right knee pain for 6 months. She describes diffuse pain around the knee without localization. Knee examination is unremarkable: no effusion, no joint line tenderness, full range of motion, normal ligament stability. However, she also mentions right groin pain and difficulty putting on her socks. Hip examination reveals restricted internal rotation and reproduced groin and right thigh discomfort. What is the most appropriate next step?",
+      "options": {
+        "A": "Order MRI of the right knee",
+        "B": "Refer to orthopedics for knee arthroscopy evaluation",
+        "C": "Order AP pelvis and frog-leg lateral X-ray to evaluate the right hip",
+        "D": "Prescribe topical NSAIDs for presumed early knee OA"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a classic presentation of referred knee pain from hip OA. The key discriminating finding is a completely normal knee examination with restricted hip internal rotation and reproduced groin/thigh pain on hip provocation. Hip OA commonly refers pain to the anterior knee and medial thigh. The next step is imaging the hip, not the knee. Option A is incorrect: MRI of the knee is not indicated when the knee examination is entirely normal; it would likely be negative and delay the correct diagnosis. Option B is incorrect: arthroscopy without adequate imaging or a positive knee examination would be premature and potentially harmful. Option D is incorrect: treating the knee with topical NSAIDs without identifying the source would fail — the pain is hip-generated and requires hip-directed management.",
+      "difficulty": "hard",
+      "tags": ["knee-pain", "referred-pain", "hip-OA", "diagnosis", "clinical-reasoning"]
+    },
+    {
+      "id": "UTI-001",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "lessonSlug": "uti-uncomplicated-complicated-stewardship-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "Which of the following patients meets criteria for uncomplicated UTI and can be treated without urine culture?",
+      "options": {
+        "A": "A 28-year-old non-pregnant woman with 2-day history of dysuria and frequency, no fever, no prior UTI in 3 months",
+        "B": "A 55-year-old man with new-onset dysuria and urinary frequency",
+        "C": "A 32-year-old pregnant woman with urinary frequency and positive urine dipstick",
+        "D": "A 68-year-old woman with T2DM and dysuria, two UTIs in the last 6 months"
+      },
+      "correctAnswer": "A",
+      "rationale": "Uncomplicated UTI is defined as acute lower urinary tract infection in a non-pregnant, structurally normal, immunocompetent woman. The 28-year-old meets all criteria — healthy female, non-pregnant, no structural abnormalities, and short symptom duration — and can be treated empirically without culture. Option B is incorrect: UTI in a male is by definition complicated (anatomical factors, prostatitis risk) and requires urine culture. Option C is incorrect: pregnant patients always require culture-guided treatment for UTI or ASB regardless of complication status. Option D is incorrect: diabetes, female with recurrent UTI (2 episodes in 6 months), and older age classify this as complicated — culture is mandatory.",
+      "difficulty": "medium",
+      "tags": ["UTI", "uncomplicated", "diagnosis", "stewardship"]
+    },
+    {
+      "id": "UTI-002",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "lessonSlug": "uti-uncomplicated-complicated-stewardship-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 24-year-old non-pregnant woman presents with dysuria and frequency for 2 days. She has no drug allergies. Local resistance data shows E. coli TMP-SMX resistance at 28%. She has normal renal function. What is the most appropriate first-line antibiotic for uncomplicated cystitis?",
+      "options": {
+        "A": "TMP-SMX DS BID for 3 days",
+        "B": "Nitrofurantoin monohydrate/macrocrystals 100mg BID for 5 days",
+        "C": "Ciprofloxacin 250mg BID for 3 days",
+        "D": "Cephalexin 500mg QID for 7 days"
+      },
+      "correctAnswer": "B",
+      "rationale": "Nitrofurantoin monohydrate/macrocrystals (Macrobid) is the preferred first-line agent for uncomplicated cystitis: excellent E. coli coverage, minimal collateral damage to gut flora, and low resistance rates. It is the correct choice when local resistance data precludes TMP-SMX. Option A is incorrect: TMP-SMX resistance at 28% exceeds the 20% threshold above which empirical use is not recommended without culture guidance — using TMP-SMX here risks treatment failure. Option C is incorrect: ciprofloxacin (fluoroquinolone) is specifically contraindicated as first-line for uncomplicated cystitis due to high collateral damage (microbiome disruption, Clostridioides difficile risk, tendinopathy) and preservation of this class for complicated infections. Option D is incorrect: cephalexin has variable activity against common uropathogens and is not recommended as first-line; it lacks the evidence base of nitrofurantoin or TMP-SMX.",
+      "difficulty": "medium",
+      "tags": ["UTI", "antibiotic-stewardship", "first-line-treatment", "prescribing"]
+    },
+    {
+      "id": "UTI-003",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "lessonSlug": "uti-uncomplicated-complicated-stewardship-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 26-year-old woman at 14 weeks gestation presents for her first prenatal visit. Urinalysis dipstick shows nitrite positive and leukocyte esterase 2+. She has no urinary symptoms. Urine culture is sent and returns positive for >100,000 CFU/mL of E. coli. She has no drug allergies. Which is the most appropriate management?",
+      "options": {
+        "A": "Observe without treatment; recheck culture in 4 weeks",
+        "B": "Treat with nitrofurantoin 100mg BID for 5 days and reschedule follow-up in 1 month",
+        "C": "Treat with TMP-SMX DS BID for 3 days as the safest option in pregnancy",
+        "D": "Treat with ciprofloxacin 500mg BID for 3 days for the most reliable coverage"
+      },
+      "correctAnswer": "B",
+      "rationale": "Asymptomatic bacteriuria in pregnancy must always be treated — it significantly increases the risk of pyelonephritis (25-fold), preterm labor, and low birth weight. At 14 weeks (second trimester), nitrofurantoin is safe and appropriate. Option A is incorrect: observation without treatment is acceptable only in non-pregnant adults; in pregnancy, ASB treatment is mandatory regardless of symptoms. Option C is incorrect: TMP-SMX is contraindicated in the first trimester (folate antagonism, neural tube defect risk) and is not recommended near term (potential kernicterus risk) — at 14 weeks, it is generally avoided in preference for safer alternatives. Option D is incorrect: fluoroquinolones (ciprofloxacin) are contraindicated in pregnancy due to theoretical risk of fetal cartilage damage.",
+      "difficulty": "hard",
+      "tags": ["UTI", "pregnancy", "ASB", "prescribing", "prenatal-care"],
+      "populationTags": ["reproductive-health"]
+    },
+    {
+      "id": "UTI-004",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "lessonSlug": "uti-uncomplicated-complicated-stewardship-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 78-year-old woman with mild dementia is brought to clinic by her daughter, who reports that the patient has been confused for 2 days. Vital signs: T 37.1°C, BP 128/74, HR 82. Urinalysis: cloudy urine, nitrites positive, WBC 12/hpf, bacteria moderate. Urine culture is pending. She is otherwise at her functional baseline except for the cognitive changes. Which is the best next step?",
+      "options": {
+        "A": "Start nitrofurantoin 100mg BID for 5 days empirically for UTI-associated delirium",
+        "B": "Hold antibiotics, perform a systematic delirium workup, and review medications for culprits",
+        "C": "Start ciprofloxacin 500mg BID for 7 days for complicated UTI with altered mental status",
+        "D": "Send patient to the emergency department for presumed urosepsis"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has bacteriuria on urinalysis but no systemic features of UTI (no fever, no UTI-localized symptoms in a patient unable to self-report). Bacteriuria is ubiquitous in older women — over 50% of institutionalized women have positive urine cultures without UTI. Confusion in an elderly patient with positive UA is frequently attributed to UTI without adequate evaluation, which leads to antibiotic overuse and misses the true cause (medication side effect, dehydration, early pneumonia, acute metabolic change). A systematic delirium evaluation should precede treatment. Option A is incorrect: empirically treating without confirming UTI as the cause perpetuates the inappropriate UTI-delirium conflation. Option C is incorrect: ciprofloxacin is not first-line and there is insufficient evidence this represents UTI-related AMS without localizing signs. Option D is incorrect: she is hemodynamically stable without fever or tachycardia — there is no indication for emergency referral at this time.",
+      "difficulty": "hard",
+      "tags": ["UTI", "elderly", "ASB", "delirium", "stewardship"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "UTI-005",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "lessonSlug": "uti-uncomplicated-complicated-stewardship-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 31-year-old non-pregnant woman presents with 3 days of dysuria, left-sided flank pain, fever (38.8°C), and vomiting. She is unable to keep fluids down. She has no drug allergies and her creatinine is 0.9 mg/dL. Blood pressure is 102/68, heart rate 104. Which management plan is most appropriate?",
+      "options": {
+        "A": "Prescribe oral ciprofloxacin 500mg BID for 7 days and follow up in 48-72 hours",
+        "B": "Prescribe nitrofurantoin 100mg BID for 5 days and follow up in 48-72 hours",
+        "C": "Send a urine culture, prescribe antiemetics, and follow up in 24 hours",
+        "D": "Transfer to emergency department for IV antibiotics and hydration"
+      },
+      "correctAnswer": "D",
+      "rationale": "This patient has pyelonephritis with systemic illness (fever, tachycardia, hypotension, and vomiting preventing oral intake). She cannot safely be managed with oral antibiotics because she cannot absorb them. Patients with pyelonephritis who cannot tolerate oral medications, have hemodynamic instability (borderline hypotension, tachycardia), or who appear systemically ill require hospital-level care with IV antibiotics and hydration. Option A is incorrect: oral ciprofloxacin is appropriate for outpatient pyelonephritis in a stable patient who can tolerate oral intake — this patient cannot. Option B is incorrect: nitrofurantoin has poor tissue penetration and is specifically contraindicated for pyelonephritis regardless of renal function; it is only appropriate for lower UTI. Option C is incorrect: sending cultures without beginning treatment and observing without antipyretics or antibiotics is unsafe in a febrile, hemodynamically borderline patient.",
+      "difficulty": "hard",
+      "tags": ["pyelonephritis", "UTI", "disposition", "prescribing"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "UTI-006",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "lessonSlug": "uti-uncomplicated-complicated-stewardship-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 62-year-old postmenopausal woman reports her fourth uncomplicated UTI in the past 10 months. Cultures confirm E. coli sensitive to nitrofurantoin each time. She denies incontinence, structural symptoms, or incomplete bladder emptying. She drinks water regularly and voids after intercourse. Which is the most evidence-based prevention strategy for this patient?",
+      "options": {
+        "A": "Recommend daily cranberry supplements 500mg",
+        "B": "Prescribe trimethoprim-sulfamethoxazole DS daily continuously for 12 months",
+        "C": "Prescribe topical vaginal estrogen cream",
+        "D": "Refer to urology for cystoscopy to evaluate for structural abnormality"
+      },
+      "correctAnswer": "C",
+      "rationale": "In postmenopausal women, vaginal atrophy from estrogen deficiency disrupts normal vaginal flora and creates a favorable environment for uropathogens. Topical vaginal estrogen is the most evidence-based non-antibiotic strategy for recurrent UTI prevention in this population — it restores Lactobacillus colonization and significantly reduces UTI recurrence. It has minimal systemic absorption and is safe in patients who cannot use systemic hormone therapy. Option A is incorrect: cranberry supplements have consistently failed to show benefit in high-quality randomized trials for UTI prevention. Option B is incorrect: continuous antibiotic prophylaxis (TMP-SMX) is a valid second-line option for recurrent UTI but should follow a trial of non-antibiotic prevention in a patient who has not yet tried vaginal estrogen; it also carries resistance risk. Option D is incorrect: structural evaluation is appropriate after recurrent complicated UTI or failure of all prevention strategies, not as first-line management for straightforward recurrent uncomplicated UTI.",
+      "difficulty": "hard",
+      "tags": ["UTI", "recurrent-UTI", "prevention", "postmenopausal", "prescribing"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "T2DM-001",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A patient with T2DM on maximally tolerated metformin has a current A1c of 7.8%. His individualized A1c target is 7.0%. He has no ASCVD, HF, or CKD. He is 54 years old with BMI 33 and wants to avoid hypoglycemia. Which agent class is most appropriate to add?",
+      "options": {
+        "A": "Insulin glargine for most reliable A1c reduction",
+        "B": "Sulfonylurea (glipizide) for high glycemic potency and low cost",
+        "C": "DPP-4 inhibitor (sitagliptin) for weight neutrality and no hypoglycemia risk",
+        "D": "GLP-1 receptor agonist (semaglutide) for A1c reduction combined with weight loss benefit"
+      },
+      "correctAnswer": "D",
+      "rationale": "In a patient without specific cardiovascular or renal indication but with obesity (BMI 33) and preference to avoid hypoglycemia, a GLP-1 receptor agonist provides the best combination of A1c reduction (1.5-2.0%), significant weight loss benefit (3-6kg), and no intrinsic hypoglycemia risk. Option A is incorrect: insulin provides reliable glycemic control but carries significant hypoglycemia risk, requires injection and monitoring training, and causes weight gain — inappropriate as first intensification step in this profile. Option B is incorrect: sulfonylureas carry hypoglycemia risk (especially with missed meals), promote weight gain, and are associated with cardiovascular risk signals — not aligned with this patient's stated preference. Option C is incorrect: DPP-4 inhibitors are weight neutral and hypoglycemia-free but provide only 0.6-0.8% A1c reduction — insufficient for a 0.8% gap; GLP-1 RA is superior in potency and provides additional weight benefit.",
+      "difficulty": "medium",
+      "tags": ["T2DM", "intensification", "GLP-1", "prescribing"]
+    },
+    {
+      "id": "T2DM-002",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 61-year-old woman with T2DM, A1c 8.2% on metformin, is found to have new-onset HFrEF (EF 35%) on echocardiogram. She has no history of recurrent genitourinary infections. eGFR is 68. Which second agent is most appropriate to add?",
+      "options": {
+        "A": "Saxagliptin 5mg daily for low hypoglycemia risk",
+        "B": "Pioglitazone 30mg daily for insulin sensitization",
+        "C": "Dapagliflozin 10mg daily for HF benefit and glycemic control",
+        "D": "Semaglutide 0.5mg weekly for ASCVD and weight benefit"
+      },
+      "correctAnswer": "C",
+      "rationale": "SGLT-2 inhibitors (dapagliflozin, empagliflozin) are the preferred second agent when T2DM coexists with HFrEF — they reduce hospitalizations for heart failure and cardiovascular death, and this benefit is independent of glycemic status. Dapagliflozin has specific FDA approval for HFrEF regardless of diabetes status. eGFR 68 is well above the threshold for initiation. Option A is incorrect: saxagliptin is specifically contraindicated (or strongly discouraged) in HFrEF — the SAVOR-TIMI trial showed a 27% increase in hospitalization for heart failure with saxagliptin; it must be avoided. Option B is incorrect: pioglitazone causes sodium and water retention, exacerbating heart failure — it is contraindicated in HF (NYHA Class 3-4) and should be avoided across all HF stages. Option D is incorrect: semaglutide (GLP-1 RA) has demonstrated MACE reduction in ASCVD but does NOT reduce HHF — for a patient whose primary complication is HFrEF, SGLT-2i is the evidence-based first choice.",
+      "difficulty": "hard",
+      "tags": ["T2DM", "heart-failure", "SGLT-2", "HFrEF", "comorbidity-driven-selection"],
+      "populationTags": ["chronic-disease"]
+    },
+    {
+      "id": "T2DM-003",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 58-year-old man with T2DM, CKD stage 3b (eGFR 38), and a recent MI has an A1c of 8.5%. He is currently on metformin (held pending creatinine review), aspirin, atorvastatin, and carvedilol. He has no history of HF. Which agent combination is most appropriate for intensification?",
+      "options": {
+        "A": "Glipizide IR plus linagliptin",
+        "B": "Empagliflozin 10mg plus semaglutide SC weekly",
+        "C": "Glyburide plus sitagliptin (adjusted for CKD)",
+        "D": "Pioglitazone plus GLP-1 receptor agonist"
+      },
+      "correctAnswer": "B",
+      "rationale": "With established ASCVD (post-MI) and CKD stage 3b, empagliflozin provides both cardiovascular and renal protection — it reduces MACE, HHF, and slows CKD progression. It can be initiated down to eGFR ≥20 for its cardiovascular and renal indications (glycemic benefit diminishes <45). Adding semaglutide addresses ASCVD-related MACE reduction further and provides additional A1c lowering. Option A is incorrect: while linagliptin (no renal adjustment) is appropriate in CKD, glipizide carries hypoglycemia risk and offers no cardiovascular protection — this combination does not address the ASCVD or renal priorities. Option C is incorrect: glyburide is a long-acting sulfonylurea explicitly listed in the Beers Criteria and specifically contraindicated in CKD due to active metabolite accumulation causing prolonged hypoglycemia. Sitagliptin requires dose reduction at CrCl <50, not full dose. Option D is incorrect: pioglitazone causes fluid retention and may worsen cardiac status in post-MI patients; it is generally avoided in significant cardiovascular disease.",
+      "difficulty": "expert",
+      "tags": ["T2DM", "CKD", "ASCVD", "SGLT-2", "GLP-1", "comorbidity-driven-selection"],
+      "populationTags": ["chronic-disease"]
+    },
+    {
+      "id": "T2DM-004",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 47-year-old woman with T2DM has been on empagliflozin 10mg and metformin for 9 months. She presents for a pre-surgical evaluation for elective knee replacement scheduled in 5 days. Her current A1c is 6.9%, fasting glucose 118 mg/dL. Which pre-operative adjustment is most appropriate?",
+      "options": {
+        "A": "No adjustment needed; continue empagliflozin through the surgical date",
+        "B": "Stop empagliflozin 3 days before surgery and restart after she is eating",
+        "C": "Switch from empagliflozin to glipizide IR for the peri-operative period",
+        "D": "Hospitalize 2 days before surgery for IV insulin bridging"
+      },
+      "correctAnswer": "B",
+      "rationale": "SGLT-2 inhibitors must be held before major surgery — typically 3 days before for elective procedures — due to the risk of euglycemic diabetic ketoacidosis (eudka), which can occur with surgical stress, fasting, or reduced carbohydrate intake. Euglycemic DKA is characterized by ketonemia and metabolic acidosis with a normal or minimally elevated blood glucose, making it easily missed if not anticipated. SGLT-2 inhibitors should be restarted only when the patient is eating normally. Option A is incorrect: continuing SGLT-2i through surgery is a patient safety error — peri-operative fasting and surgical stress significantly increase eudka risk. Option C is incorrect: switching to glipizide introduces hypoglycemia risk in a peri-operative NPO patient; this is not appropriate bridging. Option D is incorrect: IV insulin bridging is reserved for poorly controlled diabetes (A1c >9%) or insulin-dependent patients — this patient's diabetes is well-controlled and does not require hospitalization.",
+      "difficulty": "hard",
+      "tags": ["T2DM", "SGLT-2", "euglycemic-DKA", "pre-op", "prescribing"]
+    },
+    {
+      "id": "T2DM-005",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 79-year-old woman with T2DM, moderate dementia, and a recent hip fracture (now residing in a care facility) has an A1c of 8.9%. Her care facility nurse notes she frequently misses meals. Her current medications include glipizide 10mg BID. She has had two hypoglycemic episodes in the last month. What is the most appropriate A1c target and medication change for this patient?",
+      "options": {
+        "A": "Target A1c <7.0%; add basal insulin glargine at bedtime",
+        "B": "Target A1c <8.5%; discontinue glipizide; start linagliptin 5mg daily",
+        "C": "Target A1c <8.0%; switch glipizide to glimepiride for longer action",
+        "D": "Target A1c <7.5%; continue glipizide and add weekly liraglutide injection"
+      },
+      "correctAnswer": "B",
+      "rationale": "In a frail elderly patient with cognitive impairment, missed meals, and documented hypoglycemia, the primary harm prevention goal shifts from preventing complications (long-term benefit) to preventing acute hypoglycemic events (immediate safety). ADA guidelines recommend an A1c target of up to 8.5% for frail patients with limited life expectancy and hypoglycemia risk. Glipizide must be discontinued — it is causing the hypoglycemia. Linagliptin is the appropriate replacement: it requires no renal dose adjustment, has no intrinsic hypoglycemia risk, and is available once daily. Option A is incorrect: targeting <7.0% with basal insulin adds further hypoglycemia risk in a patient who misses meals — this would be unsafe and would worsen the existing problem. Option C is incorrect: switching to glimepiride (another long-acting sulfonylurea) addresses the specific drug but not the class problem — all sulfonylureas cause hypoglycemia and are Beers Criteria in elderly patients. Option D is incorrect: weekly GLP-1 RA injection adds complexity (injection training in dementia setting) and GI side effects that worsen nutritional intake; the target <7.5% is still too tight for this patient's risk profile.",
+      "difficulty": "expert",
+      "tags": ["T2DM", "elderly", "frailty", "hypoglycemia", "A1c-target", "deprescribing"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "T2DM-006",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 52-year-old man with newly diagnosed T2DM presents with A1c 11.2%, polyuria, polydipsia, and a 14-pound weight loss over 3 months. Random glucose is 387 mg/dL. He has no ketonuria. Which initial management strategy is most appropriate?",
+      "options": {
+        "A": "Metformin 500mg BID titrated up over 4 weeks, with recheck A1c in 3 months",
+        "B": "Start metformin plus a GLP-1 receptor agonist immediately, target A1c in 6 months",
+        "C": "Initiate basal insulin (glargine) immediately; add metformin once glucose is controlled",
+        "D": "Hospitalize for IV insulin infusion protocol"
+      },
+      "correctAnswer": "C",
+      "rationale": "A newly diagnosed T2DM patient with A1c >10% and symptomatic hyperglycemia (weight loss, polyuria, polydipsia) requires rapid glucose reduction. Basal insulin is indicated at diagnosis when A1c is significantly above goal with symptomatic hyperglycemia — it allows immediate effective glycemic reduction while metformin is gradually introduced. After stabilization, de-intensification is often possible as beta-cell function recovers (glucose toxicity reverses). Option A is incorrect: starting metformin alone in a patient with A1c 11.2% would take months to show effect — symptomatic hyperglycemia requires faster intervention. Option B is incorrect: while combination therapy is guideline-supported for high A1c, GLP-1 RA onset is gradual (weeks to months titration) and does not address the urgency of the current presentation. Option D is incorrect: IV insulin is reserved for DKA/HHS or inpatient acute hyperglycemic crisis; this patient has no ketonuria, is ambulatory and hemodynamically stable — outpatient basal insulin initiation is appropriate.",
+      "difficulty": "hard",
+      "tags": ["T2DM", "new-diagnosis", "initial-management", "insulin", "high-A1c"]
+    },
+    {
+      "id": "T2DM-007",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonSlug": "t2dm-intensification-beyond-metformin-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 64-year-old woman on empagliflozin 10mg, metformin, and linagliptin presents to urgent care with nausea, vomiting, and feeling 'off' for 2 days. Vital signs: T 37.2°C, BP 118/72, HR 92. Blood glucose is 168 mg/dL. Labs: serum bicarbonate 14 mEq/L, anion gap 22. Urine ketones large. What is the most appropriate action?",
+      "options": {
+        "A": "Reassure the patient that glucose is not critically elevated; recheck glucose in 2 hours",
+        "B": "Diagnose euglycemic DKA, stop empagliflozin, and transfer to emergency department",
+        "C": "Diagnose a gastrointestinal illness and prescribe ondansetron with follow-up in 24 hours",
+        "D": "Increase insulin dosing if patient is on basal insulin, and hydrate orally"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is euglycemic DKA — a well-recognized but underdiagnosed adverse effect of SGLT-2 inhibitors. The hallmarks are: anion gap metabolic acidosis (anion gap 22, bicarb 14), large ketonuria, and glucose in the normal-to-mildly-elevated range (not the markedly elevated glucose of classic DKA). The absence of markedly elevated glucose can cause dismissal of this diagnosis. The SGLT-2 inhibitor must be stopped immediately and the patient transferred for IV fluids, insulin infusion, and electrolyte management. Option A is incorrect: attributing the presentation to a non-critical glucose ignores the anion gap acidosis and large ketonuria, which together define DKA regardless of glucose level. Option C is incorrect: attributing this to a simple GI illness misses a potentially fatal metabolic derangement — the lab pattern (high anion gap + ketonuria) demands DKA evaluation regardless of the glucose. Option D is incorrect: this patient is not on insulin; the patient does not have insulin-deficient DKA in the classical sense — the mechanism is SGLT-2-mediated ketogenesis; empirically adding insulin without DKA protocol management is inappropriate outpatient management.",
+      "difficulty": "expert",
+      "tags": ["T2DM", "euglycemic-DKA", "SGLT-2", "adverse-effects", "emergency-recognition"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "COPD-001",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 64-year-old man with a 40 pack-year smoking history presents with progressive dyspnea and morning cough productive of white sputum for 2 years. Spirometry shows post-bronchodilator FEV1/FVC of 0.62 and FEV1 72% predicted. His CAT score is 7 and he has had no exacerbations in the past year. How is this patient classified using GOLD 2024?",
+      "options": {
+        "A": "GOLD 2, Group A",
+        "B": "GOLD 2, Group B",
+        "C": "GOLD 1, Group E",
+        "D": "GOLD 2, Group E"
+      },
+      "correctAnswer": "A",
+      "rationale": "GOLD 2024 classification uses two independent axes: spirometric grade (GOLD 1-4 based on FEV1) and ABE group (symptom burden + exacerbation history). FEV1 72% predicted = GOLD Grade 2 (50-79%). CAT score 7 = fewer symptoms (threshold is CAT ≥10 for 'more symptoms'). Zero exacerbations in the past year = Group A. Therefore: GOLD 2, Group A. Option B is incorrect: Group B requires CAT ≥10 or mMRC ≥2 — this patient's CAT is 7, below the threshold. Option C is incorrect: GOLD 1 requires FEV1 ≥80%; this patient's FEV1 is 72%. Option D is incorrect: Group E requires ≥2 moderate exacerbations or ≥1 hospitalization — he had none.",
+      "difficulty": "medium",
+      "tags": ["COPD", "GOLD-staging", "classification", "spirometry"]
+    },
+    {
+      "id": "COPD-002",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 70-year-old woman with COPD is classified as GOLD 3, Group B. Her CAT score is 14. She is currently on SABA PRN only. She denies exacerbations in the past year. Blood eosinophil count is 180 cells/µL. Which inhaler regimen is most appropriate?",
+      "options": {
+        "A": "Add inhaled corticosteroid (fluticasone) monotherapy",
+        "B": "Add LAMA (tiotropium) monotherapy",
+        "C": "Add LABA (salmeterol) plus ICS (fluticasone) — LABA/ICS combination",
+        "D": "Add LAMA plus LABA combination (dual bronchodilator) as initial maintenance"
+      },
+      "correctAnswer": "D",
+      "rationale": "GOLD 2024 Group B patients with high symptom burden (CAT 14) should be initiated on LAMA+LABA dual bronchodilator as their initial maintenance regimen. The combination provides superior bronchodilation compared to either agent alone. Option A is incorrect: ICS monotherapy is not recommended in COPD — it provides minimal bronchodilation and increases pneumonia risk; ICS must always be paired with a long-acting bronchodilator. Option B is incorrect: LAMA monotherapy alone would be appropriate for mildly symptomatic Group A or B patients — with a CAT of 14 (significantly symptomatic), dual bronchodilation is warranted from the start. Option C is incorrect: LABA/ICS combination is not the preferred initial step for Group B — it adds ICS without a clear eosinophilic indication (eos 180, below the 300 threshold); LAMA+LABA is preferred as it avoids unnecessary ICS exposure.",
+      "difficulty": "hard",
+      "tags": ["COPD", "inhaler-selection", "GOLD-Group-B", "dual-bronchodilator"]
+    },
+    {
+      "id": "COPD-003",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 67-year-old man with COPD on LAMA+LABA continues to have 3 exacerbations per year despite optimal inhaler technique. Blood eosinophil count is 380 cells/µL. He currently smokes. Which modification to his regimen is most appropriate?",
+      "options": {
+        "A": "Add montelukast for eosinophilic inflammation",
+        "B": "Switch from LAMA+LABA to LABA+ICS combination",
+        "C": "Add ICS to the existing LAMA+LABA to achieve triple therapy",
+        "D": "Add roflumilast only, without ICS, due to current smoking"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient meets both criteria for ICS addition on top of dual bronchodilator: eosinophils ≥300 cells/µL AND frequent exacerbator (Group E on LAMA+LABA). Triple therapy (LAMA+LABA+ICS) is supported by the IMPACT trial, which showed mortality benefit and exacerbation reduction in this phenotype. Option A is incorrect: montelukast has no evidence base in COPD management; it is used for asthma and allergic rhinitis. Option B is incorrect: switching from LAMA+LABA to LABA+ICS would remove the LAMA, which provides important bronchodilation, and is a downgrade of bronchodilator therapy; the correct approach is to add ICS, not replace. Option D is incorrect: roflumilast is a PDE-4 inhibitor indicated for severe COPD with chronic bronchitis and frequent exacerbations, not as the next step before ICS addition; furthermore, smoking reduces ICS efficacy but does not contraindicate its use in eosinophilic frequent exacerbators.",
+      "difficulty": "hard",
+      "tags": ["COPD", "triple-therapy", "ICS", "eosinophils", "exacerbator-phenotype"]
+    },
+    {
+      "id": "COPD-004",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 63-year-old woman with known COPD presents with increased dyspnea, increased sputum production, and change in sputum color from white to yellow-green over 3 days. Vital signs are stable, SpO2 94% on room air. She meets all three Anthonisen criteria. Which antibiotic is the most appropriate first-line choice?",
+      "options": {
+        "A": "Ciprofloxacin 500mg BID for 7 days",
+        "B": "Azithromycin 500mg day 1 then 250mg for 4 days",
+        "C": "Cefdinir 300mg BID for 7 days",
+        "D": "Moxifloxacin 400mg daily for 5 days"
+      },
+      "correctAnswer": "B",
+      "rationale": "When antibiotics are indicated for COPD exacerbation (Anthonisen criteria met), first-line options are azithromycin, doxycycline, or amoxicillin-clavulanate. Azithromycin covers H. influenzae and S. pneumoniae (dominant COPD exacerbation pathogens) and has anti-inflammatory properties. Option A is incorrect: ciprofloxacin is a respiratory fluoroquinolone with poor streptococcal coverage and is not recommended for community-acquired COPD exacerbations unless Pseudomonas is suspected (typically in structural lung disease, recent hospitalization). Option C is incorrect: while cephalosporins have some coverage, cefdinir is not a guideline-recommended first-line option for COPD exacerbation. Option D is incorrect: moxifloxacin is a broad-spectrum respiratory fluoroquinolone reserved for patients who have failed first-line therapy or have high-risk features — it is not appropriate as initial empiric therapy for a stable outpatient exacerbation.",
+      "difficulty": "hard",
+      "tags": ["COPD", "exacerbation", "antibiotics", "stewardship", "Anthonisen"]
+    },
+    {
+      "id": "COPD-005",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 71-year-old man with known severe COPD presents to urgent care with worsening dyspnea. He is placed on supplemental oxygen. His SpO2 is 85% on room air. Within 20 minutes of starting O2 at 4L/min via nasal cannula, SpO2 rises to 97% and he feels better, but he becomes increasingly lethargic. ABG at this point shows pH 7.28, pCO2 68 mmHg. What was the most likely error in management?",
+      "options": {
+        "A": "Oxygen delivery was inadequate; should have used 100% non-rebreather mask",
+        "B": "Oral prednisone should have been given before oxygen",
+        "C": "Oxygen was titrated above the target range for known COPD CO2 retainers, suppressing hypoxic drive",
+        "D": "IV magnesium should have been given for bronchospasm relief"
+      },
+      "correctAnswer": "C",
+      "rationale": "In known or suspected CO2-retaining COPD patients, oxygen therapy must be titrated to a target SpO2 of 88-92%. Achieving SpO2 97% in this population is over-oxygenation: it suppresses the hypoxic respiratory drive that these patients rely on more than healthy lungs, and the resulting hypoventilation leads to worsening CO2 retention and respiratory acidosis. The pH 7.28 and pCO2 68 confirm CO2 narcosis from over-oxygenation. Option A is incorrect: increasing oxygen concentration further would worsen CO2 retention — the error was too much oxygen, not too little. Option B is incorrect: the order of interventions does not explain the CO2 rise — this is a physiologic response to hyperoxia-induced hypoventilation. Option D is incorrect: IV magnesium is used for refractory asthma, not COPD exacerbation — and does not address the physiological cause of the deterioration.",
+      "difficulty": "hard",
+      "tags": ["COPD", "oxygen-therapy", "CO2-retention", "urgent-care"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "COPD-006",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "An 82-year-old woman with COPD and mild cognitive impairment has inadequate inhaler technique with her tiotropium DPI device during clinic assessment. Spirometry shows FEV1 38% predicted. Which change is most appropriate to optimize medication delivery?",
+      "options": {
+        "A": "Switch to nebulized ipratropium BID as the most reliable delivery method",
+        "B": "Switch from DPI tiotropium to tiotropium soft-mist inhaler (Respimat) and provide technique training",
+        "C": "Add an MDI salbutamol with spacer and discontinue the LAMA",
+        "D": "Prescribe oral theophylline as systemic bronchodilator when inhalers are not feasible"
+      },
+      "correctAnswer": "B",
+      "rationale": "Soft-mist inhalers (Respimat) produce a slow-moving mist that does not require the high peak inspiratory flow that dry powder inhalers (DPIs) depend on. In elderly patients with severe COPD and poor inspiratory flow, switching from DPI to SMI maintains the same molecule (tiotropium) while dramatically improving pulmonary drug deposition. Option A is incorrect: while nebulized ipratropium is an option, it requires equipment and setup at home; switching to tiotropium SMI maintains the once-daily convenience with improved delivery. Option C is incorrect: removing the LAMA and replacing with PRN SABA would represent a downgrade in maintenance therapy — SABA does not replace long-acting maintenance bronchodilation. Option D is incorrect: theophylline has a narrow therapeutic index with significant toxicity risk, requires blood level monitoring, and has significant drug interactions — it is rarely used in modern COPD management and should not be chosen before optimizing inhaler device selection.",
+      "difficulty": "hard",
+      "tags": ["COPD", "inhaler-device", "DPI", "SMI", "older-adult"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "COPD-007",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonSlug": "copd-gold-staging-inhaler-selection-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 68-year-old man with COPD (GOLD 3, Group E) presents with a severe exacerbation treated with oral prednisone 40mg and azithromycin for 72 hours at home. He calls to report he is not improving — his dyspnea is 8/10, he cannot complete sentences, and his SpO2 via home oximeter reads 86%. His wife is with him. What is the most appropriate next step?",
+      "options": {
+        "A": "Add ipratropium MDI to his current regimen and recheck in 12 hours",
+        "B": "Increase prednisone dose to 60mg and extend antibiotic course by 3 days",
+        "C": "Direct transfer to the emergency department for potential hospitalization",
+        "D": "Schedule urgent pulmonology appointment for the following morning"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has failed outpatient exacerbation therapy at 72 hours with worsening severity: SpO2 86% (below safe outpatient threshold), inability to speak in full sentences, and clinical distress. GOLD criteria for hospital admission include failure of outpatient therapy, SpO2 <88-90% (or worsening), inability to tolerate oral medications (already taking antibiotics and steroids without response), and significant dyspnea at rest. He requires emergency evaluation for non-invasive ventilation, IV therapy, and close monitoring. Option A is incorrect: adding ipratropium MDI as a next outpatient step is dangerously inadequate for a patient with SpO2 86% and severe dyspnea at home. Option B is incorrect: escalating prednisone to 60mg prolongs treatment without benefit (REDUCE trial showed no benefit from longer courses) and does not address the severity of the current deterioration. Option D is incorrect: a 'next morning' appointment is unsafe — this patient's clinical status requires emergency evaluation now, not in 12-16 hours.",
+      "difficulty": "expert",
+      "tags": ["COPD", "exacerbation", "disposition", "hospital-admission"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "HA-001",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 44-year-old man presents with what he describes as 'the worst headache of his life,' which began suddenly while lifting weights and reached maximum intensity within 45 seconds. He is alert and oriented but uncomfortable. Vital signs are within normal limits. He has never had a headache like this before. What is the highest-priority diagnosis to exclude?",
+      "options": {
+        "A": "Exercise-induced migraine",
+        "B": "Subarachnoid hemorrhage",
+        "C": "Tension-type headache triggered by Valsalva",
+        "D": "Cluster headache first presentation"
+      },
+      "correctAnswer": "B",
+      "rationale": "A 'thunderclap' headache — reaching maximal intensity within seconds — is subarachnoid hemorrhage until proven otherwise. This is a neurological emergency. The classic sentinel headache from SAH is frequently misdiagnosed as migraine or tension-type on first presentation, leading to catastrophic delayed diagnosis. Option A is incorrect: exercise-induced migraine is a diagnosis of exclusion — it cannot be assigned before SAH has been excluded, especially with first-ever maximal-severity headache. Option C is incorrect: Valsalva-related tension headache is benign but a diagnosis of exclusion — the thunderclap onset pattern mandates emergent evaluation regardless of any proposed benign explanation. Option D is incorrect: cluster headache produces severe unilateral periorbital pain but not thunderclap onset within seconds; it also features autonomic symptoms (lacrimation, ptosis) that are absent here.",
+      "difficulty": "medium",
+      "tags": ["headache", "SAH", "thunderclap", "red-flags"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "HA-002",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 68-year-old woman presents with a new temporal headache, fatigue, and jaw pain when eating for 3 weeks. She has no fever or visual symptoms today but reports one episode of 'blurring' in her right eye 5 days ago that resolved after 30 minutes. ESR is 84 mm/hr, CRP is 4.2 mg/dL. Which action is most critical to initiate today in the primary care or urgent care setting?",
+      "options": {
+        "A": "Order temporal artery duplex ultrasound and schedule biopsy within 2 weeks",
+        "B": "Start prednisone 40-60mg daily immediately, then arrange temporal artery biopsy",
+        "C": "Refer to ophthalmology for same-day exam before starting any treatment",
+        "D": "Start ibuprofen 600mg TID while awaiting rheumatology referral"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation is classic giant cell arteritis (GCA): age >50, new temporal headache, jaw claudication, elevated ESR and CRP, and a transient visual episode consistent with amaurosis fugax — a warning sign before permanent ischemic optic neuropathy. High-dose corticosteroids must be started IMMEDIATELY when GCA is clinically suspected. Every hour of delay increases the risk of permanent blindness. Temporal artery biopsy can be performed within 2 weeks of starting steroids without significantly reducing diagnostic yield. Option A is incorrect: waiting for biopsy before treatment is dangerous — if GCA causes optic artery occlusion during the wait, vision loss is permanent and irreversible. Option C is incorrect: same-day ophthalmology is appropriate and should be arranged, but treatment must not be withheld awaiting the exam — steroids come first. Option D is incorrect: ibuprofen has no effect on vasculitis; treating GCA with NSAIDs without steroids allows the disease to progress to visual loss.",
+      "difficulty": "hard",
+      "tags": ["headache", "GCA", "temporal-arteritis", "vision-loss", "steroids"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "HA-003",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 52-year-old woman presents to urgent care with severe right-sided headache and right eye pain. On examination, you note right ptosis, right eye deviated down and out, and the right pupil is dilated and non-reactive to light. She reports this came on suddenly 2 hours ago. What is the most appropriate next step?",
+      "options": {
+        "A": "Prescribe sumatriptan 6mg SC for presumed ocular migraine with third-nerve aura",
+        "B": "Refer urgently to ophthalmology for management of right cranial nerve III palsy",
+        "C": "Call 911 for immediate transfer; this presentation is consistent with a posterior communicating artery aneurysm compressing CN III",
+        "D": "Obtain urgent CT head to evaluate for ischemic stroke involving the brainstem"
+      },
+      "correctAnswer": "C",
+      "rationale": "A painful third cranial nerve palsy with pupil involvement (dilated, non-reactive) is a posterior communicating artery (PComm) aneurysm emergency until proven otherwise. The pupillomotor fibers of CN III run on the outside of the nerve and are compressed first by an expanding aneurysm. This is a pre-rupture sentinel event — if the aneurysm ruptures, the patient will have a SAH. This is a neurosurgical emergency requiring immediate transfer. Option A is incorrect: treating as migraine is potentially fatal — a painful third nerve palsy with mydriasis is NEVER a migraine variant until PComm aneurysm has been excluded by CTA or MRA; sumatriptan is contraindicated and irrelevant here. Option B is incorrect: routine ophthalmology referral is inadequate for a suspected ruptured or expanding intracranial aneurysm — neurosurgical evaluation is needed immediately. Option D is incorrect: while CT head is the first step in the emergency department workup, ischemic brainstem stroke does not cause a painful mydriatic CN III palsy — ischemic CN III palsy (from microvascular disease in diabetes or hypertension) spares the pupil; pupil involvement points to compression, not ischemia.",
+      "difficulty": "expert",
+      "tags": ["headache", "CN3-palsy", "aneurysm", "PComm", "neurosurgical-emergency"],
+      "dispositionTag": "immediate-escalation"
+    },
+    {
+      "id": "HA-004",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 35-year-old man presents with episodes of severe right periorbital pain lasting 30-45 minutes, occurring 4-5 times per day for the past 3 weeks. He reports right-sided lacrimation and nasal congestion during episodes and says he is 'extremely agitated' during attacks. His wife notes he paces during the episodes. He reports the attacks began suddenly 3 weeks ago and he has been headache-free for several years. Which primary headache disorder best fits this presentation?",
+      "options": {
+        "A": "Migraine with autonomic features",
+        "B": "Trigeminal neuralgia",
+        "C": "Cluster headache",
+        "D": "Hemicrania continua"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cluster headache is characterized by: unilateral severe periorbital pain lasting 15-180 minutes, occurring 1-8 times per day in cluster periods (weeks to months), ipsilateral cranial autonomic features (lacrimation, rhinorrhea, ptosis, miosis), and the pathognomonic agitation and restlessness during attacks. The cyclical pattern (cluster period) and the agitation distinguish this from migraine. Option A is incorrect: migraine autonomic features (migraine with cranial autonomic symptoms) also occur but migraine patients characteristically prefer to lie still in a dark quiet room — the agitation/pacing is pathognomonic for cluster headache. Option B is incorrect: trigeminal neuralgia presents with brief (seconds) electric shock-like facial pain triggered by light touch, chewing, or cold — not autonomic features, not periorbital, not minutes-long episodes. Option D is incorrect: hemicrania continua is a continuous unilateral headache with fluctuating severity and cranial autonomic features that is indomethacin-responsive — it lacks the episodic cluster pattern and does not remit spontaneously.",
+      "difficulty": "hard",
+      "tags": ["headache", "cluster-headache", "diagnosis", "primary-headache"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "HA-005",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 41-year-old man with confirmed cluster headache presents at the start of a new cluster period. He is requesting his usual sumatriptan 50mg oral tablets. What is the most appropriate acute treatment for a cluster headache attack?",
+      "options": {
+        "A": "Sumatriptan 50mg oral tablets as prescribed",
+        "B": "High-flow oxygen at 100% via non-rebreather mask for 15 minutes, AND sumatriptan 6mg subcutaneous",
+        "C": "Verapamil 240mg daily for prophylaxis; no acute rescue needed once preventive is on board",
+        "D": "Ergotamine 2mg sublingual at onset of each attack"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cluster headache acute treatment requires fast-acting routes — the pain peaks rapidly in minutes, making oral medications ineffective (they absorb too slowly to achieve therapeutic levels before the attack peaks). First-line acute cluster treatment: high-flow oxygen 100% via non-rebreather mask at 12-15 L/min for 15 minutes (highly effective, no systemic side effects) AND/OR subcutaneous sumatriptan 6mg (fastest onset of all triptan formulations, most evidence). Option A is incorrect: oral sumatriptan absorbs too slowly for cluster headache — by the time it reaches therapeutic levels, the attack may be over; it is specifically not recommended as monotherapy for acute cluster attacks. Option C is incorrect: verapamil is the preventive (prophylactic) treatment for cluster — it does not treat acute attacks; patients still need effective acute rescue therapy. Option D is incorrect: ergotamines are largely obsolete, have significant CV contraindications, and are not first-line cluster treatment per current guidelines.",
+      "difficulty": "hard",
+      "tags": ["headache", "cluster-headache", "acute-treatment", "oxygen", "sumatriptan"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "HA-006",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 38-year-old woman with a 10-year history of migraine presents reporting her headaches have become daily over the past 4 months. She uses sumatriptan 6 days per week to manage. She denies any recent head trauma or new neurological symptoms. On review, her current medication list shows sumatriptan, ibuprofen 800mg BID, and caffeine tablets daily. What is the most likely diagnosis and the cornerstone of management?",
+      "options": {
+        "A": "Chronic migraine requiring biologic (CGRP antibody) initiation; continue current acute medications",
+        "B": "Medication overuse headache (MOH); the cornerstone of management is analgesic withdrawal",
+        "C": "New daily persistent headache; order MRI brain with and without contrast",
+        "D": "Tension-type headache transformation; switch ibuprofen to naproxen sodium"
+      },
+      "correctAnswer": "B",
+      "rationale": "Medication overuse headache (MOH) develops when headache-specific medications (triptans ≥10 days/month) or analgesics/NSAIDs (≥15 days/month) are used regularly — causing rebound headache and a transformation to daily or near-daily headache. Sumatriptan use 6 days per week far exceeds the threshold. The cornerstone of management is discontinuing the overused medication(s). Patients must be counseled that withdrawal will transiently worsen headache before improving. Option A is incorrect: CGRP monoclonal antibodies are appropriate for episodic or chronic migraine prevention, but they are not the cornerstone of MOH management — withdrawal of overused medication is; adding preventive therapy without withdrawal will not resolve MOH. Option C is incorrect: new daily persistent headache is a distinct entity with headache continuous from onset (not progressive transformation from episodic); neuroimaging is not required when the presentation fits MOH. Option D is incorrect: switching NSAIDs does not address the fundamental problem — the frequency of analgesic use, not the specific agent, is causing the MOH.",
+      "difficulty": "hard",
+      "tags": ["headache", "MOH", "medication-overuse", "triptan", "management"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "HA-007",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonSlug": "headache-differential-red-flags-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 58-year-old man with HIV (CD4 count 42) presents with 2 weeks of progressive headache, mild confusion, and low-grade fever. His temperature is 38.1°C. There is no focal neurological deficit and no papilledema. Which is the most appropriate initial diagnostic and management sequence?",
+      "options": {
+        "A": "Perform lumbar puncture immediately; send CSF for bacterial culture, cryptococcal antigen, and cell count",
+        "B": "Obtain CT head first to exclude mass lesion, then proceed with LP; send cryptococcal antigen serum simultaneously",
+        "C": "Start empiric ceftriaxone for bacterial meningitis and delay LP for 72 hours",
+        "D": "Start empiric fluconazole for cryptococcal meningitis based on CD4 count and symptom pattern"
+      },
+      "correctAnswer": "B",
+      "rationale": "In an immunocompromised patient with CD4 <50, cryptococcal meningitis is the most likely diagnosis and must be evaluated with LP and CSF cryptococcal antigen. However, with altered mentation in an immunocompromised host, a mass lesion (CNS toxoplasmosis, lymphoma) must be excluded by CT head before LP to rule out herniation risk. CT first, then LP is the correct sequence, with serum cryptococcal antigen sent simultaneously (highly sensitive even before LP). Option A is incorrect: LP before CT is unsafe in an immunocompromised patient with cognitive changes — toxoplasma or CNS lymphoma can cause elevated ICP and herniation risk even without papilledema. Option C is incorrect: empiric ceftriaxone without LP is appropriate for bacterial meningitis in classic presentations, but this patient's subacute course, low CD4, and HIV status makes cryptococcal meningitis the priority; fluconazole would be the empiric choice, not ceftriaxone alone, and LP is essential for diagnosis and to measure opening pressure. Option D is incorrect: starting fluconazole without LP misses the opening pressure measurement and culture, which are critical in cryptococcal meningitis — amphotericin B plus flucytosine is first-line induction therapy (not fluconazole) for CNS cryptococcosis; empiric treatment without LP is incomplete management.",
+      "difficulty": "expert",
+      "tags": ["headache", "immunocompromised", "cryptococcal-meningitis", "HIV", "workup-sequence"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "SYN-001",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonSlug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 17-year-old male basketball player collapsed during a game and briefly lost consciousness. Bystanders performed CPR until he regained consciousness spontaneously 45 seconds later. He felt dizzy and weak for 10 minutes after. He denies prodrome before collapse. His father died suddenly at age 42 from 'a heart problem.' ECG shows increased QRS voltage and deep Q waves in lateral leads. What is the most appropriate next step?",
+      "options": {
+        "A": "Reassure the family that vasovagal syncope is common in adolescents; follow up in 2 weeks",
+        "B": "Obtain cardiac MRI and refer to cardiology urgently; restrict from sports pending evaluation",
+        "C": "Prescribe beta-blockers empirically and allow return to sports with 48-hour monitoring",
+        "D": "Perform tilt-table testing at next available appointment to confirm vasovagal etiology"
+      },
+      "correctAnswer": "B",
+      "rationale": "Exertional syncope in a young athlete with a family history of sudden cardiac death and ECG findings consistent with hypertrophic cardiomyopathy (increased QRS voltage, deep Q waves lateral leads) is a cardiac emergency until proven otherwise. HOCM is the leading cause of sudden cardiac death in young athletes in the US. He must be immediately restricted from competitive sports and evaluated urgently with echocardiogram and cardiology referral. Option A is incorrect: reassurance for vasovagal is appropriate for classic presentations — exertional syncope without prodrome in a young athlete with a concerning family history and ECG cannot be attributed to vasovagal without cardiac workup. Option C is incorrect: prescribing beta-blockers without a confirmed diagnosis and allowing return to sports before workup is dangerous — premature return to exertion risks sudden cardiac death. Option D is incorrect: tilt-table testing evaluates vasovagal or orthostatic syncope — it has no diagnostic role for suspected HOCM and is not the appropriate study here.",
+      "difficulty": "hard",
+      "tags": ["syncope", "exertional-syncope", "HOCM", "young-athlete", "cardiac-risk"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "SYN-002",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonSlug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 55-year-old man presents after a witnessed syncope episode while gardening. His wife reports he looked pale before the event, then went limp for about 20 seconds and recovered fully within 2 minutes. He reports he had been standing in the heat for an hour and had not drunk water. Current ECG is normal. BP sitting 132/82, standing 130/80. Past medical history: hypertension on amlodipine. Which diagnosis is most consistent with this presentation?",
+      "options": {
+        "A": "Cardiac arrhythmia requiring urgent Holter monitoring",
+        "B": "Vasovagal syncope with situational trigger",
+        "C": "Orthostatic hypotension secondary to amlodipine",
+        "D": "Seizure with tonic-clonic activity misidentified as syncope"
+      },
+      "correctAnswer": "B",
+      "rationale": "Vasovagal syncope has three key features met here: (1) prodrome (pallor, brief warning), (2) situational trigger (prolonged standing in heat, dehydration), and (3) brief LOC with rapid complete recovery. Normal ECG and normal orthostatic vitals remove orthostatic hypotension and cardiac arrhythmia from consideration. Option A is incorrect: cardiac arrhythmia-related syncope typically has no prodrome, occurs without clear trigger, and may occur while seated or supine — the classic vasovagal pattern with a clear trigger and prodrome argues strongly against arrhythmia; however, a normal ECG in the office does not exclude all arrhythmias. Option C is incorrect: orthostatic hypotension requires a ≥20 mmHg systolic drop on standing — here orthostatic vitals are normal; furthermore, amlodipine causes peripheral vasodilation but is not a major orthostatic agent. Option D is incorrect: seizure should be suspected with prolonged loss of consciousness, post-ictal confusion, lateral tongue biting, or incontinence — none of these are present; the 20-second LOC with immediate recovery is more consistent with syncope.",
+      "difficulty": "medium",
+      "tags": ["syncope", "vasovagal", "diagnosis", "differential"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "SYN-003",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonSlug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 62-year-old woman presents after a syncope episode. Her ECG shows a QTc of 508 ms. She recently started moxifloxacin and haloperidol. She has no structural heart disease on prior echocardiogram. Which is the most appropriate next step?",
+      "options": {
+        "A": "Continue current medications; QTc of 508 ms is acceptable in elderly women",
+        "B": "Refer to cardiology at next available appointment for outpatient QTc management",
+        "C": "Discontinue QT-prolonging medications and transfer to ED for monitoring and cardiac event telemetry",
+        "D": "Prescribe potassium supplementation and recheck QTc in 1 week"
+      },
+      "correctAnswer": "C",
+      "rationale": "QTc 508 ms is critically prolonged (normal female <470 ms) and, combined with syncope, indicates high risk for torsades de pointes (TdP) — a potentially fatal polymorphic ventricular tachycardia. Moxifloxacin and haloperidol are both QT-prolonging agents, and their combination significantly increases TdP risk. This is not an outpatient situation — the patient requires QT-prolonging drug discontinuation, telemetry monitoring, electrolyte optimization, and emergent evaluation. Option A is incorrect: QTc 508 ms with syncope is not acceptable in any age group — TdP risk at this QTc is substantial, particularly with syncope already occurring. Option B is incorrect: outpatient next-available cardiology appointment is inappropriate for a patient with syncope and QTc 508 ms — this requires emergency-level monitoring. Option D is incorrect: while electrolyte correction is important in QT management, it is not sufficient without discontinuing the causative agents and monitoring — hypomagnesemia can be a contributing factor but this patient's primary issue is drug-induced QT prolongation.",
+      "difficulty": "hard",
+      "tags": ["syncope", "QTc", "drug-induced", "torsades", "ECG"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "SYN-004",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonSlug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 28-year-old woman presents after a witnessed event during which she suddenly went limp while sitting at her desk, eyes rolling back briefly. A coworker reports she made rhythmic leg movements for about 8 seconds and then was confused for 15 minutes afterward before returning to her baseline. She has no prior history of seizure or syncope. Which feature most strongly supports seizure over syncope in this presentation?",
+      "options": {
+        "A": "Brief rhythmic movements lasting 8 seconds during the LOC",
+        "B": "Eyes rolling back during the event",
+        "C": "Sudden onset without warning while seated",
+        "D": "Confusion lasting 15 minutes after regaining consciousness"
+      },
+      "correctAnswer": "D",
+      "rationale": "Post-ictal confusion lasting 15 minutes after regaining consciousness is the most discriminating feature for seizure versus syncope. Syncope-related anoxic myoclonus (brief jerking during oxygen deprivation) is common and does NOT indicate epilepsy — it resolves when consciousness returns. Confusion after syncope is brief (<1 minute). Prolonged post-ictal confusion (minutes to tens of minutes) strongly suggests a generalized seizure. Option A is incorrect: brief rhythmic movements during LOC are a normal manifestation of anoxic myoclonus in syncope — they should not be interpreted as convulsive seizure activity when the duration is very short (8 seconds); however, prolonged tonic-clonic activity >1 minute is more concerning. Option B is incorrect: eye deviation or rolling can occur in both syncope and seizure. Option C is incorrect: sudden onset without warning while seated is a feature of cardiac syncope but is non-specific — arrhythmia-related syncope also lacks prodrome; it does not distinguish seizure from cardiac syncope.",
+      "difficulty": "hard",
+      "tags": ["syncope", "seizure-vs-syncope", "post-ictal", "differential"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "SYN-005",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonSlug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "An 81-year-old man with hypertension and BPH presents after two syncopal episodes in the past 3 months. Both occurred after meals. BP sitting: 148/84, standing at 1 minute: 118/68, standing at 3 minutes: 104/62. Current medications: tamsulosin 0.4mg daily, metoprolol 50mg BID, amlodipine 10mg daily. What is the most appropriate intervention?",
+      "options": {
+        "A": "Increase metoprolol to reduce heart rate and prevent compensatory tachycardia",
+        "B": "Start fludrocortisone 0.1mg daily immediately for all-cause orthostatic syncope",
+        "C": "Discontinue tamsulosin or reduce antihypertensive regimen; counsel on meal-related hypotension",
+        "D": "Refer to cardiology for loop recorder implantation to monitor for arrhythmia"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has progressive orthostatic hypotension (BP drops 44 mmHg systolic at 3 minutes standing) that is worse postprandially — consistent with medication-induced orthostasis from the combination of tamsulosin (alpha-blocker) plus amlodipine (calcium channel blocker) plus metoprolol (beta-blocker reduces compensatory tachycardia). The first intervention for drug-induced orthostatic hypotension is deprescribing or reducing the causative agents, not adding another medication. Option A is incorrect: increasing metoprolol would worsen orthostatic hypotension by further blunting the compensatory tachycardia that partially maintains blood pressure on standing. Option B is incorrect: fludrocortisone may be appropriate for refractory neurogenic orthostasis, but adding a mineralocorticoid before addressing the drug burden would expose this patient to sodium retention, hypokalemia, and potentially worsening hypertension. Option D is incorrect: cardiac arrhythmia is not the likely mechanism here — the orthostatic BP response clearly identifies the etiology; loop recorder implantation would be appropriate if arrhythmia were the primary concern after medication optimization fails.",
+      "difficulty": "hard",
+      "tags": ["syncope", "orthostatic", "polypharmacy", "older-adult", "deprescribing"],
+      "populationTags": ["older-adult"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "SYN-006",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonSlug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 74-year-old woman with HFrEF (EF 30%) and T2DM presents after an episode of loss of consciousness while sitting. She denies prodrome. ECG shows sinus rhythm with LBBB. Troponin is negative. BP 110/70. Which syncope evaluation is most appropriate for this patient?",
+      "options": {
+        "A": "Diagnose vasovagal syncope based on normal troponin and discharge with follow-up in 2 weeks",
+        "B": "Transfer to ED for hospital-level monitoring, cardiology evaluation, and advanced arrhythmia workup",
+        "C": "Schedule 48-hour Holter monitor as outpatient and follow up in 3-4 days",
+        "D": "Perform tilt-table test to rule out vasovagal mechanism before cardiac workup"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient meets multiple high-risk syncope criteria: structural heart disease (HFrEF with EF 30%), abnormal ECG (LBBB — highest-risk ECG finding in syncope), and syncope without prodrome while seated. The San Francisco Syncope Rule identifies HF history alone as a high-risk criterion. These factors together predict high 30-day serious outcome risk (cardiac arrhythmia, sudden death). This patient requires hospital admission for telemetry monitoring and cardiology evaluation, not outpatient workup. Option A is incorrect: negative troponin does not reassure against arrhythmic syncope — troponin excludes ACS, not VT or AV block. Option C is incorrect: outpatient Holter monitoring is appropriate for low-risk or intermediate-risk patients — this patient with HFrEF and LBBB-associated syncope is high-risk and cannot safely wait days for monitoring. Option D is incorrect: tilt-table testing evaluates vasovagal/orthostatic mechanisms — it has no diagnostic utility in a patient with structural heart disease and high-risk ECG findings where arrhythmia is the priority.",
+      "difficulty": "expert",
+      "tags": ["syncope", "high-risk", "structural-heart-disease", "HFrEF", "LBBB", "disposition"],
+      "dispositionTag": "ED-referral"
+    },
+    {
+      "id": "HTN-001",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonSlug": "hypertension-red-flags-referral-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 54-year-old man presents to urgent care with BP 196/114, headache, and anxiety. He is alert and oriented. Neurological exam is normal. Fundoscopy shows no papilledema. He has been non-adherent to his medications. His ECG is normal and creatinine is at his baseline. What is the most appropriate management?",
+      "options": {
+        "A": "Transfer to the emergency department for IV antihypertensive infusion",
+        "B": "Administer sublingual nifedipine 10mg for rapid BP reduction",
+        "C": "Have him rest in a quiet room for 20 minutes, restart his oral medications, and arrange 24-48h follow-up",
+        "D": "Start IV labetalol in clinic to bring BP below 160/100 within 1 hour"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is hypertensive urgency — severely elevated BP without acute end-organ damage (normal neuro exam, no papilledema, normal ECG, baseline creatinine). Hypertensive urgency does not require emergency hospitalization or IV therapy. The correct management is: 20-30 minutes of rest (often drops BP significantly), restart or adjust oral antihypertensives, and arrange close 24-48h follow-up. Option A is incorrect: ED transfer is appropriate for hypertensive emergency (end-organ damage), not urgency. Option B is incorrect: sublingual nifedipine is specifically contraindicated — it causes rapid, unpredictable, uncontrolled BP reduction that can precipitate ischemic stroke, MI, and death; this is a recognized patient safety error. Option D is incorrect: IV labetalol is reserved for hypertensive emergency with target organ damage; administering IV antihypertensives in clinic for urgency without monitoring capability is inappropriate and potentially dangerous.",
+      "difficulty": "hard",
+      "tags": ["hypertension", "urgency-vs-emergency", "management", "disposition"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "HTN-002",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonSlug": "hypertension-red-flags-referral-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 59-year-old woman presents with sudden onset severe chest and back pain radiating to the scapulae. BP is 188/104 in the right arm and 148/80 in the left arm. Heart rate is 108. She appears diaphoretic. Chest X-ray shows widened mediastinum. What is the most critical immediate step?",
+      "options": {
+        "A": "Administer aspirin 325mg and call cardiology for STEMI protocol activation",
+        "B": "Start IV esmolol or labetalol to reduce HR and BP; call 911 for immediate transfer",
+        "C": "Start IV nitroprusside to rapidly reduce BP below 120/80",
+        "D": "Perform two-view chest X-ray and await radiologist confirmation before initiating treatment"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is acute aortic dissection: tearing scapular pain, inter-arm BP differential >40 mmHg systolic, widened mediastinum on CXR, and tachycardia. The immediate treatment goal is to reduce aortic wall shear stress: decrease HR to <60 bpm first, then reduce SBP to 100-120 mmHg. A beta-blocker (esmolol or labetalol) must be started FIRST — vasodilators alone cause reflex tachycardia, which INCREASES aortic wall shear force and can propagate the dissection. Immediate surgical consultation and transfer are life-saving. Option A is incorrect: aspirin is for ACS — aortic dissection is not a thrombotic event and aspirin could worsen bleeding into the dissection; activating STEMI protocol delays the correct treatment. Option C is incorrect: nitroprusside (a vasodilator) alone causes reflex tachycardia — it should only be used AFTER the heart rate has been adequately reduced with a beta-blocker; starting nitroprusside alone worsens dissection. Option D is incorrect: treatment must not be delayed for radiologist confirmation when the clinical diagnosis is clear — await the call to 911 and begin beta-blocker therapy simultaneously.",
+      "difficulty": "expert",
+      "tags": ["hypertension", "aortic-dissection", "emergency", "treatment-sequence"],
+      "dispositionTag": "immediate-escalation"
+    },
+    {
+      "id": "HTN-003",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonSlug": "hypertension-red-flags-referral-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 24-year-old woman at 36 weeks gestation is brought to a clinic visit by her partner. BP is 176/110 (confirmed twice). She reports a severe frontal headache and visual changes ('sparkles') for 3 hours. She has 3+ proteinuria. She denies contractions. What is the most appropriate action?",
+      "options": {
+        "A": "Start oral labetalol and admit for fetal monitoring; check labs in the morning",
+        "B": "Administer magnesium sulfate, call 911 for immediate hospital transfer, and initiate antihypertensive treatment",
+        "C": "Administer sublingual nifedipine for rapid BP reduction and observe for 2 hours in clinic",
+        "D": "Consult nephrology for presumed pregnancy-associated hypertension with proteinuria"
+      },
+      "correctAnswer": "B",
+      "rationale": "Severe-range BP (≥160/110) with headache and visual symptoms in a woman at 36 weeks gestation is preeclampsia with severe features — approaching eclampsia. Magnesium sulfate for seizure prophylaxis must be given IMMEDIATELY (not waiting for a seizure to occur). Antihypertensive treatment (IV labetalol or hydralazine) must be initiated, and the patient requires immediate transfer to an obstetric facility — delivery is the definitive treatment. Option A is incorrect: oral labetalol alone in a clinic without magnesium sulfate is dangerously inadequate for BP 176/110 with prodromal neurological symptoms; the patient is on the verge of eclampsia. Option C is incorrect: sublingual nifedipine is contraindicated in general and even more dangerous in pregnancy; a 2-hour observation in clinic is unsafe for a patient on the verge of seizure. Option D is incorrect: nephrology consultation is not the priority — this is an obstetric emergency requiring immediate obstetric hospital transfer, not ambulatory specialist consultation.",
+      "difficulty": "expert",
+      "tags": ["hypertension", "eclampsia", "preeclampsia", "pregnancy", "magnesium"],
+      "dispositionTag": "immediate-escalation"
+    },
+    {
+      "id": "HTN-004",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonSlug": "hypertension-red-flags-referral-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 72-year-old man with a 20-year history of hypertension presents with BP 204/118 after 3 days without his medications. He had accidentally run out. He is alert, oriented, and has no headache, chest pain, or vision change. Creatinine is at his baseline. Which is the most appropriate initial management approach?",
+      "options": {
+        "A": "Administer IV hydralazine 10mg to rapidly lower BP within 1 hour",
+        "B": "Restart his prescribed oral antihypertensives and follow up in 24-48 hours",
+        "C": "Admit to telemetry for 24-hour monitoring given BP >200 systolic",
+        "D": "Start oral nifedipine extended-release 30mg and decrease dose of his beta-blocker"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is hypertensive urgency in a chronically hypertensive patient who ran out of his medications — the BP is elevated due to abrupt discontinuation, not a new problem. He has no end-organ damage. The correct approach is to restart his prescribed medications, observe him for 20-30 minutes to confirm stability, and arrange 24-48h follow-up. In chronic hypertension, the brain's autoregulatory curve is shifted — rapid lowering to normal BP causes cerebral ischemia in a patient whose brain has adapted to higher pressure. Option A is incorrect: IV hydralazine is reserved for hypertensive emergency with end-organ damage; administering IV medications for urgency risks excessive rapid lowering and is inappropriate for outpatient management. Option C is incorrect: hospital admission for telemetry is not indicated without end-organ damage; BP elevation alone (urgency) does not require inpatient management. Option D is incorrect: changing his medication regimen during an acute event without knowing his stable regimen is inappropriate — the correct action is to restart what was working, not empirically restructure therapy.",
+      "difficulty": "hard",
+      "tags": ["hypertension", "urgency", "medication-nonadherence", "older-adult", "management"],
+      "populationTags": ["older-adult"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "HTN-005",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonSlug": "hypertension-red-flags-referral-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 51-year-old woman with BP on three maximal-dose medications (lisinopril 40mg, amlodipine 10mg, and hydrochlorothiazide 25mg) still has BP averaging 158/96 at home. She is adherent to medications. She denies symptoms of secondary hypertension. Serum potassium is 3.4 mEq/L, sodium normal, creatinine normal. Which is the most appropriate fourth agent?",
+      "options": {
+        "A": "Metoprolol succinate 25mg daily",
+        "B": "Clonidine 0.1mg BID",
+        "C": "Spironolactone 25-50mg daily",
+        "D": "Hydralazine 25mg TID"
+      },
+      "correctAnswer": "C",
+      "rationale": "Spironolactone is the evidence-based fourth agent for resistant hypertension — the PATHWAY-2 trial demonstrated its superiority over other agents as add-on therapy. Hypokalemia (K+ 3.4) in a patient on a thiazide diuretic suggests primary hyperaldosteronism, which is highly prevalent in resistant hypertension. Spironolactone directly antagonizes aldosterone, addresses the likely underlying aldosteronism, and raises potassium. Option A is incorrect: adding a second beta-blocker (metoprolol) to a patient already on ACEi, CCB, and thiazide has limited evidence as fourth agent; beta-blockers are less effective for resistant hypertension than spironolactone. Option B is incorrect: clonidine is a centrally acting alpha-agonist with significant side effects (sedation, rebound hypertension on discontinuation) and is not recommended as fourth-line agent in modern resistant HTN management. Option D is incorrect: hydralazine causes reflex tachycardia and requires TID dosing, making it difficult to use without a concurrent beta-blocker; it is not a preferred fourth agent for resistant hypertension.",
+      "difficulty": "hard",
+      "tags": ["hypertension", "resistant-HTN", "spironolactone", "prescribing", "fourth-line"]
+    },
+    {
+      "id": "HTN-006",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonSlug": "hypertension-red-flags-referral-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "An 84-year-old woman has been on amlodipine 10mg, lisinopril 20mg, and furosemide 20mg. Her home BPs average 142/78. At today's visit, BP sitting is 136/72; on standing, BP drops to 108/64 and she reports lightheadedness. She had a fall 3 months ago. How should her antihypertensive regimen be modified?",
+      "options": {
+        "A": "Continue current regimen; target BP <130/80 per ACC/AHA guidelines for all adults",
+        "B": "Add midodrine 5mg BID to address orthostatic hypotension",
+        "C": "Reduce or discontinue one antihypertensive agent, prioritizing removal of furosemide if no clear volume overload indication",
+        "D": "Increase furosemide to 40mg to reduce volume and peripheral vascular resistance"
+      },
+      "correctAnswer": "C",
+      "rationale": "This 84-year-old has clinical orthostatic hypotension (systolic drop >20 mmHg) with a history of falls — antihypertensive-induced orthostasis is her primary fall risk. Her sitting BP of 136/72 is reasonable for an 84-year-old frail patient; ACC/AHA targets of <130/80 apply to healthy non-frail older adults but should be relaxed in frail patients with orthostasis. Furosemide should be deprescribed first if there is no active heart failure or volume overload indication — it causes volume depletion that worsens orthostasis. Option A is incorrect: rigidly applying <130/80 to a frail 84-year-old with orthostatic hypotension and a fall history is likely to cause more harm from falls and cerebral hypoperfusion than from slightly higher BP. Option B is incorrect: midodrine raises BP via vasoconstriction but may worsen supine hypertension in elderly patients — the correct first step is to reduce the antihypertensive burden, not to add a vasoconstrictor. Option D is incorrect: increasing furosemide would worsen volume depletion and dramatically worsen orthostatic hypotension — this is the opposite of what is needed.",
+      "difficulty": "hard",
+      "tags": ["hypertension", "older-adult", "orthostasis", "fall-risk", "deprescribing"],
+      "populationTags": ["older-adult"],
+      "dispositionTag": "outpatient"
+    },
+    {
+      "id": "CA-001",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonSlug": "cancer-red-flags-primary-care-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 53-year-old man presents with 4 weeks of difficulty swallowing solids that has now progressed to liquids. He has lost 11 pounds in the past 6 weeks without trying. He has a 25 pack-year smoking history and drinks 2-3 glasses of wine nightly. He was seen 6 months ago and had a 'normal' upper endoscopy for GERD. What is the most appropriate next step?",
+      "options": {
+        "A": "Increase his PPI to twice daily and trial for 8 weeks before further workup",
+        "B": "Order barium swallow to characterize swallowing dysfunction before endoscopy",
+        "C": "Refer urgently for upper endoscopy (EGD) within 2 weeks",
+        "D": "Reassure and recheck BMI in 4 weeks given recent normal endoscopy"
+      },
+      "correctAnswer": "C",
+      "rationale": "Progressive dysphagia (solids to liquids), unintentional weight loss, and multiple risk factors (smoking, alcohol) are esophageal cancer alarm features requiring urgent endoscopic evaluation, not empiric trial of PPI or reassurance. A 'normal' endoscopy 6 months ago does not protect against interval malignancy, especially with new obstructive symptoms. Upper endoscopy (EGD) is the definitive test for esophageal cancer and should be arranged within 2 weeks per NICE NG12 guidelines. Option A is incorrect: empiric PPI for progressive dysphagia with weight loss represents dangerous delay — GERD does not progress to dysphagia with liquids within weeks; this pattern is cancer until proven otherwise. Option B is incorrect: barium swallow is an indirect imaging test and would delay the definitive diagnosis achievable by EGD with biopsy; it is not the appropriate first step for a mass lesion workup. Option D is incorrect: reassurance based on a prior normal endoscopy is clinically negligent in the setting of new alarm symptoms; adenocarcinoma can develop rapidly in Barrett's esophagus.",
+      "difficulty": "hard",
+      "tags": ["cancer-red-flags", "esophageal-cancer", "dysphagia", "urgent-referral"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "CA-002",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonSlug": "cancer-red-flags-primary-care-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 58-year-old man presents for a well visit. He mentions he noticed blood in his urine 'once, about 10 days ago' — described as pink-tinged voiding. It has not recurred. He denies pain, UTI symptoms, or dysuria. He is a 35 pack-year smoker. Current urinalysis today is completely normal. What is the most appropriate management?",
+      "options": {
+        "A": "Reassure and monitor; a single episode with a normal UA today is likely benign",
+        "B": "Treat for presumed UTI with nitrofurantoin and recheck UA in 2 weeks",
+        "C": "Order CT urogram and refer to urology for cystoscopy",
+        "D": "Repeat UA in 4 weeks; if blood persists, refer to urology"
+      },
+      "correctAnswer": "C",
+      "rationale": "A single episode of gross (visible) hematuria in a male ≥35 with a significant smoking history mandates full urological evaluation — CT urogram AND cystoscopy — regardless of a current normal UA. Bladder cancer and renal cell carcinoma are the primary concerns. Urothelial bleeding is intermittent, and a normal UA on the day of visit does not exclude urological malignancy. Delay for 'watchful waiting' significantly worsens outcomes in bladder cancer, which is often diagnosed late. Option A is incorrect: reassurance based on a single episode and a normal follow-up UA is an unacceptable miss for potentially curable bladder cancer — intermittent bleeding is a feature of this malignancy, not evidence of its absence. Option B is incorrect: there are no UTI symptoms; treating without UA positivity for infection is inappropriate stewardship and delays cancer diagnosis. Option D is incorrect: waiting 4 weeks before referral introduces dangerous delay in a patient with a smoking history and a cancer-risk hematuria presentation; every episode of gross hematuria in this demographic needs full workup.",
+      "difficulty": "hard",
+      "tags": ["cancer-red-flags", "hematuria", "bladder-cancer", "urgent-referral"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "CA-003",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonSlug": "cancer-red-flags-primary-care-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 62-year-old woman presents with 3 weeks of drenching night sweats, a 15-pound weight loss, and fatigue. She notices a firm non-tender lump above her left collarbone. She denies fever. CBC shows mild normocytic anemia, LDH 340 U/L (elevated). What is the most appropriate next step?",
+      "options": {
+        "A": "Order an infectious disease workup for mycobacterium and start empiric antifungals",
+        "B": "Reassure and recheck CBC in 4 weeks; B-symptoms alone are non-specific",
+        "C": "Order urgent CT of chest/abdomen/pelvis with contrast and refer to hematology-oncology",
+        "D": "Aspirate the supraclavicular lymph node for culture and sensitivity"
+      },
+      "correctAnswer": "C",
+      "rationale": "B-symptoms (drenching night sweats, weight loss), firm supraclavicular lymphadenopathy (Virchow's region for left neck — drainage from mediastinum, thorax, and upper abdomen), elevated LDH, and anemia in a 62-year-old constitute a lymphoma pattern requiring urgent oncological evaluation. CT chest/abdomen/pelvis is the appropriate first staging workup. Hematology-oncology referral for lymph node excisional biopsy is the standard diagnostic approach. Option A is incorrect: this is not a mycobacterial or fungal pattern — the combination of B-symptoms, supraclavicular adenopathy, and elevated LDH is a malignant hematological constellation; antifungal therapy delays cancer diagnosis. Option B is incorrect: B-symptoms are not non-specific in this context — they are a WHO staging criteria for lymphoma and warrant urgent evaluation. Option D is incorrect: aspiration of supraclavicular lymph nodes (FNA) is inadequate for lymphoma diagnosis — lymphoma requires architecture analysis, which necessitates excisional biopsy; aspirating the node delays correct diagnostic tissue sampling.",
+      "difficulty": "hard",
+      "tags": ["cancer-red-flags", "lymphoma", "B-symptoms", "supraclavicular", "urgent-referral"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "CA-004",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonSlug": "cancer-red-flags-primary-care-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 58-year-old postmenopausal woman notices a new 1.5 cm firm mass in her right breast at her annual exam. She had a screening bilateral mammogram 8 months ago read as BI-RADS 1 (normal). She has no family history of breast cancer. What is the most appropriate management?",
+      "options": {
+        "A": "Reassure and repeat screening mammogram at her next annual appointment in 4 months",
+        "B": "Order a diagnostic mammogram and breast ultrasound immediately",
+        "C": "Refer to a breast surgeon without imaging since the clinical exam is suspicious",
+        "D": "Schedule a repeat clinical breast exam in 3 months to monitor for size change"
+      },
+      "correctAnswer": "B",
+      "rationale": "A new palpable breast mass in a postmenopausal woman requires immediate imaging regardless of a recent normal screening mammogram. Palpable breast masses need diagnostic mammogram (not screening) and ultrasound — diagnostic imaging includes additional targeted views and is interpreted differently than screening. A normal screening mammogram does not clear a new palpable mass, as mammography has 10-15% false negative rate for palpable lesions. Option A is incorrect: repeating a screening mammogram in 4 months is inadequate — the screening is already 8 months old, and the mass is new and palpable; screening mammogram is not the same as diagnostic evaluation. Option C is incorrect: surgical referral without imaging is premature — imaging first characterizes the lesion and guides biopsy decision; biopsy without imaging is not standard of care. Option D is incorrect: a 3-month delay to 'monitor' a new firm breast mass in a postmenopausal woman is a clinical error — postmenopausal breast tissue does not normally develop benign cysts; all palpable masses require evaluation.",
+      "difficulty": "medium",
+      "tags": ["cancer-red-flags", "breast-cancer", "palpable-mass", "diagnostic-mammogram"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "CA-005",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonSlug": "cancer-red-flags-primary-care-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 52-year-old man with a 25 pack-year history quit smoking 12 years ago. His coworker was just diagnosed with lung cancer and the patient asks if he qualifies for lung cancer screening. His most recent visit was 14 months ago and no screening was ordered. Which statement accurately applies the USPSTF 2021 lung cancer screening criteria?",
+      "options": {
+        "A": "He does not qualify; he must currently smoke to be eligible for LDCT screening",
+        "B": "He qualifies; USPSTF recommends annual LDCT for adults 50-80 with ≥20 pack-years who currently smoke or quit within 15 years",
+        "C": "He qualifies only if he also has a first-degree relative with lung cancer",
+        "D": "He does not qualify; annual chest X-ray is the recommended screening modality for former smokers"
+      },
+      "correctAnswer": "B",
+      "rationale": "The USPSTF 2021 criteria for annual low-dose CT (LDCT) lung cancer screening: adults age 50-80, ≥20 pack-year smoking history, and currently smoking OR quit within the past 15 years. This patient: age 52 (qualifies), 25 pack-years (qualifies), quit 12 years ago (within 15 years — qualifies). He should have been offered LDCT at his visit 14 months ago. Option A is incorrect: the 2021 guideline update specifically expanded eligibility to include former smokers who quit within 15 years — former smoking status within this window qualifies. Option C is incorrect: family history is not a USPSTF criterion for LDCT eligibility — only age, pack-year history, and current vs recent smoking status determine eligibility. Option D is incorrect: chest X-ray has no proven mortality benefit for lung cancer screening and is not recommended — LDCT is the only evidence-based screening modality with demonstrated mortality reduction (NLST trial).",
+      "difficulty": "medium",
+      "tags": ["cancer-red-flags", "lung-cancer-screening", "LDCT", "USPSTF", "preventive-care"]
+    },
+    {
+      "id": "PREP-001",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A patient presents requesting to start PrEP. He identifies as a gay man who has had condomless anal sex with multiple partners in the past 3 months. His last HIV test was 6 months ago and was negative. What is the minimum requirement before initiating TDF/FTC (Truvada) today?",
+      "options": {
+        "A": "Provide a new HIV test order but initiate PrEP based on the 6-month-old negative result",
+        "B": "Obtain a new HIV test within 7 days prior to PrEP initiation and confirm negative status",
+        "C": "Obtain a new HIV test and wait 30 days for results before prescribing",
+        "D": "Initiate PrEP immediately; HIV testing can be ordered at the first follow-up visit"
+      },
+      "correctAnswer": "B",
+      "rationale": "CDC PrEP guidelines require confirmed HIV-negative status within 7 days prior to initiating PrEP. A 6-month-old negative test is insufficient — the patient may have acquired HIV during the interval, and starting PrEP with active undiagnosed HIV selects for resistance to the tenofovir/emtricitabine backbone. A 4th-generation HIV antigen/antibody test (or HIV RNA) within 7 days is required. Option A is incorrect: the 6-month-old test exceeds the allowable window; the patient must have recent testing. Option C is incorrect: HIV test results from 4th-generation testing are available within hours to days — waiting 30 days is not clinically necessary and delays access to prevention. Option D is incorrect: PrEP must NEVER be initiated without confirming HIV-negative status — this is the primary patient safety requirement of PrEP prescribing.",
+      "difficulty": "medium",
+      "tags": ["PrEP", "HIV-prevention", "pre-initiation", "prescribing"],
+      "populationTags": ["LGBTQ+"]
+    },
+    {
+      "id": "PREP-002",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A transgender woman on gender-affirming estrogen therapy is requesting PrEP. She has receptive anal sex with male partners. She has been inconsistent with daily pill-taking in the past. She has no chronic kidney disease. Which PrEP regimen is most appropriate to offer?",
+      "options": {
+        "A": "TAF/FTC (Descovy) — preferred for transgender women with better renal and bone safety",
+        "B": "TDF/FTC (Truvada) — the only approved regimen for transgender women",
+        "C": "Both Truvada and Descovy plus injectable cabotegravir should be discussed; injectable preferred for adherence",
+        "D": "TDF/FTC oral only; injectable PrEP is not approved for transgender women"
+      },
+      "correctAnswer": "C",
+      "rationale": "For a transgender woman with receptive anal sex and documented difficulty with daily adherence, presenting all appropriate options — including injectable cabotegravir (Apretude) — is the correct approach. Cabotegravir long-acting injectable (every 2 months) was specifically studied in transgender women in HPTN 083 and showed superiority to daily oral TDF/FTC. Descovy (TAF/FTC) is approved for MSM and transgender women — it is appropriate. Truvada is also appropriate. For a patient with adherence challenges, discussing injectable PrEP is particularly important. Option A is incorrect: while Descovy is appropriate, limiting the option to Descovy only excludes the injectable option and Truvada — an incomplete response. Option B is incorrect: Truvada is not 'the only approved regimen'; Descovy and injectable cabotegravir are both approved for transgender women. Option D is incorrect: injectable cabotegravir (Apretude) IS approved for transgender women — this was a primary enrollment group in the pivotal HPTN 083 trial.",
+      "difficulty": "hard",
+      "tags": ["PrEP", "transgender", "cabotegravir", "injectable-PrEP", "adherence"],
+      "populationTags": ["LGBTQ+"]
+    },
+    {
+      "id": "PREP-003",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A cisgender woman and her male partner (HIV-positive, undetectable viral load) have decided to try to conceive. She does not have HIV. She requests PrEP. Which PrEP regimen is most appropriate for her as a woman who will have condomless vaginal sex?",
+      "options": {
+        "A": "TAF/FTC (Descovy) — preferred for all patients due to better renal safety",
+        "B": "TDF/FTC (Truvada) — FDA-approved for vaginal exposure risk reduction in cisgender women",
+        "C": "Injectable cabotegravir (Apretude) — more convenient and does not require daily pills",
+        "D": "No PrEP needed; an undetectable viral load in her partner means U=U and transmission risk is effectively zero"
+      },
+      "correctAnswer": "B",
+      "rationale": "TDF/FTC (Truvada) is the only FDA-approved oral PrEP regimen for cisgender women with vaginal exposure risk. TAF/FTC (Descovy) was NOT studied in cisgender women for vaginal exposure and is NOT approved for this indication — a critical prescribing distinction. Injectable cabotegravir is FDA-approved for cisgender women (HPTN 084 enrolled cisgender women in Africa), so option C is partially correct but option B is the most straightforward evidence-based answer for oral PrEP. Option A is incorrect: Descovy is explicitly not approved for vaginal exposure in cisgender women — this is a patient safety error; prescribing it for this indication is off-label and potentially inadequate due to lower vaginal tissue drug concentrations. Option D is incorrect: U=U (Undetectable = Untransmittable) is scientifically robust for condomless sex with a virally suppressed partner, but this patient is asking for PrEP and has the right to make her own risk mitigation choices; some patients desire additional protection during conception attempts.",
+      "difficulty": "hard",
+      "tags": ["PrEP", "Descovy-restriction", "cisgender-women", "vaginal-exposure", "prescribing"],
+      "populationTags": ["LGBTQ+", "reproductive-health"]
+    },
+    {
+      "id": "PREP-004",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A gay man on TDF/FTC PrEP for 6 months presents for his routine 3-month visit. He reports he missed 3 doses this week due to travel. His HIV test today shows reactive 4th-generation result, confirmed reactive on repeat. He is completely asymptomatic. What is the most critical next step?",
+      "options": {
+        "A": "Recheck HIV test in 2 weeks to confirm; a single reactive result may be a false positive",
+        "B": "Stop TDF/FTC immediately, order HIV RNA and resistance genotype, and refer urgently to HIV specialist",
+        "C": "Add dolutegravir to the TDF/FTC and continue until resistance testing returns",
+        "D": "Reassure the patient that he is protected while on PrEP and that seroconversion on PrEP is rare"
+      },
+      "correctAnswer": "B",
+      "rationale": "HIV seroconversion while on PrEP — confirmed reactive result — requires immediate action. TDF/FTC must be stopped immediately: continuing it as monotherapy in active HIV infection selects for tenofovir and emtricitabine resistance mutations (K65R and M184V), which would then compromise his future ART options. HIV RNA quantification confirms viremia, and resistance genotyping on the same sample guides ART selection. Urgent HIV specialist referral within days (not weeks) is needed. Option A is incorrect: a confirmed reactive result on repeat testing is not a laboratory false positive; delaying action risks resistance development while the patient is on inadequate therapy. Option C is incorrect: adding dolutegravir alone to TDF/FTC without resistance testing creates a partially suppressive regimen that may not achieve full viral suppression and still risks resistance; the full ART regimen must be designed by an HIV specialist after resistance results. Option D is incorrect: reassurance is inappropriate — seroconversion has occurred and the patient needs immediate HIV care.",
+      "difficulty": "expert",
+      "tags": ["PrEP", "seroconversion", "resistance", "HIV-specialist", "urgent-referral"],
+      "populationTags": ["LGBTQ+"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "PREP-005",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 26-year-old gay man on TDF/FTC PrEP asks how soon the medication protects against anal HIV acquisition. He started PrEP 5 days ago. What is the accurate counseling regarding time to protective drug levels?",
+      "options": {
+        "A": "Protection begins within 24-48 hours of starting TDF/FTC",
+        "B": "Protection in rectal tissue is achieved after approximately 7 days of consistent daily dosing",
+        "C": "Full protection requires 21 days of consistent dosing for all exposure routes",
+        "D": "TDF/FTC provides no meaningful protection until 6 weeks of continuous use"
+      },
+      "correctAnswer": "B",
+      "rationale": "TDF/FTC achieves protective drug concentrations in rectal tissue after approximately 7 days of consistent daily dosing — this is based on pharmacokinetic studies showing rectal tissue saturation. This timeline is faster than vaginal tissue (21 days) due to differential drug concentration in mucosal tissues. The patient is at day 5 — he is not yet fully protected for rectal exposure and should be counseled to use condoms for the next 2 days. Option A is incorrect: 24-48 hours is insufficient for tissue saturation — blood levels rise quickly but intracellular (tissue) concentrations in rectal mucosa take 7 days. Option C is incorrect: 21 days is the timeline for vaginal tissue and for people who inject drugs, not rectal tissue — the distinction between 7 days (rectal) and 21 days (vaginal) is clinically important. Option D is incorrect: 6 weeks is far too long — this would be incorrect counseling that discourages appropriate use.",
+      "difficulty": "medium",
+      "tags": ["PrEP", "pharmacokinetics", "protection-timeline", "counseling"],
+      "populationTags": ["LGBTQ+"]
+    },
+    {
+      "id": "PREP-006",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A new patient discloses that he has sex with men. To determine PrEP eligibility, the NP begins a sexual history. The patient identifies as heterosexual but discloses he has receptive anal sex with men while using methamphetamine at parties and does not disclose this to his wife. Which approach to sexual history demonstrates the highest quality inclusive practice?",
+      "options": {
+        "A": "Confirm the patient's heterosexual identity and proceed with a standard STI panel without further PrEP discussion",
+        "B": "Ask directly about anatomy, sex acts, and partner anatomy without presupposing identity; complete a PrEP eligibility assessment based on behavioral risk",
+        "C": "Inform the patient that he should disclose his behavior to his wife before initiating any sexual health services",
+        "D": "Refrain from PrEP discussion since the patient identifies as heterosexual and the system is configured for MSM patients"
+        
+      },
+      "correctAnswer": "B",
+      "rationale": "An inclusive, anatomy-based and behavior-based sexual history does not rely on identity labels to determine clinical risk. The patient has receptive anal sex with male partners — which is the highest-risk behavioral exposure for HIV — while disclosing a heterosexual identity. This is common, and identity-based screening misses this population. The NP should assess behavioral risk (sex acts, partner anatomy, condom use, substance use) and offer PrEP based on risk, not identity. Option A is incorrect: accepting the identity label and proceeding without PrEP discussion fails to assess the actual behavioral risk that makes this patient highly eligible for PrEP. Option C is incorrect: disclosure to his wife is a deeply personal decision and not within the NP's scope to require; confidentiality and non-judgment are foundational to inclusive sexual health care — creating barriers to care by moralizing will drive the patient away. Option D is incorrect: PrEP is not for 'MSM patients' — it is for any individual at substantial HIV risk regardless of identity; systems that restrict eligibility by identity label are clinically inappropriate.",
+      "difficulty": "hard",
+      "tags": ["PrEP", "inclusive-history", "sexual-health", "LGBTQ+", "clinical-communication"],
+      "populationTags": ["LGBTQ+"]
+    },
+    {
+      "id": "PREP-007",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "lessonSlug": "prep-hiv-prevention-prescribing-monitoring-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A gay man on TDF/FTC PrEP presents for his 3-month monitoring visit. He is asymptomatic. Which of the following monitoring components is mandatory at this visit?",
+      "options": {
+        "A": "HIV test, creatinine, and comprehensive metabolic panel",
+        "B": "HIV test only; all other labs can be checked at the 6-month visit",
+        "C": "HIV test AND site-specific STI screening (rectal, urethral, pharyngeal NAAT)",
+        "D": "HIV test, hepatitis B surface antigen, and hepatitis C antibody"
+      },
+      "correctAnswer": "C",
+      "rationale": "Every 3-month PrEP visit mandates: (1) HIV test — non-negotiable for both safety and continued eligibility; (2) site-specific STI screening — urethral, rectal, AND pharyngeal NAAT for gonorrhea and chlamydia. Site-specific screening (not just genital) triples STI detection rates in MSM. Creatinine/renal function is required every 6 months (not every 3 months). HBV and HCV are annual rechecks for MSM on PrEP. Option A is incorrect: CMP and creatinine are not required at every 3-month visit — they are checked at 6-month intervals for TDF/FTC; adding an unnecessary CMP at every visit is not guideline-recommended. Option B is incorrect: HIV test alone is insufficient — STI screening is equally essential and clinically mandated; missing STIs misses opportunities for treatment and partner notification. Option D is incorrect: HBV surface antigen is checked at baseline; repeat HBV surface antigen and HCV antibody are annual monitoring, not every-3-month requirements.",
+      "difficulty": "hard",
+      "tags": ["PrEP", "monitoring", "STI-screening", "site-specific", "HIV-testing"],
+      "populationTags": ["LGBTQ+"]
+    },
+    {
+      "id": "GER-001",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 78-year-old woman completes the Timed Up and Go (TUG) test in your clinic. She rises from the chair, walks 10 feet, turns, and returns to sit in 14.5 seconds. How should you interpret this result?",
+      "options": {
+        "A": "Normal; TUG is abnormal only if it takes longer than 20 seconds",
+        "B": "Mildly abnormal; follow up with gait assessment referral in 6 months",
+        "C": "Abnormal; result ≥12 seconds indicates increased fall risk and warrants further assessment",
+        "D": "The TUG cannot be interpreted without bone density data"
+      },
+      "correctAnswer": "C",
+      "rationale": "A TUG time of ≥12 seconds indicates increased fall risk in older adults. This patient completed the test in 14.5 seconds, placing her above the threshold. This result should trigger a comprehensive falls assessment: medication review, orthostatic BP measurement, vision evaluation, home safety review, and physical therapy referral for strength and balance training. Option A is incorrect: 20 seconds is not the cutoff — the validated fall risk threshold is ≥12 seconds; waiting for a 20-second TUG would miss the majority of at-risk older adults. Option B is incorrect: a positive TUG screening requires action now, not a 6-month follow-up; injury from a fall can occur before then. Option D is incorrect: the TUG is a purely functional assessment of gait, balance, and mobility — it is independent of bone density.",
+      "difficulty": "medium",
+      "tags": ["geriatric-assessment", "falls", "TUG", "fall-risk", "older-adult"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "GER-002",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "An 80-year-old man has undergone frailty screening using the Fried Frailty Criteria. He meets the following criteria: (1) unintentional weight loss of 5 kg in the past year, (2) self-reported exhaustion 3-4 days per week, and (3) slow gait speed on assessment. He has good grip strength and is physically active 3 days per week. What is his frailty classification and the most appropriate clinical response?",
+      "options": {
+        "A": "Robust (0 criteria); no intervention needed",
+        "B": "Pre-frail (2 criteria); implement resistance exercise and nutritional optimization",
+        "C": "Frail (3 criteria); initiate a comprehensive intervention program and refer to geriatrics",
+        "D": "Frail (3 criteria); limit physical activity to prevent injury"
+      },
+      "correctAnswer": "C",
+      "rationale": "The patient meets 3 Fried Frailty criteria (weight loss, exhaustion, slow gait speed) — this classifies him as frail (≥3 criteria). Frailty requires a comprehensive intervention including resistance exercise, protein/nutritional assessment, review of all medications for contributors, and geriatrics consultation for complex management. Option A is incorrect: meeting 0 criteria is robust — this patient clearly meets 3. Option B is incorrect: 1-2 criteria = pre-frail; 3 or more = frail — this patient meets 3. The intervention intensity for frailty is greater than for pre-frailty. Option D is incorrect: limiting physical activity in frail elderly is harmful — progressive resistance exercise is the most evidence-based intervention for improving frailty; inactivity worsens muscle loss and functional decline.",
+      "difficulty": "medium",
+      "tags": ["geriatric-assessment", "frailty", "Fried-criteria", "intervention"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "GER-003",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 77-year-old woman with insomnia has been taking zolpidem 10mg nightly for 4 years. She has had two falls in the past year, one resulting in a wrist fracture. She denies rebound insomnia when she has missed doses on rare occasions. Which management approach is most appropriate?",
+      "options": {
+        "A": "Continue zolpidem; it is safer than untreated insomnia in older adults",
+        "B": "Switch to eszopiclone; it has a better fall risk profile than zolpidem",
+        "C": "Discontinue zolpidem with a gradual taper; initiate cognitive behavioral therapy for insomnia (CBT-I)",
+        "D": "Add quetiapine 12.5mg nightly for sedation to allow zolpidem dose reduction"
+      },
+      "correctAnswer": "C",
+      "rationale": "Zolpidem (a Z-drug) is Beers Criteria in all older adults — it causes fall risk equivalent to benzodiazepines, impairs psychomotor function, causes next-day drowsiness, and contributes to cognitive impairment. With two falls and a fracture, this medication is causing documented harm. CBT-I (Cognitive Behavioral Therapy for Insomnia) is the first-line evidence-based treatment for chronic insomnia in all adults including the elderly — it outperforms medications in long-term outcomes. Gradual tapering prevents rebound insomnia. Option A is incorrect: continuing a Beers-listed medication causing documented falls is clinically unjustifiable — untreated insomnia is less acutely dangerous than falls and fractures in elderly. Option B is incorrect: eszopiclone is also a Z-drug with the same Beers listing and fall risk — substituting one Z-drug for another does not solve the problem. Option D is incorrect: adding quetiapine (an antipsychotic) for sleep is strongly discouraged in elderly patients — it carries Beers Criteria status for dementia patients, increases fall risk further, and adds anticholinergic and QT burden.",
+      "difficulty": "hard",
+      "tags": ["geriatric-assessment", "falls", "zolpidem", "Beers-criteria", "deprescribing", "CBT-I"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "GER-004",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "An 84-year-old man with moderate Alzheimer dementia, paroxysmal atrial fibrillation, and recurrent falls is being evaluated for anticoagulation. His CHA2DS2-VASc score is 4 (AF + hypertension + age). His daughter asks whether he should continue apixaban, which was started 6 months ago. He has had no bleeding events. Which approach best serves this patient?",
+      "options": {
+        "A": "Continue apixaban; stroke risk from AF outweighs fall risk in all patients with CHA2DS2-VASc ≥2",
+        "B": "Discontinue apixaban; cognitive impairment plus fall risk make anticoagulation too dangerous",
+        "C": "Conduct shared decision-making with patient (to extent possible) and family; present individualized stroke vs bleed risk data and patient's preferences and values",
+        "D": "Switch from apixaban to aspirin 81mg for stroke prevention with lower bleed risk"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a genuine clinical dilemma — anticoagulation in a patient with high stroke risk AND high fall and bleed risk. Guidelines do not provide a definitive rule; shared decision-making with the patient (to the extent cognition allows) and family is the appropriate framework. Stroke risk data, intracranial hemorrhage risk data, fall risk factors, and the patient's and family's values regarding quality of life and acceptable outcomes must all be part of the discussion. Option A is incorrect: while stroke risk from AF is significant, dismissing fall and bleed risk is not person-centered — some patients in this situation have family-defined preferences that favor quality of life over stroke prevention. Option B is incorrect: blanket discontinuation based on cognitive impairment alone is not guideline-supported — cognition and fall risk are factors to weigh, not automatic contraindications; 'a patient must fall 295 times per year for falls to outweigh the stroke benefit of anticoagulation' is a commonly cited but context-dependent benchmark. Option D is incorrect: aspirin is not an alternative anticoagulant for AF stroke prevention — it does not reduce cardioembolic stroke and provides no meaningful benefit over no therapy for AF-related stroke.",
+      "difficulty": "expert",
+      "tags": ["geriatric-assessment", "anticoagulation", "dementia", "falls", "AF", "shared-decision-making"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "GER-005",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "An 80-year-old woman with T2DM, hypertension, and CKD has a serum creatinine of 1.4 mg/dL and weighs 52 kg. Her eGFR reported by the laboratory is 44 mL/min/1.73m². Her nephrologist has recommended starting sitagliptin. Using Cockcroft-Gault, her estimated CrCl calculates to 27 mL/min. What sitagliptin dosing is most appropriate?",
+      "options": {
+        "A": "Sitagliptin 100mg daily — use eGFR 44 which indicates Stage 3b CKD",
+        "B": "Sitagliptin 25mg daily — Cockcroft-Gault CrCl <30 requires the lowest dose adjustment",
+        "C": "Sitagliptin 50mg daily — CrCl 27 falls in the 30-50 range requiring moderate dose reduction",
+        "D": "Avoid sitagliptin entirely; all DPP-4 inhibitors are contraindicated in CKD"
+      },
+      "correctAnswer": "B",
+      "rationale": "Drug dosing in the elderly must use Cockcroft-Gault CrCl, not CKD-EPI eGFR, because eGFR is BSA-normalized and overestimates renal function in low-muscle-mass elderly women. This patient's CrCl by Cockcroft-Gault is 27 mL/min (below 30). Sitagliptin dosing: CrCl ≥50 = 100mg; CrCl 30-49 = 50mg; CrCl <30 = 25mg. Using the eGFR of 44 would lead to a 50mg dose — which is actually an overdose relative to her true renal function. Option A is incorrect: using eGFR 44 leads to incorrect dosing — this patient's true renal function (CrCl 27) is substantially lower. Option C is incorrect: CrCl 27 is BELOW 30, not in the 30-50 range; 50mg would be an overdose for this renal function level. Option D is incorrect: DPP-4 inhibitors are not broadly contraindicated in CKD — they require dose adjustment. Linagliptin is the one DPP-4i that requires NO renal adjustment at any CKD stage.",
+      "difficulty": "expert",
+      "tags": ["geriatric-assessment", "renal-dosing", "Cockcroft-Gault", "eGFR", "sitagliptin", "CKD"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "GER-006",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "An 81-year-old man visits his daughter who notices him becoming increasingly confused over 2 days. His medications include lisinopril, metoprolol, atorvastatin, tamsulosin, and diphenhydramine 50mg nightly for sleep (self-prescribed OTC). Vital signs are normal. UA is negative. Cognitive screen reveals new functional and executive deficits. What is the most likely contributing cause?",
+      "options": {
+        "A": "Early Alzheimer disease presenting with acute-on-chronic cognitive decline",
+        "B": "Diphenhydramine-induced anticholinergic delirium",
+        "C": "Urinary tract infection causing non-specific confusion",
+        "D": "Metoprolol causing bradycardia-mediated cerebral hypoperfusion"
+      },
+      "correctAnswer": "B",
+      "rationale": "Diphenhydramine is a potent first-generation antihistamine with high anticholinergic CNS penetration. In elderly patients, anticholinergic agents cause acute confusion, delirium, urinary retention, constipation, and falls. This is the classic anticholinergic delirium pattern: subacute confusion over days, negative UA, normal vital signs, and an OTC agent often not disclosed without direct inquiry. Diphenhydramine should be stopped immediately. Option A is incorrect: Alzheimer's typically progresses over months to years; acute-onset confusion over 2 days without prior decline points to a reversible cause such as delirium. Option C is incorrect: UA is negative — treating for UTI without positive UA in an elderly confused patient is the classic overtreatment error; this patient's delirium is drug-induced. Option D is incorrect: metoprolol can cause fatigue but does not commonly cause acute cognitive confusion; heart rate is not reported as abnormal.",
+      "difficulty": "medium",
+      "tags": ["geriatric-assessment", "anticholinergic", "diphenhydramine", "delirium", "polypharmacy"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "GER-007",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "lessonSlug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 76-year-old man reports three falls in the past 6 months, one resulting in a rib contusion. His TUG is 15 seconds. He is sedentary. He has hypertension and osteoporosis. Current medications include amlodipine, lisinopril, atorvastatin, and furosemide. Home evaluation reveals poor lighting on stairs and a loose bath mat. Which multi-component fall prevention strategy is most evidence-based?",
+      "options": {
+        "A": "Prescribe hip protector pads and calcium plus vitamin D supplementation",
+        "B": "Refer to physical therapy for progressive resistance and balance training, conduct medication review for orthostatic contributors, and recommend home safety modifications",
+        "C": "Increase calcium and vitamin D, and refer to orthopedics for prophylactic hip pinning",
+        "D": "Restrict ambulation; limit patient to one floor of his home to prevent fall events"
+      },
+      "correctAnswer": "B",
+      "rationale": "Multi-component fall prevention combining exercise (progressive balance and strength training), medication deprescribing of fall-risk medications, and home safety modification is the only intervention with consistent evidence for reducing falls and fall injuries in community-dwelling older adults (CDC STEADI, Cochrane reviews). This patient has multiple modifiable factors: TUG abnormal, sedentary, furosemide may contribute to orthostasis, and specific home hazards identified. Option A is incorrect: hip protectors reduce hip fracture severity after falls but do not prevent falls; calcium and vitamin D are important for bone health but do not reduce fall incidence. Option C is incorrect: prophylactic hip pinning is not a clinical intervention — there is no such procedure for fall prevention; calcium and vitamin D alone do not prevent falls. Option D is incorrect: restricting ambulation accelerates deconditioning, sarcopenia, and functional decline — inactivity is a direct risk factor for future falls and is the opposite of evidence-based care.",
+      "difficulty": "hard",
+      "tags": ["geriatric-assessment", "falls", "prevention", "multi-component", "PT", "home-safety"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "DEPR-001",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "lessonSlug": "deprescribing-beers-criteria-older-adults-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "An 83-year-old woman with moderate dementia has been prescribed haloperidol 1mg daily by a previous provider for 'agitation at sundowning.' Her family asks whether this medication is appropriate. You review her chart and note she has had two pneumonia hospitalizations in the past 18 months. Which action is most appropriate?",
+      "options": {
+        "A": "Continue haloperidol; antipsychotics are the standard of care for dementia-related agitation",
+        "B": "Switch to quetiapine 12.5mg; it has a safer profile than haloperidol in dementia",
+        "C": "Discuss the FDA black box warning with the family; implement non-pharmacological approaches and plan a slow taper of haloperidol",
+        "D": "Increase haloperidol to 2mg if current dose does not fully control agitation"
+      },
+      "correctAnswer": "C",
+      "rationale": "Antipsychotics in elderly patients with dementia carry an FDA black box warning: increased mortality risk from cardiovascular events (including sudden death) and pneumonia (aspiration). This patient has already had two pneumonia hospitalizations — a red flag for antipsychotic continuation. Non-pharmacological interventions (consistent routines, reduced evening stimulation, caregiver de-escalation techniques) are mandatory first steps. Slow tapering of haloperidol with close monitoring is appropriate. Option A is incorrect: antipsychotics are not 'standard of care' for dementia agitation — they carry a mortality-associated black box warning and should be minimized or avoided whenever possible. Option B is incorrect: switching to quetiapine — also an antipsychotic — does not remove the class-wide black box warning; all atypical and typical antipsychotics carry this risk in dementia patients. Option D is incorrect: increasing the dose in a patient with documented adverse outcomes (two pneumonias) is directly contrary to the FDA black box warning and patient safety principles.",
+      "difficulty": "hard",
+      "tags": ["deprescribing", "antipsychotics", "dementia", "Beers-criteria", "black-box"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "DEPR-002",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "lessonSlug": "deprescribing-beers-criteria-older-adults-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 79-year-old woman with GERD has been on omeprazole 40mg daily for 6 years. She initially started it after a Helicobacter pylori-associated ulcer, which was eradicated 4 years ago. She has had no GI symptoms for 3 years. Which deprescribing action is most appropriate?",
+      "options": {
+        "A": "Continue omeprazole indefinitely; stopping PPIs risks ulcer recurrence in all elderly patients",
+        "B": "Reduce to omeprazole 20mg daily and reassess in 4 weeks",
+        "C": "Attempt PPI tapering or switching to on-demand use; counsel on rebound acid hypersecretion for 2-4 weeks",
+        "D": "Stop omeprazole immediately; transition to calcium carbonate antacids as needed"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient no longer has an active indication for high-dose chronic PPI — the H. pylori was eradicated and she has been symptom-free for 3 years. Long-term PPI use has documented harms: C. difficile risk, hypomagnesemia, reduced calcium and B12 absorption (especially relevant in osteoporosis-prone elderly), and increased pneumonia risk. PPI deprescribing is appropriate with patient counseling on expected rebound acid hypersecretion for 2-4 weeks (a common reason patients restart). Tapering or switching to on-demand use is the preferred approach. Option A is incorrect: chronic PPI is not indicated for all elderly patients without active indication; risk-benefit reassessment is mandatory. Option B is incorrect: reducing the dose without a plan to discontinue or use on-demand misses the deprescribing goal; dose reduction alone is an incomplete intervention. Option D is incorrect: abrupt cessation of long-term PPI causes significant rebound acid hypersecretion; the patient is likely to experience severe heartburn and restart the medication — graduated tapering or on-demand transition improves success rates.",
+      "difficulty": "hard",
+      "tags": ["deprescribing", "PPI", "omeprazole", "Beers-criteria", "older-adult"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "DEPR-003",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "lessonSlug": "deprescribing-beers-criteria-older-adults-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "An 88-year-old woman with mild dementia and COPD has been taking atorvastatin 40mg for primary cardiovascular prevention for 12 years. She recently transitioned to hospice-level palliative care for advanced COPD. Her daughter asks whether all her medications should continue. In deciding about statin continuation, which consideration is most clinically appropriate?",
+      "options": {
+        "A": "Continue atorvastatin; discontinuing statins increases MI risk in elderly patients",
+        "B": "Continue atorvastatin only if LDL is above 100 mg/dL on repeat testing",
+        "C": "Discontinue atorvastatin; in the context of limited life expectancy and palliative goals, the primary prevention benefit timeline will not be realized",
+        "D": "Reduce to atorvastatin 10mg daily to preserve some cardiovascular protection while minimizing cost"
+      },
+      "correctAnswer": "C",
+      "rationale": "Statins for primary prevention require 3-5 years of continuous use before cardiovascular benefit is realized (NNT). A patient with advanced COPD enrolled in palliative care with limited life expectancy will not live long enough to benefit from primary prevention — the harm (polypharmacy, drug interactions, pill burden, side effects) outweighs the non-existent benefit. Statin discontinuation in this context is supported by STOPP criteria, palliative care guidelines, and goals-of-care principles. This is a shared decision-making conversation with the family. Option A is incorrect: the argument that 'discontinuing increases MI risk' applies to statins for secondary prevention in patients with established ASCVD and adequate life expectancy — not primary prevention in a palliative patient. Option B is incorrect: LDL monitoring for primary prevention statin therapy has no clinical basis here — the issue is goals of care, not lipid levels. Option D is incorrect: reducing the dose neither addresses the goals-of-care question nor removes the polypharmacy burden — a full deprescribing discussion is warranted.",
+      "difficulty": "expert",
+      "tags": ["deprescribing", "statin", "palliative-care", "goals-of-care", "older-adult"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "DEPR-004",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "lessonSlug": "deprescribing-beers-criteria-older-adults-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 76-year-old man with anxiety and insomnia has been taking lorazepam 1mg TID for 8 years. He was started on it after a death in the family and never tapered. He now comes to you as a new patient. He denies any prior taper attempts and says he 'needs' the medication. Physical exam and neurological exam are normal. What is the most important initial step in deprescribing lorazepam in this patient?",
+      "options": {
+        "A": "Abruptly discontinue lorazepam; he has been on it for years and should be physiologically dependent",
+        "B": "Switch immediately to diazepam at equivalent dose; it is safer in elderly",
+        "C": "Initiate a very gradual taper (10% dose reduction every 2-4 weeks) while concurrently addressing anxiety with an SSRI and behavioral therapy",
+        "D": "Continue lorazepam; the risk of withdrawal seizures in an 8-year user is too high to attempt tapering"
+      },
+      "correctAnswer": "C",
+      "rationale": "Long-term benzodiazepine users require slow, gradual tapering — abrupt discontinuation after 8 years risks withdrawal seizures, which can be life-threatening. A 10% dose reduction every 2-4 weeks is a conservative, safe approach. Concurrent treatment of the underlying anxiety (SSRI + behavioral therapy) addresses the indication and reduces relapse risk. Option A is incorrect: abrupt discontinuation of long-term benzodiazepines is dangerous — withdrawal from benzodiazepines resembles alcohol withdrawal (seizures, delirium, autonomic instability) and can be fatal; never abruptly stop after years of use. Option B is incorrect: switching to diazepam in an 80-year-old is problematic — diazepam is a long-acting benzodiazepine with active metabolites that accumulate in elderly patients with reduced hepatic clearance; it is Beers Criteria in older adults. Option D is incorrect: tapering is feasible and recommended even in long-term users — the risk of seizures exists but is managed through slow, monitored tapering, not indefinite continuation of a harmful drug class.",
+      "difficulty": "hard",
+      "tags": ["deprescribing", "benzodiazepine", "tapering", "withdrawal", "older-adult"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "DEPR-005",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "lessonSlug": "deprescribing-beers-criteria-older-adults-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "An 82-year-old woman with overactive bladder has been taking oxybutynin 5mg BID for 3 years. She reports adequate bladder control but her daughter has noticed progressive short-term memory decline over the past 18 months. MMSE declined from 28 to 23 over this period. Which medication substitution most appropriately addresses the cognitive concern?",
+      "options": {
+        "A": "Switch to tolterodine extended-release; it has lower anticholinergic CNS penetration than oxybutynin",
+        "B": "Switch to mirabegron (a beta-3 adrenergic agonist); it has no anticholinergic activity",
+        "C": "Add rivastigmine (acetylcholinesterase inhibitor) to counteract the anticholinergic effect of oxybutynin",
+        "D": "Continue oxybutynin; memory decline in an 82-year-old is expected age-related change"
+      },
+      "correctAnswer": "B",
+      "rationale": "Oxybutynin has high CNS anticholinergic penetration and is a known contributor to cognitive decline in elderly patients. Switching to mirabegron — a beta-3 adrenergic agonist — provides equivalent OAB efficacy through a completely different mechanism with no anticholinergic activity, removing the cognitive burden. This is a classic Beers Criteria–driven medication switch. Option A is incorrect: tolterodine ER has lower CNS penetration than oxybutynin but is still a muscarinic antagonist with anticholinergic burden — it reduces but does not eliminate the anticholinergic contribution to cognitive decline. Option C is incorrect: adding an acetylcholinesterase inhibitor to counteract an anticholinergic is irrational polypharmacy — it creates competing pharmacological effects and increases overall drug burden; the correct action is to remove the anticholinergic, not layer another drug on top. Option D is incorrect: the cognitive decline tracked with the medication start and has progressed with continued use; drug-induced cognitive impairment must be investigated before attributing decline to 'normal aging.'",
+      "difficulty": "hard",
+      "tags": ["deprescribing", "oxybutynin", "anticholinergic", "cognitive-impairment", "mirabegron"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "DEPR-006",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "lessonSlug": "deprescribing-beers-criteria-older-adults-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "An 80-year-old man with hypertension, CKD stage 3a, and osteoarthritis has been taking naproxen 500mg BID for 6 months prescribed by orthopedics for knee pain. He also takes lisinopril 10mg and chlorthalidone 12.5mg. He presents for follow-up and his creatinine has risen from 1.2 to 1.7 mg/dL over 3 months. Which cascade is most likely responsible and what is the most appropriate action?",
+      "options": {
+        "A": "CKD is progressing independently; continue naproxen and increase lisinopril for renoprotection",
+        "B": "Chlorthalidone is causing volume depletion and AKI; reduce the diuretic dose",
+        "C": "NSAID-ACEi-diuretic triple whammy is causing AKI; discontinue naproxen and recheck creatinine",
+        "D": "Add omeprazole and continue naproxen; GI protection will prevent progression"
+      },
+      "correctAnswer": "C",
+      "rationale": "The 'triple whammy' nephrotoxic combination — NSAID (inhibits prostaglandin-mediated renal afferent arteriolar dilation) + ACEi/ARB (inhibits angiotensin II-mediated efferent constriction) + diuretic (reduces circulating volume) — is the most common cause of reversible AKI in older adults on multiple medications. Naproxen is the identifiable intervention — it was added 6 months ago and the creatinine rise parallels its use. The NSAID must be discontinued. Creatinine will often return to baseline within weeks. Option A is incorrect: continuing naproxen with increased ACEi further compounds the nephrotoxic combination and will worsen AKI. Option B is incorrect: the diuretic is a contributing factor but naproxen is the key precipitant; reducing the diuretic alone without removing the NSAID does not resolve the triple whammy. Option D is incorrect: omeprazole protects the GI tract from NSAID ulceration — it has zero effect on NSAID-induced nephrotoxicity; creatinine rises from renal hemodynamic effects, not GI effects.",
+      "difficulty": "expert",
+      "tags": ["deprescribing", "triple-whammy", "NSAID", "CKD", "polypharmacy", "cascade-prescribing"],
+      "populationTags": ["older-adult"]
+    },
+    {
+      "id": "PSO-001",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "lessonSlug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 43-year-old man with moderate psoriasis presents reporting that his ring finger and index finger on both hands have become swollen like 'sausages' and his lower back aches in the morning. His skin disease is currently well-controlled on topical therapy. PASI score is 3. Which action is most appropriate?",
+      "options": {
+        "A": "Continue topical therapy; his skin disease is well-controlled and joint symptoms are likely tendinopathy",
+        "B": "Increase topical corticosteroid potency to better control underlying inflammation causing joint symptoms",
+        "C": "Refer to rheumatology regardless of PASI score; dactylitis and axial symptoms suggest psoriatic arthritis",
+        "D": "Start oral methotrexate based on the PASI score alone; it will address both skin and joints"
+      },
+      "correctAnswer": "C",
+      "rationale": "Dactylitis (diffuse swelling of entire digits — 'sausage fingers') combined with inflammatory back pain (morning stiffness, worse at rest) in a patient with psoriasis is psoriatic arthritis until proven otherwise. PsA affects 30% of psoriasis patients and can develop independently of skin severity — PASI 3 does not rule out PsA. Rheumatology referral is indicated for any suspected psoriatic arthritis regardless of skin PASI. Option A is incorrect: dismissing joint symptoms as tendinopathy misses PsA — tendinopathy does not cause dactylitis (sausage digits are a highly specific PsA sign). Option B is incorrect: increasing topical therapy addresses only the skin; it has no effect on joint inflammation in PsA, which requires systemic treatment. Option D is incorrect: starting methotrexate without rheumatology evaluation is appropriate in some cases but premature as first action — confirmation of PsA diagnosis, exclusion of other arthropathies, and baseline labs should be established with specialist input.",
+      "difficulty": "hard",
+      "tags": ["psoriasis", "psoriatic-arthritis", "dactylitis", "referral"],
+      "populationTags": ["chronic-disease"]
+    },
+    {
+      "id": "PSO-002",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "lessonSlug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 7-year-old boy with moderate atopic dermatitis affecting his antecubital fossae and neck presents with his mother. Despite twice-daily hydrocortisone 1% for 8 weeks, the AD has not improved significantly. She asks about a 'stronger cream.' Which management approach is most appropriate?",
+      "options": {
+        "A": "Prescribe triamcinolone 0.1% to all affected areas including the neck",
+        "B": "Prescribe tacrolimus 0.03% ointment for face and sensitive areas; upgrade to mid-potency topical CS for trunk and extremity lesions with a consistent emollient regimen",
+        "C": "Refer directly for dupilumab initiation; hydrocortisone failure at 8 weeks indicates moderate-severe disease requiring biologics",
+        "D": "Switch to oral prednisone 1mg/kg for 2 weeks to rapidly clear the flare"
+      },
+      "correctAnswer": "B",
+      "rationale": "This child's AD is undertreated with hydrocortisone 1% (low potency, appropriate for face only). Step-up therapy for moderate AD in a child requires: tacrolimus 0.03% ointment (pediatric dose — not 0.1%) for sensitive areas (neck, eyelids, face) where steroids risk skin atrophy; and mid-potency topical corticosteroids (triamcinolone 0.05% or desonide) for trunk and extremity lesions. Consistent emollient use is the foundation. Option A is incorrect: triamcinolone 0.1% (mid-high potency) should not be applied to the neck in children — this area has thin skin with high absorption; risk of atrophy and hypothalamic-pituitary-adrenal suppression is significant. Option C is incorrect: dupilumab is indicated for inadequate response to APPROPRIATE topical therapy — hydrocortisone 1% is not adequate, not 'failed appropriate topical treatment'; step up first, then consider biologic. Option D is incorrect: oral corticosteroids cause AD rebound after discontinuation, promote skin barrier impairment, and HPA suppression in children — short courses do not achieve remission and are not recommended.",
+      "difficulty": "hard",
+      "tags": ["atopic-dermatitis", "pediatric", "stepwise", "topical-therapy", "tacrolimus"]
+    },
+    {
+      "id": "PSO-003",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "lessonSlug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 38-year-old woman with plaque psoriasis has failed adequate trials of topical corticosteroids and calcipotriol. Her PASI score is 13 and DLQI is 14. She asks about biologic therapy. Which response most accurately reflects the biologic referral criteria?",
+      "options": {
+        "A": "She does not qualify; biologic therapy requires failure of phototherapy before systemic or biologic agents",
+        "B": "She qualifies; PASI >10 and DLQI >10 with failure of topical therapy meets standard biologic referral criteria",
+        "C": "She qualifies only if she has psoriatic arthritis; skin-only disease cannot receive biologics",
+        "D": "She qualifies; however, biologics cannot be started until methotrexate has been tried for at least 6 months"
+      },
+      "correctAnswer": "B",
+      "rationale": "PASI (Psoriasis Area and Severity Index) >10 and DLQI (Dermatology Life Quality Index) >10 together, with failure of adequate topical therapy, meet standard criteria for biologic referral. This patient meets both thresholds. PASI alone >10 or DLQI alone >10 with topical failure is sufficient in many guidelines. Option A is incorrect: while phototherapy is an option in the stepwise ladder, it is not mandatory before biologic referral in all guidelines; patients with PASI/DLQI scores meeting thresholds can be referred for biologic consideration after topical failure. Option C is incorrect: biologics (IL-17, IL-23, TNF-alpha inhibitors) are FDA-approved for moderate-to-severe plaque psoriasis regardless of joint involvement. Option D is incorrect: methotrexate is an option in the stepwise ladder but is not a mandatory prerequisite for biologic referral in all cases — some guidelines allow biologic first after topical failure in patients who cannot tolerate or have contraindications to conventional systemics.",
+      "difficulty": "medium",
+      "tags": ["psoriasis", "PASI", "DLQI", "biologic-referral", "stepwise"]
+    },
+    {
+      "id": "PSO-004",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "lessonSlug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 14-year-old girl with severe atopic dermatitis presents to urgent care with a rapidly spreading rash. Over 24 hours, punched-out, monomorphic crusted erosions have spread from her usual AD distribution to her face, trunk, and arms. She has a fever of 38.6°C and appears ill. Her mother applied extra topical steroid cream last night. What is the most appropriate management?",
+      "options": {
+        "A": "Prescribe a medium-potency topical corticosteroid and oral antihistamine for acute AD flare",
+        "B": "Diagnose eczema herpeticum; start systemic acyclovir and discontinue topical steroid",
+        "C": "Start oral prednisone for severe atopic dermatitis flare with secondary infection",
+        "D": "Prescribe oral antibiotic (cephalexin) for presumed staphylococcal superinfection of eczema"
+      },
+      "correctAnswer": "B",
+      "rationale": "Eczema herpeticum is HSV superinfection of atopic dermatitis — a dermatological emergency. The hallmark features are: punched-out, monomorphic (all the same size and stage) crusted vesicular erosions, rapid spread beyond typical AD distribution, fever, and systemic illness. Topical corticosteroids applied to HSV eczema herpeticum suppress local immunity and can cause catastrophic HSV dissemination. Acyclovir 400mg 5x/day (or valacyclovir 1g TID) must be started immediately, and topical steroids must be discontinued. Hospitalizing for IV acyclovir should be considered for widespread disease. Option A is incorrect: topical corticosteroids will worsen HSV dissemination — this is dangerous and contraindicated in eczema herpeticum. Option C is incorrect: oral prednisone is immunosuppressive and would compound the iatrogenic immunosuppression already caused by the topical steroid application; it is absolutely contraindicated in active viral infection. Option D is incorrect: while staphylococcal superinfection (impetiginization) is common in AD, it presents with honey-crusted lesions, not monomorphic punched-out erosions — the clinical pattern here is diagnostic for HSV.",
+      "difficulty": "expert",
+      "tags": ["atopic-dermatitis", "eczema-herpeticum", "HSV", "emergency", "acyclovir"],
+      "dispositionTag": "urgent-same-day"
+    },
+    {
+      "id": "PSO-005",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "lessonSlug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01",
+      "cognitiveLayer": "L1",
+      "stem": "A 35-year-old woman with moderate-to-severe psoriasis is started on methotrexate 15mg weekly by her dermatologist. Which medication should be prescribed concurrently to reduce the most common serious side effects of methotrexate?",
+      "options": {
+        "A": "Leucovorin 5mg weekly 24 hours after each methotrexate dose",
+        "B": "Folic acid 1mg daily on non-methotrexate days",
+        "C": "Calcium 1000mg daily to prevent osteoporosis",
+        "D": "Pyridoxine 50mg daily to reduce peripheral neuropathy risk"
+      },
+      "correctAnswer": "B",
+      "rationale": "Folic acid 1mg daily (typically on days not taking methotrexate, though some protocols allow all days) is standard practice with methotrexate to reduce the most common side effects: mucositis, hepatotoxicity, and cytopenias. Folate supplementation reduces these adverse effects without significantly compromising methotrexate's therapeutic efficacy. Option A is incorrect: leucovorin (folinic acid) is used for methotrexate rescue in oncology overdose situations — it actively rescues cells from methotrexate inhibition and would reduce psoriasis efficacy if given weekly alongside therapeutic doses. Option C is incorrect: calcium supplementation does not address methotrexate toxicity — it is relevant for corticosteroid-induced osteoporosis but not methotrexate management. Option D is incorrect: pyridoxine is used for isoniazid-induced peripheral neuropathy and chemotherapy regimens — it is not standard practice with low-dose weekly methotrexate for psoriasis.",
+      "difficulty": "medium",
+      "tags": ["psoriasis", "methotrexate", "folic-acid", "prescribing", "monitoring"]
+    },
+    {
+      "id": "SMK-001",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "lessonSlug": "smoking-cessation-pharmacotherapy-counseling-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 45-year-old woman presents for a well visit and smokes 1 pack per day. She states she is 'not ready to quit right now.' She is not interested in pharmacotherapy. Which response best represents evidence-based counseling for a precontemplation patient?",
+      "options": {
+        "A": "Document her refusal and plan to address it again in 1 year at her next annual visit",
+        "B": "Use the 5R framework: explore personal Relevance, Risks, Rewards, Roadblocks, and repeat the conversation at every visit",
+        "C": "Refer to a smoking cessation specialist; readiness counseling is outside the NP scope",
+        "D": "Prescribe a nicotine patch without her agreement to avoid withdrawal-related harms"
+      },
+      "correctAnswer": "B",
+      "rationale": "For patients not ready to quit, the 5R framework is the evidence-based counseling approach: Relevance (personal health and family context), Risks (health consequences specific to her), Rewards (benefits of quitting), Roadblocks (barriers to quitting), and Repetition (returning to the topic at every visit). Brief motivational counseling at every visit significantly increases quit rates over time. Option A is incorrect: addressing tobacco use only at annual visits misses the opportunity to plant a seed at every encounter; brief counseling at every visit is proven more effective than annual discussion. Option C is incorrect: brief motivational counseling for smoking cessation is within every primary care NP's scope — this is core preventive medicine. Option D is incorrect: prescribing any medication without the patient's agreement and informed consent is unethical and a boundary violation; furthermore, an unrestricted NRT patch in a full-time smoker without a quit plan would be misused.",
+      "difficulty": "medium",
+      "tags": ["smoking-cessation", "5R-framework", "motivational-counseling", "precontemplation"]
+    },
+    {
+      "id": "SMK-002",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "lessonSlug": "smoking-cessation-pharmacotherapy-counseling-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 52-year-old man with a 30 pack-year history wants to quit smoking. He has a history of major depressive disorder, currently stable on sertraline 100mg. He asks whether he can use varenicline. How should you counsel him regarding its safety in patients with psychiatric history?",
+      "options": {
+        "A": "Varenicline is contraindicated in any patient with a history of depression or psychiatric illness",
+        "B": "Varenicline can be used with caution; the EAGLES trial showed no significant increase in neuropsychiatric adverse events compared to placebo in patients with stable psychiatric conditions",
+        "C": "Switch his sertraline to bupropion, which doubles as an antidepressant and smoking cessation aid",
+        "D": "Recommend NRT only; all non-NRT cessation aids are unsafe in patients on SSRIs"
+      },
+      "correctAnswer": "B",
+      "rationale": "The EAGLES trial (2016) definitively evaluated neuropsychiatric safety of varenicline and bupropion versus NRT and placebo in patients with and without stable psychiatric illness. The trial found no significant increase in serious neuropsychiatric adverse events in patients with stable psychiatric conditions. Varenicline remains the most effective cessation agent and can be used in patients with controlled psychiatric disorders, including stable depression, with appropriate monitoring. Option A is incorrect: this was the former FDA concern prior to the EAGLES trial — the black box warning for neuropsychiatric adverse events was subsequently removed after EAGLES demonstrated safety. Option C is incorrect: switching sertraline to bupropion for the dual purpose is complex and risks destabilizing well-controlled depression; combining bupropion (NDRI) with sertraline (SSRI) also increases serotonin activity; this is not the recommended approach. Option D is incorrect: NRT is safe in combination with SSRIs, but restricting cessation pharmacotherapy to NRT only for all psychiatric patients is overly restrictive and not evidence-based post-EAGLES.",
+      "difficulty": "medium",
+      "tags": ["smoking-cessation", "varenicline", "EAGLES-trial", "psychiatric-safety", "prescribing"]
+    },
+    {
+      "id": "SMK-003",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "lessonSlug": "smoking-cessation-pharmacotherapy-counseling-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 58-year-old woman with CKD stage 4 (CrCl 22 mL/min calculated by Cockcroft-Gault) and 35 pack-years of smoking wants to quit. She asks about varenicline. What is the most appropriate prescribing decision?",
+      "options": {
+        "A": "Prescribe standard varenicline 0.5mg daily → 1mg BID; renal function does not affect varenicline dosing",
+        "B": "Prescribe varenicline with renal dose reduction: start 0.5mg daily, maximum 0.5mg BID for CrCl <30",
+        "C": "Avoid varenicline entirely in CKD; use bupropion SR as a safer alternative",
+        "D": "Avoid all pharmacotherapy; recommend cessation counseling only for patients with CrCl <30"
+      },
+      "correctAnswer": "B",
+      "rationale": "Varenicline is renally cleared and requires dose adjustment when CrCl <30 mL/min: start at 0.5mg once daily, with a maximum dose of 0.5mg BID (never titrate to the standard 1mg BID in this population due to drug accumulation risk). This patient's CrCl by Cockcroft-Gault is 22 mL/min — below the 30 threshold. She can and should use varenicline for the highest-efficacy cessation strategy, with the renal-adjusted dose. Option A is incorrect: renal function significantly affects varenicline — the drug is approximately 90% renally cleared; standard dosing would lead to accumulation and increased adverse effect risk (nausea, neuropsychiatric). Option C is incorrect: bupropion is also renally cleared (to some extent) and carries its own risks (seizure threshold lowering); avoiding varenicline when the correct renal dose adjustment exists is unnecessarily restrictive. Option D is incorrect: patients with CKD benefit from smoking cessation at least as much as the general population (smoking accelerates CKD progression); withholding pharmacotherapy from a highly motivated patient with CKD is inappropriate.",
+      "difficulty": "hard",
+      "tags": ["smoking-cessation", "varenicline", "CKD", "renal-dosing", "prescribing"]
+    },
+    {
+      "id": "SMK-004",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "lessonSlug": "smoking-cessation-pharmacotherapy-counseling-lesson-01",
+      "cognitiveLayer": "L2",
+      "stem": "A 44-year-old man with a history of alcohol use disorder (currently sober 3 years) and epilepsy managed with levetiracetam wants to quit smoking. He asks about bupropion SR. Which response is most clinically appropriate?",
+      "options": {
+        "A": "Bupropion SR is safe in patients with epilepsy on stable anticonvulsants; proceed with standard dosing",
+        "B": "Bupropion SR is contraindicated in patients with a seizure disorder; use varenicline instead",
+        "C": "Bupropion SR is contraindicated due to alcohol history; NRT is the only safe option",
+        "D": "Bupropion SR is safe in patients sober for 3 years; dose-dependent seizure risk does not apply to controlled epilepsy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bupropion SR has a dose-dependent seizure risk and is specifically contraindicated in patients with a seizure disorder (epilepsy), regardless of current anticonvulsant control. Even on levetiracetam, the additional seizure threshold lowering from bupropion represents an unacceptable risk. Varenicline is the appropriate alternative — it does not affect seizure threshold and is the most effective cessation agent. Option A is incorrect: epilepsy is an absolute contraindication to bupropion SR regardless of anticonvulsant therapy — adding bupropion creates pharmacodynamic risk regardless of concurrent AED use. Option C is incorrect: the relevant contraindication here is epilepsy, not alcohol use history; past alcohol use disorder (sober 3 years) is not a contraindication to bupropion — the seizure risk from abrupt alcohol withdrawal (acute intoxication context) is the relevant alcohol concern, which does not apply to a patient 3 years sober. Option D is incorrect: dose-dependent seizure risk from bupropion applies to patients with epilepsy regardless of controlled status — 'controlled epilepsy' on AEDs does not remove the contraindication.",
+      "difficulty": "hard",
+      "tags": ["smoking-cessation", "bupropion", "seizure-risk", "contraindications", "prescribing"]
+    },
+    {
+      "id": "SMK-005",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "lessonSlug": "smoking-cessation-pharmacotherapy-counseling-lesson-01",
+      "cognitiveLayer": "L3",
+      "stem": "A 28-year-old woman at 16 weeks gestation smokes 10 cigarettes daily and is highly motivated to quit. She is concerned about using any medications during pregnancy. What is the most accurate counseling and recommended approach?",
+      "options": {
+        "A": "Advise her to continue smoking at the same rate; stopping abruptly in mid-pregnancy may harm the fetus",
+        "B": "Recommend behavioral counseling alone; all pharmacotherapy is absolutely contraindicated in pregnancy",
+        "C": "Offer NRT (patch plus short-acting form) as the preferred pharmacotherapy; continued smoking causes significantly greater fetal harm than NRT nicotine exposure",
+        "D": "Prescribe varenicline; it is the safest and most effective option for highly motivated pregnant patients"
+      },
+      "correctAnswer": "C",
+      "rationale": "Nicotine replacement therapy (NRT) is the preferred smoking cessation pharmacotherapy in pregnancy. The key counseling point: the toxins from cigarette combustion (carbon monoxide, 4,000+ chemicals) cause significantly more fetal harm — including IUGR, placental abruption, stillbirth, and SIDS — than NRT's nicotine alone. Combination NRT (patch for baseline control + gum or lozenge for cravings) is safe and effective. Avoid overnight extended-release patches in the 3rd trimester. Option A is incorrect: advising a motivated patient to continue smoking in pregnancy is harmful — the goal is complete cessation. Option B is incorrect: behavioral counseling alone is less effective than combined pharmacotherapy + counseling in pregnancy; NRT is recommended when counseling alone is insufficient. Option D is incorrect: varenicline has insufficient safety data in pregnancy — animal studies show adverse effects and there is no adequate human RCT data; it is not recommended for use in pregnancy; NRT has the most established safety profile.",
+      "difficulty": "hard",
+      "tags": ["smoking-cessation", "pregnancy", "NRT", "pharmacotherapy", "safety"],
+      "populationTags": ["reproductive-health"]
+    }
+  ]
+}

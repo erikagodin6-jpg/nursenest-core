@@ -1,0 +1,198 @@
+import Link from "next/link";
+import { requireAdmin } from "@/lib/auth/guards";
+import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { loadAdminUserSearch } from "@/lib/admin/load-admin-user-search";
+import {
+  adminUserDirectoryFilterQueryString,
+  loadAdminUserDirectory,
+  parseAdminUserDirectoryFilters,
+} from "@/lib/admin/load-admin-user-directory";
+import { AdminUserSearchPanel } from "@/components/admin/admin-user-search-panel";
+import { AdminUserDirectoryFilters } from "@/components/admin/admin-user-directory-filters";
+import { AdminUserDirectoryTable } from "@/components/admin/admin-user-directory-table";
+import { UserRole } from "@prisma/client";
+
+export const dynamic = "force-dynamic";
+
+const ADMIN_USERS_DB_TIMEOUT_MS = 1800;
+
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    q?: string;
+    paid?: string;
+    pathway?: string;
+    tier?: string;
+    inactive?: string;
+    weak?: string;
+    after?: string;
+  }>;
+}) {
+  await requireAdmin();
+  const sp = await searchParams;
+  const q = sp.q?.trim() ?? "";
+  const { filters: dirFilters, cursor: dirCursor } = parseAdminUserDirectoryFilters(sp);
+  const dirQuery = adminUserDirectoryFilterQueryString(dirFilters);
+  const directory = await withDatabaseFallbackTimeout(
+    () => loadAdminUserDirectory(dirFilters, dirCursor),
+    { rows: [], nextCursor: null },
+    ADMIN_USERS_DB_TIMEOUT_MS,
+    { scope: "admin_users", label: "user_directory" },
+  );
+
+  const initialRows =
+    q.length >= 2
+      ? await withDatabaseFallbackTimeout(
+          () => loadAdminUserSearch(q),
+          [],
+          ADMIN_USERS_DB_TIMEOUT_MS,
+          { scope: "admin_users", label: "support_search" },
+        )
+      : null;
+
+  const [recent, byCountry, byTier] = await Promise.all([
+    withDatabaseFallbackTimeout(
+      () =>
+        prisma.user.findMany({
+          orderBy: { createdAt: "desc" },
+          take: 40,
+          select: { id: true, email: true, name: true, role: true, country: true, tier: true, createdAt: true, trialStatus: true },
+        }),
+      [],
+      ADMIN_USERS_DB_TIMEOUT_MS,
+      { scope: "admin_users", label: "recent_registrations" },
+    ),
+    withDatabaseFallbackTimeout(
+      () => prisma.user.groupBy({ by: ["country"], _count: { _all: true } }),
+      [],
+      ADMIN_USERS_DB_TIMEOUT_MS,
+      { scope: "admin_users", label: "country_distribution" },
+    ),
+    withDatabaseFallbackTimeout(
+      () => prisma.user.groupBy({ by: ["tier"], _count: { _all: true } }),
+      [],
+      ADMIN_USERS_DB_TIMEOUT_MS,
+      { scope: "admin_users", label: "tier_distribution" },
+    ),
+  ]);
+
+  const learners = await withDatabaseFallbackTimeout(
+    () => prisma.user.count({ where: { role: UserRole.LEARNER } }),
+    0,
+    ADMIN_USERS_DB_TIMEOUT_MS,
+    { scope: "admin_users", label: "learner_count" },
+  );
+  const usingFallback = recent.length === 0 && byCountry.length === 0 && byTier.length === 0 && learners === 0;
+
+  return (
+    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin</p>
+          <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Users &amp; support lookup</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Learners: {learners.toLocaleString()} · Search links to a read-only support profile (subscription, usage, recent
+            activity).
+          </p>
+        </div>
+        <Link href="/admin" className="text-sm font-semibold text-primary underline">
+          ← Overview
+        </Link>
+      </div>
+
+      <div className="mt-8">
+        <AdminUserSearchPanel key={q || "home"} initialQuery={q} initialRows={initialRows} />
+      </div>
+
+      <div className="mt-8 space-y-4">
+        <AdminUserDirectoryFilters
+          initialPaid={dirFilters.paid}
+          initialPathway={dirFilters.pathwayId ?? ""}
+          initialTier={dirFilters.tier ?? ""}
+          initialInactive={dirFilters.inactiveDays != null ? String(dirFilters.inactiveDays) : ""}
+          initialWeak={dirFilters.weakTopicsOnly ? "1" : ""}
+        />
+        <section className="nn-card p-6">
+          <h2 className="text-lg font-semibold">Filtered learner directory</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Up to {directory.rows.length} rows per page · paid flag uses subscription ACTIVE/GRACE only.
+          </p>
+          <div className="mt-4">
+            <AdminUserDirectoryTable rows={directory.rows} nextCursor={directory.nextCursor} querySuffix={dirQuery} />
+          </div>
+        </section>
+      </div>
+
+      {usingFallback ? (
+        <section className="mt-8 nn-card p-6 text-sm text-[var(--semantic-text-secondary)]">
+          User analytics are temporarily unavailable while database reads recover. Support search will return once the database is responsive again.
+        </section>
+      ) : null}
+
+      <section className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="nn-card p-6">
+          <h2 className="text-lg font-semibold">By country</h2>
+          <ul className="mt-3 space-y-1 text-sm">
+            {byCountry.map((r) => (
+              <li key={r.country} className="flex justify-between">
+                <span>{r.country}</span>
+                <span className="tabular-nums">{r._count._all}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="nn-card p-6">
+          <h2 className="text-lg font-semibold">By tier</h2>
+          <ul className="mt-3 space-y-1 text-sm">
+            {byTier.map((r) => (
+              <li key={r.tier} className="flex justify-between">
+                <span>{r.tier}</span>
+                <span className="tabular-nums">{r._count._all}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="mt-8 nn-card p-6">
+        <h2 className="text-lg font-semibold">Newest registrations</h2>
+        <div className="mt-4 overflow-auto">
+          <table className="w-full min-w-[640px] text-left text-sm">
+            <thead className="border-b border-border text-muted-foreground">
+              <tr>
+                <th className="py-2">Name</th>
+                <th className="py-2">Email</th>
+                <th className="py-2">Role</th>
+                <th className="py-2">Country</th>
+                <th className="py-2">Tier</th>
+                <th className="py-2">Trial</th>
+                <th className="py-2">Created</th>
+                <th className="py-2" />
+              </tr>
+            </thead>
+            <tbody>
+              {recent.map((u) => (
+                <tr key={u.id} className="border-b border-border/50">
+                  <td className="py-2 pr-2">{u.name}</td>
+                  <td className="py-2 font-mono text-xs">{u.email}</td>
+                  <td className="py-2">{u.role}</td>
+                  <td className="py-2">{u.country}</td>
+                  <td className="py-2">{u.tier}</td>
+                  <td className="py-2">{u.trialStatus}</td>
+                  <td className="py-2 text-xs">{u.createdAt.toISOString().slice(0, 10)}</td>
+                  <td className="py-2">
+                    <Link href={`/admin/users/${encodeURIComponent(u.id)}`} className="text-primary underline">
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  );
+}

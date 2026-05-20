@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-04-14T16:23:05.281Z",
+  "databaseAvailable": false,
+  "legacyMapSummary": {
+    "high": 3,
+    "medium": 0,
+    "low": 0,
+    "none": 4220,
+    "mergeIntoExisting": 3,
+    "createMissing": 4220,
+    "reviewNeeded": 0,
+    "duplicateFlag": 0
+  },
+  "duplicatesInDb": 0,
+  "duplicateSamples": [],
+  "notImportedFromLegacyEstimate": 4220,
+  "notes": [
+    "Full legacy reconciliation uses legacy-to-current-lesson-map.json action field.",
+    "DB duplicate groups listed when database available."
+  ]
+}

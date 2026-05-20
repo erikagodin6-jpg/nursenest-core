@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-after-preceptor-conflict-on-icu-rebuilding-momentum-on-your-shift",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 46,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 31,
+  "title": "After Preceptor Conflict on ICU: Rebuilding Momentum on Your Shift",
+  "audience": "nursing",
+  "unit": "ICU",
+  "keywords": {
+    "primary": "after preceptor conflict on icu rebuilding momentum on your shift",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-31.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "After Preceptor Conflict on ICU: Rebuilding Momentum on Your S… | NurseNest",
+    "description": "Practical new grad nursing guidance on ICU: after preceptor conflict on icu: rebuilding momentum on your shift. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

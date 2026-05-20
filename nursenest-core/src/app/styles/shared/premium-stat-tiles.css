@@ -1,0 +1,123 @@
+/* ==========================================================================
+   premium-stat-tiles.css — NurseNest shared stat tile design system token
+
+   Single source of truth for .nn-premium-hero-stat* classes.
+
+   Ownership:
+     These classes are shared between:
+       - Marketing routes: src/app/styles/marketing/hero.css (imports this file)
+       - Learner routes:   src/app/learner-premium-ds.css (imports this file)
+
+   KEEP IN SYNC: If the visual design of stat tiles changes, update only
+   this file. Do NOT duplicate rules in hero.css or learner-premium-ds.css.
+
+   Classes defined here:
+     .nn-premium-hero-stats         — 3-column stat grid (base)
+     .nn-premium-hero-stat          — individual stat tile (base)
+     .nn-premium-hero-stat__label   — tile label text
+     .nn-premium-hero-stat__figure  — figure row (value + unit)
+     .nn-premium-hero-stat__value   — numeric value
+     .nn-premium-hero-stat__unit    — unit suffix (e.g. "cards")
+     .nn-premium-hero-stat__glyph   — icon slot
+     .nn-premium-hero-stat--readiness — readiness colour variant
+     .nn-premium-hero-stat--streak    — streak colour variant
+     .nn-premium-hero-stat--mastery   — mastery colour variant
+   ========================================================================== */
+
+.nn-premium-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.nn-premium-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 112px;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-subtle, #f0e6f7);
+}
+.nn-premium-hero-stat__label {
+  display: block;
+  width: 100%;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--palette-text-muted);
+  line-height: 1.25;
+}
+.nn-premium-hero-stat__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  margin-top: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.nn-premium-hero-stat__label + .nn-premium-hero-stat__value {
+  margin-top: 6px;
+}
+.nn-premium-hero-stat__value {
+  display: block;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--palette-heading);
+  margin-top: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.nn-premium-hero-stat__unit {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--palette-text-muted);
+  line-height: 1.2;
+}
+.nn-premium-hero-stat__glyph {
+  display: block;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-bottom: 6px;
+  color: color-mix(in srgb, var(--palette-text-muted) 55%, var(--palette-heading));
+}
+.nn-premium-hero-stat--readiness {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-success) 9%, var(--surface, #fff)),
+    color-mix(in srgb, var(--semantic-success) 16%, var(--surface, #fff))
+  );
+  border-color: color-mix(in srgb, var(--semantic-success) 30%, transparent);
+}
+.nn-premium-hero-stat--readiness .nn-premium-hero-stat__glyph {
+  color: color-mix(in srgb, var(--semantic-success) 88%, var(--palette-heading));
+}
+.nn-premium-hero-stat--streak {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--surface, #fff)),
+    color-mix(in srgb, var(--semantic-warning) 15%, var(--surface, #fff))
+  );
+  border-color: color-mix(in srgb, var(--semantic-warning) 28%, transparent);
+}
+.nn-premium-hero-stat--streak .nn-premium-hero-stat__glyph {
+  color: color-mix(in srgb, var(--semantic-warning) 90%, var(--palette-heading));
+}
+.nn-premium-hero-stat--mastery {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--surface, #fff)),
+    color-mix(in srgb, var(--semantic-info) 15%, var(--surface, #fff))
+  );
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, transparent);
+}
+.nn-premium-hero-stat--mastery .nn-premium-hero-stat__glyph {
+  color: color-mix(in srgb, var(--semantic-info) 88%, var(--palette-heading));
+}

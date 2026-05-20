@@ -1,0 +1,122 @@
+# Production reliability monitor (read-only checks + bounded Next.js revalidate hints).
+# Required repo secrets: NURSENEST_PRODUCTION_BASE_URL, NURSENEST_RELIABILITY_SECRET
+# Production env: NURSENEST_RELIABILITY_SECRET must match the workflow secret (DigitalOcean).
+# Do not add `set -x` or `curl -v` here; never echo secret values to logs.
+
+name: Production reliability check
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  reliability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Verify secrets are configured
+        id: secrets
+        env:
+          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
+          SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BASE_URL:-}" ] || [ -z "${SECRET:-}" ]; then
+            echo '::error title=GitHub Actions configuration::Production reliability workflow is missing required repository secrets. This is a CI/CD configuration problem — it does not indicate that production (nursenest.ca) is down or unreachable.'
+            echo '::notice::Add Actions secrets: NURSENEST_PRODUCTION_BASE_URL (e.g. https://www.nursenest.ca) and NURSENEST_RELIABILITY_SECRET (must match production NURSENEST_RELIABILITY_SECRET on DigitalOcean). See nursenest-core/docs/github-actions-production-reliability-check.md'
+            exit 1
+          fi
+          echo '::notice::Repository secrets for production reliability are present. Any failure after this step reflects production reachability or in-app checks, not missing Actions secrets.'
+
+      - name: Initial reliability check
+        id: initial
+        continue-on-error: true
+        env:
+          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
+          SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
+        run: |
+          set -euo pipefail
+          BASE_URL="${BASE_URL%/}"
+          echo "Probing ${BASE_URL}/api/internal/reliability/check"
+          HTTP_CODE="$(curl -sS -o /tmp/nn-reliability.json -w "%{http_code}" \
+            -H "x-nursenest-reliability-secret: ${SECRET}" \
+            "${BASE_URL}/api/internal/reliability/check")"
+          echo "HTTP ${HTTP_CODE}"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Reliability check HTTP ${HTTP_CODE}"
+            cat /tmp/nn-reliability.json || true
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          jq '{ ok, checkedAt, baseUrl, failureCount: (.failures|length), warningCount: (.warnings|length) }' /tmp/nn-reliability.json
+          jq -r '.failures[]?' /tmp/nn-reliability.json | while read -r line; do echo "::warning::${line}"; done || true
+          OK="$(jq -r '.ok // false' /tmp/nn-reliability.json)"
+          echo "ok=${OK}" >> "$GITHUB_OUTPUT"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Reliability check reported ok=false on first pass"
+            exit 1
+          fi
+          exit 0
+
+      - name: Bounded self-heal (one shot)
+        id: heal
+        if: steps.initial.outputs.ok != 'true'
+        env:
+          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
+          SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
+        run: |
+          set -euo pipefail
+          BASE_URL="${BASE_URL%/}"
+          echo "Invoking bounded self-heal on ${BASE_URL}"
+          curl -sS -f -X POST "${BASE_URL}/api/internal/reliability/self-heal" \
+            -H "Content-Type: application/json" \
+            -H "x-nursenest-reliability-secret: ${SECRET}" \
+            -d '{"action":"revalidate-critical-paths"}' | tee /tmp/nn-self-heal.json
+          echo "Waiting 30s before re-check..."
+          sleep 30
+
+      - name: Recheck after self-heal
+        id: recheck
+        if: steps.initial.outputs.ok != 'true' && steps.heal.outcome == 'success'
+        continue-on-error: true
+        env:
+          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
+          SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
+        run: |
+          set -euo pipefail
+          BASE_URL="${BASE_URL%/}"
+          HTTP_CODE="$(curl -sS -o /tmp/nn-reliability-2.json -w "%{http_code}" \
+            -H "x-nursenest-reliability-secret: ${SECRET}" \
+            "${BASE_URL}/api/internal/reliability/check")"
+          echo "HTTP ${HTTP_CODE}"
+          cat /tmp/nn-reliability-2.json
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          OK="$(jq -r '.ok // false' /tmp/nn-reliability-2.json)"
+          echo "ok=${OK}" >> "$GITHUB_OUTPUT"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Reliability check still ok=false after self-heal"
+            exit 1
+          fi
+
+      - name: Conclude
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.secrets.outcome }}" != "success" ]; then
+            echo '::error title=GitHub Actions configuration::Job stopped because required repository secrets were missing or the verify step failed. This is not evidence of a production outage — configure Actions secrets and re-run.'
+            exit 1
+          fi
+          if [ "${{ steps.initial.outputs.ok }}" = "true" ]; then
+            echo "Healthy on first check."
+            exit 0
+          fi
+          if [ "${{ steps.recheck.outputs.ok }}" = "true" ]; then
+            echo "Recovered after self-heal."
+            exit 0
+          fi
+          echo "::error::Production reliability check failed after secrets were present (see prior steps for HTTP or ok=false — possible production or auth mismatch, not missing Actions secrets)."
+          exit 1

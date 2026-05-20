@@ -1,0 +1,42 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "capturedAt": "2026-05-10T21:44:41.011Z",
+  "summary": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/homepage-desktop.png"
+    },
+    {
+      "route": "/tools",
+      "viewport": "desktop",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/clinical-tools-desktop.png"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/homepage-mobile.png"
+    },
+    {
+      "route": "/tools",
+      "viewport": "mobile",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/clinical-tools-mobile.png"
+    }
+  ],
+  "issues": [
+    {
+      "route": "/us/rn/nclex-rn/lessons",
+      "viewport": "desktop",
+      "error": "TimeoutError: page.waitForSelector: Timeout 60000ms exceeded.\nCall log:\n  - waiting for locator('main') to be visible\n"
+    },
+    {
+      "route": "/us/rn/nclex-rn/lessons",
+      "viewport": "mobile",
+      "error": "TimeoutError: page.goto: Timeout 120000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:3100/us/rn/nclex-rn/lessons\", waiting until \"load\"\n"
+    }
+  ]
+}

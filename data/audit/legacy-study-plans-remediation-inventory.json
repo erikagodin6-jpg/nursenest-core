@@ -1,0 +1,508 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "files": 20,
+    "concepts": [
+      "onboarding-plan",
+      "study-path",
+      "mock-exam assembly",
+      "readiness score"
+    ]
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/pages/mock-exam-report.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-readiness.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/study-pathways-hub.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/mock-exams.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-readiness-analytics.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-mock-exam-templates.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-readiness-demo.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/nclex-readiness-score.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/mock-exam-session.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/radiography-readiness-quiz.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "client/src/pages/onboarding-plan.tsx",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/readiness-engine.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/mock-exam-assembly.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/readiness-routes.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/rationale-remediation.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/premium-study-routes.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/mlt-remediation-routes.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/study-path.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/mlt-remediation-engine.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    },
+    {
+      "sourcePath": "server/mock-exam-template-routes.ts",
+      "contentType": "study_plan_remediation_or_mock_flow",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [],
+      "recommendedDestination": "Current study coach / plans — only aligned features",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Compare to current remediation; avoid duplicate study-loop logic."
+    }
+  ]
+}

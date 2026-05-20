@@ -1,0 +1,317 @@
+import type { FlashcardItemKind, Prisma } from "@prisma/client";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import {
+  normalizeLegacyAnswerPayload,
+  hydrateCanonicalSata,
+  type CanonicalOption,
+} from "./flashcard-canonical-options";
+
+/** Client + API shape for NCLEX-style micro-questions on flashcards. */
+export type ExamMicroQuestionPayload = {
+  itemKind: FlashcardItemKind;
+  questionStem: string;
+  answerOptions: Array<{ letter: string; text: string }>;
+  correctLetter: string;
+  rationaleCorrect: string;
+  rationaleIncorrect: Array<{ letter: string; rationale: string }>;
+};
+
+/**
+ * SATA (Select All That Apply) payload — multiple correct answers.
+ * correctLetters is a sorted array of the letters that are correct (≥ 2).
+ */
+export type SataQuestionPayload = {
+  itemKind: "SATA";
+  questionStem: string;
+  answerOptions: Array<{ letter: string; text: string }>;
+  correctLetters: string[];
+  rationaleCorrect: string;
+  rationaleByLetter: Array<{ letter: string; rationale: string; correct: boolean }>;
+};
+
+/**
+ * Type guard for SATA payloads. Checks both `itemKind === "SATA"` AND that
+ * `correctLetters` is a non-empty array — guards against a malformed MCQ payload
+ * that has `itemKind=SATA` but `correctLetter` (singular) instead of `correctLetters`.
+ */
+export function isSataPayload(
+  payload: ExamMicroQuestionPayload | SataQuestionPayload | null | undefined,
+): payload is SataQuestionPayload {
+  if (!payload || payload.itemKind !== "SATA") return false;
+  return Array.isArray((payload as SataQuestionPayload).correctLetters);
+}
+
+const LETTER_RE = /^[A-D]$/;
+
+/**
+ * Definition / acronym trivia (not mini NCLEX-style judgment items).
+ * Used on write validation and when parsing DB rows so trivial items do not use the exam stack.
+ */
+export function isTrivialDefinitionOnlyStem(stem: string): boolean {
+  const t = stem.trim();
+  if (t.length < 6) return true;
+  const trivialPatterns: RegExp[] = [
+    /\bwhat\s+does\s+[A-Z0-9]{1,12}\s+stand\s+for\b/i,
+    /\bwhat\s+is\s+the\s+(meaning|definition|abbreviation)\s+of\s+[A-Z0-9]{1,12}\b/i,
+    /\bdefine\s+(the\s+)?[A-Z]{2,12}\b/i,
+    /\bwhat\s+is\s+[A-Z]{2,12}\s*\??\s*$/i,
+    /\bspell\s+out\s+[A-Z]{2,12}\b/i,
+    /\bfull\s+form\s+of\s+[A-Z]{2,12}\b/i,
+  ];
+  return trivialPatterns.some((p) => p.test(t));
+}
+
+function normLetter(raw: string | null | undefined): string | null {
+  if (raw == null) return null;
+  const s = String(raw).trim().toUpperCase();
+  return LETTER_RE.test(s) ? s : null;
+}
+
+function parseOptionsJson(raw: Prisma.JsonValue | null | undefined): Array<{ letter: string; text: string }> | null {
+  if (raw == null || !Array.isArray(raw)) return null;
+  const out: Array<{ letter: string; text: string }> = [];
+  for (const row of raw) {
+    if (!row || typeof row !== "object") return null;
+    const o = row as Record<string, unknown>;
+    const letter = normLetter(typeof o.letter === "string" ? o.letter : typeof o.id === "string" ? o.id : null);
+    const text = typeof o.text === "string" ? o.text.trim() : "";
+    if (!letter || text.length < 2) return null;
+    out.push({ letter, text });
+  }
+  if (out.length < 3 || out.length > 4) return null;
+  const letters = new Set(out.map((x) => x.letter));
+  if (letters.size !== out.length) return null;
+  return out;
+}
+
+function parseIncorrectJson(
+  raw: Prisma.JsonValue | null | undefined,
+): Array<{ letter: string; rationale: string }> | null {
+  if (raw == null || !Array.isArray(raw)) return null;
+  const out: Array<{ letter: string; rationale: string }> = [];
+  for (const row of raw) {
+    if (!row || typeof row !== "object") return null;
+    const o = row as Record<string, unknown>;
+    const letter = normLetter(typeof o.letter === "string" ? o.letter : null);
+    const rationale = typeof o.rationale === "string" ? o.rationale.trim() : "";
+    if (!letter || rationale.length < 4) return null;
+    out.push({ letter, rationale });
+  }
+  return out;
+}
+
+/**
+ * Returns a complete exam micro-question payload when DB fields satisfy NCLEX-style rules;
+ * otherwise null (legacy front/back card).
+ */
+export function parseExamMicroQuestionFromDbFields(card: {
+  examItemKind: FlashcardItemKind | null;
+  questionStem: string | null;
+  answerOptions: Prisma.JsonValue | null;
+  correctAnswer: string | null;
+  rationaleCorrect: string | null;
+  rationaleIncorrect: Prisma.JsonValue | null;
+}): ExamMicroQuestionPayload | null {
+  if (!card.examItemKind) return null;
+  const stem = card.questionStem?.trim() ?? "";
+  if (stem.length < 8) return null;
+  const options = parseOptionsJson(card.answerOptions);
+  if (!options) return null;
+  const correctLetter = normLetter(card.correctAnswer);
+  if (!correctLetter || !options.some((o) => o.letter === correctLetter)) return null;
+  const rationaleCorrect = card.rationaleCorrect?.trim() ?? "";
+  if (rationaleCorrect.length < 8) return null;
+  const incorrect = parseIncorrectJson(card.rationaleIncorrect);
+  if (!incorrect) return null;
+  const optionLetters = new Set(options.map((o) => o.letter));
+  const wrongLetters = [...optionLetters].filter((l) => l !== correctLetter).sort();
+  if (wrongLetters.length !== options.length - 1) return null;
+  const incMap = new Map(incorrect.map((r) => [r.letter, r.rationale]));
+  if (incMap.size !== incorrect.length) return null;
+  for (const w of wrongLetters) {
+    const r = incMap.get(w);
+    if (!r || r.trim().length < 4) return null;
+  }
+  return {
+    itemKind: card.examItemKind,
+    questionStem: stem,
+    answerOptions: options,
+    correctLetter,
+    rationaleCorrect,
+    rationaleIncorrect: wrongLetters.map((letter) => ({
+      letter,
+      rationale: incMap.get(letter)!,
+    })),
+  };
+}
+
+export function correctAnswerLine(exam: ExamMicroQuestionPayload): string {
+  const hit = exam.answerOptions.find((o) => o.letter === exam.correctLetter);
+  const label = hit ? `${exam.correctLetter}) ${hit.text}` : exam.correctLetter;
+  return `Correct: ${label}`;
+}
+
+/**
+ * Deterministic per-session shuffle of A–D rows so the keyed letter stays aligned with rationales.
+ * Uses stable lexical ordering before shuffling so identical DB rows still vary by `seed`.
+ */
+export function shuffleExamMicroQuestionOrder(exam: ExamMicroQuestionPayload, seed: string): ExamMicroQuestionPayload {
+  if (exam.answerOptions.length <= 1) return exam;
+  const base = [...exam.answerOptions].sort((a, b) => a.letter.localeCompare(b.letter));
+  const shuffled = shuffleSeeded(base, `${seed}:exam_micro`);
+  const oldToNew = new Map<string, string>();
+  shuffled.forEach((opt, idx) => {
+    oldToNew.set(opt.letter, String.fromCharCode("A".charCodeAt(0) + idx));
+  });
+  const newOptions = shuffled.map((opt, idx) => ({
+    letter: String.fromCharCode("A".charCodeAt(0) + idx),
+    text: opt.text,
+  }));
+  const newCorrect = oldToNew.get(exam.correctLetter);
+  if (!newCorrect) return exam;
+  const rationaleIncorrect = exam.rationaleIncorrect.map((row) => ({
+    letter: oldToNew.get(row.letter) ?? row.letter,
+    rationale: row.rationale,
+  }));
+  return {
+    ...exam,
+    answerOptions: newOptions,
+    correctLetter: newCorrect,
+    rationaleIncorrect,
+  };
+}
+
+/** Zod/admin: validate raw JSON + strings before persist. */
+export function validateExamMicroQuestionInput(input: {
+  examItemKind: FlashcardItemKind;
+  questionStem: string;
+  answerOptions: unknown;
+  correctAnswer: string;
+  rationaleCorrect: string;
+  rationaleIncorrect: unknown;
+}): { ok: true; payload: ExamMicroQuestionPayload } | { ok: false; error: string } {
+  const parsed = parseExamMicroQuestionFromDbFields({
+    examItemKind: input.examItemKind,
+    questionStem: input.questionStem,
+    answerOptions: input.answerOptions as Prisma.JsonValue,
+    correctAnswer: input.correctAnswer,
+    rationaleCorrect: input.rationaleCorrect,
+    rationaleIncorrect: input.rationaleIncorrect as Prisma.JsonValue,
+  });
+  if (!parsed) {
+    return {
+      ok: false,
+      error:
+        "Exam-style cards require: questionStem (≥8 chars), 3–4 answerOptions {letter,text}, correctAnswer A–D matching an option, rationaleCorrect (≥8 chars), and rationaleIncorrect entries for every distractor letter with rationale (≥4 chars each).",
+    };
+  }
+  if (isTrivialDefinitionOnlyStem(input.questionStem)) {
+    return {
+      ok: false,
+      error:
+        "Exam-style stems must be clinical judgment items (priority, assessment, intervention), not acronym or definition trivia (e.g. “What does X stand for?”).",
+    };
+  }
+  return { ok: true, payload: parsed };
+}
+
+// ─── SATA parsing ─────────────────────────────────────────────────────────────
+
+type SataDbFields = {
+  examItemKind: FlashcardItemKind | null;
+  questionStem: string | null;
+  answerOptions: Prisma.JsonValue | null;
+  correctAnswer: string | null;
+  rationaleCorrect: string | null;
+  rationaleIncorrect: Prisma.JsonValue | null;
+};
+
+/**
+ * Parses a SATA payload from legacy JSON DB fields.
+ *
+ * The legacy model stores SATA correct letters as a comma-separated string in
+ * `correctAnswer` (e.g. "A,C,D"). Cards that only have a single letter stored
+ * are treated as single-correct SATA (1-correct) and returned, but callers
+ * should prefer canonical FlashcardOption rows when available.
+ *
+ * Returns null when the card is not a valid SATA card.
+ */
+export function parseSataFromDbFields(card: SataDbFields): SataQuestionPayload | null {
+  if (card.examItemKind !== "SATA") return null;
+
+  const options = normalizeLegacyAnswerPayload({
+    examItemKind: card.examItemKind,
+    answerOptions: card.answerOptions,
+    correctAnswer: card.correctAnswer,
+    rationaleCorrect: card.rationaleCorrect,
+    rationaleIncorrect: card.rationaleIncorrect,
+  });
+
+  if (!options) return null;
+
+  // Need at least 2 correct for a valid SATA (1 correct = likely a data error)
+  const correctCount = options.filter((o) => o.isCorrect).length;
+  if (correctCount < 2) return null;
+
+  return hydrateCanonicalSata(
+    card.questionStem ?? "",
+    options,
+    card.rationaleCorrect,
+  );
+}
+
+/**
+ * Parses a SATA payload from canonical FlashcardOption rows.
+ * Preferred over parseSataFromDbFields when canonical rows exist.
+ */
+export function parseSataFromCanonicalOptions(
+  stem: string | null,
+  options: CanonicalOption[],
+  rationaleCorrect: string | null,
+): SataQuestionPayload | null {
+  if (!stem || options.length === 0) return null;
+  const correctCount = options.filter((o) => o.isCorrect).length;
+  if (correctCount < 2) return null;
+  return hydrateCanonicalSata(stem, options, rationaleCorrect);
+}
+
+/**
+ * Shuffles SATA options deterministically by session seed.
+ * Keeps correctLetters, rationaleByLetter, and answerOptions aligned.
+ */
+export function shuffleSataQuestionOrder(
+  sata: SataQuestionPayload,
+  seed: string,
+): SataQuestionPayload {
+  if (sata.answerOptions.length <= 1) return sata;
+
+  const base = [...sata.answerOptions].sort((a, b) => a.letter.localeCompare(b.letter));
+  const shuffled = shuffleSeeded(base, `${seed}:sata`);
+
+  const oldToNew = new Map<string, string>();
+  shuffled.forEach((opt, idx) => {
+    oldToNew.set(opt.letter, String.fromCharCode("A".charCodeAt(0) + idx));
+  });
+
+  const newOptions = shuffled.map((opt, idx) => ({
+    letter: String.fromCharCode("A".charCodeAt(0) + idx),
+    text: opt.text,
+  }));
+
+  const newCorrectLetters = sata.correctLetters
+    .map((l) => oldToNew.get(l) ?? l)
+    .sort();
+
+  const newRationaleByLetter = sata.rationaleByLetter.map((r) => ({
+    letter: oldToNew.get(r.letter) ?? r.letter,
+    rationale: r.rationale,
+    correct: r.correct,
+  }));
+
+  return {
+    ...sata,
+    answerOptions: newOptions,
+    correctLetters: newCorrectLetters,
+    rationaleByLetter: newRationaleByLetter,
+  };
+}

@@ -1,0 +1,3 @@
+-- No-op: `practice_tests` is created in `20260407120000_practice_tests`.
+-- The original ALTER ran before that table existed and failed deploys (42P01).
+-- Column `adaptiveState` is added in the CREATE TABLE in that migration.

@@ -1,0 +1,122 @@
+# Placeholder copy leak — signup first/last name (FIX-REPORT)
+
+**Date:** 2026-05-07  
+**Scope:** Learner marketing signup (`/signup`) and marketing i18n pipeline.
+
+---
+
+## 1. Root cause
+
+`SignupForm` referenced **`pages.signup.placeholderFirstName`** and **`pages.signup.placeholderLastName`**, but those keys were **never added** to the canonical marketing catalog (`tools/i18n/marketing/marketing-en.json`). At runtime, `formatMarketingMessage` treated them as missing/invalid, `MarketingI18nProvider.safeFormat` fell through to **`humanizedMarketingKeyFallback`**, which derives a title-case string from the key’s final segment (`placeholderFirstName` → **“Placeholder First Name”**). The JSX used `t("…") ?? "First name"`, which **never helped**: `t()` always returned a non-empty humanized string, so the `??` fallback was dead.
+
+`.vibecheck/truthpack/` was **not present** in this workspace clone; no truthpack keys were consulted or invented.
+
+---
+
+## 2. Exact files responsible (pre-fix)
+
+| Layer | File | Role |
+|--------|------|------|
+| UI | `nursenest-core/src/components/auth/signup-form.tsx` | Called `t("pages.signup.placeholderFirstName")` / `placeholderLastName` for `placeholder` attributes. |
+| Catalog gap | `tools/i18n/marketing/marketing-en.json` | Missing the two keys above (other `pages.signup.placeholder*` keys existed). |
+| Runtime fallback | `nursenest-core/src/components/i18n/marketing-i18n-provider.tsx` → `safeFormat` | On empty resolution, returns `humanizedMarketingKeyFallback(key)`. |
+| Heuristic | `nursenest-core/src/lib/marketing-i18n/marketing-message-value-policy.ts` | `humanizedMarketingKeyFallback` turns camelCase tail into user-visible words. |
+| Compiled output | `nursenest-core/public/i18n/*/pages.json` (+ monolith `client/public/i18n/*.json` after `npm run i18n:compile`) | Shipped whatever the merge pipeline produced; without source keys, behavior was unchanged until compile after fix. |
+
+---
+
+## 3. Placeholder / scaffold string audit (ripgrep-style survey)
+
+Strings below are **representative hits** from repo search (`Placeholder`, `Builder Title`, `Selection Label`, `Heading`, `"Question"` / `"Answer"`, `Pool Preset`, `Intro`, `Subtitle`, `scaffold`). **Learner-facing** is called out where applicable.
+
+| String / pattern | Example location(s) | Learner-facing? |
+|------------------|---------------------|-----------------|
+| **“Placeholder First Name” / “Placeholder Last Name”** (via humanize) | Resolved from missing `pages.signup.placeholderFirstName` / `LastName` | **Yes** (signup) — **fixed** by adding catalog keys + compile. |
+| `humanizedMarketingKeyFallback` | `marketing-i18n-provider.tsx`, `marketing-message-value-policy.ts` | Any missing marketing key (last resort). |
+| `searchPlaceholder`, `*Placeholder` i18n **keys** (legitimate UX) | `marketing-message-keys.generated.ts`, many `learner.*` / `login.*` keys | Yes — intentional placeholders (search, forms). |
+| `"Question"` / `"Answer"` as **English defaults** in `tx(...)` / labels | e.g. `practice-test-runner-client.tsx`, `practice-session-layout.tsx`, `pathway-lesson-quiz-embed-section.tsx` | Yes (practice UI); defaults are real words, not key-humanization. |
+| JSON-LD `@type`: `"Question"` / `"Answer"` | `seo-json-ld.tsx`, `faq-json-ld.tsx`, blog builders | No (schema, not visible copy). |
+| **“Placeholder Values”** | `client/src/pages/admin-subscriber-rescue.tsx` | Admin |
+| `isPlaceholderAuthCopy` / auth trust guards | `auth-flow-trust-reassurance.tsx`, `is-placeholder-auth-copy.ts` | Marketing auth reassurance (hides bad copy). |
+| `Placeholder URL` (comments / env) | `require-database-env.ts` | No (docs / infra). |
+| `scaffold` / `quizPlaceholders` | `allied-mastery-module-scaffolding`, tests | Admin / draft content, not signup. |
+| `Builder Title`, `Selection Label`, `Pool Preset` (exact phrases) | No matches under `nursenest-core/` TSX/TS | — |
+
+---
+
+## 4. Routes affected
+
+- **`/signup`** (marketing signup): first/last name `<input placeholder=…>` and accessible names.
+
+Adjacent fields on the same form already used existing keys: **Username**, **Email**, **Password**, country / tier / exam / study-goal / time selects — **no change required** after spot-check.
+
+---
+
+## 5. Files changed (this fix)
+
+**Source / policy**
+
+- `tools/i18n/marketing/marketing-en.json` — added `pages.signup.placeholderFirstName` → `"First name"`, `pages.signup.placeholderLastName` → `"Last name"`.
+- `tools/i18n/marketing/locale/marketing-*.json` (21 locales) — updated by **`npm run i18n:normalize-marketing`** (missing keys filled with canonical English per script design).
+- `nursenest-core/src/components/auth/signup-form.tsx` — removed ineffective `?? "First name"` / `?? "Last name"` (dead code once keys exist).
+- `nursenest-core/src/lib/marketing-i18n/marketing-message-value-policy.ts` — JSDoc on `humanizedMarketingKeyFallback` clarified: prefer real strings in `marketing-en.json` + normalize.
+
+**Generated by pipeline (do not hand-edit)**
+
+- `nursenest-core/src/lib/i18n/marketing-message-keys.generated.ts`
+- `nursenest-core/public/i18n/<locale>/pages.json` (all merged locales)
+- `client/public/i18n/<locale>.json` (monolith bundles)
+
+---
+
+## 6. Screenshots
+
+| When | Path | Notes |
+|------|------|--------|
+| **Before** | — | Not captured in this session (pre-fix state unavailable here). Prior evidence: `docs/qa-reports/rn-learner-journey-20260507-1651/QA-REPORT.md`. |
+| **After** | *(intended)* `docs/qa-reports/placeholder-copy-fix-20260507-2109/signup-desktop-after.png` | IDE browser tool reported saving under a host temp path; **no binary was committed** to this folder. Use local browser + same path if a PNG is required in-repo. |
+
+---
+
+## 7. Browser confirmation (leaks eliminated)
+
+On **`http://127.0.0.1:3000/signup`** (390×844 and default desktop), accessibility snapshot showed:
+
+- Textbox **name** and **placeholder**: **“First name”**, **“Last name”** (not “Placeholder …”).
+- **Username**, **Email**, **Password** placeholders unchanged and correct.
+
+No raw dotted keys (`pages.signup.…`) in visible control labels in that snapshot.
+
+---
+
+## 8. Fallback policy (safe behavior)
+
+**Current architecture** (unchanged except documentation):
+
+1. `formatMarketingMessage` (`marketing-i18n-core.ts`) normalizes values; missing/invalid → `missingMarketingCopyFallback` (empty in production after guards) + structured `console.error` JSON logs.
+2. `MarketingI18nProvider.safeFormat` uses **`humanizedMarketingKeyFallback`** when the trimmed resolved string is empty or on certain errors, with **dev-only** deduped warnings via `warnMissingMarketingMessageKeyDev`.
+
+**Policy implemented for this bug class:** learner-critical copy must exist in **`tools/i18n/marketing/marketing-en.json`**, then run **`npm run i18n:normalize-marketing`** and **`npm run i18n:compile`** so production ships real strings, not key-derived text. Non-English overlays receive English fill for new keys until translators replace them (normalize script behavior).
+
+---
+
+## 9. Verification commands run
+
+```bash
+npm run i18n:normalize-marketing
+npm run i18n:compile
+npm run i18n:validate   # OK — 22 locales; 0 warnings
+```
+
+**Shard check:** `node -e "const p=require('./nursenest-core/public/i18n/en/pages.json'); console.log(p['pages.signup.placeholderFirstName'], p['pages.signup.placeholderLastName']);"` → `First name` `Last name`.
+
+---
+
+## 10. Metrics
+
+| Metric | Value |
+|--------|--------|
+| New marketing keys | 2 |
+| Locales in normalize pass | 21 overlay files + `marketing-en.json` |
+| `i18n:validate` warnings | 0 |
+| Learner-visible bad strings on `/signup` (post-fix) | 0 (per browser snapshot + compiled JSON check) |

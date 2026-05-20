@@ -1,0 +1,1868 @@
+{
+  "generatedAt": "2026-04-14T16:26:45.193Z",
+  "pages": {
+    "marketingLessons": "/[locale]/[slug]/[examCode]/lessons/[lessonSlug] — server: loadPathwayLesson, visibleSectionsForLesson, canViewFullPathwayLesson",
+    "learnerApp": "/app/** — protected by auth layout + API gates",
+    "practiceTests": "/app/practice-tests/** — session required for active tests"
+  },
+  "apisEnumerated": 204,
+  "apiRoutes": [
+    {
+      "path": "src/app/api/admin/ai/drafts/flashcards/[id]/promote/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/flashcards/[id]/review/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/flashcards/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/flashcards/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/questions/[id]/promote/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/questions/[id]/review/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/questions/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/drafts/questions/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/exam-questions/drafts/[id]/regenerate-section/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/exam-questions/generate-batch/[jobId]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/exam-questions/generate-batch/[jobId]/step/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/exam-questions/generate-batch/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/exam-questions/generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ai/flashcards/generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/analytics/dashboard/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/analytics/funnels/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/analytics/study-performance/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/analytics/subscriptions/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/analytics/users/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/automation-logs/[id]/retry/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/automation-logs/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/[id]/duplicate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/[id]/image-generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/[id]/pre-publish-validation/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/batch-chunk/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/batch-schedule/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/batch-schedule/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/batch-schedule/run/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/campaigns/[id]/run-chunk/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/campaigns/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/control-panel/generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/control-panel/persist-draft/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/control-panel/regenerate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/draft-batch/[id]/process/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/draft-batch/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/draft-batch/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/generate-ai/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/generate-gemini-draft/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/localized/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/localized/generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/localized/queue/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/localized/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/refresh-existing/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/blog/upgrade-weak/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/cat-blueprint-sessions/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/categories/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/content-audit/high-end-completeness/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/content-pipeline/batch/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/content-quality/refresh/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/content-quality/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/diagnostics/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/exam-coverage-audit/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/exams/[id]/route.ts",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/exams/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/export/content/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/flashcards/decks/[deckId]/route.ts",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/flashcards/decks/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/flashcards/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/flashcards/summary/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/fraud-dashboard/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/gaps/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/i18n-diagnostics/refresh/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/i18n-diagnostics/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/insights/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/jobs/[id]/retry/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/jobs/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lesson-question-link-coverage/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/[id]/adapt/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/[id]/duplicate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-drafts/[id]/promote/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-drafts/[id]/regenerate-section/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-drafts/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-drafts/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-generate-batch/[jobId]/cancel/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-generate-batch/[jobId]/export/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-generate-batch/[jobId]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-generate-batch/[jobId]/step/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-generate-batch/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/ai-generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/bulk/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/lessons/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/linking/inspect/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/media/[id]/route.ts",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/media/[id]/scan/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/media/batch-scan/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/media/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/media/upload/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/nclex-client-needs-mapping/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/np-aanp-blueprint/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/np-coverage/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/operations-dashboard/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/operations-health/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/ops/run/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/pathway-lesson-translations/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/pathway-lessons/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/pre-nursing-report/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/protection-abuse-reviews/[id]/action/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/qa/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/question-bank-coverage/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/question-bank-diagnostics/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/question-bank-remediation/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/questions/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/questions/bulk-import/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/questions/bulk/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/questions/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/scalability-report/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/seo/report/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/seo/validate-path/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/stats/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/storage/upload/route.ts",
+      "methodsHint": "+POST",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/system-status/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/users/[userId]/support/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/admin/users/lookup/route.ts",
+      "methodsHint": "GET",
+      "gate": "admin",
+      "hasSubscriber": false,
+      "hasAdmin": true,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/ai/study-plan/generate/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/assets/i18n/[filename]/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/[...nextauth]/route.ts",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/change-password/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/forgot-password/route.ts",
+      "methodsHint": "+POST",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/resend-verification/route.ts",
+      "methodsHint": "+POST",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/reset-password/route.ts",
+      "methodsHint": "+POST",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/sync-session/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/auth/verify-email/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/billing/portal/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/blog/import/route.ts",
+      "methodsHint": "+POST",
+      "gate": "cron_or_webhook_secret",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/blog/publish/route.ts",
+      "methodsHint": "+POST",
+      "gate": "cron_or_webhook_secret",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cat/np/analysis/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cat/np/answer/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cat/np/audit/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cat/np/session/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/coach/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cron/blog-batch-schedule/route.ts",
+      "methodsHint": "+POST",
+      "gate": "cron_or_webhook_secret",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cron/blog-publish/route.ts",
+      "methodsHint": "+POST",
+      "gate": "cron_or_webhook_secret",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/cron/jobs/route.ts",
+      "methodsHint": "+POST",
+      "gate": "cron_or_webhook_secret",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/debug/sentry-test/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/exams/attempt/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/exams/session/question/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/exams/session/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/exams/start/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/exams/submit/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/feedback/report/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_only",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/flashcards/custom-session/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/flashcards/decks/[deckRef]/review/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/flashcards/decks/[deckRef]/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/flashcards/decks/[deckRef]/study/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/flashcards/decks/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/flashcards/due-summary/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/flashcards/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/flashcards/stats/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/flashcards/weak-queue/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/health/ready/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/health/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/adaptive-loop/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/baseline-assessment/questions/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/baseline-assessment/skip/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/baseline-assessment/status/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_only",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/baseline-assessment/submit/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/command-center/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/engagement-nudges/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/exam-plan/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/insights/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/lesson-assessment/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/lesson-bank-study-loop/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/mistakes/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/notes/recent/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/notes/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/pathway-hub-stats/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/personal-profile/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/learner/pre-nursing-plan/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/pre-nursing-progress/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/protection-telemetry/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/readiness/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/study-budget/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/study-path/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/study-settings/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/learner/weak-areas/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/lessons/pathway-progress/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/lessons/progress/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/lessons/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/marketing-assets/[...path]/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/onboarding/complete/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/practice-tests/[id]/cat-study-review/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/practice-tests/[id]/question/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/practice-tests/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/practice-tests/cat-insights/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/practice-tests/cat-readiness/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/practice-tests/route.ts",
+      "methodsHint": "GET+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/pricing/options/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/public/flashcard-tags/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/public/home-stats/route.ts",
+      "methodsHint": "GET",
+      "gate": "intentionally_public",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/questions/[id]/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/questions/discovery/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/questions/freemium-grade/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/questions/grade/route.ts",
+      "methodsHint": "+POST",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/questions/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": true
+    },
+    {
+      "path": "src/app/api/questions/strategy-counts/route.ts",
+      "methodsHint": "GET",
+      "gate": "subscriber_session",
+      "hasSubscriber": true,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/signup/route.ts",
+      "methodsHint": "+POST",
+      "gate": "review_required",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/subscribe/route.ts",
+      "methodsHint": "+POST",
+      "gate": "review_required",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/subscriptions/checkout/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/subscriptions/webhook/route.ts",
+      "methodsHint": "+POST",
+      "gate": "cron_or_webhook_secret",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": false,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/trial/start/route.ts",
+      "methodsHint": "+POST",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    },
+    {
+      "path": "src/app/api/trial/status/route.ts",
+      "methodsHint": "GET",
+      "gate": "auth_entitlement_or_401",
+      "hasSubscriber": false,
+      "hasAdmin": false,
+      "hasAuth": true,
+      "hasEntitlement": false
+    }
+  ],
+  "pageRouteGroups": [
+    {
+      "pattern": "(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/**",
+      "note": "Marketing pathway lessons — preview/full via pathway-lesson-access"
+    },
+    {
+      "pattern": "(student)/app/**",
+      "note": "Learner app — session + entitlements on data routes"
+    },
+    {
+      "pattern": "practice-tests/**",
+      "note": "CAT / practice UI — uses subscriber APIs"
+    },
+    {
+      "pattern": "flashcards/**",
+      "note": "Flashcard study — deck visibility + subscriber checks in API"
+    }
+  ],
+  "attackVectorsChecked": [
+    "Direct URL without session — marketing lessons: notFound if structuralQuality.publicComplete false; app routes redirect/sign-in",
+    "API without cookie — /api/questions, /api/lessons require userId (401)",
+    "includeRationale=1 for freemium — blocked 403 in /api/questions/[id]",
+    "Query param preview/free bypass — no handlers found; entitlement from session only",
+    "ISR leak — lesson detail force-dynamic; revalidate 86400 with auth-bound body paths"
+  ]
+}

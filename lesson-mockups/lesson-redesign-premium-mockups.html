@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NurseNest Premium Lesson Redesign Mockups</title>
+  <style>
+    :root {
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --radius: 8px;
+      --shadow-soft: 0 18px 55px rgba(20, 36, 54, 0.11);
+      --shadow-card: 0 10px 30px rgba(20, 36, 54, 0.09);
+      --ocean-bg: #edf8f8;
+      --ocean-surface: #ffffff;
+      --ocean-panel: #f5fbfb;
+      --ocean-border: #cfe6e7;
+      --ocean-text: #17313a;
+      --ocean-muted: #597078;
+      --ocean-accent: #2f9a9a;
+      --ocean-accent-soft: #dff5f3;
+      --blossom-bg: #fff7f3;
+      --blossom-surface: #fffdfb;
+      --blossom-panel: #fff1eb;
+      --blossom-border: #f0d6ca;
+      --blossom-text: #3d2c2f;
+      --blossom-muted: #7a6260;
+      --blossom-accent: #b76f66;
+      --blossom-accent-soft: #fae4dc;
+      --midnight-bg: #091724;
+      --midnight-surface: #102333;
+      --midnight-panel: #152c3d;
+      --midnight-border: #2b5063;
+      --midnight-text: #edf8fa;
+      --midnight-muted: #a6c1ca;
+      --midnight-accent: #79d7d0;
+      --midnight-accent-soft: #193f4a;
+      --aurora-bg: #f2f8ff;
+      --aurora-surface: #ffffff;
+      --aurora-panel: #f2fbf5;
+      --aurora-border: #cbdfee;
+      --aurora-text: #1d3041;
+      --aurora-muted: #637282;
+      --aurora-accent: #5e8bd9;
+      --aurora-accent-soft: #e2ecff;
+      --sunset-bg: #fff8ed;
+      --sunset-surface: #fffdf8;
+      --sunset-panel: #fff0dd;
+      --sunset-border: #efd6b7;
+      --sunset-text: #3f3024;
+      --sunset-muted: #7a6652;
+      --sunset-accent: #c67838;
+      --sunset-accent-soft: #fde6cb;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #dfe8ed;
+      color: #14242f;
+      font-family: var(--font);
+    }
+    .gallery {
+      display: grid;
+      gap: 48px;
+      padding: 48px;
+    }
+    .mockup {
+      width: 1440px;
+      min-height: 1000px;
+      overflow: hidden;
+      position: relative;
+      background: var(--lesson-bg);
+      color: var(--lesson-text);
+      border: 1px solid rgba(24, 44, 58, 0.12);
+      box-shadow: 0 24px 80px rgba(12, 28, 42, 0.18);
+    }
+    .mockup.mobile {
+      width: 430px;
+      min-height: 932px;
+    }
+    .theme-ocean {
+      --lesson-bg: var(--ocean-bg);
+      --lesson-surface: var(--ocean-surface);
+      --lesson-panel: var(--ocean-panel);
+      --lesson-border: var(--ocean-border);
+      --lesson-text: var(--ocean-text);
+      --lesson-muted: var(--ocean-muted);
+      --lesson-accent: var(--ocean-accent);
+      --lesson-accent-soft: var(--ocean-accent-soft);
+    }
+    .theme-blossom {
+      --lesson-bg: var(--blossom-bg);
+      --lesson-surface: var(--blossom-surface);
+      --lesson-panel: var(--blossom-panel);
+      --lesson-border: var(--blossom-border);
+      --lesson-text: var(--blossom-text);
+      --lesson-muted: var(--blossom-muted);
+      --lesson-accent: var(--blossom-accent);
+      --lesson-accent-soft: var(--blossom-accent-soft);
+    }
+    .theme-midnight {
+      --lesson-bg: var(--midnight-bg);
+      --lesson-surface: var(--midnight-surface);
+      --lesson-panel: var(--midnight-panel);
+      --lesson-border: var(--midnight-border);
+      --lesson-text: var(--midnight-text);
+      --lesson-muted: var(--midnight-muted);
+      --lesson-accent: var(--midnight-accent);
+      --lesson-accent-soft: var(--midnight-accent-soft);
+    }
+    .theme-aurora {
+      --lesson-bg: var(--aurora-bg);
+      --lesson-surface: var(--aurora-surface);
+      --lesson-panel: var(--aurora-panel);
+      --lesson-border: var(--aurora-border);
+      --lesson-text: var(--aurora-text);
+      --lesson-muted: var(--aurora-muted);
+      --lesson-accent: var(--aurora-accent);
+      --lesson-accent-soft: var(--aurora-accent-soft);
+    }
+    .theme-sunset {
+      --lesson-bg: var(--sunset-bg);
+      --lesson-surface: var(--sunset-surface);
+      --lesson-panel: var(--sunset-panel);
+      --lesson-border: var(--sunset-border);
+      --lesson-text: var(--sunset-text);
+      --lesson-muted: var(--sunset-muted);
+      --lesson-accent: var(--sunset-accent);
+      --lesson-accent-soft: var(--sunset-accent-soft);
+    }
+    .frame {
+      padding: 34px 42px 40px;
+      min-height: inherit;
+    }
+    .mobile .frame {
+      padding: 18px;
+    }
+    .topbar,
+    .hero,
+    .card,
+    .side,
+    .rail,
+    .lesson-card,
+    .stepper,
+    .tabbar,
+    .mobile-bar {
+      background: var(--lesson-surface);
+      border: 1px solid var(--lesson-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+    .theme-midnight .topbar,
+    .theme-midnight .hero,
+    .theme-midnight .card,
+    .theme-midnight .side,
+    .theme-midnight .rail,
+    .theme-midnight .lesson-card,
+    .theme-midnight .stepper,
+    .theme-midnight .tabbar,
+    .theme-midnight .mobile-bar {
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: var(--lesson-surface);
+      background: var(--lesson-accent);
+      font-weight: 900;
+    }
+    .nav {
+      display: flex;
+      gap: 8px;
+      color: var(--lesson-muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .nav span,
+    .chip,
+    .tag {
+      border: 1px solid var(--lesson-border);
+      background: var(--lesson-panel);
+      border-radius: 999px;
+      padding: 8px 11px;
+      white-space: nowrap;
+    }
+    .hero {
+      padding: 24px;
+      margin-bottom: 18px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--lesson-accent) 12%, transparent), transparent 55%),
+        var(--lesson-surface);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 22px;
+      align-items: stretch;
+    }
+    .kicker {
+      color: var(--lesson-accent);
+      font-size: 12px;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      max-width: 820px;
+      font-size: 44px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .mobile h1 {
+      font-size: 28px;
+    }
+    .lede {
+      color: var(--lesson-muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin-top: 14px;
+      max-width: 720px;
+    }
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .progress-box {
+      padding: 18px;
+      border-radius: var(--radius);
+      background: var(--lesson-panel);
+      border: 1px solid var(--lesson-border);
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--lesson-muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .meter {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--lesson-border) 70%, transparent);
+    }
+    .meter span {
+      display: block;
+      height: 100%;
+      width: var(--value, 58%);
+      background: var(--lesson-accent);
+    }
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 56px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--lesson-muted);
+      background: var(--lesson-panel);
+      border: 1px solid transparent;
+      font-size: 13px;
+      font-weight: 760;
+    }
+    .step strong {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--lesson-surface);
+      color: var(--lesson-accent);
+      border: 1px solid var(--lesson-border);
+    }
+    .step.active {
+      color: var(--lesson-text);
+      border-color: color-mix(in srgb, var(--lesson-accent) 36%, var(--lesson-border));
+      background: var(--lesson-accent-soft);
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 310px;
+      gap: 18px;
+    }
+    .hub-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 18px;
+    }
+    .rail,
+    .side {
+      padding: 16px;
+      align-self: start;
+    }
+    .rail {
+      position: sticky;
+      top: 18px;
+    }
+    .rail h3,
+    .side h3,
+    .card h3 {
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .rail a {
+      display: block;
+      color: var(--lesson-muted);
+      text-decoration: none;
+      padding: 10px 10px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      border-left: 3px solid transparent;
+    }
+    .rail a.active {
+      color: var(--lesson-text);
+      background: var(--lesson-accent-soft);
+      border-left-color: var(--lesson-accent);
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .content-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .card {
+      padding: 18px;
+      min-height: 190px;
+    }
+    .card.large {
+      grid-column: span 2;
+      min-height: 225px;
+    }
+    .card.accent {
+      border-left: 5px solid var(--lesson-accent);
+    }
+    .card .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--lesson-accent);
+      font-size: 11px;
+      font-weight: 840;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .card p,
+    .side p,
+    .lesson-card p {
+      color: var(--lesson-muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .bullets {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+    .bullet {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      gap: 10px;
+      color: var(--lesson-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .bullet::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: var(--lesson-accent);
+    }
+    .recall {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .recall div {
+      border: 1px solid var(--lesson-border);
+      background: var(--lesson-panel);
+      padding: 11px;
+      border-radius: 7px;
+      font-size: 13px;
+      color: var(--lesson-text);
+      line-height: 1.42;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      border: 1px solid var(--lesson-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 820;
+      color: var(--lesson-text);
+      background: var(--lesson-surface);
+    }
+    .btn.primary {
+      color: var(--lesson-surface);
+      background: var(--lesson-accent);
+      border-color: var(--lesson-accent);
+    }
+    .theme-midnight .btn.primary {
+      color: #08202a;
+    }
+    .side-stack {
+      display: grid;
+      gap: 14px;
+    }
+    .mini-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .mini {
+      padding: 12px;
+      border-radius: 7px;
+      border: 1px solid var(--lesson-border);
+      background: var(--lesson-panel);
+    }
+    .mini b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .lesson-card {
+      display: grid;
+      gap: 12px;
+      min-height: 210px;
+      padding: 18px;
+      border-left: 5px solid transparent;
+    }
+    .lesson-card.complete { border-left-color: #4b9f7b; }
+    .lesson-card.active { border-left-color: var(--lesson-accent); }
+    .lesson-card.locked { opacity: 0.72; }
+    .lesson-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .category-tile {
+      padding: 17px;
+      border-radius: var(--radius);
+      border: 1px solid var(--lesson-border);
+      background: var(--lesson-surface);
+      min-height: 160px;
+      box-shadow: var(--shadow-card);
+    }
+    .category-tile .count {
+      color: var(--lesson-accent);
+      font-size: 30px;
+      font-weight: 860;
+      margin-top: 18px;
+    }
+    .tabbar {
+      display: flex;
+      gap: 8px;
+      padding: 9px;
+      margin-bottom: 16px;
+    }
+    .tabbar span {
+      flex: 1;
+      text-align: center;
+      color: var(--lesson-muted);
+      background: var(--lesson-panel);
+      border-radius: 7px;
+      padding: 11px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .tabbar span.active {
+      color: var(--lesson-text);
+      background: var(--lesson-accent-soft);
+      box-shadow: inset 0 -3px 0 var(--lesson-accent);
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .flow-card {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 15px;
+      align-items: center;
+      padding: 17px;
+      border-radius: var(--radius);
+      background: var(--lesson-surface);
+      border: 1px solid var(--lesson-border);
+      box-shadow: var(--shadow-card);
+    }
+    .orb {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      color: var(--lesson-accent);
+      background: var(--lesson-accent-soft);
+      font-weight: 900;
+      font-size: 24px;
+    }
+    .mobile .stepper {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px;
+      overflow: hidden;
+    }
+    .mobile .step {
+      min-height: 58px;
+      display: grid;
+      gap: 5px;
+      justify-items: center;
+      padding: 7px 4px;
+      font-size: 10px;
+      text-align: center;
+    }
+    .mobile .step strong {
+      width: 24px;
+      height: 24px;
+    }
+    .mobile .hero {
+      padding: 18px;
+    }
+    .mobile .content-grid,
+    .mobile .lesson-cards,
+    .mobile .category-grid,
+    .mobile .split,
+    .mobile .hub-grid,
+    .mobile .main-grid {
+      grid-template-columns: 1fr;
+    }
+    .mobile .rail,
+    .mobile .side {
+      display: none;
+    }
+    .mobile .card {
+      min-height: auto;
+      padding: 16px;
+    }
+    .mobile .card.large {
+      grid-column: auto;
+    }
+    .mobile-bar {
+      position: sticky;
+      bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      margin-top: 14px;
+    }
+    .accordion {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .accordion .card {
+      border-left: 5px solid var(--lesson-accent);
+    }
+    .skeleton {
+      background: linear-gradient(90deg, var(--lesson-panel), color-mix(in srgb, var(--lesson-surface) 70%, var(--lesson-panel)), var(--lesson-panel));
+      border-radius: 7px;
+      min-height: 18px;
+    }
+    .sk-lg { min-height: 132px; }
+    .sk-md { min-height: 74px; }
+    .sk-sm { min-height: 38px; }
+    .title-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin: 6px 0 18px;
+    }
+    .title-strip h2 {
+      font-size: 26px;
+      letter-spacing: -0.02em;
+    }
+    .caption {
+      position: absolute;
+      left: 18px;
+      bottom: 14px;
+      color: color-mix(in srgb, var(--lesson-muted) 72%, transparent);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <main class="gallery">
+    <section id="mockup-01" class="mockup theme-ocean" data-file="01-ocean-lesson-hub-dashboard.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>NurseNest Lessons</div><div class="nav"><span>Dashboard</span><span>Lessons</span><span>Questions</span><span>Progress</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">Ocean theme source of truth</div><h1>Clinical lessons organized like a learning command center.</h1><p class="lede">A hub that groups lessons by body system, shows readiness, and routes learners into pretest, learning, post-test, and review without becoming a generic article index.</p><div class="meta"><span class="chip">RN pathway</span><span class="chip">68 lessons</span><span class="chip">42 percent complete</span><span class="chip">Next: Cardiac assessment</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Pathway progress</span><span>42%</span></div><div class="meter" style="--value:42%"><span></span></div><div class="mini-list"><div class="mini"><b>Resume lesson</b><p>Hypertensive crisis: safety priorities</p></div><div class="mini"><b>Weak area</b><p>Diagnostics and treatment sequencing</p></div></div></div>
+        </div>
+        <div class="title-strip"><h2>Systems and readiness</h2><div class="meta"><span class="tag">Theme-aware cards</span><span class="tag">Progress states</span></div></div>
+        <div class="category-grid">
+          <div class="category-tile"><h3>Cardiovascular</h3><p>Prioritize perfusion, rhythms, hemodynamics, and urgent interventions.</p><div class="count">18</div></div>
+          <div class="category-tile"><h3>Respiratory</h3><p>Gas exchange, oxygenation, ABGs, and safe escalation patterns.</p><div class="count">14</div></div>
+          <div class="category-tile"><h3>Renal</h3><p>Fluid balance, electrolytes, labs, and dialysis priorities.</p><div class="count">11</div></div>
+          <div class="category-tile"><h3>Maternal newborn</h3><p>Complications, assessments, fetal monitoring, and teaching.</p><div class="count">9</div></div>
+        </div>
+        <div class="title-strip"><h2>Recommended next lessons</h2><div class="meta"><span class="tag">Pretest ready</span><span class="tag">Personalized</span></div></div>
+        <div class="lesson-cards">
+          <div class="lesson-card active"><span class="tag">In progress</span><h3>Hypertensive Crisis</h3><p>Structured clinical grid with safety, assessment, diagnostics, and interventions.</p><div class="meter" style="--value:64%"><span></span></div></div>
+          <div class="lesson-card complete"><span class="tag">Complete</span><h3>Shock Recognition</h3><p>Review weak points and jump directly to retention prompts.</p><div class="meter" style="--value:100%"><span></span></div></div>
+          <div class="lesson-card locked"><span class="tag">Pretest first</span><h3>Heart Failure Exacerbation</h3><p>Baseline check appears before the lesson when gated mode is enabled.</p><div class="meter" style="--value:0%"><span></span></div></div>
+        </div>
+      </div>
+      <div class="caption">01 lesson hub desktop ocean</div>
+    </section>
+
+    <section id="mockup-02" class="mockup theme-ocean" data-file="02-ocean-lesson-detail-gated.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Cardiovascular Lesson</div><div class="nav"><span>Overview</span><span>Pretest</span><span>Learn</span><span>Review</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">Gated mode enabled</div><h1>Hypertensive Crisis</h1><p class="lede">The lesson shell holds content back until baseline knowledge is checked. The learner sees why the pretest exists without scary language or extra friction.</p><div class="meta"><span class="chip">12 min lesson</span><span class="chip">6 question pretest</span><span class="chip">Post-test available after learning</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Lesson state</span><span>Ready for pretest</span></div><div class="meter" style="--value:12%"><span></span></div><div class="actions"><span class="btn primary">Start pretest</span><span class="btn">Open settings</span></div></div>
+        </div>
+        <div class="stepper"><div class="step active"><strong>1</strong>Pretest</div><div class="step"><strong>2</strong>Learn locked</div><div class="step"><strong>3</strong>Post-test</div><div class="step"><strong>4</strong>Review</div></div>
+        <div class="main-grid">
+          <aside class="rail"><h3>Lesson map</h3><a class="active">Baseline check</a><a>Clinical overview</a><a>Assessment</a><a>Interventions</a><a>Safety priorities</a></aside>
+          <section class="content-grid">
+            <article class="card large accent"><div class="eyebrow">Pretest card</div><h3>Check your baseline knowledge</h3><p>This short pretest helps tailor what to focus on. It is saved after completion, so learners do not repeat it unless they reset it later.</p><div class="recall"><div>6 application questions</div><div>Results unlock the clinical learning grid</div><div>Content remains configurable for open mode</div></div><div class="actions"><span class="btn primary">Begin baseline check</span><span class="btn">Why this matters</span></div></article>
+            <article class="card"><div class="eyebrow">Locked preview</div><h3>Clinical grid hidden</h3><p>Cards reserve layout but do not reveal lesson content before pretest completion.</p><div class="skeleton sk-md"></div></article>
+            <article class="card"><div class="eyebrow">Retention panel</div><h3>Unlocks next</h3><p>Quick takeaways and weak areas appear after baseline results.</p><div class="skeleton sk-md"></div></article>
+          </section>
+          <aside class="side side-stack"><div><h3>Configurable gate</h3><p>ENABLE_LESSON_PRETEST_GATE controls whether this experience blocks lesson content or opens immediately.</p></div><div class="mini"><b>Pretest status</b><p>Not started</p></div><div class="mini"><b>Reset behavior</b><p>Secondary setting, never prominent in the main flow.</p></div></aside>
+        </div>
+      </div>
+      <div class="caption">02 lesson detail gated ocean</div>
+    </section>
+
+    <section id="mockup-03" class="mockup theme-blossom" data-file="03-blossom-lesson-detail-open.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>NurseNest Learn</div><div class="nav"><span>Blossom</span><span>Warm</span><span>Readable</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">Open mode</div><h1>Preeclampsia Recognition</h1><p class="lede">Open mode shows the learning grid immediately while keeping pretest available as a readiness check. Blossom is warm without becoming overly pink.</p><div class="meta"><span class="chip">Maternity</span><span class="chip">Open learning</span><span class="chip">Pretest optional</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Current phase</span><span>Learning</span></div><div class="meter" style="--value:48%"><span></span></div><div class="mini-list"><div class="mini"><b>Optional pretest</b><p>Check readiness anytime.</p></div><div class="mini"><b>Post-test</b><p>Available after content review.</p></div></div></div>
+        </div>
+        <div class="stepper"><div class="step"><strong>1</strong>Pretest optional</div><div class="step active"><strong>2</strong>Learn</div><div class="step"><strong>3</strong>Post-test</div><div class="step"><strong>4</strong>Review</div></div>
+        <div class="main-grid">
+          <aside class="rail"><h3>Sections</h3><a class="active">Overview</a><a>Risk factors</a><a>Assessment</a><a>Interventions</a><a>Safety</a></aside>
+          <section class="content-grid">
+            <article class="card accent"><div class="eyebrow">Overview</div><h3>Clinical orientation</h3><p>Short framing copy sits in a card instead of a long article intro.</p><div class="bullets"><div class="bullet">What the learner should recognize first.</div><div class="bullet">Why escalation matters.</div></div></article>
+            <article class="card"><div class="eyebrow">Causes and risk factors</div><h3>Pattern recognition</h3><p>Existing content maps here only when the lesson source has this concept.</p><div class="bullets"><div class="bullet">Risk factors grouped by signal.</div><div class="bullet">No fabricated clinical facts.</div></div></article>
+            <article class="card"><div class="eyebrow">Assessment</div><h3>What to look for</h3><p>Assessment findings become a scannable learning unit.</p><div class="recall"><div>Quick recall: what finding changes priority?</div></div></article>
+            <article class="card"><div class="eyebrow">Safety priority</div><h3>Escalation logic</h3><p>Safety callouts get a stronger visual hierarchy without hardcoded color utilities.</p><div class="recall"><div>Know this cold: urgent symptoms should not be buried.</div></div></article>
+          </section>
+          <aside class="side side-stack"><div><h3>Retention panel</h3><p>Sticky summary shows key takeaways, related lessons, and test readiness.</p></div><div class="mini"><b>Know this cold</b><p>Assessment, safety, and patient education.</p></div><div class="mini"><b>Related</b><p>Postpartum hemorrhage</p></div></aside>
+        </div>
+      </div>
+      <div class="caption">03 lesson detail open blossom</div>
+    </section>
+
+    <section id="mockup-04" class="mockup theme-midnight" data-file="04-midnight-clinical-grid.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Midnight Lesson Surface</div><div class="nav"><span>High contrast</span><span>No white body</span><span>Clinical</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">Midnight theme</div><h1>Sepsis Recognition and Prioritization</h1><p class="lede">Dark mode uses premium clinical surfaces with readable contrast. Cards stay calm and structured instead of washed-out gray slabs.</p><div class="meta"><span class="chip">Critical care</span><span class="chip">Application focused</span><span class="chip">Review ready</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Retention confidence</span><span>71%</span></div><div class="meter" style="--value:71%"><span></span></div><div class="mini-list"><div class="mini"><b>Weak section</b><p>Diagnostics and labs</p></div><div class="mini"><b>Next action</b><p>Complete post-test</p></div></div></div>
+        </div>
+        <div class="stepper"><div class="step"><strong>1</strong>Pretest done</div><div class="step active"><strong>2</strong>Learn</div><div class="step"><strong>3</strong>Post-test</div><div class="step"><strong>4</strong>Review</div></div>
+        <div class="main-grid">
+          <aside class="rail"><h3>Clinical map</h3><a class="active">Pathophysiology</a><a>Assessment</a><a>Diagnostics</a><a>Interventions</a><a>Traps</a></aside>
+          <section class="content-grid">
+            <article class="card accent"><div class="eyebrow">Pathophysiology</div><h3>Why the patient declines</h3><p>Mechanism content lives in a focused module rather than one endless text stream.</p><div class="bullets"><div class="bullet">Cause and response stay together.</div><div class="bullet">Clinical consequence follows immediately.</div></div></article>
+            <article class="card"><div class="eyebrow">Diagnostics and labs</div><h3>Interpretation over memorization</h3><p>Lab meaning is grouped with clinical implications when supported by source content.</p><div class="recall"><div>Recall prompt: what lab trend changes urgency?</div></div></article>
+            <article class="card"><div class="eyebrow">Assessment to intervention</div><h3>Link findings to action</h3><p>Mapping cards connect what the nurse sees with what the learner should do next.</p></article>
+            <article class="card"><div class="eyebrow">Common trap</div><h3>Do not miss escalation cues</h3><p>Trap cards isolate exam pitfalls without adding unsupported medical facts.</p></article>
+          </section>
+          <aside class="side side-stack"><div><h3>Quick review</h3><p>Sticky retention panel remains readable in dark mode and avoids raw white article surfaces.</p></div><div class="mini"><b>Know this cold</b><p>Safety, trends, and intervention order.</p></div><div class="mini"><b>Post-test</b><p>8 application questions ready.</p></div></aside>
+        </div>
+      </div>
+      <div class="caption">04 midnight clinical grid</div>
+    </section>
+
+    <section id="mockup-05" class="mockup theme-aurora" data-file="05-aurora-topic-category-page.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Topic Page</div><div class="nav"><span>Aurora</span><span>Category</span><span>Lesson map</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">Topic/category layout</div><h1>Cardiovascular Safety Priorities</h1><p class="lede">Topic pages become a structured clinical pathway with status, recommended sequence, and grouped cards instead of a flat list of links.</p><div class="meta"><span class="chip">18 lessons</span><span class="chip">7 complete</span><span class="chip">4 need review</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Category mastery</span><span>39%</span></div><div class="meter" style="--value:39%"><span></span></div><div class="actions"><span class="btn primary">Resume sequence</span><span class="btn">Practice weak areas</span></div></div>
+        </div>
+        <div class="tabbar"><span class="active">Core sequence</span><span>Assessment</span><span>Interventions</span><span>Review</span></div>
+        <div class="lesson-cards">
+          <div class="lesson-card complete"><span class="tag">Complete</span><h3>Blood pressure basics</h3><p>Done, with post-test review available.</p><div class="meter" style="--value:100%"><span></span></div></div>
+          <div class="lesson-card active"><span class="tag">Next lesson</span><h3>Hypertensive crisis</h3><p>Pretest completed. Clinical learning grid is open.</p><div class="meter" style="--value:62%"><span></span></div></div>
+          <div class="lesson-card"><span class="tag">Ready</span><h3>Stroke warning signs</h3><p>Start with baseline check or open directly depending on flag.</p><div class="meter" style="--value:0%"><span></span></div></div>
+        </div>
+        <div class="title-strip"><h2>Category insights</h2><div class="meta"><span class="tag">Derived from progress</span></div></div>
+        <div class="content-grid three">
+          <article class="card"><div class="eyebrow">Weak concept</div><h3>Diagnostics</h3><p>Route back to sections that map lab interpretation to action.</p></article>
+          <article class="card"><div class="eyebrow">Retain</div><h3>Safety priorities</h3><p>Convert recurring safety rules into short review prompts.</p></article>
+          <article class="card"><div class="eyebrow">Related lessons</div><h3>Shock and perfusion</h3><p>Related reading appears as a compact learning bridge.</p></article>
+        </div>
+      </div>
+      <div class="caption">05 topic category aurora</div>
+    </section>
+
+    <section id="mockup-06" class="mockup theme-sunset" data-file="06-sunset-pretest-flow.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Pretest Flow</div><div class="nav"><span>Sunset</span><span>Baseline</span><span>Low friction</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">Pretest experience</div><h1>Start with a calm readiness check.</h1><p class="lede">The pretest explains value, shows estimated effort, and stores completion. It should feel supportive, not punitive.</p><div class="meta"><span class="chip">6 questions</span><span class="chip">3 minutes</span><span class="chip">Saved after completion</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Baseline status</span><span>Not started</span></div><div class="meter" style="--value:0%"><span></span></div><div class="actions"><span class="btn primary">Start pretest</span><span class="btn">Skip in open mode</span></div></div>
+        </div>
+        <div class="split">
+          <article class="flow-card"><div class="orb">1</div><div><h3>Check baseline</h3><p>No lesson content shown in gated mode. In open mode, this becomes optional readiness.</p></div></article>
+          <article class="flow-card"><div class="orb">2</div><div><h3>Save completion</h3><p>Completed pretests are recognized by the progress system so learners do not repeat them.</p></div></article>
+          <article class="flow-card"><div class="orb">3</div><div><h3>Unlock learning grid</h3><p>After completion, the learner lands in the clinical card layout.</p></div></article>
+          <article class="flow-card"><div class="orb">4</div><div><h3>Reset intentionally</h3><p>Reset is secondary and deliberate, not a prominent distraction.</p></div></article>
+        </div>
+        <div class="title-strip"><h2>Completed pretest state</h2><div class="meta"><span class="tag">Compact summary</span></div></div>
+        <div class="content-grid three">
+          <article class="card"><div class="eyebrow">Score</div><h3>4 of 6</h3><p>Score appears if available from existing data.</p></article>
+          <article class="card"><div class="eyebrow">Strength</div><h3>Assessment cues</h3><p>Only shown when supported by assessment result data.</p></article>
+          <article class="card"><div class="eyebrow">Focus next</div><h3>Treatment sequencing</h3><p>Routes the learner into the right section of the lesson.</p></article>
+        </div>
+      </div>
+      <div class="caption">06 pretest flow sunset</div>
+    </section>
+
+    <section id="mockup-07" class="mockup theme-ocean" data-file="07-ocean-posttest-review.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Post-test Review</div><div class="nav"><span>Retention</span><span>Review</span><span>Weak sections</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="kicker">After learning</div><h1>Post-test results guide the review, not a dead end.</h1><p class="lede">The end of the lesson shifts into application, feedback, and direct links back to weak clinical sections.</p><div class="meta"><span class="chip">Post-test complete</span><span class="chip">Application questions</span><span class="chip">Review unlocked</span></div></div>
+          <div class="progress-box"><div class="progress-label"><span>Post-test result</span><span>75%</span></div><div class="meter" style="--value:75%"><span></span></div><div class="actions"><span class="btn primary">Review rationales</span><span class="btn">Retake later</span></div></div>
+        </div>
+        <div class="stepper"><div class="step"><strong>1</strong>Pretest done</div><div class="step"><strong>2</strong>Learn done</div><div class="step active"><strong>3</strong>Post-test</div><div class="step"><strong>4</strong>Review</div></div>
+        <div class="main-grid">
+          <aside class="rail"><h3>Jump back</h3><a>Overview</a><a class="active">Diagnostics</a><a>Safety</a><a>Education</a></aside>
+          <section class="content-grid">
+            <article class="card large accent"><div class="eyebrow">Result state</div><h3>You are close on application.</h3><p>The result panel summarizes performance and sends the learner to weak sections instead of dumping a long rationale page.</p><div class="recall"><div>Needs review: diagnostics and treatment sequencing</div><div>Strong: symptom recognition and safety escalation</div></div></article>
+            <article class="card"><div class="eyebrow">Question review</div><h3>Rationale cards</h3><p>Rationales remain structured and link back to source lesson sections.</p></article>
+            <article class="card"><div class="eyebrow">Next retention</div><h3>Quick recall set</h3><p>Mini prompts support spaced review if existing systems support it.</p></article>
+          </section>
+          <aside class="side side-stack"><div><h3>Review plan</h3><p>Return to diagnostics, then attempt application questions again later.</p></div><div class="mini"><b>Related lesson</b><p>Stroke warning signs</p></div><div class="mini"><b>Progress</b><p>Lesson marked complete after supported completion logic.</p></div></aside>
+        </div>
+      </div>
+      <div class="caption">07 post-test review ocean</div>
+    </section>
+
+    <section id="mockup-08" class="mockup mobile theme-midnight" data-file="08-mobile-midnight-lesson.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Lesson</div><div class="nav"><span>Midnight</span></div></div>
+        <div class="hero"><div class="kicker">Mobile lesson</div><h1>Hypertensive Crisis</h1><p class="lede">Mobile uses accordions and a sticky action bar so it does not become a confusing wall.</p><div class="meta"><span class="chip">12 min</span><span class="chip">Pretest done</span></div></div>
+        <div class="stepper"><div class="step"><strong>1</strong>Pretest</div><div class="step active"><strong>2</strong>Learn</div><div class="step"><strong>3</strong>Post</div><div class="step"><strong>4</strong>Review</div></div>
+        <div class="tabbar"><span class="active">Core</span><span>Assess</span><span>Safety</span></div>
+        <div class="accordion">
+          <article class="card"><div class="eyebrow">Overview</div><h3>Clinical orientation</h3><p>Short sections stay digestible on a phone.</p></article>
+          <article class="card"><div class="eyebrow">Pathophysiology</div><h3>Why it becomes urgent</h3><p>One concept per card, no article body feeling.</p></article>
+          <article class="card"><div class="eyebrow">Assessment</div><h3>Findings to watch</h3><p>Large tap targets and no horizontal overflow.</p></article>
+          <article class="card"><div class="eyebrow">Safety priority</div><h3>Escalation cues</h3><p>Critical learning stands out in the stack.</p></article>
+        </div>
+        <div class="mobile-bar"><div><b>62%</b><p>Learning progress</p></div><span class="btn primary">Continue</span></div>
+      </div>
+      <div class="caption">08 mobile lesson midnight</div>
+    </section>
+
+    <section id="mockup-09" class="mockup mobile theme-blossom" data-file="09-mobile-blossom-hub.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Lessons</div><div class="nav"><span>Blossom</span></div></div>
+        <div class="hero"><div class="kicker">Mobile hub</div><h1>Resume clinical learning</h1><p class="lede">Hub cards stack with clear progress states and comfortable scan rhythm.</p><div class="meta"><span class="chip">42% complete</span><span class="chip">RN</span></div></div>
+        <div class="tabbar"><span class="active">Next</span><span>Systems</span><span>Review</span></div>
+        <div class="lesson-cards">
+          <div class="lesson-card active"><span class="tag">Resume</span><h3>Hypertensive Crisis</h3><p>Pretest completed. Continue learning grid.</p><div class="meter" style="--value:62%"><span></span></div></div>
+          <div class="lesson-card"><span class="tag">Ready</span><h3>Heart Failure</h3><p>Start readiness check or open in open mode.</p><div class="meter" style="--value:0%"><span></span></div></div>
+          <div class="lesson-card complete"><span class="tag">Review</span><h3>Shock Recognition</h3><p>Post-test review and quick recall ready.</p><div class="meter" style="--value:100%"><span></span></div></div>
+        </div>
+        <div class="mobile-bar"><div><b>Next up</b><p>Cardiovascular</p></div><span class="btn primary">Resume</span></div>
+      </div>
+      <div class="caption">09 mobile hub blossom</div>
+    </section>
+
+    <section id="mockup-10" class="mockup theme-aurora" data-file="10-aurora-loading-skeleton.png">
+      <div class="frame">
+        <div class="topbar"><div class="brand"><span class="mark">N</span>Loading State</div><div class="nav"><span>Aurora</span><span>No CLS</span><span>Reduced motion</span></div></div>
+        <div class="hero hero-grid">
+          <div><div class="skeleton sk-sm" style="width:180px"></div><br><div class="skeleton" style="height:56px;width:720px"></div><br><div class="skeleton sk-sm" style="width:560px"></div><div class="meta"><span class="chip">Reserved hero</span><span class="chip">Reserved stepper</span><span class="chip">Reserved grid</span></div></div>
+          <div class="progress-box"><div class="skeleton sk-sm"></div><br><div class="skeleton sk-sm"></div><br><div class="skeleton sk-md"></div></div>
+        </div>
+        <div class="stepper"><div class="step"><strong>1</strong><span class="skeleton" style="width:90px"></span></div><div class="step"><strong>2</strong><span class="skeleton" style="width:90px"></span></div><div class="step"><strong>3</strong><span class="skeleton" style="width:90px"></span></div><div class="step"><strong>4</strong><span class="skeleton" style="width:90px"></span></div></div>
+        <div class="main-grid">
+          <aside class="rail"><h3>Loading</h3><div class="skeleton sk-sm"></div><br><div class="skeleton sk-sm"></div><br><div class="skeleton sk-sm"></div><br><div class="skeleton sk-sm"></div></aside>
+          <section class="content-grid">
+            <article class="card"><div class="skeleton sk-sm"></div><br><div class="skeleton sk-lg"></div></article>
+            <article class="card"><div class="skeleton sk-sm"></div><br><div class="skeleton sk-lg"></div></article>
+            <article class="card"><div class="skeleton sk-sm"></div><br><div class="skeleton sk-lg"></div></article>
+            <article class="card"><div class="skeleton sk-sm"></div><br><div class="skeleton sk-lg"></div></article>
+          </section>
+          <aside class="side side-stack"><div class="skeleton sk-md"></div><div class="skeleton sk-md"></div><div class="skeleton sk-md"></div></aside>
+        </div>
+      </div>
+      <div class="caption">10 loading skeleton aurora</div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "reportKind": "user_journeys_by_tier",
+  "generatedAt": "2026-04-14T23:59:00.000Z",
+  "safeMode": true,
+  "methodology": "Schema + baseline only. No live browser sessions, no staging/production URLs, no tri-matrix (anonymous/free/paid) per tier executed in the authoring environment. Populate failures[] when QA or Playwright runs complete.",
+  "journeyTemplate": [
+    { "id": "landing_localized", "label": "Landing page (localized)" },
+    { "id": "pathway_selection", "label": "Pathway selection" },
+    { "id": "lesson_browse", "label": "Lesson browsing (paginated hub)" },
+    { "id": "lesson_complete", "label": "Lesson completion" },
+    { "id": "pre_quiz", "label": "Pre-lesson quiz" },
+    { "id": "post_quiz", "label": "Post-lesson quiz" },
+    { "id": "cat_or_practice", "label": "CAT / practice exams (if applicable to tier)" },
+    { "id": "progress_dashboard", "label": "Progress dashboard" },
+    { "id": "upgrade_paywall", "label": "Upgrade / paywall interaction" }
+  ],
+  "tiers": [
+    {
+      "tierId": "rn",
+      "label": "RN (NCLEX-RN)",
+      "status": "not_executed",
+      "failures": [],
+      "notes": "Primary pathway; validate locale prefixes (e.g. /us/rn/...) per routing docs."
+    },
+    {
+      "tierId": "pn",
+      "label": "PN / LPN / RPN (as product maps)",
+      "status": "not_executed",
+      "failures": [],
+      "notes": "Confirm terminology in UI matches country (RPN vs LPN); no cross-tier copy from RN without review."
+    },
+    {
+      "tierId": "np",
+      "label": "NP",
+      "status": "not_executed",
+      "failures": [],
+      "notes": "Verify exam product and entitlement SKUs match pathway; CAT applicability per product rules."
+    },
+    {
+      "tierId": "allied",
+      "label": "Allied health",
+      "status": "not_executed",
+      "failures": [],
+      "notes": "See allied hubs under marketing routes; question bank scope differs from RN."
+    },
+    {
+      "tierId": "pre_nursing",
+      "label": "Pre-nursing",
+      "status": "not_executed",
+      "failures": [],
+      "notes": "Foundational content; paywall tier may differ; validate no premium leakage on previews."
+    },
+    {
+      "tierId": "new_grad",
+      "label": "New graduate / refresher",
+      "status": "not_executed",
+      "failures": [],
+      "notes": "Often blog + lesson cross-links; validate internal links per audit-internal-links tooling."
+    }
+  ],
+  "paywallMatrix": {
+    "description": "For each tier, run anonymous vs free vs paid where product supports it.",
+    "status": "not_executed",
+    "checks": [
+      "direct_link_bypass",
+      "api_unauthorized_for_premium",
+      "cached_page_no_answer_leak",
+      "cat_requires_entitlement"
+    ]
+  },
+  "references": [
+    "docs/i18n-architecture.md",
+    "docs/legacy-restoration-map.md",
+    "data/audit/user-journey-failures.json",
+    "data/audit/paywall-final-security.json"
+  ],
+  "recommendedExecution": [
+    "Parameterize Playwright with BASE_URL, LOCALE, PATHWAY_SLUG, and test account fixtures (Stripe test mode).",
+    "Log each failure: tierId, step id, url, role, httpStatus, screenshot object key (admin-only bucket).",
+    "Batch runs by tier to avoid overloading CI; cap parallel workers."
+  ]
+}

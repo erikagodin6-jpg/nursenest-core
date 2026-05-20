@@ -1,0 +1,14 @@
+{
+  "title": "Guide de calculs posologiques pour infirmiers",
+  "h1": "Guide des calculs posologiques infirmiers avec contrôles de sécurité",
+  "description": "Analyse dimensionnelle, doses au poids et sécurité des débits IV pour étudiants en soins infirmiers et candidats aux examens.",
+  "sections": [
+    {
+      "heading": "Rendre chaque étape visible",
+      "level": 2,
+      "body": [
+        "Écrivez les unités à chaque multiplication et division. Les examens pénalisent les conversions silencieuses entre mg, µg, mL et unités par kg."
+      ]
+    }
+  ]
+}

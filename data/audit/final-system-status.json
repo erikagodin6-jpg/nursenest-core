@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "safeMode": true,
+  "databaseAvailable": false,
+  "lessons": {
+    "totalEvaluated": 562,
+    "completeStrictPremiumSpine": 4,
+    "completenessPctStrict": 1,
+    "lenientViableShape": 53,
+    "lenientViablePct": 9,
+    "incomplete": 558,
+    "missing": 0,
+    "brokenRoute": 0
+  },
+  "quizParityPercent": 14,
+  "missingContentEstimate": 558,
+  "paywallBreaches": 0,
+  "cat": {
+    "CAT_MIN_COMPLETE_POOL": 30,
+    "status": "see cat-exam-parity.json"
+  },
+  "pagination": {
+    "generatedAt": "2026-04-14T16:24:44.619Z",
+    "hubs": "PATHWAY_HUB_PAGE_SIZE_DEFAULT + searchParams (marketing lessons hub)",
+    "apiLessons": "LESSON_API_OFFSET_LIMIT / cursor mode",
+    "catPool": "MAX_POOL 4000 cap in cat-pool.ts"
+  },
+  "files": [
+    "final-lesson-completeness.json",
+    "lesson-quiz-parity.json",
+    "lesson-format-parity.json",
+    "paywall-security.json",
+    "cat-exam-parity.json",
+    "legacy-gap-final.json"
+  ],
+  "fixesAppliedThisRun": [],
+  "manualFollowUp": [
+    "Restore missing pre/post quizzes from legacy sources in batches (max 25).",
+    "When DB online, re-run audit for ContentItem lessons and blog parity."
+  ]
+}

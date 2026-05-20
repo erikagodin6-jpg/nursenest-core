@@ -1,0 +1,694 @@
+{
+  "version": 1,
+  "description": "Wave 5 – Fluid Balance, Prioritization ABCs, General Nursing Clinical",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-fluid-balance",
+      "previewSectionCount": 2,
+      "seoTitle": "Fluid balance nursing: IV fluids, dehydration, overload, third-spacing & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on fluid balance: isotonic vs hypotonic vs hypertonic IV fluids, fluid volume deficit and excess, third-spacing, I&O, assessment, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Fluid balance** is a foundational nursing competency. Maintaining homeostasis requires precise management of fluid intake and output, electrolyte balance, and vascular volume. For NCLEX-RN Canada, fluid balance knowledge is tested in virtually every clinical specialization — from cardiac and renal nursing to surgical care, obstetrics, and critical care.\n\n**Body fluid compartments:**\n- Total body water (TBW): ~60% of body weight in adult men, ~50% in women\n  - Intracellular fluid (ICF): 2/3 of TBW — inside cells\n  - Extracellular fluid (ECF): 1/3 of TBW — outside cells\n    - Intravascular: plasma (within blood vessels)\n    - Interstitial: between cells and vessels (lymphatics)\n    - Transcellular: CSF, pleural, pericardial, peritoneal, synovial fluid\n\n**Osmolality controls fluid movement:**\n- Water moves from areas of low osmolality → high osmolality (osmosis)\n- Normal serum osmolality: 280–295 mOsm/kg\n- Sodium is the primary ECF osmole — changes in Na⁺ drive water movement between ICF and ECF\n\n**Normal daily I&O (adult):**\n- Intake: ~2,500 mL/day (1,200 mL oral fluids, 1,000 mL food water, 300 mL metabolic water)\n- Output: ~2,500 mL/day (urine 1,200–1,500 mL, stool 200 mL, insensible 800–1,000 mL skin/lungs)\n- Minimum urine output: 0.5 mL/kg/hr (adult)"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "IV Fluid Types and Clinical Indications",
+          "kind": "pathophysiology_overview",
+          "body": "**Isotonic solutions (osmolality close to plasma: 280–295 mOsm/L) — stays in ECF, does not shift water across cell membranes:**\n\n- **Normal Saline (0.9% NaCl, NS)**: 308 mOsm/L. Used for: volume replacement (hypovolemia, blood transfusion pre/post), hyponatremia, medication compatibility. Caution: large volumes → hyperchloraemic metabolic acidosis and fluid overload.\n- **Lactated Ringer's (LR)**: 273 mOsm/L; contains Na⁺, K⁺, Ca²⁺, Cl⁻, lactate. More physiologically balanced than NS. Used for: surgical fluid replacement, burns, trauma. Caution: contains K⁺ — caution in hyperkalemia; lactate contraindicated in liver failure (can't metabolize lactate); not for TBI (slightly hypotonic after lactate metabolism).\n- **D5W (5% dextrose in water)**: technically isotonic in the bag (252 mOsm/L), but once dextrose is metabolized, becomes free water → distributed throughout TBW (mostly ICF). Effectively hypotonic in the body. Used for: hypernatremia correction (free water repletion); medication carrier; NOT for volume expansion (does not stay in ECF).\n\n**Hypotonic solutions (< 280 mOsm/L) — moves water INTO cells; reduces cellular dehydration; reduces ECF volume:**\n- **0.45% NaCl (half-normal saline)**: 154 mOsm/L. Used for: cellular rehydration, DKA phase 2 (when glucose < 14 mmol/L and glucose correction underway), maintenance IVF. Caution: cerebral edema risk in TBI patients.\n- **0.33% NaCl**: for paediatric maintenance.\n\n**Hypertonic solutions (> 295 mOsm/L) — draws water FROM cells INTO ECF; increases intravascular volume:**\n- **3% NaCl**: 1,026 mOsm/L. Used for: symptomatic severe hyponatremia (seizures), hyponatremic encephalopathy. MUST be given in ICU with close monitoring. Risk: rapid correction → osmotic demyelination syndrome (ODS).\n- **D5NS (D5 + 0.9% NaCl)**: 560 mOsm/L. Used for: postoperative maintenance with some volume replacement; caution with fluid overload risk.\n- **D5LR**: used for maintenance + glucose delivery in some post-op situations.\n\n**Colloids:**\n- **Albumin (5%, 25%)**: stays in vascular compartment; expands plasma volume; used for SBP (hepatorenal), hypoalbuminemia with hemodynamic instability\n- **Blood products** (PRBCs, FFP, platelets, cryoprecipitate): for specific deficiencies\n\n**Third-spacing:** Fluid shifts from the intravascular compartment into a 'non-functional' space (peritoneal cavity — ascites; interstitial — edema; pleural — effusion). The patient is hemodynamically volume-depleted despite total body water excess. Common in: pancreatitis, burns, sepsis, post-major surgery. Monitor: edema developing while hemodynamic indicators of dehydration (tachycardia, low urine output, low CVP) are present."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Fluid Volume Deficit vs Excess",
+          "kind": "signs_symptoms",
+          "body": "**Fluid Volume Deficit (FVD / Hypovolemia):**\n- Thirst (early sign)\n- Dry mucous membranes\n- Decreased skin turgor (tenting)\n- Tachycardia (compensatory)\n- Orthostatic hypotension → supine hypotension (late)\n- Decreased urine output (< 30 mL/hr or 0.5 mL/kg/hr)\n- Concentrated urine: dark yellow, high specific gravity (> 1.030)\n- Weight loss (1 kg = 1 L fluid loss)\n- Flat JVP, peripheral veins slow to fill\n- Sunken eyes, fontanelle (paediatric)\n- Altered LOC (severe dehydration)\n\n**Fluid Volume Excess (FVE / Hypervolemia):**\n- Bounding pulse\n- Hypertension\n- Increased urine output initially (then oliguria if renal decompensation occurs)\n- Dependent edema: ankles/feet in ambulatory patients; sacral in bed-bound\n- Periorbital edema\n- Weight gain (acute weight gain = fluid retention: 1 kg ≈ 1 L)\n- JVP > 4 cm above sternal angle (raised central venous pressure)\n- Crackles (pulmonary edema): bilateral fine crackles at lung bases\n- S3 gallop (volume overloaded ventricle)\n- Shortness of breath, decreased SpO₂\n\n**Third-spacing signs (paradox of fluid deficit + edema):**\n- Low urine output despite presence of edema/ascites\n- Tachycardia and hypotension with visibly edematous patient\n- Low CVP despite anasarca\n- This is NOT treated by diuretics (the intravascular space is dry) — needs careful IV fluid resuscitation"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Hemodynamic Compromise",
+          "kind": "red_flags",
+          "body": "**Dehydration / Hypovolemia — escalate immediately:**\n- Urine output < 0.5 mL/kg/hr for ≥ 2 hours despite fluid administration\n- HR > 120, SBP < 90, MAP < 65 mmHg\n- Altered LOC — cerebral hypoperfusion\n- Skin: mottling, delayed capillary refill (> 3 seconds)\n- Lactate > 2 mmol/L (tissue hypoperfusion)\n\n**Fluid Overload / Pulmonary Edema — escalate immediately:**\n- SpO₂ dropping with bilateral crackles and pink frothy sputum\n- RR > 30, unable to speak in full sentences\n- SBP rising with new dyspnea after large volume IV fluid administration\n- Weight gain of > 2 kg overnight\n\n**IV fluid administration errors:**\n- Wrong fluid type: giving NS to a client with hyperchloraemic acidosis; giving hypotonic to a TBI patient (worsens cerebral edema)\n- Infusing too rapidly: in heart failure or renal failure patients → flash pulmonary edema\n- Running dry: air embolism risk with gravity/pressure bags (use electronic pumps)"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Fluid status assessment labs:**\n- **BUN (blood urea nitrogen)**: elevated in dehydration (concentrated), decreased in fluid overload (dilutional). BUN:creatinine ratio > 20:1 suggests pre-renal dehydration\n- **Serum creatinine**: rises in renal hypoperfusion from dehydration\n- **Serum Na⁺, K⁺, Cl⁻**: guide fluid selection; hypernatremia suggests free water deficit; hyponatremia suggests free water excess or sodium loss\n- **Serum albumin**: low albumin → reduced oncotic pressure → third-spacing and edema\n- **CBC**: haematocrit rises with dehydration (haemoconcentration); falls with fluid overload (haemodilution)\n- **Urine specific gravity**: > 1.030 (concentrated = dehydrated); < 1.010 (dilute = overloaded or DI)\n- **Urine Na⁺**: < 20 mEq/L = kidneys conserving sodium (pre-renal dehydration or hypovolemia); > 40 mEq/L = kidneys excreting sodium (SIADH, renal failure)\n\n**Monitoring tools:**\n- Daily weight (most accurate fluid balance monitor): same time each day, same scale, same clothing\n- Strict I&O: document every fluid input (IV, oral, NG feeding, blood products) and output (urine, NG drainage, wound drainage, emesis, stool, chest tube)\n- CVP (central venous pressure): normal 2–8 mmHg; low in dehydration, high in overload\n- BP and HR trends: orthostatic vitals for dehydration assessment"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**I&O monitoring best practices:**\n- Measure ALL inputs: oral fluids (include meals with high water content), IV fluids, blood products, irrigation fluids absorbed, medications in solution\n- Measure ALL outputs: urine (Foley or hourly voiding), wound drainage (measure from drainage devices), NG/gastric suction, chest tube output, emesis, significant stool\n- Reconcile every 4–8 hours; report trends\n- Minimum expected urine output: 30 mL/hr (adult); 1 mL/kg/hr (paediatric)\n\n**IV fluid administration safety:**\n- Verify the order: IV fluid type, volume, rate (mL/hr)\n- Check IV site before infusion: redness, swelling, warmth, pain, leaking → stop infusion, remove IV\n- Rate control: use infusion pump for all IV medications and blood products\n- Primary + secondary ('piggyback') setup: primary line fluid must be compatible with secondary\n- Blood transfusion: always start with 0.9% NS; never mix blood with dextrose or LR (haemolysis); filter must be used; verify product × 2 nurses, ABO/Rh type\n\n**Fluid replacement in specific contexts:**\n- **Post-surgical fluid management**: assess wound drain output, estimate insensible losses, maintain MAP > 65 and urine output ≥ 0.5 mL/kg/hr\n- **Burns (Parkland formula)**: 4 mL × kg × % TBSA burned = fluid to give in first 24h (50% in first 8h, 50% in next 16h); use LR\n- **Sepsis (Surviving Sepsis)**: 30 mL/kg IV crystalloid within 3h; reassess with dynamic fluid responsiveness markers thereafter\n- **Heart failure / renal failure**: restrict fluids per protocol; daily weight; strict I&O; monitor for pulmonary oedema\n\n**Oedema assessment (grading):**\n- 1+: slight pitting, disappears rapidly (< 2 mm)\n- 2+: somewhat deeper, disappears in 10–15 seconds (2–4 mm)\n- 3+: deep pit, remains 1 minute (4–6 mm)\n- 4+: deep pit, remains 2+ minutes; dependent areas markedly swollen (> 6 mm)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Daily weight is the best volume monitor** — a 1 kg weight gain overnight = ~1 L of fluid retained. Scales must be calibrated; weigh at the same time in same conditions.\n- **NS in large volumes → hyperchloraemic acidosis** — the high chloride content of NS can cause metabolic acidosis. Balanced crystalloids (LR, Plasmalyte) are preferred for large-volume resuscitation.\n- **D5W does NOT volume-expand** — after metabolism, the dextrose is gone and the water distributes throughout TBW; only ~90 mL of every 1,000 mL D5W stays in the intravascular space. Use NS or LR for volume replacement, not D5W.\n- **Third-spacing paradox**: patient has low urine output + hypotension + edema → fluid is in the wrong compartment. Diuretics worsen intravascular depletion. IV fluid resuscitation targets the vascular space.\n- **Orthostatic vital signs**: check BP and HR supine → sitting → standing. Drop of ≥ 20/10 mmHg SBP/DBP or HR rise ≥ 20 = orthostatic hypotension → dehydration or autonomic dysfunction.\n- **Fluid overload in CKD and HF patients**: happens faster and is more dangerous. Even small overruns (200–300 mL extra per day) accumulate and cause pulmonary oedema. Strict 1:1 I&O target."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Heart failure — fluid restriction education:**\n- Limit fluids as directed (typically 1,500–2,000 mL/day) — this includes all liquids: water, juice, soup, gelatin, ice cream, ice chips (1 cup ice = 120 mL fluid)\n- Weigh every morning after first void, before eating, in the same clothing — record your weight\n- Report weight gain of > 1 kg in 24 hours or > 2 kg in 1 week — this is a fluid accumulation warning\n- Signs of fluid overload: swollen ankles, shortness of breath, inability to lie flat at night (orthopnoea)\n\n**Dehydration prevention:**\n- Drink 8–10 cups (2–2.5 L) of water daily in normal conditions\n- Increase intake during hot weather, fever, exercise, or diarrhoea/vomiting\n- Urine should be pale yellow — dark yellow or amber means drink more\n- Elderly: thirst sensation diminishes with age — drink on a schedule, not just when thirsty\n\n**IV therapy at home or infusion clinic:**\n- Report: redness, pain, swelling, or leaking at IV site\n- Report: sudden shortness of breath, chest pain, or confusion during infusion\n- Do not adjust IV rate yourself"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Isotonic (NS, LR, D5W effective): stay in ECF, volume expand. D5W = free water after metabolism — does NOT volume expand.\n- Hypotonic (0.45% NaCl): moves into ICF; used for cellular rehydration, DKA phase 2.\n- Hypertonic (3% NaCl): draws water from ICF to ECF; used for severe symptomatic hyponatremia — ICU-level monitoring.\n- FVD: tachycardia, dry mucous membranes, oliguria, low specific gravity on concentrated urine, orthostatic hypotension, weight loss.\n- FVE: crackles, S3, elevated JVP, bounding pulse, hypertension, dependent oedema, weight gain.\n- Third-spacing: fluid lost from vasculature into 'non-functional' compartment — treat with careful fluid resuscitation, not diuretics.\n- Daily weight + strict I&O = the most important fluid monitoring tools. 1 kg weight change ≈ 1 L fluid change."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is caring for a post-operative client who had a 3 L intraoperative fluid loss. The provider orders 1 L 0.9% NaCl over 2 hours. What is the primary reason normal saline is selected over D5W for this situation?",
+          "options": [
+            "D5W is more expensive and reserved for paediatric patients",
+            "Normal saline is isotonic and stays in the extracellular fluid compartment, making it effective for volume replacement. D5W acts as free water after dextrose metabolism and does not volume-expand.",
+            "D5W causes hyperglycaemia in post-operative patients",
+            "Normal saline is more compatible with post-operative blood products"
+          ],
+          "correct": 1,
+          "rationale": "The goal of volume replacement after surgical fluid loss is to restore intravascular volume. Isotonic NS stays in the extracellular compartment after infusion, expanding plasma volume. D5W, once the dextrose is metabolised, distributes as free water across all compartments (mostly intracellular) — only about 90 mL of every 1,000 mL stays intravascular. It is not effective for volume replacement."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with heart failure gains 3 kg over 2 days and develops new crackles bilaterally and SpO₂ 91% on room air. What is the nurse's priority intervention?",
+          "options": [
+            "Encourage the client to ambulate to mobilize fluid",
+            "Notify the provider — the weight gain represents approximately 3 L of fluid retention; assessment findings indicate pulmonary oedema development",
+            "Restrict oral fluids to 500 mL and reassess in 4 hours",
+            "Increase supplemental O₂ and document the finding — this is expected in heart failure"
+          ],
+          "correct": 1,
+          "rationale": "A 3 kg weight gain (≈ 3 L fluid retention) with new bilateral crackles and SpO₂ 91% indicates evolving pulmonary oedema in a fluid-overloaded heart failure patient. This is a clinical deterioration requiring immediate provider notification for assessment and likely diuretic therapy. Documenting alone without notification is inadequate given hemodynamic compromise."
+        },
+        {
+          "question": "A client with burns covering 25% TBSA and weighing 70 kg requires fluid resuscitation using the Parkland formula. How much fluid should be given in the first 8 hours?",
+          "options": [
+            "7,000 mL",
+            "3,500 mL",
+            "1,750 mL",
+            "14,000 mL"
+          ],
+          "correct": 1,
+          "rationale": "Parkland formula: 4 mL × kg × %TBSA = total 24h fluid. 4 × 70 × 25 = 7,000 mL total. Half (3,500 mL) is given in the FIRST 8 hours (from time of injury, not time of arrival), and the remaining half (3,500 mL) is distributed over the following 16 hours. Lactated Ringer's is the preferred fluid for burns resuscitation."
+        },
+        {
+          "question": "A nurse assesses a post-abdominal surgery client on day 2 who has dependent pitting oedema (3+) at the ankles and sacrum, yet heart rate is 118 bpm, BP is 88/52 mmHg, and urine output is 18 mL/hr. What fluid problem is most likely occurring?",
+          "options": [
+            "Fluid volume excess — the oedema confirms too much IV fluid was given",
+            "Third-spacing — fluid is shifting from the intravascular space into the interstitial and peritoneal compartments, causing intravascular depletion despite visible oedema",
+            "Cardiogenic shock — the hypotension and oedema suggest heart failure",
+            "Dehydration from inadequate oral intake post-surgery"
+          ],
+          "correct": 1,
+          "rationale": "Third-spacing presents paradoxically: the patient appears fluid-overloaded externally (oedema) but is intravascularly depleted (tachycardia, hypotension, oliguria). After major abdominal surgery, peritoneal and interstitial fluid accumulation draws fluid from the vasculature. Treatment is careful IV resuscitation to restore intravascular volume — NOT diuretics, which would worsen the intravascular depletion."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-prioritization-abcs",
+      "previewSectionCount": 2,
+      "seoTitle": "Nursing prioritization: ABCs, Maslow, triage, delegation & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on clinical prioritization: ABCs, Maslow's hierarchy, triage frameworks, SBAR, delegation principles, and Canadian NCLEX-RN decision-making priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Clinical prioritization** is the process of determining which patient needs, interventions, or assessments require attention first when resources are limited. For NCLEX-RN Canada, prioritization is one of the most heavily tested competency areas — the ability to determine which patient to see first, which problem to address first, and when to delegate.\n\n**Foundational prioritization frameworks:**\n1. **ABCs (Airway, Breathing, Circulation)**: physiological needs that, if unmet, cause immediate death — always the top priority\n2. **Maslow's Hierarchy of Needs**: physiological → safety → love/belonging → esteem → self-actualization. Address lower-tier needs before higher ones.\n3. **Acute vs Chronic**: acute, new-onset deterioration typically takes priority over chronic, stable conditions\n4. **Life-threatening vs non-life-threatening**: actual vs potential problems — actual threats to life take priority\n\n**NCLEX prioritization rule of thumb:**\nIf one option prevents death immediately → that one first. Then: what stabilizes the situation? Then: what promotes recovery? Then: what prevents complication?"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Prioritization Frameworks in Detail",
+          "kind": "pathophysiology_overview",
+          "body": "**ABC Framework — in order:**\n\n**Airway (A)** — the most critical. Without a patent airway, oxygenation and ventilation are impossible. A compromised airway kills in minutes.\n- Airway threats: obstruction (foreign body, angioedema, stridor, tumour, vomit), loss of protective reflexes (unconsciousness, stroke, anaphylaxis)\n- Actions: positioning (head tilt-chin lift or jaw thrust for spinal concern), suctioning, adjunct airways (OPA, NPA), intubation\n\n**Breathing (B)** — once airway patent, ensure adequate ventilation. Airway without breathing = still dying.\n- Breathing threats: tension pneumothorax, flail chest, severe pneumonia, status asthmaticus, severe ARDS, apnoea\n- Actions: supplemental O₂, BVM ventilation, chest decompression (needle or tube), bronchodilators\n\n**Circulation (C)** — ensure adequate cardiac output and perfusion.\n- Circulation threats: cardiac arrest, massive haemorrhage, cardiogenic/distributive shock, severe arrhythmias\n- Actions: CPR, haemorrhage control, IV access, fluids, vasopressors, defibrillation\n\n**Disability (D) + Exposure (E)**: after ABCs stabilized\n- Disability: GCS/LOC, pupils, focal neurology\n- Exposure: full body assessment (hidden injuries, rashes, bleeding)\n\n**Maslow's Hierarchy applied clinically:**\n- **Level 1 (Physiological)**: oxygenation, circulation, nutrition, hydration, elimination, comfort — address these first\n- **Level 2 (Safety)**: fall risk, infection prevention, medication safety\n- **Level 3 (Love/Belonging)**: family communication, therapeutic relationship\n- **Level 4 (Esteem)**: body image, dignity, autonomy\n- **Level 5 (Self-actualisation)**: meaning-making, spirituality\n\n**Common NCLEX prioritization questions:**\n\n**'Which patient do you see first?'** — scan for: airway compromise, active bleeding, chest pain, neurological change, respiratory distress. The patient with the highest physiological threat goes first.\n\n**'Which assessment finding requires immediate attention?'** — look for: new vs expected, stable vs deteriorating, life-threatening consequence, action available.\n\n**SBAR communication framework:**\n- **S**ituation: who you are calling about and the immediate concern\n- **B**ackground: relevant clinical history, reason for admission\n- **A**ssessment: what you think is happening\n- **R**ecommendation: what you need (order, evaluation, intervention)\n\nSBAR ensures complete, organized handover and reduces miscommunication — required for all urgent communications with providers.\n\n**Triage frameworks (ED / mass casualty):**\n- **START triage (Simple Triage and Rapid Treatment)**:\n  - Black (expectant): unsalvageable, too severe to survive with available resources\n  - Red (immediate): life-threatening but salvageable — address first\n  - Yellow (delayed): serious but stable — can wait\n  - Green (minor): 'walking wounded' — can wait longest\n- **Canadian Triage and Acuity Scale (CTAS)**:\n  - Level 1 (Resuscitation): immediate — cardiac arrest, no airway\n  - Level 2 (Emergent): 15 min — severe respiratory distress, altered LOC, MI\n  - Level 3 (Urgent): 30 min — moderate distress\n  - Level 4 (Less urgent): 60 min — minor complaints\n  - Level 5 (Non-urgent): 120 min — routine or chronic complaints"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Recognizing Priority Clinical Findings",
+          "kind": "signs_symptoms",
+          "body": "**High-priority findings requiring immediate action:**\n- Airway: audible stridor, unable to speak or cry, cyanosis, use of all accessory muscles, inability to swallow\n- Breathing: RR > 30 or < 8, SpO₂ < 90% on supplemental O₂, asymmetric chest rise, absent breath sounds, pink frothy sputum\n- Circulation: SBP < 90, MAP < 65, HR > 150 or < 40, signs of shock (pallor, clammy, mottling, confusion), active major haemorrhage\n- Neurological: new GCS < 8, focal neurological deficit (new stroke), seizure, sudden severe headache ('thunderclap — worst of life')\n- Cardiac: crushing central chest pain with diaphoresis and nausea, new dysrhythmia with hemodynamic compromise\n\n**Patterns that suggest stable-but-monitoring:**\n- Chronic pain, established diagnosis, patient communicating coherently with normal vitals\n- Expected post-operative findings (mild pain, slight fever on day 1, expected wound drainage)\n- Stable chronic disease exacerbation without deterioration indicators\n\n**NCLEX cues that a finding is priority:**\n- New or sudden onset\n- Change from previous assessment\n- Extreme values (very high or very low)\n- Combination of findings (e.g., chest pain + diaphoresis + jaw pain = higher priority than chest pain alone)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Escalation Triggers",
+          "kind": "red_flags",
+          "body": "**Activate rapid response or emergency alert immediately:**\n- SpO₂ < 90% not correcting with O₂\n- RR < 8 or > 30 sustained\n- HR < 40 or > 150 with symptoms\n- SBP < 90 despite interventions\n- New altered LOC (GCS drop ≥ 2 points)\n- Sudden severe headache or new focal neuro deficit\n- Uncontrolled haemorrhage\n- Chest pain with ECG changes\n- Silent chest in asthma (no air movement)\n- Anaphylaxis\n\n**Do not leave unstable patients:**\n- If you must leave: call for another nurse to stay before departing\n- Always communicate handoff with 'eyes on' for unstable patients — verbal confirmation, not just chart documentation"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Clinical Decision Support: When to Escalate",
+          "kind": "labs_diagnostics",
+          "body": "**Early Warning Score (EWS/NEWS):**\n- Aggregate score of: RR, O₂ saturation, temperature, systolic BP, HR, level of consciousness, supplemental O₂ use\n- Score ≥ 5 or any single parameter scoring 3 → immediate clinical escalation to provider\n- Widely used in Canadian hospitals to standardize when nurses escalate\n\n**Critical lab values requiring immediate provider notification:**\n- K⁺ < 2.5 or > 6.5 mEq/L (cardiac dysrhythmia risk)\n- Na⁺ < 120 or > 160 mEq/L\n- Blood glucose < 2.8 or > 30 mmol/L\n- Haemoglobin < 70 g/L\n- Platelet count < 20 × 10⁹/L\n- Troponin any detectable rise with chest pain\n- Lactate > 4 mmol/L\n- INR > 8 or significantly supratherapeutic\n\n**Documentation and communication:**\n- Document the finding, the provider notified, time of notification, and provider's response\n- If provider response is inadequate and patient safety is at risk: escalate to supervisor (chain of command)\n- Nurses have a professional and legal obligation to continue escalating until the patient receives appropriate care"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities: Prioritization in Practice",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Delegation principles (Right Delegation framework):**\n\nNurses may delegate tasks to unregulated care providers (UCPs) / personal support workers / nursing aides when ALL five 'rights' are met:\n1. **Right task**: the task is in the UCP's scope of practice and facility policy allows delegation\n2. **Right circumstance**: the patient is stable enough that a less-skilled provider can safely perform the task\n3. **Right person**: the UCP has the training and competency for this specific task\n4. **Right direction/communication**: clear, specific instructions given verbally and/or in writing\n5. **Right supervision/evaluation**: the nurse monitors the outcome and ensures the task was completed correctly\n\n**Tasks a nurse CANNOT delegate:**\n- Initial nursing assessment and ongoing assessment of complex/unstable patients\n- Nursing diagnosis and care planning\n- Medication administration (in most jurisdictions without specific UCP medication training)\n- Patient teaching requiring nursing judgment\n- Invasive procedures beyond UCP scope\n- IV medication administration\n\n**Managing multiple patients — time management:**\n1. Identify which patients are most acute at the start of shift\n2. Check on all patients within first 30 minutes\n3. Plan medication administration around meal times and assessments\n4. Cluster care: group assessments, medications, and procedures to minimize interruptions\n5. Reassess priorities throughout the shift — conditions change\n\n**Conflict of priorities — NCLEX approach:**\n- If a priority question seems to have two equally urgent answers, the ABC element takes precedence\n- If both are breathing problems: the more acute or unstable one\n- If the question asks what to do FIRST: choose the action with the most immediate life-saving impact"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **A, then B, then C** — this order is absolute. An airway problem always takes priority over a breathing problem, which takes priority over a circulation problem. The only exception: cardiac arrest (CPR = simultaneous ABCs).\n- **Actual > potential problems** — the patient who IS bleeding takes priority over the patient who MIGHT bleed. Address what is happening now.\n- **New or changed > chronic, stable** — a patient with a new-onset symptom may be deteriorating; a patient with a long-standing chronic complaint has adapted. The exception: an unstable chronic condition (e.g. decompensated heart failure).\n- **SBAR is required for provider notification** — calling without a structured communication risks incomplete information transfer and delayed intervention.\n- **Chain of command**: if provider does not respond appropriately to your concern about a deteriorating patient, escalate to charge nurse, nursing supervisor, department head, or rapid response team. Your professional duty is to the patient.\n- **Delegation ≠ abandonment**: you delegate the task, not the responsibility. The nurse retains accountability for the outcome."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Empowering patients and families to escalate:**\n- Teach patients and families: 'If you feel something is wrong — say something. You have the right to ask for a nurse immediately.'\n- Ryan's Rule (Canada/Queensland): patients and families can trigger a rapid response review if they believe their deterioration is not being appropriately recognized. Know your hospital's patient-initiated escalation process.\n- Teach the FAST acronym for stroke recognition: Face drooping, Arm weakness, Speech difficulty, Time to call 911\n- Teach warning signs that require emergency care: chest pain, sudden severe headache, difficulty breathing, sudden confusion or vision change, severe bleeding\n\n**Discharge planning priorities:**\n- Address physiological needs first: is the patient stable enough for discharge? Medications reconciled? Follow-up arranged?\n- Then: does the patient understand the discharge instructions? Do they have transportation, support at home?\n- Safety concerns override comfort considerations"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Prioritization hierarchy: ABCs → Maslow physiological → actual > potential → acute > chronic\n- Airway: stridor, cyanosis, inability to speak = immediate intervention. Breathing: SpO₂ < 90%, silent chest, RR < 8 or > 30. Circulation: SBP < 90, MAP < 65, signs of shock.\n- SBAR: Situation → Background → Assessment → Recommendation — required for all urgent provider communications\n- Delegation: right task, right circumstance, right person, right direction, right supervision. Nurses CANNOT delegate assessment, diagnosis, planning, or IV medication administration.\n- Escalation: early warning scores, critical lab values, chain of command. Do not wait for explicit permission to escalate — professional accountability requires it.\n- NCLEX rule: most acute physiological threat → first. Prevent death before preventing complication."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse has four patients. Which patient should be assessed first?",
+          "options": [
+            "A client with type 2 diabetes whose morning glucose is 9.8 mmol/L",
+            "A client on day 2 post-cholecystectomy who rates incisional pain at 5/10",
+            "A client with COPD who has a new respiratory rate of 32/min and SpO₂ of 87% on 2 L/min O₂",
+            "A client awaiting discharge who is asking about their prescription instructions"
+          ],
+          "correct": 2,
+          "rationale": "The COPD client has an acute respiratory problem — SpO₂ 87% + RR 32 indicates significant respiratory distress and possible impending failure. This is an immediate threat to Airway and Breathing (ABCs) requiring urgent assessment and intervention. The glucose of 9.8 is mildly elevated but not emergent. Post-op pain at 5/10 on day 2 is expected and not immediately life-threatening. Discharge teaching is non-urgent."
+        },
+        {
+          "question": "A nurse asks a UCP (unregulated care provider) to take vital signs on a stable post-op client. The nurse is delegating correctly when she:",
+          "options": [
+            "Tells the UCP to report any changes and leaves all monitoring to them for the shift",
+            "Specifies which vital signs to take, what values to report immediately, when to take them, and follows up to verify the readings",
+            "Asks the UCP to assess the wound and drain while taking vitals",
+            "Delegates all patient care to the UCP so she can focus on charting"
+          ],
+          "correct": 1,
+          "rationale": "Correct delegation requires all five rights: right task (vital signs = appropriate for UCP), right circumstances (stable post-op patient), right person (UCP trained for vitals), right direction (specify what to take, when, what abnormal values to report), and right supervision (nurse follows up to review). Wound assessment and drain assessment require nursing judgment and cannot be delegated to UCPs."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse caring for 5 clients prioritizes which finding first?",
+          "options": [
+            "A client who is crying and requesting to speak to the chaplain",
+            "A client post-cardiac catheterization who has a new complaint of numbness and coolness in the accessed limb",
+            "A client requesting to ambulate for the first time after knee replacement",
+            "A client whose INR result of 3.1 just returned (target 2.0–3.0)"
+          ],
+          "correct": 1,
+          "rationale": "Numbness and coolness in a limb after cardiac catheterization suggests arterial occlusion at the access site — a vascular emergency that can lead to limb loss if not identified and treated promptly. This is a circulation threat (ABCs). The chaplain request is a psychosocial need (Maslow Level 3). First ambulation requires assessment but is not an emergency. INR 3.1 is at the upper end of therapeutic range — important to document and review but not emergent."
+        },
+        {
+          "question": "A nurse recognizes that a client with new-onset confusion, SpO₂ 88%, and RR 28 is deteriorating. The provider does not answer the call. What should the nurse do?",
+          "options": [
+            "Document the attempt to call and try again in 30 minutes",
+            "Activate the rapid response team, escalate to the charge nurse and supervisor, and continue to initiate emergency nursing interventions (supplemental O₂, positioning, monitoring) while escalating",
+            "Wait at the nurses' station until the provider calls back",
+            "Transfer the patient to the ICU without a provider order"
+          ],
+          "correct": 1,
+          "rationale": "When a patient is deteriorating and the provider is unresponsive, the nurse must escalate through the chain of command: charge nurse → supervisor → department head → rapid response team. In the meantime, independent nursing interventions (supplemental O₂, positioning, ongoing monitoring, IV access preparation) are appropriate. The nurse has a professional and ethical duty to continue escalating until the patient receives appropriate care. Waiting is a patient safety failure."
+        },
+        {
+          "question": "A nurse is asked to delegate 6 AM vital signs on a client admitted for pneumonia who has been stable for 24 hours (afebrile, SpO₂ 96% on 2 L). The nurse is delegating to a UCP. This delegation is:",
+          "options": [
+            "Inappropriate — vital signs on a pneumonia patient always require nursing assessment",
+            "Appropriate — the patient is stable and vital signs are within a UCP's scope; the nurse specifies parameters to report and will review the results",
+            "Inappropriate — vital signs can only be delegated to another RN",
+            "Inappropriate — delegating vital signs means the nurse is not fulfilling their professional duty"
+          ],
+          "correct": 1,
+          "rationale": "Delegating vital sign collection to a UCP is appropriate when all five rights are met: the task is appropriate for UCPs, the patient is stable, the UCP is trained, clear instructions are given (including which values to report immediately), and the nurse supervises the outcome. Stable patients do not require the nurse to personally collect every vital sign. The nurse retains accountability and must review and interpret the results."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "previewSectionCount": 2,
+      "seoTitle": "General nursing clinical skills: medication safety, fall prevention, safety culture & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on general clinical nursing: medication administration 10 rights, high-alert medications, fall prevention, pressure injury staging, restraint use, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**General clinical nursing skills** encompass the foundational safety-critical practices that underpin all nursing specialties. NCLEX-RN Canada tests these across every domain — medication safety, fall prevention, patient identification, restraint use, pressure injury prevention, and documentation. Errors in these areas are leading causes of patient harm in Canadian hospitals.\n\n**Patient safety context:**\n- Medication errors: among the most common adverse events; most are preventable\n- Falls: leading cause of injury-related hospitalization in Canada; 30% of falls result in injury\n- Pressure injuries: affect 26% of hospitalized patients; largely preventable with nursing care\n- Wrong-patient events: prevented by consistent 2-identifier verification\n\nThis lesson covers the core safety practices that nurses must apply reliably, regardless of clinical specialty."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Medication Administration Safety: 10 Rights",
+          "kind": "pathophysiology_overview",
+          "body": "**The 10 Rights of Medication Administration:**\n\n1. **Right patient**: verify with 2 patient identifiers (name + DOB or name + hospital ID number) — NEVER identify by room number or bed number alone. Ask the patient to state their name; do not just confirm what you say.\n\n2. **Right medication**: check the medication name three times (medication administration record, when retrieving from dispensing system, at the bedside). Be alert to look-alike/sound-alike (LASA) drugs (e.g., hydroxyzine vs hydralazine, Humalog vs Humulin).\n\n3. **Right dose**: calculate and verify dose calculations independently. For high-alert medications: require 2-nurse verification.\n\n4. **Right route**: oral, sublingual, IV, IM, SC, topical, inhaled, rectal — routes are not interchangeable. Never give oral medications IV, and vice versa.\n\n5. **Right time**: scheduled medications should be given within 30–60 minutes of scheduled time (facility policy varies); 'STAT' medications should be given immediately.\n\n6. **Right documentation**: document immediately after administration — never before. Document right drug, dose, route, time, patient response.\n\n7. **Right assessment**: check relevant parameters before administration — BP before antihypertensives; HR before digoxin; glucose before insulin; pain score before analgesics.\n\n8. **Right reason**: confirm the indication is current and appropriate for this patient.\n\n9. **Right response**: evaluate the patient's response to the medication at the appropriate time after administration.\n\n10. **Right to refuse**: patients have the legal right to refuse any medication. Document the refusal and inform the provider.\n\n**High-alert medications (Institute for Safe Medication Practices — ISMP):**\nDrugs with a narrow therapeutic index or potential for catastrophic harm when given in error. Require 2-nurse verification at most facilities:\n- **Anticoagulants**: heparin (especially IV infusions), warfarin, DOACs\n- **Insulin**: all types — include dose, type, route\n- **Concentrated electrolytes**: IV potassium > 10 mEq/hr, concentrated sodium solutions\n- **Opioids**: IV morphine, hydromorphone, fentanyl\n- **Chemotherapy**: cytotoxic agents\n- **Neuromuscular blocking agents**: vecuronium, rocuronium — must be stored separately from other medications; have caused fatal respiratory arrest when given in error\n- **Digoxin**: narrow therapeutic index; toxicity is common"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Recognizing Medication Errors and Adverse Effects",
+          "kind": "signs_symptoms",
+          "body": "**Signs of common high-alert medication complications:**\n\n**Heparin overdose / anticoagulation excess:**\n- Signs: unexpected bleeding — oozing from IV sites, mucous membranes, ecchymosis, haematuria, haemoptysis, intracranial haemorrhage (severe headache, altered LOC)\n- Reversal: protamine sulfate (heparin reversal); vitamin K + FFP/PCC (warfarin reversal); specific reversal agents for DOACs (idarucizumab for dabigatran; andexanet alfa for apixaban/rivaroxaban)\n\n**Digoxin toxicity:**\n- Early: nausea, vomiting, anorexia, visual disturbances (yellow-green haze, halos)\n- Cardiac: bradycardia (especially AV blocks), atrial dysrhythmias\n- Predisposing factors: hypokalemia (reduces binding competition at Na-K ATPase — markedly increases toxicity even at 'therapeutic' levels), hypomagnesemia, hypercalcemia, renal failure\n\n**Insulin hypoglycaemia**: see Insulin/Hypoglycemia lesson\n\n**Drug-drug interactions alert signs:**\n- Unexpected bleeding on warfarin + NSAID/antibiotic/amiodarone — review INR\n- Bradycardia with digoxin + beta-blocker + diltiazem/verapamil\n- QT prolongation: multiple medications affecting QTc (azithromycin + haloperidol + fluconazole)\n\n**Falls assessment:**\n- Physiological risk factors: hypotension, dizziness, cognitive impairment, muscle weakness, sensory deficits (vision, proprioception), polypharmacy (sedatives, diuretics, antihypertensives)\n- Environmental risk factors: wet floors, poor lighting, inappropriate footwear, IV poles, urinary urgency during night\n- **Morse Fall Scale (common Canadian tool)**: fall history (25 pts), secondary diagnosis (15), ambulatory aid (15-30), IV (20), gait (10-20), mental status (15); score ≥ 45 = high risk"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Patient Safety Emergencies",
+          "kind": "red_flags",
+          "body": "**Medication error — after administering wrong drug, dose, or route:**\n1. Assess the patient immediately for harm\n2. Notify the provider and charge nurse immediately\n3. Implement any ordered countermeasures (reversal agent, monitoring orders)\n4. Complete an incident report (quality improvement, not punitive in most Canadian frameworks)\n5. Document clinical findings and notifications in the patient chart — do NOT document the error in the patient chart (incident report is separate)\n6. Monitor patient closely for adverse effects\n\n**Restraint-related emergencies:**\n- Restraint entanglement with airway compromise → remove restraint immediately\n- Signs of pressure on restrained limb: pallor, cyanosis, absent pulse, coolness → remove or loosen restraint immediately\n- Patient must be assessed at minimum every 2 hours when restrained\n\n**Pressure injury emergency:**\n- Stage 3/4 wound or unstageable wound in a patient with poor nutrition and sepsis → notify wound care team, dietitian, and provider for urgent wound management and nutritional support\n\n**Wrong patient event prevention:**\n- If a medication or procedure is performed on the wrong patient: stop immediately, assess for harm, notify provider and charge nurse, complete incident report, disclose to patient and family"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Safety Assessment Tools",
+          "kind": "labs_diagnostics",
+          "body": "**Fall risk assessment:**\n- Morse Fall Scale (see above): score ≥ 25 = at-risk; ≥ 45 = high-risk\n- STRATIFY (St. Thomas's Risk Assessment Tool): fall history, agitation, impaired vision, frequent toileting, impaired mobility or transfer\n- Re-assess at admission, with any change in condition, after any fall, and on transfer\n\n**Pressure injury staging (NPUAP/EPUAP):**\n- **Stage 1**: intact skin with non-blanchable erythema; skin may be painful, firm, soft, warmer, or cooler\n- **Stage 2**: partial-thickness skin loss — shallow open ulcer or intact/ruptured blister; dermis exposed\n- **Stage 3**: full-thickness skin loss; subcutaneous fat visible; may have undermining/tunnelling; no exposed bone/tendon/muscle\n- **Stage 4**: full-thickness tissue loss with exposed bone, tendon, or muscle; frequently has undermining/tunnelling; deepest pressure injury\n- **Unstageable**: full-thickness; depth unknown due to slough or eschar covering the wound base\n- **Deep Tissue Injury (DTI)**: purple or maroon intact skin or blood-filled blister from pressure/shear at deep tissue level; can rapidly progress\n\n**Braden Scale (pressure injury risk):**\n- Six subscales: sensory perception, moisture, activity, mobility, nutrition, friction/shear\n- Score range: 6–23; ≤ 18 = at-risk; ≤ 9 = very high risk\n\n**Digoxin level monitoring:**\n- Therapeutic: 0.5–2.0 ng/mL (0.5–0.8 for HF); draw 6–8 hours post-dose (trough)\n- Always check K⁺ alongside digoxin level — hypokalemia dramatically increases toxicity risk"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Fall prevention protocol:**\n- Implement risk-appropriate interventions for all patients (NOT just high-risk): call bell within reach, bed in lowest position, wheels locked, night light on\n- High-risk patients: yellow wristband + signage on door, non-slip footwear, hourly rounding, hip protector (if appropriate), bed and chair alarms, bed exit sensor\n- Frequently toileting patients: scheduled voiding q2–3h, especially overnight\n- Review medications: reduce or substitute sedatives, narcotics, antihypertensives where possible (provider discussion)\n- Supervised ambulation for first post-op attempt; assess gait and balance\n\n**Pressure injury prevention:**\n- **Position change**: every 2 hours in bed, every 1 hour in chair — document\n- **Inspection**: skin inspection head to toe at each repositioning; bony prominences especially: occiput, ears, shoulders, elbows, sacrum, heels, lateral malleoli\n- **Pressure relief**: specialty foam or air mattress for high-risk patients; float heels off bed with pillow under calves\n- **Moisture management**: keep skin clean and dry; incontinence briefs changed promptly; moisture barriers (zinc oxide cream)\n- **Nutrition**: adequate protein and caloric intake; collaborate with dietitian for wound healing\n- **Friction and shear**: lift sheet for transfers; do NOT drag patients up the bed\n\n**Physical/chemical restraint principles:**\n- Restraints are the LAST resort — must have a provider order in Canada (unlike older practice)\n- Least restrictive alternative first: bed alarm, sitter, reorientation, environmental modifications, addressing underlying cause of agitation\n- Obtain consent (patient or SDM) and explain purpose\n- Assess restrained patient at minimum every 2 hours: circulation (pulse, colour, sensation), skin integrity, ROM\n- Apply correctly: wrist restraints in quick-release knot (not tied to bed rail) → allows quick release\n- Discontinue at first safe opportunity; reassess need at each shift\n\n**Patient identification at procedure/medication administration:**\n- Use 2 identifiers every time, every patient, every procedure\n- Scanning barcodes (BCMA — bar code medication administration): reduces medication errors by 50–80%\n- Pre-procedure time-out: 'RIGHT PATIENT, RIGHT PROCEDURE, RIGHT SITE' — all team members participate and agree before proceeding"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Never document before giving**: documenting a medication before administration means if it is not given (patient refused, adverse vital signs), the record is incorrect and the nurse is legally and ethically liable.\n- **Look-alike/sound-alike drugs**: Humalog vs Humulin, hydroxyzine vs hydralazine, KCl vs NS flush (concentrated potassium is lethal IV push) — use tall-man lettering, verify twice.\n- **Digoxin hold parameters**: hold for HR < 60 (adult); notify provider. Also check K⁺ before administering — hypokalemia + digoxin = toxicity risk even at 'normal' levels.\n- **Stage 2 vs stage 1 pressure injury**: Stage 1 is NON-blanchable erythema on intact skin. Stage 2 is actual skin loss. Blanchable erythema (turns white when you press it) is reactive hyperaemia — uncomfortable but intact vasculature; monitor and prevent. Non-blanchable = stage 1 pressure injury — act now.\n- **Restraint wrist ties to the BED FRAME** not the side rail — if the rail is lowered, a tied restraint lifts the patient's arm dangerously. Always knot below mattress level on a non-moving frame part.\n- **Incident report ≠ medical record**: the incident report is a quality improvement document; document clinical facts in the patient chart; document the incident ONLY in the incident report system."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Fall prevention education for patients and families:**\n- Call for help before getting up — never try to get out of bed alone if you are dizzy or unsteady\n- Wear non-slip footwear — bare feet and socks are a slip risk\n- Make sure the call bell is always within reach\n- If you feel dizzy when standing: sit on the edge of the bed for 1–2 minutes before standing fully\n- Tell us about any medications that make you dizzy or drowsy\n\n**Skin and pressure injury education:**\n- Inspect your skin daily, especially over bony areas (heels, sacrum, elbows)\n- If you must sit for long periods: shift your weight every 15–30 minutes\n- Keep skin clean and dry — incontinence must be cleaned promptly\n- Adequate nutrition supports skin integrity — eat enough protein\n\n**Medication safety education:**\n- Always tell your nurse about ALL medications you take at home, including herbals, vitamins, and OTC drugs\n- Know the names and doses of your medications — use a medication list wallet card\n- Never take someone else's medication\n- Report immediately: unexpected bleeding, dizziness, new rash, or any unexpected symptom after a new medication\n- You have the right to ask about any medication you are given: what it is and why"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- 10 Rights of medication: patient, medication, dose, route, time, documentation, assessment, reason, response, right to refuse\n- High-alert medications requiring 2-nurse verification: anticoagulants, insulin, concentrated electrolytes, opioids, neuromuscular blockers, chemotherapy\n- Patient identification: 2 identifiers every time — name + DOB or hospital ID. Never by room number.\n- Fall risk: Morse Fall Scale ≥ 45 = high risk. Bed lowest, call bell in reach, non-slip footwear, scheduled toileting, review sedating medications.\n- Pressure injury staging: 1 (non-blanchable intact skin) → 2 (partial skin loss) → 3 (subcutaneous fat visible) → 4 (bone/tendon/muscle exposed). Braden ≤ 18 = at-risk.\n- Restraints: last resort, provider order required, check every 2 hours, knot to bed frame NOT rail, least restrictive first.\n- Digoxin: check HR and K⁺ before giving. Hold if HR < 60. Hypokalemia → toxicity even at therapeutic levels."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is about to administer medications and approaches a client. To correctly identify the client, the nurse should:",
+          "options": [
+            "Confirm the room number and bed assignment match the medication administration record",
+            "Ask 'Are you Mr. Smith?' and wait for the client to say 'yes'",
+            "Ask the client to state their name and date of birth, then compare both to the medication administration record and ID band",
+            "Check the name on the whiteboard above the bed"
+          ],
+          "correct": 2,
+          "rationale": "Proper patient identification requires 2 independent identifiers — the client states their own name AND date of birth; the nurse compares both to the MAR and the ID band. Confirmation questions ('Are you Mr. Smith?') can result in affirmative answers from confused patients. Room numbers and whiteboards are not reliable identifiers — patients may be transferred or names may be incorrect."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse administers the wrong dose of metoprolol (50 mg instead of the ordered 25 mg). The patient's HR is 42 bpm and BP 88/56 mmHg. What is the correct sequence of actions?",
+          "options": [
+            "Document the dose given in the chart, administer atropine 0.5 mg IV, and complete an incident report at end of shift",
+            "Assess the patient, immediately notify the provider and charge nurse, implement ordered interventions, closely monitor the patient, and complete an incident report promptly (never documenting the error in the patient chart)",
+            "Do not tell the charge nurse to avoid disciplinary action; monitor the patient closely and document the correct ordered dose",
+            "Administer atropine immediately without notifying the provider — it is an appropriate reversal action"
+          ],
+          "correct": 1,
+          "rationale": "After a medication error: (1) assess patient for harm, (2) notify provider and charge nurse immediately, (3) implement ordered countermeasures (provider may order atropine or monitoring, not the nurse independently), (4) closely monitor, (5) complete incident report promptly. Never conceal a medication error. The clinical facts (HR 42, BP 88/56, interventions given) are documented in the patient chart; the error itself is documented in the incident report system — NOT in the patient chart."
+        },
+        {
+          "question": "A nurse assessing a bedridden client's sacrum finds a 2 cm area of purple, intact skin with a spongy texture compared to surrounding tissue. The skin does not blanche. What is the correct classification?",
+          "options": [
+            "Stage 1 pressure injury — non-blanchable erythema",
+            "Stage 2 pressure injury — partial thickness skin loss",
+            "Deep tissue pressure injury (DTI) — purple discolouration with intact skin suggesting deep tissue damage",
+            "Moisture-associated skin damage from incontinence — not a pressure injury"
+          ],
+          "correct": 2,
+          "rationale": "Purple or maroon intact skin with a spongy texture, localized over a bony prominence, is characteristic of a Deep Tissue Pressure Injury (DTI). DTI represents damage at the deep tissue level (muscle, fascia) from sustained pressure/shear, with the overlying skin still intact but the underlying tissue already injured. DTI can rapidly progress to Stage 3 or 4. It is distinct from Stage 1 (non-blanchable erythema — red/pink) which represents superficial vascular damage."
+        },
+        {
+          "question": "A nurse notices a client with heart failure has gained 2.5 kg since yesterday's weight. The client has bilateral ankle oedema and crackles at both lung bases. The current IV order reads '0.9% NaCl at 75 mL/hr.' What should the nurse do?",
+          "options": [
+            "Continue the NS infusion — the provider ordered it",
+            "Discontinue the IV fluid without a provider order",
+            "Hold the IV infusion, assess the client, notify the provider with SBAR communication about the fluid status change and current findings",
+            "Switch the fluid to 0.45% NaCl to prevent further sodium loading"
+          ],
+          "correct": 2,
+          "rationale": "A 2.5 kg weight gain + bilateral crackles + ankle oedema in a heart failure patient indicates fluid volume excess — adding more isotonic saline worsens pulmonary oedema. The nurse should hold the infusion (within nursing scope when clinical deterioration is evident), assess the patient, and immediately notify the provider using SBAR communication. The nurse cannot discontinue or change the IV fluid type without a provider order — but holding a potentially harmful fluid while seeking an urgent order is appropriate and within nursing scope."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-fluid-balance",
+      "previewSectionCount": 2,
+      "seoTitle": "Fluid balance nursing: IV fluids, dehydration, overload, third-spacing & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on fluid balance: isotonic vs hypotonic vs hypertonic IV fluids, fluid volume deficit and excess, third-spacing, I&O, assessment, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Fluid balance** is a foundational nursing competency. Maintaining homeostasis requires precise management of fluid intake and output, electrolyte balance, and vascular volume. For NCLEX-RN Canada, fluid balance knowledge is tested in virtually every clinical specialization — from cardiac and renal nursing to surgical care, obstetrics, and critical care.\n\n**Body fluid compartments:**\n- Total body water (TBW): ~60% of body weight in adult men, ~50% in women\n  - Intracellular fluid (ICF): 2/3 of TBW — inside cells\n  - Extracellular fluid (ECF): 1/3 of TBW — outside cells\n    - Intravascular: plasma (within blood vessels)\n    - Interstitial: between cells and vessels (lymphatics)\n    - Transcellular: CSF, pleural, pericardial, peritoneal, synovial fluid\n\n**Osmolality controls fluid movement:**\n- Water moves from areas of low osmolality → high osmolality (osmosis)\n- Normal serum osmolality: 280–295 mOsm/kg\n- Sodium is the primary ECF osmole — changes in Na⁺ drive water movement between ICF and ECF\n\n**Normal daily I&O (adult):**\n- Intake: ~2,500 mL/day (1,200 mL oral fluids, 1,000 mL food water, 300 mL metabolic water)\n- Output: ~2,500 mL/day (urine 1,200–1,500 mL, stool 200 mL, insensible 800–1,000 mL skin/lungs)\n- Minimum urine output: 0.5 mL/kg/hr (adult)"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "IV Fluid Types and Clinical Indications",
+          "kind": "pathophysiology_overview",
+          "body": "**Isotonic solutions (osmolality close to plasma: 280–295 mOsm/L) — stays in ECF, does not shift water across cell membranes:**\n\n- **Normal Saline (0.9% NaCl, NS)**: 308 mOsm/L. Used for: volume replacement (hypovolemia, blood transfusion pre/post), hyponatremia, medication compatibility. Caution: large volumes → hyperchloraemic metabolic acidosis and fluid overload.\n- **Lactated Ringer's (LR)**: 273 mOsm/L; contains Na⁺, K⁺, Ca²⁺, Cl⁻, lactate. More physiologically balanced than NS. Used for: surgical fluid replacement, burns, trauma. Caution: contains K⁺ — caution in hyperkalemia; lactate contraindicated in liver failure (can't metabolize lactate); not for TBI (slightly hypotonic after lactate metabolism).\n- **D5W (5% dextrose in water)**: technically isotonic in the bag (252 mOsm/L), but once dextrose is metabolized, becomes free water → distributed throughout TBW (mostly ICF). Effectively hypotonic in the body. Used for: hypernatremia correction (free water repletion); medication carrier; NOT for volume expansion (does not stay in ECF).\n\n**Hypotonic solutions (< 280 mOsm/L) — moves water INTO cells; reduces cellular dehydration; reduces ECF volume:**\n- **0.45% NaCl (half-normal saline)**: 154 mOsm/L. Used for: cellular rehydration, DKA phase 2 (when glucose < 14 mg/dL or mEq/L and glucose correction underway), maintenance IVF. Caution: cerebral edema risk in TBI patients.\n- **0.33% NaCl**: for paediatric maintenance.\n\n**Hypertonic solutions (> 295 mOsm/L) — draws water FROM cells INTO ECF; increases intravascular volume:**\n- **3% NaCl**: 1,026 mOsm/L. Used for: symptomatic severe hyponatremia (seizures), hyponatremic encephalopathy. MUST be given in ICU with close monitoring. Risk: rapid correction → osmotic demyelination syndrome (ODS).\n- **D5NS (D5 + 0.9% NaCl)**: 560 mOsm/L. Used for: postoperative maintenance with some volume replacement; caution with fluid overload risk.\n- **D5LR**: used for maintenance + glucose delivery in some post-op situations.\n\n**Colloids:**\n- **Albumin (5%, 25%)**: stays in vascular compartment; expands plasma volume; used for SBP (hepatorenal), hypoalbuminemia with hemodynamic instability\n- **Blood products** (PRBCs, FFP, platelets, cryoprecipitate): for specific deficiencies\n\n**Third-spacing:** Fluid shifts from the intravascular compartment into a 'non-functional' space (peritoneal cavity — ascites; interstitial — edema; pleural — effusion). The patient is hemodynamically volume-depleted despite total body water excess. Common in: pancreatitis, burns, sepsis, post-major surgery. Monitor: edema developing while hemodynamic indicators of dehydration (tachycardia, low urine output, low CVP) are present."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Fluid Volume Deficit vs Excess",
+          "kind": "signs_symptoms",
+          "body": "**Fluid Volume Deficit (FVD / Hypovolemia):**\n- Thirst (early sign)\n- Dry mucous membranes\n- Decreased skin turgor (tenting)\n- Tachycardia (compensatory)\n- Orthostatic hypotension → supine hypotension (late)\n- Decreased urine output (< 30 mL/hr or 0.5 mL/kg/hr)\n- Concentrated urine: dark yellow, high specific gravity (> 1.030)\n- Weight loss (1 kg = 1 L fluid loss)\n- Flat JVP, peripheral veins slow to fill\n- Sunken eyes, fontanelle (paediatric)\n- Altered LOC (severe dehydration)\n\n**Fluid Volume Excess (FVE / Hypervolemia):**\n- Bounding pulse\n- Hypertension\n- Increased urine output initially (then oliguria if renal decompensation occurs)\n- Dependent edema: ankles/feet in ambulatory patients; sacral in bed-bound\n- Periorbital edema\n- Weight gain (acute weight gain = fluid retention: 1 kg ≈ 1 L)\n- JVP > 4 cm above sternal angle (raised central venous pressure)\n- Crackles (pulmonary edema): bilateral fine crackles at lung bases\n- S3 gallop (volume overloaded ventricle)\n- Shortness of breath, decreased SpO₂\n\n**Third-spacing signs (paradox of fluid deficit + edema):**\n- Low urine output despite presence of edema/ascites\n- Tachycardia and hypotension with visibly edematous patient\n- Low CVP despite anasarca\n- This is NOT treated by diuretics (the intravascular space is dry) — needs careful IV fluid resuscitation"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Hemodynamic Compromise",
+          "kind": "red_flags",
+          "body": "**Dehydration / Hypovolemia — escalate immediately:**\n- Urine output < 0.5 mL/kg/hr for ≥ 2 hours despite fluid administration\n- HR > 120, SBP < 90, MAP < 65 mmHg\n- Altered LOC — cerebral hypoperfusion\n- Skin: mottling, delayed capillary refill (> 3 seconds)\n- Lactate > 2 mg/dL or mEq/L (tissue hypoperfusion)\n\n**Fluid Overload / Pulmonary Edema — escalate immediately:**\n- SpO₂ dropping with bilateral crackles and pink frothy sputum\n- RR > 30, unable to speak in full sentences\n- SBP rising with new dyspnea after large volume IV fluid administration\n- Weight gain of > 2 kg overnight\n\n**IV fluid administration errors:**\n- Wrong fluid type: giving NS to a client with hyperchloraemic acidosis; giving hypotonic to a TBI patient (worsens cerebral edema)\n- Infusing too rapidly: in heart failure or renal failure patients → flash pulmonary edema\n- Running dry: air embolism risk with gravity/pressure bags (use electronic pumps)"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Fluid status assessment labs:**\n- **BUN (blood urea nitrogen)**: elevated in dehydration (concentrated), decreased in fluid overload (dilutional). BUN:creatinine ratio > 20:1 suggests pre-renal dehydration\n- **Serum creatinine**: rises in renal hypoperfusion from dehydration\n- **Serum Na⁺, K⁺, Cl⁻**: guide fluid selection; hypernatremia suggests free water deficit; hyponatremia suggests free water excess or sodium loss\n- **Serum albumin**: low albumin → reduced oncotic pressure → third-spacing and edema\n- **CBC**: haematocrit rises with dehydration (haemoconcentration); falls with fluid overload (haemodilution)\n- **Urine specific gravity**: > 1.030 (concentrated = dehydrated); < 1.010 (dilute = overloaded or DI)\n- **Urine Na⁺**: < 20 mEq/L = kidneys conserving sodium (pre-renal dehydration or hypovolemia); > 40 mEq/L = kidneys excreting sodium (SIADH, renal failure)\n\n**Monitoring tools:**\n- Daily weight (most accurate fluid balance monitor): same time each day, same scale, same clothing\n- Strict I&O: document every fluid input (IV, oral, NG feeding, blood products) and output (urine, NG drainage, wound drainage, emesis, stool, chest tube)\n- CVP (central venous pressure): normal 2–8 mmHg; low in dehydration, high in overload\n- BP and HR trends: orthostatic vitals for dehydration assessment"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**I&O monitoring best practices:**\n- Measure ALL inputs: oral fluids (include meals with high water content), IV fluids, blood products, irrigation fluids absorbed, medications in solution\n- Measure ALL outputs: urine (Foley or hourly voiding), wound drainage (measure from drainage devices), NG/gastric suction, chest tube output, emesis, significant stool\n- Reconcile every 4–8 hours; report trends\n- Minimum expected urine output: 30 mL/hr (adult); 1 mL/kg/hr (paediatric)\n\n**IV fluid administration safety:**\n- Verify the order: IV fluid type, volume, rate (mL/hr)\n- Check IV site before infusion: redness, swelling, warmth, pain, leaking → stop infusion, remove IV\n- Rate control: use infusion pump for all IV medications and blood products\n- Primary + secondary ('piggyback') setup: primary line fluid must be compatible with secondary\n- Blood transfusion: always start with 0.9% NS; never mix blood with dextrose or LR (haemolysis); filter must be used; verify product × 2 nurses, ABO/Rh type\n\n**Fluid replacement in specific contexts:**\n- **Post-surgical fluid management**: assess wound drain output, estimate insensible losses, maintain MAP > 65 and urine output ≥ 0.5 mL/kg/hr\n- **Burns (Parkland formula)**: 4 mL × kg × % TBSA burned = fluid to give in first 24h (50% in first 8h, 50% in next 16h); use LR\n- **Sepsis (Surviving Sepsis)**: 30 mL/kg IV crystalloid within 3h; reassess with dynamic fluid responsiveness markers thereafter\n- **Heart failure / renal failure**: restrict fluids per protocol; daily weight; strict I&O; monitor for pulmonary oedema\n\n**Oedema assessment (grading):**\n- 1+: slight pitting, disappears rapidly (< 2 mm)\n- 2+: somewhat deeper, disappears in 10–15 seconds (2–4 mm)\n- 3+: deep pit, remains 1 minute (4–6 mm)\n- 4+: deep pit, remains 2+ minutes; dependent areas markedly swollen (> 6 mm)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Daily weight is the best volume monitor** — a 1 kg weight gain overnight = ~1 L of fluid retained. Scales must be calibrated; weigh at the same time in same conditions.\n- **NS in large volumes → hyperchloraemic acidosis** — the high chloride content of NS can cause metabolic acidosis. Balanced crystalloids (LR, Plasmalyte) are preferred for large-volume resuscitation.\n- **D5W does NOT volume-expand** — after metabolism, the dextrose is gone and the water distributes throughout TBW; only ~90 mL of every 1,000 mL D5W stays in the intravascular space. Use NS or LR for volume replacement, not D5W.\n- **Third-spacing paradox**: patient has low urine output + hypotension + edema → fluid is in the wrong compartment. Diuretics worsen intravascular depletion. IV fluid resuscitation targets the vascular space.\n- **Orthostatic vital signs**: check BP and HR supine → sitting → standing. Drop of ≥ 20/10 mmHg SBP/DBP or HR rise ≥ 20 = orthostatic hypotension → dehydration or autonomic dysfunction.\n- **Fluid overload in CKD and HF patients**: happens faster and is more dangerous. Even small overruns (200–300 mL extra per day) accumulate and cause pulmonary oedema. Strict 1:1 I&O target."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Heart failure — fluid restriction education:**\n- Limit fluids as directed (typically 1,500–2,000 mL/day) — this includes all liquids: water, juice, soup, gelatin, ice cream, ice chips (1 cup ice = 120 mL fluid)\n- Weigh every morning after first void, before eating, in the same clothing — record your weight\n- Report weight gain of > 1 kg in 24 hours or > 2 kg in 1 week — this is a fluid accumulation warning\n- Signs of fluid overload: swollen ankles, shortness of breath, inability to lie flat at night (orthopnoea)\n\n**Dehydration prevention:**\n- Drink 8–10 cups (2–2.5 L) of water daily in normal conditions\n- Increase intake during hot weather, fever, exercise, or diarrhoea/vomiting\n- Urine should be pale yellow — dark yellow or amber means drink more\n- Elderly: thirst sensation diminishes with age — drink on a schedule, not just when thirsty\n\n**IV therapy at home or infusion clinic:**\n- Report: redness, pain, swelling, or leaking at IV site\n- Report: sudden shortness of breath, chest pain, or confusion during infusion\n- Do not adjust IV rate yourself"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Isotonic (NS, LR, D5W effective): stay in ECF, volume expand. D5W = free water after metabolism — does NOT volume expand.\n- Hypotonic (0.45% NaCl): moves into ICF; used for cellular rehydration, DKA phase 2.\n- Hypertonic (3% NaCl): draws water from ICF to ECF; used for severe symptomatic hyponatremia — ICU-level monitoring.\n- FVD: tachycardia, dry mucous membranes, oliguria, low specific gravity on concentrated urine, orthostatic hypotension, weight loss.\n- FVE: crackles, S3, elevated JVP, bounding pulse, hypertension, dependent oedema, weight gain.\n- Third-spacing: fluid lost from vasculature into 'non-functional' compartment — treat with careful fluid resuscitation, not diuretics.\n- Daily weight + strict I&O = the most important fluid monitoring tools. 1 kg weight change ≈ 1 L fluid change."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is caring for a post-operative client who had a 3 L intraoperative fluid loss. The provider orders 1 L 0.9% NaCl over 2 hours. What is the primary reason normal saline is selected over D5W for this situation?",
+          "options": [
+            "D5W is more expensive and reserved for paediatric patients",
+            "Normal saline is isotonic and stays in the extracellular fluid compartment, making it effective for volume replacement. D5W acts as free water after dextrose metabolism and does not volume-expand.",
+            "D5W causes hyperglycaemia in post-operative patients",
+            "Normal saline is more compatible with post-operative blood products"
+          ],
+          "correct": 1,
+          "rationale": "The goal of volume replacement after surgical fluid loss is to restore intravascular volume. Isotonic NS stays in the extracellular compartment after infusion, expanding plasma volume. D5W, once the dextrose is metabolised, distributes as free water across all compartments (mostly intracellular) — only about 90 mL of every 1,000 mL stays intravascular. It is not effective for volume replacement."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with heart failure gains 3 kg over 2 days and develops new crackles bilaterally and SpO₂ 91% on room air. What is the nurse's priority intervention?",
+          "options": [
+            "Encourage the client to ambulate to mobilize fluid",
+            "Notify the provider — the weight gain represents approximately 3 L of fluid retention; assessment findings indicate pulmonary oedema development",
+            "Restrict oral fluids to 500 mL and reassess in 4 hours",
+            "Increase supplemental O₂ and document the finding — this is expected in heart failure"
+          ],
+          "correct": 1,
+          "rationale": "A 3 kg weight gain (≈ 3 L fluid retention) with new bilateral crackles and SpO₂ 91% indicates evolving pulmonary oedema in a fluid-overloaded heart failure patient. This is a clinical deterioration requiring immediate provider notification for assessment and likely diuretic therapy. Documenting alone without notification is inadequate given hemodynamic compromise."
+        },
+        {
+          "question": "A client with burns covering 25% TBSA and weighing 70 kg requires fluid resuscitation using the Parkland formula. How much fluid should be given in the first 8 hours?",
+          "options": [
+            "7,000 mL",
+            "3,500 mL",
+            "1,750 mL",
+            "14,000 mL"
+          ],
+          "correct": 1,
+          "rationale": "Parkland formula: 4 mL × kg × %TBSA = total 24h fluid. 4 × 70 × 25 = 7,000 mL total. Half (3,500 mL) is given in the FIRST 8 hours (from time of injury, not time of arrival), and the remaining half (3,500 mL) is distributed over the following 16 hours. Lactated Ringer's is the preferred fluid for burns resuscitation."
+        },
+        {
+          "question": "A nurse assesses a post-abdominal surgery client on day 2 who has dependent pitting oedema (3+) at the ankles and sacrum, yet heart rate is 118 bpm, BP is 88/52 mmHg, and urine output is 18 mL/hr. What fluid problem is most likely occurring?",
+          "options": [
+            "Fluid volume excess — the oedema confirms too much IV fluid was given",
+            "Third-spacing — fluid is shifting from the intravascular space into the interstitial and peritoneal compartments, causing intravascular depletion despite visible oedema",
+            "Cardiogenic shock — the hypotension and oedema suggest heart failure",
+            "Dehydration from inadequate oral intake post-surgery"
+          ],
+          "correct": 1,
+          "rationale": "Third-spacing presents paradoxically: the patient appears fluid-overloaded externally (oedema) but is intravascularly depleted (tachycardia, hypotension, oliguria). After major abdominal surgery, peritoneal and interstitial fluid accumulation draws fluid from the vasculature. Treatment is careful IV resuscitation to restore intravascular volume — NOT diuretics, which would worsen the intravascular depletion."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-prioritization-abcs",
+      "previewSectionCount": 2,
+      "seoTitle": "Nursing prioritization: ABCs, Maslow, triage, delegation & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on clinical prioritization: ABCs, Maslow's hierarchy, triage frameworks, SBAR, delegation principles, and NCLEX-RN decision-making priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Clinical prioritization** is the process of determining which patient needs, interventions, or assessments require attention first when resources are limited. For NCLEX-RN Canada, prioritization is one of the most heavily tested competency areas — the ability to determine which patient to see first, which problem to address first, and when to delegate.\n\n**Foundational prioritization frameworks:**\n1. **ABCs (Airway, Breathing, Circulation)**: physiological needs that, if unmet, cause immediate death — always the top priority\n2. **Maslow's Hierarchy of Needs**: physiological → safety → love/belonging → esteem → self-actualization. Address lower-tier needs before higher ones.\n3. **Acute vs Chronic**: acute, new-onset deterioration typically takes priority over chronic, stable conditions\n4. **Life-threatening vs non-life-threatening**: actual vs potential problems — actual threats to life take priority\n\n**NCLEX prioritization rule of thumb:**\nIf one option prevents death immediately → that one first. Then: what stabilizes the situation? Then: what promotes recovery? Then: what prevents complication?"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Prioritization Frameworks in Detail",
+          "kind": "pathophysiology_overview",
+          "body": "**ABC Framework — in order:**\n\n**Airway (A)** — the most critical. Without a patent airway, oxygenation and ventilation are impossible. A compromised airway kills in minutes.\n- Airway threats: obstruction (foreign body, angioedema, stridor, tumour, vomit), loss of protective reflexes (unconsciousness, stroke, anaphylaxis)\n- Actions: positioning (head tilt-chin lift or jaw thrust for spinal concern), suctioning, adjunct airways (OPA, NPA), intubation\n\n**Breathing (B)** — once airway patent, ensure adequate ventilation. Airway without breathing = still dying.\n- Breathing threats: tension pneumothorax, flail chest, severe pneumonia, status asthmaticus, severe ARDS, apnoea\n- Actions: supplemental O₂, BVM ventilation, chest decompression (needle or tube), bronchodilators\n\n**Circulation (C)** — ensure adequate cardiac output and perfusion.\n- Circulation threats: cardiac arrest, massive haemorrhage, cardiogenic/distributive shock, severe arrhythmias\n- Actions: CPR, haemorrhage control, IV access, fluids, vasopressors, defibrillation\n\n**Disability (D) + Exposure (E)**: after ABCs stabilized\n- Disability: GCS/LOC, pupils, focal neurology\n- Exposure: full body assessment (hidden injuries, rashes, bleeding)\n\n**Maslow's Hierarchy applied clinically:**\n- **Level 1 (Physiological)**: oxygenation, circulation, nutrition, hydration, elimination, comfort — address these first\n- **Level 2 (Safety)**: fall risk, infection prevention, medication safety\n- **Level 3 (Love/Belonging)**: family communication, therapeutic relationship\n- **Level 4 (Esteem)**: body image, dignity, autonomy\n- **Level 5 (Self-actualisation)**: meaning-making, spirituality\n\n**Common NCLEX prioritization questions:**\n\n**'Which patient do you see first?'** — scan for: airway compromise, active bleeding, chest pain, neurological change, respiratory distress. The patient with the highest physiological threat goes first.\n\n**'Which assessment finding requires immediate attention?'** — look for: new vs expected, stable vs deteriorating, life-threatening consequence, action available.\n\n**SBAR communication framework:**\n- **S**ituation: who you are calling about and the immediate concern\n- **B**ackground: relevant clinical history, reason for admission\n- **A**ssessment: what you think is happening\n- **R**ecommendation: what you need (order, evaluation, intervention)\n\nSBAR ensures complete, organized handover and reduces miscommunication — required for all urgent communications with providers.\n\n**Triage frameworks (ED / mass casualty):**\n- **START triage (Simple Triage and Rapid Treatment)**:\n  - Black (expectant): unsalvageable, too severe to survive with available resources\n  - Red (immediate): life-threatening but salvageable — address first\n  - Yellow (delayed): serious but stable — can wait\n  - Green (minor): 'walking wounded' — can wait longest\n- **US Triage and Acuity Scale (CTAS)**:\n  - Level 1 (Resuscitation): immediate — cardiac arrest, no airway\n  - Level 2 (Emergent): 15 min — severe respiratory distress, altered LOC, MI\n  - Level 3 (Urgent): 30 min — moderate distress\n  - Level 4 (Less urgent): 60 min — minor complaints\n  - Level 5 (Non-urgent): 120 min — routine or chronic complaints"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Recognizing Priority Clinical Findings",
+          "kind": "signs_symptoms",
+          "body": "**High-priority findings requiring immediate action:**\n- Airway: audible stridor, unable to speak or cry, cyanosis, use of all accessory muscles, inability to swallow\n- Breathing: RR > 30 or < 8, SpO₂ < 90% on supplemental O₂, asymmetric chest rise, absent breath sounds, pink frothy sputum\n- Circulation: SBP < 90, MAP < 65, HR > 150 or < 40, signs of shock (pallor, clammy, mottling, confusion), active major haemorrhage\n- Neurological: new GCS < 8, focal neurological deficit (new stroke), seizure, sudden severe headache ('thunderclap — worst of life')\n- Cardiac: crushing central chest pain with diaphoresis and nausea, new dysrhythmia with hemodynamic compromise\n\n**Patterns that suggest stable-but-monitoring:**\n- Chronic pain, established diagnosis, patient communicating coherently with normal vitals\n- Expected post-operative findings (mild pain, slight fever on day 1, expected wound drainage)\n- Stable chronic disease exacerbation without deterioration indicators\n\n**NCLEX cues that a finding is priority:**\n- New or sudden onset\n- Change from previous assessment\n- Extreme values (very high or very low)\n- Combination of findings (e.g., chest pain + diaphoresis + jaw pain = higher priority than chest pain alone)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Escalation Triggers",
+          "kind": "red_flags",
+          "body": "**Activate rapid response or emergency alert immediately:**\n- SpO₂ < 90% not correcting with O₂\n- RR < 8 or > 30 sustained\n- HR < 40 or > 150 with symptoms\n- SBP < 90 despite interventions\n- New altered LOC (GCS drop ≥ 2 points)\n- Sudden severe headache or new focal neuro deficit\n- Uncontrolled haemorrhage\n- Chest pain with ECG changes\n- Silent chest in asthma (no air movement)\n- Anaphylaxis\n\n**Do not leave unstable patients:**\n- If you must leave: call for another nurse to stay before departing\n- Always communicate handoff with 'eyes on' for unstable patients — verbal confirmation, not just chart documentation"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Clinical Decision Support: When to Escalate",
+          "kind": "labs_diagnostics",
+          "body": "**Early Warning Score (EWS/NEWS):**\n- Aggregate score of: RR, O₂ saturation, temperature, systolic BP, HR, level of consciousness, supplemental O₂ use\n- Score ≥ 5 or any single parameter scoring 3 → immediate clinical escalation to provider\n- Widely used in US hospitals to standardize when nurses escalate\n\n**Critical lab values requiring immediate provider notification:**\n- K⁺ < 2.5 or > 6.5 mEq/L (cardiac dysrhythmia risk)\n- Na⁺ < 120 or > 160 mEq/L\n- Blood glucose < 2.8 or > 30 mg/dL or mEq/L\n- Haemoglobin < 70 g/L\n- Platelet count < 20 × 10⁹/L\n- Troponin any detectable rise with chest pain\n- Lactate > 4 mg/dL or mEq/L\n- INR > 8 or significantly supratherapeutic\n\n**Documentation and communication:**\n- Document the finding, the provider notified, time of notification, and provider's response\n- If provider response is inadequate and patient safety is at risk: escalate to supervisor (chain of command)\n- Nurses have a professional and legal obligation to continue escalating until the patient receives appropriate care"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities: Prioritization in Practice",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Delegation principles (Right Delegation framework):**\n\nNurses may delegate tasks to unregulated care providers (UCPs) / personal support workers / nursing aides when ALL five 'rights' are met:\n1. **Right task**: the task is in the UCP's scope of practice and facility policy allows delegation\n2. **Right circumstance**: the patient is stable enough that a less-skilled provider can safely perform the task\n3. **Right person**: the UCP has the training and competency for this specific task\n4. **Right direction/communication**: clear, specific instructions given verbally and/or in writing\n5. **Right supervision/evaluation**: the nurse monitors the outcome and ensures the task was completed correctly\n\n**Tasks a nurse CANNOT delegate:**\n- Initial nursing assessment and ongoing assessment of complex/unstable patients\n- Nursing diagnosis and care planning\n- Medication administration (in most jurisdictions without specific UCP medication training)\n- Patient teaching requiring nursing judgment\n- Invasive procedures beyond UCP scope\n- IV medication administration\n\n**Managing multiple patients — time management:**\n1. Identify which patients are most acute at the start of shift\n2. Check on all patients within first 30 minutes\n3. Plan medication administration around meal times and assessments\n4. Cluster care: group assessments, medications, and procedures to minimize interruptions\n5. Reassess priorities throughout the shift — conditions change\n\n**Conflict of priorities — NCLEX approach:**\n- If a priority question seems to have two equally urgent answers, the ABC element takes precedence\n- If both are breathing problems: the more acute or unstable one\n- If the question asks what to do FIRST: choose the action with the most immediate life-saving impact"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **A, then B, then C** — this order is absolute. An airway problem always takes priority over a breathing problem, which takes priority over a circulation problem. The only exception: cardiac arrest (CPR = simultaneous ABCs).\n- **Actual > potential problems** — the patient who IS bleeding takes priority over the patient who MIGHT bleed. Address what is happening now.\n- **New or changed > chronic, stable** — a patient with a new-onset symptom may be deteriorating; a patient with a long-standing chronic complaint has adapted. The exception: an unstable chronic condition (e.g. decompensated heart failure).\n- **SBAR is required for provider notification** — calling without a structured communication risks incomplete information transfer and delayed intervention.\n- **Chain of command**: if provider does not respond appropriately to your concern about a deteriorating patient, escalate to charge nurse, nursing supervisor, department head, or rapid response team. Your professional duty is to the patient.\n- **Delegation ≠ abandonment**: you delegate the task, not the responsibility. The nurse retains accountability for the outcome."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Empowering patients and families to escalate:**\n- Teach patients and families: 'If you feel something is wrong — say something. You have the right to ask for a nurse immediately.'\n- Ryan's Rule (Canada/Queensland): patients and families can trigger a rapid response review if they believe their deterioration is not being appropriately recognized. Know your hospital's patient-initiated escalation process.\n- Teach the FAST acronym for stroke recognition: Face drooping, Arm weakness, Speech difficulty, Time to call 911\n- Teach warning signs that require emergency care: chest pain, sudden severe headache, difficulty breathing, sudden confusion or vision change, severe bleeding\n\n**Discharge planning priorities:**\n- Address physiological needs first: is the patient stable enough for discharge? Medications reconciled? Follow-up arranged?\n- Then: does the patient understand the discharge instructions? Do they have transportation, support at home?\n- Safety concerns override comfort considerations"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Prioritization hierarchy: ABCs → Maslow physiological → actual > potential → acute > chronic\n- Airway: stridor, cyanosis, inability to speak = immediate intervention. Breathing: SpO₂ < 90%, silent chest, RR < 8 or > 30. Circulation: SBP < 90, MAP < 65, signs of shock.\n- SBAR: Situation → Background → Assessment → Recommendation — required for all urgent provider communications\n- Delegation: right task, right circumstance, right person, right direction, right supervision. Nurses CANNOT delegate assessment, diagnosis, planning, or IV medication administration.\n- Escalation: early warning scores, critical lab values, chain of command. Do not wait for explicit permission to escalate — professional accountability requires it.\n- NCLEX rule: most acute physiological threat → first. Prevent death before preventing complication."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse has four patients. Which patient should be assessed first?",
+          "options": [
+            "A client with type 2 diabetes whose morning glucose is 9.8 mmol/L",
+            "A client on day 2 post-cholecystectomy who rates incisional pain at 5/10",
+            "A client with COPD who has a new respiratory rate of 32/min and SpO₂ of 87% on 2 L/min O₂",
+            "A client awaiting discharge who is asking about their prescription instructions"
+          ],
+          "correct": 2,
+          "rationale": "The COPD client has an acute respiratory problem — SpO₂ 87% + RR 32 indicates significant respiratory distress and possible impending failure. This is an immediate threat to Airway and Breathing (ABCs) requiring urgent assessment and intervention. The glucose of 9.8 is mildly elevated but not emergent. Post-op pain at 5/10 on day 2 is expected and not immediately life-threatening. Discharge teaching is non-urgent."
+        },
+        {
+          "question": "A nurse asks a UCP (unregulated care provider) to take vital signs on a stable post-op client. The nurse is delegating correctly when she:",
+          "options": [
+            "Tells the UCP to report any changes and leaves all monitoring to them for the shift",
+            "Specifies which vital signs to take, what values to report immediately, when to take them, and follows up to verify the readings",
+            "Asks the UCP to assess the wound and drain while taking vitals",
+            "Delegates all patient care to the UCP so she can focus on charting"
+          ],
+          "correct": 1,
+          "rationale": "Correct delegation requires all five rights: right task (vital signs = appropriate for UCP), right circumstances (stable post-op patient), right person (UCP trained for vitals), right direction (specify what to take, when, what abnormal values to report), and right supervision (nurse follows up to review). Wound assessment and drain assessment require nursing judgment and cannot be delegated to UCPs."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse caring for 5 clients prioritizes which finding first?",
+          "options": [
+            "A client who is crying and requesting to speak to the chaplain",
+            "A client post-cardiac catheterization who has a new complaint of numbness and coolness in the accessed limb",
+            "A client requesting to ambulate for the first time after knee replacement",
+            "A client whose INR result of 3.1 just returned (target 2.0–3.0)"
+          ],
+          "correct": 1,
+          "rationale": "Numbness and coolness in a limb after cardiac catheterization suggests arterial occlusion at the access site — a vascular emergency that can lead to limb loss if not identified and treated promptly. This is a circulation threat (ABCs). The chaplain request is a psychosocial need (Maslow Level 3). First ambulation requires assessment but is not an emergency. INR 3.1 is at the upper end of therapeutic range — important to document and review but not emergent."
+        },
+        {
+          "question": "A nurse recognizes that a client with new-onset confusion, SpO₂ 88%, and RR 28 is deteriorating. The provider does not answer the call. What should the nurse do?",
+          "options": [
+            "Document the attempt to call and try again in 30 minutes",
+            "Activate the rapid response team, escalate to the charge nurse and supervisor, and continue to initiate emergency nursing interventions (supplemental O₂, positioning, monitoring) while escalating",
+            "Wait at the nurses' station until the provider calls back",
+            "Transfer the patient to the ICU without a provider order"
+          ],
+          "correct": 1,
+          "rationale": "When a patient is deteriorating and the provider is unresponsive, the nurse must escalate through the chain of command: charge nurse → supervisor → department head → rapid response team. In the meantime, independent nursing interventions (supplemental O₂, positioning, ongoing monitoring, IV access preparation) are appropriate. The nurse has a professional and ethical duty to continue escalating until the patient receives appropriate care. Waiting is a patient safety failure."
+        },
+        {
+          "question": "A nurse is asked to delegate 6 AM vital signs on a client admitted for pneumonia who has been stable for 24 hours (afebrile, SpO₂ 96% on 2 L). The nurse is delegating to a UCP. This delegation is:",
+          "options": [
+            "Inappropriate — vital signs on a pneumonia patient always require nursing assessment",
+            "Appropriate — the patient is stable and vital signs are within a UCP's scope; the nurse specifies parameters to report and will review the results",
+            "Inappropriate — vital signs can only be delegated to another RN",
+            "Inappropriate — delegating vital signs means the nurse is not fulfilling their professional duty"
+          ],
+          "correct": 1,
+          "rationale": "Delegating vital sign collection to a UCP is appropriate when all five rights are met: the task is appropriate for UCPs, the patient is stable, the UCP is trained, clear instructions are given (including which values to report immediately), and the nurse supervises the outcome. Stable patients do not require the nurse to personally collect every vital sign. The nurse retains accountability and must review and interpret the results."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-general-nursing-clinical",
+      "previewSectionCount": 2,
+      "seoTitle": "General nursing clinical skills: medication safety, fall prevention, safety culture & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on general clinical nursing: medication administration 10 rights, high-alert medications, fall prevention, pressure injury staging, restraint use, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**General clinical nursing skills** encompass the foundational safety-critical practices that underpin all nursing specialties. NCLEX-RN Canada tests these across every domain — medication safety, fall prevention, patient identification, restraint use, pressure injury prevention, and documentation. Errors in these areas are leading causes of patient harm in US hospitals.\n\n**Patient safety context:**\n- Medication errors: among the most common adverse events; most are preventable\n- Falls: leading cause of injury-related hospitalization in Canada; 30% of falls result in injury\n- Pressure injuries: affect 26% of hospitalized patients; largely preventable with nursing care\n- Wrong-patient events: prevented by consistent 2-identifier verification\n\nThis lesson covers the core safety practices that nurses must apply reliably, regardless of clinical specialty."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Medication Administration Safety: 10 Rights",
+          "kind": "pathophysiology_overview",
+          "body": "**The 10 Rights of Medication Administration:**\n\n1. **Right patient**: verify with 2 patient identifiers (name + DOB or name + hospital ID number) — NEVER identify by room number or bed number alone. Ask the patient to state their name; do not just confirm what you say.\n\n2. **Right medication**: check the medication name three times (medication administration record, when retrieving from dispensing system, at the bedside). Be alert to look-alike/sound-alike (LASA) drugs (e.g., hydroxyzine vs hydralazine, Humalog vs Humulin).\n\n3. **Right dose**: calculate and verify dose calculations independently. For high-alert medications: require 2-nurse verification.\n\n4. **Right route**: oral, sublingual, IV, IM, SC, topical, inhaled, rectal — routes are not interchangeable. Never give oral medications IV, and vice versa.\n\n5. **Right time**: scheduled medications should be given within 30–60 minutes of scheduled time (facility policy varies); 'STAT' medications should be given immediately.\n\n6. **Right documentation**: document immediately after administration — never before. Document right drug, dose, route, time, patient response.\n\n7. **Right assessment**: check relevant parameters before administration — BP before antihypertensives; HR before digoxin; glucose before insulin; pain score before analgesics.\n\n8. **Right reason**: confirm the indication is current and appropriate for this patient.\n\n9. **Right response**: evaluate the patient's response to the medication at the appropriate time after administration.\n\n10. **Right to refuse**: patients have the legal right to refuse any medication. Document the refusal and inform the provider.\n\n**High-alert medications (Institute for Safe Medication Practices — ISMP):**\nDrugs with a narrow therapeutic index or potential for catastrophic harm when given in error. Require 2-nurse verification at most facilities:\n- **Anticoagulants**: heparin (especially IV infusions), warfarin, DOACs\n- **Insulin**: all types — include dose, type, route\n- **Concentrated electrolytes**: IV potassium > 10 mEq/hr, concentrated sodium solutions\n- **Opioids**: IV morphine, hydromorphone, fentanyl\n- **Chemotherapy**: cytotoxic agents\n- **Neuromuscular blocking agents**: vecuronium, rocuronium — must be stored separately from other medications; have caused fatal respiratory arrest when given in error\n- **Digoxin**: narrow therapeutic index; toxicity is common"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Recognizing Medication Errors and Adverse Effects",
+          "kind": "signs_symptoms",
+          "body": "**Signs of common high-alert medication complications:**\n\n**Heparin overdose / anticoagulation excess:**\n- Signs: unexpected bleeding — oozing from IV sites, mucous membranes, ecchymosis, haematuria, haemoptysis, intracranial haemorrhage (severe headache, altered LOC)\n- Reversal: protamine sulfate (heparin reversal); vitamin K + FFP/PCC (warfarin reversal); specific reversal agents for DOACs (idarucizumab for dabigatran; andexanet alfa for apixaban/rivaroxaban)\n\n**Digoxin toxicity:**\n- Early: nausea, vomiting, anorexia, visual disturbances (yellow-green haze, halos)\n- Cardiac: bradycardia (especially AV blocks), atrial dysrhythmias\n- Predisposing factors: hypokalemia (reduces binding competition at Na-K ATPase — markedly increases toxicity even at 'therapeutic' levels), hypomagnesemia, hypercalcemia, renal failure\n\n**Insulin hypoglycaemia**: see Insulin/Hypoglycemia lesson\n\n**Drug-drug interactions alert signs:**\n- Unexpected bleeding on warfarin + NSAID/antibiotic/amiodarone — review INR\n- Bradycardia with digoxin + beta-blocker + diltiazem/verapamil\n- QT prolongation: multiple medications affecting QTc (azithromycin + haloperidol + fluconazole)\n\n**Falls assessment:**\n- Physiological risk factors: hypotension, dizziness, cognitive impairment, muscle weakness, sensory deficits (vision, proprioception), polypharmacy (sedatives, diuretics, antihypertensives)\n- Environmental risk factors: wet floors, poor lighting, inappropriate footwear, IV poles, urinary urgency during night\n- **Morse Fall Scale (common US tool)**: fall history (25 pts), secondary diagnosis (15), ambulatory aid (15-30), IV (20), gait (10-20), mental status (15); score ≥ 45 = high risk"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Patient Safety Emergencies",
+          "kind": "red_flags",
+          "body": "**Medication error — after administering wrong drug, dose, or route:**\n1. Assess the patient immediately for harm\n2. Notify the provider and charge nurse immediately\n3. Implement any ordered countermeasures (reversal agent, monitoring orders)\n4. Complete an incident report (quality improvement, not punitive in most US frameworks)\n5. Document clinical findings and notifications in the patient chart — do NOT document the error in the patient chart (incident report is separate)\n6. Monitor patient closely for adverse effects\n\n**Restraint-related emergencies:**\n- Restraint entanglement with airway compromise → remove restraint immediately\n- Signs of pressure on restrained limb: pallor, cyanosis, absent pulse, coolness → remove or loosen restraint immediately\n- Patient must be assessed at minimum every 2 hours when restrained\n\n**Pressure injury emergency:**\n- Stage 3/4 wound or unstageable wound in a patient with poor nutrition and sepsis → notify wound care team, dietitian, and provider for urgent wound management and nutritional support\n\n**Wrong patient event prevention:**\n- If a medication or procedure is performed on the wrong patient: stop immediately, assess for harm, notify provider and charge nurse, complete incident report, disclose to patient and family"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Safety Assessment Tools",
+          "kind": "labs_diagnostics",
+          "body": "**Fall risk assessment:**\n- Morse Fall Scale (see above): score ≥ 25 = at-risk; ≥ 45 = high-risk\n- STRATIFY (St. Thomas's Risk Assessment Tool): fall history, agitation, impaired vision, frequent toileting, impaired mobility or transfer\n- Re-assess at admission, with any change in condition, after any fall, and on transfer\n\n**Pressure injury staging (NPUAP/EPUAP):**\n- **Stage 1**: intact skin with non-blanchable erythema; skin may be painful, firm, soft, warmer, or cooler\n- **Stage 2**: partial-thickness skin loss — shallow open ulcer or intact/ruptured blister; dermis exposed\n- **Stage 3**: full-thickness skin loss; subcutaneous fat visible; may have undermining/tunnelling; no exposed bone/tendon/muscle\n- **Stage 4**: full-thickness tissue loss with exposed bone, tendon, or muscle; frequently has undermining/tunnelling; deepest pressure injury\n- **Unstageable**: full-thickness; depth unknown due to slough or eschar covering the wound base\n- **Deep Tissue Injury (DTI)**: purple or maroon intact skin or blood-filled blister from pressure/shear at deep tissue level; can rapidly progress\n\n**Braden Scale (pressure injury risk):**\n- Six subscales: sensory perception, moisture, activity, mobility, nutrition, friction/shear\n- Score range: 6–23; ≤ 18 = at-risk; ≤ 9 = very high risk\n\n**Digoxin level monitoring:**\n- Therapeutic: 0.5–2.0 ng/mL (0.5–0.8 for HF); draw 6–8 hours post-dose (trough)\n- Always check K⁺ alongside digoxin level — hypokalemia dramatically increases toxicity risk"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Fall prevention protocol:**\n- Implement risk-appropriate interventions for all patients (NOT just high-risk): call bell within reach, bed in lowest position, wheels locked, night light on\n- High-risk patients: yellow wristband + signage on door, non-slip footwear, hourly rounding, hip protector (if appropriate), bed and chair alarms, bed exit sensor\n- Frequently toileting patients: scheduled voiding q2–3h, especially overnight\n- Review medications: reduce or substitute sedatives, narcotics, antihypertensives where possible (provider discussion)\n- Supervised ambulation for first post-op attempt; assess gait and balance\n\n**Pressure injury prevention:**\n- **Position change**: every 2 hours in bed, every 1 hour in chair — document\n- **Inspection**: skin inspection head to toe at each repositioning; bony prominences especially: occiput, ears, shoulders, elbows, sacrum, heels, lateral malleoli\n- **Pressure relief**: specialty foam or air mattress for high-risk patients; float heels off bed with pillow under calves\n- **Moisture management**: keep skin clean and dry; incontinence briefs changed promptly; moisture barriers (zinc oxide cream)\n- **Nutrition**: adequate protein and caloric intake; collaborate with dietitian for wound healing\n- **Friction and shear**: lift sheet for transfers; do NOT drag patients up the bed\n\n**Physical/chemical restraint principles:**\n- Restraints are the LAST resort — must have a provider order in Canada (unlike older practice)\n- Least restrictive alternative first: bed alarm, sitter, reorientation, environmental modifications, addressing underlying cause of agitation\n- Obtain consent (patient or SDM) and explain purpose\n- Assess restrained patient at minimum every 2 hours: circulation (pulse, colour, sensation), skin integrity, ROM\n- Apply correctly: wrist restraints in quick-release knot (not tied to bed rail) → allows quick release\n- Discontinue at first safe opportunity; reassess need at each shift\n\n**Patient identification at procedure/medication administration:**\n- Use 2 identifiers every time, every patient, every procedure\n- Scanning barcodes (BCMA — bar code medication administration): reduces medication errors by 50–80%\n- Pre-procedure time-out: 'RIGHT PATIENT, RIGHT PROCEDURE, RIGHT SITE' — all team members participate and agree before proceeding"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Never document before giving**: documenting a medication before administration means if it is not given (patient refused, adverse vital signs), the record is incorrect and the nurse is legally and ethically liable.\n- **Look-alike/sound-alike drugs**: Humalog vs Humulin, hydroxyzine vs hydralazine, KCl vs NS flush (concentrated potassium is lethal IV push) — use tall-man lettering, verify twice.\n- **Digoxin hold parameters**: hold for HR < 60 (adult); notify provider. Also check K⁺ before administering — hypokalemia + digoxin = toxicity risk even at 'normal' levels.\n- **Stage 2 vs stage 1 pressure injury**: Stage 1 is NON-blanchable erythema on intact skin. Stage 2 is actual skin loss. Blanchable erythema (turns white when you press it) is reactive hyperaemia — uncomfortable but intact vasculature; monitor and prevent. Non-blanchable = stage 1 pressure injury — act now.\n- **Restraint wrist ties to the BED FRAME** not the side rail — if the rail is lowered, a tied restraint lifts the patient's arm dangerously. Always knot below mattress level on a non-moving frame part.\n- **Incident report ≠ medical record**: the incident report is a quality improvement document; document clinical facts in the patient chart; document the incident ONLY in the incident report system."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Fall prevention education for patients and families:**\n- Call for help before getting up — never try to get out of bed alone if you are dizzy or unsteady\n- Wear non-slip footwear — bare feet and socks are a slip risk\n- Make sure the call bell is always within reach\n- If you feel dizzy when standing: sit on the edge of the bed for 1–2 minutes before standing fully\n- Tell us about any medications that make you dizzy or drowsy\n\n**Skin and pressure injury education:**\n- Inspect your skin daily, especially over bony areas (heels, sacrum, elbows)\n- If you must sit for long periods: shift your weight every 15–30 minutes\n- Keep skin clean and dry — incontinence must be cleaned promptly\n- Adequate nutrition supports skin integrity — eat enough protein\n\n**Medication safety education:**\n- Always tell your nurse about ALL medications you take at home, including herbals, vitamins, and OTC drugs\n- Know the names and doses of your medications — use a medication list wallet card\n- Never take someone else's medication\n- Report immediately: unexpected bleeding, dizziness, new rash, or any unexpected symptom after a new medication\n- You have the right to ask about any medication you are given: what it is and why"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- 10 Rights of medication: patient, medication, dose, route, time, documentation, assessment, reason, response, right to refuse\n- High-alert medications requiring 2-nurse verification: anticoagulants, insulin, concentrated electrolytes, opioids, neuromuscular blockers, chemotherapy\n- Patient identification: 2 identifiers every time — name + DOB or hospital ID. Never by room number.\n- Fall risk: Morse Fall Scale ≥ 45 = high risk. Bed lowest, call bell in reach, non-slip footwear, scheduled toileting, review sedating medications.\n- Pressure injury staging: 1 (non-blanchable intact skin) → 2 (partial skin loss) → 3 (subcutaneous fat visible) → 4 (bone/tendon/muscle exposed). Braden ≤ 18 = at-risk.\n- Restraints: last resort, provider order required, check every 2 hours, knot to bed frame NOT rail, least restrictive first.\n- Digoxin: check HR and K⁺ before giving. Hold if HR < 60. Hypokalemia → toxicity even at therapeutic levels."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is about to administer medications and approaches a client. To correctly identify the client, the nurse should:",
+          "options": [
+            "Confirm the room number and bed assignment match the medication administration record",
+            "Ask 'Are you Mr. Smith?' and wait for the client to say 'yes'",
+            "Ask the client to state their name and date of birth, then compare both to the medication administration record and ID band",
+            "Check the name on the whiteboard above the bed"
+          ],
+          "correct": 2,
+          "rationale": "Proper patient identification requires 2 independent identifiers — the client states their own name AND date of birth; the nurse compares both to the MAR and the ID band. Confirmation questions ('Are you Mr. Smith?') can result in affirmative answers from confused patients. Room numbers and whiteboards are not reliable identifiers — patients may be transferred or names may be incorrect."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse administers the wrong dose of metoprolol (50 mg instead of the ordered 25 mg). The patient's HR is 42 bpm and BP 88/56 mmHg. What is the correct sequence of actions?",
+          "options": [
+            "Document the dose given in the chart, administer atropine 0.5 mg IV, and complete an incident report at end of shift",
+            "Assess the patient, immediately notify the provider and charge nurse, implement ordered interventions, closely monitor the patient, and complete an incident report promptly (never documenting the error in the patient chart)",
+            "Do not tell the charge nurse to avoid disciplinary action; monitor the patient closely and document the correct ordered dose",
+            "Administer atropine immediately without notifying the provider — it is an appropriate reversal action"
+          ],
+          "correct": 1,
+          "rationale": "After a medication error: (1) assess patient for harm, (2) notify provider and charge nurse immediately, (3) implement ordered countermeasures (provider may order atropine or monitoring, not the nurse independently), (4) closely monitor, (5) complete incident report promptly. Never conceal a medication error. The clinical facts (HR 42, BP 88/56, interventions given) are documented in the patient chart; the error itself is documented in the incident report system — NOT in the patient chart."
+        },
+        {
+          "question": "A nurse assessing a bedridden client's sacrum finds a 2 cm area of purple, intact skin with a spongy texture compared to surrounding tissue. The skin does not blanche. What is the correct classification?",
+          "options": [
+            "Stage 1 pressure injury — non-blanchable erythema",
+            "Stage 2 pressure injury — partial thickness skin loss",
+            "Deep tissue pressure injury (DTI) — purple discolouration with intact skin suggesting deep tissue damage",
+            "Moisture-associated skin damage from incontinence — not a pressure injury"
+          ],
+          "correct": 2,
+          "rationale": "Purple or maroon intact skin with a spongy texture, localized over a bony prominence, is characteristic of a Deep Tissue Pressure Injury (DTI). DTI represents damage at the deep tissue level (muscle, fascia) from sustained pressure/shear, with the overlying skin still intact but the underlying tissue already injured. DTI can rapidly progress to Stage 3 or 4. It is distinct from Stage 1 (non-blanchable erythema — red/pink) which represents superficial vascular damage."
+        },
+        {
+          "question": "A nurse notices a client with heart failure has gained 2.5 kg since yesterday's weight. The client has bilateral ankle oedema and crackles at both lung bases. The current IV order reads '0.9% NaCl at 75 mL/hr.' What should the nurse do?",
+          "options": [
+            "Continue the NS infusion — the provider ordered it",
+            "Discontinue the IV fluid without a provider order",
+            "Hold the IV infusion, assess the client, notify the provider with SBAR communication about the fluid status change and current findings",
+            "Switch the fluid to 0.45% NaCl to prevent further sodium loading"
+          ],
+          "correct": 2,
+          "rationale": "A 2.5 kg weight gain + bilateral crackles + ankle oedema in a heart failure patient indicates fluid volume excess — adding more isotonic saline worsens pulmonary oedema. The nurse should hold the infusion (within nursing scope when clinical deterioration is evident), assess the patient, and immediately notify the provider using SBAR communication. The nurse cannot discontinue or change the IV fluid type without a provider order — but holding a potentially harmful fluid while seeking an urgent order is appropriate and within nursing scope."
+        }
+      ]
+    }
+  ]
+}

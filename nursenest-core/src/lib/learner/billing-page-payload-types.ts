@@ -1,0 +1,27 @@
+import type { CountryCode, SubscriptionStatus, TierCode, TrialStatus, UserRole } from "@prisma/client";
+
+export type BillingSubscriptionRow = {
+  status: SubscriptionStatus;
+  stripeSubscriptionId: string;
+  stripeCustomerId: string | null;
+  planTier: TierCode | null;
+  planCountry: CountryCode | null;
+  alliedCareer: string | null;
+  /** Mirrors Stripe `cancel_at_period_end` when synced (scheduled cancellation). */
+  cancelAtPeriodEnd: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type BillingUserRow = {
+  tier: TierCode;
+  country: string;
+  role: UserRole;
+  trialStatus: TrialStatus;
+  trialEndsAt: Date | null;
+  trialStartedAt: Date | null;
+  learnerPath: string | null;
+  passwordHash: string | null;
+  /** Canonical allied profession slug when tier is ALLIED (marketing / lesson scope). */
+  alliedProfessionKey: string | null;
+};

@@ -1,0 +1,66 @@
+modules = ["nodejs-20", "web", "python3", "postgresql-16"]
+run = "npm run dev"
+hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
+
+[nix]
+channel = "stable-24_05"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3000
+
+[env]
+PORT = "5000"
+
+[deployment]
+deploymentTarget = "autoscale"
+build = ["npm", "run", "build"]
+publicDir = "dist/public"
+run = ["node", "./dist/index.cjs"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "NODE_ENV=development tsx --import ./server/asset-stub-loader.mjs server/index.ts"
+waitForPort = 5000
+
+[agent]
+stack = "MOCKUP_JS"
+mockupState = "FULLSTACK"
+integrations = ["stripe:2.0.0", "javascript_openai_ai_integrations:2.0.0", "javascript_object_storage:2.0.0"]
+
+[userenv]
+
+[userenv.shared]
+SITE_URL = "https://www.nursenest.ca"
+ENABLE_AI_AUTOGEN = "true"
+ALLIED_PRO_MONTHLY_PRICE_ID = "price_1T6enrChmmgDwbsx6FqhSDmc"
+ALLIED_PRO_ANNUAL_PRICE_ID = "price_1T6enrChmmgDwbsxuwiW96Ll"
+ADMIN_API_KEY = "2390a185b91db3054c86b05bda359a15cbf21dbb5482ff7448ee362592d6cde9"
+ADMIN_JWT_SECRET = "c1910206f4c936391e3441a44e73e45789251de74175c3c6e61924089d20ed13759a707f8c44e171e339641969bda103"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 180000

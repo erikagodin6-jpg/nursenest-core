@@ -1,0 +1,45 @@
+"use client";
+
+import { useState } from "react";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
+
+export function LessonMarkCompleteButton({ lessonId }: { lessonId: string }) {
+  const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
+
+  async function save() {
+    setStatus("saving");
+    try {
+      const res = await fetch("/api/lessons/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lessonId, completed: true }),
+      });
+      if (!res.ok) throw new Error("fail");
+      setStatus("done");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("nn-learner-stats-updated"));
+      }
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        disabled={status === "saving" || status === "done"}
+        onClick={() => void save()}
+        className="nn-ui-btn nn-ui-btn--outline nn-ui-btn--md"
+      >
+        <SuccessLeaf show={status === "done"} size={20} />
+        {status === "done" ? "Marked complete" : status === "saving" ? "Saving\u2026" : "Mark lesson complete"}
+      </button>
+      {status === "error" ? (
+        <span className="text-xs font-medium text-[color-mix(in_srgb,var(--semantic-warning)_85%,var(--semantic-text-primary))]">
+          Could not save. Try again.
+        </span>
+      ) : null}
+    </div>
+  );
+}

@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-04-14T16:28:26.970Z",
+  "databaseAvailable": false,
+  "accessControlRules": {
+    "anonymous": "API routes return 401 without session; marketing may show public lesson previews only",
+    "freemium": "resolveEntitlement.hasAccess false → freemium pools; rationales blocked in /api/questions/[id]",
+    "paid": "getUserAccess.hasPremium + tier ladder via accessible-tiers.ts",
+    "pastDue": "Still hasPremium true (grace_period) — see get-user-access.ts",
+    "canceled": "Subscription CANCELLED — no longer in ACTIVE_LIKE; access ends unless trial"
+  },
+  "reconciliation": {
+    "mode": "audit_script_read_only",
+    "tierDriftListed": 0,
+    "note": "Full Stripe↔DB reconciliation requires STRIPE_SECRET_KEY + compare Customer.subscriptions in Stripe API — not run here."
+  },
+  "risks": [
+    "User.tier can temporarily diverge from Subscription.planTier until webhook/sync; effectiveTierCountryForAccess prefers plan.",
+    "PAST_DUE users retain premium access (grace) — confirm product policy."
+  ],
+  "filesWritten": [
+    "entitlement-system-map.json",
+    "stripe-sync-validation.json",
+    "entitlement-final-status.json"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-04-21T19:49:32.255Z",
+  "staleBlogPostsSample": [],
+  "catalogBundleMtime": "2026-04-18T09:56:02.911Z",
+  "policy": {
+    "staleDaysBlog": 365,
+    "staleDaysLessonCatalog": 365
+  }
+}

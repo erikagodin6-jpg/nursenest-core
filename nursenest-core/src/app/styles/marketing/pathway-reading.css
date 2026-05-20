@@ -1,0 +1,958 @@
+/* ==========================================================================
+   pathway-reading.css — NurseNest Premium Marketing Design System
+   
+   Ownership: Pathway lesson reading rail, nav dark surfaces, tier-hub hero bands
+   
+   Source: extracted from src/app/premium-redesign-2026.css (lines 2557–3502)
+   Import order: preserved — do not reorder imports in styles/marketing/index.css
+   Cascade: rules depend on cascade order across all section files; changes
+            to this file may affect other sections if shared selectors are involved.
+   
+   DO NOT add new rules here that belong to a different section file.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   Pathway lesson reading — Blossom presentation (marketing + shared shell)
+   --------------------------------------------------------------------- */
+
+.nn-lesson-reading-shell--blossom {
+  border-radius: 1rem;
+  background:
+    linear-gradient(
+      185deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted)) 46%,
+      color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--theme-page-bg)) 100%
+    );
+  box-shadow: 0 28px 56px -44px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent);
+}
+
+.nn-lesson-reading-shell--blossom .nn-lesson-main--blossom {
+  border-radius: 1.125rem;
+  padding: 0.15rem 0.1rem 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-reading-shell--blossom .nn-lesson-main--blossom {
+    padding: 0.25rem 0.15rem 0.5rem;
+  }
+}
+
+.nn-lesson-reading-progress {
+  position: sticky;
+  top: 0;
+  z-index: 34;
+  margin-top: -0.15rem;
+  margin-bottom: 0.45rem;
+}
+
+.nn-lesson-reading-progress__track {
+  height: 4px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-panel-muted));
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 6%, transparent);
+}
+
+.nn-lesson-reading-progress__fill {
+  height: 100%;
+  min-width: 3%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 78%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-chart-2) 82%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-chart-5) 76%, var(--semantic-border-soft))
+  );
+  transition: width 140ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lesson-reading-progress__fill {
+    transition: none;
+  }
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-section-nav.nn-lesson-section-nav--blossom {
+  border-top-color: color-mix(in srgb, var(--semantic-chart-2) 38%, var(--semantic-border-soft));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-chart-4) 7%, transparent), transparent 42%),
+    var(--bg-card);
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--semantic-text-primary) 5%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-section-nav__progress strong {
+  color: color-mix(in srgb, var(--semantic-chart-2) 82%, var(--semantic-text-secondary));
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-section-nav-mobile--sticky-lane {
+    position: sticky;
+    top: 0.35rem;
+    z-index: 28;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.nn-lesson-quick-summary--blossom {
+  border-radius: 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-chart-3) 10%);
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+html[data-theme="dark-clinical"] .nn-lesson-quick-summary--blossom,
+html[data-theme="dark-mode"] .nn-lesson-quick-summary--blossom,
+html[data-theme="midnight-indigo"] .nn-lesson-quick-summary--blossom {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 94%, var(--semantic-chart-3) 6%);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-article-flow::before {
+  opacity: 0.62;
+}
+
+html[data-theme="dark-clinical"] .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-article-flow::before,
+html[data-theme="dark-mode"] .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-article-flow::before {
+  opacity: 0.28;
+}
+
+.nn-premium-lesson-detail-shell .lv-lesson-actions .lv-btn-secondary {
+  min-width: 0;
+  white-space: normal;
+  text-wrap: balance;
+  text-align: center;
+  padding-inline: 0.85rem;
+}
+
+.nn-premium-lesson-detail-shell .lv-lesson-actions .lv-btn-primary {
+  min-width: 0;
+  white-space: normal;
+  text-wrap: balance;
+  text-align: center;
+}
+
+.nn-premium-auth-header {
+  text-align: left;
+}
+
+.nn-premium-auth-header h1 {
+  margin-top: 0.55rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.02;
+}
+
+.nn-premium-auth-header > p:last-child {
+  margin-top: 0.72rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.nn-premium-auth-pathway-rail {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  margin-top: 1rem;
+  padding: 0.15rem 0 0.4rem;
+  scrollbar-width: thin;
+}
+
+.nn-premium-auth-pathway-rail > span:first-child {
+  border-color: color-mix(in srgb, var(--nn-auth-accent-primary) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-auth-accent-primary) 12%, var(--semantic-surface));
+}
+
+.nn-premium-auth-form {
+  position: relative;
+}
+
+.nn-premium-auth-input {
+  min-height: var(--nn-auth-input-height);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--nn-auth-accent-primary) 12%) !important;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-surface) 96%, transparent), color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted))) !important;
+  color: var(--theme-body-text) !important;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 80%, transparent);
+}
+
+.nn-premium-auth-input:focus-visible,
+.nn-premium-auth-checkbox:focus-visible,
+.nn-premium-auth-form a:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--nn-auth-accent-primary) 42%, transparent);
+  outline-offset: 3px;
+}
+
+.nn-premium-auth-primary-button {
+  min-height: 3.1rem;
+  border-radius: 1rem !important;
+  box-shadow: 0 16px 34px -26px color-mix(in srgb, var(--nn-auth-accent-primary) 54%, transparent);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.nn-premium-auth-primary-button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 38px -24px color-mix(in srgb, var(--nn-auth-accent-primary) 62%, transparent);
+}
+
+.nn-premium-auth-primary-button:disabled {
+  cursor: not-allowed;
+}
+
+.nn-premium-auth-alert,
+.nn-verify-status {
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface));
+}
+
+.nn-verify-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.9rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.nn-verify-status--success {
+  border-color: color-mix(in srgb, var(--semantic-success) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+}
+
+.nn-verify-status--warning {
+  border-color: color-mix(in srgb, var(--semantic-warning) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 11%, var(--semantic-surface));
+}
+
+.nn-premium-auth-onboarding {
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--nn-auth-accent-success) 8%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-panel-cool) 38%, var(--semantic-surface)) !important;
+}
+
+.nn-premium-auth-legal {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--semantic-border-soft);
+  padding-top: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.nn-premium-auth-legal p + p {
+  margin-top: 0.55rem;
+}
+
+.nn-trial-blocked[data-nn-premium-auth-subscription-required] {
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 28%, var(--semantic-border-soft));
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--semantic-warning) 10%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (max-width: 980px) {
+  .nn-premium-auth-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-premium-auth-story {
+    display: none;
+  }
+
+  .nn-premium-auth-mobile-brand {
+    display: flex;
+  }
+
+  .nn-premium-auth-system {
+    width: min(100%, 42rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-premium-auth-system {
+    --nn-auth-radius-card: 1.15rem;
+    --nn-auth-input-height: 3.15rem;
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-premium-auth-card {
+    padding: 1rem;
+  }
+
+  .nn-premium-auth-header {
+    text-align: center;
+  }
+
+  .nn-premium-auth-header h1 {
+    font-size: clamp(1.75rem, 8vw, 2.35rem);
+  }
+
+  .nn-premium-auth-pathway-rail {
+    margin-inline: -0.15rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .nn-premium-auth-primary-button {
+    min-height: 3.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-auth-primary-button,
+  .nn-premium-auth-primary-button:not(:disabled):hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.nn-premium-home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand, #2563eb) 24%, var(--border-subtle, #e5e7eb));
+  background: color-mix(in srgb, var(--surface, #fff) 88%, transparent);
+  color: color-mix(in srgb, var(--semantic-brand, #2563eb) 86%, var(--palette-heading));
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.nn-premium-home-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--semantic-brand, #2563eb);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-brand, #2563eb) 14%, transparent);
+}
+
+.nn-premium-pathway-card,
+.nn-premium-depth-card,
+.nn-premium-flow-card,
+.nn-premium-readiness-panel,
+.nn-premium-trust-card,
+.nn-premium-final-cta,
+.nn-premium-cta-tile,
+.nn-premium-clinical-note,
+.nn-premium-mini-metric {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface, #fff) 94%, transparent), color-mix(in srgb, var(--surface, #fff) 84%, transparent));
+  border-color: color-mix(in srgb, var(--border-subtle, #e5e7eb) 78%, var(--semantic-brand, #2563eb));
+  box-shadow: 0 18px 44px -34px color-mix(in srgb, var(--palette-heading, #0f172a) 30%, transparent);
+  contain: paint;
+}
+
+.nn-premium-pathway-card {
+  background:
+    radial-gradient(
+      360px 180px at 100% 0%,
+      color-mix(in srgb, var(--premium-card-glow, var(--semantic-chart-6)) 11%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--premium-card-accent) 13%, var(--surface, #fff)),
+      color-mix(in srgb, var(--premium-card-soft, var(--premium-card-accent)) 5%, var(--surface, #fff))
+    );
+}
+
+.nn-premium-pathway-card:nth-of-type(9n + 1) {
+  --premium-card-accent: var(--semantic-chart-1);
+  --premium-card-soft: var(--semantic-chart-7);
+  --premium-card-glow: var(--semantic-chart-3);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 2) {
+  --premium-card-accent: var(--semantic-chart-2);
+  --premium-card-soft: var(--semantic-chart-8);
+  --premium-card-glow: var(--semantic-chart-7);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 3) {
+  --premium-card-accent: var(--semantic-chart-3);
+  --premium-card-soft: var(--semantic-chart-5);
+  --premium-card-glow: var(--semantic-chart-6);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 4) {
+  --premium-card-accent: var(--semantic-chart-4);
+  --premium-card-soft: var(--semantic-chart-9);
+  --premium-card-glow: var(--semantic-chart-8);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 5) {
+  --premium-card-accent: var(--semantic-chart-5);
+  --premium-card-soft: var(--semantic-chart-6);
+  --premium-card-glow: var(--semantic-chart-1);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 6) {
+  --premium-card-accent: var(--semantic-chart-6);
+  --premium-card-soft: var(--semantic-chart-2);
+  --premium-card-glow: var(--semantic-chart-5);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 7) {
+  --premium-card-accent: var(--semantic-chart-7);
+  --premium-card-soft: var(--semantic-chart-3);
+  --premium-card-glow: var(--semantic-chart-2);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 8) {
+  --premium-card-accent: var(--semantic-chart-8);
+  --premium-card-soft: var(--semantic-chart-4);
+  --premium-card-glow: var(--semantic-chart-7);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 9) {
+  --premium-card-accent: var(--semantic-chart-9);
+  --premium-card-soft: var(--semantic-chart-1);
+  --premium-card-glow: var(--semantic-chart-4);
+}
+
+.nn-premium-pathway-card__icon {
+  display: inline-grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--surface, #fff);
+  border: 1px solid color-mix(in srgb, var(--premium-card-accent) 24%, var(--border-subtle, #e5e7eb));
+  color: var(--premium-card-accent);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.nn-premium-depth-card[data-role="pathophysiology"] { --depth-accent: var(--lesson-pathophysiology-accent, var(--nn-premium-tone-brand)); --depth-soft: var(--lesson-pathophysiology-soft, var(--semantic-brand-soft)); }
+.nn-premium-depth-card[data-role="diagnostics"] { --depth-accent: var(--lesson-diagnostics-accent, var(--nn-premium-tone-warning)); --depth-soft: var(--lesson-diagnostics-soft, var(--semantic-warning-soft)); }
+.nn-premium-depth-card[data-role="red-flags"] { --depth-accent: var(--lesson-red-flags-accent, var(--nn-premium-tone-danger)); --depth-soft: var(--lesson-red-flags-soft, var(--semantic-danger-soft)); }
+.nn-premium-depth-card[data-role="interventions"] { --depth-accent: var(--lesson-interventions-accent, var(--nn-premium-tone-success)); --depth-soft: var(--lesson-interventions-soft, var(--semantic-success-soft)); }
+.nn-premium-depth-card[data-role="medications"] { --depth-accent: var(--lesson-medications-accent, var(--nn-premium-tone-accent)); --depth-soft: var(--lesson-medications-soft, var(--semantic-panel-cool)); }
+.nn-premium-depth-card[data-role="pearls"] { --depth-accent: var(--lesson-pearls-accent, var(--nn-premium-tone-accent)); --depth-soft: var(--lesson-pearls-soft, var(--semantic-panel-warm)); }
+
+.nn-premium-depth-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--depth-soft, var(--semantic-brand-soft, #eef2ff));
+  color: var(--depth-accent, var(--semantic-brand, #2563eb));
+}
+
+.nn-premium-flow {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .nn-premium-flow::before {
+    content: "";
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 32px;
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      var(--nn-premium-tone-brand),
+      var(--semantic-chart-2),
+      var(--nn-premium-tone-accent),
+      var(--semantic-chart-6),
+      var(--nn-premium-tone-info),
+      var(--semantic-chart-8),
+      var(--nn-premium-tone-success)
+    );
+    opacity: 0.24;
+  }
+}
+
+.nn-premium-flow-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface, #fff) 96%, transparent), color-mix(in srgb, var(--premium-flow-accent) 7%, var(--surface, #fff)));
+}
+
+.nn-premium-flow-card__number {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  color: color-mix(in srgb, var(--premium-flow-accent) 44%, transparent);
+  font-size: 24px;
+  font-weight: 950;
+}
+
+.nn-premium-flow-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--premium-flow-accent) 12%, var(--surface, #fff));
+  color: var(--premium-flow-accent);
+  border: 1px solid color-mix(in srgb, var(--premium-flow-accent) 25%, transparent);
+}
+
+.nn-premium-readiness-panel {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface, #fff) 96%, transparent), color-mix(in srgb, var(--nn-premium-tone-success) 6%, var(--surface, #fff)));
+}
+
+.nn-premium-readiness-gauge {
+  display: grid;
+  width: 104px;
+  height: 104px;
+  place-items: center;
+  border-radius: 999px;
+  background: conic-gradient(var(--semantic-success, #16a34a) 0 75%, color-mix(in srgb, var(--border-subtle, #e5e7eb) 80%, transparent) 75% 100%);
+}
+
+.nn-premium-readiness-gauge > span {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--surface, #fff);
+  color: var(--palette-heading, #0f172a);
+  font-size: 21px;
+  font-weight: 950;
+}
+
+.nn-premium-progress {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--palette-text-muted, #475569) 13%, transparent);
+}
+
+.nn-premium-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--progress-tone, var(--nn-premium-meter-brand));
+}
+
+.nn-premium-trust-card__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--nn-premium-tone-brand) 18%, var(--surface, #fff)), color-mix(in srgb, var(--nn-premium-tone-accent) 18%, var(--surface, #fff)));
+  color: var(--semantic-brand, #2563eb);
+  border: 1px solid var(--border-subtle, #e5e7eb);
+}
+
+.nn-premium-final-cta {
+  background:
+    radial-gradient(520px 260px at 0% 0%, color-mix(in srgb, var(--nn-premium-tone-accent) 16%, transparent), transparent 65%),
+    radial-gradient(520px 260px at 100% 0%, color-mix(in srgb, var(--nn-premium-tone-brand) 15%, transparent), transparent 65%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface, #fff) 96%, transparent), color-mix(in srgb, var(--surface, #fff) 84%, transparent));
+}
+
+.nn-premium-cta-tile {
+  display: block;
+  transition: transform 160ms ease;
+}
+
+.nn-premium-cta-tile:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--semantic-brand, #2563eb) 34%, var(--border-subtle, #e5e7eb));
+}
+
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-root :is(
+    .nn-premium-pathway-card,
+    .nn-premium-flow-card,
+    .nn-premium-cta-tile,
+    .nn-premium-home-section--social-study article
+  ) {
+    transition-property: border-color, box-shadow, background-color, color;
+  }
+
+  .nn-home-marketing-root :is(
+    .nn-premium-pathway-card:hover,
+    .nn-premium-flow-card:hover,
+    .nn-premium-cta-tile:hover,
+    .nn-premium-home-section--social-study article:hover
+  ) {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-premium-home-section {
+    padding-block: var(--nn-rhythm-mobile-section-y, 2.75rem);
+  }
+
+  .nn-premium-pathway-card,
+  .nn-premium-flow-card {
+    min-height: auto;
+  }
+}
+
+/* =====================================================================
+   Phase 3 — Premium global navigation v2 (CSS-only).
+
+   Builds on top of the existing CSS hooks in site-header.tsx:
+     `.nn-header-logo-row`, `.nn-header-logo-row--scrolled`,
+     `.nn-header-dark-surface`, `[data-nn-header-band="primary"]`,
+     `.nn-header-nav-row`, `.nn-marketing-nav-link`, `.nn-nav-cta`.
+
+   Goals (premium clinical):
+     - rounded floating shell on the primary band
+     - clearer translucent / saturated glass on light themes
+     - deeper saturation glass on dark themes (Midnight, Apex)
+     - polished CTA hover/focus lift + brand-tinted ring
+     - smoother nav-link hover that doesn't shift layout
+     - bottom hairline brand-tinted on scroll
+     - mobile drawer panel feels softer, more premium
+     - never breaks existing behavior, JS, or accessibility
+
+   Scope: nothing in here changes routes, auth, i18n, analytics, focus
+   semantics, or DOM structure. All animations respect
+   `prefers-reduced-motion`.
+   ===================================================================== */
+
+/* -------- 3.1  Floating glass primary band (light themes) -------- */
+
+/* The primary band already has saturate/blur above. Strengthen glass + refined gradient on the
+   full-width `.nn-header-marketing-primary-band`, not a max-width shell. */
+[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
+  /* Refined elevation on the same neutral base (no theme chrome wash). */
+  background:
+    linear-gradient(
+      180deg,
+      var(--nn-header-primary-bg, #ffffff) 0%,
+      color-mix(in srgb, var(--nn-header-primary-bg, #ffffff) 94%, var(--semantic-info, #0ea5e9) 6%) 100%
+    );
+  backdrop-filter: blur(14px) saturate(105%);
+  -webkit-backdrop-filter: blur(14px) saturate(105%);
+}
+
+/* Floating-shell feel via inset highlight + soft outer brand ring on the
+   sticky wrapper, only visible past the top so the band reads as flat
+   when the user is at hero. */
+@supports selector(:has(*)) {
+  body:has(.sticky.top-0.z-50 .nn-header-logo-row--scrolled) .sticky.top-0.z-50 {
+    box-shadow:
+      0 1px 0 0 color-mix(in srgb, var(--theme-primary, #2563eb) 22%, transparent) inset,
+      0 18px 40px -22px color-mix(in srgb, var(--theme-heading-text, #0f172a) 24%, transparent);
+  }
+}
+
+/* -------- 3.2  Dark themes (Midnight + Apex): deeper glass -------- */
+
+.nn-header-dark-surface {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b0f1a)) 92%, transparent) 0%,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b0f1a)) 76%, transparent) 100%
+    );
+  backdrop-filter: saturate(170%) blur(16px);
+  -webkit-backdrop-filter: saturate(170%) blur(16px);
+}
+
+[data-theme="apex"] .nn-header-dark-surface,
+[data-theme="midnight"] .nn-header-dark-surface {
+  /* Subtle violet/indigo glow under the band reads as premium and
+     intelligent on the deep navy surface. */
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.10),
+    0 18px 60px -32px color-mix(in srgb, var(--theme-primary, #a78bfa) 50%, transparent);
+}
+
+/* Midnight: slightly denser glass on the sticky shell so marketing chrome never reads as empty/transparent */
+html[data-theme="midnight"] .nn-header-dark-surface {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b1220)) 97%, transparent) 0%,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b1220)) 88%, transparent) 100%
+    );
+}
+
+/* -------- 3.3  Nav links — refined hover (no layout shift) -------- */
+
+.nn-marketing-nav-link {
+  /* Replace the older `transform: translateY(-1px)` lift with an inset
+     pill background so hover stays flush with adjacent links and never
+     jiggles. */
+  position: relative;
+  border-radius: 0.625rem; /* 10px */
+}
+.nn-marketing-nav-link:hover,
+.nn-marketing-nav-link:focus-visible {
+  transform: none;
+  background-color: color-mix(
+    in srgb,
+    var(--nav-hover-bg, var(--nav-hover, var(--theme-primary, #2563eb))) 12%,
+    transparent
+  );
+}
+.nn-marketing-nav-link:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--theme-primary, #2563eb) 32%, transparent);
+}
+
+/* Active page: entire chip reads as selected (fill + border + weight).
+   Bottom rules / ::after underlines removed — capsule state comes from
+   globals.css + marketing-row4 scoped rules. */
+.nn-marketing-nav-link[aria-current="page"] {
+  font-weight: 600;
+  color: var(--nav-link-active, var(--theme-brand-strong, var(--theme-primary)));
+  text-decoration: none;
+}
+
+/* -------- 3.4  Premium CTA polish -------- */
+
+/* The header's primary CTA already uses `.nn-nav-cta`. Add a subtle
+   gradient + lift + brand ring on hover/focus. Token-driven so each
+   palette automatically applies. */
+.nn-nav-cta {
+  background-image: linear-gradient(
+    120deg,
+    var(--theme-primary, #2563eb),
+    color-mix(in srgb, var(--theme-primary, #2563eb) 60%, var(--theme-accent, #fbbf24))
+  );
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, #ffffff 35%, transparent) inset,
+    0 6px 18px -10px color-mix(in srgb, var(--theme-primary, #2563eb) 70%, transparent);
+  transition:
+    box-shadow 200ms ease,
+    transform 200ms ease,
+    filter 200ms ease;
+}
+.nn-nav-cta:hover {
+  filter: brightness(1.05);
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, #ffffff 45%, transparent) inset,
+    0 10px 28px -12px color-mix(in srgb, var(--theme-primary, #2563eb) 80%, transparent);
+  transform: translateY(-1px);
+}
+.nn-nav-cta:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--theme-primary, #2563eb) 32%, transparent),
+    0 1px 0 0 color-mix(in srgb, #ffffff 45%, transparent) inset,
+    0 10px 28px -12px color-mix(in srgb, var(--theme-primary, #2563eb) 80%, transparent);
+}
+.nn-nav-cta:active {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-nav-cta,
+  .nn-nav-cta:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* -------- 3.5  Tier-strip (exam family row): pill-shape on hover -------- */
+
+/* `.nn-header-nav-row` holds the second desktop row. Give the chips a soft
+   pill hover and a denser active treatment, again purely additive. */
+.nn-header-nav-row .nn-marketing-nav-link[data-active] {
+  background: color-mix(in srgb, #ffffff 18%, transparent);
+}
+.nn-header-nav-row .nn-marketing-nav-link:hover {
+  background: color-mix(in srgb, #ffffff 14%, transparent);
+}
+
+/* -------- 3.6  Mobile drawer — softer premium feel -------- */
+
+/* The drawer is a portal-injected element with the classes
+   `nn-header-overlay-mobile-only`, sliding in via existing keyframes.
+   We only refine the visual without touching JS. */
+.nn-header-overlay-mobile-only > div:last-child {
+  /* the actual sliding panel — slightly more rounded bottom edge,
+     a soft brand glow, and a deeper top radius pull. */
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+  box-shadow:
+    0 24px 60px -22px color-mix(in srgb, var(--theme-heading-text, #0f172a) 38%, transparent),
+    0 1px 0 0 color-mix(in srgb, var(--theme-primary, #2563eb) 18%, transparent) inset;
+}
+
+/* On dark themes (Midnight + Apex) the drawer surface gets a quiet
+   violet/indigo wash so it doesn't read as a flat black sheet. */
+[data-theme="midnight"] .nn-header-overlay-mobile-only > div:last-child,
+[data-theme="apex"] .nn-header-overlay-mobile-only > div:last-child {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--theme-primary, #a78bfa) 6%, var(--nav-bg, #0b0f1a)),
+      var(--nav-bg, #0b0f1a)
+    );
+}
+
+/* -------- 3.7  Brand lockup + logo focus polish -------- */
+
+.nn-header-logo-link {
+  border-radius: 0.75rem;
+  padding: 0.125rem 0.25rem;
+}
+.nn-header-logo-link img,
+.nn-header-logo-link svg {
+  filter: contrast(1.05);
+}
+.nn-header-logo-link:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--theme-primary, #2563eb) 32%, transparent);
+}
+
+/* -------- 3.8  Mobile auth-row CTA gets the same gradient -------- */
+
+/* The mobile auth row uses the same `.nn-nav-cta` class for the primary
+   action, so it inherits the gradient + ring naturally — no override needed.
+   Document here for posterity in case future code splits the class. */
+
+/* ---------------------------------------------------------------------
+   Dark themes (Midnight, Apex): exam-family tier row used white-tint hovers
+   from the tier-strip rules above; swap to primary-tinted glass so active/hover read on navy.
+   --------------------------------------------------------------------- */
+[data-theme="midnight"] .nn-header-nav-row .nn-marketing-nav-link[data-active],
+[data-theme="apex"] .nn-header-nav-row .nn-marketing-nav-link[data-active] {
+  background: color-mix(in srgb, var(--theme-primary) 20%, transparent);
+}
+[data-theme="midnight"] .nn-header-nav-row .nn-marketing-nav-link:hover,
+[data-theme="apex"] .nn-header-nav-row .nn-marketing-nav-link:hover {
+  background: color-mix(in srgb, var(--theme-primary) 14%, transparent);
+}
+
+/* ---------------------------------------------------------------------
+   Pathway tier hub (RN / PN / RPN / NP shell) — hero band elevation consistent
+   with in-repo homepage mockups (`preview-screenshots/homepage-mockup-*.png`);
+   scoped so authenticated `/app` learner chrome stays unchanged.
+   --------------------------------------------------------------------- */
+.nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band {
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading, #0f172a) 28%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-info, #0284c7) 14%, transparent) inset;
+}
+
+[data-theme="midnight"] .nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band,
+[data-theme="apex"] .nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--border-subtle, #334155));
+  background: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--semantic-info) 10%, var(--theme-page-bg, #0b1220)) 0%,
+    color-mix(in srgb, var(--semantic-info) 4%, var(--theme-page-bg, #0b1220)) 48%,
+    transparent 100%
+  );
+}
+
+/* ---------------------------------------------------------------------
+   Nursing / exam pathway hubs — premium module bands + primary study shell.
+   Token-only washes; aligns with homepage premium radial language.
+   --------------------------------------------------------------------- */
+
+.nn-hub-premium-modules-root {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-hub-premium-section-panel::before {
+  content: "";
+  position: absolute;
+  inset: -42% -18% auto -18%;
+  height: 58%;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.88;
+  z-index: 0;
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="study"]::before {
+  background:
+    radial-gradient(420px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 68%),
+    radial-gradient(380px 180px at 88% 10%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="readiness"]::before {
+  background:
+    radial-gradient(420px 200px at 8% 0%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 70%),
+    radial-gradient(360px 160px at 92% 12%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="newGrad"]::before {
+  background:
+    radial-gradient(400px 190px at 18% 0%, color-mix(in srgb, var(--semantic-success) 14%, transparent), transparent 70%),
+    radial-gradient(340px 150px at 82% 10%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-head,
+.nn-hub-premium-modules-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-hub-premium-modules-grid > li {
+  min-width: 0;
+}
+
+.nn-hub-premium-section-accent {
+  width: 4px;
+  min-height: 3.25rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-2) 52%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-info) 44%, var(--semantic-border-soft)) 100%
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="readiness"] .nn-hub-premium-section-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-3) 50%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 46%, var(--semantic-border-soft)) 100%
+  );
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="newGrad"] .nn-hub-premium-section-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-success) 52%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft)) 100%
+  );
+}
+
+.nn-hub-tier-study-band {
+  padding-bottom: 0.25rem;
+}
+
+.nn-hub-primary-study-modes {
+  position: relative;
+  padding: 1.65rem 1.15rem 1.85rem;
+  margin-inline: -0.15rem;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-chart-2));
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--semantic-surface)) 0%, transparent 58%),
+    var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (min-width: 640px) {
+  .nn-hub-primary-study-modes {
+    padding: 1.85rem 1.65rem 2.1rem;
+  }
+}
+
+[data-theme="midnight"] .nn-hub-primary-study-modes,
+[data-theme="apex"] .nn-hub-primary-study-modes {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+}

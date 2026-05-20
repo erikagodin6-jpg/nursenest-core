@@ -1,0 +1,77 @@
+import type { CountryCode, TierCode, UserRole } from "@prisma/client";
+import type { AlliedCareerKey } from "../pricing/display-catalog";
+
+/** Narrow legacy shape for question/lesson SQL helpers (shared type; avoid circular imports). */
+export type AccessScope = {
+  hasAccess: boolean;
+  reason:
+    | "active_subscription"
+    /** Paid period not over yet while DB/Stripe row is `CANCELLED` (e.g. after period-end cancel or `customer.subscription.deleted` with paid-through). */
+    | "canceled_paid_through"
+    /** Staff/student-ops bypass — not a paid plan; see {@link isLearnerEntitlementStaffBypassRole}. */
+    | "admin_override"
+    | "grace_period"
+    | "past_due_grace"
+    | "active_trial"
+    /** Allied tier subscription active in Stripe/DB but occupation scope missing or invalid — premium study surfaces stay locked until repaired. */
+    | "allied_occupation_required"
+    | "no_access";
+  tier: TierCode | null;
+  country: CountryCode | null;
+  /** When tier is ALLIED, the specific career line the user purchased. */
+  alliedCareer: AlliedCareerKey | null;
+  /**
+   * True when this scope was derived from a **verified** signed admin learner QA cookie for the same user id
+   * (`nn_admin_learner_qa`, verified in `getUserAccess`). Server-trusted; use to skip learner business analytics.
+   */
+  adminLearnerQaSimulation?: boolean;
+};
+
+/** Normalized subscription lifecycle for product UI and server gates. */
+export type SubscriptionPlanStatus = "none" | "active" | "canceled" | "grace" | "past_due";
+
+/**
+ * Canonical access snapshot for a learner: mirrors Stripe `Subscription` + `User` profile.
+ * Use {@link accessScopeFromUserAccess} / `resolveEntitlement` when only tier/country/`hasAccess` is needed.
+ */
+export type UserAccess = {
+  userId: string;
+  /** True when the learner may use premium lessons, bank, CAT, etc. */
+  hasPremium: boolean;
+  /** Same semantics as {@link AccessScope.reason}. */
+  reason: AccessScope["reason"];
+  allowedRegion: {
+    country: CountryCode | null;
+    /** Global pricing region from checkout metadata, when set. */
+    billingRegionSlug: string | null;
+  };
+  allowedProfession: {
+    tier: TierCode | null;
+    alliedCareer: AlliedCareerKey | null;
+  };
+  allowedExam: {
+    /** Learner goal pathway; optional future hard-lock from subscription metadata. */
+    pathwayId: string | null;
+  };
+  plan: {
+    planCode: string | null;
+    duration: string | null;
+    status: SubscriptionPlanStatus;
+    /** Best-effort access end: current period end, else trial end. */
+    expiresAt: Date | null;
+    cancelAtPeriodEnd: boolean;
+  };
+  /**
+   * Present when a backing `User` row was loaded. Used by JWT/session sync to avoid a second `User` query.
+   * Absent when the user id did not resolve (`emptyAccess`) or DB is unavailable.
+   */
+  sessionJwt?: {
+    role: UserRole;
+    credentialVersion: number;
+  };
+  /**
+   * True when admin learner QA overlay is active (signed cookie verified server-side in `getUserAccess`).
+   * Mirrors `AccessScope.adminLearnerQaSimulation`; omitted for normal subscribers.
+   */
+  adminLearnerQaSimulation?: boolean;
+};

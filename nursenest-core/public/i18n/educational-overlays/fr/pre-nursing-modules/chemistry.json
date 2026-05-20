@@ -1,0 +1,19 @@
+{
+  "overview": "La chimie de base sous-tend de nombreux concepts infirmiers essentiels : équilibre acido-basique, osmolarité, solubilité des médicaments et réactions métaboliques. Comprendre ces principes facilite l'interprétation des gaz artériels, des résultats biologiques et des mécanismes d'action des médicaments.",
+  "key_concepts": [
+    "pH sanguin normal : 7,35–7,45 (légèrement alcalin) ; < 7,35 = acidose, > 7,45 = alcalose",
+    "Tampons : systèmes qui résistent aux variations de pH (bicarbonate/CO₂ est le principal tampon sanguin)",
+    "Liaison ionique vs covalente : les électrolytes forment des liaisons ioniques et se dissocient dans l'eau pour conduire l'électricité",
+    "Osmolarité : concentration des solutés dans une solution — détermine les mouvements d'eau par osmose",
+    "Réactions enzymatiques : les enzymes (protéines) accélèrent les réactions chimiques sans être consommées — la température et le pH affectent leur activité"
+  ],
+  "nursing_responsibilities": "L'infirmière interprète les gaz artériels sanguins (pH, PaCO₂, HCO₃⁻) pour identifier les déséquilibres acido-basiques et leur compensation. Elle surveille les résultats biologiques indiquant un déséquilibre électrolytique ou métabolique. Elle comprend que la solubilité d'un médicament affecte sa voie d'administration et sa biodisponibilité.",
+  "clinical_pearls": "La règle ROME (Respiratory Opposite, Metabolic Equal) : en acidose respiratoire, le pH et le CO₂ vont dans des directions opposées ; en acidose métabolique, le pH et le bicarbonate vont dans la même direction. La compensation est partielle — le pH ne revient jamais tout à fait à la normale par compensation seule. Un pH > 7,45 avec un CO₂ bas = alcalose respiratoire (hyperventilation).",
+  "patient_education": "Expliquez simplement les résultats : « Votre sang est un peu plus acide que la normale. Votre corps essaie de corriger ça en respirant plus vite pour éliminer du CO₂. » Reliez les résultats biologiques aux sensations du patient (dyspnée compensatrice) pour améliorer la compréhension.",
+  "key_takeaways": [
+    "Le pH sanguin normal (7,35–7,45) est étroitement régulé — des variations même minimes ont des conséquences cliniques",
+    "Le système bicarbonate/CO₂ est le principal tampon sanguin : compensé par les reins (HCO₃⁻) et les poumons (CO₂)",
+    "L'osmolarité détermine les mouvements d'eau entre les compartiments — compréhension essentielle pour le choix des solutés IV",
+    "Les gaz artériels sanguins sont un outil diagnostique clé que l'infirmière doit savoir interpréter"
+  ]
+}

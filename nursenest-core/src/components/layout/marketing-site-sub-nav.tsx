@@ -1,0 +1,94 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+import { useTheme } from "next-themes";
+import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { getExamNavStripItems } from "@/lib/marketing/country-exam-offerings";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { formatTitleCase } from "@/lib/format/text-case";
+
+function isSubNavActive(strippedPath: string, href: string): boolean {
+  const base = href.split("?")[0] || "";
+  if (!base || base === "/") return false;
+  if (strippedPath === base) return true;
+  if (strippedPath.startsWith(`${base}/`)) return true;
+  return false;
+}
+
+/** Allow wrapping for long German/French/Spanish labels; cap width so pills scroll horizontally instead of stretching. */
+const LINK_BASE =
+  "flex min-h-[2.25rem] w-max max-w-[min(100%,13rem)] items-center justify-center whitespace-normal text-balance break-words rounded-full px-2.5 py-1.5 text-[13px] font-medium leading-snug tracking-tight transition-[background,color,box-shadow] duration-200 md:max-w-[15rem] md:px-3.5 md:py-2 md:text-sm";
+
+/**
+ * Pathway sub-navigation — soft editorial tint; pill active state (no harsh tabs).
+ */
+export function MarketingSiteSubNav() {
+  const pathname = usePathname() ?? "/";
+  const { t, locale } = useMarketingI18n();
+  const { region } = useNursenestRegion();
+  const { theme } = useTheme();
+  const navChromeStyle = getNavChromeStyle(theme);
+
+  const localize = (href: string) => {
+    const mapped = mapLegacyMarketingHref(href);
+    if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
+    return withMarketingLocale(locale, mapped);
+  };
+
+  const items = useMemo(() => {
+    const strip = getExamNavStripItems(region);
+    return [
+      ...strip.map((s) => ({ key: s.id, labelKey: s.labelKey, href: s.href })),
+      { key: "pre-nursing", labelKey: "nav.preNursing" as const, href: "/pre-nursing" },
+      { key: "tools", labelKey: "nav.tools" as const, href: HUB.tools },
+    ];
+  }, [region]);
+
+  const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
+
+  return (
+    <nav
+      aria-label={t("nav.pathwayHubsAria")}
+      style={navChromeStyle}
+      className="border-b"
+    >
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
+        <ul className="-mx-3 flex min-h-10 snap-x snap-mandatory items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:mx-0 sm:items-center sm:gap-1.5 sm:overflow-x-visible sm:px-0 sm:py-2 md:min-h-11 md:justify-center md:gap-2 lg:gap-2.5">
+          {items.map((item) => {
+            const href = localize(item.href);
+            const active = isSubNavActive(strippedPath, item.href);
+            return (
+              <li key={item.key} className="flex shrink-0 snap-start items-stretch sm:items-center">
+                <Link
+                  href={href}
+                  className={`${LINK_BASE} ${
+                    active
+                      ? "bg-[color:var(--nn-nav-hover-bg)] text-[color:var(--nn-nav-fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
+                      : "text-[color:var(--nn-nav-fg)] opacity-75 hover:bg-[color:var(--nn-nav-hover-bg)] hover:opacity-100"
+                  } `}
+                  onClick={() =>
+                    trackClientEvent(PH.marketingSubNavClick, {
+                      actor: "anonymous",
+                      nav_key: item.key,
+                      marketing_region: region,
+                    })
+                  }
+                >
+                  {formatTitleCase(t(item.labelKey), locale)}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
+  );
+}

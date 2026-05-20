@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean" id="root-html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RN Practice Exam Hub — Mockups</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0f172a;color:#e2e8f0}
+button,input{font-family:inherit;cursor:pointer}
+
+[data-theme="ocean"]{
+  --bg:#f0f5fa;--surf:#fff;--panel:#f7fafd;--border:rgba(176,218,240,.65);
+  --muted:#647894;--txt:#0f172a;--txt2:#455569;
+  --primary:#1aaee0;--primary-d:#0d7aaa;--primary-s:rgba(13,122,170,.09);
+  --semantic-success:#16a34a;--ok:var(--semantic-success);--warn:#d97706;--info:#2563eb;--danger:#e11d48;
+  --c1:#e11d48;--c2:#4eb0ce;--c3:#0d9488;--c4:#7c3aed;--c5:#16a34a;--c6:#d97706;
+  --nav-bg:#fff;--nav-fg:#0f172a;--chip-bg:rgba(13,122,170,.09);--chip-fg:#0d7aaa;
+}
+[data-theme="blossom"]{
+  --bg:#fdf2fb;--surf:#fff;--panel:#fdf7fc;--border:rgba(232,200,226,.7);
+  --muted:#7a6b84;--txt:#10182f;--txt2:#455569;
+  --primary:#d948a8;--primary-d:#b3359a;--primary-s:rgba(217,72,168,.08);
+  --semantic-success:#2ecc71;--ok:var(--semantic-success);--warn:#f39c12;--info:#7c3aed;--danger:#e14d8f;
+  --c1:#e11d48;--c2:#7c3aed;--c3:#d948a8;--c4:#4eb0ce;--c5:#16a34a;--c6:#d97706;
+  --nav-bg:#fffcfb;--nav-fg:#3b1224;--chip-bg:rgba(217,72,168,.1);--chip-fg:#b3359a;
+}
+[data-theme="midnight"]{
+  --bg:#07111f;--surf:#111827;--panel:#0d1826;--border:rgba(49,68,102,.85);
+  --muted:#5e7a98;--txt:#f0f6ff;--txt2:#c8d8ed;
+  --primary:#38bdf8;--primary-d:#0ea5e9;--primary-s:rgba(56,189,248,.08);
+  --semantic-success:#34d399;--ok:var(--semantic-success);--warn:#fbbf24;--info:#60a5fa;--danger:#fb7185;
+  --c1:#f87171;--c2:#38bdf8;--c3:#34d399;--c4:#a78bfa;--c5:#34d399;--c6:#fbbf24;
+  --nav-bg:#0b1220;--nav-fg:#e8eef8;--chip-bg:rgba(56,189,248,.12);--chip-fg:#7dd3fc;
+}
+
+.ctrl{background:#0c1220;border-bottom:1px solid #1e293b;padding:12px 20px;position:sticky;top:0;z-index:100}
+.ctrl h1{font-size:13px;font-weight:700;color:#f8fafc;margin-bottom:8px}
+.ctrl-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ctrl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b;min-width:48px}
+.pill{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94a3b8;background:#1e293b;border:none}
+.pill.on{color:#38bdf8;background:#0f2744}
+.pill.theme.on{color:#f0f9ff}
+.stage{display:flex;justify-content:center;padding:28px 20px 48px}
+
+#hub-viewport{width:1280px;height:900px;max-height:900px;background:var(--bg);color:var(--txt);overflow:hidden;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.45);border:1px solid var(--border);display:flex;flex-direction:column}
+.hub-main{flex:1;min-height:0;overflow:hidden}
+
+/* Learner nav */
+.learner-nav{height:56px;flex-shrink:0;background:var(--nav-bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:20px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--nav-fg)}
+.nav-mark{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+.nav-word{font-size:14px;font-weight:800;letter-spacing:-.02em}
+.nav-links{display:flex;gap:4px;flex:1}
+.nav-link{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);background:transparent;border:none}
+.nav-link.on{color:var(--primary-d);background:var(--primary-s)}
+.nav-right{display:flex;gap:8px;align-items:center}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--panel);border:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center}
+
+.hub-main{padding:28px 36px 32px;max-width:1100px;margin:0 auto;width:100%}
+.hub-hero{margin-bottom:32px}
+.hub-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--border);padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:10px}
+.hub-hero h2{font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.hub-lead{font-size:14px;line-height:1.65;color:var(--txt2);max-width:52ch;margin-top:8px}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.filter-chip{padding:8px 14px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surf);color:var(--txt2)}
+.filter-chip.on{background:var(--primary-s);border-color:color-mix(in srgb,var(--primary) 35%,var(--border));color:var(--primary-d)}
+.filter-chip.weak{border-color:color-mix(in srgb,var(--warn) 40%,var(--border));color:var(--warn)}
+
+.hub-grid{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start}
+@media(max-width:900px){.hub-grid{grid-template-columns:1fr}}
+
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.cat-card{padding:18px 20px;border-radius:14px;border:1px solid var(--border);background:var(--surf);cursor:pointer;transition:border-color .15s}
+.cat-card:hover{border-color:color-mix(in srgb,var(--primary) 40%,var(--border))}
+.cat-card.sel{border-color:var(--primary-d);box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 20%,transparent)}
+.cat-dot{width:10px;height:10px;border-radius:50%;margin-bottom:10px}
+.cat-name{font-size:14px;font-weight:700;margin-bottom:4px}
+.cat-meta{font-size:11px;color:var(--muted)}
+.cat-count{font-size:12px;font-weight:700;color:var(--primary-d);margin-top:8px}
+
+.start-panel{padding:24px;border-radius:16px;border:1px solid var(--border);background:var(--surf);position:sticky;top:0}
+.start-panel h3{font-size:15px;font-weight:800;margin-bottom:16px}
+.field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;display:block}
+.count-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.count-btn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--panel);font-size:13px;font-weight:700;color:var(--txt2)}
+.count-btn.on{background:var(--primary-d);border-color:var(--primary-d);color:#fff}
+.count-custom{display:flex;gap:8px;margin-bottom:20px}
+.count-custom input{flex:1;height:40px;border-radius:10px;border:1px solid var(--border);padding:0 12px;font-size:14px;background:var(--panel);color:var(--txt)}
+.summary{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:18px;padding:12px;border-radius:10px;background:var(--panel)}
+.summary strong{color:var(--txt)}
+.cta{width:100%;padding:14px 20px;border-radius:12px;border:none;background:var(--primary-d);color:#fff;font-size:14px;font-weight:800;box-shadow:0 4px 14px -4px color-mix(in srgb,var(--primary-d) 50%,transparent)}
+.cta-sub{text-align:center;font-size:11px;color:var(--muted);margin-top:10px}
+
+.weak-banner{display:none;margin-bottom:20px;padding:12px 16px;border-radius:12px;border:1px solid color-mix(in srgb,var(--warn) 35%,var(--border));background:color-mix(in srgb,var(--warn) 8%,var(--surf));font-size:12px;color:var(--txt2)}
+.weak-banner.show{display:flex;align-items:center;gap:10px}
+</style>
+</head>
+<body>
+
+<div class="ctrl">
+  <h1>RN Practice exam hub · filters · question count · start CTA</h1>
+  <div class="ctrl-row" style="margin-bottom:6px">
+    <span class="ctrl-label">View</span>
+    <div id="view-tabs"></div>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">Theme</span>
+    <button type="button" class="pill theme on" data-theme-pick="ocean">Ocean</button>
+    <button type="button" class="pill theme" data-theme-pick="blossom">Blossom</button>
+    <button type="button" class="pill theme" data-theme-pick="midnight">Midnight</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div id="hub-viewport" data-capture-root data-capture-view="default" data-capture-theme="ocean">
+    <nav class="learner-nav" aria-label="Learner navigation">
+      <a class="nav-logo" href="#"><span class="nav-mark">N</span><span class="nav-word">NurseNest</span></a>
+      <div class="nav-links">
+        <button type="button" class="nav-link">Dashboard</button>
+        <button type="button" class="nav-link">Lessons</button>
+        <button type="button" class="nav-link on">Practice</button>
+        <button type="button" class="nav-link">Flashcards</button>
+        <button type="button" class="nav-link">CAT</button>
+      </div>
+      <div class="nav-right"><button type="button" class="nav-link">Labs</button><span class="nav-avatar">ER</span></div>
+    </nav>
+    <main class="hub-main" id="hub-main"></main>
+  </div>
+</div>
+
+<script>
+const VIEWS = [
+  { id: 'default', label: 'Hub default' },
+  { id: 'filters_active', label: 'Filters active' },
+  { id: 'count_custom', label: 'Custom count' },
+];
+
+const CATEGORIES = [
+  { name: 'Cardiovascular', count: 842, color: 'var(--c1)', sel: true },
+  { name: 'Respiratory', count: 615, color: 'var(--c2)', sel: false },
+  { name: 'Endocrine', count: 428, color: 'var(--c3)', sel: false },
+  { name: 'Mental health', count: 391, color: 'var(--c4)', sel: false },
+];
+
+let currentView = 'default';
+let filterCategory = 'all';
+let filterSystem = 'all';
+let filterWeak = false;
+let questionCount = 25;
+
+function renderHub() {
+  const weakOn = currentView === 'filters_active' || filterWeak;
+  const catFilter = currentView === 'filters_active' ? 'cardio' : 'all';
+  const customCount = currentView === 'count_custom';
+  if (currentView === 'filters_active') { filterWeak = true; filterCategory = 'category'; filterSystem = 'system'; }
+  if (currentView === 'count_custom') questionCount = 'custom';
+
+  document.getElementById('hub-main').innerHTML = `
+    <section class="hub-hero">
+      <span class="hub-eyebrow">RN · NCLEX practice</span>
+      <h2>Practice exam hub</h2>
+      <p class="hub-lead">Build a focused session by category, body system, or weak areas you have not answered yet. Choose how many questions, then start when you are ready.</p>
+    </section>
+    <div class="weak-banner ${weakOn ? 'show' : ''}"><span style="font-size:18px">◎</span> Weak &amp; unanswered filter on — prioritizing items you have missed or skipped.</div>
+    <div class="filters" id="filter-bar">
+      <button type="button" class="filter-chip ${catFilter === 'all' ? 'on' : ''}" data-f="all">All topics</button>
+      <button type="button" class="filter-chip ${catFilter !== 'all' ? 'on' : ''}" data-f="category">By category</button>
+      <button type="button" class="filter-chip ${currentView === 'filters_active' ? 'on' : ''}" data-f="system">By system</button>
+      <button type="button" class="filter-chip weak ${weakOn ? 'on' : ''}" data-f="weak">Weak &amp; unanswered</button>
+    </div>
+    <div class="hub-grid">
+      <div class="cat-grid">
+        ${CATEGORIES.map(c => `
+          <div class="cat-card ${c.sel && currentView !== 'count_custom' ? 'sel' : ''}">
+            <div class="cat-dot" style="background:${c.color}"></div>
+            <div class="cat-name">${c.name}</div>
+            <div class="cat-meta">NCLEX-RN · adaptive pool</div>
+            <div class="cat-count">${c.count} questions</div>
+          </div>`).join('')}
+      </div>
+      <aside class="start-panel">
+        <h3>Session setup</h3>
+        <span class="field-label">Question count</span>
+        <div class="count-row">
+          ${[10, 25, 50].map(n => `<button type="button" class="count-btn ${!customCount && questionCount === n ? 'on' : ''}" data-count="${n}">${n}</button>`).join('')}
+          <button type="button" class="count-btn ${customCount ? 'on' : ''}" data-count="custom">Custom</button>
+        </div>
+        ${customCount ? `<div class="count-custom"><input type="number" value="35" min="5" max="100" aria-label="Custom count"><span style="font-size:12px;color:var(--muted);align-self:center">questions</span></div>` : ''}
+        <div class="summary">
+          <strong>${customCount ? '35' : questionCount} questions</strong> · Cardiovascular<br>
+          Tutor mode with rationales · ~${customCount ? '52' : Math.round(questionCount * 1.5)} min est.
+        </div>
+        <button type="button" class="cta">Start practice session</button>
+        <p class="cta-sub">Server-backed progress · resume anytime</p>
+      </aside>
+    </div>`;
+
+  const vp = document.getElementById('hub-viewport');
+  vp.setAttribute('data-capture-view', currentView);
+}
+
+function buildViewTabs() {
+  const el = document.getElementById('view-tabs');
+  el.innerHTML = '';
+  VIEWS.forEach(v => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pill' + (v.id === currentView ? ' on' : '');
+    b.dataset.viewPick = v.id;
+    b.textContent = v.label;
+    b.onclick = () => { currentView = v.id; if (v.id === 'default') { filterWeak = false; questionCount = 25; } buildViewTabs(); renderHub(); };
+    el.appendChild(b);
+  });
+}
+
+document.querySelectorAll('[data-theme-pick]').forEach(btn => {
+  btn.onclick = () => {
+    document.documentElement.setAttribute('data-theme', btn.dataset.themePick);
+    document.querySelectorAll('[data-theme-pick]').forEach(b => b.classList.toggle('on', b === btn));
+    document.getElementById('hub-viewport').setAttribute('data-capture-theme', btn.dataset.themePick);
+  };
+});
+
+buildViewTabs();
+renderHub();
+</script>
+</body>
+</html>

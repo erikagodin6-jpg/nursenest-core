@@ -1,0 +1,7 @@
+{
+  "name": "server-only",
+  "version": "0.0.0-private",
+  "description": "No-op shim for Node/tsx scripts; Next still enforces RSC boundaries via bundler.",
+  "main": "index.js",
+  "type": "commonjs"
+}

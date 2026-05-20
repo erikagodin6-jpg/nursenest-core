@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-04-13T20:24:45.707Z",
+  "totalsBeforeRun": {
+    "us-np-fnp": 1573,
+    "us-np-agpcnp": 1465,
+    "us-np-whnp": 8,
+    "us-np-pnp-pc": 8,
+    "us-np-pmhnp": 1459,
+    "ca-np-cnple": 1465
+  },
+  "finalPublishedDbByPathway": {
+    "ca-np-cnple": 1465,
+    "us-np-agpcnp": 1465,
+    "us-np-fnp": 1573,
+    "us-np-pmhnp": 1459,
+    "us-np-pnp-pc": 8,
+    "us-np-whnp": 8
+  },
+  "npPublishedTotal": 5978,
+  "historicalNpUniqueInContentMapApprox": 1409,
+  "recoveredFromSourceOperations": 0,
+  "generatedNpGapLessons": 0,
+  "hubTotalsMatchDb": true,
+  "detailRouteTotals": {
+    "us-np-fnp": 0,
+    "us-np-agpcnp": 0,
+    "us-np-whnp": 0,
+    "us-np-pnp-pc": 0,
+    "us-np-pmhnp": 0,
+    "ca-np-cnple": 0
+  },
+  "randomResolutionChecks": {
+    "total": 0,
+    "failed": 0,
+    "rows": []
+  },
+  "adminOpsCountMatch": true,
+  "staticParamsNote": "Lesson detail uses dynamicParams; validation via loader + random checks.",
+  "sampleHubs": [
+    {
+      "pathwayId": "us-np-fnp",
+      "hub": "/us/np/fnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "hub": "/us/np/agpcnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "hub": "/us/np/whnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "hub": "/us/np/pnp-pc/lessons"
+    },
+    {
+      "pathwayId": "us-np-pmhnp",
+      "hub": "/us/np/pmhnp/lessons"
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "hub": "/canada/np/cnple/lessons"
+    }
+  ],
+  "readinessVsRnRpn": {
+    "note": "NP row counts should approach RN/RPN per-pathway depth after legacy import; remaining gap = targeted NP-specific generation (Phase 6), not pre-Phase-5.",
+    "compareReports": [
+      "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json"
+    ]
+  },
+  "blockers": [
+    "See np-quarantine.json"
+  ]
+}

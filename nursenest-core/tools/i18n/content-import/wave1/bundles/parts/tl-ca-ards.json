@@ -1,0 +1,185 @@
+{
+  "ca-rn-nclex-rn:ca-rn-ards": {
+    "title": "ARDS (NCLEX-RN, Canada)",
+    "topic": "ARDS",
+    "seoTitle": "ARDS | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "NCLEX-RN (Canada): ARDS — oxygenation, lung-protective ventilation, at monitoring.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Sinusuri ng mga item sa **ARDS** kung naikakabit mo ang assessment data sa panganib: ano ang unang nagbabago, ano ang kailangang i-escalate, at ano ang **hindi ligtas** sa konteksto."
+      },
+      "exam_relevance": {
+        "heading": "Koneksyon sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding."
+      },
+      "core_concept": {
+        "heading": "Pangunahing konsepto",
+        "body": "Ikonekta ang interventions sa perfusion, oxygenation, infection load, electrolytes, glucose–insulin dynamics, at monitoring na nagpapakita ng epekto."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Pumili ng pasyenteng **pinakamabilis tumaas ang risk** kung walang nursing action — saka ang assessment o order na tumutugma."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "- Ikonekta ang **vitals + ABG/VBG + story** bago mag-teach o mag-discharge.\n- Alisin ang mga opsyon na **laktawan ang assessment** o **atrasin ang escalation** kapag may instability.\n- **Question bank:** drill items na may tag `topic:ards`."
+      }
+    },
+    "preTest": [
+      {
+        "question": "50-year-old na may ARDS: pumapangit ang kidney function. BUN 38 mg/dL, creatinine 2.8 mg/dL. BP 88/54, HR 116, RR 20 (ventilator), SpO2 90% sa FiO2 70% at PEEP 14. Urine 80 mL sa nakaraang 8 oras. Anong complication ang pinaka-malamang?",
+        "options": [
+          "MODS — ARDS na may kidney failure at hemodynamic instability ay nagpapahiwatig ng systemic deterioration",
+          "Isolated acute kidney injury mula sa contrast",
+          "Normal renal response sa mechanical ventilation",
+          "Drug nephrotoxicity na mag-wawala pag na-adjust ang dose"
+        ],
+        "rationale": "Maaaring mag-trigger ang ARDS ng systemic inflammation at MODS. Mataas na BUN/creatinine na may oliguria, hypotension, at tachycardia sa kontekstong ito ay malakas na nagpapahiwatig ng MODS at nangangailangan ng aggressive support."
+      },
+      {
+        "question": "May severe acute pancreatitis ang client; Ranson score sa admission ay 6. Dapat maintindihan ng nurse na ito ay:",
+        "options": [
+          "Mataas na mortality risk na nangangailangan ng ICU monitoring at aggressive support",
+          "Mild pancreatitis na inaasahan gumaling nang buo",
+          "Moderate pancreatitis na standard medical management lang",
+          "Kandidato para sa early surgery"
+        ],
+        "rationale": "Ang Ranson criteria ay nagpe-predict ng severity at mortality. Score 5–6 ay humigit-kumulang 40% mortality at ICU-level care na may monitoring para sa necrotizing pancreatitis, ARDS, at multi-organ failure."
+      },
+      {
+        "question": "75-year-old na may history ng COPD, acute respiratory distress. SpO2 88% on room air. Unang gagawin ng PN?",
+        "options": [
+          "Magbigay ng supplemental oxygen ayon sa order",
+          "Hikayatin ang pursed-lip breathing",
+          "Mag-auscultate at suriin ang respiratory effort",
+          "Kumuha ng CBC ayon sa order"
+        ],
+        "rationale": "Sa acute respiratory distress, unahin ang assessment ng lung sounds at effort bago ang ibang intervention — ito ang nagga-guide sa severity ng hypoxia."
+      },
+      {
+        "question": "Nagmo-monitor ang nurse sa pneumonia patient na may oxygen therapy. Alin ang nagpapakitang kailangan ng karagdagang intervention?",
+        "options": [
+          "RR 20/min",
+          "SpO2 88% sa 2 L/min nasal cannula",
+          "Diaphragm breathing",
+          "Clear breath sounds"
+        ],
+        "rationale": "Ang SpO2 na 88% sa 2 L/min ay hipoxemia at nangangailangan ng reassessment at madalas na oxygen titration; target ay karaniwang >92% depende sa konteksto."
+      },
+      {
+        "question": "May TRALI ang client habang transfusion. Dapat ang nurse:",
+        "options": [
+          "Ituloy ang transfusion pero mas mabagal",
+          "Itigil agad ang transfusion at magbigay ng supportive respiratory care",
+          "Mag-diuretic para sa pulmonary edema",
+          "I-restart ang transfusion na may bagong filter"
+        ],
+        "rationale": "TRALI: acute hypoxemic respiratory distress sa loob ng 6 oras pagkatapos ng transfusion. Itigil ang transfusion at supportive care (oxygen, mechanical ventilation kung kailangan). Hindi tulad ng TACO na volume overload — di primary ang diuretics."
+      }
+    ],
+    "postTest": [
+      {
+        "question": "Alin sa mga ito ang pinaka-consistent sa ARDS?",
+        "options": [
+          "Hyperinflated lungs",
+          "Bilateral pulmonary infiltrates",
+          "Pleural effusion",
+          "Clear breath sounds"
+        ],
+        "rationale": "Ang ARDS ay karaniwang may bilateral infiltrates sa imaging at severe hypoxemia na hindi basta-basta naiaayos sa oxygen lang."
+      },
+      {
+        "question": "Aling clinical findings ang nauugnay sa ARDS?",
+        "options": [
+          "Severe hypoxemia",
+          "Bilateral pulmonary infiltrates",
+          "Decreased lung compliance",
+          "Diffuse alveolar damage",
+          "Normal oxygen saturation"
+        ],
+        "rationale": "Kumbinasyon ng severe hypoxemia, bilateral infiltrates, mababang compliance, at diffuse alveolar damage; hindi normal ang saturation."
+      },
+      {
+        "question": "68-year-old na may pneumonia at COPD: productive cough, worse dyspnea. Priority action?",
+        "options": [
+          "Magbigay ng bronchodilator ayon sa order",
+          "Kumuha ng sputum para sa culture",
+          "Taasan ang oxygen flow",
+          "Hikayatin ang cough at deep breathing"
+        ],
+        "rationale": "Sa acute distress na may COPD, priority ang magbigay ng prescribed bronchodilator para mabuksan ang airways; susunod ang iba base sa reassessment."
+      },
+      {
+        "question": "55-year-old na may ARDS sa mechanical ventilation (FiO2 80%, PEEP 12). SpO2 90% pagkatapos biglang 82% na may tumataas na peak airway pressure. Unang i-suspect?",
+        "options": [
+          "Pneumothorax mula sa barotrauma dahil sa mataas na pressures at PEEP",
+          "VAP na nag-develop sa loob ng ilang minuto",
+          "Improved compliance na bumabawas sa PEEP need",
+          "Faulty pulse oximeter"
+        ],
+        "rationale": "Biglang desaturation na may mataas na peak pressure sa high PEEP/FiO2 ay nagpapahiwatig ng pneumothorax — emergency ang assessment."
+      },
+      {
+        "question": "30-year-old na may acute respiratory distress pagkatapos ma-expose sa cigarette smoke. Priority intervention?",
+        "options": [
+          "Corticosteroid",
+          "High Fowler position",
+          "Warm compress sa dibdib",
+          "Chest physiotherapy"
+        ],
+        "rationale": "Ang high Fowler position ay nagpapadali ng lung expansion at breathing comfort sa acute distress."
+      },
+      {
+        "question": "COPD patient na acute distress. ABG: pH 7.28, PaCO2 58 mmHg, PaO2 55 mmHg, HCO3 26 mmol/L. Interpretasyon?",
+        "options": [
+          "Metabolic acidosis na may respiratory compensation",
+          "Respiratory alkalosis mula sa hyperventilation",
+          "Uncompensated respiratory acidosis na nagpapahiwatig ng acute ventilatory failure",
+          "Normal ABG"
+        ],
+        "rationale": "Mababang pH, mataas na PaCO2, normal HCO3: uncompensated respiratory acidosis na may hypoxemia — posibleng kailanganin ang NIV o intubation."
+      },
+      {
+        "question": "ARDS patient sa mechanical ventilation: P/F ratio 85. Ano ang ibig sabihin?",
+        "options": [
+          "Mild ARDS",
+          "Moderate ARDS",
+          "Severe ARDS — isaalang-alang ang prone positioning",
+          "Normal oxygenation"
+        ],
+        "rationale": "Berlin criteria: P/F <100 ay severe ARDS; prone positioning, neuromuscular blockade, o ECMO ay posible ayon sa protocol."
+      },
+      {
+        "question": "ARDS patient intubated at ventilated. ABG: pH 7.28, PaCO2 52 mmHg, PaO2 58 mmHg, HCO3 24 mEq/L. Interpretasyon?",
+        "options": [
+          "Uncompensated respiratory acidosis na may hypoxemia",
+          "Compensated metabolic alkalosis",
+          "Mixed respiratory at metabolic acidosis",
+          "Uncompensated metabolic acidosis"
+        ],
+        "rationale": "Mababang pH, mataas na PaCO2, mababang PaO2, normal HCO3: respiratory acidosis na may hypoxemia — i-adjust ang ventilator para mapabuti ang ventilation at oxygenation."
+      },
+      {
+        "question": "Kailangan ng ARDS patient ng lung-protective ventilation. Kasama dito ang:",
+        "options": [
+          "Mataas na tidal volumes para sa max oxygenation",
+          "Mababang tidal volumes (6 mL/kg ideal body weight) na may plateau pressure <30 cmH2O",
+          "Maximum PEEP na walang compliance monitoring",
+          "Napakabilis na ventilator cycling"
+        ],
+        "rationale": "ARDSNet protocol: mababang tidal volumes para mabawasan ang volutrauma; plateau <30 cmH2O; PEEP para recruitment; posible ang permissive hypercapnia."
+      },
+      {
+        "question": "30-year-old na may cystic fibrosis sa pulmonary therapy; biglang lumala ang ubo at dyspnea. Priority action?",
+        "options": [
+          "Bronchodilator ayon sa order",
+          "Tawagan agad ang provider",
+          "I-assess ang SpO2 ng pasyente",
+          "Hikayatin ang incentive spirometer"
+        ],
+        "rationale": "Unahin ang SpO2 para sukatin ang acute respiratory distress; ito ang nagga-guide sa oxygen at escalation; bronchodilator ay posible pagkatapos ng assessment."
+      }
+    ]
+  }
+}

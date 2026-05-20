@@ -1,0 +1,11 @@
+/* =========================================================================
+   themes.css
+   Per-theme HTML attribute overrides ([data-theme="*"]).
+   Currently lives in globals.css (80 html[data-theme] blocks spanning
+   ~4700 lines). Extraction is deferred because these blocks are deeply
+   interleaved with shared-component overrides and moving them requires
+   careful cascade-order verification across all 14 themes.
+
+   Future work: once the audit confirms all [data-theme] blocks are
+   self-contained, extract them here and update root layout imports.
+   ========================================================================= */

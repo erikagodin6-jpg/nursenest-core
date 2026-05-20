@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-04-16T21:02:28.694Z",
+  "baseUrl": "http://127.0.0.1:3000",
+  "maxPages": 200,
+  "maxDepth": 5,
+  "includeAdmin": false,
+  "visited": 1,
+  "edges": 0,
+  "failures": 1,
+  "results": [
+    {
+      "url": "http://127.0.0.1:3000/",
+      "finalUrl": "http://127.0.0.1:3000/",
+      "statusChain": [],
+      "ok": false,
+      "issue": "FETCH_ERROR",
+      "detail": "fetch failed"
+    }
+  ],
+  "edgesSample": []
+}

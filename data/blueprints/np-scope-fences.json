@@ -1,0 +1,312 @@
+{
+  "version": 1,
+  "appliedDate": "2026-04-10",
+  "description": "Enforced scope boundaries for NP advanced practice content generation. All generators must consult this file before producing content for fenced topics. Violations must be flagged in the post-generation duplication report.",
+  "fences": [
+    {
+      "fenceId": "SF-01",
+      "severity": "CRITICAL",
+      "slugA": "t2dm-intensification-beyond-metformin",
+      "slugB": "glp1-sglt2-comorbidity-selection",
+      "boundary": {
+        "slugA_owns": [
+          "all agent classes at a map level (SU, DPP-4, TZD, GLP-1, SGLT-2, insulin — listed as options only)",
+          "A1c target selection by patient profile",
+          "hypoglycemia risk stratification across agents",
+          "cost and adherence considerations",
+          "insulin initiation decision tree (when to start, basal vs prandial)",
+          "sulfonylurea and DPP-4 inhibitor comparative selection",
+          "TZD use cases and contraindications"
+        ],
+        "slugA_may_not_include": [
+          "mechanism of GLP-1 receptor agonism",
+          "SGLT-2 mechanism and glycosuria",
+          "specific cardiorenal trial data (EMPA-REG OUTCOME, LEADER, DECLARE-TIMI 58, CREDENCE, DAPA-CKD, DAPA-HF)",
+          "GLP-1 adverse effects: nausea, vomiting, pancreatitis, thyroid C-cell tumor risk",
+          "SGLT-2 adverse effects: UTI, DKA risk, volume depletion, Fournier gangrene",
+          "agent-level differences within GLP-1 class (semaglutide vs liraglutide vs dulaglutide)",
+          "agent-level differences within SGLT-2 class (empagliflozin vs dapagliflozin vs canagliflozin)"
+        ],
+        "slugB_owns": [
+          "cardiorenal indication-driven selection: T2DM + established ASCVD, T2DM + HFrEF, T2DM + CKD",
+          "specific cardiovascular and renal outcome trial data per agent class",
+          "GLP-1 class mechanism, adverse effect profile, and contraindications in detail",
+          "SGLT-2 class mechanism, adverse effect profile, and contraindications in detail",
+          "agent-level selection within GLP-1 class",
+          "agent-level selection within SGLT-2 class",
+          "overlap cases (GLP-1 preferred with ASCVD; SGLT-2 preferred with HF/CKD)"
+        ],
+        "slugB_may_not_include": [
+          "general T2DM step therapy decision tree",
+          "A1c targets by patient profile",
+          "sulfonylurea or DPP-4 inhibitor comparative selection",
+          "TZD use cases",
+          "insulin initiation pathway"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-02",
+      "severity": "HIGH",
+      "slugA": "thyroid-disease-diagnosis-management",
+      "slugB": "levothyroxine-dosing-monitoring-interactions",
+      "boundary": {
+        "slugA_owns": [
+          "TSH interpretation: low vs normal vs high, primary vs central thyroid disease",
+          "free T4 and free T3 role and when to order",
+          "clinical presentation of hypothyroidism (cold intolerance, constipation, bradycardia, myxedema)",
+          "clinical presentation of hyperthyroidism (heat intolerance, tremor, palpitations, exophthalmos)",
+          "subclinical vs overt thresholds for treatment initiation",
+          "Graves disease vs Hashimoto vs thyroid nodule workup overview",
+          "when to initiate levothyroxine (clinical decision — TSH thresholds)",
+          "treatment goal concept (target TSH range for age group)",
+          "thyroid cancer red flags and referral criteria",
+          "referral indications to endocrinology"
+        ],
+        "slugA_may_not_include": [
+          "levothyroxine starting dose calculation or formula",
+          "weight-based dosing (mcg/kg/day)",
+          "administration timing (30–60 min before food)",
+          "specific absorption interactions: calcium, iron, PPIs, sucralfate, cholestyramine",
+          "drug interactions that alter levothyroxine requirements: warfarin, digoxin, rifampin, phenytoin",
+          "TSH monitoring interval after dose change",
+          "dose titration step size"
+        ],
+        "slugB_owns": [
+          "starting dose calculation: 1.6 mcg/kg/day full replacement; 25–50 mcg elderly/cardiac",
+          "administration timing: 30–60 min before food, bedtime alternative",
+          "absorption interactions: calcium, iron, PPIs, sucralfate, cholestyramine (take 4 hrs apart)",
+          "drug interactions that increase levothyroxine clearance or displacement: rifampin, phenytoin, carbamazepine, warfarin effect",
+          "TSH monitoring: recheck at 6–8 weeks after each dose change",
+          "dose titration: 12.5–25 mcg increments",
+          "brand vs generic switching caution"
+        ],
+        "slugB_may_not_include": [
+          "clinical diagnosis of hypothyroidism or hyperthyroidism",
+          "TSH interpretation ranges for diagnosis",
+          "when to initiate levothyroxine therapy",
+          "Graves vs Hashimoto differentiation",
+          "thyroid cancer workup"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-03",
+      "severity": "HIGH",
+      "slugA": "ckd-progression-monitoring-medication",
+      "slugB": "medication-dose-adjustment-ckd",
+      "boundary": {
+        "slugA_owns": [
+          "CKD staging: G1–G5 by eGFR and albuminuria (KDIGO framework)",
+          "renoprotective agents: RAAS inhibitors (ACE/ARB) for albuminuria reduction",
+          "SGLT-2 inhibitors for CKD progression (CREDENCE/DAPA-CKD data summary)",
+          "blood pressure targets in CKD (<130/80 with proteinuria)",
+          "dietary management: sodium, potassium, phosphate, protein restriction thresholds",
+          "monitoring labs and frequency: eGFR, serum potassium, creatinine, urine albumin:creatinine, CBC, PTH, phosphorus",
+          "when to refer nephrology: eGFR <30 G4–G5, rapidly declining eGFR, refractory hyperkalemia",
+          "anemia of CKD: EPO deficiency concept and when to consider treatment",
+          "metabolic acidosis management in CKD: sodium bicarbonate threshold",
+          "mineral bone disease: calcium, phosphate, vitamin D overview"
+        ],
+        "slugA_may_not_include": [
+          "Cockcroft-Gault formula application for drug dosing",
+          "specific drugs to avoid below eGFR thresholds (NSAIDs, metformin, nitrofurantoin)",
+          "dose adjustment tables for antibiotics in CKD",
+          "DOAC dosing adjustments in CKD",
+          "contrast nephropathy prevention protocol",
+          "opioid caution in CKD with specific agents named"
+        ],
+        "slugB_owns": [
+          "Cockcroft-Gault creatinine clearance formula and when to use vs MDRD/CKD-EPI",
+          "high-yield drugs to avoid entirely: NSAIDs (worsen CKD), metformin (hold if eGFR <30, caution 30–45), nitrofurantoin (ineffective and toxic if eGFR <30)",
+          "antibiotic dose adjustment in CKD: fluoroquinolones, aminoglycosides, beta-lactams, vancomycin",
+          "DOAC dose adjustment: apixaban renal criteria (2 of 3: age ≥80, weight ≤60kg, Cr ≥1.5), rivaroxaban/dabigatran thresholds",
+          "opioid caution: morphine and codeine active metabolite accumulation, prefer hydromorphone",
+          "contrast nephropathy: hold metformin, NSAIDs; pre-hydration protocol; NAC role",
+          "potassium-sparing diuretics and RAAS: hyperkalemia risk monitoring intervals in CKD"
+        ],
+        "slugB_may_not_include": [
+          "CKD staging or KDIGO framework",
+          "renoprotective therapy strategies (RAAS, SGLT-2 for CKD)",
+          "blood pressure targets in CKD",
+          "dietary management in CKD",
+          "CKD monitoring labs and surveillance frequency",
+          "nephrology referral criteria"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-04",
+      "severity": "HIGH",
+      "slugA": "mdd-diagnosis-risk-initial-management",
+      "slugB": "antidepressant-selection-ssri-snri-primary-care",
+      "boundary": {
+        "slugA_owns": [
+          "DSM-5 MDD criteria: 9 symptoms (SIGECAPS + depressed mood), 5+ for 2 weeks, functional impairment, exclusion of medical/substance cause",
+          "PHQ-9 scoring and severity staging: mild 5–9, moderate 10–14, moderately severe 15–19, severe 20–27",
+          "PHQ-9 item 9 (suicidal ideation) response protocol",
+          "Columbia Suicide Severity Rating Scale (C-SSRS): ideation vs intent vs plan vs means",
+          "suicide risk stratification: low / moderate / high and corresponding clinical actions",
+          "safety planning components: warning signs, coping strategies, support contacts, means restriction",
+          "clinical decision framework: mild → watchful wait + therapy; moderate → therapy + medication option; severe → medication + therapy + close follow-up; high risk → same-day psychiatry or ED",
+          "indications to refer to psychiatry vs manage in primary care",
+          "psychotherapy options at decision level (CBT, behavioral activation — name only, not detailed)"
+        ],
+        "slugA_may_not_include": [
+          "comparative SSRI profiles (fluoxetine vs sertraline vs escitalopram vs paroxetine)",
+          "SNRI profiles (venlafaxine vs duloxetine)",
+          "bupropion or mirtazapine profiles",
+          "adverse effect comparison across antidepressants",
+          "CYP450 interaction profiles of specific antidepressants",
+          "antidepressant switching protocols",
+          "dose ranges for specific antidepressants",
+          "black box warning details for specific agents"
+        ],
+        "slugB_owns": [
+          "SSRI agent comparison: fluoxetine (long half-life, activating, CYP2D6 inhibitor), sertraline (neutral, broad indications, safest in cardiac), escitalopram (most tolerated, fewest interactions), paroxetine (most anticholinergic, shortest half-life, avoid in pregnancy, strong CYP2D6 inhibitor)",
+          "SNRI comparison: venlafaxine (dose-dependent BP elevation, discontinuation syndrome), duloxetine (pain indication, hepatotoxicity risk)",
+          "bupropion: smoking cessation, weight neutral, contraindicated with seizure disorder or eating disorders, activating",
+          "mirtazapine: sedating, appetite stimulation, useful in elderly or underweight patients, NaSSA mechanism",
+          "black box warning: suicidality risk in patients <25 years",
+          "serotonin syndrome recognition and risk combinations",
+          "switching strategies: cross-taper vs direct switch vs washout (fluoxetine 5-week washout before MAOI)",
+          "dose titration timelines and typical therapeutic dose ranges",
+          "CYP450 interaction profiles for each agent"
+        ],
+        "slugB_may_not_include": [
+          "DSM-5 MDD criteria",
+          "PHQ-9 scoring or interpretation",
+          "Columbia Suicide Severity Rating Scale",
+          "suicide risk stratification",
+          "safety planning",
+          "decision to prescribe vs refer to psychiatry"
+        ]
+      }
+    }
+  ],
+  "phase2_fences": [
+    {
+      "fenceId": "SF-05",
+      "severity": "HIGH",
+      "appliedDate": "2026-04-11",
+      "phase": 2,
+      "slugA": "hypertension-red-flags-referral",
+      "slugB": "hypertension-step-therapy-guideline",
+      "boundary": {
+        "slugA_owns": [
+          "ACC/AHA BP classification: Normal (<120/80), Elevated (120–129/<80), Stage 1 (130–139/80–89), Stage 2 (≥140/90)",
+          "Hypertensive urgency definition: BP ≥180/120 without end-organ damage",
+          "Hypertensive emergency definition: BP ≥180/120 WITH end-organ damage (encephalopathy, retinal changes, pulmonary edema, AKI, aortic dissection, NSTEMI)",
+          "End-organ damage recognition: papilledema, altered mental status, chest pain, dyspnea, hematuria, retinal hemorrhage/exudate",
+          "Disposition decision: urgency → can be managed outpatient with same-day medication adjustment; emergency → 911 or ED transfer",
+          "Secondary hypertension red flag recognition: young patient, resistant HTN, hypokalemia (hyperaldosteronism), paroxysmal features (pheochromocytoma), sudden onset or worsening (renal artery stenosis)",
+          "White coat vs masked hypertension recognition and indication for ambulatory BP monitoring (ABPM)",
+          "Referral criteria to nephrology/endocrinology/cardiology for resistant or secondary HTN",
+          "BP target awareness by comorbidity: diabetes (<130/80), CKD with proteinuria (<130/80), older adult (SPRINT trial)"
+        ],
+        "slugA_may_not_include": [
+          "First-line drug class selection by patient profile (thiazide vs CCB vs ACEi/ARB)",
+          "Compelling indications matching drug class to comorbidity (ACEi for DM, BBs for HF, thiazide for isolated systolic)",
+          "Step therapy escalation sequence (add-on agent selection after Step 1)",
+          "Antihypertensive dose ranges and titration",
+          "Drug-drug interactions between antihypertensives",
+          "Adverse effect profiles by antihypertensive class",
+          "Combination pill selection or rationale"
+        ],
+        "slugB_owns": [
+          "First-line antihypertensive class selection: thiazide diuretics (HCTZ, chlorthalidone), ACE inhibitors (lisinopril), ARBs (losartan), calcium channel blockers (amlodipine) — by patient characteristics",
+          "Compelling indications for drug class: ACEi/ARB for DM or CKD with proteinuria, beta-blockers post-MI or HFrEF, thiazides in Black patients without CKD/DM, CCBs as alternative in Black patients",
+          "Step therapy: Step 1 monotherapy → Step 2 2-drug combo (preferred: ACEi + CCB or ARB + CCB) → Step 3 add thiazide or spironolactone",
+          "Resistant HTN: definition (uncontrolled on ≥3 drug classes including diuretic, optimal doses) and addition of spironolactone or further evaluation",
+          "Antihypertensive adverse effects: ACEi cough (switch to ARB), hyperkalemia (ACEi/ARB in CKD), peripheral edema (CCB), hyponatremia and hypokalemia (thiazides), angioedema (ACEi absolute contraindication switch to ARB)",
+          "Contraindications: ACEi/ARB in pregnancy (teratogenic), beta-blockers in decompensated HF or high-degree AV block, thiazides and sulfa allergy"
+        ],
+        "slugB_may_not_include": [
+          "ACC/AHA BP staging thresholds or classification",
+          "Hypertensive urgency vs emergency definitions or management pathway",
+          "Secondary hypertension recognition or referral criteria",
+          "End-organ damage recognition features",
+          "White coat hypertension or ABPM indications",
+          "When to transfer vs manage outpatient"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-06",
+      "severity": "HIGH",
+      "appliedDate": "2026-04-11",
+      "phase": 2,
+      "slugA": "heart-failure-gdmt-primary-care",
+      "slugAlessonPart": "2A",
+      "slugB": "heart-failure-gdmt-primary-care",
+      "slugBlessonPart": "2B",
+      "crossTopicFence": "ace-arb-arni-indications-monitoring",
+      "boundary": {
+        "slugA_lessonPart_2A_owns": [
+          "HFrEF vs HFpEF vs HFmrEF classification by ejection fraction (EF <40% = HFrEF; 41–49% = HFmrEF; ≥50% = HFpEF)",
+          "NYHA functional classification: Class I–IV symptoms and activity tolerance",
+          "BNP and NT-proBNP interpretation for HF diagnosis vs monitoring (BNP >400: likely HF; <100: HF unlikely; rising BNP on therapy = poor prognosis)",
+          "Echocardiography interpretation: which findings distinguish HFrEF from HFpEF (EF measurement, diastolic parameters, wall thickness, LA enlargement)",
+          "HF phenotype recognition from clinical features: S3 gallop + dilated cardiomyopathy + low EF = HFrEF; hypertensive elderly woman + preserved heart size + diastolic dysfunction = HFpEF",
+          "Acutely decompensated HF recognition: orthopnea, PND, increased weight, worsening edema, rising BNP — disposition trigger to higher level of care",
+          "Triggers for HF decompensation: dietary sodium excess, medication non-adherence, new AF, ischemia, infection, NSAID use"
+        ],
+        "slugA_lessonPart_2A_may_not_include": [
+          "Which GDMT drug class to add based on EF threshold",
+          "ACE inhibitor or ARNi starting doses in HF",
+          "Beta-blocker selection rationale for HFrEF (carvedilol vs metoprolol succinate vs bisoprolol)",
+          "Mineralocorticoid receptor antagonist (MRA) indications and monitoring",
+          "SGLT-2 inhibitor use for HF (DAPA-HF, EMPEROR-Reduced data)",
+          "Diuretic dose adjustment for volume management",
+          "GDMT titration schedules or contraindications per drug class"
+        ],
+        "slugB_lessonPart_2B_owns": [
+          "HFrEF GDMT four-pillar framework: (1) ACEi or ARNi, (2) evidence-based beta-blocker, (3) MRA, (4) SGLT-2 inhibitor — initiation sequence and EF thresholds",
+          "ARNi (sacubitril/valsartan): superiority over ACEi (PARADIGM-HF), 36-hour washout before/after ACEi to prevent angioedema, contraindicated with ACEi concurrent use",
+          "Evidence-based beta-blockers for HFrEF: carvedilol, metoprolol succinate, bisoprolol — NOT atenolol, NOT labetalol, NOT non-selective without vasodilating properties",
+          "MRA (spironolactone or eplerenone): indicated for HFrEF EF ≤35% with NYHA Class II–IV; monitor K⁺ and creatinine at 1 week and 4 weeks after initiation; hold if K⁺ >5.0 or eGFR <30",
+          "SGLT-2 inhibitors (dapagliflozin, empagliflozin) for HFrEF regardless of diabetes status — HF outcome benefit independent of glycemic effect",
+          "HFpEF management: fewer proven mortality benefits; diuretics for congestion, SGLT-2 (EMPEROR-Preserved data), control of underlying HTN and AF",
+          "Diuresis in HF: loop diuretics (furosemide) for acute decongestion; electrolyte monitoring; target dry weight",
+          "Device therapy indications from primary care perspective: CRT if EF ≤35% + LBBB + NYHA III; ICD if EF ≤35%; refer to cardiology"
+        ],
+        "slugB_lessonPart_2B_may_not_include": [
+          "EF-based HF classification criteria (belongs to 2A)",
+          "NYHA class assignment criteria (belongs to 2A)",
+          "BNP/NT-proBNP threshold interpretation for diagnosis (belongs to 2A)",
+          "HF decompensation recognition triggers (belongs to 2A)",
+          "Echocardiography phenotype interpretation (belongs to 2A)"
+        ],
+        "crossTopicFenceNote": "ace-arb-arni-indications-monitoring (Prescribing & Advanced Pharmacology domain) owns: drug-specific mechanism details, pharmacokinetic properties, adverse effect management for individual agents, monitoring parameter schedules, and cross-drug class interactions. heart-failure-gdmt-primary-care owns: the CLINICAL DECISION of WHICH drug class to add/up-titrate and WHEN (guideline thresholds, NYHA triggers, EF criteria). Questions testing specific drug AE management or mechanism belong to ace-arb-arni-indications-monitoring."
+      }
+    }
+  ],
+  "phase1_generation_rules": {
+    "description": "Rules enforced during Phase 1 (Diagnostic Foundations) content generation. All 14 topics are differential diagnosis / diagnostic reasoning topics. These rules are absolute.",
+    "permitted_question_types": [
+      "Most likely diagnosis (pattern recognition)",
+      "Most appropriate next diagnostic step",
+      "Which finding most supports diagnosis X over Y",
+      "Which condition is most consistent with this presentation",
+      "Which patient requires immediate referral / transfer (disposition only, not treatment)",
+      "Which workup should be ordered first"
+    ],
+    "forbidden_question_types": [
+      "Most appropriate medication or antibiotic",
+      "Correct starting dose",
+      "How would you treat this condition",
+      "Appropriate follow-up interval for chronic management",
+      "Which medication should be discontinued"
+    ],
+    "stem_anchor_uniqueness": "No two questions across Phase 1 may share the same combination of: chief complaint + patient age group + key differentiating finding. Each question must register a unique stem anchor.",
+    "endocrine_crisis_scope": "Topic endocrine-crisis-differentials-recognition covers recognition and triage disposition ONLY. No management mechanics (no fluids, no hydrocortisone dosing, no antithyroid drug selection) may appear in questions or lesson sections.",
+    "recognition_vs_management_boundary": "Phase 1 lessons may state what condition a presentation represents and what initial diagnostic test to order. They may NOT detail treatment protocols, prescribing decisions, or chronic management — those belong to Phase 3–4.",
+    "cross_topic_duplication_guard": "After generating each topic's questions, check all prior question stem anchors. Flag any stem that reuses the same chief complaint + demographic + key finding combination across any two Phase 1 topics."
+  },
+  "renamed_topic": {
+    "oldSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+    "newSlug": "endocrine-crisis-differentials-recognition",
+    "reason": "Original slug implied adrenal insufficiency management. Renamed to reflect recognition-only differential scope across AI, thyroid storm, DKA, HHS, myxedema coma, and hypoglycemic crisis.",
+    "effectiveDate": "2026-04-10"
+  }
+}

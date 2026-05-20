@@ -1,0 +1,277 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import test from "node:test";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const appRoot = join(here, "..", "..");
+/** Next app package root (`nursenest-core/` — contains `next.config.mjs`, `src/`). */
+const packageRoot = join(here, "..", "..", "..");
+
+function readAppFile(relativePath: string): string {
+  return readFileSync(join(appRoot, relativePath), "utf8");
+}
+
+function readPackageFile(relativePath: string): string {
+  return readFileSync(join(packageRoot, relativePath), "utf8");
+}
+
+test("default blog and lessons routes opt out of build-time static work", () => {
+  /** Blog index uses ISR (`revalidate`); layout is a passthrough wrapper. */
+  const blogIndexPage = readAppFile("app/(marketing)/(default)/blog/page.tsx");
+  const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
+
+  assert.match(blogIndexPage, /export const revalidate =/);
+  assert.match(lessonsPage, /export const dynamic = "force-dynamic"/);
+});
+
+test("marketing default layout uses chrome-only shards and layers main page shards during production build", () => {
+  const defaultLayout = readAppFile("app/(marketing)/(default)/layout.tsx");
+  const chromeServer = readAppFile("lib/marketing-i18n/marketing-layout-chrome-messages.server.ts");
+  const shardLoader = readAppFile("lib/marketing-i18n/load-marketing-message-shards.ts");
+  const mainShards = readAppFile("components/i18n/marketing-main-i18n-shards.tsx");
+  const shardGroups = readAppFile("lib/marketing-i18n/marketing-i18n-shard-groups.ts");
+
+  assert.match(defaultLayout, /MarketingMainI18nShards/);
+  assert.match(chromeServer, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
+  assert.match(chromeServer, /function defaultLayoutShardList/);
+  assert.match(chromeServer, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS/);
+  assert.match(chromeServer, /MARKETING_CHROME_MESSAGE_SHARDS/);
+  assert.match(mainShards, /Suspense/);
+  assert.match(shardGroups, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS = \[/);
+  assert.match(shardGroups, /"marketing"/);
+  assert.match(shardGroups, /"nav"/);
+
+  assert.match(shardLoader, /loadMarketingMessageShardsSync/);
+  assert.match(shardLoader, /mergeShards/);
+});
+
+test("fixed home and lessons surfaces use page-body shards during production build", () => {
+  /** Default `/` composes body i18n via layout `MarketingMainI18nShards`, not inline in `page.tsx`. */
+  const mainPageShards = readAppFile("components/i18n/marketing-main-i18n-shards.tsx");
+  const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
+  const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
+
+  assert.match(mainPageShards, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
+
+  assert.match(lessonsPage, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
+  assert.match(lessonsPage, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
+
+  assert.match(lessonSections, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
+  assert.match(lessonSections, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
+});
+
+test("next config pins low-memory compile settings (next.config.mjs)", async () => {
+  const href = pathToFileURL(join(packageRoot, "next.config.mjs")).href;
+  const { default: nextConfig } = await import(href);
+  assert.ok(nextConfig && typeof nextConfig === "object");
+
+  const exp = nextConfig.experimental;
+  assert.ok(exp && typeof exp === "object");
+  assert.equal(exp.cpus, 1);
+  assert.equal(exp.workerThreads, false);
+  assert.equal(exp.webpackBuildWorker, false);
+  assert.equal(exp.staticGenerationMaxConcurrency, 1);
+  assert.equal(exp.memoryBasedWorkersCount, false);
+  assert.equal(exp.parallelServerCompiles, false);
+  assert.equal(exp.parallelServerBuildTraces, false);
+
+  assert.equal(typeof nextConfig.webpack, "function");
+  const mock = { resolve: {} };
+  const out = nextConfig.webpack(mock, { dev: false });
+  assert.equal(out.parallelism, 1, "webpack hook must force parallelism=1 for production builds");
+  assert.equal(out.cache, false, "webpack persistent cache disabled for production builds");
+});
+
+test("npm build uses the production wrapper and emits Next compile memory diagnostics", () => {
+  const pkg = JSON.parse(readPackageFile("package.json")) as { scripts?: Record<string, string> };
+  const buildScript = pkg.scripts?.build ?? "";
+  const buildpackWrapper = readPackageFile("scripts/run-buildpack-build.mjs");
+  const nextProdWrapper = readPackageFile("scripts/run-next-prod-build.mjs");
+
+  assert.match(buildScript, /scripts\/run-buildpack-build\.mjs/);
+  assert.doesNotMatch(buildScript, /\bnext build\b/);
+  assert.match(buildpackWrapper, /BUILD_LOG_MEMORY_USAGE/);
+  assert.match(buildpackWrapper, /NODE_OPTIONS/);
+  assert.match(nextProdWrapper, /next_build_memory_sample/);
+  assert.match(nextProdWrapper, /next_build_memory_peak/);
+  assert.match(nextProdWrapper, /peakRssMb/);
+});
+
+test("pre-nursing i18n provider avoids top-level JSON imports", () => {
+  const source = readAppFile("content/pre-nursing/pre-nursing-i18n.tsx");
+
+  assert.doesNotMatch(source, /import strings from ["']\.\/pre-nursing-strings-en\.json["']/);
+  assert.match(source, /require\(["']\.\/pre-nursing-strings-en\.json["']\)/);
+});
+
+test("root ux tracking avoids broad marketing path imports", () => {
+  const uxTracking = readAppFile("lib/observability/frontend-ux-tracking.ts");
+
+  assert.doesNotMatch(uxTracking, /@\/lib\/i18n\/marketing-path/);
+  assert.match(uxTracking, /@\/lib\/i18n\/marketing-locale-prefix/);
+});
+
+test("admin blueprint coverage page avoids top-level catalog JSON imports", () => {
+  const adminBlueprintPage = readAppFile("app/(admin)/admin/lessons/blueprint-coverage/page.tsx");
+
+  assert.doesNotMatch(adminBlueprintPage, /import catalog from "@\/content\/pathway-lessons\/catalog\.json"/);
+  // Must use readFileSync (not require) to avoid static bundling of catalog JSON
+  assert.doesNotMatch(adminBlueprintPage, /require\("@\/content\/pathway-lessons\/catalog\.json"\)/);
+  assert.match(adminBlueprintPage, /readFileSync.*catalog\.json/);
+});
+
+test("pathway lesson catalog sync avoids top-level heavy catalog JSON imports", () => {
+  const source = readAppFile("lib/lessons/pathway-lesson-catalog-sync.ts");
+
+  assert.doesNotMatch(source, /import catalog from ["']@\/content\/pathway-lessons\/catalog\.json["']/);
+  assert.doesNotMatch(source, /import alliedBundledCatalog from ["']@\/content\/pathway-lessons\/allied-bundled-catalog\.json["']/);
+  assert.doesNotMatch(source, /import newGradTransitionCatalog from ["']@\/content\/pathway-lessons\/new-grad-transition-catalog\.json["']/);
+});
+
+test("priority content and catalog helper modules avoid top-level JSON imports and bare require()", () => {
+  const sourcePaths = [
+    "lib/content/master-topic-map.ts",
+    "lib/content-blueprint/rn-nclex-master-map.ts",
+    "lib/lessons/pathway-lesson-registry-source.ts",
+    "lib/content/topic-map-catalog-dedupe.ts",
+    "lib/scalability/build-content-scalability-report.ts",
+  ];
+
+  for (const sourcePath of sourcePaths) {
+    const source = readAppFile(sourcePath);
+    // No static import of JSON (would cause bundling)
+    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(content|data)\/.+\.json["']/,
+      `${sourcePath}: must not have static JSON import`);
+    // No bare require() of catalog JSON (causes Turbopack/webpack to statically bundle catalog files)
+    const lines = source.split("\n").filter((l: string) => !l.trim().startsWith("//") && !l.trim().startsWith("*"));
+    const bareRequire = lines.filter((l: string) => /\brequire\s*\(["']@\/content/.test(l));
+    assert.equal(bareRequire.length, 0,
+      `${sourcePath}: must not use require() for catalog JSON — use readFileSync instead. Found: ${bareRequire.slice(0, 1).join(", ")}`);
+  }
+});
+
+test("homepage blog helpers lazy-load the static blog corpus and query layer", () => {
+  const staticBlogPosts = readAppFile("lib/blog/static-blog-posts.ts");
+  const homeBlogTeaser = readAppFile("lib/blog/home-blog-teaser.ts");
+  const latestLinks = readAppFile("components/marketing/marketing-blog-latest-links.tsx");
+
+  assert.doesNotMatch(staticBlogPosts, /import\s+\{\s*STATIC_BLOG_POSTS/);
+  assert.match(staticBlogPosts, /createRequire\(import\.meta\.url\)/);
+  assert.match(staticBlogPosts, /require\(["'][^"']*content\/blog-static-posts["']\)/);
+
+  assert.doesNotMatch(homeBlogTeaser, /import\s+\{\s*getPublishedBlogPostsPage/);
+  assert.match(homeBlogTeaser, /await import\(["']@\/lib\/blog\/safe-blog-queries["']\)/);
+
+  assert.doesNotMatch(latestLinks, /import\s+\{\s*getPublishedBlogPostsPage/);
+  assert.match(latestLinks, /await import\(["']@\/lib\/blog\/safe-blog-queries["']\)/);
+});
+
+test("public lessons hub uses metadata helpers instead of the full lesson loader", () => {
+  const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
+  const publicMetadata = readAppFile("lib/lessons/pathway-lesson-public-metadata.ts");
+
+  assert.doesNotMatch(lessonSections, /@\/lib\/lessons\/pathway-lesson-loader/);
+  assert.match(lessonSections, /@\/lib\/lessons\/pathway-lesson-public-metadata/);
+  assert.match(publicMetadata, /listCatalogPathwayIdsWithLessonsSync/);
+  assert.match(publicMetadata, /getCatalogLessonPreviewTitlesForPublicSurface/);
+});
+
+test("shared lessons metadata lazy-loads the heavy catalog sync module", () => {
+  const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
+  const publicMetadata = readAppFile("lib/lessons/pathway-lesson-public-metadata.ts");
+
+  assert.doesNotMatch(publicMetadata, /from ["']@\/lib\/lessons\/pathway-lesson-catalog-sync["']/);
+  assert.match(publicMetadata, /await import\(["']@\/lib\/lessons\/pathway-lesson-catalog-sync["']\)/);
+  assert.match(lessonSections, /await getCatalogLessonPreviewTitlesForPublicSurface\(/);
+});
+
+test("home and paywall shells lazy-load public home stats instead of importing the full stats module", () => {
+  const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  const deferredHomeStats = readAppFile("components/marketing/home-restored-with-deferred-stats.server.tsx");
+  const localizedHomePage = readAppFile("app/(marketing)/[locale]/page.tsx");
+  const paywallHomeStats = readAppFile("lib/marketing/load-paywall-home-stats-for-shell.ts");
+
+  assert.doesNotMatch(defaultHomePage, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+  assert.doesNotMatch(deferredHomeStats, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+  assert.doesNotMatch(localizedHomePage, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+  assert.doesNotMatch(paywallHomeStats, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+
+  assert.match(defaultHomePage, /home-restored-with-deferred-stats/);
+  assert.match(deferredHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+  assert.match(localizedHomePage, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+  assert.match(paywallHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+});
+
+test("exam selector gate stays lazy-loaded when mounted (no eager server path)", () => {
+  const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  const deferredGate = readAppFile("components/onboarding/exam-selector-gate-lazy.tsx");
+
+  assert.doesNotMatch(defaultHomePage, /from ["']@\/components\/onboarding\/exam-selector-gate["']/);
+
+  assert.match(deferredGate, /dynamic\(/);
+  assert.match(deferredGate, /@\/components\/onboarding\/exam-selector-gate/);
+  assert.match(deferredGate, /ssr:\s*false/);
+});
+
+test("learner shell defers optional study-next and tutor chrome until the request needs them", () => {
+  const learnerShellLayout = readAppFile("app/(student)/app/(learner)/layout.tsx");
+
+  assert.doesNotMatch(learnerShellLayout, /from ["']@\/components\/student\/learner-study-next-block["']/);
+  assert.doesNotMatch(learnerShellLayout, /from ["']@\/components\/learner-tutor["']/);
+  assert.match(learnerShellLayout, /await import\(["']@\/components\/student\/learner-study-next-block["']\)/);
+  assert.match(learnerShellLayout, /await import\(["']@\/components\/learner-tutor["']\)/);
+});
+
+test("ops lesson helpers use loader config without importing the full loader", () => {
+  const sourcePaths = [
+    "lib/lessons/pathway-lesson-registry-source.ts",
+    "lib/scalability/build-content-scalability-report.ts",
+    "lib/lessons/pathway-lesson-translation-diagnostics.ts",
+  ];
+
+  for (const sourcePath of sourcePaths) {
+    const source = readAppFile(sourcePath);
+    assert.doesNotMatch(source, /@\/lib\/lessons\/pathway-lesson-loader["']/);
+    assert.match(source, /@\/lib\/lessons\/pathway-lesson-loader-config["']/);
+  }
+});
+
+test("remaining pre-nursing and interactive content modules avoid top-level JSON imports", () => {
+  const sourcePaths = [
+    "components/tools/calculators/transfusion-safety-tool.tsx",
+    "components/pre-nursing/pre-nursing-landing-client.tsx",
+    "components/pre-nursing/pre-nursing-milestone-strip.tsx",
+    "components/pre-nursing/pre-nursing-module-engagement.tsx",
+    "components/marketing/case-studies-page-client.tsx",
+    "app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx",
+    "app/(marketing)/(default)/pre-nursing/lessons/page.tsx",
+    "app/(marketing)/(default)/pre-nursing/lessons/[slug]/page.tsx",
+    "app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
+  ];
+
+  for (const sourcePath of sourcePaths) {
+    const source = readAppFile(sourcePath);
+    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(content|data)\/.+\.json["']/);
+    assert.match(source, /require\(["']@\/content\/.+\.json["']\)/);
+  }
+});
+
+test("server-facing readiness and inventory helpers use JSON import attributes (Node ESM)", () => {
+  const inventorySource = readAppFile("lib/education-images/inventory.ts");
+  assert.match(
+    inventorySource,
+    /import\s+.+\s+from\s+["']@\/config\/education-image-inventory\.json["']\s+with\s*\{\s*type:\s*["']json["']\s*\}/,
+  );
+});
+
+test("country exam readiness snapshot stays bundler-safe for route rendering", () => {
+  const source = readAppFile("lib/navigation/country-exam-readiness-snapshot.ts");
+  assert.doesNotMatch(source, /node:module/);
+  assert.doesNotMatch(source, /createRequire/);
+  assert.match(
+    source,
+    /import\s+.+\s+from\s+["']@\/config\/pathway-readiness-snapshot\.json["'].*type:\s*["']json["']/,
+  );
+});

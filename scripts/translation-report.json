@@ -1,0 +1,2053 @@
+{
+  "fr": {
+    "name": "French",
+    "totalKeys": 17832,
+    "missingKeys": 539,
+    "untranslatedKeys": 3508,
+    "mixedKeys": 1310,
+    "coverage": 77.5,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 10693,
+        "missing": 375,
+        "untranslated": 3429,
+        "coverage": 73.8,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1611,
+        "missing": 77,
+        "untranslated": 24,
+        "coverage": 94.1,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1127,
+        "missing": 65,
+        "untranslated": 38,
+        "coverage": 91.6,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 281,
+        "missing": 0,
+        "untranslated": 17,
+        "coverage": 94.3,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "careerGuide.viewFullGuide",
+      "clinicalCalculators.heading",
+      "dashboard.nextStepMockExams",
+      "examHub.contentHubDesc",
+      "examHub.contentHubTitle",
+      "footer.studyInYourLanguage",
+      "footer.viewAllLanguages",
+      "hero.featureStrip.activeRecall",
+      "hero.featureStrip.clinicalDecision",
+      "hero.featureStrip.examBlueprint",
+      "hero.featureStrip.spacedRepetition",
+      "home.hero.authorityBadge",
+      "home.hero.benefit1",
+      "home.hero.benefit2",
+      "home.hero.benefit3",
+      "home.hero.benefit4",
+      "home.hero.benefitsHeading",
+      "home.hero.builtForAlliedHealth",
+      "home.hero.builtForLabel",
+      "home.hero.builtForMicrocopy"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.bundles",
+      "allied.alliedAdmin.cognitiveTargets",
+      "allied.alliedAdmin.conversion",
+      "allied.alliedAdmin.depth",
+      "allied.alliedAdmin.domains",
+      "allied.alliedAdmin.domains2",
+      "allied.alliedAdmin.faqSchema",
+      "allied.alliedAdmin.flagged",
+      "allied.alliedAdmin.generated",
+      "allied.alliedAdmin.generated2",
+      "allied.alliedAdmin.imagelinked",
+      "allied.alliedAdmin.maxRecall",
+      "allied.alliedAdmin.ngnCases",
+      "allied.alliedAdmin.noAutomationsConfiguredYet",
+      "allied.alliedAdmin.notes",
+      "allied.alliedAdmin.publishingValidationChecklist"
+    ],
+    "mixed": [
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.clinicalVignettesWithPatientDemographics",
+      "allied.alliedAdmin.coversCbtDbtEmdrPsychodynamic",
+      "allied.alliedAdmin.productionDbVerifiedBeforeWrites",
+      "allied.alliedAdmin.questionSetsAvailableForPurchase",
+      "allied.alliedAdmin.validationGatesRationaleMin600",
+      "allied.alliedAdmin.youNeedAdminPrivilegesTo",
+      "allied.alliedDiagnostic.600WordRationalesOnEvery",
+      "allied.alliedDiagnostic.takeAFreeDiagnosticAssessment",
+      "allied.alliedDiagnostic.wellSendYourResultsAnd",
+      "allied.alliedHealthArticle.theArticleYoureLookingFor",
+      "allied.alliedHealthHub.exploreAlliedHealthCareersIncluding",
+      "allied.alliedHealthProfession.theAlliedHealthProfessionYoure",
+      "allied.alliedHome.alliedHealthCareersCertificationExam",
+      "allied.alliedHome.jumpDirectlyIntoTheStudy",
+      "allied.alliedInstitutions.competencyMappingByExamBlueprint",
+      "allied.alliedInstitutions.customizeYourInstitutionalPackageWith",
+      "allied.alliedInstitutions.domainHeatmapsRevealExactlyWhich",
+      "allied.alliedInstitutions.domainLockEnsuresOnlyStudents"
+    ]
+  },
+  "tl": {
+    "name": "Filipino",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 2489,
+    "mixedKeys": 116,
+    "coverage": 86.1,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 12100,
+        "missing": 0,
+        "untranslated": 2397,
+        "coverage": 83.5,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1639,
+        "missing": 0,
+        "untranslated": 73,
+        "coverage": 95.7,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 59,
+        "missing": 0,
+        "untranslated": 5,
+        "coverage": 92.2,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1216,
+        "missing": 1,
+        "untranslated": 13,
+        "coverage": 98.9,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 297,
+        "missing": 0,
+        "untranslated": 1,
+        "coverage": 99.7,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedDiagnostic.alliedHealthDiagnosticAssessment",
+      "allied.alliedHome.alliedHealthCareersCertificationExam",
+      "allied.alliedHome.alliedHealthCertificationExams",
+      "allied.alliedPricing.nursenestAlliedVsGenericTest",
+      "allied.alliedSeoLanding.nursenestAlliedVsGenericTest",
+      "allied.careerLanding.nursenestAlliedVsGenericTest",
+      "allied.encyclopediaAdmin.crossprofessionLinksJsonArray",
+      "allied.mltLanding.mltExamPrepCsmlsAscp",
+      "allied.paramedicParamedicAcp.acpExamPrepAdvancedCare",
+      "allied.paramedicParamedicLessonsHub.paramedicLessonsClinicalStudyGuides",
+      "allied.paramedicParamedicNremt.nremtParamedicPracticeQuestionsCognitive",
+      "allied.pharmtechHub.pharmacyTechnicianExamPrepPtcb",
+      "allied.physicalTherapyHub.ptaExamPrepNpteptaPractice",
+      "allied.socialWorkDomains.aswbTestBank1000Social",
+      "components.deckViews.txtMdCsvRtfPdf",
+      "components.footer.electrolyteAmpAbgSimulator",
+      "data.pre_nursing_anatomy.airwayBranchingConductingZoneRespiratory",
+      "data.pre_nursing_anatomy.mechanicalVsChemicalDigestion",
+      "data.pre_nursing_cultural_competency.traumainformedNursingPractice",
+      "data.pre_nursing_health_assessment.subjectiveVsObjectiveDistinction"
+    ],
+    "mixed": [
+      "allied.alliedAdmin.coversCbtDbtEmdrPsychodynamic",
+      "allied.alliedHealthHub.alliedHealthCareersEducationCertification",
+      "allied.mltMltImageLibrary.max20mbJpegPngWebp",
+      "allied.paramedicParamedicAcp.progressivedifficultyEcgRecognitionPracticeI",
+      "allied.paramedicParamedicFlashcardsHub.masterParamedicConceptsWithSpaced",
+      "allied.paramedicParamedicLanding.advancedEmtCertificationPrepBridging",
+      "allied.pharmtechLessons.pharmacyTechnicianLessonsCompleteLesson",
+      "anatomy.sys.lymphaticImmuneDesc",
+      "data.pre_nursing_anatomy.slidingFilamentTheoryNeuromuscularJuncti",
+      "data.pre_nursing_health_assessment.lymphNodesThyroidJugularVein",
+      "data.pre_nursing_health_assessment.visualAcuityHearingNasalPatency",
+      "data.pre_nursing_nutrition_foundations.saturatedFatTransFatSodium",
+      "home.diff.languagesDesc",
+      "home.mostTested.sepsisDesc",
+      "jobs.seoTitle",
+      "lesson.assessmentFindingsSubtitle",
+      "lessons.lesson.advanced-cardiac-auscultation-np",
+      "lessons.lesson.anaphylaxis-advanced-np",
+      "lessons.lesson.ards-management-np",
+      "lessons.lesson.bacterial-vaginosis-np"
+    ]
+  },
+  "hi": {
+    "name": "Hindi",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 14118,
+    "mixedKeys": 11,
+    "coverage": 21.4,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1148,
+        "missing": 0,
+        "untranslated": 13349,
+        "coverage": 7.9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1631,
+        "missing": 0,
+        "untranslated": 81,
+        "coverage": 95.3,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 591,
+        "missing": 1,
+        "untranslated": 638,
+        "coverage": 48,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 270,
+        "missing": 0,
+        "untranslated": 28,
+        "coverage": 90.6,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "home.region.usDesc",
+      "lessons.lesson.functional-assessment-rn",
+      "lessons.lesson.pain-assessment-rpn",
+      "newGrad.career.s2i1",
+      "newGrad.certs.seoTitle",
+      "newGrad.hub.cat.certsDesc",
+      "newGrad.hub.eco2Desc",
+      "newGrad.hub.premiumFeat4Desc",
+      "pathways.rn.mod.labValues.desc",
+      "pricing.np.feature3",
+      "pricing.np.feature5"
+    ]
+  },
+  "es": {
+    "name": "Spanish",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 12907,
+    "mixedKeys": 91,
+    "coverage": 28.1,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1908,
+        "missing": 0,
+        "untranslated": 12589,
+        "coverage": 13.2,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 150,
+        "missing": 0,
+        "untranslated": 1,
+        "coverage": 99.3,
+        "threshold": 100,
+        "passed": false
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1596,
+        "missing": 0,
+        "untranslated": 116,
+        "coverage": 93.2,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1062,
+        "missing": 1,
+        "untranslated": 167,
+        "coverage": 86.3,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 286,
+        "missing": 0,
+        "untranslated": 12,
+        "coverage": 96,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.difficultyDistribution",
+      "allied.alliedAdmin.difficultyDistribution2",
+      "allied.alliedAdmin.difficultyDistribution3",
+      "allied.alliedAdmin.domains",
+      "allied.alliedAdmin.domains2",
+      "allied.alliedAdmin.flagged",
+      "allied.alliedAdmin.imagelinked",
+      "allied.alliedAdmin.maxRecall",
+      "allied.alliedAdmin.publish",
+      "allied.alliedAdmin.publish2",
+      "allied.alliedAdmin.questions",
+      "allied.alliedAdmin.questions2",
+      "allied.alliedAdmin.quickActions",
+      "allied.alliedAdmin.status",
+      "allied.alliedAdmin.storefrontCopy",
+      "allied.alliedAdmin.total",
+      "allied.alliedAdmin.totalItems"
+    ],
+    "mixed": [
+      "allied.alliedHealthHub.alliedHealthCareersEducationCertification",
+      "allied.alliedSeoLanding.chooseThePlanThatFits",
+      "allied.careerLanding.startFreeUpgradeWhenYoure",
+      "allied.mltCountryPage.milestoneChecksEnsureYoureOn",
+      "allied.paramedicParamedicLanding.mostQuestionBanksGiveYou",
+      "allied.paramedicParamedicLanding.studyingRandomQuestionsWastesTime",
+      "allied.paramedicParamedicLanding.youKnowYouNeedTo",
+      "allied.paramedicParamedicNremt.ourEngineAdjustsQuestionDifficulty",
+      "allied.paramedicParamedicQuestionSeo.theParamedicQuestionTopicYoure",
+      "allied.paramedicScenariosHub.scenariosMatchingYourFiltersHavent",
+      "allied.pharmtechPracticeExamSeo.takeTimedPracticeExamsTo",
+      "components.examFollowupModal.focusedPreparationForYourComeback",
+      "components.footer.applynestHealthcareProgramApplicationsAnd",
+      "components.heartSoundsPlayer.tapALandmarkToLearn",
+      "components.lessonImageManager.describeTheClinicalImageYou",
+      "home.mostTested.ecgDesc",
+      "lessons.lesson.abdominal-exam-np",
+      "lessons.lesson.cirrhosis-management-np",
+      "lessons.lesson.cognitive-screening-np",
+      "lessons.lesson.functional-assessment-rn"
+    ]
+  },
+  "zh": {
+    "name": "Chinese (Simplified)",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 13901,
+    "mixedKeys": 3,
+    "coverage": 22.6,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1146,
+        "missing": 0,
+        "untranslated": 13351,
+        "coverage": 7.9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1628,
+        "missing": 0,
+        "untranslated": 84,
+        "coverage": 95.1,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 812,
+        "missing": 1,
+        "untranslated": 417,
+        "coverage": 66,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 0,
+        "untranslated": 27,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "alliedFaq.exams3.a",
+      "mockExams.tierNpDesc",
+      "newGrad.certs.seoTitle"
+    ]
+  },
+  "zh-tw": {
+    "name": "Chinese (Traditional)",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 14560,
+    "mixedKeys": 6,
+    "coverage": 18.9,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 618,
+        "missing": 0,
+        "untranslated": 13879,
+        "coverage": 4.3,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1628,
+        "missing": 0,
+        "untranslated": 84,
+        "coverage": 95.1,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 681,
+        "missing": 1,
+        "untranslated": 548,
+        "coverage": 55.4,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 0,
+        "untranslated": 27,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "alliedFaq.exams3.a",
+      "alliedFaq.general3.a",
+      "lessons.lesson.pain-assessment-rpn",
+      "mockExams.tierNpDesc",
+      "pricing.np.feature3",
+      "pricing.np.feature5"
+    ]
+  },
+  "ar": {
+    "name": "Arabic",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 3567,
+    "mixedKeys": 5,
+    "coverage": 80.1,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 11123,
+        "missing": 0,
+        "untranslated": 3374,
+        "coverage": 76.7,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1678,
+        "missing": 0,
+        "untranslated": 34,
+        "coverage": 98,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 48,
+        "missing": 0,
+        "untranslated": 16,
+        "coverage": 75,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1089,
+        "missing": 1,
+        "untranslated": 140,
+        "coverage": 88.5,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 295,
+        "missing": 0,
+        "untranslated": 3,
+        "coverage": 99,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedInstitutions.nameschooledu",
+      "allied.alliedPricing.nursenestAlliedVsGenericTest",
+      "allied.alliedSeoLanding.nursenestAlliedVsGenericTest",
+      "allied.mltLanding.csmlsAscp",
+      "allied.paramedicEcgComponents.spo2",
+      "anatomy.examContext.np.title",
+      "anatomy.examContext.rn.title",
+      "anatomy.examContext.rpn.title",
+      "components.footer.alliedCareers",
+      "components.footer.alliedPricing",
+      "components.footer.applynest",
+      "components.footer.bloodTransfusionSimulator",
+      "components.footer.burnoutPrevention",
+      "components.footer.clinicalReferences",
+      "components.footer.clinicalSimulators",
+      "components.footer.clinicalSkillsGuides",
+      "components.footer.deterioratingPatientSim",
+      "components.footer.diagnosticImaging",
+      "components.footer.electrolyteAmpAbgSimulator",
+      "components.footer.examFormatUpdates"
+    ],
+    "mixed": [
+      "data.pre_nursing_terminology.commonConfusionOtomyVsOstomy",
+      "lessons.lesson.cognitive-screening-np",
+      "pages.authorityGuidePages.735745Below735Acidosis",
+      "pages.authorityGuidePages.anionGapNaClHco",
+      "pages.authorityGuidePages.spo951008892ForCopd"
+    ]
+  },
+  "ko": {
+    "name": "Korean",
+    "totalKeys": 4238,
+    "missingKeys": 14094,
+    "untranslatedKeys": 48,
+    "mixedKeys": 13,
+    "coverage": 21.2,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 716,
+        "missing": 13775,
+        "untranslated": 6,
+        "coverage": 4.9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1627,
+        "missing": 77,
+        "untranslated": 8,
+        "coverage": 95,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1003,
+        "missing": 197,
+        "untranslated": 30,
+        "coverage": 81.5,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 23,
+        "untranslated": 4,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "untranslated": [
+      "anatomy.examContext.np.title",
+      "anatomy.examContext.rn.title",
+      "anatomy.examContext.rpn.title",
+      "dashboard.tier.rn",
+      "flashcards.compare.generic",
+      "flashcards.socialProof.stat3Value",
+      "hero.trustIndicator.builtFor",
+      "hero.trustIndicator.certCandidates",
+      "hero.trustIndicator.newGradNurses",
+      "hero.trustIndicator.nursingStudents",
+      "home.competitive.archer",
+      "home.competitive.uworld",
+      "home.hero.builtFor",
+      "home.hero.lvnLpn",
+      "home.hero.trustQuestionsLabel",
+      "home.heroFeatures.areaCriticalCare",
+      "home.heroFeatures.areaPediatric",
+      "home.heroFeatures.areaPracticeQuestions",
+      "home.heroFeatures.areaPrioritization",
+      "home.heroFeatures.bloodTransfusion"
+    ],
+    "mixed": [
+      "home.region.usDesc",
+      "lessons.lesson.cognitive-screening-np",
+      "lessons.lesson.functional-assessment-rn",
+      "lessons.lesson.msk-special-tests-np",
+      "lessons.lesson.pain-assessment-rpn",
+      "mockExams.tierNpDesc",
+      "newGrad.certs.seoTitle",
+      "newGrad.hub.cat.certsDesc",
+      "newGrad.hub.eco2Desc",
+      "newGrad.hub.premiumFeat4Desc",
+      "newGrad.profDev.s2i6",
+      "pathways.rn.mod.labValues.desc",
+      "pricing.np.feature3"
+    ]
+  },
+  "pt": {
+    "name": "Portuguese",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 13753,
+    "mixedKeys": 87,
+    "coverage": 23.4,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1299,
+        "missing": 0,
+        "untranslated": 13198,
+        "coverage": 9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1609,
+        "missing": 0,
+        "untranslated": 103,
+        "coverage": 94,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 836,
+        "missing": 1,
+        "untranslated": 393,
+        "coverage": 68,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 261,
+        "missing": 0,
+        "untranslated": 37,
+        "coverage": 87.6,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "allied.alliedHealthProfession.theAlliedHealthProfessionYoure",
+      "allied.alliedSeoLanding.chooseThePlanThatFits",
+      "allied.careerLanding.startFreeUpgradeWhenYoure",
+      "allied.mltCountryPage.milestoneChecksEnsureYoureOn",
+      "allied.paramedicParamedicLanding.mostQuestionBanksGiveYou",
+      "allied.paramedicParamedicLanding.studyingRandomQuestionsWastesTime",
+      "allied.paramedicParamedicLanding.youKnowYouNeedTo",
+      "allied.paramedicParamedicNremt.ourEngineAdjustsQuestionDifficulty",
+      "allied.paramedicParamedicQuestionSeo.theParamedicQuestionTopicYoure",
+      "allied.paramedicScenariosHub.scenariosMatchingYourFiltersHavent",
+      "allied.pharmtechPracticeExamSeo.takeTimedPracticeExamsTo",
+      "components.examFollowupModal.focusedPreparationForYourComeback",
+      "components.footer.applynestHealthcareProgramApplicationsAnd",
+      "components.heartSoundsPlayer.tapALandmarkToLearn",
+      "components.lessonImageManager.describeTheClinicalImageYou",
+      "home.faq.a13",
+      "home.faq.a5",
+      "home.flashcardTrust.subtitle",
+      "lessons.lesson.abdominal-exam-np",
+      "lessons.lesson.cognitive-screening-np"
+    ]
+  },
+  "pa": {
+    "name": "Punjabi",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 14029,
+    "mixedKeys": 13,
+    "coverage": 21.8,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1148,
+        "missing": 0,
+        "untranslated": 13349,
+        "coverage": 7.9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1627,
+        "missing": 0,
+        "untranslated": 85,
+        "coverage": 95,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 683,
+        "missing": 1,
+        "untranslated": 546,
+        "coverage": 55.5,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 0,
+        "untranslated": 27,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "home.region.usDesc",
+      "lessons.lesson.functional-assessment-rn",
+      "mockExams.tierNpDesc",
+      "nav.npContent",
+      "newGrad.certs.seoTitle",
+      "newGrad.hub.cat.certsDesc",
+      "newGrad.hub.eco2Desc",
+      "newGrad.hub.premiumFeat4Desc",
+      "newGrad.profDev.s2i3",
+      "newGrad.profDev.s2i4",
+      "newGrad.workplace.s2i3",
+      "pricing.np.feature3",
+      "pricing.np.feature5"
+    ]
+  },
+  "vi": {
+    "name": "Vietnamese",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 13870,
+    "mixedKeys": 84,
+    "coverage": 22.7,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1298,
+        "missing": 0,
+        "untranslated": 13199,
+        "coverage": 9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1611,
+        "missing": 0,
+        "untranslated": 101,
+        "coverage": 94.1,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 708,
+        "missing": 1,
+        "untranslated": 521,
+        "coverage": 57.6,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 0,
+        "untranslated": 27,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "allied.alliedHealthProfession.theAlliedHealthProfessionYoure",
+      "allied.alliedSeoLanding.chooseThePlanThatFits",
+      "allied.careerLanding.startFreeUpgradeWhenYoure",
+      "allied.mltCountryPage.milestoneChecksEnsureYoureOn",
+      "allied.paramedicParamedicLanding.mostQuestionBanksGiveYou",
+      "allied.paramedicParamedicLanding.studyingRandomQuestionsWastesTime",
+      "allied.paramedicParamedicLanding.youKnowYouNeedTo",
+      "allied.paramedicParamedicNremt.ourEngineAdjustsQuestionDifficulty",
+      "allied.paramedicParamedicQuestionSeo.theParamedicQuestionTopicYoure",
+      "allied.paramedicScenariosHub.scenariosMatchingYourFiltersHavent",
+      "allied.pharmtechPracticeExamSeo.takeTimedPracticeExamsTo",
+      "components.examFollowupModal.focusedPreparationForYourComeback",
+      "components.footer.applynestHealthcareProgramApplicationsAnd",
+      "components.heartSoundsPlayer.tapALandmarkToLearn",
+      "components.lessonImageManager.describeTheClinicalImageYou",
+      "home.faq.a13",
+      "home.faq.a5",
+      "home.flashcardTrust.subtitle",
+      "lessons.lesson.abdominal-exam-np",
+      "lessons.lesson.cognitive-screening-np"
+    ]
+  },
+  "ht": {
+    "name": "Haitian Creole",
+    "totalKeys": 4238,
+    "missingKeys": 14094,
+    "untranslatedKeys": 4,
+    "mixedKeys": 3,
+    "coverage": 21.5,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 722,
+        "missing": 13775,
+        "untranslated": 0,
+        "coverage": 5,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1634,
+        "missing": 77,
+        "untranslated": 1,
+        "coverage": 95.4,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1030,
+        "missing": 197,
+        "untranslated": 3,
+        "coverage": 83.7,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 275,
+        "missing": 23,
+        "untranslated": 0,
+        "coverage": 92.3,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "untranslated": [
+      "home.hero.builtFor",
+      "home.heroFeatures.learningAreasSubtitle",
+      "home.heroFeatures.multilingualCallout",
+      "lessons.lesson.spina-bifida"
+    ],
+    "mixed": [
+      "mockExams.tierNpDesc",
+      "newGrad.certs.seoTitle",
+      "newGrad.hub.eco2Desc"
+    ]
+  },
+  "ur": {
+    "name": "Urdu",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 14033,
+    "mixedKeys": 7,
+    "coverage": 21.8,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1146,
+        "missing": 0,
+        "untranslated": 13351,
+        "coverage": 7.9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1626,
+        "missing": 0,
+        "untranslated": 86,
+        "coverage": 95,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 682,
+        "missing": 1,
+        "untranslated": 547,
+        "coverage": 55.4,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 0,
+        "untranslated": 27,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "lessons.lesson.iv-fluid-types-rpn",
+      "mockExams.tierNpDesc",
+      "nav.npContent",
+      "newGrad.profDev.s2i3",
+      "newGrad.profDev.s2i4",
+      "pricing.np.feature3",
+      "pricing.np.feature5"
+    ]
+  },
+  "ja": {
+    "name": "Japanese",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 14033,
+    "mixedKeys": 2,
+    "coverage": 21.8,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 1146,
+        "missing": 0,
+        "untranslated": 13351,
+        "coverage": 7.9,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1627,
+        "missing": 0,
+        "untranslated": 85,
+        "coverage": 95,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 681,
+        "missing": 1,
+        "untranslated": 548,
+        "coverage": 55.4,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 0,
+        "untranslated": 27,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "lessons.lesson.pain-assessment-rpn",
+      "mockExams.tierNpDesc"
+    ]
+  },
+  "fa": {
+    "name": "Farsi",
+    "totalKeys": 4238,
+    "missingKeys": 14094,
+    "untranslatedKeys": 41,
+    "mixedKeys": 0,
+    "coverage": 21.3,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 719,
+        "missing": 13775,
+        "untranslated": 3,
+        "coverage": 5,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1629,
+        "missing": 77,
+        "untranslated": 6,
+        "coverage": 95.2,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1005,
+        "missing": 197,
+        "untranslated": 28,
+        "coverage": 81.7,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 271,
+        "missing": 23,
+        "untranslated": 4,
+        "coverage": 90.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "untranslated": [
+      "anatomy.examContext.np.title",
+      "anatomy.examContext.rn.title",
+      "anatomy.examContext.rpn.title",
+      "dashboard.tier.rn",
+      "flashcards.compare.generic",
+      "flashcards.socialProof.stat3Value",
+      "hero.trustIndicator.builtFor",
+      "hero.trustIndicator.certCandidates",
+      "hero.trustIndicator.newGradNurses",
+      "hero.trustIndicator.nursingStudents",
+      "home.competitive.archer",
+      "home.competitive.uworld",
+      "home.hero.builtFor",
+      "home.hero.lvnLpn",
+      "home.hero.trustQuestionsLabel",
+      "home.heroFeatures.areaCriticalCare",
+      "home.heroFeatures.areaPediatric",
+      "home.heroFeatures.areaPracticeQuestions",
+      "home.heroFeatures.areaPrioritization",
+      "home.heroFeatures.bloodTransfusion"
+    ],
+    "mixed": []
+  },
+  "de": {
+    "name": "German",
+    "totalKeys": 17951,
+    "missingKeys": 1,
+    "untranslatedKeys": 14410,
+    "mixedKeys": 95,
+    "coverage": 19.7,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 788,
+        "missing": 0,
+        "untranslated": 13709,
+        "coverage": 5.4,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 150,
+        "missing": 0,
+        "untranslated": 1,
+        "coverage": 99.3,
+        "threshold": 100,
+        "passed": false
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1590,
+        "missing": 0,
+        "untranslated": 122,
+        "coverage": 92.9,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 0,
+        "untranslated": 22,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 706,
+        "missing": 1,
+        "untranslated": 523,
+        "coverage": 57.4,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 265,
+        "missing": 0,
+        "untranslated": 33,
+        "coverage": 88.9,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
+    "untranslated": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "mixed": [
+      "allied.alliedHealthProfession.theAlliedHealthProfessionYoure",
+      "allied.alliedSeoLanding.chooseThePlanThatFits",
+      "allied.careerLanding.startFreeUpgradeWhenYoure",
+      "allied.mltCountryPage.milestoneChecksEnsureYoureOn",
+      "allied.paramedicParamedicLanding.mostQuestionBanksGiveYou",
+      "allied.paramedicParamedicLanding.studyingRandomQuestionsWastesTime",
+      "allied.paramedicParamedicLanding.youKnowYouNeedTo",
+      "allied.paramedicParamedicNremt.ourEngineAdjustsQuestionDifficulty",
+      "allied.paramedicParamedicQuestionSeo.theParamedicQuestionTopicYoure",
+      "allied.paramedicScenariosHub.scenariosMatchingYourFiltersHavent",
+      "allied.pharmtechPracticeExamSeo.takeTimedPracticeExamsTo",
+      "components.examFollowupModal.focusedPreparationForYourComeback",
+      "components.footer.applynestHealthcareProgramApplicationsAnd",
+      "components.heartSoundsPlayer.tapALandmarkToLearn",
+      "components.lessonImageManager.describeTheClinicalImageYou",
+      "home.faq.a13",
+      "home.faq.a5",
+      "home.flashcardTrust.subtitle",
+      "lessons.lesson.abdominal-exam-np",
+      "lessons.lesson.cognitive-screening-np"
+    ]
+  },
+  "th": {
+    "name": "Thai",
+    "totalKeys": 3791,
+    "missingKeys": 14633,
+    "untranslatedKeys": 54,
+    "mixedKeys": 25,
+    "coverage": 18.2,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 177,
+        "missing": 14316,
+        "untranslated": 4,
+        "coverage": 1.2,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1617,
+        "missing": 77,
+        "untranslated": 18,
+        "coverage": 94.5,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1008,
+        "missing": 195,
+        "untranslated": 27,
+        "coverage": 82,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 270,
+        "missing": 23,
+        "untranslated": 5,
+        "coverage": 90.6,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "untranslated": [
+      "anatomy.examContext.np.title",
+      "anatomy.examContext.rn.title",
+      "anatomy.examContext.rpn.title",
+      "dashboard.tier.rn",
+      "flashcards.compare.generic",
+      "flashcards.socialProof.stat3Value",
+      "hero.trustIndicator.builtFor",
+      "hero.trustIndicator.certCandidates",
+      "hero.trustIndicator.newGradNurses",
+      "hero.trustIndicator.nursingStudents",
+      "home.competitive.archer",
+      "home.competitive.uworld",
+      "home.hero.lvnLpn",
+      "home.heroFeatures.areaCriticalCare",
+      "home.heroFeatures.areaPediatric",
+      "home.heroFeatures.areaPracticeQuestions",
+      "home.heroFeatures.areaPrioritization",
+      "home.heroFeatures.bloodTransfusion",
+      "home.heroFeatures.clinicalScenarios",
+      "home.heroFeatures.explore"
+    ],
+    "mixed": [
+      "alliedFaq.exams1.a",
+      "faq.exam3.q",
+      "home.faq.a12",
+      "home.faq.a5",
+      "home.region.usDesc",
+      "lessons.lesson.abdominal-exam-np",
+      "lessons.lesson.calcium-channel-blocker-overdose-np",
+      "lessons.lesson.cognitive-screening-np",
+      "lessons.lesson.drug-eruptions-np",
+      "lessons.lesson.frailty-assessment-np",
+      "lessons.lesson.functional-assessment-rn",
+      "lessons.lesson.gcs-advanced-rn",
+      "lessons.lesson.hearing-screening-rpn",
+      "lessons.lesson.long-qt-syndrome-np",
+      "lessons.lesson.mast-cell-activation-np",
+      "lessons.lesson.msk-special-tests-np",
+      "lessons.lesson.pain-assessment-rpn",
+      "lessons.lesson.spine-exam-np",
+      "pathways.rn.mod.labValues.desc",
+      "prenursing.pharm-agonist"
+    ]
+  },
+  "tr": {
+    "name": "Turkish",
+    "totalKeys": 3317,
+    "missingKeys": 14635,
+    "untranslatedKeys": 61,
+    "mixedKeys": 21,
+    "coverage": 18.1,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 176,
+        "missing": 14316,
+        "untranslated": 5,
+        "coverage": 1.2,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1611,
+        "missing": 77,
+        "untranslated": 24,
+        "coverage": 94.1,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1004,
+        "missing": 197,
+        "untranslated": 29,
+        "coverage": 81.6,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 272,
+        "missing": 23,
+        "untranslated": 3,
+        "coverage": 91.3,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "untranslated": [
+      "anatomy.examContext.np.title",
+      "anatomy.examContext.rn.title",
+      "dashboard.tier.rn",
+      "examHub.format",
+      "flashcards.compare.generic",
+      "hero.trustIndicator.builtFor",
+      "hero.trustIndicator.certCandidates",
+      "hero.trustIndicator.newGradNurses",
+      "hero.trustIndicator.nursingStudents",
+      "home.competitive.archer",
+      "home.competitive.uworld",
+      "home.hero.builtFor",
+      "home.hero.lvnLpn",
+      "home.hero.trustQuestionsLabel",
+      "home.heroFeatures.areaCriticalCare",
+      "home.heroFeatures.areaPediatric",
+      "home.heroFeatures.areaPracticeQuestions",
+      "home.heroFeatures.areaPrioritization",
+      "home.heroFeatures.bloodTransfusion",
+      "home.heroFeatures.clinicalScenarios"
+    ],
+    "mixed": [
+      "home.mostTested.ecgDesc",
+      "home.region.usDesc",
+      "lessons.lesson.abdominal-exam-np",
+      "lessons.lesson.cognitive-screening-np",
+      "lessons.lesson.fetal-surveillance-np",
+      "lessons.lesson.functional-assessment-rn",
+      "lessons.lesson.hus-np",
+      "lessons.lesson.lipid-management-np",
+      "lessons.lesson.msk-special-tests-np",
+      "lessons.lesson.myasthenia-gravis-crisis-np",
+      "lessons.lesson.pain-assessment-rpn",
+      "lessons.lesson.pres-np",
+      "lessons.lesson.sepsis-screening-rn",
+      "lessons.lesson.spine-exam-np",
+      "lessons.lesson.ttp-np",
+      "mockExams.tierNpDesc",
+      "nav.npContent",
+      "pathways.rn.mod.advPathoEndocrine.desc",
+      "pathways.rn.mod.labValues.desc",
+      "pricing.np.feature3"
+    ]
+  },
+  "id": {
+    "name": "Indonesian",
+    "totalKeys": 3317,
+    "missingKeys": 14635,
+    "untranslatedKeys": 2,
+    "mixedKeys": 1,
+    "coverage": 18.5,
+    "byContentType": {
+      "optional": {
+        "total": 14497,
+        "translated": 181,
+        "missing": 14316,
+        "untranslated": 0,
+        "coverage": 1.2,
+        "threshold": 90,
+        "passed": false
+      },
+      "rationales": {
+        "total": 151,
+        "translated": 151,
+        "missing": 0,
+        "untranslated": 0,
+        "coverage": 100,
+        "threshold": 100,
+        "passed": true
+      },
+      "lessons": {
+        "total": 1712,
+        "translated": 1635,
+        "missing": 77,
+        "untranslated": 0,
+        "coverage": 95.5,
+        "threshold": 100,
+        "passed": false
+      },
+      "blogs": {
+        "total": 64,
+        "translated": 42,
+        "missing": 22,
+        "untranslated": 0,
+        "coverage": 65.6,
+        "threshold": 95,
+        "passed": false
+      },
+      "ui": {
+        "total": 1230,
+        "translated": 1031,
+        "missing": 197,
+        "untranslated": 2,
+        "coverage": 83.8,
+        "threshold": 100,
+        "passed": false
+      },
+      "questions": {
+        "total": 298,
+        "translated": 275,
+        "missing": 23,
+        "untranslated": 0,
+        "coverage": 92.3,
+        "threshold": 100,
+        "passed": false
+      }
+    },
+    "missing": [
+      "allied.alliedAdmin.5layerProductionSystem",
+      "allied.alliedAdmin.accepted",
+      "allied.alliedAdmin.accepted2",
+      "allied.alliedAdmin.active",
+      "allied.alliedAdmin.active2",
+      "allied.alliedAdmin.adminAccessRequired",
+      "allied.alliedAdmin.adminAccessRequiredToSeed",
+      "allied.alliedAdmin.allTypes",
+      "allied.alliedAdmin.alliedContentPipeline",
+      "allied.alliedAdmin.allowedQuestionTypes",
+      "allied.alliedAdmin.approve",
+      "allied.alliedAdmin.autoflashcards",
+      "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
+      "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
+      "allied.alliedAdmin.avgRationaleWords",
+      "allied.alliedAdmin.avgWords",
+      "allied.alliedAdmin.batchSize25100",
+      "allied.alliedAdmin.batchesOf50",
+      "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
+      "allied.alliedAdmin.bundles"
+    ],
+    "untranslated": [
+      "home.heroFeatures.learningAreasSubtitle",
+      "home.heroFeatures.multilingualCallout"
+    ],
+    "mixed": [
+      "mockExams.tierNpDesc"
+    ]
+  }
+}

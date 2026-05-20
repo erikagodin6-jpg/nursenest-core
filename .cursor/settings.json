@@ -1,0 +1,31 @@
+{
+  "plugins": {
+    "superpowers": {
+      "enabled": true
+    },
+    "compound-engineering": {
+      "enabled": true
+    },
+    "cloudflare": {
+      "enabled": true
+    },
+    "vercel": {
+      "enabled": true
+    },
+    "posthog": {
+      "enabled": true
+    },
+    "sentry": {
+      "enabled": true
+    },
+    "firecrawl": {
+      "enabled": true
+    },
+    "figma": {
+      "enabled": true
+    },
+    "prisma": {
+      "enabled": true
+    }
+  }
+}

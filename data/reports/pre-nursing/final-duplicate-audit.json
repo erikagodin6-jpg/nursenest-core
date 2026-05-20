@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-03-31T16:22:52.383Z",
+  "apply": true,
+  "duplicateSlugWithinPathwayCount": 0,
+  "conceptOverlapPairsCount": 1,
+  "safeDemotionCandidates": 0,
+  "demotedToDraft": 0,
+  "overlaps": [
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "keepId": "pre-nursing-chemistry::buffers-physiology::en",
+      "keepSlug": "buffers-physiology",
+      "keepTitle": "Buffer Systems in Physiology",
+      "dropId": "pre-nursing-chemistry::chemistry-data-pre-nursing-chemistry-buffersystems-2::en",
+      "dropSlug": "chemistry-data-pre-nursing-chemistry-buffersystems-2",
+      "dropTitle": "Buffer Systems",
+      "score": 0.667,
+      "reason": "High title similarity but generated row is richer; keep generated"
+    }
+  ]
+}

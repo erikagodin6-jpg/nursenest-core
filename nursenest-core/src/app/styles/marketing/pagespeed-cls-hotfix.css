@@ -1,0 +1,134 @@
+/* ========================================================================== 
+   pagespeed-cls-hotfix.css — PSI 2026-05-17 CLS/TBT emergency guard
+
+   PageSpeed showed excellent FCP/LCP but catastrophic CLS. The marketing
+   header is the highest-risk above-fold surface because it changes across
+   theme, auth, utility, and desktop/mobile chrome during hydration.
+
+   This file is intentionally imported after header-nav/header-single-line so
+   the final cascade reserves stable geometry before React/session/theme
+   hydration completes. Keep this file small and structural only.
+   ========================================================================== */
+
+:root {
+  --nn-marketing-header-desktop-reserved-height: 7.85rem;
+  --nn-marketing-header-desktop-main-row-height: 4.25rem;
+  --nn-marketing-header-desktop-tier-row-height: 2.35rem;
+  --nn-marketing-header-utility-row-height: 1.875rem;
+  --nn-marketing-header-mobile-reserved-height: 3.75rem;
+}
+
+@media (min-width: 1024px) {
+  [data-nn-cls-region="site-header"] {
+    min-height: var(--nn-marketing-header-desktop-reserved-height);
+    contain: layout paint style;
+  }
+
+  [data-nn-header-layout="marketing-row4"],
+  [data-nn-header-layout="marketing-unified-dark"] {
+    min-height: var(--nn-marketing-header-desktop-reserved-height);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-frame,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-frame {
+    min-height: var(--nn-marketing-header-desktop-reserved-height);
+    overflow: visible;
+  }
+
+  [data-nn-header-layout="marketing-row4"] [data-nn-header-row="utility"] {
+    min-height: var(--nn-marketing-header-utility-row-height);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    min-height: var(--nn-marketing-header-desktop-main-row-height);
+    max-height: var(--nn-marketing-header-desktop-main-row-height);
+    overflow: hidden;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    max-height: 2.75rem;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-auth-cluster {
+    min-width: 13.75rem;
+    max-width: 22rem;
+    min-height: 2.75rem;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail {
+    min-height: var(--nn-marketing-header-desktop-tier-row-height);
+    max-height: var(--nn-marketing-header-desktop-tier-row-height);
+    overflow: hidden;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner {
+    min-height: var(--nn-marketing-header-desktop-tier-row-height);
+    max-height: var(--nn-marketing-header-desktop-tier-row-height);
+    overflow: hidden;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner > nav,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner > nav {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip,
+  [data-nn-header-layout="marketing-row4"] [data-nn-pathway-link],
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-tier-chip {
+    min-width: 0;
+    max-width: 8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  [data-nn-cls-region="site-header"] {
+    min-height: var(--nn-marketing-header-mobile-reserved-height);
+    contain: layout paint style;
+  }
+
+  [data-nn-header-layout="marketing-row4"],
+  [data-nn-header-layout="marketing-unified-dark"] {
+    min-height: var(--nn-marketing-header-mobile-reserved-height);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar {
+    min-height: var(--nn-marketing-header-mobile-reserved-height);
+  }
+}
+
+/* PSI/TBT guard: remove above-fold entrance motion and broad transition work on
+   the sticky header. Header motion is visually minor but expensive because the
+   element is fixed/sticky and contains many descendants. */
+[data-nn-cls-region="site-header"] .nn-header-animate-in,
+[data-nn-cls-region="site-header"] .nn-header-logo-link,
+[data-nn-cls-region="site-header"] .nn-marketing-nav-link,
+[data-nn-cls-region="site-header"] .nav-item,
+[data-nn-cls-region="site-header"] button,
+[data-nn-cls-region="site-header"] a {
+  animation: none !important;
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nn-cls-region="site-header"] *,
+  [data-nn-cls-region="site-header"] *::before,
+  [data-nn-cls-region="site-header"] *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

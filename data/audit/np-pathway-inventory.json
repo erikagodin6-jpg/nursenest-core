@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-04-15T03:15:12.233Z",
+  "note": "bundledCatalogLessonCount comes from pathway-lessons/catalog.json; auditLessonRows from lesson-completeness-audit.",
+  "pathways": [
+    {
+      "pathwayId": "ca-np-cnple",
+      "country": "canada",
+      "examCode": "cnple",
+      "examFamily": "NP",
+      "displayName": "Canadian NP licensure (CNPLE track)",
+      "stripeTier": "NP",
+      "status": "upcoming",
+      "acquisitionMode": "waitlist",
+      "activeInProduction": false,
+      "bundledCatalogLessonCount": 0,
+      "auditLessonRows": 0,
+      "hasBundledContent": false
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "country": "us",
+      "examCode": "fnp",
+      "examFamily": "NP",
+      "displayName": "FNP certification prep",
+      "stripeTier": "NP",
+      "status": "active",
+      "acquisitionMode": "subscribe",
+      "activeInProduction": true,
+      "bundledCatalogLessonCount": 91,
+      "auditLessonRows": 161,
+      "hasBundledContent": true
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "country": "us",
+      "examCode": "agpcnp",
+      "examFamily": "NP",
+      "displayName": "AGPCNP certification prep",
+      "stripeTier": "NP",
+      "status": "active",
+      "acquisitionMode": "subscribe",
+      "activeInProduction": true,
+      "bundledCatalogLessonCount": 0,
+      "auditLessonRows": 0,
+      "hasBundledContent": false
+    },
+    {
+      "pathwayId": "us-np-pmhnp",
+      "country": "us",
+      "examCode": "pmhnp",
+      "examFamily": "NP",
+      "displayName": "PMHNP certification prep",
+      "stripeTier": "NP",
+      "status": "active",
+      "acquisitionMode": "subscribe",
+      "activeInProduction": true,
+      "bundledCatalogLessonCount": 0,
+      "auditLessonRows": 0,
+      "hasBundledContent": false
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "country": "us",
+      "examCode": "whnp",
+      "examFamily": "NP",
+      "displayName": "WHNP certification prep",
+      "stripeTier": "NP",
+      "status": "active",
+      "acquisitionMode": "subscribe",
+      "activeInProduction": true,
+      "bundledCatalogLessonCount": 0,
+      "auditLessonRows": 0,
+      "hasBundledContent": false
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "country": "us",
+      "examCode": "pnp-pc",
+      "examFamily": "NP",
+      "displayName": "PNP-PC certification prep",
+      "stripeTier": "NP",
+      "status": "active",
+      "acquisitionMode": "subscribe",
+      "activeInProduction": true,
+      "bundledCatalogLessonCount": 0,
+      "auditLessonRows": 0,
+      "hasBundledContent": false
+    }
+  ]
+}

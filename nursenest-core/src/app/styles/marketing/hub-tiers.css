@@ -1,0 +1,1193 @@
+/* ==========================================================================
+   hub-tiers.css — NurseNest Premium Marketing Design System
+   
+   Ownership: NP/RN/PN marketing hubs, pricing/paywall, tools and FAQ vertical slices
+   
+   Source: extracted from src/app/premium-redesign-2026.css (lines 3503–4641)
+   Import order: preserved — do not reorder imports in styles/marketing/index.css
+   Cascade: rules depend on cascade order across all section files; changes
+            to this file may affect other sections if shared selectors are involved.
+   
+   DO NOT add new rules here that belong to a different section file.
+   ========================================================================== */
+
+/* =====================================================================
+   Pricing / paywall vertical slice — homepage premium system alignment.
+
+   Scope: marketing pricing pages and shared learner paywall cards only.
+   Uses semantic/theme tokens and existing CTA classes; no checkout, auth,
+   Stripe, entitlement, route, SEO, or analytics behavior changes.
+   ===================================================================== */
+
+.nn-pricing-premium-root {
+  --nn-pricing-tone-brand: var(--semantic-brand, var(--theme-primary));
+  --nn-pricing-tone-info: var(--semantic-info);
+  --nn-pricing-tone-success: var(--semantic-success);
+  --nn-pricing-tone-warning: var(--semantic-warning);
+  --nn-pricing-tone-accent: var(--semantic-chart-5, var(--theme-accent));
+  --nn-pricing-card-bg-color: var(--semantic-surface, var(--theme-card-bg));
+  --nn-pricing-card-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--nn-pricing-card-bg-color) 96%, transparent),
+    color-mix(in srgb, var(--nn-pricing-card-bg-color) 84%, transparent)
+  );
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-pricing-premium-root::before {
+  content: "";
+  position: absolute;
+  inset: -2rem max(-4vw, -2rem) auto;
+  height: 42rem;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(720px 380px at 4% 0%, color-mix(in srgb, var(--nn-pricing-tone-brand) 10%, transparent), transparent 64%),
+    radial-gradient(680px 360px at 100% 6%, color-mix(in srgb, var(--nn-pricing-tone-accent) 9%, transparent), transparent 62%),
+    radial-gradient(620px 320px at 50% 92%, color-mix(in srgb, var(--nn-pricing-tone-success) 7%, transparent), transparent 62%);
+}
+
+.nn-pricing-hero-premium {
+  box-shadow:
+    0 24px 60px -38px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 34%, transparent),
+    0 1px 0 color-mix(in srgb, var(--nn-pricing-tone-brand) 16%, transparent) inset;
+}
+
+.nn-pricing-hero-premium::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 8%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 0%, rgba(0, 0, 0, 0.48), transparent 68%);
+  -webkit-mask-image: radial-gradient(circle at 50% 0%, rgba(0, 0, 0, 0.48), transparent 68%);
+}
+
+.nn-pricing-pill-control {
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--nn-pricing-tone-brand));
+  background: color-mix(in srgb, var(--surface, var(--semantic-surface)) 92%, transparent);
+  color: var(--semantic-text-primary);
+  box-shadow: 0 10px 24px -20px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 30%, transparent);
+}
+
+.nn-pricing-pill-control:hover,
+.nn-pricing-pill-control:focus-visible {
+  background: color-mix(in srgb, var(--nn-pricing-tone-brand) 8%, var(--surface, var(--semantic-surface)));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--nn-pricing-tone-brand) 18%, transparent),
+    0 14px 30px -22px color-mix(in srgb, var(--nn-pricing-tone-brand) 48%, transparent);
+}
+
+.nn-pricing-pill-control[data-active="true"] {
+  border-color: color-mix(in srgb, var(--nn-pricing-tone-brand) 44%, var(--semantic-border-soft));
+  background: linear-gradient(120deg, var(--role-cta), color-mix(in srgb, var(--role-cta) 68%, var(--theme-accent, var(--semantic-info))));
+  color: var(--role-cta-foreground);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 30%, transparent) inset,
+    0 14px 30px -20px var(--role-cta-shadow);
+}
+
+.nn-pricing-plan-card {
+  background: var(--nn-pricing-card-bg);
+  background-color: var(--nn-pricing-card-bg-color);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-pricing-tone-brand));
+  box-shadow:
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 34%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 30%, transparent) inset;
+}
+
+.nn-pricing-plan-card[data-highlight="popular"] {
+  background:
+    radial-gradient(420px 180px at 50% -10%, color-mix(in srgb, var(--nn-pricing-tone-info) 16%, transparent), transparent 70%),
+    var(--nn-pricing-card-bg);
+  border-color: color-mix(in srgb, var(--nn-pricing-tone-info) 68%, var(--semantic-border-soft));
+  box-shadow:
+    0 24px 60px -34px color-mix(in srgb, var(--nn-pricing-tone-info) 38%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 34%, transparent) inset;
+}
+
+.nn-pricing-plan-card[data-highlight="value"] {
+  background:
+    radial-gradient(420px 180px at 50% -10%, color-mix(in srgb, var(--nn-pricing-tone-success) 14%, transparent), transparent 70%),
+    var(--nn-pricing-card-bg);
+  border-color: color-mix(in srgb, var(--nn-pricing-tone-success) 52%, var(--semantic-border-soft));
+}
+
+.nn-pricing-badge {
+  max-width: calc(100% - 1.5rem);
+  white-space: normal;
+  text-align: center;
+  color: var(--text-inverse, var(--role-cta-foreground));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 34%, transparent) inset,
+    0 8px 18px -12px currentColor;
+}
+
+.nn-pricing-trial-card,
+.nn-pricing-consent-modal,
+.nn-pricing-faq-card,
+.nn-paywall-premium {
+  background: var(--nn-pricing-card-bg);
+  background-color: var(--nn-pricing-card-bg-color);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-pricing-tone-brand));
+  box-shadow:
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 32%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 28%, transparent) inset;
+}
+
+.nn-pricing-faq-card {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.nn-pricing-faq-card:hover,
+.nn-pricing-faq-card:focus-within,
+.nn-pricing-faq-card[open] {
+  border-color: color-mix(in srgb, var(--nn-pricing-tone-brand) 34%, var(--semantic-border-soft));
+  box-shadow:
+    0 20px 48px -34px color-mix(in srgb, var(--nn-pricing-tone-brand) 36%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 30%, transparent) inset;
+}
+
+.nn-paywall-premium {
+  --nn-pricing-tone-brand: var(--semantic-brand, var(--theme-primary));
+  --nn-pricing-tone-info: var(--semantic-info);
+  --nn-pricing-tone-success: var(--semantic-success);
+  --nn-pricing-card-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface, var(--semantic-surface)) 96%, transparent),
+    color-mix(in srgb, var(--surface, var(--semantic-surface)) 84%, transparent)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-paywall-premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(520px 220px at 0% 0%, color-mix(in srgb, var(--nn-pricing-tone-success) 10%, transparent), transparent 62%),
+    radial-gradient(480px 220px at 100% 0%, color-mix(in srgb, var(--nn-pricing-tone-info) 9%, transparent), transparent 60%);
+}
+
+.nn-paywall-premium > * {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-pricing-pill-control,
+  .nn-pricing-faq-card {
+    transition: none;
+  }
+}
+
+/* Blog topic badges — brand / muted variants (semantic tokens; complements nn-badge-semantic-*). */
+.nn-blog-topic-badge-brand {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--semantic-text-primary));
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 26%, var(--semantic-border-soft));
+}
+
+.nn-blog-topic-badge-muted {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+  background: color-mix(in srgb, var(--semantic-text-muted) 9%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+  border: 1px solid color-mix(in srgb, var(--semantic-text-muted) 20%, var(--semantic-border-soft));
+}
+
+.nn-premium-blog-post-card,
+.nn-premium-blog-related-card {
+  background-color: var(--semantic-surface, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand));
+}
+/* =====================================================================
+   NP pathway vertical slice — homepage design-system parity + graduate polish.
+   Scope: marketing NP hubs + NP lesson hubs (`.nn-np-hub-root`). Tokens only.
+   ===================================================================== */
+
+/* NP tier overview hub — hero reads “advanced practice” without flattening to grey.
+   Premium convergence hubs use `.nn-np-pathway-hero-premium` + `--np-convergence` instead (below). */
+[data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence) .nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-brand) 16%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 28%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-brand) 14%, transparent) inset;
+  background:
+    radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-brand) 12%, transparent), transparent 58%),
+    radial-gradient(460px 220px at 96% 6%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 56%),
+    radial-gradient(420px 200px at 52% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 60%),
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--semantic-info) 8%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 5%, var(--theme-page-bg)) 48%,
+      transparent 100%
+    );
+}
+
+[data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence) .nn-nursing-tier-hub-hero-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 6%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at 18% 0%, rgba(0, 0, 0, 0.35), transparent 62%);
+  -webkit-mask-image: radial-gradient(circle at 18% 0%, rgba(0, 0, 0, 0.35), transparent 62%);
+  z-index: 0;
+}
+
+[data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence) .nn-nursing-tier-hub-hero-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------
+   RN NCLEX / registered-nurse marketing hubs — premium clinical entry
+   (mirrors NP depth; distinct cool + success radials; excludes New Grad + PN shells).
+   --------------------------------------------------------------------- */
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  ) {
+  --nn-rn-hub-panel: color-mix(in srgb, var(--semantic-surface) 88%, var(--theme-page-bg));
+  --nn-rn-hub-card: color-mix(in srgb, var(--semantic-surface) 92%, var(--theme-card-bg));
+  --nn-rn-hub-border: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-surface));
+  --nn-rn-hub-soft-shadow: 0 20px 48px -34px color-mix(in srgb, var(--palette-heading) 20%, transparent);
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-info) 9%, var(--nn-rn-hub-border));
+  box-shadow:
+    var(--nn-rn-hub-soft-shadow),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 86%, transparent) inset;
+  background:
+    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-success) 5%, transparent), transparent 58%),
+    radial-gradient(480px 220px at 96% 8%, color-mix(in srgb, var(--semantic-chart-2) 5%, transparent), transparent 58%),
+    radial-gradient(400px 200px at 48% 100%, color-mix(in srgb, var(--semantic-info) 4%, transparent), transparent 60%),
+    linear-gradient(
+      128deg,
+      color-mix(in srgb, var(--semantic-info) 2%, var(--nn-rn-hub-panel)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 86%, var(--theme-page-bg)) 48%,
+      color-mix(in srgb, var(--semantic-surface) 72%, var(--theme-page-bg)) 100%
+    );
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 2.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 2.5%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 12% 0%, rgba(0, 0, 0, 0.32), transparent 64%);
+  -webkit-mask-image: radial-gradient(circle at 12% 0%, rgba(0, 0, 0, 0.32), transparent 64%);
+  z-index: 0;
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band
+  > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="midnight"]
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  ) {
+  --nn-rn-hub-panel: color-mix(in srgb, var(--semantic-surface) 72%, var(--theme-page-bg));
+  --nn-rn-hub-card: color-mix(in srgb, var(--semantic-surface) 80%, var(--theme-card-bg));
+  --nn-rn-hub-border: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+}
+
+[data-theme="midnight"]
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band,
+[data-theme="apex"]
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-info) 20%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-success) 12%, transparent), transparent 58%),
+    radial-gradient(460px 220px at 98% 6%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 56%),
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--semantic-info) 8%, var(--nn-rn-hub-panel)) 0%,
+      color-mix(in srgb, var(--semantic-chart-4) 4%, var(--theme-page-bg)) 52%,
+      var(--theme-page-bg) 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 14%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 24%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 12%, transparent) inset;
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )[data-nn-nursing-tier-hub="surface"]
+  .nn-exam-hub-study-card {
+  border-color: color-mix(in srgb, var(--semantic-info) 7%, var(--nn-rn-hub-border));
+  background:
+    linear-gradient(150deg, color-mix(in srgb, var(--semantic-info) 2%, var(--nn-rn-hub-card)) 0%, transparent 56%),
+    var(--nn-rn-hub-card);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 78%, transparent),
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )[data-nn-nursing-tier-hub="surface"]
+  .nn-exam-hub-study-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-rn-hub-border));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 82%, transparent),
+    0 20px 52px -32px color-mix(in srgb, var(--palette-heading) 20%, transparent);
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )[data-nn-nursing-tier-hub="surface"]
+  .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--semantic-surface) 82%, var(--theme-card-bg));
+}
+
+/* ---------------------------------------------------------------------
+   PN / RPN practical nursing hub hero — warm prioritization + bedside-forward glow
+   (distinct from RN cool/info ribbon; same hero DOM as other tier hubs).
+   --------------------------------------------------------------------- */
+.nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 18%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 24%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-success) 13%, transparent) inset;
+  background:
+    radial-gradient(520px 240px at 8% 0%, color-mix(in srgb, var(--semantic-panel-warm) 52%, transparent), transparent 58%),
+    radial-gradient(460px 220px at 94% 10%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 56%),
+    radial-gradient(400px 200px at 48% 100%, color-mix(in srgb, var(--semantic-warning) 9%, transparent), transparent 58%),
+    linear-gradient(
+      132deg,
+      color-mix(in srgb, var(--semantic-panel-positive) 11%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-5) 6%, var(--theme-page-bg)) 46%,
+      transparent 100%
+    );
+}
+
+.nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image: radial-gradient(
+    circle at 72% 16%,
+    color-mix(in srgb, var(--semantic-brand) 9%, transparent),
+    transparent 54%
+  );
+  opacity: 0.9;
+  z-index: 0;
+}
+
+.nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="midnight"] .nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band,
+[data-theme="apex"] .nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 16%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-success) 12%, transparent), transparent 56%),
+    radial-gradient(460px 210px at 96% 8%, color-mix(in srgb, var(--semantic-chart-3) 11%, transparent), transparent 54%),
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-5) 7%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-pathway-hub--pn-rpn
+  .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 15%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -34px color-mix(in srgb, var(--palette-heading) 22%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 13%, transparent) inset;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-pathway-hub--pn-rpn .nn-hub-tier-study-band > div[class*="grid"] {
+    gap: clamp(1.25rem, 4vw, 1.75rem);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   NP premium convergence — practitioner workstation hero
+   (chart-4 + diagnostics emphasis; denser mesh than RN; token-only Midnight/Blossom).
+   --------------------------------------------------------------------- */
+.nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--border-subtle));
+  box-shadow:
+    0 16px 40px -28px color-mix(in srgb, var(--palette-heading) 16%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-brand) 8%, transparent) inset;
+  background:
+    radial-gradient(480px 180px at 6% 0%, color-mix(in srgb, var(--semantic-brand) 6%, transparent), transparent 58%),
+    var(--theme-page-bg);
+}
+
+.nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 7%, transparent) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at 14% 0%, rgba(0, 0, 0, 0.38), transparent 62%);
+  -webkit-mask-image: radial-gradient(circle at 14% 0%, rgba(0, 0, 0, 0.38), transparent 62%);
+  z-index: 0;
+}
+
+.nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="midnight"] .nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band,
+[data-theme="apex"] .nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 18%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-chart-4) 13%, transparent), transparent 56%),
+    radial-gradient(460px 210px at 96% 8%, color-mix(in srgb, var(--semantic-info) 12%, transparent), transparent 54%),
+    linear-gradient(
+      124deg,
+      color-mix(in srgb, var(--semantic-brand) 10%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-2) 6%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-pathway-hub--np-convergence
+  .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 18%, var(--border-subtle));
+  box-shadow:
+    0 22px 48px -32px color-mix(in srgb, var(--palette-heading) 24%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-4) 12%, transparent) inset;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-pathway-hub--np-convergence .nn-hub-tier-study-band {
+    gap: clamp(1.35rem, 4.5vw, 2rem);
+  }
+}
+
+[data-theme="midnight"]
+  [data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence)
+  .nn-nursing-tier-hub-hero-band,
+[data-theme="apex"]
+  [data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence)
+  .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-brand) 14%, transparent), transparent 58%),
+    radial-gradient(460px 220px at 96% 6%, color-mix(in srgb, var(--semantic-chart-2) 12%, transparent), transparent 56%),
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--semantic-info) 10%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 6%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+}
+
+/* Lesson hub container — subtle breathing room; chips never overflow the viewport. */
+.nn-np-hub-root {
+  position: relative;
+}
+
+.nn-np-hub-root .nn-chip {
+  max-width: min(100%, 22rem);
+  box-sizing: border-box;
+}
+
+.nn-np-topic-browse {
+  border-color: color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-border-soft));
+  box-shadow: 0 18px 44px -28px color-mix(in srgb, var(--palette-heading) 22%, transparent);
+}
+
+/* Per-group accent token — aligns editorial buckets to diagnostics / safety / pharm / etc. */
+.nn-np-topic-group {
+  --nn-np-group-accent: var(--semantic-brand);
+}
+
+.nn-np-topic-group--safety_prioritization {
+  --nn-np-group-accent: var(--semantic-warning);
+}
+.nn-np-topic-group--cardiovascular {
+  --nn-np-group-accent: var(--semantic-danger);
+}
+.nn-np-topic-group--respiratory {
+  --nn-np-group-accent: var(--semantic-info);
+}
+.nn-np-topic-group--endocrine {
+  --nn-np-group-accent: var(--semantic-chart-3);
+}
+.nn-np-topic-group--neuro {
+  --nn-np-group-accent: var(--semantic-chart-2);
+}
+.nn-np-topic-group--pharmacology {
+  --nn-np-group-accent: var(--semantic-brand);
+}
+.nn-np-topic-group--fluids_renal_gi {
+  --nn-np-group-accent: var(--semantic-panel-cool);
+}
+.nn-np-topic-group--gastrointestinal {
+  --nn-np-group-accent: var(--semantic-chart-5);
+}
+.nn-np-topic-group--infection_immunology {
+  --nn-np-group-accent: var(--semantic-success);
+}
+.nn-np-topic-group--maternity_pediatrics {
+  --nn-np-group-accent: var(--semantic-chart-1);
+}
+.nn-np-topic-group--mental_health {
+  --nn-np-group-accent: var(--semantic-chart-4);
+}
+.nn-np-topic-group--hematology_oncology {
+  --nn-np-group-accent: var(--semantic-danger);
+}
+.nn-np-topic-group--musculoskeletal_integumentary {
+  --nn-np-group-accent: var(--semantic-panel-warm);
+}
+.nn-np-topic-group--emergency_triage {
+  --nn-np-group-accent: var(--semantic-warning);
+}
+.nn-np-topic-group--other {
+  --nn-np-group-accent: color-mix(in srgb, var(--semantic-text-muted) 88%, var(--semantic-text-primary));
+}
+
+.nn-np-topic-group-heading {
+  margin-left: 0;
+  padding-left: 0.65rem;
+  border-left: 3px solid var(--nn-np-group-accent);
+  color: color-mix(in srgb, var(--nn-np-group-accent) 42%, var(--semantic-text-primary));
+}
+
+.nn-np-topic-group .nn-np-topic-chip {
+  border-color: color-mix(in srgb, var(--nn-np-group-accent) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-np-group-accent) 8%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-np-topic-group .nn-np-topic-chip:hover {
+  border-color: color-mix(in srgb, var(--nn-np-group-accent) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-np-group-accent) 12%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--nn-np-group-accent) 18%, var(--semantic-text-primary));
+}
+
+[data-theme="midnight"] .nn-np-topic-group .nn-np-topic-chip,
+[data-theme="apex"] .nn-np-topic-group .nn-np-topic-chip {
+  background: color-mix(in srgb, var(--nn-np-group-accent) 10%, var(--theme-page-bg));
+}
+
+[data-theme="midnight"] .nn-np-topic-group .nn-np-topic-chip:hover,
+[data-theme="apex"] .nn-np-topic-group .nn-np-topic-chip:hover {
+  background: color-mix(in srgb, var(--nn-np-group-accent) 16%, var(--theme-page-bg));
+}
+
+/* =====================================================================
+   Tools + FAQ — marketing vertical slice (homepage / pricing parity).
+   Scope: public /tools, /tools/[slug], /faq. Tokens only.
+   ===================================================================== */
+
+.nn-tools-marketing-hero {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(640px 300px at 8% 0%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent) 0%, transparent 58%),
+    radial-gradient(560px 280px at 96% 8%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent) 0%, transparent 56%),
+    radial-gradient(480px 240px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent) 0%, transparent 60%),
+    var(--page-bg, var(--theme-page-bg));
+}
+
+.nn-tools-marketing-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 5%, transparent) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at 40% 0%, rgba(0, 0, 0, 0.22), transparent 62%);
+  -webkit-mask-image: radial-gradient(circle at 40% 0%, rgba(0, 0, 0, 0.22), transparent 62%);
+  z-index: 0;
+}
+
+.nn-tools-marketing-hero > div {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-tools-calculator-surface {
+  border-radius: var(--radius-lg, 1rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 1, var(--border));
+  background: var(--semantic-surface);
+  box-shadow: var(--elevation-rest, var(--shadow-card));
+}
+
+.nn-faq-marketing-root {
+  position: relative;
+  background:
+    radial-gradient(520px 220px at 4% 0%, color-mix(in srgb, var(--semantic-info) 8%, transparent), transparent 60%),
+    radial-gradient(480px 200px at 96% 12%, color-mix(in srgb, var(--semantic-chart-3) 7%, transparent), transparent 58%),
+    var(--page-bg, var(--theme-page-bg));
+}
+
+.nn-premium-faq-card {
+  background: linear-gradient(
+    175deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted))
+  );
+  border-color: color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
+  box-shadow:
+    0 22px 48px -38px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent),
+    var(--elevation-rest, var(--shadow-card));
+}
+
+.nn-premium-faq-card :where(h2) {
+  letter-spacing: -0.015em;
+  scroll-margin-top: 5.5rem;
+}
+
+.nn-premium-faq-card :where(h2) + p,
+.nn-premium-faq-card :where(h3) + p {
+  margin-top: 0.5rem;
+}
+
+.nn-premium-faq-redesign {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--semantic-text-primary, var(--theme-heading-text));
+}
+
+.nn-premium-faq-redesign-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(720px 360px at 8% 0%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 62%),
+    radial-gradient(620px 320px at 94% 12%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-panel-cool) 10%, transparent), transparent 42%);
+}
+
+.nn-premium-faq-redesign-hero {
+  margin: 0 auto 1.4rem;
+  max-width: 58rem;
+  text-align: center;
+}
+
+.nn-premium-faq-redesign-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  padding: 0.35rem 0.8rem;
+  color: color-mix(in srgb, var(--semantic-brand) 84%, var(--semantic-text-primary));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 28px -22px color-mix(in srgb, var(--semantic-brand) 55%, transparent);
+}
+
+.nn-premium-faq-redesign-title {
+  margin: 0.9rem 0 0;
+  color: var(--semantic-text-primary, var(--theme-heading-text));
+  font-size: clamp(2.15rem, 7vw, 4.6rem);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+}
+
+.nn-premium-faq-redesign-subtitle {
+  margin: 1rem auto 0;
+  max-width: 42rem;
+  color: var(--semantic-text-secondary, var(--theme-body-text));
+  font-size: clamp(1rem, 2.5vw, 1.18rem);
+  line-height: 1.65;
+}
+
+.nn-premium-faq-redesign-chips {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.6rem;
+  margin: 1.35rem -1rem 0;
+  overflow-x: auto;
+  padding: 0.2rem 1rem 0.55rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nn-faq-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand));
+  background: color-mix(in srgb, var(--semantic-surface) 84%, var(--semantic-panel-cool));
+  padding: 0.65rem 0.95rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow:
+    0 16px 32px -28px color-mix(in srgb, var(--semantic-text-primary) 32%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 74%, transparent) inset;
+}
+
+.nn-faq-chip span {
+  display: inline-grid;
+  min-width: 1.45rem;
+  min-height: 1.45rem;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.nn-premium-faq-redesign-layout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+.nn-premium-faq-redesign-sidebar {
+  display: none;
+}
+
+.nn-premium-faq-redesign-groups {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.nn-premium-faq-redesign-group {
+  scroll-margin-top: 6rem;
+}
+
+.nn-premium-faq-redesign-group-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 0.8rem;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-cool)), color-mix(in srgb, var(--semantic-surface) 82%, var(--semantic-panel-warm)));
+  padding: 1rem;
+  box-shadow: 0 18px 42px -36px color-mix(in srgb, var(--semantic-text-primary) 34%, transparent);
+}
+
+.nn-premium-faq-redesign-group-icon {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--semantic-text-primary));
+}
+
+.nn-premium-faq-redesign-group-header h2 {
+  margin: 0;
+  color: var(--semantic-text-primary);
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+
+.nn-premium-faq-redesign-group-header p {
+  margin: 0.22rem 0 0;
+  color: var(--semantic-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.nn-premium-faq-redesign-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.nn-premium-faq-redesign-card {
+  overflow: hidden;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand));
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--semantic-surface) 93%, var(--semantic-panel-cool)), color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-panel-muted)));
+  box-shadow:
+    0 18px 44px -34px color-mix(in srgb, var(--semantic-text-primary) 30%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 65%, transparent) inset;
+  transition: transform 190ms ease;
+}
+
+.nn-premium-faq-redesign-card:hover,
+.nn-premium-faq-redesign-card:focus-within {
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-border-soft));
+  box-shadow:
+    0 24px 54px -36px color-mix(in srgb, var(--semantic-brand) 38%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent) inset;
+  transform: translateY(-1px);
+}
+
+.nn-premium-faq-redesign-trigger {
+  display: flex;
+  width: 100%;
+  min-height: 4.2rem;
+  align-items: center;
+  gap: 0.8rem;
+  border: 0;
+  background: transparent;
+  padding: 0.95rem;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nn-premium-faq-redesign-trigger:focus-visible,
+.nn-faq-chip:focus-visible,
+.nn-premium-faq-redesign-nav-link:focus-visible,
+.nn-premium-faq-redesign-cta:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+  outline-offset: 3px;
+}
+
+.nn-premium-faq-redesign-index {
+  display: inline-grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 0.8rem;
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-info) 82%, var(--semantic-text-primary));
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.nn-premium-faq-redesign-question-wrap {
+  display: grid;
+  min-width: 0;
+  gap: 0.32rem;
+}
+
+.nn-faq-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: color-mix(in srgb, var(--semantic-brand) 76%, var(--semantic-text-primary));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-premium-faq-redesign-question {
+  color: var(--semantic-text-primary);
+  font-size: 1rem;
+  font-weight: 850;
+  line-height: 1.25;
+  letter-spacing: -0.018em;
+}
+
+.nn-premium-faq-redesign-chevron {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  margin-left: auto;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-panel-cool) 42%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-primary));
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nn-premium-faq-redesign-trigger[aria-expanded="true"] .nn-premium-faq-redesign-chevron {
+  transform: rotate(180deg);
+}
+
+.nn-premium-faq-redesign-panel {
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, transparent);
+  padding: 0 1rem 1.1rem 4rem;
+  color: var(--semantic-text-secondary);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nn-premium-faq-redesign-panel {
+    animation: nn-premium-faq-panel-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+.nn-premium-faq-redesign-panel p {
+  margin: 0;
+  max-width: 48rem;
+  padding-top: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.68;
+}
+
+.nn-premium-faq-redesign-sticky-cta {
+  position: fixed;
+  left: max(0.75rem, env(safe-area-inset-left));
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-panel-cool));
+  padding: 0.8rem;
+  box-shadow:
+    0 24px 60px -32px color-mix(in srgb, var(--semantic-text-primary) 42%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 70%, transparent) inset;
+  backdrop-filter: blur(14px) saturate(1.12);
+  -webkit-backdrop-filter: blur(14px) saturate(1.12);
+}
+
+.nn-premium-faq-redesign-sticky-cta strong,
+.nn-premium-faq-redesign-sticky-cta span {
+  display: block;
+}
+
+.nn-premium-faq-redesign-sticky-cta strong {
+  color: var(--semantic-text-primary);
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.nn-premium-faq-redesign-sticky-cta span {
+  margin-top: 0.15rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.nn-premium-faq-redesign-cta {
+  display: inline-flex;
+  min-height: 2.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--role-cta, var(--semantic-brand));
+  color: var(--role-cta-fg, #fff);
+  padding: 0.7rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 16px 28px -18px color-mix(in srgb, var(--semantic-brand) 60%, transparent);
+}
+
+.nn-premium-product-faq-section {
+  position: relative;
+  isolation: isolate;
+}
+
+@keyframes nn-premium-faq-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .nn-premium-faq-redesign-chips {
+    justify-content: center;
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: visible;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .nn-premium-faq-redesign-layout {
+    grid-template-columns: minmax(13rem, 0.26fr) minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .nn-premium-faq-redesign-sidebar {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: 0.45rem;
+    border-radius: 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand));
+    background: color-mix(in srgb, var(--semantic-surface) 84%, var(--semantic-panel-cool));
+    padding: 0.9rem;
+    box-shadow: 0 20px 48px -40px color-mix(in srgb, var(--semantic-text-primary) 35%, transparent);
+  }
+
+  .nn-premium-faq-redesign-sidebar-title {
+    margin: 0 0 0.2rem;
+    padding: 0 0.4rem;
+    color: var(--semantic-text-muted);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .nn-premium-faq-redesign-nav-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    border-radius: 1rem;
+    padding: 0.62rem 0.65rem;
+    color: var(--semantic-text-primary);
+    font-size: 0.86rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .nn-premium-faq-redesign-nav-link:hover {
+    background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  }
+
+  .nn-premium-faq-redesign-nav-link strong {
+    display: inline-grid;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    place-items: center;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+    color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+    font-size: 0.72rem;
+  }
+
+  .nn-premium-faq-redesign-groups {
+    gap: 1.25rem;
+  }
+
+  .nn-premium-faq-redesign-sticky-cta {
+    left: 50%;
+    right: auto;
+    width: min(42rem, calc(100vw - 2rem));
+    transform: translateX(-50%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-premium-faq-redesign-trigger {
+    padding: 1rem 1.1rem;
+  }
+
+  .nn-premium-faq-redesign-question {
+    font-size: 1.06rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-faq-redesign-card,
+  .nn-premium-faq-redesign-chevron,
+  .nn-premium-faq-redesign-panel,
+  .nn-faq-chip,
+  .nn-premium-faq-redesign-nav-link,
+  .nn-premium-faq-redesign-cta {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .nn-premium-faq-redesign-card:hover,
+  .nn-premium-faq-redesign-card:focus-within {
+    transform: none;
+  }
+}

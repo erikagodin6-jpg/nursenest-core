@@ -1,0 +1,77 @@
+/**
+ * Mobile UX standards — reusable spacing, reading width, overflow-safe patterns.
+ * Uses semantic / theme variables only (no ad-hoc hex). Imported from globals.css.
+ */
+
+:root {
+  /* WCAG 2.5.5 / iOS HIG: ~44×44 CSS px for primary interactive targets */
+  --nn-mobile-touch-min: 2.75rem;
+  /* Comfortable max measure for long-form lesson/marketing prose */
+  --nn-mobile-readable-max: 42rem;
+  /* Horizontal padding when not using Tailwind px-* on a section */
+  --nn-mobile-gutter-x: clamp(1rem, 4vw, 1.5rem);
+}
+
+/** Centered column for long reading (lessons, legal); does not change route SEO. */
+.nn-mobile-readable {
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-width: var(--nn-mobile-readable-max);
+  width: 100%;
+}
+
+/** Apply to sections that need consistent edge inset on small screens without Tailwind. */
+.nn-mobile-gutter {
+  box-sizing: border-box;
+  padding-inline: var(--nn-mobile-gutter-x);
+}
+
+/** Icon-only or compact controls that must meet minimum tap size. */
+.nn-mobile-touch-target {
+  box-sizing: border-box;
+  min-height: var(--nn-mobile-touch-min);
+  min-width: var(--nn-mobile-touch-min);
+}
+
+/** Stack spacing between major blocks on narrow viewports (pairs with gap-* in TSX). */
+.nn-mobile-stack > * + * {
+  margin-top: var(--nn-rhythm-tight-y, 0.75rem);
+}
+
+@media (max-width: 767.98px) {
+  /* Momentum scrolling inside learner main (iOS Safari). */
+  main#nn-learner-main {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent wide code / pre blocks from forcing horizontal page scroll */
+  .nn-lesson-prose pre,
+  .nn-lesson-content.nn-lesson-prose pre,
+  .nn-lesson-content pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nn-lesson-prose table,
+  .nn-lesson-content.nn-lesson-prose table,
+  .nn-lesson-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nn-lesson-prose img,
+  .nn-lesson-content.nn-lesson-prose img,
+  .nn-lesson-content img {
+    height: auto;
+    max-width: 100%;
+  }
+
+  .nn-mobile-figure-contain img,
+  .nn-lesson-section-lead-figure img {
+    height: auto;
+    max-width: 100%;
+  }
+}

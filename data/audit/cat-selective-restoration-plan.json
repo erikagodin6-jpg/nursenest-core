@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-04-14T13:47:11.288Z",
+  "selectiveRestorationRecommended": true,
+  "rationale": "Recommend borrowing specific UX/behaviors (checkpoint messaging, recovery prompts, optional printable backup patterns) into current components without replacing routes or engines.",
+  "doNotDo": [
+    "Replace PracticeTestRunnerClient or /app/practice-tests routes with mock-exam-session.",
+    "Re-enable Express /api/cat as production path for RN/PN CAT.",
+    "Merge lib/cat (NP) and lib/exams/cat-engine without an explicit product decision.",
+    "Import legacy global CSS or gray marketing-only styles into learner CAT."
+  ],
+  "recommendedLowRiskItems": [
+    {
+      "item": "Session recovery copy and edge-case flows",
+      "sourceHint": "client session-checkpoint + exam-fallbacks SessionRecoveryPrompt patterns",
+      "targetHint": "practice-test-runner-client.tsx resilience surfaces",
+      "risk": "low"
+    },
+    {
+      "item": "Printable / backup practice set (if still needed)",
+      "sourceHint": "exam-fallbacks PrintableBackup",
+      "targetHint": "optional export behind existing premium gate",
+      "risk": "low"
+    },
+    {
+      "item": "Deeper rationale guardrails for broken media",
+      "sourceHint": "MediaGuard / TranslationGuard patterns",
+      "targetHint": "align with existing PracticeQuestionCard media handling",
+      "risk": "low"
+    }
+  ],
+  "deferOrHighRisk": [
+    "Porting full mock-exam-session state machine into Next without a phased plan.",
+    "Unifying three adaptive engines (client legacy, server mlt, exams/cat, lib/cat NP) in one pass."
+  ]
+}

@@ -1,0 +1,1003 @@
+{
+  "version": 1,
+  "phase": 1,
+  "label": "Diagnostic Foundations — Lesson Outlines",
+  "generatedDate": "2026-04-10",
+  "scopeFenceRef": "np-scope-fences.json",
+  "generationRule": "All lessons teach RECOGNITION and DIFFERENTIAL REASONING only. Management is scoped to initial triage disposition (transfer vs test). No prescribing content.",
+  "lessons": [
+    {
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "lessonId": "np-p1-chest-1a",
+      "title": "Chest Pain Differential: Life-Threatening Causes",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Distinguish ACS from PE, aortic dissection, tension pneumothorax, and cardiac tamponade using history, physical, and targeted diagnostic findings",
+        "Apply the HEART score to risk-stratify chest pain in the outpatient setting",
+        "Identify clinical features that mandate immediate 911 activation vs urgent ED transfer",
+        "Recognize atypical ACS presentations in women, diabetics, and elderly patients",
+        "Select the appropriate initial diagnostic workup (ECG, troponin, D-dimer, CXR) based on pretest probability"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Framework: Six Life-Threatening Causes",
+          "keyPoints": [
+            "The 'six killers': ACS, PE, aortic dissection, tension pneumothorax, esophageal rupture, cardiac tamponade",
+            "Feature-based exclusion order: start with ECG findings, then hemodynamic stability, then symptom character",
+            "Any diaphoresis + chest pain = ACS until proven otherwise"
+          ]
+        },
+        {
+          "sectionTitle": "ACS Recognition",
+          "keyPoints": [
+            "Classic: substernal pressure, radiation to jaw/left arm, diaphoresis, nausea, relieved by nitroglycerin",
+            "Atypical presentations: women (jaw pain, fatigue, dyspnea), elderly (dyspnea alone, syncope), diabetics (silent MI)",
+            "STEMI vs NSTEMI vs UA: ECG + troponin + symptom timeline",
+            "HEART score components: History, ECG, Age, Risk factors, Troponin — low (0–3), intermediate (4–6), high (7–10)"
+          ]
+        },
+        {
+          "sectionTitle": "Aortic Dissection",
+          "keyPoints": [
+            "Classic: sudden-onset tearing/ripping pain, radiating to back, maximal at onset (vs crescendo in ACS)",
+            "Unequal blood pressures between arms (>20 mmHg difference) — 15% sensitive but highly specific",
+            "Pulse deficits, neurological deficits, new aortic regurgitation murmur",
+            "Risk factors: uncontrolled HTN, Marfan syndrome, bicuspid aortic valve, cocaine use",
+            "D-dimer has high sensitivity; definitive: CT aortogram — do not delay for treatment"
+          ]
+        },
+        {
+          "sectionTitle": "Pulmonary Embolism",
+          "keyPoints": [
+            "Pleuritic chest pain + dyspnea + tachycardia; hemoptysis suggests pulmonary infarction",
+            "Wells score: DVT symptoms, PE most likely, HR>100, immobilization, prior DVT/PE, hemoptysis, cancer",
+            "Low Wells + low pretest → D-dimer (if negative, rules out); high Wells → CT pulmonary angiography",
+            "ECG: sinus tachycardia most common; S1Q3T3 in massive PE"
+          ]
+        },
+        {
+          "sectionTitle": "Tension Pneumothorax and Cardiac Tamponade",
+          "keyPoints": [
+            "Tension PTX: absent breath sounds unilaterally + tracheal deviation AWAY from affected side + hypotension + JVD — immediate needle decompression",
+            "Cardiac tamponade: Beck's triad (hypotension + muffled heart sounds + JVD); pulsus paradoxus >10 mmHg; electrical alternans on ECG",
+            "Both require emergent disposition — not workup-and-wait"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "This lesson covers recognition and initial diagnostic workup only. Definitive management (thrombolytics, anticoagulation, cardiac catheterization) is covered in Phase 5 urgent care and Phase 3 chronic disease."
+    },
+    {
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "lessonId": "np-p1-chest-1b",
+      "title": "Chest Pain Differential: Non-Cardiac and Subacute Causes",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Distinguish musculoskeletal, gastrointestinal, pulmonary, and psychiatric causes of chest pain from cardiac causes",
+        "Use symptom characteristics (reproducibility, food relation, positional changes) to narrow the differential",
+        "Recognize pericarditis and myocarditis presentations in young patients",
+        "Identify when a 'benign-appearing' chest pain complaint requires further cardiac evaluation",
+        "Apply a systematic non-cardiac chest pain workup approach in the outpatient NP setting"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Gastrointestinal Causes",
+          "keyPoints": [
+            "GERD: burning, substernal, worse after meals/lying flat, relieved by antacids/PPI — can mimic ACS",
+            "Esophageal spasm: severe squeezing pain, can radiate to jaw, may respond to nitroglycerin (diagnostic trap)",
+            "Peptic ulcer: epigastric predominance, food relation varies (worse with food in gastric ulcer, better in duodenal)",
+            "Key differentiator: GERD/esophageal causes do NOT cause ECG changes or troponin elevation"
+          ]
+        },
+        {
+          "sectionTitle": "Musculoskeletal Causes",
+          "keyPoints": [
+            "Costochondritis: point tenderness at costochondral junction, reproducible with palpation — most common benign cause",
+            "Tietze syndrome: localized swelling at single costochondral junction, typically 2nd or 3rd rib",
+            "Rib fracture: hx of trauma or osteoporosis, point tenderness, pain with respiration",
+            "Herpes zoster: dermatomal distribution, burning quality, may precede rash by 2–3 days — do not miss"
+          ]
+        },
+        {
+          "sectionTitle": "Pericarditis and Pleuritis",
+          "keyPoints": [
+            "Pericarditis: sharp, pleuritic pain, worse supine, better leaning forward; pericardial friction rub; ECG: diffuse ST elevation (saddle-shaped) + PR depression",
+            "Pleuritis: sharp, positional, reproducible with deep inspiration; associated with infection, autoimmune disease, or PE",
+            "Myocarditis in young patients: viral prodrome + chest pain + elevated troponin with normal coronary angiogram"
+          ]
+        },
+        {
+          "sectionTitle": "Psychiatric/Functional Causes",
+          "keyPoints": [
+            "Panic disorder: palpitations, diaphoresis, shortness of breath, fear of dying — can be indistinguishable from ACS acutely",
+            "Key: cardiac workup must be completed before attributing to panic — do not anchor",
+            "Hyperventilation: paresthesias, carpopedal spasm, lightheadedness with chest tightness"
+          ]
+        },
+        {
+          "sectionTitle": "When to Escalate 'Low-Risk' Chest Pain",
+          "keyPoints": [
+            "Any new chest pain in patient >40 with ≥2 cardiac risk factors: ECG + troponin",
+            "Cocaine use: ACS at any age — vasospasm mechanism",
+            "Exertional component: requires stress testing regardless of other features",
+            "Atypical features in high-risk patients do not exclude ACS"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Questions in 1B must not duplicate 1A stems. 1B focuses on non-cardiac causes and the diagnostic reasoning around distinguishing them from cardiac causes."
+    },
+    {
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "lessonId": "np-p1-dyspnea-1a",
+      "title": "Dyspnea Differential: Cardiac Causes",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Differentiate heart failure from arrhythmia, pericardial disease, and ACS as causes of acute dyspnea",
+        "Use BNP/NT-proBNP, chest X-ray, and ECG to narrow dyspnea differential toward cardiac etiology",
+        "Recognize HFrEF vs HFpEF clinical presentations",
+        "Identify patients with dyspnea who require emergent vs urgent evaluation",
+        "Distinguish cardiac from pulmonary causes using history and targeted physical exam findings"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Diagnostic Framework for Dyspnea",
+          "keyPoints": [
+            "Rate of onset: acute (minutes → PE, flash pulmonary edema, pneumothorax), subacute (hours/days → HF exacerbation, pneumonia), chronic (weeks/months → COPD, HFpEF, anemia, malignancy)",
+            "Orthopnea and paroxysmal nocturnal dyspnea: strongly suggest HF (specificity ~90%)",
+            "BNP <100 pg/mL: very unlikely HF; BNP >400 pg/mL: likely HF — intermediate zone requires clinical correlation"
+          ]
+        },
+        {
+          "sectionTitle": "Heart Failure",
+          "keyPoints": [
+            "HFrEF (EF <40%): S3 gallop, lateral displacement of PMI, dilated cardiomegaly on CXR, low voltage ECG",
+            "HFpEF (EF ≥50%): diastolic dysfunction, preserved heart size, often in elderly women with HTN and DM",
+            "CXR findings: cardiomegaly, Kerley B lines, cephalization of pulmonary vessels, pleural effusions",
+            "Triggers for acute decompensation: dietary sodium excess, medication non-adherence, new arrhythmia, infection, ischemia"
+          ]
+        },
+        {
+          "sectionTitle": "Arrhythmia as a Cause of Dyspnea",
+          "keyPoints": [
+            "Atrial fibrillation with rapid ventricular response: irregular rhythm, palpitations, dyspnea — ECG shows irregularly irregular rate",
+            "Supraventricular tachycardia: sudden onset + sudden offset, regular rhythm, rates 150–250",
+            "High-degree AV block: bradycardia-induced dyspnea and presyncope"
+          ]
+        },
+        {
+          "sectionTitle": "Pericardial and Tamponade",
+          "keyPoints": [
+            "Pericardial effusion causing dyspnea: gradual accumulation until tamponade physiology develops",
+            "Beck's triad as late finding; pulsus paradoxus early finding",
+            "Echocardiogram: diagnostic of choice for pericardial effusion and tamponade assessment"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "1A focuses on cardiac causes of dyspnea. Pulmonary, metabolic, and other causes are in 1B. Questions in 1A must not use the same demographic + finding as chest pain 1A questions."
+    },
+    {
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "lessonId": "np-p1-dyspnea-1b",
+      "title": "Dyspnea Differential: Pulmonary, Metabolic, and Other Causes",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Distinguish COPD exacerbation from asthma, pneumonia, and PE as acute causes of dyspnea",
+        "Recognize anemia, metabolic acidosis, obesity hypoventilation, and anxiety as non-cardiopulmonary dyspnea causes",
+        "Apply spirometry concepts and clinical history to differentiate obstructive from restrictive patterns",
+        "Identify the Wells score and D-dimer role in PE evaluation",
+        "Select appropriate initial workup for dyspnea based on acuity and clinical context"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Pulmonary Causes",
+          "keyPoints": [
+            "COPD exacerbation: increased dyspnea + increased sputum production + purulent sputum; history of smoking; pursed lip breathing, barrel chest, prolonged expiration",
+            "Asthma: episodic, reversible, triggers (allergen, cold air, exercise, aspirin); expiratory wheeze; peak flow monitoring",
+            "Pneumonia: productive cough, fever, crackles, consolidation on CXR; dyspnea proportional to consolidation extent",
+            "PE: sudden onset, pleuritic component, hemoptysis, risk factors (immobilization, prior DVT/PE, cancer, OCP use)"
+          ]
+        },
+        {
+          "sectionTitle": "Differentiating COPD vs Asthma",
+          "keyPoints": [
+            "COPD: >40 years, smoking hx, irreversible obstruction (FEV1/FVC <0.7 post-bronchodilator)",
+            "Asthma: younger, atopic hx, fully reversible (FEV1 improvement ≥12% and 200 mL after bronchodilator)",
+            "ACO (asthma-COPD overlap): features of both; requires specialist input"
+          ]
+        },
+        {
+          "sectionTitle": "Non-Cardiopulmonary Causes",
+          "keyPoints": [
+            "Anemia: pallor, fatigue, exertional dyspnea proportional to Hgb level; tachycardia at rest if severe",
+            "Metabolic acidosis: compensatory hyperventilation (Kussmaul breathing); check pH, bicarbonate, anion gap",
+            "Obesity hypoventilation: BMI >40, daytime hypercapnia, polycythemia, cor pulmonale in chronic cases",
+            "Anxiety/hyperventilation: paresthesias, carpopedal spasm, no hypoxia — diagnosis of exclusion after workup"
+          ]
+        },
+        {
+          "sectionTitle": "Workup Sequence in Dyspnea",
+          "keyPoints": [
+            "Immediate: pulse oximetry, respiratory rate, accessory muscle use",
+            "First-line: ECG, CXR, CBC, BMP, BNP",
+            "Targeted by presentation: D-dimer + CT-PA if PE suspected; PFTs if chronic obstructive pattern; echo if cardiac cause suspected",
+            "Disposition signal: O2 sat <90%, accessory muscle use, altered mental status → emergency transfer"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "1B must not reuse PE questions from chest pain 1A. Each dyspnea question must use a distinct chief complaint anchor not used in chest pain topics."
+    },
+    {
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "lessonId": "np-p1-abdomen-1a",
+      "title": "Abdominal Pain Differential: Adult and Surgical Emergencies",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Recognize the presentation of appendicitis, bowel obstruction, mesenteric ischemia, perforated viscus, and ruptured AAA",
+        "Apply anatomical location to generate an age-appropriate differential for abdominal pain",
+        "Identify peritoneal signs (guarding, rigidity, rebound) and their clinical significance",
+        "Distinguish biliary from GI from vascular causes of acute abdominal pain",
+        "Determine which presentations require immediate transfer vs in-office workup"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Quadrant-Based Differential Framework",
+          "keyPoints": [
+            "RUQ: cholecystitis, cholangitis, hepatitis, Fitz-Hugh-Curtis syndrome, right lower lobe pneumonia (referred)",
+            "RLQ: appendicitis, Crohn's, ovarian pathology (females), Meckel's diverticulum (pediatric), psoas abscess",
+            "LLQ: diverticulitis, sigmoid volvulus, ovarian pathology (females), ischemic colitis",
+            "LUQ: splenic pathology (infarct, rupture), pancreatitis (left-sided), gastric pathology",
+            "Epigastric: peptic ulcer, pancreatitis, GERD, ACS (referred), early appendicitis",
+            "Diffuse/periumbilical: early appendicitis, mesenteric ischemia, bowel obstruction, ruptured AAA"
+          ]
+        },
+        {
+          "sectionTitle": "Appendicitis",
+          "keyPoints": [
+            "Classic: periumbilical pain → RLQ migration + anorexia + nausea, low-grade fever",
+            "Rovsing's sign, psoas sign, obturator sign — clinical aids",
+            "Alvarado score: WBC + shift + rebound + migration + anorexia + nausea = 0–10",
+            "Perforation risk increases after 24–36 hours; elderly and young children have atypical presentations and higher perforation rates"
+          ]
+        },
+        {
+          "sectionTitle": "Life-Threatening Surgical Emergencies",
+          "keyPoints": [
+            "Ruptured AAA: sudden severe back/abdominal pain + pulsatile abdominal mass + hemodynamic instability — 50% mortality even with surgery",
+            "Mesenteric ischemia: pain out of proportion to exam, risk factors (AF, hypercoagulable, atherosclerosis), lactic acidosis late finding",
+            "Perforated viscus: sudden onset severe diffuse pain, rigid board-like abdomen, free air on upright CXR under diaphragm",
+            "Bowel obstruction: colicky pain + distension + vomiting + obstipation; high-pitched bowel sounds early, absent late"
+          ]
+        },
+        {
+          "sectionTitle": "Biliary Causes",
+          "keyPoints": [
+            "Cholecystitis: RUQ pain, Murphy's sign (inspiratory arrest with RUQ palpation), fever, elevated WBC",
+            "Choledocholithiasis: RUQ pain + jaundice (no fever typically)",
+            "Ascending cholangitis (Charcot's triad): RUQ pain + fever + jaundice; Reynold's pentad adds hypotension + altered mental status — septic emergency"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "1A focuses on adult abdominal pain and surgical emergencies. Gynecological and pediatric causes are in 1B. No overlap in question demographics or chief complaints between 1A and 1B."
+    },
+    {
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "lessonId": "np-p1-abdomen-1b",
+      "title": "Abdominal Pain Differential: Gynecological and Pediatric Presentations",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Recognize ectopic pregnancy, ovarian torsion, and PID as gynecological emergencies presenting with abdominal pain",
+        "Distinguish age-specific pediatric causes: intussusception, volvulus, Hirschsprung disease, Meckel's diverticulum",
+        "Apply the pregnancy test as the critical first step in all women of reproductive age with abdominal pain",
+        "Identify clinical features that distinguish functional from surgical abdominal pain in pediatric patients",
+        "Select appropriate workup and disposition for gynecological and pediatric abdominal emergencies"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Gynecological Abdominal Emergencies",
+          "keyPoints": [
+            "Ectopic pregnancy: amenorrhea + lower abdominal pain + vaginal spotting; rupture → hemodynamic instability and referred shoulder pain (diaphragmatic irritation from hemoperitoneum)",
+            "β-hCG positive + no intrauterine pregnancy on US = ectopic until proven otherwise",
+            "Ovarian torsion: sudden severe unilateral pelvic pain, may radiate to back/thigh; nausea/vomiting common; normal WBC; US shows enlarged ovary with absent or reduced Doppler flow",
+            "PID: cervical motion tenderness (CMT), adnexal tenderness, uterine tenderness — Chandelier sign; usually bilateral; sexually active women",
+            "Tubo-ovarian abscess: PID + mass + systemic illness + failure to improve on antibiotics → surgery or IR drainage"
+          ]
+        },
+        {
+          "sectionTitle": "Pediatric Abdominal Causes by Age",
+          "keyPoints": [
+            "Newborn/infant: Hirschsprung disease (failure to pass meconium >48h, abdominal distension), malrotation/volvulus (bilious vomiting = emergency until proven otherwise)",
+            "Infant (2–36 months): intussusception — episodic severe colicky crying, knees to chest, vomiting, currant jelly stool (late), sausage-shaped mass RUQ",
+            "School age: appendicitis (most common surgical emergency), Meckel's diverticulum (painless rectal bleeding), mesenteric lymphadenitis (viral illness + LAD + periumbilical pain)",
+            "Adolescent female: same as adult gynecological causes; always test β-hCG"
+          ]
+        },
+        {
+          "sectionTitle": "Functional Abdominal Pain in Pediatrics",
+          "keyPoints": [
+            "Functional abdominal pain: most common cause of recurrent abdominal pain in school-age children; periumbilical, no weight loss, no nocturnal awakening, normal exam and labs",
+            "Rome IV criteria: recurrent without structural/metabolic cause",
+            "Red flags warranting workup: RLQ localization, weight loss, fever, blood in stool, family hx of IBD, nocturnal pain"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "All gynecological question stems must specify reproductive-age female. All pediatric stems must specify age clearly to prevent overlap with adult 1A questions."
+    },
+    {
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "lessonId": "np-p1-headache-1a",
+      "title": "Headache Differential: Primary Headache Syndromes",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Apply the SNOOP4 mnemonic to identify secondary headache red flags",
+        "Distinguish migraine from tension-type headache from cluster headache using clinical criteria",
+        "Recognize the impact of hormonal factors, sleep, and dietary triggers on primary headache",
+        "Identify medication overuse headache (MOH) as a secondary headache pattern requiring recognition",
+        "Determine when a primary headache diagnosis can be made clinically vs when imaging is required"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "SNOOP4 Red Flag Mnemonic",
+          "keyPoints": [
+            "S: Systemic symptoms (fever, weight loss) or Systemic disease (HIV, cancer)",
+            "N: Neurological symptoms or signs (focal deficit, altered consciousness)",
+            "O: Onset sudden or 'thunderclap'",
+            "O: Older age new headache (>50 years — consider GCA, mass)",
+            "P: Progressive worsening pattern or positional component",
+            "P: Papilledema",
+            "P: Precipitation by Valsalva/exertion/positional change",
+            "P: Postural component"
+          ]
+        },
+        {
+          "sectionTitle": "Migraine",
+          "keyPoints": [
+            "POUND mnemonic: Pulsating, duration 4–72 hOUrs, Unilateral, Nausea/vomiting, Disabling",
+            "Migraine with aura: visual (fortification spectra, scotoma), sensory, or language symptoms lasting 20–60 min preceding headache",
+            "Triggers: hormonal fluctuation (perimenstrual), sleep disruption, fasting, bright light, red wine, tyramine-containing foods",
+            "OCP and migraine with aura: absolute contraindication to combined oral contraceptives (stroke risk)"
+          ]
+        },
+        {
+          "sectionTitle": "Tension-Type Headache",
+          "keyPoints": [
+            "Bilateral, pressure/band-like quality, mild–moderate intensity, no nausea or vomiting, not aggravated by routine activity",
+            "No aura, no photophobia AND phonophobia (one may be present but not both)",
+            "Episodic (<15 days/month) vs chronic (≥15 days/month)",
+            "Most common headache type overall; diagnosis of exclusion after ruling out secondary causes"
+          ]
+        },
+        {
+          "sectionTitle": "Cluster Headache",
+          "keyPoints": [
+            "Severe unilateral periorbital/temporal pain; autonomic features IPSILATERAL: lacrimation, rhinorrhea, ptosis, miosis, conjunctival injection",
+            "Duration 15–180 minutes; frequency 1–8x/day; occur at same time daily ('alarm clock headache')",
+            "Circadian clustering: most common in spring/fall; alcohol triggers during a cluster period",
+            "More common in men aged 20–40; restless/agitated behavior distinguishes from migraine (migraine patients are still)"
+          ]
+        },
+        {
+          "sectionTitle": "Medication Overuse Headache",
+          "keyPoints": [
+            "Use of analgesics or triptans ≥10–15 days/month for >3 months → paradoxical daily headache",
+            "Often in patients with episodic migraine or TTH who escalate analgesic use",
+            "Diagnosis: new daily persistent headache in known headache patient using frequent analgesics",
+            "Recognition point: the treatment itself has become the cause"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "1A covers primary headache syndromes. Red flag/secondary headache causes are in 1B. No question in 1A should involve thunderclap, fever, papilledema, or neurological deficits."
+    },
+    {
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "lessonId": "np-p1-headache-1b",
+      "title": "Headache Differential: Secondary and Dangerous Causes",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Recognize subarachnoid hemorrhage as the most dangerous headache emergency: thunderclap pattern and LP findings",
+        "Identify giant cell arteritis in patients >50 using jaw claudication, temporal artery tenderness, and ESR",
+        "Distinguish bacterial meningitis headache from other causes using Kernig, Brudzinski, and nuchal rigidity",
+        "Recognize increased intracranial pressure headache pattern and papilledema significance",
+        "Apply neuroimaging indications for new or changing headache"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Subarachnoid Hemorrhage",
+          "keyPoints": [
+            "'Worst headache of my life' — thunderclap onset, maximal severity at onset (seconds)",
+            "Sentinel bleed may present as less severe headache days before rupture — do not miss",
+            "Workup: non-contrast CT head first; if negative within 6 hours of onset, 95% sensitive; if >6 hours → LP for xanthochromia",
+            "LP: xanthochromia (yellow CSF from oxyhemoglobin) + elevated RBCs that do NOT clear between tubes 1 and 4",
+            "Any thunderclap headache: do NOT give triptans or analgesics before ruling out SAH"
+          ]
+        },
+        {
+          "sectionTitle": "Bacterial Meningitis",
+          "keyPoints": [
+            "Classic triad: headache + fever + neck stiffness (only 44% have all three; 95% have at least 2)",
+            "Kernig's sign: knee cannot be extended with hip at 90° (meningeal irritation)",
+            "Brudzinski's sign: passive neck flexion causes involuntary knee flexion",
+            "Petechial/purpuric rash: meningococcal meningitis — emergent; do not delay antibiotics for LP",
+            "Photophobia and phonophobia also present — differs from migraine by fever and meningeal signs"
+          ]
+        },
+        {
+          "sectionTitle": "Giant Cell Arteritis",
+          "keyPoints": [
+            "Age >50 years (almost never younger), women > men",
+            "New temporal headache + jaw claudication + scalp tenderness + visual symptoms (amaurosis fugax, diplopia)",
+            "Temporal artery: tender, nodular, non-pulsatile on palpation",
+            "ESR >50 mm/hr (often >100); CRP elevated; definitive: temporal artery biopsy",
+            "Do NOT wait for biopsy to start high-dose prednisone — visual loss is irreversible"
+          ]
+        },
+        {
+          "sectionTitle": "Increased Intracranial Pressure",
+          "keyPoints": [
+            "Headache worse in morning, lying down, or with Valsalva; projectile vomiting without nausea",
+            "Papilledema: blurred disc margins on fundoscopy — urgent ophthalmology referral",
+            "Causes: space-occupying lesion (mass, abscess, hematoma), idiopathic intracranial hypertension (pseudotumor cerebri — obese women of childbearing age)",
+            "Cushing's reflex (late): HTN + bradycardia + irregular breathing = impending herniation"
+          ]
+        },
+        {
+          "sectionTitle": "Hypertensive Headache and Other Secondary Causes",
+          "keyPoints": [
+            "Hypertensive encephalopathy: BP usually >180/120 + headache + visual changes + altered mental status",
+            "Carbon monoxide: headache in multiple household members simultaneously; diffuse bilateral, frontal",
+            "Drug-induced headache: OCP (migraines worsen), vasodilators (nitroglycerin), NSAIDs (MOH if overused)",
+            "Neuroimaging indications: thunderclap, focal deficit, papilledema, immunocompromised, age >50 new headache, cancer history"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "1B is exclusively secondary/dangerous headaches. Each question must have a red flag feature in the stem. No question may overlap demographically with 1A primary headache questions."
+    },
+    {
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "lessonId": "np-p1-fatigue-1",
+      "title": "Fatigue Differential: Systematic Approach in Primary Care",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Generate a systematic differential for fatigue covering endocrine, hematological, psychiatric, and infectious causes",
+        "Use targeted history findings and screening labs to distinguish thyroid disease, anemia, diabetes, and depression as causes of fatigue",
+        "Recognize red flag fatigue features suggesting malignancy or serious systemic disease",
+        "Apply an efficient initial lab panel for undifferentiated fatigue in primary care",
+        "Identify when fatigue represents a symptom of an emerging condition requiring urgent workup"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Initial Lab Panel for Undifferentiated Fatigue",
+          "keyPoints": [
+            "CBC (anemia, leukemia), CMP (renal, hepatic, glucose), TSH (thyroid), fasting glucose or HbA1c (diabetes), ferritin (IDA), B12/folate",
+            "PHQ-9 (depression screen) — should be done simultaneously with lab workup, not after labs are 'normal'",
+            "Additional based on history: EBV/mono spot, HIV, hepatitis panel, ESR/CRP (inflammatory/autoimmune)"
+          ]
+        },
+        {
+          "sectionTitle": "Thyroid Causes",
+          "keyPoints": [
+            "Hypothyroidism: fatigue + cold intolerance + constipation + weight gain + dry skin + hair loss + bradycardia + myxedema; TSH elevated, free T4 low",
+            "Hyperthyroidism: fatigue + heat intolerance + weight loss + tremor + palpitations + diarrhea; TSH suppressed, free T4/T3 elevated",
+            "Subclinical hypothyroidism: elevated TSH, normal free T4, nonspecific symptoms — treat if TSH >10 or symptomatic"
+          ]
+        },
+        {
+          "sectionTitle": "Anemia as a Cause of Fatigue",
+          "keyPoints": [
+            "IDA: microcytic (MCV <80), low ferritin (<12 ng/mL), pica, pagophagia, heavy menstrual bleeding in women, GI blood loss in men/older adults",
+            "B12/folate deficiency: macrocytic (MCV >100), neurological symptoms (subacute combined degeneration — B12), glossitis, vegetarian/vegan diet",
+            "Anemia of chronic disease: normocytic, low iron, low TIBC, elevated ferritin (opposite of IDA)",
+            "Hemolytic anemia: jaundice, splenomegaly, elevated LDH and indirect bilirubin"
+          ]
+        },
+        {
+          "sectionTitle": "Diabetes and Metabolic Causes",
+          "keyPoints": [
+            "Uncontrolled T2DM: fatigue + polyuria + polydipsia + blurred vision; HbA1c elevated",
+            "Hypothalamic-pituitary: hypopituitarism causes fatigue with other hormonal deficiencies (hypogonadism, adrenal insufficiency, hypothyroidism together)",
+            "CKD-related fatigue: correlates with eGFR decline; often overlooked — check creatinine in any fatigue workup",
+            "Obstructive sleep apnea: fatigue + excessive daytime sleepiness + witnessed apneas + loud snoring; BMI is a risk factor but not required"
+          ]
+        },
+        {
+          "sectionTitle": "Psychiatric and Infectious Causes",
+          "keyPoints": [
+            "MDD: fatigue + depressed mood or anhedonia; PHQ-9 ≥10; rule out medical causes first but do not delay PHQ-9 screening",
+            "EBV/infectious mononucleosis: fatigue + pharyngitis + cervical posterior lymphadenopathy + splenomegaly; atypical lymphocytes on peripheral smear; heterophile antibody test",
+            "Red flag fatigue features: unintentional weight loss, night sweats, lymphadenopathy, hemoptysis → malignancy workup"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Fatigue questions must specify both the fatigue quality AND the associated symptom cluster that narrows the differential. No question may use the same associated symptom combination as another Phase 1 topic (e.g., fever + fatigue is covered in Fever Without Source topic)."
+    },
+    {
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "lessonId": "np-p1-fever-1",
+      "title": "Fever Without Source: Viral vs Bacterial vs Systemic Cause",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Apply age-stratified risk assessment for fever without an identifiable source",
+        "Distinguish viral from bacterial causes using clinical features, WBC patterns, and procalcitonin",
+        "Recognize fever patterns suggesting malignancy, autoimmune disease, or travel-related illness",
+        "Identify high-risk fever presentations requiring immediate workup and empiric treatment",
+        "Determine appropriate workup and disposition for fever without source by clinical context"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Fever Without Source Framework",
+          "keyPoints": [
+            "Definition: fever (≥38°C/100.4°F) without a clear focus after history, physical, and initial assessment",
+            "Acute (<7 days): usually infectious; subacute/prolonged (>3 weeks): consider FUO workup (infection, malignancy, autoimmune, drug fever)",
+            "FUO diagnostic criteria: ≥38.3°C on multiple occasions, duration >3 weeks, no diagnosis after 3 outpatient visits or 3 days hospitalization"
+          ]
+        },
+        {
+          "sectionTitle": "Viral vs Bacterial Differentiation",
+          "keyPoints": [
+            "Viral: gradual onset, self-limiting, WBC normal or mildly elevated with lymphocyte predominance, procalcitonin <0.25 ng/mL",
+            "Bacterial: higher fever, chills/rigors, WBC >12,000 with left shift, procalcitonin >0.5 ng/mL, localized source usually identifiable",
+            "Procalcitonin: rises rapidly (4–6 hrs) in bacterial infection; useful to guide antibiotic stewardship; not useful for localized infections (UTI, skin)"
+          ]
+        },
+        {
+          "sectionTitle": "High-Risk Fever Presentations",
+          "keyPoints": [
+            "Infant <3 months with fever ≥38°C: serious bacterial infection (SBI) risk — requires full septic workup (CBC, CMP, UA/culture, blood culture, consider LP)",
+            "Febrile neutropenia: ANC <500 + fever = oncologic emergency; empiric broad-spectrum antibiotics",
+            "Returned traveler with fever: malaria until proven otherwise (can be fatal if delayed); also dengue, typhoid, rickettsial disease",
+            "IVDU with fever: endocarditis until proven otherwise; blood cultures ×2 before antibiotics; echocardiogram"
+          ]
+        },
+        {
+          "sectionTitle": "Systemic and Non-Infectious Causes",
+          "keyPoints": [
+            "Lymphoma (B symptoms): fever + drenching night sweats + ≥10% weight loss + lymphadenopathy",
+            "SLE flare: fever + malar rash + joint pain + serositis; check ANA, anti-dsDNA, complement levels",
+            "Drug fever: temporal relation to medication start; common culprits: beta-lactams, phenytoin, sulfonamides, allopurinol; eosinophilia may be present",
+            "Toxic shock syndrome: fever + hypotension + diffuse erythematous rash + multiorgan dysfunction; tampon use or skin wound as source"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Fever questions must include a clinical context detail (age, travel history, occupation, immunosuppression, IV drug use) that anchors the differential. No fever stem may use the same context as a stem in any other Phase 1 topic."
+    },
+    {
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "lessonId": "np-p1-syncope-1",
+      "title": "Syncope Differential: Vasovagal, Cardiac, and Neurological",
+      "targetQuestions": 12,
+      "learningObjectives": [
+        "Classify syncope by mechanism: reflex (vasovagal), orthostatic, cardiac arrhythmic, cardiac structural, and neurological",
+        "Apply the San Francisco Syncope Rule to identify high-risk features requiring ED evaluation",
+        "Distinguish true syncope from seizure, hypoglycemic loss of consciousness, and TIA mimics",
+        "Use ECG findings to identify arrhythmic causes of syncope",
+        "Determine which syncope presentations can be evaluated outpatient vs require emergent evaluation"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Syncope Classification",
+          "keyPoints": [
+            "True syncope: transient loss of consciousness due to global cerebral hypoperfusion; self-limited; recovery within seconds",
+            "Reflex/vasovagal: prodrome (nausea, diaphoresis, warmth, yawning); trigger (prolonged standing, heat, emotional stress, venipuncture); most common type",
+            "Orthostatic: sustained drop in BP ≥20 mmHg systolic or ≥10 mmHg diastolic within 3 minutes of standing; causes (dehydration, medications, autonomic neuropathy)",
+            "Cardiac arrhythmic: no prodrome, exertional, older patients; family hx sudden cardiac death; ECG abnormalities",
+            "Cardiac structural: exertional syncope + murmur = aortic stenosis or HOCM until proven otherwise"
+          ]
+        },
+        {
+          "sectionTitle": "San Francisco Syncope Rule (CHESS)",
+          "keyPoints": [
+            "C: CHF history",
+            "H: Hematocrit <30%",
+            "E: Abnormal ECG",
+            "S: Shortness of breath",
+            "S: Systolic BP <90 at triage",
+            "Any positive: high risk → ED evaluation"
+          ]
+        },
+        {
+          "sectionTitle": "Syncope vs Seizure vs TIA",
+          "keyPoints": [
+            "Seizure: tonic-clonic movements before LOC (not after), post-ictal confusion (prolonged), tongue biting, urinary incontinence, headache after",
+            "Convulsive syncope: brief tonic-clonic-like movements AFTER LOC due to cerebral hypoperfusion — EEG normal, no post-ictal confusion",
+            "TIA: focal neurological deficits during event (slurred speech, arm weakness, visual loss) — NOT a cause of syncope (TIA causes focal deficits, not global cerebral hypoperfusion)"
+          ]
+        },
+        {
+          "sectionTitle": "High-Risk ECG Findings in Syncope",
+          "keyPoints": [
+            "Prolonged QT (>470 ms women, >450 ms men): risk of torsades de pointes",
+            "Brugada pattern: RBBB morphology + ST elevation in V1–V2 (coved type)",
+            "Complete heart block or high-degree AV block: Stokes-Adams attacks",
+            "Pre-excitation (WPW delta wave): risk of SVT degenerating to VF",
+            "New LBBB: may indicate structural heart disease or ischemia"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Syncope questions must specify whether prodrome was present (vasovagal) or absent (cardiac). Seizure-mimicking syncope questions must distinguish by post-event behavior. No syncope question may reuse a demographic already used in dyspnea or chest pain questions."
+    },
+    {
+      "topicSlug": "flank-pain-differential-uti-stones-pyelo",
+      "lessonPart": "1",
+      "lessonId": "np-p1-flank-1",
+      "title": "Flank Pain Differential: UTI, Nephrolithiasis, Pyelonephritis, and Beyond",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Distinguish nephrolithiasis from pyelonephritis, uncomplicated UTI, and renal pathology using history and targeted exam",
+        "Identify clinical features suggesting malignant, vascular, or musculoskeletal causes of flank pain",
+        "Apply urine dipstick, urinalysis, and imaging selection criteria for flank pain evaluation",
+        "Recognize when flank pain requires immediate transfer (suspected ruptured AAA, urosepsis)",
+        "Determine appropriate outpatient management vs ED disposition for nephrolithiasis"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Clinical Differentiation Framework",
+          "keyPoints": [
+            "Nephrolithiasis: sudden severe colicky flank pain radiating to groin/ipsilateral testicle or labia; patient restless/unable to find comfortable position; hematuria (80%); nausea/vomiting; NO fever unless infection superimposed",
+            "Pyelonephritis: fever + rigors + flank pain + CVA tenderness + urinary symptoms (dysuria, frequency, urgency); less colicky, more constant",
+            "Uncomplicated UTI: lower tract symptoms only (dysuria, frequency, urgency), no fever >38°C, no CVA tenderness",
+            "Key differentiator: fever + flank pain = pyelonephritis; afebrile + colicky + radiation to groin = stone"
+          ]
+        },
+        {
+          "sectionTitle": "Nephrolithiasis Evaluation",
+          "keyPoints": [
+            "Urinalysis: hematuria (absent in 20% of stones — don't rule out), possible pH clue to stone type",
+            "Imaging: low-dose non-contrast CT abdomen/pelvis (gold standard); renal US first-line for pregnant women and radiation concerns",
+            "Stone size management: <5 mm → 90% pass spontaneously; 5–10 mm → 50% pass; >10 mm → urological intervention typically needed",
+            "Indication for ED transfer from office: suspected urosepsis (stone + fever), uncontrolled pain, solitary kidney, bilateral obstruction, anuric"
+          ]
+        },
+        {
+          "sectionTitle": "Beyond the Usual Causes",
+          "keyPoints": [
+            "Renal cell carcinoma: painless hematuria + flank pain + palpable mass (classic triad — often late presentation); weight loss, fatigue, night sweats",
+            "ADPKD: bilateral flank pain + bilateral palpable kidneys + family history + HTN + hematuria",
+            "Ruptured AAA masquerading as flank pain: sudden severe pain radiating to flank + hemodynamic instability + pulsatile mass — emergent surgery",
+            "Musculoskeletal: reproducible with position change, paraspinal muscle tenderness, hx trauma or heavy lifting, no urinary symptoms"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Flank pain questions must specify fever status and urinary symptom presence to anchor the differential. No flank pain stem may duplicate the UTI or pyelonephritis stems used in Acute Primary Care Phase 5 topics."
+    },
+    {
+      "topicSlug": "knee-pain-differential",
+      "lessonPart": "1",
+      "lessonId": "np-p1-knee-1",
+      "title": "Knee Pain Differential: Structural, Inflammatory, and Infectious Causes",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Distinguish traumatic structural causes (ACL, meniscus, patellar fracture) from inflammatory arthritis and septic arthritis",
+        "Apply the Ottawa Knee Rules to select patients who require radiographic evaluation",
+        "Recognize septic arthritis as a surgical emergency requiring immediate joint aspiration",
+        "Differentiate monoarthritis from polyarthritis presentations and their differential implications",
+        "Identify referred pain from hip and lumbar spine as a cause of knee pain"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Structural Traumatic Causes",
+          "keyPoints": [
+            "ACL tear: twisting mechanism, immediate swelling (hemarthrosis), positive Lachman test (most sensitive), anterior drawer sign, pivot shift",
+            "Meniscus tear: joint line tenderness, McMurray test (pain/click with rotation), locking or giving way; effusion develops over hours vs immediate in ACL",
+            "PCL tear: posterior sag on exam, mechanism often dashboard injury or forced hyperextension",
+            "Ottawa Knee Rules: X-ray needed if: age ≥55, isolated patellar tenderness, fibular head tenderness, cannot flex to 90°, or cannot weight-bear 4 steps"
+          ]
+        },
+        {
+          "sectionTitle": "Inflammatory Arthritis",
+          "keyPoints": [
+            "Osteoarthritis: older patient, mechanical pain (worse with activity, better with rest), morning stiffness <30 minutes, crepitus, bony enlargement, Heberden/Bouchard nodes",
+            "Rheumatoid arthritis: symmetric, small joints primarily but can involve knees; morning stiffness >1 hour, RF/anti-CCP antibodies",
+            "Gout: sudden onset monoarthritis, first MTP classic but any joint; joint aspiration: negatively birefringent needle-shaped crystals (MSU)",
+            "Pseudogout: calcium pyrophosphate crystals, positively birefringent rhomboid-shaped; often knee; radiograph: chondrocalcinosis"
+          ]
+        },
+        {
+          "sectionTitle": "Septic Arthritis",
+          "keyPoints": [
+            "Single hot swollen joint + fever = septic until proven otherwise",
+            "Gonococcal arthritis in young sexually active adults: migratory arthritis preceding monoarthritis + skin lesions (pustules) + tenosynovitis",
+            "Non-gonococcal: S. aureus most common; IVDU: gram-negative organisms possible",
+            "Joint aspiration: WBC >50,000/mm³ suggests septic; send culture, glucose, protein, crystal analysis",
+            "Do NOT delay aspiration — cartilage destruction occurs within hours of untreated septic arthritis"
+          ]
+        },
+        {
+          "sectionTitle": "Other Causes and Referred Pain",
+          "keyPoints": [
+            "Patellofemoral pain syndrome (PFPS): anterior knee pain worse with stairs, squatting, prolonged sitting ('movie sign'); young athletes and women",
+            "Osgood-Schlatter: tibial tuberosity swelling and tenderness in adolescent athletes during growth spurt",
+            "Baker's cyst: posterior knee fullness; rupture mimics DVT (calf swelling, edema) — ultrasound differentiates",
+            "Referred pain: hip OA (anterior knee pain, normal knee exam, limited internal hip rotation); lumbar radiculopathy (dermatomal pattern)"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "All knee pain questions must specify age, mechanism (traumatic vs atraumatic), and joint involvement pattern (mono vs poly). Septic arthritis questions must include fever. No knee pain stem may duplicate the gout or OA stems in Phase 3 chronic disease topics."
+    },
+    {
+      "topicSlug": "rash-differential-primary-care",
+      "lessonPart": "1",
+      "lessonId": "np-p1-rash-1",
+      "title": "Rash Differential: Morphology-Based Primary Care Approach",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Apply a morphology-based framework (macule, papule, vesicle, pustule, purpura) to narrow rash differential",
+        "Identify immediately life-threatening rashes requiring emergency transfer (meningococcemia, SJS/TEN, NF)",
+        "Distinguish viral from bacterial from inflammatory rashes using distribution, associated symptoms, and appearance",
+        "Recognize contact dermatitis, atopic dermatitis, and psoriasis as common chronic rash presentations",
+        "Determine which rash presentations require dermatology referral vs primary care management"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Morphology Framework",
+          "keyPoints": [
+            "Macule/patch: flat color change — viral exanthems, hyperpigmentation, tinea versicolor",
+            "Papule/plaque: raised palpable — psoriasis, lichen planus, eczema, seborrheic dermatitis",
+            "Vesicle/bulla: fluid-filled — herpes simplex/zoster, bullous pemphigoid, contact dermatitis",
+            "Pustule: purulent fluid — folliculitis, impetigo, acne, disseminated gonococcemia",
+            "Purpura/petechiae: non-blanching — ITP, vasculitis, meningococcemia, RMSF (requires immediate action)",
+            "Target lesion: erythema multiforme (minor) vs SJS (extensive mucosal involvement, >10% BSA skin detachment)"
+          ]
+        },
+        {
+          "sectionTitle": "Life-Threatening Rashes",
+          "keyPoints": [
+            "Meningococcemia: fever + non-blanching purpuric rash ± meningismus — call 911, empiric antibiotics before transfer",
+            "SJS/TEN: medication reaction (sulfonamides, anticonvulsants, allopurinol, NSAIDs); mucosal involvement, skin detachment, Nikolsky sign positive",
+            "Necrotizing fasciitis: severe pain out of proportion to exam, skin changes (bronze → bullae → necrosis), systemic toxicity, crepitus — emergent surgery",
+            "RMSF: tick bite + fever + rash starting on wrists/ankles spreading centrally — thrombocytopenia, hyponatremia"
+          ]
+        },
+        {
+          "sectionTitle": "Common Infectious Rashes",
+          "keyPoints": [
+            "Herpes zoster: dermatomal vesicular rash, burning/pruritic, allodynia preceding rash by 1–3 days",
+            "Primary syphilis: painless indurated chancre + bilateral inguinal lymphadenopathy; may be missed",
+            "Secondary syphilis: diffuse maculopapular rash involving palms and soles — pathognomonic pattern",
+            "Lyme disease: erythema migrans (expanding annular target lesion ≥5 cm, central clearing); tick exposure",
+            "Scarlet fever: sandpaper-like rash + strawberry tongue + pharyngitis; Group A Strep"
+          ]
+        },
+        {
+          "sectionTitle": "Chronic Inflammatory Rashes",
+          "keyPoints": [
+            "Psoriasis: well-demarcated erythematous plaques with silvery scale; Auspitz sign (pinpoint bleeding when scale removed); extensor surfaces, scalp, nails (onycholysis)",
+            "Atopic dermatitis: flexor surfaces, intensely pruritic, lichenification from chronic scratching; atopic triad with asthma and allergic rhinitis",
+            "Contact dermatitis: linear or geometric pattern matching allergen exposure (poison ivy), pruritic, vesicular"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Rash questions must specify the morphology type, distribution, and whether blanching is present. Life-threatening rash questions (meningococcemia, SJS) must test recognition and disposition — not treatment."
+    },
+    {
+      "topicSlug": "red-eye-differential-conjunctivitis-glaucoma",
+      "lessonPart": "1",
+      "lessonId": "np-p1-redeye-1",
+      "title": "Red Eye Differential: Primary Care Triage and Diagnosis",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Distinguish conjunctivitis (bacterial, viral, allergic) from uveitis, acute angle-closure glaucoma, and corneal pathology",
+        "Identify clinical features requiring immediate ophthalmology referral",
+        "Apply visual acuity assessment and fluorescein staining concepts to red eye evaluation",
+        "Recognize gonococcal conjunctivitis as a vision-threatening STI requiring urgent treatment",
+        "Determine which red eye presentations can be managed in primary care vs require referral"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Red Eye Triage Framework",
+          "keyPoints": [
+            "Vision-threatening red eye features: pain (not just discomfort), vision loss, photophobia, fixed or irregular pupil, ciliary flush — any of these requires same-day ophthalmology referral",
+            "Non-vision-threatening: discharge predominant, normal vision, bilateral, itching without pain, clear cornea"
+          ]
+        },
+        {
+          "sectionTitle": "Conjunctivitis Types",
+          "keyPoints": [
+            "Bacterial: mucopurulent discharge (yellow/green), crusted lashes, unilateral or bilateral, morning crusting; common pathogens: S. aureus, S. pneumoniae, H. influenzae (children)",
+            "Viral (adenoviral): watery/serous discharge, preauricular lymphadenopathy, often follows URI, highly contagious, bilateral, follicular response on palpation of palpebral conjunctiva",
+            "Allergic: bilateral, intense itching (key differentiator), stringy/watery discharge, papillary response, seasonal pattern or allergen exposure",
+            "Gonococcal: copious purulent discharge, rapid progression, chemosis; STI co-testing essential; vision-threatening (corneal perforation)"
+          ]
+        },
+        {
+          "sectionTitle": "Uveitis and Iritis",
+          "keyPoints": [
+            "Anterior uveitis/iritis: unilateral, deep aching pain, photophobia, CILIARY FLUSH (perilimbal injection), irregular/constricted pupil, cells and flare on slit-lamp",
+            "Associated conditions: HLA-B27 (ankylosing spondylitis, reactive arthritis, IBD, psoriasis), sarcoidosis, juvenile idiopathic arthritis",
+            "Urgent ophthalmology referral — synechiae formation and vision loss if untreated"
+          ]
+        },
+        {
+          "sectionTitle": "Acute Angle-Closure Glaucoma",
+          "keyPoints": [
+            "Sudden severe unilateral eye pain + headache + nausea/vomiting + halos around lights + blurred vision",
+            "Fixed mid-dilated pupil (5–6 mm); steamy/hazy cornea (corneal edema from elevated IOP)",
+            "IOP typically >40 mmHg (normal <21); triggered by dim lighting, mydriatics, medications",
+            "Ophthalmic emergency: permanent vision loss within hours — immediate referral while starting topical IOP-lowering agents"
+          ]
+        },
+        {
+          "sectionTitle": "Corneal Pathology",
+          "keyPoints": [
+            "Corneal abrasion: foreign body sensation, photophobia, pain, fluorescein staining shows defect under Wood's lamp/cobalt blue light",
+            "Corneal ulcer: contact lens wearer + severe pain + purulent discharge + white corneal opacity — culture before antibiotics; urgent ophthalmology",
+            "Subconjunctival hemorrhage: bright red blood under conjunctiva; flat, unilateral; no pain; no vision change; benign if atraumatic; resolve in 1–3 weeks"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "All red eye questions must specify: unilateral or bilateral, presence or absence of pain (distinct from discomfort), and visual acuity status. Painless red eye = likely conjunctivitis or subconjunctival hemorrhage. Painful = iritis, glaucoma, corneal pathology — must test referral decision."
+    },
+    {
+      "topicSlug": "hemoptysis-differential-risk-workup",
+      "lessonPart": "1",
+      "lessonId": "np-p1-hemoptysis-1",
+      "title": "Hemoptysis Differential: Etiology, Risk Stratification, and Workup",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Generate a comprehensive differential for hemoptysis from airway, parenchymal, vascular, and cardiac causes",
+        "Distinguish true hemoptysis from hematemesis and nasopharyngeal bleeding",
+        "Apply risk stratification to determine outpatient vs emergency evaluation based on volume and clinical context",
+        "Identify red flag features suggesting malignancy, TB, or vasculitis requiring urgent workup",
+        "Select appropriate initial imaging and workup based on clinical probability"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Hemoptysis vs Hematemesis",
+          "keyPoints": [
+            "Hemoptysis: bright red, frothy, alkaline pH, preceded by coughing or gurgling sensation in chest",
+            "Hematemesis: dark red or coffee-ground, acidic pH, preceded by nausea, mixed with food particles",
+            "Epistaxis: nasal source — examine nasopharynx; posterior epistaxis can be swallowed then vomited or coughed",
+            "Massive hemoptysis: >200–600 mL/24h (definitions vary); immediate airway threat — emergent"
+          ]
+        },
+        {
+          "sectionTitle": "Common Causes by Setting",
+          "keyPoints": [
+            "Outpatient, most common: bronchitis (most common cause in primary care), pneumonia, bronchiectasis",
+            "High-risk patient (smoker >40): lung cancer until proven otherwise",
+            "Young immigrant/endemic area: TB (upper lobe cavitary lesion + night sweats + weight loss)",
+            "Recurrent hemoptysis + chronic productive cough + clubbing: bronchiectasis (dilated airways — CT diagnostic)",
+            "Hemoptysis after DVT/PE: pulmonary infarction (pleuritic pain + peripheral wedge-shaped opacity)"
+          ]
+        },
+        {
+          "sectionTitle": "Cardiovascular and Systemic Causes",
+          "keyPoints": [
+            "Mitral stenosis: pulmonary venous HTN causes hemoptysis; exertional dyspnea, opening snap, low-pitched diastolic murmur at apex",
+            "Goodpasture syndrome: hemoptysis + hematuria + anti-GBM antibodies; rapidly progressive glomerulonephritis",
+            "GPA (Granulomatosis with Polyangiitis/Wegener): hemoptysis + saddle nose deformity + sinusitis + renal disease; c-ANCA positive",
+            "HHT (Hereditary Hemorrhagic Telangiectasia): telangiectasias on lips/tongue/hands; pulmonary AVMs; family history"
+          ]
+        },
+        {
+          "sectionTitle": "Workup Approach",
+          "keyPoints": [
+            "All hemoptysis: CXR first — identifies mass, infiltrate, cavitation, cardiomegaly",
+            "CXR normal + smoker >40 or risk factors: CT chest with contrast + bronchoscopy",
+            "Suspected TB: sputum AFB smear × 3, cultures, respiratory isolation",
+            "Urgent labs: CBC (thrombocytopenia), PT/INR (coagulopathy), BUN/Cr (Goodpasture/vasculitis), ANCA if systemic features",
+            "Indications for immediate hospital transfer: hemoptysis >5 mL per episode, hemodynamic instability, O2 saturation decline, bilateral infiltrates"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Hemoptysis questions must specify volume (small streaking vs significant), patient age/smoking history, and any systemic symptoms. Malignancy and TB questions must have red flag features embedded in the stem to be appropriately expert-level."
+    },
+    {
+      "topicSlug": "lymphadenopathy-reactive-malignant-workup",
+      "lessonPart": "1",
+      "lessonId": "np-p1-lymph-1",
+      "title": "Lymphadenopathy: Reactive vs Malignant Workup Algorithm",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Apply anatomical location of lymphadenopathy to generate an appropriate differential",
+        "Distinguish reactive from malignant lymphadenopathy using node characteristics, associated symptoms, and duration",
+        "Recognize B symptoms as a lymphoma red flag requiring urgent workup",
+        "Identify Virchow's node, Sister Mary Joseph nodule, and scalene node significance",
+        "Apply the initial workup algorithm and determine criteria for lymph node biopsy referral"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Anatomical Location Framework",
+          "keyPoints": [
+            "Cervical (anterior): upper respiratory infections, EBV, oral/dental infections, thyroid pathology",
+            "Cervical (posterior): EBV (classic posterior cervical), rubella, toxoplasmosis, scalp infections",
+            "Supraclavicular: HIGH concern for malignancy — right: lung/esophageal; left (Virchow's node): gastric/abdominal/pelvic malignancy",
+            "Axillary: breast pathology, arm/chest wall infection, lymphoma, cat scratch disease",
+            "Inguinal: lower extremity/perineal infection, STIs (syphilis, LGV, genital herpes), lower extremity lymphoma",
+            "Mediastinal/hilar (on imaging): sarcoidosis, lymphoma, TB, histoplasmosis"
+          ]
+        },
+        {
+          "sectionTitle": "Reactive vs Malignant Features",
+          "keyPoints": [
+            "Reactive (benign): soft, tender, mobile, <1 cm, associated recent infection, resolves in 4–6 weeks",
+            "Malignant (concerning): firm to rubbery (lymphoma) or rock-hard (metastatic), non-tender, fixed, >1 cm, no associated infection, persists >4–6 weeks or progressive",
+            "Supraclavicular nodes: always concerning regardless of size or tenderness",
+            "B symptoms: fever >38°C + drenching night sweats + ≥10% weight loss in 6 months → lymphoma workup"
+          ]
+        },
+        {
+          "sectionTitle": "Common Infectious Causes",
+          "keyPoints": [
+            "EBV (infectious mononucleosis): posterior cervical LAD + splenomegaly + pharyngitis + atypical lymphocytes + heterophile antibody",
+            "CMV: similar to EBV but heterophile negative; CMV-specific IgM diagnostic",
+            "Toxoplasmosis: cat exposure or undercooked meat; posterior cervical LAD; IgG/IgM serology",
+            "Cat scratch disease (Bartonella henselae): cat scratch/bite → regional LAD + fever + papule at inoculation site; treatment: azithromycin for severe cases",
+            "HIV: acute HIV with seroconversion syndrome — generalized LAD + fever + pharyngitis + rash"
+          ]
+        },
+        {
+          "sectionTitle": "Workup and Biopsy Criteria",
+          "keyPoints": [
+            "Initial workup: CBC with differential (atypical lymphocytes, blast cells), LDH and uric acid (lymphoma), ESR/CRP, monospot, EBV/CMV serology, CXR",
+            "Biopsy indications: persistence >4–6 weeks without explanation, size >1–2 cm without infection, supraclavicular location, B symptoms, associated constitutional symptoms, rock-hard consistency",
+            "Excisional biopsy preferred over FNA for lymph node evaluation when lymphoma is suspected (need architecture)",
+            "CT chest/abdomen/pelvis: required for staging evaluation once malignancy is suspected"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Lymphadenopathy questions must specify node location, size, consistency (tender/non-tender, mobile/fixed), duration, and associated symptoms. The high-yield teaching distinction is reactive vs malignant, so each question should test one arm of that distinction clearly."
+    },
+    {
+      "topicSlug": "endocrine-crisis-differentials-recognition",
+      "lessonPart": "1",
+      "lessonId": "np-p1-endocrine-crisis-1",
+      "title": "Endocrine Crisis Differentials: Recognition and Triage in Primary Care",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Distinguish adrenal insufficiency from thyroid storm, myxedema coma, DKA, and HHS using presenting features",
+        "Recognize hypoglycemic crisis as a common endocrine emergency with specific recognition features",
+        "Identify the clinical findings that differentiate primary vs secondary adrenal insufficiency",
+        "Apply recognition-level decision-making to determine disposition for endocrine emergencies encountered in primary care",
+        "Recognize pheochromocytoma crisis as a treatable cause of hypertensive emergency"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Adrenal Insufficiency Recognition",
+          "keyPoints": [
+            "Primary AI (Addison's disease): fatigue + hyperpigmentation (ACTH stimulates MSH — buccal mucosa, skin creases, recent scars) + hypotension + hyponatremia + HYPERKALEMIA",
+            "Secondary AI: fatigue + hypotension WITHOUT hyperpigmentation (ACTH deficiency, so no MSH stimulation) + hyponatremia but NOT hyperkalemia (aldosterone intact)",
+            "Adrenal crisis triggers: sudden steroid withdrawal, illness, surgery, trauma in a patient on chronic steroids",
+            "Key labs: low cortisol + high ACTH (primary) vs low cortisol + low ACTH (secondary); hyponatremia + hyperkalemia combination is classic for primary AI"
+          ]
+        },
+        {
+          "sectionTitle": "Thyroid Storm vs Myxedema Coma",
+          "keyPoints": [
+            "Thyroid storm: fever >38.5°C + tachycardia/arrhythmia + HTN + altered mental status + GI symptoms (vomiting, diarrhea) in hyperthyroid patient; precipitated by infection, surgery, or iodine load",
+            "Burch-Wartofsky Point Scale: used to quantify likelihood of thyroid storm (temperature, heart rate, CNS effects, GI-hepatic dysfunction)",
+            "Myxedema coma: severe hypothyroidism + altered mental status + hypothermia + bradycardia + hypoventilation + hyponatremia; precipitated by cold exposure, infection, medications (sedatives)",
+            "Recognition distinction: thyroid storm = hyperadrenergic state; myxedema coma = hypometabolic shutdown"
+          ]
+        },
+        {
+          "sectionTitle": "DKA vs HHS",
+          "keyPoints": [
+            "DKA: T1DM primarily (can occur in T2DM); glucose often 250–600; ANION GAP metabolic ACIDOSIS (pH <7.3, bicarbonate <18); Kussmaul breathing; fruity breath; ketonemia/ketonuria",
+            "HHS: T2DM exclusively; glucose often >600 (can be >1000); NO or minimal ketoacidosis; severe dehydration; altered mental status proportional to hyperosmolarity",
+            "Key distinction: acidosis present in DKA, absent in HHS; ketones positive in DKA, absent/minimal in HHS",
+            "Both require ED transfer — recognition in primary care initiates transfer while providing initial IV access if available"
+          ]
+        },
+        {
+          "sectionTitle": "Hypoglycemic Crisis and Pheochromocytoma",
+          "keyPoints": [
+            "Severe hypoglycemia (<54 mg/dL with symptoms; <40 mg/dL with altered mental status): diaphoresis + tremor + tachycardia (adrenergic) → confusion → seizure → coma",
+            "In-office recognition: glucose meter; if responsive → oral glucose; if altered → glucagon 1 mg IM (if available); call 911",
+            "Pheochromocytoma crisis: paroxysmal hypertension + palpitations + headache + diaphoresis (classic triad); can be precipitated by stress, palpation, or certain medications (beta-blockers)",
+            "Recognition: episodic nature distinguishes from essential hypertension; screen with plasma free metanephrines or 24-hour urine catecholamines"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SCOPE FENCE: This lesson covers RECOGNITION and TRIAGE DISPOSITION ONLY. No question may test specific dose of hydrocortisone, propylthiouracil dosing, DKA fluid resuscitation rates, or any treatment protocol. Permitted question types: 'most likely diagnosis', 'which finding confirms the diagnosis', 'most appropriate immediate action' (answer must be 'transfer to ED' or 'call 911' — not a specific pharmacological intervention)."
+    }
+  ]
+}

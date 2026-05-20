@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-04-15T03:04:52.060Z",
+  "phase": "legacy_advanced_ts",
+  "dryRun": true,
+  "filesScanned": 40,
+  "rawQuestions": 3,
+  "normalizedOk": 3,
+  "normalizeErrors": 0,
+  "skippedDuplicateStemInDb": 0,
+  "skippedDuplicateInRun": 0,
+  "inserted": 0,
+  "insertErrors": [],
+  "fileSummaries": [],
+  "errorSamples": []
+}

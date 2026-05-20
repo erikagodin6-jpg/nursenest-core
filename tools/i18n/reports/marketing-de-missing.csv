@@ -1,0 +1,1258 @@
+locale,key,englishValue,overlayValue,overlayStatus,section,priorityRank
+de,pages.pricing.billing.heading,Choose how long you want to commit,,missing_in_overlay,pricing,1
+de,pages.pricing.billing.helper,Totals help you compare term savings; Stripe shows the exact charge before you pay. You can switch term at renewal where your plan allows.,,missing_in_overlay,pricing,1
+de,pages.pricing.billing.recurringDisclosure,"Subscriptions renew automatically until you cancel. Stripe shows the renewal cadence, price, and next charge date before you pay. Cancellation and refund rules are in our subscription & refund policy.",,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.comingSoon,Coming soon,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.continue,Continue to secure checkout,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.mustAcceptPolicies,Confirm the policies above to continue to checkout.,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyAckBetween1,", ",,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyAckBetween2,", and ",,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyAckEnd,", including recurring billing and cancellation rules.",,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyAckStart,I have read and agree to the ,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyPrivacyLabel,Privacy Policy,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyRefundLabel,Subscription & refund policy,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.policyTermsLabel,Terms of Service,,missing_in_overlay,pricing,1
+de,pages.pricing.checkout.recurringShort,Recurring billing: your plan renews until you cancel in the billing portal. Exact terms appear on Stripe before payment.,,missing_in_overlay,pricing,1
+de,pages.pricing.country.ca,Canada,,missing_in_overlay,pricing,1
+de,pages.pricing.country.us,United States,,missing_in_overlay,pricing,1
+de,pages.pricing.countryLabel,Country:,,missing_in_overlay,pricing,1
+de,pages.pricing.description,"NurseNest Core plans by exam pathway (RPN, LVN/LPN, RN, NP, allied) and country—full bank, lessons, mocks, and server-checked access.",,missing_in_overlay,pricing,1
+de,pages.pricing.duration.3month,3 months,,missing_in_overlay,pricing,1
+de,pages.pricing.duration.6month,6 months,,missing_in_overlay,pricing,1
+de,pages.pricing.duration.monthly,Monthly,,missing_in_overlay,pricing,1
+de,pages.pricing.duration.yearly,12 months (best savings),,missing_in_overlay,pricing,1
+de,pages.pricing.error.checkoutNetwork,Network error starting checkout. Check your connection and try again.,,missing_in_overlay,pricing,1
+de,pages.pricing.error.checkoutSignIn,"Sign in first, then return here to finish checkout.",,missing_in_overlay,pricing,1
+de,pages.pricing.error.checkoutUnavailable,Checkout is not available for this plan right now.,,missing_in_overlay,pricing,1
+de,pages.pricing.error.loadPlans,We could not load plans. Refresh the page or try again shortly.,,missing_in_overlay,pricing,1
+de,pages.pricing.h1,Pricing that matches your exam—not a generic subscription wall,,missing_in_overlay,pricing,1
+de,pages.pricing.institutionalBanner,"Programs & schools: volume licensing, cohort seats, and admin-friendly rollout—see institutional pricing.",,missing_in_overlay,pricing,1
+de,pages.pricing.institutionalLink,Institutional & program pricing,,missing_in_overlay,pricing,1
+de,pages.pricing.intro,"Pick your pathway and country. After checkout, that tier unlocks the full question bank, lessons, timed sessions, and score history for your registration context—no mixing in content from other scopes.",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.headline,Allied health exam prep anchored in clinical reasoning,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.headlineOutcome,Allied health exam prep anchored in clinical reasoning,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.headlineUrgency,Allied health exam prep anchored in clinical reasoning — start your pass-focused sprint,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.included0,Reasoning-heavy question practice with clear rationales,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.included1,Lesson library access aligned to your subscription tier,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.included2,Timed exams to rehearse stamina and pacing,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.included3,Simple analytics to steer your next study block,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.outcome0,Practice rapid prioritization and protocol edges like certification exams,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.outcome1,Tie pathophysiology lessons to applied items the same week,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.outcome2,Track weak domains instead of repeating comfortable topics,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.proofLine,Certification success correlates with consistent application—not cramming—NurseNest enforces that cadence.,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.allied.subhead,"RT, paramedic, lab, and imaging learners use the same disciplined question → lesson → mock rhythm.",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.headline,NCLEX-PN prep that prioritizes safety and scope,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.headlineOutcome,NCLEX-PN prep that prioritizes safety and scope,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.headlineUrgency,NCLEX-PN prep that prioritizes safety and scope — start your pass-focused sprint,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.included0,PN-focused practice questions and rationales,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.included1,Lesson tracks for high-yield clinical foundations,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.included2,Practice exams drawn from your eligible pool only,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.included3,Performance cues to rebalance weak categories weekly,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.outcome0,Rehearse prioritization and therapeutic communication the way boards frame them,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.outcome1,Reinforce pharmacology monitoring PN scope expects,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.outcome2,Use mock pacing to reduce exam-day adrenaline mistakes,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.proofLine,Outcome-focused study beats passive videos—active items with rationales are built into every plan.,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.lvn_lpn.subhead,US LVN/LPN pathways get PN-level scenarios—no RN-only noise unless your plan includes it.,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.headline,NP exam prep with differential depth and management rigor,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.headlineOutcome,NP exam prep with differential depth and management rigor,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.headlineUrgency,NP exam prep with differential depth and management rigor — start your advanced-practice sprint,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.included0,NP-tier items with deeper rationale expectations,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.included1,Clinical lessons supporting advanced pathways (per your tier),,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.included2,Mock exam sessions sized for longer case blocks,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.included3,Category analytics tuned for NP scope,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.outcome0,Stress-test differentials and prescribing considerations safely,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.outcome1,Build speed on complex case stems without skipping rationale depth,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.outcome2,Align study blocks to the systems you actually see in practice,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.proofLine,NP candidates use NurseNest to keep complexity high without losing the feedback loop rationales provide.,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.np.subhead,"Advanced practice items emphasize synthesis, diagnostics, and follow-up planning.",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.headline,"NCLEX-RN readiness: judgment, pharmacology, and stamina",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.headlineOutcome,"NCLEX-RN readiness: judgment, pharmacology, and stamina",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.headlineUrgency,"NCLEX-RN readiness: judgment, pharmacology, and stamina — start your pass-focused sprint",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.included0,High-yield RN question bank with rationales,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.included1,Lessons across core systems and acute care transitions,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.included2,CAT-style / adaptive-friendly practice modes where available,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.included3,Exam analytics and review focused on your miss patterns,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.outcome0,Train clinical judgment with scenarios weighted like the real exam,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.outcome1,"Strengthen pharmacology, safety, and prioritization in one workflow",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.outcome2,Move from practice questions to full mocks when accuracy holds,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.proofLine,"Serious candidates combine daily questions, lessons, and mocks—NurseNest keeps that loop in one subscription.",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rn.subhead,"Integrated lessons, NGN-style thinking, and mock exams for Canada and the United States.",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.headline,Pass the REx-PN with practice that feels like exam day,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.headlineOutcome,Reach passing readiness: the REx-PN with practice that feels like exam day,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.headlineUrgency,Pass the REx-PN with practice that feels like exam day — start your pass-focused sprint,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.included0,PN-tier question bank with detailed rationales,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.included1,Clinical lessons mapped to entry-to-practice competencies,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.included2,Timed practice exams using your filtered item pool,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.included3,Progress visibility so you study what moves your score,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.outcome0,"Build confidence on delegation, scope, and stable vs unstable presentations",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.outcome1,Translate theory into quick decisions under time pressure,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.outcome2,Close gaps with category-aware review instead of random drilling,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.proofLine,Learners who train consistently with timed blocks and rationales report stronger readiness on exam-style judgment items.,,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.rpn.subhead,"PN-scope scenarios, safety-first rationales, and timed sets aligned to Canadian practical nursing.",,missing_in_overlay,pricing,1
+de,pages.pricing.narrative.variant.urgencyLine,Lock in a weekly question-and-rationale rhythm now—consistent reps beat last-minute cramming.,,missing_in_overlay,pricing,1
+de,pages.pricing.plan.avgSuffix,avg,,missing_in_overlay,pricing,1
+de,pages.pricing.plan.bestValue,Best value,,missing_in_overlay,pricing,1
+de,pages.pricing.plan.saveVsMonthly,Save ~{{pct}}% vs paying month-to-month,,missing_in_overlay,pricing,1
+de,pages.pricing.preview.badge,Inside the learner shell,,missing_in_overlay,pricing,1
+de,pages.pricing.preview.body,"Timed item sets, review mode, and mock exams live next to your running accuracy and category breakdowns—so you see whether you are actually improving, not just logging hours.",,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricAccuracy,72%,,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricAccuracyCaption,Rolling accuracy (sample),,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricsLabel,Example performance strip (illustrative),,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricStreak,5,,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricStreakCaption,Day study streak,,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricWeak,3,,missing_in_overlay,pricing,1
+de,pages.pricing.preview.metricWeakCaption,Categories flagged weak,,missing_in_overlay,pricing,1
+de,pages.pricing.section.includedHeading,Included in this tier,,missing_in_overlay,pricing,1
+de,pages.pricing.section.outcomesHeading,What changes in your study week,,missing_in_overlay,pricing,1
+de,pages.pricing.segment.allied,Allied health,,missing_in_overlay,pricing,1
+de,pages.pricing.segment.lvn,LVN/LPN (US),,missing_in_overlay,pricing,1
+de,pages.pricing.segment.np,NP,,missing_in_overlay,pricing,1
+de,pages.pricing.segment.rn,RN,,missing_in_overlay,pricing,1
+de,pages.pricing.segment.rpn,RPN (Canada),,missing_in_overlay,pricing,1
+de,pages.pricing.social.passRateLine,"Learners who keep a weekly rhythm—questions, rationales, timed blocks—tend to feel steadier as their test date approaches. Your mileage depends on how you use the bank.",,missing_in_overlay,pricing,1
+de,pages.pricing.social.pricingFooterLine,"One subscription covers the bank, lessons, timed practice, and performance history so you are not stitching together three different vendors the week before your exam.",,missing_in_overlay,pricing,1
+de,pages.pricing.title,Pricing,,missing_in_overlay,pricing,1
+de,pages.pricing.trust.bullet0,Secure checkout via Stripe,,missing_in_overlay,pricing,1
+de,pages.pricing.trust.bullet1,Built for Canada and US registration contexts,,missing_in_overlay,pricing,1
+de,pages.pricing.trust.bullet2,Your question bank stays scoped to the tier you purchased—no cross-tier leakage,,missing_in_overlay,pricing,1
+de,pages.pricing.trust.guaranteeBody,"If NurseNest is not helping you study with clearer structure and more disciplined practice in the first 30 days, contact support—we will work with you on a fair resolution.",,missing_in_overlay,pricing,1
+de,pages.pricing.trust.guaranteeTitle,30-day pass-focused guarantee,,missing_in_overlay,pricing,1
+de,paywall.dashboard.intro,"The dashboard shows access status for everyone; subscribers get readiness, streaks, planner, weak-topic nudges, and continue-where-you-left-off shortcuts.",,missing_in_overlay,paywall,2
+de,paywall.dashboard.lose0,Blended readiness and suggested next steps across sessions,,missing_in_overlay,paywall,2
+de,paywall.dashboard.lose1,Study planner and exam-date pacing,,missing_in_overlay,paywall,2
+de,paywall.dashboard.lose2,Weak-area flashcard and drill nudges from your misses,,missing_in_overlay,paywall,2
+de,paywall.dashboard.progress,"You already have activity on this account. Upgrade to turn this into your daily hub with saved signals, not just banners.",,missing_in_overlay,paywall,2
+de,paywall.dashboard.title,Unlock full access,,missing_in_overlay,paywall,2
+de,paywall.exams.intro,"Timed mocks draw from your tier’s server-side pool. Checkout enables full-length attempts, autosave, and score history.",,missing_in_overlay,paywall,2
+de,paywall.exams.lose0,Full-length timed sessions with attempt review,,missing_in_overlay,paywall,2
+de,paywall.exams.lose1,Score history and pacing that match authorization-to-test timing,,missing_in_overlay,paywall,2
+de,paywall.exams.lose2,Saved mocks tied to your pathway,,missing_in_overlay,paywall,2
+de,paywall.exams.progress,"When your plan is active, new mock attempts appear here immediately after checkout.",,missing_in_overlay,paywall,2
+de,paywall.exams.title,Unlock full access,,missing_in_overlay,paywall,2
+de,paywall.feature.adaptivePlanner,adaptive study planner,,missing_in_overlay,paywall,2
+de,paywall.feature.detailedRationales,detailed rationales,,missing_in_overlay,paywall,2
+de,paywall.feature.flashcards,flashcards,,missing_in_overlay,paywall,2
+de,paywall.feature.fullQuestionBank,full question bank,,missing_in_overlay,paywall,2
+de,paywall.feature.readinessTracking,readiness tracking,,missing_in_overlay,paywall,2
+de,paywall.footerHint,"Most candidates who feel exam-ready mixed steady question reps, full rationales, and at least one full mock in the weeks before their date, not a single cram block.",,missing_in_overlay,paywall,2
+de,paywall.lessons.intro,"Lesson previews show structure; subscribers get complete bodies, module progress, and the lesson pool that matches your pathway.",,missing_in_overlay,paywall,2
+de,paywall.lessons.lose0,Full lesson content beyond preview limits,,missing_in_overlay,paywall,2
+de,paywall.lessons.lose1,Completion tracking and resume across modules,,missing_in_overlay,paywall,2
+de,paywall.lessons.lose2,Cross-lesson sequences aligned to your exam scope,,missing_in_overlay,paywall,2
+de,paywall.lessons.progress,Any preview modules you opened still count toward your study story. Upgrade to keep progress and unlock full depth.,,missing_in_overlay,paywall,2
+de,paywall.lessons.title,Unlock full access,,missing_in_overlay,paywall,2
+de,paywall.loseHeading,What you lose without upgrading,,missing_in_overlay,paywall,2
+de,paywall.questions.intro,"Previews and capped runs show you the interface; a paid tier unlocks the full pathway-scoped pool, full rationales on every option, weak-area routing, and cross-device history.",,missing_in_overlay,paywall,2
+de,paywall.questions.lose0,Full rationales and review history for every item you have attempted,,missing_in_overlay,paywall,2
+de,paywall.questions.lose1,Unlimited or tier-scoped bank access (not preview caps),,missing_in_overlay,paywall,2
+de,paywall.questions.lose2,Category analytics that persist across sessions and devices,,missing_in_overlay,paywall,2
+de,paywall.questions.progress,"You have already started prep. Your recent attempts count. Upgrade to keep weak-topic lists, streaks, and full review instead of losing depth after each preview.",,missing_in_overlay,paywall,2
+de,paywall.questions.title,Unlock full access,,missing_in_overlay,paywall,2
+de,paywall.remainingLessons,{{n}} lesson preview rows remaining,,missing_in_overlay,paywall,2
+de,paywall.remainingQuestions,{{n}} preview questions remaining,,missing_in_overlay,paywall,2
+de,paywall.subscriptionBadge,NurseNest subscription,,missing_in_overlay,paywall,2
+de,paywall.unlockListHeading,Unlock full access to:,,missing_in_overlay,paywall,2
+de,home.career.exploreJourney,Explore Your Career Journey,,missing_in_overlay,home,3
+de,home.career.journeyBadge,Study → Pass → Transition → Get Hired,,missing_in_overlay,home,3
+de,home.career.journeySubtitle,Follow the step-by-step journey from exam prep to career launch. Every stage connects to the resources you need.,,missing_in_overlay,home,3
+de,home.career.journeyTitle,See Your Complete Career Path,,missing_in_overlay,home,3
+de,home.career.rnPath,RN Career Path,,missing_in_overlay,home,3
+de,home.competitive.archer,Archer,,missing_in_overlay,home,3
+de,home.competitive.badge,How We Compare,,missing_in_overlay,home,3
+de,home.competitive.caContent,Canadian Content,,missing_in_overlay,home,3
+de,home.competitive.clinicalSims,Clinical Simulations,,missing_in_overlay,home,3
+de,home.competitive.deepPatho,Deep Pathophysiology,,missing_in_overlay,home,3
+de,home.competitive.feature,Feature,,missing_in_overlay,home,3
+de,home.competitive.flashcards,Test Bank,,missing_in_overlay,home,3
+de,home.competitive.freeContent,Free Tier Available,,missing_in_overlay,home,3
+de,home.competitive.heading,Why NurseNest vs UWorld & Archer,,missing_in_overlay,home,3
+de,home.competitive.limited,Limited,,missing_in_overlay,home,3
+de,home.competitive.multiLang,15+ Languages,,missing_in_overlay,home,3
+de,home.competitive.npContent,NP Certification Prep,,missing_in_overlay,home,3
+de,home.competitive.nursenest,NurseNest,,missing_in_overlay,home,3
+de,home.competitive.price,Starting Price,,missing_in_overlay,home,3
+de,home.competitive.priceAR,$99+ one-time,,missing_in_overlay,home,3
+de,home.competitive.priceNN,From $21.99/mo,,missing_in_overlay,home,3
+de,home.competitive.priceUW,$399+ one-time,,missing_in_overlay,home,3
+de,home.competitive.subtitle,Get more for less. NurseNest delivers premium exam prep features at a fraction of the cost.,,missing_in_overlay,home,3
+de,home.competitive.uworld,UWorld,,missing_in_overlay,home,3
+de,home.cta.button,Create Free Account,,missing_in_overlay,home,3
+de,home.cta.disclaimer,No credit card required. Free anatomy content and practice questions included.,,missing_in_overlay,home,3
+de,home.cta.subtitle,"No card to browse starter content. When you are ready, upgrade for the full bank and mocks for your tier.",,missing_in_overlay,home,3
+de,home.cta.title,Open a free account and start with your pathway,,missing_in_overlay,home,3
+de,home.diff.languages,15 Languages,,missing_in_overlay,home,3
+de,home.diff.languagesDesc,"English, French, Filipino, Hindi, Spanish, Chinese, Arabic, Korean, Portuguese, Punjabi, and more",,missing_in_overlay,home,3
+de,home.diff.patho,Deep Pathophysiology,,missing_in_overlay,home,3
+de,home.diff.pathoDesc,"Cellular-level explanations, receptor-level drug MOA, not just surface summaries",,missing_in_overlay,home,3
+de,home.diff.region,Canada & US,,missing_in_overlay,home,3
+de,home.diff.regionDesc,"CAD/USD pricing, regional lab values, scope-of-practice language",,missing_in_overlay,home,3
+de,home.diff.scope,Tier-Specific Scope,,missing_in_overlay,home,3
+de,home.diff.scopeDesc,"monitor/report, RN protocol-based, NP order/prescribe",,missing_in_overlay,home,3
+de,home.email.button,Send Me Practice Questions,,missing_in_overlay,home,3
+de,home.email.disclaimer,No spam. No sales pitches. Just clinically useful study material. You control how often you hear from us.,,missing_in_overlay,home,3
+de,home.email.freq.biweekly,Every two weeks,,missing_in_overlay,home,3
+de,home.email.freq.daily,Once a day,,missing_in_overlay,home,3
+de,home.email.freq.everyOtherDay,Every other day,,missing_in_overlay,home,3
+de,home.email.freq.monthly,Once a month,,missing_in_overlay,home,3
+de,home.email.freq.threeWeek,3 times a week,,missing_in_overlay,home,3
+de,home.email.freq.twiceWeek,Twice a week,,missing_in_overlay,home,3
+de,home.email.freq.weekly,Once a week,,missing_in_overlay,home,3
+de,home.email.frequencyLabel,Send me questions:,,missing_in_overlay,home,3
+de,home.email.invalidEmail,Please enter a valid email address.,,missing_in_overlay,home,3
+de,home.email.placeholder,Enter your email address,,missing_in_overlay,home,3
+de,home.email.somethingWrong,Something went wrong. Please try again.,,missing_in_overlay,home,3
+de,home.email.subscriptionFailed,Subscription failed. Please try again.,,missing_in_overlay,home,3
+de,home.email.subtitle,"Receive practice questions with detailed rationales, pharmacology review cards, and exam strategy breakdowns. Choose your preferred frequency and adjust it anytime from your profile settings. Written by nursing educators. Useful from day one. Unsubscribe anytime.",,missing_in_overlay,home,3
+de,home.email.success,You are subscribed. Check your inbox for study tips.,,missing_in_overlay,home,3
+de,home.email.title,Free Clinical Reasoning Questions - You Choose How Often,,missing_in_overlay,home,3
+de,home.examPath.badge,Exam-Specific Prep,,missing_in_overlay,home,3
+de,home.examPath.bothNote,All content is available regardless of region. Choose your primary exam to get personalized recommendations.,,missing_in_overlay,home,3
+de,home.examPath.ca.cta,REX-PN Prep Guide,,missing_in_overlay,home,3
+de,home.examPath.ca.desc,"Prepare for the Regulatory Exam–Practical Nurse with Canadian-specific content: RPN scope of practice, CNO standards, metric units, and SI lab values.",,missing_in_overlay,home,3
+de,home.examPath.ca.pill1,CAT-Based Exam,,missing_in_overlay,home,3
+de,home.examPath.ca.pill2,CNO Standards,,missing_in_overlay,home,3
+de,home.examPath.ca.pill3,SI Units & Metric,,missing_in_overlay,home,3
+de,home.examPath.ca.subtitle,Registered Practical Nurse,,missing_in_overlay,home,3
+de,home.examPath.ca.title,Canada — REX-PN,,missing_in_overlay,home,3
+de,home.examPath.heading,Choose Your Exam Path,,missing_in_overlay,home,3
+de,home.examPath.subtitle,NurseNest delivers targeted preparation for both Canadian and American nursing exams. Select your path for content aligned to your specific exam.,,missing_in_overlay,home,3
+de,home.examPath.us.cta,NCLEX-RN Prep Guide,,missing_in_overlay,home,3
+de,home.examPath.us.desc,"Master the NCLEX-RN and NCLEX-PN with Next Generation NCLEX question types, clinical judgment measurement model, and US scope of practice content.",,missing_in_overlay,home,3
+de,home.examPath.us.pill1,NGN Question Types,,missing_in_overlay,home,3
+de,home.examPath.us.pill2,Clinical Judgment Model,,missing_in_overlay,home,3
+de,home.examPath.us.pill3,NCSBN Standards,,missing_in_overlay,home,3
+de,home.examPath.us.subtitle,RN & PN Licensure,,missing_in_overlay,home,3
+de,home.examPath.us.title,United States — NCLEX,,missing_in_overlay,home,3
+de,home.examPath.yourRegion,Your Region,,missing_in_overlay,home,3
+de,home.exams.desc,Timed practice exams with detailed rationales and scoring.,,missing_in_overlay,home,3
+de,home.exams.title,Mock Exams,,missing_in_overlay,home,3
+de,home.exploreHubs.link.blog,Blog & study notes,,missing_in_overlay,home,3
+de,home.exploreHubs.link.nclexRn,NCLEX-RN practice hub,,missing_in_overlay,home,3
+de,home.exploreHubs.link.np,NP exam prep,,missing_in_overlay,home,3
+de,home.exploreHubs.link.pricing,Plans & checkout,,missing_in_overlay,home,3
+de,home.exploreHubs.link.rexPn,REx-PN & NCLEX-PN prep,,missing_in_overlay,home,3
+de,home.exploreHubs.link.tools,Clinical calculators,,missing_in_overlay,home,3
+de,home.exploreHubs.subtitle,"Deeper pages for RN, PN, and NP prep—plus clinical calculators and pricing without leaving the same shell.",,missing_in_overlay,home,3
+de,home.exploreHubs.title,"Guides, tools, and plans when you are ready",,missing_in_overlay,home,3
+de,home.faq.a1,"No. NurseNest is an independent educational platform. It is not affiliated with, endorsed by, or connected to NCLEX, NCSBN, CNO, or any nursing or allied health regulatory body. All content is developed independently by healthcare professionals and is designed to align with the content domains and cognitive patterns assessed on licensure and certification examinations.",,missing_in_overlay,home,3
+de,home.faq.a10,"Yes. All NurseNest content is developed and reviewed by healthcare professionals with clinical and educational expertise. Lessons, practice questions, and case simulations are created to reflect current evidence-based practice guidelines and are designed to align with the content domains assessed on nursing, NP, and allied health certification examinations. Content is regularly updated to maintain clinical accuracy and relevance.",,missing_in_overlay,home,3
+de,home.faq.a11,"Yes. NurseNest includes dedicated exam prep for allied health professions including respiratory therapy (RRT), paramedics (PCP/ACP/NREMT), medical laboratory technologists (MLT), pharmacy technicians, diagnostic imaging technologists, social workers (ASWB), psychotherapists (CRPO), occupational therapists (NBCOT), and physical therapists. Each profession has tailored practice questions, study resources, and career guides.",,missing_in_overlay,home,3
+de,home.faq.a12,"Yes. NurseNest offers comprehensive nurse practitioner certification exam prep covering AANP, ANCC, FNP-BC, AGPCNP-BC, AGACNP-BC, PMHNP-BC, PNP-BC, NNP-BC, ENP-C, and CNM. NP content includes advanced-level practice questions, molecular-level pathophysiology lessons, and diagnostic reasoning exercises designed for the higher clinical complexity expected on NP certification exams.",,missing_in_overlay,home,3
+de,home.faq.a13,"The New Graduate Hub provides clinical survival guides, first-year-on-the-floor resources, certification pathway planning, resume and interview tools, and burnout prevention resources. It",,missing_in_overlay,home,3
+de,home.faq.a14,"NurseNest supports preparation for nursing specialty certifications including CCRN (Critical Care), CEN (Emergency), PCCN (Progressive Care), and others. The platform offers clinical specialty guides covering ICU, NICU, trauma, med-surg, mental health, orthopedics, nephrology, and palliative care nursing — each with targeted practice questions and clinical pearls.",,missing_in_overlay,home,3
+de,home.faq.a2,"NurseNest questions are designed to mirror the clinical reasoning and cognitive patterns tested on healthcare licensure and certification examinations. They are not actual exam questions, but they target the same thinking skills, content domains, and clinical judgment frameworks that examiners use to assess readiness for practice. This includes Next Generation-style case studies and clinical judgment scenarios for nursing, as well as discipline-specific question formats for allied health professions.",,missing_in_overlay,home,3
+de,home.faq.a3,"Absolutely. Many nursing and allied health students use NurseNest alongside their coursework to reinforce pathophysiology, pharmacology, and clinical reasoning skills. The structured progression from foundational concepts to advanced case analysis is designed to complement how healthcare programs build knowledge across semesters, making it valuable from your first year through graduation.",,missing_in_overlay,home,3
+de,home.faq.a4,"Traditional question banks give you a question, four options, and the correct answer. NurseNest provides deep rationales explaining why the correct answer is right and why each distractor is wrong. It connects questions to pathophysiology lessons, includes interactive case simulations with branching outcomes, and tracks your performance across body systems to target your weak areas. The goal is to build clinical reasoning, not just test recall.",,missing_in_overlay,home,3
+de,home.faq.a5,"Yes. NurseNest supports exam preparation for all major nursing licensure and certification examinations, including NCLEX-RN, NCLEX-PN, REX-PN, and all NP certification exams: AANP, ANCC, FNP-BC, AGPCNP-BC, AGACNP-BC, PMHNP-BC, PNP-BC, NNP-BC, ENP-C, and CNM. The platform also covers allied health certifications including RRT, NREMT, MLT, PTCB, NBCOT, and ASWB exams. Whether you",,missing_in_overlay,home,3
+de,home.faq.a6,"The free plan includes Pre-Nursing Foundations modules, interactive anatomy and physiology diagrams, Clinical Clarity explanations, access to the lesson library for browsing, limited practice questions, and up to 50 flashcards across your decks. No credit card is required to start. Premium plans unlock the full question bank, clinical case simulations, unlimited flashcard decks with Learn and Test modes, med math tools, performance analytics, and all 10 language translations.",,missing_in_overlay,home,3
+de,home.faq.a6b,"Learn Mode uses spaced retry to help you master every card. Cards you miss are automatically re-queued until you get them right. Test Mode is a timed assessment where you go through the entire deck once, with a detailed report card at the end showing your accuracy, time spent, and which cards you need to review. Both modes include keyboard shortcuts for faster studying. You can also create your own decks and import cards via CSV to quickly build study sets from your lecture notes.",,missing_in_overlay,home,3
+de,home.faq.a7,Yes. All subscriptions can be cancelled at any time through your profile page. You retain access to premium features until the end of your current billing period. There are no cancellation fees or long-term commitments.,,missing_in_overlay,home,3
+de,home.faq.a8,"Yes. NurseNest includes question formats designed to mirror the cognitive patterns tested on Next Generation nursing licensure examinations, including case studies with multiple response points, drag-and-drop prioritization, highlight-the-evidence items, and clinical judgment scenarios that require you to recognize cues, analyze information, and evaluate outcomes. These formats are integrated throughout the question bank and clinical simulations.",,missing_in_overlay,home,3
+de,home.faq.a9prefix,NurseNest offers over,,missing_in_overlay,home,3
+de,home.faq.a9suffix,"practice questions spanning nursing, NP, and allied health content areas including medical-surgical, pharmacology, maternal-newborn, pediatrics, mental health, critical care, respiratory therapy, paramedicine, and clinical prioritization. New questions are added every week to ensure comprehensive and growing coverage. Each question includes a detailed rationale explaining the clinical reasoning behind the correct answer.",,missing_in_overlay,home,3
+de,home.faq.heading,Common Questions About NurseNest,,missing_in_overlay,home,3
+de,home.faq.q1,"Is NurseNest affiliated with NCLEX, NCSBN, or any licensing body?",,missing_in_overlay,home,3
+de,home.faq.q10,Is the content reviewed by healthcare professionals?,,missing_in_overlay,home,3
+de,home.faq.q11,Does NurseNest offer allied health exam prep?,,missing_in_overlay,home,3
+de,home.faq.q12,Can I prepare for NP certification exams on NurseNest?,,missing_in_overlay,home,3
+de,home.faq.q13,What resources are available for new graduates?,,missing_in_overlay,home,3
+de,home.faq.q14,Does NurseNest support nursing specialty certifications?,,missing_in_overlay,home,3
+de,home.faq.q2,Are the practice questions similar to what appears on licensure exams?,,missing_in_overlay,home,3
+de,home.faq.q3,Can I use NurseNest while still in school?,,missing_in_overlay,home,3
+de,home.faq.q4,How is NurseNest different from a traditional question bank?,,missing_in_overlay,home,3
+de,home.faq.q5,Does NurseNest cover both Canadian and US content?,,missing_in_overlay,home,3
+de,home.faq.q6,What does the free plan include?,,missing_in_overlay,home,3
+de,home.faq.q6b,How do the flashcard deck Learn and Test modes work?,,missing_in_overlay,home,3
+de,home.faq.q7,Can I cancel my subscription at any time?,,missing_in_overlay,home,3
+de,home.faq.q8,Does NurseNest include Next Generation NCLEX-style questions?,,missing_in_overlay,home,3
+de,home.faq.q9,How many practice questions are available on NurseNest?,,missing_in_overlay,home,3
+de,home.faq.subtitle,"Straightforward answers about how NurseNest works for nursing, NP, allied health, and new graduate students.",,missing_in_overlay,home,3
+de,home.faq.viewAll,View All FAQs,,missing_in_overlay,home,3
+de,home.feature.abg,ABG Analysis,,missing_in_overlay,home,3
+de,home.feature.accuracyCheck,Clinically Verified,,missing_in_overlay,home,3
+de,home.feature.autoSave,Auto-Save,,missing_in_overlay,home,3
+de,home.feature.branching,Branching Scenarios,,missing_in_overlay,home,3
+de,home.feature.clinicalPearls,Clinical Pearls,,missing_in_overlay,home,3
+de,home.feature.csvImport,CSV Import,,missing_in_overlay,home,3
+de,home.feature.deepRationales,Deep Rationales,,missing_in_overlay,home,3
+de,home.feature.examFormat,Exam Format,,missing_in_overlay,home,3
+de,home.feature.free2,2 Free,,missing_in_overlay,home,3
+de,home.feature.freeContent,Free Content,,missing_in_overlay,home,3
+de,home.feature.instantFeedback,Instant Feedback,,missing_in_overlay,home,3
+de,home.feature.labClusters,Lab Clusters,,missing_in_overlay,home,3
+de,home.feature.learnMode,Learn Mode,,missing_in_overlay,home,3
+de,home.feature.progressTracking,Progress Tracking,,missing_in_overlay,home,3
+de,home.feature.scoreTrends,Score Trends,,missing_in_overlay,home,3
+de,home.feature.stepwise,Stepwise Solutions,,missing_in_overlay,home,3
+de,home.feature.testMode,Test Mode,,missing_in_overlay,home,3
+de,home.feature.tierLevels,Tiered Levels,,missing_in_overlay,home,3
+de,home.feature.videoLectures,Video Lectures,,missing_in_overlay,home,3
+de,home.featured.badge,Study Resources,,missing_in_overlay,home,3
+de,home.featured.heading,Featured Study Resources,,missing_in_overlay,home,3
+de,home.featured.subtitle,"Curated cram guides, study packs, and clinical references designed to accelerate your exam preparation.",,missing_in_overlay,home,3
+de,home.featured.viewAll,Browse All Resources,,missing_in_overlay,home,3
+de,home.features.subtitle,"Comprehensive tools designed by healthcare professionals, for healthcare professionals.",,missing_in_overlay,home,3
+de,home.features.title,Everything You Need to Succeed,,missing_in_overlay,home,3
+de,home.flashcards.desc,Create and study flashcard decks with Learn and Test modes.,,missing_in_overlay,home,3
+de,home.flashcards.title,Study Decks,,missing_in_overlay,home,3
+de,home.flashcardTrust.benefit1,"Every card is validated against current clinical practice guidelines, pharmacology references, and evidence-based nursing standards before publication",,missing_in_overlay,home,3
+de,home.flashcardTrust.benefit2,"Drug dosages, lab ranges, and clinical parameters are cross-referenced with authoritative sources to ensure accuracy down to the decimal",,missing_in_overlay,home,3
+de,home.flashcardTrust.benefit3,"Content is structured around exam-relevant domains - you study what licensing boards actually test, not random trivia from unverified sources",,missing_in_overlay,home,3
+de,home.flashcardTrust.benefit4,"Built-in accuracy scoring flags cards that need review, so the platform self-corrects and improves continuously based on clinical updates",,missing_in_overlay,home,3
+de,home.flashcardTrust.ctaButton,Explore Verified Flashcards,,missing_in_overlay,home,3
+de,home.flashcardTrust.ctaDesc,"Stop gambling with unverified flashcards. Every NurseNest deck is built on validated clinical content, verified against current practice guidelines and peer-reviewed literature. Study with confidence knowing the information you are committing to memory is accurate, current, and exam-ready.",,missing_in_overlay,home,3
+de,home.flashcardTrust.ctaTitle,Your Exam Prep Deserves Verified Content,,missing_in_overlay,home,3
+de,home.flashcardTrust.heading,Not All Flashcards Are Created Equal,,missing_in_overlay,home,3
+de,home.flashcardTrust.issue1,"User-generated content with no clinical review - anyone can publish a deck, regardless of accuracy or qualifications",,missing_in_overlay,home,3
+de,home.flashcardTrust.issue2,Outdated pharmacology and incorrect dosage ranges that reflect superseded guidelines or student misunderstandings,,missing_in_overlay,home,3
+de,home.flashcardTrust.issue3,No source citations or evidence grading - you have no way to verify if a card is based on current clinical evidence,,missing_in_overlay,home,3
+de,home.flashcardTrust.issue4,"Errors compound silently: students memorize wrong answers, share decks, and misinformation spreads across cohorts unchecked",,missing_in_overlay,home,3
+de,home.flashcardTrust.nurseNest,NurseNest Flashcards,,missing_in_overlay,home,3
+de,home.flashcardTrust.otherPlatforms,Typical Flashcard Platforms,,missing_in_overlay,home,3
+de,home.flashcardTrust.subtitle,Most flashcard platforms let anyone upload content with zero quality control. That means the cards you,,missing_in_overlay,home,3
+de,home.flashcardTrust.userCreated.benefit1,"Create unlimited personal flashcard decks organized by topic, body system, or exam focus area",,missing_in_overlay,home,3
+de,home.flashcardTrust.userCreated.benefit2,"All content verified against current clinical practice guidelines, peer-reviewed literature, and evidence-based sources",,missing_in_overlay,home,3
+de,home.flashcardTrust.userCreated.benefit3,Import cards in bulk via CSV upload to quickly build decks from your lecture notes or study guides,,missing_in_overlay,home,3
+de,home.flashcardTrust.userCreated.benefit4,Share verified decks with classmates or keep them private - you control visibility for every deck you create,,missing_in_overlay,home,3
+de,home.flashcardTrust.userCreated.desc,"Build custom flashcard decks from your own study notes and lecture content. All platform content is verified against current clinical practice guidelines and evidence-based literature. When you create your own cards, you can cross-reference them with our verified lesson content to ensure accuracy before studying.",,missing_in_overlay,home,3
+de,home.flashcardTrust.userCreated.heading,Create Your Own Flashcards - Clinically Verified,,missing_in_overlay,home,3
+de,home.flashcardTrust.warningBadge,"Study Smarter, Not Riskier",,missing_in_overlay,home,3
+de,home.free.anatomy,Interactive Anatomy & Physiology,,missing_in_overlay,home,3
+de,home.free.anatomyDesc,"Click-to-label diagrams of cardiovascular, respiratory, neurological, renal, and endocrine systems with immediate feedback.",,missing_in_overlay,home,3
+de,home.free.anatomyMeta,Click-to-label exercises,,missing_in_overlay,home,3
+de,home.free.badge,Free & Interactive,,missing_in_overlay,home,3
+de,home.free.clarity,Clinical Clarity,,missing_in_overlay,home,3
+de,home.free.clarityDesc,"Clear, evidence-based answers to questions that students commonly get wrong on exams.",,missing_in_overlay,home,3
+de,home.free.clarityMeta,Explore topics,,missing_in_overlay,home,3
+de,home.free.explore,Explore Free Modules,,missing_in_overlay,home,3
+de,home.free.preNursing,Pre-Nursing Foundations,,missing_in_overlay,home,3
+de,home.free.preNursingDesc,"Interactive modules on cell biology, physiology principles, medical terminology, pharmacology basics, and pathophysiology logic.",,missing_in_overlay,home,3
+de,home.free.preNursingMeta,5 interactive modules,,missing_in_overlay,home,3
+de,home.free.subtitle,"No account needed. Explore interactive anatomy, concept checks, and foundational modules designed to develop the clinical thinking that exam questions actually test.",,missing_in_overlay,home,3
+de,home.free.title,Start Building Your Clinical Foundation,,missing_in_overlay,home,3
+de,home.guarantee.badge,30-Day Pass Guarantee,,missing_in_overlay,home,3
+de,home.guarantee.desc,Study with confidence. If you,,missing_in_overlay,home,3
+de,home.hero.authorityBadge,"Rationale-first items, pathway-scoped banks",,missing_in_overlay,home,3
+de,home.hero.benefit1,Real-world clinical scenarios that mirror actual nursing exam questions,,missing_in_overlay,home,3
+de,home.hero.benefit2,Active recall and spaced repetition for long-term knowledge retention,,missing_in_overlay,home,3
+de,home.hero.benefit3,NGN-style formats including clinical judgment and prioritization questions,,missing_in_overlay,home,3
+de,home.hero.benefit4,Clinical decision-making practice with detailed rationales for every answer,,missing_in_overlay,home,3
+de,home.hero.benefitsHeading,Why Nurses Choose NurseNest,,missing_in_overlay,home,3
+de,home.hero.builtFor,Built for: RPN • RN • NP • Paramedic • Respiratory Therapy • Pharmacy Technician • Diagnostic Imaging,,missing_in_overlay,home,3
+de,home.hero.builtForAlliedHealth,Allied Health Professionals,,missing_in_overlay,home,3
+de,home.hero.builtForLabel,Built for,,missing_in_overlay,home,3
+de,home.hero.builtForMicrocopy,From foundations to advanced practice — one platform for every nursing career stage,,missing_in_overlay,home,3
+de,home.hero.builtForNursePractitioners,Nurse Practitioners (NP),,missing_in_overlay,home,3
+de,home.hero.builtForNursingStudents,Nursing Students,,missing_in_overlay,home,3
+de,home.hero.builtForPracticalNurses,Practical Nurses (RPN/LPN),,missing_in_overlay,home,3
+de,home.hero.builtForRegisteredNurses,Registered Nurses (RN),,missing_in_overlay,home,3
+de,home.hero.cancelAnytime,Cancel anytime,,missing_in_overlay,home,3
+de,home.hero.cta,Start Studying Free,,missing_in_overlay,home,3
+de,home.hero.cta2,Try Practice Questions,,missing_in_overlay,home,3
+de,home.hero.ctaPrimary,Start Studying Smarter,,missing_in_overlay,home,3
+de,home.hero.ctaSecondary,Explore Practice Questions,,missing_in_overlay,home,3
+de,home.hero.dynamicSubtitle,"Our retention-focused learning system uses active recall and spaced repetition across {{questionCount}} practice questions, {{flashcardInfo}}{{lessonCount}} clinical lessons, and adaptive mock exams — engineered for {{rpnLabel}}, RN, NP, allied health, and certification success in {{regionName}}.",,missing_in_overlay,home,3
+de,home.hero.examPrepFor,{{region}} Exam Prep Available For,,missing_in_overlay,home,3
+de,home.hero.exploreLessons,Explore Practice Questions,,missing_in_overlay,home,3
+de,home.hero.featureActiveRecall,Scheduled question pulls,,missing_in_overlay,home,3
+de,home.hero.featureActiveRecallDesc,Bring missed topics back on a cadence so easy chapters do not crowd out the fragile ones.,,missing_in_overlay,home,3
+de,home.hero.featureBlueprint,Banks scoped to your pathway,,missing_in_overlay,home,3
+de,home.hero.featureBlueprintDesc,"PN, RN, NP, and allied pools stay separated so scope and delegation language match your registration context.",,missing_in_overlay,home,3
+de,home.hero.featureClinicalDecision,Option-by-option reasoning,,missing_in_overlay,home,3
+de,home.hero.featureClinicalDecisionDesc,See why the keyed answer is safest and why each alternative breaks down clinically.,,missing_in_overlay,home,3
+de,home.hero.featureNGN,Board-shaped case stems,,missing_in_overlay,home,3
+de,home.hero.featureNGNDesc,"Prioritization, bowtie, and multi-step stems framed the way current exams present risk.",,missing_in_overlay,home,3
+de,home.hero.firstAttempt,First-attempt students,,missing_in_overlay,home,3
+de,home.hero.flashcardsInfo,"{{count}} flashcards, ",,missing_in_overlay,home,3
+de,home.hero.guarantee,30-Day Satisfaction Guarantee,,missing_in_overlay,home,3
+de,home.hero.lvnLpn,LVN / LPN,,missing_in_overlay,home,3
+de,home.hero.mainTitle,Exam prep that rehearses judgement—not memorized buzzwords,,missing_in_overlay,home,3
+de,home.hero.moreCount,+{{count}} more,,missing_in_overlay,home,3
+de,home.hero.nclexRn,NCLEX-RN,,missing_in_overlay,home,3
+de,home.hero.newSubheadline,"Work NCLEX/REx-PN/NP-style stems with rationales that explain why each distractor fails, pair weak categories with lessons, and move into timed sets when you are ready to rehearse authorization-to-test pacing.",,missing_in_overlay,home,3
+de,home.hero.noCreditCard,No credit card required,,missing_in_overlay,home,3
+de,home.hero.noCreditCardCentered,No credit card required,,missing_in_overlay,home,3
+de,home.hero.npExams,NP Exams,,missing_in_overlay,home,3
+de,home.hero.passRate,94% Pass Rate,,missing_in_overlay,home,3
+de,home.hero.quickSelect,Choose your exam:,,missing_in_overlay,home,3
+de,home.hero.reassurance,No subscription required to start  |  Instant access  |  Cancel anytime,,missing_in_overlay,home,3
+de,home.hero.rexPn,REx-PN,,missing_in_overlay,home,3
+de,home.hero.seeIncluded,See what,,missing_in_overlay,home,3
+de,home.hero.startPracticingFree,Start Studying Smarter,,missing_in_overlay,home,3
+de,home.hero.studentCount,"5,000+ students",,missing_in_overlay,home,3
+de,home.hero.studentsStudying,"5,000+ students studying this week",,missing_in_overlay,home,3
+de,home.hero.subtitle,"From RPN/LVN foundations to RN licensure, NP certification, allied health credentials, specialty certifications, and new-grad career support — NurseNest delivers structured lessons, practice questions, and exam simulations for every healthcare path.",,missing_in_overlay,home,3
+de,home.hero.title,NurseNest: Your Complete Healthcare Exam Prep Platform,,missing_in_overlay,home,3
+de,home.hero.trustFlashcards,Flashcards tied to lessons and rationales,,missing_in_overlay,home,3
+de,home.hero.trustFlashcardsLabel,Flashcards,,missing_in_overlay,home,3
+de,home.hero.trustLearnersLabel,Learners,,missing_in_overlay,home,3
+de,home.hero.trustLessons,Structured lessons across exam pathways,,missing_in_overlay,home,3
+de,home.hero.trustLessonsLabel,Lessons,,missing_in_overlay,home,3
+de,home.hero.trustMicroBadge,Built for authorization-to-test pacing,,missing_in_overlay,home,3
+de,home.hero.trustPassRate,Steady reps beat cram sessions,,missing_in_overlay,home,3
+de,home.hero.trustQuestions,"Practice questions across RN, PN, NP, and allied pathways",,missing_in_overlay,home,3
+de,home.hero.trustQuestionsLabel,Practice questions,,missing_in_overlay,home,3
+de,home.hero.trustStudents,Learners building study reps on NurseNest,,missing_in_overlay,home,3
+de,home.hero.urgencyMicrocopy,Thousands of stems across nursing and allied tracks—filter to the exam you are sitting next.,,missing_in_overlay,home,3
+de,home.heroFeatures.areaClinicalReasoning,Clinical Reasoning,,missing_in_overlay,home,3
+de,home.heroFeatures.areaCriticalCare,Critical Care,,missing_in_overlay,home,3
+de,home.heroFeatures.areaLabInterpretation,Lab Interpretation,,missing_in_overlay,home,3
+de,home.heroFeatures.areaPediatric,Pediatric Nursing,,missing_in_overlay,home,3
+de,home.heroFeatures.areaPharmacology,Pharmacology,,missing_in_overlay,home,3
+de,home.heroFeatures.areaPracticeQuestions,Practice Questions,,missing_in_overlay,home,3
+de,home.heroFeatures.areaPrioritization,Prioritization,,missing_in_overlay,home,3
+de,home.heroFeatures.bloodTransfusion,Blood Transfusion,,missing_in_overlay,home,3
+de,home.heroFeatures.clinicalScenarios,Clinical Scenarios,,missing_in_overlay,home,3
+de,home.heroFeatures.examPrep,Exam Prep,,missing_in_overlay,home,3
+de,home.heroFeatures.explore,Explore,,missing_in_overlay,home,3
+de,home.heroFeatures.labValues,Lab Values,,missing_in_overlay,home,3
+de,home.heroFeatures.learningAreasHeading,Explore Key Learning Areas,,missing_in_overlay,home,3
+de,home.heroFeatures.learningAreasSubtitle,Deep-dive into the clinical topics that matter most for your nursing exams and career.,,missing_in_overlay,home,3
+de,home.heroFeatures.multilingual,Multilingual Learning,,missing_in_overlay,home,3
+de,home.heroFeatures.multilingualCallout,Study in 15+ languages -- all content is available in your preferred language for a truly global learning experience.,,missing_in_overlay,home,3
+de,home.heroFeatures.newGrad,New Grad Support,,missing_in_overlay,home,3
+de,home.heroFeatures.pathophysiology,Pathophysiology,,missing_in_overlay,home,3
+de,home.heroFeatures.trustClinicalReasoning,Clinical Reasoning,,missing_in_overlay,home,3
+de,home.heroFeatures.trustEvidence,Evidence-Based,,missing_in_overlay,home,3
+de,home.heroFeatures.trustExamAligned,Blueprint Aligned,,missing_in_overlay,home,3
+de,home.heroFeatures.trustRetention,Spaced Repetition,,missing_in_overlay,home,3
+de,home.howItWorks.badge,3 Simple Steps,,missing_in_overlay,home,3
+de,home.howItWorks.heading,How NurseNest Works,,missing_in_overlay,home,3
+de,home.howItWorks.step1.desc,"Study deep pathophysiology lessons, clinical pearls, and pharmacology organized by body system and exam tier.",,missing_in_overlay,home,3
+de,home.howItWorks.step1.title,Learn,,missing_in_overlay,home,3
+de,home.howItWorks.step2.desc,"Test yourself with exam-style questions, clinical simulations, and flashcard decks with instant rationales.",,missing_in_overlay,home,3
+de,home.howItWorks.step2.title,Practice,,missing_in_overlay,home,3
+de,home.howItWorks.step3.desc,"Track your readiness with performance analytics, target weak areas, and walk into exam day confident.",,missing_in_overlay,home,3
+de,home.howItWorks.step3.title,Pass,,missing_in_overlay,home,3
+de,home.howItWorks.subtitle,A structured path from knowledge gaps to exam confidence.,,missing_in_overlay,home,3
+de,home.lessons.allPathwaysCta,Browse all pathways,,missing_in_overlay,home,3
+de,home.lessons.desc,"Structured learning paths for RPN, RN, and NP with clinical depth.",,missing_in_overlay,home,3
+de,home.lessons.lessonHubCta,Open lesson hub →,,missing_in_overlay,home,3
+de,home.lessons.subtitle,"Pick a pathway, drill by topic, then jump into matching practice items so review and application stay on the same rail.",,missing_in_overlay,home,3
+de,home.lessons.title,Start from the lesson hub for your exam,,missing_in_overlay,home,3
+de,home.mostTested.badge,High Yield,,missing_in_overlay,home,3
+de,home.mostTested.ecg,ECG & Cardiac Emergencies,,missing_in_overlay,home,3
+de,home.mostTested.ecgDesc,"Lethal rhythms, STEMI vs NSTEMI, troponin, shock states",,missing_in_overlay,home,3
+de,home.mostTested.electrolytes,Electrolytes & Acid-Base,,missing_in_overlay,home,3
+de,home.mostTested.electrolytesDesc,"Na, K, Ca, Mg, ABG interpretation, anion gap, DKA vs HHS",,missing_in_overlay,home,3
+de,home.mostTested.heading,Most Tested Exam Topics,,missing_in_overlay,home,3
+de,home.mostTested.neuro,Neuro Emergencies,,missing_in_overlay,home,3
+de,home.mostTested.neuroDesc,"Stroke, increased ICP, seizures, spinal cord injury",,missing_in_overlay,home,3
+de,home.mostTested.ob,OB Emergencies,,missing_in_overlay,home,3
+de,home.mostTested.obDesc,"Preeclampsia, placental abruption, PPH, eclampsia",,missing_in_overlay,home,3
+de,home.mostTested.pharm,Pharmacology Safety,,missing_in_overlay,home,3
+de,home.mostTested.pharmDesc,"High-alert meds, drug interactions, toxicity, antidotes",,missing_in_overlay,home,3
+de,home.mostTested.sepsis,Sepsis & Shock,,missing_in_overlay,home,3
+de,home.mostTested.sepsisDesc,"Hour-1 bundle, qSOFA, vasopressors, fluid resuscitation",,missing_in_overlay,home,3
+de,home.mostTested.subtitle,These topics appear on virtually every nursing licensure exam. Master them first.,,missing_in_overlay,home,3
+de,home.new.badge,Just Launched,,missing_in_overlay,home,3
+de,home.new.blog.desc,"Scholarly nursing articles with APA 7 citations, written by nursing professionals. Weekly content on clinical reasoning and exam strategy.",,missing_in_overlay,home,3
+de,home.new.blog.title,Clinical Education Blog,,missing_in_overlay,home,3
+de,home.new.decks.desc,"Create your own decks, study with spaced-retry Learn mode or timed Test mode, share with classmates, and import cards via CSV.",,missing_in_overlay,home,3
+de,home.new.decks.title,Flashcard Deck System,,missing_in_overlay,home,3
+de,home.new.label,New,,missing_in_overlay,home,3
+de,home.new.languages.desc,"Study in English, French, Filipino, Hindi, Spanish, Chinese, Arabic, Korean, Portuguese, Punjabi, and more. Full interface translation with RTL support.",,missing_in_overlay,home,3
+de,home.new.languages.title,15-Language Support,,missing_in_overlay,home,3
+de,home.nurses.badge,Beyond the Exam,,missing_in_overlay,home,3
+de,home.nurses.bodySystems,Body Systems,,missing_in_overlay,home,3
+de,home.nurses.deterioration,Clinical Deterioration Recognition,,missing_in_overlay,home,3
+de,home.nurses.deteriorationDesc,"Early warning signs, NEWS/MEWS scoring concepts, SBAR escalation frameworks, and the assessment sequences that prevent adverse events.",,missing_in_overlay,home,3
+de,home.nurses.floor,Floor-Specialty Readiness,,missing_in_overlay,home,3
+de,home.nurses.floorDesc,"Med-surg, ICU, ER, pediatrics, maternal-newborn, and mental health. Understand the assessment patterns and red flags specific to your unit.",,missing_in_overlay,home,3
+de,home.nurses.grad,New Graduate Transition,,missing_in_overlay,home,3
+de,home.nurses.gradDesc,"Practical clinical reasoning for your first weeks on the floor. Shift organization, time management, and knowing when to escalate.",,missing_in_overlay,home,3
+de,home.nurses.heading,From Student to Practicing Nurse,,missing_in_overlay,home,3
+de,home.nurses.medSafety,Medication Safety in Practice,,missing_in_overlay,home,3
+de,home.nurses.medSafetyDesc,"High-alert drug protocols, IV medication safety, common look-alike/sound-alike errors, and dose verification workflows used in hospitals.",,missing_in_overlay,home,3
+de,home.nurses.studyModes,Study Modes,,missing_in_overlay,home,3
+de,home.nurses.subtitle,"Passing the exam is the first milestone. NurseNest also prepares you for the clinical realities that textbooks skip: floor-specific protocols, shift prioritization, recognizing patient deterioration in real time, and building confidence as a new hire.",,missing_in_overlay,home,3
+de,home.platform.badge,Everything You Need in One Platform,,missing_in_overlay,home,3
+de,home.qbank.desc,"Filter by tier, body system, or topic. Every question includes detailed rationales explaining why the correct answer is right and why each distractor is wrong. New questions added weekly.",,missing_in_overlay,home,3
+de,home.qbank.title,Practice Questions,,missing_in_overlay,home,3
+de,home.region.ca,Canada,,missing_in_overlay,home,3
+de,home.region.caDesc,"Showing REx-PN, NCLEX-RN, NP Exam content with Canadian measurements (°C, kg, cm) and RPN terminology.",,missing_in_overlay,home,3
+de,home.region.us,United States,,missing_in_overlay,home,3
+de,home.region.usDesc,"Showing NCLEX-PN, NCLEX-RN, AANP/ANCC exam content with US measurements (°F, lbs, in) and LPN/LVN terminology.",,missing_in_overlay,home,3
+de,home.secondary.analytics,Performance Analytics,,missing_in_overlay,home,3
+de,home.secondary.analyticsDesc,"Track scores by body system, spot weak areas, see trends",,missing_in_overlay,home,3
+de,home.secondary.blog,Clinical Education Blog,,missing_in_overlay,home,3
+de,home.secondary.blogDesc,APA7-cited scholarly articles with new posts published weekly,,missing_in_overlay,home,3
+de,home.secondary.dashboard,Learning Dashboard,,missing_in_overlay,home,3
+de,home.secondary.dashboardDesc,"Drag-and-drop widgets, study streaks, progress tracking",,missing_in_overlay,home,3
+de,home.secondary.qotd,Question of the Day,,missing_in_overlay,home,3
+de,home.secondary.qotdDesc,Daily clinical reasoning question with detailed rationale,,missing_in_overlay,home,3
+de,home.simulators.desc,Practice clinical judgment with interactive patient scenarios.,,missing_in_overlay,home,3
+de,home.simulators.title,Clinical Simulators,,missing_in_overlay,home,3
+de,home.socialProof.badge,Trusted by Nursing Students,,missing_in_overlay,home,3
+de,home.socialProof.heading,Built for Results,,missing_in_overlay,home,3
+de,home.socialProof.lessons,Clinical Lessons,,missing_in_overlay,home,3
+de,home.socialProof.passRate,Exam-Aligned Content,,missing_in_overlay,home,3
+de,home.socialProof.passRateValue,100%,,missing_in_overlay,home,3
+de,home.socialProof.questions,Practice Questions,,missing_in_overlay,home,3
+de,home.socialProof.students,Students Studying,,missing_in_overlay,home,3
+de,home.socialProof.updatedDesc,New questions and lessons added every week,,missing_in_overlay,home,3
+de,home.startFree,Start Free - No Credit Card Required,,missing_in_overlay,home,3
+de,home.stats.lessons,Clinical Lessons,,missing_in_overlay,home,3
+de,home.stats.modes,Study Modes,,missing_in_overlay,home,3
+de,home.stats.questions,Practice Questions,,missing_in_overlay,home,3
+de,home.stats.simulators,Clinical Simulators,,missing_in_overlay,home,3
+de,home.stats.studyPacks,Study Packs,,missing_in_overlay,home,3
+de,home.study.browseAll,Browse All Lessons,,missing_in_overlay,home,3
+de,home.study.cases,Clinical Case Simulations,,missing_in_overlay,home,3
+de,home.study.casesDesc,"Work through branching patient scenarios for conditions like sepsis, myocardial infarction, diabetic ketoacidosis, and stroke. Each simulation follows a consequence-based decision pathway, allowing you to practice the clinical judgment process in a risk-free environment before exam day.",,missing_in_overlay,home,3
+de,home.study.critical,Critical Care & Emergency Response,,missing_in_overlay,home,3
+de,home.study.criticalDesc,"Develop rapid assessment skills for shock recognition, respiratory failure patterns, neurological deterioration, sepsis identification, and metabolic emergencies like DKA and HHS. Lessons are structured around the clinical judgment process used in acute care settings and tested on licensing examinations.",,missing_in_overlay,home,3
+de,home.study.heading,What You Can Study on NurseNest,,missing_in_overlay,home,3
+de,home.study.lab,Lab Values & Critical Diagnostics,,missing_in_overlay,home,3
+de,home.study.labDesc,"Go beyond memorizing normal ranges. Learn to interpret abnormal lab clusters, analyze arterial blood gases, recognize electrolyte emergencies, and connect diagnostic findings to immediate nursing actions. Each lesson builds the cluster-based reasoning that exam questions demand.",,missing_in_overlay,home,3
+de,home.study.maternal,"Maternal, Newborn & Pediatric Nursing",,missing_in_overlay,home,3
+de,home.study.maternalDesc,"Comprehensive coverage of pregnancy complications, labor and delivery assessment, postpartum care, neonatal danger signs, and pediatric conditions across developmental stages. Lessons emphasize the critical thinking required to differentiate normal from abnormal findings in obstetric and pediatric clinical scenarios.",,missing_in_overlay,home,3
+de,home.study.medsurg,Medical-Surgical Nursing,,missing_in_overlay,home,3
+de,home.study.medsurgDesc,"Master cardiovascular, respiratory, neurological, gastrointestinal, renal, and endocrine pathophysiology through lessons designed to align with exam content domains. Each module connects disease mechanisms to the clinical prioritization and acute deterioration patterns that licensing examinations assess most heavily.",,missing_in_overlay,home,3
+de,home.study.mental,Mental Health Nursing,,missing_in_overlay,home,3
+de,home.study.mentalDesc,"Explore psychiatric conditions, therapeutic communication techniques, crisis intervention protocols, and psychopharmacology through a clinical reasoning lens. Content addresses the cognitive traps that examinations use in psychiatric scenarios, helping you recognize safety-based nursing responses under pressure.",,missing_in_overlay,home,3
+de,home.study.patho,Pathophysiology & Clinical Reasoning,,missing_in_overlay,home,3
+de,home.study.pathoDesc,"Understand disease processes at the cellular and molecular level, explained in clinical context. When you know why a condition produces specific signs and symptoms, you can reason through unfamiliar exam questions instead of relying on memorization alone.",,missing_in_overlay,home,3
+de,home.study.pharm,Pharmacology & Medication Safety,,missing_in_overlay,home,3
+de,home.study.pharmDesc,"Study drug classes organized by mechanism of action, with emphasis on side effect profiles, contraindications, and high-alert medications. Content is designed to mirror the cognitive patterns tested on nursing licensure examinations, including dosage calculation errors and medication safety scenarios that appear frequently.",,missing_in_overlay,home,3
+de,home.study.priority,Clinical Prioritization & Delegation,,missing_in_overlay,home,3
+de,home.study.priorityDesc,"Practice who-do-you-see-first scenarios, delegation decision-making, and the safety-based frameworks that underpin every prioritization question on nursing examinations. Learn to distinguish acute findings from expected findings and apply assignment logic confidently under timed conditions.",,missing_in_overlay,home,3
+de,home.study.subtext,"Structured from foundational concepts to advanced clinical judgment. Whether you are in your first semester or preparing for your licensing exam, the content meets you where you are.",,missing_in_overlay,home,3
+de,home.study.subtitle,Every topic is built around the clinical reasoning patterns tested on nursing licensure examinations. No filler content. No outdated material. Every lesson connects pathophysiology to the decision-making frameworks that examiners use to write questions.,,missing_in_overlay,home,3
+de,home.tools.desc,"Med math calculator, lab value interpreter, and drug reference.",,missing_in_overlay,home,3
+de,home.tools.title,Clinical Tools,,missing_in_overlay,home,3
+de,home.why.analytics,Performance Analytics,,missing_in_overlay,home,3
+de,home.why.analyticsDesc,"Track your proficiency by body system, identify weak areas with precision, and focus your study time where it matters most. Pre-test and post-test comparison data shows exactly how your clinical reasoning is improving over time.",,missing_in_overlay,home,3
+de,home.why.heading,Why Students Choose NurseNest,,missing_in_overlay,home,3
+de,home.why.judgment,Clinical Judgment Architecture,,missing_in_overlay,home,3
+de,home.why.judgmentDesc,"Content is organized around the cognitive patterns tested on nursing licensure examinations: recognizing cues, analyzing hypotheses, prioritizing actions, and evaluating outcomes. This mirrors the clinical judgment framework that modern exams are designed to measure.",,missing_in_overlay,home,3
+de,home.why.noFiller,"Exam-Relevant, Zero Filler",,missing_in_overlay,home,3
+de,home.why.noFillerDesc,"Every lesson covers high-yield concepts that align with the content domains tested on nursing licensure examinations. No obscure topics, no outdated protocols, no wasted study sessions. Study what will actually be assessed.",,missing_in_overlay,home,3
+de,home.why.progression,Structured Progression,,missing_in_overlay,home,3
+de,home.why.progressionDesc,"Start with foundational pathophysiology and build toward complex case analysis. Each lesson connects to related topics so concepts reinforce each other instead of existing in isolation, taking you from beginner to advanced systematically.",,missing_in_overlay,home,3
+de,home.why.rationale,Rationale-First Design,,missing_in_overlay,home,3
+de,home.why.rationaleDesc,"Every question, lesson, and simulation explains the clinical reasoning behind the correct answer. You learn why an option is right and why the others are wrong, building the judgment patterns that examiners assess on licensing examinations.",,missing_in_overlay,home,3
+de,home.why.simulation,Interactive Case Simulations,,missing_in_overlay,home,3
+de,home.why.simulationDesc,"Work through branching patient scenarios where your decisions determine outcomes. Practice clinical reasoning in a risk-free environment before your exam or your first shift, with detailed feedback on every decision point.",,missing_in_overlay,home,3
+de,home.why.subtitle,"Most study tools hand you a question and an answer key. NurseNest teaches you how to reason through clinical problems the way licensing exams expect you to, so unfamiliar questions stop being intimidating.",,missing_in_overlay,home,3
+de,pages.home.adminLessonCountBreakdown,Admin: Lesson Count Breakdown,,missing_in_overlay,home,3
+de,pages.home.availableIn20LanguagesStudy,Available in 20 languages — Study nursing in your language,,missing_in_overlay,home,3
+de,pages.home.canadianFlag,Canadian flag,,missing_in_overlay,home,3
+de,pages.home.metaDescription,"Clinical exam prep with practice questions, lessons, and mock exams for RPN/LPN, RN, NCLEX, REx-PN, NP, and allied health — built for Canada and the US.",,missing_in_overlay,home,3
+de,pages.home.metaTitle,"NurseNest — Healthcare Exam Prep | Nursing, NP & Allied Health",,missing_in_overlay,home,3
+de,pages.home.rarr,&rarr;,,missing_in_overlay,home,3
+de,pages.home.storeProducts,Store Products,,missing_in_overlay,home,3
+de,pages.home.totalLessons,Total Lessons,,missing_in_overlay,home,3
+de,pages.home.totalQuestions,Total Questions,,missing_in_overlay,home,3
+de,pages.home.usFlag,US flag,,missing_in_overlay,home,3
+de,footer.about,About,,missing_in_overlay,footer,4
+de,footer.acceptableUse,Acceptable use,,missing_in_overlay,footer,4
+de,footer.alliedHealth,Allied health,,missing_in_overlay,footer,4
+de,footer.alliedHealthExamPrep,Allied health exam prep,,missing_in_overlay,footer,4
+de,footer.allSpecialties,All specialties,,missing_in_overlay,footer,4
+de,footer.anatomyExplorer,Anatomy explorer,,missing_in_overlay,footer,4
+de,footer.blog,Blog,,missing_in_overlay,footer,4
+de,footer.caseStudies,Case studies,,missing_in_overlay,footer,4
+de,footer.clinicalLessons,Clinical lessons,,missing_in_overlay,footer,4
+de,footer.clinicalTools,Clinical tools,,missing_in_overlay,footer,4
+de,footer.contact,Contact,,missing_in_overlay,footer,4
+de,footer.disclaimer,Disclaimer,,missing_in_overlay,footer,4
+de,footer.educationEcosystem,Education ecosystem,,missing_in_overlay,footer,4
+de,footer.emailBannerPhase2,Newsletter signup will connect to the subscribe API in Phase 2.,,missing_in_overlay,footer,4
+de,footer.emailBannerSubtitle,Choose how often you hear from us. Unsubscribe anytime.,,missing_in_overlay,footer,4
+de,footer.emailBannerTitle,Get clinically useful questions in your inbox,,missing_in_overlay,footer,4
+de,footer.examPrep,Exam Prep,,missing_in_overlay,footer,4
+de,footer.faq,FAQ,,missing_in_overlay,footer,4
+de,footer.forSchools,For schools,,missing_in_overlay,footer,4
+de,footer.icuGuide,ICU guide,,missing_in_overlay,footer,4
+de,footer.legal,Legal,,missing_in_overlay,footer,4
+de,footer.legalDisclaimer,"NurseNest provides educational content for exam preparation and is not affiliated with NCLEX, regulatory colleges, or licensing bodies.",,missing_in_overlay,footer,4
+de,footer.medMath,Med math,,missing_in_overlay,footer,4
+de,footer.mockExams,Mock exams,,missing_in_overlay,footer,4
+de,footer.newGradHub,New grad hub,,missing_in_overlay,footer,4
+de,footer.newGradSupportSection,New grad support,,missing_in_overlay,footer,4
+de,footer.nicuGuide,NICU guide,,missing_in_overlay,footer,4
+de,footer.nursing,Nursing,,missing_in_overlay,footer,4
+de,footer.nursingSpecialties,Nursing specialties,,missing_in_overlay,footer,4
+de,footer.paramedic,Paramedic,,missing_in_overlay,footer,4
+de,footer.preNursing,Pre-nursing,,missing_in_overlay,footer,4
+de,footer.pricing,Pricing,,missing_in_overlay,footer,4
+de,footer.privacy,Privacy,,missing_in_overlay,footer,4
+de,footer.questionOfTheDay,Question of the day,,missing_in_overlay,footer,4
+de,footer.refundPolicy,Refund policy,,missing_in_overlay,footer,4
+de,footer.resources,Resources,,missing_in_overlay,footer,4
+de,footer.respiratoryTherapy,Respiratory therapy,,missing_in_overlay,footer,4
+de,footer.rights,All rights reserved.,,missing_in_overlay,footer,4
+de,footer.studyInYourLanguage,Study nursing in your language,,missing_in_overlay,footer,4
+de,footer.studyTools,Study tools,,missing_in_overlay,footer,4
+de,footer.terms,Terms,,missing_in_overlay,footer,4
+de,footer.testBank,Test bank,,missing_in_overlay,footer,4
+de,footer.viewAllLanguages,View all languages →,,missing_in_overlay,footer,4
+de,nav.examStrip.npCA,NP (CNPLE),NP (CNPLE),identical_to_english,nav,5
+de,nav.examStrip.pnCA,REx-PN,REx-PN,identical_to_english,nav,5
+de,nav.examStrip.pnUS,NCLEX-PN,NCLEX-PN,identical_to_english,nav,5
+de,nav.examStrip.rn,NCLEX-RN,NCLEX-RN,identical_to_english,nav,5
+de,nav.regionLabel,Region,Region,identical_to_english,nav,5
+de,pages.forgotPassword.backToLoginLabel,Back to sign in,,missing_in_overlay,auth,6
+de,pages.forgotPassword.emailPlaceholder,Email address on your account,,missing_in_overlay,auth,6
+de,pages.forgotPassword.errorMessage,Something went wrong. Please try again.,,missing_in_overlay,auth,6
+de,pages.forgotPassword.h1,Reset your password,,missing_in_overlay,auth,6
+de,pages.forgotPassword.intro,"Enter your email address. If an account exists with a password, we will send a reset link.",,missing_in_overlay,auth,6
+de,pages.forgotPassword.metaDescription,Reset your NurseNest password,,missing_in_overlay,auth,6
+de,pages.forgotPassword.metaTitle,Forgot password,,missing_in_overlay,auth,6
+de,pages.forgotPassword.submitLabel,Send reset link,,missing_in_overlay,auth,6
+de,pages.forgotPassword.successMessage,"If an account exists for that email, a password reset link has been sent.",,missing_in_overlay,auth,6
+de,pages.login.description,Login to NurseNest Core,,missing_in_overlay,auth,6
+de,pages.login.legalAfter,.,.,identical_to_english,auth,6
+de,pages.login.subtitle,Sign in to continue your exam prep.,,missing_in_overlay,auth,6
+de,pages.login.title,Login,Login,identical_to_english,auth,6
+de,pages.resetPassword.backToLoginLabel,Back to sign in,,missing_in_overlay,auth,6
+de,pages.resetPassword.confirmLabel,Confirm new password,,missing_in_overlay,auth,6
+de,pages.resetPassword.errorGeneric,This reset link is invalid or has expired. Request a new one from the sign-in page.,,missing_in_overlay,auth,6
+de,pages.resetPassword.h1,Choose a new password,,missing_in_overlay,auth,6
+de,pages.resetPassword.intro,Enter and confirm your new password (at least 8 characters).,,missing_in_overlay,auth,6
+de,pages.resetPassword.metaDescription,Set a new NurseNest password,,missing_in_overlay,auth,6
+de,pages.resetPassword.metaTitle,Reset password,,missing_in_overlay,auth,6
+de,pages.resetPassword.mismatchMessage,Passwords do not match.,,missing_in_overlay,auth,6
+de,pages.resetPassword.passwordLabel,New password,,missing_in_overlay,auth,6
+de,pages.resetPassword.submitLabel,Update password,,missing_in_overlay,auth,6
+de,pages.resetPassword.successMessage,Your password has been updated. You can sign in now.,,missing_in_overlay,auth,6
+de,pages.resetPassword.weakPasswordMessage,Password must be at least 8 characters.,,missing_in_overlay,auth,6
+de,pages.signup.description,Create your NurseNest Core account,,missing_in_overlay,auth,6
+de,pages.signup.legalAfter,.,,missing_in_overlay,auth,6
+de,pages.signup.legalAnd, and ,,missing_in_overlay,auth,6
+de,pages.signup.legalBefore,"By creating an account, you agree to our ",,missing_in_overlay,auth,6
+de,pages.signup.privacyLink,Privacy Policy,,missing_in_overlay,auth,6
+de,pages.signup.subtitle,Pick your country and exam path to personalize content.,,missing_in_overlay,auth,6
+de,pages.signup.termsLink,Terms of Service,,missing_in_overlay,auth,6
+de,pages.signup.tierLvn,LVN/LPN,LVN/LPN,identical_to_english,auth,6
+de,pages.signup.tierNp,NP,NP,identical_to_english,auth,6
+de,pages.signup.tierRn,RN,RN,identical_to_english,auth,6
+de,pages.signup.tierRpn,RPN,RPN,identical_to_english,auth,6
+de,account.idPrefix,ID,ID,identical_to_english,other,7
+de,account.role.admin,Admin,Admin,identical_to_english,other,7
+de,account.role.administrator,Administrator,Administrator,identical_to_english,other,7
+de,brand.applyNest,ApplyNest,ApplyNest,identical_to_english,other,7
+de,brand.nurseNest,NurseNest,NurseNest,identical_to_english,other,7
+de,components.competitiveDifferentiation.clinicalLearningSystem,Clinical Learning System,,missing_in_overlay,other,7
+de,components.competitiveDifferentiation.feature,Feature,,missing_in_overlay,other,7
+de,components.competitiveDifferentiation.platformComparison,Platform Comparison,,missing_in_overlay,other,7
+de,components.competitiveDifferentiation.typicalPlatforms,Typical Platforms,,missing_in_overlay,other,7
+de,components.competitiveDifferentiation.typicalPlatforms2,Typical Platforms,,missing_in_overlay,other,7
+de,components.footer.applynestHealthcareProgramApplicationsAnd,ApplyNest — program applications & admissions,,missing_in_overlay,other,7
+de,components.footer.healthcareProgramApplicationsAdmissionsAnd,— healthcare program applications & admissions.,,missing_in_overlay,other,7
+de,components.footer.nclexrnPrep,NCLEX-RN prep,,missing_in_overlay,other,7
+de,components.footer.npExamPrepHub,NP exam prep hub,,missing_in_overlay,other,7
+de,components.footer.nursenestNursingAndHealthcareExam,NurseNest — nursing & healthcare exam prep,,missing_in_overlay,other,7
+de,components.footer.nursingExamPrepClinicalTools,— nursing exam prep & clinical tools.,,missing_in_overlay,other,7
+de,components.footer.nursingExamPrepHub,Nursing exam prep hub,,missing_in_overlay,other,7
+de,components.footer.ourEducationEcosystem,Our education ecosystem,,missing_in_overlay,other,7
+de,components.footer.paramedic,Paramedic,,missing_in_overlay,other,7
+de,components.footer.respiratoryTherapist,Respiratory therapy,,missing_in_overlay,other,7
+de,components.footer.rexpnNclexpnPrep,REx-PN / NCLEX-PN prep,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.careerreadinessScenariosGoal,career-readiness scenarios (goal),,missing_in_overlay,other,7
+de,components.heroAlliedHealth.comingSoon,Coming Soon,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.comingSoon2,Coming Soon,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.newGraduate,New Graduate,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.prenursing,Pre-Nursing,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.prepareForNursingSchoolSuccess,Prepare for nursing school success with foundational science and terminology review.,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.questions,questions,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.questions2,questions,,missing_in_overlay,other,7
+de,components.heroAlliedHealth.questionsGoal,questions (goal),,missing_in_overlay,other,7
+de,components.heroAlliedHealth.transitionFromStudentToConfident,Transition from student to confident practitioner with workplace readiness scenarios.,,missing_in_overlay,other,7
+de,components.heroCertifications.startPrep,Start prep,,missing_in_overlay,other,7
+de,components.heroExpansionTracker.alliedHealthMajorCareers,Allied Health (Major Careers),,missing_in_overlay,other,7
+de,components.heroExpansionTracker.nursingTiers,Nursing Tiers,,missing_in_overlay,other,7
+de,components.heroFeaturesGrid.learnMore,Learn more,,missing_in_overlay,other,7
+de,components.heroGlobalCoverage.rarr,→,,missing_in_overlay,other,7
+de,components.heroGlobalCoverage.supportedCountries,Supported Countries,,missing_in_overlay,other,7
+de,components.heroGlobalCoverage.supportedLanguages,Supported Languages,,missing_in_overlay,other,7
+de,components.heroNursingTiers.20Languages,20 Languages,,missing_in_overlay,other,7
+de,components.heroNursingTiers.majorExams,Major Exams,,missing_in_overlay,other,7
+de,components.heroNursingTiers.mockExams,Mock Exams,,missing_in_overlay,other,7
+de,components.heroNursingTiers.questionsGoal,questions (goal),,missing_in_overlay,other,7
+de,components.heroNursingTiers.studyGuides,Study Guides,,missing_in_overlay,other,7
+de,components.homeBottomSections.25Questions,25 Questions,,missing_in_overlay,other,7
+de,components.homeBottomSections.adaptive,Adaptive,,missing_in_overlay,other,7
+de,components.homeBottomSections.builtForYou,Built for You,,missing_in_overlay,other,7
+de,components.homeBottomSections.canada,Canada,,missing_in_overlay,other,7
+de,components.homeBottomSections.createYourPlan,Create Your Plan,,missing_in_overlay,other,7
+de,components.homeBottomSections.customStudyPlanner,Custom Study Planner,,missing_in_overlay,other,7
+de,components.homeBottomSections.dailyTasks,Daily Tasks,,missing_in_overlay,other,7
+de,components.homeBottomSections.domainAnalysis,Domain Analysis,,missing_in_overlay,other,7
+de,components.homeBottomSections.free,Free,,missing_in_overlay,other,7
+de,components.homeBottomSections.freeReadinessExam,Free Readiness Exam,,missing_in_overlay,other,7
+de,components.homeBottomSections.instantResults,Instant Results,,missing_in_overlay,other,7
+de,components.homeBottomSections.noCost,No Cost,,missing_in_overlay,other,7
+de,components.homeBottomSections.performanceReportCard,Performance Report Card,,missing_in_overlay,other,7
+de,components.homeBottomSections.personalized,Adaptive,,missing_in_overlay,other,7
+de,components.homeBottomSections.progressTracking,Progress Tracking,,missing_in_overlay,other,7
+de,components.homeBottomSections.readinessExamBody,"Twenty-five items with an instant breakdown: see whether timing, knowledge, or judgement slipped before you sit for real.",,missing_in_overlay,other,7
+de,components.homeBottomSections.reportCardBody,Category accuracy and trends over time—so you stop re-drilling chapters you already own and focus where score variance is highest.,,missing_in_overlay,other,7
+de,components.homeBottomSections.scoreTrends,Score Trends,,missing_in_overlay,other,7
+de,components.homeBottomSections.studyPlannerBody,"Queue blocks from your exam date and the categories that still miss—so after a shift you open the planner and see what to do next, not a blank calendar.",,missing_in_overlay,other,7
+de,components.homeBottomSections.studyToolsCta,Start free — open practice,,missing_in_overlay,other,7
+de,components.homeBottomSections.studyToolsHeading,"Reports, mocks, and planners in one learner shell",,missing_in_overlay,other,7
+de,components.homeBottomSections.studyToolsSubcopy,"After a shift, you should not rebuild a study stack from memory. Open the planner for your exam window, run a mock when you are ready, and read the report card to see what to queue next.",,missing_in_overlay,other,7
+de,components.homeBottomSections.takeTheFreeExam,Take the Free Exam,,missing_in_overlay,other,7
+de,components.homeBottomSections.unitedStates,United States,,missing_in_overlay,other,7
+de,components.homeBottomSections.viewYourReportCard,View Your Report Card,,missing_in_overlay,other,7
+de,components.homeBottomSections.weakAreaDetection,Weak Area Detection,,missing_in_overlay,other,7
+de,components.homeChoosePath.chooseYourPath,Choose Your Path,,missing_in_overlay,other,7
+de,components.homeChoosePath.clinicalLessons,Clinical Lessons,,missing_in_overlay,other,7
+de,components.homeChoosePath.flashcards,Flashcards,,missing_in_overlay,other,7
+de,components.homeChoosePath.languagesSupported,Languages Supported,,missing_in_overlay,other,7
+de,components.homeChoosePath.practiceQuestions,Practice Questions,,missing_in_overlay,other,7
+de,components.homeChoosePath.whetherYoureANursingStudent,Whether you,,missing_in_overlay,other,7
+de,components.homeConversionSections.7dayMoneybackGuarantee,7-Day Money-Back Guarantee,,missing_in_overlay,other,7
+de,components.homeConversionSections.allied,Allied,,missing_in_overlay,other,7
+de,components.homeConversionSections.aProvenSystemToPrepare,"Learn the mechanism, pressure-test with items, then redirect study time using category signals—not vibes.",,missing_in_overlay,other,7
+de,components.homeConversionSections.averageRating,average rating,,missing_in_overlay,other,7
+de,components.homeConversionSections.chooseYourPath,Choose Your Path,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveCta,Compare plans & pricing,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveHeading,Why learners outgrow single-exam qbanks,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow0.feature,Question volume,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow0.ours,{{count}} exam-style questions across pathway tiers,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow0.typical,"Smaller banks, often under a few thousand items",,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow1.feature,Flashcards included,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow1.ours,{{count}} flashcards organized into decks,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow1.typical,Flashcards sold separately or missing entirely,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow2.feature,Multi-discipline scope,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow2.ours,"Dedicated RPN, RN, NP, and allied tracks with correct scope language",,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow2.typical,Single-exam focus or mixed stems that blur delegation rules,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow3.feature,Integrated workflow,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow3.ours,"Questions, decks, mocks, and lessons referencing the same miss patterns",,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow3.typical,Only one modality (questions-only or video-only),,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow4.feature,Allied & specialty coverage,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow4.ours,"RT, lab, paramedic, imaging, and related tracks with protocol-level framing",,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow4.typical,Nursing-only content with no credible allied expansion,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow5.feature,Readiness analytics,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow5.ours,Category accuracy and session trends that suggest what to queue next,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveRow5.typical,Score-only dashboards with no line-of-sight to the next study block,,missing_in_overlay,other,7
+de,components.homeConversionSections.competitiveSubcopy,"Most tools optimize for one test. NurseNest keeps questions, decks, mocks, lessons, and category analytics on one rail so you are not rebuilding a workflow every semester.",,missing_in_overlay,other,7
+de,components.homeConversionSections.conversionProofCta,Create a free account — explore the bank,,missing_in_overlay,other,7
+de,components.homeConversionSections.conversionProofHeading,What you actually get in the shell,,missing_in_overlay,other,7
+de,components.homeConversionSections.conversionProofSubcopy,"Fewer open tabs. NurseNest combines {{questions}} exam-style items, {{flashcards}} flashcards across {{decks}} decks, CAT-style mocks, image-backed items where available, and rationales that spell out safe vs unsafe options—in one study environment aligned to nursing, NP, and allied exams.",,missing_in_overlay,other,7
+de,components.homeConversionSections.everythingYouNeed,Everything You Need,,missing_in_overlay,other,7
+de,components.homeConversionSections.explore,Explore,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.flashcards.desc,Learn and test modes with spaced scheduling so weak concepts resurface before you forget them.,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.flashcards.tags,Deck tagging · Spaced mode · Import,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.flashcards.title,Flashcards & decks,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.mocks.desc,"Full-length timed sessions with breakdowns that show whether timing, knowledge, or judgement slipped.",,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.mocks.tags,Strict mode · Score trends · Review queue,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.mocks.title,Mock exams,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.questions.desc,{{count}} items across domains with detailed rationales focused on judgement—not trivia recall.,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.questions.tags,SATA · NGN-style · Timed sets,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.questions.title,Question bank,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.rationales.desc,"Every option explains the clinical call—so you rehearse elimination logic, not pattern matching.",,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.rationales.tags,Unsafe options · Delegation · Pharmacology safety,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureCard.rationales.title,Rationale-first review,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureStripHeading,Pass-focused tools—not a generic content marketplace,,missing_in_overlay,other,7
+de,components.homeConversionSections.featureStripSubcopy,"Pick the lane that matches tonight’s study goal: drill items, rehearse a mock, or read rationales for what you just missed.",,missing_in_overlay,other,7
+de,components.homeConversionSections.finalCtaHeading,Start rehearsing with your pathway unlocked,,missing_in_overlay,other,7
+de,components.homeConversionSections.finalCtaPrimary,Start practicing free,,missing_in_overlay,other,7
+de,components.homeConversionSections.finalCtaSecondary,View pricing,,missing_in_overlay,other,7
+de,components.homeConversionSections.finalCtaSubcopy,"Create a free account to browse starter content. Upgrade when you want the full bank, mocks, and history for your tier—no surprise charges to look around.",,missing_in_overlay,other,7
+de,components.homeConversionSections.freeAccountIncludesPracticeQuestions,"Free account includes practice questions, lessons, and flashcard access.",,missing_in_overlay,other,7
+de,components.homeConversionSections.howItWorks,How It Works,,missing_in_overlay,other,7
+de,components.homeConversionSections.howItWorksHeading,"How rationales, practice, and progress connect",,missing_in_overlay,other,7
+de,components.homeConversionSections.howItWorksIntro,Three loops you repeat until exam day—each one tied to how boards actually score judgement.,,missing_in_overlay,other,7
+de,components.homeConversionSections.howStep1.desc,Short lessons and reviews organized by system and competency so you know why a presentation matters—not just the buzzword.,,missing_in_overlay,other,7
+de,components.homeConversionSections.howStep1.title,Learn the mechanism,,missing_in_overlay,other,7
+de,components.homeConversionSections.howStep2.desc,"Timed and untimed sets, SATA, and case-style stems with rationales that dismantle every option—not just the letter the key lists.",,missing_in_overlay,other,7
+de,components.homeConversionSections.howStep2.title,Pressure-test with items,,missing_in_overlay,other,7
+de,components.homeConversionSections.howStep3.desc,"See accuracy by domain, carry results into the next session, and stop guessing what to open after a 12-hour shift.",,missing_in_overlay,other,7
+de,components.homeConversionSections.howStep3.title,Redirect off weak categories,,missing_in_overlay,other,7
+de,components.homeConversionSections.join5000Students,"Join 5,000+ students",,missing_in_overlay,other,7
+de,components.homeConversionSections.nextScreenshot,Next screenshot,,missing_in_overlay,other,7
+de,components.homeConversionSections.noCreditCardRequiredFree,No credit card required. Free tier available.,,missing_in_overlay,other,7
+de,components.homeConversionSections.platformScale,Platform Scale,,missing_in_overlay,other,7
+de,components.homeConversionSections.previousScreenshot,Previous screenshot,,missing_in_overlay,other,7
+de,components.homeConversionSections.professionHeading,Choose the exam you are sitting next,,missing_in_overlay,other,7
+de,components.homeConversionSections.professionSubcopy,Jump straight into pathway-tagged practice hubs and lessons so delegation language matches your registration context.,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.catExams.desc,Timed blocks that adapt difficulty so you are not only rehearsing questions you already own.,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.catExams.title,CAT-style mocks with performance carryover,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.clinicalImages.desc,Images and diagrams embedded with rationales so you practice interpreting what boards actually show on screen.,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.clinicalImages.title,Visuals where the exam tests recognition,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.examQuestions.desc,"Stems written for delegation, prioritization, and pharmacology judgement—with rationales that explain why each distractor fails clinically.",,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.examQuestions.title,Exam-style items with unsafe-option reasoning,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.flashcards.desc,"Pharmacology, pathophysiology, and high-yield concepts in decks meant for spaced retrieval—not isolated memorization.",,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.flashcards.title,Decks you can tie to weak tags,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.lessons.desc,Body-system and competency lessons with quick checks so you know whether the concept stuck before you burn another question block.,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.lessons.title,Lessons with pre/post checks,,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.multiDiscipline.desc,"Practical nursing, RN, NP, and allied content use the right delegation language—no one-size stem bank with a new label.",,missing_in_overlay,other,7
+de,components.homeConversionSections.proofCard.multiDiscipline.title,Separate tracks for separate scopes,,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleCheckAnswer,Show rationale,,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleCorrect,Correct,,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleCorrectAnswerLabel,Correct answer: {{letter}},,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleQuestionHeading,Try a pharmacology judgement stem,,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleQuestionSubcopy,"Tap an option, then read how the rationale rules out each distractor—same flow as inside the bank.",,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleStartPractice,Open free practice,,missing_in_overlay,other,7
+de,components.homeConversionSections.sampleTryAgain,Reset question,,missing_in_overlay,other,7
+de,components.homeConversionSections.studentReviews,Student Reviews,,missing_in_overlay,other,7
+de,components.homeConversionSections.testimonialsHeading,What learners say about rehearsing here,,missing_in_overlay,other,7
+de,components.homeConversionSections.testimonialsSubcopy,Quotes from students preparing for Canadian and US licensure and certification exams—your results depend on how consistently you train.,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustBadge.catExams,CAT-style mocks,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustBadge.clinicalImages,Clinical images,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustBadge.multiTier,Pathway-tier banks,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustCounterLabel.decks,Study decks,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustCounterLabel.flashcards,Flashcards,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustCounterLabel.lessons,Clinical lessons,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustCounterLabel.questions,Practice questions,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustCountersHeading,Built for high-stakes healthcare exams—not generic multiple-choice drills,,missing_in_overlay,other,7
+de,components.homeConversionSections.trustCountersSubcopy,"A deep bank of items, decks, lessons, and mocks for RPN, RN, NP, and allied tracks—scoped so you are not mixing PN stems into RN review.",,missing_in_overlay,other,7
+de,components.homeConversionSections.tryItFree,Try It Free,,missing_in_overlay,other,7
+de,components.homeConversionSections.whyNursenest,Why NurseNest,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.adaptiveMockExams.feature,Mock exams,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.adaptiveMockExams.nursenest,Timed blocks sized for your filtered pool with performance carryover into review queues,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.adaptiveMockExams.typical,Static PDF-style tests that do not feed the next study block,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.clinicalJudgmentTraining.feature,Clinical judgement practice,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.clinicalJudgmentTraining.nursenest,"NGN-style cases, bowties, and prioritization drills with full option rationale",,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.clinicalJudgmentTraining.typical,Straight multiple choice without the multi-step reasoning stems boards now use,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.clinicalLessons.feature,Clinical lessons,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.clinicalLessons.nursenest,"Lessons wired to categories you miss, with pre/post checks instead of passive video only",,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.clinicalLessons.typical,No lesson layer or generic slides detached from your item history,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.defaultHeadline,Where NurseNest diverges from generic Qbanks,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.defaultSubtitle,"Side-by-side on the things that change how you study: scope, rationales, mocks, and whether analytics point you to the next item set.",,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.flashcardsIncluded.feature,Flashcards & remediation,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.flashcardsIncluded.nursenest,Decks generated from weak tags with spaced scheduling inside the same subscription,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.flashcardsIncluded.typical,Often a separate purchase or static decks disconnected from your miss list,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.multiDisciplineCoverage.feature,Multi-pathway coverage,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.multiDisciplineCoverage.nursenest,"Dedicated RPN/LVN, RN, NP, and allied tracks with scope-appropriate language",,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.multiDisciplineCoverage.typical,Single-exam focus or repurposed stems that blur PN vs RN judgement,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.questionBankSize.feature,Question bank depth,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.questionBankSize.nursenest,Large exam-style bank with pathway filters so PN items do not masquerade as RN review,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.questionBankSize.typical,Smaller banks or generic pools that mix scopes and confuse delegation practice,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.readinessAnalytics.feature,Performance analytics,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.readinessAnalytics.nursenest,Domain and competency views that suggest what to queue next,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.readinessAnalytics.typical,Score-only dashboards without a path back to the next session,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.studyPlanGenerator.feature,Study rhythm,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.studyPlanGenerator.nursenest,Weekly nudges anchored to weak areas and the exam window you set,,missing_in_overlay,other,7
+de,components.homeDifferentiation.comparison.studyPlanGenerator.typical,One-size schedules that ignore whether pharmacology or prioritization is actually sliding,,missing_in_overlay,other,7
+de,components.homeDifferentiation.defaultHeadline.allied,"Certification practice that stays in protocol edges, not trivia lists",,missing_in_overlay,other,7
+de,components.homeDifferentiation.defaultHeadline.certification,"Certification prep tied to reasoning checkpoints, not generic flashcards",,missing_in_overlay,other,7
+de,components.homeDifferentiation.defaultHeadline.general,What you get beyond a static PDF question bank,,missing_in_overlay,other,7
+de,components.homeDifferentiation.defaultHeadline.np,NP prep that keeps case complexity high without losing the rationale loop,,missing_in_overlay,other,7
+de,components.homeDifferentiation.defaultSubtitle,"NurseNest is built for the judgement calls licensing exams measure: unsafe options, delegation limits, and the pathophysiology behind a symptom—not marketing checklists.",,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.adaptiveDifficulty.description,Sessions react to what you just missed instead of feeding endless items you already nail—closer to how CAT-style exams probe weak domains.,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.adaptiveDifficulty.title,Difficulty that tracks your miss patterns,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.clinicalReasoning.description,Each stem explains why the correct choice is safest and why the distractors fail—so you rehearse the same elimination logic the boards reward.,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.clinicalReasoning.title,Rationales that defend every option,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.integratedStudy.description,"Jump from a flagged topic into a lesson, then back into a timed block without exporting CSVs or juggling three subscriptions.",,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.integratedStudy.title,"Questions, lessons, mocks in one rail",,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.multiDiscipline.description,"PN, RN, NP, and allied banks use the right delegation language and risk framing for that registration—not recycled stem banks with a new label.",,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.multiDiscipline.title,Pathways separated by scope,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.readinessAnalytics.description,"See where accuracy wobbles by system or competency, then queue the next session against that bucket instead of guessing what to open tonight.",,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.readinessAnalytics.title,Category signals you can act on,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.spacedRepetition.description,Cards resurface weak concepts on a schedule so pharmacology and labs stick without a separate deck app.,,missing_in_overlay,other,7
+de,components.homeDifferentiation.grid.spacedRepetition.title,Flashcards tied to what you actually miss,,missing_in_overlay,other,7
+de,conversion.lockedStudyNext.ariaLabel,"Preview of subscriber Study Next (sample data, locked)",,missing_in_overlay,other,7
+de,conversion.lockedStudyNext.previewHint,Example layout — your recommendations personalize from your practice after you subscribe.,,missing_in_overlay,other,7
+de,cta.continuePlan,Continue your plan,,missing_in_overlay,other,7
+de,cta.improveWeakAreas,Improve your weak areas,,missing_in_overlay,other,7
+de,cta.unlockPlan,Unlock your personalized study plan,,missing_in_overlay,other,7
+de,examAttempt.accessError,Unable to verify access. Refresh and try again.,,missing_in_overlay,other,7
+de,examAttempt.backToExams,Back to exams,,missing_in_overlay,other,7
+de,examAttempt.byTopicHeading,Performance by topic,,missing_in_overlay,other,7
+de,examAttempt.fullReportCta,Full score report,,missing_in_overlay,other,7
+de,examAttempt.openQuestionBank,Open question bank,,missing_in_overlay,other,7
+de,examAttempt.recorded,Attempt recorded,,missing_in_overlay,other,7
+de,examAttempt.reportTitle,Score report,,missing_in_overlay,other,7
+de,examAttempt.reviewTopicsLabel,Review topics:,,missing_in_overlay,other,7
+de,examAttempt.scoreLine,Score: {{score}}/{{total}},,missing_in_overlay,other,7
+de,examAttempt.scoreWithPct,Score: {{score}}/{{total}} ({{pct}}%),,missing_in_overlay,other,7
+de,examAttempt.signInPrompt,Sign in to view attempt details.,,missing_in_overlay,other,7
+de,examAttempt.subscriberOnly,Attempt reports are available to subscribers.,,missing_in_overlay,other,7
+de,examAttempt.timeLabel,Time: {{time}},,missing_in_overlay,other,7
+de,examAttempt.timeLimitLabel,limit {{time}},,missing_in_overlay,other,7
+de,examAttempt.viewPlansCta,View plans,,missing_in_overlay,other,7
+de,hero.featureStrip.activeRecall,Active Recall,,missing_in_overlay,other,7
+de,hero.featureStrip.clinicalDecision,Clinical Decision,,missing_in_overlay,other,7
+de,hero.featureStrip.examBlueprint,Exam Blueprint,,missing_in_overlay,other,7
+de,hero.featureStrip.spacedRepetition,Spaced Repetition,,missing_in_overlay,other,7
+de,hero.trustIndicator.alliedHealth,Allied Health,,missing_in_overlay,other,7
+de,hero.trustIndicator.builtFor,Built for,,missing_in_overlay,other,7
+de,hero.trustIndicator.certCandidates,Certification Candidates,,missing_in_overlay,other,7
+de,hero.trustIndicator.newGradNurses,New Grad Nurses,,missing_in_overlay,other,7
+de,hero.trustIndicator.nursingStudents,Nursing Students,,missing_in_overlay,other,7
+de,learner.entitlement.flashcardsShort,Unable to verify access right now. Refresh and try again.,,missing_in_overlay,other,7
+de,learner.entitlement.verifyFailed,"We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no plan.” Refresh shortly, or sign in again if it keeps happening.",,missing_in_overlay,other,7
+de,learner.entitlement.verifyFailedShort,Unable to verify access right now. Refresh and try again.,,missing_in_overlay,other,7
+de,learner.error.app.description,Your account and access remain intact. Try again.,,missing_in_overlay,other,7
+de,learner.error.app.retry,Retry,,missing_in_overlay,other,7
+de,learner.error.app.title,Unable to load this section,,missing_in_overlay,other,7
+de,learner.error.section.dashboard,Dashboard,,missing_in_overlay,other,7
+de,learner.error.section.description,Your session is unchanged. Retry the page or return to the dashboard.,,missing_in_overlay,other,7
+de,learner.error.section.title,This section hit a snag,,missing_in_overlay,other,7
+de,learner.error.section.tryAgain,Try again,,missing_in_overlay,other,7
+de,learner.examPractice.chooseMode,Choose how you want to run this session. Progress saves automatically; you can refresh and resume.,,missing_in_overlay,other,7
+de,learner.examPractice.disclaimer,This is NurseNest practice. Timed pacing and layout are designed to feel serious and focused. We do not replicate any official exam vendor interface or guarantee identical behavior on test day.,,missing_in_overlay,other,7
+de,learner.examPractice.emptySuffix,or contact support if this doesn’t match what you expect.,,missing_in_overlay,other,7
+de,learner.examPractice.loadQuestionFailed,We couldn’t load this question (connection or temporary server issue). Refresh the page or try again shortly.,,missing_in_overlay,other,7
+de,learner.examPractice.networkStart,Could not reach the server to start this session. Check your connection and retry.,,missing_in_overlay,other,7
+de,learner.examPractice.preparing,Preparing your practice session…,,missing_in_overlay,other,7
+de,learner.examPractice.recordAttemptFailed,We couldn’t record this attempt. Check your connection or try again shortly.,,missing_in_overlay,other,7
+de,learner.examPractice.retry,Retry,,missing_in_overlay,other,7
+de,learner.examPractice.sessionLoadFailed,We could not load the exam session. Check your connection and retry.,,missing_in_overlay,other,7
+de,learner.examPractice.timed,Timed,,missing_in_overlay,other,7
+de,learner.examPractice.timedButton,Timed ({{minutes}} min),,missing_in_overlay,other,7
+de,learner.examPractice.timedModeHint,Timed mode shows a countdown and submits automatically when time expires (your answers so far are sent).,,missing_in_overlay,other,7
+de,learner.examPractice.untimed,Untimed,,missing_in_overlay,other,7
+de,learner.exams.page.afterSubscribe.li1,Full-length mocks with server-filtered item pools,,missing_in_overlay,other,7
+de,learner.exams.page.afterSubscribe.li2,Score history for readiness tracking,,missing_in_overlay,other,7
+de,learner.exams.page.afterSubscribe.li3,Resumable sessions with autosaved progress,,missing_in_overlay,other,7
+de,learner.exams.page.afterSubscribe.title,After you subscribe,,missing_in_overlay,other,7
+de,learner.exams.page.defaultExamBody,We could not attach a default exam profile to your account yet. You can still use the question bank while we finish loading exam metadata.,,missing_in_overlay,other,7
+de,learner.exams.page.defaultExamTitle,Setting up your practice exam,,missing_in_overlay,other,7
+de,learner.exams.page.historyLoadFailed,Exam history couldn’t load. The database was unreachable or the request failed. Your subscription status is unchanged; refresh or try again shortly.,,missing_in_overlay,other,7
+de,learner.exams.page.latestAttempt,Latest attempt: {{score}}/{{total}} ({{pct}}%).,,missing_in_overlay,other,7
+de,learner.exams.page.latestStrong,Strong practice band. Keep mixing timed sets.,,missing_in_overlay,other,7
+de,learner.exams.page.latestWeak,Add timed blocks this week to lift accuracy.,,missing_in_overlay,other,7
+de,learner.exams.page.noAttempts,No attempts yet. Start a session below when you are ready.,,missing_in_overlay,other,7
+de,learner.exams.page.openQuestionBankArrow,Open question bank →,,missing_in_overlay,other,7
+de,learner.exams.page.reportCardBody,Pair exam scores with question bank misses to plan your next study blocks.,,missing_in_overlay,other,7
+de,learner.exams.page.reportCardTitle,Report card & analytics,,missing_in_overlay,other,7
+de,learner.exams.page.subscriberIntro,"US NCLEX-RN and NCLEX-PN timed runs use your subscription pool. Answers stay hidden until you submit; you get a score at the end (no rationales between items, same pacing as test day).",,missing_in_overlay,other,7
+de,learner.exams.page.subtitle.locked,Timed practice pulls from the same server-filtered pool as your question bank. Subscribe to start full sessions and save attempts to your history.,,missing_in_overlay,other,7
+de,learner.exams.page.title,Practice exams,,missing_in_overlay,other,7
+de,learner.exams.shell.backToDashboard,Back to dashboard,,missing_in_overlay,other,7
+de,learner.exams.shell.signIn,Sign in,,missing_in_overlay,other,7
+de,learner.exams.shell.signInToPractice,to access practice exams.,,missing_in_overlay,other,7
+de,learner.examSession.empty.bankEmptyGlobal.body,"Timed practice needs items in the question bank. None are published yet. This is a data gap, not a paywall.",,missing_in_overlay,other,7
+de,learner.examSession.empty.bankEmptyGlobal.title,No published questions for practice,,missing_in_overlay,other,7
+de,learner.examSession.empty.default.body,"We couldn’t put any items in this practice set. Use the question bank with filters cleared, or contact support if it persists.",,missing_in_overlay,other,7
+de,learner.examSession.empty.default.title,No questions for this session,,missing_in_overlay,other,7
+de,learner.examSession.empty.entitlementExcludesAll.body,"Items exist in the bank but none match your profile country and tier. Update your profile or plan, or contact support.",,missing_in_overlay,other,7
+de,learner.examSession.empty.entitlementExcludesAll.title,No questions in your subscription scope,,missing_in_overlay,other,7
+de,learner.examSession.empty.indeterminate.body,The session started with no items for an uncommon reason. Try again from Practice exams or use the question bank. Contact support if this keeps happening.,,missing_in_overlay,other,7
+de,learner.examSession.empty.indeterminate.title,Practice pool is empty,,missing_in_overlay,other,7
+de,learner.examSession.start.cannotStart,You can’t start this practice session with the current account or plan.,,missing_in_overlay,other,7
+de,learner.examSession.start.examNotInPlan,This exam isn’t included in your current plan or region.,,missing_in_overlay,other,7
+de,learner.examSession.start.examUnavailable,That exam is no longer available. Go back to Practice exams and pick another.,,missing_in_overlay,other,7
+de,learner.examSession.start.generic,Could not start the practice session.,,missing_in_overlay,other,7
+de,learner.examSession.start.serviceUnavailable,We couldn’t start the session (temporary database or service issue). Try again shortly.,,missing_in_overlay,other,7
+de,learner.examSession.start.signInAgain,Sign in again to start a practice exam.,,missing_in_overlay,other,7
+de,learner.examSession.start.startFailed503,Starting the session failed. Refresh and try again shortly.,,missing_in_overlay,other,7
+de,learner.examSession.start.subscriptionRequired,An active subscription is required to start practice exams.,,missing_in_overlay,other,7
+de,learner.flashcards.hub.allTags,All tags,,missing_in_overlay,other,7
+de,learner.flashcards.hub.bestStreak,Best streak,,missing_in_overlay,other,7
+de,learner.flashcards.hub.bottomExamLessons,Exam lessons,,missing_in_overlay,other,7
+de,learner.flashcards.hub.bottomQuestionBank,Question bank,,missing_in_overlay,other,7
+de,learner.flashcards.hub.cardsCount,{{n}} cards,,missing_in_overlay,other,7
+de,learner.flashcards.hub.dayStreak,Day streak,,missing_in_overlay,other,7
+de,learner.flashcards.hub.deckMetaPathway,pathway,,missing_in_overlay,other,7
+de,learner.flashcards.hub.dueToday,Due (today),,missing_in_overlay,other,7
+de,learner.flashcards.hub.emptyLink,question bank,,missing_in_overlay,other,7
+de,learner.flashcards.hub.emptyPrefix,No decks match these filters. Try clearing filters or explore the,,missing_in_overlay,other,7
+de,learner.flashcards.hub.examFamilyAll,All,,missing_in_overlay,other,7
+de,learner.flashcards.hub.filterExamFamily,Exam family,,missing_in_overlay,other,7
+de,learner.flashcards.hub.filterPathway,Pathway,,missing_in_overlay,other,7
+de,learner.flashcards.hub.learning,Learning,,missing_in_overlay,other,7
+de,learner.flashcards.hub.loadDecksFailed,Failed to load decks,,missing_in_overlay,other,7
+de,learner.flashcards.hub.loadingDecks,Loading decks…,,missing_in_overlay,other,7
+de,learner.flashcards.hub.next,Next,,missing_in_overlay,other,7
+de,learner.flashcards.hub.overdue,Overdue,,missing_in_overlay,other,7
+de,learner.flashcards.hub.pageOf,Page {{page}} / {{total}},,missing_in_overlay,other,7
+de,learner.flashcards.hub.paginationAria,Deck pagination,,missing_in_overlay,other,7
+de,learner.flashcards.hub.pathwayAll,All pathways,,missing_in_overlay,other,7
+de,learner.flashcards.hub.previous,Previous,,missing_in_overlay,other,7
+de,learner.flashcards.hub.publicSeoCta,Public topic pages (SEO),,missing_in_overlay,other,7
+de,learner.flashcards.hub.reviews,Reviews,,missing_in_overlay,other,7
+de,learner.flashcards.hub.search,Search,,missing_in_overlay,other,7
+de,learner.flashcards.hub.searchDecksLabel,Search decks,,missing_in_overlay,other,7
+de,learner.flashcards.hub.searchPlaceholder,Title or description (2+ characters),,missing_in_overlay,other,7
+de,learner.flashcards.hub.study,Study,,missing_in_overlay,other,7
+de,learner.flashcards.hub.studyShuffled,Study shuffled,,missing_in_overlay,other,7
+de,learner.flashcards.hub.subscribeUnlock,Subscribe to unlock,,missing_in_overlay,other,7
+de,learner.flashcards.hub.subscriptionRequired,Subscription required,,missing_in_overlay,other,7
+de,learner.flashcards.hub.subtitle,"Pathway-scoped decks with spaced repetition. Filter by pathway, exam family, or topic tag. Subscribers get full decks, shuffle, and weak-area study from your question stats.",,missing_in_overlay,other,7
+de,learner.flashcards.hub.tagsPrefix,Tags:,,missing_in_overlay,other,7
+de,learner.flashcards.hub.title,Flashcards,,missing_in_overlay,other,7
+de,learner.flashcards.hub.topicTag,Topic tag,,missing_in_overlay,other,7
+de,learner.flashcards.hub.weakAreasCta,Study weak areas,,missing_in_overlay,other,7
+de,learner.flashcards.page.subtitle.locked,"Subscriber plans unlock full flashcard study, weak-area queues, and progress tracking.",,missing_in_overlay,other,7
+de,learner.flashcards.page.title,Flashcards,,missing_in_overlay,other,7
+de,learner.loading.app,Loading your dashboard…,,missing_in_overlay,other,7
+de,learner.loading.flashcards,Loading flashcards…,,missing_in_overlay,other,7
+de,learner.loading.questionBank,Loading question bank…,,missing_in_overlay,other,7
+de,learner.loading.section,Loading…,,missing_in_overlay,other,7
+de,learner.practiceTests.subtitle.locked,"Build timed or untimed tests from your question pool, save progress, and review scores with topic breakdowns, included with an active plan.",,missing_in_overlay,other,7
+de,learner.practiceTests.subtitle.subscriber,"Configure length, topics, difficulty, and selection mode. Run timed or untimed sessions, auto-save as you go, resume incomplete tests, and review scores with per-topic breakdowns and weak-area links.",,missing_in_overlay,other,7
+de,learner.practiceTests.title,Practice tests,,missing_in_overlay,other,7
+de,learner.qbank.api.accessVerifyFailed,"We couldn’t verify your access (subscription check failed). Refresh shortly. This is usually temporary, not a paywall block.",,missing_in_overlay,other,7
+de,learner.qbank.api.genericLoadFailure,Could not load questions. Check your connection and retry.,,missing_in_overlay,other,7
+de,learner.qbank.api.noActiveSubscription,No active subscription on this account. Choose a plan to use the full question bank.,,missing_in_overlay,other,7
+de,learner.qbank.api.previewsExhausted,Complimentary previews are used up. Subscribe for full bank access and rationales.,,missing_in_overlay,other,7
+de,learner.qbank.api.signInAgain,You need to sign in again to load the question bank.,,missing_in_overlay,other,7
+de,learner.qbank.api.subscriberListBlocked,This account can’t open the subscriber question list with the current plan or session.,,missing_in_overlay,other,7
+de,learner.qbank.api.tempUnavailable,The question bank is temporarily unavailable (database or service issue). Try again in a moment.,,missing_in_overlay,other,7
+de,learner.qbank.discovery.accessVerifyFailed,Couldn’t verify access for topic filters. Refresh shortly.,,missing_in_overlay,other,7
+de,learner.qbank.discovery.generic,Topic menu couldn’t load; try refreshing.,,missing_in_overlay,other,7
+de,learner.qbank.discovery.notAvailable,Topic discovery isn’t available for this account or plan.,,missing_in_overlay,other,7
+de,learner.qbank.discovery.serverIssue,Topic list couldn’t load (temporary server or database issue).,,missing_in_overlay,other,7
+de,learner.qbank.discovery.signIn,Sign in to load topic filters for your bank.,,missing_in_overlay,other,7
+de,learner.qbank.discovery.subscriptionRequired,Topic menu needs an active subscription; you can still use previews elsewhere.,,missing_in_overlay,other,7
+de,learner.qbank.efficiency.finalPrep,Final prep mix,,missing_in_overlay,other,7
+de,learner.qbank.efficiency.highYield,High-yield / harder items,,missing_in_overlay,other,7
+de,learner.qbank.efficiency.off,Off,,missing_in_overlay,other,7
+de,learner.qbank.efficiency.rapid,Rapid (short batch),,missing_in_overlay,other,7
+de,learner.qbank.efficiency.weak,Weak areas (ledger),,missing_in_overlay,other,7
+de,learner.qbank.empty.bankEmptyGlobal.body,"There are no published items in the question bank yet. This is a content gap, not your subscription. Contact support if you expected data here.",,missing_in_overlay,other,7
+de,learner.qbank.empty.bankEmptyGlobal.title,No published questions yet,,missing_in_overlay,other,7
+de,learner.qbank.empty.default.body,"Try another topic, clear filters, or refresh. If you recently subscribed, wait a moment and retry.",,missing_in_overlay,other,7
+de,learner.qbank.empty.default.title,No questions in this view,,missing_in_overlay,other,7
+de,learner.qbank.empty.entitlementExcludesAll.body,"Published questions exist, but none match your account country and tier. Check your profile country and plan, or contact support.",,missing_in_overlay,other,7
+de,learner.qbank.empty.entitlementExcludesAll.title,No questions match your profile,,missing_in_overlay,other,7
+de,learner.qbank.empty.indeterminate.body,"The list is empty for an uncommon reason. Try clearing filters, then refresh. If it persists, contact support with the time you tried.",,missing_in_overlay,other,7
+de,learner.qbank.empty.indeterminate.title,No questions in this view,,missing_in_overlay,other,7
+de,learner.qbank.empty.pathwayNotOnPlan.body,"That pathway isn’t included in your subscription, so it wasn’t applied as a filter. Clear the pathway filter or upgrade. If the list is still empty, the cause below still applies.",,missing_in_overlay,other,7
+de,learner.qbank.empty.pathwayNotOnPlan.title,Pathway not on your plan,,missing_in_overlay,other,7
+de,learner.qbank.empty.pathwayPoolEmpty.body,"Your subscription has items, but none are tagged for this exam pathway. Try “All topics” without a pathway filter, or pick another pathway.",,missing_in_overlay,other,7
+de,learner.qbank.empty.pathwayPoolEmpty.title,Nothing for this pathway in your pool,,missing_in_overlay,other,7
+de,learner.qbank.empty.topicNoMatch.body,The topic filter matches the database label exactly. Choose another topic from the menu or “All topics”.,,missing_in_overlay,other,7
+de,learner.qbank.empty.topicNoMatch.title,No questions for this topic label,,missing_in_overlay,other,7
+de,learner.qbank.empty.unknownPathway.body,"“{{pathwayId}}” isn’t a recognized pathway ID, so the bank wasn’t scoped to it. Remove the pathway filter or pick a pathway from your hub.",,missing_in_overlay,other,7
+de,learner.qbank.empty.unknownPathway.title,Unknown pathway filter,,missing_in_overlay,other,7
+de,learner.qbank.genericError,Something went wrong.,,missing_in_overlay,other,7
+de,learner.qbank.gradeFailed,Could not grade this item.,,missing_in_overlay,other,7
+de,learner.qbank.loading,Loading your question bank…,,missing_in_overlay,other,7
+de,learner.qbank.networkError,Network error loading questions.,,missing_in_overlay,other,7
+de,learner.qbank.notice.topicMenuTruncated,Showing the {{cap}} most common topics in your bank ({{omitted}} more questions in topics not listed). Choose “All topics” in topic drill to browse discovery buckets.,,missing_in_overlay,other,7
+de,learner.qbank.notice.topicRelaxed,No exact matches for topic “{{topic}}”. Showing questions for your pathway instead. Use the topic menu to narrow further.,,missing_in_overlay,other,7
+de,learner.qbank.notice.weakLowConfidence,Weak-area topic mapping is low-confidence right now. Continue grading items and we will tighten topic alignment.,,missing_in_overlay,other,7
+de,learner.qbank.notice.weakUnavailable,Weak-area mode needs a few graded items first. We are showing a mixed pool until your topic ledger populates.,,missing_in_overlay,other,7
+de,learner.qbank.pickTopic.body,Choose a topic from the menu below to start a topic-based quiz (recent items first).,,missing_in_overlay,other,7
+de,learner.qbank.pickTopic.title,Pick a topic,,missing_in_overlay,other,7
+de,learner.qbank.preset.pathwayMixed,"Pathway mixed exam (random, exam-aligned)",,missing_in_overlay,other,7
+de,learner.qbank.preset.randomBank,Random (full tier pool),,missing_in_overlay,other,7
+de,learner.qbank.preset.topicDrill,Topic drill (recent),,missing_in_overlay,other,7
+de,learner.qbank.retry,Retry,,missing_in_overlay,other,7
+de,learner.qbank.ui.batchProgressNote,Progress for this batch is saved in your browser so you can refresh and continue. Random and mixed modes exclude questions you have already seen this session when you load more. Scoring runs on the server. Answers are not graded in the page alone.,,missing_in_overlay,other,7
+de,learner.qbank.ui.checkAnswer,Check answer,,missing_in_overlay,other,7
+de,learner.qbank.ui.checking,Checking…,,missing_in_overlay,other,7
+de,learner.qbank.ui.continuePriority,Continue priority review,,missing_in_overlay,other,7
+de,learner.qbank.ui.correct,Correct,,missing_in_overlay,other,7
+de,learner.qbank.ui.efficiencyMode,Efficiency mode,,missing_in_overlay,other,7
+de,learner.qbank.ui.examShellHint,"Exam-style session: explanations stay hidden until you choose, like closed-book pacing (practice only).",,missing_in_overlay,other,7
+de,learner.qbank.ui.incorrect,Incorrect,,missing_in_overlay,other,7
+de,learner.qbank.ui.learningHigh,Strong match from this item’s metadata. Next steps should stay on the same topic track.,,missing_in_overlay,other,7
+de,learner.qbank.ui.learningLow,Approximate routing only. Open the question bank and tune filters if results look off-target.,,missing_in_overlay,other,7
+de,learner.qbank.ui.learningMedium,"Routed from the question topic; if the bank feels broad, narrow with filters or your priority review queue.",,missing_in_overlay,other,7
+de,learner.qbank.ui.loadMore,Load more (no repeats),,missing_in_overlay,other,7
+de,learner.qbank.ui.nextQuestion,Next question,,missing_in_overlay,other,7
+de,learner.qbank.ui.pathwayAll,All pathways (tier + country),,missing_in_overlay,other,7
+de,learner.qbank.ui.pathwayFilter,Pathway / exam mix,,missing_in_overlay,other,7
+de,learner.qbank.ui.previous,Previous,,missing_in_overlay,other,7
+de,learner.qbank.ui.questionOf,Question {{n}} of {{total}},,missing_in_overlay,other,7
+de,learner.qbank.ui.relatedLesson,Related lesson,,missing_in_overlay,other,7
+de,learner.qbank.ui.reviewFlashcards,Review flashcards,,missing_in_overlay,other,7
+de,learner.qbank.ui.selectTopic,Select topic…,,missing_in_overlay,other,7
+de,learner.qbank.ui.sessionLine,Session: {{correct}}/{{total}} correct,,missing_in_overlay,other,7
+de,learner.qbank.ui.sessionLineIdle,Answer and check to track this session,,missing_in_overlay,other,7
+de,learner.qbank.ui.showExplanation,Show explanation,,missing_in_overlay,other,7
+de,learner.qbank.ui.skipForNow,Skip for now,,missing_in_overlay,other,7
+de,learner.qbank.ui.sortRandom,Random,,missing_in_overlay,other,7
+de,learner.qbank.ui.sortRecent,Recent,,missing_in_overlay,other,7
+de,learner.qbank.ui.studyMode,Study mode,,missing_in_overlay,other,7
+de,learner.qbank.ui.topicCodeLine,Topic code: {{code}} · routing confidence {{confidence}},,missing_in_overlay,other,7
+de,learner.qbank.ui.topicDrill,Topic (topic drill),,missing_in_overlay,other,7
+de,learner.qbank.ui.topicDrillSameCode,Topic drill (same code),,missing_in_overlay,other,7
+de,learner.questions.howTo.examStyleLink,Exam-style question bank,,missing_in_overlay,other,7
+de,learner.questions.howTo.footer,Premium items and rationales are for individual subscriber use. Copying is limited on-screen; use My notes for text you can print or export.,,missing_in_overlay,other,7
+de,learner.questions.howTo.li1,"Select answers, then use Check answer for instant feedback.",,missing_in_overlay,other,7
+de,learner.questions.howTo.li2,"Pair with Practice exams when you want timed, full-set rehearsal.",,missing_in_overlay,other,7
+de,learner.questions.howTo.li3a,"For a more exam-like bank session (explanations hidden until you opt in), add",,missing_in_overlay,other,7
+de,learner.questions.howTo.li3b,"to this page URL, or use",,missing_in_overlay,other,7
+de,learner.questions.howTo.title,How to use this bank,,missing_in_overlay,other,7
+de,learner.questions.subtitle.locked,"Practice with rationales after each item, topic filters, and session-friendly review, included with an active plan.",,missing_in_overlay,other,7
+de,learner.questions.subtitle.subscriber,"Answer MCQ and SATA items, check your work against the official key, and read rationales. Use the topic filter to drill weak areas. Progress for this session is saved in your browser.",,missing_in_overlay,other,7
+de,learner.questions.title,Question bank,,missing_in_overlay,other,7
+de,learner.studyPlan.kicker,Exam-first prep,,missing_in_overlay,other,7
+de,learner.studyPlan.subtitle.locked,"Your exam date, cadence, and practice signals drive weekly targets and Study Next recommendations when you have an active plan.",,missing_in_overlay,other,7
+de,learner.studyPlan.subtitle.subscriber,"Your exam date, cadence, and practice signals drive weekly targets and checkpoints. Optional AI weekly structure still lives below. Enable with `AI_STUDY_PLAN_ENABLED=true` when configured. Not medical advice.",,missing_in_overlay,other,7
+de,learner.studyPlan.title,Study plan,,missing_in_overlay,other,7
+de,lessonContinue.ariaLabel,Continue learning,,missing_in_overlay,other,7
+de,lessonContinue.title,Continue learning,,missing_in_overlay,other,7
+de,pages.examLessons.appLessonsLead,Looking for the app lesson list (subscriber)?,,missing_in_overlay,other,7
+de,pages.examLessons.appLessonsLink,Go to app lessons,,missing_in_overlay,other,7
+de,pages.examLessons.ctaBlog,Read the blog,,missing_in_overlay,other,7
+de,pages.examLessons.ctaPricing,View plans & pricing,,missing_in_overlay,other,7
+de,pages.examLessons.ctaTools,Free clinical tools,,missing_in_overlay,other,7
+de,pages.examLessons.h1,Lessons by exam pathway,,missing_in_overlay,other,7
+de,pages.examLessons.intro,"Every hub below is scoped to one country, license track, and exam. No mixed terminology, no cross-leak between NP specialties when you set your learner pathway. Start with a preview, then unlock the full lesson with a matching plan.",,missing_in_overlay,other,7
+de,pages.examLessons.metaDescription,"Browse nursing lessons by country, role, and exam track (REx-PN, NCLEX-RN, NCLEX-PN, NP specialties, and more). Previews are free; full depth unlocks with the matching subscription.",,missing_in_overlay,other,7
+de,pages.examLessons.metaTitle,Exam-scoped clinical lessons | NurseNest,,missing_in_overlay,other,7
+de,pages.examLessons.openHub,Open lesson hub →,,missing_in_overlay,other,7
+de,pages.examLessons.pathwayBadge,{{region}} · {{shortName}},,missing_in_overlay,other,7
+de,pages.forInstitutions.audience1,Nursing schools and college programs,,missing_in_overlay,other,7
+de,pages.forInstitutions.audience2,Hospital and health-system education departments,,missing_in_overlay,other,7
+de,pages.forInstitutions.audience3,Program directors and faculty evaluating digital exam-prep for cohorts,,missing_in_overlay,other,7
+de,pages.forInstitutions.ctaContact,Contact us about institutional access,,missing_in_overlay,other,7
+de,pages.forInstitutions.ctaPricing,View individual pricing,,missing_in_overlay,other,7
+de,pages.forInstitutions.description,"Volume licensing and cohort access for nursing schools, programs, and healthcare education teams using NurseNest Core.",,missing_in_overlay,other,7
+de,pages.forInstitutions.eyebrow,Institutional,,missing_in_overlay,other,7
+de,pages.forInstitutions.h1,Institutional pricing for programs and schools,,missing_in_overlay,other,7
+de,pages.forInstitutions.intro,"Give your cohort the same NCLEX-RN, REx-PN, NP, and allied exam prep as individual subscribers—with seat-based access, rollout options, and terms sized to your program.",,missing_in_overlay,other,7
+de,pages.forInstitutions.nextBody,"Share your program type, estimated learner count, and timeline—we will follow up with pricing and rollout options. For single learners, individual plans stay on the main pricing page.",,missing_in_overlay,other,7
+de,pages.forInstitutions.offer1,Seat-based licensing aligned to cohort size and term length,,missing_in_overlay,other,7
+de,pages.forInstitutions.offer2,"Pathway-aligned tiers (RPN/LVN, RN, NP, allied health) matching public individual plans",,missing_in_overlay,other,7
+de,pages.forInstitutions.offer3,"Enrollment workflows such as domain verification or invite codes, depending on your agreement",,missing_in_overlay,other,7
+de,pages.forInstitutions.offer4,Centralized entitlement checks—the same server-side access model as individual subscriptions,,missing_in_overlay,other,7
+de,pages.forInstitutions.offer5,Onboarding support for program administrators and faculty contacts,,missing_in_overlay,other,7
+de,pages.forInstitutions.sectionAudience,Who it is for,,missing_in_overlay,other,7
+de,pages.forInstitutions.sectionNext,Next steps,,missing_in_overlay,other,7
+de,pages.forInstitutions.sectionOffer,What we offer,,missing_in_overlay,other,7
+de,pages.forInstitutions.title,Institutional pricing,,missing_in_overlay,other,7
+de,programmatic.chrome.kicker,NurseNest exam prep,,missing_in_overlay,other,7
+de,programmatic.chrome.relatedHubsAria,Related hubs,,missing_in_overlay,other,7
+de,programmatic.chrome.subLead,"Turn reading into reps: pathway-scoped questions, lessons, and timed exams that match what your authorization actually covers.",,missing_in_overlay,other,7
+de,programmatic.cta.comparePlans,Compare plans,,missing_in_overlay,other,7
+de,programmatic.cta.createFreeAccount,Create free account,,missing_in_overlay,other,7
+de,programmatic.cta.startFreeCreateAccount,Start free (create account),,missing_in_overlay,other,7
+de,programmatic.cta.startPracticeQuestions,Start practice questions,,missing_in_overlay,other,7
+de,programmatic.cta.viewPlans,View plans,,missing_in_overlay,other,7
+de,programmatic.explore.aria,More exam prep,,missing_in_overlay,other,7
+de,programmatic.explore.heading,Explore more,,missing_in_overlay,other,7
+de,programmatic.faq.heading,Common questions,,missing_in_overlay,other,7
+de,programmatic.nav.blog,Blog,,missing_in_overlay,other,7
+de,programmatic.nav.examLessons,Lesson hubs,,missing_in_overlay,other,7
+de,programmatic.nav.tools,Free tools,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.aanpLink,AANP practice test,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.anccLink,ANCC FNP practice test,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.boardHubsHeading,Board-named NP practice hubs,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.caIntroAfter, landing (same pathway as ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.caIntroBefore,Canadian NP: use the ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.caLink,CNPLE practice test,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.cnpleBodyAfter, page—same Canadian NP pathway as ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.cnpleBodyBefore,Prefer a single landing that says CNPLE in the URL? Open the ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.cnpleKeywordHeading,CNPLE keyword hub,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.cnpleLink,CNPLE practice test,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.pmhnpLink,PMHNP practice test,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.samePathwaySuffix,).,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.usAfterAnccBeforePm,. Psychiatric–mental health NP: ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.usBeforeCode,US Family NP candidates often search by certifying body. These URLs use the same FNP pathway as ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.usBetweenAanpAndAncc,", ",,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.usBetweenCodeAndLinks,: ,,missing_in_overlay,other,7
+de,programmatic.npCrosslinks.usEnd,.,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.categoryIntro,"Structured the same way for RN, PN, and NP: category first, then system/topic groups with scoped actions.",,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.categoryNavAria,Category shortcuts,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.clinicalTakeaway,Clinical takeaway: ,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.correctAnswerPrefix,Correct answer: ,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.ctaExams,Exams (CAT / practice),,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.ctaLessons,Lessons,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.ctaPracticeQuestions,Practice Questions,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.ctaStartPractice,Start practice questions,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.ctaTestBank,Test Bank,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.drillIntro,"Drill one system here, review lessons, then apply under timed pressure in the same week.",,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.exampleCategoryMix,Category mix (example),,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.examplePhysiological,Physiological,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.examplePsychosocial,Psychosocial,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.exampleSafety,Safety,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.exampleTrend,Trend (example),,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.howToUseHeading,How to use these questions,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.linkLessonsPathway,Lessons for this pathway,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.linkPracticeExams,Practice exams (sign in),,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.linkPricing,Plans and pricing,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.linkTestBank,Test bank,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.linkTryFive,Try 5 questions now,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.mappedGroups,{{count}} mapped system/topic groups,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.mistakesHeading,Common mistakes on this item style,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.nextStepsBody,"Link questions to lessons, then to timed exams when your category scores stop jumping. Pricing stays separate from your first free passes.",,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.nextStepsHeading,Next steps inside NurseNest,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.rationaleHeading,What a strong rationale looks like,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.rationaleSampleNote,Sample stem for discussion. Not a scored item from your bank.,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.statusImproving,Improving,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.statusNeedsWork,Needs work,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.statusStable,Stable,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.systemHeading,{{exam}} · {{terminology}} terminology,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.trendFootnote,"Rolling accuracy by block, not a guarantee of exam outcome.",,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.weakPreviewHeading,Weak area preview,,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.weakPreviewNote,"Example layout. Your live session report lists categories you actually miss, not demo data.",,missing_in_overlay,other,7
+de,programmatic.practiceBlocks.whyOthersFail,Why the other options fail,,missing_in_overlay,other,7
+de,programmatic.practiceHero.buildStudyPlan,Build study plan,,missing_in_overlay,other,7
+de,programmatic.practiceHero.footerLine,"Structured hub actions: questions, lessons, test bank, and exams.",,missing_in_overlay,other,7
+de,programmatic.practiceHero.openTestBank,Open test bank,,missing_in_overlay,other,7
+de,programmatic.practiceHero.startQuestions,Start practice questions,,missing_in_overlay,other,7
+de,programmatic.practiceHero.studyLessons,Study lessons,,missing_in_overlay,other,7
+de,programmatic.practiceHero.takeTest,Take a test (CAT / exams),,missing_in_overlay,other,7
+de,programmatic.related.aria,Related topics,,missing_in_overlay,other,7
+de,programmatic.related.heading,Related guides,,missing_in_overlay,other,7
+de,programmatic.studyInside.body,"Every guide links to exam lessons, pathway questions, the public test bank, adaptive CAT exams, study tools, and flashcards so you never hit a dead end.",,missing_in_overlay,other,7
+de,programmatic.studyInside.heading,Study inside NurseNest,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkExamLessons,Exam lesson hubs,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkExams,Adaptive CAT exams,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkFlashcards,Flashcards,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkPracticeQuestions,Practice questions,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkPricing,Pricing,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkSignup,Sign up,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkTestBank,Test bank overview,,missing_in_overlay,other,7
+de,programmatic.studyInside.linkTools,Study tools,,missing_in_overlay,other,7
+de,studyNext.openCta,Open,,missing_in_overlay,other,7
+de,studyNext.primary,Recommended next step,,missing_in_overlay,other,7
+de,studyNext.reasons.continue_path_started,You started this pathway,,missing_in_overlay,other,7
+de,studyNext.reasons.insufficient_signals_mixed_bank,Start with mixed practice,,missing_in_overlay,other,7
+de,studyNext.reasons.pathway_progress_stalled,Your pathway progress has stalled,,missing_in_overlay,other,7
+de,studyNext.reasons.practice_retest_weak_pool,Review your weak-area pool,,missing_in_overlay,other,7
+de,studyNext.reasons.weak_topic_high_confidence,Weakness is well supported in this topic,,missing_in_overlay,other,7
+de,studyNext.reasons.weak_topic_low_confidence,Low confidence in this topic,,missing_in_overlay,other,7
+de,studyNext.reasons.weak_topic_recent_miss,Recent misses in this topic,,missing_in_overlay,other,7
+de,studyNext.secondary,Other helpful actions,,missing_in_overlay,other,7
+de,studyNext.title,Study Next,,missing_in_overlay,other,7
+de,tools.card.ivInfusion.desc,"Pump rate, drip rate, and duration from volume, rate, and drop factor.",,missing_in_overlay,other,7
+de,tools.card.ivInfusion.title,IV & infusion,,missing_in_overlay,other,7
+de,tools.card.transfusionSafety.desc,Quick recognition drills for transfusion reactions and immediate actions.,,missing_in_overlay,other,7
+de,tools.card.transfusionSafety.title,Transfusion safety,,missing_in_overlay,other,7
+de,tools.electrolyteAbg.hco3,HCO₃⁻ (mEq/L),HCO₃⁻ (mEq/L),identical_to_english,other,7
+de,tools.electrolyteAbg.paco2,PaCO₂ (mmHg),PaCO₂ (mmHg),identical_to_english,other,7
+de,tools.electrolyteAbg.ph,pH,pH,identical_to_english,other,7
+de,tools.ivInfusion.dropFactor,Drop factor (gtt/mL),,missing_in_overlay,other,7
+de,tools.ivInfusion.gttMin,Drip rate,,missing_in_overlay,other,7
+de,tools.ivInfusion.hours,Hours,,missing_in_overlay,other,7
+de,tools.ivInfusion.infuseOver,Infuse over,,missing_in_overlay,other,7
+de,tools.ivInfusion.metaDescription,"Calculate infusion rate (mL/hr), drip rate (gtt/min), or duration from volume and flow.",,missing_in_overlay,other,7
+de,tools.ivInfusion.metaTitle,IV & infusion calculator | NurseNest,,missing_in_overlay,other,7
+de,tools.ivInfusion.minutes,Minutes,,missing_in_overlay,other,7
+de,tools.ivInfusion.rateMlHr,Rate,,missing_in_overlay,other,7
+de,tools.ivInfusion.tabDrip,Drip (gtt/min),,missing_in_overlay,other,7
+de,tools.ivInfusion.tabDuration,Duration,,missing_in_overlay,other,7
+de,tools.ivInfusion.tabPump,Pump (mL/hr),,missing_in_overlay,other,7
+de,tools.ivInfusion.title,IV & infusion,,missing_in_overlay,other,7
+de,tools.ivInfusion.unitMlHr,mL/hr,,missing_in_overlay,other,7
+de,tools.ivInfusion.validation,Enter positive numbers where required.,,missing_in_overlay,other,7
+de,tools.ivInfusion.volumeMl,Volume (mL),,missing_in_overlay,other,7
+de,tools.labValues.colName,Test,Test,identical_to_english,other,7
+de,tools.labValues.row.bun.name,BUN,BUN,identical_to_english,other,7
+de,tools.labValues.row.bun.range,7–20,7–20,identical_to_english,other,7
+de,tools.labValues.row.bun.unit,mg/dL,mg/dL,identical_to_english,other,7
+de,tools.labValues.row.cl.range,98–107,98–107,identical_to_english,other,7
+de,tools.labValues.row.cl.unit,mEq/L,mEq/L,identical_to_english,other,7
+de,tools.labValues.row.co2.range,22–29,22–29,identical_to_english,other,7
+de,tools.labValues.row.co2.unit,mEq/L,mEq/L,identical_to_english,other,7
+de,tools.labValues.row.cr.range,0.7–1.3,0.7–1.3,identical_to_english,other,7
+de,tools.labValues.row.cr.unit,mg/dL,mg/dL,identical_to_english,other,7
+de,tools.labValues.row.glu.range,70–99,70–99,identical_to_english,other,7
+de,tools.labValues.row.glu.unit,mg/dL,mg/dL,identical_to_english,other,7
+de,tools.labValues.row.hb.range,13.5–17.5,13.5–17.5,identical_to_english,other,7
+de,tools.labValues.row.hb.unit,g/dL,g/dL,identical_to_english,other,7
+de,tools.labValues.row.k.range,3.5–5.1,3.5–5.1,identical_to_english,other,7
+de,tools.labValues.row.k.unit,mEq/L,mEq/L,identical_to_english,other,7
+de,tools.labValues.row.na.range,136–145,136–145,identical_to_english,other,7
+de,tools.labValues.row.na.unit,mEq/L,mEq/L,identical_to_english,other,7
+de,tools.labValues.row.plt.range,150–400,150–400,identical_to_english,other,7
+de,tools.labValues.row.plt.unit,×10³/µL,×10³/µL,identical_to_english,other,7
+de,tools.labValues.row.wbc.range,4.5–11.0,4.5–11.0,identical_to_english,other,7
+de,tools.labValues.row.wbc.unit,×10³/µL,×10³/µL,identical_to_english,other,7
+de,tools.medMath.unitGttMin,gtt/min,gtt/min,identical_to_english,other,7
+de,tools.transfusionSafety.intro,Tap the best immediate action. Rationales summarize what to watch for on exams and on the unit.,,missing_in_overlay,other,7
+de,tools.transfusionSafety.metaDescription,Practice identifying transfusion reactions and first-line nursing responses.,,missing_in_overlay,other,7
+de,tools.transfusionSafety.metaTitle,Transfusion safety drills | NurseNest,,missing_in_overlay,other,7
+de,tools.transfusionSafety.opt2a,Rising free hemoglobin or plasma hemoglobin with decreasing haptoglobin (with clinical correlation).,,missing_in_overlay,other,7
+de,tools.transfusionSafety.opt2b,Isolated platelet count drop without other signs.,,missing_in_overlay,other,7
+de,tools.transfusionSafety.optA,"Stop the transfusion, keep IV access with normal saline, and notify the provider and blood bank per protocol.",,missing_in_overlay,other,7
+de,tools.transfusionSafety.optB,Slow the infusion to 50 mL/hr and continue monitoring.,,missing_in_overlay,other,7
+de,tools.transfusionSafety.optC,Give antipyretics and continue the transfusion if vital signs stabilize.,,missing_in_overlay,other,7
+de,tools.transfusionSafety.q1,"A patient develops fever, chills, and flank pain 45 minutes into a red blood cell transfusion. What is your priority?",,missing_in_overlay,other,7
+de,tools.transfusionSafety.q2,You suspect acute hemolytic transfusion reaction. Which lab pair best supports hemolysis in this context?,,missing_in_overlay,other,7
+de,tools.transfusionSafety.rationale1,"Febrile or hemolytic suspicion requires stopping the blood product, maintaining patent IV access with saline, monitoring, and escalation—before restarting anything.",,missing_in_overlay,other,7
+de,tools.transfusionSafety.rationale2,Hemolysis releases free hemoglobin and consumes haptoglobin; always interpret with the clinical picture and institutional transfusion reaction pathway.,,missing_in_overlay,other,7
+de,tools.transfusionSafety.title,Transfusion safety,,missing_in_overlay,other,7

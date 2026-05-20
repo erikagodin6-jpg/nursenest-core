@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-04-15T03:26:28.245Z",
+  "sourceAuditGeneratedAt": "2026-04-15T03:25:17.969Z",
+  "sourceRollupGeneratedAt": "2026-04-15T03:25:17.969Z",
+  "npPathways": [
+    "ca-np-cnple",
+    "us-np-fnp",
+    "us-np-agpcnp",
+    "us-np-pmhnp",
+    "us-np-whnp",
+    "us-np-pnp-pc"
+  ],
+  "totals": {
+    "npLessonRowsRoutable": 161,
+    "productionReadyEn": 94,
+    "notProductionReadyEn": 67,
+    "usableButThinEn": 16,
+    "productionReadyEnButLocalizationIncomplete": 94
+  },
+  "usCanadaPriority": {
+    "unitedStates": "us-np-fnp is the only US NP track with bundled catalog volume today; other US NP tracks (AGPCNP, PMHNP, WHNP, PNP-PC) are registry-active but need catalog + scoped-gold content to match FNP depth.",
+    "canada": "ca-np-cnple is upcoming in the product registry with zero bundled catalog lessons—Canadian NP prep should be added as a dedicated catalog + scoped-gold wave, not by mislabeling US FNP content."
+  },
+  "recommendedBatchOrder": [
+    "us-np-fnp — complete remaining not–production_ready_en + elevate usable_but_thin_en",
+    "us-np-agpcnp / us-np-pmhnp / us-np-whnp / us-np-pnp-pc — add bundled lessons + gold where product enables exam hubs",
+    "ca-np-cnple — Canada-specific primary-care NP corpus (collaborative prescribing language, SI vitals) once pathway ships"
+  ],
+  "clusterPriorityNotes": [
+    "Cardiovascular, endocrine, and infectious disease ambulatory lessons drive perceived NP premium completeness.",
+    "Integrated PAD reviews (bp26-usnp-*) scale exam-style judgment—keep batches grouped by client-need × body-system domains.",
+    "Scoped-gold lessons shared across NP tracks should stay pathway-aware (WHNP depth vs FNP primary-care lane vs Canada collaborative framing)."
+  ],
+  "topRecurringContentProblems": [
+    {
+      "reason": "no_educational_overlay_in_scanned_locales",
+      "count": 65
+    },
+    {
+      "reason": "missing_educational",
+      "count": 47
+    },
+    {
+      "reason": "thin_total_word_count",
+      "count": 15
+    },
+    {
+      "reason": "links",
+      "count": 6
+    },
+    {
+      "reason": "Clinical scenario section must include a structured patient vignette (patient/cl",
+      "count": 3
+    },
+    {
+      "reason": "not_in_exam_filtered_hub_list",
+      "count": 3
+    },
+    {
+      "reason": "isolated_no_internal_links_or_related_refs",
+      "count": 3
+    },
+    {
+      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+      "count": 2
+    },
+    {
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+      "count": 1
+    },
+    {
+      "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (19 < 40 words).",
+      "count": 1
+    },
+    {
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
+      "count": 1
+    },
+    {
+      "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (12 < 40 words).",
+      "count": 1
+    },
+    {
+      "reason": "low_total_word_count",
+      "count": 1
+    },
+    {
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
+      "count": 1
+    }
+  ],
+  "estimateBatchesAtSize100": 1,
+  "rollupSnapshot": [
+    {
+      "pathwayId": "us-np-fnp",
+      "country": "us",
+      "exam": "fnp",
+      "roleTrack": "np",
+      "nursingPriority": true,
+      "totalLessons": 161,
+      "productionReady": 0,
+      "usableButThin": 10,
+      "structurallyIncomplete": 0,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 100,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "productionReadyEn": 94,
+      "goodEnglishNotLocalizationComplete": 94,
+      "averageOverallScore": 85.9,
+      "topReasons": [
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 157
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 15
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 14
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 13
+        },
+        {
+          "reason": "missing_educational:clinical_application",
+          "count": 12
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 6
+        },
+        {
+          "reason": "links:internal_links_high_count(9)",
+          "count": 4
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 3
+        }
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "production_ready_en": 94,
+        "usable_but_thin_en": 16
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 50,
+        "localized_ready": 2,
+        "localization_incomplete": 109
+      }
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "cookies": [
+    {
+      "name": "nn_marketing_region",
+      "value": "CA",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1812734676.812764,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "authjs.csrf-token",
+      "value": "8ad25aa63c6fb3f26aacd6c4fd7797d32b0a81bcf92870f573a7223d8f44f97f%7C6300e59b5cb135c0c609beb77298a5027d8df053bb15eb3e05487ca15bbccae2",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "authjs.callback-url",
+      "value": "http%3A%2F%2Flocalhost%3A3000%2F",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "authjs.session-token",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiR1B0QXpoWkI2WEFwalNoRXZFbWtydkFFTmhaa09KQzk0WEJFdHZxYk5ESk9TUW1FZ3ZDTFBVc3RqUU03bk9EakdIN0wyNEF0V2ttYjBvMS16THdVWEEifQ..PQ5UtQTahT3tcOOBneyc8g.LvlGsxlbBDmviCtGAcwhYLeMsLs2aBbxTAdqotA_WbmgxvBeT24_RYe_vPyHOiniC5ZoZ4j3RcivBiunoQPV6PfLDJjSovp-6Kfu3ks7BN9Yg-Wonm_6214DfN7M7JUOFnNryZrz33XIDM9uleIArHyK4JlVW_MN9e7kX1FFwoKtsngzbKBga4QmoRgCdWQ_G1lsMyCfVp_zvivKCuAJpvOPfCSJMmjDpT-p-TtDYHqQ3NeBWadBFLy2rBKvGulRg-BKsU3bfH94YAvUvb1_m3fkZCz636IueQ9iCQz0OAPBF46ArXgF1-Wi6rd_AVnb_R3KUMEUKR521TJuIL9d3_x49aTKZL7aLm6gXfyfLWwoPC881BT3fw-BVWaZrr-WSUWEreOmRjThB-dbzjQODhr2pWN4j87xiQh99XAJQsN6nZWQ7J131_eFG4Jxmb5yeW10zPzl0NuBYw3TGHuu9VRzTGOCJ2QO3lP9Yfl1Xaw_5QkCeGq7rGuiP3ucBGN214kHf-VKkzNEhQhnvTyNsgbDePtH5VD625zU0K4cmF0Uwh32tPgiX2xvEI74TIt1.6oveaQnRfsaUeB2w3MoxQ1_UmzZTX8N0q7U8p3mdJ3o",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1780766692.889744,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3010",
+      "localStorage": [
+        {
+          "name": "nursenest-region",
+          "value": "CA"
+        }
+      ]
+    }
+  ]
+}

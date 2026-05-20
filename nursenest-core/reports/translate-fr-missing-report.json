@@ -1,0 +1,3510 @@
+{
+  "generatedAt": "2026-05-03T18:56:46.570Z",
+  "dryRun": true,
+  "applied": false,
+  "locale": "fr",
+  "changedKeys": 4987,
+  "reviewRequired": 4845,
+  "changes": [
+    {
+      "shard": "nav",
+      "key": "footer.faq",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "FAQ"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.blog",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Blog"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.certifications",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "CertifiCATions"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.newGradCareer",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Nursing (RPN/RN)"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.npAdvanced",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NP/Advanced"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.occupationalTherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Occupational Therapy"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.paramedicine",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Paramedic / EMT"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.pharmacyTech",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pharmacy Technician"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.physicalTherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Physical Therapy"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.preNursing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pre-Nursing"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.previewMode",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Preview Mode"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.productBuilder",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Product Builder"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.psychotherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Psychotherapy"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.respTherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Respiratory Therapy"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.revenueIntelligence",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Revenue Intelligence"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.screenshotStudio",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Screenshot Studio"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.seoDashboard",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "SEO Dashboard"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.seoPerformance",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "SEO Performance"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.socialWork",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Social Work"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.badge.regionCA",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Canada"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.badge.roleLvnLpn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LPN / LVN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.badge.roleNp",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NP"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.badge.roleRn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.badge.roleRpn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RPN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.examStrip.npCA",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NP (CNPLE)"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.examStrip.pnCA",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "REx-PN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.examStrip.pnUS",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NCLEX-PN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.examStrip.rn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NCLEX-RN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.mega.np.label",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NP"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.mega.pn.labelCA",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RPN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.mega.pn.labelUS",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LPN / LVN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.mega.rn.label",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.tierDrop.lpnTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NCLEX-PN · LPN"
+    },
+    {
+      "shard": "nav",
+      "key": "nav.tierDrop.rnTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NCLEX-RN"
+    },
+    {
+      "shard": "auth",
+      "key": "login.signupTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Create Account"
+    },
+    {
+      "shard": "auth",
+      "key": "login.signupSubtitle",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Start your préparation aux examens infirmiers today"
+    },
+    {
+      "shard": "auth",
+      "key": "login.noAccount",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Don't have an account?"
+    },
+    {
+      "shard": "auth",
+      "key": "login.signUpNow",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Sign up"
+    },
+    {
+      "shard": "auth",
+      "key": "login.welcomeSubtitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Continue your exam prep jouRNey"
+    },
+    {
+      "shard": "auth",
+      "key": "login.forgotPassword",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Forgot password?"
+    },
+    {
+      "shard": "auth",
+      "key": "login.forgotEmailHelp",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Forgot email?"
+    },
+    {
+      "shard": "auth",
+      "key": "login.forgotEmailHelpTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Recover account email"
+    },
+    {
+      "shard": "auth",
+      "key": "login.passwordResetTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Password Reset"
+    },
+    {
+      "shard": "auth",
+      "key": "login.passwordResetDescription",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Use “Forgot password?” to get a reset link, or contact support if you no longer have access to your email."
+    },
+    {
+      "shard": "auth",
+      "key": "account.idPrefix",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "ID"
+    },
+    {
+      "shard": "auth",
+      "key": "account.role.admin",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Admin"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.competitorArcher",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Archer"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.competitorNurseNest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NurseNest"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.competitorUWorld",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "UWorld"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.equivPerMo",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "/mo"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.perMo",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "/mo"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.periodMo",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "/mo"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.plans",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Plans"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.rn.nameCA",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RN"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.rn.nameUS",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RN"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.rpn.nameCA",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RPN"
+    },
+    {
+      "shard": "billing",
+      "key": "pricing.rpn.nameUS",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LVN"
+    },
+    {
+      "shard": "billing",
+      "key": "shop.product.questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "questions"
+    },
+    {
+      "shard": "billing",
+      "key": "upgrade.pro",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pro"
+    },
+    {
+      "shard": "brand",
+      "key": "brand.applyNest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "ApplyNest"
+    },
+    {
+      "shard": "brand",
+      "key": "brand.nurseNest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NurseNest"
+    },
+    {
+      "shard": "brand",
+      "key": "brand.trust.checkout",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Secure checkout · Cancel anytime · Nurse-built content"
+    },
+    {
+      "shard": "brand",
+      "key": "brand.trust.prep",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Built for licensing exams · Evidence-informed rationales · Full banks with a subscription"
+    },
+    {
+      "shard": "brand",
+      "key": "brand.trust.pricing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Transparent pricing · No surprise fees · Trusted by nursing students"
+    },
+    {
+      "shard": "common",
+      "key": "common.premium",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Premium"
+    },
+    {
+      "shard": "common",
+      "key": "nursenest.ca",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NurseNest.ca"
+    },
+    {
+      "shard": "common",
+      "key": "report.attachScreenshot",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Attach Screenshot"
+    },
+    {
+      "shard": "common",
+      "key": "report.buttonLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Report Problem"
+    },
+    {
+      "shard": "common",
+      "key": "report.contactPermission",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "You may contact me about this report"
+    },
+    {
+      "shard": "common",
+      "key": "report.descriptionLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Description"
+    },
+    {
+      "shard": "common",
+      "key": "report.descriptionPlaceholder",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Describe the issue you encountered..."
+    },
+    {
+      "shard": "common",
+      "key": "report.emailLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Email (optional)"
+    },
+    {
+      "shard": "common",
+      "key": "report.emailPlaceholder",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "common",
+      "key": "report.errorDescription",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Something went wrong. Please try again."
+    },
+    {
+      "shard": "common",
+      "key": "report.errorTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Submission Failed"
+    },
+    {
+      "shard": "common",
+      "key": "report.pageInfo",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Page information will be included automatically."
+    },
+    {
+      "shard": "common",
+      "key": "report.problemTypeLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Problem Type"
+    },
+    {
+      "shard": "common",
+      "key": "report.problemTypePlaceholder",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Select a problem type"
+    },
+    {
+      "shard": "common",
+      "key": "report.screenshotError",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Failed to capture screenshot"
+    },
+    {
+      "shard": "common",
+      "key": "report.screenshotLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Screenshot"
+    },
+    {
+      "shard": "common",
+      "key": "report.screenshotTooLarge",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Screenshot is too large"
+    },
+    {
+      "shard": "common",
+      "key": "report.severityLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Severity"
+    },
+    {
+      "shard": "common",
+      "key": "report.submitButton",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Submit Report"
+    },
+    {
+      "shard": "common",
+      "key": "report.submitting",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Submitting..."
+    },
+    {
+      "shard": "common",
+      "key": "report.subtitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Help us improve by reporting issues you encounter."
+    },
+    {
+      "shard": "common",
+      "key": "report.successDescription",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Thank you for your feedback. We will review your report."
+    },
+    {
+      "shard": "common",
+      "key": "report.successTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Report Submitted"
+    },
+    {
+      "shard": "common",
+      "key": "report.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Report a Problem"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.accuracy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Accuracy"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.confidenceBreakdown",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Confidence Breakdown"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.correct",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.exitSession",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Exit Session"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.expert",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Expert"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.flagged",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Flagged"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.howSureWereYou",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "How sure were you?"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.mastered",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Mastered"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.mostDifficultSubtopicsByTier",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Most Difficult Subtopics by Tier"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.multipleChoice",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Multiple Choice"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.total",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Total"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.totalStudied",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Total Studied"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.type",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Type"
+    },
+    {
+      "shard": "components",
+      "key": "components.adaptiveStudy.whyThisIsCorrect",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why This Is Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.advancedQuestionRenderers.age",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Age:"
+    },
+    {
+      "shard": "components",
+      "key": "components.advancedQuestionRenderers.chiefComplaint",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Chief Complaint:"
+    },
+    {
+      "shard": "components",
+      "key": "components.advancedQuestionRenderers.gender",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Gender:"
+    },
+    {
+      "shard": "components",
+      "key": "components.aiAssistant.aiAssistant",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "AI Assistant"
+    },
+    {
+      "shard": "components",
+      "key": "components.aiAssistant.aiAssistant2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "AI Assistant"
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedBreadcrumb.breadcrumb",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Breadcrumb"
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedEmailCapture.noSpamUnsubscribeAnytime",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No spam. Unsubscribe anytime."
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedEmailCapture.noSpamUnsubscribeAnytime2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No spam. Unsubscribe anytime."
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedEmailCapture.youremailcom",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedEmailCapture.youremailcom2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedEmailCapture.youremailcom3",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.alliedEmailCapture.youremailcom4",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.auscultationPlayer.source",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Source"
+    },
+    {
+      "shard": "components",
+      "key": "components.auscultationSitesDiagram.auscultationSites",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Auscultation Sites"
+    },
+    {
+      "shard": "components",
+      "key": "components.auscultationSitesDiagram.normalSound",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Normal Sound"
+    },
+    {
+      "shard": "components",
+      "key": "components.auscultationSitesDiagram.useTheDiaphragmOfThe",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "- Use the diaphragm of the stethoscope"
+    },
+    {
+      "shard": "components",
+      "key": "components.breadcrumbNav.breadcrumb",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Breadcrumb"
+    },
+    {
+      "shard": "components",
+      "key": "components.carousel.carousel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "carousel"
+    },
+    {
+      "shard": "components",
+      "key": "components.carousel.slide",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "slide"
+    },
+    {
+      "shard": "components",
+      "key": "components.commandCenter.certifications",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "CertifiCATions"
+    },
+    {
+      "shard": "components",
+      "key": "components.commandCenter.interviewPrep",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Interview Prep"
+    },
+    {
+      "shard": "components",
+      "key": "components.commandCenter.questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.commandCenter.readiness",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Readiness"
+    },
+    {
+      "shard": "components",
+      "key": "components.commandCenter.readiness2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Readiness"
+    },
+    {
+      "shard": "components",
+      "key": "components.commandCenter.survivalGuides",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Survival Guides"
+    },
+    {
+      "shard": "components",
+      "key": "components.competitiveDifferentiation.clinicalLearningSystem",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical LeaRNing System"
+    },
+    {
+      "shard": "components",
+      "key": "components.competitiveDifferentiation.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Feature"
+    },
+    {
+      "shard": "components",
+      "key": "components.competitiveDifferentiation.platformComparison",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Platform Comparison"
+    },
+    {
+      "shard": "components",
+      "key": "components.competitiveDifferentiation.typicalPlatforms",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Typical Platforms"
+    },
+    {
+      "shard": "components",
+      "key": "components.competitiveDifferentiation.typicalPlatforms2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Typical Platforms"
+    },
+    {
+      "shard": "components",
+      "key": "components.conversionFunnelMockExamTeaser.adaptive",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Adaptive"
+    },
+    {
+      "shard": "components",
+      "key": "components.conversionFunnelMockExamTeaser.domains",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Domains"
+    },
+    {
+      "shard": "components",
+      "key": "components.conversionFunnelMockExamTeaser.scoreBreakdown",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Score breakdown"
+    },
+    {
+      "shard": "components",
+      "key": "components.conversionFunnelMockExamTeaser.timed",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timed"
+    },
+    {
+      "shard": "components",
+      "key": "components.conversionFunnelSocialProofBar.questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.30Premium",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "30 (premium)"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.40Premium",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "40 (premium)"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.50Premium",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "50 (premium)"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.accuracy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Accuracy"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.convertingNotes",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Converting Notes..."
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.correct",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.frontQuestionterm",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Front (Question/Term)"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.howWellDidYouKnow",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "How well did you know this?"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.iGotItWrong",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I got it wrong"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.iKnewThis",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I knew this"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.iWasUnsure",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I was unsure"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.limitReached",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "— limit reached"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.mastered",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Mastered"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.missed",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Missed"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.orPasteYourNotesBelow",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "or paste your notes below"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.private",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Private"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.private2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Private"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.public",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Public"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.public2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Public"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.question",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Question"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.tapEachSectionToReveal",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Tap each section to reveal"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.tapEachSectionToReveal2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Tap each section to reveal"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.test",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Test"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.txtMdCsvRtfPdf",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": ".txt, .md, .csv, .rtf, .pdf, .doc, .docx (max 5 MB)"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.unlisted",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Unlisted"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.unlisted2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Unlisted"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.visibility",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Visibility:"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.visibility2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Visibility:"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.visibility3",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Visibility:"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.whyThisIsCorrect",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why This Is Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.deckViews.whyThisIsCorrect2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why This Is Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.educationalIntegrity.educationalIntegrity",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "EduCATional Integrity"
+    },
+    {
+      "shard": "components",
+      "key": "components.emailSignupPrompt.youremailcom",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.emailSignupPrompt.youremailcom2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.emailSignupPrompt.youremailcom3",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.engagement.pauseThink",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pause & Think"
+    },
+    {
+      "shard": "components",
+      "key": "components.environmentBadge.dbFingerprint",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "DB Fingerprint:"
+    },
+    {
+      "shard": "components",
+      "key": "components.examCalculator.calculator",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Calculator"
+    },
+    {
+      "shard": "components",
+      "key": "components.examConsole.noExhibits",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No exhibits"
+    },
+    {
+      "shard": "components",
+      "key": "components.examConsole.typeYourNotesHere",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Type your notes here..."
+    },
+    {
+      "shard": "components",
+      "key": "components.examConsole.typeYourNotesHere2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Type your notes here..."
+    },
+    {
+      "shard": "components",
+      "key": "components.examFollowupModal.iPassed",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I passed!"
+    },
+    {
+      "shard": "components",
+      "key": "components.examFollowupModal.yourDiscountCode",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Your discount code"
+    },
+    {
+      "shard": "components",
+      "key": "components.exitIntentModal.youreIn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "You're in!"
+    },
+    {
+      "shard": "components",
+      "key": "components.explanationPanel.framework",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Framework:"
+    },
+    {
+      "shard": "components",
+      "key": "components.explanationPanel.frameworkAppliesHere",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "framework applies here."
+    },
+    {
+      "shard": "components",
+      "key": "components.explanationPanel.mnemonicDevice",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Mnemonic Device"
+    },
+    {
+      "shard": "components",
+      "key": "components.explanationPanel.whyThisIsCorrect",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why This Is Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.fixedLessonNav.prev",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Prev"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.alliedCareers",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Allied Careers"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.alliedPricing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Allied Pricing"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.applynest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "ApplyNest"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.applynestHealthcareProgramApplicationsAnd",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "ApplyNest — program appliCATions & admissions"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.burnoutPrevention",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "BuRNout Prevention"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.clinicalReferences",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical References"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.clinicalSimulators",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical Simulators"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.diagnosticImaging",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Diagnostic Imaging"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.electrolyteAmpAbgSimulator",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Electrolyte &amp; ABG Simulator"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.examFormatUpdates",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Exam Format Updates"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.healthcarePolicy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Healthcare Policy"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.internationalRecruitment",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "InteRNational Recruitment"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.licensingPolicyChanges",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Licensing Policy Changes"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.medicalLabTech",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Medical Lab Tech"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.npExamPrepHub",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NP exam prep hub"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.nursenestNursingAndHealthcareExam",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NurseNest — nursing & healthcare exam prep"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.occupationalTherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Occupational Therapy"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.osceSkillsPractice",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "OSCE Skills Practice"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.paramedic",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Paramedic"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.pharmacyTechnician",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pharmacy Technician"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.physicalTherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Physical Therapy"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.policyUpdatesHub",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Policy & Updates Hub"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.psychotherapy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Psychotherapy"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.regulatoryChanges",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Regulatory Changes"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.respiratoryTherapist",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Respiratory therapy"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.rexpnNclexpnPrep",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "REx-PN / NCLEX-PN prep"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.safetyHazardSimulator",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Safety Hazard Simulator"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.siConventionalConverter",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "SI ↔ Conventional Converter"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.socialWork",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Social Work"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.survivalGuides",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Survival Guides"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.whyNursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why NurseNest"
+    },
+    {
+      "shard": "components",
+      "key": "components.freePassUpgradePrompt.questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.globalSearch.esc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Esc"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.aortic2ndIcsRight",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "= Aortic (2nd ICS, right)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.erbsPoint3rdIcsLeft",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "= Erb's Point (3rd ICS, left)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.mitralapex5thIcsMcl",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "= Mitral/Apex (5th ICS, MCL)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.pitch",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pitch:"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.pulmonic2ndIcsLeft",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "= Pulmonic (2nd ICS, left)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.realAuscultationRecording",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Real auscultation recording"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.timing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timing:"
+    },
+    {
+      "shard": "components",
+      "key": "components.heartSoundsPlayer.tricuspid4thIcsLeft",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "= Tricuspid (4th ICS, left)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.careerreadinessScenariosGoal",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "career-readiness scenarios (goal)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.comingSoon",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Coming Soon"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.comingSoon2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Coming Soon"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.newGraduate",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "New Graduate"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.prenursing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pre-Nursing"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.prepareForNursingSchoolSuccess",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Prepare for nursing school success with foundational science and terminology review."
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.questions2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.questionsGoal",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "questions (goal)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroAlliedHealth.transitionFromStudentToConfident",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Transition from student to confident practitioner with workplace readiness scenarios."
+    },
+    {
+      "shard": "components",
+      "key": "components.heroCertifications.startPrep",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Start prep"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroExpansionTracker.alliedHealthMajorCareers",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Allied Health (Major Careers)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroExpansionTracker.nursingTiers",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Nursing Tiers"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroFeaturesGrid.learnMore",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LeaRN more"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroGlobalCoverage.rarr",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "→"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroGlobalCoverage.supportedCountries",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Supported Countries"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroGlobalCoverage.supportedLanguages",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Supported Languages"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroNursingTiers.20Languages",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "20 Languages"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroNursingTiers.majorExams",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Major Exams"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroNursingTiers.questionsGoal",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "questions (goal)"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroNursingTiers.studyGuides",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Study Guides"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroProofShowcase.8Improvement",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "+8% improvement"
+    },
+    {
+      "shard": "components",
+      "key": "components.heroProofShowcase.screenshotThumbnails",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Screenshot thumbnails"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.25Questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "25 Questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.adaptive",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Adaptive"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.builtForYou",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Built for You"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.canada",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Canada"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.createYourPlan",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Create Your Plan"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.customStudyPlanner",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Custom Study Planner"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.dailyTasks",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Daily Tasks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.domainAnalysis",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Domain Analysis"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.free",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Free"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.freeReadinessExam",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Free Readiness Exam"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.instantResults",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Instant Results"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.noCost",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No Cost"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.performanceReportCard",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Performance Report Card"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.personalized",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Adaptive"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.progressTracking",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Progress Tracking"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.scoreTrends",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Score Trends"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.takeTheFreeExam",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Take the Free Exam"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.unitedStates",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "United States"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.viewYourReportCard",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "View Your Report Card"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.weakAreaDetection",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Weak Area Detection"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeChoosePath.chooseYourPath",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Choose Your Path"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeChoosePath.clinicalLessons",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical Lessons"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeChoosePath.flashcards",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeChoosePath.languagesSupported",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Languages Supported"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeChoosePath.practiceQuestions",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "questions d'entraînement"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeChoosePath.whetherYoureANursingStudent",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Whether you"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.7dayMoneybackGuarantee",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "7-Day Money-Back Guarantee"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.aProvenSystemToPrepare",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "LeaRN the mechanism, pressure-test with items, then redirect study time using CATegory signals—not vibes."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.allied",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Allied"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.averageRating",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "average rating"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.chooseYourPath",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Choose Your Path"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.everythingYouNeed",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Everything You Need"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.explore",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Explore"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.freeAccountIncludesPracticeQuestions",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Free account includes questions d'entraînement, lessons, and flashcard access."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howItWorks",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "How It Works"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.join5000Students",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Join 5,000+ students"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.nextScreenshot",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Next screenshot"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.noCreditCardRequiredFree",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No credit card required. Free tier available."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.platformScale",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Platform Scale"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.previousScreenshot",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Previous screenshot"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.studentReviews",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Student Reviews"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.tryItFree",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Try It Free"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.whyNursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why NurseNest"
+    },
+    {
+      "shard": "components",
+      "key": "components.imagingPaywall.verifyingPurchase",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Verifying Purchase..."
+    },
+    {
+      "shard": "components",
+      "key": "components.inlineEditor.briefDescription",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Brief description..."
+    },
+    {
+      "shard": "components",
+      "key": "components.inlineEditor.tagsCommaSeparated",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Tags (comma separated)"
+    },
+    {
+      "shard": "components",
+      "key": "components.inlineEditor.tier",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Tier"
+    },
+    {
+      "shard": "components",
+      "key": "components.inlineEditor.tier2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Tier"
+    },
+    {
+      "shard": "components",
+      "key": "components.interactiveLearning.correctSequence",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Correct sequence!"
+    },
+    {
+      "shard": "components",
+      "key": "components.interactiveLearning.definitions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Definitions"
+    },
+    {
+      "shard": "components",
+      "key": "components.marketingCta.noSpamUnsubscribeAnytime",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No spam. Unsubscribe anytime."
+    },
+    {
+      "shard": "components",
+      "key": "components.marketingCta.youremailcom",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "your@email.com"
+    },
+    {
+      "shard": "components",
+      "key": "components.medicalReviewBadge.linkedin",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LinkedIn"
+    },
+    {
+      "shard": "components",
+      "key": "components.navigation.internationalNurses",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "InteRNational Nurses"
+    },
+    {
+      "shard": "components",
+      "key": "components.navigation.siConventionalConverter",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "SI ↔ Conventional Converter"
+    },
+    {
+      "shard": "components",
+      "key": "components.newGradLeadCapture.times",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "&times;"
+    },
+    {
+      "shard": "components",
+      "key": "components.ngnRenderersImageHotspotRenderer.times",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "&times;"
+    },
+    {
+      "shard": "components",
+      "key": "components.ngnRenderersLabInterpretationRenderer.normal",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Normal"
+    },
+    {
+      "shard": "components",
+      "key": "components.ngnRenderersLabInterpretationRenderer.test",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Test"
+    },
+    {
+      "shard": "components",
+      "key": "components.platform_error_boundary.clearYourBrowserCacheAnd",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clear your browser cache and try again"
+    },
+    {
+      "shard": "components",
+      "key": "components.platform_error_boundary.tryRefreshingTheFullPage",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Try refreshing the full page"
+    },
+    {
+      "shard": "components",
+      "key": "components.platform_error_boundary.tryUsingADifferentBrowser",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Try using a different browser"
+    },
+    {
+      "shard": "components",
+      "key": "components.postExamFollowup.generatingPlan",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Generating Plan..."
+    },
+    {
+      "shard": "components",
+      "key": "components.postExamFollowup.readinessScore",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Readiness Score"
+    },
+    {
+      "shard": "components",
+      "key": "components.premiumStudy.iGotItWrong",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I got it wrong"
+    },
+    {
+      "shard": "components",
+      "key": "components.premiumStudy.iKnewThis",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I knew this"
+    },
+    {
+      "shard": "components",
+      "key": "components.premiumStudy.iWasUnsure",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "I was unsure"
+    },
+    {
+      "shard": "components",
+      "key": "components.questionComments.discussion",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Discussion"
+    },
+    {
+      "shard": "components",
+      "key": "components.respiratorySoundsLibrary.pitch",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pitch:"
+    },
+    {
+      "shard": "components",
+      "key": "components.respiratorySoundsLibrary.timing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timing:"
+    },
+    {
+      "shard": "components",
+      "key": "components.richTextEditor.fontColor",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Font Color"
+    },
+    {
+      "shard": "components",
+      "key": "components.richTextEditor.pastedImage",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pasted image"
+    },
+    {
+      "shard": "components",
+      "key": "components.richTextEditor.times",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "&times;"
+    },
+    {
+      "shard": "components",
+      "key": "components.seoContentTemplate.breadcrumb",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Breadcrumb"
+    },
+    {
+      "shard": "components",
+      "key": "components.seoContentTemplate.breadcrumb2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Breadcrumb"
+    },
+    {
+      "shard": "components",
+      "key": "components.seoHubCta.medicallyReviewed",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Medically Reviewed"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyMomentum.confidence",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Confidence:"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyMomentum.howConfidentWereYou",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "How confident were you?"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyMomentum.questions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyNotes.autosavesAsYouType",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Auto-saves as you type"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyPlanWidget.cardswk",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Cards/Wk"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyPlanWidget.minday",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Min/Day"
+    },
+    {
+      "shard": "components",
+      "key": "components.studyPlanWidget.qday",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Q/Day"
+    },
+    {
+      "shard": "components",
+      "key": "components.testerFeedbackDialog.description",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Description *"
+    },
+    {
+      "shard": "components",
+      "key": "components.testerFeedbackDialog.pageUrlAutofilled",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Page URL (auto-filled)"
+    },
+    {
+      "shard": "components",
+      "key": "components.themed_logo.nursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NurseNest"
+    },
+    {
+      "shard": "components",
+      "key": "components.trustShowcase.insideNursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Inside NurseNest"
+    },
+    {
+      "shard": "components",
+      "key": "components.uiBreadcrumb.breadcrumb",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "breadcrumb"
+    },
+    {
+      "shard": "components",
+      "key": "components.uiPagination.pagination",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "pagination"
+    },
+    {
+      "shard": "components",
+      "key": "components.uiSidebar.displaysTheMobileSidebar",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Displays the mobile sidebar."
+    },
+    {
+      "shard": "components",
+      "key": "components.uiSidebar.sidebar",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Sidebar"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletFlashcards",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire & planner:"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletFlashcardsBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "weak-topic decks and pacing after sign-in."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletLessons",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Lessons:"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletLessonsBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "clinical priorities and safety rules framed the way this board asks."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletPracticeExams",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Practice exams:"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletPracticeExamsBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "full-length timing and review flags in-app."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletPracticeItems",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Practice items:"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.bulletPracticeItemsBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "short sets with rationales that explain distractors, not just the key."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.catCtaSignedIn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Start pathway CAT →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.catCtaSignup",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Create a free account to start →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.catStripBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "After sign-in, run adaptive (CAT) sessions and timed practice exams from your study hub—scoped to this pathway (length, topics, review flow). Full adaptive depth unlocks when your plan covers this track."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.catStripTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "CAT & practice exams"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.conversionHeadingDefault",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "What you get for this licensure track"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.conversionLeadDefault",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "After you subscribe, one login holds pathway-matched practice, lessons, cartes mémoire, planner, and readiness for this exam family. Timed practice exams and CAT sessions unlock in-app when your plan covers this track."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.ctaCreateAccount",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Create free account"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.ctaJoinOrSignIn",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Join or sign in"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.ctaJoinOrSignInFooter",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Join or sign in →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.footerEntitlements",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Checkout and content entitlements use your {{shortName}} track with NurseNest's {{tier}} tier for {{countryCode}}. Pick the correct pathway in your profile so lessons and banks stay exam-specific."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.npSiblingsLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Other US NP tracks"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.npSiblingsLead",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Each board specialty has its own hub and question scope—switch tracks if your certifiCATion focus changes."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepDirectoryLink",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "lessons directory"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepExamsLink",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "practice exams"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepLessonsLink",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "pathway lessons"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepQuestionsLink",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "questions d'entraînement with rationales"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepRhythmEnd",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepRhythmLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Prep rhythm"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepRhythmLine1",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Anchor with"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepRhythmLine2",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": ", then"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepRhythmLine3",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": ", then"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.prepRhythmLine4",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": ". Browse other licensure tracks from the"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.pricingCardBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "See the NurseNest tier for this pathway in {{countryCode}}. NP specialties may share the NP tier until per-pathway billing ships."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.pricingCardCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Compare plans"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.pricingCardTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pricing & plans"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.shortcutCat",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Start pathway CAT →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.shortcutDashboard",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Open your dashboard →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.shortcutQuestions",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "questions d'entraînement in app →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.signedInHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Already studying inside NurseNest?"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.tertiaryApp",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Open your study hub"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.tertiaryPricing",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Plans & pricing"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.tryQuestions",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Try {{shortName}} questions"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.body.viewAllPlans",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "View all plans →"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.npInventoryHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Content depth (transparent)"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.lessonsCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Open lessons"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.lessonsTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Lessons"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "{{exam}} CAT"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Open {{exam}} CAT intro"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.practiceExamsBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timed sessions and full-length review in the app"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.practiceExamsTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Practice exams"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.questionsBadge",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Popular first step"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.questionsCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Open question bank"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.questionsTitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Question bank"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.signInLink",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Sign in"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.studyModes.signInNote",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Already have an account?"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.waitlist.bodyCnple",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Canadian NP licensure (CNPLE) integration is still evolving. This hub shows what is available today—lessons and questions grow as requirements finalize. Subscribe/checkout for this track opens when the product is active; use Join waitlist below to hear when we launch billing for CNPLE."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.waitlist.bodyDefault",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Exam branding and registration rules can change. This hub stays updated: join the list or start from an active track if you test sooner."
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.waitlist.titleUpcoming",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Upcoming or transitioning pathway"
+    },
+    {
+      "shard": "components",
+      "key": "components.examPathwayHub.waitlist.titleWaitlist",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Coming soon — join the waitlist"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.pnExamPrepCa",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "REx-PN (RPN) prep"
+    },
+    {
+      "shard": "components",
+      "key": "components.footer.pnExamPrepUs",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NCLEX-PN (LPN) prep"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.readinessExamBody",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Twenty-five items with an instant breakdown: see whether timing, knowledge, or judgement slipped before you sit for real."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.reportCardBody",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "CATegory accuracy and trends over time—so you stop re-drilling chapters you already own and focus where score variance is highest."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.studyPlannerBody",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Queue blocks from your exam date and the CATegories that still miss—so after a shift you open the planner and see what to do next, not a blank calendar."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.studyToolsCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Start free — open practice"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.studyToolsHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Reports, practice exams, and planners in one leaRNer shell"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeBottomSections.studyToolsSubcopy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "After a shift, you should not rebuild a study stack from memory. Open the planner for your exam window, run a practice exam when you are ready, and read the report card to see what to queue next."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Compare plans & pricing"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Why leaRNers outgrow single-exam qbanks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow0.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Question volume"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow0.ours",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "{{count}} exam-style questions across pathway tiers"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow0.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Smaller banks, often under a few thousand items"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow1.feature",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire included"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow1.ours",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "{{count}} cartes mémoire organized into decks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow1.typical",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire sold separately or missing entirely"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow2.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Multi-discipline scope"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow2.ours",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "DediCATed RPN, RN, NP, and allied tracks with correct scope language"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow2.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Single-exam focus or mixed stems that blur delegation rules"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow3.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Integrated workflow"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow3.ours",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Questions, decks, practice exams, and lessons referencing the same miss patteRNs"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow3.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Only one modality (questions-only or video-only)"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow4.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Allied & specialty coverage"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow4.ours",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "RT, lab, paramedic, imaging, and related tracks with protocol-level framing"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow4.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Nursing-only content with no credible allied expansion"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow5.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Readiness analytics"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow5.ours",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "CATegory accuracy and session trends that suggest what to queue next"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveRow5.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Score-only dashboards with no line-of-sight to the next study block"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.competitiveSubcopy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Most tools optimize for one test. NurseNest keeps questions, decks, practice exams, lessons, and CATegory analytics on one rail so you are not rebuilding a workflow every semester."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.conversionProofCta",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Create a free account — explore the bank"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.conversionProofHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "What you actually get in the shell"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.conversionProofSubcopy",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Fewer open tabs. NurseNest combines {{questions}} exam-style items, {{cartes mémoire}} cartes mémoire across {{decks}} decks, CAT-style practice exams, image-backed items where available, and rationales that spell out safe vs unsafe options—in one study environment aligned to nursing, NP, and allied exams."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.flashcards.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LeaRN and test modes with spaced scheduling so weak concepts resurface before you forget them."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.flashcards.tags",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Deck tagging · Spaced mode · Import"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.flashcards.title",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire & decks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.mocks.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Full-length timed sessions with breakdowns that show whether timing, knowledge, or judgement slipped."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.mocks.tags",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Strict mode · Score trends · Review queue"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.questions.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "{{count}} items across domains with detailed rationales focused on judgement—not trivia recall."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.questions.tags",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "SATA · NGN-style · Timed sets"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.questions.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Question bank"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.rationales.desc",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Every option explains the clinical call—so you rehearse elimination logic, not patteRN matching."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.rationales.tags",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Unsafe options · Delegation · pharmacologie safety"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureCard.rationales.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "justification-first review"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureStripHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pass-focused tools—not a generic content marketplace"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.featureStripSubcopy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pick the lane that matches tonight’s study goal: drill items, rehearse a practice exam, or read rationales for what you just missed."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.finalCtaHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Start rehearsing with your pathway unlocked"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.finalCtaPrimary",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Start practicing free"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.finalCtaSecondary",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "View pricing"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.finalCtaSubcopy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Create a free account to browse starter content. Upgrade when you want the full bank, practice exams, and history for your tier—no surprise charges to look around."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howItWorksHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "How rationales, practice, and progress connect"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howItWorksIntro",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Three loops you repeat until exam day—each one tied to how boards actually score judgement."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howStep1.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Short lessons and reviews organized by system and competency so you know why a presentation matters—not just the buzzword."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howStep1.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "LeaRN the mechanism"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howStep2.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timed and untimed sets, SATA, and case-style stems with rationales that dismantle every option—not just the letter the key lists."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howStep2.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pressure-test with items"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howStep3.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "See accuracy by domain, carry results into the next session, and stop guessing what to open after a 12-hour shift."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.howStep3.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Redirect off weak CATegories"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.professionHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Choose the exam you are sitting next"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.professionSubcopy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Jump straight into pathway-tagged practice hubs and lessons so delegation language matches your registration context."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.catExams.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timed blocks that adapt difficulty so you are not only rehearsing questions you already own."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.catExams.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "CAT-style practice exams with performance carryover"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.clinicalImages.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Images and diagrams embedded with rationales so you practice interpreting what boards actually show on screen."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.clinicalImages.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Visuals where the exam tests recognition"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.examQuestions.desc",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Stems written for delegation, prioritization, and pharmacologie judgement—with rationales that explain why each distractor fails clinically."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.examQuestions.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Exam-style items with unsafe-option reasoning"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.flashcards.desc",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "pharmacologie, pathophysiology, and high-yield concepts in decks meant for spaced retrieval—not isolated memorization."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.flashcards.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Decks you can tie to weak tags"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.lessons.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Body-system and competency lessons with quick checks so you know whether the concept stuck before you buRN another question block."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.lessons.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Lessons with pre/post checks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.multiDiscipline.desc",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Practical nursing, RN, NP, and allied content use the right delegation language—no one-size stem bank with a new label."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.proofCard.multiDiscipline.title",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Separate tracks for separate scopes"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleCheckAnswer",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Show justification"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleCorrect",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Correct"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleCorrectAnswerLabel",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Correct answer: {{letter}}"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleQuestionHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Try a pharmacologie judgement stem"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleQuestionSubcopy",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Tap an option, then read how the justification rules out each distractor—same flow as inside the bank."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleStartPractice",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Open free practice"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.sampleTryAgain",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Reset question"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.testimonialsHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "What leaRNers say about rehearsing here"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.testimonialsSubcopy",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "Quotes from students preparing for Canadian and US licensure and certifiCATion exams—your results depend on how consistently you train."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustBadge.catExams",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "CAT-style practice exams"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustBadge.clinicalImages",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical images"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustBadge.multiTier",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Pathway-tier banks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustCounterLabel.decks",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Study decks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustCounterLabel.flashcards",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustCounterLabel.lessons",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical lessons"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustCounterLabel.questions",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "questions d'entraînement"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustCountersHeading",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Built for high-stakes healthcare exams—not generic multiple-choice drills"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeConversionSections.trustCountersSubcopy",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "A deep bank of items, decks, lessons, and practice exams for RPN, RN, NP, and allied tracks—scoped so you are not mixing PN stems into RN review."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.adaptiveMockExams.nursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Timed blocks sized for your filtered pool with performance carryover into review queues"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.adaptiveMockExams.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Static PDF-style tests that do not feed the next study block"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.clinicalJudgmentTraining.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical judgement practice"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.clinicalJudgmentTraining.nursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "NGN-style cases, bowties, and prioritization drills with full option justification"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.clinicalJudgmentTraining.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Straight multiple choice without the multi-step reasoning stems boards now use"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.clinicalLessons.feature",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Clinical lessons"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.clinicalLessons.nursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Lessons wired to CATegories you miss, with pre/post checks instead of passive video only"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.clinicalLessons.typical",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "No lesson layer or generic slides detached from your item history"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.defaultHeadline",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Where NurseNest diverges from generic Qbanks"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.defaultSubtitle",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Side-by-side on the things that change how you study: scope, rationales, practice exams, and whether analytics point you to the next item set."
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.flashcardsIncluded.feature",
+      "action": "dry-run",
+      "needsReview": false,
+      "proposed": "cartes mémoire & remediation"
+    },
+    {
+      "shard": "components",
+      "key": "components.homeDifferentiation.comparison.flashcardsIncluded.nursenest",
+      "action": "dry-run",
+      "needsReview": true,
+      "proposed": "Decks generated from weak tags with spaced scheduling inside the same subscription"
+    }
+  ]
+}

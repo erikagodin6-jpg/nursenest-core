@@ -1,0 +1,19 @@
+{
+  "overview": "L'anatomie est l'étude de la structure du corps humain, tandis que la physiologie s'intéresse à ses fonctions. Ces deux disciplines sont indissociables : comprendre pourquoi le cœur bat nécessite de connaître sa structure. En soins infirmiers, cette base est essentielle pour interpréter les signes cliniques et planifier des soins sûrs.",
+  "key_concepts": [
+    "Niveaux d'organisation : chimique → cellulaire → tissulaire → organe → système → organisme",
+    "Homéostasie : maintien d'un environnement interne stable par des mécanismes de rétroaction négative",
+    "Termes directionnels : antérieur/postérieur, médial/latéral, proximal/distal, ipsilatéral/controlatéral",
+    "Cavités corporelles : thoracique (cœur, poumons), abdominopelvienne, crânienne, vertébrale",
+    "Les 11 systèmes : tégumentaire, osseux, musculaire, nerveux, endocrinien, cardiovasculaire, lymphatique, respiratoire, digestif, urinaire, reproducteur"
+  ],
+  "nursing_responsibilities": "L'infirmière utilise le vocabulaire anatomique pour documenter avec précision les symptômes et transmettre les informations cliniques. Elle identifie les repères anatomiques lors de l'évaluation (auscultation, palpation) et oriente son intervention selon le système atteint. Une connaissance solide de la physiologie permet d'anticiper les complications et d'expliquer les soins au patient.",
+  "clinical_pearls": "La rétroaction négative est le mécanisme homéostatique le plus courant — par exemple, lorsque la glycémie augmente, l'insuline est sécrétée pour la faire baisser. En pathologie, ce mécanisme est souvent défaillant (ex. : diabète). Les termes directionnels évitent les ambiguïtés dans les transmissions : dire « douleur dans le quadrant inférieur droit » est plus précis que « douleur à droite ».",
+  "patient_education": "Expliquer simplement la structure et la fonction aide les patients à comprendre leur maladie. Par exemple : « Votre cœur est une pompe qui envoie le sang à tout votre corps. Quand il est affaibli, certains organes reçoivent moins d'oxygène. » Des explications claires améliorent l'observance thérapeutique.",
+  "key_takeaways": [
+    "L'anatomie (structure) et la physiologie (fonction) sont toujours étudiées ensemble en soins infirmiers",
+    "L'homéostasie est perturbée dans la plupart des maladies — identifier quel mécanisme est défaillant guide les soins",
+    "Maîtriser le vocabulaire directionnel est indispensable pour une documentation et une communication précises",
+    "Les 11 systèmes corporels sont interdépendants ; une atteinte d'un système affecte souvent les autres"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-heart-failure": {
+    "title": "Heart failure (NCLEX-RN, Canada)",
+    "topic": "Heart failure",
+    "seoTitle": "Heart failure | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Canada clinical context: heart failure — metric labs at nursing scope.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Kahulugan sa klinika",
+        "body": "Sinusuri ng mga item sa **heart failure** kung naikakabit mo ang assessment data sa panganib: ano ang unang nagbabago, ano ang kailangang i-escalate, at ano ang **hindi ligtas** sa konteksto.\n\n**Canada RN:** gamitin ang **SI units** kapag mmol/L ang nakasaad. Ang provincial standards at workplace policy ang humahawak sa delegation at scope."
+      },
+      "exam_relevance": {
+        "heading": "Koneksyon sa exam",
+        "body": "Asahan ang **prioritization**, **monitoring**, at **safety** — lalo na kapag may routine tasks kasabay ng abnormal finding."
+      },
+      "core_concept": {
+        "heading": "Pangunahing konsepto",
+        "body": "Ikonekta ang interventions sa perfusion, oxygenation, infection load, electrolytes, glucose–insulin dynamics, at sa monitoring na nagpapakita ng epekto."
+      },
+      "clinical_scenario": {
+        "heading": "Clinical scenario",
+        "body": "Pumili ng pasyenteng **pinakamabilis tumaas ang risk** kung walang nursing action — saka ang assessment o order na tumutugma. Gamitin ang Canada acute-care context kapag may units o roles sa stem."
+      },
+      "takeaways": {
+        "heading": "Mga takeaway",
+        "body": "- Ikonekta ang **vitals + labs + story** bago mag-teach o mag-discharge.\n- **Question bank:** drill items na may tag `topic:heart-failure`.\n- **Canada:** ingat sa **metric labs** at **scope language** sa PN stems."
+      }
+    }
+  }
+}

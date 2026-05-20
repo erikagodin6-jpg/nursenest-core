@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest CAT — Premium Redesign · 15 Screens</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+button,input,select,textarea{font-family:inherit}
+svg{display:block;flex-shrink:0}
+
+/* ── Chrome ────────────────────────────────────────────────────── */
+.chrome{background:#0a0f1a;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:10.5px;font-weight:700;color:#94a3b8;letter-spacing:.08em;text-transform:uppercase}
+.chrome-note{font-size:10px;color:#475569}
+.tabs{background:#0f1623;padding:0 24px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:42px;z-index:299;padding-top:8px}
+.tabs::-webkit-scrollbar{display:none}
+.tsep{width:1px;height:14px;background:#1e293b;margin:0 6px 8px;align-self:center}
+.tab{padding:6px 12px 8px;font-size:10px;font-weight:600;color:#475569;border-radius:4px 4px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none;letter-spacing:.02em}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+.tab-group-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;padding:8px 6px 0;align-self:flex-start}
+
+/* ── Frame system ───────────────────────────────────────────────── */
+.frame{display:none;width:1440px;min-height:900px;overflow:hidden;position:relative}
+.frame.mobile-frame{width:390px;height:844px}
+.frame.on{display:block}
+
+/* ══════════════════════════════════════════════════════════════
+   CAT SEMANTIC TOKENS
+   (inline here; in production these layer over global semantic tokens)
+════════════════════════════════════════════════════════════════ */
+/* Ocean */
+.oc{
+  --cat-bg:#f2f6fb;
+  --cat-surface:#ffffff;
+  --cat-surface-elevated:#ffffff;
+  --cat-panel:#f8fafd;
+  --cat-panel-hover:#f0f5fa;
+  --cat-border:rgba(176,220,243,0.75);
+  --cat-border-strong:rgba(143,198,232,0.85);
+  --cat-divider:rgba(176,220,243,0.45);
+  --cat-muted:#647894;
+  --cat-subtle:#94a3b8;
+  --cat-accent:#1aaee0;
+  --cat-accent-deep:#0d7aaa;
+  --cat-accent-soft:rgba(26,174,224,0.09);
+  --cat-selected-bg:rgba(13,122,170,0.07);
+  --cat-selected-border:#0d7aaa;
+  --cat-selected-left:#0d7aaa;
+  --cat-focus-ring:rgba(26,174,224,0.35);
+  --cat-nav-bg:#ffffff;
+  --cat-nav-border:rgba(176,220,243,0.7);
+  --cat-nav-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 12px -6px rgba(6,88,140,.08);
+  --cat-bottom-bg:#ffffff;
+  --cat-bottom-border:rgba(176,220,243,0.7);
+  --cat-bottom-shadow:0 -1px 0 rgba(0,0,0,.03),0 -8px 24px -12px rgba(6,88,140,.07);
+  --cat-rail-bg:#f8fafd;
+  --cat-rail-border:rgba(176,220,243,0.6);
+  --cat-text-primary:#0f172a;
+  --cat-text-body:#455569;
+  --cat-text-muted:#647894;
+  --cat-success:#16a34a;
+  --cat-success-bg:rgba(22,163,74,.08);
+  --cat-success-border:rgba(22,163,74,.25);
+  --cat-danger:#dc2626;
+  --cat-danger-bg:rgba(220,38,38,.07);
+  --cat-danger-border:rgba(220,38,38,.22);
+  --cat-warning:#d97706;
+  --cat-warning-bg:rgba(217,119,6,.08);
+  --cat-letter-bg:#f1f5f9;
+  --cat-letter-fg:#647894;
+  --cat-letter-sel-bg:#0d7aaa;
+  --cat-letter-sel-fg:#ffffff;
+  --cat-progress-track:rgba(176,220,243,0.4);
+  --cat-progress-fill:#1aaee0;
+  --cat-chip-bg:rgba(26,174,224,0.1);
+  --cat-chip-border:rgba(26,174,224,0.25);
+  --cat-chip-fg:#0d7aaa;
+  --cat-timer-warn:#dc2626;
+  --cat-shadow-card:0 1px 0 rgba(0,0,0,.03),0 8px 24px -12px rgba(6,88,140,.07);
+  --cat-shadow-rail:1px 0 0 rgba(176,220,243,.7);
+  --cat-shadow-bottom:-1px 0 0 rgba(176,220,243,.5),0 -12px 32px -16px rgba(6,88,140,.06);
+}
+
+/* Midnight */
+.mn{
+  --cat-bg:#07111f;
+  --cat-surface:#111827;
+  --cat-surface-elevated:#16202f;
+  --cat-panel:#0d1826;
+  --cat-panel-hover:#132030;
+  --cat-border:rgba(49,68,102,.85);
+  --cat-border-strong:rgba(56,189,248,.2);
+  --cat-divider:rgba(49,68,102,.5);
+  --cat-muted:#647894;
+  --cat-subtle:#47607c;
+  --cat-accent:#38bdf8;
+  --cat-accent-deep:#0ea5e9;
+  --cat-accent-soft:rgba(56,189,248,.08);
+  --cat-selected-bg:rgba(56,189,248,.1);
+  --cat-selected-border:#38bdf8;
+  --cat-selected-left:#38bdf8;
+  --cat-focus-ring:rgba(56,189,248,.4);
+  --cat-nav-bg:#0b1220;
+  --cat-nav-border:rgba(49,68,102,.9);
+  --cat-nav-shadow:0 1px 0 rgba(0,0,0,.25),0 4px 16px -6px rgba(0,0,0,.35);
+  --cat-bottom-bg:#0b1220;
+  --cat-bottom-border:rgba(49,68,102,.9);
+  --cat-bottom-shadow:0 -1px 0 rgba(0,0,0,.2),0 -12px 32px -16px rgba(0,0,0,.4);
+  --cat-rail-bg:#0d1826;
+  --cat-rail-border:rgba(49,68,102,.7);
+  --cat-text-primary:#f0f6ff;
+  --cat-text-body:#c8d8ed;
+  --cat-text-muted:#647894;
+  --cat-success:#34d399;
+  --cat-success-bg:rgba(52,211,153,.1);
+  --cat-success-border:rgba(52,211,153,.25);
+  --cat-danger:#f87171;
+  --cat-danger-bg:rgba(248,113,113,.1);
+  --cat-danger-border:rgba(248,113,113,.22);
+  --cat-warning:#fbbf24;
+  --cat-warning-bg:rgba(251,191,36,.09);
+  --cat-letter-bg:#1e2d42;
+  --cat-letter-fg:#647894;
+  --cat-letter-sel-bg:#38bdf8;
+  --cat-letter-sel-fg:#07111f;
+  --cat-progress-track:rgba(49,68,102,.6);
+  --cat-progress-fill:#38bdf8;
+  --cat-chip-bg:rgba(56,189,248,.12);
+  --cat-chip-border:rgba(56,189,248,.25);
+  --cat-chip-fg:#7dd3fc;
+  --cat-timer-warn:#f87171;
+  --cat-shadow-card:0 2px 0 rgba(0,0,0,.2),0 8px 32px -12px rgba(0,0,0,.35);
+  --cat-shadow-rail:1px 0 0 rgba(49,68,102,.7);
+  --cat-shadow-bottom:0 -1px 0 rgba(49,68,102,.7),0 -12px 32px -16px rgba(0,0,0,.35);
+}
+
+/* Blossom */
+.bl{
+  --cat-bg:#fdf2fb;
+  --cat-surface:#ffffff;
+  --cat-surface-elevated:#ffffff;
+  --cat-panel:#fdf7fc;
+  --cat-panel-hover:#f9eef8;
+  --cat-border:rgba(232,200,226,.8);
+  --cat-border-strong:rgba(217,72,168,.25);
+  --cat-divider:rgba(232,200,226,.5);
+  --cat-muted:#7a6b84;
+  --cat-subtle:#9d8da8;
+  --cat-accent:#d948a8;
+  --cat-accent-deep:#b3359a;
+  --cat-accent-soft:rgba(217,72,168,.09);
+  --cat-selected-bg:rgba(217,72,168,.07);
+  --cat-selected-border:#d948a8;
+  --cat-selected-left:#d948a8;
+  --cat-focus-ring:rgba(217,72,168,.3);
+  --cat-nav-bg:#ffffff;
+  --cat-nav-border:rgba(232,200,226,.7);
+  --cat-nav-shadow:0 1px 0 rgba(0,0,0,.03),0 4px 12px -6px rgba(180,60,160,.07);
+  --cat-bottom-bg:#ffffff;
+  --cat-bottom-border:rgba(232,200,226,.7);
+  --cat-bottom-shadow:0 -1px 0 rgba(0,0,0,.02),0 -8px 24px -12px rgba(180,60,160,.06);
+  --cat-rail-bg:#fdf7fc;
+  --cat-rail-border:rgba(232,200,226,.6);
+  --cat-text-primary:#10182f;
+  --cat-text-body:#455569;
+  --cat-text-muted:#7a6b84;
+  --cat-success:#16a34a;
+  --cat-success-bg:rgba(22,163,74,.08);
+  --cat-success-border:rgba(22,163,74,.25);
+  --cat-danger:#dc2626;
+  --cat-danger-bg:rgba(220,38,38,.07);
+  --cat-danger-border:rgba(220,38,38,.2);
+  --cat-warning:#d97706;
+  --cat-warning-bg:rgba(217,119,6,.08);
+  --cat-letter-bg:#f8f0f7;
+  --cat-letter-fg:#7a6b84;
+  --cat-letter-sel-bg:#d948a8;
+  --cat-letter-sel-fg:#ffffff;
+  --cat-progress-track:rgba(232,200,226,.45);
+  --cat-progress-fill:#d948a8;
+  --cat-chip-bg:rgba(217,72,168,.1);
+  --cat-chip-border:rgba(217,72,168,.25);
+  --cat-chip-fg:#b3359a;
+  --cat-timer-warn:#dc2626;
+  --cat-shadow-card:0 1px 0 rgba(0,0,0,.03),0 8px 24px -12px rgba(180,60,160,.06);
+  --cat-shadow-rail:1px 0 0 rgba(232,200,226,.7);
+  --cat-shadow-bottom:0 -1px 0 rgba(0,0,0,.02),0 -12px 32px -16px rgba(180,60,160,.05);
+}
+
+/* ── Shared CAT UI primitives ──────────────────────────────────── */
+.cat-shell{
+  display:flex;flex-direction:column;
+  background:var(--cat-bg);
+  width:100%;height:100%;
+  position:relative;
+}
+
+/* TOP BAR */
+.cat-topbar{
+  position:sticky;top:0;z-index:50;
+  height:48px;
+  background:var(--cat-nav-bg);
+  border-bottom:1px solid var(--cat-nav-border);
+  box-shadow:var(--cat-nav-shadow);
+  display:flex;align-items:center;
+  padding:0 20px;
+  gap:0;
+  flex-shrink:0;
+}
+.cat-tb-left{
+  display:flex;align-items:center;gap:10px;
+  min-width:200px;
+}
+.cat-tb-brand{
+  font-size:13.5px;font-weight:800;
+  letter-spacing:-.03em;
+  color:var(--cat-text-primary);
+}
+.cat-tb-brand-dot{color:var(--cat-accent)}
+.cat-tb-chip{
+  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border-radius:4px;
+  background:var(--cat-chip-bg);
+  border:1px solid var(--cat-chip-border);
+  color:var(--cat-chip-fg);
+}
+.cat-tb-adaptive{
+  display:flex;align-items:center;gap:4px;
+  font-size:9px;font-weight:600;letter-spacing:.06em;
+  color:var(--cat-muted);
+}
+.cat-tb-adaptive-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 2.5px rgba(34,197,94,.2);
+}
+
+.cat-tb-center{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:0;
+}
+.cat-tb-qcount{
+  font-size:13px;font-weight:700;
+  color:var(--cat-text-primary);
+  letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+}
+.cat-tb-qdivider{
+  font-size:13px;font-weight:400;color:var(--cat-muted);
+  margin:0 2px;
+}
+.cat-tb-progress-wrap{
+  width:120px;height:3px;border-radius:99px;
+  background:var(--cat-progress-track);
+  margin:0 14px;overflow:hidden;
+}
+.cat-tb-progress-fill{
+  height:100%;border-radius:99px;
+  background:var(--cat-progress-fill);
+  transition:width .4s ease;
+}
+
+.cat-tb-right{
+  display:flex;align-items:center;gap:4px;
+  min-width:200px;justify-content:flex-end;
+}
+.cat-timer{
+  font-size:14px;font-weight:700;
+  font-variant-numeric:tabular-nums;letter-spacing:.04em;
+  color:var(--cat-text-primary);
+  font-family:'DM Sans',system-ui,monospace;
+  padding:5px 10px;border-radius:6px;
+  background:var(--cat-panel);
+  border:1px solid var(--cat-border);
+  margin-right:6px;
+}
+.cat-timer.warn{color:var(--cat-timer-warn)}
+.cat-tool{
+  width:32px;height:32px;border-radius:7px;
+  background:transparent;
+  border:1px solid transparent;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:background .12s,border-color .12s;
+}
+.cat-tool:hover{
+  background:var(--cat-panel);
+  border-color:var(--cat-border);
+}
+.cat-tool svg path,
+.cat-tool svg line,
+.cat-tool svg circle,
+.cat-tool svg rect,
+.cat-tool svg polyline,
+.cat-tool svg polygon{
+  stroke:var(--cat-muted);
+}
+.cat-tool.flagged svg path,
+.cat-tool.flagged svg polygon{
+  stroke:var(--cat-warning);fill:var(--cat-warning);
+}
+.cat-tool-sep{width:1px;height:18px;background:var(--cat-border);margin:0 4px}
+.cat-tb-exit{
+  font-size:11px;font-weight:600;
+  color:var(--cat-muted);
+  padding:5px 10px;border-radius:6px;
+  border:1px solid var(--cat-border);
+  background:transparent;cursor:pointer;
+  transition:.12s;margin-left:4px;
+}
+.cat-tb-exit:hover{color:var(--cat-text-primary);background:var(--cat-panel)}
+
+/* BODY */
+.cat-body{
+  display:flex;flex:1;min-height:0;
+  overflow:hidden;
+  height:calc(900px - 48px - 60px);
+}
+
+/* LEFT RAIL */
+.cat-rail{
+  width:248px;flex-shrink:0;
+  background:var(--cat-rail-bg);
+  border-right:1px solid var(--cat-rail-border);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:var(--cat-border) transparent;
+}
+.cat-rail-inner{padding:20px 18px;display:flex;flex-direction:column;gap:20px}
+.cat-rail-section{}
+.cat-rail-section-label{
+  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-subtle);margin-bottom:8px;
+}
+.cat-rail-item-type{
+  font-size:12.5px;font-weight:700;
+  color:var(--cat-text-primary);
+  line-height:1.3;margin-bottom:6px;
+}
+.cat-rail-item-desc{
+  font-size:11.5px;
+  color:var(--cat-text-muted);
+  line-height:1.6;
+}
+.cat-rail-instruction{
+  background:var(--cat-surface);
+  border:1px solid var(--cat-border);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.cat-rail-instruction p{
+  font-size:11.5px;color:var(--cat-text-body);
+  line-height:1.65;margin:0;
+}
+.cat-rail-instruction p+p{margin-top:6px}
+.cat-rail-divider{height:1px;background:var(--cat-divider)}
+.cat-rail-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:600;letter-spacing:.03em;
+  color:var(--cat-chip-fg);
+  background:var(--cat-chip-bg);
+  border:1px solid var(--cat-chip-border);
+  padding:3px 9px;border-radius:99px;
+}
+.cat-rail-domain{
+  font-size:12px;font-weight:600;
+  color:var(--cat-text-primary);
+  padding:8px 0 2px;
+}
+.cat-rail-domain-meta{
+  font-size:11px;color:var(--cat-text-muted);margin-top:2px;
+}
+.cat-rail-tip{
+  background:var(--cat-accent-soft);
+  border:1px solid var(--cat-border);
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:11px;
+  color:var(--cat-text-muted);
+  line-height:1.55;
+}
+
+/* MAIN CONTENT */
+.cat-main{
+  flex:1;min-width:0;
+  overflow-y:auto;
+  padding:28px 32px;
+  display:flex;flex-direction:column;
+  gap:0;
+  scroll-behavior:smooth;
+}
+.cat-question-wrap{
+  max-width:740px;
+  margin:0 auto;
+  display:flex;flex-direction:column;
+  gap:16px;
+  width:100%;
+}
+
+/* QUESTION CARD */
+.cat-q-card{
+  background:var(--cat-surface);
+  border:1px solid var(--cat-border);
+  border-radius:16px;
+  padding:30px 32px;
+  box-shadow:var(--cat-shadow-card);
+}
+.cat-q-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--cat-divider);
+  margin-bottom:20px;
+  gap:12px;
+}
+.cat-q-category{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.cat-q-cat-pill{
+  font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-chip-fg);
+  background:var(--cat-chip-bg);
+  border:1px solid var(--cat-chip-border);
+  padding:3px 10px;border-radius:5px;
+}
+.cat-q-diff{
+  display:flex;gap:2px;align-items:center;
+}
+.cat-q-diff-pip{
+  width:7px;height:7px;border-radius:2px;
+}
+.cat-q-diff-pip.filled{background:var(--cat-accent)}
+.cat-q-diff-pip.empty{background:var(--cat-border-strong);opacity:.35}
+.cat-q-head-right{
+  display:flex;align-items:center;gap:8px;
+}
+.cat-flag-btn{
+  width:30px;height:30px;
+  background:transparent;border:1px solid var(--cat-border);
+  border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.12s;
+}
+.cat-flag-btn:hover{background:var(--cat-panel)}
+
+/* STEM */
+.cat-stem{
+  font-size:15.5px;
+  line-height:1.78;
+  letter-spacing:-.014em;
+  color:var(--cat-text-primary);
+  font-weight:400;
+  max-width:68ch;
+}
+.cat-stem strong{font-weight:700}
+
+/* OPTIONS */
+.cat-options{
+  display:flex;flex-direction:column;
+  gap:8px;
+  margin-top:24px;
+}
+.cat-option{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:15px 18px;
+  border:1.5px solid var(--cat-border);
+  border-radius:12px;
+  cursor:pointer;
+  background:var(--cat-surface);
+  transition:border-color .13s ease,background .13s ease,box-shadow .13s ease;
+  position:relative;
+  overflow:hidden;
+}
+.cat-option::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:0;border-radius:12px 0 0 12px;
+  background:var(--cat-selected-left);
+  transition:width .13s ease;
+}
+.cat-option:hover{
+  border-color:var(--cat-border-strong);
+  background:var(--cat-panel);
+}
+.cat-option:focus-visible{
+  outline:2px solid var(--cat-focus-ring);
+  outline-offset:2px;
+}
+.cat-option.selected{
+  border-color:var(--cat-selected-border);
+  background:var(--cat-selected-bg);
+}
+.cat-option.selected::before{width:4px}
+.cat-option.correct{
+  border-color:var(--cat-success-border);
+  background:var(--cat-success-bg);
+}
+.cat-option.correct::before{width:4px;background:var(--cat-success)}
+.cat-option.incorrect{
+  border-color:var(--cat-danger-border);
+  background:var(--cat-danger-bg);
+}
+.cat-option.incorrect::before{width:4px;background:var(--cat-danger)}
+.cat-option.dim{opacity:.5}
+
+.cat-opt-letter{
+  width:26px;height:26px;
+  border-radius:6px;
+  background:var(--cat-letter-bg);
+  color:var(--cat-letter-fg);
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+  transition:background .13s,color .13s;
+}
+.cat-option.selected .cat-opt-letter{
+  background:var(--cat-letter-sel-bg);
+  color:var(--cat-letter-sel-fg);
+}
+.cat-option.correct .cat-opt-letter{
+  background:var(--cat-success);color:#fff;
+}
+.cat-option.incorrect .cat-opt-letter{
+  background:var(--cat-danger);color:#fff;
+}
+.cat-opt-text{
+  font-size:13.5px;color:var(--cat-text-body);
+  line-height:1.58;flex:1;
+}
+.cat-option.selected .cat-opt-text{
+  color:var(--cat-text-primary);font-weight:500;
+}
+
+/* SATA checkbox */
+.cat-sata-check{
+  width:18px;height:18px;border-radius:4px;
+  border:2px solid var(--cat-border-strong);
+  background:var(--cat-surface);
+  flex-shrink:0;margin-top:3px;
+  display:flex;align-items:center;justify-content:center;
+  transition:.12s;
+}
+.cat-option.selected .cat-sata-check{
+  background:var(--cat-accent);
+  border-color:var(--cat-accent);
+}
+
+/* REVIEW RATIONALE */
+.cat-rationale{
+  background:var(--cat-panel);
+  border:1px solid var(--cat-border);
+  border-radius:12px;
+  padding:16px 18px;
+  margin-top:16px;
+}
+.cat-rationale-label{
+  font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-muted);margin-bottom:8px;
+}
+.cat-rationale-text{
+  font-size:13px;color:var(--cat-text-body);line-height:1.65;
+}
+
+/* BOTTOM BAR */
+.cat-bottom{
+  height:60px;flex-shrink:0;
+  background:var(--cat-bottom-bg);
+  border-top:1px solid var(--cat-bottom-border);
+  box-shadow:var(--cat-shadow-bottom);
+  display:flex;align-items:center;
+  padding:0 32px;
+  justify-content:space-between;
+  gap:16px;
+}
+.cat-bottom-left{display:flex;align-items:center;gap:8px}
+.cat-bottom-right{display:flex;align-items:center;gap:8px}
+.cat-btn-ghost{
+  font-size:13px;font-weight:600;
+  color:var(--cat-text-muted);
+  background:transparent;
+  border:1px solid var(--cat-border);
+  padding:8px 18px;border-radius:9px;
+  cursor:pointer;transition:.13s;
+  display:flex;align-items:center;gap:6px;
+}
+.cat-btn-ghost:hover{
+  color:var(--cat-text-primary);
+  background:var(--cat-panel);
+  border-color:var(--cat-border-strong);
+}
+.cat-btn-flag{
+  font-size:12.5px;font-weight:600;
+  color:var(--cat-muted);
+  background:transparent;
+  border:1px solid var(--cat-border);
+  padding:7px 14px;border-radius:9px;
+  cursor:pointer;transition:.13s;
+  display:flex;align-items:center;gap:5px;
+}
+.cat-btn-primary{
+  font-size:13px;font-weight:700;
+  color:#fff;
+  background:var(--cat-accent-deep);
+  padding:8px 24px;border-radius:9px;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  box-shadow:0 1px 0 rgba(0,0,0,.1),0 4px 12px -4px rgba(var(--r,13),var(--g,122),var(--b,170),.35);
+  transition:.13s;
+}
+.oc .cat-btn-primary{box-shadow:0 1px 0 rgba(0,0,0,.08),0 4px 12px -4px rgba(13,122,170,.3)}
+.mn .cat-btn-primary{
+  background:#38bdf8;color:#07111f;
+  box-shadow:0 1px 0 rgba(0,0,0,.15),0 4px 14px -4px rgba(56,189,248,.35);
+}
+.bl .cat-btn-primary{box-shadow:0 1px 0 rgba(0,0,0,.08),0 4px 12px -4px rgba(179,53,154,.3)}
+
+.cat-btn-primary:hover{opacity:.92}
+
+/* KEYBOARD HINT */
+.cat-kb-hint{
+  font-size:10.5px;color:var(--cat-subtle);
+  display:flex;align-items:center;gap:4px;
+}
+.cat-kbd{
+  font-size:9.5px;font-weight:600;
+  background:var(--cat-panel);
+  border:1px solid var(--cat-border);
+  border-bottom-width:2px;
+  padding:1px 5px;border-radius:4px;
+  color:var(--cat-muted);
+  font-family:monospace;
+}
+
+/* EXHIBIT TABS */
+.cat-exhibit-panel{
+  width:320px;flex-shrink:0;
+  background:var(--cat-rail-bg);
+  border-right:1px solid var(--cat-rail-border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.cat-exhibit-header{
+  padding:14px 16px 0;
+  border-bottom:1px solid var(--cat-border);
+  flex-shrink:0;
+}
+.cat-exhibit-header-label{
+  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-subtle);margin-bottom:10px;
+}
+.cat-exhibit-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.cat-exhibit-tabs::-webkit-scrollbar{display:none}
+.cat-exhibit-tab{
+  font-size:11.5px;font-weight:500;
+  color:var(--cat-text-muted);
+  padding:7px 12px 9px;
+  border-radius:7px 7px 0 0;
+  cursor:pointer;white-space:nowrap;
+  background:transparent;border:none;
+  transition:.1s;
+  position:relative;
+}
+.cat-exhibit-tab.active{
+  color:var(--cat-text-primary);
+  font-weight:600;
+  background:var(--cat-surface);
+  box-shadow:0 -1px 0 var(--cat-border) inset,1px 0 0 var(--cat-border),−1px 0 0 var(--cat-border);
+}
+.cat-exhibit-tab .alert-dot{
+  position:absolute;top:5px;right:6px;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--cat-danger);
+}
+.cat-exhibit-content{
+  flex:1;overflow-y:auto;
+  padding:14px 16px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--cat-border) transparent;
+}
+
+/* LAB TABLE */
+.cat-lab-section{margin-bottom:16px}
+.cat-lab-section-title{
+  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-subtle);
+  padding:4px 0 6px;
+  border-bottom:1px solid var(--cat-divider);
+  margin-bottom:8px;
+}
+.cat-lab-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:5px 6px;border-radius:6px;
+  font-size:12px;
+}
+.cat-lab-row:hover{background:var(--cat-panel)}
+.cat-lab-name{color:var(--cat-text-body);font-weight:500;flex:1}
+.cat-lab-val{
+  font-weight:700;color:var(--cat-text-primary);
+  font-variant-numeric:tabular-nums;
+  margin-right:6px;
+}
+.cat-lab-ref{font-size:10.5px;color:var(--cat-subtle);margin-right:6px}
+.cat-lab-flag{
+  font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;
+}
+.cat-lab-flag.low{background:var(--cat-danger-bg);color:var(--cat-danger)}
+.cat-lab-flag.high{background:var(--cat-warning-bg);color:var(--cat-warning)}
+.cat-lab-flag.crit{background:var(--cat-danger-bg);color:var(--cat-danger);border:1px solid var(--cat-danger-border)}
+
+/* BOWTIE */
+.cat-bowtie-canvas{
+  max-width:1100px;margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 280px 1fr;
+  gap:0;
+  align-items:start;
+  padding:20px 32px;
+}
+.cat-bowtie-col{display:flex;flex-direction:column;gap:10px}
+.cat-bowtie-col-header{
+  font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-chip-fg);
+  text-align:center;
+  padding:6px 12px;
+  background:var(--cat-chip-bg);
+  border:1px solid var(--cat-chip-border);
+  border-radius:7px;
+  margin-bottom:6px;
+}
+.cat-bowtie-slot{
+  background:var(--cat-surface);
+  border:1.5px solid var(--cat-border);
+  border-radius:12px;
+  padding:14px 16px;
+  min-height:62px;
+  cursor:pointer;
+  transition:border-color .13s;
+  display:flex;align-items:center;gap:10px;
+  position:relative;
+}
+.cat-bowtie-slot:hover{border-color:var(--cat-border-strong)}
+.cat-bowtie-slot.filled{
+  border-color:var(--cat-selected-border);
+  background:var(--cat-selected-bg);
+}
+.cat-bowtie-slot.correct{
+  border-color:var(--cat-success-border);
+  background:var(--cat-success-bg);
+}
+.cat-bowtie-slot.incorrect{
+  border-color:var(--cat-danger-border);
+  background:var(--cat-danger-bg);
+}
+.cat-bowtie-slot-num{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--cat-letter-bg);
+  color:var(--cat-letter-fg);
+  font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.cat-bowtie-slot.filled .cat-bowtie-slot-num{
+  background:var(--cat-letter-sel-bg);
+  color:var(--cat-letter-sel-fg);
+}
+.cat-bowtie-slot-text{
+  font-size:12.5px;color:var(--cat-text-body);line-height:1.45;flex:1;
+}
+.cat-bowtie-slot.filled .cat-bowtie-slot-text{
+  color:var(--cat-text-primary);font-weight:500;
+}
+.cat-bowtie-slot-empty{
+  font-size:12px;color:var(--cat-subtle);font-style:italic;
+}
+.cat-bowtie-remove{
+  font-size:10px;font-weight:600;color:var(--cat-accent);
+  background:none;border:none;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;
+}
+
+/* Connector arrows */
+.cat-bowtie-connector{
+  display:flex;align-items:center;
+  justify-content:center;
+  padding:20px 0;
+}
+.cat-bowtie-arrow-line{
+  height:2px;flex:1;
+  background:linear-gradient(90deg,transparent,var(--cat-border),var(--cat-accent-deep),var(--cat-border),transparent);
+  opacity:.5;
+}
+.cat-bowtie-arrowhead{
+  width:8px;height:8px;
+  border-top:2px solid var(--cat-accent-deep);
+  border-right:2px solid var(--cat-accent-deep);
+  transform:rotate(45deg);
+  opacity:.6;flex-shrink:0;
+}
+
+/* Center scenario card */
+.cat-bowtie-center{
+  padding:0 16px;
+  display:flex;flex-direction:column;
+  align-items:center;
+}
+.cat-bowtie-scenario{
+  background:var(--cat-surface);
+  border:2px solid var(--cat-border-strong);
+  border-radius:18px;
+  padding:20px 18px;
+  text-align:center;
+  box-shadow:var(--cat-shadow-card);
+  width:100%;
+}
+.cat-bowtie-scenario-label{
+  font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--cat-subtle);margin-bottom:10px;
+}
+.cat-bowtie-patient-avatar{
+  width:52px;height:52px;border-radius:13px;
+  background:var(--cat-chip-bg);
+  border:2px solid var(--cat-chip-border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:var(--cat-chip-fg);
+  margin:0 auto 10px;
+}
+.cat-bowtie-patient-name{
+  font-size:14px;font-weight:700;color:var(--cat-text-primary);
+}
+.cat-bowtie-patient-meta{
+  font-size:11px;color:var(--cat-muted);margin-top:2px;margin-bottom:10px;
+}
+.cat-bowtie-scenario-divider{height:1px;background:var(--cat-divider);margin:10px 0}
+.cat-bowtie-scenario-text{
+  font-size:11.5px;color:var(--cat-text-body);
+  line-height:1.6;text-align:left;
+}
+.cat-bowtie-vitals{
+  display:flex;flex-wrap:wrap;gap:4px;
+  justify-content:center;margin-top:8px;
+}
+.cat-vital-chip{
+  font-size:10px;font-weight:600;
+  padding:2px 7px;border-radius:99px;
+  background:var(--cat-panel);
+  border:1px solid var(--cat-border);
+  color:var(--cat-text-body);
+}
+.cat-vital-chip.crit{
+  background:var(--cat-danger-bg);
+  border-color:var(--cat-danger-border);
+  color:var(--cat-danger);
+}
+
+/* Option Bank */
+.cat-option-bank{
+  max-width:1100px;margin:0 auto;
+  padding:0 32px;
+  margin-top:12px;
+}
+.cat-option-bank-label{
+  font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-subtle);text-align:center;margin-bottom:10px;
+}
+.cat-bank-pills{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+}
+.cat-bank-pill{
+  font-size:12.5px;font-weight:500;
+  color:var(--cat-text-body);
+  background:var(--cat-surface);
+  border:1.5px solid var(--cat-border);
+  padding:8px 14px;border-radius:8px;
+  cursor:pointer;transition:.12s;
+  line-height:1.4;
+  max-width:260px;text-align:left;
+}
+.cat-bank-pill:hover{
+  border-color:var(--cat-selected-border);
+  background:var(--cat-selected-bg);
+}
+.cat-bank-pill.placed{
+  border-color:var(--cat-accent);
+  background:var(--cat-accent-soft);
+  color:var(--cat-chip-fg);
+  font-weight:600;
+  opacity:.55;
+}
+
+/* MATRIX TABLE */
+.cat-matrix-wrap{
+  background:var(--cat-surface);
+  border:1px solid var(--cat-border);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:var(--cat-shadow-card);
+}
+.cat-matrix-table{width:100%;border-collapse:collapse}
+.cat-matrix-table th{
+  padding:11px 16px;
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-subtle);
+  background:var(--cat-panel);
+  border-bottom:2px solid var(--cat-border);
+  text-align:center;
+}
+.cat-matrix-table th:first-child{text-align:left;width:42%}
+.cat-matrix-table td{
+  border-bottom:1px solid var(--cat-divider);
+  padding:0;
+}
+.cat-matrix-table tr:last-child td{border-bottom:none}
+.cat-matrix-table tr:hover td{background:var(--cat-panel-hover)}
+.cat-matrix-action{padding:12px 16px;font-size:12.5px;color:var(--cat-text-primary);line-height:1.45;font-weight:500}
+.cat-matrix-action-sub{font-size:11px;color:var(--cat-muted);font-weight:400;margin-top:2px}
+.cat-matrix-cell{padding:10px;text-align:center}
+.cat-matrix-col-a{background:var(--cat-success-bg)}
+.cat-matrix-col-b{background:var(--cat-danger-bg)}
+.cat-matrix-col-c{background:transparent}
+.cat-radio{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--cat-border-strong);
+  background:var(--cat-surface);
+  cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:.12s;
+}
+.cat-radio.selected-a{
+  border-color:var(--cat-success);
+  background:var(--cat-success);
+}
+.cat-radio.selected-a::after{
+  content:'';width:7px;height:7px;border-radius:50%;background:#fff;
+}
+.cat-radio.selected-b{
+  border-color:var(--cat-danger);
+  background:var(--cat-danger);
+}
+.cat-radio.selected-b::after{
+  content:'';width:7px;height:7px;border-radius:50%;background:#fff;
+}
+
+/* Case study badge / progress */
+.cat-case-banner{
+  background:var(--cat-panel);
+  border-bottom:1px solid var(--cat-border);
+  padding:9px 20px;
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;
+}
+.cat-case-patient{font-size:12.5px;font-weight:600;color:var(--cat-text-primary)}
+.cat-case-dots{display:flex;gap:4px;align-items:center}
+.cat-case-dot{width:7px;height:7px;border-radius:50%}
+.cat-case-dot.done{background:var(--cat-success)}
+.cat-case-dot.active{background:var(--cat-accent)}
+.cat-case-dot.todo{background:var(--cat-border-strong);opacity:.4}
+.cat-case-progress{font-size:11px;color:var(--cat-muted)}
+
+/* REVIEW MODE answer reveal */
+.cat-review-answer-key{
+  background:var(--cat-success-bg);
+  border:1px solid var(--cat-success-border);
+  border-radius:10px;
+  padding:12px 14px;
+  margin-top:4px;
+}
+.cat-review-answer-key-label{
+  font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cat-success);margin-bottom:4px;
+}
+.cat-review-answer-key-text{
+  font-size:12.5px;color:var(--cat-text-body);line-height:1.55;
+}
+
+/* SKELETON loading states */
+.cat-skel{
+  background:linear-gradient(90deg,var(--cat-panel) 25%,var(--cat-panel-hover) 50%,var(--cat-panel) 75%);
+  background-size:200% 100%;
+  animation:skel 1.4s ease infinite;
+  border-radius:6px;
+}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* MOBILE overrides */
+.cat-shell.mobile-shell .cat-topbar{height:44px;padding:0 12px}
+.cat-shell.mobile-shell .cat-body{flex-direction:column;height:auto;min-height:calc(844px - 44px - 56px)}
+.cat-shell.mobile-shell .cat-rail{width:100%;border-right:none;border-bottom:1px solid var(--cat-rail-border);max-height:120px;overflow:hidden}
+.cat-shell.mobile-shell .cat-main{padding:16px}
+.cat-shell.mobile-shell .cat-q-card{padding:18px 16px}
+.cat-shell.mobile-shell .cat-bottom{height:56px;padding:0 12px}
+.cat-shell.mobile-shell .cat-btn-ghost{padding:7px 12px;font-size:12.5px}
+.cat-shell.mobile-shell .cat-btn-primary{padding:7px 16px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <span class="chrome-title">NurseNest CAT · Premium Redesign · 15 Screens</span>
+  <span class="chrome-note">Apple-designed NCLEX · Ocean · Midnight · Blossom · Mobile</span>
+</div>
+<div class="tabs">
+  <span class="tab-group-label">OCEAN</span>
+  <button class="tab on" onclick="show(0)">1 MCQ Active</button>
+  <button class="tab" onclick="show(1)">2 MCQ Review</button>
+  <button class="tab" onclick="show(2)">3 SATA</button>
+  <button class="tab" onclick="show(3)">4 Case Study</button>
+  <button class="tab" onclick="show(4)">5 Bowtie</button>
+  <button class="tab" onclick="show(5)">6 Matrix</button>
+  <div class="tsep"></div>
+  <span class="tab-group-label">MIDNIGHT</span>
+  <button class="tab" onclick="show(6)">7 MCQ</button>
+  <button class="tab" onclick="show(7)">8 Bowtie</button>
+  <button class="tab" onclick="show(8)">9 Case Study</button>
+  <div class="tsep"></div>
+  <span class="tab-group-label">BLOSSOM</span>
+  <button class="tab" onclick="show(9)">10 MCQ</button>
+  <button class="tab" onclick="show(10)">11 Review</button>
+  <div class="tsep"></div>
+  <span class="tab-group-label">MOBILE</span>
+  <button class="tab" onclick="show(11)">12 Ocean MCQ</button>
+  <button class="tab" onclick="show(12)">13 Ocean SATA</button>
+  <button class="tab" onclick="show(13)">14 Midnight MCQ</button>
+  <button class="tab" onclick="show(14)">15 Bowtie Mobile</button>
+</div>
+
+<!-- ══ HELPERS (shared SVG icons) ══════════════════════════════════ -->
+<template id="ico-flag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></template>
+<template id="ico-calc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></template>
+<template id="ico-labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/><path d="M8 16v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5"/></svg></template>
+<template id="ico-a11y"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 8h8M12 8v8M9 18l-1 3M15 18l1 3"/></svg></template>
+<template id="ico-prev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></template>
+<template id="ico-next"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg></template>
+<template id="ico-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></template>
+<template id="ico-correct"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></template>
+<template id="ico-incorrect"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></template>
+
+<!-- ════════════════════════════════════════════════════════════════
+     MACROS (reusable snippets)
+════════════════════════════════════════════════════════════════════ -->
+
+<!-- FRAME 1 · Ocean · Standard MCQ · Active (unanswered → selection made) -->
+<div class="frame on" id="f0">
+<div class="cat-shell oc" style="height:900px">
+
+  <!-- TOP BAR -->
+  <header class="cat-topbar">
+    <div class="cat-tb-left">
+      <span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span>
+      <span class="cat-tb-chip">CAT Exam</span>
+      <span class="cat-tb-adaptive"><span class="cat-tb-adaptive-dot"></span>Adaptive</span>
+    </div>
+    <div class="cat-tb-center">
+      <span class="cat-tb-qcount">Question 23</span>
+      <span class="cat-tb-qdivider"> of </span>
+      <span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span>
+      <div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:30.6%"></div></div>
+    </div>
+    <div class="cat-tb-right">
+      <div class="cat-timer">00:42:15</div>
+      <button class="cat-tool" title="Flag for review">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+      </button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tool" title="Calculator">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+      </button>
+      <button class="cat-tool" title="Lab Values">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2" stroke-linecap="round"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg>
+      </button>
+      <button class="cat-tool" title="Accessibility">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 9h8M12 9v7M9 18l-1 3M15 18l1 3"/></svg>
+      </button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tb-exit">End Exam</button>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div class="cat-body">
+    <!-- LEFT RAIL -->
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Item Type</div>
+          <div class="cat-rail-item-type">Single Best Answer</div>
+          <div class="cat-rail-item-desc">Select the one best response. Only one answer is accepted.</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Category</div>
+          <div class="cat-rail-domain">Cardiovascular &amp; Oxygenation</div>
+          <div class="cat-rail-domain-meta">Physiological Integrity · Reduction of Risk</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Instructions</div>
+          <div class="cat-rail-instruction">
+            <p>Read the clinical scenario carefully. Identify the priority action the nurse should take first.</p>
+            <p>Use Maslow's hierarchy and the nursing process to guide your reasoning.</p>
+          </div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Adaptive Intelligence</div>
+          <div class="cat-rail-tip">
+            <span class="cat-rail-tag" style="margin-bottom:6px;display:inline-flex">⚡ Difficulty: Hard</span><br>
+            This item was selected based on your current performance trajectory. Answer carefully.
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category">
+              <span class="cat-q-cat-pill">Cardiovascular</span>
+              <div class="cat-q-diff">
+                <div class="cat-q-diff-pip filled"></div>
+                <div class="cat-q-diff-pip filled"></div>
+                <div class="cat-q-diff-pip filled"></div>
+                <div class="cat-q-diff-pip filled"></div>
+                <div class="cat-q-diff-pip empty"></div>
+              </div>
+            </div>
+            <div class="cat-q-head-right">
+              <span style="font-size:10.5px;color:var(--cat-subtle)">A–D to select</span>
+              <button class="cat-flag-btn" title="Flag for review" aria-label="Flag question for review">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <p class="cat-stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Current assessment: HR 104 bpm, BP 158/92 mmHg, respiratory rate 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields bilaterally, 2+ pitting edema of the bilateral lower extremities, and jugular venous distension. Medications include lisinopril 10 mg daily and metoprolol 25 mg twice daily. The provider has been notified. <strong>Which action should the nurse implement FIRST?</strong></p>
+
+          <div class="cat-options" role="radiogroup" aria-label="Answer options">
+            <button class="cat-option" role="radio" aria-checked="false" onclick="selectOpt(this)">
+              <span class="cat-opt-letter" aria-hidden="true">A</span>
+              <span class="cat-opt-text">Administer furosemide 40 mg IV as ordered to address acute volume overload</span>
+            </button>
+            <button class="cat-option selected" role="radio" aria-checked="true" onclick="selectOpt(this)">
+              <span class="cat-opt-letter" aria-hidden="true">B</span>
+              <span class="cat-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span>
+            </button>
+            <button class="cat-option" role="radio" aria-checked="false" onclick="selectOpt(this)">
+              <span class="cat-opt-letter" aria-hidden="true">C</span>
+              <span class="cat-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span>
+            </button>
+            <button class="cat-option" role="radio" aria-checked="false" onclick="selectOpt(this)">
+              <span class="cat-opt-letter" aria-hidden="true">D</span>
+              <span class="cat-opt-text">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left">
+      <button class="cat-btn-ghost">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Previous
+      </button>
+    </div>
+    <div class="cat-kb-hint">
+      <span class="cat-kbd">A</span><span class="cat-kbd">B</span><span class="cat-kbd">C</span><span class="cat-kbd">D</span>&nbsp;to select&nbsp;·&nbsp;<span class="cat-kbd">Enter</span>&nbsp;to submit
+    </div>
+    <div class="cat-bottom-right">
+      <button class="cat-btn-flag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Mark for Review
+      </button>
+      <button class="cat-btn-primary">
+        Submit Answer
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 2 · Ocean · MCQ · Review Mode (correct/incorrect revealed) -->
+<div class="frame" id="f1">
+<div class="cat-shell oc" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left">
+      <span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span>
+      <span class="cat-tb-chip" style="background:rgba(22,163,74,.12);border-color:rgba(22,163,74,.25);color:#166534">Review Mode</span>
+    </div>
+    <div class="cat-tb-center">
+      <span class="cat-tb-qcount">Question 23</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span>
+      <div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:30.6%"></div></div>
+    </div>
+    <div class="cat-tb-right">
+      <div class="cat-timer" style="color:var(--cat-muted);font-size:11px;border:none;background:none;padding:0">Session reviewed</div>
+      <button class="cat-tb-exit">Exit Review</button>
+    </div>
+  </header>
+  <div class="cat-body">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Your Answer</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--cat-selected-bg);border:1.5px solid var(--cat-selected-border);border-radius:9px;margin-bottom:8px">
+            <span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg);flex-shrink:0">B</span>
+            <span style="font-size:12px;color:var(--cat-text-primary);font-weight:600">High-Fowler's + O₂</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--cat-success-bg);border:1.5px solid var(--cat-success-border);border-radius:9px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cat-success)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+            <span style="font-size:11.5px;color:var(--cat-success);font-weight:700">Correct Answer</span>
+          </div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Clinical Rationale</div>
+          <div class="cat-rail-instruction">
+            <p>In acute HF exacerbation with hypoxia, positioning and oxygenation are immediate priorities. High-Fowler's reduces venous return and relieves dyspnea, while supplemental O₂ addresses the SpO₂ of 92%.</p>
+            <p style="margin-top:8px;padding-top:8px;border-top:1px solid var(--cat-divider)"><strong style="color:var(--cat-text-primary)">Why not A?</strong> Furosemide, while appropriate, is a subsequent intervention after stabilizing oxygenation.</p>
+          </div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">NCLEX Strategy</div>
+          <div class="cat-rail-tip">Use the ABCs and Maslow's: Airway → Breathing → Circulation. Airway management (positioning + O₂) precedes pharmacological intervention.</div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category">
+              <span class="cat-q-cat-pill">Cardiovascular</span>
+              <div style="font-size:10.5px;color:var(--cat-success);font-weight:600;display:flex;align-items:center;gap:4px">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+                Correct
+              </div>
+            </div>
+            <span style="font-size:10.5px;color:var(--cat-subtle)">Item 23 · Hard</span>
+          </div>
+          <p class="cat-stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Current assessment: HR 104 bpm, BP 158/92 mmHg, respiratory rate 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema bilateral lower extremities, and jugular venous distension. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="cat-options">
+            <button class="cat-option dim" disabled>
+              <span class="cat-opt-letter">A</span>
+              <span class="cat-opt-text">Administer furosemide 40 mg IV as ordered to address acute volume overload</span>
+            </button>
+            <button class="cat-option correct" disabled>
+              <span class="cat-opt-letter">B</span>
+              <span class="cat-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cat-success)" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+            </button>
+            <button class="cat-option dim" disabled>
+              <span class="cat-opt-letter">C</span>
+              <span class="cat-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span>
+            </button>
+            <button class="cat-option dim" disabled>
+              <span class="cat-opt-letter">D</span>
+              <span class="cat-opt-text">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span>
+            </button>
+          </div>
+          <div class="cat-review-answer-key">
+            <div class="cat-review-answer-key-label">Why B is Correct</div>
+            <div class="cat-review-answer-key-text">SpO₂ of 92% indicates hypoxemia requiring immediate oxygen therapy. High-Fowler's positioning reduces venous return to the heart, decreasing preload and relieving pulmonary congestion. This is the priority over pharmacological intervention.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left">
+      <button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button>
+    </div>
+    <div style="font-size:11px;color:var(--cat-muted)">Reviewing completed session · 75 questions</div>
+    <div class="cat-bottom-right">
+      <button class="cat-btn-primary">Next Question<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+    </div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 3 · Ocean · SATA (Select All That Apply) -->
+<div class="frame" id="f2">
+<div class="cat-shell oc" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left">
+      <span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span>
+      <span class="cat-tb-chip">CAT Exam</span>
+      <span class="cat-tb-adaptive"><span class="cat-tb-adaptive-dot"></span>Adaptive</span>
+    </div>
+    <div class="cat-tb-center">
+      <span class="cat-tb-qcount">Question 31</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span>
+      <div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:41.3%"></div></div>
+    </div>
+    <div class="cat-tb-right">
+      <div class="cat-timer">00:29:04</div>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></button>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tb-exit">End Exam</button>
+    </div>
+  </header>
+  <div class="cat-body">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Item Type</div>
+          <div class="cat-rail-item-type">Select All That Apply</div>
+          <div class="cat-rail-item-desc">There is no partial credit. You must select <em>every</em> correct option and no incorrect ones.</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Instructions</div>
+          <div class="cat-rail-instruction">
+            <p>Consider each option independently. An option is correct if it would be appropriate in this clinical scenario.</p>
+          </div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Category</div>
+          <div class="cat-rail-domain">Respiratory &amp; Oxygenation</div>
+          <div class="cat-rail-domain-meta">Physiological Integrity · Physiological Adaptation</div>
+          <div style="margin-top:6px"><span class="cat-rail-tag">⚡ Very Hard</span></div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Selected</div>
+          <div style="font-size:13px;font-weight:700;color:var(--cat-accent-deep)">2 of 5</div>
+          <div style="font-size:11px;color:var(--cat-muted);margin-top:2px">Select all that apply</div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category">
+              <span class="cat-q-cat-pill">Respiratory</span>
+              <span style="font-size:10px;font-weight:700;color:var(--cat-chip-fg);background:var(--cat-chip-bg);border:1px solid var(--cat-chip-border);padding:2px 8px;border-radius:5px;letter-spacing:.08em;text-transform:uppercase">SATA</span>
+            </div>
+            <button class="cat-flag-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="cat-stem">A nurse is caring for a <strong>client with community-acquired pneumonia</strong> who is receiving antibiotic therapy. The client's vital signs are: T 38.9°C, HR 98, BP 136/82, RR 24, SpO₂ 91% on 4 L/min via nasal cannula. Which nursing interventions are appropriate at this time? <strong>Select all that apply.</strong></p>
+          <div class="cat-options" role="group" aria-label="Select all that apply">
+            <label class="cat-option selected" style="cursor:pointer">
+              <span class="cat-sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">A</span>
+              <span class="cat-opt-text">Elevate the head of the bed to 45° to optimize lung expansion and reduce aspiration risk</span>
+              <input type="checkbox" checked style="position:absolute;opacity:0;pointer-events:none">
+            </label>
+            <label class="cat-option" style="cursor:pointer">
+              <span class="cat-sata-check"></span>
+              <span class="cat-opt-letter">B</span>
+              <span class="cat-opt-text">Apply a non-rebreather mask at 15 L/min for the SpO₂ of 91% on 4 L nasal cannula</span>
+              <input type="checkbox" style="position:absolute;opacity:0;pointer-events:none">
+            </label>
+            <label class="cat-option selected" style="cursor:pointer">
+              <span class="cat-sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">C</span>
+              <span class="cat-opt-text">Encourage fluid intake of 2–3 L/day to thin secretions and facilitate expectoration</span>
+              <input type="checkbox" checked style="position:absolute;opacity:0;pointer-events:none">
+            </label>
+            <label class="cat-option" style="cursor:pointer">
+              <span class="cat-sata-check"></span>
+              <span class="cat-opt-letter">D</span>
+              <span class="cat-opt-text">Administer acetaminophen 650 mg PO PRN for fever and discomfort as ordered</span>
+              <input type="checkbox" style="position:absolute;opacity:0;pointer-events:none">
+            </label>
+            <label class="cat-option" style="cursor:pointer">
+              <span class="cat-sata-check"></span>
+              <span class="cat-opt-letter">E</span>
+              <span class="cat-opt-text">Notify the provider immediately and prepare for intubation based on the current SpO₂ reading</span>
+              <input type="checkbox" style="position:absolute;opacity:0;pointer-events:none">
+            </label>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="cat-kb-hint"><span class="cat-kbd">Space</span>&nbsp;to check/uncheck&nbsp;·&nbsp;<span class="cat-kbd">↑↓</span>&nbsp;to navigate</div>
+    <div class="cat-bottom-right">
+      <button class="cat-btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button>
+      <button class="cat-btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+    </div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 4 · Ocean · NGN Case Study + Exhibit Tabs -->
+<div class="frame" id="f3">
+<div class="cat-shell oc" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-chip" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.25);color:#6d28d9">NGN</span></div>
+    <div class="cat-tb-center">
+      <span class="cat-tb-qcount">Case Study</span><span class="cat-tb-qdivider"> · </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">Q 3 of 6</span>
+      <div class="cat-case-dots" style="margin-left:14px">
+        <div class="cat-case-dot done"></div><div class="cat-case-dot done"></div><div class="cat-case-dot active"></div><div class="cat-case-dot todo"></div><div class="cat-case-dot todo"></div><div class="cat-case-dot todo"></div>
+      </div>
+    </div>
+    <div class="cat-tb-right"><div class="cat-timer">01:12:44</div><button class="cat-tb-exit">End Exam</button></div>
+  </header>
+
+  <!-- Case banner -->
+  <div class="cat-case-banner">
+    <span class="cat-case-patient">Mrs. Helena Park · 71F · Med-Surg · Respiratory</span>
+    <span style="font-size:11px;color:var(--cat-muted)">T 38.7°C · HR 92 · BP 142/88 · RR 24 · SpO₂ 89% on 2L NC · COPD GOLD II · HTN · Type 2 DM</span>
+    <span class="cat-rail-tag" style="margin-left:auto">Case Study · 6 Questions</span>
+  </div>
+
+  <div class="cat-body" style="height:calc(900px - 48px - 40px - 60px)">
+    <!-- EXHIBIT PANEL -->
+    <aside class="cat-exhibit-panel">
+      <div class="cat-exhibit-header">
+        <div class="cat-exhibit-header-label">Exhibit Panel</div>
+        <div class="cat-exhibit-tabs">
+          <button class="cat-exhibit-tab">H&amp;P</button>
+          <button class="cat-exhibit-tab">Vital Signs</button>
+          <button class="cat-exhibit-tab active">Lab Results<span class="alert-dot"></span></button>
+          <button class="cat-exhibit-tab">Imaging</button>
+          <button class="cat-exhibit-tab">Medications</button>
+        </div>
+      </div>
+      <div class="cat-exhibit-content">
+        <div class="cat-lab-section">
+          <div class="cat-lab-section-title">Complete Blood Count</div>
+          <div class="cat-lab-row"><span class="cat-lab-name">WBC</span><span class="cat-lab-val">14.2</span><span class="cat-lab-ref">4.5–11.0</span><span class="cat-lab-flag high">↑ HIGH</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Hemoglobin</span><span class="cat-lab-val">10.8</span><span class="cat-lab-ref">12.0–16.0</span><span class="cat-lab-flag low">↓ LOW</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Hematocrit</span><span class="cat-lab-val">32%</span><span class="cat-lab-ref">36–46%</span><span class="cat-lab-flag low">↓ LOW</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Platelets</span><span class="cat-lab-val">218</span><span class="cat-lab-ref">150–400</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Neutrophils</span><span class="cat-lab-val">88%</span><span class="cat-lab-ref">50–70%</span><span class="cat-lab-flag high">↑ HIGH</span></div>
+        </div>
+        <div class="cat-lab-section">
+          <div class="cat-lab-section-title">Basic Metabolic Panel</div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Sodium</span><span class="cat-lab-val">136</span><span class="cat-lab-ref">136–145 mEq/L</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Potassium</span><span class="cat-lab-val">3.1</span><span class="cat-lab-ref">3.5–5.0 mEq/L</span><span class="cat-lab-flag crit">⚠ CRIT</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">BUN</span><span class="cat-lab-val">28</span><span class="cat-lab-ref">7–20 mg/dL</span><span class="cat-lab-flag high">↑</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Creatinine</span><span class="cat-lab-val">1.4</span><span class="cat-lab-ref">0.6–1.2 mg/dL</span><span class="cat-lab-flag high">↑</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Glucose</span><span class="cat-lab-val">188</span><span class="cat-lab-ref">70–100 mg/dL</span><span class="cat-lab-flag high">↑</span></div>
+        </div>
+        <div class="cat-lab-section">
+          <div class="cat-lab-section-title">Arterial Blood Gas</div>
+          <div class="cat-lab-row"><span class="cat-lab-name">pH</span><span class="cat-lab-val">7.32</span><span class="cat-lab-ref">7.35–7.45</span><span class="cat-lab-flag low">↓</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">PaCO₂</span><span class="cat-lab-val">52</span><span class="cat-lab-ref">35–45 mmHg</span><span class="cat-lab-flag high">↑</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">PaO₂</span><span class="cat-lab-val">58</span><span class="cat-lab-ref">80–100 mmHg</span><span class="cat-lab-flag crit">⚠ CRIT</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">HCO₃⁻</span><span class="cat-lab-val">26</span><span class="cat-lab-ref">22–26 mEq/L</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">SaO₂</span><span class="cat-lab-val">89%</span><span class="cat-lab-ref">95–100%</span><span class="cat-lab-flag crit">⚠ CRIT</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- QUESTION AREA -->
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category">
+              <span class="cat-q-cat-pill">Respiratory</span>
+              <span style="font-size:10px;font-weight:700;color:#6d28d9;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.22);padding:2px 8px;border-radius:5px;letter-spacing:.08em;text-transform:uppercase">SATA · NGN</span>
+            </div>
+            <span style="font-size:10.5px;color:var(--cat-subtle)">Q 3 of 6</span>
+          </div>
+          <p class="cat-stem">Based on <strong>Mrs. Park's laboratory results and clinical presentation</strong>, which findings require <strong>priority nursing intervention</strong>? <strong>Select all that apply.</strong></p>
+          <div class="cat-options" role="group">
+            <label class="cat-option selected" style="cursor:pointer">
+              <span class="cat-sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">A</span>
+              <span class="cat-opt-text">Critically low PaO₂ of 58 mmHg indicating respiratory failure requiring immediate oxygen titration</span>
+            </label>
+            <label class="cat-option selected" style="cursor:pointer">
+              <span class="cat-sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">B</span>
+              <span class="cat-opt-text">Critical hypokalemia (K⁺ 3.1 mEq/L) with associated risk for cardiac dysrhythmia requiring immediate provider notification</span>
+            </label>
+            <label class="cat-option" style="cursor:pointer"><span class="cat-sata-check"></span><span class="cat-opt-letter">C</span><span class="cat-opt-text">Elevated WBC count of 14.2 indicating systemic infection requiring blood culture collection prior to antibiotic therapy</span></label>
+            <label class="cat-option" style="cursor:pointer"><span class="cat-sata-check"></span><span class="cat-opt-letter">D</span><span class="cat-opt-text">Mildly elevated BUN/Creatinine suggesting dehydration requiring increased IV fluid rate to 125 mL/hr</span></label>
+            <label class="cat-option" style="cursor:pointer"><span class="cat-sata-check"></span><span class="cat-opt-letter">E</span><span class="cat-opt-text">Hemoglobin of 10.8 g/dL indicating anemia requiring urgent packed red blood cell transfusion</span></label>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div style="font-size:11px;color:var(--cat-muted)">2 selected · Select all that apply</div>
+    <div class="cat-bottom-right"><button class="cat-btn-primary">Next Question<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 5 · Ocean · NGN Bowtie — Flagship UI -->
+<div class="frame" id="f4">
+<div class="cat-shell oc" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-chip" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.25);color:#0f766e">Bowtie</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Question 47</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span><div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:62.6%"></div></div></div>
+    <div class="cat-tb-right"><div class="cat-timer">00:28:04</div><button class="cat-tb-exit">End Exam</button></div>
+  </header>
+  <div class="cat-body" style="height:calc(900px - 48px - 60px)">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Item Type</div>
+          <div class="cat-rail-item-type">NGN Bowtie</div>
+          <div class="cat-rail-item-desc">Select nursing actions and parameters to monitor for this client's condition.</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Instructions</div>
+          <div class="cat-rail-instruction">
+            <p>Select <strong>2 actions</strong> to take on the left.</p>
+            <p>Select <strong>2 parameters</strong> to monitor on the right.</p>
+            <p style="margin-top:6px;padding-top:6px;border-top:1px solid var(--cat-divider)">Click or tap an option below, then assign it to a slot. Each option can only be used once.</p>
+          </div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Progress</div>
+          <div style="display:flex;gap:6px;margin-top:2px">
+            <div style="flex:1;background:var(--cat-success-bg);border:1px solid var(--cat-success-border);border-radius:8px;padding:6px 8px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:var(--cat-success)">2/2</div>
+              <div style="font-size:9.5px;color:var(--cat-muted);margin-top:1px">Actions</div>
+            </div>
+            <div style="flex:1;background:var(--cat-success-bg);border:1px solid var(--cat-success-border);border-radius:8px;padding:6px 8px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:var(--cat-success)">2/2</div>
+              <div style="font-size:9.5px;color:var(--cat-muted);margin-top:1px">Parameters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main" style="padding:20px 0;overflow:hidden">
+      <!-- BOWTIE CANVAS -->
+      <div class="cat-bowtie-canvas">
+        <!-- LEFT: Actions -->
+        <div class="cat-bowtie-col">
+          <div class="cat-bowtie-col-header">Actions to Take</div>
+          <div class="cat-bowtie-slot filled" tabindex="0" role="button" aria-label="Action slot 1: Elevate head of bed to 30–45 degrees">
+            <span class="cat-bowtie-slot-num">1</span>
+            <span class="cat-bowtie-slot-text">Elevate head of bed to 30–45°</span>
+            <button class="cat-bowtie-remove">Remove</button>
+          </div>
+          <div class="cat-bowtie-slot filled" tabindex="0" role="button" aria-label="Action slot 2: Administer IV furosemide as ordered">
+            <span class="cat-bowtie-slot-num">2</span>
+            <span class="cat-bowtie-slot-text">Administer IV furosemide as ordered</span>
+            <button class="cat-bowtie-remove">Remove</button>
+          </div>
+        </div>
+
+        <!-- CENTER: Clinical scenario -->
+        <div class="cat-bowtie-center">
+          <div class="cat-bowtie-connector">
+            <div class="cat-bowtie-arrow-line"></div>
+            <div class="cat-bowtie-arrowhead"></div>
+            <div style="width:30px"></div>
+            <div class="cat-bowtie-arrowhead" style="transform:rotate(-135deg)"></div>
+            <div class="cat-bowtie-arrow-line"></div>
+          </div>
+          <div class="cat-bowtie-scenario">
+            <div class="cat-bowtie-scenario-label">Client Condition</div>
+            <div class="cat-bowtie-patient-avatar">RC</div>
+            <div class="cat-bowtie-patient-name">Mr. Robert Chen</div>
+            <div class="cat-bowtie-patient-meta">82M · CVICU · Post-op Day 2</div>
+            <div class="cat-bowtie-scenario-divider"></div>
+            <div class="cat-bowtie-scenario-text"><strong>Acute decompensated heart failure</strong> following CABG surgery. Bilateral pulmonary edema. SpO₂ trending 95% → 90%.</div>
+            <div class="cat-bowtie-vitals">
+              <span class="cat-vital-chip crit">HR 112 ↑</span>
+              <span class="cat-vital-chip crit">SpO₂ 90% ↓</span>
+              <span class="cat-vital-chip crit">BP 162/98 ↑</span>
+              <span class="cat-vital-chip">RR 22</span>
+              <span class="cat-vital-chip crit">+3.2 kg ↑</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Parameters -->
+        <div class="cat-bowtie-col">
+          <div class="cat-bowtie-col-header" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.25);color:#0f766e">Parameters to Monitor</div>
+          <div class="cat-bowtie-slot filled" style="border-color:rgba(13,148,136,.5);background:rgba(13,148,136,.06)" tabindex="0" role="button">
+            <span class="cat-bowtie-slot-num" style="background:rgba(13,148,136,.15);color:#0f766e">1</span>
+            <span class="cat-bowtie-slot-text">Urinary output hourly (goal &gt;30 mL/hr)</span>
+            <button class="cat-bowtie-remove" style="color:#0f766e">Remove</button>
+          </div>
+          <div class="cat-bowtie-slot filled" style="border-color:rgba(13,148,136,.5);background:rgba(13,148,136,.06)" tabindex="0" role="button">
+            <span class="cat-bowtie-slot-num" style="background:rgba(13,148,136,.15);color:#0f766e">2</span>
+            <span class="cat-bowtie-slot-text">SpO₂ and breath sounds q2h</span>
+            <button class="cat-bowtie-remove" style="color:#0f766e">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPTION BANK -->
+      <div class="cat-option-bank">
+        <div class="cat-option-bank-label">Option Bank — click an option to assign it to the focused slot</div>
+        <div class="cat-bank-pills">
+          <button class="cat-bank-pill placed">Elevate head of bed to 30–45°</button>
+          <button class="cat-bank-pill placed">Administer IV furosemide as ordered</button>
+          <button class="cat-bank-pill">Administer 500 mL NS bolus over 1 hour</button>
+          <button class="cat-bank-pill placed">Urinary output hourly (goal >30 mL/hr)</button>
+          <button class="cat-bank-pill placed">SpO₂ and breath sounds q2h</button>
+          <button class="cat-bank-pill">Place client in Trendelenburg position</button>
+          <button class="cat-bank-pill">Serum potassium after each diuretic dose</button>
+          <button class="cat-bank-pill">Blood glucose every 6 hours</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:11.5px;color:var(--cat-success);font-weight:600;background:var(--cat-success-bg);border:1px solid var(--cat-success-border);padding:4px 12px;border-radius:7px">✓ All 4 slots filled</span>
+    </div>
+    <div class="cat-bottom-right"><button class="cat-btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 6 · Ocean · NGN Matrix/Grid -->
+<div class="frame" id="f5">
+<div class="cat-shell oc" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-chip" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.25);color:#0f766e">Matrix</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Question 58</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span><div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:77.3%"></div></div></div>
+    <div class="cat-tb-right"><div class="cat-timer">00:14:32</div><button class="cat-tb-exit">End Exam</button></div>
+  </header>
+  <div class="cat-body" style="height:calc(900px - 48px - 60px)">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Item Type</div>
+          <div class="cat-rail-item-type">Matrix / Grid</div>
+          <div class="cat-rail-item-desc">Select one response in each row. All rows must be answered.</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Category</div>
+          <div class="cat-rail-domain">Pharmacology &amp; Safety</div>
+          <div class="cat-rail-domain-meta">Physiological Integrity · Pharmacological Therapies</div>
+          <div style="margin-top:6px"><span class="cat-rail-tag">⚡ Very Hard</span></div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Completion</div>
+          <div style="display:grid;grid-template-columns:1fr;gap:3px">
+            <div style="display:flex;align-items:center;gap:6px;font-size:11.5px">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--cat-success);flex-shrink:0"></div>
+              <span style="color:var(--cat-success);font-weight:600">5 of 5 rows answered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap" style="max-width:900px">
+        <div class="cat-q-card" style="padding:24px 28px">
+          <div class="cat-q-head">
+            <div class="cat-q-category"><span class="cat-q-cat-pill">Pharmacology</span></div>
+            <button class="cat-flag-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="cat-stem" style="font-size:14.5px">A nurse is caring for <strong>Mr. Torres, 58M</strong>, admitted with hypertensive urgency (BP 196/114 mmHg). The provider has ordered the following medications. For each medication, indicate whether the action is <strong>Indicated</strong>, <strong>Contraindicated</strong>, or has <strong>No Effect</strong> on the current condition.</p>
+          <div class="cat-matrix-wrap" style="margin-top:18px">
+            <table class="cat-matrix-table">
+              <thead>
+                <tr>
+                  <th>Medication / Action</th>
+                  <th class="cat-matrix-col-a" style="color:var(--cat-success)">Indicated</th>
+                  <th class="cat-matrix-col-b" style="color:var(--cat-danger)">Contraindicated</th>
+                  <th class="cat-matrix-col-c">No Effect on BP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="cat-matrix-action">Labetalol 20 mg IV push over 2 min<div class="cat-matrix-action-sub">Alpha &amp; beta blocker · Fast-acting antihypertensive</div></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-a"><div class="cat-radio selected-a"></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-b"><div class="cat-radio"></div></td>
+                  <td class="cat-matrix-cell"><div class="cat-radio"></div></td>
+                </tr>
+                <tr>
+                  <td><div class="cat-matrix-action">Furosemide 40 mg IV<div class="cat-matrix-action-sub">Loop diuretic · Reduces preload and volume</div></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-a"><div class="cat-radio"></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-b"><div class="cat-radio"></div></td>
+                  <td class="cat-matrix-cell"><div class="cat-radio selected-a" style="border-color:var(--cat-accent);background:var(--cat-accent)"></div></td>
+                </tr>
+                <tr>
+                  <td><div class="cat-matrix-action">Morphine 4 mg IV PRN<div class="cat-matrix-action-sub">Opioid analgesic · Respiratory depression risk</div></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-a"><div class="cat-radio"></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-b"><div class="cat-radio selected-b"></div></td>
+                  <td class="cat-matrix-cell"><div class="cat-radio"></div></td>
+                </tr>
+                <tr>
+                  <td><div class="cat-matrix-action">Nicardipine 5 mg/hr IV infusion<div class="cat-matrix-action-sub">Calcium channel blocker · Titrated antihypertensive</div></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-a"><div class="cat-radio selected-a"></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-b"><div class="cat-radio"></div></td>
+                  <td class="cat-matrix-cell"><div class="cat-radio"></div></td>
+                </tr>
+                <tr>
+                  <td><div class="cat-matrix-action">Normal Saline 500 mL bolus<div class="cat-matrix-action-sub">IV fluid · Volume expansion</div></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-a"><div class="cat-radio"></div></td>
+                  <td class="cat-matrix-cell cat-matrix-col-b"><div class="cat-radio selected-b"></div></td>
+                  <td class="cat-matrix-cell"><div class="cat-radio"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:12px;font-size:11px;color:var(--cat-subtle)">
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:50%;background:var(--cat-success);display:inline-block"></span>Indicated</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:50%;background:var(--cat-danger);display:inline-block"></span>Contraindicated</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:50%;background:var(--cat-accent);display:inline-block"></span>No Effect</span>
+            <span style="margin-left:auto;color:var(--cat-success);font-weight:600">✓ 5/5 complete</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="cat-kb-hint"><span class="cat-kbd">←</span><span class="cat-kbd">→</span>&nbsp;select column&nbsp;·&nbsp;<span class="cat-kbd">↑↓</span>&nbsp;navigate rows</div>
+    <div class="cat-bottom-right"><button class="cat-btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAMES 7-9 · Midnight Theme -->
+<div class="frame" id="f6">
+<div class="cat-shell mn" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-adaptive"><span class="cat-tb-adaptive-dot"></span>Adaptive</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Question 23</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span><div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:30.6%"></div></div></div>
+    <div class="cat-tb-right">
+      <div class="cat-timer">00:42:15</div>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></button>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tb-exit">End Exam</button>
+    </div>
+  </header>
+  <div class="cat-body">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Item Type</div>
+          <div class="cat-rail-item-type">Single Best Answer</div>
+          <div class="cat-rail-item-desc">Select the one best response. Only one answer is accepted.</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Category</div>
+          <div class="cat-rail-domain">Cardiovascular &amp; Oxygenation</div>
+          <div class="cat-rail-domain-meta">Physiological Integrity · Reduction of Risk</div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Instructions</div>
+          <div class="cat-rail-instruction"><p>Read the clinical scenario carefully. Identify the priority action the nurse should take first.</p></div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Adaptive Intelligence</div>
+          <div class="cat-rail-tip"><span class="cat-rail-tag" style="margin-bottom:6px;display:inline-flex">⚡ Difficulty: Hard</span><br>Item selected based on your current performance trajectory.</div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category">
+              <span class="cat-q-cat-pill">Cardiovascular</span>
+              <div class="cat-q-diff"><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip empty"></div></div>
+            </div>
+            <button class="cat-flag-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="cat-stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Current assessment: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema, and JVD. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="cat-options" role="radiogroup">
+            <button class="cat-option"><span class="cat-opt-letter">A</span><span class="cat-opt-text">Administer furosemide 40 mg IV as ordered to address acute volume overload</span></button>
+            <button class="cat-option selected"><span class="cat-opt-letter">B</span><span class="cat-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span></button>
+            <button class="cat-option"><span class="cat-opt-letter">C</span><span class="cat-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+            <button class="cat-option"><span class="cat-opt-letter">D</span><span class="cat-opt-text">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="cat-kb-hint"><span class="cat-kbd">A–D</span>&nbsp;to select&nbsp;·&nbsp;<span class="cat-kbd">Enter</span>&nbsp;to submit</div>
+    <div class="cat-bottom-right"><button class="cat-btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button><button class="cat-btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 8 · Midnight · Bowtie -->
+<div class="frame" id="f7">
+<div class="cat-shell mn" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-chip" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25);color:#34d399">Bowtie</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Question 47</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span><div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:62.6%"></div></div></div>
+    <div class="cat-tb-right"><div class="cat-timer">00:28:04</div><button class="cat-tb-exit">End Exam</button></div>
+  </header>
+  <div class="cat-body" style="height:calc(900px - 48px - 60px)">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Item Type</div><div class="cat-rail-item-type">NGN Bowtie</div><div class="cat-rail-item-desc">Select 2 actions and 2 parameters for this client's condition.</div></div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Instructions</div><div class="cat-rail-instruction"><p>Tap an option to assign it to the active slot. Each option can only be used once.</p></div></div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Progress</div>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1;background:var(--cat-success-bg);border:1px solid var(--cat-success-border);border-radius:8px;padding:6px 8px;text-align:center"><div style="font-size:14px;font-weight:700;color:var(--cat-success)">2/2</div><div style="font-size:9.5px;color:var(--cat-muted)">Actions</div></div>
+            <div style="flex:1;background:var(--cat-success-bg);border:1px solid var(--cat-success-border);border-radius:8px;padding:6px 8px;text-align:center"><div style="font-size:14px;font-weight:700;color:var(--cat-success)">2/2</div><div style="font-size:9.5px;color:var(--cat-muted)">Parameters</div></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main" style="padding:20px 0;overflow:hidden">
+      <div class="cat-bowtie-canvas">
+        <div class="cat-bowtie-col">
+          <div class="cat-bowtie-col-header">Actions to Take</div>
+          <div class="cat-bowtie-slot filled"><span class="cat-bowtie-slot-num">1</span><span class="cat-bowtie-slot-text">Elevate head of bed to 30–45°</span><button class="cat-bowtie-remove">Remove</button></div>
+          <div class="cat-bowtie-slot filled"><span class="cat-bowtie-slot-num">2</span><span class="cat-bowtie-slot-text">Administer IV furosemide as ordered</span><button class="cat-bowtie-remove">Remove</button></div>
+        </div>
+        <div class="cat-bowtie-center">
+          <div class="cat-bowtie-connector"><div class="cat-bowtie-arrow-line"></div><div class="cat-bowtie-arrowhead"></div><div style="width:30px"></div><div class="cat-bowtie-arrowhead" style="transform:rotate(-135deg)"></div><div class="cat-bowtie-arrow-line"></div></div>
+          <div class="cat-bowtie-scenario">
+            <div class="cat-bowtie-scenario-label">Client Condition</div>
+            <div class="cat-bowtie-patient-avatar">RC</div>
+            <div class="cat-bowtie-patient-name">Mr. Robert Chen</div>
+            <div class="cat-bowtie-patient-meta">82M · CVICU · Post-op Day 2</div>
+            <div class="cat-bowtie-scenario-divider"></div>
+            <div class="cat-bowtie-scenario-text"><strong>Acute decompensated heart failure</strong> following CABG. Bilateral pulmonary edema. SpO₂ trending 95% → 90%.</div>
+            <div class="cat-bowtie-vitals"><span class="cat-vital-chip crit">HR 112 ↑</span><span class="cat-vital-chip crit">SpO₂ 90% ↓</span><span class="cat-vital-chip crit">BP 162/98 ↑</span><span class="cat-vital-chip">RR 22</span></div>
+          </div>
+        </div>
+        <div class="cat-bowtie-col">
+          <div class="cat-bowtie-col-header" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25);color:#34d399">Parameters to Monitor</div>
+          <div class="cat-bowtie-slot filled" style="border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.06)"><span class="cat-bowtie-slot-num" style="background:rgba(52,211,153,.15);color:#34d399">1</span><span class="cat-bowtie-slot-text">Urinary output hourly (goal &gt;30 mL/hr)</span><button class="cat-bowtie-remove" style="color:#34d399">Remove</button></div>
+          <div class="cat-bowtie-slot filled" style="border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.06)"><span class="cat-bowtie-slot-num" style="background:rgba(52,211,153,.15);color:#34d399">2</span><span class="cat-bowtie-slot-text">SpO₂ and breath sounds q2h</span><button class="cat-bowtie-remove" style="color:#34d399">Remove</button></div>
+        </div>
+      </div>
+      <div class="cat-option-bank">
+        <div class="cat-option-bank-label">Option Bank</div>
+        <div class="cat-bank-pills">
+          <button class="cat-bank-pill placed">Elevate head of bed to 30–45°</button>
+          <button class="cat-bank-pill placed">Administer IV furosemide as ordered</button>
+          <button class="cat-bank-pill">Administer 500 mL NS bolus</button>
+          <button class="cat-bank-pill placed">Urinary output hourly (goal >30 mL/hr)</button>
+          <button class="cat-bank-pill placed">SpO₂ and breath sounds q2h</button>
+          <button class="cat-bank-pill">Place client in Trendelenburg position</button>
+          <button class="cat-bank-pill">Serum potassium after each diuretic dose</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div style="font-size:11.5px;color:var(--cat-success);font-weight:600;background:var(--cat-success-bg);border:1px solid var(--cat-success-border);padding:4px 12px;border-radius:7px">✓ All 4 slots filled</div>
+    <div class="cat-bottom-right"><button class="cat-btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 9 · Midnight · Case Study -->
+<div class="frame" id="f8">
+<div class="cat-shell mn" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-chip" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.25);color:#60a5fa">NGN</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Case Study</span><span class="cat-tb-qdivider"> · </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">Q 2 of 6</span><div class="cat-case-dots" style="margin-left:14px"><div class="cat-case-dot done"></div><div class="cat-case-dot active"></div><div class="cat-case-dot todo"></div><div class="cat-case-dot todo"></div><div class="cat-case-dot todo"></div><div class="cat-case-dot todo"></div></div></div>
+    <div class="cat-tb-right"><div class="cat-timer">01:18:22</div><button class="cat-tb-exit">End Exam</button></div>
+  </header>
+  <div class="cat-case-banner" style="background:var(--cat-panel);border-color:var(--cat-border)">
+    <span class="cat-case-patient">Mrs. Helena Park · 71F · Med-Surg · Respiratory Failure</span>
+    <span style="font-size:11px;color:var(--cat-muted)">SpO₂ 89% · PaO₂ 58 · K⁺ 3.1 · pH 7.32 · WBC 14.2</span>
+    <span class="cat-rail-tag" style="margin-left:auto">Active Case</span>
+  </div>
+  <div class="cat-body" style="height:calc(900px - 48px - 40px - 60px)">
+    <aside class="cat-exhibit-panel" style="background:var(--cat-rail-bg);border-color:var(--cat-rail-border)">
+      <div class="cat-exhibit-header" style="border-color:var(--cat-border)">
+        <div class="cat-exhibit-header-label">Exhibit Panel</div>
+        <div class="cat-exhibit-tabs">
+          <button class="cat-exhibit-tab">H&amp;P</button>
+          <button class="cat-exhibit-tab active">Lab Results<span class="alert-dot"></span></button>
+          <button class="cat-exhibit-tab">Imaging</button>
+          <button class="cat-exhibit-tab">Meds</button>
+        </div>
+      </div>
+      <div class="cat-exhibit-content">
+        <div class="cat-lab-section">
+          <div class="cat-lab-section-title">Basic Metabolic Panel</div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Potassium</span><span class="cat-lab-val">3.1</span><span class="cat-lab-ref">3.5–5.0</span><span class="cat-lab-flag crit">⚠ CRIT</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Sodium</span><span class="cat-lab-val">136</span><span class="cat-lab-ref">136–145</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Glucose</span><span class="cat-lab-val">188</span><span class="cat-lab-ref">70–100</span><span class="cat-lab-flag high">↑</span></div>
+        </div>
+        <div class="cat-lab-section">
+          <div class="cat-lab-section-title">Arterial Blood Gas</div>
+          <div class="cat-lab-row"><span class="cat-lab-name">pH</span><span class="cat-lab-val">7.32</span><span class="cat-lab-ref">7.35–7.45</span><span class="cat-lab-flag low">↓</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">PaCO₂</span><span class="cat-lab-val">52</span><span class="cat-lab-ref">35–45</span><span class="cat-lab-flag high">↑</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">PaO₂</span><span class="cat-lab-val">58</span><span class="cat-lab-ref">80–100</span><span class="cat-lab-flag crit">⚠ CRIT</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">SaO₂</span><span class="cat-lab-val">89%</span><span class="cat-lab-ref">95–100%</span><span class="cat-lab-flag crit">⚠ CRIT</span></div>
+        </div>
+        <div class="cat-lab-section">
+          <div class="cat-lab-section-title">CBC</div>
+          <div class="cat-lab-row"><span class="cat-lab-name">WBC</span><span class="cat-lab-val">14.2</span><span class="cat-lab-ref">4.5–11.0</span><span class="cat-lab-flag high">↑</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Hemoglobin</span><span class="cat-lab-val">10.8</span><span class="cat-lab-ref">12.0–16.0</span><span class="cat-lab-flag low">↓</span></div>
+          <div class="cat-lab-row"><span class="cat-lab-name">Neutrophils</span><span class="cat-lab-val">88%</span><span class="cat-lab-ref">50–70%</span><span class="cat-lab-flag high">↑</span></div>
+        </div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category"><span class="cat-q-cat-pill">Respiratory</span><span style="font-size:10px;font-weight:700;color:#60a5fa;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.22);padding:2px 8px;border-radius:5px;letter-spacing:.08em;text-transform:uppercase">SATA</span></div>
+            <span style="font-size:10.5px;color:var(--cat-subtle)">Q 2 of 6</span>
+          </div>
+          <p class="cat-stem">Based on <strong>Mrs. Park's current laboratory values and clinical presentation</strong>, which findings require <strong>priority nursing intervention</strong>? <strong>Select all that apply.</strong></p>
+          <div class="cat-options" role="group">
+            <label class="cat-option selected" style="cursor:pointer"><span class="cat-sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--cat-bg)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">A</span><span class="cat-opt-text">Critically low PaO₂ of 58 mmHg indicating respiratory failure requiring immediate oxygen titration</span></label>
+            <label class="cat-option selected" style="cursor:pointer"><span class="cat-sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--cat-bg)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">B</span><span class="cat-opt-text">Critical hypokalemia (K⁺ 3.1 mEq/L) with risk for cardiac dysrhythmia requiring immediate notification</span></label>
+            <label class="cat-option" style="cursor:pointer"><span class="cat-sata-check"></span><span class="cat-opt-letter">C</span><span class="cat-opt-text">Elevated WBC count indicating infection requiring blood culture collection prior to antibiotics</span></label>
+            <label class="cat-option" style="cursor:pointer"><span class="cat-sata-check"></span><span class="cat-opt-letter">D</span><span class="cat-opt-text">Elevated BUN/Creatinine suggesting dehydration requiring increased IV fluid rate</span></label>
+            <label class="cat-option" style="cursor:pointer"><span class="cat-sata-check"></span><span class="cat-opt-letter">E</span><span class="cat-opt-text">Hemoglobin 10.8 g/dL indicating anemia requiring urgent packed red blood cell transfusion</span></label>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div style="font-size:11px;color:var(--cat-muted)">2 selected · Select all that apply</div>
+    <div class="cat-bottom-right"><button class="cat-btn-primary">Next Question<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 10 · Blossom · MCQ Active -->
+<div class="frame" id="f9">
+<div class="cat-shell bl" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT Exam</span><span class="cat-tb-adaptive"><span class="cat-tb-adaptive-dot"></span>Adaptive</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Question 23</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span><div class="cat-tb-progress-wrap"><div class="cat-tb-progress-fill" style="width:30.6%"></div></div></div>
+    <div class="cat-tb-right">
+      <div class="cat-timer">00:42:15</div>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/></svg></button>
+      <button class="cat-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></button>
+      <div class="cat-tool-sep"></div>
+      <button class="cat-tb-exit">End Exam</button>
+    </div>
+  </header>
+  <div class="cat-body">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Item Type</div><div class="cat-rail-item-type">Single Best Answer</div><div class="cat-rail-item-desc">Select the one best response. Only one answer is accepted.</div></div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Category</div><div class="cat-rail-domain">Cardiovascular &amp; Oxygenation</div><div class="cat-rail-domain-meta">Physiological Integrity · Reduction of Risk</div></div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Instructions</div><div class="cat-rail-instruction"><p>Identify the priority action based on the ABCs and Maslow's hierarchy.</p></div></div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section"><div class="cat-rail-section-label">Adaptive</div><div class="cat-rail-tip"><span class="cat-rail-tag" style="margin-bottom:6px;display:inline-flex">⚡ Difficulty: Hard</span><br>Item selected based on your performance trajectory.</div></div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category">
+              <span class="cat-q-cat-pill">Cardiovascular</span>
+              <div class="cat-q-diff"><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip filled"></div><div class="cat-q-diff-pip empty"></div></div>
+            </div>
+            <button class="cat-flag-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cat-muted)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></button>
+          </div>
+          <p class="cat-stem">A <strong>68-year-old client</strong> is admitted to the cardiac step-down unit with an acute heart failure exacerbation. Current assessment: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema, and jugular venous distension. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="cat-options" role="radiogroup">
+            <button class="cat-option"><span class="cat-opt-letter">A</span><span class="cat-opt-text">Administer furosemide 40 mg IV as ordered to address acute volume overload</span></button>
+            <button class="cat-option selected"><span class="cat-opt-letter">B</span><span class="cat-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span></button>
+            <button class="cat-option"><span class="cat-opt-letter">C</span><span class="cat-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+            <button class="cat-option"><span class="cat-opt-letter">D</span><span class="cat-opt-text">Increase the IV infusion rate to 125 mL/hr to maintain adequate preload and cardiac output</span></button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div class="cat-kb-hint"><span class="cat-kbd">A–D</span>&nbsp;to select&nbsp;·&nbsp;<span class="cat-kbd">Enter</span>&nbsp;to submit</div>
+    <div class="cat-bottom-right"><button class="cat-btn-flag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Mark for Review</button><button class="cat-btn-primary">Submit Answer<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 11 · Blossom · Review Mode -->
+<div class="frame" id="f10">
+<div class="cat-shell bl" style="height:900px">
+  <header class="cat-topbar">
+    <div class="cat-tb-left"><span class="cat-tb-brand">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip" style="background:rgba(22,163,74,.12);border-color:rgba(22,163,74,.25);color:#166534">Review Mode</span></div>
+    <div class="cat-tb-center"><span class="cat-tb-qcount">Question 23</span><span class="cat-tb-qdivider"> of </span><span class="cat-tb-qcount" style="color:var(--cat-muted)">75</span></div>
+    <div class="cat-tb-right"><div class="cat-timer" style="color:var(--cat-muted);font-size:11px;border:none;background:none;padding:0">Reviewed · May 17</div><button class="cat-tb-exit">Exit Review</button></div>
+  </header>
+  <div class="cat-body">
+    <aside class="cat-rail">
+      <div class="cat-rail-inner">
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Your Answer</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--cat-selected-bg);border:1.5px solid var(--cat-selected-border);border-radius:9px;margin-bottom:8px"><span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg);flex-shrink:0">B</span><span style="font-size:12px;color:var(--cat-text-primary);font-weight:600">High-Fowler's + O₂</span></div>
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--cat-success-bg);border:1.5px solid var(--cat-success-border);border-radius:9px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cat-success)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg><span style="font-size:11.5px;color:var(--cat-success);font-weight:700">Correct</span></div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section">
+          <div class="cat-rail-section-label">Clinical Rationale</div>
+          <div class="cat-rail-instruction"><p>In acute HF exacerbation with SpO₂ 92%, positioning and oxygenation are immediate priorities. High-Fowler's reduces venous return; O₂ addresses the hypoxemia.</p><p style="margin-top:8px;padding-top:8px;border-top:1px solid var(--cat-divider)"><strong>Why not A?</strong> Furosemide is appropriate but follows stabilizing oxygenation.</p></div>
+        </div>
+        <div class="cat-rail-divider"></div>
+        <div class="cat-rail-section"><div class="cat-rail-section-label">NCLEX Strategy</div><div class="cat-rail-tip">ABCs: Airway → Breathing first. Position and oxygen before pharmacological intervention.</div></div>
+      </div>
+    </aside>
+    <main class="cat-main">
+      <div class="cat-question-wrap">
+        <div class="cat-q-card">
+          <div class="cat-q-head">
+            <div class="cat-q-category"><span class="cat-q-cat-pill">Cardiovascular</span><div style="font-size:10.5px;color:var(--cat-success);font-weight:600;display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>Correct</div></div>
+            <span style="font-size:10.5px;color:var(--cat-subtle)">Item 23 · Hard</span>
+          </div>
+          <p class="cat-stem">A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92%, bilateral crackles, 2+ pitting edema. <strong>Which action should the nurse implement FIRST?</strong></p>
+          <div class="cat-options">
+            <button class="cat-option dim" disabled><span class="cat-opt-letter">A</span><span class="cat-opt-text">Administer furosemide 40 mg IV as ordered to address acute volume overload</span></button>
+            <button class="cat-option correct" disabled><span class="cat-opt-letter">B</span><span class="cat-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cat-success)" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></button>
+            <button class="cat-option dim" disabled><span class="cat-opt-letter">C</span><span class="cat-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm prior to provider callback</span></button>
+            <button class="cat-option dim" disabled><span class="cat-opt-letter">D</span><span class="cat-opt-text">Increase the IV infusion rate to maintain adequate preload and cardiac output</span></button>
+          </div>
+          <div class="cat-review-answer-key"><div class="cat-review-answer-key-label">Why B is Correct</div><div class="cat-review-answer-key-text">SpO₂ 92% requires immediate oxygenation. High-Fowler's positioning reduces venous return and relieves pulmonary congestion. Priority: airway and breathing before pharmacology.</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="cat-bottom">
+    <div class="cat-bottom-left"><button class="cat-btn-ghost"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Previous</button></div>
+    <div style="font-size:11px;color:var(--cat-muted)">Session reviewed · 75 questions</div>
+    <div class="cat-bottom-right"><button class="cat-btn-primary">Next Question<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button></div>
+  </footer>
+</div>
+</div>
+
+<!-- FRAMES 12-15 · Mobile Screens (390×844) -->
+
+<!-- FRAME 12 · Ocean Mobile · MCQ Active -->
+<div class="frame mobile-frame" id="f11">
+<div class="cat-shell oc mobile-shell" style="height:844px;width:390px">
+  <header class="cat-topbar" style="height:44px;padding:0 12px">
+    <div class="cat-tb-left" style="min-width:0;gap:6px"><span class="cat-tb-brand" style="font-size:12.5px">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT</span></div>
+    <div class="cat-tb-center" style="gap:6px"><span class="cat-tb-qcount" style="font-size:12px">Q23</span><div class="cat-tb-progress-wrap" style="width:70px"><div class="cat-tb-progress-fill" style="width:30.6%"></div></div><span class="cat-tb-qcount" style="color:var(--cat-muted);font-size:12px">75</span></div>
+    <div class="cat-tb-right" style="min-width:0;gap:4px"><div class="cat-timer" style="font-size:12.5px;padding:4px 8px">42:15</div></div>
+  </header>
+
+  <!-- Context strip (collapsed rail) -->
+  <div style="background:var(--cat-panel);border-bottom:1px solid var(--cat-border);padding:7px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <span style="font-size:9.5px;font-weight:700;color:var(--cat-chip-fg);background:var(--cat-chip-bg);border:1px solid var(--cat-chip-border);padding:2px 7px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">Cardiovascular</span>
+    <span style="font-size:9.5px;color:var(--cat-muted)">Single Best Answer</span>
+    <span style="margin-left:auto;font-size:9.5px;font-weight:600;color:var(--cat-accent-deep)">Hard · ⚡ Adaptive</span>
+  </div>
+
+  <!-- Scroll area -->
+  <div style="flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:12px;height:calc(844px - 44px - 38px - 56px)">
+    <div class="cat-q-card" style="padding:16px 14px">
+      <p class="cat-stem" style="font-size:14.5px;line-height:1.72">A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92% on room air, bilateral crackles, 2+ pitting edema. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="cat-options" role="radiogroup" style="margin-top:16px;gap:7px">
+        <button class="cat-option" style="padding:13px 14px"><span class="cat-opt-letter">A</span><span class="cat-opt-text" style="font-size:13px">Administer furosemide 40 mg IV stat for acute volume overload</span></button>
+        <button class="cat-option selected" style="padding:13px 14px"><span class="cat-opt-letter">B</span><span class="cat-opt-text" style="font-size:13px">Position in high-Fowler's and apply supplemental O₂ at 2–4 L/min via nasal cannula</span></button>
+        <button class="cat-option" style="padding:13px 14px"><span class="cat-opt-letter">C</span><span class="cat-opt-text" style="font-size:13px">Obtain 12-lead ECG and document cardiac rhythm for provider</span></button>
+        <button class="cat-option" style="padding:13px 14px"><span class="cat-opt-letter">D</span><span class="cat-opt-text" style="font-size:13px">Increase IV fluid rate to 125 mL/hr to maintain preload</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky bottom -->
+  <footer style="height:56px;background:var(--cat-bottom-bg);border-top:1px solid var(--cat-bottom-border);box-shadow:var(--cat-shadow-bottom);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+    <button class="cat-btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+    <button class="cat-btn-flag" style="flex:1;font-size:12px;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button>
+    <button class="cat-btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px 12px">Submit Answer</button>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 13 · Ocean Mobile · SATA -->
+<div class="frame mobile-frame" id="f12">
+<div class="cat-shell oc mobile-shell" style="height:844px;width:390px">
+  <header class="cat-topbar" style="height:44px;padding:0 12px">
+    <div class="cat-tb-left" style="min-width:0;gap:6px"><span class="cat-tb-brand" style="font-size:12.5px">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT</span></div>
+    <div class="cat-tb-center" style="gap:6px"><span class="cat-tb-qcount" style="font-size:12px">Q31</span><div class="cat-tb-progress-wrap" style="width:70px"><div class="cat-tb-progress-fill" style="width:41.3%"></div></div><span class="cat-tb-qcount" style="color:var(--cat-muted);font-size:12px">75</span></div>
+    <div class="cat-tb-right" style="min-width:0;gap:4px"><div class="cat-timer" style="font-size:12.5px;padding:4px 8px">29:04</div></div>
+  </header>
+  <div style="background:var(--cat-panel);border-bottom:1px solid var(--cat-border);padding:7px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <span style="font-size:9.5px;font-weight:700;color:var(--cat-chip-fg);background:var(--cat-chip-bg);border:1px solid var(--cat-chip-border);padding:2px 7px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">Respiratory</span>
+    <span style="font-size:9.5px;font-weight:700;color:#6d28d9;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:2px 7px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">SATA</span>
+    <span style="margin-left:auto;font-size:9.5px;color:var(--cat-accent-deep);font-weight:600">2 selected</span>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:14px 12px;height:calc(844px - 44px - 38px - 56px)">
+    <div class="cat-q-card" style="padding:16px 14px">
+      <p class="cat-stem" style="font-size:14.5px;line-height:1.72">A client with community-acquired pneumonia has SpO₂ 91% on 4L NC, T 38.9°C, RR 24. Which nursing interventions are appropriate? <strong>Select all that apply.</strong></p>
+      <div class="cat-options" role="group" style="margin-top:16px;gap:7px">
+        <label class="cat-option selected" style="cursor:pointer;padding:12px 14px"><span class="cat-sata-check" style="width:16px;height:16px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">A</span><span class="cat-opt-text" style="font-size:13px">Elevate head of bed to 45° to optimize lung expansion</span></label>
+        <label class="cat-option" style="cursor:pointer;padding:12px 14px"><span class="cat-sata-check" style="width:16px;height:16px"></span><span class="cat-opt-letter">B</span><span class="cat-opt-text" style="font-size:13px">Apply non-rebreather mask at 15 L/min immediately</span></label>
+        <label class="cat-option selected" style="cursor:pointer;padding:12px 14px"><span class="cat-sata-check" style="width:16px;height:16px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span><span class="cat-opt-letter" style="background:var(--cat-letter-sel-bg);color:var(--cat-letter-sel-fg)">C</span><span class="cat-opt-text" style="font-size:13px">Encourage fluid intake 2–3 L/day to thin secretions</span></label>
+        <label class="cat-option" style="cursor:pointer;padding:12px 14px"><span class="cat-sata-check" style="width:16px;height:16px"></span><span class="cat-opt-letter">D</span><span class="cat-opt-text" style="font-size:13px">Administer acetaminophen 650 mg PO PRN for fever</span></label>
+        <label class="cat-option" style="cursor:pointer;padding:12px 14px"><span class="cat-sata-check" style="width:16px;height:16px"></span><span class="cat-opt-letter">E</span><span class="cat-opt-text" style="font-size:13px">Notify provider and prepare for intubation immediately</span></label>
+      </div>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--cat-bottom-bg);border-top:1px solid var(--cat-bottom-border);box-shadow:var(--cat-shadow-bottom);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+    <button class="cat-btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+    <button class="cat-btn-flag" style="flex:1;font-size:12px;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button>
+    <button class="cat-btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px 12px">Submit Answer</button>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 14 · Midnight Mobile · MCQ -->
+<div class="frame mobile-frame" id="f13">
+<div class="cat-shell mn mobile-shell" style="height:844px;width:390px">
+  <header class="cat-topbar" style="height:44px;padding:0 12px">
+    <div class="cat-tb-left" style="min-width:0;gap:6px"><span class="cat-tb-brand" style="font-size:12.5px">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT</span></div>
+    <div class="cat-tb-center" style="gap:6px"><span class="cat-tb-qcount" style="font-size:12px">Q23</span><div class="cat-tb-progress-wrap" style="width:70px"><div class="cat-tb-progress-fill" style="width:30.6%"></div></div><span class="cat-tb-qcount" style="color:var(--cat-muted);font-size:12px">75</span></div>
+    <div class="cat-tb-right" style="min-width:0;gap:4px"><div class="cat-timer" style="font-size:12.5px;padding:4px 8px">42:15</div></div>
+  </header>
+  <div style="background:var(--cat-panel);border-bottom:1px solid var(--cat-border);padding:7px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <span style="font-size:9.5px;font-weight:700;color:var(--cat-chip-fg);background:var(--cat-chip-bg);border:1px solid var(--cat-chip-border);padding:2px 7px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase">Cardiovascular</span>
+    <span style="margin-left:auto;font-size:9.5px;font-weight:600;color:var(--cat-accent)">Hard · ⚡ Adaptive</span>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:14px 12px;height:calc(844px - 44px - 38px - 56px)">
+    <div class="cat-q-card" style="padding:16px 14px">
+      <p class="cat-stem" style="font-size:14.5px;line-height:1.72">A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment: HR 104, BP 158/92, SpO₂ 92% on room air, bilateral crackles, 2+ pitting edema. <strong>Which action should the nurse implement FIRST?</strong></p>
+      <div class="cat-options" role="radiogroup" style="margin-top:16px;gap:7px">
+        <button class="cat-option" style="padding:13px 14px"><span class="cat-opt-letter">A</span><span class="cat-opt-text" style="font-size:13px">Administer furosemide 40 mg IV stat for acute volume overload</span></button>
+        <button class="cat-option selected" style="padding:13px 14px"><span class="cat-opt-letter">B</span><span class="cat-opt-text" style="font-size:13px">Position in high-Fowler's and apply supplemental O₂ at 2–4 L/min via nasal cannula</span></button>
+        <button class="cat-option" style="padding:13px 14px"><span class="cat-opt-letter">C</span><span class="cat-opt-text" style="font-size:13px">Obtain 12-lead ECG and document cardiac rhythm for provider</span></button>
+        <button class="cat-option" style="padding:13px 14px"><span class="cat-opt-letter">D</span><span class="cat-opt-text" style="font-size:13px">Increase IV fluid rate to 125 mL/hr to maintain preload</span></button>
+      </div>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--cat-bottom-bg);border-top:1px solid var(--cat-bottom-border);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+    <button class="cat-btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+    <button class="cat-btn-flag" style="flex:1;font-size:12px;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Flag</button>
+    <button class="cat-btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px 12px">Submit Answer</button>
+  </footer>
+</div>
+</div>
+
+<!-- FRAME 15 · Ocean Mobile · Bowtie (stacked) -->
+<div class="frame mobile-frame" id="f14">
+<div class="cat-shell oc mobile-shell" style="height:844px;width:390px">
+  <header class="cat-topbar" style="height:44px;padding:0 12px">
+    <div class="cat-tb-left" style="min-width:0;gap:6px"><span class="cat-tb-brand" style="font-size:12.5px">Nurse<span class="cat-tb-brand-dot">Nest</span></span><span class="cat-tb-chip">CAT</span><span class="cat-tb-chip" style="background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.25);color:#0f766e">Bowtie</span></div>
+    <div class="cat-tb-right" style="min-width:0;gap:4px"><div class="cat-timer" style="font-size:12.5px;padding:4px 8px">28:04</div></div>
+  </header>
+
+  <div style="flex:1;overflow-y:auto;padding:12px;height:calc(844px - 44px - 56px)">
+    <!-- Scenario card -->
+    <div class="cat-bowtie-scenario" style="margin-bottom:12px;text-align:left">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div class="cat-bowtie-patient-avatar" style="width:40px;height:40px;font-size:14px;margin:0;flex-shrink:0">RC</div>
+        <div><div class="cat-bowtie-patient-name" style="font-size:13px">Mr. Robert Chen</div><div class="cat-bowtie-patient-meta" style="font-size:10.5px">82M · CVICU · Post-op Day 2 · Acute decompensated HF</div></div>
+      </div>
+      <div class="cat-bowtie-vitals"><span class="cat-vital-chip crit">HR 112 ↑</span><span class="cat-vital-chip crit">SpO₂ 90% ↓</span><span class="cat-vital-chip crit">BP 162/98 ↑</span><span class="cat-vital-chip">RR 22</span><span class="cat-vital-chip crit">+3.2 kg ↑</span></div>
+    </div>
+
+    <!-- Actions slots -->
+    <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cat-chip-fg);background:var(--cat-chip-bg);border:1px solid var(--cat-chip-border);border-radius:6px;padding:4px 10px;margin-bottom:8px;text-align:center">Actions to Take (2)</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+      <div class="cat-bowtie-slot filled" style="padding:10px 12px"><span class="cat-bowtie-slot-num">1</span><span class="cat-bowtie-slot-text" style="font-size:12.5px">Elevate head of bed to 30–45°</span><button class="cat-bowtie-remove" style="font-size:10px">Remove</button></div>
+      <div class="cat-bowtie-slot filled" style="padding:10px 12px"><span class="cat-bowtie-slot-num">2</span><span class="cat-bowtie-slot-text" style="font-size:12.5px">Administer IV furosemide as ordered</span><button class="cat-bowtie-remove" style="font-size:10px">Remove</button></div>
+    </div>
+
+    <!-- Parameter slots -->
+    <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0f766e;background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.25);border-radius:6px;padding:4px 10px;margin-bottom:8px;text-align:center">Parameters to Monitor (2)</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+      <div class="cat-bowtie-slot filled" style="border-color:rgba(13,148,136,.45);background:rgba(13,148,136,.06);padding:10px 12px"><span class="cat-bowtie-slot-num" style="background:rgba(13,148,136,.15);color:#0f766e">1</span><span class="cat-bowtie-slot-text" style="font-size:12.5px">Urinary output hourly (goal &gt;30 mL/hr)</span><button class="cat-bowtie-remove" style="color:#0f766e;font-size:10px">Remove</button></div>
+      <div class="cat-bowtie-slot filled" style="border-color:rgba(13,148,136,.45);background:rgba(13,148,136,.06);padding:10px 12px"><span class="cat-bowtie-slot-num" style="background:rgba(13,148,136,.15);color:#0f766e">2</span><span class="cat-bowtie-slot-text" style="font-size:12.5px">SpO₂ and breath sounds q2h</span><button class="cat-bowtie-remove" style="color:#0f766e;font-size:10px">Remove</button></div>
+    </div>
+
+    <!-- Option bank -->
+    <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cat-subtle);margin-bottom:8px;text-align:center">Option Bank</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <button class="cat-bank-pill placed" style="font-size:12px;padding:7px 11px">Elevate head of bed to 30–45°</button>
+      <button class="cat-bank-pill placed" style="font-size:12px;padding:7px 11px">Administer IV furosemide</button>
+      <button class="cat-bank-pill" style="font-size:12px;padding:7px 11px">Administer 500 mL NS bolus</button>
+      <button class="cat-bank-pill placed" style="font-size:12px;padding:7px 11px">Urinary output hourly</button>
+      <button class="cat-bank-pill placed" style="font-size:12px;padding:7px 11px">SpO₂ and breath sounds q2h</button>
+      <button class="cat-bank-pill" style="font-size:12px;padding:7px 11px">Trendelenburg position</button>
+    </div>
+  </div>
+  <footer style="height:56px;background:var(--cat-bottom-bg);border-top:1px solid var(--cat-bottom-border);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0">
+    <button class="cat-btn-ghost" style="padding:8px 12px;font-size:12px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+    <div style="flex:1;font-size:11px;color:var(--cat-success);font-weight:600;text-align:center">✓ All 4 filled</div>
+    <button class="cat-btn-primary" style="flex:2;justify-content:center;font-size:12.5px;padding:9px 12px">Submit</button>
+  </footer>
+</div>
+</div>
+
+<script>
+const frames=document.querySelectorAll('.frame'),tabs=document.querySelectorAll('.tab');
+function show(i){frames.forEach((f,j)=>{f.classList.toggle('on',j===i)});tabs.forEach((t,j)=>{t.classList.toggle('on',j===i)});window.scrollTo({top:0,behavior:'instant'})}
+function selectOpt(el){el.closest('.cat-options').querySelectorAll('.cat-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected')}
+(function(){const p=new URLSearchParams(location.search).get('frame');if(p!==null){const n=parseInt(p,10);if(!isNaN(n))show(n);}})();
+</script>
+</body>
+</html>

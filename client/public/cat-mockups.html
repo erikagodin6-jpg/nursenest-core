@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAT Exam Landing — 15 Layout Mockups | NurseNest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --f:'DM Sans',system-ui,sans-serif;
+  --blue:#1aaee0;--blue-soft:#e6f7fc;--blue-mid:#d9f3fa;--blue-deep:#0a4f72;--blue-dark:#0d7aaa;
+  --ink:#0f172a;--body:#455569;--muted:#647894;--subtle:#94a3b8;
+  --page:#f3f8fc;--card:#fff;--cb:#d0e8f5;
+  --green:#16a34a;--green-s:#f0fdf4;--green-b:#bbf7d0;
+  --rose:#e11d48;--rose-s:#fff1f2;
+  --amber:#d97706;--amber-s:#fffbeb;--amber-b:#fde68a;
+  --purple:#7c3aed;--purple-s:#f5f0fe;--purple-b:#ddd6fe;
+  --teal:#0d9488;--teal-s:#f0fdfa;--teal-b:#99f6e4;
+  --r:.75rem;--rl:1rem;--rxl:1.25rem;
+  --sh:0 1px 3px rgba(15,23,42,.06),0 8px 24px -12px rgba(15,23,42,.1);
+  --shl:0 4px 20px -6px rgba(15,23,42,.14),0 1px 4px rgba(15,23,42,.06);
+}
+
+body{font-family:var(--f);background:#1e293b;-webkit-font-smoothing:antialiased}
+
+/* ── Showcase chrome ── */
+.chrome-top{background:#0f172a;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:12px;font-weight:600;color:#e2e8f0;letter-spacing:.04em;text-transform:uppercase}
+.chrome-sub{font-size:11px;color:#475569}
+
+.tabs{background:#1e293b;padding:0 24px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;position:sticky;top:49px;z-index:199;padding-top:10px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 16px 10px;font-size:11.5px;font-weight:500;color:#64748b;border-radius:8px 8px 0 0;cursor:pointer;white-space:nowrap;transition:.15s;font-family:var(--f);background:transparent;border:none}
+.tab:hover{color:#cbd5e1;background:#334155}
+.tab.on{color:#1aaee0;background:white;font-weight:600}
+
+.frame{background:white;min-height:100vh;display:none}
+.frame.on{display:block}
+
+/* ── Shared nav placeholder ── */
+.nav{height:56px;background:white;border-bottom:1px solid var(--cb);display:flex;align-items:center;padding:0 40px;gap:24px}
+.nav-logo{font-size:17px;font-weight:800;color:var(--blue);letter-spacing:-.01em}
+.nav-links{display:flex;gap:4px;margin-left:auto}
+.nav-link{font-size:13px;color:var(--muted);padding:6px 12px;border-radius:8px;font-weight:500}
+.nav-cta{font-size:13px;font-weight:600;color:white;background:var(--blue);padding:7px 16px;border-radius:8px;margin-left:8px}
+.nav-note{margin-left:auto;font-size:10.5px;background:var(--amber-s);border:1px solid var(--amber-b);color:#92400e;padding:3px 10px;border-radius:99px;font-weight:500}
+
+/* ── Question card shared ── */
+.qc{background:white;border:1px solid var(--cb);border-radius:var(--rxl);box-shadow:var(--shl);padding:24px}
+.qbadge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-dark);background:var(--blue-soft);padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:12px}
+.qstem{font-size:14px;line-height:1.65;color:var(--ink);margin-bottom:14px}
+.qstem strong{font-weight:700}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border:1.5px solid var(--cb);border-radius:8px;font-size:13px;color:var(--body);cursor:pointer}
+.qopt.ok{border-color:var(--green);background:var(--green-s);color:#166534;font-weight:500}
+.ql{font-size:10.5px;font-weight:700;min-width:20px;height:20px;border-radius:5px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0}
+.qopt.ok .ql{background:var(--green);color:white}
+.qrat{margin-top:12px;padding:10px 12px;background:#f8fafc;border-left:3px solid var(--green);border-radius:0 7px 7px 0;font-size:12.5px;color:var(--body);line-height:1.6}
+.qrat strong{color:var(--ink)}
+.qfoot{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--cb);font-size:11.5px;color:var(--subtle)}
+.qnxt{color:var(--blue-dark);font-weight:600;font-family:var(--f);font-size:11.5px;background:none;border:none;cursor:pointer}
+
+/* ── Shared buttons ── */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--f);font-size:14px;font-weight:600;padding:12px 22px;border-radius:var(--rl);text-decoration:none;border:none;cursor:pointer}
+.btn-blue{background:var(--blue);color:white;box-shadow:0 1px 4px rgba(26,174,224,.3)}
+.btn-dark{background:var(--ink);color:white}
+.btn-out{background:transparent;color:var(--muted);border:1px solid var(--cb)}
+.btn-white{background:white;color:var(--ink);box-shadow:var(--sh)}
+.btn-green{background:var(--green);color:white}
+
+/* ── Section helpers ── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dark);display:inline-flex;align-items:center;gap:6px;margin-bottom:14px}
+.h1{font-size:50px;font-weight:800;line-height:1.08;letter-spacing:-.025em;color:var(--ink)}
+.h2{font-size:36px;font-weight:800;line-height:1.12;letter-spacing:-.02em;color:var(--ink)}
+.h3{font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.lead{font-size:17px;line-height:1.7;color:var(--body);max-width:520px}
+.sub{font-size:15px;line-height:1.7;color:var(--body)}
+
+/* ── Stat strip ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--cb);border-bottom:1px solid var(--cb)}
+.stat{padding:28px 24px;text-align:center;border-right:1px solid var(--cb)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:38px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1}
+.stat-n span{color:var(--blue)}
+.stat-l{font-size:12.5px;color:var(--muted);margin-top:5px}
+
+/* ── Feature cards ── */
+.fc{padding:24px;border:1px solid var(--cb);border-radius:var(--rl);background:white}
+.fc-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:20px}
+.fc-t{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.fc-d{font-size:13.5px;color:var(--body);line-height:1.65}
+
+/* ── Domain chip ── */
+.domain{padding:12px 16px;border:1px solid var(--cb);border-radius:10px;background:white;cursor:pointer;transition:.15s}
+.domain:hover{border-color:var(--blue);background:var(--blue-soft)}
+.dt{font-size:13px;font-weight:600;color:var(--ink)}
+.dp{font-size:11px;color:var(--muted);margin-top:2px}
+.dbar{height:3px;border-radius:99px;background:var(--cb);margin-top:10px;overflow:hidden}
+.dfill{height:100%;border-radius:99px;background:var(--blue)}
+
+/* ── Tag ── */
+.tag{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:99px;display:inline-block}
+.tag-blue{background:var(--blue-soft);color:var(--blue-dark)}
+.tag-green{background:var(--green-s);color:#166534}
+.tag-purple{background:var(--purple-s);color:#5b21b6}
+.tag-amber{background:var(--amber-s);color:#92400e}
+
+/* ── CTA footer ── */
+.cta-footer{background:var(--ink);padding:64px 40px;text-align:center}
+.cta-footer h2{font-size:36px;font-weight:800;color:white;letter-spacing:-.02em;margin-bottom:10px}
+.cta-footer p{font-size:16px;color:#64748b;margin-bottom:28px}
+</style>
+</head>
+<body>
+
+<div class="chrome-top">
+  <span class="chrome-title">NurseNest · CAT Exam Hub — 15 Layout Mockups</span>
+  <span class="chrome-sub">Your existing nav is preserved in every design · Click tabs to compare</span>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="show(0)">A · Sky Split</button>
+  <button class="tab" onclick="show(1)">B · Centered</button>
+  <button class="tab" onclick="show(2)">C · Navy Hero</button>
+  <button class="tab" onclick="show(3)">D · Ocean Wash</button>
+  <button class="tab" onclick="show(4)">E · Question First</button>
+  <button class="tab" onclick="show(5)">F · Bento Grid</button>
+  <button class="tab" onclick="show(6)">G · Warm Cream</button>
+  <button class="tab" onclick="show(7)">H · Deep Teal</button>
+  <button class="tab" onclick="show(8)">I · Bold Type</button>
+  <button class="tab" onclick="show(9)">J · Domain Map</button>
+  <button class="tab" onclick="show(10)">K · Green Pass</button>
+  <button class="tab" onclick="show(11)">L · Slate Pro</button>
+  <button class="tab" onclick="show(12)">M · Diagonal</button>
+  <button class="tab" onclick="show(13)">N · Purple Focus</button>
+  <button class="tab" onclick="show(14)">O · Score First</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     A · SKY SPLIT  — 2-col, white bg, question card right
+════════════════════════════════════════════════════════════ -->
+<div class="frame on">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <!-- Hero -->
+  <section style="padding:72px 0 64px;background:#fff">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 460px;gap:64px;align-items:center">
+      <div>
+        <span class="eyebrow">🎯 NCLEX · Computerized Adaptive Testing</span>
+        <h1 class="h1" style="margin-bottom:20px">Practice questions<br>that think like<br><span style="color:var(--blue)">NCLEX does.</span></h1>
+        <p class="lead" style="margin-bottom:32px">Our adaptive engine adjusts difficulty with every answer — exactly the way the real exam works. No static lists. No guesswork.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <a class="btn btn-blue">Start practising free →</a>
+          <a class="btn btn-out">How CAT scoring works</a>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:20px;font-size:12.5px;color:var(--subtle)">
+          <span>✓ 2,400+ adaptive questions</span>
+          <span>✓ All 8 NCLEX domains</span>
+          <span>✓ No card required</span>
+        </div>
+      </div>
+      <div class="qc">
+        <span class="qbadge">Adaptive · Management of Care · Lvl ●●●○○</span>
+        <p class="qstem">A nurse is caring for a client 6 hr post-op abdominal surgery. Pain 7/10, dressing has 4 cm serosanguineous area. Which action should the nurse take <strong>first</strong>?</p>
+        <div class="qopts">
+          <div class="qopt"><span class="ql">A</span><span>Administer the prescribed PRN analgesic</span></div>
+          <div class="qopt"><span class="ql">B</span><span>Reinforce the dressing and reassess in 30 min</span></div>
+          <div class="qopt ok"><span class="ql">C</span><span>Assess wound and notify surgeon of findings</span></div>
+          <div class="qopt"><span class="ql">D</span><span>Reposition to reduce wound tension</span></div>
+        </div>
+        <div class="qrat"><strong>Rationale:</strong> Assessment before intervention — the nurse must evaluate drainage character and notify the surgeon before any PRN or position change.</div>
+        <div class="qfoot"><span>Question 14 of 75 · Difficulty adjusting ↑</span><button class="qnxt">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="wrap"><div class="stats">
+    <div class="stat"><div class="stat-n">2,400<span>+</span></div><div class="stat-l">Adaptive questions</div></div>
+    <div class="stat"><div class="stat-n">94<span>%</span></div><div class="stat-l">First-attempt pass rate</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">NCLEX domains</div></div>
+    <div class="stat"><div class="stat-n">75<span>–145</span></div><div class="stat-l">Real question range</div></div>
+  </div></div>
+
+  <!-- Features -->
+  <section style="padding:64px 0;background:var(--page)">
+    <div class="wrap">
+      <p class="eyebrow">Why NurseNest CAT</p>
+      <h2 class="h2" style="margin-bottom:8px">Built around how NCLEX<br>actually scores you</h2>
+      <p class="sub" style="margin-bottom:40px;max-width:480px">Not a static bank — a live engine that mirrors NCLEX-RN and NCLEX-PN's adaptive algorithm, question by question.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc"><div class="fc-ico" style="background:var(--blue-soft)">🔄</div><div class="fc-t">True adaptive difficulty</div><p class="fc-d">Every correct or incorrect answer immediately adjusts the next question's difficulty, replicating NCLEX's scoring algorithm.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--green-s)">📋</div><div class="fc-t">NGN formats included</div><p class="fc-d">Bow-tie, matrix grids, extended drag-and-drop — every next-gen NCLEX item type, fully functional.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--purple-s)">🧠</div><div class="fc-t">Deep clinical rationale</div><p class="fc-d">Every question explains the nursing process behind the answer, not just which option is correct.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--amber-s)">📊</div><div class="fc-t">Domain gap tracking</div><p class="fc-d">See your readiness score across all 8 NCLEX domains, updated live after every session.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--teal-s)">🇨🇦</div><div class="fc-t">Canadian-aligned</div><p class="fc-d">Calibrated for both NCLEX-RN and NCLEX-PN in Canada, with Canadian drug names and clinical context.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:#fdf4ff">⚡</div><div class="fc-t">Timed simulations</div><p class="fc-d">Full 75–145 question simulations with real time pressure so you build pacing alongside clinical knowledge.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Ready when you are.</h2><p>No credit card. Start in 60 seconds.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     B · CENTERED — clean centered, stat strip, domain grid
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:88px 40px 72px;text-align:center;background:white">
+    <span class="tag tag-blue" style="margin-bottom:20px">NCLEX · CAT Exam Prep</span>
+    <h1 class="h1" style="max-width:720px;margin:0 auto 20px">The adaptive question bank<br>built for how NCLEX scores you</h1>
+    <p class="lead" style="text-align:center;margin:0 auto 36px">Questions that respond to your level in real time. No static lists, no wasted practice — only what moves your readiness score forward.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn btn-blue">Start practising free →</a>
+      <a class="btn btn-out">See a sample question</a>
+    </div>
+    <p style="margin-top:20px;font-size:12px;color:var(--subtle)">Trusted by 40,000+ nursing students across Canada and the US</p>
+  </section>
+
+  <div style="background:white"><div class="wrap"><div class="stats">
+    <div class="stat"><div class="stat-n">2,400<span>+</span></div><div class="stat-l">Adaptive questions</div></div>
+    <div class="stat"><div class="stat-n">94<span>%</span></div><div class="stat-l">First-attempt pass rate</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">NCLEX domains covered</div></div>
+    <div class="stat"><div class="stat-n">≤ 30<span>s</span></div><div class="stat-l">Average time per question</div></div>
+  </div></div></div>
+
+  <section style="padding:64px 0;background:var(--page)">
+    <div class="wrap">
+      <p class="eyebrow" style="justify-content:center">All 8 NCLEX-RN Domains</p>
+      <h2 class="h2" style="text-align:center;margin-bottom:36px">Practise every domain.<br>Know exactly where you stand.</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div class="domain"><div class="dt">Management of Care</div><div class="dp">17–23% of NCLEX</div><div class="dbar"><div class="dfill" style="width:78%"></div></div></div>
+        <div class="domain"><div class="dt">Safety & Infection</div><div class="dp">9–15% of NCLEX</div><div class="dbar"><div class="dfill" style="width:64%"></div></div></div>
+        <div class="domain"><div class="dt">Health Promotion</div><div class="dp">6–12% of NCLEX</div><div class="dbar"><div class="dfill" style="width:55%"></div></div></div>
+        <div class="domain"><div class="dt">Psychosocial Integrity</div><div class="dp">6–12% of NCLEX</div><div class="dbar"><div class="dfill" style="width:70%"></div></div></div>
+        <div class="domain"><div class="dt">Basic Care & Comfort</div><div class="dp">6–12% of NCLEX</div><div class="dbar"><div class="dfill" style="width:61%"></div></div></div>
+        <div class="domain"><div class="dt">Pharmacology</div><div class="dp">11–17% of NCLEX</div><div class="dbar"><div class="dfill" style="width:43%"></div></div></div>
+        <div class="domain"><div class="dt">Reduction of Risk</div><div class="dp">9–15% of NCLEX</div><div class="dbar"><div class="dfill" style="width:57%"></div></div></div>
+        <div class="domain"><div class="dt">Physiological Adaptation</div><div class="dp">11–17% of NCLEX</div><div class="dbar"><div class="dfill" style="width:49%"></div></div></div>
+      </div>
+      <p style="margin-top:16px;font-size:12px;color:var(--subtle);text-align:center">Progress bars reflect your readiness after signing in — demo data shown</p>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Pick up where UWorld left off.</h2><p>More adaptive. More Canadian. Free to start.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     C · NAVY HERO — dark authoritative hero, bright body
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="background:var(--ink);padding:80px 40px 72px">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center">
+      <div>
+        <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);background:rgba(26,174,224,.15);padding:4px 12px;border-radius:99px;display:inline-block;margin-bottom:20px">NCLEX CAT Prep</span>
+        <h1 style="font-size:52px;font-weight:800;color:white;line-height:1.07;letter-spacing:-.025em;margin-bottom:20px">Harder questions<br>mean you're winning.<br><span style="color:var(--blue)">Keep going.</span></h1>
+        <p style="font-size:17px;line-height:1.7;color:#94a3b8;max-width:480px;margin-bottom:36px">NCLEX gets harder as you answer correctly. Our adaptive engine works the same way, so harder questions on test day feel like home.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-blue">Start practising free →</a>
+          <a class="btn" style="background:rgba(255,255,255,.08);color:#e2e8f0;border:1px solid rgba(255,255,255,.12)">See a sample question</a>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:24px">
+          <div style="font-size:30px;font-weight:800;color:white">94<span style="color:var(--blue)">%</span><div style="font-size:12px;color:#64748b;font-weight:400">pass rate</div></div>
+          <div style="font-size:30px;font-weight:800;color:white">2,400<span style="color:var(--blue)">+</span><div style="font-size:12px;color:#64748b;font-weight:400">questions</div></div>
+          <div style="font-size:30px;font-weight:800;color:white">8<div style="font-size:12px;color:#64748b;font-weight:400">domains</div></div>
+        </div>
+      </div>
+      <div class="qc">
+        <span class="qbadge">Pharmacology · Difficulty ●●●●○</span>
+        <p class="qstem">A client taking warfarin reports eating large amounts of leafy greens this week. INR is 1.4. Which is the nurse's priority action?</p>
+        <div class="qopts">
+          <div class="qopt"><span class="ql">A</span><span>Hold the next dose of warfarin</span></div>
+          <div class="qopt ok"><span class="ql">B</span><span>Notify the prescriber of the subtherapeutic INR and dietary change</span></div>
+          <div class="qopt"><span class="ql">C</span><span>Instruct the client to avoid vitamin K foods entirely</span></div>
+          <div class="qopt"><span class="ql">D</span><span>Administer vitamin K 10 mg IV as prescribed</span></div>
+        </div>
+        <div class="qrat"><strong>Rationale:</strong> INR 1.4 is subtherapeutic. Vitamin K in greens reduces warfarin effect. Notifying the prescriber is priority — dose adjustment decisions require a physician order.</div>
+        <div class="qfoot"><span>Q 23 of 75 · CAT level ↑↑</span><button class="qnxt">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:64px 0;background:white">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc"><div class="fc-ico" style="background:var(--blue-soft)">🔄</div><div class="fc-t">Real adaptive logic</div><p class="fc-d">Our difficulty engine replicates the exact NCLEX CAT algorithm — correct answers unlock harder questions, incorrect answers recalibrate to your level.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--green-s)">📋</div><div class="fc-t">NGN item types</div><p class="fc-d">Bow-tie, matrix grids, extended drag-and-drop, trend, and highlights — every format added in 2023.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--amber-s)">📊</div><div class="fc-t">Live readiness score</div><p class="fc-d">Your readiness score updates after every question across all 8 NCLEX domains. No surprises on test day.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>You've studied this hard. Finish it.</h2><p>Start free — no card, no commitment.</p><a class="btn btn-white">Start practising →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     D · OCEAN WASH — light blue gradient, airy, branded
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="background:linear-gradient(160deg,#e6f7fc 0%,#f0fbff 50%,#ffffff 100%);padding:88px 40px 80px">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 440px;gap:60px;align-items:center">
+      <div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+          <span class="tag tag-blue">NCLEX-RN</span>
+          <span class="tag tag-blue">NCLEX-PN</span>
+          <span class="tag tag-green">CAT Engine</span>
+        </div>
+        <h1 class="h1" style="margin-bottom:18px">Every question<br>learns from your<br><span style="color:var(--blue-dark)">last answer.</span></h1>
+        <p class="lead" style="margin-bottom:32px">That's computerized adaptive testing. NurseNest mirrors NCLEX's algorithm so practising here feels indistinguishable from the real exam.</p>
+        <a class="btn btn-blue" style="margin-bottom:12px;display:inline-flex">Try 10 adaptive questions free →</a>
+        <p style="font-size:12.5px;color:var(--muted)">Already a member? <a href="#" style="color:var(--blue-dark);font-weight:600">Log in and continue</a></p>
+      </div>
+      <div>
+        <div class="qc" style="border-color:var(--blue-mid);box-shadow:0 8px 40px rgba(26,174,224,.15),0 2px 8px rgba(26,174,224,.1)">
+          <span class="qbadge">Physiological Adaptation · Difficulty ●●○○○</span>
+          <p class="qstem">A nurse is assessing a client with COPD who has an order for 2L O₂ via NC. SpO₂ is 88%. Which intervention does the nurse implement <strong>first</strong>?</p>
+          <div class="qopts">
+            <div class="qopt ok"><span class="ql">A</span><span>Apply O₂ at prescribed rate and reassess SpO₂ in 15 minutes</span></div>
+            <div class="qopt"><span class="ql">B</span><span>Increase O₂ to 4L to quickly correct hypoxemia</span></div>
+            <div class="qopt"><span class="ql">C</span><span>Notify the physician before applying oxygen</span></div>
+            <div class="qopt"><span class="ql">D</span><span>Encourage pursed-lip breathing only</span></div>
+          </div>
+          <div class="qrat"><strong>Rationale:</strong> In COPD, hypoxic drive is preserved with low-flow O₂. Apply as prescribed — increasing above ordered rate risks suppressing respiratory drive. Reassess after application.</div>
+          <div class="qfoot"><span>Q 5 of 75 · Calibrating…</span><button class="qnxt">Next question →</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:white"><div class="wrap"><div class="stats">
+    <div class="stat"><div class="stat-n">2,400<span>+</span></div><div class="stat-l">Adaptive questions</div></div>
+    <div class="stat"><div class="stat-n">94<span>%</span></div><div class="stat-l">First-attempt pass rate</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">NCLEX domains</div></div>
+    <div class="stat"><div class="stat-n">75<span>–145</span></div><div class="stat-l">Real question range</div></div>
+  </div></div></div>
+
+  <section style="padding:64px 0;background:var(--page)">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+      <div>
+        <p class="eyebrow">How It Works</p>
+        <h2 class="h2" style="margin-bottom:20px">CAT isn't just harder questions. It's smarter ones.</h2>
+        <p class="sub" style="margin-bottom:28px">NCLEX uses Item Response Theory to determine your ability level. Questions aren't random — they're chosen to extract the most information about your competency with each response.</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;background:var(--blue-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue-dark);flex-shrink:0">1</div><div><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px">Baseline questions</div><p style="font-size:13px;color:var(--body)">The first 10–15 questions establish your starting ability level.</p></div></div>
+          <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;background:var(--blue-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue-dark);flex-shrink:0">2</div><div><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px">Adaptive difficulty</div><p style="font-size:13px;color:var(--body)">Correct → harder. Incorrect → easier. The exam finds your true level.</p></div></div>
+          <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;background:var(--blue-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue-dark);flex-shrink:0">3</div><div><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px">Pass/fail verdict</div><p style="font-size:13px;color:var(--body)">NCLEX stops when it's 95% confident in your outcome. Harder questions = closer to passing.</p></div></div>
+        </div>
+      </div>
+      <div class="qc" style="border-color:var(--blue-mid)"><span class="qbadge">Safety & Infection Control</span><p class="qstem">A nurse enters a room to assess a client with C. difficile infection. Which PPE should the nurse apply <strong>before</strong> entering?</p><div class="qopts"><div class="qopt"><span class="ql">A</span><span>Gloves only</span></div><div class="qopt ok"><span class="ql">B</span><span>Gown and gloves</span></div><div class="qopt"><span class="ql">C</span><span>N95 respirator, gown, and gloves</span></div><div class="qopt"><span class="ql">D</span><span>Surgical mask and gloves</span></div></div><div class="qrat"><strong>Rationale:</strong> C. diff is contact precautions — gown + gloves. N95 is not required (not airborne). Gloves alone are insufficient.</div><div class="qfoot"><span>Q 8 · Calibrating baseline</span><button class="qnxt">Next →</button></div></div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Practise the way NCLEX tests you.</h2><p>Free to start. No card needed.</p><a class="btn btn-white">Begin adaptive practice →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     E · QUESTION FIRST — giant question card is the hero
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:40px 40px 0;background:#f8fafc">
+    <div class="wrap" style="text-align:center;padding-bottom:28px">
+      <span class="tag tag-blue" style="margin-bottom:12px">NCLEX CAT Exam Prep</span>
+      <h1 style="font-size:38px;font-weight:800;letter-spacing:-.02em;color:var(--ink);margin-bottom:8px">This is what NCLEX looks like.</h1>
+      <p style="font-size:16px;color:var(--body)">Practise with questions built to the same adaptive standard. Try one right now — no account needed.</p>
+    </div>
+
+    <!-- Giant question card -->
+    <div class="wrap" style="max-width:800px">
+      <div style="background:white;border:1px solid var(--cb);border-radius:20px;box-shadow:0 8px 48px rgba(15,23,42,.1);overflow:hidden">
+        <div style="background:var(--ink);padding:16px 28px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:12px;font-weight:600;color:var(--blue);letter-spacing:.04em;text-transform:uppercase">NurseNest Adaptive · NCLEX-RN Format</span>
+          <span style="font-size:12px;color:#475569">Question 1 of 75 · Difficulty calibrating…</span>
+        </div>
+        <div style="padding:32px 36px">
+          <div style="display:flex;gap:12px;margin-bottom:20px">
+            <span class="tag tag-blue">Management of Care</span>
+            <span class="tag tag-amber">Priority Question</span>
+          </div>
+          <p style="font-size:16px;line-height:1.7;color:var(--ink);margin-bottom:24px">The nurse is caring for four clients. Which client does the nurse assess <strong>first</strong>?<br><br>Client A has a closed femur fracture, pain 6/10, neurovascular checks intact.<br>Client B had an appendectomy 2 hr ago, SpO₂ 96%, pain controlled.<br>Client C has Type 2 diabetes, blood glucose 14 mmol/L, and reports thirst.<br>Client D has a new onset of confusion and slurred speech following a head injury.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 16px;border:2px solid var(--cb);border-radius:10px;font-size:14.5px;color:var(--body);cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='#1aaee0';this.style.background='#f0fbff'" onmouseout="this.style.borderColor='var(--cb)';this.style.background='white'"><span style="font-size:12px;font-weight:700;min-width:22px;height:22px;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)">A</span>Client A — femur fracture, pain 6/10</div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 16px;border:2px solid var(--cb);border-radius:10px;font-size:14.5px;color:var(--body);cursor:pointer" onmouseover="this.style.borderColor='#1aaee0';this.style.background='#f0fbff'" onmouseout="this.style.borderColor='var(--cb)';this.style.background='white'"><span style="font-size:12px;font-weight:700;min-width:22px;height:22px;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)">B</span>Client B — 2 hr post-appendectomy</div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 16px;border:2px solid var(--cb);border-radius:10px;font-size:14.5px;color:var(--body);cursor:pointer" onmouseover="this.style.borderColor='#1aaee0';this.style.background='#f0fbff'" onmouseout="this.style.borderColor='var(--cb)';this.style.background='white'"><span style="font-size:12px;font-weight:700;min-width:22px;height:22px;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)">C</span>Client C — T2DM, glucose 14 mmol/L</div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 16px;border:2px solid var(--green);background:var(--green-s);border-radius:10px;font-size:14.5px;color:#166534;font-weight:500;cursor:pointer"><span style="font-size:12px;font-weight:700;min-width:22px;height:22px;background:var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center;color:white">D</span>Client D — new confusion + slurred speech after head injury ✓</div>
+          </div>
+          <div style="background:var(--green-s);border-left:4px solid var(--green);border-radius:0 10px 10px 0;padding:16px 18px;font-size:14px;line-height:1.65;color:#166534"><strong style="display:block;margin-bottom:4px">Correct — here's why:</strong>New neurological changes (confusion + slurred speech) after head injury suggest increased intracranial pressure — an immediately life-threatening deterioration. NCLEX priority = airway, breathing, circulation, then neuro changes. Client D is assessed first.</div>
+        </div>
+        <div style="border-top:1px solid var(--cb);padding:16px 36px;display:flex;justify-content:space-between;align-items:center;background:#fafafa">
+          <div style="font-size:13px;color:var(--muted)">Difficulty adjusting ↑ — keep going</div>
+          <a class="btn btn-blue" style="padding:10px 20px;font-size:13px">See next question →</a>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:16px;font-size:12.5px;color:var(--subtle)"><a href="#" style="color:var(--blue-dark);font-weight:600">Create a free account</a> to save progress and track your readiness across all 8 domains</p>
+    </div>
+  </section>
+
+  <section style="padding:64px 0;background:white">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div class="fc"><div class="fc-ico" style="background:var(--blue-soft)">🔄</div><div class="fc-t">Adaptive difficulty</div><p class="fc-d">Questions calibrate to your level with every answer, mirroring NCLEX's IRT scoring algorithm.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--green-s)">📋</div><div class="fc-t">NGN item types</div><p class="fc-d">Bow-tie, matrix, extended drag-and-drop — every next-gen NCLEX format is here.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--amber-s)">🎯</div><div class="fc-t">2,400+ questions</div><p class="fc-d">Across all 8 NCLEX-RN client needs categories with detailed clinical rationale.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Keep practising. It gets harder — that means it's working.</h2><p>Free to start. No card needed.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     F · BENTO GRID — asymmetric card grid, editorial feel
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:56px 40px;background:var(--page)">
+    <div class="wrap">
+      <div style="margin-bottom:36px">
+        <span class="eyebrow">NCLEX · CAT Exam Prep</span>
+        <h1 class="h1" style="max-width:640px">The smarter way to<br>prepare for NCLEX.</h1>
+      </div>
+
+      <!-- Bento grid -->
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:auto auto;gap:16px">
+
+        <!-- Big card: question -->
+        <div style="grid-row:span 2;background:white;border:1px solid var(--cb);border-radius:var(--rxl);padding:28px;box-shadow:var(--sh)">
+          <span class="tag tag-blue" style="margin-bottom:16px">Live adaptive question</span>
+          <p style="font-size:15px;line-height:1.7;color:var(--ink);margin-bottom:20px">A nurse is preparing to administer digoxin 0.125 mg PO to a client with heart failure. The client's apical pulse is 54 bpm and regular. Which action does the nurse take <strong>first</strong>?</p>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px">
+            <div class="qopt ok"><span class="ql">A</span><span>Hold the medication and notify the prescriber</span></div>
+            <div class="qopt"><span class="ql">B</span><span>Administer the dose — rate is regular</span></div>
+            <div class="qopt"><span class="ql">C</span><span>Recount the pulse for a full minute</span></div>
+            <div class="qopt"><span class="ql">D</span><span>Document and administer with food</span></div>
+          </div>
+          <div class="qrat"><strong>Rationale:</strong> Digoxin is held for pulse &lt; 60 bpm (adult) and the prescriber notified. Bradycardia indicates digoxin toxicity risk. Never administer based on rate regularity alone.</div>
+          <div class="qfoot"><span>Management of Care · Difficulty ●●●○○</span><button class="qnxt">Next question →</button></div>
+        </div>
+
+        <!-- Stat: pass rate -->
+        <div style="background:var(--ink);border-radius:var(--rxl);padding:28px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-size:52px;font-weight:800;color:white;line-height:1;letter-spacing:-.03em">94<span style="color:var(--blue)">%</span></div>
+          <div style="font-size:14px;color:#64748b;margin-top:6px">first-attempt<br>pass rate</div>
+        </div>
+
+        <!-- Stat: questions -->
+        <div style="background:var(--blue);border-radius:var(--rxl);padding:28px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-size:52px;font-weight:800;color:white;line-height:1;letter-spacing:-.03em">2,400<span style="font-size:28px">+</span></div>
+          <div style="font-size:14px;color:rgba(255,255,255,.7);margin-top:6px">adaptive<br>questions</div>
+        </div>
+
+        <!-- NGN feature -->
+        <div style="background:var(--purple-s);border:1px solid var(--purple-b);border-radius:var(--rxl);padding:24px">
+          <div style="font-size:28px;margin-bottom:8px">📋</div>
+          <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px">Next-Gen Formats</div>
+          <p style="font-size:13px;color:var(--body);line-height:1.6">Bow-tie, matrix grids, drag-and-drop — every NGN item type added to NCLEX since 2023.</p>
+        </div>
+
+        <!-- Canadian -->
+        <div style="background:var(--green-s);border:1px solid var(--green-b);border-radius:var(--rxl);padding:24px">
+          <div style="font-size:28px;margin-bottom:8px">🇨🇦</div>
+          <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px">Canadian-aligned</div>
+          <p style="font-size:13px;color:var(--body);line-height:1.6">Drug names, clinical context, and spelling calibrated for NCLEX in Canada.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:28px;display:flex;gap:12px;align-items:center">
+        <a class="btn btn-blue">Start practising free →</a>
+        <a class="btn btn-out">Explore all 8 domains</a>
+        <span style="font-size:12.5px;color:var(--subtle);margin-left:8px">No account required to try · No credit card</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>More adaptive than UWorld. More Canadian than Archer.</h2><p>Built for nurses preparing in Canada.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     G · WARM CREAM — amber/cream palette, encouraging
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="background:#fdfbf7;padding:80px 40px 72px;border-bottom:1px solid #e8e0d0">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 440px;gap:60px;align-items:center">
+      <div>
+        <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-s);border:1px solid var(--amber-b);padding:4px 12px;border-radius:99px;display:inline-block;margin-bottom:20px">NCLEX · CAT Exam Prep</span>
+        <h1 class="h1" style="margin-bottom:18px">You already know<br>more than you think.<br><span style="color:var(--amber)">Prove it.</span></h1>
+        <p class="lead" style="margin-bottom:32px">Adaptive practice that finds exactly where your clinical reasoning lives — then builds it up. No busywork. Only the questions that matter for your level.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" style="background:var(--ink);color:white">Start practising free →</a>
+          <a class="btn btn-out" style="border-color:#d6c9b6;color:var(--muted)">See how CAT works</a>
+        </div>
+        <div style="margin-top:24px;font-size:13px;color:#a8956e">✓ 2,400+ questions &nbsp;·&nbsp; ✓ All 8 NCLEX domains &nbsp;·&nbsp; ✓ No card required</div>
+      </div>
+
+      <div class="qc" style="border-color:#e0d9cf;box-shadow:0 8px 32px rgba(168,149,110,.15)">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);background:var(--amber-s);border:1px solid var(--amber-b);padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:12px">Health Promotion · Difficulty ●●○○○</span>
+        <p class="qstem">A public health nurse is teaching a group of adults about colorectal cancer screening. Which statement indicates the teaching was effective?</p>
+        <div class="qopts" style="gap:6px">
+          <div class="qopt" style="border-color:#e0d9cf"><span class="ql" style="background:#f5f0e8">A</span><span>I'll start colonoscopy screening at age 40</span></div>
+          <div class="qopt ok" style="border-color:var(--green)"><span class="ql" style="background:var(--green);color:white">B</span><span>I should have my first screening colonoscopy at age 45</span></div>
+          <div class="qopt" style="border-color:#e0d9cf"><span class="ql" style="background:#f5f0e8">C</span><span>A fecal occult blood test every 5 years is sufficient</span></div>
+          <div class="qopt" style="border-color:#e0d9cf"><span class="ql" style="background:#f5f0e8">D</span><span>Colonoscopy is only needed if I have symptoms</span></div>
+        </div>
+        <div class="qrat"><strong>Rationale:</strong> Current guidelines recommend colorectal cancer screening beginning at age 45 for average-risk adults. Colonoscopy every 10 years is the gold standard.</div>
+        <div class="qfoot" style="border-color:#e0d9cf"><span>Q 6 of 75</span><button class="qnxt">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:64px 40px;background:#fdfbf7">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--amber)">Why NurseNest</p>
+      <h2 class="h2" style="margin-bottom:36px">Designed to build<br>confidence, not anxiety.</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc" style="border-color:#e0d9cf;background:#fffdf9"><div class="fc-ico" style="background:var(--amber-s)">🔄</div><div class="fc-t">Adaptive every time</div><p class="fc-d">Difficulty adjusts with each answer so you're always at the edge of your current ability — where growth happens.</p></div>
+        <div class="fc" style="border-color:#e0d9cf;background:#fffdf9"><div class="fc-ico" style="background:var(--green-s)">🧠</div><div class="fc-t">Clinical reasoning first</div><p class="fc-d">Rationale explains the nursing process, not just the correct option. You understand, not memorize.</p></div>
+        <div class="fc" style="border-color:#e0d9cf;background:#fffdf9"><div class="fc-ico" style="background:var(--blue-soft)">📊</div><div class="fc-t">Progress you can see</div><p class="fc-d">Your readiness score updates across all 8 domains after every session, so you always know where you stand.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:var(--ink);padding:64px 40px;text-align:center"><h2 style="font-size:36px;font-weight:800;color:white;letter-spacing:-.02em;margin-bottom:10px">You've got this. Start easy, go hard.</h2><p style="font-size:16px;color:#64748b;margin-bottom:28px">Free to start. No card. No pressure.</p><a class="btn btn-white">Begin adaptive practice →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     H · DEEP TEAL — strong teal hero, clinical authority
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="background:#0a4f72;padding:80px 40px 72px">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 460px;gap:64px;align-items:center">
+      <div>
+        <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-mid);padding:4px 12px;border:1px solid rgba(26,174,224,.3);border-radius:99px;display:inline-block;margin-bottom:20px;background:rgba(26,174,224,.1)">NCLEX · CAT Exam Prep</span>
+        <h1 style="font-size:50px;font-weight:800;color:white;line-height:1.08;letter-spacing:-.025em;margin-bottom:20px">Clinical judgment.<br>Adaptive questions.<br><span style="color:var(--blue)">Real NCLEX results.</span></h1>
+        <p style="font-size:17px;line-height:1.7;color:#7dd3f0;max-width:480px;margin-bottom:32px">NurseNest mirrors NCLEX's computerized adaptive testing algorithm. Every correct answer unlocks a harder question — because that's exactly how NCLEX scores you.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" style="background:var(--blue);color:white">Start practising free →</a>
+          <a class="btn" style="background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)">How adaptive scoring works</a>
+        </div>
+      </div>
+      <div class="qc" style="border-color:rgba(26,174,224,.2);box-shadow:0 12px 48px rgba(0,0,0,.25)">
+        <span class="qbadge">Reduction of Risk Potential · ●●●●○</span>
+        <p class="qstem">A nurse is reviewing lab results for a client receiving total parenteral nutrition (TPN). Which finding requires immediate intervention?</p>
+        <div class="qopts">
+          <div class="qopt"><span class="ql">A</span><span>Serum albumin 32 g/L</span></div>
+          <div class="qopt"><span class="ql">B</span><span>Blood glucose 8.4 mmol/L</span></div>
+          <div class="qopt ok"><span class="ql">C</span><span>Serum phosphate 0.5 mmol/L</span></div>
+          <div class="qopt"><span class="ql">D</span><span>Serum potassium 3.8 mmol/L</span></div>
+        </div>
+        <div class="qrat"><strong>Rationale:</strong> Phosphate 0.5 mmol/L is severely hypophosphatemic (normal 0.8–1.45). Refeeding syndrome with TPN — immediate risk of respiratory failure, cardiac arrhythmias. Notify prescriber now.</div>
+        <div class="qfoot"><span>Q 31 · CAT adjusting ↑↑</span><button class="qnxt">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:#0a4f72;border-top:1px solid rgba(255,255,255,.1)"><div class="wrap"><div style="display:grid;grid-template-columns:repeat(4,1fr)">
+    <div style="padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:38px;font-weight:800;color:white;letter-spacing:-.03em">2,400<span style="color:var(--blue)">+</span></div><div style="font-size:12.5px;color:#7dd3f0;margin-top:4px">Adaptive questions</div></div>
+    <div style="padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:38px;font-weight:800;color:white;letter-spacing:-.03em">94<span style="color:var(--blue)">%</span></div><div style="font-size:12.5px;color:#7dd3f0;margin-top:4px">Pass rate</div></div>
+    <div style="padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:38px;font-weight:800;color:white">8</div><div style="font-size:12.5px;color:#7dd3f0;margin-top:4px">NCLEX domains</div></div>
+    <div style="padding:28px 24px;text-align:center"><div style="font-size:38px;font-weight:800;color:white">🇨🇦</div><div style="font-size:12.5px;color:#7dd3f0;margin-top:4px">Canadian-aligned</div></div>
+  </div></div></div>
+
+  <section style="padding:64px 0;background:white">
+    <div class="wrap">
+      <p class="eyebrow">Everything You Need</p>
+      <h2 class="h2" style="margin-bottom:36px">Built for NCLEX.<br>Tested by nurses.</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc"><div class="fc-ico" style="background:var(--blue-soft)">🔄</div><div class="fc-t">True CAT algorithm</div><p class="fc-d">Difficulty scales in real time with each answer using the same Item Response Theory NCLEX uses.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:#f0fdfa">📋</div><div class="fc-t">NGN formats</div><p class="fc-d">All next-gen item types: bow-tie, matrix, extended drag-and-drop, trends, and highlights.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--purple-s)">📊</div><div class="fc-t">Domain readiness</div><p class="fc-d">Track readiness across all 8 NCLEX domains, updated live. Know your weak spots before test day.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Ready to meet the real NCLEX?</h2><p>Start free. No card needed.</p><a class="btn btn-white">Begin adaptive practice →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     I · BOLD TYPE — giant typography, ultra-minimal
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:80px 40px;border-bottom:1px solid var(--cb)">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:flex-end">
+        <div>
+          <h1 style="font-size:72px;font-weight:800;line-height:.98;letter-spacing:-.04em;color:var(--ink);margin-bottom:32px">NCLEX<br><span style="color:var(--blue)">CAT</span><br>Prep.</h1>
+          <p class="lead" style="margin-bottom:36px;max-width:440px">Questions that adapt to you. The same way NCLEX does. No static banks. No wasted time.</p>
+          <div style="display:flex;gap:12px;align-items:center">
+            <a class="btn btn-blue" style="font-size:15px;padding:14px 28px">Start free →</a>
+            <span style="font-size:13px;color:var(--subtle)">No account needed to try</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:72px;font-weight:800;letter-spacing:-.04em;color:var(--ink);margin-bottom:4px;line-height:1">2,400<span style="color:var(--blue)">+</span></div>
+          <div style="font-size:14px;color:var(--muted);border-top:2px solid var(--cb);padding-top:12px;margin-bottom:28px">Adaptive questions across all 8 NCLEX domains</div>
+          <div style="font-size:72px;font-weight:800;letter-spacing:-.04em;color:var(--ink);margin-bottom:4px;line-height:1">94<span style="color:var(--blue)">%</span></div>
+          <div style="font-size:14px;color:var(--muted);border-top:2px solid var(--cb);padding-top:12px">First-attempt NCLEX pass rate among NurseNest users*</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:0">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--cb)">
+        <div style="padding:48px 40px 48px 0;border-right:1px solid var(--cb)"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dark);margin-bottom:12px">01 — Adaptive</div><h3 class="h3" style="margin-bottom:12px">Questions that match your level</h3><p class="sub">Correct answers unlock harder questions. Wrong answers recalibrate. The exam always stays at your growth edge.</p></div>
+        <div style="padding:48px 40px;border-right:1px solid var(--cb)"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dark);margin-bottom:12px">02 — NGN Ready</div><h3 class="h3" style="margin-bottom:12px">Every next-gen format</h3><p class="sub">Bow-tie, matrix grids, drag-and-drop, trends — the formats NCLEX added in 2023 that most banks still lack.</p></div>
+        <div style="padding:48px 0 48px 40px"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dark);margin-bottom:12px">03 — Clinical depth</div><h3 class="h3" style="margin-bottom:12px">Rationale that teaches</h3><p class="sub">Not just the answer — the full nursing process reasoning. You understand why, not just what.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:64px 0">
+    <div class="wrap"><div class="qc" style="max-width:700px;margin:0 auto">
+      <span class="qbadge">Sample · Psychosocial Integrity</span>
+      <p class="qstem">A nurse is caring for a client who recently received a diagnosis of terminal cancer. The client states, "I know I'm going to die. I just want to go home." Which response by the nurse is <strong>most therapeutic</strong>?</p>
+      <div class="qopts">
+        <div class="qopt"><span class="ql">A</span><span>"I understand. Let me speak with the team about discharge planning."</span></div>
+        <div class="qopt"><span class="ql">B</span><span>"It's normal to feel that way. Have you talked to your family?"</span></div>
+        <div class="qopt ok"><span class="ql">C</span><span>"It sounds like being at home is very important to you. Tell me more about what that would mean."</span></div>
+        <div class="qopt"><span class="ql">D</span><span>"Many patients feel this way. Would you like to speak to a counsellor?"</span></div>
+      </div>
+      <div class="qrat"><strong>Rationale:</strong> Option C uses reflection and open-ended questioning — the most therapeutic communication technique. It acknowledges the client's wish without deflecting or rushing to problem-solve.</div>
+      <div class="qfoot"><span>Q 19 · Difficulty ●●●○○</span><button class="qnxt">Continue →</button></div>
+    </div></div>
+  </section>
+
+  <div class="cta-footer"><h2>One more question. Then one more.<br>That's how you pass.</h2><p>Free to start.</p><a class="btn btn-white">Start →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     J · DOMAIN MAP — domain grid is the hero visual
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:64px 40px 48px;background:white">
+    <div class="wrap" style="display:grid;grid-template-columns:440px 1fr;gap:64px;align-items:center">
+      <div>
+        <span class="eyebrow">CAT Exam Prep · NCLEX-RN &amp; PN</span>
+        <h1 class="h1" style="margin-bottom:18px">Know every domain.<br>Pass with<br><span style="color:var(--blue)">certainty.</span></h1>
+        <p class="lead" style="margin-bottom:28px">Adaptive questions across all 8 NCLEX client needs categories. Track your readiness in real time, by domain.</p>
+        <a class="btn btn-blue">Start practising free →</a>
+        <p style="margin-top:16px;font-size:12.5px;color:var(--subtle)">No credit card · Works on mobile · Saves automatically</p>
+      </div>
+      <!-- Domain map -->
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:var(--blue-soft);border:1.5px solid var(--blue-mid);border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:var(--blue-dark);margin-bottom:4px">Management of Care</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">17–23% of NCLEX</div><div style="height:4px;background:var(--blue-mid);border-radius:99px;overflow:hidden"><div style="width:78%;height:100%;background:var(--blue-dark);border-radius:99px"></div></div><div style="font-size:11px;color:var(--blue-dark);margin-top:5px;font-weight:600">78% ready · 320 Qs</div></div>
+          <div style="background:var(--amber-s);border:1.5px solid var(--amber-b);border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:#92400e;margin-bottom:4px">Pharmacology</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">11–17% of NCLEX</div><div style="height:4px;background:var(--amber-b);border-radius:99px;overflow:hidden"><div style="width:43%;height:100%;background:var(--amber);border-radius:99px"></div></div><div style="font-size:11px;color:var(--amber);margin-top:5px;font-weight:600">43% ready · Focus here</div></div>
+          <div style="background:var(--green-s);border:1.5px solid var(--green-b);border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:#166534;margin-bottom:4px">Safety &amp; Infection</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">9–15% of NCLEX</div><div style="height:4px;background:var(--green-b);border-radius:99px;overflow:hidden"><div style="width:84%;height:100%;background:var(--green);border-radius:99px"></div></div><div style="font-size:11px;color:var(--green);margin-top:5px;font-weight:600">84% ready · Strong</div></div>
+          <div style="background:var(--purple-s);border:1.5px solid var(--purple-b);border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:#5b21b6;margin-bottom:4px">Physiological Adapt.</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">11–17% of NCLEX</div><div style="height:4px;background:var(--purple-b);border-radius:99px;overflow:hidden"><div style="width:49%;height:100%;background:var(--purple);border-radius:99px"></div></div><div style="font-size:11px;color:var(--purple);margin-top:5px;font-weight:600">49% ready · Build this</div></div>
+          <div style="background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:var(--teal);margin-bottom:4px">Reduction of Risk</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">9–15% of NCLEX</div><div style="height:4px;background:#99f6e4;border-radius:99px;overflow:hidden"><div style="width:57%;height:100%;background:var(--teal);border-radius:99px"></div></div><div style="font-size:11px;color:var(--teal);margin-top:5px;font-weight:600">57% ready · Keep going</div></div>
+          <div style="background:var(--blue-soft);border:1.5px solid var(--blue-mid);border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:var(--blue-dark);margin-bottom:4px">Health Promotion</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">6–12% of NCLEX</div><div style="height:4px;background:var(--blue-mid);border-radius:99px;overflow:hidden"><div style="width:65%;height:100%;background:var(--blue-dark);border-radius:99px"></div></div><div style="font-size:11px;color:var(--blue-dark);margin-top:5px;font-weight:600">65% ready · Good</div></div>
+          <div style="background:var(--rose-s);border:1.5px solid #fecdd3;border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:#9f1239;margin-bottom:4px">Basic Care &amp; Comfort</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">6–12% of NCLEX</div><div style="height:4px;background:#fecdd3;border-radius:99px;overflow:hidden"><div style="width:71%;height:100%;background:var(--rose);border-radius:99px"></div></div><div style="font-size:11px;color:var(--rose);margin-top:5px;font-weight:600">71% ready · Solid</div></div>
+          <div style="background:#f5f0fe;border:1.5px solid var(--purple-b);border-radius:var(--rl);padding:18px;cursor:pointer"><div style="font-size:13.5px;font-weight:700;color:#5b21b6;margin-bottom:4px">Psychosocial Integrity</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">6–12% of NCLEX</div><div style="height:4px;background:var(--purple-b);border-radius:99px;overflow:hidden"><div style="width:62%;height:100%;background:var(--purple);border-radius:99px"></div></div><div style="font-size:11px;color:var(--purple);margin-top:5px;font-weight:600">62% ready · Progressing</div></div>
+        </div>
+        <p style="font-size:11.5px;color:var(--subtle);margin-top:10px">Demo data — sign in to see your real readiness scores</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>See your real domain scores.</h2><p>Sign in and your readiness map populates after 10 questions.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     K · GREEN PASS — achievement, green accent, passing-first
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 40%,#ffffff 100%);padding:80px 40px 72px">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 440px;gap:56px;align-items:center">
+      <div>
+        <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);background:var(--green-s);border:1px solid var(--green-b);padding:4px 12px;border-radius:99px;display:inline-block;margin-bottom:20px">NCLEX · CAT Exam Prep · 94% Pass Rate</span>
+        <h1 class="h1" style="margin-bottom:18px">Study with the<br>confidence of someone<br><span style="color:var(--green)">who already passed.</span></h1>
+        <p class="lead" style="margin-bottom:32px">Adaptive questions that mirror NCLEX's algorithm. Clinical rationale that builds real judgment. Domain tracking that shows you exactly where you stand.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-green">Start practising free →</a>
+          <a class="btn btn-out">How it works</a>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag tag-green">✓ 2,400+ questions</span>
+          <span class="tag tag-green">✓ All 8 NCLEX domains</span>
+          <span class="tag tag-green">✓ NGN formats</span>
+          <span class="tag tag-green">✓ Canadian-aligned</span>
+        </div>
+      </div>
+      <div>
+        <!-- Pass card -->
+        <div style="background:white;border:1px solid var(--green-b);border-radius:20px;padding:28px;box-shadow:0 8px 40px rgba(22,163,74,.12);margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+            <div style="width:48px;height:48px;background:var(--green);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px">✓</div>
+            <div><div style="font-size:16px;font-weight:700;color:var(--ink)">Readiness Score</div><div style="font-size:13px;color:var(--muted)">Based on 148 adaptive questions</div></div>
+          </div>
+          <div style="font-size:60px;font-weight:800;color:var(--green);line-height:1;letter-spacing:-.03em;margin-bottom:4px">82<span style="font-size:24px">%</span></div>
+          <div style="font-size:13px;color:var(--body);margin-bottom:16px">Projected pass likelihood: <strong style="color:var(--green)">Very likely to pass</strong></div>
+          <div style="height:6px;background:var(--green-b);border-radius:99px;overflow:hidden"><div style="width:82%;height:100%;background:var(--green);border-radius:99px"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11.5px;color:var(--muted)"><span>Needs work</span><span>NCLEX Pass Line</span><span>Exceeds</span></div>
+        </div>
+        <div class="qc">
+          <span class="qbadge">Management of Care · ●●●○○</span>
+          <p class="qstem" style="font-size:13.5px">The nurse delegates vital signs to an unregulated care provider. Which finding requires the nurse to reassess the client <strong>immediately</strong>?</p>
+          <div class="qopts">
+            <div class="qopt"><span class="ql">A</span><span>Temperature 37.8°C (100°F)</span></div>
+            <div class="qopt ok"><span class="ql">B</span><span>Respiratory rate 8 breaths/minute</span></div>
+            <div class="qopt"><span class="ql">C</span><span>Blood pressure 138/88 mmHg</span></div>
+            <div class="qopt"><span class="ql">D</span><span>Pulse 96 bpm</span></div>
+          </div>
+          <div class="qfoot"><span>Q 22 · CAT adjusting ↑</span><button class="qnxt">Next →</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>94% of NurseNest students pass first attempt.</h2><p>Join them. Start free.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     L · SLATE PRO — slate professional, structured
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="background:#f1f5f9;padding:72px 40px;border-bottom:1px solid #cbd5e1">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:#e2e8f0;border-radius:8px;padding:6px 14px;margin-bottom:20px"><span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#475569">NCLEX · CAT Prep</span></div>
+        <h1 class="h1" style="margin-bottom:20px;color:#0f172a">Precision practice.<br>Real adaptive<br><span style="color:var(--blue)">NCLEX results.</span></h1>
+        <p class="lead" style="margin-bottom:32px;color:#475569">CAT isn't about more questions — it's about the right questions. NurseNest's adaptive engine surfaces exactly what NCLEX will test you on, at exactly the right difficulty.</p>
+        <div style="display:flex;gap:12px">
+          <a class="btn btn-blue">Start free practice →</a>
+          <a class="btn btn-out" style="border-color:#cbd5e1">View sample questions</a>
+        </div>
+      </div>
+      <div>
+        <!-- Structured checklist card -->
+        <div style="background:white;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:var(--sh)">
+          <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e2e8f0">What NurseNest CAT covers</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">Adaptive difficulty engine</span></div><span class="tag tag-blue">NCLEX-aligned</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">All 8 NCLEX client needs</span></div><span class="tag tag-green">Complete</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">NGN next-gen formats</span></div><span class="tag tag-blue">2023+</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">75–145 question simulations</span></div><span class="tag tag-green">Real format</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">Canadian drug names &amp; context</span></div><span class="tag tag-blue">🇨🇦 CA + US</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">Deep clinical rationale</span></div><span class="tag tag-green">Every Q</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="color:#0f172a;font-weight:500">Domain readiness tracking</span></div><span class="tag tag-blue">Live</span></div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;gap:8px">
+            <a class="btn btn-blue" style="flex:1;justify-content:center;padding:10px 16px;font-size:13px">Start free →</a>
+            <a class="btn btn-out" style="padding:10px 16px;font-size:13px;border-color:#cbd5e1">Try a question</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:56px 0;background:white">
+    <div class="wrap"><div class="qc" style="max-width:680px;margin:0 auto">
+      <span class="qbadge">Pharmacology · High-yield</span>
+      <p class="qstem">A nurse is preparing to administer IV vancomycin 1 g over 60 min. During infusion, the client develops facial flushing, pruritus, and hypotension. Which intervention is the nurse's priority?</p>
+      <div class="qopts">
+        <div class="qopt"><span class="ql">A</span><span>Stop the infusion and notify the prescriber</span></div>
+        <div class="qopt ok"><span class="ql">B</span><span>Slow the infusion rate and reassess in 10 minutes</span></div>
+        <div class="qopt"><span class="ql">C</span><span>Administer diphenhydramine IV as prescribed</span></div>
+        <div class="qopt"><span class="ql">D</span><span>Discontinue vancomycin permanently</span></div>
+      </div>
+      <div class="qrat"><strong>Rationale:</strong> These are signs of Red Man Syndrome — an infusion rate-related reaction, not a true allergy. The intervention is to slow (not stop) the infusion. Stopping entirely is reserved for true anaphylaxis.</div>
+      <div class="qfoot"><span>Difficulty ●●●●○ · Q 38</span><button class="qnxt">Next →</button></div>
+    </div></div>
+  </section>
+
+  <div class="cta-footer"><h2>Structured practice. Adaptive results.</h2><p>Free to start — no card, no commitment.</p><a class="btn btn-white">Begin practice →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     M · DIAGONAL — bold diagonal bg split, distinctive
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="position:relative;overflow:hidden;padding:80px 40px 72px;background:white">
+    <!-- Diagonal blue block -->
+    <div style="position:absolute;top:0;left:0;right:55%;bottom:0;background:var(--blue-soft);transform:skewX(-4deg) translateX(-40px);z-index:0"></div>
+    <div class="wrap" style="position:relative;z-index:1;display:grid;grid-template-columns:1fr 480px;gap:60px;align-items:center">
+      <div>
+        <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dark);background:white;padding:4px 12px;border-radius:99px;display:inline-block;margin-bottom:20px;box-shadow:var(--sh)">NCLEX · CAT Exam Prep</span>
+        <h1 class="h1" style="margin-bottom:18px">Adaptive questions<br>that make the real<br><span style="color:var(--blue)">exam feel familiar.</span></h1>
+        <p class="lead" style="margin-bottom:32px">NurseNest mirrors NCLEX's CAT algorithm. Harder questions after correct answers — exactly like test day. So when harder questions appear on NCLEX, you've already been there.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-blue">Start practising free →</a>
+          <a class="btn btn-out">Watch a 60-second demo</a>
+        </div>
+      </div>
+      <div class="qc" style="border-color:var(--blue-mid);box-shadow:0 12px 48px rgba(26,174,224,.18)">
+        <span class="qbadge">Basic Care &amp; Comfort · ●●●○○</span>
+        <p class="qstem">A nurse is caring for a client who is 1 day postpartum and breastfeeding. The client reports nipple soreness rated 6/10. Which instruction does the nurse give <strong>first</strong>?</p>
+        <div class="qopts">
+          <div class="qopt"><span class="ql">A</span><span>Apply lanolin cream after each feeding</span></div>
+          <div class="qopt ok"><span class="ql">B</span><span>Assess latch position and technique with the next feeding</span></div>
+          <div class="qopt"><span class="ql">C</span><span>Alternate breast and formula feeding to rest nipples</span></div>
+          <div class="qopt"><span class="ql">D</span><span>Apply warm compresses for 10 minutes before feeding</span></div>
+        </div>
+        <div class="qrat"><strong>Rationale:</strong> Poor latch is the most common cause of nipple soreness. Assessment and correction of latch is the priority intervention before applying any topical treatment or altering feeding pattern.</div>
+        <div class="qfoot"><span>Q 11 · Difficulty calibrating</span><button class="qnxt">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:white"><div class="wrap"><div class="stats">
+    <div class="stat"><div class="stat-n">2,400<span>+</span></div><div class="stat-l">Questions</div></div>
+    <div class="stat"><div class="stat-n">94<span>%</span></div><div class="stat-l">Pass rate</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">NCLEX domains</div></div>
+    <div class="stat"><div class="stat-n">🇨🇦</div><div class="stat-l">Canadian-aligned</div></div>
+  </div></div></div>
+
+  <section style="padding:64px 0;background:var(--page)">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc"><div class="fc-ico" style="background:var(--blue-soft)">🔄</div><div class="fc-t">Real adaptive logic</div><p class="fc-d">Correct → harder. Wrong → recalibrate. The exam always challenges you at your growth edge.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--green-s)">📋</div><div class="fc-t">NGN formats</div><p class="fc-d">Every next-gen NCLEX item type fully implemented — not just standard MCQ.</p></div>
+        <div class="fc"><div class="fc-ico" style="background:var(--amber-s)">📊</div><div class="fc-t">Domain tracking</div><p class="fc-d">Live readiness score across all 8 client needs categories after every session.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Different by design. Effective by evidence.</h2><p>Start free.</p><a class="btn btn-white">Begin adaptive practice →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     N · PURPLE FOCUS — purple accent, calm/premium
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:80px 40px 72px;background:linear-gradient(160deg,#f5f0fe 0%,#ede9fe 30%,#fafafa 100%)">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 460px;gap:60px;align-items:center">
+      <div>
+        <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);background:white;padding:4px 12px;border-radius:99px;display:inline-block;margin-bottom:20px;box-shadow:0 1px 4px rgba(124,58,237,.2)">NCLEX · CAT Exam Prep</span>
+        <h1 class="h1" style="margin-bottom:18px">Deep focus.<br>Adaptive practice.<br><span style="color:var(--purple)">Exam-day calm.</span></h1>
+        <p class="lead" style="margin-bottom:32px">Practise in an environment designed to build confidence, not anxiety. Questions that adapt to your level, clinical reasoning that builds real knowledge.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" style="background:var(--purple);color:white">Start practising free →</a>
+          <a class="btn btn-out">Explore question bank</a>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag tag-purple">✓ Adaptive difficulty</span>
+          <span class="tag tag-purple">✓ NGN formats</span>
+          <span class="tag tag-purple">✓ 2,400+ questions</span>
+        </div>
+      </div>
+      <div class="qc" style="border-color:var(--purple-b);box-shadow:0 12px 48px rgba(124,58,237,.15)">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);background:var(--purple-s);border:1px solid var(--purple-b);padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:12px">Psychosocial Integrity · ●●●○○</span>
+        <p class="qstem">A nurse is caring for a client diagnosed with major depressive disorder who states, "Nothing I do ever makes a difference anyway." Which response by the nurse is <strong>most therapeutic</strong>?</p>
+        <div class="qopts">
+          <div class="qopt"><span class="ql">A</span><span>"I know it feels that way, but things will get better."</span></div>
+          <div class="qopt"><span class="ql">B</span><span>"Have you thought about what activities you used to enjoy?"</span></div>
+          <div class="qopt ok"><span class="ql">C</span><span>"It sounds like you're feeling hopeless right now. Tell me more about that."</span></div>
+          <div class="qopt"><span class="ql">D</span><span>"Your medications will start working soon — give it more time."</span></div>
+        </div>
+        <div class="qrat"><strong>Rationale:</strong> Option C uses reflection and an open-ended invitation — therapeutic communication techniques for depression. Options A and D offer false reassurance. Option B redirects prematurely.</div>
+        <div class="qfoot"><span>Q 17 · CAT adjusting ↑</span><button class="qnxt" style="color:var(--purple)">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:white"><div class="wrap"><div class="stats">
+    <div class="stat"><div class="stat-n">2,400<span style="color:var(--purple)">+</span></div><div class="stat-l">Questions</div></div>
+    <div class="stat"><div class="stat-n">94<span style="color:var(--purple)">%</span></div><div class="stat-l">Pass rate</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">NCLEX domains</div></div>
+    <div class="stat"><div class="stat-n">100<span style="color:var(--purple)">%</span></div><div class="stat-l">NGN format coverage</div></div>
+  </div></div></div>
+
+  <section style="padding:64px 0;background:var(--purple-s)">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--purple)">Built for focus</p>
+      <h2 class="h2" style="margin-bottom:36px">A calmer way to<br>prepare for NCLEX.</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc" style="border-color:var(--purple-b)"><div class="fc-ico" style="background:var(--purple-s);border:1px solid var(--purple-b)">🔄</div><div class="fc-t">Adaptive difficulty</div><p class="fc-d">Calm, progressive difficulty that builds confidence — you're never thrown into water deeper than you're ready for.</p></div>
+        <div class="fc" style="border-color:var(--purple-b)"><div class="fc-ico" style="background:var(--purple-s);border:1px solid var(--purple-b)">🧠</div><div class="fc-t">Clinical reasoning</div><p class="fc-d">Every question explains the reasoning behind the answer — building real clinical judgment, not pattern matching.</p></div>
+        <div class="fc" style="border-color:var(--purple-b)"><div class="fc-ico" style="background:var(--purple-s);border:1px solid var(--purple-b)">📊</div><div class="fc-t">Progress visibility</div><p class="fc-d">Clear readiness scores across every domain so you always know exactly what to focus on next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:var(--purple);padding:64px 40px;text-align:center"><h2 style="font-size:36px;font-weight:800;color:white;margin-bottom:10px;letter-spacing:-.02em">Calm study. Confident results.</h2><p style="color:rgba(255,255,255,.6);margin-bottom:28px;font-size:16px">Free to start. No card needed.</p><a class="btn btn-white">Create free account →</a></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     O · SCORE FIRST — readiness score as the hero visual
+════════════════════════════════════════════════════════════ -->
+<div class="frame">
+  <nav class="nav"><span class="nav-logo">NurseNest</span><span class="nav-note">↑ Your existing nav — untouched</span></nav>
+
+  <section style="padding:72px 40px;background:var(--page)">
+    <div class="wrap" style="display:grid;grid-template-columns:1fr 500px;gap:64px;align-items:center">
+      <div>
+        <span class="eyebrow">NCLEX · CAT Exam Prep</span>
+        <h1 class="h1" style="margin-bottom:18px">Know your<br>readiness before<br><span style="color:var(--blue)">test day.</span></h1>
+        <p class="lead" style="margin-bottom:32px">After 10 adaptive questions, NurseNest generates a domain-by-domain readiness score. No guessing how ready you are — your score tells you exactly where to focus next.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-blue">Get my readiness score →</a>
+          <a class="btn btn-out">Browse question bank</a>
+        </div>
+        <p style="margin-top:16px;font-size:12.5px;color:var(--subtle)">Free · Takes 8 minutes · No account needed to start</p>
+      </div>
+
+      <!-- Score dashboard card -->
+      <div style="background:white;border:1px solid var(--cb);border-radius:20px;padding:28px;box-shadow:var(--shl)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><div style="font-size:15px;font-weight:700;color:var(--ink)">Your Readiness Score</div><div style="font-size:12px;color:var(--muted)">Based on 148 adaptive questions</div></div>
+          <span class="tag tag-green">On track to pass</span>
+        </div>
+
+        <!-- Big score gauge -->
+        <div style="text-align:center;padding:16px 0;margin-bottom:20px">
+          <div style="font-size:80px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-.04em">79<span style="font-size:32px;color:var(--blue)">%</span></div>
+          <div style="height:10px;background:var(--page);border-radius:99px;overflow:hidden;margin:12px 0;position:relative">
+            <div style="width:79%;height:100%;background:linear-gradient(90deg,var(--blue) 0%,#1aaee0 100%);border-radius:99px"></div>
+            <div style="position:absolute;left:72%;top:-4px;width:2px;height:18px;background:var(--amber);border-radius:1px"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--subtle)"><span>Below passing</span><span style="color:var(--amber);font-weight:600">← NCLEX pass line</span><span>Exceeds</span></div>
+        </div>
+
+        <!-- Domain breakdown -->
+        <div style="border-top:1px solid var(--cb);padding-top:16px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:10px">By domain</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--body);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Management of Care</span><div style="width:100px;height:6px;background:var(--page);border-radius:99px;flex-shrink:0;overflow:hidden"><div style="width:82%;height:100%;background:var(--green);border-radius:99px"></div></div><span style="font-size:11.5px;font-weight:600;color:var(--green);width:28px;text-align:right;flex-shrink:0">82%</span></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--body);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Pharmacology</span><div style="width:100px;height:6px;background:var(--page);border-radius:99px;flex-shrink:0;overflow:hidden"><div style="width:43%;height:100%;background:var(--amber);border-radius:99px"></div></div><span style="font-size:11.5px;font-weight:600;color:var(--amber);width:28px;text-align:right;flex-shrink:0">43%</span></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--body);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Safety &amp; Infection</span><div style="width:100px;height:6px;background:var(--page);border-radius:99px;flex-shrink:0;overflow:hidden"><div style="width:85%;height:100%;background:var(--green);border-radius:99px"></div></div><span style="font-size:11.5px;font-weight:600;color:var(--green);width:28px;text-align:right;flex-shrink:0">85%</span></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--body);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Physiological Adapt.</span><div style="width:100px;height:6px;background:var(--page);border-radius:99px;flex-shrink:0;overflow:hidden"><div style="width:49%;height:100%;background:var(--rose);border-radius:99px"></div></div><span style="font-size:11.5px;font-weight:600;color:var(--rose);width:28px;text-align:right;flex-shrink:0">49%</span></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--body);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Psychosocial Integrity</span><div style="width:100px;height:6px;background:var(--page);border-radius:99px;flex-shrink:0;overflow:hidden"><div style="width:71%;height:100%;background:var(--blue);border-radius:99px"></div></div><span style="font-size:11.5px;font-weight:600;color:var(--blue-dark);width:28px;text-align:right;flex-shrink:0">71%</span></div>
+          </div>
+          <a class="btn btn-blue" style="width:100%;justify-content:center;margin-top:16px;padding:11px">Get my real scores →</a>
+          <p style="text-align:center;font-size:11.5px;color:var(--subtle);margin-top:8px">Demo data — takes 10 questions to generate yours</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:64px 0;background:white">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <h2 class="h2" style="margin-bottom:36px">From your first question<br>to your exam date.</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="fc"><div style="font-size:24px;font-weight:800;color:var(--blue);margin-bottom:8px">01</div><div class="fc-t">Take a 10-question baseline</div><p class="fc-d">Answer 10 adaptive questions across different domains. Your readiness score generates immediately.</p></div>
+        <div class="fc"><div style="font-size:24px;font-weight:800;color:var(--blue);margin-bottom:8px">02</div><div class="fc-t">Focus on your weak domains</div><p class="fc-d">Your dashboard shows exactly which domains need work. Drill targeted adaptive questions.</p></div>
+        <div class="fc"><div style="font-size:24px;font-weight:800;color:var(--blue);margin-bottom:8px">03</div><div class="fc-t">Simulate the real exam</div><p class="fc-d">Run full 75–145 question CAT simulations with the same timing and difficulty as NCLEX.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-footer"><h2>Know your score in 10 questions.</h2><p>Free to start. No card. Takes 8 minutes.</p><a class="btn btn-white">Get my readiness score →</a></div>
+</div>
+
+<script>
+const frames = document.querySelectorAll('.frame');
+const tabs = document.querySelectorAll('.tab');
+
+function show(i) {
+  frames.forEach((f,j) => { f.classList.toggle('on', j===i); });
+  tabs.forEach((t,j) => { t.classList.toggle('on', j===i); });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+</script>
+</body>
+</html>

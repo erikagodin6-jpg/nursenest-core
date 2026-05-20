@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-04-13T20:23:53.894Z",
+  "currentTotalsBeforeRecovery": {
+    "us-rn-nclex-rn": 1026,
+    "ca-rn-nclex-rn": 742,
+    "us-lpn-nclex-pn": 1052,
+    "ca-rpn-rex-pn": 1041
+  },
+  "finalPublishedDbByPathway": {
+    "ca-rn-nclex-rn": 742,
+    "ca-rpn-rex-pn": 1041,
+    "us-lpn-nclex-pn": 1052,
+    "us-rn-nclex-rn": 1026
+  },
+  "countSemantics": {
+    "historicalUniqueLegacyLessonsInContentMap": {
+      "rnTier": 587,
+      "rpnPnTier": 922,
+      "note": "Unique legacy IDs per tier — not comparable to summed pathway row counts without reconciliation (each ID maps to US+CA rows)."
+    },
+    "recoveredFromSourceOperations": 0,
+    "recoveredFromSourceOperationsNote": "DB insert/update operations on pathway+slug keys — equals inserted+updated, not unique canonical lessons.",
+    "finalLivePublishedRowsCombinedRn": 1768,
+    "finalLivePublishedRowsCombinedRpnPn": 2093,
+    "reconciliationReport": "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json"
+  },
+  "historicalEstimate": {
+    "rn": 587,
+    "rpnPn": 922
+  },
+  "recoveredFromSource": 0,
+  "generatedTrueGapLessons": 0,
+  "hubTotals": {
+    "us-rn-nclex-rn": 1026,
+    "ca-rn-nclex-rn": 742,
+    "us-lpn-nclex-pn": 1052,
+    "ca-rpn-rex-pn": 1041
+  },
+  "detailRouteTotals": {
+    "us-rn-nclex-rn": 0,
+    "ca-rn-nclex-rn": 0,
+    "us-lpn-nclex-pn": 0,
+    "ca-rpn-rex-pn": 0
+  },
+  "randomResolutionChecks": {
+    "total": 0,
+    "failed": 0,
+    "rows": []
+  },
+  "adminOpsCountMatch": true,
+  "sampleUrls": [
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "hub": "/us/rn/nclex-rn/lessons"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "hub": "/canada/rn/nclex-rn/lessons"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "hub": "/us/lpn/nclex-pn/lessons"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "hub": "/canada/rpn/rex-pn/lessons"
+    }
+  ],
+  "blockers": []
+}

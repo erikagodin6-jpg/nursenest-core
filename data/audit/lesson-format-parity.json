@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "step": "lesson_format_theme",
+  "marketingLessonDetail": "src/app/(marketing)/.../lessons/[lessonSlug]/page.tsx",
+  "themeSystem": "semantic-status-tokens.css + globals / data-theme",
+  "spotCheck": {
+    "usesSemanticTheme": [
+      {
+        "component": "pathway-lesson-body",
+        "semanticTokensOrNnClasses": true
+      },
+      {
+        "component": "lesson-section-card",
+        "semanticTokensOrNnClasses": true
+      }
+    ],
+    "hardcodedColorSuspicion": []
+  },
+  "notes": [
+    "Visual parity vs legacy is validated in staging; automated check is token/class presence only.",
+    "Do not regress to pre-theme hardcoded colors on lesson surfaces."
+  ]
+}

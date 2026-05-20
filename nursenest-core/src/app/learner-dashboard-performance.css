@@ -1,0 +1,162 @@
+/**
+ * Learner dashboard Web Vitals — CLS reserves and skeleton alignment (/app study hub).
+ * Theme tokens only; no layout forks per theme.
+ */
+
+/* Priority band skeleton mirrors readiness strip grid (reduces Suspense → content shift). */
+.nn-dash-skeleton-priority-matrix {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.35rem);
+  grid-template-columns: minmax(0, 1fr);
+  min-height: clamp(22rem, 52vh, 28rem);
+}
+
+@media (min-width: 1024px) {
+  .nn-dash-skeleton-priority-matrix {
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+    align-items: start;
+    min-height: clamp(18rem, 38vh, 24rem);
+  }
+}
+
+.nn-dash-skeleton-priority-matrix__primary {
+  min-height: clamp(12rem, 28vh, 16rem);
+}
+
+.nn-dash-skeleton-priority-matrix__rail {
+  min-height: clamp(10rem, 22vh, 14rem);
+}
+
+/* Graph next-steps + adaptive overview: reserve vertical space before list paints. */
+.nn-educ-graph-next-steps-stable {
+  min-height: clamp(6.5rem, 18vh, 10rem);
+  contain: layout style;
+}
+
+.nn-adaptive-overview-graph-slot {
+  min-height: clamp(5.5rem, 14vh, 8.5rem);
+}
+
+.nn-adaptive-overview-root {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 28rem;
+}
+
+/* Client islands that mount after fetch — match loading skeleton footprint. */
+.nn-focus-today-reserve {
+  min-height: clamp(7.5rem, 20vh, 11rem);
+}
+
+.nn-coaching-dashboard-reserve {
+  min-height: clamp(8rem, 22vh, 12rem);
+}
+
+.nn-coaching-dashboard-reserve--settled:empty {
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hub nav: desktop column width stable without client-hydrated <details open>. */
+.nn-dash-hub-nav-desktop {
+  align-self: start;
+}
+
+/* ── Hub layout: desktop rail without client `details.open` (CLS) ─────── */
+@media (min-width: 1024px) {
+  .nn-dash-hub-layout {
+    display: grid;
+    grid-template-columns: minmax(11.5rem, 15rem) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  .nn-dash-hub-nav-details--mobile {
+    display: none;
+  }
+
+  .nn-dash-hub-nav-rail--desktop {
+    display: block;
+    position: sticky;
+    top: 5.5rem;
+    align-self: start;
+  }
+}
+
+@media (max-width: 1023px) {
+  .nn-dash-hub-nav-rail--desktop {
+    display: none;
+  }
+}
+
+/* ── Dashboard first paint: no layout-shifting entrances ──────────────── */
+.nn-dash--learner-home .nn-dash-section {
+  animation: none;
+}
+
+.nn-dash--learner-home .nn-progress-fill-reveal,
+.nn-dash--learner-home .nn-panel-chart-fade {
+  animation: none !important;
+  transform: none !important;
+}
+
+.nn-dash--learner-home .nn-progress-track-semantic [class*="transition-[width]"] {
+  transition: none !important;
+}
+
+.nn-dash--learner-home .nn-dash-hub-nav__link,
+.nn-dash--learner-home .nn-engagement-nudge {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.nn-dash-client-slot--coaching {
+  min-height: 7.5rem;
+}
+
+.nn-dash-client-slot--nudge {
+  min-height: 5.5rem;
+}
+
+.nn-dash-client-slot--spaced {
+  min-height: 4.75rem;
+}
+
+.nn-adaptive-loop-reserve {
+  min-height: clamp(6.5rem, 16vh, 9rem);
+}
+
+.nn-adaptive-loop-reserve--settled:empty {
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.nn-engagement-nudge-reserve {
+  min-height: clamp(4.75rem, 12vh, 6.5rem);
+}
+
+.nn-engagement-nudge-reserve--settled:empty {
+  min-height: 0;
+}
+
+.nn-spaced-review-reserve {
+  min-height: clamp(4.75rem, 12vh, 6rem);
+}
+
+.nn-spaced-review-reserve--settled:empty {
+  min-height: 0;
+}
+
+/* Lighthouse contrast: reasoning line on primary action card (WCAG AA on gradient surface). */
+.nn-primary-action-card__reasoning {
+  color: color-mix(in srgb, var(--semantic-text-primary) 78%, var(--semantic-text-muted));
+}
+
+.nn-dash-hub-nav-details__summary {
+  color: var(--semantic-text-primary);
+}

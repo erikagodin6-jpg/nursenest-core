@@ -1,0 +1,44 @@
+{
+  "detectedAt": "2026-04-14T17:00:00.000Z",
+  "primarySourceOfTruth": {
+    "path": "data/blog-manifest/batch-01/batch-01-import-ready.json",
+    "format": "JSON manifest",
+    "generatedAtInFile": "2026-04-14T04:04:09.449Z",
+    "batchId": "nclex-seo-batch-01",
+    "manifestReference": "data/blog-manifest/nclex-seo-100.manifest.json",
+    "entryCount": 10,
+    "structure": {
+      "perPostFields": [
+        "slug",
+        "title",
+        "excerpt",
+        "body (full HTML article)",
+        "locale",
+        "sourceLocale",
+        "translationGroupId",
+        "targetKeyword",
+        "seoTitle",
+        "seoDescription",
+        "relatedLessonPaths",
+        "relatedTools",
+        "category",
+        "careerSlug",
+        "exam",
+        "postTemplate",
+        "intent",
+        "workflowStatus",
+        "postStatus",
+        "requiresReferences",
+        "apaReferences",
+        "bodySourceFile (path to optional HTML fragment on disk)"
+      ],
+      "notes": "Bodies are full HTML <article> blocks suitable for BlogPost.body. Posts are DRAFT with NEEDS_MEDICAL_REVIEW until editorial approval."
+    }
+  },
+  "secondarySourcesNotPresentInWorkspace": {
+    "data/replit-exports/seo_articles.json": "missing — use nursenest-core/scripts/import-blog.ts when files are copied into data/replit-exports/",
+    "data/replit-exports/imaging_blog_articles.json": "missing",
+    "client/src/data/seo-content-articles.ts": "use existing import-blog.ts reader when present"
+  },
+  "recoveryPipeline": "nursenest-core/scripts/blog/import-legacy-manifest.ts"
+}

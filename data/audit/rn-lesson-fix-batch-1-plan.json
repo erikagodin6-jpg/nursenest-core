@@ -1,0 +1,2509 @@
+{
+  "generatedAt": "2026-04-15T02:56:25.921Z",
+  "sourceQueueGeneratedAt": "2026-04-15T02:54:44.866Z",
+  "sourceAuditGeneratedAt": "2026-04-15T02:54:44.866Z",
+  "batchSize": 100,
+  "selectionRules": "RN pathways only (us-rn-nclex-rn, ca-rn-nclex-rn, us-rn-new-grad-transition); routable; exclude duplicate_or_unclear_source and not_routable; sort content/structural gaps first, then pathway order US→CA→new-grad, then overallScore asc; cap 100.",
+  "lessons": [
+    {
+      "lessonId": "us-rn-nclex-rn:acute-pancreatitis-nursing-care",
+      "slug": "acute-pancreatitis-nursing-care",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:addisonian-crisis",
+      "slug": "addisonian-crisis",
+      "title": "Addisonian Crisis (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:aki-prerenal-vs-intrarenal",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:alcohol-withdrawal-ciwa",
+      "slug": "alcohol-withdrawal-ciwa",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:anemia-types-transfusion-thresholds",
+      "slug": "anemia-types-transfusion-thresholds",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:assignment-vs-delegation",
+      "slug": "assignment-vs-delegation",
+      "title": "Assignment vs Delegation (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:calcium-tetany",
+      "slug": "calcium-tetany",
+      "title": "Calcium & Tetany (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:cushing-syndrome-assessment",
+      "slug": "cushing-syndrome-assessment",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:dka-vs-hhs-priorities-hy",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:enteral-feeding-tube-safety",
+      "slug": "enteral-feeding-tube-safety",
+      "title": "Enteral Feeding Tube Safety (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:ethical-distress-advocacy",
+      "slug": "ethical-distress-advocacy",
+      "title": "Ethical Distress & Advocacy (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:fluid-volume-deficit",
+      "slug": "fluid-volume-deficit",
+      "title": "Fluid Volume Deficit (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:fluid-volume-excess",
+      "slug": "fluid-volume-excess",
+      "title": "Fluid Volume Excess (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:gerd-pud-bleeding-clues",
+      "slug": "gerd-pud-bleeding-clues",
+      "title": "GERD & PUD Bleeding Clues (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:gi-bleed-assessment",
+      "slug": "gi-bleed-assessment",
+      "title": "GI Bleed Assessment (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:growth-failure-red-flags",
+      "slug": "growth-failure-red-flags",
+      "title": "Growth Failure Red Flags (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hemodialysis-access-care",
+      "slug": "hemodialysis-access-care",
+      "title": "Hemodialysis Access Care (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hiv-confidentiality-pep-basics",
+      "slug": "hiv-confidentiality-pep-basics",
+      "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hypo-vs-hyperkalemia-hy",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "title": "Hypo- vs Hyperkalemia (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hyponatremia-vs-hypernatremia-hy",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:immobility-dvt-prophylaxis",
+      "slug": "immobility-dvt-prophylaxis",
+      "title": "Immobility & DVT Prophylaxis (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:immunization-schedule-essentials",
+      "slug": "immunization-schedule-essentials",
+      "title": "Immunization Schedule Essentials (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:increased-icp-positioning",
+      "slug": "increased-icp-positioning",
+      "title": "Increased ICP & Positioning (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:indwelling-catheter-risks",
+      "slug": "indwelling-catheter-risks",
+      "title": "Indwelling Catheter Risks (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:isolation-precautions-in-practice",
+      "slug": "isolation-precautions-in-practice",
+      "title": "Isolation Precautions in Practice (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:kidney-stones-strain-management",
+      "slug": "kidney-stones-strain-management",
+      "title": "Kidney Stones & Strain Management (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:late-decelerations-fhr",
+      "slug": "late-decelerations-fhr",
+      "title": "Late Decelerations & FHR (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:legal-nurse-practice-act",
+      "slug": "legal-nurse-practice-act",
+      "title": "Legal: Nurse Practice Act (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:liver-failure-hepatic-encephalopathy",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:magnesium-arrhythmia-risk",
+      "slug": "magnesium-arrhythmia-risk",
+      "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:meningitis-isolation-assessment",
+      "slug": "meningitis-isolation-assessment",
+      "title": "Meningitis Isolation & Assessment (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:migraine-vs-red-flag-headache",
+      "slug": "migraine-vs-red-flag-headache",
+      "title": "Migraine vs Red-Flag Headache (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:mixed-acid-base-patterns",
+      "slug": "mixed-acid-base-patterns",
+      "title": "Mixed Acid-Base Patterns (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:neutropenic-precautions",
+      "slug": "neutropenic-precautions",
+      "title": "Neutropenic Precautions (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:newborn-thermoregulation-feeding",
+      "slug": "newborn-thermoregulation-feeding",
+      "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:non-accidental-trauma-suspicion",
+      "slug": "non-accidental-trauma-suspicion",
+      "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:ostomy-skin-protection",
+      "slug": "ostomy-skin-protection",
+      "title": "Ostomy & Skin Protection (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:parkinson-disease-med-timing",
+      "slug": "parkinson-disease-med-timing",
+      "title": "Parkinson Disease Med Timing (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pediatric-fever-dehydration",
+      "slug": "pediatric-fever-dehydration",
+      "title": "Pediatric Fever & Dehydration (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:peritoneal-dialysis-complications",
+      "slug": "peritoneal-dialysis-complications",
+      "title": "Peritoneal Dialysis Complications (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:phosphate-shifts-in-renal",
+      "slug": "phosphate-shifts-in-renal",
+      "title": "Phosphate Shifts in Renal (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pleural-effusion-chest-tubes",
+      "slug": "pleural-effusion-chest-tubes",
+      "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:postpartum-hemorrhage",
+      "slug": "postpartum-hemorrhage",
+      "title": "Postpartum Hemorrhage (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:preeclampsia-vs-eclampsia",
+      "slug": "preeclampsia-vs-eclampsia",
+      "title": "Preeclampsia vs Eclampsia (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pressure-injury-staging",
+      "slug": "pressure-injury-staging",
+      "title": "Pressure Injury Staging (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:psychotropic-side-effects",
+      "slug": "psychotropic-side-effects",
+      "title": "Psychotropic Side Effects (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:qi-incident-reporting",
+      "slug": "qi-incident-reporting",
+      "title": "QI & Incident Reporting (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:ra-flare-immune-modulators",
+      "slug": "ra-flare-immune-modulators",
+      "title": "RA Flare & Immune Modulators (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:rh-incompatibility-basics",
+      "slug": "rh-incompatibility-basics",
+      "title": "Rh Incompatibility Basics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:rsv-pediatric-resp-distress",
+      "slug": "rsv-pediatric-resp-distress",
+      "title": "RSV & Pediatric Resp Distress (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:seizure-precautions-rescue-meds",
+      "slug": "seizure-precautions-rescue-meds",
+      "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:severe-dermatitis-skin-care",
+      "slug": "severe-dermatitis-skin-care",
+      "title": "Severe Dermatitis Skin Care (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:siadh-vs-di-basics",
+      "slug": "siadh-vs-di-basics",
+      "title": "SIADH vs DI Basics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:sickle-cell-pain-acs",
+      "slug": "sickle-cell-pain-acs",
+      "title": "Sickle Cell Pain & ACS (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:spinal-cord-injury-autonomic-dysreflexia",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:stroke-assessment-tpa-window",
+      "slug": "stroke-assessment-tpa-window",
+      "title": "Stroke Assessment & tPA Window (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:suicide-risk-assessment-hy",
+      "slug": "suicide-risk-assessment-hy",
+      "title": "Suicide Risk Assessment (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:tb-isolation-compliance",
+      "slug": "tb-isolation-compliance",
+      "title": "TB Isolation & Compliance (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:thyroid-storm-myxedema-clues",
+      "slug": "thyroid-storm-myxedema-clues",
+      "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:tpn-line-care-basics",
+      "slug": "tpn-line-care-basics",
+      "title": "TPN Line Care Basics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:transfusion-reaction-recognition",
+      "slug": "transfusion-reaction-recognition",
+      "title": "Transfusion Reaction Recognition (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:uti-vs-pyelonephritis",
+      "slug": "uti-vs-pyelonephritis",
+      "title": "UTI vs Pyelonephritis (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:wound-infection-vs-colonization",
+      "slug": "wound-infection-vs-colonization",
+      "title": "Wound Infection vs Colonization (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 10.5
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:diabetes-self-management-teaching",
+      "slug": "diabetes-self-management-teaching",
+      "title": "Diabetes Self-Management Teaching (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 15.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:sepsis-early-recognition-hy",
+      "slug": "sepsis-early-recognition-hy",
+      "title": "Sepsis Early Recognition (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 15.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "missing_educational:safety_or_priority_mentioned",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:abdominal-aortic-aneurysm-nclex-rn",
+      "slug": "abdominal-aortic-aneurysm-nclex-rn",
+      "title": "Abdominal Aortic Aneurysm (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (36 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (22 < 35 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:acute-coronary-syndrome-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "title": "Acute Coronary Syndrome (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (18 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:antibiotic-classes-allergies-hy",
+      "slug": "antibiotic-classes-allergies-hy",
+      "title": "Antibiotic Classes & Allergies (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:anticoagulants-bleeding-risk",
+      "slug": "anticoagulants-bleeding-risk",
+      "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:antihypertensive-combos",
+      "slug": "antihypertensive-combos",
+      "title": "Antihypertensive Combos (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:atrial-fibrillation-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "title": "Atrial Fibrillation (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (15 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:c-diff-infection-control",
+      "slug": "c-diff-infection-control",
+      "title": "C. diff Infection Control (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:cardiac-glycosides-toxicity",
+      "slug": "cardiac-glycosides-toxicity",
+      "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:chemo-safe-handling-extravasation",
+      "slug": "chemo-safe-handling-extravasation",
+      "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (11 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (37 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:falls-hourly-rounding",
+      "slug": "falls-hourly-rounding",
+      "title": "Falls & Hourly Rounding (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:heart-failure-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "title": "Heart Failure (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (23 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (35 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hip-fracture-fall-risk",
+      "slug": "hip-fracture-fall-risk",
+      "title": "Hip Fracture & Fall Risk (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hypertensive-encephalopathy-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "title": "Hypertensive Encephalopathy (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:infective-endocarditis-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "title": "Infective Endocarditis (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (13 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:insulin-hypoglycemia-hy",
+      "slug": "insulin-hypoglycemia-hy",
+      "title": "Insulin & Hypoglycemia (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:medication-error-disclosure",
+      "slug": "medication-error-disclosure",
+      "title": "Medication Error Disclosure (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:myocardial-infarction-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "title": "Myocardial Infarction (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (14 < 35 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:opioids-respiratory-depression",
+      "slug": "opioids-respiratory-depression",
+      "title": "Opioids & Respiratory Depression (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "title": "Peripheral Artery Disease (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (20 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:restraint-alternatives-policy",
+      "slug": "restraint-alternatives-policy",
+      "title": "Restraint Alternatives & Policy (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:sharp-safety-exposure",
+      "slug": "sharp-safety-exposure",
+      "title": "Sharp Safety & Exposure (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 16.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:diuretics-electrolyte-shifts",
+      "slug": "diuretics-electrolyte-shifts",
+      "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 20.7
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
+      "topFailureReasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links",
+        "not_in_exam_filtered_hub_list"
+      ],
+      "intendedFixScope": "legacy_spine_depth_clinical_scenario"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-dysrhythmias",
+      "slug": "us-rn-dysrhythmias",
+      "title": "Dysrhythmias (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 33.6
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (114 < 180).",
+        "Section \"red_flags\" below minimum word count (66 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "thin_total_word_count",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-insulin-hypoglycemia",
+      "slug": "us-rn-insulin-hypoglycemia",
+      "title": "Insulin & hypoglycemia (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 33.6
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (126 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "low_total_word_count",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-antibiotics",
+      "slug": "us-rn-antibiotics",
+      "title": "Antibiotics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 34.3
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "missing_educational:exam_or_reasoning_cues",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-asthma",
+      "slug": "us-rn-asthma",
+      "title": "Asthma (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 37.2
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (134 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Section \"red_flags\" below minimum word count (70 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-potassium-imbalance",
+      "slug": "us-rn-potassium-imbalance",
+      "title": "Potassium imbalance (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 37.2
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (111 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (83 < 120).",
+        "Section \"red_flags\" below minimum word count (52 < 80).",
+        "Section \"labs_diagnostics\" below minimum word count (84 < 100).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-acid-base-advanced",
+      "slug": "us-rn-acid-base-advanced",
+      "title": "Acid–base disorders (advanced) (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 38.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (87 < 180).",
+        "Section \"red_flags\" below minimum word count (64 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-angina",
+      "slug": "us-rn-angina",
+      "title": "Angina (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 38.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (138 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (109 < 120).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-copd-respiratory",
+      "slug": "us-rn-copd-respiratory",
+      "title": "COPD & respiratory basics (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 38.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:us-rn-delegation",
+      "slug": "us-rn-delegation",
+      "title": "Delegation & assignment (NCLEX-RN, US)",
+      "pathwayId": "us-rn-nclex-rn",
+      "currentScores": {
+        "overallScore": 38.1
+      },
+      "currentStatus": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "topFailureReasons": [
+        "Section \"introduction\" below minimum word count (135 < 180).",
+        "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "links:no_internal_study_links",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "intendedFixScope": "scoped_gold_premium_spine"
+    }
+  ]
+}

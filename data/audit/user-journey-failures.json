@@ -1,0 +1,28 @@
+{
+  "reportKind": "user_journey_failures",
+  "generatedAt": "2026-04-14T23:59:00.000Z",
+  "methodology": "Documentation-only pass. No live browser automation, no authenticated sessions, no production/staging URLs were exercised in the environment that produced this file.",
+  "journeySteps": [
+    { "step": 1, "name": "Landing on homepage", "status": "not_executed", "failures": [] },
+    { "step": 2, "name": "Navigate to RN pathway", "status": "not_executed", "failures": [] },
+    { "step": 3, "name": "Open lessons", "status": "not_executed", "failures": [] },
+    { "step": 4, "name": "Pre-lesson quiz", "status": "not_executed", "failures": [] },
+    { "step": 5, "name": "Complete lesson", "status": "not_executed", "failures": [] },
+    { "step": 6, "name": "Post-lesson quiz", "status": "not_executed", "failures": [] },
+    { "step": 7, "name": "Start CAT exam", "status": "not_executed", "failures": [] },
+    { "step": 8, "name": "Complete CAT session", "status": "not_executed", "failures": [] },
+    { "step": 9, "name": "View readiness score", "status": "not_executed", "failures": [] }
+  ],
+  "paywallVariants": {
+    "anonymous": { "status": "not_executed", "notes": "Requires scripted or manual session matrix (no cookies in this pass)." },
+    "free": { "status": "not_executed", "notes": "Define free-tier test account policy; do not use production PII." },
+    "paid_rn": { "status": "not_executed", "notes": "Use Stripe test mode + test subscriber only." }
+  },
+  "aggregatedFailures": [],
+  "blockingReason": "E2E and tri-role paywall validation require a dedicated QA run (Playwright/Cypress or manual checklist) with test accounts and explicit approval. This artifact reserves the schema for logging failures when that run occurs.",
+  "recommendedExecution": [
+    "Run nursenest-core e2e suite if present under e2e/ with BASE_URL and test credentials in CI secrets.",
+    "Record route-level failures with URL, role, expected vs actual HTTP status, and screenshot path (admin-only storage).",
+    "Cross-check paywall with data/audit/paywall-final-security.json after each release."
+  ]
+}

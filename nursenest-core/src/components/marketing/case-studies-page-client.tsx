@@ -1,0 +1,89 @@
+"use client";
+
+import { useState } from "react";
+
+type CaseItem = {
+  id: string;
+  title: string;
+  summary: string;
+  vignette: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  takeaway: string;
+};
+
+let caseStudiesCache: CaseItem[] | null = null;
+
+function getCaseStudies(): CaseItem[] {
+  if (caseStudiesCache) return caseStudiesCache;
+  caseStudiesCache = require("@/content/clinical-case-studies.json") as CaseItem[];
+  return caseStudiesCache;
+}
+
+export function CaseStudiesPageClient() {
+  const data = getCaseStudies();
+  const [open, setOpen] = useState<string | null>(data[0]?.id ?? null);
+  const [picked, setPicked] = useState<Record<string, number | null>>({});
+
+  return (
+    <div className="mx-auto max-w-3xl">
+      <header className="mb-10">
+        <h1 className="nn-marketing-h1">Clinical case studies</h1>
+        <p className="nn-marketing-lead mt-3 text-[var(--theme-muted-text)]">
+          Short, exam-style vignettes with prioritization and safety reasoning. Pair them with your question bank sessions.
+        </p>
+      </header>
+      <ul className="space-y-4">
+        {data.map((c) => {
+          const isOpen = open === c.id;
+          const choice = picked[c.id] ?? null;
+          return (
+            <li key={c.id} className="rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-sm">
+              <button
+                type="button"
+                className="flex w-full items-start justify-between gap-3 px-5 py-4 text-left"
+                onClick={() => setOpen(isOpen ? null : c.id)}
+              >
+                <div>
+                  <h2 className="nn-marketing-h4">{c.title}</h2>
+                  <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">{c.summary}</p>
+                </div>
+                <span className="shrink-0 text-sm text-primary">{isOpen ? "−" : "+"}</span>
+              </button>
+              {isOpen ? (
+                <div className="border-t border-[var(--theme-separator)] px-5 pb-5 pt-2">
+                  <p className="text-sm leading-relaxed text-[var(--theme-heading-text)]">{c.vignette}</p>
+                  <p className="mt-4 text-sm font-semibold text-[var(--theme-heading-text)]">{c.question}</p>
+                  <ul className="mt-3 space-y-2">
+                    {c.options.map((opt, i) => (
+                      <li key={opt}>
+                        <button
+                          type="button"
+                          onClick={() => setPicked((p) => ({ ...p, [c.id]: i }))}
+                          className={`w-full rounded-lg border px-3 py-2 text-left text-sm ${
+                            choice === i ? "border-primary bg-primary/10" : "border-[var(--theme-card-border)]"
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  {choice !== null ? (
+                    <p
+                      className={`mt-3 text-sm ${choice === c.correctIndex ? "text-emerald-800" : "text-amber-900"}`}
+                    >
+                      <span className="font-semibold">Takeaway: </span>
+                      {c.takeaway}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}

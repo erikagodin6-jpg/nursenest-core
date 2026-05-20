@@ -1,0 +1,210 @@
+"use client";
+
+/**
+ * FlashcardFilters — Compact filter bar for the deck hub.
+ *
+ * Exposes:
+ *   - Source type toggle chips (All / Lesson Concepts / Rationale-Derived / Weak Areas / Definitions)
+ *   - Pathway selector (optional)
+ *   - Topic / tag selector (optional)
+ *   - Exam family selector (optional)
+ *
+ * Design: pill-style filter chips with semantic surface tints. No harsh colors.
+ */
+
+import type { DeckDisplaySource } from "@/lib/flashcards/flashcard-generation";
+import { deckSourceAccentVar } from "@/lib/flashcards/flashcard-generation";
+import { formatTitleCase } from "@/lib/format/text-case";
+
+export type FlashcardFiltersValue = {
+  source: DeckDisplaySource | "";
+  pathwayId: string;
+  /** Category `topicCode` from lesson deep-links (`/app/flashcards?...&topicCode=`). */
+  topicCode: string;
+  examFamily: string;
+  tagSlug: string;
+  q: string;
+};
+
+type TagRow = { slug: string; name: string };
+type PathwayOption = { id: string; label: string };
+
+type FlashcardFiltersProps = {
+  value: FlashcardFiltersValue;
+  onChange: (next: Partial<FlashcardFiltersValue>) => void;
+  pathwayOptions?: PathwayOption[];
+  tagList?: TagRow[];
+  /** When true, pathway is fixed by the parent (e.g. tier-scoped flashcards hub) — no pathway dropdown. */
+  hidePathway?: boolean;
+};
+
+const EXAM_FAMILIES = ["NCLEX_RN", "NCLEX_PN", "REX_PN", "AANP", "GENERIC"] as const;
+
+const SOURCE_CHIPS: { label: string; value: DeckDisplaySource | "" }[] = [
+  { label: "All decks", value: "" },
+  { label: "Lesson Concepts", value: "Lesson Concepts" },
+  { label: "Rationale-Derived", value: "Rationale-Derived" },
+  { label: "Weak Areas", value: "Weak Areas" },
+  { label: "Definitions", value: "Definitions" },
+];
+
+function SourceChip({
+  chip,
+  active,
+  onSelect,
+}: {
+  chip: (typeof SOURCE_CHIPS)[number];
+  active: boolean;
+  onSelect: () => void;
+}) {
+  const accent =
+    chip.value
+      ? deckSourceAccentVar(chip.value)
+      : "var(--theme-primary)";
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className="rounded-full px-3 py-1.5 text-xs font-semibold transition"
+      aria-pressed={active}
+      style={
+        active
+          ? {
+              background: `color-mix(in srgb, ${accent} 18%, var(--bg-card, #fff))`,
+              color: accent,
+              border: `2px solid color-mix(in srgb, ${accent} 40%, var(--semantic-border-soft))`,
+            }
+          : {
+              background: "color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--theme-card-bg))",
+              color: "var(--semantic-text-secondary)",
+              border: "2px solid color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-text-muted))",
+            }
+      }
+    >
+      {chip.label}
+    </button>
+  );
+}
+
+export function FlashcardFilters({
+  value,
+  onChange,
+  pathwayOptions = [],
+  tagList = [],
+  hidePathway = false,
+}: FlashcardFiltersProps) {
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Source type chips */}
+      <div>
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">Deck type</p>
+        <div className="flex flex-wrap gap-2">
+          {SOURCE_CHIPS.map((chip) => (
+            <SourceChip
+              key={chip.value}
+              chip={chip}
+              active={value.source === chip.value}
+              onSelect={() => onChange({ source: chip.value })}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Selectors row */}
+      <div className="grid gap-3 sm:grid-cols-3">
+        {!hidePathway && pathwayOptions.length > 0 ? (
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
+              Pathway
+              <select
+                className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+                style={{
+                  background: "var(--theme-card-bg)",
+                  borderColor: "var(--semantic-border-soft)",
+                  color: "var(--semantic-text-primary)",
+                }}
+                value={value.pathwayId}
+                onChange={(e) => onChange({ pathwayId: e.target.value })}
+              >
+                <option value="">All pathways</option>
+                {pathwayOptions.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        ) : null}
+
+        <div>
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
+            Exam type
+            <select
+              className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+              style={{
+                background: "var(--theme-card-bg)",
+                borderColor: "var(--semantic-border-soft)",
+                color: "var(--semantic-text-primary)",
+              }}
+              value={value.examFamily}
+              onChange={(e) => onChange({ examFamily: e.target.value })}
+            >
+              <option value="">All exams</option>
+              {EXAM_FAMILIES.map((ef) => (
+                <option key={ef} value={ef}>
+                  {formatTitleCase(ef.replace(/_/g, " ").toLowerCase())}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        {tagList.length > 0 ? (
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
+              Topic tag
+              <select
+                className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+                style={{
+                  background: "var(--theme-card-bg)",
+                  borderColor: "var(--semantic-border-soft)",
+                  color: "var(--semantic-text-primary)",
+                }}
+                value={value.tagSlug}
+                onChange={(e) => onChange({ tagSlug: e.target.value })}
+              >
+                <option value="">All topics</option>
+                {tagList.map((t) => (
+                  <option key={t.slug} value={t.slug}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        ) : null}
+      </div>
+
+      {/* Search */}
+      <div>
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
+          Search decks
+          <input
+            type="search"
+            placeholder="Pharmacology, Cardiovascular…"
+            className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+            style={{
+              background: "var(--theme-card-bg)",
+              borderColor: "var(--semantic-border-soft)",
+              color: "var(--semantic-text-primary)",
+            }}
+            value={value.q}
+            onChange={(e) => onChange({ q: e.target.value })}
+          />
+        </label>
+      </div>
+    </div>
+  );
+}

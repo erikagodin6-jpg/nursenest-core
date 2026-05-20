@@ -1,0 +1,712 @@
+{
+  "version": 1,
+  "locale": "fr",
+  "items": [
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-ards",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "SDRA (NCLEX-RN, Canada)",
+        "topic": "SDRA",
+        "seoTitle": "SDRA | NCLEX-RN Canada | NurseNest",
+        "seoDescription": "Contexte infirmier au Canada : SDRA (ARDS) — oxygénation, ventilation protectrice et surveillance en unité.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur la **SDRA (ARDS)** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** lorsque l’énoncé indique des mmol/L et interprétez-les avec le contexte clinique."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque. Utilisez le contexte des soins aigus au Canada lorsque l’énoncé mentionne des unités ou des rôles."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + gaz du sang + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** items `topic:ards`.\n- **Canada :** attention aux **unités SI** et au **périmètre** dans les énoncés IPAC."
+          }
+        },
+        "preTest": [
+          {
+            "question": "Un client de 50 ans atteint de SDRA voit sa fonction rénale se détériorer. BUN 38 mg/dL, créatinine 2,8 mg/dL. TA 88/54, FC 116, FR 20 (ventilateur), SpO2 90 % sous FiO2 70 % avec PEEP 14. Diurèse 80 mL en 8 h. Quelle complication se développe le plus probablement ?",
+            "options": [
+              "Syndrome de dysfonction multiorganique (SDMO) : la SDRA avec insuffisance rénale et instabilité hémodynamique indique une détérioration systémique",
+              "Insuffisance rénale aiguë isolée due au produit de contraste",
+              "Réponse rénale normale à la ventilation mécanique",
+              "Néphrotoxicité médicamenteuse qui se corrigera avec l’ajustement des doses"
+            ],
+            "rationale": "La SDRA peut déclencher une réponse inflammatoire systémique menant au SDMO. La détérioration rénale (BUN/créatinine élevés, oligurie) avec hypotension et tachycardie dans ce contexte suggère fortement le SDMO, une situation à très haut risque nécessitant des soins de support agressifs."
+          },
+          {
+            "question": "Un client présente une pancréatite aiguë sévère ; le score de Ranson à l’admission est de 6. L’infirmière doit reconnaître que cela indique :",
+            "options": [
+              "Risque de mortalité élevé nécessitant surveillance de niveau USI et soins de support agressifs",
+              "Pancréatite légère avec récupération attendue complète",
+              "Pancréatite modérée nécessitant une prise en charge médicale standard",
+              "Indication à une chirurgie précoce"
+            ],
+            "rationale": "Les critères de Ranson estiment la gravité et la mortalité. Un score de 5–6 indique une mortalité d’environ 40 % et une prise en charge en USI avec surveillance rapprochée des complications (pancréatite nécrosante, SDRA, défaillance multiorganique)."
+          },
+          {
+            "question": "Une patiente de 75 ans ayant des antécédents de BPCO est admise pour détresse respiratoire aiguë. Sa saturation est de 88 % à l’air ambiant. Que doit faire l’IP en premier ?",
+            "options": [
+              "Administrer de l’oxygène supplémentaire selon l’ordonnance",
+              "Encourager la respiration avec les lèvres pincées",
+              "Ausculter les poumons et évaluer l’effort respiratoire",
+              "Obtenir une numération formule sanguine complète selon l’ordonnance"
+            ],
+            "rationale": "En détresse respiratoire aiguë, l’évaluation des bruits pulmonaires et de l’effort respiratoire précède les interventions : elle oriente la gravité de l’hypoxie et les prochaines actions, y compris l’oxygène."
+          },
+          {
+            "question": "Une infirmière surveille un patient atteint de pneumonie sous oxygénothérapie. Quel résultat indique le besoin d’intervention supplémentaire ?",
+            "options": [
+              "Fréquence respiratoire de 20/min",
+              "Saturation en oxygène de 88 % sous 2 L/min au masque à lunettes",
+              "Utilisation du diaphragme pour respirer",
+              "Murmure vésiculaire net à l’auscultation"
+            ],
+            "rationale": "Une SpO2 de 88 % sous 2 L/min indique une hypoxémie et nécessite une réévaluation et souvent une adaptation de l’oxygénothérapie ; l’objectif est généralement au-dessus de 92 % selon le contexte clinique."
+          },
+          {
+            "question": "Un client en transfusion sanguine développe un œdème aigu du poumon lié à la transfusion (TRALI). L’infirmière doit :",
+            "options": [
+              "Poursuivre la transfusion plus lentement",
+              "Arrêter immédiatement la transfusion et assurer une prise en charge respiratoire de support",
+              "Administrer des diurétiques pour l’œdème pulmonaire",
+              "Relancer la transfusion avec un nouveau filtre"
+            ],
+            "rationale": "TRALI : détresse respiratoire hypoxémique aiguë dans les 6 h suivant la transfusion. Arrêt de la transfusion, soins de support (oxygène, ventilation si nécessaire). Les diurétiques ne sont pas indiqués comme dans l’SRO liée à la surcharge (TACO)."
+          }
+        ],
+        "postTest": [
+          {
+            "question": "Quel signe d’évaluation correspond le mieux au syndrome de détresse respiratoire aiguë (SDRA) ?",
+            "options": [
+              "Poumons hyperinsufflés",
+              "Infiltrats pulmonaires bilatéraux",
+              "Épanchement pleural",
+              "Auscultation pulmonaire nette"
+            ],
+            "rationale": "La SDRA se caractérise notamment par des infiltrats bilatéraux sur l’imagerie et une hypoxémie sévère non corrigeable simplement par l’O2."
+          },
+          {
+            "question": "Quels constats cliniques sont associés à la SDRA ?",
+            "options": [
+              "Hypoxémie sévère",
+              "Infiltrats pulmonaires bilatéraux",
+              "Compliance pulmonaire diminuée",
+              "Atteinte alvéolaire diffuse",
+              "Saturation en oxygène normale"
+            ],
+            "rationale": "La SDRA associe hypoxémie sévère, infiltrats bilatéraux, compliance diminuée et atteinte alvéolaire diffuse ; la saturation n’est pas normale."
+          },
+          {
+            "question": "Une infirmière prend en charge un homme de 68 ans atteint de pneumonie et de BPCO : toux productive, dyspnée accrue. Quelle est l’action prioritaire ?",
+            "options": [
+              "Administrer un bronchodilatateur selon l’ordonnance",
+              "Obtenir un échantillon d’expectoration pour culture",
+              "Augmenter le débit d’oxygène",
+              "Encourager toux et respirations profondes"
+            ],
+            "rationale": "En détresse respiratoire aiguë avec BPCO, ouvrir les voies aérières avec un bronchodilatateur prescrit est souvent la priorité pour réduire la dyspnée ; les autres mesures suivent selon l’évaluation."
+          },
+          {
+            "question": "Un client de 55 ans atteint de SDRA est sous ventilation mécanique (FiO2 80 %, PEEP 12 cmH2O). TA 106/64, FC 98, SpO2 90 %. La SpO2 chute soudainement à 82 % avec augmentation des pressions de crête. Quelle complication suspecter en premier ?",
+            "options": [
+              "Pneumothorax par barotraumatisme lié aux pressions élevées et à la PEEP",
+              "Pneumonie associée au ventilateur évoluant en quelques minutes",
+              "Amélioration de la compliance réduisant le besoin de PEEP",
+              "Défaillance du saturimètre"
+            ],
+            "rationale": "Une désaturation brutale avec pics de pression évoque un pneumothorax sous ventilation à haute PEEP/FiO2 : urgence (auscultation, déviation trachéale, décompression si indiqué)."
+          },
+          {
+            "question": "Un homme de 30 ans présente une détresse respiratoire aiguë après exposition à la fumée de cigarette. Quelle intervention prioriser ?",
+            "options": [
+              "Administrer un corticostéroïde",
+              "Placer le patient en position haute (Fowler élevé)",
+              "Appliquer une compresse chaude sur le thorax",
+              "Initier la kinésithérapie respiratoire"
+            ],
+            "rationale": "La position haute optimise l’expansion pulmonaire et le confort ventilatoire en détresse aiguë ; les autres options ne traitent pas l’urgence immédiate."
+          },
+          {
+            "question": "Une infirmière prend en charge un client BPCO en détresse respiratoire aiguë. GSA : pH 7,28, PaCO2 58 mmHg, PaO2 55 mmHg, HCO3 26 mmol/L. Comment interpréter ?",
+            "options": [
+              "Acidose métabolique avec compensation respiratoire",
+              "Alcalose respiratoire par hyperventilation",
+              "Acidose respiratoire non compensée indiquant une défaillance ventilatoire aiguë",
+              "Gaz du sang artériels normaux"
+            ],
+            "rationale": "pH bas, PaCO2 élevé, HCO3 normal : acidose respiratoire non compensée avec hypoxémie — défaillance ventilatoire aiguë possible ; peut nécessiter VNI ou intubation selon le contexte."
+          },
+          {
+            "question": "Un client sous ventilation mécanique pour SDRA a un rapport P/F de 85. Cela indique :",
+            "options": [
+              "SDRA légère",
+              "SDRA modérée",
+              "SDRA sévère — envisager la décubitus ventral",
+              "Oxygénation normale"
+            ],
+            "rationale": "Critères de Berlin : P/F < 100 = SDRA sévère ; décubitus ventral prolongé, blocage neuro-musculaire, ECMO possibles selon les protocoles."
+          },
+          {
+            "question": "Un client atteint de SDRA est intubé et ventilé. GSA : pH 7,28, PaCO2 52 mmHg, PaO2 58 mmHg, HCO3 24 mEq/L. Comment interpréter ?",
+            "options": [
+              "Acidose respiratoire non compensée avec hypoxémie",
+              "Alcalose métabolique compensée",
+              "Acidose mixte respiratoire et métabolique",
+              "Acidose métabolique non compensée"
+            ],
+            "rationale": "pH bas, PaCO2 élevé, PaO2 bas, HCO3 normal : acidose respiratoire avec hypoxémie — ajustements ventilatoires pour améliorer ventilation et oxygénation."
+          },
+          {
+            "question": "Un client atteint de SDRA nécessite une ventilation « protectrice ». Cela inclut :",
+            "options": [
+              "Volumes courants élevés pour maximiser l’oxygénation",
+              "Faibles volumes courants (6 mL/kg du poids idéal) avec pression de plateau < 30 cmH2O",
+              "PEEP maximale sans surveillance de la compliance",
+              "Fréquence ventilatoire très rapide"
+            ],
+            "rationale": "Protocole ARDSNet : faibles volumes pour limiter le volutrauma ; plateau < 30 cmH2O ; PEEP pour recrutement ; hypercapnie permissive possible."
+          },
+          {
+            "question": "Une infirmière prend en charge un homme de 30 ans atteint de mucoviscidose en kinésithérapie pulmonaire ; aggravation soudaine de la toux et de la dyspnée. Quelle est l’action prioritaire ?",
+            "options": [
+              "Administrer un bronchodilatateur selon l’ordonnance",
+              "Prévenir immédiatement le médecin traitant",
+              "Évaluer la saturation en oxygène du patient",
+              "Encourager le spiromètre d’incitation"
+            ],
+            "rationale": "Évaluer d’abord la SpO2 pour quantifier la détresse respiratoire aiguë ; oriente l’oxygène et les escalades ; les bronchodilatateurs peuvent suivre selon l’évaluation."
+          }
+        ]
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-copd-respiratory",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "BPCO et bases respiratoires (NCLEX-RN, Canada)",
+        "topic": "BPCO et bases respiratoires",
+        "seoTitle": "BPCO et bases respiratoires | NCLEX-RN Canada | NurseNest",
+        "seoDescription": "Contexte infirmier au Canada : BPCO et bases respiratoires — données métriques et formulation adaptée au périmètre.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur la **BPCO** et la respiration vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** lorsque l’énoncé indique des mmol/L (p. ex. glucose, électrolytes) et interprétez-les avec le contexte clinique. Les normes provinciales et les politiques de l’employeur encadrent toujours la délégation et les actions autonomes."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal. Les items canadiens peuvent utiliser des unités métriques et des milieux de soins canadiens; le raisonnement clinique reste le même."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque. Utilisez le contexte des soins aigus au Canada lorsque l’énoncé mentionne des unités ou des rôles."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** travaillez les items étiquetés `topic:copd-respiratory`.\n- **Canada :** attention aux **laboratoires métriques** et au langage du **périmètre du collège** dans les énoncés IPAC."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-fluid-balance",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Déficit vs excès liquidien (NCLEX-RN, Canada)",
+        "topic": "Déficit vs excès liquidien",
+        "seoTitle": "Déficit vs excès liquidien | NCLEX-RN Canada | NurseNest",
+        "seoDescription": "Contexte infirmier au Canada : bilan liquidien — électrolytes SI et jugement clinique.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur le **déficit vs excès liquidien** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** pour les électrolytes lorsque l’énoncé les indique."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, équilibre hydroélectrolytique, fonction rénale/cardiaque) et à la surveillance qui confirme la réponse."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + bilan entrées/sorties + laboratoires** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:fluid-balance`.\n- **Canada :** vigilance aux **unités métriques** et au **périmètre**."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-heart-failure",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insuffisance cardiaque (NCLEX-RN, Canada)",
+        "topic": "Insuffisance cardiaque",
+        "seoTitle": "Insuffisance cardiaque | NCLEX-RN Canada | NurseNest",
+        "seoDescription": "Contexte infirmier au Canada : insuffisance cardiaque — données métriques et formulation adaptée au périmètre.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur l’**insuffisance cardiaque** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** lorsque l’énoncé indique des mmol/L et interprétez-les avec le contexte clinique. Les normes provinciales et les politiques de l’employeur encadrent la délégation et les actions autonomes."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal. Les items canadiens peuvent utiliser des unités métriques; le raisonnement clinique reste le même."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque. Utilisez le contexte des soins aigus au Canada lorsque l’énoncé mentionne des unités ou des rôles."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** travaillez les items étiquetés `topic:heart-failure`.\n- **Canada :** attention aux **laboratoires métriques** et au langage du **périmètre du collège**."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-insulin-hypoglycemia",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insuline et hypoglycémie (NCLEX-RN, Canada)",
+        "topic": "Insuline et hypoglycémie",
+        "seoTitle": "Insuline et hypoglycémie | NCLEX-RN Canada | NurseNest",
+        "seoDescription": "Contexte infirmier au Canada : insuline et hypoglycémie — SI, sécurité médicamenteuse et périmètre.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur l’**insuline** et l’**hypoglycémie** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **mmol/L** pour le glucose lorsque l’énoncé les indique. Les normes provinciales encadrent la délégation et les actions autonomes."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions à la dynamique **glucose–insuline**, aux signes de **neuroglycopénie**, et à la surveillance qui confirme la réponse au traitement."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + glycémie + récit** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:insulin-hypoglycemia`.\n- **Canada :** vigilance aux **unités SI** et au **périmètre** dans les énoncés IPAC."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-sepsis",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Sepsis (NCLEX-RN, Canada)",
+        "topic": "Sepsis",
+        "seoTitle": "Sepsis | NCLEX-RN Canada | NurseNest",
+        "seoDescription": "Contexte infirmier au Canada : sepsis — lactate, antibiotiques précoces et surveillance.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur le **sepsis** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** (p. ex. lactate mmol/L) et le contexte des soins canadiens."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions à la **perfusion tissulaire**, à la **réponse inflammatoire** et à la surveillance (lactate, perfusion, perfusion de liquides, cultures) qui confirme la réponse au traitement."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:sepsis`.\n- **Canada :** vigilance aux **seuils métriques** et au **périmètre** dans les énoncés IPAC."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-ards",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "SDRA (NCLEX-RN, États-Unis)",
+        "topic": "SDRA",
+        "seoTitle": "SDRA | NCLEX-RN US | NurseNest",
+        "seoDescription": "NCLEX-RN (É.-U.) : SDRA (ARDS) — oxygénation, ventilation protectrice et surveillance.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur la **SDRA (ARDS)** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + gaz du sang + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** items `topic:ards`."
+          }
+        },
+        "preTest": [
+          {
+            "question": "Un client de 50 ans atteint de SDRA voit sa fonction rénale se détériorer. BUN 38 mg/dL, créatinine 2,8 mg/dL. TA 88/54, FC 116, FR 20 (ventilateur), SpO2 90 % sous FiO2 70 % avec PEEP 14. Diurèse 80 mL en 8 h. Quelle complication se développe le plus probablement ?",
+            "options": [
+              "Syndrome de dysfonction multiorganique (SDMO) : la SDRA avec insuffisance rénale et instabilité hémodynamique indique une détérioration systémique",
+              "Insuffisance rénale aiguë isolée due au produit de contraste",
+              "Réponse rénale normale à la ventilation mécanique",
+              "Néphrotoxicité médicamenteuse qui se corrigera avec l’ajustement des doses"
+            ],
+            "rationale": "La SDRA peut déclencher une réponse inflammatoire systémique menant au SDMO. La détérioration rénale (BUN/créatinine élevés, oligurie) avec hypotension et tachycardie dans ce contexte suggère fortement le SDMO, une situation à très haut risque nécessitant des soins de support agressifs."
+          },
+          {
+            "question": "Un client présente une pancréatite aiguë sévère ; le score de Ranson à l’admission est de 6. L’infirmière doit reconnaître que cela indique :",
+            "options": [
+              "Risque de mortalité élevé nécessitant surveillance de niveau USI et soins de support agressifs",
+              "Pancréatite légère avec récupération attendue complète",
+              "Pancréatite modérée nécessitant une prise en charge médicale standard",
+              "Indication à une chirurgie précoce"
+            ],
+            "rationale": "Les critères de Ranson estiment la gravité et la mortalité. Un score de 5–6 indique une mortalité d’environ 40 % et une prise en charge en USI avec surveillance rapprochée des complications (pancréatite nécrosante, SDRA, défaillance multiorganique)."
+          },
+          {
+            "question": "Une patiente de 75 ans ayant des antécédents de BPCO est admise pour détresse respiratoire aiguë. Sa saturation est de 88 % à l’air ambiant. Que doit faire l’IP en premier ?",
+            "options": [
+              "Administrer de l’oxygène supplémentaire selon l’ordonnance",
+              "Encourager la respiration avec les lèvres pincées",
+              "Ausculter les poumons et évaluer l’effort respiratoire",
+              "Obtenir une numération formule sanguine complète selon l’ordonnance"
+            ],
+            "rationale": "En détresse respiratoire aiguë, l’évaluation des bruits pulmonaires et de l’effort respiratoire précède les interventions : elle oriente la gravité de l’hypoxie et les prochaines actions, y compris l’oxygène."
+          },
+          {
+            "question": "Une infirmière surveille un patient atteint de pneumonie sous oxygénothérapie. Quel résultat indique le besoin d’intervention supplémentaire ?",
+            "options": [
+              "Fréquence respiratoire de 20/min",
+              "Saturation en oxygène de 88 % sous 2 L/min au masque à lunettes",
+              "Utilisation du diaphragme pour respirer",
+              "Murmure vésiculaire net à l’auscultation"
+            ],
+            "rationale": "Une SpO2 de 88 % sous 2 L/min indique une hypoxémie et nécessite une réévaluation et souvent une adaptation de l’oxygénothérapie ; l’objectif est généralement au-dessus de 92 % selon le contexte clinique."
+          },
+          {
+            "question": "Un client en transfusion sanguine développe un œdème aigu du poumon lié à la transfusion (TRALI). L’infirmière doit :",
+            "options": [
+              "Poursuivre la transfusion plus lentement",
+              "Arrêter immédiatement la transfusion et assurer une prise en charge respiratoire de support",
+              "Administrer des diurétiques pour l’œdème pulmonaire",
+              "Relancer la transfusion avec un nouveau filtre"
+            ],
+            "rationale": "TRALI : détresse respiratoire hypoxémique aiguë dans les 6 h suivant la transfusion. Arrêt de la transfusion, soins de support (oxygène, ventilation si nécessaire). Les diurétiques ne sont pas indiqués comme dans l’SRO liée à la surcharge (TACO)."
+          }
+        ],
+        "postTest": [
+          {
+            "question": "Quel signe d’évaluation correspond le mieux au syndrome de détresse respiratoire aiguë (SDRA) ?",
+            "options": [
+              "Poumons hyperinsufflés",
+              "Infiltrats pulmonaires bilatéraux",
+              "Épanchement pleural",
+              "Auscultation pulmonaire nette"
+            ],
+            "rationale": "La SDRA se caractérise notamment par des infiltrats bilatéraux sur l’imagerie et une hypoxémie sévère non corrigeable simplement par l’O2."
+          },
+          {
+            "question": "Quels constats cliniques sont associés à la SDRA ?",
+            "options": [
+              "Hypoxémie sévère",
+              "Infiltrats pulmonaires bilatéraux",
+              "Compliance pulmonaire diminuée",
+              "Atteinte alvéolaire diffuse",
+              "Saturation en oxygène normale"
+            ],
+            "rationale": "La SDRA associe hypoxémie sévère, infiltrats bilatéraux, compliance diminuée et atteinte alvéolaire diffuse ; la saturation n’est pas normale."
+          },
+          {
+            "question": "Une infirmière prend en charge un homme de 68 ans atteint de pneumonie et de BPCO : toux productive, dyspnée accrue. Quelle est l’action prioritaire ?",
+            "options": [
+              "Administrer un bronchodilatateur selon l’ordonnance",
+              "Obtenir un échantillon d’expectoration pour culture",
+              "Augmenter le débit d’oxygène",
+              "Encourager toux et respirations profondes"
+            ],
+            "rationale": "En détresse respiratoire aiguë avec BPCO, ouvrir les voies aériennes avec un bronchodilatateur prescrit est souvent la priorité pour réduire la dyspnée ; les autres mesures suivent selon l’évaluation."
+          },
+          {
+            "question": "Un client de 55 ans atteint de SDRA est sous ventilation mécanique (FiO2 80 %, PEEP 12 cmH2O). TA 106/64, FC 98, SpO2 90 %. La SpO2 chute soudainement à 82 % avec augmentation des pressions de crête. Quelle complication suspecter en premier ?",
+            "options": [
+              "Pneumothorax par barotraumatisme lié aux pressions élevées et à la PEEP",
+              "Pneumonie associée au ventilateur évoluant en quelques minutes",
+              "Amélioration de la compliance réduisant le besoin de PEEP",
+              "Défaillance du saturimètre"
+            ],
+            "rationale": "Une désaturation brutale avec pics de pression évoque un pneumothorax sous ventilation à haute PEEP/FiO2 : urgence (auscultation, déviation trachéale, décompression si indiqué)."
+          },
+          {
+            "question": "Un homme de 30 ans présente une détresse respiratoire aiguë après exposition à la fumée de cigarette. Quelle intervention prioriser ?",
+            "options": [
+              "Administrer un corticostéroïde",
+              "Placer le patient en position haute (Fowler élevé)",
+              "Appliquer une compresse chaude sur le thorax",
+              "Initier la kinésithérapie respiratoire"
+            ],
+            "rationale": "La position haute optimise l’expansion pulmonaire et le confort ventilatoire en détresse aiguë ; les autres options ne traitent pas l’urgence immédiate."
+          },
+          {
+            "question": "Une infirmière prend en charge un client BPCO en détresse respiratoire aiguë. GSA : pH 7,28, PaCO2 58 mmHg, PaO2 55 mmHg, HCO3 26 mmol/L. Comment interpréter ?",
+            "options": [
+              "Acidose métabolique avec compensation respiratoire",
+              "Alcalose respiratoire par hyperventilation",
+              "Acidose respiratoire non compensée indiquant une défaillance ventilatoire aiguë",
+              "Gaz du sang artériels normaux"
+            ],
+            "rationale": "pH bas, PaCO2 élevé, HCO3 normal : acidose respiratoire non compensée avec hypoxémie — défaillance ventilatoire aiguë possible ; peut nécessiter VNI ou intubation selon le contexte."
+          },
+          {
+            "question": "Un client sous ventilation mécanique pour SDRA a un rapport P/F de 85. Cela indique :",
+            "options": [
+              "SDRA légère",
+              "SDRA modérée",
+              "SDRA sévère — envisager la décubitus ventral",
+              "Oxygénation normale"
+            ],
+            "rationale": "Critères de Berlin : P/F < 100 = SDRA sévère ; décubitus ventral prolongé, blocage neuro-musculaire, ECMO possibles selon les protocoles."
+          },
+          {
+            "question": "Un client atteint de SDRA est intubé et ventilé. GSA : pH 7,28, PaCO2 52 mmHg, PaO2 58 mmHg, HCO3 24 mEq/L. Comment interpréter ?",
+            "options": [
+              "Acidose respiratoire non compensée avec hypoxémie",
+              "Alcalose métabolique compensée",
+              "Acidose mixte respiratoire et métabolique",
+              "Acidose métabolique non compensée"
+            ],
+            "rationale": "pH bas, PaCO2 élevé, PaO2 bas, HCO3 normal : acidose respiratoire avec hypoxémie — ajustements ventilatoires pour améliorer ventilation et oxygénation."
+          },
+          {
+            "question": "Un client atteint de SDRA nécessite une ventilation « protectrice ». Cela inclut :",
+            "options": [
+              "Volumes courants élevés pour maximiser l’oxygénation",
+              "Faibles volumes courants (6 mL/kg du poids idéal) avec pression de plateau < 30 cmH2O",
+              "PEEP maximale sans surveillance de la compliance",
+              "Fréquence ventilatoire très rapide"
+            ],
+            "rationale": "Protocole ARDSNet : faibles volumes pour limiter le volutrauma ; plateau < 30 cmH2O ; PEEP pour recrutement ; hypercapnie permissive possible."
+          },
+          {
+            "question": "Une infirmière prend en charge un homme de 30 ans atteint de mucoviscidose en kinésithérapie pulmonaire ; aggravation soudaine de la toux et de la dyspnée. Quelle est l’action prioritaire ?",
+            "options": [
+              "Administrer un bronchodilatateur selon l’ordonnance",
+              "Prévenir immédiatement le médecin traitant",
+              "Évaluer la saturation en oxygène du patient",
+              "Encourager le spiromètre d’incitation"
+            ],
+            "rationale": "Évaluer d’abord la SpO2 pour quantifier la détresse respiratoire aiguë ; oriente l’oxygène et les escalades ; les bronchodilatateurs peuvent suivre selon l’évaluation."
+          }
+        ]
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-copd-respiratory",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "BPCO et bases respiratoires (NCLEX-RN, États-Unis)",
+        "topic": "BPCO et bases respiratoires",
+        "seoTitle": "BPCO et bases respiratoires | NCLEX-RN US | NurseNest",
+        "seoDescription": "NCLEX-RN (É.-U.) : BPCO et bases respiratoires — leçon à cinq sections, banque alignée.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur la **BPCO** et la respiration vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** travaillez les items étiquetés `topic:copd-respiratory`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-fluid-balance",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Déficit vs excès liquidien (NCLEX-RN, États-Unis)",
+        "topic": "Déficit vs excès liquidien",
+        "seoTitle": "Déficit vs excès liquidien | NCLEX-RN US | NurseNest",
+        "seoDescription": "NCLEX-RN (É.-U.) : bilan liquidien — électrolytes et surveillance.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur le **déficit vs excès liquidien** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, équilibre hydroélectrolytique, fonction rénale/cardiaque) et à la surveillance qui confirme la réponse."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + bilan entrées/sorties + laboratoires** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:fluid-balance`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-heart-failure",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insuffisance cardiaque (NCLEX-RN, États-Unis)",
+        "topic": "Insuffisance cardiaque",
+        "seoTitle": "Insuffisance cardiaque | NCLEX-RN US | NurseNest",
+        "seoDescription": "NCLEX-RN (É.-U.) : insuffisance cardiaque — banque alignée, leçon à cinq sections.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur l’**insuffisance cardiaque** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions au schéma sous-jacent (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la surveillance qui confirme que l’intervention fonctionne."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- Éliminez les options qui **négligent l’évaluation** ou **retardent l’escalade** lorsque les données montrent une instabilité.\n- **Banque :** travaillez les items étiquetés `topic:heart-failure`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-insulin-hypoglycemia",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insuline et hypoglycémie (NCLEX-RN, États-Unis)",
+        "topic": "Insuline et hypoglycémie",
+        "seoTitle": "Insuline et hypoglycémie | NCLEX-RN US | NurseNest",
+        "seoDescription": "NCLEX-RN (É.-U.) : insuline et hypoglycémie — sécurité médicamenteuse et surveillance.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur l’**insuline** et l’**hypoglycémie** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions à la dynamique **glucose–insuline**, aux signes de **neuroglycopénie**, et à la surveillance qui confirme la réponse au traitement."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + glycémie + récit** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:insulin-hypoglycemia`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-sepsis",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Sepsis (NCLEX-RN, États-Unis)",
+        "topic": "Sepsis",
+        "seoTitle": "Sepsis | NCLEX-RN US | NurseNest",
+        "seoDescription": "NCLEX-RN (É.-U.) : sepsis — reconnaissance précoce, antibiotiques et réanimation.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Signification clinique",
+            "body": "Les questions sur le **sepsis** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte."
+          },
+          "exam_relevance": {
+            "heading": "Pertinence pour l’examen",
+            "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+          },
+          "core_concept": {
+            "heading": "Concept central",
+            "body": "Reliez les interventions à la **perfusion tissulaire**, à la **réponse inflammatoire** et à la surveillance (lactate, perfusion, réponse aux liquides, cultures)."
+          },
+          "clinical_scenario": {
+            "heading": "Scénario clinique",
+            "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+          },
+          "takeaways": {
+            "heading": "Points à retenir",
+            "body": "- Reliez **signes vitaux + laboratoires + récit** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:sepsis`."
+          }
+        }
+      }
+    }
+  ]
+}

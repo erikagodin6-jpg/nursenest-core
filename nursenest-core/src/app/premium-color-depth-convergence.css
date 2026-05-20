@@ -1,0 +1,287 @@
+/**
+ * Premium Color Depth Convergence
+ *
+ * Additive visual-richness layer. Token-only, scoped to premium platform,
+ * learner, marketing, auth, lesson, exam, flashcard, cockpit, account,
+ * clinical, and admin-preview roots.
+ */
+
+:root {
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-chart-3) 18%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-chart-5) 14%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-chart-8) 13%, transparent);
+  --nn-depth-ambient:
+    radial-gradient(780px 340px at 8% -8%, var(--nn-depth-glow-a), transparent 62%),
+    radial-gradient(680px 300px at 96% 0%, var(--nn-depth-glow-b), transparent 64%),
+    radial-gradient(620px 280px at 48% 110%, var(--nn-depth-glow-c), transparent 68%);
+  --nn-depth-surface:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 32%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-lavender)) 48%,
+      color-mix(in srgb, var(--semantic-panel-warm) 24%, var(--semantic-surface)) 100%
+    );
+  --nn-depth-surface-alt:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-panel-mint) 24%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-panel-aqua) 18%, var(--semantic-surface)) 46%,
+      color-mix(in srgb, var(--semantic-panel-peach) 18%, var(--semantic-surface))
+    );
+  --nn-depth-border: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 18%);
+  --nn-depth-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 70%, transparent) inset,
+    0 18px 48px -34px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    0 10px 34px -28px color-mix(in srgb, var(--semantic-brand) 25%, transparent);
+  --nn-depth-shadow-hover:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 76%, transparent) inset,
+    0 24px 58px -36px color-mix(in srgb, var(--semantic-text-primary) 24%, transparent),
+    0 14px 40px -30px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
+  --nn-depth-chart-a: var(--semantic-chart-3);
+  --nn-depth-chart-b: var(--semantic-chart-5);
+  --nn-depth-chart-c: var(--semantic-chart-8);
+  --nn-depth-chart-d: var(--semantic-warning);
+  --nn-depth-chart-e: var(--semantic-success);
+}
+
+html[data-theme="ocean"] {
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-info) 22%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-accent-turquoise) 18%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-accent-gold) 11%, transparent);
+}
+
+html[data-theme="blossom"] {
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-accent-lavender) 20%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-accent-peach) 16%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-info) 12%, transparent);
+}
+
+html[data-theme="midnight"] {
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-info) 18%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-accent-lavender) 16%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-accent-gold) 10%, transparent);
+  --nn-depth-surface:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-info)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 93%, var(--semantic-accent-indigo)) 52%,
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-accent-lavender)) 100%
+    );
+}
+
+html[data-theme="sunset"] {
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-accent-peach) 24%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-accent-plum) 16%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-accent-gold) 16%, transparent);
+}
+
+html[data-theme="aurora"] {
+  --nn-depth-glow-a: color-mix(in srgb, var(--semantic-accent-turquoise) 22%, transparent);
+  --nn-depth-glow-b: color-mix(in srgb, var(--semantic-accent-lavender) 18%, transparent);
+  --nn-depth-glow-c: color-mix(in srgb, var(--semantic-accent-mint) 16%, transparent);
+}
+
+html[data-theme="ocean"] [data-nn-premium-color-depth],
+html[data-theme="blossom"] [data-nn-premium-color-depth],
+html[data-theme="midnight"] [data-nn-premium-color-depth],
+html[data-theme="sunset"] [data-nn-premium-color-depth],
+html[data-theme="aurora"] [data-nn-premium-color-depth],
+html[data-theme="ocean"] [data-nn-premium-full-platform-convergence],
+html[data-theme="blossom"] [data-nn-premium-full-platform-convergence],
+html[data-theme="midnight"] [data-nn-premium-full-platform-convergence],
+html[data-theme="sunset"] [data-nn-premium-full-platform-convergence],
+html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
+  --nn-color-depth-theme-covered: 1;
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence],
+  .nn-premium-auth-system,
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell,
+  .nn-pre-nursing-marketing-hub,
+  .nn-flashcards-hub-premium,
+  .nn-exam-session-premium,
+  .nn-dash--learner-home,
+  .nn-labs-hub,
+  [data-nn-med-calc-hub],
+  [data-nn-scenario-study-shell]
+) {
+  position: relative;
+  isolation: isolate;
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence],
+  .nn-premium-auth-system,
+  .nn-premium-lessons-system,
+  .nn-pre-nursing-marketing-hub,
+  .nn-flashcards-hub-premium,
+  .nn-dash--learner-home,
+  .nn-labs-hub,
+  [data-nn-med-calc-hub],
+  [data-nn-scenario-study-shell]
+)::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1rem -0.75rem auto;
+  height: min(34rem, 62vh);
+  border-radius: 9999px;
+  background: var(--nn-depth-ambient);
+  opacity: 0.72;
+  z-index: -1;
+}
+
+:is(
+  .nn-learner-page-hero,
+  .nn-dash-page-header,
+  .nn-premium-practice-hub-hero,
+  .nn-flashcards-hub-hero,
+  .nn-labs-hub__hero,
+  [data-nn-scenario-study-shell] > header,
+  .nn-premium-auth-card,
+  .nn-premium-auth-story,
+  .nn-premium-lessons-hub-hero,
+  .nn-premium-lesson-detail-shell header
+) {
+  border-color: var(--nn-depth-border);
+  background: var(--nn-depth-surface);
+  box-shadow: var(--nn-depth-shadow);
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence] .nn-card,
+  [data-nn-premium-full-platform-convergence] .lv-card,
+  [data-nn-premium-full-platform-convergence] .nn-ls-surface,
+  .nn-flashcards-deck-library-surface,
+  .nn-flashcards-deck-match-band,
+  .nn-premium-practice-hub-builder,
+  .nn-practice-exam-rationale-premium .nn-practice-exam-rationale-panel__card,
+  .nn-report-card-topic-signal,
+  .nn-cockpit-mastery-key,
+  .nn-cockpit-readiness-card,
+  .nn-labs-hub article,
+  [data-nn-med-calc-hub] article
+) {
+  background: var(--nn-depth-surface-alt);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--nn-depth-chart-a) 16%);
+  box-shadow: var(--nn-depth-shadow);
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence] .nn-card,
+  [data-nn-premium-full-platform-convergence] .lv-card,
+  [data-nn-premium-full-platform-convergence] .nn-ls-surface,
+  .nn-flashcards-deck-library-surface,
+  .nn-flashcards-deck-match-band,
+  .nn-premium-practice-hub-builder,
+  .nn-labs-hub article,
+  [data-nn-med-calc-hub] article
+):hover {
+  box-shadow: var(--nn-depth-shadow-hover);
+}
+
+:is(
+  .nn-progress-track-semantic,
+  .nn-exam-progress-premium .nn-progress-track-semantic--md,
+  .nn-cockpit-readiness-card .nn-progress-track-semantic,
+  .nn-flashcard-study-stack-premium .nn-progress-track-semantic
+) {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--nn-depth-chart-a) 14%, var(--semantic-panel-muted)),
+      color-mix(in srgb, var(--nn-depth-chart-b) 10%, var(--semantic-panel-muted)),
+      color-mix(in srgb, var(--nn-depth-chart-c) 12%, var(--semantic-panel-muted))
+    );
+}
+
+:is(
+  .nn-badge-semantic-info,
+  .nn-badge-semantic-success,
+  .nn-badge-semantic-warning,
+  .nn-badge-semantic-danger,
+  .nn-ls-chip,
+  .nn-premium-auth-pathway-pill,
+  .nn-premium-auth-theme-pill
+) {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 68%, transparent) inset,
+    0 8px 20px -16px color-mix(in srgb, var(--semantic-brand) 26%, transparent);
+}
+
+:is(
+  .lesson-section-card,
+  .nn-premium-lesson-section,
+  [data-nn-premium-lessons-section-system],
+  [data-nn-premium-individual-lesson-recommendations]
+) {
+  --nn-section-depth-accent: var(--lesson-pearls-accent, var(--semantic-chart-5));
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--nn-section-depth-accent) 7%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-panel-muted) 64%, var(--semantic-surface))
+    );
+  border-color: color-mix(in srgb, var(--nn-section-depth-accent) 20%, var(--semantic-border-soft));
+  box-shadow: var(--nn-depth-shadow);
+}
+
+[data-nn-premium-platform-family="exam-study"] {
+  --nn-platform-family-accent: var(--semantic-chart-3);
+  --nn-platform-family-panel: var(--semantic-panel-aqua);
+}
+
+[data-nn-premium-platform-family="learner-account"] {
+  --nn-platform-family-accent: var(--semantic-chart-5);
+  --nn-platform-family-panel: var(--semantic-panel-lavender);
+}
+
+[data-nn-premium-platform-family="clinical"] {
+  --nn-platform-family-accent: var(--semantic-chart-7);
+  --nn-platform-family-panel: var(--semantic-panel-mint);
+}
+
+[data-nn-premium-platform-family="admin-preview"] {
+  --nn-platform-family-accent: var(--semantic-chart-6);
+  --nn-platform-family-panel: var(--semantic-panel-muted);
+}
+
+@media (max-width: 767px) {
+  :is(
+    [data-nn-premium-full-platform-convergence],
+    .nn-premium-auth-system,
+    .nn-premium-lessons-system,
+    .nn-flashcards-hub-premium,
+    .nn-dash--learner-home,
+    .nn-labs-hub,
+    [data-nn-med-calc-hub],
+    [data-nn-scenario-study-shell]
+  )::after {
+    inset-inline: -2rem;
+    height: min(26rem, 54vh);
+    opacity: 0.56;
+  }
+
+  :is(.nn-learner-page-hero, .nn-premium-practice-hub-hero, .nn-flashcards-hub-hero, .nn-labs-hub__hero) {
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 62%, transparent) inset,
+      0 16px 36px -30px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(
+    [data-nn-premium-full-platform-convergence],
+    .nn-premium-auth-system,
+    .nn-premium-lessons-system,
+    .nn-flashcards-hub-premium,
+    .nn-dash--learner-home,
+    .nn-labs-hub,
+    [data-nn-med-calc-hub],
+    [data-nn-scenario-study-shell]
+  )::after {
+    filter: none;
+  }
+}

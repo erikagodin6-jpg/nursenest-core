@@ -1,0 +1,308 @@
+/**
+ * Premium Atmospheric Ecosystem Convergence
+ *
+ * Homepage-aligned richness for internal NurseNest surfaces. This layer is
+ * presentation-only and intentionally avoids homepage redesign, routing,
+ * entitlement, SEO, i18n, or adaptive-logic changes.
+ */
+
+:root {
+  --nn-atmosphere-homepage-standard: 1;
+  --nn-atmosphere-mint: var(--semantic-accent-mint);
+  --nn-atmosphere-aqua: var(--semantic-accent-turquoise);
+  --nn-atmosphere-lavender: var(--semantic-accent-lavender);
+  --nn-atmosphere-peach: var(--semantic-accent-peach);
+  --nn-atmosphere-gold: var(--semantic-accent-gold);
+  --nn-atmosphere-plum: var(--semantic-accent-plum);
+  --nn-atmosphere-indigo: var(--semantic-accent-indigo);
+  --nn-atmosphere-dashboard:
+    radial-gradient(840px 420px at 8% -8%, color-mix(in srgb, var(--nn-atmosphere-aqua) 20%, transparent), transparent 62%),
+    radial-gradient(740px 360px at 100% 4%, color-mix(in srgb, var(--nn-atmosphere-lavender) 16%, transparent), transparent 64%),
+    radial-gradient(680px 300px at 50% 112%, color-mix(in srgb, var(--nn-atmosphere-gold) 12%, transparent), transparent 70%);
+  --nn-atmosphere-panel:
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--semantic-surface) 82%, var(--nn-atmosphere-mint) 18%) 0%,
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--nn-atmosphere-aqua) 12%) 42%,
+      color-mix(in srgb, var(--semantic-surface) 84%, var(--nn-atmosphere-lavender) 16%) 100%
+    );
+  --nn-atmosphere-panel-warm:
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--semantic-surface) 84%, var(--nn-atmosphere-peach) 16%),
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--nn-atmosphere-gold) 10%) 48%,
+      color-mix(in srgb, var(--semantic-surface) 86%, var(--nn-atmosphere-plum) 14%)
+    );
+  --nn-atmosphere-brand-frame:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 74%, transparent) inset,
+    0 26px 70px -48px color-mix(in srgb, var(--semantic-text-primary) 26%, transparent),
+    0 18px 48px -38px color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+  --nn-atmosphere-tactile:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 72%, transparent) inset,
+    0 16px 42px -34px color-mix(in srgb, var(--semantic-text-primary) 24%, transparent);
+  --nn-module-lessons: var(--nn-atmosphere-mint);
+  --nn-module-flashcards: var(--nn-atmosphere-lavender);
+  --nn-module-practice: var(--nn-atmosphere-peach);
+  --nn-module-cat: var(--semantic-info);
+  --nn-module-weak-areas: color-mix(in srgb, var(--semantic-danger) 64%, var(--semantic-warning));
+  --nn-module-ecg: color-mix(in srgb, var(--nn-atmosphere-indigo) 58%, var(--nn-atmosphere-aqua));
+  --nn-module-readiness: color-mix(in srgb, var(--semantic-success) 62%, var(--semantic-info));
+}
+
+html[data-theme="ocean"] {
+  --nn-atmosphere-mint: var(--semantic-accent-seafoam);
+  --nn-atmosphere-aqua: var(--semantic-accent-turquoise);
+  --nn-atmosphere-lavender: var(--semantic-chart-6);
+  --nn-atmosphere-peach: var(--semantic-accent-gold);
+  --nn-atmosphere-gold: var(--semantic-accent-gold);
+  --nn-atmosphere-plum: var(--semantic-accent-periwinkle);
+}
+
+html[data-theme="blossom"] {
+  --nn-atmosphere-mint: color-mix(in srgb, var(--semantic-accent-mint) 74%, var(--semantic-surface));
+  --nn-atmosphere-aqua: color-mix(in srgb, var(--semantic-info) 58%, var(--semantic-accent-mint));
+  --nn-atmosphere-lavender: var(--semantic-accent-lavender);
+  --nn-atmosphere-peach: var(--semantic-accent-peach);
+  --nn-atmosphere-gold: color-mix(in srgb, var(--semantic-accent-gold) 78%, var(--semantic-warning-soft));
+  --nn-atmosphere-plum: var(--semantic-accent-plum);
+}
+
+html[data-theme="midnight"] {
+  --nn-atmosphere-mint: var(--semantic-accent-mint);
+  --nn-atmosphere-aqua: var(--semantic-info);
+  --nn-atmosphere-lavender: var(--semantic-accent-lavender);
+  --nn-atmosphere-peach: var(--semantic-accent-gold);
+  --nn-atmosphere-gold: var(--semantic-accent-gold);
+  --nn-atmosphere-plum: var(--semantic-accent-periwinkle);
+  --nn-atmosphere-panel:
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--nn-atmosphere-indigo) 10%),
+      color-mix(in srgb, var(--semantic-surface) 88%, var(--nn-atmosphere-aqua) 12%) 46%,
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--nn-atmosphere-lavender) 10%)
+    );
+}
+
+html[data-theme="sunset"] {
+  --nn-atmosphere-mint: color-mix(in srgb, var(--semantic-accent-mint) 62%, var(--semantic-accent-gold));
+  --nn-atmosphere-aqua: color-mix(in srgb, var(--semantic-info) 52%, var(--semantic-accent-mint));
+  --nn-atmosphere-lavender: color-mix(in srgb, var(--semantic-accent-lavender) 72%, var(--semantic-accent-peach));
+  --nn-atmosphere-peach: var(--semantic-accent-peach);
+  --nn-atmosphere-gold: var(--semantic-accent-gold);
+  --nn-atmosphere-plum: var(--semantic-accent-plum);
+}
+
+html[data-theme="aurora"] {
+  --nn-atmosphere-mint: var(--semantic-accent-mint);
+  --nn-atmosphere-aqua: var(--semantic-accent-turquoise);
+  --nn-atmosphere-lavender: var(--semantic-accent-lavender);
+  --nn-atmosphere-peach: var(--semantic-accent-peach);
+  --nn-atmosphere-gold: color-mix(in srgb, var(--semantic-accent-gold) 64%, var(--semantic-success));
+  --nn-atmosphere-plum: color-mix(in srgb, var(--semantic-accent-lavender) 78%, var(--semantic-danger));
+}
+
+html[data-theme="ocean"] [data-nn-premium-full-platform-convergence],
+html[data-theme="blossom"] [data-nn-premium-full-platform-convergence],
+html[data-theme="midnight"] [data-nn-premium-full-platform-convergence],
+html[data-theme="sunset"] [data-nn-premium-full-platform-convergence],
+html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
+  --nn-atmospheric-ecosystem-theme-covered: 1;
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence],
+  .nn-premium-auth-system,
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell,
+  .nn-flashcards-hub-premium,
+  .nn-exam-session-premium,
+  .nn-premium-practice-hub,
+  .nn-dash--learner-home,
+  .nn-labs-hub,
+  [data-nn-med-calc-hub],
+  [data-nn-scenario-study-shell],
+  .nn-pre-nursing-marketing-hub,
+  .nn-new-grad-hub,
+  .nn-allied-health-hub
+) {
+  position: relative;
+  isolation: isolate;
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence],
+  .nn-premium-auth-system,
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell,
+  .nn-flashcards-hub-premium,
+  .nn-exam-session-premium,
+  .nn-premium-practice-hub,
+  .nn-dash--learner-home,
+  .nn-labs-hub,
+  [data-nn-med-calc-hub],
+  [data-nn-scenario-study-shell],
+  .nn-pre-nursing-marketing-hub,
+  .nn-new-grad-hub,
+  .nn-allied-health-hub
+)::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--nn-atmosphere-dashboard);
+  opacity: 0.42;
+  z-index: -1;
+}
+
+:is(.nn-brand-header-logo-slot, .nn-brand-learner-logo-slot, .nn-brand-auth-logo-slot, .nn-header-logo-link) {
+  border-radius: 999px;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 62%, transparent) inset,
+    0 10px 28px -24px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+}
+
+:is(.nn-header-logo-link, .nn-brand-header-logo-slot, .nn-brand-learner-logo-slot):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 5px color-mix(in srgb, var(--semantic-brand) 36%, transparent),
+    0 12px 34px -26px color-mix(in srgb, var(--semantic-brand) 42%, transparent);
+}
+
+:is(.nn-learner-shell-primary-nav, .nn-mobile-nav, .nn-header-marketing-row4, .nn-premium-shell-nav) {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-brand) 10%),
+      color-mix(in srgb, var(--semantic-surface) 92%, var(--nn-atmosphere-lavender) 8%)
+    );
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 18%);
+  box-shadow: var(--nn-atmosphere-tactile);
+}
+
+:is(.nn-learner-shell-primary-nav a, .nn-mobile-nav a, .nn-header-marketing-row4 a, .nn-premium-shell-nav a):hover {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  box-shadow: 0 8px 18px -16px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+}
+
+:is(
+  .nn-dash-page-header,
+  .nn-learner-page-hero,
+  .nn-cockpit-readiness-card,
+  .nn-cockpit-mastery-key,
+  .nn-report-card-topic-signal,
+  .nn-premium-auth-card,
+  .nn-premium-auth-story,
+  .nn-premium-lessons-hub-hero,
+  .nn-premium-practice-hub-hero,
+  .nn-flashcards-hub-hero,
+  .nn-labs-hub__hero,
+  [data-nn-scenario-study-shell] > header
+) {
+  background: var(--nn-atmosphere-panel);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--semantic-brand) 18%);
+  box-shadow: var(--nn-atmosphere-brand-frame);
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence] .nn-card,
+  [data-nn-premium-full-platform-convergence] .lv-card,
+  [data-nn-premium-full-platform-convergence] .nn-ls-surface,
+  .nn-premium-hero-mini__card,
+  .nn-flashcards-deck-library-surface,
+  .nn-flashcards-deck-match-band,
+  .nn-practice-exam-rationale-panel__card,
+  .nn-labs-hub article,
+  [data-nn-med-calc-hub] article
+) {
+  box-shadow: var(--nn-atmosphere-tactile);
+}
+
+:is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell) {
+  --nn-ecosystem-module-accent: var(--nn-module-lessons);
+}
+
+:is(.nn-flashcards-hub-premium, .nn-flashcard-study-stack-premium) {
+  --nn-ecosystem-module-accent: var(--nn-module-flashcards);
+}
+
+:is(.nn-premium-practice-hub, .nn-practice-session, .nn-practice-exam-rationale-panel__card) {
+  --nn-ecosystem-module-accent: var(--nn-module-practice);
+}
+
+:is(.nn-exam-session-premium, .nn-cat-session, [data-nn-premium-platform-module="exam-session"]) {
+  --nn-ecosystem-module-accent: var(--nn-module-cat);
+}
+
+:is(.nn-labs-hub, [data-nn-med-calc-hub]) {
+  --nn-ecosystem-module-accent: var(--nn-module-readiness);
+}
+
+:is([data-nn-scenario-study-shell], .nn-ecg-module-page) {
+  --nn-ecosystem-module-accent: var(--nn-module-ecg);
+}
+
+:is(
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell,
+  .nn-flashcards-hub-premium,
+  .nn-flashcard-study-stack-premium,
+  .nn-premium-practice-hub,
+  .nn-practice-session,
+  .nn-exam-session-premium,
+  .nn-labs-hub,
+  [data-nn-med-calc-hub],
+  [data-nn-scenario-study-shell],
+  .nn-ecg-module-page
+) :is(.nn-card, .lv-card, .nn-ls-surface, article, section[class*="rounded"]) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-ecosystem-module-accent, var(--semantic-brand)) 18%);
+}
+
+:is(.nn-progress-fill-semantic-readiness, .nn-progress-fill-semantic-success) {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--semantic-success) 88%, var(--nn-atmosphere-mint)),
+      color-mix(in srgb, var(--semantic-info) 38%, var(--semantic-success))
+    );
+}
+
+:is(.nn-progress-fill-semantic-info, .nn-progress-fill-semantic-brand) {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--semantic-info) 82%, var(--nn-atmosphere-aqua)),
+      color-mix(in srgb, var(--semantic-brand) 72%, var(--nn-atmosphere-lavender))
+    );
+}
+
+:is(.nn-progress-fill-semantic-warning, .nn-progress-fill-semantic-danger) {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--semantic-warning) 82%, var(--nn-atmosphere-gold)),
+      color-mix(in srgb, var(--semantic-danger) 60%, var(--nn-atmosphere-peach))
+    );
+}
+
+@media (max-width: 767px) {
+  :is(
+    [data-nn-premium-full-platform-convergence],
+    .nn-premium-auth-system,
+    .nn-premium-lessons-system,
+    .nn-flashcards-hub-premium,
+    .nn-dash--learner-home,
+    .nn-labs-hub,
+    [data-nn-med-calc-hub],
+    [data-nn-scenario-study-shell]
+  )::before {
+    opacity: 0.28;
+  }
+
+  :is(.nn-learner-shell-primary-nav, .nn-mobile-nav, .nn-header-marketing-row4, .nn-premium-shell-nav) {
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 58%, transparent) inset,
+      0 12px 28px -24px color-mix(in srgb, var(--semantic-brand) 24%, transparent);
+  }
+}

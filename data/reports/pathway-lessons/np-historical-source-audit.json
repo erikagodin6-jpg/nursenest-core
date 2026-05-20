@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-04-13T20:27:29.317Z",
+  "note": "Post-import snapshot: currentlyImported counts reflect published pathway_lessons keys after recovery.",
+  "historicalNpInventoryEstimate": {
+    "uniqueLegacyNpLessonIdsInContentMap": 1409,
+    "note": "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Review false positives if counts seem high."
+  },
+  "rows": [
+    {
+      "sourcePath": "../client/src/data/lessons/index.ts (contentMap)",
+      "sourceType": "ts-module",
+      "rawLessonCount": 1409,
+      "validLessonCount": 1409,
+      "invalidLessonCount": 0,
+      "uniqueLegacyNpIdsApprox": 1409,
+      "pathwayMapping": "legacy NP keys → all four NP pathways",
+      "rowsExpandedToPathways": 8454,
+      "currentlyImportedIntoPathwayLessons": 8430,
+      "currentlySurfacedInRuntime": true,
+      "sourceQualityClass": "historical/high-value"
+    },
+    {
+      "sourcePath": "src/content/pathway-lessons/catalog.json",
+      "sourceType": "json",
+      "pathwayId": "us-np-fnp",
+      "rawLessonCount": 91,
+      "validLessonCount": 91,
+      "pathwayMapping": "us-np-fnp only",
+      "currentlyImportedIntoPathwayLessons": 91,
+      "currentlySurfacedInRuntime": true,
+      "sourceQualityClass": "curated/FNP-specific"
+    },
+    {
+      "sourcePath": "data/materialized/np-clinical-layer-2026/catalog-np-overlays.json",
+      "sourceType": "json",
+      "rawLessonCount": 9,
+      "validLessonCount": 54,
+      "pathwayMapping": "usNpFnp overlays × four pathways",
+      "currentlyImportedIntoPathwayLessons": 54,
+      "currentlySurfacedInRuntime": true,
+      "sourceQualityClass": "materialized/NP-overlays"
+    },
+    {
+      "sourcePath": "data/replit-exports/content_items.json",
+      "sourceType": "json",
+      "rawLessonCount": 52,
+      "npLikeLessonRows": 0,
+      "pathwayMapping": "none reliable",
+      "currentlyImportedIntoPathwayLessons": 0,
+      "currentlySurfacedInRuntime": false,
+      "sourceQualityClass": "not-applicable"
+    }
+  ]
+}

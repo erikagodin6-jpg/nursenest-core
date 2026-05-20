@@ -1,0 +1,209 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import {
+  Award,
+  BookOpen,
+  ChevronDown,
+  Dna,
+  GraduationCap,
+  HeartPulse,
+  Stethoscope,
+  Wrench,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { publicExamPrepHubDestinations, HUB } from "@/lib/navigation/canonical-destinations";
+import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+
+type TierItem = {
+  key: string;
+  icon: LucideIcon;
+  titleKey: string;
+  descKey: string;
+  href: string;
+};
+
+const NAV_TRIGGER_CLASS =
+  "nn-marketing-body-sm nn-marketing-nav-link flex items-center gap-1 font-medium tracking-tight text-[var(--nav-link)]";
+
+export function TierGatewayDropdown({
+  triggerLabelKey = "nav.exams",
+  navLinkClass,
+}: {
+  triggerLabelKey?: string;
+  navLinkClass?: string;
+}) {
+  const { t, locale } = useMarketingI18n();
+  const { region } = useNursenestRegion();
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const localize = (href: string) => withMarketingLocale(locale, href);
+  const hubs = publicExamPrepHubDestinations(region);
+  const newGradHubHref = publicNewGradStudyDestinations(region, hubs.rn).hubHref;
+
+  const items: TierItem[] = [
+    {
+      key: "rn",
+      icon: Stethoscope,
+      titleKey: "nav.tierDrop.rnTitle",
+      descKey: "nav.tierDrop.rnDesc",
+      href: hubs.rn,
+    },
+    {
+      key: "pn",
+      icon: HeartPulse,
+      titleKey: region === "CA" ? "nav.tierDrop.rpnTitle" : "nav.tierDrop.lpnTitle",
+      descKey: region === "CA" ? "nav.tierDrop.rpnDesc" : "nav.tierDrop.lpnDesc",
+      href: hubs.pn,
+    },
+    {
+      key: "np",
+      icon: Award,
+      titleKey: "nav.tierDrop.npTitle",
+      descKey: "nav.tierDrop.npDesc",
+      href: hubs.np,
+    },
+    {
+      key: "new-grad",
+      icon: GraduationCap,
+      titleKey: "nav.mega.newGrad.label",
+      descKey: "nav.mega.newGrad.hubDescription",
+      href: newGradHubHref,
+    },
+    {
+      key: "allied",
+      icon: Dna,
+      titleKey: "nav.tierDrop.alliedTitle",
+      descKey: "nav.tierDrop.alliedDesc",
+      href: hubs.allied,
+    },
+    {
+      key: "pre-nursing",
+      icon: BookOpen,
+      titleKey: "nav.tierDrop.preNursingTitle",
+      descKey: "nav.tierDrop.preNursingDesc",
+      href: "/pre-nursing",
+    },
+    {
+      key: "tools",
+      icon: Wrench,
+      titleKey: "nav.tierDrop.toolsTitle",
+      descKey: "nav.tierDrop.toolsDesc",
+      href: HUB.tools,
+    },
+  ];
+
+  const openDropdown = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+
+  const scheduleClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onClickOutside = (e: MouseEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClickOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClickOutside);
+    };
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    },
+    [],
+  );
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative"
+      onMouseEnter={openDropdown}
+      onMouseLeave={scheduleClose}
+    >
+      <button
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className={navLinkClass ?? NAV_TRIGGER_CLASS}
+      >
+        {formatTitleCase(t(triggerLabelKey as Parameters<typeof t>[0]), locale)}
+        <ChevronDown
+          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+
+      <div
+        role="menu"
+        aria-hidden={!open}
+        className={`absolute start-0 top-full z-40 mt-1.5 w-[22rem] rounded-2xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[var(--shadow-elevated)] transition-opacity duration-150 ${
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onMouseEnter={openDropdown}
+        onMouseLeave={scheduleClose}
+      >
+        <p className="nn-marketing-label px-3 pb-2 pt-2 text-[var(--nav-muted)]">
+          {formatEyebrow(t("nav.tierDrop.heading"), locale)}
+        </p>
+        <ul className="space-y-0.5">
+          {items.map((item) => {
+            const Icon = item.icon;
+            const href = localize(item.href);
+            return (
+              <li key={item.key}>
+                <Link
+                  href={href}
+                  role="menuitem"
+                  className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[var(--nav-hover)]"
+                  onClick={() => {
+                    setOpen(false);
+                    trackClientEvent(PH.marketingNavClick, {
+                      actor: "anonymous",
+                      nav_id: `tier_drop_${item.key}`,
+                      surface: "tier_gateway_dropdown",
+                      marketing_region: region,
+                    });
+                  }}
+                >
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--nav-active)] text-[var(--nav-fg)] transition-colors group-hover:bg-[var(--nav-link)] group-hover:text-[var(--nav-bg)]">
+                    <Icon className="h-4 w-4" strokeWidth={1.75} aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="nn-marketing-body-sm block font-semibold leading-tight tracking-tight text-[var(--nav-fg)]">
+                      {formatTitleCase(t(item.titleKey as Parameters<typeof t>[0]), locale)}
+                    </span>
+                    <span className="nn-marketing-caption mt-0.5 block leading-snug text-[var(--nav-muted)]">
+                      {formatSentenceCase(t(item.descKey as Parameters<typeof t>[0]), locale)}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}

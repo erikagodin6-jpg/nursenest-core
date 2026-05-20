@@ -1,0 +1,1246 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "blogRelatedClientFiles": 6,
+    "blogRelatedServerFiles": 2,
+    "seoArticleClusterFiles": 42,
+    "mergedUniqueFiles": 47,
+    "interpretation": "Mix of React marketing pages and server blog automation; extract editorial content for current blog/MDX/DB."
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/pages/imaging-blog.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/blog.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-blog.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-blog.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "server/blog-automation.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "server/question-blog-pipeline.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-title-map.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-microbiology.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-metadata.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-clinical-comparisons.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-herbal-supplements.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-lab-values.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-hub-links.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-conditions.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-medications.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-exam-data.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-symptom-assessments.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-content-articles.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/data/seo-blood-bank.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-landing-page.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-practice-quiz.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-hub-resources.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/encyclopedia-hub.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-hub-interview.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-lesson-detail.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/new-grad/seo-guide-page.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-hub-new-grad.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/allied-health-article.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-allied-health-articles.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-hub-resumes.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-hub-personal-statements.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/encyclopedia-landing.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-study-guides.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-page.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-study-guide.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-content-article.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/encyclopedia-entry.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/seo-hub-page.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-prep-cornerstone-pages.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/data/allied-health-article-topics.ts",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/article-detail.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/encyclopedia-hub-page.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-health-article.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/article-listing.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/encyclopedia-admin.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-study-guide.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/encyclopedia-topic-page.tsx",
+      "contentType": "blog_or_seo_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "legacy-format"
+      ],
+      "recommendedDestination": "Current BlogPost / marketing content pipeline",
+      "recommendedMigrationOrder": 7,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "extract-then-reauthor-in-current-layout",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "marketing-study-surfaces-semantic-colors"
+      },
+      "notes": "Prefer content extraction over porting legacy page components."
+    }
+  ]
+}

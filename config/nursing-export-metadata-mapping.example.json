@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "description": "Copy to nursing-export-metadata-mapping.json and edit after review. Never commit secrets.",
+  "reviewed": true,
+  "cacheKeyExact": {
+    "legacy-batch-2024-rpn": { "tier": "rpn", "exam": "REx-PN", "note": "example" }
+  },
+  "cacheKeyPatterns": [
+    {
+      "pattern": "^myorg-nclex-rn-",
+      "tier": "rn",
+      "exam": "NCLEX_RN",
+      "description": "Example prefix — adjust to match real export keys"
+    }
+  ]
+}

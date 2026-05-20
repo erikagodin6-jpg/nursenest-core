@@ -1,0 +1,488 @@
+/* ==========================================================================
+   hero.css — NurseNest Premium Marketing Design System
+   
+   Ownership: Homepage hero: grid, clinical panel, stat tiles, ECG strip, mini lesson cards, trust pills
+   
+   Source: extracted from src/app/premium-redesign-2026.css (lines 0–565)
+   Import order: preserved — do not reorder imports in styles/marketing/index.css
+   Cascade: rules depend on cascade order across all section files; changes
+            to this file may affect other sections if shared selectors are involved.
+   
+   DO NOT add new rules here that belong to a different section file.
+   ========================================================================== */
+
+/* =====================================================================
+   Premium Redesign 2026 — additive, surgical visual layer.
+   - Adds the approved homepage premium hero visual (clinical dashboard
+     panel + ECG strip + readiness/streak/mastered tiles) without
+     altering copy/i18n/tracking links.
+   - Adds a CSS-only premium-glass enhancement for the marketing header
+     using existing classes (no TSX changes to the 1,157-line header).
+   - Adds a tiny token bridge so the [data-theme="apex"] palette
+     (defined in theme-palettes.css) lights up in the new hero.
+
+   Conservative rules:
+   - All rules are scoped to .nn-home-marketing-rich-hero or to existing
+     header classes already shipped in production.
+   - Uses semantic CSS variables wherever possible — does not hard-code
+     a single brand hue.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Premium hero — additive shell. The existing copy column stays exactly
+   as it is. We only add a new visual column and a richer ambient
+   background behind the section.
+   --------------------------------------------------------------------- */
+
+.nn-home-marketing-rich-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Homepage hero headline — theme tokens (semantic charts + brand; no raw product hex in TSX). */
+  --hero-headline-accent: var(--semantic-chart-1, var(--semantic-brand));
+  --hero-headline-secondary: var(--semantic-chart-3, var(--semantic-info));
+  --hero-headline-gradient: linear-gradient(
+    96deg,
+    color-mix(in srgb, var(--hero-headline-accent) 94%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 92%, var(--semantic-border-soft)) 40%,
+    color-mix(in srgb, var(--hero-headline-secondary) 93%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-shadow: 0 0.04em 0 color-mix(in srgb, var(--semantic-border-soft) 45%, transparent);
+  --hero-headline-glow: drop-shadow(0 0 20px color-mix(in srgb, var(--semantic-chart-3) 26%, transparent))
+    drop-shadow(0 0 44px color-mix(in srgb, var(--semantic-chart-1) 16%, transparent));
+  --hero-ambient-radial: radial-gradient(120% 92% at 6% 28%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent) 0%, transparent 58%),
+    radial-gradient(100% 78% at 96% 12%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent) 0%, transparent 55%),
+    radial-gradient(92% 72% at 42% 108%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent) 0%, transparent 62%);
+  background:
+    radial-gradient(720px 380px at 8% 0%, color-mix(in srgb, var(--semantic-chart-1, #ec4899) 26%, transparent) 0%, transparent 60%),
+    radial-gradient(720px 380px at 100% 12%, color-mix(in srgb, var(--semantic-chart-3, #3b82f6) 26%, transparent) 0%, transparent 60%),
+    radial-gradient(720px 380px at 60% 100%, color-mix(in srgb, var(--semantic-chart-4, #10b981) 22%, transparent) 0%, transparent 60%),
+    var(--page-bg, #ffffff);
+}
+
+.nn-home-marketing-rich-hero::after {
+  content: "";
+  position: absolute;
+  inset: -1px 0 -1px 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 0%, rgba(0, 0, 0, 0.6), transparent 65%);
+  -webkit-mask-image: radial-gradient(circle at 50% 0%, rgba(0, 0, 0, 0.6), transparent 65%);
+  z-index: 0;
+}
+
+/* ----- Premium hero headline stack (typography + local ambient only; layout unchanged) ----- */
+.nn-home-marketing-rich-hero .nn-hero-headline-visual {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  max-width: min(100%, 42rem);
+}
+
+.nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+  content: "";
+  position: absolute;
+  inset: -14% -6% -20% -10%;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--hero-ambient-radial);
+  opacity: 0.88;
+}
+
+@media (min-width: 1024px) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+    filter: blur(34px);
+    will-change: opacity;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+    opacity: 0.72;
+    inset: -10% -4% -14% -6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+    filter: none;
+    opacity: 0.5;
+  }
+}
+
+.nn-home-marketing-rich-hero #home-conversion-hero-heading.nn-hero-headline--premium {
+  letter-spacing: -0.034em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
+.nn-home-marketing-rich-hero .nn-blossom-hero-gradient-copy {
+  display: inline;
+  background-image: var(--hero-headline-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  text-shadow: var(--hero-headline-shadow);
+  filter: var(--hero-headline-glow);
+  /* Promote to its own compositor layer so the drop-shadow filter does not force
+     ancestor elements to repaint. Eliminates non-composited animation flag on this element. */
+  will-change: filter, opacity;
+}
+
+@media (max-width: 639.98px) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
+  .nn-home-marketing-rich-hero .nn-blossom-hero-gradient-copy {
+    filter: drop-shadow(0 0 14px color-mix(in srgb, var(--semantic-chart-3) 22%, transparent))
+      drop-shadow(0 0 28px color-mix(in srgb, var(--semantic-chart-1) 14%, transparent));
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .nn-home-marketing-rich-hero {
+    contain: layout style;
+  }
+}
+
+/* Ocean — calm aqua / cool blue headline emphasis (semantic charts). */
+html[data-theme="ocean"] .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-2);
+  --hero-headline-secondary: var(--semantic-chart-3);
+  --hero-headline-gradient: linear-gradient(
+    94deg,
+    color-mix(in srgb, var(--semantic-chart-2) 95%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-border-soft)) 44%,
+    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-glow: drop-shadow(0 0 22px color-mix(in srgb, var(--semantic-info) 30%, transparent))
+    drop-shadow(0 0 42px color-mix(in srgb, var(--semantic-chart-4) 18%, transparent));
+  --hero-ambient-radial: radial-gradient(118% 88% at 4% 22%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent) 0%, transparent 58%),
+    radial-gradient(96% 74% at 100% 10%, color-mix(in srgb, var(--semantic-chart-3) 15%, transparent) 0%, transparent 56%),
+    radial-gradient(90% 70% at 48% 100%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent) 0%, transparent 60%);
+}
+
+/* Sunset — warm optimistic emphasis without flat orange slabs. */
+html[data-theme="sunset"] .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-5);
+  --hero-headline-secondary: var(--semantic-warning);
+  --hero-headline-gradient: linear-gradient(
+    96deg,
+    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-border-soft)) 42%,
+    color-mix(in srgb, var(--semantic-warning) 90%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-glow: drop-shadow(0 0 20px color-mix(in srgb, var(--semantic-chart-5) 26%, transparent))
+    drop-shadow(0 0 40px color-mix(in srgb, var(--semantic-warning) 16%, transparent));
+}
+
+/* Dark / Midnight family — luminous clinical workstation headline. */
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-4);
+  --hero-headline-secondary: var(--semantic-chart-3);
+  --hero-headline-gradient: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--semantic-chart-4) 86%, var(--palette-heading)) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 88%, var(--palette-heading)) 34%,
+    color-mix(in srgb, var(--semantic-info) 84%, var(--palette-heading)) 66%,
+    color-mix(in srgb, var(--semantic-chart-1) 80%, var(--palette-heading)) 100%
+  );
+  --hero-headline-shadow: 0 0.07em 0 color-mix(in srgb, var(--palette-heading) 22%, transparent);
+  --hero-headline-glow: drop-shadow(0 0 28px color-mix(in srgb, var(--semantic-chart-3) 48%, transparent))
+    drop-shadow(0 0 58px color-mix(in srgb, var(--semantic-info) 32%, transparent))
+    drop-shadow(0 0 36px color-mix(in srgb, var(--semantic-success) 24%, transparent));
+  --hero-ambient-radial: radial-gradient(112% 86% at 10% 18%, color-mix(in srgb, var(--semantic-chart-3) 24%, transparent) 0%, transparent 55%),
+    radial-gradient(98% 74% at 94% 6%, color-mix(in srgb, var(--semantic-info) 20%, transparent) 0%, transparent 54%),
+    radial-gradient(90% 70% at 38% 108%, color-mix(in srgb, var(--semantic-chart-4) 18%, transparent) 0%, transparent 58%);
+}
+
+/* Inner shell uses 2-col grid on lg+, single column on mobile. */
+.nn-premium-hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  align-items: center;
+  /* vw-based clamp: stable across all breakpoints — does not recalculate when
+     the mobile URL bar shows/hides (unlike dvh). Locks above-fold geometry
+     before hydration so the hero never collapses to 0 during React mount. */
+  min-height: clamp(18rem, 52vw, 30rem);
+}
+@media (min-width: 1024px) {
+  .nn-premium-hero-grid {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 40px;
+    min-height: 28rem;
+  }
+}
+
+/* Hero CTAs — slightly tighter than global marketing hero defaults. */
+.nn-home-marketing-rich-hero a.nn-btn-primary,
+.nn-home-marketing-rich-hero a.nn-btn-secondary {
+  min-height: 44px;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+  font-size: 0.9375rem;
+}
+@media (min-width: 640px) {
+  .nn-home-marketing-rich-hero a.nn-btn-primary,
+  .nn-home-marketing-rich-hero a.nn-btn-secondary {
+    min-height: 46px;
+    font-size: 1rem;
+  }
+}
+
+/* Eyebrow pill above the headline. */
+.nn-premium-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-1, #ec4899) 25%, transparent);
+  color: var(--semantic-chart-1, #be185d);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nn-premium-hero-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--semantic-chart-1, #ec4899);
+}
+
+/* ----- Right-column clinical dashboard panel ----- */
+.nn-premium-hero-panel {
+  position: relative;
+  padding: 22px;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface, #ffffff) 92%, transparent) 0%, color-mix(in srgb, var(--surface, #ffffff) 80%, transparent) 100%);
+  border: 1px solid var(--border-subtle, #ecdef2);
+  box-shadow:
+    0 30px 60px rgba(76, 29, 149, 0.18),
+    0 2px 0 rgba(255, 255, 255, 0.6) inset;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.nn-premium-hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: -28px;
+  z-index: -1;
+  border-radius: 40px;
+  background:
+    radial-gradient(280px 200px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1, #f472b6) 26%, transparent), transparent 60%),
+    radial-gradient(280px 200px at 100% 0%, color-mix(in srgb, var(--semantic-chart-3, #60a5fa) 26%, transparent), transparent 60%),
+    radial-gradient(280px 200px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4, #6ee7b7) 26%, transparent), transparent 60%);
+  filter: blur(2px);
+}
+
+.nn-premium-hero-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.nn-premium-hero-panel__tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-chart-2, #8b5cf6) 16%, transparent);
+  color: color-mix(in srgb, var(--semantic-chart-2, #6d28d9) 88%, var(--text-primary, var(--palette-heading)));
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nn-premium-hero-panel__live {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--semantic-success, #047857);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nn-premium-hero-panel__live::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--semantic-success, #10b981);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-success, #10b981) 18%, transparent);
+}
+
+/* Shared stat tile classes — single source of truth in styles/shared/premium-stat-tiles.css
+   Imported here for marketing routes; also imported by learner-premium-ds.css for learner routes. */
+@import "../shared/premium-stat-tiles.css";
+
+.nn-premium-hero-ecg {
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-heading-text, #0f172a) 88%, #000000) 0%,
+    color-mix(in srgb, var(--semantic-chart-3, #3b82f6) 12%, #0f172a) 100%
+  );
+  color: var(--text-on-dark, #e2e8f0);
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-3, #60a5fa) 35%, transparent);
+  margin: 12px 0;
+}
+
+/* Dark palettes: rhythm strip background tracks ink surfaces (avoid muddy mixes). */
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero
+  .nn-premium-hero-ecg {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-inset, var(--theme-card-bg)) 92%, #000000) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--bg-inset, var(--theme-card-bg))) 100%
+  );
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 42%, var(--border-subtle));
+}
+
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero
+  a.nn-btn-secondary {
+  color: var(--role-secondary-action-text, var(--palette-heading));
+}
+
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-root
+  .nn-premium-home-section
+  a.nn-btn-secondary {
+  color: var(--role-secondary-action-text, var(--palette-heading));
+}
+
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero
+  .nn-premium-hero-trust__pill {
+  background: var(--surface, var(--theme-card-bg));
+  color: var(--palette-heading);
+  border-color: var(--border-subtle);
+}
+
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero
+  .nn-premium-hero-panel {
+  border-color: var(--border-subtle);
+  box-shadow:
+    0 28px 56px color-mix(in srgb, #000000 55%, transparent),
+    0 1px 0 color-mix(in srgb, var(--palette-heading) 12%, transparent) inset;
+}
+
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero
+  .nn-premium-hero-stat {
+  background: var(--surface, var(--theme-card-bg));
+  border-color: var(--border-subtle);
+}
+.nn-premium-hero-ecg__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-success, #34d399) 82%, var(--text-on-dark, #f8fafc));
+  margin-bottom: 6px;
+}
+.nn-premium-hero-ecg__bpm {
+  margin-left: auto;
+  color: color-mix(in srgb, var(--semantic-chart-1, #f472b6) 75%, var(--text-on-dark, #f8fafc));
+}
+.nn-premium-hero-ecg svg {
+  width: 100%;
+  height: 52px;
+  display: block;
+}
+
+/* Homepage ECG section — rhythm strip panel matches hero readability on dark / midnight themes */
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-root
+  .nn-premium-home-section--ecg
+  .nn-premium-hero-ecg {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-inset, var(--theme-card-bg)) 92%, #000000) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--bg-inset, var(--theme-card-bg))) 100%
+  );
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 42%, var(--border-subtle));
+}
+
+/* Static strip only — continuous drift reads as decorative telemetry, not clinical teaching. */
+
+/* Mini lesson cards */
+.nn-premium-hero-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.nn-premium-hero-mini__card {
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-subtle, #efe7f6);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.nn-premium-hero-mini__title {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--palette-heading);
+  line-height: 1.25;
+}
+.nn-premium-hero-mini__sub {
+  font-size: 11px;
+  color: var(--palette-text-muted);
+}
+.nn-premium-hero-mini__bar {
+  border-radius: 999px;
+}
+.nn-premium-hero-mini__card[data-nn-hero-mini-topic="cardiovascular"] {
+  border-color: color-mix(in srgb, var(--semantic-success, #16a34a) 22%, var(--border-subtle, #efe7f6));
+}
+.nn-premium-hero-mini__card[data-nn-hero-mini-topic="pharmacology"] {
+  border-color: color-mix(in srgb, var(--semantic-info, #0284c7) 22%, var(--border-subtle, #efe7f6));
+}
+
+/* Trust pill row under CTAs */
+.nn-premium-hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--palette-text-muted, #475569);
+}
+.nn-premium-hero-trust__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-subtle, #ecdef2);
+  color: var(--palette-heading);
+  font-weight: 700;
+}
+.nn-premium-hero-trust__stars {
+  color: var(--semantic-warning, #f59e0b);
+  font-weight: 800;
+}
+
+/* Primary marketing band: neutral paper on --nn-header-primary-bg + whisper tint — not sticky wrapper chrome; full-width wrapper, not `.nn-section-shell`. */

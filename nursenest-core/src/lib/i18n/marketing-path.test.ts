@@ -1,0 +1,103 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import {
+  canonicalExamHubPathFromPossiblyLocalizedPath,
+  isExamHubMarketingPath,
+  isExpansionExamMarketingPath,
+} from "@/lib/i18n/exam-hub-path";
+import { globalRegionSlugFromExpansionExamsPathname } from "@/lib/marketing/expansion-exams-path-gate";
+import {
+  REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS,
+  globalRegionSlugFromRegionalMarketingPublicPath,
+} from "@/lib/marketing/regional-marketing-public-gate";
+import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
+import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
+
+test("withMarketingLocale prefixes non-English marketing paths", () => {
+  assert.equal(withMarketingLocale("fr", "/pricing"), "/fr/pricing");
+  assert.equal(withMarketingLocale("en", "/pricing"), "/pricing");
+});
+
+test("marketing-path re-exports locale stripping helper for shared callers", () => {
+  assert.deepEqual(stripMarketingLocalePrefix("/fr/pricing"), {
+    locale: "fr",
+    pathname: "/pricing",
+  });
+});
+
+test("withMarketingLocale does not prefix exam hub country paths", () => {
+  assert.equal(withMarketingLocale("fr", "/us/rn/nclex-rn/lessons"), "/us/rn/nclex-rn/lessons");
+  assert.equal(withMarketingLocale("de", "/canada/pn/rex-pn"), "/canada/pn/rex-pn");
+});
+
+test("withMarketingLocale does not prefix global expansion /exams/ hubs (avoid /tl/exams/... 404s)", () => {
+  assert.equal(withMarketingLocale("tl", "/exams/philippines"), "/exams/philippines");
+  assert.equal(withMarketingLocale("fr", "/exams/india"), "/exams/india");
+});
+
+test("withMarketingLocale does not prefix top-level country marketing hubs (Philippines, Middle East)", () => {
+  assert.equal(withMarketingLocale("tl", "/philippines"), "/philippines");
+  assert.equal(withMarketingLocale("fr", "/middle-east/dha-exam"), "/middle-east/dha-exam");
+});
+
+test("withMarketingLocale does not prefix subscriber app or admin (avoid /fr/app/... marketing tree)", () => {
+  assert.equal(withMarketingLocale("fr", "/app/lessons"), "/app/lessons");
+  assert.equal(withMarketingLocale("de", "/app"), "/app");
+  assert.equal(withMarketingLocale("fr", "/admin"), "/admin");
+});
+
+test("isExpansionExamMarketingPath", () => {
+  assert.equal(isExpansionExamMarketingPath("/exams/philippines"), true);
+  assert.equal(isExpansionExamMarketingPath("/exams"), true);
+  assert.equal(isExpansionExamMarketingPath("/pricing"), false);
+});
+
+test("isExamHubMarketingPath detects us/canada hubs", () => {
+  assert.equal(isExamHubMarketingPath("/us/rn/nclex-rn"), true);
+  assert.equal(isExamHubMarketingPath("/canada/pn/rex-pn"), true);
+  assert.equal(isExamHubMarketingPath("/fr/pricing"), false);
+  assert.equal(isExamHubMarketingPath("/pricing"), false);
+});
+
+test("isExamHubMarketingPath detects hubs after a non-English locale prefix", () => {
+  assert.equal(isExamHubMarketingPath("/fr/us/rn/nclex-rn"), true);
+  assert.equal(isExamHubMarketingPath("/es/canada/np/cnple"), true);
+  assert.equal(isExamHubMarketingPath("/fr/pricing"), false);
+});
+
+test("globalRegionSlugFromExpansionExamsPathname maps /exams segments to GlobalRegionSlug", () => {
+  assert.equal(globalRegionSlugFromExpansionExamsPathname("/exams/korea"), "south-korea");
+  assert.equal(globalRegionSlugFromExpansionExamsPathname("/exams/middle-east"), "uae");
+  assert.equal(globalRegionSlugFromExpansionExamsPathname("/fr/exams/japan"), "japan");
+  assert.equal(globalRegionSlugFromExpansionExamsPathname("/exams"), null);
+  assert.equal(globalRegionSlugFromExpansionExamsPathname("/pricing"), null);
+});
+
+test("globalRegionSlugFromRegionalMarketingPublicPath maps locale-prefixed regional topic paths", () => {
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/fr/japan/nursing-exam"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/zh-tw/india/nursing-exams"), "india");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/japan/nursing-exam"), "japan");
+});
+
+test("REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS covers hyphenated middle-east", () => {
+  assert.ok(REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS.includes("/:locale/middle-east/:path*"));
+});
+
+test("globalRegionSlugFromRegionalMarketingPublicPath covers /exams and country-topic trees", () => {
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/exams/japan"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/japan/nursing-exam"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/fr/japan/nursing-exam"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/pricing"), null);
+});
+
+test("canonicalExamHubPathFromPossiblyLocalizedPath strips non-English locale prefixes from exam hubs", () => {
+  assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/fr/canada/pn/rex-pn"), {
+    locale: "fr",
+    canonicalPath: "/canada/pn/rex-pn",
+  });
+  assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/es/us/rn/nclex-rn/questions"), {
+    locale: "es",
+    canonicalPath: "/us/rn/nclex-rn/questions",
+  });
+  assert.equal(canonicalExamHubPathFromPossiblyLocalizedPath("/fr/pricing"), null);
+});

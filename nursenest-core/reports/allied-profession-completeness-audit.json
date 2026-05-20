@@ -1,0 +1,911 @@
+{
+  "status": "fail",
+  "generatedAt": "2026-05-03T18:03:32.386Z",
+  "thresholds": {
+    "minLessons": 200,
+    "minFlashcards": 300,
+    "minQuestions": 500,
+    "minCatQuestions": 150
+  },
+  "professionCount": 19,
+  "passingProfessionCount": 0,
+  "warningProfessionCount": 0,
+  "failingProfessionCount": 19,
+  "issues": [
+    {
+      "professionKey": "pta",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "pta",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "pta",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "pta",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "ota",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "ota",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "ota",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "ota",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "mlt",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "mlt",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "mlt",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "mlt",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "imaging",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "imaging",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "imaging",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "imaging",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "respiratory",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "respiratory",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "respiratory",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "respiratory",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "paramedic",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "paramedic",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "paramedic",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "paramedic",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "pharmacy-tech",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "pharmacy-tech",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "pharmacy-tech",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "pharmacy-tech",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "social-work",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "social-work",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "social-work",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "social-work",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "psw-hca",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "psw-hca",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "psw-hca",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "psw-hca",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "community-health-worker",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "community-health-worker",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "community-health-worker",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "community-health-worker",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "mental-health-addictions",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "mental-health-addictions",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "mental-health-addictions",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "mental-health-addictions",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "medical-assistant",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "medical-assistant",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "medical-assistant",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "medical-assistant",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-assistant",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-assistant",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-assistant",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-assistant",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-hygiene",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-hygiene",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-hygiene",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "dental-hygiene",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "dietetic-technician",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "dietetic-technician",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "dietetic-technician",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "dietetic-technician",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "emt",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "emt",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "emt",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "emt",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "sonography",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "sonography",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "sonography",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "sonography",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "radiography",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "radiography",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "radiography",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "radiography",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    },
+    {
+      "professionKey": "lab-assistant",
+      "severity": "fail",
+      "bucket": "lessons",
+      "message": "Lesson count below minimum threshold",
+      "expected": 200,
+      "actual": 0
+    },
+    {
+      "professionKey": "lab-assistant",
+      "severity": "fail",
+      "bucket": "flashcards",
+      "message": "Flashcard count below minimum threshold",
+      "expected": 300,
+      "actual": 0
+    },
+    {
+      "professionKey": "lab-assistant",
+      "severity": "fail",
+      "bucket": "questions",
+      "message": "Question count below minimum threshold",
+      "expected": 500,
+      "actual": 0
+    },
+    {
+      "professionKey": "lab-assistant",
+      "severity": "fail",
+      "bucket": "cat",
+      "message": "CAT-eligible question count below minimum threshold",
+      "expected": 150,
+      "actual": 0
+    }
+  ],
+  "perProfession": {
+    "pta": {
+      "professionKey": "pta",
+      "title": "Physical therapist assistant (PTA) exam prep | NurseNest",
+      "category": "Therapy and rehabilitation",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "ota": {
+      "professionKey": "ota",
+      "title": "Occupational therapy assistant (OTA) exam prep | NurseNest",
+      "category": "Therapy and rehabilitation",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "mlt": {
+      "professionKey": "mlt",
+      "title": "Medical lab (MLT / MLS) exam prep | NurseNest",
+      "category": "Laboratory and imaging",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "imaging": {
+      "professionKey": "imaging",
+      "title": "Medical imaging exam prep | NurseNest",
+      "category": "Laboratory and imaging",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "respiratory": {
+      "professionKey": "respiratory",
+      "title": "Respiratory therapy (RRT) exam prep | NurseNest",
+      "category": "Field and acute care",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "paramedic": {
+      "professionKey": "paramedic",
+      "title": "Paramedic exam prep | Allied health | NurseNest",
+      "category": "Field and acute care",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "pharmacy-tech": {
+      "professionKey": "pharmacy-tech",
+      "title": "Pharmacy technician exam prep | NurseNest",
+      "category": "Clinical and desk-side roles",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "social-work": {
+      "professionKey": "social-work",
+      "title": "Social work licensing exam prep | NurseNest",
+      "category": "Community and personal support",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "psw-hca": {
+      "professionKey": "psw-hca",
+      "title": "PSW / HCA / CCA exam prep | NurseNest",
+      "category": "Community and personal support",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "community-health-worker": {
+      "professionKey": "community-health-worker",
+      "title": "Community health worker exam prep | NurseNest",
+      "category": "Community and personal support",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "mental-health-addictions": {
+      "professionKey": "mental-health-addictions",
+      "title": "Mental health and addictions worker exam prep | NurseNest",
+      "category": "Community and personal support",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "medical-assistant": {
+      "professionKey": "medical-assistant",
+      "title": "Medical assistant exam prep | NurseNest",
+      "category": "Clinical and desk-side roles",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "dental-assistant": {
+      "professionKey": "dental-assistant",
+      "title": "Dental assistant exam prep | NurseNest",
+      "category": "Clinical and desk-side roles",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "dental-hygiene": {
+      "professionKey": "dental-hygiene",
+      "title": "Dental hygiene exam prep | NurseNest",
+      "category": "Clinical and desk-side roles",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "dietetic-technician": {
+      "professionKey": "dietetic-technician",
+      "title": "Dietetic technician exam prep | NurseNest",
+      "category": "Clinical and desk-side roles",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "emt": {
+      "professionKey": "emt",
+      "title": "EMT exam prep | Allied health | NurseNest",
+      "category": "Field and acute care",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "sonography": {
+      "professionKey": "sonography",
+      "title": "Ultrasound / sonography exam prep | NurseNest",
+      "category": "Laboratory and imaging",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "radiography": {
+      "professionKey": "radiography",
+      "title": "Radiography / medical imaging exam prep | NurseNest",
+      "category": "Laboratory and imaging",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    },
+    "lab-assistant": {
+      "professionKey": "lab-assistant",
+      "title": "Medical laboratory assistant exam prep | NurseNest",
+      "category": "Laboratory and imaging",
+      "pathwayId": "us-allied-core",
+      "lessonCount": 0,
+      "flashcardCount": 0,
+      "questionCount": 0,
+      "catEligibleQuestionCount": 0,
+      "hasPracticeExamSurface": true,
+      "hasStudyPlanSurface": true,
+      "hasReportCardSurface": true,
+      "hasSeoDifferentiation": true,
+      "status": "fail"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 52" width="260" height="52" role="img" aria-label="NurseNest">
+  <title>NurseNest</title>
+  <!-- Same-origin fallback mark: leaf + wordmark (replaces legacy stroke arch). -->
+  <g transform="translate(0 5) scale(0.88)">
+    <path d="M6 40 C6 29 14.5 21 25 21 S44 29 44 40 Z" fill="#2563eb" />
+    <path d="M11 40 C11 32.5 17 27 25 27 S39 32.5 39 40 Z" fill="#FFFFFF" />
+  </g>
+  <text
+    x="52"
+    y="35"
+    font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    font-size="24"
+    font-weight="800"
+    fill="#1e293b"
+  >
+    Nurse
+  </text>
+  <text
+    x="132"
+    y="35"
+    font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    font-size="24"
+    font-weight="800"
+    fill="#2563eb"
+  >
+    Nest
+  </text>
+</svg>

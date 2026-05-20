@@ -1,0 +1,401 @@
+import Link from "next/link";
+import { Sparkles } from "lucide-react";
+import type { ConfidencePatternSummary, AnalyticsSummary } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
+
+type RecKind = "risk" | "build" | "measure" | "consistency" | "progress";
+
+type NextStep = {
+  step: string;
+  title: string;
+  body: string;
+  cta: string;
+  href: string;
+  surface: string;
+  border: string;
+  ctaVariant: "primary" | "secondary";
+  priority: number;
+  kind: RecKind;
+};
+
+/**
+ * AnalyticsNextSteps — contextual recommendation cards based on actual analytics data.
+ *
+ * Surfaces alternate between soft-a, soft-b, soft-c to avoid monotony.
+ * Recommendations are derived from real signals (overconfidence, uncertainty, etc.)
+ * not generic filler copy.
+ */
+export function AnalyticsNextSteps({
+  summary,
+  patterns,
+}: {
+  summary: AnalyticsLoadResult<AnalyticsSummary>;
+  patterns: AnalyticsLoadResult<ConfidencePatternSummary> | null;
+}) {
+  if (patterns === null) {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-loading">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            Loading confidence signals for personalized recommendations…
+          </p>
+        </div>
+        <div className="nn-analytics-panel-skeleton grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+          {(
+            [
+              "var(--semantic-chart-1)",
+              "var(--semantic-chart-3)",
+              "var(--semantic-chart-5)",
+            ] as const
+          ).map((hue, i) => (
+            <div
+              key={i}
+              className="flex h-40 flex-col gap-3 rounded-2xl border p-4"
+              style={{
+                borderColor: `color-mix(in srgb, ${hue} 26%, var(--semantic-border-soft))`,
+                background: `color-mix(in srgb, ${hue} 9%, var(--semantic-surface))`,
+              }}
+              aria-hidden
+            >
+              <div
+                className="nn-analytics-skeleton-block h-3 w-24 rounded-md"
+                style={{ background: `color-mix(in srgb, ${hue} 18%, var(--semantic-border-soft))` }}
+              />
+              <div
+                className="nn-analytics-skeleton-block flex-1 rounded-xl"
+                style={{ background: `color-mix(in srgb, ${hue} 12%, var(--semantic-border-soft))` }}
+              />
+            </div>
+          ))}
+        </div>
+        <span className="sr-only">Loading recommendations</span>
+      </section>
+    );
+  }
+
+  if (summary.kind === "error") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-summary-error">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-danger)]">
+          Recommendations unavailable: summary failed to load ({summary.reason}). This is not the same as having no
+          study history yet.
+        </p>
+      </section>
+    );
+  }
+
+  if (patterns.kind === "error") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-patterns-error">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-danger)]">
+          Recommendations unavailable: confidence pattern load failed ({patterns.reason}). Fix the error to see
+          tailored next steps — empty cards here would misleadingly look like “nothing to do”.
+        </p>
+      </section>
+    );
+  }
+
+  if (patterns.kind === "empty") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-patterns-empty">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-text-muted)]">
+          No confidence-rated attempts yet — add a few self-ratings during practice to unlock tailored next steps.
+        </p>
+      </section>
+    );
+  }
+
+  if (summary.kind === "empty") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-summary-empty">
+        <p className="text-sm text-[var(--semantic-text-muted)]">No summary data — complete a practice session to unlock recommendations.</p>
+      </section>
+    );
+  }
+
+  const summaryData = analyticsResolvedData(summary);
+  const patternsData = analyticsResolvedData(patterns);
+  if (summaryData == null || patternsData == null) {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-unresolved">
+        <p className="text-sm text-[var(--semantic-text-muted)]">Recommendations are temporarily unavailable.</p>
+      </section>
+    );
+  }
+
+  const steps = buildSteps(summaryData, patternsData);
+  const degradedNote =
+    summary.kind === "degraded" || patterns.kind === "degraded" ? (
+      <p className="text-xs font-semibold text-[var(--semantic-warning)]" data-testid="analytics-next-steps-degraded">
+        <span className="uppercase tracking-wide">Degraded</span> — some inputs may be partial; suggestions still
+        reflect the data we could load.
+      </p>
+    ) : null;
+
+  return (
+    <section className="space-y-4">
+      <div>
+        <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+          Recommendations
+        </p>
+        <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+          <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+          Next best actions
+        </h2>
+        <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+          Personalized recommendations from your adaptive performance and confidence patterns.
+        </p>
+        {degradedNote}
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+        {steps.map((step, i) => (
+          <NextStepCard key={i} step={step} index={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const KIND_LABEL: Record<RecKind, string> = {
+  risk: "High impact",
+  build: "Reinforce",
+  measure: "Measure",
+  consistency: "Habit",
+  progress: "Progress",
+};
+
+const KIND_SURFACE: Record<RecKind, string> = {
+  risk: "color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface))",
+  build: "color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface))",
+  measure: "color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface))",
+  consistency: "color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface))",
+  progress: "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))",
+};
+
+function NextStepCard({ step, index }: { step: NextStep; index: number }) {
+  const footer = footerForKind(step.kind);
+  return (
+    <div
+      className="flex flex-col justify-between gap-4 rounded-2xl p-5 shadow-sm"
+      style={{ background: step.surface, border: `1px solid ${step.border}` }}
+    >
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className="rounded-full px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-[var(--semantic-text-primary)]"
+            style={{
+              background: KIND_SURFACE[step.kind],
+              border: `1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent)`,
+            }}
+          >
+            P{step.priority}
+          </span>
+          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+            {KIND_LABEL[step.kind]}
+          </span>
+        </div>
+        <p
+          className="text-[0.65rem] font-bold uppercase tracking-widest"
+          style={{ color: "var(--semantic-text-muted)" }}
+        >
+          Action {String(index + 1).padStart(2, "0")}
+        </p>
+        <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{step.title}</p>
+        <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{step.body}</p>
+      </div>
+      <div className="flex flex-col gap-3">
+        <Link
+          href={step.href}
+          className={`${
+            step.ctaVariant === "primary" ? "nn-btn-primary" : "nn-btn-secondary"
+          } inline-flex min-h-[2.25rem] items-center rounded-lg px-4 text-xs font-semibold shadow-none`}
+        >
+          {step.cta}
+        </Link>
+        <p className="flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+          <span className="h-2 w-2 rounded-full" style={{ background: footer.dot }} aria-hidden />
+          <span style={{ color: footer.text }}>{footer.label}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function footerForKind(kind: RecKind): { label: string; dot: string; text: string } {
+  switch (kind) {
+    case "risk":
+      return { label: "High priority", dot: "var(--semantic-danger)", text: "var(--semantic-danger)" };
+    case "measure":
+      return { label: "Moderate priority", dot: "var(--semantic-warning)", text: "var(--semantic-text-secondary)" };
+    case "build":
+      return { label: "Reinforce", dot: "var(--semantic-info)", text: "var(--semantic-info-contrast, var(--semantic-info))" };
+    case "consistency":
+      return { label: "Habit", dot: "var(--semantic-chart-2)", text: "var(--semantic-text-secondary)" };
+    case "progress":
+    default:
+      return { label: "Quick win", dot: "var(--semantic-success)", text: "var(--semantic-success)" };
+  }
+}
+
+const SURFACES = [
+  {
+    surface: "var(--surface-soft-a, var(--semantic-panel-cool))",
+    border: "color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))",
+  },
+  {
+    surface: "var(--surface-soft-c, var(--semantic-panel-positive))",
+    border: "color-mix(in srgb, var(--semantic-success) 20%, var(--semantic-border-soft))",
+  },
+  {
+    surface: "color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface))",
+    border: "color-mix(in srgb, var(--semantic-warning) 20%, transparent)",
+  },
+  {
+    surface: "color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface))",
+    border: "color-mix(in srgb, var(--semantic-brand) 20%, transparent)",
+  },
+];
+
+function buildSteps(
+  summary: AnalyticsSummary,
+  patterns: ConfidencePatternSummary,
+): NextStep[] {
+  const steps: Omit<NextStep, "surface" | "border">[] = [];
+  let priority = 1;
+
+  // 1. Overconfidence intervention (highest urgency)
+  if (patterns.overconfidentErrors >= 3) {
+    steps.push({
+      step: "01",
+      title: "Fix Overconfident Errors",
+      body: `You have ${patterns.overconfidentErrors} questions where you were confident but wrong — these are your highest-risk gaps. Review them in the spaced repetition queue.`,
+      cta: "Open review queue",
+      href: "/app/review",
+      ctaVariant: "primary",
+      priority: priority++,
+      kind: "risk",
+    });
+  }
+
+  // 2. CAT if no recent one
+  if (summary.catSessionCount === 0) {
+    steps.push({
+      step: "01",
+      title: "Measure Your Readiness",
+      body: "You have not completed a CAT session yet. A CAT gives you an adaptive readiness score and identifies exact weak areas.",
+      cta: "Start a CAT",
+      href: "/app/practice-tests",
+      ctaVariant: "primary",
+      priority: priority++,
+      kind: "measure",
+    });
+  } else if (summary.latestReadinessBand === "not_ready" || summary.latestReadinessBand === "building") {
+    steps.push({
+      step: "01",
+      title: "Strengthen Foundations",
+      body: "Your readiness score shows you are still building. Focus on lesson review before increasing question volume.",
+      cta: "Go to lessons",
+      href: "/app/lessons",
+      ctaVariant: "primary",
+      priority: priority++,
+      kind: "build",
+    });
+  }
+
+  // 3. Uncertain correct — reinforce near-misses
+  if (patterns.uncertainCorrect >= 5) {
+    steps.push({
+      step: "02",
+      title: "Reinforce Uncertain Correct",
+      body: `You answered ${patterns.uncertainCorrect} questions correctly but lacked confidence. Use flashcards to lock in this fragile knowledge before it slips.`,
+      cta: "Go to flashcards",
+      href: "/app/flashcards",
+      ctaVariant: "secondary",
+      priority: priority++,
+      kind: "build",
+    });
+  }
+
+  // 4. Strategy practice if enough sessions
+  if (summary.studySessionCount >= 10) {
+    steps.push({
+      step: steps.length + 1 < 10 ? `0${steps.length + 1}` : `${steps.length + 1}`,
+      title: "Practice Thinking Strategies",
+      body: "Use the strategy trainer to build clinical decision-making patterns — not just recall, but the reasoning approach that unlocks harder questions.",
+      cta: "Open strategy trainer",
+      href: "/app/strategy",
+      ctaVariant: "secondary",
+      priority: priority++,
+      kind: "build",
+    });
+  }
+
+  // 5. Streak / consistency
+  if (summary.streakDays === 0) {
+    steps.push({
+      step: steps.length + 1 < 10 ? `0${steps.length + 1}` : `${steps.length + 1}`,
+      title: "Build Your Study Streak",
+      body: "Consistent daily practice compounds faster than long irregular sessions. Even 15 minutes daily improves retention.",
+      cta: "Start a quick session",
+      href: "/app/questions",
+      ctaVariant: "secondary",
+      priority: priority++,
+      kind: "consistency",
+    });
+  }
+
+  // 6. Always-on: take another CAT
+  if (summary.catSessionCount > 0) {
+    steps.push({
+      step: steps.length + 1 < 10 ? `0${steps.length + 1}` : `${steps.length + 1}`,
+      title: "Track Your Progress",
+      body: "Take another CAT to see if your readiness score has improved since your last session.",
+      cta: "Take another CAT",
+      href: "/app/practice-tests",
+      ctaVariant: "secondary",
+      priority: priority++,
+      kind: "progress",
+    });
+  }
+
+  // Assign alternating surfaces
+  return steps.slice(0, 6).map((s, i) => ({
+    ...s,
+    ...(SURFACES[i % SURFACES.length]!),
+  }));
+}

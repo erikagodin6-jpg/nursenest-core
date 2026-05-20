@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/blog-batch-schedule",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/jobs",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/stripe-reconcile",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/monitoring-synthetic",
+      "schedule": "*/15 * * * *"
+    }
+  ]
+}

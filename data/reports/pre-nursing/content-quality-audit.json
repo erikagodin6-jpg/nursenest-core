@@ -1,0 +1,1436 @@
+{
+  "generatedAt": "2026-03-31T16:22:52.384Z",
+  "totalPublished": 143,
+  "rows": [
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-11organsystemsoverview-1",
+      "title": "11 Organ Systems Overview",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 506,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-actionpotentialsteps-2",
+      "title": "Action Potential Steps",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 501,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-actionpotentialsynaptictransmission-3",
+      "title": "Action Potential & Synaptic Transmission",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 534,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-airwaybranchingconductingzonerespiratory-4",
+      "title": "Airway Branching (Conducting Zone → Respiratory Zone)",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 552,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-airwaysanatomygasexchange-5",
+      "title": "Airways Anatomy & Gas Exchange",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 514,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-anatomicalpositiondirectionalterms-6",
+      "title": "Anatomical Position & Directional Terms",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 532,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "anatomy-physiology-data-pre-nursing-anatomy-axialvsappendicularskeleton-7",
+      "title": "Axial vs Appendicular Skeleton",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 516,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "cardiovascular-system-basics",
+      "title": "Cardiovascular System Basics",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 776,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "cell-biology-cell-biology-lesson-1-1",
+      "title": "Cell Biology Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "cell-biology-cell-biology-lesson-2-2",
+      "title": "Cell Biology Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "cell-biology-cell-biology-lesson-3-3",
+      "title": "Cell Biology Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "cell-biology-cell-biology-lesson-4-4",
+      "title": "Cell Biology Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "endocrine-feedback-loops",
+      "title": "Endocrine Feedback Loops",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 757,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "gi-digestion-absorption",
+      "title": "GI Digestion and Absorption",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 781,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "homeostasis-acid-base",
+      "title": "Homeostasis and Acid-Base Balance",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 772,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "immune-inflammatory-response",
+      "title": "Immune and Inflammatory Response",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 768,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "integumentary-barrier-healing",
+      "title": "Integumentary Barrier and Wound Healing",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 784,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "musculoskeletal-structure-function",
+      "title": "Musculoskeletal Structure and Function",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 789,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "nervous-system-signaling",
+      "title": "Nervous System Signaling and Control",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 772,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "physiology-physiology-lesson-1-1",
+      "title": "Physiology Principles Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 466,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "physiology-physiology-lesson-2-2",
+      "title": "Physiology Principles Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 466,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "physiology-physiology-lesson-3-3",
+      "title": "Physiology Principles Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 466,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "physiology-physiology-lesson-4-4",
+      "title": "Physiology Principles Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 466,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "renal-fluid-regulation",
+      "title": "Renal Function and Fluid Regulation",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 756,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-anatomy-physiology",
+      "course": "anatomy-physiology",
+      "slug": "respiratory-system-gas-exchange",
+      "title": "Respiratory System and Gas Exchange",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 774,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "atomic-structure-periodic-trends",
+      "title": "Atomic Structure and Periodic Trends",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 791,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "atp-pathway-atp-pathway-lesson-1-1",
+      "title": "ATP & Energy Pathways Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 491,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "atp-pathway-atp-pathway-lesson-2-2",
+      "title": "ATP & Energy Pathways Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 491,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "atp-pathway-atp-pathway-lesson-3-3",
+      "title": "ATP & Energy Pathways Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 491,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "atp-pathway-atp-pathway-lesson-4-4",
+      "title": "ATP & Energy Pathways Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 491,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "atp-pathway-atp-pathway-lesson-5-5",
+      "title": "ATP & Energy Pathways Foundations 5",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 491,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "biochemistry-carbohydrates-proteins-lipids",
+      "title": "Biochemistry: Carbs, Proteins, and Lipids",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 784,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "buffers-physiology",
+      "title": "Buffer Systems in Physiology",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 762,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "chemistry-data-pre-nursing-chemistry-blood735745-1",
+      "title": "Blood: 7.35–7.45",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 475,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "chemistry-data-pre-nursing-chemistry-buffersystems-2",
+      "title": "Buffer Systems",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 475,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "chemistry-data-pre-nursing-chemistry-chemistryfoundationsquiz-3",
+      "title": "Chemistry Foundations Quiz",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 498,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "chemistry-data-pre-nursing-chemistry-hclgastricacid2-4",
+      "title": "HCl, Gastric acid (~2)",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 485,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "electrolytes-osmolality-tonicity",
+      "title": "Electrolytes, Osmolality, and Tonicity",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 772,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "enzyme-kinetics-clinical-context",
+      "title": "Enzyme Kinetics in Clinical Context",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 778,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "ionic-covalent-bonding",
+      "title": "Ionic and Covalent Bonding",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 754,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "lab-values-chemistry-interpretation",
+      "title": "Interpreting Common Chemistry Lab Values",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 780,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "moles-molarity-concentration",
+      "title": "Moles, Molarity, and Concentration",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 768,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "organic-functional-groups",
+      "title": "Organic Functional Groups for Nursing",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 795,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "ph-and-acid-base-foundations",
+      "title": "pH and Acid-Base Foundations",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 762,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "science-foundations-science-foundations-lesson-1-1",
+      "title": "Science Foundations Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 478,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "science-foundations-science-foundations-lesson-2-2",
+      "title": "Science Foundations Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 478,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "science-foundations-science-foundations-lesson-3-3",
+      "title": "Science Foundations Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 478,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "science-foundations-science-foundations-lesson-4-4",
+      "title": "Science Foundations Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 478,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "science-foundations-science-foundations-lesson-5-5",
+      "title": "Science Foundations Foundations 5",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 478,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-chemistry",
+      "course": "chemistry",
+      "slug": "science-foundations-science-foundations-lesson-6-6",
+      "title": "Science Foundations Foundations 6",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 478,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "calculation-error-troubleshooting",
+      "title": "Calculation Error Troubleshooting",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 777,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "diagnostics-diagnostics-lesson-1-1",
+      "title": "Diagnostic Methods Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 482,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "diagnostics-diagnostics-lesson-2-2",
+      "title": "Diagnostic Methods Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 482,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "diagnostics-diagnostics-lesson-3-3",
+      "title": "Diagnostic Methods Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 482,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "diagnostics-diagnostics-lesson-4-4",
+      "title": "Diagnostic Methods Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 482,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "dimensional-analysis-step-by-step",
+      "title": "Dimensional Analysis Step by Step",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 783,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "fluids-electrolytes-fluids-electrolytes-lesson-1-1",
+      "title": "Fluids & Electrolytes Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 485,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "fluids-electrolytes-fluids-electrolytes-lesson-2-2",
+      "title": "Fluids & Electrolytes Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 485,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "fluids-electrolytes-fluids-electrolytes-lesson-3-3",
+      "title": "Fluids & Electrolytes Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 485,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "fluids-electrolytes-fluids-electrolytes-lesson-4-4",
+      "title": "Fluids & Electrolytes Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 485,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "iv-flow-rates-gtt-min",
+      "title": "IV Flow Rates (gtt/min)",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 758,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "iv-infusion-ml-hr",
+      "title": "IV Infusion Rates (mL/hr)",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 760,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "liquid-dose-calculations",
+      "title": "Liquid Dose Calculations",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 732,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "ratios-proportions-core",
+      "title": "Ratios and Proportions Core",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 735,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "safe-rounding-significant-figures",
+      "title": "Safe Rounding and Significant Figures",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 781,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "tablet-dose-calculations",
+      "title": "Tablet Dose Calculations",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 732,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "units-conversions-metric-household",
+      "title": "Unit Conversions: Metric and Household",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 761,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-math",
+      "course": "math",
+      "slug": "weight-based-dosing-basics",
+      "title": "Weight-Based Dosing Basics",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 734,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "abbreviations-safety-risks",
+      "title": "Abbreviations and Safety Risks",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 762,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "anatomical-directions-planes",
+      "title": "Anatomical Directions and Planes",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 773,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "cardio-respiratory-terminology",
+      "title": "Cardio-Respiratory Terminology",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 759,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "case-based-terminology-practice",
+      "title": "Case-Based Terminology Practice",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 757,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "documentation-language-clarity",
+      "title": "Documentation Language and Clarity",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 766,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "infectious-immunology-terms",
+      "title": "Infectious Disease and Immunology Terms",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 768,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "medical-terminology-data-pre-nursing-terminology-anteriorventral-1",
+      "title": "Anterior (ventral)",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 480,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "medical-terminology-data-pre-nursing-terminology-commonconfusionotomyvsostomy-2",
+      "title": "Common Confusion: -otomy vs -ostomy vs -ectomy",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 521,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "medical-terminology-data-pre-nursing-terminology-decodinginaction-3",
+      "title": "Decoding in Action",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 481,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "medical-terminology-data-pre-nursing-terminology-frontalcoronalplane-4",
+      "title": "Frontal (coronal) plane",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 489,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "musculoskeletal-integumentary-terms",
+      "title": "Musculoskeletal and Integumentary Terms",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 768,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "neuro-endocrine-terminology",
+      "title": "Neuro-Endocrine Terminology",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 756,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "renal-gi-terminology",
+      "title": "Renal-GI Terminology",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 749,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "roots-prefixes-suffixes",
+      "title": "Roots, Prefixes, and Suffixes",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 761,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "terminology-terminology-lesson-1-1",
+      "title": "Medical Terminology Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "terminology-terminology-lesson-2-2",
+      "title": "Medical Terminology Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-medical-terminology",
+      "course": "medical-terminology",
+      "slug": "terminology-terminology-lesson-3-3",
+      "title": "Medical Terminology Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 454,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "antimicrobial-basics-resistance",
+      "title": "Antimicrobial Basics and Resistance",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 769,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "chain-of-infection-clinical-breakpoints",
+      "title": "Chain of Infection and Breakpoints",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 783,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "common-healthcare-pathogens",
+      "title": "Common Healthcare Pathogens",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 752,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "gram-positive-vs-negative",
+      "title": "Gram Positive vs Gram Negative",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 764,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "growth-curves-transmission",
+      "title": "Microbial Growth Curves and Transmission",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 789,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "host-defense-immunity",
+      "title": "Host Defense and Immunity Overview",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 762,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "infection-control-infection-control-lesson-1-1",
+      "title": "Infection Control Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 476,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "infection-control-infection-control-lesson-2-2",
+      "title": "Infection Control Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 476,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "infection-control-infection-control-lesson-3-3",
+      "title": "Infection Control Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 476,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "infection-control-infection-control-lesson-4-4",
+      "title": "Infection Control Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 476,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "isolation-precautions-practice",
+      "title": "Isolation Precautions in Practice",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 782,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "microbial-cell-structure",
+      "title": "Microbial Cell Structure Basics",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 765,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "microbiology-data-pre-nursing-microbiology-colonizationvsinfection-1",
+      "title": "Colonization vs Infection",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 490,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "microbiology-data-pre-nursing-microbiology-criticaldistinction-2",
+      "title": "Critical Distinction",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 481,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "microbiology-data-pre-nursing-microbiology-matchthemicrobiologyconcept-3",
+      "title": "Match the Microbiology Concept",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 499,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "microbiology-data-pre-nursing-microbiology-microbiologyfoundationsquiz-4",
+      "title": "Microbiology Foundations Quiz",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 498,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "specimen-collection-contamination",
+      "title": "Specimen Collection and Contamination Risks",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 774,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-microbiology",
+      "course": "microbiology",
+      "slug": "sterilization-disinfection-asepsis",
+      "title": "Sterilization, Disinfection, and Asepsis",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 789,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "acid-base-pathophysiology",
+      "title": "Acid-Base Pathophysiology",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 753,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "cell-injury-adaptation",
+      "title": "Cell Injury and Adaptation",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 763,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "cellular-injury-cellular-injury-lesson-1-1",
+      "title": "Cellular Injury & Adaptation Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 513,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "cellular-injury-cellular-injury-lesson-2-2",
+      "title": "Cellular Injury & Adaptation Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 513,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "cellular-injury-cellular-injury-lesson-3-3",
+      "title": "Cellular Injury & Adaptation Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 513,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "cellular-injury-cellular-injury-lesson-4-4",
+      "title": "Cellular Injury & Adaptation Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 513,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "cellular-injury-cellular-injury-lesson-5-5",
+      "title": "Cellular Injury & Adaptation Foundations 5",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 513,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "endocrine-dysregulation-basics",
+      "title": "Endocrine Dysregulation Basics",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 758,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "fluid-shifts-edema-shock-overview",
+      "title": "Fluid Shifts, Edema, and Shock Overview",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 758,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "hypoxia-ischemia-reperfusion",
+      "title": "Hypoxia, Ischemia, Reperfusion",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 764,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "infection-sepsis-continuum",
+      "title": "Infection to Sepsis Continuum",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 757,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "inflammation-healing-basics",
+      "title": "Inflammation and Healing Basics",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 768,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "inflammation-inflammation-lesson-1-1",
+      "title": "Inflammation & Immune Response Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 494,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "inflammation-inflammation-lesson-2-2",
+      "title": "Inflammation & Immune Response Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 494,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "inflammation-inflammation-lesson-3-3",
+      "title": "Inflammation & Immune Response Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 494,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "inflammation-inflammation-lesson-4-4",
+      "title": "Inflammation & Immune Response Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 494,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "oxygenation-oxygenation-lesson-1-1",
+      "title": "Oxygenation & Perfusion Foundations 1",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 483,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "oxygenation-oxygenation-lesson-2-2",
+      "title": "Oxygenation & Perfusion Foundations 2",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 483,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "oxygenation-oxygenation-lesson-3-3",
+      "title": "Oxygenation & Perfusion Foundations 3",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 483,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "oxygenation-oxygenation-lesson-4-4",
+      "title": "Oxygenation & Perfusion Foundations 4",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 483,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "oxygenation-oxygenation-lesson-5-5",
+      "title": "Oxygenation & Perfusion Foundations 5",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 483,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "pain-stress-neuroendocrine-response",
+      "title": "Pain, Stress, and Neuroendocrine Response",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 787,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "pathophysiology-data-pre-nursing-cellular-injury-cellularinjuryadaptationquiz-1",
+      "title": "Cellular Injury & Adaptation Quiz",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 502,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "pathophysiology-data-pre-nursing-cellular-injury-compensationvsdecompensation-2",
+      "title": "Compensation vs Decompensation",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 499,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "pathophysiology-data-pre-nursing-cellular-injury-freeradicalsoxidativestress-3",
+      "title": "Free Radicals & Oxidative Stress",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 500,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "renal-failure-mechanisms-intro",
+      "title": "Renal Failure Mechanisms Intro",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 746,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pathophysiology",
+      "course": "pathophysiology",
+      "slug": "thromboembolism-fundamentals",
+      "title": "Thromboembolism Fundamentals",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 759,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "dose-response-adverse-effects",
+      "title": "Dose Response and Adverse Effects",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 788,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "drug-interactions-contraindications",
+      "title": "Drug Interactions and Contraindications",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 779,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "high-alert-medications-intro",
+      "title": "High-Alert Medications Intro",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 783,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "medication-error-prevention",
+      "title": "Medication Error Prevention",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 782,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "medication-rights-checks",
+      "title": "Medication Rights and Safety Checks",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 790,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "patient-education-adherence",
+      "title": "Patient Education and Adherence",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 774,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "pharmacodynamics-receptors",
+      "title": "Pharmacodynamics and Receptor Action",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 788,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "pharmacokinetics-adme",
+      "title": "Pharmacokinetics (ADME)",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 775,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "pharmacology-pages-prenursing-pharmacologycheck-1",
+      "title": "Pharmacology Check",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 456,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "pharmacology-prenursing-pharm-agonist-2",
+      "title": "Binds to receptor and ACTIVATES it. Mimics the natural ligand. Example: Morphine (opioid agonist)",
+      "source": "imported-existing",
+      "quality": "imported-fragmentary",
+      "bodyChars": 525,
+      "needsEnrichment": true
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "pharmacology-prenursing-pharm-antagonist-3",
+      "title": "Binds to receptor and BLOCKS it. Prevents the natural ligand from activating. Example: Naloxone (opioid antagonist)",
+      "source": "imported-existing",
+      "quality": "imported-rich",
+      "bodyChars": 546,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "renal-hepatic-dose-adjustment-basics",
+      "title": "Renal/Hepatic Dose Adjustment Basics",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 776,
+      "needsEnrichment": false
+    },
+    {
+      "pathwayId": "pre-nursing-pharmacology-foundations",
+      "course": "pharmacology-foundations",
+      "slug": "therapeutic-index-safety",
+      "title": "Therapeutic Index and Medication Safety",
+      "source": "generated",
+      "quality": "generated",
+      "bodyChars": 794,
+      "needsEnrichment": false
+    }
+  ]
+}

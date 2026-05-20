@@ -1,0 +1,734 @@
+{
+  "version": 1,
+  "description": "Wave 4 – Pain Management, Infection Control, Antibiotics",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pain-management",
+      "previewSectionCount": 2,
+      "seoTitle": "Pain management nursing: opioid safety, WHO ladder, addiction vs dependence & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on pain management: nociceptive vs neuropathic pain, WHO analgesic ladder, opioid safety monitoring, naloxone, non-pharmacological strategies, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Pain** is defined by the International Association for the Study of Pain (IASP) as 'an unpleasant sensory and emotional experience associated with, or resembling that associated with, actual or potential tissue damage.' Pain is the most common reason patients seek healthcare, and the fifth vital sign — the Canadian Pain Society and CNA recognize that effective pain assessment and management is a core nursing competency.\n\n**Types of pain:**\n- **Nociceptive pain**: caused by actual tissue damage. Somatic nociceptive (skin, muscle, bone): well-localized, aching, sharp — fractures, surgical wounds, arthritis. Visceral nociceptive (internal organs): poorly localized, cramping, referred — appendicitis, bowel obstruction, MI.\n- **Neuropathic pain**: caused by nerve damage or dysfunction. Burning, shooting, electric, tingling quality. Examples: diabetic neuropathy, post-herpetic neuralgia, spinal cord injury pain, phantom limb pain.\n- **Acute pain**: < 3 months; protective function; associated with sympathetic activation (tachycardia, diaphoresis, HTN).\n- **Chronic pain**: > 3 months; often no longer protective; frequently involves central sensitization; sympathetic adaptation occurs (may NOT have tachycardia or diaphoresis despite severe pain).\n\nFor NCLEX-RN: pain management focuses on: accurate assessment, pharmacological and non-pharmacological interventions, opioid safety, and recognizing barriers to pain relief."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology of Pain",
+          "kind": "pathophysiology_overview",
+          "body": "**Pain transduction.** Noxious stimuli (mechanical, chemical, thermal) activate peripheral nociceptors — free nerve endings of A-delta fibres (sharp, fast, first pain) and C fibres (dull, aching, slow, second pain). Tissue injury releases algogenic chemicals: prostaglandins (PGE₂), bradykinin, substance P, histamine, ATP. These sensitize nociceptors → peripheral sensitization → lower activation threshold. This is why injured tissue is hypersensitive (allodynia and hyperalgesia).\n\n**Pain transmission.** A-delta and C fibre signals travel to the dorsal horn of the spinal cord and synapse in the substantia gelatinosa (Rexed laminae I, II). Second-order neurons cross the midline and ascend via the spinothalamic tract to the thalamus. The thalamus relays signals to the somatosensory cortex (location and intensity) and limbic system (emotional component — suffering, fear, depression).\n\n**Modulation and gate control.** The gate control theory (Melzack & Wall): A-beta fibres (touch, pressure) can activate inhibitory interneurons in the dorsal horn that 'close the gate' to C-fibre pain signals — this explains why rubbing an injury provides temporary relief, and why TENS and massage work. Descending inhibitory pathways (from periaqueductal gray, raphe nuclei) release endogenous opioids (endorphins, enkephalins), serotonin, and norepinephrine → inhibit pain transmission in the dorsal horn. Opioid drugs mimic endorphins at mu, kappa, and delta receptors.\n\n**Central sensitization.** Repeated or intense pain input 'winds up' the spinal cord — NMDA receptors become sensitized, expanding the pain field and lowering the threshold. This is the mechanism of chronic pain conditions (fibromyalgia, chronic low back pain) and explains why early, aggressive acute pain management helps prevent chronic pain development."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Pain Assessment",
+          "kind": "signs_symptoms",
+          "body": "**Subjective assessment — self-report is the gold standard:**\n- **Numeric Rating Scale (NRS)**: 0–10; 0 = no pain, 10 = worst imaginable\n- **Wong-Baker FACES scale**: for children, cognitive impairment, or patients who cannot use numbers\n- **PQRSTU mnemonic:**\n  - P: Provocation/Palliation — what makes it worse/better?\n  - Q: Quality — burning, sharp, dull, cramping, stabbing?\n  - R: Region/Radiation — where? Does it spread?\n  - S: Severity — 0–10\n  - T: Timing — constant, intermittent, onset\n  - U: Understanding — what do you think is causing it?\n\n**Objective indicators** (when self-report not possible — behavioural pain scales):\n- **CPOT (Critical Care Pain Observation Tool)**: for intubated ICU patients; observes facial expression, body movements, muscle tension, compliance with ventilator or vocalization\n- **FLACC scale** (Face, Legs, Activity, Cry, Consolability): for children < 7 years\n- Physiological changes: tachycardia, hypertension, diaphoresis, elevated RR — UNRELIABLE for chronic pain (adaptation occurs); may be present in acute pain\n\n**Barriers to pain assessment:**\n- Fear of addiction (patient and provider)\n- Cultural stoicism — patient may not report pain\n- Communication barriers (language, cognitive impairment)\n- Nurses underestimating pain, especially in demographic groups (elderly, non-white patients, patients with substance use history)\n- The nurse must BELIEVE the patient's self-report — pain is always subjective"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Opioid Safety",
+          "kind": "red_flags",
+          "body": "**Opioid-induced respiratory depression — notify provider immediately:**\n- RR < 8 breaths/min\n- SpO₂ < 90% with opioid administration\n- Sedation scale > 2 (patient difficult to arouse)\n- Pinpoint pupils (miosis) — hallmark of opioid toxicity\n- 'Death rattle' or agonal breathing\n\n**OPIOID-RELATED SEDATION SCALE (Pasero):**\n- S = Sleeping, easily aroused\n- 1 = Awake and alert\n- 2 = Slightly drowsy, easily aroused — acceptable, MONITOR\n- 3 = Frequently drowsy, arousable, drifts off during conversation — REDUCE DOSE, increase monitoring\n- 4 = Somnolent, minimal response to stimulation — STOP OPIOID, consider naloxone\n\n**Naloxone (Narcan) — reversal agent:**\n- Indication: opioid-induced respiratory depression (RR < 8, sedation level 3–4, SpO₂ dropping)\n- Dose: 0.4 mg diluted in 10 mL NS; give 1–2 mL (0.04–0.08 mg) IV q2–3 min until RR > 8 and patient arousable. Titrate slowly — goal is reversal of respiratory depression, NOT complete reversal of analgesia (which causes acute withdrawal pain and is dangerous in opioid-dependent patients)\n- Duration: 30–90 minutes; shorter than most opioids → patient may re-narcotize after naloxone wears off → monitor closely and may need repeat doses or infusion\n- Have naloxone and resuscitation equipment available whenever opioids are administered\n\n**NEVER CONFUSE:**\n- Addiction (psychological compulsion to use drug despite harm) ≠ Physical dependence (normal physiological adaptation — withdrawal on abrupt cessation) ≠ Tolerance (need for higher dose to achieve same effect). Patients on long-term opioids will have dependence and tolerance — this is NOT addiction."
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Assessment Tools",
+          "kind": "labs_diagnostics",
+          "body": "**Pain assessment tools by population:**\n- Adults (alert): NRS 0–10 or VAS\n- Children 3–7: FACES pain scale\n- Children < 3 or non-verbal: FLACC\n- ICU/intubated: CPOT or BPS (Behavioral Pain Scale)\n- Neonatal: NIPS (Neonatal Infant Pain Scale), PIPP\n- Cognitively impaired elderly: PAINAD (Pain Assessment in Advanced Dementia)\n\n**Documentation:**\n- Reassess pain after every intervention: 30–60 minutes after oral medications; 15–30 minutes after IV medications; 1 hour after non-pharmacological intervention\n- Document: pain score before AND after treatment, intervention given, patient's functional response\n\n**WHO Analgesic Ladder — 3 steps:**\n- Step 1 (mild pain, NRS 1–3): Non-opioids — acetaminophen, NSAIDs (ibuprofen, ketorolac, naproxen)\n- Step 2 (moderate pain, NRS 4–6): Weak opioids — codeine, tramadol; ± non-opioid adjuvant\n- Step 3 (severe pain, NRS 7–10): Strong opioids — morphine, hydromorphone, oxycodone, fentanyl; ± non-opioid adjuvant\n\n**Labs for pain management monitoring:**\n- Renal function: NSAIDs are renally toxic; contraindicated in CKD; dosing adjustment for opioids in renal failure\n- Liver function: acetaminophen hepatotoxicity risk in liver disease or > 4g/day; reduce to 2g/day in hepatic impairment\n- Serum levels rarely needed unless toxicity suspected (acetaminophen level, opioid toxicology)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Non-pharmacological interventions (always use in conjunction):**\n- Positioning: elevate injured extremity, pillow splinting for surgical sites, side-lying for back pain\n- Heat: vasodilation, muscle relaxation; use for chronic muscle pain, back pain (NOT on acute inflammation, neuropathy, or areas with impaired sensation)\n- Cold (cryotherapy): vasoconstriction, reduces inflammation and swelling; use for acute injuries (first 24–48h), post-procedural swelling\n- TENS (Transcutaneous Electrical Nerve Stimulation): gate control mechanism; useful for chronic musculoskeletal pain\n- Massage/therapeutic touch\n- Distraction, guided imagery, music therapy, mindfulness\n- Relaxation breathing\n- Acupuncture, acupressure\n\n**Pharmacological interventions — nursing administration:**\n\n**NSAIDs (ibuprofen, naproxen, ketorolac):**\n- Mechanism: COX inhibition → reduced prostaglandin synthesis → decreased inflammation and pain sensitization\n- Monitor: GI bleeding (give with food, PPI for high-risk patients), renal function (hold for eGFR < 30), BP increase, fluid retention\n- Ketorolac (Toradol) IV/IM: max 5 days; used post-operatively; avoid in renal failure, GI bleeding, elderly > 65 (increased toxicity)\n\n**Acetaminophen:**\n- Safe first-line; max 4g/day in adults with normal liver function; 2g/day in hepatic impairment or heavy alcohol use\n- Does NOT have anti-inflammatory effect (unlike NSAIDs) but is an effective analgesic\n- Watch for inadvertent overdose (multiple combination products contain acetaminophen)\n\n**Opioid administration:**\n- Assess: RR, level of sedation, SpO₂, bowel sounds, pain score BEFORE each dose\n- Hold: RR < 10, sedation level ≥ 3 on Pasero scale\n- IV opioids: onset 5 min; peak 15–20 min; oral onset 30–60 min, peak 1–2h — time reassessments accordingly\n- PCA (Patient Controlled Analgesia): allows patient to self-dose within prescribed limits; only the PATIENT presses the button — never a nurse, family member, or visitor\n- Equianalgesic dosing: know conversions for opioid rotation (morphine 10 mg IV = 30 mg PO; hydromorphone 1.5 mg IV = 7.5 mg PO)\n\n**Adjuvant analgesics:**\n- Gabapentinoids (gabapentin, pregabalin): neuropathic pain; also used for opioid-sparing post-op\n- Tricyclic antidepressants (amitriptyline): neuropathic pain; monitor for sedation, anticholinergic effects\n- SNRIs (duloxetine): fibromyalgia, diabetic neuropathy\n- Topical agents: lidocaine patches, capsaicin cream — for localized neuropathic pain\n\n**Constipation prevention:**\n- Start bowel regimen at opioid initiation — do NOT wait for constipation to develop\n- Stool softener + stimulant laxative: docusate + senna (Senokot-S)\n- Do NOT use fibre/bulk laxatives alone (ineffective without peristalsis from opioids)\n- Methylnaltrexone (Relistor): peripheral opioid antagonist; for opioid-induced constipation refractory to laxatives; does NOT cross BBB, does not reverse analgesia"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Believe the patient.** The nurse cannot objectively see or measure pain — the patient's self-report is always the gold standard. Dismissing pain based on absence of objective signs (especially in chronic pain) is both clinically wrong and ethically unacceptable.\n- **PCA = patient-controlled only.** Family members pressing the button bypass the safety mechanism. Educate firmly.\n- **Naloxone titration**: do NOT give a full 0.4 mg IV bolus — this causes acute withdrawal, reverses all analgesia, and can cause severe pain, vomiting, and tachycardia. Dilute and titrate.\n- **Equianalgesic literacy**: when rotating opioids, the equianalgesic dose is a starting point, not an exact conversion — reduce by 25–50% to account for incomplete cross-tolerance.\n- **Opioid antagonism half-life**: naloxone 30–90 min; many opioids last 4–6h. After naloxone wears off, re-narcotization can occur — continuous monitoring is essential after administration.\n- **NSAIDs and renal risk**: NSAIDs reduce renal prostaglandin production → afferent arteriolar constriction → reduced GFR. In any patient with low volume states (dehydration, HF, sepsis), NSAIDs can cause acute kidney injury rapidly.\n- **Multimodal analgesia** (WHO ladder principle): combining drugs with different mechanisms = better pain control with lower doses of each = fewer side effects."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Managing pain at home after surgery or acute injury:**\n- Take pain medications on a schedule in the first 24–72h — do not wait until pain is severe ('staying ahead of the pain')\n- Use non-pharmacological methods alongside medications\n- Opioids: do not drive or operate machinery; do not drink alcohol; take stool softeners daily\n- Acetaminophen: check all OTC products for acetaminophen content — do not exceed 4g/day total from all sources\n- Report: severe nausea/vomiting, difficulty breathing, extreme drowsiness, or complete absence of bowel movement after 3 days\n\n**Safe opioid storage and disposal:**\n- Lock opioids away from children and visitors\n- Never share opioids — illegal and dangerous\n- Dispose unused opioids at pharmacy take-back programs (Canadian drug disposal programs)\n- Keep naloxone at home if on chronic opioids: home naloxone kits are available free at most Canadian pharmacies (provincial programs)\n\n**Chronic pain coping strategies:**\n- Pain management is not about eliminating pain to zero — it is about improving function\n- Pacing activities, goal-setting, and sleep hygiene are foundational\n- Psychological support: CBT for chronic pain, acceptance and commitment therapy (ACT)\n- Physical activity (graded) is evidence-based for almost all chronic pain conditions — immobility worsens chronic pain"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pain is always subjective — believe the patient. Self-report is the gold standard.\n- Assess with PQRSTU; reassess within 15–30 min IV or 30–60 min oral after any intervention\n- WHO ladder: Step 1 (mild) → non-opioids; Step 2 (moderate) → weak opioids; Step 3 (severe) → strong opioids + adjuvants\n- Opioid monitoring: Pasero sedation scale + RR + SpO₂ before each dose. Hold if RR < 10 or sedation ≥ 3.\n- Naloxone: dilute 0.4 mg in 10 mL NS; titrate 0.04 mg q2–3 min; monitor for re-narcotization (duration 30–90 min < opioid)\n- PCA: ONLY the patient pushes the button\n- Constipation: start bowel regimen at opioid initiation; docusate + senna\n- Addiction ≠ Dependence ≠ Tolerance — never withhold analgesia due to fear of addiction in patients with legitimate pain"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client post-abdominal surgery rates pain at 8/10 and has RR 14/min, SpO₂ 96%, and is drowsy but arousable to voice. He received IV hydromorphone 30 minutes ago. What is the nurse's priority action?",
+          "options": [
+            "Administer naloxone immediately — the patient has opioid toxicity",
+            "Hold the next dose and monitor closely — this is sedation level 2 on the Pasero scale (slightly drowsy, easily aroused); continue monitoring",
+            "Increase the dose since pain is still 8/10",
+            "Give another full dose in 30 minutes as prescribed — the patient is still in pain"
+          ],
+          "correct": 1,
+          "rationale": "Drowsy but easily arousable = Pasero sedation level 2 — acceptable; requires monitoring but not dose withholding or naloxone. RR 14 and SpO₂ 96% are within acceptable limits. Naloxone is for level 3–4 sedation with RR < 8 or SpO₂ < 90%. The nurse should document, continue to monitor, and reassess at the next scheduled dose — pain management decisions beyond monitoring require provider discussion."
+        },
+        {
+          "question": "A client is prescribed opioids for cancer pain. She tells the nurse, 'I don't want to take these — I'm afraid I'll become addicted.' What is the nurse's best response?",
+          "options": [
+            "Your concern is valid — addiction is a significant risk with opioid use for pain.",
+            "Physical dependence (needing the drug to avoid withdrawal) is expected with chronic opioids, but addiction (psychological compulsion despite harm) is very uncommon when opioids are used appropriately for pain management.",
+            "You won't need these for long — your cancer pain should go away soon.",
+            "If you're worried, we can just use acetaminophen instead."
+          ],
+          "correct": 1,
+          "rationale": "Differentiating addiction from dependence is a key nursing education point. Physical dependence (the body adapts to opioids — withdrawal occurs if stopped abruptly) is expected and does not indicate addiction. Psychological addiction (craving, compulsive use despite harm) is uncommon in patients using opioids for legitimate cancer pain. Validating the fear without providing accurate information delays necessary pain relief and is not therapeutic."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is administering IV morphine for acute pain. Thirty minutes later, the patient has RR 7/min, SpO₂ 87%, and responds only to vigorous sternal rub. What is the immediate nursing action?",
+          "options": [
+            "Administer naloxone 0.4 mg IV push immediately in full dose",
+            "Stop the morphine, call a rapid response, administer naloxone diluted in NS titrating 0.04 mg IV q2-3 min until RR > 8",
+            "Administer supplemental O₂ and recheck in 10 minutes",
+            "Position the patient in left lateral decubitus and elevate legs"
+          ],
+          "correct": 1,
+          "rationale": "This is Pasero sedation level 4 with respiratory depression (RR 7, SpO₂ 87%) — opioid toxicity. Actions: STOP the opioid, activate rapid response, administer oxygen, and give DILUTED naloxone titrated to effect. A full 0.4 mg bolus reverses all analgesia abruptly, precipitating acute withdrawal and severe pain in opioid-tolerant patients. Titrating 0.04 mg q2–3 min reverses respiratory depression while preserving some analgesia."
+        },
+        {
+          "question": "A nurse enters a patient's room and finds the patient's spouse pressing the PCA button 'to help with the pain while he's sleeping.' What is the correct intervention?",
+          "options": [
+            "Allow it — the spouse knows the patient best",
+            "Allow one press — the patient is clearly in pain",
+            "Immediately educate the spouse that only the patient is to press the PCA button — unauthorized pressing bypasses the safety mechanism and risks respiratory depression",
+            "Silence the PCA alarm and increase the basal rate instead"
+          ],
+          "correct": 2,
+          "rationale": "PCA safety relies on the patient being awake and conscious enough to press the button — the sedation that precedes respiratory depression prevents a conscious patient from self-dosing. A family member pressing the button on a sleeping patient bypasses this safety mechanism and can cause fatal respiratory depression. The nurse must educate the family immediately and document the intervention."
+        },
+        {
+          "question": "Which statement best describes the correct acetaminophen dosing principle for a client with chronic alcohol use?",
+          "options": [
+            "Acetaminophen is contraindicated in all patients who drink alcohol — use NSAIDs instead",
+            "Maximum dose is reduced to 2g/day due to increased risk of hepatotoxicity in patients with liver impairment from alcohol use",
+            "Acetaminophen should be given at the full 4g/day dose to avoid using opioids",
+            "The patient's pain is self-induced — acetaminophen is not indicated"
+          ],
+          "correct": 1,
+          "rationale": "Acetaminophen is hepatotoxic at high doses and the toxic threshold is lower in patients with liver impairment (including chronic alcohol use). The maximum dose should be reduced to 2g/day. Acetaminophen is not absolutely contraindicated in alcohol use — it remains safer than NSAIDs (which worsen GI bleeding risk and renal function in this population)."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-infection-control",
+      "previewSectionCount": 2,
+      "seoTitle": "Infection control nursing: standard precautions, transmission, PPE, HAIs & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on infection control: chain of infection, standard precautions, airborne/droplet/contact isolation, HAI prevention, hand hygiene, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Infection control** is the application of evidence-based practices to prevent the transmission of infectious agents within healthcare settings. Healthcare-associated infections (HAIs) affect approximately 200,000 Canadians annually and contribute to 8,000–12,000 deaths per year (PHAC data). The vast majority of HAIs are preventable through consistent application of standard and transmission-based precautions.\n\n**The chain of infection** must be broken at any link to prevent transmission:\n1. **Infectious agent** (pathogen — bacteria, virus, fungus, parasite, prion)\n2. **Reservoir** (where the pathogen lives — human host, water, soil, equipment)\n3. **Portal of exit** (how it leaves the reservoir — respiratory tract, blood, feces, wound drainage)\n4. **Mode of transmission** (how it travels — contact, droplet, airborne, vehicle, vector)\n5. **Portal of entry** (how it enters a new host — mucous membranes, broken skin, respiratory tract, GI tract)\n6. **Susceptible host** (compromised immunity, invasive devices, immunosuppression)\n\n**Infection control in practice:** The nurse's primary role is to break the chain, particularly at links 4 (mode of transmission) and 6 (host susceptibility).",
+          "figures": [
+            {
+              "id": "inflammatory-response-fig",
+              "url": "uploads/images/inflammatory-response.webp",
+              "alt": "Diagram of the inflammatory response pathophysiology",
+              "caption": "The inflammatory response: host defence against infection — local and systemic mechanisms",
+              "kind": "diagram"
+            }
+          ]
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Transmission Routes and Precautions",
+          "kind": "pathophysiology_overview",
+          "body": "**Standard Precautions (Tier 1) — apply to ALL patients, regardless of diagnosis:**\nStandard precautions treat all blood, body fluids (except sweat), non-intact skin, and mucous membranes as potentially infectious.\n\n- **Hand hygiene**: most important single infection-control measure. PHAC/WHO 5 Moments:\n  1. Before touching the patient\n  2. Before a clean/aseptic procedure\n  3. After body fluid exposure risk\n  4. After touching the patient\n  5. After touching patient surroundings\n  Use: alcohol-based hand rub (ABHR) for most; soap and water for C. difficile spores (alcohol is ineffective against spores), before meals, and after toileting.\n- **PPE**: gloves for contact with blood/body fluids; gown if clothing may be soiled; mask + eye protection if splash risk\n- **Respiratory hygiene**: cough etiquette — cover mouth/nose, use tissues, perform hand hygiene; applies from triage onward\n- **Safe injection practices**: one syringe and one needle per patient; never re-use or share; sterile field for procedures\n- **Safe handling of sharps**: never recap with two hands; use safety-engineered sharps devices; dispose in appropriate sharps containers immediately\n\n**Transmission-Based Precautions (Tier 2) — added on top of Standard Precautions when specific pathogen is known or suspected:**\n\n**Airborne Precautions:**\n- For pathogens transmitted by particles ≤ 5 microns that remain suspended in air over long distances\n- Requires: **N95 respirator** (fit-tested), negative pressure room (air exhausted to outside or HEPA-filtered)\n- Pathogens: TB (Mycobacterium tuberculosis), measles, varicella, smallpox, SARS-CoV-2 during aerosol-generating procedures\n- Patient transport: place surgical mask on patient\n\n**Droplet Precautions:**\n- For pathogens in large droplets (> 5 microns) that travel ≤ 1 metre and fall quickly\n- Requires: **surgical mask** within 1–2 metres of patient, private room (or cohorting)\n- Pathogens: influenza, pertussis, meningococcal meningitis, mumps, rubella, group A strep pharyngitis, COVID-19 (routine care)\n- Patient transport: surgical mask on patient\n\n**Contact Precautions:**\n- For pathogens transmitted by direct or indirect contact\n- Requires: **gloves + gown** for all room contact; private room or cohorting; dedicated equipment (stethoscope, BP cuff) stays in room\n- Pathogens: MRSA, VRE, C. difficile, ESBL-producing organisms, RSV, norovirus, skin infestations (scabies, lice), wound infections with multidrug-resistant organisms"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms of Common HAIs",
+          "kind": "signs_symptoms",
+          "body": "**CAUTI (Catheter-Associated Urinary Tract Infection):**\n- Dysuria, urgency (if catheter removed), fever\n- Suprapubic tenderness\n- New confusion in elderly (UTI classic presentation)\n- Cloudy, foul-smelling urine\n- Positive urinalysis and culture\n\n**CLABSI (Central Line-Associated Bloodstream Infection):**\n- Fever, rigors (often dramatic onset)\n- Redness, warmth, swelling, purulent drainage at central line site\n- New bacteraemia/sepsis without another source\n\n**MRSA (Methicillin-Resistant Staphylococcus aureus):**\n- Wound infection: erythema, warmth, purulent discharge, dehiscence\n- Pneumonia (especially post-influenza): rapid-onset necrotizing pneumonia\n- Bacteraemia: may present with sepsis\n- Skin abscesses (community-acquired MRSA)\n\n**C. difficile (Clostridioides difficile, CDI):**\n- Watery diarrhoea ≥ 3 episodes/day, with or without fever, leukocytosis, abdominal cramps\n- Recent antibiotic use is the primary risk factor\n- Can progress to pseudomembranous colitis, toxic megacolon, sepsis\n- Toxin detected by EIA or PCR on stool sample\n\n**VAP (Ventilator-Associated Pneumonia):**\n- New infiltrates on CXR + fever + increased WBC + purulent secretions in an intubated patient ≥ 48h post-intubation"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Outbreak and Escalation",
+          "kind": "red_flags",
+          "body": "**Escalate immediately:**\n- Suspected active pulmonary TB (new immigrant/traveller with cough, haemoptysis, weight loss, night sweats, positive TST/IGRA): place in airborne isolation IMMEDIATELY, obtain respiratory specimens, notify public health\n- Suspected meningococcal disease (petechial rash + meningismus + fever): droplet precautions + IV antibiotics within 1 hour\n- CDI outbreak on the unit (≥ 2 new cases in 7 days): notify infection control, enhance environmental cleaning (10,000 ppm hypochlorite for C. diff), reinforce contact precautions\n- MRSA/VRE cluster (> 1 new case): review screening, reinforce precautions, notify infection control team\n- Needlestick injury: wash with soap and water for 5 min; do NOT squeeze or suck; notify supervisor and occupational health immediately; report within 2–4 hours for PEP eligibility window (HIV PEP must start within 72h, ideally within 2h)"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Identifying infection source:**\n- **Urinalysis + urine C&S**: dipstick positive for nitrites and leukocyte esterase suggests UTI; culture confirms pathogen and sensitivities\n- **Blood cultures × 2 (from 2 sites)**: before antibiotics; identifies bacteraemia; sensitivity 80–90%\n- **Wound culture (swab or deep tissue)**: for suspected surgical site infection; swab the purulent area; deep tissue > surface swab\n- **Sputum C&S**: for pneumonia, TB work-up (collect 3 consecutive morning specimens for AFB smear + culture)\n- **C. difficile toxin** (stool EIA or PCR): test only unformed stool; do not test solid stool or as test-of-cure\n- **Fungal cultures**: Candida, Aspergillus in immunocompromised (BAL, blood cultures)\n\n**Surveillance labs:**\n- MRSA nasal screening (PCR swab): on admission to ICU, high-risk units, or outbreak investigation\n- VRE rectal/perianal swab: high-risk patients (ICU, transplant)\n\n**Infection markers:**\n- WBC with differential: leukocytosis + left shift (bands) = bacterial infection\n- Procalcitonin: elevated in bacterial infections; used to guide antibiotic stewardship (discontinue when falling)\n- CRP: nonspecific inflammatory marker; useful for trend monitoring\n- Lactate: elevated in sepsis/tissue hypoperfusion"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**HAI Prevention Bundles (evidence-based, unit-level implementation):**\n\n**CAUTI Prevention Bundle:**\n- Insert catheter only when clinically indicated (not for nurse convenience)\n- Use aseptic technique during insertion\n- Maintain closed drainage system; keep bag below bladder level (prevent reflux)\n- Perform perineal hygiene daily and after soiling with soap and water\n- Reassess catheter necessity DAILY; remove as soon as no longer clinically necessary\n- Do NOT routinely irrigate catheters\n- Document insertion date/time; aim for earliest possible removal\n\n**CLABSI Prevention (Central Line Bundle):**\n- Hand hygiene before insertion and access\n- Maximal sterile barriers during insertion (cap, mask, sterile gloves, full-body drape)\n- Chlorhexidine antisepsis for skin preparation\n- Optimal site selection: subclavian preferred over femoral\n- Daily assessment for line necessity — remove when no longer needed\n- Hub decontamination ('scrub the hub'): 15 seconds with 70% isopropanol before each access\n- Dressing: transparent semipermeable dressing, change every 7 days or when soiled\n\n**CDI Prevention:**\n- Contact precautions: gloves AND gown for all contact\n- Hand hygiene with soap and water (not ABHR alone — alcohol does not kill C. difficile spores)\n- Environmental cleaning: bleach-based disinfectant (10,000 ppm hypochlorite)\n- Dedicated equipment: stethoscope, BP cuff, thermometer stays in room\n- Antibiotic stewardship: avoid broad-spectrum antibiotics unnecessarily\n\n**VAP Prevention Bundle:**\n- HOB 30–45 degrees\n- Daily sedation interruption ('sedation vacation') to assess neurological status and reduce ventilator duration\n- Daily oral care with 0.12% chlorhexidine gluconate q2–4h\n- Subglottic suctioning (if subglottic-suction ETT in place)\n- ETT cuff pressure monitoring (20–30 cmH₂O)\n\n**PPE donning and doffing order:**\n- **DONNING (putting on)**: gown → mask/respirator → goggles/face shield → gloves\n- **DOFFING (taking off)**: gloves → goggles/face shield → gown → mask/respirator. Perform hand hygiene between each step. The mask is removed LAST because it protects the face — removing it first risks contaminating the face while removing a potentially soiled gown."
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Soap and water is mandatory for C. diff** — alcohol-based hand rub does NOT kill spores. This is a common NCLEX trap.\n- **Doffing order: mask removed LAST** — the face is a portal of entry; contaminated hands during gown/glove removal must not touch the face before hand hygiene.\n- **N95 for airborne; surgical mask for droplet** — NCLEX often tests this distinction. TB, measles, varicella = N95. Influenza, COVID-19 (routine) = surgical mask.\n- **'Scrub the hub'**: 15 seconds of friction with 70% isopropanol on every IV access port before use — this is the single most evidence-based practice for CLABSI prevention during routine care.\n- **Remove catheters early** — the catheter is the risk factor for CAUTI, not the bacteria. Every day without a catheter is a day without CAUTI risk.\n- **Airborne precautions start before confirmation** — if TB is suspected clinically, place in airborne isolation immediately. Do not wait for smear or culture results.\n- **Cohorting**: if single rooms are unavailable, patients with the SAME confirmed infection can be cohorted (shared room) — patients with different organisms should NOT be cohorted."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Patient and visitor hand hygiene:**\n- Perform hand hygiene when entering and leaving the patient's room\n- Use the hand sanitizer dispenser at the room entrance — it protects both you and the patient\n- Visitors with cold, flu, or gastrointestinal illness should NOT visit immunocompromised patients\n\n**For patients with CDI:**\n- You have a bowel infection from bacteria — the precautions (gown, gloves, soap and water handwashing) protect others from getting the same infection\n- Do not share bathrooms with other patients\n- Wash hands thoroughly with soap and water after every bowel movement\n\n**For patients with MRSA or contact precautions:**\n- Gowns and gloves protect staff and other patients — they are not a judgement about you\n- The precautions will be lifted when your cultures are negative and the treatment course is complete\n- MRSA can be carried on the skin without causing infection in healthy people; however, it can cause serious infections if it enters wounds or the bloodstream\n\n**Immunization (community prevention):**\n- Stay up to date on influenza and pneumococcal vaccines — they reduce HAI risk for both patients and healthcare workers\n- COVID-19 vaccination reduces severity of infection and healthcare-associated transmission"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Chain of infection: break at any link. Hand hygiene is the single most effective measure.\n- Standard precautions apply to ALL patients with ALL body fluids (except sweat).\n- Airborne (N95 + negative pressure room): TB, measles, varicella. Droplet (surgical mask): influenza, meningococcal, COVID-19. Contact (gloves + gown): MRSA, VRE, CDI, scabies.\n- C. diff: soap and water hand hygiene (ABHR ineffective against spores). Bleach for environmental cleaning.\n- CAUTI: daily catheter necessity review; remove ASAP. CLABSI: maximal sterile barriers + scrub the hub. VAP: HOB 30–45°, oral care, sedation vacation.\n- Doffing: gloves → goggles → gown → mask (mask LAST). Hand hygiene between each step.\n- Needlestick: soap and water 5 min; notify occupational health immediately; HIV PEP within 72h."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse enters the room of a client on contact precautions for MRSA wound infection. In what order should the nurse put on PPE before entering the room?",
+          "options": [
+            "Gloves → gown → mask → goggles",
+            "Gown → mask → goggles → gloves",
+            "Mask → goggles → gown → gloves",
+            "Gloves → mask → goggles → gown"
+          ],
+          "correct": 1,
+          "rationale": "Correct donning order: gown first (establishes the protective layer over clothing), then mask/respirator, then goggles/face shield, then gloves last (gloves go over the gown cuffs to prevent gaps). When doffing, the reverse applies — gloves first (most contaminated), then goggles, then gown, then mask last (to protect the face from contaminated hands)."
+        },
+        {
+          "question": "A client is suspected to have pulmonary tuberculosis. While awaiting test results, what is the nurse's immediate priority?",
+          "options": [
+            "Place the client on droplet precautions in a private room",
+            "Place the client in airborne precautions: negative pressure room and N95 respirator for healthcare providers",
+            "Place the client on contact precautions and obtain a sputum culture",
+            "Wait for the TST/IGRA result before initiating any precautions"
+          ],
+          "correct": 1,
+          "rationale": "Suspected pulmonary TB requires AIRBORNE precautions immediately — do not wait for culture confirmation (which takes weeks). TB is transmitted by airborne nuclei (droplet nuclei ≤ 5 microns); requires negative pressure room and N95 respirator for all HCPs. Surgical mask (droplet precautions) is insufficient. Delaying isolation until results are available risks healthcare worker and patient transmission."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse caring for a client with Clostridioides difficile infection completes care and needs to perform hand hygiene before leaving the room. Which is correct?",
+          "options": [
+            "Alcohol-based hand rub is preferred — it is more effective than soap and water",
+            "Either alcohol-based rub or soap and water is acceptable for C. difficile",
+            "Soap and water is required — alcohol-based hand rub is ineffective against C. difficile spores",
+            "Soap and water is needed only if gloves were not worn"
+          ],
+          "correct": 2,
+          "rationale": "Clostridioides difficile produces spores that are resistant to alcohol. Alcohol-based hand rub does NOT kill C. difficile spores. Soap and water friction physically removes spores from the hands. This is a critical distinction — ABHR is preferred for most pathogens, but C. difficile requires soap and water."
+        },
+        {
+          "question": "A client on a central line has a fever of 38.9°C, rigors, and redness at the insertion site. Blood cultures are drawn. Which nursing action is the PRIORITY?",
+          "options": [
+            "Start broad-spectrum antibiotics immediately before blood culture results are available",
+            "Notify the provider, apply a warm compress to the site, and continue to monitor",
+            "Notify the provider — suspected CLABSI. Confirm orders for: blood cultures × 2, line assessment/removal decision, and timely antibiotic administration",
+            "Remove the central line immediately without a provider order"
+          ],
+          "correct": 2,
+          "rationale": "This presentation is consistent with central line-associated bloodstream infection (CLABSI). The nurse should notify the provider with full clinical findings, ensure blood cultures are collected (2 sets, from the line AND a peripheral site), and await orders for line management and antibiotics. Removing the line without a provider order is outside nursing scope. Antibiotics should not be started without a provider order, though prompt administration after cultures are drawn is critical."
+        },
+        {
+          "question": "A nurse accidentally has a needlestick injury while disposing of a needle used on an HIV-positive patient. What is the priority sequence of actions?",
+          "options": [
+            "Apply a tourniquet, squeeze blood from the wound, and notify the charge nurse",
+            "Wash the site vigorously with soap and water for at least 5 minutes, notify the supervisor, and report to occupational health immediately for PEP evaluation",
+            "Apply alcohol-based antiseptic and complete an incident report at the end of the shift",
+            "Squeeze blood from the wound, apply alcohol, and wait for the next morning to report if symptoms develop"
+          ],
+          "correct": 1,
+          "rationale": "For needlestick: immediately wash with soap and water for at least 5 minutes (do NOT squeeze the wound — this can introduce more organism). Notify supervisor. Report to occupational health IMMEDIATELY — HIV post-exposure prophylaxis (PEP) must begin within 72 hours (ideally within 1–2 hours) to be effective. Delay in reporting forfeits PEP opportunity. Incident reporting is also required for documentation and quality improvement."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "previewSectionCount": 2,
+      "seoTitle": "Antibiotics nursing: classes, spectrum, resistance, allergy & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on antibiotics: major classes and mechanisms, cross-reactivity, antibiotic stewardship, nephrotoxicity/ototoxicity monitoring, C. diff, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Antibiotics** are among the most commonly prescribed medications in healthcare. Nursing responsibilities include: correct administration, allergy verification, monitoring for adverse effects, obtaining cultures before administration, and supporting antibiotic stewardship to prevent resistance.\n\n**Antibiotic stewardship** is the systematic effort to ensure antibiotics are used only when truly indicated, at the right dose, route, and duration — to optimize patient outcomes and minimize resistance development and adverse effects.\n\n**Mechanism overview:**\n- **Cell wall synthesis inhibitors**: penicillins, cephalosporins, carbapenems, vancomycin\n- **Protein synthesis inhibitors**: aminoglycosides (30S ribosome), tetracyclines (30S), macrolides (50S), clindamycin (50S), linezolid (50S)\n- **DNA/RNA synthesis inhibitors**: fluoroquinolones (DNA gyrase), rifampin (RNA polymerase), metronidazole (DNA strand breakage)\n- **Cell membrane disruptors**: polymyxins (polymyxin B, colistin)\n- **Antimetabolites**: trimethoprim-sulfamethoxazole (folate synthesis)"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Major Antibiotic Classes: Mechanisms, Spectrum, and Key Nursing Points",
+          "kind": "pathophysiology_overview",
+          "body": "**Beta-lactams (penicillins, cephalosporins, carbapenems):**\nMechanism: inhibit transpeptidase enzymes (penicillin-binding proteins) → prevent bacterial cell wall peptidoglycan cross-linking → cell lysis.\n- **Penicillins** (amoxicillin, amoxicillin-clavulanate, piperacillin-tazobactam): broad-spectrum with beta-lactamase inhibitors; used for community respiratory infections, skin/soft tissue, intraabdominal, Gram-negatives. ALLERGY: immediate hypersensitivity (anaphylaxis) in ~0.1% of recipients — check allergy history every time.\n- **Cephalosporins** (cefazolin, cefuroxime, ceftriaxone, cefepime, ceftazidime): four generations; increasing Gram-negative coverage with each generation. Cross-reactivity with penicillin: < 2% in true penicillin allergy — safe for most patients with penicillin allergy unless prior anaphylaxis\n- **Carbapenems** (meropenem, imipenem, ertapenem): broadest spectrum beta-lactams; reserved for MDR organisms and serious healthcare-associated infections\n\n**Vancomycin:**\nMechanism: binds D-Ala-D-Ala terminal on cell wall precursors → prevents peptidoglycan cross-linking. Only effective against Gram-positives.\nIndications: MRSA, serious Gram-positive infections, CDI (oral vancomycin — local effect in gut).\nNursing monitoring:\n- **Infuse slowly** (over ≥ 60 minutes, up to 1–2h for higher doses) — rapid infusion → 'Red Man Syndrome': flushing, erythema, pruritus of face/neck/upper body from histamine release (not IgE-mediated, not true allergy). Treated by slowing or stopping infusion and diphenhydramine.\n- Trough levels (or AUC/MIC ratio with PK monitoring): ensure therapeutic levels\n- Renal function: nephrotoxic; monitor BMP; reduce dose/extend intervals in CKD\n- Ototoxicity: tinnitus, hearing loss with high levels; audiometry in prolonged courses\n\n**Aminoglycosides (gentamicin, tobramycin, amikacin):**\nMechanism: bind 30S ribosomal subunit → inhibit protein synthesis; bactericidal.\nKey toxicities (narrow therapeutic index — high monitoring requirement):\n- **Nephrotoxicity**: proximal tubular damage → rising creatinine, oliguria. Monitor renal function every 2–3 days; hold if creatinine rising significantly. Avoid concurrent nephrotoxins (NSAIDs, vancomycin, contrast).\n- **Ototoxicity**: cochlear (sensorineural hearing loss — irreversible) and vestibular (vertigo, ataxia). Monitor for tinnitus, dizziness. Audiometry for prolonged courses.\n- Peak and trough levels required (or once-daily extended-interval dosing with different monitoring).\n\n**Fluoroquinolones (ciprofloxacin, levofloxacin, moxifloxacin):**\nMechanism: inhibit DNA gyrase and topoisomerase IV → prevent DNA supercoiling → DNA damage → bactericidal.\nKey concerns:\n- QT prolongation: check baseline QTc and electrolytes; avoid with other QT-prolonging agents (amiodarone, haloperidol)\n- Tendinopathy and tendon rupture: especially Achilles tendon; risk increased in elderly, corticosteroid users, renal failure\n- Peripheral neuropathy (irreversible)\n- **Avoid in children and pregnant women** (articular cartilage damage in animal studies)\n- Avoid with antacids, calcium, iron, zinc within 2 hours — impair absorption\n- Photosensitivity\n- Broad spectrum including atypical organisms; used for respiratory, UTI, GI, atypicals\n\n**Macrolides (azithromycin, clarithromycin, erythromycin):**\nMechanism: bind 50S ribosomal subunit → inhibit protein synthesis.\n- Excellent coverage of atypical pathogens (Mycoplasma, Legionella, Chlamydophila)\n- QT prolongation risk: particularly azithromycin; monitor in high-risk patients\n- GI upset (erythromycin is a motilin agonist → nausea, cramping, diarrhoea)\n- Drug interactions: inhibit CYP3A4 (clarithromycin, erythromycin) → increased levels of statins, warfarin, digoxin\n\n**Metronidazole:**\nMechanism: forms toxic metabolites by anaerobic bacteria that damage DNA.\n- Used for anaerobic infections, CDI (oral), bacterial vaginosis, H. pylori (combo therapy)\n- Disulfiram-like reaction: patient MUST avoid all alcohol during treatment and 48 hours after completion (even small amounts cause severe nausea, vomiting, flushing, tachycardia)\n- Peripheral neuropathy with prolonged use\n- Metallic taste — warn patients\n\n**Clindamycin:**\nMechanism: binds 50S ribosome; bacteriostatic.\n- Good coverage for Gram-positive and anaerobes; skin/soft tissue, dental infections, aspiration pneumonia\n- Risk: C. difficile colitis — clindamycin is one of the highest-risk antibiotics for CDI\n- Monitor for diarrhoea; test stool if ≥ 3 loose stools in 24h while on or after clindamycin"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Adverse Effects and Allergy Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Antibiotic hypersensitivity — spectrum of reactions:**\n- **Immediate hypersensitivity (Type I, IgE-mediated)**: occurs within minutes to 1 hour of first dose. Urticaria, angioedema, bronchospasm, hypotension, anaphylaxis. LIFE-THREATENING. Hold antibiotic, administer epinephrine IM, call emergency.\n- **Accelerated urticaria**: 1–72 hours after dose; urticaria only; may continue with monitoring depending on severity.\n- **Delayed reactions** (> 72 hours): maculopapular rash (most common antibiotic reaction overall — often NOT true allergy); may be drug-rash-eosinophilia-systemic symptoms (DRESS) — serious; Stevens-Johnson syndrome (rare but severe).\n\n**Red Man Syndrome (vancomycin) vs anaphylaxis:**\n- Red Man: non-immunological histamine release; flushing, erythema, pruritus of upper body. No bronchospasm, no hypotension (usually). Treated by slowing infusion rate; not a true allergy.\n- Anaphylaxis: IgE-mediated; bronchospasm, hypotension, urticaria. Life-threatening. Epinephrine immediately.\n\n**C. difficile (antibiotic-associated colitis):**\n- Watery, foul-smelling diarrhoea ≥ 3/day during or after antibiotic therapy\n- Especially high risk: clindamycin, fluoroquinolones, broad-spectrum cephalosporins\n- Do NOT administer anti-diarrhoeal agents (antiperistaltics → toxic megacolon)\n\n**Antibiotic-specific toxicities to monitor:**\n- Vancomycin: Red Man Syndrome, nephrotoxicity, ototoxicity\n- Aminoglycosides: nephrotoxicity, ototoxicity (irreversible)\n- Fluoroquinolones: tendon rupture, QT prolongation, peripheral neuropathy\n- Tetracyclines: photosensitivity, dental/bone effects in children\n- Metronidazole: disulfiram reaction with alcohol"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Anaphylaxis and Sepsis",
+          "kind": "red_flags",
+          "body": "**Anaphylaxis — STOP antibiotic immediately, call emergency:**\n- Urticaria/hives + bronchospasm and/or hypotension within 1 hour of antibiotic administration\n- Administer epinephrine 1:1000, 0.3–0.5 mg IM (anterolateral thigh)\n- Lay patient flat (Trendelenburg if no respiratory distress)\n- High-flow O₂\n- IV access, IV fluids\n- Diphenhydramine and corticosteroids are adjuncts — epinephrine is primary\n- Document true penicillin allergy in chart; notify provider; do NOT re-challenge\n\n**Delay in first antibiotic dose in sepsis:**\n- In sepsis, every hour of delay in antibiotic administration increases mortality by ~7%\n- First antibiotic dose should be administered within 1–3 hours of sepsis recognition, ideally after cultures are collected but without waiting for results\n- If patient has known or suspected penicillin allergy: consult provider before delaying — most penicillin 'allergies' are not true anaphylaxis; cross-reactivity with cephalosporins is < 2%; alternative agents are usually available"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Before starting antibiotics:**\n- Obtain cultures first (blood × 2, urine, wound, sputum as appropriate) — once antibiotics are started, culture sensitivity falls significantly\n- Allergy history: what was the reaction? When did it occur? Has the patient tolerated the drug since?\n\n**Drug level monitoring:**\n- **Vancomycin**: trough level just before next dose (goal: 15–20 mcg/mL for serious infections) OR AUC/MIC pharmacokinetic monitoring (preferred in many centres)\n- **Aminoglycosides**: peak (1 hour post-dose) and trough (before next dose) for traditional dosing; for extended-interval (once-daily), a single level drawn at a specified time (Hartford nomogram)\n\n**Monitoring for toxicity:**\n- BMP at baseline and every 2–3 days for vancomycin and aminoglycosides: creatinine, BUN, electrolytes\n- CBC for prolonged courses: thrombocytopaenia possible with some beta-lactams, vancomycin\n- LFTs for prolonged isoniazid, rifampin (TB therapy)\n- QTc monitoring: baseline ECG and periodic for fluoroquinolones, azithromycin in high-risk patients\n\n**Antibiotic stewardship support role:**\n- When the clinical picture changes (patient improving): advocate for de-escalation (narrower spectrum) or switch to oral\n- When cultures return: confirm antibiotic aligns with sensitivities\n- Question prolonged broad-spectrum courses without reassessment"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Before every antibiotic dose:**\n1. Verify the 'Rights' (right drug, dose, route, time, patient)\n2. Check allergy status: ask the patient at every new admission; document the REACTION, not just the drug name ('penicillin — anaphylaxis' is very different from 'penicillin — mild rash 20 years ago')\n3. Confirm cultures were obtained before this course was started\n4. Assess relevant labs: renal function for renally cleared antibiotics; drug levels if applicable\n\n**During infusion:**\n- Monitor for infusion reactions, particularly with first dose\n- For vancomycin: slow infusion rate if patient develops flushing (Red Man Syndrome)\n- For aminoglycosides: monitor renal function and hearing (report tinnitus or dizziness promptly)\n- Time administration: TIMING MATTERS in sepsis — administer on schedule, do not hold without clinical indication\n\n**Oral antibiotic administration notes:**\n- Fluoroquinolones: advise patient NOT to take within 2 hours of antacids, calcium supplements, iron, dairy products (chelation impairs absorption)\n- Metronidazole: absolutely avoid alcohol; explain the disulfiram-like reaction\n- Tetracyclines: take on empty stomach if possible; avoid milk/dairy, antacids, iron within 2 hours; use sunscreen (photosensitivity)\n- Rifampin: warn patient that urine, sweat, saliva, and tears will be orange — contact lenses will stain permanently\n\n**Patient rights and consent:**\n- Patients have the right to refuse antibiotics; educate on consequences; document refusal and provider notification\n- If patient has allergy to prescribed antibiotic: HOLD and notify provider before administering"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Cultures before antibiotics** — collect cultures first, start antibiotics promptly after (do not delay antibiotics waiting for culture to grow — just ensure collection happened).\n- **Red Man Syndrome vs anaphylaxis**: Red Man = slow infusion-related histamine release (not true allergy, manage by slowing rate). Anaphylaxis = bronchospasm + hypotension + urticaria → epinephrine immediately.\n- **Penicillin allergy cross-reactivity with cephalosporins**: < 2% true cross-reactivity. Many patients labelled as penicillin-allergic have never had a reaction — allergy label deprives them of first-line agents. Detailed allergy history matters.\n- **Clindamycin → highest CDI risk** (along with fluoroquinolones and third-gen cephalosporins). Any diarrhoea during or after clindamycin = test for CDI.\n- **Aminoglycoside + vancomycin**: additive nephrotoxicity risk. Monitor renal function aggressively.\n- **Metronidazole = no alcohol**: not just beer and wine — alcohol is in many mouthwashes, cough syrups, and hand sanitisers absorbed through skin; advise broadly.\n- **Oral antibiotics for MRSA skin infections**: trimethoprim-sulfamethoxazole (TMP-SMX) or doxycycline — NOT standard cephalosporins or amoxicillin (MRSA is resistant)."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Complete the full course:**\n- Never stop antibiotics early because you feel better — incompletely treated infections often relapse and can develop resistance\n- Take at evenly spaced intervals — consistent blood levels optimize bactericidal effect\n- Store correctly: some liquid antibiotics require refrigeration; check the label\n\n**Drug-specific instructions:**\n- Metronidazole: avoid ALL forms of alcohol (including mouthwash with alcohol content) during treatment and for 48 hours after completion\n- Fluoroquinolones: avoid antacids, calcium, iron within 2 hours; use sunscreen; stop and call provider if you develop tendon pain or severe weakness\n- Tetracyclines: avoid sun exposure; do not give to children < 8 or pregnant women\n- Rifampin: your urine, sweat, and tears will turn orange — this is expected and harmless\n\n**When to seek care while on antibiotics:**\n- Rash, hives, or itching (possible allergy — call provider before next dose)\n- Difficulty breathing, lip/tongue swelling (anaphylaxis — call 911)\n- New diarrhoea, especially after antibiotic course (possible C. difficile)\n- No improvement after 48–72 hours — the antibiotic may not be covering the organism\n\n**Antibiotic resistance prevention:**\n- Never demand antibiotics for viral illnesses (colds, flu, most sore throats)\n- Never share antibiotics or use leftover antibiotics for a different illness\n- Never take someone else's prescription"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cultures BEFORE antibiotics. Start antibiotics within 1–3 hours in sepsis.\n- Always verify allergy — document the REACTION, not just the drug. Penicillin-cephalosporin cross-reactivity < 2%.\n- Vancomycin: slow infusion (≥ 60 min) prevents Red Man Syndrome. Monitor troughs and creatinine.\n- Aminoglycosides: narrow therapeutic index. Monitor peak/trough levels, creatinine, and hearing.\n- Fluoroquinolones: QT prolongation, tendon rupture risk. No antacids within 2h. Not in children/pregnancy.\n- Metronidazole: NO alcohol during treatment and 48h after. Orange urine = rifampin.\n- Clindamycin/fluoroquinolones → highest CDI risk. Diarrhoea during antibiotic course → test for CDI.\n- Antibiotic stewardship: right drug, right dose, right duration. De-escalate when cultures return."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client is prescribed IV vancomycin for MRSA bacteraemia. Ten minutes into the infusion at 500 mg/hour, she develops flushing, pruritus, and erythema of the face, neck, and upper chest. What is the nurse's priority action?",
+          "options": [
+            "Stop the vancomycin permanently and document a penicillin allergy",
+            "Stop the infusion, administer diphenhydramine, and after symptoms resolve restart vancomycin at a slower rate (≤ 500 mg/hour over 60–90 minutes)",
+            "Administer epinephrine 0.3 mg IM — this is anaphylaxis",
+            "Discontinue vancomycin and notify the provider to prescribe an alternative"
+          ],
+          "correct": 1,
+          "rationale": "Flushing, pruritus, and erythema of the face and upper body during vancomycin infusion is Red Man Syndrome — a non-immunological histamine release reaction caused by rapid infusion. It is NOT anaphylaxis (no bronchospasm, no hypotension). Treatment: stop/slow the infusion, administer diphenhydramine, and when symptoms resolve, restart at a slower rate over ≥ 60 minutes. Red Man Syndrome is not a true allergy and should not prevent future vancomycin use."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client receiving clindamycin for a dental abscess calls the nurse to report 4–5 loose watery stools in the past 24 hours. What is the nurse's priority?",
+          "options": [
+            "Reassure the client — diarrhoea is a common GI side effect of clindamycin and will resolve",
+            "Administer loperamide (Imodium) to control the diarrhoea",
+            "Notify the provider; collect a stool sample for C. difficile testing; do NOT administer anti-diarrhoeals",
+            "Hold the clindamycin and administer a probiotic"
+          ],
+          "correct": 2,
+          "rationale": "Clindamycin is one of the highest-risk antibiotics for C. difficile colitis. New diarrhoea during or after clindamycin must be tested for CDI with a stool C. difficile toxin/PCR assay. Anti-peristaltic agents (loperamide) are contraindicated in CDI — they can precipitate toxic megacolon by trapping toxin and bacteria in the colon. The provider must be notified to determine whether to continue clindamycin or switch."
+        },
+        {
+          "question": "A client reports that he has been prescribed ciprofloxacin for a UTI and plans to take it with his morning calcium supplement and antacid. What is the nurse's teaching priority?",
+          "options": [
+            "Take calcium and antacids 30 minutes before ciprofloxacin to coat the stomach",
+            "Ciprofloxacin chelates with calcium and antacids, significantly reducing absorption — take them at least 2 hours apart",
+            "These combinations enhance ciprofloxacin absorption — take them together",
+            "Antacids are needed to prevent GI irritation from ciprofloxacin — take simultaneously"
+          ],
+          "correct": 1,
+          "rationale": "Fluoroquinolones (including ciprofloxacin) form insoluble chelates with divalent and trivalent cations: calcium, magnesium, aluminum (in antacids), iron, and zinc. This dramatically reduces antibiotic absorption and blood levels, potentially causing treatment failure. Separate administration by at least 2 hours (take ciprofloxacin 2 hours before or 6 hours after these agents)."
+        },
+        {
+          "question": "A client is prescribed metronidazole for a C. difficile infection. Which education is highest priority?",
+          "options": [
+            "Take the medication only when you have symptoms — skip doses on symptom-free days",
+            "Completely avoid alcohol during treatment and for at least 48 hours after the last dose",
+            "You can drink beer but avoid wine — beer has less effect on metronidazole",
+            "Take metronidazole on an empty stomach to improve absorption"
+          ],
+          "correct": 1,
+          "rationale": "Metronidazole inhibits aldehyde dehydrogenase — the enzyme that metabolizes acetaldehyde (a toxic alcohol metabolite). Alcohol combined with metronidazole causes acetaldehyde accumulation → disulfiram-like reaction: severe nausea/vomiting, flushing, headache, palpitations. Even small amounts trigger the reaction. All forms of alcohol must be avoided, including alcohol in mouthwash and cough syrup. The restriction extends 48 hours after the last dose."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pain-management",
+      "previewSectionCount": 2,
+      "seoTitle": "Pain management nursing: opioid safety, WHO ladder, addiction vs dependence & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on pain management: nociceptive vs neuropathic pain, WHO analgesic ladder, opioid safety monitoring, naloxone, non-pharmacological strategies, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Pain** is defined by the International Association for the Study of Pain (IASP) as 'an unpleasant sensory and emotional experience associated with, or resembling that associated with, actual or potential tissue damage.' Pain is the most common reason patients seek healthcare, and the fifth vital sign — the US Pain Society and CNA recognize that effective pain assessment and management is a core nursing competency.\n\n**Types of pain:**\n- **Nociceptive pain**: caused by actual tissue damage. Somatic nociceptive (skin, muscle, bone): well-localized, aching, sharp — fractures, surgical wounds, arthritis. Visceral nociceptive (internal organs): poorly localized, cramping, referred — appendicitis, bowel obstruction, MI.\n- **Neuropathic pain**: caused by nerve damage or dysfunction. Burning, shooting, electric, tingling quality. Examples: diabetic neuropathy, post-herpetic neuralgia, spinal cord injury pain, phantom limb pain.\n- **Acute pain**: < 3 months; protective function; associated with sympathetic activation (tachycardia, diaphoresis, HTN).\n- **Chronic pain**: > 3 months; often no longer protective; frequently involves central sensitization; sympathetic adaptation occurs (may NOT have tachycardia or diaphoresis despite severe pain).\n\nFor NCLEX-RN: pain management focuses on: accurate assessment, pharmacological and non-pharmacological interventions, opioid safety, and recognizing barriers to pain relief."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology of Pain",
+          "kind": "pathophysiology_overview",
+          "body": "**Pain transduction.** Noxious stimuli (mechanical, chemical, thermal) activate peripheral nociceptors — free nerve endings of A-delta fibres (sharp, fast, first pain) and C fibres (dull, aching, slow, second pain). Tissue injury releases algogenic chemicals: prostaglandins (PGE₂), bradykinin, substance P, histamine, ATP. These sensitize nociceptors → peripheral sensitization → lower activation threshold. This is why injured tissue is hypersensitive (allodynia and hyperalgesia).\n\n**Pain transmission.** A-delta and C fibre signals travel to the dorsal horn of the spinal cord and synapse in the substantia gelatinosa (Rexed laminae I, II). Second-order neurons cross the midline and ascend via the spinothalamic tract to the thalamus. The thalamus relays signals to the somatosensory cortex (location and intensity) and limbic system (emotional component — suffering, fear, depression).\n\n**Modulation and gate control.** The gate control theory (Melzack & Wall): A-beta fibres (touch, pressure) can activate inhibitory interneurons in the dorsal horn that 'close the gate' to C-fibre pain signals — this explains why rubbing an injury provides temporary relief, and why TENS and massage work. Descending inhibitory pathways (from periaqueductal gray, raphe nuclei) release endogenous opioids (endorphins, enkephalins), serotonin, and norepinephrine → inhibit pain transmission in the dorsal horn. Opioid drugs mimic endorphins at mu, kappa, and delta receptors.\n\n**Central sensitization.** Repeated or intense pain input 'winds up' the spinal cord — NMDA receptors become sensitized, expanding the pain field and lowering the threshold. This is the mechanism of chronic pain conditions (fibromyalgia, chronic low back pain) and explains why early, aggressive acute pain management helps prevent chronic pain development."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Pain Assessment",
+          "kind": "signs_symptoms",
+          "body": "**Subjective assessment — self-report is the gold standard:**\n- **Numeric Rating Scale (NRS)**: 0–10; 0 = no pain, 10 = worst imaginable\n- **Wong-Baker FACES scale**: for children, cognitive impairment, or patients who cannot use numbers\n- **PQRSTU mnemonic:**\n  - P: Provocation/Palliation — what makes it worse/better?\n  - Q: Quality — burning, sharp, dull, cramping, stabbing?\n  - R: Region/Radiation — where? Does it spread?\n  - S: Severity — 0–10\n  - T: Timing — constant, intermittent, onset\n  - U: Understanding — what do you think is causing it?\n\n**Objective indicators** (when self-report not possible — behavioural pain scales):\n- **CPOT (Critical Care Pain Observation Tool)**: for intubated ICU patients; observes facial expression, body movements, muscle tension, compliance with ventilator or vocalization\n- **FLACC scale** (Face, Legs, Activity, Cry, Consolability): for children < 7 years\n- Physiological changes: tachycardia, hypertension, diaphoresis, elevated RR — UNRELIABLE for chronic pain (adaptation occurs); may be present in acute pain\n\n**Barriers to pain assessment:**\n- Fear of addiction (patient and provider)\n- Cultural stoicism — patient may not report pain\n- Communication barriers (language, cognitive impairment)\n- Nurses underestimating pain, especially in demographic groups (elderly, non-white patients, patients with substance use history)\n- The nurse must BELIEVE the patient's self-report — pain is always subjective"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Opioid Safety",
+          "kind": "red_flags",
+          "body": "**Opioid-induced respiratory depression — notify provider immediately:**\n- RR < 8 breaths/min\n- SpO₂ < 90% with opioid administration\n- Sedation scale > 2 (patient difficult to arouse)\n- Pinpoint pupils (miosis) — hallmark of opioid toxicity\n- 'Death rattle' or agonal breathing\n\n**OPIOID-RELATED SEDATION SCALE (Pasero):**\n- S = Sleeping, easily aroused\n- 1 = Awake and alert\n- 2 = Slightly drowsy, easily aroused — acceptable, MONITOR\n- 3 = Frequently drowsy, arousable, drifts off during conversation — REDUCE DOSE, increase monitoring\n- 4 = Somnolent, minimal response to stimulation — STOP OPIOID, consider naloxone\n\n**Naloxone (Narcan) — reversal agent:**\n- Indication: opioid-induced respiratory depression (RR < 8, sedation level 3–4, SpO₂ dropping)\n- Dose: 0.4 mg diluted in 10 mL NS; give 1–2 mL (0.04–0.08 mg) IV q2–3 min until RR > 8 and patient arousable. Titrate slowly — goal is reversal of respiratory depression, NOT complete reversal of analgesia (which causes acute withdrawal pain and is dangerous in opioid-dependent patients)\n- Duration: 30–90 minutes; shorter than most opioids → patient may re-narcotize after naloxone wears off → monitor closely and may need repeat doses or infusion\n- Have naloxone and resuscitation equipment available whenever opioids are administered\n\n**NEVER CONFUSE:**\n- Addiction (psychological compulsion to use drug despite harm) ≠ Physical dependence (normal physiological adaptation — withdrawal on abrupt cessation) ≠ Tolerance (need for higher dose to achieve same effect). Patients on long-term opioids will have dependence and tolerance — this is NOT addiction."
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Assessment Tools",
+          "kind": "labs_diagnostics",
+          "body": "**Pain assessment tools by population:**\n- Adults (alert): NRS 0–10 or VAS\n- Children 3–7: FACES pain scale\n- Children < 3 or non-verbal: FLACC\n- ICU/intubated: CPOT or BPS (Behavioral Pain Scale)\n- Neonatal: NIPS (Neonatal Infant Pain Scale), PIPP\n- Cognitively impaired elderly: PAINAD (Pain Assessment in Advanced Dementia)\n\n**Documentation:**\n- Reassess pain after every intervention: 30–60 minutes after oral medications; 15–30 minutes after IV medications; 1 hour after non-pharmacological intervention\n- Document: pain score before AND after treatment, intervention given, patient's functional response\n\n**WHO Analgesic Ladder — 3 steps:**\n- Step 1 (mild pain, NRS 1–3): Non-opioids — acetaminophen, NSAIDs (ibuprofen, ketorolac, naproxen)\n- Step 2 (moderate pain, NRS 4–6): Weak opioids — codeine, tramadol; ± non-opioid adjuvant\n- Step 3 (severe pain, NRS 7–10): Strong opioids — morphine, hydromorphone, oxycodone, fentanyl; ± non-opioid adjuvant\n\n**Labs for pain management monitoring:**\n- Renal function: NSAIDs are renally toxic; contraindicated in CKD; dosing adjustment for opioids in renal failure\n- Liver function: acetaminophen hepatotoxicity risk in liver disease or > 4g/day; reduce to 2g/day in hepatic impairment\n- Serum levels rarely needed unless toxicity suspected (acetaminophen level, opioid toxicology)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Non-pharmacological interventions (always use in conjunction):**\n- Positioning: elevate injured extremity, pillow splinting for surgical sites, side-lying for back pain\n- Heat: vasodilation, muscle relaxation; use for chronic muscle pain, back pain (NOT on acute inflammation, neuropathy, or areas with impaired sensation)\n- Cold (cryotherapy): vasoconstriction, reduces inflammation and swelling; use for acute injuries (first 24–48h), post-procedural swelling\n- TENS (Transcutaneous Electrical Nerve Stimulation): gate control mechanism; useful for chronic musculoskeletal pain\n- Massage/therapeutic touch\n- Distraction, guided imagery, music therapy, mindfulness\n- Relaxation breathing\n- Acupuncture, acupressure\n\n**Pharmacological interventions — nursing administration:**\n\n**NSAIDs (ibuprofen, naproxen, ketorolac):**\n- Mechanism: COX inhibition → reduced prostaglandin synthesis → decreased inflammation and pain sensitization\n- Monitor: GI bleeding (give with food, PPI for high-risk patients), renal function (hold for eGFR < 30), BP increase, fluid retention\n- Ketorolac (Toradol) IV/IM: max 5 days; used post-operatively; avoid in renal failure, GI bleeding, elderly > 65 (increased toxicity)\n\n**Acetaminophen:**\n- Safe first-line; max 4g/day in adults with normal liver function; 2g/day in hepatic impairment or heavy alcohol use\n- Does NOT have anti-inflammatory effect (unlike NSAIDs) but is an effective analgesic\n- Watch for inadvertent overdose (multiple combination products contain acetaminophen)\n\n**Opioid administration:**\n- Assess: RR, level of sedation, SpO₂, bowel sounds, pain score BEFORE each dose\n- Hold: RR < 10, sedation level ≥ 3 on Pasero scale\n- IV opioids: onset 5 min; peak 15–20 min; oral onset 30–60 min, peak 1–2h — time reassessments accordingly\n- PCA (Patient Controlled Analgesia): allows patient to self-dose within prescribed limits; only the PATIENT presses the button — never a nurse, family member, or visitor\n- Equianalgesic dosing: know conversions for opioid rotation (morphine 10 mg IV = 30 mg PO; hydromorphone 1.5 mg IV = 7.5 mg PO)\n\n**Adjuvant analgesics:**\n- Gabapentinoids (gabapentin, pregabalin): neuropathic pain; also used for opioid-sparing post-op\n- Tricyclic antidepressants (amitriptyline): neuropathic pain; monitor for sedation, anticholinergic effects\n- SNRIs (duloxetine): fibromyalgia, diabetic neuropathy\n- Topical agents: lidocaine patches, capsaicin cream — for localized neuropathic pain\n\n**Constipation prevention:**\n- Start bowel regimen at opioid initiation — do NOT wait for constipation to develop\n- Stool softener + stimulant laxative: docusate + senna (Senokot-S)\n- Do NOT use fibre/bulk laxatives alone (ineffective without peristalsis from opioids)\n- Methylnaltrexone (Relistor): peripheral opioid antagonist; for opioid-induced constipation refractory to laxatives; does NOT cross BBB, does not reverse analgesia"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Believe the patient.** The nurse cannot objectively see or measure pain — the patient's self-report is always the gold standard. Dismissing pain based on absence of objective signs (especially in chronic pain) is both clinically wrong and ethically unacceptable.\n- **PCA = patient-controlled only.** Family members pressing the button bypass the safety mechanism. Educate firmly.\n- **Naloxone titration**: do NOT give a full 0.4 mg IV bolus — this causes acute withdrawal, reverses all analgesia, and can cause severe pain, vomiting, and tachycardia. Dilute and titrate.\n- **Equianalgesic literacy**: when rotating opioids, the equianalgesic dose is a starting point, not an exact conversion — reduce by 25–50% to account for incomplete cross-tolerance.\n- **Opioid antagonism half-life**: naloxone 30–90 min; many opioids last 4–6h. After naloxone wears off, re-narcotization can occur — continuous monitoring is essential after administration.\n- **NSAIDs and renal risk**: NSAIDs reduce renal prostaglandin production → afferent arteriolar constriction → reduced GFR. In any patient with low volume states (dehydration, HF, sepsis), NSAIDs can cause acute kidney injury rapidly.\n- **Multimodal analgesia** (WHO ladder principle): combining drugs with different mechanisms = better pain control with lower doses of each = fewer side effects."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Managing pain at home after surgery or acute injury:**\n- Take pain medications on a schedule in the first 24–72h — do not wait until pain is severe ('staying ahead of the pain')\n- Use non-pharmacological methods alongside medications\n- Opioids: do not drive or operate machinery; do not drink alcohol; take stool softeners daily\n- Acetaminophen: check all OTC products for acetaminophen content — do not exceed 4g/day total from all sources\n- Report: severe nausea/vomiting, difficulty breathing, extreme drowsiness, or complete absence of bowel movement after 3 days\n\n**Safe opioid storage and disposal:**\n- Lock opioids away from children and visitors\n- Never share opioids — illegal and dangerous\n- Dispose unused opioids at pharmacy take-back programs (US drug disposal programs)\n- Keep naloxone at home if on chronic opioids: home naloxone kits are available free at most US pharmacies (provincial programs)\n\n**Chronic pain coping strategies:**\n- Pain management is not about eliminating pain to zero — it is about improving function\n- Pacing activities, goal-setting, and sleep hygiene are foundational\n- Psychological support: CBT for chronic pain, acceptance and commitment therapy (ACT)\n- Physical activity (graded) is evidence-based for almost all chronic pain conditions — immobility worsens chronic pain"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pain is always subjective — believe the patient. Self-report is the gold standard.\n- Assess with PQRSTU; reassess within 15–30 min IV or 30–60 min oral after any intervention\n- WHO ladder: Step 1 (mild) → non-opioids; Step 2 (moderate) → weak opioids; Step 3 (severe) → strong opioids + adjuvants\n- Opioid monitoring: Pasero sedation scale + RR + SpO₂ before each dose. Hold if RR < 10 or sedation ≥ 3.\n- Naloxone: dilute 0.4 mg in 10 mL NS; titrate 0.04 mg q2–3 min; monitor for re-narcotization (duration 30–90 min < opioid)\n- PCA: ONLY the patient pushes the button\n- Constipation: start bowel regimen at opioid initiation; docusate + senna\n- Addiction ≠ Dependence ≠ Tolerance — never withhold analgesia due to fear of addiction in patients with legitimate pain"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client post-abdominal surgery rates pain at 8/10 and has RR 14/min, SpO₂ 96%, and is drowsy but arousable to voice. He received IV hydromorphone 30 minutes ago. What is the nurse's priority action?",
+          "options": [
+            "Administer naloxone immediately — the patient has opioid toxicity",
+            "Hold the next dose and monitor closely — this is sedation level 2 on the Pasero scale (slightly drowsy, easily aroused); continue monitoring",
+            "Increase the dose since pain is still 8/10",
+            "Give another full dose in 30 minutes as prescribed — the patient is still in pain"
+          ],
+          "correct": 1,
+          "rationale": "Drowsy but easily arousable = Pasero sedation level 2 — acceptable; requires monitoring but not dose withholding or naloxone. RR 14 and SpO₂ 96% are within acceptable limits. Naloxone is for level 3–4 sedation with RR < 8 or SpO₂ < 90%. The nurse should document, continue to monitor, and reassess at the next scheduled dose — pain management decisions beyond monitoring require provider discussion."
+        },
+        {
+          "question": "A client is prescribed opioids for cancer pain. She tells the nurse, 'I don't want to take these — I'm afraid I'll become addicted.' What is the nurse's best response?",
+          "options": [
+            "Your concern is valid — addiction is a significant risk with opioid use for pain.",
+            "Physical dependence (needing the drug to avoid withdrawal) is expected with chronic opioids, but addiction (psychological compulsion despite harm) is very uncommon when opioids are used appropriately for pain management.",
+            "You won't need these for long — your cancer pain should go away soon.",
+            "If you're worried, we can just use acetaminophen instead."
+          ],
+          "correct": 1,
+          "rationale": "Differentiating addiction from dependence is a key nursing education point. Physical dependence (the body adapts to opioids — withdrawal occurs if stopped abruptly) is expected and does not indicate addiction. Psychological addiction (craving, compulsive use despite harm) is uncommon in patients using opioids for legitimate cancer pain. Validating the fear without providing accurate information delays necessary pain relief and is not therapeutic."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is administering IV morphine for acute pain. Thirty minutes later, the patient has RR 7/min, SpO₂ 87%, and responds only to vigorous sternal rub. What is the immediate nursing action?",
+          "options": [
+            "Administer naloxone 0.4 mg IV push immediately in full dose",
+            "Stop the morphine, call a rapid response, administer naloxone diluted in NS titrating 0.04 mg IV q2-3 min until RR > 8",
+            "Administer supplemental O₂ and recheck in 10 minutes",
+            "Position the patient in left lateral decubitus and elevate legs"
+          ],
+          "correct": 1,
+          "rationale": "This is Pasero sedation level 4 with respiratory depression (RR 7, SpO₂ 87%) — opioid toxicity. Actions: STOP the opioid, activate rapid response, administer oxygen, and give DILUTED naloxone titrated to effect. A full 0.4 mg bolus reverses all analgesia abruptly, precipitating acute withdrawal and severe pain in opioid-tolerant patients. Titrating 0.04 mg q2–3 min reverses respiratory depression while preserving some analgesia."
+        },
+        {
+          "question": "A nurse enters a patient's room and finds the patient's spouse pressing the PCA button 'to help with the pain while he's sleeping.' What is the correct intervention?",
+          "options": [
+            "Allow it — the spouse knows the patient best",
+            "Allow one press — the patient is clearly in pain",
+            "Immediately educate the spouse that only the patient is to press the PCA button — unauthorized pressing bypasses the safety mechanism and risks respiratory depression",
+            "Silence the PCA alarm and increase the basal rate instead"
+          ],
+          "correct": 2,
+          "rationale": "PCA safety relies on the patient being awake and conscious enough to press the button — the sedation that precedes respiratory depression prevents a conscious patient from self-dosing. A family member pressing the button on a sleeping patient bypasses this safety mechanism and can cause fatal respiratory depression. The nurse must educate the family immediately and document the intervention."
+        },
+        {
+          "question": "Which statement best describes the correct acetaminophen dosing principle for a client with chronic alcohol use?",
+          "options": [
+            "Acetaminophen is contraindicated in all patients who drink alcohol — use NSAIDs instead",
+            "Maximum dose is reduced to 2g/day due to increased risk of hepatotoxicity in patients with liver impairment from alcohol use",
+            "Acetaminophen should be given at the full 4g/day dose to avoid using opioids",
+            "The patient's pain is self-induced — acetaminophen is not indicated"
+          ],
+          "correct": 1,
+          "rationale": "Acetaminophen is hepatotoxic at high doses and the toxic threshold is lower in patients with liver impairment (including chronic alcohol use). The maximum dose should be reduced to 2g/day. Acetaminophen is not absolutely contraindicated in alcohol use — it remains safer than NSAIDs (which worsen GI bleeding risk and renal function in this population)."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-infection-control",
+      "previewSectionCount": 2,
+      "seoTitle": "Infection control nursing: standard precautions, transmission, PPE, HAIs & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on infection control: chain of infection, standard precautions, airborne/droplet/contact isolation, HAI prevention, hand hygiene, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Infection control** is the application of evidence-based practices to prevent the transmission of infectious agents within healthcare settings. Healthcare-associated infections (HAIs) affect approximately 200,000 USs annually and contribute to 8,000–12,000 deaths per year (PHAC data). The vast majority of HAIs are preventable through consistent application of standard and transmission-based precautions.\n\n**The chain of infection** must be broken at any link to prevent transmission:\n1. **Infectious agent** (pathogen — bacteria, virus, fungus, parasite, prion)\n2. **Reservoir** (where the pathogen lives — human host, water, soil, equipment)\n3. **Portal of exit** (how it leaves the reservoir — respiratory tract, blood, feces, wound drainage)\n4. **Mode of transmission** (how it travels — contact, droplet, airborne, vehicle, vector)\n5. **Portal of entry** (how it enters a new host — mucous membranes, broken skin, respiratory tract, GI tract)\n6. **Susceptible host** (compromised immunity, invasive devices, immunosuppression)\n\n**Infection control in practice:** The nurse's primary role is to break the chain, particularly at links 4 (mode of transmission) and 6 (host susceptibility).",
+          "figures": [
+            {
+              "id": "inflammatory-response-fig",
+              "url": "uploads/images/inflammatory-response.webp",
+              "alt": "Diagram of the inflammatory response pathophysiology",
+              "caption": "The inflammatory response: host defence against infection — local and systemic mechanisms",
+              "kind": "diagram"
+            }
+          ]
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Transmission Routes and Precautions",
+          "kind": "pathophysiology_overview",
+          "body": "**Standard Precautions (Tier 1) — apply to ALL patients, regardless of diagnosis:**\nStandard precautions treat all blood, body fluids (except sweat), non-intact skin, and mucous membranes as potentially infectious.\n\n- **Hand hygiene**: most important single infection-control measure. PHAC/WHO 5 Moments:\n  1. Before touching the patient\n  2. Before a clean/aseptic procedure\n  3. After body fluid exposure risk\n  4. After touching the patient\n  5. After touching patient surroundings\n  Use: alcohol-based hand rub (ABHR) for most; soap and water for C. difficile spores (alcohol is ineffective against spores), before meals, and after toileting.\n- **PPE**: gloves for contact with blood/body fluids; gown if clothing may be soiled; mask + eye protection if splash risk\n- **Respiratory hygiene**: cough etiquette — cover mouth/nose, use tissues, perform hand hygiene; applies from triage onward\n- **Safe injection practices**: one syringe and one needle per patient; never re-use or share; sterile field for procedures\n- **Safe handling of sharps**: never recap with two hands; use safety-engineered sharps devices; dispose in appropriate sharps containers immediately\n\n**Transmission-Based Precautions (Tier 2) — added on top of Standard Precautions when specific pathogen is known or suspected:**\n\n**Airborne Precautions:**\n- For pathogens transmitted by particles ≤ 5 microns that remain suspended in air over long distances\n- Requires: **N95 respirator** (fit-tested), negative pressure room (air exhausted to outside or HEPA-filtered)\n- Pathogens: TB (Mycobacterium tuberculosis), measles, varicella, smallpox, SARS-CoV-2 during aerosol-generating procedures\n- Patient transport: place surgical mask on patient\n\n**Droplet Precautions:**\n- For pathogens in large droplets (> 5 microns) that travel ≤ 1 metre and fall quickly\n- Requires: **surgical mask** within 1–2 metres of patient, private room (or cohorting)\n- Pathogens: influenza, pertussis, meningococcal meningitis, mumps, rubella, group A strep pharyngitis, COVID-19 (routine care)\n- Patient transport: surgical mask on patient\n\n**Contact Precautions:**\n- For pathogens transmitted by direct or indirect contact\n- Requires: **gloves + gown** for all room contact; private room or cohorting; dedicated equipment (stethoscope, BP cuff) stays in room\n- Pathogens: MRSA, VRE, C. difficile, ESBL-producing organisms, RSV, norovirus, skin infestations (scabies, lice), wound infections with multidrug-resistant organisms"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms of Common HAIs",
+          "kind": "signs_symptoms",
+          "body": "**CAUTI (Catheter-Associated Urinary Tract Infection):**\n- Dysuria, urgency (if catheter removed), fever\n- Suprapubic tenderness\n- New confusion in elderly (UTI classic presentation)\n- Cloudy, foul-smelling urine\n- Positive urinalysis and culture\n\n**CLABSI (Central Line-Associated Bloodstream Infection):**\n- Fever, rigors (often dramatic onset)\n- Redness, warmth, swelling, purulent drainage at central line site\n- New bacteraemia/sepsis without another source\n\n**MRSA (Methicillin-Resistant Staphylococcus aureus):**\n- Wound infection: erythema, warmth, purulent discharge, dehiscence\n- Pneumonia (especially post-influenza): rapid-onset necrotizing pneumonia\n- Bacteraemia: may present with sepsis\n- Skin abscesses (community-acquired MRSA)\n\n**C. difficile (Clostridioides difficile, CDI):**\n- Watery diarrhoea ≥ 3 episodes/day, with or without fever, leukocytosis, abdominal cramps\n- Recent antibiotic use is the primary risk factor\n- Can progress to pseudomembranous colitis, toxic megacolon, sepsis\n- Toxin detected by EIA or PCR on stool sample\n\n**VAP (Ventilator-Associated Pneumonia):**\n- New infiltrates on CXR + fever + increased WBC + purulent secretions in an intubated patient ≥ 48h post-intubation"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Outbreak and Escalation",
+          "kind": "red_flags",
+          "body": "**Escalate immediately:**\n- Suspected active pulmonary TB (new immigrant/traveller with cough, haemoptysis, weight loss, night sweats, positive TST/IGRA): place in airborne isolation IMMEDIATELY, obtain respiratory specimens, notify public health\n- Suspected meningococcal disease (petechial rash + meningismus + fever): droplet precautions + IV antibiotics within 1 hour\n- CDI outbreak on the unit (≥ 2 new cases in 7 days): notify infection control, enhance environmental cleaning (10,000 ppm hypochlorite for C. diff), reinforce contact precautions\n- MRSA/VRE cluster (> 1 new case): review screening, reinforce precautions, notify infection control team\n- Needlestick injury: wash with soap and water for 5 min; do NOT squeeze or suck; notify supervisor and occupational health immediately; report within 2–4 hours for PEP eligibility window (HIV PEP must start within 72h, ideally within 2h)"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Identifying infection source:**\n- **Urinalysis + urine C&S**: dipstick positive for nitrites and leukocyte esterase suggests UTI; culture confirms pathogen and sensitivities\n- **Blood cultures × 2 (from 2 sites)**: before antibiotics; identifies bacteraemia; sensitivity 80–90%\n- **Wound culture (swab or deep tissue)**: for suspected surgical site infection; swab the purulent area; deep tissue > surface swab\n- **Sputum C&S**: for pneumonia, TB work-up (collect 3 consecutive morning specimens for AFB smear + culture)\n- **C. difficile toxin** (stool EIA or PCR): test only unformed stool; do not test solid stool or as test-of-cure\n- **Fungal cultures**: Candida, Aspergillus in immunocompromised (BAL, blood cultures)\n\n**Surveillance labs:**\n- MRSA nasal screening (PCR swab): on admission to ICU, high-risk units, or outbreak investigation\n- VRE rectal/perianal swab: high-risk patients (ICU, transplant)\n\n**Infection markers:**\n- WBC with differential: leukocytosis + left shift (bands) = bacterial infection\n- Procalcitonin: elevated in bacterial infections; used to guide antibiotic stewardship (discontinue when falling)\n- CRP: nonspecific inflammatory marker; useful for trend monitoring\n- Lactate: elevated in sepsis/tissue hypoperfusion"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**HAI Prevention Bundles (evidence-based, unit-level implementation):**\n\n**CAUTI Prevention Bundle:**\n- Insert catheter only when clinically indicated (not for nurse convenience)\n- Use aseptic technique during insertion\n- Maintain closed drainage system; keep bag below bladder level (prevent reflux)\n- Perform perineal hygiene daily and after soiling with soap and water\n- Reassess catheter necessity DAILY; remove as soon as no longer clinically necessary\n- Do NOT routinely irrigate catheters\n- Document insertion date/time; aim for earliest possible removal\n\n**CLABSI Prevention (Central Line Bundle):**\n- Hand hygiene before insertion and access\n- Maximal sterile barriers during insertion (cap, mask, sterile gloves, full-body drape)\n- Chlorhexidine antisepsis for skin preparation\n- Optimal site selection: subclavian preferred over femoral\n- Daily assessment for line necessity — remove when no longer needed\n- Hub decontamination ('scrub the hub'): 15 seconds with 70% isopropanol before each access\n- Dressing: transparent semipermeable dressing, change every 7 days or when soiled\n\n**CDI Prevention:**\n- Contact precautions: gloves AND gown for all contact\n- Hand hygiene with soap and water (not ABHR alone — alcohol does not kill C. difficile spores)\n- Environmental cleaning: bleach-based disinfectant (10,000 ppm hypochlorite)\n- Dedicated equipment: stethoscope, BP cuff, thermometer stays in room\n- Antibiotic stewardship: avoid broad-spectrum antibiotics unnecessarily\n\n**VAP Prevention Bundle:**\n- HOB 30–45 degrees\n- Daily sedation interruption ('sedation vacation') to assess neurological status and reduce ventilator duration\n- Daily oral care with 0.12% chlorhexidine gluconate q2–4h\n- Subglottic suctioning (if subglottic-suction ETT in place)\n- ETT cuff pressure monitoring (20–30 cmH₂O)\n\n**PPE donning and doffing order:**\n- **DONNING (putting on)**: gown → mask/respirator → goggles/face shield → gloves\n- **DOFFING (taking off)**: gloves → goggles/face shield → gown → mask/respirator. Perform hand hygiene between each step. The mask is removed LAST because it protects the face — removing it first risks contaminating the face while removing a potentially soiled gown."
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Soap and water is mandatory for C. diff** — alcohol-based hand rub does NOT kill spores. This is a common NCLEX trap.\n- **Doffing order: mask removed LAST** — the face is a portal of entry; contaminated hands during gown/glove removal must not touch the face before hand hygiene.\n- **N95 for airborne; surgical mask for droplet** — NCLEX often tests this distinction. TB, measles, varicella = N95. Influenza, COVID-19 (routine) = surgical mask.\n- **'Scrub the hub'**: 15 seconds of friction with 70% isopropanol on every IV access port before use — this is the single most evidence-based practice for CLABSI prevention during routine care.\n- **Remove catheters early** — the catheter is the risk factor for CAUTI, not the bacteria. Every day without a catheter is a day without CAUTI risk.\n- **Airborne precautions start before confirmation** — if TB is suspected clinically, place in airborne isolation immediately. Do not wait for smear or culture results.\n- **Cohorting**: if single rooms are unavailable, patients with the SAME confirmed infection can be cohorted (shared room) — patients with different organisms should NOT be cohorted."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Patient and visitor hand hygiene:**\n- Perform hand hygiene when entering and leaving the patient's room\n- Use the hand sanitizer dispenser at the room entrance — it protects both you and the patient\n- Visitors with cold, flu, or gastrointestinal illness should NOT visit immunocompromised patients\n\n**For patients with CDI:**\n- You have a bowel infection from bacteria — the precautions (gown, gloves, soap and water handwashing) protect others from getting the same infection\n- Do not share bathrooms with other patients\n- Wash hands thoroughly with soap and water after every bowel movement\n\n**For patients with MRSA or contact precautions:**\n- Gowns and gloves protect staff and other patients — they are not a judgement about you\n- The precautions will be lifted when your cultures are negative and the treatment course is complete\n- MRSA can be carried on the skin without causing infection in healthy people; however, it can cause serious infections if it enters wounds or the bloodstream\n\n**Immunization (community prevention):**\n- Stay up to date on influenza and pneumococcal vaccines — they reduce HAI risk for both patients and healthcare workers\n- COVID-19 vaccination reduces severity of infection and healthcare-associated transmission"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Chain of infection: break at any link. Hand hygiene is the single most effective measure.\n- Standard precautions apply to ALL patients with ALL body fluids (except sweat).\n- Airborne (N95 + negative pressure room): TB, measles, varicella. Droplet (surgical mask): influenza, meningococcal, COVID-19. Contact (gloves + gown): MRSA, VRE, CDI, scabies.\n- C. diff: soap and water hand hygiene (ABHR ineffective against spores). Bleach for environmental cleaning.\n- CAUTI: daily catheter necessity review; remove ASAP. CLABSI: maximal sterile barriers + scrub the hub. VAP: HOB 30–45°, oral care, sedation vacation.\n- Doffing: gloves → goggles → gown → mask (mask LAST). Hand hygiene between each step.\n- Needlestick: soap and water 5 min; notify occupational health immediately; HIV PEP within 72h."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse enters the room of a client on contact precautions for MRSA wound infection. In what order should the nurse put on PPE before entering the room?",
+          "options": [
+            "Gloves → gown → mask → goggles",
+            "Gown → mask → goggles → gloves",
+            "Mask → goggles → gown → gloves",
+            "Gloves → mask → goggles → gown"
+          ],
+          "correct": 1,
+          "rationale": "Correct donning order: gown first (establishes the protective layer over clothing), then mask/respirator, then goggles/face shield, then gloves last (gloves go over the gown cuffs to prevent gaps). When doffing, the reverse applies — gloves first (most contaminated), then goggles, then gown, then mask last (to protect the face from contaminated hands)."
+        },
+        {
+          "question": "A client is suspected to have pulmonary tuberculosis. While awaiting test results, what is the nurse's immediate priority?",
+          "options": [
+            "Place the client on droplet precautions in a private room",
+            "Place the client in airborne precautions: negative pressure room and N95 respirator for healthcare providers",
+            "Place the client on contact precautions and obtain a sputum culture",
+            "Wait for the TST/IGRA result before initiating any precautions"
+          ],
+          "correct": 1,
+          "rationale": "Suspected pulmonary TB requires AIRBORNE precautions immediately — do not wait for culture confirmation (which takes weeks). TB is transmitted by airborne nuclei (droplet nuclei ≤ 5 microns); requires negative pressure room and N95 respirator for all HCPs. Surgical mask (droplet precautions) is insufficient. Delaying isolation until results are available risks healthcare worker and patient transmission."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse caring for a client with Clostridioides difficile infection completes care and needs to perform hand hygiene before leaving the room. Which is correct?",
+          "options": [
+            "Alcohol-based hand rub is preferred — it is more effective than soap and water",
+            "Either alcohol-based rub or soap and water is acceptable for C. difficile",
+            "Soap and water is required — alcohol-based hand rub is ineffective against C. difficile spores",
+            "Soap and water is needed only if gloves were not worn"
+          ],
+          "correct": 2,
+          "rationale": "Clostridioides difficile produces spores that are resistant to alcohol. Alcohol-based hand rub does NOT kill C. difficile spores. Soap and water friction physically removes spores from the hands. This is a critical distinction — ABHR is preferred for most pathogens, but C. difficile requires soap and water."
+        },
+        {
+          "question": "A client on a central line has a fever of 38.9°C, rigors, and redness at the insertion site. Blood cultures are drawn. Which nursing action is the PRIORITY?",
+          "options": [
+            "Start broad-spectrum antibiotics immediately before blood culture results are available",
+            "Notify the provider, apply a warm compress to the site, and continue to monitor",
+            "Notify the provider — suspected CLABSI. Confirm orders for: blood cultures × 2, line assessment/removal decision, and timely antibiotic administration",
+            "Remove the central line immediately without a provider order"
+          ],
+          "correct": 2,
+          "rationale": "This presentation is consistent with central line-associated bloodstream infection (CLABSI). The nurse should notify the provider with full clinical findings, ensure blood cultures are collected (2 sets, from the line AND a peripheral site), and await orders for line management and antibiotics. Removing the line without a provider order is outside nursing scope. Antibiotics should not be started without a provider order, though prompt administration after cultures are drawn is critical."
+        },
+        {
+          "question": "A nurse accidentally has a needlestick injury while disposing of a needle used on an HIV-positive patient. What is the priority sequence of actions?",
+          "options": [
+            "Apply a tourniquet, squeeze blood from the wound, and notify the charge nurse",
+            "Wash the site vigorously with soap and water for at least 5 minutes, notify the supervisor, and report to occupational health immediately for PEP evaluation",
+            "Apply alcohol-based antiseptic and complete an incident report at the end of the shift",
+            "Squeeze blood from the wound, apply alcohol, and wait for the next morning to report if symptoms develop"
+          ],
+          "correct": 1,
+          "rationale": "For needlestick: immediately wash with soap and water for at least 5 minutes (do NOT squeeze the wound — this can introduce more organism). Notify supervisor. Report to occupational health IMMEDIATELY — HIV post-exposure prophylaxis (PEP) must begin within 72 hours (ideally within 1–2 hours) to be effective. Delay in reporting forfeits PEP opportunity. Incident reporting is also required for documentation and quality improvement."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-antibiotics",
+      "previewSectionCount": 2,
+      "seoTitle": "Antibiotics nursing: classes, spectrum, resistance, allergy & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on antibiotics: major classes and mechanisms, cross-reactivity, antibiotic stewardship, nephrotoxicity/ototoxicity monitoring, C. diff, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Antibiotics** are among the most commonly prescribed medications in healthcare. Nursing responsibilities include: correct administration, allergy verification, monitoring for adverse effects, obtaining cultures before administration, and supporting antibiotic stewardship to prevent resistance.\n\n**Antibiotic stewardship** is the systematic effort to ensure antibiotics are used only when truly indicated, at the right dose, route, and duration — to optimize patient outcomes and minimize resistance development and adverse effects.\n\n**Mechanism overview:**\n- **Cell wall synthesis inhibitors**: penicillins, cephalosporins, carbapenems, vancomycin\n- **Protein synthesis inhibitors**: aminoglycosides (30S ribosome), tetracyclines (30S), macrolides (50S), clindamycin (50S), linezolid (50S)\n- **DNA/RNA synthesis inhibitors**: fluoroquinolones (DNA gyrase), rifampin (RNA polymerase), metronidazole (DNA strand breakage)\n- **Cell membrane disruptors**: polymyxins (polymyxin B, colistin)\n- **Antimetabolites**: trimethoprim-sulfamethoxazole (folate synthesis)"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Major Antibiotic Classes: Mechanisms, Spectrum, and Key Nursing Points",
+          "kind": "pathophysiology_overview",
+          "body": "**Beta-lactams (penicillins, cephalosporins, carbapenems):**\nMechanism: inhibit transpeptidase enzymes (penicillin-binding proteins) → prevent bacterial cell wall peptidoglycan cross-linking → cell lysis.\n- **Penicillins** (amoxicillin, amoxicillin-clavulanate, piperacillin-tazobactam): broad-spectrum with beta-lactamase inhibitors; used for community respiratory infections, skin/soft tissue, intraabdominal, Gram-negatives. ALLERGY: immediate hypersensitivity (anaphylaxis) in ~0.1% of recipients — check allergy history every time.\n- **Cephalosporins** (cefazolin, cefuroxime, ceftriaxone, cefepime, ceftazidime): four generations; increasing Gram-negative coverage with each generation. Cross-reactivity with penicillin: < 2% in true penicillin allergy — safe for most patients with penicillin allergy unless prior anaphylaxis\n- **Carbapenems** (meropenem, imipenem, ertapenem): broadest spectrum beta-lactams; reserved for MDR organisms and serious healthcare-associated infections\n\n**Vancomycin:**\nMechanism: binds D-Ala-D-Ala terminal on cell wall precursors → prevents peptidoglycan cross-linking. Only effective against Gram-positives.\nIndications: MRSA, serious Gram-positive infections, CDI (oral vancomycin — local effect in gut).\nNursing monitoring:\n- **Infuse slowly** (over ≥ 60 minutes, up to 1–2h for higher doses) — rapid infusion → 'Red Man Syndrome': flushing, erythema, pruritus of face/neck/upper body from histamine release (not IgE-mediated, not true allergy). Treated by slowing or stopping infusion and diphenhydramine.\n- Trough levels (or AUC/MIC ratio with PK monitoring): ensure therapeutic levels\n- Renal function: nephrotoxic; monitor BMP; reduce dose/extend intervals in CKD\n- Ototoxicity: tinnitus, hearing loss with high levels; audiometry in prolonged courses\n\n**Aminoglycosides (gentamicin, tobramycin, amikacin):**\nMechanism: bind 30S ribosomal subunit → inhibit protein synthesis; bactericidal.\nKey toxicities (narrow therapeutic index — high monitoring requirement):\n- **Nephrotoxicity**: proximal tubular damage → rising creatinine, oliguria. Monitor renal function every 2–3 days; hold if creatinine rising significantly. Avoid concurrent nephrotoxins (NSAIDs, vancomycin, contrast).\n- **Ototoxicity**: cochlear (sensorineural hearing loss — irreversible) and vestibular (vertigo, ataxia). Monitor for tinnitus, dizziness. Audiometry for prolonged courses.\n- Peak and trough levels required (or once-daily extended-interval dosing with different monitoring).\n\n**Fluoroquinolones (ciprofloxacin, levofloxacin, moxifloxacin):**\nMechanism: inhibit DNA gyrase and topoisomerase IV → prevent DNA supercoiling → DNA damage → bactericidal.\nKey concerns:\n- QT prolongation: check baseline QTc and electrolytes; avoid with other QT-prolonging agents (amiodarone, haloperidol)\n- Tendinopathy and tendon rupture: especially Achilles tendon; risk increased in elderly, corticosteroid users, renal failure\n- Peripheral neuropathy (irreversible)\n- **Avoid in children and pregnant women** (articular cartilage damage in animal studies)\n- Avoid with antacids, calcium, iron, zinc within 2 hours — impair absorption\n- Photosensitivity\n- Broad spectrum including atypical organisms; used for respiratory, UTI, GI, atypicals\n\n**Macrolides (azithromycin, clarithromycin, erythromycin):**\nMechanism: bind 50S ribosomal subunit → inhibit protein synthesis.\n- Excellent coverage of atypical pathogens (Mycoplasma, Legionella, Chlamydophila)\n- QT prolongation risk: particularly azithromycin; monitor in high-risk patients\n- GI upset (erythromycin is a motilin agonist → nausea, cramping, diarrhoea)\n- Drug interactions: inhibit CYP3A4 (clarithromycin, erythromycin) → increased levels of statins, warfarin, digoxin\n\n**Metronidazole:**\nMechanism: forms toxic metabolites by anaerobic bacteria that damage DNA.\n- Used for anaerobic infections, CDI (oral), bacterial vaginosis, H. pylori (combo therapy)\n- Disulfiram-like reaction: patient MUST avoid all alcohol during treatment and 48 hours after completion (even small amounts cause severe nausea, vomiting, flushing, tachycardia)\n- Peripheral neuropathy with prolonged use\n- Metallic taste — warn patients\n\n**Clindamycin:**\nMechanism: binds 50S ribosome; bacteriostatic.\n- Good coverage for Gram-positive and anaerobes; skin/soft tissue, dental infections, aspiration pneumonia\n- Risk: C. difficile colitis — clindamycin is one of the highest-risk antibiotics for CDI\n- Monitor for diarrhoea; test stool if ≥ 3 loose stools in 24h while on or after clindamycin"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Adverse Effects and Allergy Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Antibiotic hypersensitivity — spectrum of reactions:**\n- **Immediate hypersensitivity (Type I, IgE-mediated)**: occurs within minutes to 1 hour of first dose. Urticaria, angioedema, bronchospasm, hypotension, anaphylaxis. LIFE-THREATENING. Hold antibiotic, administer epinephrine IM, call emergency.\n- **Accelerated urticaria**: 1–72 hours after dose; urticaria only; may continue with monitoring depending on severity.\n- **Delayed reactions** (> 72 hours): maculopapular rash (most common antibiotic reaction overall — often NOT true allergy); may be drug-rash-eosinophilia-systemic symptoms (DRESS) — serious; Stevens-Johnson syndrome (rare but severe).\n\n**Red Man Syndrome (vancomycin) vs anaphylaxis:**\n- Red Man: non-immunological histamine release; flushing, erythema, pruritus of upper body. No bronchospasm, no hypotension (usually). Treated by slowing infusion rate; not a true allergy.\n- Anaphylaxis: IgE-mediated; bronchospasm, hypotension, urticaria. Life-threatening. Epinephrine immediately.\n\n**C. difficile (antibiotic-associated colitis):**\n- Watery, foul-smelling diarrhoea ≥ 3/day during or after antibiotic therapy\n- Especially high risk: clindamycin, fluoroquinolones, broad-spectrum cephalosporins\n- Do NOT administer anti-diarrhoeal agents (antiperistaltics → toxic megacolon)\n\n**Antibiotic-specific toxicities to monitor:**\n- Vancomycin: Red Man Syndrome, nephrotoxicity, ototoxicity\n- Aminoglycosides: nephrotoxicity, ototoxicity (irreversible)\n- Fluoroquinolones: tendon rupture, QT prolongation, peripheral neuropathy\n- Tetracyclines: photosensitivity, dental/bone effects in children\n- Metronidazole: disulfiram reaction with alcohol"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Anaphylaxis and Sepsis",
+          "kind": "red_flags",
+          "body": "**Anaphylaxis — STOP antibiotic immediately, call emergency:**\n- Urticaria/hives + bronchospasm and/or hypotension within 1 hour of antibiotic administration\n- Administer epinephrine 1:1000, 0.3–0.5 mg IM (anterolateral thigh)\n- Lay patient flat (Trendelenburg if no respiratory distress)\n- High-flow O₂\n- IV access, IV fluids\n- Diphenhydramine and corticosteroids are adjuncts — epinephrine is primary\n- Document true penicillin allergy in chart; notify provider; do NOT re-challenge\n\n**Delay in first antibiotic dose in sepsis:**\n- In sepsis, every hour of delay in antibiotic administration increases mortality by ~7%\n- First antibiotic dose should be administered within 1–3 hours of sepsis recognition, ideally after cultures are collected but without waiting for results\n- If patient has known or suspected penicillin allergy: consult provider before delaying — most penicillin 'allergies' are not true anaphylaxis; cross-reactivity with cephalosporins is < 2%; alternative agents are usually available"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Before starting antibiotics:**\n- Obtain cultures first (blood × 2, urine, wound, sputum as appropriate) — once antibiotics are started, culture sensitivity falls significantly\n- Allergy history: what was the reaction? When did it occur? Has the patient tolerated the drug since?\n\n**Drug level monitoring:**\n- **Vancomycin**: trough level just before next dose (goal: 15–20 mcg/mL for serious infections) OR AUC/MIC pharmacokinetic monitoring (preferred in many centres)\n- **Aminoglycosides**: peak (1 hour post-dose) and trough (before next dose) for traditional dosing; for extended-interval (once-daily), a single level drawn at a specified time (Hartford nomogram)\n\n**Monitoring for toxicity:**\n- BMP at baseline and every 2–3 days for vancomycin and aminoglycosides: creatinine, BUN, electrolytes\n- CBC for prolonged courses: thrombocytopaenia possible with some beta-lactams, vancomycin\n- LFTs for prolonged isoniazid, rifampin (TB therapy)\n- QTc monitoring: baseline ECG and periodic for fluoroquinolones, azithromycin in high-risk patients\n\n**Antibiotic stewardship support role:**\n- When the clinical picture changes (patient improving): advocate for de-escalation (narrower spectrum) or switch to oral\n- When cultures return: confirm antibiotic aligns with sensitivities\n- Question prolonged broad-spectrum courses without reassessment"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Before every antibiotic dose:**\n1. Verify the 'Rights' (right drug, dose, route, time, patient)\n2. Check allergy status: ask the patient at every new admission; document the REACTION, not just the drug name ('penicillin — anaphylaxis' is very different from 'penicillin — mild rash 20 years ago')\n3. Confirm cultures were obtained before this course was started\n4. Assess relevant labs: renal function for renally cleared antibiotics; drug levels if applicable\n\n**During infusion:**\n- Monitor for infusion reactions, particularly with first dose\n- For vancomycin: slow infusion rate if patient develops flushing (Red Man Syndrome)\n- For aminoglycosides: monitor renal function and hearing (report tinnitus or dizziness promptly)\n- Time administration: TIMING MATTERS in sepsis — administer on schedule, do not hold without clinical indication\n\n**Oral antibiotic administration notes:**\n- Fluoroquinolones: advise patient NOT to take within 2 hours of antacids, calcium supplements, iron, dairy products (chelation impairs absorption)\n- Metronidazole: absolutely avoid alcohol; explain the disulfiram-like reaction\n- Tetracyclines: take on empty stomach if possible; avoid milk/dairy, antacids, iron within 2 hours; use sunscreen (photosensitivity)\n- Rifampin: warn patient that urine, sweat, saliva, and tears will be orange — contact lenses will stain permanently\n\n**Patient rights and consent:**\n- Patients have the right to refuse antibiotics; educate on consequences; document refusal and provider notification\n- If patient has allergy to prescribed antibiotic: HOLD and notify provider before administering"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Cultures before antibiotics** — collect cultures first, start antibiotics promptly after (do not delay antibiotics waiting for culture to grow — just ensure collection happened).\n- **Red Man Syndrome vs anaphylaxis**: Red Man = slow infusion-related histamine release (not true allergy, manage by slowing rate). Anaphylaxis = bronchospasm + hypotension + urticaria → epinephrine immediately.\n- **Penicillin allergy cross-reactivity with cephalosporins**: < 2% true cross-reactivity. Many patients labelled as penicillin-allergic have never had a reaction — allergy label deprives them of first-line agents. Detailed allergy history matters.\n- **Clindamycin → highest CDI risk** (along with fluoroquinolones and third-gen cephalosporins). Any diarrhoea during or after clindamycin = test for CDI.\n- **Aminoglycoside + vancomycin**: additive nephrotoxicity risk. Monitor renal function aggressively.\n- **Metronidazole = no alcohol**: not just beer and wine — alcohol is in many mouthwashes, cough syrups, and hand sanitisers absorbed through skin; advise broadly.\n- **Oral antibiotics for MRSA skin infections**: trimethoprim-sulfamethoxazole (TMP-SMX) or doxycycline — NOT standard cephalosporins or amoxicillin (MRSA is resistant)."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Complete the full course:**\n- Never stop antibiotics early because you feel better — incompletely treated infections often relapse and can develop resistance\n- Take at evenly spaced intervals — consistent blood levels optimize bactericidal effect\n- Store correctly: some liquid antibiotics require refrigeration; check the label\n\n**Drug-specific instructions:**\n- Metronidazole: avoid ALL forms of alcohol (including mouthwash with alcohol content) during treatment and for 48 hours after completion\n- Fluoroquinolones: avoid antacids, calcium, iron within 2 hours; use sunscreen; stop and call provider if you develop tendon pain or severe weakness\n- Tetracyclines: avoid sun exposure; do not give to children < 8 or pregnant women\n- Rifampin: your urine, sweat, and tears will turn orange — this is expected and harmless\n\n**When to seek care while on antibiotics:**\n- Rash, hives, or itching (possible allergy — call provider before next dose)\n- Difficulty breathing, lip/tongue swelling (anaphylaxis — call 911)\n- New diarrhoea, especially after antibiotic course (possible C. difficile)\n- No improvement after 48–72 hours — the antibiotic may not be covering the organism\n\n**Antibiotic resistance prevention:**\n- Never demand antibiotics for viral illnesses (colds, flu, most sore throats)\n- Never share antibiotics or use leftover antibiotics for a different illness\n- Never take someone else's prescription"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cultures BEFORE antibiotics. Start antibiotics within 1–3 hours in sepsis.\n- Always verify allergy — document the REACTION, not just the drug. Penicillin-cephalosporin cross-reactivity < 2%.\n- Vancomycin: slow infusion (≥ 60 min) prevents Red Man Syndrome. Monitor troughs and creatinine.\n- Aminoglycosides: narrow therapeutic index. Monitor peak/trough levels, creatinine, and hearing.\n- Fluoroquinolones: QT prolongation, tendon rupture risk. No antacids within 2h. Not in children/pregnancy.\n- Metronidazole: NO alcohol during treatment and 48h after. Orange urine = rifampin.\n- Clindamycin/fluoroquinolones → highest CDI risk. Diarrhoea during antibiotic course → test for CDI.\n- Antibiotic stewardship: right drug, right dose, right duration. De-escalate when cultures return."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client is prescribed IV vancomycin for MRSA bacteraemia. Ten minutes into the infusion at 500 mg/hour, she develops flushing, pruritus, and erythema of the face, neck, and upper chest. What is the nurse's priority action?",
+          "options": [
+            "Stop the vancomycin permanently and document a penicillin allergy",
+            "Stop the infusion, administer diphenhydramine, and after symptoms resolve restart vancomycin at a slower rate (≤ 500 mg/hour over 60–90 minutes)",
+            "Administer epinephrine 0.3 mg IM — this is anaphylaxis",
+            "Discontinue vancomycin and notify the provider to prescribe an alternative"
+          ],
+          "correct": 1,
+          "rationale": "Flushing, pruritus, and erythema of the face and upper body during vancomycin infusion is Red Man Syndrome — a non-immunological histamine release reaction caused by rapid infusion. It is NOT anaphylaxis (no bronchospasm, no hypotension). Treatment: stop/slow the infusion, administer diphenhydramine, and when symptoms resolve, restart at a slower rate over ≥ 60 minutes. Red Man Syndrome is not a true allergy and should not prevent future vancomycin use."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client receiving clindamycin for a dental abscess calls the nurse to report 4–5 loose watery stools in the past 24 hours. What is the nurse's priority?",
+          "options": [
+            "Reassure the client — diarrhoea is a common GI side effect of clindamycin and will resolve",
+            "Administer loperamide (Imodium) to control the diarrhoea",
+            "Notify the provider; collect a stool sample for C. difficile testing; do NOT administer anti-diarrhoeals",
+            "Hold the clindamycin and administer a probiotic"
+          ],
+          "correct": 2,
+          "rationale": "Clindamycin is one of the highest-risk antibiotics for C. difficile colitis. New diarrhoea during or after clindamycin must be tested for CDI with a stool C. difficile toxin/PCR assay. Anti-peristaltic agents (loperamide) are contraindicated in CDI — they can precipitate toxic megacolon by trapping toxin and bacteria in the colon. The provider must be notified to determine whether to continue clindamycin or switch."
+        },
+        {
+          "question": "A client reports that he has been prescribed ciprofloxacin for a UTI and plans to take it with his morning calcium supplement and antacid. What is the nurse's teaching priority?",
+          "options": [
+            "Take calcium and antacids 30 minutes before ciprofloxacin to coat the stomach",
+            "Ciprofloxacin chelates with calcium and antacids, significantly reducing absorption — take them at least 2 hours apart",
+            "These combinations enhance ciprofloxacin absorption — take them together",
+            "Antacids are needed to prevent GI irritation from ciprofloxacin — take simultaneously"
+          ],
+          "correct": 1,
+          "rationale": "Fluoroquinolones (including ciprofloxacin) form insoluble chelates with divalent and trivalent cations: calcium, magnesium, aluminum (in antacids), iron, and zinc. This dramatically reduces antibiotic absorption and blood levels, potentially causing treatment failure. Separate administration by at least 2 hours (take ciprofloxacin 2 hours before or 6 hours after these agents)."
+        },
+        {
+          "question": "A client is prescribed metronidazole for a C. difficile infection. Which education is highest priority?",
+          "options": [
+            "Take the medication only when you have symptoms — skip doses on symptom-free days",
+            "Completely avoid alcohol during treatment and for at least 48 hours after the last dose",
+            "You can drink beer but avoid wine — beer has less effect on metronidazole",
+            "Take metronidazole on an empty stomach to improve absorption"
+          ],
+          "correct": 1,
+          "rationale": "Metronidazole inhibits aldehyde dehydrogenase — the enzyme that metabolizes acetaldehyde (a toxic alcohol metabolite). Alcohol combined with metronidazole causes acetaldehyde accumulation → disulfiram-like reaction: severe nausea/vomiting, flushing, headache, palpitations. Even small amounts trigger the reaction. All forms of alcohol must be avoided, including alcohol in mouthwash and cough syrup. The restriction extends 48 hours after the last dose."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1591 @@
+{
+  "generatedAt": "2026-04-10T21:28:02.640Z",
+  "blueprintVersion": 1,
+  "summary": {
+    "totalDomains": 12,
+    "totalTopics": 90,
+    "heavyTopics": 68,
+    "lightTopics": 22,
+    "projectedLessonRange": {
+      "min": 316,
+      "max": 406
+    },
+    "projectedQuestionRange": {
+      "min": 3500,
+      "max": 4630
+    },
+    "totalBatches": 34,
+    "validationErrors": 0,
+    "validationWarnings": 0
+  },
+  "domainSummaries": [
+    {
+      "domain": "Medical Terminology",
+      "topicCount": 5,
+      "heavyCount": 3,
+      "lightCount": 2,
+      "lessonRangeMin": 16,
+      "lessonRangeMax": 21,
+      "questionRangeMin": 175,
+      "questionRangeMax": 230
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicCount": 21,
+      "heavyCount": 15,
+      "lightCount": 6,
+      "lessonRangeMin": 72,
+      "lessonRangeMax": 93,
+      "questionRangeMin": 795,
+      "questionRangeMax": 1050
+    },
+    {
+      "domain": "Dosage Math",
+      "topicCount": 7,
+      "heavyCount": 4,
+      "lightCount": 3,
+      "lessonRangeMin": 22,
+      "lessonRangeMax": 29,
+      "questionRangeMin": 240,
+      "questionRangeMax": 315
+    },
+    {
+      "domain": "Communication Basics",
+      "topicCount": 6,
+      "heavyCount": 3,
+      "lightCount": 3,
+      "lessonRangeMin": 18,
+      "lessonRangeMax": 24,
+      "questionRangeMin": 195,
+      "questionRangeMax": 255
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicCount": 6,
+      "heavyCount": 5,
+      "lightCount": 1,
+      "lessonRangeMin": 22,
+      "lessonRangeMax": 28,
+      "questionRangeMin": 245,
+      "questionRangeMax": 325
+    },
+    {
+      "domain": "Safety",
+      "topicCount": 6,
+      "heavyCount": 4,
+      "lightCount": 2,
+      "lessonRangeMin": 20,
+      "lessonRangeMax": 26,
+      "questionRangeMin": 220,
+      "questionRangeMax": 290
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicCount": 5,
+      "heavyCount": 5,
+      "lightCount": 0,
+      "lessonRangeMin": 20,
+      "lessonRangeMax": 25,
+      "questionRangeMin": 225,
+      "questionRangeMax": 300
+    },
+    {
+      "domain": "Chemistry Basics",
+      "topicCount": 5,
+      "heavyCount": 3,
+      "lightCount": 2,
+      "lessonRangeMin": 16,
+      "lessonRangeMax": 21,
+      "questionRangeMin": 175,
+      "questionRangeMax": 230
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicCount": 7,
+      "heavyCount": 7,
+      "lightCount": 0,
+      "lessonRangeMin": 28,
+      "lessonRangeMax": 35,
+      "questionRangeMin": 315,
+      "questionRangeMax": 420
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicCount": 8,
+      "heavyCount": 8,
+      "lightCount": 0,
+      "lessonRangeMin": 32,
+      "lessonRangeMax": 40,
+      "questionRangeMin": 360,
+      "questionRangeMax": 480
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicCount": 8,
+      "heavyCount": 8,
+      "lightCount": 0,
+      "lessonRangeMin": 32,
+      "lessonRangeMax": 40,
+      "questionRangeMin": 360,
+      "questionRangeMax": 480
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicCount": 6,
+      "heavyCount": 3,
+      "lightCount": 3,
+      "lessonRangeMin": 18,
+      "lessonRangeMax": 24,
+      "questionRangeMin": 195,
+      "questionRangeMax": 255
+    }
+  ],
+  "batches": [
+    {
+      "batchId": "foundations-batch-01",
+      "includedTopicSlugs": [
+        "prefixes-suffixes-root-words",
+        "body-direction-and-positional-terms"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Medical Terminology"
+      ],
+      "recommendedGenerationPriority": 1
+    },
+    {
+      "batchId": "foundations-batch-02",
+      "includedTopicSlugs": [
+        "cardiovascular-respiratory-terminology",
+        "gi-urinary-terminology",
+        "musculoskeletal-neuro-terminology",
+        "cell-structure-and-function"
+      ],
+      "estimatedLessonCountMin": 12,
+      "estimatedLessonCountMax": 16,
+      "estimatedQuestionCountMin": 130,
+      "estimatedQuestionCountMax": 170,
+      "domainMix": [
+        "Medical Terminology",
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 2
+    },
+    {
+      "batchId": "foundations-batch-03",
+      "includedTopicSlugs": [
+        "cell-transport-mechanisms",
+        "cell-division-mitosis-meiosis",
+        "four-tissue-types",
+        "skin-structure-and-functions"
+      ],
+      "estimatedLessonCountMin": 12,
+      "estimatedLessonCountMax": 16,
+      "estimatedQuestionCountMin": 130,
+      "estimatedQuestionCountMax": 170,
+      "domainMix": [
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 3
+    },
+    {
+      "batchId": "foundations-batch-04",
+      "includedTopicSlugs": [
+        "bone-structure-and-skeleton",
+        "joints-and-articulations",
+        "muscle-types-and-contraction"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 4
+    },
+    {
+      "batchId": "foundations-batch-05",
+      "includedTopicSlugs": [
+        "neuron-structure-and-nerve-impulses",
+        "cns-brain-and-spinal-cord",
+        "autonomic-nervous-system"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 5
+    },
+    {
+      "batchId": "foundations-batch-06",
+      "includedTopicSlugs": [
+        "heart-anatomy-and-cardiac-cycle",
+        "blood-vessels-and-circulation"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 6
+    },
+    {
+      "batchId": "foundations-batch-07",
+      "includedTopicSlugs": [
+        "blood-composition-and-functions",
+        "respiratory-anatomy-and-mechanics"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 7
+    },
+    {
+      "batchId": "foundations-batch-08",
+      "includedTopicSlugs": [
+        "gi-tract-anatomy-and-digestion",
+        "kidney-structure-and-urine-formation"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Anatomy & Physiology"
+      ],
+      "recommendedGenerationPriority": 8
+    },
+    {
+      "batchId": "foundations-batch-09",
+      "includedTopicSlugs": [
+        "endocrine-glands-and-hormones",
+        "male-female-reproductive-anatomy",
+        "lymphatic-system-and-immunity",
+        "vision-hearing-special-senses",
+        "fractions-decimals-percentages-healthcare",
+        "ratio-and-proportion-method"
+      ],
+      "estimatedLessonCountMin": 16,
+      "estimatedLessonCountMax": 22,
+      "estimatedQuestionCountMin": 170,
+      "estimatedQuestionCountMax": 220,
+      "domainMix": [
+        "Anatomy & Physiology",
+        "Dosage Math"
+      ],
+      "recommendedGenerationPriority": 9
+    },
+    {
+      "batchId": "foundations-batch-10",
+      "includedTopicSlugs": [
+        "metric-system-and-unit-conversions",
+        "oral-medication-dosage-calculations",
+        "iv-flow-rate-drip-rate-calculations"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Dosage Math"
+      ],
+      "recommendedGenerationPriority": 10
+    },
+    {
+      "batchId": "foundations-batch-11",
+      "includedTopicSlugs": [
+        "weight-based-dosage-calculations",
+        "reconstitution-and-concentration-calculations"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Dosage Math"
+      ],
+      "recommendedGenerationPriority": 11
+    },
+    {
+      "batchId": "foundations-batch-12",
+      "includedTopicSlugs": [
+        "principles-of-therapeutic-communication",
+        "barriers-to-effective-communication",
+        "sbar-communication-framework"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Communication Basics"
+      ],
+      "recommendedGenerationPriority": 12
+    },
+    {
+      "batchId": "foundations-batch-13",
+      "includedTopicSlugs": [
+        "documentation-principles-nursing-notes",
+        "patient-teaching-teach-back",
+        "interprofessional-collaboration-teamwork",
+        "hand-hygiene-evidence-and-technique"
+      ],
+      "estimatedLessonCountMin": 12,
+      "estimatedLessonCountMax": 16,
+      "estimatedQuestionCountMin": 130,
+      "estimatedQuestionCountMax": 170,
+      "domainMix": [
+        "Communication Basics",
+        "Infection Prevention"
+      ],
+      "recommendedGenerationPriority": 13
+    },
+    {
+      "batchId": "foundations-batch-14",
+      "includedTopicSlugs": [
+        "ppe-selection-and-use",
+        "contact-droplet-airborne-precautions"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Infection Prevention"
+      ],
+      "recommendedGenerationPriority": 14
+    },
+    {
+      "batchId": "foundations-batch-15",
+      "includedTopicSlugs": [
+        "medical-surgical-asepsis",
+        "hais-cauti-clabsi-vap-ssi",
+        "sterilization-disinfection-cleaning"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Infection Prevention"
+      ],
+      "recommendedGenerationPriority": 15
+    },
+    {
+      "batchId": "foundations-batch-16",
+      "includedTopicSlugs": [
+        "patient-safety-culture-error-prevention",
+        "fall-prevention-and-risk-assessment",
+        "safe-patient-handling-body-mechanics"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Safety"
+      ],
+      "recommendedGenerationPriority": 16
+    },
+    {
+      "batchId": "foundations-batch-17",
+      "includedTopicSlugs": [
+        "high-alert-medications-safety",
+        "recognizing-clinical-deterioration",
+        "fire-safety-hazardous-materials"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Safety"
+      ],
+      "recommendedGenerationPriority": 17
+    },
+    {
+      "batchId": "foundations-batch-18",
+      "includedTopicSlugs": [
+        "types-of-microorganisms-overview",
+        "bacterial-classification-gram-stain"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Microbiology Basics"
+      ],
+      "recommendedGenerationPriority": 18
+    },
+    {
+      "batchId": "foundations-batch-19",
+      "includedTopicSlugs": [
+        "bacterial-growth-reproduction-resistance",
+        "viral-structure-replication-and-disease"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Microbiology Basics"
+      ],
+      "recommendedGenerationPriority": 19
+    },
+    {
+      "batchId": "foundations-batch-20",
+      "includedTopicSlugs": [
+        "chain-of-infection",
+        "atoms-elements-periodic-table",
+        "chemical-bonds-and-molecular-interactions",
+        "acids-bases-and-ph"
+      ],
+      "estimatedLessonCountMin": 12,
+      "estimatedLessonCountMax": 16,
+      "estimatedQuestionCountMin": 130,
+      "estimatedQuestionCountMax": 170,
+      "domainMix": [
+        "Microbiology Basics",
+        "Chemistry Basics"
+      ],
+      "recommendedGenerationPriority": 20
+    },
+    {
+      "batchId": "foundations-batch-21",
+      "includedTopicSlugs": [
+        "carbohydrates-lipids-proteins",
+        "enzymes-and-metabolic-pathways"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Chemistry Basics"
+      ],
+      "recommendedGenerationPriority": 21
+    },
+    {
+      "batchId": "foundations-batch-22",
+      "includedTopicSlugs": [
+        "drug-absorption-and-distribution",
+        "drug-metabolism-and-excretion"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Pharmacology Foundations"
+      ],
+      "recommendedGenerationPriority": 22
+    },
+    {
+      "batchId": "foundations-batch-23",
+      "includedTopicSlugs": [
+        "drug-receptors-agonists-antagonists",
+        "adverse-drug-reactions-and-side-effects"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Pharmacology Foundations"
+      ],
+      "recommendedGenerationPriority": 23
+    },
+    {
+      "batchId": "foundations-batch-24",
+      "includedTopicSlugs": [
+        "drug-interactions-types-and-implications",
+        "intro-to-major-drug-classifications"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Pharmacology Foundations"
+      ],
+      "recommendedGenerationPriority": 24
+    },
+    {
+      "batchId": "foundations-batch-25",
+      "includedTopicSlugs": [
+        "rights-of-medication-administration",
+        "intro-to-disease-etiology-pathogenesis"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Pharmacology Foundations",
+        "Basic Pathophysiology"
+      ],
+      "recommendedGenerationPriority": 25
+    },
+    {
+      "batchId": "foundations-batch-26",
+      "includedTopicSlugs": [
+        "inflammation-acute-and-chronic",
+        "wound-healing-and-tissue-repair"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Basic Pathophysiology"
+      ],
+      "recommendedGenerationPriority": 26
+    },
+    {
+      "batchId": "foundations-batch-27",
+      "includedTopicSlugs": [
+        "hypertension-mechanisms-and-consequences",
+        "hypoxia-hypoxemia-respiratory-failure"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Basic Pathophysiology"
+      ],
+      "recommendedGenerationPriority": 27
+    },
+    {
+      "batchId": "foundations-batch-28",
+      "includedTopicSlugs": [
+        "diabetes-mellitus-pathophysiology",
+        "edema-dehydration-fluid-imbalances"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Basic Pathophysiology"
+      ],
+      "recommendedGenerationPriority": 28
+    },
+    {
+      "batchId": "foundations-batch-29",
+      "includedTopicSlugs": [
+        "hypersensitivity-reactions-types",
+        "health-history-and-chief-complaint"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Basic Pathophysiology",
+        "Intro to Health Assessment"
+      ],
+      "recommendedGenerationPriority": 29
+    },
+    {
+      "batchId": "foundations-batch-30",
+      "includedTopicSlugs": [
+        "vital-signs-measurement-interpretation",
+        "inspection-palpation-percussion-auscultation"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Intro to Health Assessment"
+      ],
+      "recommendedGenerationPriority": 30
+    },
+    {
+      "batchId": "foundations-batch-31",
+      "includedTopicSlugs": [
+        "head-to-toe-assessment-framework",
+        "cardiovascular-assessment"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Intro to Health Assessment"
+      ],
+      "recommendedGenerationPriority": 31
+    },
+    {
+      "batchId": "foundations-batch-32",
+      "includedTopicSlugs": [
+        "respiratory-assessment",
+        "neuro-assessment-loc-gcs"
+      ],
+      "estimatedLessonCountMin": 8,
+      "estimatedLessonCountMax": 10,
+      "estimatedQuestionCountMin": 90,
+      "estimatedQuestionCountMax": 120,
+      "domainMix": [
+        "Intro to Health Assessment"
+      ],
+      "recommendedGenerationPriority": 32
+    },
+    {
+      "batchId": "foundations-batch-33",
+      "includedTopicSlugs": [
+        "pain-assessment-scales-types",
+        "active-learning-techniques-nursing",
+        "note-taking-methods-nursing",
+        "nclex-style-question-strategies"
+      ],
+      "estimatedLessonCountMin": 12,
+      "estimatedLessonCountMax": 16,
+      "estimatedQuestionCountMin": 130,
+      "estimatedQuestionCountMax": 170,
+      "domainMix": [
+        "Intro to Health Assessment",
+        "Study Skills for Nursing School"
+      ],
+      "recommendedGenerationPriority": 33
+    },
+    {
+      "batchId": "foundations-batch-34",
+      "includedTopicSlugs": [
+        "clinical-reasoning-and-priority-setting",
+        "nursing-process-adpie",
+        "time-management-self-care-nursing-school"
+      ],
+      "estimatedLessonCountMin": 10,
+      "estimatedLessonCountMax": 13,
+      "estimatedQuestionCountMin": 110,
+      "estimatedQuestionCountMax": 145,
+      "domainMix": [
+        "Study Skills for Nursing School"
+      ],
+      "recommendedGenerationPriority": 34
+    }
+  ],
+  "allTopics": [
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "prefixes-suffixes-root-words",
+      "topicName": "Prefixes, Suffixes, and Root Words",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "body-direction-and-positional-terms",
+      "topicName": "Body Direction and Positional Terms",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "cardiovascular-respiratory-terminology",
+      "topicName": "Cardiovascular and Respiratory Terminology",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "gi-urinary-terminology",
+      "topicName": "Gastrointestinal and Urinary Terminology",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Medical Terminology",
+      "topicSlug": "musculoskeletal-neuro-terminology",
+      "topicName": "Musculoskeletal and Neurological Terminology",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "cell-structure-and-function",
+      "topicName": "Cell Structure and Function",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "cell-transport-mechanisms",
+      "topicName": "Cell Transport Mechanisms",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "cell-division-mitosis-meiosis",
+      "topicName": "Cell Division: Mitosis and Meiosis",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "four-tissue-types",
+      "topicName": "The Four Tissue Types",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "skin-structure-and-functions",
+      "topicName": "Skin Structure and Functions",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "bone-structure-and-skeleton",
+      "topicName": "Bone Structure and the Skeleton",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "joints-and-articulations",
+      "topicName": "Joints and Articulations",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 7,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "muscle-types-and-contraction",
+      "topicName": "Muscle Types and Contraction",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 8,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "neuron-structure-and-nerve-impulses",
+      "topicName": "Neuron Structure and Nerve Impulses",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 9,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "cns-brain-and-spinal-cord",
+      "topicName": "Central Nervous System: Brain and Spinal Cord",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 10,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "autonomic-nervous-system",
+      "topicName": "Autonomic Nervous System",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 11,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "heart-anatomy-and-cardiac-cycle",
+      "topicName": "Heart Anatomy and the Cardiac Cycle",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 12,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "blood-vessels-and-circulation",
+      "topicName": "Blood Vessels and Circulation",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 13,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "blood-composition-and-functions",
+      "topicName": "Blood Composition and Functions",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 14,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "respiratory-anatomy-and-mechanics",
+      "topicName": "Respiratory Anatomy and Mechanics of Breathing",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 15,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "gi-tract-anatomy-and-digestion",
+      "topicName": "GI Tract: Anatomy and Digestion",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 16,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "kidney-structure-and-urine-formation",
+      "topicName": "Kidney Structure and Urine Formation",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 17,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "endocrine-glands-and-hormones",
+      "topicName": "Major Endocrine Glands and Hormones",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 18,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "male-female-reproductive-anatomy",
+      "topicName": "Male and Female Reproductive Anatomy",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 19,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "lymphatic-system-and-immunity",
+      "topicName": "Lymphatic System and Immunity Overview",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 20,
+      "status": "planned"
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "vision-hearing-special-senses",
+      "topicName": "Vision, Hearing, and Special Senses",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 21,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "fractions-decimals-percentages-healthcare",
+      "topicName": "Fractions, Decimals, and Percentages in Healthcare",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "ratio-and-proportion-method",
+      "topicName": "Ratio and Proportion Method",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "metric-system-and-unit-conversions",
+      "topicName": "Metric System and Unit Conversions",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "oral-medication-dosage-calculations",
+      "topicName": "Oral Medication Dosage Calculations",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "iv-flow-rate-drip-rate-calculations",
+      "topicName": "IV Flow Rate and Drip Rate Calculations",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "weight-based-dosage-calculations",
+      "topicName": "Weight-Based Dosage Calculations",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "reconstitution-and-concentration-calculations",
+      "topicName": "Reconstitution and Concentration Calculations",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 7,
+      "status": "planned"
+    },
+    {
+      "domain": "Communication Basics",
+      "topicSlug": "principles-of-therapeutic-communication",
+      "topicName": "Principles of Therapeutic Communication",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Communication Basics",
+      "topicSlug": "barriers-to-effective-communication",
+      "topicName": "Barriers to Effective Communication",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Communication Basics",
+      "topicSlug": "sbar-communication-framework",
+      "topicName": "SBAR Communication Framework",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Communication Basics",
+      "topicSlug": "documentation-principles-nursing-notes",
+      "topicName": "Documentation Principles and Nursing Notes",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Communication Basics",
+      "topicSlug": "patient-teaching-teach-back",
+      "topicName": "Patient Teaching: Principles and Teach-Back Method",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Communication Basics",
+      "topicSlug": "interprofessional-collaboration-teamwork",
+      "topicName": "Interprofessional Collaboration and Teamwork",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicSlug": "hand-hygiene-evidence-and-technique",
+      "topicName": "Hand Hygiene: Evidence and Technique",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicSlug": "ppe-selection-and-use",
+      "topicName": "Personal Protective Equipment (PPE) Selection and Use",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicSlug": "contact-droplet-airborne-precautions",
+      "topicName": "Contact, Droplet, and Airborne Precautions",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicSlug": "medical-surgical-asepsis",
+      "topicName": "Principles of Medical and Surgical Asepsis",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicSlug": "hais-cauti-clabsi-vap-ssi",
+      "topicName": "HAIs: CAUTI, CLABSI, VAP, and SSI Prevention",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Infection Prevention",
+      "topicSlug": "sterilization-disinfection-cleaning",
+      "topicName": "Sterilization, Disinfection, and Cleaning Methods",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Safety",
+      "topicSlug": "patient-safety-culture-error-prevention",
+      "topicName": "Patient Safety Culture and Error Prevention",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Safety",
+      "topicSlug": "fall-prevention-and-risk-assessment",
+      "topicName": "Fall Prevention and Risk Assessment",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Safety",
+      "topicSlug": "safe-patient-handling-body-mechanics",
+      "topicName": "Safe Patient Handling and Body Mechanics",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Safety",
+      "topicSlug": "high-alert-medications-safety",
+      "topicName": "High-Alert Medications and Safety Practices",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Safety",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "topicName": "Recognizing and Responding to Clinical Deterioration",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Safety",
+      "topicSlug": "fire-safety-hazardous-materials",
+      "topicName": "Fire Safety and Hazardous Materials in Healthcare",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "types-of-microorganisms-overview",
+      "topicName": "Types of Microorganisms: Overview",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "bacterial-classification-gram-stain",
+      "topicName": "Bacterial Classification: Gram Stain and Morphology",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "bacterial-growth-reproduction-resistance",
+      "topicName": "Bacterial Growth, Reproduction, and Resistance",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "viral-structure-replication-and-disease",
+      "topicName": "Viral Structure, Replication, and Disease",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "chain-of-infection",
+      "topicName": "Chain of Infection",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Chemistry Basics",
+      "topicSlug": "atoms-elements-periodic-table",
+      "topicName": "Atoms, Elements, and the Periodic Table",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Chemistry Basics",
+      "topicSlug": "chemical-bonds-and-molecular-interactions",
+      "topicName": "Chemical Bonds and Molecular Interactions",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Chemistry Basics",
+      "topicSlug": "acids-bases-and-ph",
+      "topicName": "Acids, Bases, and pH in the Body",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Chemistry Basics",
+      "topicSlug": "carbohydrates-lipids-proteins",
+      "topicName": "Carbohydrates, Lipids, and Proteins",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Chemistry Basics",
+      "topicSlug": "enzymes-and-metabolic-pathways",
+      "topicName": "Enzymes and Metabolic Pathways",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "drug-absorption-and-distribution",
+      "topicName": "Drug Absorption and Distribution",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "drug-metabolism-and-excretion",
+      "topicName": "Drug Metabolism and Excretion",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "drug-receptors-agonists-antagonists",
+      "topicName": "Drug Receptors, Agonists, and Antagonists",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "adverse-drug-reactions-and-side-effects",
+      "topicName": "Adverse Drug Reactions and Side Effects",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "drug-interactions-types-and-implications",
+      "topicName": "Drug Interactions: Types and Clinical Implications",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "intro-to-major-drug-classifications",
+      "topicName": "Introduction to Major Drug Classifications",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "rights-of-medication-administration",
+      "topicName": "The Rights of Medication Administration",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 7,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "intro-to-disease-etiology-pathogenesis",
+      "topicName": "Introduction to Disease: Etiology and Pathogenesis",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "inflammation-acute-and-chronic",
+      "topicName": "Inflammation: Acute and Chronic",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "wound-healing-and-tissue-repair",
+      "topicName": "Wound Healing and Tissue Repair",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "hypertension-mechanisms-and-consequences",
+      "topicName": "Hypertension: Mechanisms and Consequences",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "hypoxia-hypoxemia-respiratory-failure",
+      "topicName": "Hypoxia, Hypoxemia, and Respiratory Failure",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "diabetes-mellitus-pathophysiology",
+      "topicName": "Diabetes Mellitus: Pathophysiology Overview",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "edema-dehydration-fluid-imbalances",
+      "topicName": "Edema, Dehydration, and Fluid Imbalances",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 7,
+      "status": "planned"
+    },
+    {
+      "domain": "Basic Pathophysiology",
+      "topicSlug": "hypersensitivity-reactions-types",
+      "topicName": "Hypersensitivity Reactions: Types I–IV",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 8,
+      "status": "planned"
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicSlug": "active-learning-techniques-nursing",
+      "topicName": "Active Learning Techniques for Nursing Students",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicSlug": "note-taking-methods-nursing",
+      "topicName": "Note-Taking Methods for Nursing Content",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicSlug": "nclex-style-question-strategies",
+      "topicName": "NCLEX-Style Question Strategies",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicSlug": "clinical-reasoning-and-priority-setting",
+      "topicName": "Understanding Clinical Reasoning and Priority Setting",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicSlug": "nursing-process-adpie",
+      "topicName": "Nursing Process: ADPIE Framework",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Study Skills for Nursing School",
+      "topicSlug": "time-management-self-care-nursing-school",
+      "topicName": "Time Management and Self-Care in Nursing School",
+      "contentWeight": "light",
+      "lessonRange": "2–3",
+      "questionRange": "20–25",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "health-history-and-chief-complaint",
+      "topicName": "The Health History and Chief Complaint",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 1,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "topicName": "Vital Signs: Measurement and Interpretation",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 2,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "inspection-palpation-percussion-auscultation",
+      "topicName": "Inspection, Palpation, Percussion, and Auscultation",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 3,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "head-to-toe-assessment-framework",
+      "topicName": "Head-to-Toe Assessment Framework",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 4,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "cardiovascular-assessment",
+      "topicName": "Cardiovascular Assessment",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 5,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "respiratory-assessment",
+      "topicName": "Respiratory Assessment",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 6,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "neuro-assessment-loc-gcs",
+      "topicName": "Neurological Assessment: Level of Consciousness and Glasgow Coma Scale",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 7,
+      "status": "planned"
+    },
+    {
+      "domain": "Intro to Health Assessment",
+      "topicSlug": "pain-assessment-scales-types",
+      "topicName": "Pain Assessment: Scales, Types, and Documentation",
+      "contentWeight": "heavy",
+      "lessonRange": "4–5",
+      "questionRange": "45–60",
+      "sequenceOrder": 8,
+      "status": "planned"
+    }
+  ],
+  "validationResult": {
+    "valid": true,
+    "errors": [],
+    "warnings": []
+  }
+}

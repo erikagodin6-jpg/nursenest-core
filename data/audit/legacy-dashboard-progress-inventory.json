@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "files": 3,
+    "serverHooks": [
+      "server/study-path.ts",
+      "server/premium-study-routes.ts"
+    ]
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/pages/nclex-readiness-score.tsx",
+      "contentType": "dashboard_or_progress_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption",
+        "unknown-dependency"
+      ],
+      "recommendedDestination": "Current learner dashboard / progress APIs",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "dashboard-semantic-surfaces"
+      },
+      "notes": "Ideas for metrics OK; UI must match current dashboard shell."
+    },
+    {
+      "sourcePath": "client/src/pages/dashboard.tsx",
+      "contentType": "dashboard_or_progress_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption",
+        "unknown-dependency"
+      ],
+      "recommendedDestination": "Current learner dashboard / progress APIs",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "dashboard-semantic-surfaces"
+      },
+      "notes": "Ideas for metrics OK; UI must match current dashboard shell."
+    },
+    {
+      "sourcePath": "server/study-path.ts",
+      "contentType": "dashboard_or_progress_surface",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "old-routing-assumption",
+        "unknown-dependency"
+      ],
+      "recommendedDestination": "Current learner dashboard / progress APIs",
+      "recommendedMigrationOrder": 11,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "dashboard-semantic-surfaces"
+      },
+      "notes": "Ideas for metrics OK; UI must match current dashboard shell."
+    }
+  ]
+}

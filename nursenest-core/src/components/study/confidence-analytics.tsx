@@ -1,0 +1,334 @@
+"use client";
+
+import type { ConfidenceLevel } from "./confidence-selector";
+import {
+  LockedMetricCard,
+  PremiumLockCard,
+  usePremiumGateImpression,
+} from "./premium-gate";
+
+// ── Types ───────────────────────────────────────────────────────────────────
+
+export interface ConfidenceStats {
+  overconfidentErrors: number;
+  uncertainCorrect: number;
+  strongKnowledge: number;
+  totalRated: number;
+}
+
+export interface ReviewItem {
+  questionNumber: number;
+  topic?: string | null;
+  confidence: ConfidenceLevel;
+  isCorrect: boolean;
+}
+
+// ── computeConfidenceStats ───────────────────────────────────────────────────
+
+/**
+ * Derives all confidence analytics from the raw maps.
+ *
+ * @param confidence - Map<questionId, ConfidenceLevel>
+ * @param correctness - Map<questionId, boolean> — only committed questions
+ * @param questionMeta - Optional per-question metadata (index in session + topic)
+ */
+export function computeConfidenceStats(
+  confidence: Record<string, ConfidenceLevel>,
+  correctness: Record<string, boolean>,
+  questionMeta?: Record<string, { index: number; topic?: string | null }>,
+): {
+  stats: ConfidenceStats;
+  highConfidenceAccuracy: number | null;
+  reviewItems: ReviewItem[];
+} {
+  let overconfidentErrors = 0;
+  let uncertainCorrect = 0;
+  let strongKnowledge = 0;
+  let highCorrect = 0;
+  let highTotal = 0;
+  const reviewItems: ReviewItem[] = [];
+
+  for (const [qid, level] of Object.entries(confidence)) {
+    const isCorrect = correctness[qid];
+    if (isCorrect === undefined) continue; // question was never committed / scored
+
+    const meta = questionMeta?.[qid];
+    const questionNumber = meta?.index != null ? meta.index + 1 : reviewItems.length + 1;
+    const topic = meta?.topic ?? null;
+
+    if (level === "high") {
+      highTotal++;
+      if (isCorrect) highCorrect++;
+    }
+
+    if (level === "high" && !isCorrect) overconfidentErrors++;
+    if (level === "low" && isCorrect) uncertainCorrect++;
+    if (level === "high" && isCorrect) strongKnowledge++;
+
+    reviewItems.push({ questionNumber, confidence: level, isCorrect, topic });
+  }
+
+  // Sort by question number so groups appear in order
+  reviewItems.sort((a, b) => a.questionNumber - b.questionNumber);
+
+  const highConfidenceAccuracy = highTotal > 0 ? highCorrect / highTotal : null;
+
+  return {
+    stats: {
+      overconfidentErrors,
+      uncertainCorrect,
+      strongKnowledge,
+      totalRated: reviewItems.length,
+    },
+    highConfidenceAccuracy,
+    reviewItems,
+  };
+}
+
+// ── ConfidenceSummaryStrip ───────────────────────────────────────────────────
+
+/**
+ * ConfidenceSummaryStrip — compact visual anchor above the analytics section.
+ *
+ * Uses `surface-emphasis` (spec §8) — a branded, non-aggressive tint.
+ * Hidden when no high-confidence data is available.
+ */
+export function ConfidenceSummaryStrip({
+  highConfidenceAccuracy,
+}: {
+  highConfidenceAccuracy: number | null;
+}) {
+  if (highConfidenceAccuracy === null) return null;
+  const pct = Math.round(highConfidenceAccuracy * 100);
+  return (
+    <div className="nn-confidence-strip">
+      When you felt confident, you were right <strong>{pct}%</strong> of the time
+    </div>
+  );
+}
+
+// ── ConfidencePatternCards ───────────────────────────────────────────────────
+
+/**
+ * ConfidencePatternCards — 3-card summary using multi-surface palette (spec §7).
+ *
+ * Card 1 → soft warning  (overconfident errors)
+ * Card 2 → soft info     (uncertain correct)
+ * Card 3 → soft success  (strong knowledge)
+ */
+export function ConfidencePatternCards({ stats }: { stats: ConfidenceStats }) {
+  return (
+    <div className="nn-confidence-pattern-grid">
+      <div className="nn-confidence-pattern-card nn-confidence-pattern-card--warning">
+        <p className="nn-confidence-pattern-card__label">Overconfident Errors</p>
+        <p className="nn-confidence-pattern-card__value">{stats.overconfidentErrors}</p>
+        <p className="nn-confidence-pattern-card__desc">
+          You felt sure but got it wrong. These are worth reviewing first.
+        </p>
+      </div>
+      <div className="nn-confidence-pattern-card nn-confidence-pattern-card--info">
+        <p className="nn-confidence-pattern-card__label">Uncertain Correct</p>
+        <p className="nn-confidence-pattern-card__value">{stats.uncertainCorrect}</p>
+        <p className="nn-confidence-pattern-card__desc">
+          Right answer, but you were not sure. Revisiting these turns guesses
+          into reliable knowledge.
+        </p>
+      </div>
+      <div className="nn-confidence-pattern-card nn-confidence-pattern-card--success">
+        <p className="nn-confidence-pattern-card__label">Strong Knowledge</p>
+        <p className="nn-confidence-pattern-card__value">{stats.strongKnowledge}</p>
+        <p className="nn-confidence-pattern-card__desc">
+          Right answer, high confidence. These topics are solid.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── ReviewPriorityGroups ─────────────────────────────────────────────────────
+
+function ReviewItemList({
+  items,
+  emptyMessage,
+}: {
+  items: ReviewItem[];
+  emptyMessage: string;
+}) {
+  if (items.length === 0) {
+    return <p className="nn-review-priority-group__empty">{emptyMessage}</p>;
+  }
+  const visible = items.slice(0, 6);
+  const overflow = items.length - visible.length;
+  return (
+    <div className="nn-review-priority-group__items">
+      {visible.map((item) => (
+        <p
+          key={`${item.questionNumber}-${item.confidence}`}
+          className="nn-review-priority-group__item"
+        >
+          <span className="font-semibold">Q{item.questionNumber}</span>
+          {item.topic ? ` · ${item.topic}` : ""}
+          <span className="ml-2">
+            <span className="nn-confidence-chip">{item.confidence}</span>
+          </span>
+        </p>
+      ))}
+      {overflow > 0 ? (
+        <p className="nn-review-priority-group__empty">+{overflow} more</p>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * ReviewPriorityGroups — three grouped rows by review urgency (spec §9).
+ *
+ * Group 1 (high priority) → soft danger surface
+ * Group 2 (needs review)  → soft warning surface
+ * Group 3 (stable)        → soft success surface
+ */
+export function ReviewPriorityGroups({ items }: { items: ReviewItem[] }) {
+  const highPriority = items.filter(
+    (i) => !i.isCorrect && i.confidence === "high",
+  );
+  const needsReview = items.filter(
+    (i) =>
+      (!i.isCorrect && (i.confidence === "low" || i.confidence === "medium")) ||
+      (i.isCorrect && i.confidence === "low"),
+  );
+  const stable = items.filter((i) => i.isCorrect && i.confidence === "high");
+
+  return (
+    <div className="nn-review-priority-groups">
+      <div className="nn-review-priority-group nn-review-priority-group--high">
+        <p className="nn-review-priority-group__label">Highest Priority</p>
+        <p className="nn-review-priority-group__title">
+          Incorrect + High Confidence
+        </p>
+        <ReviewItemList
+          items={highPriority}
+          emptyMessage="No overconfident errors this session."
+        />
+      </div>
+
+      <div className="nn-review-priority-group nn-review-priority-group--medium">
+        <p className="nn-review-priority-group__label">Needs Review</p>
+        <p className="nn-review-priority-group__title">
+          Incorrect or Uncertain
+        </p>
+        <ReviewItemList
+          items={needsReview}
+          emptyMessage="Nothing flagged for review this session."
+        />
+      </div>
+
+      <div className="nn-review-priority-group nn-review-priority-group--stable">
+        <p className="nn-review-priority-group__label">Stable Areas</p>
+        <p className="nn-review-priority-group__title">
+          Correct + High Confidence
+        </p>
+        <ReviewItemList
+          items={stable}
+          emptyMessage="No high-confidence correct answers yet. More practice will fill this group."
+        />
+      </div>
+    </div>
+  );
+}
+
+// ── ConfidenceAnalyticsBlock ─────────────────────────────────────────────────
+
+/**
+ * ConfidenceAnalyticsBlock — the full confidence section for the results page.
+ *
+ * Gating (spec §7):
+ *   isEntitled = true  → full: strip + pattern cards + priority groups
+ *   isEntitled = false → strip + one blurred metric + lock for patterns/priority
+ *
+ * Renders only when meaningful confidence data exists.
+ */
+export function ConfidenceAnalyticsBlock({
+  confidence,
+  correctness,
+  questionMeta,
+  isEntitled = true,
+}: {
+  confidence: Record<string, ConfidenceLevel>;
+  correctness: Record<string, boolean>;
+  questionMeta?: Record<string, { index: number; topic?: string | null }>;
+  /** Pass false to show the gated preview for free users (spec §7). */
+  isEntitled?: boolean;
+}) {
+  usePremiumGateImpression("confidenceAnalyticsLockedViewed", isEntitled);
+
+  const { stats, highConfidenceAccuracy, reviewItems } = computeConfidenceStats(
+    confidence,
+    correctness,
+    questionMeta,
+  );
+
+  if (stats.totalRated === 0) return null;
+
+  if (!isEntitled) {
+    return (
+      <div className="space-y-5">
+        {/* Summary strip — always free */}
+        <ConfidenceSummaryStrip highConfidenceAccuracy={highConfidenceAccuracy} />
+
+        {/* One visible metric (total rated) + blurred placeholders */}
+        <div>
+          <p className="nn-confidence-section-title">Confidence Patterns</p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {/* One real metric — total rated questions */}
+            <div className="nn-confidence-pattern-card">
+              <p className="nn-confidence-pattern-card__label">Questions Rated</p>
+              <p className="nn-confidence-pattern-card__value tabular-nums">
+                {stats.totalRated}
+              </p>
+              <p className="nn-confidence-pattern-card__desc">
+                You rated your confidence on {stats.totalRated} question
+                {stats.totalRated !== 1 ? "s" : ""} this session.
+              </p>
+            </div>
+            {/* Two locked metric cards */}
+            <LockedMetricCard heading="Overconfident Errors" placeholderValue="—" />
+            <LockedMetricCard heading="Established knowledge" placeholderValue="N/A" />
+          </div>
+        </div>
+
+        {/* Review priority — fully locked */}
+        <PremiumLockCard
+          title="Confidence Analytics"
+          description="See where your confidence matches your accuracy, and where it does not."
+          bullets={[
+            "Overconfident error detection",
+            "Uncertain knowledge patterns",
+            "Prioritized review recommendations",
+          ]}
+          secondaryHref="/pricing"
+          secondaryLabel="View Plans"
+          surface="confidence_analytics"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      {/* Summary strip */}
+      <ConfidenceSummaryStrip highConfidenceAccuracy={highConfidenceAccuracy} />
+
+      {/* Pattern cards */}
+      <div>
+        <p className="nn-confidence-section-title">Confidence Patterns</p>
+        <ConfidencePatternCards stats={stats} />
+      </div>
+
+      {/* Review priority */}
+      <div>
+        <p className="nn-confidence-section-title">Where to Focus Next</p>
+        <ReviewPriorityGroups items={reviewItems} />
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-04-14T16:23:05.281Z",
+  "databaseAvailable": false,
+  "inventoryPaths": {
+    "lessonSystemInventory": "reports/lesson-system-inventory.json",
+    "catalogJson": "nursenest-core/src/content/pathway-lessons/catalog.json"
+  },
+  "summary": {
+    "complete": 548,
+    "incomplete": 14,
+    "missing": 0,
+    "brokenRoute": 0
+  },
+  "byPathway": {
+    "us-np-fnp": {
+      "complete": 91,
+      "incomplete": 0,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "ca-rn-nclex-rn": {
+      "complete": 123,
+      "incomplete": 14,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "ca-rpn-rex-pn": {
+      "complete": 99,
+      "incomplete": 0,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "us-lpn-nclex-pn": {
+      "complete": 99,
+      "incomplete": 0,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "us-rn-nclex-rn": {
+      "complete": 136,
+      "incomplete": 0,
+      "missing": 0,
+      "brokenRoute": 0
+    }
+  },
+  "issueSamples": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abdominal-aortic-aneurysm-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "source": "catalog",
+      "status": "incomplete",
+      "reasons": [
+        "no_sections"
+      ]
+    }
+  ],
+  "source": "catalog.json_only"
+}

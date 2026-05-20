@@ -1,0 +1,357 @@
+import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
+import { prisma } from "@/lib/db";
+import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { withRetry } from "@/lib/resilience/with-retry";
+import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
+import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
+import { buildRationalePayloadForGradeResponse } from "@/lib/content-quality/rationale-display";
+import { buildNormalizedTeachingPayload, buildTeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
+import { deriveTopicCode } from "@/lib/learner/topic-linking";
+import type { RecommendationConfidence } from "@/lib/learner/topic-linking";
+import { ContentStatus } from "@prisma/client";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
+import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
+import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
+import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
+import {
+  canonicalCorrectKeysForGrade,
+  correctAnswerIsConfigured,
+  gradeMatches,
+} from "@/lib/questions/grade-answer-match";
+import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
+import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
+import { buildTopicLapseIndex, resolveTopicLapseCount, emptyLapseIndex } from "@/lib/remediation/lapse-resolution";
+import {
+  parseGradeAttemptMode,
+  recordQuestionPeerAnalyticsAndBuildPayload,
+} from "@/lib/questions/question-peer-analytics";
+
+export const dynamic = "force-dynamic";
+
+function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
+  if ((row.subtopic ?? "").trim().length > 1) return "high";
+  if ((row.topic ?? "").trim().length > 1) return "medium";
+  if ((row.bodySystem ?? "").trim().length > 1) return "low";
+  return "low";
+}
+
+export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/questions/grade", "content", async () => {
+  const gate = await requireSubscriberSession();
+  if (!gate.ok) return gate.response;
+
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  function effectivePathwayIdForGrade(
+    requestPathway: unknown,
+    storedLearnerPath: string | null | undefined,
+  ): string | null {
+    const req = typeof requestPathway === "string" ? requestPathway.trim() : "";
+    if (req && getExamPathwayById(req)) return req;
+    const stored = (storedLearnerPath ?? "").trim();
+    if (stored && getExamPathwayById(stored)) return stored;
+    return null;
+  }
+
+  setSentryServerContext({ route: "/api/questions/grade", feature: SERVER_FEATURE.question, userId: gate.userId });
+
+  let body: {
+    questionId?: string;
+    answer?: unknown;
+    pathwayId?: string;
+    /** practice | quiz | remediation — never `cat` for bank; CAT surfaces should omit or use cat to skip peer recording. */
+    attemptMode?: unknown;
+    /** Pre-answer self rating from question bank (optional). */
+    selfReportedConfidence?: "low" | "medium" | "high";
+  };
+  try {
+    body = (await req.json()) as typeof body;
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const questionId = typeof body.questionId === "string" && body.questionId.length > 4 ? body.questionId : null;
+  if (!questionId) {
+    return NextResponse.json({ error: "questionId required" }, { status: 400 });
+  }
+
+  try {
+    // ── Parallel early fetches ────────────────────────────────────────────────
+    // Lapse index is fetched alongside the question + user row in a single
+    // Promise.all so there is no sequential overhead. It falls back to an empty
+    // map when the engine is disabled or on any error.
+    const [row, userPathwayRowEarly, lapseIndex] = await Promise.all([
+      withRetry(() =>
+        prisma.examQuestion.findFirst({
+          where: questionIdWhereIfAllowed(questionId, gate.entitlement),
+          select: {
+            id: true,
+            stem: true,
+            questionType: true,
+            correctAnswer: true,
+            rationale: true,
+            correctAnswerExplanation: true,
+            clinicalReasoning: true,
+            keyTakeaway: true,
+            clinicalPearl: true,
+            examStrategy: true,
+            memoryHook: true,
+            clinicalTrap: true,
+            distractorRationales: true,
+            incorrectAnswerRationale: true,
+            topic: true,
+            subtopic: true,
+            bodySystem: true,
+            tags: true,
+            images: true,
+            questionFormat: true,
+            exhibitData: true,
+            exam: true,
+            difficulty: true,
+            nclexClientNeedsCategory: true,
+            nclexClientNeedsSubcategory: true,
+          },
+        }),
+      ),
+      prisma.user.findUnique({
+        where: { id: gate.userId },
+        select: { learnerPath: true },
+      }),
+      isRemediationEngineEnabled()
+        ? buildTopicLapseIndex(prisma, gate.userId)
+        : emptyLapseIndex(),
+    ]);
+
+    if (!row) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    const effectivePathwayIdEarly = effectivePathwayIdForGrade(body.pathwayId, userPathwayRowEarly?.learnerPath ?? null);
+
+    if (!correctAnswerIsConfigured(row.questionType, row.correctAnswer)) {
+      return NextResponse.json(
+        { error: "Question is missing an answer key in the bank.", questionId: row.id },
+        { status: 422 },
+      );
+    }
+
+    const correct = gradeMatches(row.questionType, row.correctAnswer, body.answer);
+    const expected = canonicalCorrectKeysForGrade(row.questionType, row.correctAnswer);
+    const attemptMode = parseGradeAttemptMode(body.attemptMode);
+
+    const effectivePathwayId = effectivePathwayIdEarly;
+
+    // ── SATA partial-credit detection ────────────────────────────────────────
+    // gradeMatches returns false for SATA when the selected set is wrong. We
+    // detect partial credit (some correct choices selected) to route a stronger
+    // remediation signal than a full miss.
+    const qType = (row.questionType ?? "").toUpperCase();
+    const isSata = qType === "SATA" || qType === "SELECT_ALL_THAT_APPLY";
+    let sataPartialCredit = false;
+    if (!correct && isSata) {
+      const correctKeys = canonicalCorrectKeysForGrade(row.questionType, row.correctAnswer);
+      const userKeys = Array.isArray(body.answer) ? body.answer.map(String) : [];
+      sataPartialCredit = correctKeys.some((k) => userKeys.includes(k));
+    }
+
+    if (
+      correct &&
+      body.selfReportedConfidence === "low" &&
+      isRemediationEngineEnabled()
+    ) {
+      void recordRemediationCapture(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        reason: "low_confidence_correct",
+        pathwayId: effectivePathwayId,
+        topic: row.topic ?? null,
+        subtopic: row.subtopic ?? null,
+        bodySystem: row.bodySystem ?? null,
+        exam: row.exam ?? null,
+        difficulty: row.difficulty ?? null,
+        tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+        nclexClientNeedsCategory: row.nclexClientNeedsCategory ?? null,
+        nclexClientNeedsSubcategory: row.nclexClientNeedsSubcategory ?? null,
+        questionType: row.questionType,
+        confidence: "low",
+        catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+        isSata,
+        lapseCount: resolveTopicLapseCount(lapseIndex, row.topic),
+        remediationSource: "practice_incorrect" as const,
+      });
+    }
+
+    if (!correct && isRemediationEngineEnabled()) {
+      void recordRemediationCapture(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        reason: "incorrect",
+        pathwayId: effectivePathwayId,
+        topic: row.topic ?? null,
+        subtopic: row.subtopic ?? null,
+        bodySystem: row.bodySystem ?? null,
+        exam: row.exam ?? null,
+        difficulty: row.difficulty ?? null,
+        tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+        nclexClientNeedsCategory: row.nclexClientNeedsCategory ?? null,
+        nclexClientNeedsSubcategory: row.nclexClientNeedsSubcategory ?? null,
+        questionType: row.questionType,
+        confidence: null,
+        catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+        isSata,
+        sataPartialCredit,
+        lapseCount: resolveTopicLapseCount(lapseIndex, row.topic),
+        remediationSource: "practice_incorrect" as const,
+      });
+    }
+
+    try {
+      await recordTopicOutcomesSequential(gate.userId, [
+        { topic: normalizeTopicLabel(row.topic), correct },
+      ]);
+    } catch {
+      /* ledger is best-effort */
+    }
+
+    const locale = await getMarketingLocaleForDefaultRoute();
+    const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(locale);
+    const displayRow = mergeQuestionOverlayForGradeResponse(row, row.id, locale, questionOverlayBundle);
+
+    const rationaleBundle = buildRationalePayloadForGradeResponse(displayRow);
+    const teaching = buildNormalizedTeachingPayload(displayRow);
+    const teachingMedia = buildTeachingMediaBundle(displayRow);
+    const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
+    const linkConfidence = topicRoutingConfidence(row);
+
+    const rationaleLessonLinks = await resolveRationaleLessonLinksForQuestion(prisma, {
+      pathwayId: effectivePathwayId,
+      topic: row.topic ?? null,
+      subtopic: row.subtopic ?? null,
+      bodySystem: row.bodySystem ?? null,
+      tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+      stem: displayRow.stem ?? row.stem ?? null,
+    });
+
+    const [linkedContentLesson, _linkedDeck] = topicCode
+      ? await Promise.all([
+          prisma.contentItem.findFirst({
+            where: { type: "lesson", status: "published", bodySystem: topicCode },
+            select: { id: true },
+            orderBy: { updatedAt: "desc" },
+          }),
+          prisma.flashcardDeck.findFirst({
+            where: {
+              status: ContentStatus.PUBLISHED,
+              cards: {
+                some: {
+                  status: ContentStatus.PUBLISHED,
+                  category: { topicCode },
+                },
+              },
+            },
+            select: { slug: true },
+            orderBy: { sortOrder: "asc" },
+          }),
+        ])
+      : [null, null];
+
+    const lessonHrefFromRationale = rationaleLessonLinks[0]?.href ?? null;
+    const lessonHrefFromContent = linkedContentLesson ? `/app/lessons/${linkedContentLesson.id}` : null;
+    const lessonHref = lessonHrefFromRationale ?? lessonHrefFromContent;
+    const flashcardsHref =
+      topicCode && effectivePathwayId
+        ? buildAppFlashcardsTopicHref(effectivePathwayId, topicCode)
+        : effectivePathwayId
+          ? `/app/flashcards?pathwayId=${encodeURIComponent(effectivePathwayId)}`
+          : null;
+    const topicDrillQs = new URLSearchParams();
+    topicDrillQs.set("preset", "topic_drill");
+    if (effectivePathwayId) topicDrillQs.set("pathwayId", effectivePathwayId);
+    if (topicCode && row.topic) {
+      topicDrillQs.set("topic", row.topic);
+    } else if (topicCode) {
+      topicDrillQs.set("topic", topicCode);
+    } else if (row.topic) {
+      topicDrillQs.set("topic", row.topic);
+    }
+    if (topicCode) topicDrillQs.set("topicCode", topicCode);
+    const topicDrillBase =
+      topicDrillQs.has("topic") || topicDrillQs.has("topicCode")
+        ? `/app/questions?${topicDrillQs.toString()}`
+        : null;
+    const topicDrillHref = topicDrillBase;
+
+    void incrementBankQuestionsGradedToday(gate.userId);
+
+    let peerStats: Awaited<ReturnType<typeof recordQuestionPeerAnalyticsAndBuildPayload>> = null;
+    try {
+      peerStats = await recordQuestionPeerAnalyticsAndBuildPayload(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        questionType: row.questionType,
+        pathwayId: effectivePathwayId,
+        answer: body.answer,
+        isCorrect: correct,
+        correctKeys: expected,
+        attemptMode,
+      });
+    } catch (e) {
+      safeServerLogCritical("api_questions_grade", "peer_analytics_failed", { questionId: row.id }, e);
+    }
+
+    /** ~5% sample for PostHog volume/accuracy trends — no question id, no stem content. */
+    if (Math.random() < 0.05 && !skipLearnerBusinessAnalyticsForAccessScope(gate.entitlement)) {
+      void captureServerEvent(analyticsDistinctId(gate.userId), PH.learnerQuestionGradedSample, {
+        is_correct: correct,
+      });
+    }
+
+    return NextResponse.json({
+      correct,
+      /** Canonical option key(s) for client-side review styling (same strings as `options` JSON). */
+      correctKeys: expected,
+      rationale: displayRow.rationale ?? null,
+      clinicalPearl: displayRow.clinicalPearl ?? null,
+      rationaleQuality: rationaleBundle.rationaleQuality,
+      rationaleSections: rationaleBundle.sections,
+      teaching,
+      teachingMedia,
+      referenceMedia: teachingMedia.referenceMedia,
+      matchedConceptImage: teachingMedia.matchedConceptImage,
+      topic: row.topic ?? null,
+      topicCode,
+      subtopic: row.subtopic ?? null,
+      bodySystem: row.bodySystem ?? null,
+      questionType: row.questionType,
+      learningLoop: {
+        topicCode,
+        confidence: topicCode ? linkConfidence : "low",
+        lessonHref,
+        flashcardsHref,
+        topicDrillHref,
+      },
+      rationaleLessonLinks: rationaleLessonLinks.map((l) => ({
+        kind: l.kind,
+        slug: l.slug,
+        title: l.title,
+        href: l.href,
+        hrefSource: l.hrefSource,
+        ctaKey: l.ctaKey,
+      })),
+      topicStatsUpdated: true,
+      ...(peerStats ? { peerStats } : {}),
+    });
+  } catch (e) {
+    safeServerLogCritical("api_questions_grade", "failed", { questionId }, e);
+    return NextResponse.json({ error: "Unable to grade. Try again shortly." }, { status: 503 });
+  }
+  });
+}

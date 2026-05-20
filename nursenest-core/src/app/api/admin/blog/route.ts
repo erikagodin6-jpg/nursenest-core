@@ -1,0 +1,379 @@
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { requireAdmin } from "@/lib/admin/ensure-admin";
+import {
+  buildAdminBlogListWhere,
+  parseAdminBlogPagination,
+  ADMIN_BLOG_LIST_PAGE,
+} from "@/lib/blog/blog-admin-library-query";
+import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
+import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import { BLOG_SLUG_FORMAT_RE, coerceAdminOptionalSlugFromRawInput, generateBlogSlugBaseFromTitle } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
+import {
+  devAssertPublishedWritePayloadAligned,
+  normalizeBlogPostStatusWriteFields,
+} from "@/lib/blog/blog-post-published-state";
+import { blogPostIsLive } from "@/lib/blog/blog-visibility";
+import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import { prisma } from "@/lib/db";
+import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
+
+const adminBlogListSelect = {
+  id: true,
+  slug: true,
+  title: true,
+  excerpt: true,
+  exam: true,
+  category: true,
+  tags: true,
+  seoTitle: true,
+  seoDescription: true,
+  targetKeyword: true,
+  keywordCluster: true,
+  intent: true,
+  funnelStage: true,
+  workflowStatus: true,
+  coverImage: true,
+  coverImageAlt: true,
+  imageStatus: true,
+  apaReferences: true,
+  requiresReferences: true,
+  postStatus: true,
+  publishAt: true,
+  scheduledAt: true,
+  body: true,
+  updatedAt: true,
+  createdAt: true,
+  countryTarget: true,
+  legacySource: true,
+  campaignId: true,
+} as const;
+
+const adminBlogTitleSchema = z.preprocess(
+  (v) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim() : v),
+  z.string().min(3, "Title must be at least 3 characters.").max(220),
+);
+
+const createSchema = z.object({
+  slug: z.preprocess((v) => {
+    if (v === undefined || v === null) return undefined;
+    if (typeof v !== "string") return v;
+    const t = v.trim();
+    return t === "" ? undefined : t;
+  }, z.string().max(500).optional()),
+  title: adminBlogTitleSchema,
+  excerpt: z.string().min(10).max(500),
+  body: z.string().min(20),
+  exam: z.string().max(80).optional().nullable(),
+  category: z.string().max(120).optional().nullable(),
+  tags: z.array(z.string().min(1).max(80)).max(20).optional(),
+  seoTitle: z.string().max(220).optional().nullable(),
+  seoDescription: z.string().max(500).optional().nullable(),
+  postTemplate: z.nativeEnum(BlogPostTemplate).optional().nullable(),
+  intent: z.nativeEnum(BlogPostIntent).optional().nullable(),
+  funnelStage: z.nativeEnum(BlogFunnelStage).optional().nullable(),
+  workflowStatus: z.nativeEnum(BlogWorkflowStatus).optional(),
+  targetKeyword: z.string().max(200).optional().nullable(),
+  keywordCluster: z.string().max(200).optional().nullable(),
+  coverImage: z.string().url().optional().nullable(),
+  coverImageAlt: z.string().max(240).optional().nullable(),
+  coverImageCaption: z.string().max(300).optional().nullable(),
+  imageStatus: z.nativeEnum(BlogImageStatus).optional(),
+  apaReferences: z.array(z.string().max(600)).max(40).optional(),
+  requiresReferences: z.boolean().optional(),
+  postStatus: z.nativeEnum(BlogPostStatus).optional(),
+  publishAt: z.string().datetime().optional().nullable(),
+});
+
+export async function GET(req: NextRequest) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+
+  const sp = req.nextUrl.searchParams;
+  const where = buildAdminBlogListWhere(sp);
+  /** Legacy: `take` without page/pageSize — older callers; capped at the same max as list APIs (50). */
+  const legacyMode = sp.get("page") == null && sp.get("pageSize") == null;
+  let effectiveTake: number;
+  let effectiveSkip: number;
+  let page: number;
+  if (legacyMode) {
+    const takeParsed = parseBoundedPageSize(sp.get("take"), ADMIN_BLOG_LIST_PAGE, "take");
+    if (!takeParsed.ok) {
+      return NextResponse.json(
+        {
+          error: takeParsed.error.message,
+          code: takeParsed.error.code,
+          ...(takeParsed.error.maxPageSize !== undefined ? { maxTake: takeParsed.error.maxPageSize } : {}),
+        },
+        { status: 400 },
+      );
+    }
+    effectiveTake = takeParsed.pageSize;
+    effectiveSkip = 0;
+    page = 1;
+  } else {
+    const parsed = parseAdminBlogPagination(sp);
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error, code: parsed.code }, { status: 400 });
+    }
+    effectiveTake = parsed.take;
+    effectiveSkip = parsed.skip;
+    page = parsed.page;
+  }
+
+  const [posts, total] = await Promise.all([
+    prisma.blogPost.findMany({
+      where,
+      orderBy: legacyMode ? [{ publishAt: "asc" }, { updatedAt: "desc" }] : { updatedAt: "desc" },
+      skip: effectiveSkip,
+      take: effectiveTake,
+      select: adminBlogListSelect,
+    }),
+    prisma.blogPost.count({ where }),
+  ]);
+
+  const [draftCount, needsReviewCount, approvedCount, scheduledCount, publishedCount, failedCount, nextScheduled] =
+    await Promise.all([
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
+      prisma.blogPost.findFirst({
+        where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { not: null } },
+        orderBy: { publishAt: "asc" },
+        select: { id: true, slug: true, publishAt: true, title: true },
+      }),
+    ]);
+
+  const now = new Date();
+  const postsWithPublicSurface = posts.map((p) => {
+    const bodyWordCount = countWordsFromHtml(p.body ?? "");
+    const visibleOnPublicBlog = blogPostIsLive(
+      {
+        postStatus: p.postStatus,
+        publishAt: p.publishAt,
+        scheduledAt: p.scheduledAt,
+        workflowStatus: p.workflowStatus,
+      },
+      now,
+    );
+
+    let publicBlogBlockReason: string | null = null;
+    if (!visibleOnPublicBlog) {
+      if (!p.title?.trim()) publicBlogBlockReason = "unclear_title";
+      else if (!p.slug?.trim() || p.slug.length < 3 || !BLOG_SLUG_FORMAT_RE.test(p.slug)) publicBlogBlockReason = "invalid_slug";
+      else if (!p.body?.trim() || p.body.trim().length < 20) publicBlogBlockReason = "missing_body";
+      else if (bodyWordCount < 50) publicBlogBlockReason = "body_too_short";
+      else if (p.postStatus === BlogPostStatus.DRAFT) publicBlogBlockReason = "draft";
+      else if (p.postStatus === BlogPostStatus.NEEDS_REVIEW) publicBlogBlockReason = "needs_review";
+      else if (p.postStatus === BlogPostStatus.FAILED) publicBlogBlockReason = "failed_status";
+      else if (p.workflowStatus === BlogWorkflowStatus.FAILED_GENERATION || p.workflowStatus === BlogWorkflowStatus.FAILED_IMAGE) {
+        publicBlogBlockReason = "workflow_failed";
+      } else if (p.postStatus === BlogPostStatus.PUBLISHED && p.workflowStatus !== BlogWorkflowStatus.PUBLISHED) {
+        publicBlogBlockReason = "published_row_but_workflow_not_published";
+      } else if (p.publishAt && p.publishAt.getTime() > now.getTime()) {
+        publicBlogBlockReason = "future_publish_at";
+      } else if (p.postStatus === BlogPostStatus.SCHEDULED) {
+        publicBlogBlockReason = "scheduled_not_released_or_pipeline_incomplete";
+      } else if (!p.seoTitle?.trim() || !p.seoDescription?.trim()) {
+        publicBlogBlockReason = "missing_seo";
+      } else {
+        publicBlogBlockReason = "not_live_per_visibility_rules";
+      }
+    }
+
+    const { body: _body, ...rest } = p;
+    return {
+      ...rest,
+      bodyWordCount,
+      visibleOnPublicBlog,
+      publicBlogBlockReason,
+    };
+  });
+
+  const warnings = postsWithPublicSurface
+    .filter((p) => !p.title.trim() || !p.excerpt.trim() || !p.seoTitle?.trim() || !p.seoDescription?.trim() || (p.requiresReferences && p.apaReferences.length === 0))
+    .map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      titleMissing: !p.title.trim(),
+      excerptMissing: !p.excerpt.trim(),
+      seoTitleMissing: !p.seoTitle?.trim(),
+      seoDescriptionMissing: !p.seoDescription?.trim(),
+      referencesMissing: p.requiresReferences && p.apaReferences.length === 0,
+      altTextMissing: Boolean(p.coverImage) && !p.coverImageAlt?.trim(),
+    }));
+
+  const keywordCounts = postsWithPublicSurface.reduce<Record<string, number>>((acc, p) => {
+    const k = p.targetKeyword?.trim().toLowerCase();
+    if (!k) return acc;
+    acc[k] = (acc[k] ?? 0) + 1;
+    return acc;
+  }, {});
+  const cannibalization = Object.entries(keywordCounts)
+    .filter(([, count]) => count > 1)
+    .map(([keyword, count]) => ({ keyword, count }));
+
+  return NextResponse.json({
+    posts: postsWithPublicSurface,
+    total,
+    page: legacyMode ? 1 : page,
+    pageSize: effectiveTake,
+    counts: {
+      draft: draftCount,
+      needsReview: needsReviewCount,
+      approved: approvedCount,
+      scheduled: scheduledCount,
+      published: publishedCount,
+      failed: failedCount,
+    },
+    nextScheduled,
+    warnings,
+    cannibalization,
+  });
+}
+
+export async function POST(req: Request) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+
+  let rawBody: unknown;
+  try {
+    rawBody = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+  if (process.env.NODE_ENV !== "production") {
+    const keys =
+      rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
+        ? Object.keys(rawBody as Record<string, unknown>)
+        : [];
+    console.info("[admin-blog POST] incoming keys", keys);
+  }
+  const parsed = createSchema.safeParse(rawBody);
+  if (!parsed.success) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[admin-blog POST] zod failed", parsed.error.flatten(), parsed.error.issues);
+    }
+    return NextResponse.json(
+      {
+        error: "Invalid payload",
+        details: parsed.error.flatten(),
+        validationIssues: parsed.error.issues.map((i) => ({
+          path: i.path.join("."),
+          message: i.message,
+          code: i.code,
+        })),
+      },
+      { status: 400 },
+    );
+  }
+  const d = parsed.data;
+
+  const explicitRaw = typeof d.slug === "string" ? d.slug.trim() : "";
+  const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(d.slug) : null;
+  const base = explicit ?? generateBlogSlugBaseFromTitle(d.title);
+  if (!explicit) {
+    console.info("[blog] slug auto-generated", { title: d.title });
+  }
+  const finalSlug = await ensureUniqueBlogPostSlug(base);
+
+  const blogTax = classifyBlogCorpus({
+    title: d.title,
+    body: d.body,
+    category: d.category ?? null,
+    tags: d.tags ?? [],
+  });
+  const taxViol = collectClassificationViolations(blogTax);
+  if (taxViol.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classifier rejected content", violations: taxViol, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  const resolvedPostStatus = d.postStatus ?? (d.publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT);
+  const publishAtForCreate = d.publishAt ? new Date(d.publishAt) : null;
+  const statusFields = normalizeBlogPostStatusWriteFields({
+    postStatus: resolvedPostStatus,
+    publishAt: publishAtForCreate,
+    workflowFromRequest: d.workflowStatus ?? undefined,
+  });
+  devAssertPublishedWritePayloadAligned({
+    postStatus: statusFields.postStatus,
+    workflowStatus: statusFields.workflowStatus,
+    label: "POST /api/admin/blog create",
+  });
+  if (
+    (resolvedPostStatus === BlogPostStatus.PUBLISHED || resolvedPostStatus === BlogPostStatus.SCHEDULED) &&
+    isPublishBlockedByTaxonomy(blogTax)
+  ) {
+    return NextResponse.json(
+      { error: "Publish/schedule blocked — taxonomy corpus is ambiguous", code: "taxonomy_publish_blocked" },
+      { status: 422 },
+    );
+  }
+  if (d.category != null && d.category !== blogTax.category) {
+    return NextResponse.json(
+      {
+        error: "category does not match classifier output",
+        code: "taxonomy_override_mismatch",
+        expected: blogTax.category,
+      },
+      { status: 422 },
+    );
+  }
+
+  const topicSource = [d.targetKeyword, d.keywordCluster, d.title].find((x) => x && String(x).trim()) ?? "";
+  const topicKey = normalizeBlogTopicKey(String(topicSource));
+  if (topicKey.length >= 3) {
+    const dupTopic = await findExistingBlogByCanonicalIntent({
+      exam: d.exam ?? null,
+      normalizedTopic: topicKey,
+    });
+    if (dupTopic) {
+      return NextResponse.json(
+        {
+          error: "A post already targets this topic intent",
+          code: "duplicate_topic_intent",
+          existingSlug: dupTopic.slug,
+        },
+        { status: 409 },
+      );
+    }
+  }
+
+  const post = await prisma.blogPost.create({
+    data: {
+      slug: finalSlug,
+      title: d.title,
+      excerpt: d.excerpt,
+      body: d.body,
+      exam: d.exam ?? null,
+      category: blogTax.category,
+      tags: d.tags ?? [],
+      seoTitle: d.seoTitle ?? null,
+      seoDescription: d.seoDescription ?? null,
+      postTemplate: d.postTemplate ?? null,
+      intent: d.intent ?? null,
+      funnelStage: d.funnelStage ?? null,
+      workflowStatus: statusFields.workflowStatus,
+      targetKeyword: d.targetKeyword ?? null,
+      keywordCluster: d.keywordCluster ?? null,
+      coverImage: d.coverImage ?? null,
+      coverImageAlt: d.coverImageAlt ?? null,
+      coverImageCaption: d.coverImageCaption ?? null,
+      imageStatus: d.imageStatus ?? BlogImageStatus.NONE,
+      apaReferences: d.apaReferences ?? [],
+      requiresReferences: d.requiresReferences ?? false,
+      postStatus: statusFields.postStatus,
+      publishAt: statusFields.publishAt,
+    },
+    select: { id: true, slug: true, postStatus: true, publishAt: true, updatedAt: true },
+  });
+
+  return NextResponse.json({ post }, { status: 201 });
+}

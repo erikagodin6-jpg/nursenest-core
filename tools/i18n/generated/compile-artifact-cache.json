@@ -1,0 +1,1297 @@
+{
+  "schemaVersion": 1,
+  "stepName": "i18n_compile",
+  "fingerprint": "51c2047b10c43ebd48f80c5343dc0edabdc307c7261d21022bde3b580c2d860c",
+  "generatedAt": "2026-05-11T13:15:47.285Z",
+  "inputs": [
+    {
+      "type": "file",
+      "path": "script/apply-de-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-hi-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-it-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-ja-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-mocks-second-pass-i18n.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-pa-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-pt-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-ru-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-ur-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-vi-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-zh-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/apply-zh-tw-priority-patches.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/audit-repair-locale-parity.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/audit-rpn-content.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/audit-rpn-duplicates.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/audit-rpn-simple.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/build-es-i18n-lingva.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/build-es-i18n-mymemory.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/build-locale-i18n-lingva.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/build.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/compile-i18n.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/compute-tier-counts.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/export-marketing-translation-gaps.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/fix-rpn-missing-fields.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/generate-newgrad-translations.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/generate-premium-qbank.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/i18n-check-drift.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/i18n-check-sync.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/i18n-payload-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/i18n-report-placeholder-fallbacks.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/i18n-report-placeholder-fallbacks.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/i18n-validate.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/image-stub-loader.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/import-bowtie-rn-rrt-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/import-lvn-rpn-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/import-rpn-lvn-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-assessment-fluid.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-cardiac-emerg.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-comfort-delegation.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-derm-peds.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-derm-renal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-derm-screen.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-endo-emerg.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-endo.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-eol-neonatal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-final2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-final3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-finalA.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-finalB.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-finalC.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-finalD.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-geri-pp.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-gi-blood.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-gi-iv.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-gi-neuro-home.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-gi-resp.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-gi-skin-lyte.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-grief-neonatal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-heent.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-heme-fluids.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-heme-mat.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-infect-comm.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-infect-legal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-infection-immune.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-infection.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-legal-community.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-lyte-gi-legal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-mat-infect.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-msk-ob.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-neonatal2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-neuro-neo.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-neuro-pain.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-neuro-psych.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-neuro-wound.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-falls.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-gi-emerg.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-mobility.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-neuro-resp.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-onc.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-onc2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-ob-renal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-onc-opioid.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-pain-cardiac.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-pall-gi.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-peds-neuro2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-peds-ob-inf.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-peds-pain.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-periop-onc.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-renal-eye.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-renal.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-resp-occ.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-1.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-10.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-11.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-12.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-13.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-14.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-15.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-16.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-16b.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-17.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-18.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-19.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-6.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-7.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-8.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-rn-9.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-batch-wound-nutri.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-lesson-batch2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-lesson-batch3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-lesson-batch4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-lesson-content.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-missing-1.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-missing-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-missing-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-missing-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-missing-5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-placeholders-1.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-placeholders-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-placeholders-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-placeholders-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/inject-rpn-placeholders-5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/insert-np-batch-57-62.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/lib/next-public-i18n-bundle.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/make-admin.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/merge-ar-from-en.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/merge-locale-json-from-en.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/merge-marketing-i18n.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/merge-practice-tests-hub-i18n-en.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/migrate-questions-to-db.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/normalize-marketing-locale-overlays.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/patch-practice-exams-cat-translations.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/repo-root.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/report-educational-translation-coverage.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/scan-hardcoded-strings-lib.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/scan-hardcoded-strings.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-arrt-image-production.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-arrt-patient-care.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-arrt-procedures.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-arrt-safety-equipment.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-arrt-supplementary.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-camrt-supplementary.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-camrt-supplementary2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-camrt-supplementary3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-camrt.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-batch1-final-topup.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-bulk-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-bulk2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-bulk3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-cat-flashcards.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-combined-batch1.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-combined-batch2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-combined-batch3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-combined-batch4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-combined-batch5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-emergency-nursing-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-final-batch6.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-batch2-arrt.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-batch2-camrt.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-batch2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-flashcards.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-lessons-flashcards.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-positioning-physics.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-imaging-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-batch1.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-batch2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-batch3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-batch4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-batch5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch6.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rn-medsurg-pharm-batch7.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch10.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch6.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch7.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch8.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-rpn-batch9.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-surgical-tech-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-tier-questions.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-all.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-artifacts.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-case-studies.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-flashcards.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-lessons.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-positioning.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-equipment-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-equipment-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-equipment-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-equipment.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-image-production-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-image-production-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-image-production-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-image-production.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-patient-care-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-patient-care-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-patient-care-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-patient-care.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-procedures-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-procedures-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-procedures-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-procedures-5.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-procedures-6.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-procedures.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-safety-2.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-safety-3.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-safety-4.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-questions-safety.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-seo-images.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/seed-usa-arrt-supplement.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/stub-assets-loader.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/sync-merged-ar-to-i18n-sources.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/sync-merged-es-to-i18n-sources.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/sync-merged-locale-to-i18n-sources.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/sync-merged-tl-to-i18n-sources.mjs"
+    },
+    {
+      "type": "file",
+      "path": "script/translate-newgrad-keys.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/translation-quality-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "script/validate-i18n-keys.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/authority-content-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/canonical-url.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/career-guide-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/careers.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/category-hub-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/constants.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/constants/ca/exams.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/constants/ca/labs.json"
+    },
+    {
+      "type": "file",
+      "path": "shared/constants/index.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/constants/us/exams.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/constants/us/labs.json"
+    },
+    {
+      "type": "file",
+      "path": "shared/country-adaptation.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/exam-error-codes.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/guide-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/healthcare-guide-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/i18n-admin-key-policy.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/i18n-payload-policy.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/i18n-shard-policy.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/i18n-translation-engineering-policy.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/lesson-stats.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/locales.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/localized-slugs.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/mlt-exam-types.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/mlt-taxonomy.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/models/chat.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/new-grad-categories.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/new-grad-professions.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/platform-manifest.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/platform-sections.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/pricing-config.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/profession-authority-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/question-manifest.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/region-config.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/replit-object-storage-cdn.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/route-manifest.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/schema.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/seo-hub-validation.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/seo-utils.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/shuffle.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/tier-config.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/tier-counts.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/tier-messaging.ts"
+    },
+    {
+      "type": "file",
+      "path": "shared/topic-cluster-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/intl-rn-pathway-hub-en.fragment.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale-batch-overrides-part2.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale-batch-overrides-part3.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale-batch-overrides.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-ar.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-de.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-es.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-fa.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-fr.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-hi.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-ht.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-id.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-it.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-ja.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-ko.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-pa.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-pt.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-ru.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-th.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-tl.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-tr.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-ur.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-vi.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-zh-tw.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/locale/marketing-zh.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/marketing/marketing-en.json"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-ar.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-de.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-en.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-es.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-fa.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-fr.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-hi.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-ht.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-id.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-it.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-ja.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-ko.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-pa.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-pt.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-ru.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-th.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-tl.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-tr.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-ur.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-vi.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-zh-tw.ts"
+    },
+    {
+      "type": "file",
+      "path": "tools/i18n/source/i18n-zh.ts"
+    }
+  ],
+  "outputs": [
+    "/root/nursenest-core/client/public/i18n",
+    "/root/nursenest-core/nursenest-core/public/i18n",
+    "/root/nursenest-core/nursenest-core/src/lib/i18n/marketing-message-keys.generated.ts"
+  ],
+  "metadata": {
+    "languageCount": 22,
+    "shardFallbackEnabled": false
+  }
+}

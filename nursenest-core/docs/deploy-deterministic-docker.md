@@ -1,0 +1,118 @@
+# Deterministic Docker deploy (DigitalOcean App Platform)
+
+This complements `.do/app-nursenest-core-next.yaml` (Heroku Node buildpack path). The **Dockerfile lives at the repository root** so the build context includes `nursenest-core/`, `shared/`, and `client/` (TypeScript path aliases).
+
+## Primary path today
+
+- **Active:** `.do/app-nursenest-core-next.yaml` uses **`dockerfile_path: Dockerfile`**, **`source_dir: .`** (repo root), no `environment_slug` / no App Platform `build_command` — compile + prune run **inside the image** (same `package.json` scripts as before).
+- **Rollback:** restore `environment_slug: node-js`, `source_dir: nursenest-core`, and the documented `build_command` from git history (see “Rollback checklist” below).
+
+## Buildpack path (before) — mental model
+
+1. DO runs Heroku Node buildpack install (`npm ci` / cache) under `source_dir: nursenest-core`.
+2. `heroku-postbuild` runs (see `package.json`): bootstrap probe + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` → one `next` compile via `build:compile` when DO skip logic applies.
+3. App Platform `build_command`: `npm run build:deploy` (standalone verify + static sync + prune), not a second full compile unless forced.
+4. `run_command`: `npm run start` → `start-standalone.mjs`.
+
+## Docker path (after) — mental model
+
+1. **Context:** repo root (`.`), not only `nursenest-core/`.
+2. **Stages:** `builder` (`npm ci` in `nursenest-core`, copy `shared/` + `client/` + app, **ephemeral** `DATABASE_URL=…` on the **single** `RUN` that runs only `npm run db:generate`, then `heroku-postbuild` / `build:deploy` / prune) → `runner` (copy built tree + `npm run start`). A copy of the repo-root `Dockerfile` is placed at `/app/Dockerfile` so `verify-dockerfile-database-url.mjs` can assert no `ARG DATABASE_URL` / `ENV DATABASE_URL` / banned placeholder during `heroku-postbuild`.
+3. **No Heroku buildpack:** Node version comes from the base image (`node:22.22.2-alpine`, aligned with `engines` / App Platform `NODE_VERSION` env).
+4. **Low-memory flags:** set in Dockerfile for the compile stage (`NN_FORCE_SINGLE_BUILD_WORKER`, `NN_APP_PLATFORM_BUILD`, single webpack parallelism, heap cap). Keep parity with YAML build env when switching.
+
+### Lesson indexes + verification (memory)
+
+Deep `verify:lesson-indexes` replays live catalog merges per pathway and can dominate build time/RSS on small builders. For App Platform / Docker:
+
+| Variable | Typical value | Effect |
+|----------|----------------|--------|
+| `NN_LESSON_INDEX_VERIFY_MODE` | `manifest` | Alias of **light** mode: manifest hash + `mergedRawLessonCount` + href checks; skips live parity replay (see `scripts/lesson-index-verify-mode.mjs`). |
+| `NN_SKIP_HEAVY_BUILD_REPORTS` | `1` | Skips writing `reports/lesson-normalization-coverage.*` and skips attaching question-inventory diagnostics to `build-runtime-metrics.json` (in-memory quality gates in the index build still run). |
+| `NN_SKIP_HEAVY_LESSON_VERIFY` | `1` | Legacy alias for light mode when `NN_LESSON_INDEX_VERIFY_MODE` is unset. |
+
+The root `Dockerfile` compile stage sets `NN_LESSON_INDEX_VERIFY_MODE=manifest` and `NN_SKIP_HEAVY_BUILD_REPORTS=1`. CI and local full verification can unset these or set `NN_LESSON_INDEX_VERIFY_MODE=deep`.
+
+### Single `next build` in Docker
+
+The image runs `npm run heroku-postbuild` (which sets `NN_POSTBUILD_NEXT_BUILD=1` and runs **one** production compile via `run-buildpack-build.mjs` → `run-next-prod-build.mjs`) and then `npm run build:deploy` (**post-compile**: git meta, standalone static sync, prune) — **not** a second `next build`.
+
+## Switching App Platform to Docker
+
+1. In the DO spec (or UI), set **`source_dir` to `/` (repo root)** so `../shared` and `../client` exist for Docker context.
+2. Set **`dockerfile_path: Dockerfile`** (repo-root path relative to context).
+3. **Remove** `environment_slug: node-js` for that component (image supplies Node).
+4. Set **`build_command` empty** or omit — the image build is the compile. Do **not** run `npm run build` again on the platform unless you intend a second compile.
+5. Keep **`run_command: npm run start`** and **`http_port: 8080`** aligned with the Dockerfile `CMD` / `PORT`.
+6. Re-apply secrets (`DATABASE_URL`, auth, etc.) as **`RUN_TIME` only** for DB connection strings on **GHCR image deploys** (see `docs/ops/ghcr-runtime-database-url.md`). **Do not** add `DATABASE_URL`, `DIRECT_URL`, or `DATABASE_DIRECT_URL` to Docker `build-args` or image `ENV`. Prisma `generate` uses an ephemeral one-line URL on the `db:generate` `RUN` only (root `Dockerfile`).
+
+## Local image build
+
+From **repository root**:
+
+```bash
+docker build -f Dockerfile -t nursenest-core-next:local .
+```
+
+## Release checklist (post-promote)
+
+Run from **`nursenest-core/`** with `BASE_URL` pointing at the deployment:
+
+```bash
+export BASE_URL=https://www.example.com
+npm run qa:deploy:deterministic-gate:remote
+```
+
+Manual / CI proof lines for **one real compile** (buildpack or Docker):
+
+- Logs should show **one** `next build` / production compile sequence (see `[build-diagnostic]` / `[buildpack-build]` lines in scripts).
+- Avoid two full “Creating an optimized production build” passes unless `NN_FORCE_NEXT_COMPILE` / `build:deploy:full` was intentional.
+
+Optional after `docker build`:
+
+```bash
+docker run --rm -e PORT=8080 nursenest-core-next:local node -e "const fs=require('fs');const p='.next/standalone';if(!fs.existsSync(p))process.exit(1);console.log('standalone ok');"
+```
+
+## Rollback checklist
+
+1. **App Platform:** Deployments → select last **successful** deployment → **Redeploy** (same git SHA and env as that build).
+2. If Docker was enabled and broken: revert spec to **`environment_slug: node-js`**, **`source_dir: nursenest-core`**, remove **`dockerfile_path`**, restore documented **`build_command`** / **`run_command`** from git history or `.do/app-nursenest-core-next.yaml` on `main`.
+3. Confirm **`NN_FORCE_SINGLE_BUILD_WORKER`** (or `DIGITALOCEAN_APP_ID` present) on build env so worker tuning cannot silently regress.
+4. Re-run **`npm run qa:deploy:deterministic-gate:remote`** against the rolled-back URL.
+
+## Env vars for deterministic Docker builds (reference)
+
+| Variable | Role |
+|----------|------|
+| `NODE_VERSION` (Docker `ARG`) | Pin Node base image |
+| `DATABASE_URL` | **Runtime:** managed Postgres URI (App Platform secret, `RUN_TIME` only). **Not** a platform build env — never bake into the image. **Build:** the Dockerfile sets a **one-line** ephemeral URL only for `npm run db:generate` inside that `RUN` (not `ENV`). |
+| `NN_FORCE_SINGLE_BUILD_WORKER` / `NN_APP_PLATFORM_BUILD` | Low-memory / DO-aware compile |
+| `NN_LOW_MEMORY_BUILD` | Prefer low-memory Next/webpack settings |
+| `NN_LESSON_INDEX_VERIFY_MODE` | `manifest` on DO Docker builds (light verify); use `deep` for full parity in CI |
+| `NN_SKIP_HEAVY_BUILD_REPORTS` | `1` to skip disk-heavy lesson coverage reports during image build |
+| `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` | Heap for `build:compile` (Docker `ARG`) |
+| Runtime secrets | Same as buildpack deploy (`DATABASE_URL`, NextAuth, etc.) |
+
+If App Platform logs show **“configuring build-time app environment variables”** and the list includes **`DATABASE_URL`**, remove it from the component’s build env in the DO UI (or narrow scope in spec) so only **run-time** injection applies.
+
+## Build git metadata (`nn-build-meta.json`, `/api/version`)
+
+The Docker build context **excludes `.git`**, and DigitalOcean App Platform often leaves **`SOURCE_*` / `DIGITALOCEAN_GIT_*` / `GITHUB_*` empty during image builds**. `prebuild` runs `scripts/write-build-git-meta.mjs`, which resolves commit/branch from env first, then `git` (which fails silently without `.git`).
+
+Per [DigitalOcean’s env docs](https://docs.digitalocean.com/products/app-platform/how-to/use-environment-variables/), **bindable variables are not available at Dockerfile build time** — only at runtime. So `${web.COMMIT_HASH}` / `${_self.COMMIT_HASH}` does not populate during `docker build`; it **does** apply when the container runs (use the **`services[].name`** prefix, e.g. `web`, if `_self` does not resolve in your spec).
+
+**App Platform (Dockerfile service) — recommended:**
+
+| Variable | Scope | Value | Purpose |
+|----------|--------|--------|---------|
+| `NN_BUILD_COMMIT` | `RUN_TIME` | `${web.COMMIT_HASH}` (match `services[].name`) | Deployment SHA from the platform |
+| `NN_BUILD_BRANCH` | `RUN_TIME` | Same string as `services[].github.branch` (no branch bindable for services) | Branch label |
+
+`nursenest-core/scripts/start-standalone.mjs` runs `write-build-git-meta.mjs` once at **process startup** (after env is injected), so `public/nn-build-meta.json` is refreshed when the filesystem allows writes. `/api/version` already merges runtime env over file contents via `runtime-version.ts`, so commit appears in the API even if the file stays build-time-null inside the image.
+
+**Other hosts:** you may still set `NN_BUILD_*` at `BUILD_TIME` if your pipeline passes literal `--build-arg` values (see root `Dockerfile` `ARG`/`ENV`).
+
+Resolution order in `write-build-git-meta.mjs` / runtime overlay (`runtime-version.ts`) matches: **`NN_BUILD_*` first**, then `SOURCE_*`, DigitalOcean, GitHub, Vercel, then git CLI.
+
+Build logs include JSON lines from `[write-build-git-meta]` with `scope: "commit"` / `"branch"` per provider (`provider`, `resolved`, `value`) plus a final `scope: "summary"` line with the chosen providers and values.

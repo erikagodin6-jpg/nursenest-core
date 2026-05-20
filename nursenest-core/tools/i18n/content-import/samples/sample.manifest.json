@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "locale": "fr",
+  "items": [
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:fluid-balance-acute-care",
+      "status": "DRAFT",
+      "payload": {
+        "title": "Équilibre des liquides (exemple brouillon)",
+        "seoDescription": "Description SEO traduite — remplacer par le texte final après révision."
+      },
+      "reviewerNote": "Sample only — safe to delete or replace."
+    }
+  ]
+}

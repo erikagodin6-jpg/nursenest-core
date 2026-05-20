@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:03.815Z",
+  "pass": "emit-recovery-import-reports",
+  "itemsExamined": {
+    "catalogLessons": 1089,
+    "prismaQuestions": null,
+    "prismaFlashcardDecks": null
+  },
+  "itemsChanged": 0,
+  "itemsSkipped": 0,
+  "duplicatesSkipped": 0,
+  "itemsStillBlocked": {
+    "lessonsStructural": 633,
+    "imageGapsSampled": 400
+  },
+  "reasonsForBlocking": [
+    "Audit-only generator — content fixes require reviewed imports/enrichment jobs."
+  ],
+  "mutationsExecuted": [],
+  "relatedAuditFiles": [
+    "data/audit/lesson-content-completeness-audit.json",
+    "data/audit/flashcard-content-completeness-audit.json",
+    "data/audit/testbank-content-completeness-audit.json",
+    "data/audit/legacy-image-reference-audit.json"
+  ]
+}

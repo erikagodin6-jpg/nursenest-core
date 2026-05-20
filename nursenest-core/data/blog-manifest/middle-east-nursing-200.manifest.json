@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T18:36:28.719Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 1)",
+      "slug": "en-prometric-nursing-exam-guide-001-prometric-nursing-exam-guide-gulf-nursing-en-1",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0001-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 2)",
+      "slug": "en-saudi-nursing-exam-preparation-002-saudi-nursing-exam-preparation-gulf-nursing-en-2",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 3)",
+      "slug": "en-dha-exam-requirements-003-dha-exam-requirements-gulf-nursing-en-3",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 4)",
+      "slug": "en-haad-vs-dha-differences-004-haad-vs-dha-differences-gulf-nursing-en-4",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 5)",
+      "slug": "en-work-as-nurse-in-uae-005-work-as-nurse-in-uae-gulf-nursing-en-5",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 6)",
+      "slug": "en-dataflow-verification-explained-006-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0001-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 7)",
+      "slug": "en-nurses-moving-to-saudi-arabia-007-nurses-moving-to-saudi-arabia-gulf-nursing-en-7",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 8)",
+      "slug": "en-best-country-middle-east-for-nurses-008-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 9)",
+      "slug": "en-nurse-salary-uae-saudi-009-nurse-salary-uae-saudi-gulf-nursing-en-9",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 10)",
+      "slug": "en-prometric-exam-questions-tips-010-prometric-exam-questions-tips-gulf-nursing-en-10",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0001-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 11)",
+      "slug": "en-prometric-nursing-exam-guide-011-prometric-nursing-exam-guide-gulf-nursing-en-11",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0002-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 12)",
+      "slug": "en-saudi-nursing-exam-preparation-012-saudi-nursing-exam-preparation-gulf-nursing-en-1",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 13)",
+      "slug": "en-dha-exam-requirements-013-dha-exam-requirements-gulf-nursing-en-13",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 14)",
+      "slug": "en-haad-vs-dha-differences-014-haad-vs-dha-differences-gulf-nursing-en-14",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 15)",
+      "slug": "en-work-as-nurse-in-uae-015-work-as-nurse-in-uae-gulf-nursing-en-15",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 16)",
+      "slug": "en-dataflow-verification-explained-016-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0002-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 17)",
+      "slug": "en-nurses-moving-to-saudi-arabia-017-nurses-moving-to-saudi-arabia-gulf-nursing-en-17",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 18)",
+      "slug": "en-best-country-middle-east-for-nurses-018-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 19)",
+      "slug": "en-nurse-salary-uae-saudi-019-nurse-salary-uae-saudi-gulf-nursing-en-19",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 20)",
+      "slug": "en-prometric-exam-questions-tips-020-prometric-exam-questions-tips-gulf-nursing-en-20",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0002-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 21)",
+      "slug": "en-prometric-nursing-exam-guide-021-prometric-nursing-exam-guide-gulf-nursing-en-21",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0003-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 22)",
+      "slug": "en-saudi-nursing-exam-preparation-022-saudi-nursing-exam-preparation-gulf-nursing-en-2",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 23)",
+      "slug": "en-dha-exam-requirements-023-dha-exam-requirements-gulf-nursing-en-23",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 24)",
+      "slug": "en-haad-vs-dha-differences-024-haad-vs-dha-differences-gulf-nursing-en-24",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 25)",
+      "slug": "en-work-as-nurse-in-uae-025-work-as-nurse-in-uae-gulf-nursing-en-25",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 26)",
+      "slug": "en-dataflow-verification-explained-026-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0003-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 27)",
+      "slug": "en-nurses-moving-to-saudi-arabia-027-nurses-moving-to-saudi-arabia-gulf-nursing-en-27",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 28)",
+      "slug": "en-best-country-middle-east-for-nurses-028-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 29)",
+      "slug": "en-nurse-salary-uae-saudi-029-nurse-salary-uae-saudi-gulf-nursing-en-29",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 30)",
+      "slug": "en-prometric-exam-questions-tips-030-prometric-exam-questions-tips-gulf-nursing-en-30",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0003-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 31)",
+      "slug": "en-prometric-nursing-exam-guide-031-prometric-nursing-exam-guide-gulf-nursing-en-31",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0004-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 32)",
+      "slug": "en-saudi-nursing-exam-preparation-032-saudi-nursing-exam-preparation-gulf-nursing-en-3",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 33)",
+      "slug": "en-dha-exam-requirements-033-dha-exam-requirements-gulf-nursing-en-33",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 34)",
+      "slug": "en-haad-vs-dha-differences-034-haad-vs-dha-differences-gulf-nursing-en-34",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 35)",
+      "slug": "en-work-as-nurse-in-uae-035-work-as-nurse-in-uae-gulf-nursing-en-35",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 36)",
+      "slug": "en-dataflow-verification-explained-036-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0004-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 37)",
+      "slug": "en-nurses-moving-to-saudi-arabia-037-nurses-moving-to-saudi-arabia-gulf-nursing-en-37",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 38)",
+      "slug": "en-best-country-middle-east-for-nurses-038-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 39)",
+      "slug": "en-nurse-salary-uae-saudi-039-nurse-salary-uae-saudi-gulf-nursing-en-39",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 40)",
+      "slug": "en-prometric-exam-questions-tips-040-prometric-exam-questions-tips-gulf-nursing-en-40",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0004-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 41)",
+      "slug": "en-prometric-nursing-exam-guide-041-prometric-nursing-exam-guide-gulf-nursing-en-41",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0005-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 42)",
+      "slug": "en-saudi-nursing-exam-preparation-042-saudi-nursing-exam-preparation-gulf-nursing-en-4",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 43)",
+      "slug": "en-dha-exam-requirements-043-dha-exam-requirements-gulf-nursing-en-43",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 44)",
+      "slug": "en-haad-vs-dha-differences-044-haad-vs-dha-differences-gulf-nursing-en-44",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 45)",
+      "slug": "en-work-as-nurse-in-uae-045-work-as-nurse-in-uae-gulf-nursing-en-45",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 46)",
+      "slug": "en-dataflow-verification-explained-046-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0005-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 47)",
+      "slug": "en-nurses-moving-to-saudi-arabia-047-nurses-moving-to-saudi-arabia-gulf-nursing-en-47",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 48)",
+      "slug": "en-best-country-middle-east-for-nurses-048-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 49)",
+      "slug": "en-nurse-salary-uae-saudi-049-nurse-salary-uae-saudi-gulf-nursing-en-49",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 50)",
+      "slug": "en-prometric-exam-questions-tips-050-prometric-exam-questions-tips-gulf-nursing-en-50",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0005-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 51)",
+      "slug": "en-prometric-nursing-exam-guide-051-prometric-nursing-exam-guide-gulf-nursing-en-51",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0006-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 52)",
+      "slug": "en-saudi-nursing-exam-preparation-052-saudi-nursing-exam-preparation-gulf-nursing-en-5",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 53)",
+      "slug": "en-dha-exam-requirements-053-dha-exam-requirements-gulf-nursing-en-53",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 54)",
+      "slug": "en-haad-vs-dha-differences-054-haad-vs-dha-differences-gulf-nursing-en-54",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 55)",
+      "slug": "en-work-as-nurse-in-uae-055-work-as-nurse-in-uae-gulf-nursing-en-55",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 56)",
+      "slug": "en-dataflow-verification-explained-056-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0006-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 57)",
+      "slug": "en-nurses-moving-to-saudi-arabia-057-nurses-moving-to-saudi-arabia-gulf-nursing-en-57",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 58)",
+      "slug": "en-best-country-middle-east-for-nurses-058-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 59)",
+      "slug": "en-nurse-salary-uae-saudi-059-nurse-salary-uae-saudi-gulf-nursing-en-59",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 60)",
+      "slug": "en-prometric-exam-questions-tips-060-prometric-exam-questions-tips-gulf-nursing-en-60",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0006-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 61)",
+      "slug": "en-prometric-nursing-exam-guide-061-prometric-nursing-exam-guide-gulf-nursing-en-61",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0007-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 62)",
+      "slug": "en-saudi-nursing-exam-preparation-062-saudi-nursing-exam-preparation-gulf-nursing-en-6",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 63)",
+      "slug": "en-dha-exam-requirements-063-dha-exam-requirements-gulf-nursing-en-63",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 64)",
+      "slug": "en-haad-vs-dha-differences-064-haad-vs-dha-differences-gulf-nursing-en-64",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 65)",
+      "slug": "en-work-as-nurse-in-uae-065-work-as-nurse-in-uae-gulf-nursing-en-65",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 66)",
+      "slug": "en-dataflow-verification-explained-066-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0007-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 67)",
+      "slug": "en-nurses-moving-to-saudi-arabia-067-nurses-moving-to-saudi-arabia-gulf-nursing-en-67",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 68)",
+      "slug": "en-best-country-middle-east-for-nurses-068-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 69)",
+      "slug": "en-nurse-salary-uae-saudi-069-nurse-salary-uae-saudi-gulf-nursing-en-69",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 70)",
+      "slug": "en-prometric-exam-questions-tips-070-prometric-exam-questions-tips-gulf-nursing-en-70",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0007-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (en 71)",
+      "slug": "en-prometric-nursing-exam-guide-071-prometric-nursing-exam-guide-gulf-nursing-en-71",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0008-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (en 72)",
+      "slug": "en-saudi-nursing-exam-preparation-072-saudi-nursing-exam-preparation-gulf-nursing-en-7",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (en 73)",
+      "slug": "en-dha-exam-requirements-073-dha-exam-requirements-gulf-nursing-en-73",
+      "primaryKeyword": "dha exam requirements",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (en 74)",
+      "slug": "en-haad-vs-dha-differences-074-haad-vs-dha-differences-gulf-nursing-en-74",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (en 75)",
+      "slug": "en-work-as-nurse-in-uae-075-work-as-nurse-in-uae-gulf-nursing-en-75",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (en 76)",
+      "slug": "en-dataflow-verification-explained-076-dataflow-verification-explained-gulf-nursing-en-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0008-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (en 77)",
+      "slug": "en-nurses-moving-to-saudi-arabia-077-nurses-moving-to-saudi-arabia-gulf-nursing-en-77",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (en 78)",
+      "slug": "en-best-country-middle-east-for-nurses-078-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (en 79)",
+      "slug": "en-nurse-salary-uae-saudi-079-nurse-salary-uae-saudi-gulf-nursing-en-79",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (en 80)",
+      "slug": "en-prometric-exam-questions-tips-080-prometric-exam-questions-tips-gulf-nursing-en-80",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "en",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0008-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ar 1)",
+      "slug": "ar-prometric-nursing-exam-guide-081-prometric-nursing-exam-guide-gulf-nursing-ar-1",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0009-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ar 2)",
+      "slug": "ar-saudi-nursing-exam-preparation-082-saudi-nursing-exam-preparation-gulf-nursing-ar-2",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ar 3)",
+      "slug": "ar-dha-exam-requirements-083-dha-exam-requirements-gulf-nursing-ar-3",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ar 4)",
+      "slug": "ar-haad-vs-dha-differences-084-haad-vs-dha-differences-gulf-nursing-ar-4",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ar 5)",
+      "slug": "ar-work-as-nurse-in-uae-085-work-as-nurse-in-uae-gulf-nursing-ar-5",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ar 6)",
+      "slug": "ar-dataflow-verification-explained-086-dataflow-verification-explained-gulf-nursing-ar-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0009-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ar 7)",
+      "slug": "ar-nurses-moving-to-saudi-arabia-087-nurses-moving-to-saudi-arabia-gulf-nursing-ar-7",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ar 8)",
+      "slug": "ar-best-country-middle-east-for-nurses-088-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ar 9)",
+      "slug": "ar-nurse-salary-uae-saudi-089-nurse-salary-uae-saudi-gulf-nursing-ar-9",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ar 10)",
+      "slug": "ar-prometric-exam-questions-tips-090-prometric-exam-questions-tips-gulf-nursing-ar-10",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0009-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ar 11)",
+      "slug": "ar-prometric-nursing-exam-guide-091-prometric-nursing-exam-guide-gulf-nursing-ar-11",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0010-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ar 12)",
+      "slug": "ar-saudi-nursing-exam-preparation-092-saudi-nursing-exam-preparation-gulf-nursing-ar-1",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ar 13)",
+      "slug": "ar-dha-exam-requirements-093-dha-exam-requirements-gulf-nursing-ar-13",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ar 14)",
+      "slug": "ar-haad-vs-dha-differences-094-haad-vs-dha-differences-gulf-nursing-ar-14",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ar 15)",
+      "slug": "ar-work-as-nurse-in-uae-095-work-as-nurse-in-uae-gulf-nursing-ar-15",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ar 16)",
+      "slug": "ar-dataflow-verification-explained-096-dataflow-verification-explained-gulf-nursing-ar-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0010-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ar 17)",
+      "slug": "ar-nurses-moving-to-saudi-arabia-097-nurses-moving-to-saudi-arabia-gulf-nursing-ar-17",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ar 18)",
+      "slug": "ar-best-country-middle-east-for-nurses-098-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ar 19)",
+      "slug": "ar-nurse-salary-uae-saudi-099-nurse-salary-uae-saudi-gulf-nursing-ar-19",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ar 20)",
+      "slug": "ar-prometric-exam-questions-tips-100-prometric-exam-questions-tips-gulf-nursing-ar-20",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0010-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ar 21)",
+      "slug": "ar-prometric-nursing-exam-guide-101-prometric-nursing-exam-guide-gulf-nursing-ar-21",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0011-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ar 22)",
+      "slug": "ar-saudi-nursing-exam-preparation-102-saudi-nursing-exam-preparation-gulf-nursing-ar-2",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ar 23)",
+      "slug": "ar-dha-exam-requirements-103-dha-exam-requirements-gulf-nursing-ar-23",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ar 24)",
+      "slug": "ar-haad-vs-dha-differences-104-haad-vs-dha-differences-gulf-nursing-ar-24",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ar 25)",
+      "slug": "ar-work-as-nurse-in-uae-105-work-as-nurse-in-uae-gulf-nursing-ar-25",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ar 26)",
+      "slug": "ar-dataflow-verification-explained-106-dataflow-verification-explained-gulf-nursing-ar-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0011-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ar 27)",
+      "slug": "ar-nurses-moving-to-saudi-arabia-107-nurses-moving-to-saudi-arabia-gulf-nursing-ar-27",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ar 28)",
+      "slug": "ar-best-country-middle-east-for-nurses-108-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ar 29)",
+      "slug": "ar-nurse-salary-uae-saudi-109-nurse-salary-uae-saudi-gulf-nursing-ar-29",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ar 30)",
+      "slug": "ar-prometric-exam-questions-tips-110-prometric-exam-questions-tips-gulf-nursing-ar-30",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0011-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ar 31)",
+      "slug": "ar-prometric-nursing-exam-guide-111-prometric-nursing-exam-guide-gulf-nursing-ar-31",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0012-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ar 32)",
+      "slug": "ar-saudi-nursing-exam-preparation-112-saudi-nursing-exam-preparation-gulf-nursing-ar-3",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ar 33)",
+      "slug": "ar-dha-exam-requirements-113-dha-exam-requirements-gulf-nursing-ar-33",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ar 34)",
+      "slug": "ar-haad-vs-dha-differences-114-haad-vs-dha-differences-gulf-nursing-ar-34",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ar 35)",
+      "slug": "ar-work-as-nurse-in-uae-115-work-as-nurse-in-uae-gulf-nursing-ar-35",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ar 36)",
+      "slug": "ar-dataflow-verification-explained-116-dataflow-verification-explained-gulf-nursing-ar-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0012-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ar 37)",
+      "slug": "ar-nurses-moving-to-saudi-arabia-117-nurses-moving-to-saudi-arabia-gulf-nursing-ar-37",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ar 38)",
+      "slug": "ar-best-country-middle-east-for-nurses-118-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ar 39)",
+      "slug": "ar-nurse-salary-uae-saudi-119-nurse-salary-uae-saudi-gulf-nursing-ar-39",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ar 40)",
+      "slug": "ar-prometric-exam-questions-tips-120-prometric-exam-questions-tips-gulf-nursing-ar-40",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0012-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ar 41)",
+      "slug": "ar-prometric-nursing-exam-guide-121-prometric-nursing-exam-guide-gulf-nursing-ar-41",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0013-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ar 42)",
+      "slug": "ar-saudi-nursing-exam-preparation-122-saudi-nursing-exam-preparation-gulf-nursing-ar-4",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ar 43)",
+      "slug": "ar-dha-exam-requirements-123-dha-exam-requirements-gulf-nursing-ar-43",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ar 44)",
+      "slug": "ar-haad-vs-dha-differences-124-haad-vs-dha-differences-gulf-nursing-ar-44",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ar 45)",
+      "slug": "ar-work-as-nurse-in-uae-125-work-as-nurse-in-uae-gulf-nursing-ar-45",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ar 46)",
+      "slug": "ar-dataflow-verification-explained-126-dataflow-verification-explained-gulf-nursing-ar-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0013-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ar 47)",
+      "slug": "ar-nurses-moving-to-saudi-arabia-127-nurses-moving-to-saudi-arabia-gulf-nursing-ar-47",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ar 48)",
+      "slug": "ar-best-country-middle-east-for-nurses-128-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ar 49)",
+      "slug": "ar-nurse-salary-uae-saudi-129-nurse-salary-uae-saudi-gulf-nursing-ar-49",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ar 50)",
+      "slug": "ar-prometric-exam-questions-tips-130-prometric-exam-questions-tips-gulf-nursing-ar-50",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0013-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ar 51)",
+      "slug": "ar-prometric-nursing-exam-guide-131-prometric-nursing-exam-guide-gulf-nursing-ar-51",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0014-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ar 52)",
+      "slug": "ar-saudi-nursing-exam-preparation-132-saudi-nursing-exam-preparation-gulf-nursing-ar-5",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ar 53)",
+      "slug": "ar-dha-exam-requirements-133-dha-exam-requirements-gulf-nursing-ar-53",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ar 54)",
+      "slug": "ar-haad-vs-dha-differences-134-haad-vs-dha-differences-gulf-nursing-ar-54",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ar 55)",
+      "slug": "ar-work-as-nurse-in-uae-135-work-as-nurse-in-uae-gulf-nursing-ar-55",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ar 56)",
+      "slug": "ar-dataflow-verification-explained-136-dataflow-verification-explained-gulf-nursing-ar-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0014-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ar 57)",
+      "slug": "ar-nurses-moving-to-saudi-arabia-137-nurses-moving-to-saudi-arabia-gulf-nursing-ar-57",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ar 58)",
+      "slug": "ar-best-country-middle-east-for-nurses-138-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ar 59)",
+      "slug": "ar-nurse-salary-uae-saudi-139-nurse-salary-uae-saudi-gulf-nursing-ar-59",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ar 60)",
+      "slug": "ar-prometric-exam-questions-tips-140-prometric-exam-questions-tips-gulf-nursing-ar-60",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ar",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0014-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (hi 1)",
+      "slug": "hi-prometric-nursing-exam-guide-141-prometric-nursing-exam-guide-gulf-nursing-hi-1",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0015-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (hi 2)",
+      "slug": "hi-saudi-nursing-exam-preparation-142-saudi-nursing-exam-preparation-gulf-nursing-hi-2",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (hi 3)",
+      "slug": "hi-dha-exam-requirements-143-dha-exam-requirements-gulf-nursing-hi-3",
+      "primaryKeyword": "dha exam requirements",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (hi 4)",
+      "slug": "hi-haad-vs-dha-differences-144-haad-vs-dha-differences-gulf-nursing-hi-4",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (hi 5)",
+      "slug": "hi-work-as-nurse-in-uae-145-work-as-nurse-in-uae-gulf-nursing-hi-5",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (hi 6)",
+      "slug": "hi-dataflow-verification-explained-146-dataflow-verification-explained-gulf-nursing-hi-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0015-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (hi 7)",
+      "slug": "hi-nurses-moving-to-saudi-arabia-147-nurses-moving-to-saudi-arabia-gulf-nursing-hi-7",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (hi 8)",
+      "slug": "hi-best-country-middle-east-for-nurses-148-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (hi 9)",
+      "slug": "hi-nurse-salary-uae-saudi-149-nurse-salary-uae-saudi-gulf-nursing-hi-9",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (hi 10)",
+      "slug": "hi-prometric-exam-questions-tips-150-prometric-exam-questions-tips-gulf-nursing-hi-10",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0015-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (hi 11)",
+      "slug": "hi-prometric-nursing-exam-guide-151-prometric-nursing-exam-guide-gulf-nursing-hi-11",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0016-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (hi 12)",
+      "slug": "hi-saudi-nursing-exam-preparation-152-saudi-nursing-exam-preparation-gulf-nursing-hi-1",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (hi 13)",
+      "slug": "hi-dha-exam-requirements-153-dha-exam-requirements-gulf-nursing-hi-13",
+      "primaryKeyword": "dha exam requirements",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (hi 14)",
+      "slug": "hi-haad-vs-dha-differences-154-haad-vs-dha-differences-gulf-nursing-hi-14",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (hi 15)",
+      "slug": "hi-work-as-nurse-in-uae-155-work-as-nurse-in-uae-gulf-nursing-hi-15",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (hi 16)",
+      "slug": "hi-dataflow-verification-explained-156-dataflow-verification-explained-gulf-nursing-hi-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0016-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (hi 17)",
+      "slug": "hi-nurses-moving-to-saudi-arabia-157-nurses-moving-to-saudi-arabia-gulf-nursing-hi-17",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (hi 18)",
+      "slug": "hi-best-country-middle-east-for-nurses-158-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (hi 19)",
+      "slug": "hi-nurse-salary-uae-saudi-159-nurse-salary-uae-saudi-gulf-nursing-hi-19",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (hi 20)",
+      "slug": "hi-prometric-exam-questions-tips-160-prometric-exam-questions-tips-gulf-nursing-hi-20",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0016-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (hi 21)",
+      "slug": "hi-prometric-nursing-exam-guide-161-prometric-nursing-exam-guide-gulf-nursing-hi-21",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0017-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (hi 22)",
+      "slug": "hi-saudi-nursing-exam-preparation-162-saudi-nursing-exam-preparation-gulf-nursing-hi-2",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (hi 23)",
+      "slug": "hi-dha-exam-requirements-163-dha-exam-requirements-gulf-nursing-hi-23",
+      "primaryKeyword": "dha exam requirements",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (hi 24)",
+      "slug": "hi-haad-vs-dha-differences-164-haad-vs-dha-differences-gulf-nursing-hi-24",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (hi 25)",
+      "slug": "hi-work-as-nurse-in-uae-165-work-as-nurse-in-uae-gulf-nursing-hi-25",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "hi",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (tl 1)",
+      "slug": "tl-dataflow-verification-explained-166-dataflow-verification-explained-gulf-nursing-tl-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0017-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (tl 2)",
+      "slug": "tl-nurses-moving-to-saudi-arabia-167-nurses-moving-to-saudi-arabia-gulf-nursing-tl-2",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (tl 3)",
+      "slug": "tl-best-country-middle-east-for-nurses-168-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (tl 4)",
+      "slug": "tl-nurse-salary-uae-saudi-169-nurse-salary-uae-saudi-gulf-nursing-tl-4",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (tl 5)",
+      "slug": "tl-prometric-exam-questions-tips-170-prometric-exam-questions-tips-gulf-nursing-tl-5",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0017-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (tl 6)",
+      "slug": "tl-prometric-nursing-exam-guide-171-prometric-nursing-exam-guide-gulf-nursing-tl-6",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0018-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (tl 7)",
+      "slug": "tl-saudi-nursing-exam-preparation-172-saudi-nursing-exam-preparation-gulf-nursing-tl-7",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (tl 8)",
+      "slug": "tl-dha-exam-requirements-173-dha-exam-requirements-gulf-nursing-tl-8",
+      "primaryKeyword": "dha exam requirements",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (tl 9)",
+      "slug": "tl-haad-vs-dha-differences-174-haad-vs-dha-differences-gulf-nursing-tl-9",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (tl 10)",
+      "slug": "tl-work-as-nurse-in-uae-175-work-as-nurse-in-uae-gulf-nursing-tl-10",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (tl 11)",
+      "slug": "tl-dataflow-verification-explained-176-dataflow-verification-explained-gulf-nursing-tl-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0018-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (tl 12)",
+      "slug": "tl-nurses-moving-to-saudi-arabia-177-nurses-moving-to-saudi-arabia-gulf-nursing-tl-12",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (tl 13)",
+      "slug": "tl-best-country-middle-east-for-nurses-178-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (tl 14)",
+      "slug": "tl-nurse-salary-uae-saudi-179-nurse-salary-uae-saudi-gulf-nursing-tl-14",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (tl 15)",
+      "slug": "tl-prometric-exam-questions-tips-180-prometric-exam-questions-tips-gulf-nursing-tl-15",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0018-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (tl 16)",
+      "slug": "tl-prometric-nursing-exam-guide-181-prometric-nursing-exam-guide-gulf-nursing-tl-16",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0019-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (tl 17)",
+      "slug": "tl-saudi-nursing-exam-preparation-182-saudi-nursing-exam-preparation-gulf-nursing-tl-1",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (tl 18)",
+      "slug": "tl-dha-exam-requirements-183-dha-exam-requirements-gulf-nursing-tl-18",
+      "primaryKeyword": "dha exam requirements",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (tl 19)",
+      "slug": "tl-haad-vs-dha-differences-184-haad-vs-dha-differences-gulf-nursing-tl-19",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (tl 20)",
+      "slug": "tl-work-as-nurse-in-uae-185-work-as-nurse-in-uae-gulf-nursing-tl-20",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "tl",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ur 1)",
+      "slug": "ur-dataflow-verification-explained-186-dataflow-verification-explained-gulf-nursing-ur-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0019-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ur 2)",
+      "slug": "ur-nurses-moving-to-saudi-arabia-187-nurses-moving-to-saudi-arabia-gulf-nursing-ur-2",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ur 3)",
+      "slug": "ur-best-country-middle-east-for-nurses-188-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ur 4)",
+      "slug": "ur-nurse-salary-uae-saudi-189-nurse-salary-uae-saudi-gulf-nursing-ur-4",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ur 5)",
+      "slug": "ur-prometric-exam-questions-tips-190-prometric-exam-questions-tips-gulf-nursing-ur-5",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0019-prometric-exam-questions-tips",
+      "status": "planned"
+    },
+    {
+      "title": "prometric nursing exam guide — Gulf nursing (ur 6)",
+      "slug": "ur-prometric-nursing-exam-guide-191-prometric-nursing-exam-guide-gulf-nursing-ur-6",
+      "primaryKeyword": "prometric nursing exam guide",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0020-prometric-nursing-exam-guide",
+      "status": "planned"
+    },
+    {
+      "title": "saudi nursing exam preparation — Gulf nursing (ur 7)",
+      "slug": "ur-saudi-nursing-exam-preparation-192-saudi-nursing-exam-preparation-gulf-nursing-ur-7",
+      "primaryKeyword": "saudi nursing exam preparation",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-saudi-nursing-exam-preparation",
+      "status": "planned"
+    },
+    {
+      "title": "dha exam requirements — Gulf nursing (ur 8)",
+      "slug": "ur-dha-exam-requirements-193-dha-exam-requirements-gulf-nursing-ur-8",
+      "primaryKeyword": "dha exam requirements",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-dha-exam-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "haad vs dha differences — Gulf nursing (ur 9)",
+      "slug": "ur-haad-vs-dha-differences-194-haad-vs-dha-differences-gulf-nursing-ur-9",
+      "primaryKeyword": "haad vs dha differences",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-haad-vs-dha-differences",
+      "status": "planned"
+    },
+    {
+      "title": "work as nurse in uae — Gulf nursing (ur 10)",
+      "slug": "ur-work-as-nurse-in-uae-195-work-as-nurse-in-uae-gulf-nursing-ur-10",
+      "primaryKeyword": "work as nurse in uae",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-work-as-nurse-in-uae",
+      "status": "planned"
+    },
+    {
+      "title": "dataflow verification explained — Gulf nursing (ur 11)",
+      "slug": "ur-dataflow-verification-explained-196-dataflow-verification-explained-gulf-nursing-ur-",
+      "primaryKeyword": "dataflow verification explained",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "transactional",
+      "translationGroupId": "me-nurse-0020-dataflow-verification-explained",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to saudi arabia — Gulf nursing (ur 12)",
+      "slug": "ur-nurses-moving-to-saudi-arabia-197-nurses-moving-to-saudi-arabia-gulf-nursing-ur-12",
+      "primaryKeyword": "nurses moving to saudi arabia",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-nurses-moving-to-saudi-arabia",
+      "status": "planned"
+    },
+    {
+      "title": "best country middle east for nurses — Gulf nursing (ur 13)",
+      "slug": "ur-best-country-middle-east-for-nurses-198-best-country-middle-east-for-nurses-gulf-nursing",
+      "primaryKeyword": "best country middle east for nurses",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-best-country-middle-east-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "nurse salary uae saudi — Gulf nursing (ur 14)",
+      "slug": "ur-nurse-salary-uae-saudi-199-nurse-salary-uae-saudi-gulf-nursing-ur-14",
+      "primaryKeyword": "nurse salary uae saudi",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-nurse-salary-uae-saudi",
+      "status": "planned"
+    },
+    {
+      "title": "prometric exam questions tips — Gulf nursing (ur 15)",
+      "slug": "ur-prometric-exam-questions-tips-200-prometric-exam-questions-tips-gulf-nursing-ur-15",
+      "primaryKeyword": "prometric exam questions tips",
+      "language": "ur",
+      "category": "Middle East nursing",
+      "intentType": "informational",
+      "translationGroupId": "me-nurse-0020-prometric-exam-questions-tips",
+      "status": "planned"
+    }
+  ]
+}

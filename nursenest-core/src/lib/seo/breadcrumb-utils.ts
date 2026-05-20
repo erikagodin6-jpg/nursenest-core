@@ -1,0 +1,55 @@
+import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
+
+/** Absolute URL for public schema.org `item` fields. */
+export function toAbsoluteSiteUrl(pathOrUrl: string): string {
+  const raw = pathOrUrl.trim();
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  const origin = resolveCanonicalSiteOrigin().replace(/\/$/, "");
+  if (!raw || raw === "/") return `${origin}/`;
+  return `${origin}${raw.startsWith("/") ? "" : "/"}${raw}`;
+}
+
+export function countryLabelFromSlug(countrySlug: string): string {
+  if (countrySlug === "canada") return "Canada";
+  if (countrySlug === "us") return "United States";
+  if (countrySlug === "uk") return "United Kingdom";
+  if (countrySlug === "australia") return "Australia";
+  if (countrySlug === "philippines") return "Philippines";
+  if (countrySlug === "india") return "India";
+  if (countrySlug === "nigeria") return "Nigeria";
+  if (countrySlug === "saudi-arabia") return "Saudi Arabia";
+  return countrySlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/**
+ * Canonical marketing URL for the country context crumb (no extra data fetch).
+ * Aligns labels with real destinations — US uses the public practice-exams hub (region-aware copy).
+ */
+export function countryExamGuideHref(countrySlug: string): string {
+  const c = countrySlug.trim().toLowerCase();
+  if (c === "canada") return "/exams/canada";
+  if (c === "us") return "/practice-exams";
+  if (c === "uk") return "/exams/uk";
+  if (c === "australia") return "/exams/australia";
+  if (c === "philippines") return "/exams/philippines";
+  if (c === "india") return "/exams/india";
+  if (c === "nigeria") return "/exams/nigeria";
+  if (c === "saudi-arabia") return "/exams/middle-east";
+  return "/";
+}
+
+/**
+ * Short label for role track segment (matches URL segment; wording is country-aware where needed).
+ * US practical/vocational nursing uses LPN / LVN; Canada PN track uses RPN.
+ */
+export function formatRoleTrackLabel(roleTrack: string, countrySlug?: string): string {
+  const t = roleTrack.toLowerCase();
+  const country = countrySlug?.toLowerCase() ?? "";
+  if (t === "rpn") return "RPN";
+  if (t === "rn") return "RN";
+  if (t === "np") return "NP";
+  if (t === "lpn") return getNursingRoleLabel({ country: country === "us" ? "US" : "CA", role: "PN" });
+  if (t === "allied") return "Allied health";
+  return roleTrack.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}

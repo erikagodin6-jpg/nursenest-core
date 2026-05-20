@@ -1,0 +1,10 @@
+{
+  "totalTopics": 34,
+  "scopeViolationCount": 0,
+  "scopeViolations": [],
+  "ratioViolations": [],
+  "carryForwardChecks": {
+    "miScopeStillBounded": true,
+    "peSplitStillBounded": true
+  }
+}

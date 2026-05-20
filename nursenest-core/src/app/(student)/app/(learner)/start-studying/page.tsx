@@ -1,0 +1,264 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { ContentStatus } from "@prisma/client";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { prisma } from "@/lib/db";
+import { isPathwayLessonStructuralPublicCompleteColumnPresent } from "@/lib/db/pathway-lesson-structural-column-runtime";
+import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+
+export const dynamic = "force-dynamic";
+
+const START_STUDYING_DB_TIMEOUT_MS = 1500;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: `${t("learner.startStudying.heroTitle")} | NurseNest`,
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/start-studying", routeGroup: "student.learner.startStudying" },
+  );
+}
+
+export default async function StartStudyingPage() {
+  const { t, locale } = await getLearnerMarketingBundle();
+  const session = await getProtectedRouteSession("(student).app.(learner).start-studying");
+  const userId = (session?.user as { id?: string })?.id ?? "";
+
+  if (!userId || !isDatabaseUrlConfigured()) {
+    redirect(loginWithCallback("/app/start-studying"));
+  }
+
+  const user = await withDatabaseFallbackTimeout(
+    () =>
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          onboardingCompletedAt: true,
+          learnerPath: true,
+          country: true,
+          examFocus: true,
+        },
+      }),
+    null,
+    START_STUDYING_DB_TIMEOUT_MS,
+    { scope: "start_studying", label: "profile_user" },
+  );
+
+  if (!user) {
+    const fallbackCrumbs: BreadcrumbCrumb[] = [
+      { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+      { name: "Dashboard", href: "/app" },
+      { name: t("learner.startStudying.heroTitle"), href: undefined },
+    ];
+    return (
+      <div className="space-y-8">
+        <LearnerBreadcrumbTrail kind="session-recovery" resumeLabel="Start studying" pathname="/app/start-studying" />
+        <header className="nn-learner-page-hero">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
+            {t("learner.startStudying.heroTitle")}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Start Studying is temporarily unavailable while your learner profile reloads. Open the dashboard or try again shortly.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/app" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold shadow-sm">
+              Back to dashboard
+            </Link>
+            <Link href="/app/lessons" className="rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold">
+              Lessons
+            </Link>
+          </div>
+        </header>
+      </div>
+    );
+  }
+
+  if (!user?.onboardingCompletedAt) {
+    redirect("/app/onboarding");
+  }
+
+  const lp = user.learnerPath?.trim();
+  let pathwayId: string | null = lp && getExamPathwayById(lp) ? lp : null;
+  if (!pathwayId) {
+    pathwayId = resolveDefaultPathwayIdForOnboarding(user.examFocus ?? null, user.country);
+  }
+
+  const pathway = pathwayId ? getExamPathwayById(pathwayId) : null;
+  const lessonLocale = locale.split("-")[0] || "en";
+  const pathwayLessonStructuralCol = await isPathwayLessonStructuralPublicCompleteColumnPresent();
+  const firstLessonSelect = {
+    id: true,
+    title: true,
+    topic: true,
+    slug: true,
+    topicSlug: true,
+    bodySystem: true,
+    previewSectionCount: true,
+    seoTitle: true,
+    seoDescription: true,
+    locale: true,
+    ...(pathwayLessonStructuralCol ? { structuralPublicComplete: true as const } : {}),
+  };
+
+  const firstLessonRaw =
+    pathwayId != null
+      ? await withDatabaseFallbackTimeout(
+          () =>
+            prisma.pathwayLesson.findFirst({
+              where: {
+                pathwayId,
+                status: ContentStatus.PUBLISHED,
+                locale: lessonLocale,
+              },
+              orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
+              select: firstLessonSelect,
+            }),
+          null,
+          START_STUDYING_DB_TIMEOUT_MS,
+          { scope: "start_studying", label: "first_lesson_primary_locale" },
+        )
+      : null;
+  let firstLesson = firstLessonRaw;
+  if (
+    firstLessonRaw &&
+    pathwayId != null &&
+    pathwayLessonStructuralCol &&
+    !(firstLessonRaw as { structuralPublicComplete?: boolean }).structuralPublicComplete
+  ) {
+    firstLesson = null;
+  }
+  if (!firstLesson && pathwayId != null && lessonLocale !== "en") {
+    const fallbackRaw = await withDatabaseFallbackTimeout(
+      () =>
+        prisma.pathwayLesson.findFirst({
+          where: { pathwayId, status: ContentStatus.PUBLISHED, locale: "en" },
+          orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
+          select: firstLessonSelect,
+        }),
+      null,
+      START_STUDYING_DB_TIMEOUT_MS,
+      { scope: "start_studying", label: "first_lesson_fallback_locale" },
+    );
+    if (
+      fallbackRaw &&
+      (!pathwayLessonStructuralCol ||
+        Boolean((fallbackRaw as { structuralPublicComplete?: boolean }).structuralPublicComplete))
+    ) {
+      firstLesson = fallbackRaw;
+    }
+  }
+
+  const entitlement = await resolveEntitlementForPage(userId);
+  const questionsHref =
+    pathwayId != null ? `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}` : "/app/questions";
+
+  const crumbs: BreadcrumbCrumb[] = [
+    { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+    { name: "Dashboard", href: "/app" },
+    { name: t("learner.startStudying.heroTitle"), href: undefined },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <LearnerBreadcrumbTrail kind="session-recovery" resumeLabel="Start studying" pathname="/app/start-studying" />
+
+      <header className="nn-learner-page-hero">
+        <h1 className="text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
+          {t("learner.startStudying.heroTitle")}
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          {t("learner.startStudying.heroSubtitle")}
+        </p>
+        {pathway ? (
+          <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[var(--semantic-brand)]">
+            {pathway.displayName}
+          </p>
+        ) : null}
+      </header>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <section
+          className="nn-card flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-5"
+          aria-labelledby="start-first-lesson"
+        >
+          <h2 id="start-first-lesson" className="text-lg font-bold text-[var(--semantic-text-primary)]">
+            {t("learner.startStudying.firstLessonTitle")}
+          </h2>
+          {firstLesson ? (
+            <>
+              <p className="text-sm text-[var(--semantic-text-secondary)]">
+                <span className="font-medium text-[var(--semantic-text-primary)]">
+                  {cleanLessonTitleForDisplay(firstLesson.title)}
+                </span>
+                {firstLesson.topic ? (
+                  <span className="block text-xs text-[var(--semantic-text-muted)]">{firstLesson.topic}</span>
+                ) : null}
+              </p>
+              <Link
+                href={`/app/lessons/${firstLesson.id}`}
+                className="nn-btn-primary mt-auto inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-semibold shadow-none"
+              >
+                {t("learner.startStudying.openFirstLesson")}
+              </Link>
+              <Link href="/app/lessons" className="text-center text-xs font-medium text-[var(--semantic-info)] hover:underline">
+                {t("learner.lessons.list.title")} →
+              </Link>
+            </>
+          ) : (
+            <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.startStudying.firstLessonEmpty")}</p>
+          )}
+        </section>
+
+        <section
+          className="nn-card flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_12%,var(--semantic-surface))] p-5"
+          aria-labelledby="start-first-questions"
+        >
+          <h2 id="start-first-questions" className="text-lg font-bold text-[var(--semantic-text-primary)]">
+            {t("learner.startStudying.questionsTitle")}
+          </h2>
+          <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.questions.subtitle.subscriber")}</p>
+          <Link
+            href={questionsHref}
+            className="nn-btn-primary mt-auto inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-semibold shadow-none"
+          >
+            {t("learner.startStudying.openQuestions")}
+          </Link>
+        </section>
+      </div>
+
+      <section className="nn-card flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">{t("learner.startStudying.ctaTitle")}</h2>
+          <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.startStudying.ctaBody")}</p>
+          {entitlement !== "error" && !entitlement.hasAccess ? (
+            <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">{t("learner.questions.subtitle.locked")}</p>
+          ) : null}
+        </div>
+        <div className="flex flex-col gap-2 sm:items-end">
+          <Link
+            href="/pricing"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-brand)]"
+          >
+            {t("learner.startStudying.ctaPricing")}
+          </Link>
+          <Link href="/app" className="text-center text-sm font-medium text-[var(--semantic-text-muted)] hover:text-[var(--semantic-text-primary)]">
+            {t("learner.startStudying.goDashboard")}
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
+}

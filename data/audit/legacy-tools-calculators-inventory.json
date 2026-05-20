@@ -1,0 +1,1102 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "pagesMatched": 64,
+    "dataFiles": [
+      "client/src/data/med-math-questions.ts",
+      "client/src/data/lessons/med-math-lessons.ts"
+    ],
+    "alliedExamples": [
+      "client/src/allied/data/pharmtech-calculations-data.ts"
+    ]
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/pages/med-math.tsx",
+      "contentType": "med_math_tool_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN/PN",
+        "examHint": "dosage safety"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Current tools / study tools hub — med math module",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "rebuild",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse question data where clean; rebuild interactions."
+    },
+    {
+      "sourcePath": "client/src/pages/clinical-calculators.tsx",
+      "contentType": "clinical_calculators_hub",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Tools hub — calculator cards",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "rebuild",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/si-conventional-converter.tsx",
+      "contentType": "unit_converter",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Utility tool page",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "rebuild",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/exam-prep-cornerstone-pages.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-mock-exams.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/dashboard.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/admin-seo-inspector.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-flashcards.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-medication-page.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/rrt-pharmacology-hub.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/demo-cat-exam.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/si-conventional-converter.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-hub.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-exams-hub.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/rex-pn-guide.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/allied-routes.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-flashcards-hub.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/conversion-cluster-page.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-cluster-topic.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/exam-prep-hub.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-study-guide.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-tools.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-blood-bank-hub.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-law-page.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/clinical-calculators.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-practice-exam-seo.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-seo-content-pages.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-guides-page.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-sig-codes-page.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/pharmtech-calculations-page.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/allied-email-capture.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/exit-intent-modal.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/nclex-rn-guide.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/home-bottom-sections.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/navigation.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/exam-calculator.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/ngn-renderers/calculation-numeric-renderer.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/career-tools/career-ai-simulator.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/allied-exam-prep-landing.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/related-resources.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/footer.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/home-choose-path.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/med-math.tsx",
+      "contentType": "tool_or_calculator_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Mapped tool route in nursenest-core",
+      "recommendedMigrationOrder": 8,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    }
+  ]
+}

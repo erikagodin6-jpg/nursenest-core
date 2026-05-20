@@ -1,0 +1,189 @@
+{
+  "generatedAt": "2026-05-11T02:58:44.861Z",
+  "captures": [
+    {
+      "pageId": "rt-hub",
+      "route": "/allied/respiratory",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "capturedAt": "2026-05-11T02:55:37.794Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-rt-hub-midnight-desktop.png"
+    },
+    {
+      "pageId": "rt-hub",
+      "route": "/allied/respiratory",
+      "theme": "midnight",
+      "viewport": "mobile",
+      "capturedAt": "2026-05-11T02:55:50.643Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-rt-hub-midnight-mobile.png"
+    },
+    {
+      "pageId": "mlt-hub",
+      "route": "/allied/mlt",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "capturedAt": "2026-05-11T02:56:01.172Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-mlt-hub-ocean-desktop.png"
+    },
+    {
+      "pageId": "mlt-hub",
+      "route": "/allied/mlt",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "capturedAt": "2026-05-11T02:56:09.081Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-mlt-hub-ocean-mobile.png"
+    },
+    {
+      "pageId": "mlt-hub",
+      "route": "/allied/mlt",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "capturedAt": "2026-05-11T02:56:21.459Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-mlt-hub-blossom-desktop.png"
+    },
+    {
+      "pageId": "mlt-hub",
+      "route": "/allied/mlt",
+      "theme": "blossom",
+      "viewport": "mobile",
+      "capturedAt": "2026-05-11T02:56:34.221Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-mlt-hub-blossom-mobile.png"
+    },
+    {
+      "pageId": "mlt-hub",
+      "route": "/allied/mlt",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "capturedAt": "2026-05-11T02:56:52.792Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-mlt-hub-midnight-desktop.png"
+    },
+    {
+      "pageId": "mlt-hub",
+      "route": "/allied/mlt",
+      "theme": "midnight",
+      "viewport": "mobile",
+      "capturedAt": "2026-05-11T02:58:43.324Z",
+      "contrastHint": 2.0325910606829045,
+      "docOverflowPx": 0,
+      "mockupStrategy": "document-only-banner",
+      "severity": "moderate",
+      "recommendations": [
+        "Improve body/surface contrast using semantic tokens (`--semantic-text-*`, `--semantic-bg-*`, `--semantic-border-soft`) across the active theme.",
+        "Align occupation hub module cards to pathway premium module spacing scale; keep `alliedProfession` query scoping intact."
+      ],
+      "figmaApprovalRequired": true,
+      "implementationRisk": "medium",
+      "likelyAffectedFiles": [
+        "nursenest-core/src/app/(marketing)/(default)/allied/**",
+        "nursenest-core/src/app/semantic-status-tokens.css"
+      ],
+      "notes": "Marketing capture — US region cookie; real DOM + branding.",
+      "beforeRelPath": "docs/screenshots/aesthetic-before-after/before/before-mlt-hub-midnight-mobile.png"
+    }
+  ]
+}

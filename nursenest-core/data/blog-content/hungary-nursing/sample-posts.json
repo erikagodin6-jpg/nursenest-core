@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "hungary",
+  "entries": [
+    {
+      "slug": "hu-sample-001-recognition-en",
+      "title": "Hungary nursing recognition — orientation (sample)",
+      "language": "en",
+      "countryTargets": ["HU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-hu-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "hu-sample-002-hu",
+      "title": "Ápolói vizsgák — áttekintés (minta)",
+      "language": "hu",
+      "countryTargets": ["HU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-hu-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "hu-sample-003-germany-en",
+      "title": "Germany next-door pathways — evidence-first framing (sample)",
+      "language": "en",
+      "countryTargets": ["HU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-hu-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "hu-sample-004-uk-en",
+      "title": "UK NMC — internationally educated nurse notes (sample)",
+      "language": "en",
+      "countryTargets": ["HU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-hu-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "hu-sample-005-nclex-en",
+      "title": "US NCLEX-RN — parallel preparation concepts (sample)",
+      "language": "en",
+      "countryTargets": ["HU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-hu-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "hu-sample-006-reasoning-en",
+      "title": "Clinical judgment — aligned to public exam scope (sample)",
+      "language": "en",
+      "countryTargets": ["HU"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-hu-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

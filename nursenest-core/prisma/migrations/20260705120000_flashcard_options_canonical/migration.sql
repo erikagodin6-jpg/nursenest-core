@@ -1,0 +1,6 @@
+-- Superseded by 20260705120000_flashcard_canonical_options.
+--
+-- This migration was kept as a no-op because the original draft duplicated
+-- CREATE TABLE "flashcard_options" and would fail when migrations ran in
+-- lexical order. Do not reintroduce DDL here; the canonical migration creates
+-- flashcard_options plus flashcard_option_responses idempotently.

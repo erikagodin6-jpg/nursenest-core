@@ -1,0 +1,19 @@
+name: Build GHCR image from nursenest-core (manual legacy)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: nursenest-core-ghcr-live-legacy
+  cancel-in-progress: true
+
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Legacy workflow disabled
+        run: echo "Use build-and-push-ghcr.yml for the production GHCR to DigitalOcean path."

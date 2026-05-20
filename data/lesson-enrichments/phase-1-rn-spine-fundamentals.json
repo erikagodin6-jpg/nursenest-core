@@ -1,0 +1,81 @@
+export const LESSONS = [
+  {
+    pathwayId: "ca-rn-nclex-rn",
+    slug: "fluid-balance-acute-care",
+    previewSectionCount: 2,
+    seoTitle:
+      "Fluid balance & IV therapy nursing: assessment, imbalances & NCLEX-RN Canada",
+    seoDescription:
+      "Fluid balance: isotonic vs hypertonic vs hypotonic IV fluids, hypovolemia, hypervolemia, edema, and NCLEX-RN priorities.",
+
+    sections: [
+      {
+        id: "overview",
+        heading: "Overview",
+        kind: "introduction",
+        body: `Fluid balance underpins most acute care decisions. Nurses must identify hypovolemia vs hypervolemia, interpret I&O trends, and safely manage IV fluids.`,
+      },
+      {
+        id: "patho",
+        heading: "Pathophysiology",
+        kind: "pathophysiology_overview",
+        body: `Fluid shifts depend on osmotic and hydrostatic pressure. Hypovolemia = low intravascular volume. Hypervolemia = excess volume. Third-spacing = fluid trapped outside circulation.`,
+      },
+      {
+        id: "assessment",
+        heading: "Assessment",
+        kind: "signs_symptoms",
+        body: `Hypovolemia: tachycardia, low urine, dry mucosa.  
+Hypervolemia: edema, crackles, weight gain.`,
+      },
+      {
+        id: "fluids",
+        heading: "IV Fluids",
+        kind: "labs_diagnostics",
+        body: `Isotonic: NS, LR (volume replacement)  
+Hypotonic: 0.45% NaCl (cell hydration)  
+Hypertonic: 3% saline (severe hyponatremia)`,
+      },
+      {
+        id: "nursing",
+        heading: "Nursing Care",
+        kind: "nursing_assessment_interventions",
+        body: `Monitor weight, I&O, lungs, vitals.  
+Treat cause. Adjust fluids carefully.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Key Takeaways",
+        kind: "takeaways",
+        body: `Weight = best indicator  
+88–92% O₂ in COPD  
+Isotonic = volume  
+Hypotonic = cells  
+Hypertonic = emergency`,
+      },
+    ],
+
+    preTest: [
+      {
+        question: "Which finding indicates hypovolemia?",
+        options: [
+          "Weight gain",
+          "Crackles",
+          "Low urine output",
+          "Bounding pulse",
+        ],
+        correct: 2,
+        rationale: "Low urine output is a key sign of hypovolemia.",
+      },
+    ],
+
+    postTest: [
+      {
+        question: "Which fluid is isotonic?",
+        options: ["0.45% NaCl", "3% NaCl", "Normal saline", "D5W"],
+        correct: 2,
+        rationale: "Normal saline is isotonic and used for volume replacement.",
+      },
+    ],
+  },
+];

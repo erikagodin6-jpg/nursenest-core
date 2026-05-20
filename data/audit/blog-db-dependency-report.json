@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-04-15T02:06:23.915Z",
+  "summary": "Majority of live /blog traffic: published URLs come from BlogPost (and localized routes from LocalizedBlogArticle). Repo TS/JSON alone does not power `/blog/[slug]` without import.",
+  "percentRepoOnlySlugsNotEditableWithoutDb": "High — any slug only present in src/lib/seo or data/ without a Prisma row cannot be edited via production CMS-style flow tied to BlogPost id.",
+  "percentLiveSlugsUnknownWithoutDbQuery": "100% of 'is this live in prod' requires DATABASE_URL query or admin export — this audit is repo-only.",
+  "codePathsIndicatingPrismaBlog": [
+    "nursenest-core/src/lib/blog/safe-blog-queries.ts — getPublishedBlogPostBySlug, getPublishedBlogPostsPage",
+    "nursenest-core/src/app/(marketing)/(default)/blog/[slug]/page.tsx — getPublishedBlogPostBySlug(slug)",
+    "nursenest-core/src/lib/seo/sitemap-blog-xml.ts — getSitemapPublishedBlogSlugs",
+    "nursenest-core/src/lib/blog/safe-localized-blog-queries.ts — localized blog route"
+  ],
+  "safestNextStepForSlugExport": "Run a read-only Prisma script against staging or production replica: `BlogPost.findMany({ where: { postStatus: 'PUBLISHED' }, select: { slug, title, updatedAt } })` and optionally dump body to files offline. Do not run destructive imports. Use existing admin/library or scripts/import-blog patterns for round-trips.",
+  "staticFallbackCaveat": "canUseStaticBlogFallback() only when NODE_ENV dev AND blogPost.count()===0 — not production behavior."
+}

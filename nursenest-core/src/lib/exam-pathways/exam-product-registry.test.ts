@@ -1,0 +1,53 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import {
+  getExamPathwayByRoute,
+  resolveExamPathwayFromMarketingHubSegment,
+} from "@/lib/exam-pathways/exam-product-registry";
+
+describe("exam-product-registry marketing hub resolution", () => {
+  it("resolves canonical pathway with case-insensitive segments", () => {
+    const a = getExamPathwayByRoute("us", "rn", "nclex-rn");
+    const b = getExamPathwayByRoute("US", "RN", "NCLEX-RN");
+    assert.ok(a && b);
+    assert.equal(a.id, "us-rn-nclex-rn");
+    assert.equal(b.id, "us-rn-nclex-rn");
+  });
+
+  it("resolveExamPathwayFromMarketingHubSegment trims and lowercases", () => {
+    const p = resolveExamPathwayFromMarketingHubSegment(" canada ", " rpn ", " rex-pn ");
+    assert.ok(p);
+    assert.equal(p.id, "ca-rpn-rex-pn");
+  });
+
+  it("resolves NP SEO alias segments with mixed case", () => {
+    const p = resolveExamPathwayFromMarketingHubSegment("US", "NP", "AANP-Practice-Test");
+    assert.ok(p);
+    assert.equal(p.id, "us-np-fnp");
+  });
+
+  it("resolves legacy /en/np specialty hubs to canonical US NP pathways", () => {
+    const fnp = resolveExamPathwayFromMarketingHubSegment("en", "np", "fnp");
+    const agpcnp = resolveExamPathwayFromMarketingHubSegment("en", "np", "agpcnp");
+    assert.ok(fnp);
+    assert.ok(agpcnp);
+    assert.equal(fnp.id, "us-np-fnp");
+    assert.equal(fnp.seoTitle, "FNP Exam Prep | AANP Practice Exam & Readiness | NurseNest");
+    assert.equal(agpcnp.id, "us-np-agpcnp");
+  });
+
+  it("resolves WHNP and PNP-PC SEO alias segments", () => {
+    const w = resolveExamPathwayFromMarketingHubSegment("us", "np", "whnp-practice-test");
+    assert.ok(w);
+    assert.equal(w.id, "us-np-whnp");
+    const p = resolveExamPathwayFromMarketingHubSegment("us", "np", "pnp-pc-practice-test");
+    assert.ok(p);
+    assert.equal(p.id, "us-np-pnp-pc");
+  });
+
+  it("resolves US NCLEX-PN when the marketing URL uses the shared pn hub segment", () => {
+    const p = resolveExamPathwayFromMarketingHubSegment("us", "pn", "nclex-pn");
+    assert.ok(p);
+    assert.equal(p.id, "us-lpn-nclex-pn");
+  });
+});
