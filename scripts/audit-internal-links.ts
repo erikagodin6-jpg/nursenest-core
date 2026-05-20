@@ -8,8 +8,11 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
+import programmaticRegistryModule from "../nursenest-core/src/lib/seo/programmatic-registry";
+import marketingLanguagesModule from "../nursenest-core/src/lib/i18n/marketing-languages";
+
+const { getAllProgrammaticSlugs } = programmaticRegistryModule as typeof import("../nursenest-core/src/lib/seo/programmatic-registry");
+const { MARKETING_LANGUAGES } = marketingLanguagesModule as typeof import("../nursenest-core/src/lib/i18n/marketing-languages");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
