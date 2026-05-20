@@ -8,8 +8,28 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LOCALE_CODES } from "../nursenest-core/src/lib/i18n/marketing-locale-policy";
+import * as programmaticRegistryModule from "../nursenest-core/src/lib/seo/programmatic-registry";
+import * as marketingLocalePolicyModule from "../nursenest-core/src/lib/i18n/marketing-locale-policy";
+
+type ProgrammaticRegistryModule = {
+  getAllProgrammaticSlugs: () => string[];
+};
+
+type MarketingLocalePolicyModule = {
+  MARKETING_LOCALE_CODES: readonly string[];
+};
+
+function unwrapModuleDefault<T extends object>(moduleValue: T | { default: T }): T {
+  const maybeDefault = (moduleValue as { default?: T }).default;
+  return maybeDefault ?? (moduleValue as T);
+}
+
+const { getAllProgrammaticSlugs } = unwrapModuleDefault(
+  programmaticRegistryModule as unknown as ProgrammaticRegistryModule | { default: ProgrammaticRegistryModule },
+);
+const { MARKETING_LOCALE_CODES } = unwrapModuleDefault(
+  marketingLocalePolicyModule as unknown as MarketingLocalePolicyModule | { default: MarketingLocalePolicyModule },
+);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
