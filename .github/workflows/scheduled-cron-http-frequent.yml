@@ -43,6 +43,8 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          BASE="$(printf '%s' "${BASE:-}" | tr -d '\r\n[:space:]')"
+          CRON_SECRET="$(printf '%s' "${CRON_SECRET:-}" | tr -d '\r\n')"
           missing=()
           [ -z "${BASE:-}" ] && missing+=("PRODUCTION_CRON_BASE_URL")
           [ -z "${CRON_SECRET:-}" ] && missing+=("CRON_SECRET")
@@ -62,6 +64,8 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          BASE="$(printf '%s' "${BASE:-}" | tr -d '\r\n[:space:]')"
+          CRON_SECRET="$(printf '%s' "${CRON_SECRET:-}" | tr -d '\r\n')"
           path="/api/cron/blog-batch-schedule"
           host="${BASE#*//}"
           host="${host%%/*}"
@@ -90,6 +94,8 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          BASE="$(printf '%s' "${BASE:-}" | tr -d '\r\n[:space:]')"
+          CRON_SECRET="$(printf '%s' "${CRON_SECRET:-}" | tr -d '\r\n')"
           path="/api/cron/jobs"
           host="${BASE#*//}"
           host="${host%%/*}"
