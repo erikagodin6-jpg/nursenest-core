@@ -186,6 +186,24 @@ export function resolveThemeLogo(
     };
   }
 
+  if (registered === "blossom" && logoVariant === "leaf") {
+    return {
+      url: "/logos/blossom-leaf.png",
+      kind: "local",
+      objectKey: "logos/blossom-leaf.png",
+      assetThemeId: "blossom",
+    };
+  }
+
+  if (registered === "aurora" && logoVariant === "leaf") {
+    return {
+      url: "/logos/aurora-leaf.png",
+      kind: "local",
+      objectKey: "logos/aurora-leaf.png",
+      assetThemeId: "aurora",
+    };
+  }
+
   void logoVariant;
   const fallbackThemeId = NURSENEST_DEFAULT_THEME;
   const url =

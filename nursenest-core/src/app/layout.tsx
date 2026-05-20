@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: nursenestAppIcons.apple, sizes: "180x180", type: "image/png" }],
     shortcut: [{ url: nursenestAppIcons.ico, type: "image/x-icon" }],
-    other: [{ rel: "mask-icon", url: nursenestAppIcons.mask, color: "#375f7a" }],
+    other: [{ rel: "mask-icon", url: nursenestAppIcons.mask, color: "#f72fa8" }],
   },
   openGraph: {
     type: "website",

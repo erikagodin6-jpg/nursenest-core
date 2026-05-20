@@ -3,10 +3,10 @@
  * Raster assets are generated from `src/assets/brand/leaf-logo-favicon.svg` via `npm run icons:generate`.
  * Vector mark matches nav/header: same geometry as `SiteBrandLogoMark` arctic-frost leaf (`/logos/arctic-frost-leaf.svg`).
  */
-export const NURSENEST_APP_ICON_VERSION = "2026-05-20-leaf" as const;
+export const NURSENEST_APP_ICON_VERSION = "2026-05-20-pink" as const;
 
-/** Arctic Frost brand primary — matches leaf outer fill in canonical SVG. */
-export const NURSENEST_LEAF_BRAND_COLOR = "#375f7a" as const;
+/** Brand primary color for app icons. */
+export const NURSENEST_LEAF_BRAND_COLOR = "#f72fa8" as const;
 
 export const NURSENEST_CANONICAL_LEAF_SVG_PATH = "/brand/leaf-logo.svg" as const;
 

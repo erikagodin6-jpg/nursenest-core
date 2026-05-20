@@ -19,7 +19,6 @@
  */
 
 import type { LinkTarget } from "@/lib/linking/internal-link-types";
-import { getCatalogDerivedLinkTargets } from "@/lib/linking/catalog-derived-link-targets";
 
 // ── Pathway question base paths (canonical) ───────────────────────────────────
 
@@ -493,12 +492,6 @@ let _catalogTargetsBootstrapped = false;
 function _bootstrapCatalogDerivedTargets(): void {
   if (_catalogTargetsBootstrapped) return;
   _catalogTargetsBootstrapped = true;
-  for (const target of getCatalogDerivedLinkTargets()) {
-    REGISTRY_ENTRIES.push(target);
-    const list = _index.get(target.topicKey) ?? [];
-    list.push(target);
-    _index.set(target.topicKey, list);
-  }
 }
 
 function _buildIndex(): void {
