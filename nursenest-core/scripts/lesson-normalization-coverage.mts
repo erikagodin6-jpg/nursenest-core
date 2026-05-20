@@ -1,23 +1,31 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
-import {
-  REQUIRED_ALLIED_PROFESSION_KEYS,
-  resolveAlliedProfessionTopicSlugsForLessonIndexVerification,
-} from "@/lib/allied/allied-profession-lesson-index-verification";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { isNNForcePublishValidRawLessons } from "@/lib/lessons/pathway-lesson-force-publish";
-import {
+import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+
+const alliedRegistryModule = await import("@/lib/allied/allied-professions-registry");
+const alliedVerificationModule = await import("@/lib/allied/allied-profession-lesson-index-verification");
+const examPathwaysModule = await import("@/lib/exam-pathways/exam-pathways-catalog");
+const forcePublishModule = await import("@/lib/lessons/pathway-lesson-force-publish");
+const catalogSyncModule = await import("@/lib/lessons/pathway-lesson-catalog-sync");
+const lessonRoutesModule = await import("@/lib/lessons/lesson-routes");
+const marketingHubModule = await import("@/lib/lessons/marketing-lessons-hub-category");
+
+const { ALLIED_PROFESSIONS } = alliedRegistryModule.default ?? alliedRegistryModule;
+const { REQUIRED_ALLIED_PROFESSION_KEYS, resolveAlliedProfessionTopicSlugsForLessonIndexVerification } =
+  alliedVerificationModule.default ?? alliedVerificationModule;
+const { getExamPathwayById } = examPathwaysModule.default ?? examPathwaysModule;
+const { isNNForcePublishValidRawLessons } = forcePublishModule.default ?? forcePublishModule;
+const {
   getCatalogLessonsRaw,
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
   resetCatalogLessonsRawMergeCacheForTests,
   sortAndFilterLessonsForPathwayContext,
-} from "@/lib/lessons/pathway-lesson-catalog-sync";
-import { alliedHealthLessonsIndexPath, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
-import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+} = catalogSyncModule.default ?? catalogSyncModule;
+const { alliedHealthLessonsIndexPath, marketingPathwayLessonDetailPath } =
+  lessonRoutesModule.default ?? lessonRoutesModule;
+const { getMarketingLessonsHubCatalogLessons } = marketingHubModule.default ?? marketingHubModule;
 
 export type ExclusionAllowlistEntry = {
   comment: string;
