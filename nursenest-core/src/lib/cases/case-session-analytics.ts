@@ -21,7 +21,7 @@ import type {
   CaseSessionAnalyticsPayload,
 } from "@/lib/cases/longitudinal-case-types";
 import type { CnpleDomainSlug } from "@/lib/np/cnple-domain-tags";
-import { toTestingModelPostHogFields } from "@/lib/testing/testing-model";
+import { assertPathwayPostHogCapture, toTestingModelPostHogFields } from "@/lib/testing/testing-model";
 
 // ── Builder ───────────────────────────────────────────────────────────────────
 
@@ -105,9 +105,10 @@ export function buildCaseSessionAnalytics(params: {
  */
 export function toCaseAnalyticsPostHogEvent(
   payload: CaseSessionAnalyticsPayload,
+  eventName = "cnple_case_session_completed",
 ): Record<string, string | number | boolean> {
   const analytics = toTestingModelPostHogFields(payload.pathwayId);
-  return {
+  const shaped = {
     ...analytics,
     cnple_case_scenario_id: payload.scenarioId,
     cnple_case_pathway_id: payload.pathwayId,
@@ -129,6 +130,8 @@ export function toCaseAnalyticsPostHogEvent(
     cnple_case_domain_error_count: payload.domainErrors.length,
     cnple_case_urgent_domains: payload.domainErrors.filter((d) => d.priority === "urgent").length,
   };
+  assertPathwayPostHogCapture(payload.pathwayId, eventName, shaped);
+  return shaped;
 }
 
 // ── Validation ────────────────────────────────────────────────────────────────

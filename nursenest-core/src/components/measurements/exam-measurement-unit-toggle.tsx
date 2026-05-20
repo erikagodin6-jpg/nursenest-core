@@ -31,10 +31,7 @@ export function ExamMeasurementUnitToggle({
   pathwayId?: string | null;
   analyticsSurface?: string;
 }) {
-  const { preference, setPreference, measurementSystem } = useMeasurementPreference(
-    fallbackSystem,
-    initialPreference,
-  );
+  const { preference, setPreference } = useMeasurementPreference(fallbackSystem, initialPreference);
 
   function update(next: MeasurementPreference) {
     setPreference(next);

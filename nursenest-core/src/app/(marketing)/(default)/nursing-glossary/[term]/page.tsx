@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { DEFAULT_INTERPRETATION_PATHWAY_ID } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
+import { definedTermJsonLd } from "@/lib/educational-graph/structured-data-educational-entities";
 import { getNursingGlossaryTerm } from "@/lib/seo/nursing-glossary-registry";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
 
@@ -80,6 +81,12 @@ export default async function NursingGlossaryTermPage({ params }: Props) {
           </ul>
         </section>
       ) : null}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(definedTermJsonLd(entry, `${GLOSSARY_HUB_PATH}/${entry.slug}`)),
+        }}
+      />
     </article>
   );
 }

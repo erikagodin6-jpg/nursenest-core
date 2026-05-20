@@ -993,7 +993,7 @@ async function LessonDetailPageInner({ params }: Props) {
             pathway,
             lesson: record,
             lessonTitleDisplay: cleanLessonTitleForDisplay(displayTitle),
-          })
+          }).crumbs
         : [];
 
     const pathwayLessonMainColumn = (

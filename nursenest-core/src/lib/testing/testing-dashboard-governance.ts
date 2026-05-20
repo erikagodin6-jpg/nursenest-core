@@ -6,6 +6,14 @@ import { getTestingModelDefinition } from "@/lib/testing/testing-model-definitio
 import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
 import { loftDashboardPriorityThemes } from "@/lib/testing/psychometric-isolation";
 
+/** Dashboard widget ids that carry CAT/adaptive psychometric semantics. */
+export type PsychometricDashboardWidgetId =
+  | "adaptiveEngine"
+  | "passProbability"
+  | "catStreak"
+  | "adaptiveReadinessMeter"
+  | "precisionConfidence";
+
 export type LearnerDashboardPsychometricProfile = {
   model: TestingModel;
   priorityThemes: readonly string[];
@@ -14,7 +22,25 @@ export type LearnerDashboardPsychometricProfile = {
   showEscalatingDifficultyMetaphors: boolean;
   primaryMetricLabel: string;
   sessionCtaLabel: string;
+  /** Widgets that must not render for this pathway's testing model. */
+  suppressedWidgets: readonly PsychometricDashboardWidgetId[];
 };
+
+const CAT_ONLY_WIDGETS: readonly PsychometricDashboardWidgetId[] = [
+  "adaptiveEngine",
+  "passProbability",
+  "catStreak",
+  "adaptiveReadinessMeter",
+  "precisionConfidence",
+] as const;
+
+const LOFT_SUPPRESSED = CAT_ONLY_WIDGETS;
+const LINEAR_SUPPRESSED: readonly PsychometricDashboardWidgetId[] = [
+  "adaptiveEngine",
+  "catStreak",
+  "adaptiveReadinessMeter",
+  "precisionConfidence",
+] as const;
 
 export function getLearnerDashboardProfile(
   pathwayId: string | null | undefined,
@@ -31,6 +57,7 @@ export function getLearnerDashboardProfile(
       showEscalatingDifficultyMetaphors: false,
       primaryMetricLabel: "Readiness & competency balance",
       sessionCtaLabel: "Continue LOFT simulation",
+      suppressedWidgets: LOFT_SUPPRESSED,
     };
   }
 
@@ -43,6 +70,7 @@ export function getLearnerDashboardProfile(
       showEscalatingDifficultyMetaphors: true,
       primaryMetricLabel: "Adaptive readiness",
       sessionCtaLabel: def.learnerFacingName,
+      suppressedWidgets: [] as const,
     };
   }
 
@@ -54,5 +82,15 @@ export function getLearnerDashboardProfile(
     showEscalatingDifficultyMetaphors: false,
     primaryMetricLabel: "Practice performance",
     sessionCtaLabel: def.learnerFacingName,
+    suppressedWidgets: LINEAR_SUPPRESSED,
   };
+}
+
+/** Capability-driven widget eligibility — prefer this over pathway conditionals in dashboard UI. */
+export function isDashboardWidgetEligible(
+  pathwayId: string | null | undefined,
+  widgetId: PsychometricDashboardWidgetId,
+): boolean {
+  const profile = getLearnerDashboardProfile(pathwayId);
+  return !profile.suppressedWidgets.includes(widgetId);
 }

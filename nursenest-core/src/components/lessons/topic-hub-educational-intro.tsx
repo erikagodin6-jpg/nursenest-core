@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { TopicHubLearningGraph } from "@/components/lessons/topic-hub-learning-graph";
 import {
   topicHubEducationalIntro,
   topicHubEducationalIntroLinks,
@@ -44,6 +45,7 @@ export function TopicHubEducationalIntro({ pathway, topicSlug }: { pathway: Exam
           Flashcard drill
         </Link>
       </p>
+      <TopicHubLearningGraph pathway={pathway} topicSlug={topicSlug} />
     </section>
   );
 }

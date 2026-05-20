@@ -34,7 +34,7 @@ const STRICT_ROUNDING_CATEGORIES: ReadonlySet<MeasurementCategory> = new Set([
   "pediatric_dosing",
 ]);
 
-const GLUCOSE_MMOL_TO_MGDL = 18;
+const GLUCOSE_MMOL_TO_MGDL = 18.0182;
 const CREAT_UMOL_TO_MGDL = 88.4;
 const HGB_GL_TO_GDL = 0.1;
 const SODIUM_MMOL_SAME = true;
@@ -53,6 +53,11 @@ const DISPLAY_RANGES: Partial<
 function roundTo(n: number, decimals: number): number {
   const f = 10 ** decimals;
   return Math.round(n * f) / f;
+}
+
+function formatNumeric(n: number, decimals: number): string {
+  if (decimals <= 0) return String(Math.round(n));
+  return roundTo(n, decimals).toFixed(decimals);
 }
 
 function kindForCategory(category: MeasurementCategory, explicitKind?: MeasurementKind): MeasurementKind {
@@ -154,41 +159,38 @@ function formatPrimaryString(
   switch (kind) {
     case "glucose": {
       if (system === "conventional") {
-        return `${roundTo(valueSi * GLUCOSE_MMOL_TO_MGDL, decimals)} mg/dL`;
+        return `${formatNumeric(valueSi * GLUCOSE_MMOL_TO_MGDL, decimals)} mg/dL`;
       }
-      return `${roundTo(valueSi, decimals)} mmol/L`;
+      return `${formatNumeric(valueSi, decimals)} mmol/L`;
     }
     case "creatinine": {
       if (system === "conventional") {
-        return `${roundTo(valueSi / CREAT_UMOL_TO_MGDL, decimals)} mg/dL`;
+        return `${formatNumeric(valueSi / CREAT_UMOL_TO_MGDL, decimals)} mg/dL`;
       }
-      return `${roundTo(valueSi, decimals)} µmol/L`;
+      return `${formatNumeric(valueSi, decimals)} µmol/L`;
     }
     case "hemoglobin": {
       if (system === "conventional") {
-        return `${roundTo(valueSi * HGB_GL_TO_GDL, decimals)} g/dL`;
+        return `${formatNumeric(valueSi * HGB_GL_TO_GDL, decimals)} g/dL`;
       }
-      return `${roundTo(valueSi, decimals)} g/L`;
+      return `${formatNumeric(valueSi, decimals)} g/L`;
     }
     case "potassium":
     case "sodium": {
       const label = kind === "sodium" ? "mEq/L" : "mmol/L";
-      if (SODIUM_MMOL_SAME || kind === "potassium") {
-        return `${roundTo(valueSi, decimals)} ${label}`;
-      }
-      return `${roundTo(valueSi, decimals)} ${label}`;
+      return `${formatNumeric(valueSi, decimals)} ${label}`;
     }
     case "temperature": {
       if (system === "conventional") {
-        return `${roundTo((valueSi * 9) / 5 + 32, decimals)}°F`;
+        return `${formatNumeric((valueSi * 9) / 5 + 32, decimals)}°F`;
       }
-      return `${roundTo(valueSi, decimals)}°C`;
+      return `${formatNumeric(valueSi, decimals)}°C`;
     }
     case "weight": {
       if (system === "conventional") {
-        return `${roundTo(valueSi * LB_PER_KG, decimals)} lb`;
+        return `${formatNumeric(valueSi * LB_PER_KG, decimals)} lb`;
       }
-      return `${roundTo(valueSi, decimals)} kg`;
+      return `${formatNumeric(valueSi, decimals)} kg`;
     }
     case "height": {
       if (system === "conventional") {
@@ -197,10 +199,10 @@ function formatPrimaryString(
         const inch = roundTo(totalIn - ft * 12, decimals);
         return `${ft}'${inch}"`;
       }
-      return `${roundTo(valueSi, decimals)} cm`;
+      return `${formatNumeric(valueSi, decimals)} cm`;
     }
     default:
-      return String(roundTo(valueSi, decimals));
+      return formatNumeric(valueSi, decimals);
   }
 }
 
@@ -240,10 +242,9 @@ export function convertClinicalMeasurement(args: {
   const dualRequested = args.options?.showEducationalEquivalent === true && !highRisk;
 
   const displayPrimary = formatPrimaryString(args.valueSi, kind, args.renderedSystem, decimals);
-  const renderedPrimaryValue = valueInRenderedPrimaryUnit(
-    args.valueSi,
-    kind,
-    args.renderedSystem,
+  const renderedPrimaryValue = roundTo(
+    valueInRenderedPrimaryUnit(args.valueSi, kind, args.renderedSystem),
+    decimals,
   );
 
   let displaySecondary: string | null = null;

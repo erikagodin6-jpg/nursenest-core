@@ -1,9 +1,19 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildMarketingLessonRemediationChain } from "@/lib/lessons/marketing-lesson-remediation-chain";
+import { buildMarketingRemediationLadderV2 } from "@/lib/educational-graph/remediation-ladder-v2";
+import { resolveRnCompetencyForTopic } from "@/lib/educational-graph/rn-competency-ontology";
+
+const KIND_LABEL: Record<string, string> = {
+  mechanism: "Mechanism",
+  foundational_lesson: "Lesson",
+  interpretation: "Interpret",
+  prioritization_drill: "Prioritize",
+  flashcards: "Flashcards",
+  mixed_reassessment: "Reassess",
+};
 
 /**
- * Competency remediation chain on public lesson detail (complements prev/next linear nav).
+ * Remediation ladder V2 on public lesson detail — progressive competency scaffolding.
  */
 export function PathwayLessonRemediationChain({
   pathway,
@@ -16,15 +26,16 @@ export function PathwayLessonRemediationChain({
   topicLabel: string;
   lessonSlug: string;
 }) {
-  const steps = buildMarketingLessonRemediationChain({
+  const steps = buildMarketingRemediationLadderV2({
     pathway,
     topicSlug,
     topicLabel,
     anchorLessonSlug: lessonSlug,
-    maxLessonSteps: 3,
+    maxLessonSteps: 2,
   });
-  const lessonSteps = steps.filter((s) => s.kind === "lesson");
-  if (lessonSteps.length < 2) return null;
+  if (steps.length < 3) return null;
+
+  const competency = resolveRnCompetencyForTopic(topicSlug);
 
   return (
     <nav
@@ -33,17 +44,29 @@ export function PathwayLessonRemediationChain({
       data-nn-lesson-remediation-chain
     >
       <h2 id="lesson-remediation-heading" className="text-sm font-semibold text-[var(--theme-heading-text)]">
-        Strengthen this competency
+        {competency ? `Strengthen: ${competency.label}` : "Remediation pathway"}
       </h2>
       <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
-        If this topic felt difficult, work through related lessons in order, then practice and drill recall.
+        Progressive ladder — mechanism and interpretation first, then judgment practice and reassessment.
       </p>
-      <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm">
-        {steps.map((step) => (
-          <li key={`${step.kind}:${step.href}`}>
-            <Link href={step.href} className="font-medium text-primary underline-offset-4 hover:underline">
-              {step.label}
-            </Link>
+      <ol className="mt-3 space-y-3">
+        {steps.map((step, i) => (
+          <li key={`${step.kind}:${step.href}`} className="flex gap-3 text-sm">
+            <span
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] text-xs font-semibold text-primary"
+              aria-hidden
+            >
+              {i + 1}
+            </span>
+            <div>
+              <span className="mr-2 text-[10px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                {KIND_LABEL[step.kind] ?? step.kind}
+              </span>
+              <Link href={step.href} className="font-medium text-primary underline-offset-4 hover:underline">
+                {step.label}
+              </Link>
+              <p className="mt-0.5 text-xs text-[var(--semantic-text-secondary)]">{step.reason}</p>
+            </div>
           </li>
         ))}
       </ol>

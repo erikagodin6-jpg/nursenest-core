@@ -34,7 +34,10 @@ const INTROS: Record<string, TopicHubEducationalIntro> = {
   },
   dka: {
     title: "Diabetic ketoacidosis (DKA)",
-    paragraphs: INTROS["diabetic-ketoacidosis"]!.paragraphs,
+    paragraphs: [
+      "DKA stems combine acid-base physiology, fluid shifts, insulin protocols, and potassium safety. A common trap is treating the glucose number without addressing dehydration, ketosis, and electrolyte timing.",
+      "Cluster lessons here with mechanism explainers on osmotic diuresis and Kussmaul breathing, then validate judgment with pathway practice questions.",
+    ],
   },
   copd: {
     title: "COPD",

@@ -63,8 +63,12 @@ export {
   type MarketingLanguageAuditResult,
 } from "@/lib/testing/testing-marketing-governance";
 export {
+  assertPathwayPostHogCapture,
+  getPsychometricTelemetryViolationCount,
+  logPsychometricTelemetryViolation,
   logTestingModelScopedEvent,
   mergeTestingModelTelemetryMeta,
+  resetPsychometricTelemetryViolationCount,
   testingModelTelemetryFields,
   toTestingModelPostHogFields,
 } from "@/lib/testing/testing-telemetry-governance";
@@ -79,8 +83,21 @@ export {
 } from "@/lib/testing/testing-model-capabilities";
 export {
   getLearnerDashboardProfile,
+  isDashboardWidgetEligible,
   type LearnerDashboardPsychometricProfile,
+  type PsychometricDashboardWidgetId,
 } from "@/lib/testing/testing-dashboard-governance";
+export {
+  getTestingModelDashboardProfile,
+  getTestingModelProgressSemantics,
+  getTestingModelRecommendationSemantics,
+  getTestingModelResultsProfile,
+  resolveResultsHeroVariant,
+  type ResultsHeroVariant,
+  type TestingModelProgressSemantics,
+  type TestingModelRecommendationSemantics,
+  type TestingModelResultsProfile,
+} from "@/lib/testing/testing-model-presentation";
 
 export {
   CNPLE_PATHWAY_ID,
@@ -163,14 +180,7 @@ export function getPathwaySimulationDisplayCopy(
   };
 }
 
-export type TestingModelAnalyticsDimensions = {
-  testingModel: import("@/lib/testing/testing-model-types").TestingModel;
-  simulationFamily: string;
-  psychometricStyle: import("@/lib/testing/testing-model-definitions").PsychometricStyle;
-  remediationStyle: import("@/lib/testing/testing-model-definitions").RemediationStyle;
-  analyticsModel: import("@/lib/testing/testing-model-definitions").AnalyticsModelKey;
-  pathway: string;
-};
+export type { TestingModelAnalyticsDimensions } from "@/lib/testing/testing-telemetry-governance";
 
 /** @deprecated Prefer {@link getTestingModelAnalyticsDimensions} — kept for incremental migration. */
 export type ExamAnalyticsContext = {

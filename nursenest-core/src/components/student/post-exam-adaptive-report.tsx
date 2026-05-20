@@ -8,6 +8,8 @@ import {
   CatResultsHero,
   ReadinessBandBadge,
 } from "@/components/study/cat-readiness-hero";
+import { LoftSimulationResultsHero } from "@/components/study/loft-simulation-results-hero";
+import { getTestingModelResultsProfile } from "@/lib/testing/testing-model-presentation";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { buildEnrichedPostExamPerformanceReport } from "@/lib/learner/post-exam-coaching/build-coaching-report";
@@ -51,7 +53,7 @@ function CompetencyBarRow({ row }: { row: PostExamCompetencyRow }) {
   );
 }
 
-export function PostExamAdaptiveReport({
+export function PostExamPerformanceReport({
   report: reportProp,
   results,
   testId,
@@ -125,7 +127,7 @@ export function PostExamAdaptiveReport({
   const report = useMemo(() => {
     if (reportProp) return reportProp;
     if (!results) {
-      throw new Error("PostExamAdaptiveReport requires results or a prebuilt report");
+      throw new Error("PostExamPerformanceReport requires results or a prebuilt report");
     }
     const input = {
       results,
@@ -170,37 +172,58 @@ export function PostExamAdaptiveReport({
   const interpretation = `${report.overall.readinessLevel}${
     report.overall.readinessResult ? ` (${report.overall.readinessResult})` : ""
   }: ${report.narrative}`;
+  const presentation = getTestingModelResultsProfile(pathwayId, report.sessionKind);
+  const isLoftSimulation = presentation.heroVariant === "loft_simulation";
 
   return (
     <div
-      className="nn-post-exam-report nn-cat-results"
-      data-nn-post-exam-adaptive-report=""
+      className={`nn-post-exam-report ${presentation.resultsSurfaceClass}`}
+      data-nn-post-exam-report=""
+      data-nn-post-exam-adaptive-report={presentation.postExamDataMarker === "cat" ? "" : undefined}
+      data-nn-post-exam-loft-report={presentation.postExamDataMarker === "loft" ? "" : undefined}
       data-session-kind={report.sessionKind}
       data-coaching-model={report.coaching?.coachingModel ?? ""}
       data-readiness-reliability={report.coaching?.readinessReliability.level ?? ""}
     >
-      <CatResultsHero
-        readinessLevel={
-          report.overall.readinessLevel as "Likely Pass" | "Borderline" | "At Risk"
-        }
-        confidenceLevel={
-          report.overall.confidenceLabel as "High" | "Moderate" | "Low"
-        }
-        passProbability={report.overall.passOutlookPct}
-        passProbabilityBand={
-          report.overall.passOutlookBand as
-            | "Very likely to pass"
-            | "Likely to pass"
-            | "Borderline"
-            | "At risk"
-            | null
-        }
-        score={report.overall.scorePct}
-        band={report.readinessBand}
-        interpretation={interpretation}
-        testId={testId}
-        lessonsHref={lessonsHref}
-      />
+      {isLoftSimulation ? (
+        <LoftSimulationResultsHero
+          readinessLevel={report.overall.readinessLevel}
+          score={report.overall.scorePct}
+          band={report.readinessBand}
+          interpretation={interpretation}
+          simulationHubHref={presentation.simulationHubHref}
+          lessonsHref={lessonsHref}
+          onReviewHref={hideExamReview ? null : presentation.simulationHubHref}
+          hideReviewCta={hideExamReview}
+        />
+      ) : (
+        <CatResultsHero
+          readinessLevel={
+            report.overall.readinessLevel as "Likely Pass" | "Borderline" | "At Risk"
+          }
+          confidenceLevel={
+            report.overall.confidenceLabel as "High" | "Moderate" | "Low"
+          }
+          passProbability={
+            presentation.showPassProbability ? report.overall.passOutlookPct : null
+          }
+          passProbabilityBand={
+            presentation.showPassProbability
+              ? (report.overall.passOutlookBand as
+                  | "Very likely to pass"
+                  | "Likely to pass"
+                  | "Borderline"
+                  | "At risk"
+                  | null)
+              : null
+          }
+          score={report.overall.scorePct}
+          band={report.readinessBand}
+          interpretation={interpretation}
+          testId={testId}
+          lessonsHref={lessonsHref}
+        />
+      )}
 
       {/* Mobile-first: recommendations before dense charts */}
       <section className="nn-post-exam-report__section nn-semantic-inset--positive" aria-labelledby="post-exam-rec-heading">
@@ -428,7 +451,7 @@ export function PostExamAdaptiveReport({
       {!isEntitled ? (
         <section className="nn-post-exam-report__section rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--semantic-surface))] p-5">
           <p className="text-sm text-[var(--semantic-text-secondary)]">
-            Unlock full exam prep for unlimited adaptive sessions, deeper analytics, and pathway-specific remediation.
+            {presentation.paywallUpsellCopy}
           </p>
           <Link
             href="/pricing"
@@ -441,6 +464,9 @@ export function PostExamAdaptiveReport({
     </div>
   );
 }
+
+/** @deprecated Use {@link PostExamPerformanceReport}. Name retained for incremental migration. */
+export const PostExamAdaptiveReport = PostExamPerformanceReport;
 
 function SummaryTile({ label, value }: { label: string; value: string }) {
   return (

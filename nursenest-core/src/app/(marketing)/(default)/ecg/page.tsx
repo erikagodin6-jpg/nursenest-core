@@ -8,6 +8,7 @@ import {
   BookOpen,
   Brain,
   CheckCircle2,
+  ChevronRight,
   ClipboardList,
   Crosshair,
   Heart,

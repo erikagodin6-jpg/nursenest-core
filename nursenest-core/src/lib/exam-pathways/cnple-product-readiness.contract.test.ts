@@ -22,8 +22,8 @@ describe("CNPLE canonical pathway key", () => {
     const cnplePathway = source("src/lib/exam-pathways/cnple-pathway.ts");
     assert.match(cnplePathway, /CNPLE_PATHWAY_ID/);
     assert.match(cnplePathway, /testing-model/);
-    const testingModel = source("src/lib/testing/testing-model.ts");
-    assert.match(testingModel, /CNPLE_PATHWAY_ID\s*=\s*["']ca-np-cnple["']/);
+    const pathwayMap = source("src/lib/testing/testing-model-pathway-map.ts");
+    assert.match(pathwayMap, /CNPLE_PATHWAY_ID\s*=\s*["']ca-np-cnple["']/);
   });
 
   it("exam-pathways-data uses ca-np-cnple as pathway id and cnple as examCode", () => {

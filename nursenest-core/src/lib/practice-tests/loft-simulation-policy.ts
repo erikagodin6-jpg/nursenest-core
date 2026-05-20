@@ -6,6 +6,7 @@
  */
 
 import {
+  assertLoftPsychometricIntegrity,
   getTestingModelForPathwayId,
   isLoftTestingModel,
   testingModelForPathwaySlug,
@@ -42,4 +43,11 @@ export function isLoftSimulationPolicy(input: LoftSimulationPolicyInput): boolea
   if (pathwaySlug.includes("cnple")) return true;
 
   return false;
+}
+
+/** Runtime guard when a session is classified as LOFT — blocks adaptive engine semantics. */
+export function assertLoftSimulationPolicyIntegrity(input: LoftSimulationPolicyInput): void {
+  if (!isLoftSimulationPolicy(input)) return;
+  const pathwayId = input.pathwaySlug?.trim() || (input.examCode === "cnple" ? "ca-np-cnple" : null);
+  assertLoftPsychometricIntegrity(pathwayId);
 }

@@ -2,10 +2,8 @@ import type { CountryCode } from "@prisma/client";
 import type { MeasurementSystem } from "@/lib/measurements/measurement-domain";
 import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
 import { parseMeasurementPreference } from "@/lib/measurements/measurement-preference";
-import {
-  resolveMeasurementRenderContext,
-  type MeasurementRenderContext,
-} from "@/lib/measurements/resolve-measurement-context";
+import type { MeasurementRenderContext } from "@/lib/measurements/measurement-domain";
+import { resolveMeasurementRenderContext } from "@/lib/measurements/resolve-measurement-context";
 
 export function resolveLessonMeasurementContext(args: {
   countryCode?: CountryCode | string | null;

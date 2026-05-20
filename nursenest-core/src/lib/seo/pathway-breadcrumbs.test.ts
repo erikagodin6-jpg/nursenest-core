@@ -87,7 +87,6 @@ test("topic cluster: education-first Home → Exam → Lessons → Topic", () =>
   assert.equal(topic.crumbs[2]?.name, "Lessons");
   assert.equal(topic.crumbs[3]?.name, "Cardiovascular");
   assert.equal(topic.crumbs[1]?.href?.includes("nclex-rn"), true);
-  assert.equal(topic.crumbs[1]?.name, topic.crumbs[1]?.name);
   assert.equal(topic.crumbs[0]?.name, "Home");
 });
 

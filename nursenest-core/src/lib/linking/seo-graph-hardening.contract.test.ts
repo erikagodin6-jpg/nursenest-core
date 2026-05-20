@@ -23,7 +23,9 @@ describe("SEO graph hardening — contracts", () => {
 
   it("lessons hub wires topic educational intro and FAQ schema", () => {
     const hub = read("src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx");
+    const intro = read("src/components/lessons/topic-hub-educational-intro.tsx");
     assert.match(hub, /TopicHubEducationalIntro/);
+    assert.match(intro, /TopicHubLearningGraph/);
     assert.match(hub, /pathwayLessonsHubFaqSchema/);
   });
 

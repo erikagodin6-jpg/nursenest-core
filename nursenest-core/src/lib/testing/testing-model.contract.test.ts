@@ -87,8 +87,7 @@ describe("CNPLE CAT language regression (grep contracts)", () => {
 
   it("case-session-analytics includes governed testing dimensions", () => {
     const content = src("lib/cases/case-session-analytics.ts");
-    assert.match(content, /testing_model/);
-    assert.match(content, /psychometric_style/);
-    assert.match(content, /getTestingModelAnalyticsDimensions/);
+    assert.match(content, /toTestingModelPostHogFields/);
+    assert.match(content, /assertPathwayPostHogCapture/);
   });
 });

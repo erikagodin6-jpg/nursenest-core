@@ -2,6 +2,10 @@ import { isLoftSimulationPolicy } from "@/lib/practice-tests/loft-simulation-pol
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { CoachingModel, CoachingSemanticsCopy } from "@/lib/learner/post-exam-coaching/types";
+import {
+  getCoachingPolicyForPathway,
+  validatePsychometricCopyForModel,
+} from "@/lib/testing/testing-model";
 
 const LOFT_FORBIDDEN = /\b(adaptive|theta|standard error|difficulty progression|exam got harder|exam got easier|psychometric)\b/i;
 
@@ -26,15 +30,20 @@ export function resolveCoachingModel(
   return "linear_practice";
 }
 
-export function buildCoachingSemanticsCopy(model: CoachingModel, config: PracticeTestConfigJson | null): CoachingSemanticsCopy {
+export function buildCoachingSemanticsCopy(
+  model: CoachingModel,
+  config: PracticeTestConfigJson | null,
+  pathwayId?: string | null,
+): CoachingSemanticsCopy {
+  const policy = pathwayId ? getCoachingPolicyForPathway(pathwayId) : null;
   switch (model) {
     case "loft_readiness":
       return {
-        examModeLabel: "LOFT licensing simulation",
+        examModeLabel: policy?.followUpSimulationTitle ?? "LOFT licensing simulation",
         readinessLabel: "Blueprint readiness",
         passOutlookLabel: "Clinical preparedness outlook",
         competencySectionTitle: "Competency balance by domain",
-        timingSectionTitle: "Simulation pacing",
+        timingSectionTitle: policy?.pacingNarrativeLead ?? "Simulation pacing",
         forbidAdaptiveWording: true,
       };
     case "cat_adaptive":
@@ -61,7 +70,11 @@ export function buildCoachingSemanticsCopy(model: CoachingModel, config: Practic
 }
 
 /** Strip CAT psychometric phrasing when presenting LOFT copy. */
-export function sanitizeCoachingNarrative(text: string, model: CoachingModel): string {
+export function sanitizeCoachingNarrative(
+  text: string,
+  model: CoachingModel,
+  pathwayId?: string | null,
+): string {
   if (model !== "loft_readiness") return text;
   let out = text;
   out = out.replace(/\badaptive readiness\b/gi, "blueprint readiness");
@@ -69,17 +82,28 @@ export function sanitizeCoachingNarrative(text: string, model: CoachingModel): s
   out = out.replace(/\bstandard error\b/gi, "estimate stability");
   out = out.replace(/\btheta\b/gi, "ability estimate");
   out = out.replace(/\bdifficulty progression\b/gi, "item challenge mix");
-  if (LOFT_FORBIDDEN.test(out)) {
+  const violations = validatePsychometricCopyForModel("LOFT", out);
+  if (violations.length > 0 || LOFT_FORBIDDEN.test(out)) {
     out = `${out} Focus on domain balance and clinical preparedness for your next fixed-length simulation.`;
+  }
+  if (pathwayId) {
+    const recheck = validatePsychometricCopyForModel("LOFT", out);
+    if (recheck.length > 0) {
+      return "Review domain balance and schedule your next blueprint-balanced LOFT simulation when ready.";
+    }
   }
   return out;
 }
 
-export function loftSafeTrendLabel(raw: string | null | undefined, model: CoachingModel): string | null {
+export function loftSafeTrendLabel(
+  raw: string | null | undefined,
+  model: CoachingModel,
+  pathwayId?: string | null,
+): string | null {
   if (!raw) return null;
   if (model === "loft_readiness") {
     if (/improving|slipping|cooling|theta/i.test(raw)) return "Performance steady across this simulation";
-    return sanitizeCoachingNarrative(raw, model);
+    return sanitizeCoachingNarrative(raw, model, pathwayId);
   }
   return raw;
 }

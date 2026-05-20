@@ -11,6 +11,7 @@ import {
   type PostExamQuestionOutcome,
 } from "@/lib/learner/post-exam-performance-report";
 import { buildCoachingSemanticsCopy, loftSafeTrendLabel, resolveCoachingModel, sanitizeCoachingNarrative } from "@/lib/learner/post-exam-coaching/coaching-semantics";
+import { validateCoachingCopyForPathway } from "@/lib/testing/testing-model";
 import { buildStructuredClinicalInsights } from "@/lib/learner/post-exam-coaching/clinical-judgment-patterns";
 import { buildLongitudinalContext } from "@/lib/learner/post-exam-coaching/longitudinal-memory";
 import { orchestrateCoachingRecommendations } from "@/lib/learner/post-exam-coaching/recommendation-orchestrator";
@@ -56,7 +57,7 @@ export function buildPostExamCoachingReport(input: BuildPostExamCoachingReportIn
 
   const sessionKind = resolvePostExamSessionKind(config, pathwayId);
   const coachingModel = resolveCoachingModel(config, pathwayId, sessionKind);
-  const semantics = buildCoachingSemanticsCopy(coachingModel, config);
+  const semantics = buildCoachingSemanticsCopy(coachingModel, config, pathwayId);
   const catReport = results.catReport;
   const coach = results.catCoach;
 
@@ -106,7 +107,7 @@ export function buildPostExamCoachingReport(input: BuildPostExamCoachingReportIn
   });
 
   const scorePct = base.overall.scorePct;
-  const headline = sanitizeCoachingNarrative(base.headline, coachingModel);
+  const headline = sanitizeCoachingNarrative(base.headline, coachingModel, pathwayId);
   const dashboardFeed = buildDashboardFeed({
     pathwayId,
     coaching: {
@@ -125,15 +126,24 @@ export function buildPostExamCoachingReport(input: BuildPostExamCoachingReportIn
     readinessReliability,
     readinessBand: getReadinessBandFromScore(scorePct),
     longitudinal,
-    longitudinalNarratives: longitudinalNarratives.map((n) => sanitizeCoachingNarrative(n, coachingModel)),
+    longitudinalNarratives: longitudinalNarratives.map((n) =>
+      sanitizeCoachingNarrative(n, coachingModel, pathwayId),
+    ),
     timing,
     clinicalJudgment,
     recommendations,
     dashboardFeed: {
       ...dashboardFeed,
-      headline: sanitizeCoachingNarrative(dashboardFeed.headline, coachingModel),
+      headline: sanitizeCoachingNarrative(dashboardFeed.headline, coachingModel, pathwayId),
     },
   };
+
+  if (pathwayId) {
+    validateCoachingCopyForPathway(
+      pathwayId,
+      [headline, ...longitudinalNarratives, dashboardFeed.headline].join(" "),
+    );
+  }
 }
 
 /** Merge coaching intelligence into a base performance report (single object for UI). */
@@ -141,12 +151,13 @@ export function attachCoachingToPerformanceReport(
   base: ReturnType<typeof buildPostExamPerformanceReport>,
   coaching: PostExamCoachingReport,
 ): typeof base & { coaching: PostExamCoachingReport } {
-  const trendSafe = loftSafeTrendLabel(base.overall.trendLabel, coaching.coachingModel);
+  const pathwayId = coaching.dashboardFeed.pathwayId;
+  const trendSafe = loftSafeTrendLabel(base.overall.trendLabel, coaching.coachingModel, pathwayId);
   return {
     ...base,
     examModeLabel: coaching.semantics.examModeLabel,
     headline: coaching.dashboardFeed.headline,
-    narrative: sanitizeCoachingNarrative(base.narrative, coaching.coachingModel),
+    narrative: sanitizeCoachingNarrative(base.narrative, coaching.coachingModel, pathwayId),
     overall: {
       ...base.overall,
       trendLabel: trendSafe,
@@ -156,15 +167,15 @@ export function attachCoachingToPerformanceReport(
       elapsedLabel: coaching.timing.elapsedLabel,
       avgSecPerQuestion: coaching.timing.avgSecPerQuestion,
       pacingLabel: coaching.timing.pacingLabel,
-      pacingDetail: sanitizeCoachingNarrative(coaching.timing.pacingDetail, coaching.coachingModel),
+      pacingDetail: sanitizeCoachingNarrative(coaching.timing.pacingDetail, coaching.coachingModel, pathwayId),
       recommendations: coaching.timing.recommendations.map((r) =>
-        sanitizeCoachingNarrative(r, coaching.coachingModel),
+        sanitizeCoachingNarrative(r, coaching.coachingModel, pathwayId),
       ),
     },
     recommendations: coaching.recommendations.map((r) => ({
       priority: r.priority,
       title: r.title,
-      reason: sanitizeCoachingNarrative(r.reason, coaching.coachingModel),
+      reason: sanitizeCoachingNarrative(r.reason, coaching.coachingModel, pathwayId),
       href: r.href,
       kind:
         r.kind === "readiness_reassessment"
@@ -184,7 +195,7 @@ export function attachCoachingToPerformanceReport(
     clinicalJudgment: coaching.clinicalJudgment.map((c) => ({
       domain: c.domain,
       pattern: c.patternLabel,
-      guidance: sanitizeCoachingNarrative(c.guidance, coaching.coachingModel),
+      guidance: sanitizeCoachingNarrative(c.guidance, coaching.coachingModel, pathwayId),
       emphasis: c.emphasis,
     })),
     coaching,

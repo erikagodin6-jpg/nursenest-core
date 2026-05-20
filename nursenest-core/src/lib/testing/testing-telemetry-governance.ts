@@ -2,11 +2,65 @@
  * Telemetry governance — normalize analytics dimensions and block CAT events on LOFT pathways.
  */
 import { safeServerLog, type SafeLogMeta } from "@/lib/observability/safe-server-log";
+
+let governanceViolationCount = 0;
+
+/** Test/diagnostic hook — count of blocked telemetry emissions this process. */
+export function getPsychometricTelemetryViolationCount(): number {
+  return governanceViolationCount;
+}
+
+export function resetPsychometricTelemetryViolationCount(): void {
+  governanceViolationCount = 0;
+}
+
+/** Logs a psychometric telemetry violation without throwing (production-safe). */
+export function logPsychometricTelemetryViolation(
+  pathwayId: string | null | undefined,
+  eventName: string,
+  detail: string,
+): void {
+  governanceViolationCount += 1;
+  safeServerLog("psychometric_telemetry", "governance_violation", {
+    pathway_id: pathwayId ?? "unknown",
+    event: eventName,
+    detail,
+  });
+}
 import { assertCatTelemetryAllowedForPathway } from "@/lib/testing/testing-engine-capabilities";
 import {
-  getTestingModelAnalyticsDimensions,
-  type TestingModelAnalyticsDimensions,
-} from "@/lib/testing/testing-model";
+  getTestingModelDefinition,
+  type AnalyticsModelKey,
+  type PsychometricStyle,
+  type RemediationStyle,
+} from "@/lib/testing/testing-model-definitions";
+import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
+import type { TestingModel } from "@/lib/testing/testing-model-types";
+
+export type TestingModelAnalyticsDimensions = {
+  testingModel: TestingModel;
+  simulationFamily: string;
+  psychometricStyle: PsychometricStyle;
+  remediationStyle: RemediationStyle;
+  analyticsModel: AnalyticsModelKey;
+  pathway: string;
+};
+
+function resolveAnalyticsDimensions(
+  pathwayId: string | null | undefined,
+): TestingModelAnalyticsDimensions {
+  const id = (pathwayId ?? "").trim() || "unknown";
+  const model = getTestingModelForPathwayId(id);
+  const def = getTestingModelDefinition(model);
+  return {
+    testingModel: model,
+    simulationFamily: def.simulationFamily,
+    psychometricStyle: def.psychometricStyle,
+    remediationStyle: def.remediationStyle,
+    analyticsModel: def.analyticsModel,
+    pathway: id,
+  };
+}
 
 export type TestingModelTelemetryMeta = SafeLogMeta &
   Record<
@@ -23,7 +77,7 @@ export type TestingModelTelemetryMeta = SafeLogMeta &
 export function testingModelTelemetryFields(
   pathwayId: string | null | undefined,
 ): TestingModelTelemetryMeta {
-  const dims = getTestingModelAnalyticsDimensions(pathwayId);
+  const dims = resolveAnalyticsDimensions(pathwayId);
   return {
     testing_model: dims.testingModel,
     simulation_family: dims.simulationFamily,
@@ -55,11 +109,26 @@ export function logTestingModelScopedEvent(
   safeServerLog(scope, event, mergeTestingModelTelemetryMeta(pathwayId, meta));
 }
 
+/**
+ * Guard PostHog capture for a pathway — blocks CAT-prefixed event names and property keys on LOFT pathways.
+ */
+export function assertPathwayPostHogCapture(
+  pathwayId: string | null | undefined,
+  eventName: string,
+  properties?: Record<string, unknown>,
+): void {
+  assertCatTelemetryAllowedForPathway(pathwayId, eventName);
+  if (!properties) return;
+  for (const key of Object.keys(properties)) {
+    assertCatTelemetryAllowedForPathway(pathwayId, key);
+  }
+}
+
 /** PostHog-style flat payload from pathway id (case + practice surfaces). */
 export function toTestingModelPostHogFields(
   pathwayId: string | null | undefined,
 ): Record<string, string> {
-  const dims: TestingModelAnalyticsDimensions = getTestingModelAnalyticsDimensions(pathwayId);
+  const dims = resolveAnalyticsDimensions(pathwayId);
   return {
     testing_model: dims.testingModel,
     simulation_family: dims.simulationFamily,

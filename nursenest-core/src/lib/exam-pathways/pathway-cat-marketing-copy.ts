@@ -9,10 +9,30 @@ import {
   getPathwaySimulationDisplayCopy,
   isLoftTestingModel,
   getTestingModelForPathway,
+  validateTestingModelMarketingLanguage,
 } from "@/lib/testing/testing-model";
 
+function assertPathwayMarketingCopy(pathway: ExamPathwayDefinition, text: string): string {
+  const audit = validateTestingModelMarketingLanguage(pathway.id, text);
+  if (!audit.ok) {
+    const messages = [
+      ...audit.violations.map((v) => v.message),
+      ...(audit.cnpleAudit && !audit.cnpleAudit.ok
+        ? audit.cnpleAudit.violations.map((i) => i.message)
+        : []),
+    ];
+    throw new Error(
+      `Marketing psychometric audit failed for ${pathway.id}: ${messages.join(" ")}`,
+    );
+  }
+  return text;
+}
+
 export function pathwayCatLandingTitle(pathway: ExamPathwayDefinition): string {
-  return getPathwaySimulationDisplayCopy(pathway).landingTitle;
+  return assertPathwayMarketingCopy(
+    pathway,
+    getPathwaySimulationDisplayCopy(pathway).landingTitle,
+  );
 }
 
 export function pathwayCatLandingSubtitle(
@@ -20,7 +40,10 @@ export function pathwayCatLandingSubtitle(
   publicCopy: PathwayReadinessPublicCopy,
 ): string {
   const display = getPathwaySimulationDisplayCopy(pathway);
-  return `${display.landingSubtitleLead} ${publicCopy.subtitle}`;
+  return assertPathwayMarketingCopy(
+    pathway,
+    `${display.landingSubtitleLead} ${publicCopy.subtitle}`,
+  );
 }
 
 export function pathwayCatMetadataDescription(
@@ -29,7 +52,13 @@ export function pathwayCatMetadataDescription(
 ): string {
   const display = getPathwaySimulationDisplayCopy(pathway);
   if (isLoftTestingModel(getTestingModelForPathway(pathway))) {
-    return `${display.shortLabel} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`;
+    return assertPathwayMarketingCopy(
+      pathway,
+      `${display.shortLabel} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`,
+    );
   }
-  return `${catPathwayShortCatLabel(pathway)} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`;
+  return assertPathwayMarketingCopy(
+    pathway,
+    `${catPathwayShortCatLabel(pathway)} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`,
+  );
 }

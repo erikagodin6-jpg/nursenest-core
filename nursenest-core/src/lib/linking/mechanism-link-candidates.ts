@@ -77,3 +77,11 @@ export function mechanismExplainerLinkCandidatesForLesson(input: {
   }
   return out;
 }
+
+/** First published mechanism explainer matching a topic slug (for remediation ladders). */
+export function publishedMechanismForTopic(topicSlug: string): { label: string; href: string } | null {
+  const candidates = mechanismExplainerLinkCandidatesForLesson({ topicKey: topicSlug });
+  const first = candidates[0];
+  if (!first) return null;
+  return { label: first.anchorText, href: first.href };
+}
