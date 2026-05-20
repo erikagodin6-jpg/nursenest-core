@@ -65,6 +65,10 @@ function MarketingDefaultMainMotionSlot({
   );
 }
 
+function defaultMarketingSiteFooter(serverHasStaffSession: boolean) {
+  return <SiteFooter serverHasStaffSession={serverHasStaffSession} />;
+}
+
 function safeNowMs(): number {
   try {
     return nnHomeDiagNowMs();
@@ -161,7 +165,7 @@ function marketingDefaultLayoutStaticShellForHome({
                 <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                   {children}
                 </MarketingDefaultMainMotionSlot>
-                <SiteFooter serverHasStaffSession={false} />
+                {defaultMarketingSiteFooter(false)}
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
@@ -384,8 +388,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         marketingRegionCookie ?? serverRegion,
       );
 
-      /** Single footer element reused for shards trailingChrome and non-shards branch (validate-marketing-production-surface allows one JSX SiteFooter). */
-      const defaultLayoutSiteFooter = <SiteFooter serverHasStaffSession={staffSession != null} />;
+      const defaultLayoutSiteFooter = defaultMarketingSiteFooter(staffSession != null);
 
       return (
         <MarketingI18nProvider
@@ -497,7 +500,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                     <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
                       {children}
                     </MarketingDefaultMainMotionSlot>
-                    <SiteFooter serverHasStaffSession={false} />
+                    {defaultMarketingSiteFooter(false)}
                   </MarketingDefaultLayoutChromeFailsafeShell>
                 </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>
