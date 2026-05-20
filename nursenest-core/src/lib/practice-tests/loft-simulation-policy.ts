@@ -2,15 +2,15 @@
  * LOFT simulation policy helpers.
  *
  * Distinguishes fixed-form linear licensing simulations (CNPLE-style) from
- * adaptive CAT delivery. Delegates pathway classification to testing-model.
+ * adaptive CAT delivery. Delegates pathway classification to client-safe
+ * testing model policy modules.
  */
 
+import { assertLoftPsychometricIntegrity } from "@/lib/testing/testing-model-capabilities";
 import {
-  assertLoftPsychometricIntegrity,
   getTestingModelForPathwayId,
   isLoftTestingModel,
-  testingModelForPathwaySlug,
-} from "@/lib/testing/testing-model";
+} from "@/lib/testing/testing-model-pathway-map";
 
 export type LoftSimulationPolicyInput = {
   examCode?: string | null;
@@ -37,7 +37,6 @@ export function isLoftSimulationPolicy(input: LoftSimulationPolicyInput): boolea
   if (examCode === "cnple") return true;
 
   const pathwayId = pathwaySlug || null;
-  if (pathwayId && isLoftTestingModel(testingModelForPathwaySlug(pathwayId))) return true;
   if (pathwayId && isLoftTestingModel(getTestingModelForPathwayId(pathwayId))) return true;
 
   if (pathwaySlug.includes("cnple")) return true;
