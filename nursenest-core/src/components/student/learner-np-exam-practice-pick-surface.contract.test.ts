@@ -19,11 +19,32 @@ describe("Learner NP exam practice picker", () => {
     const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
     assert.match(src, /"\/app\/cases\/cnple"/);
     assert.match(src, /LOFT Simulation/);
+    assert.doesNotMatch(src, /CAT adaptive/);
   });
 
-  it("exposes learner navigation for lessons and question-bank access", () => {
+  it("includes CNPLE learner-app actions", () => {
     const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
-    assert.match(src, /Question bank/);
+
+    assert.match(src, /Practice Tests/);
+    assert.match(src, /\/app\/practice-tests\?pathwayId=ca-np-cnple/);
+
+    assert.match(src, /Flashcards/);
+    assert.match(src, /\/app\/flashcards\?pathwayId=ca-np-cnple/);
+
     assert.match(src, /Lessons/);
+    assert.match(src, /\/app\/lessons\?pathwayId=ca-np-cnple/);
+
+    assert.match(src, /Question bank/);
+  });
+
+  it("does not send signed-in CNPLE learners to the public lessons route", () => {
+    const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
+    assert.doesNotMatch(src, /\/canada\/np\/cnple\/lessons/);
+  });
+
+  it("preserves non-CNPLE CAT practice flow", () => {
+    const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
+    assert.match(src, /Practice exams & CAT/);
+    assert.match(src, /encodeURIComponent\(p.id\)/);
   });
 });
