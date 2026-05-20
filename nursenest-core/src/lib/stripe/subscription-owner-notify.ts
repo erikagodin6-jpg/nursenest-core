@@ -2,7 +2,6 @@ import "server-only";
 
 import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
-import { after } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendTransactionalEmailHtml, htmlEmailShell } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -27,6 +26,20 @@ export async function claimStripeOwnerPaidSubscriptionNotifyOrDuplicate(eventId:
     }
     throw e;
   }
+}
+
+async function releaseStripeOwnerPaidSubscriptionNotifyClaim(eventId: string): Promise<void> {
+  await prisma.stripeOwnerPaidSubscriptionNotify.delete({ where: { id: eventId } }).catch(() => undefined);
+}
+
+function notificationFailure(kind: string, eventIdPrefix: string, failures: string[]): Error {
+  safeServerLog(LOG_SCOPE, "hard_fail_notification_delivery", {
+    kind,
+    eventIdPrefix,
+    failures: failures.join("; ").slice(0, 300),
+    severity: "error",
+  });
+  return new Error(`${kind}_notification_failed`);
 }
 
 function formatMoney(amount: number, currency: string | null | undefined): string {
@@ -107,10 +120,10 @@ type ScheduleArgs = {
 };
 
 /**
- * Queues internal owner email/SMS after the HTTP webhook response (Next `after`), when checkout is a paid active subscription.
- * Never throws to callers; failures are logged only.
+ * Sends internal owner email/SMS during webhook handling when checkout is a paid active subscription.
+ * Throws when no notification channel succeeds so Stripe retries the webhook.
  */
-export function scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible(args: ScheduleArgs): void {
+export async function scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible(args: ScheduleArgs): Promise<void> {
   const amountTotal = typeof args.session.amount_total === "number" ? args.session.amount_total : null;
   if (
     !shouldOwnerNotifyPaidSubscriptionCheckout({
@@ -134,7 +147,7 @@ export function scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible(arg
     return;
   }
 
-  safeServerLog(LOG_SCOPE, "checkout_notify_scheduled", {
+  safeServerLog(LOG_SCOPE, "checkout_notify_started", {
     eventIdPrefix: args.event.id.slice(0, 12),
     correlation: args.correlation,
     stripeSubStatus: args.stripeSubStatus ?? "",
@@ -144,17 +157,7 @@ export function scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible(arg
     severity: "info",
   });
 
-  after(async () => {
-    try {
-      await runOwnerPaidSubscriptionCheckoutNotificationsJob(args, amountTotal!);
-    } catch (e) {
-      safeServerLog(LOG_SCOPE, "job_unhandled_error", {
-        message: e instanceof Error ? e.message.slice(0, 240) : String(e),
-        eventIdPrefix: args.event.id.slice(0, 12),
-        correlation: args.correlation,
-      });
-    }
-  });
+  await runOwnerPaidSubscriptionCheckoutNotificationsJob(args, amountTotal!);
 }
 
 async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
@@ -179,7 +182,7 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
       eventIdPrefix: args.event.id.slice(0, 12),
       hint: "Set ADMIN_SUBSCRIPTION_NOTIFY_EMAIL and/or ADMIN_SUBSCRIPTION_NOTIFY_PHONE",
     });
-    return;
+    throw notificationFailure("checkout", args.event.id.slice(0, 12), ["no_admin_notification_recipients"]);
   }
 
   const claim = await claimStripeOwnerPaidSubscriptionNotifyOrDuplicate(args.event.id);
@@ -230,6 +233,8 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
     .replace(/</g, "&lt;")}</pre>`;
 
   const smsBody = `NurseNest paid sub: ${amountLabel} ${interval} | ${customerEmail ?? "no email"} | sub ${args.subscriptionId.slice(0, 14)}… | ${args.event.id.slice(0, 16)}…`;
+  let delivered = false;
+  const failures: string[] = [];
 
   if (notifyEmail) {
     try {
@@ -245,6 +250,9 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
           to: notifyEmail,
           eventIdPrefix: args.event.id.slice(0, 12),
         });
+        failures.push(`email:${r.skippedReason ?? "unknown"}`);
+      } else {
+        delivered = true;
       }
       safeServerLog(LOG_SCOPE, "email_result", {
         ok: r.ok,
@@ -253,6 +261,7 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
       });
     } catch (e) {
       console.error("[NurseNest][CRITICAL] Admin notification email threw during paid subscription checkout.", e);
+      failures.push(`email_exception:${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`);
       safeServerLog(LOG_SCOPE, "email_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
@@ -266,12 +275,18 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
   if (notifyPhone) {
     try {
       const r = await sendTwilioSmsIfConfigured(notifyPhone, smsBody);
+      if (r.ok) {
+        delivered = true;
+      } else {
+        failures.push(`sms:${r.skippedReason ?? "unknown"}`);
+      }
       safeServerLog(LOG_SCOPE, "sms_result", {
         ok: r.ok,
         skippedReason: r.skippedReason,
         eventIdPrefix: args.event.id.slice(0, 12),
       });
     } catch (e) {
+      failures.push(`sms_exception:${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`);
       safeServerLog(LOG_SCOPE, "sms_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
@@ -279,6 +294,11 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
     }
   } else {
     safeServerLog(LOG_SCOPE, "sms_skipped", { reason: "ADMIN_SUBSCRIPTION_NOTIFY_PHONE unset", severity: "info" });
+  }
+
+  if (!delivered) {
+    await releaseStripeOwnerPaidSubscriptionNotifyClaim(args.event.id);
+    throw notificationFailure("checkout", args.event.id.slice(0, 12), failures.length ? failures : ["no_channel_delivered"]);
   }
 }
 
@@ -312,10 +332,12 @@ export function invoiceOwnerNotifyAmountEligible(
 }
 
 /**
- * Owner email/SMS after `invoice.payment_succeeded` (first subscription charge path in webhook).
- * Mirrors checkout notify: dedupes by Stripe event id, never throws to webhook handler.
+ * Owner email/SMS for `invoice.payment_succeeded` (first subscription charge path in webhook).
+ * Mirrors checkout notify: dedupes by Stripe event id and throws when no channel delivers.
  */
-export function scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification(args: ScheduleInvoicePaymentSucceededArgs): void {
+export async function scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification(
+  args: ScheduleInvoicePaymentSucceededArgs,
+): Promise<void> {
   if (!args.userId) return;
   const rawPaid = args.invoice.amount_paid;
   if (!invoiceOwnerNotifyAmountEligible(rawPaid, args.billingReason)) {
@@ -334,7 +356,7 @@ export function scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification
     return;
   }
 
-  safeServerLog(LOG_SCOPE, "invoice_notify_scheduled", {
+  safeServerLog(LOG_SCOPE, "invoice_notify_started", {
     eventIdPrefix: args.event.id.slice(0, 12),
     correlation: args.correlation,
     subscriptionIdPrefix: args.subscriptionId.slice(0, 14),
@@ -345,17 +367,7 @@ export function scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification
     severity: "info",
   });
 
-  after(async () => {
-    try {
-      await runOwnerInvoicePaymentSucceededNotificationsJob(args, amountPaid);
-    } catch (e) {
-      safeServerLog(LOG_SCOPE, "invoice_job_unhandled_error", {
-        message: e instanceof Error ? e.message.slice(0, 240) : String(e),
-        eventIdPrefix: args.event.id.slice(0, 12),
-        correlation: args.correlation,
-      });
-    }
-  });
+  await runOwnerInvoicePaymentSucceededNotificationsJob(args, amountPaid);
 }
 
 function shouldIncludeTestModeOwnerNotifies(): boolean {
@@ -387,7 +399,7 @@ async function runOwnerInvoicePaymentSucceededNotificationsJob(
       severity: "error",
       eventIdPrefix: args.event.id.slice(0, 12),
     });
-    return;
+    throw notificationFailure("invoice_payment_succeeded", args.event.id.slice(0, 12), ["no_admin_notification_recipients"]);
   }
 
   const claim = await claimStripeOwnerPaidSubscriptionNotifyOrDuplicate(args.event.id);
@@ -420,6 +432,8 @@ async function runOwnerInvoicePaymentSucceededNotificationsJob(
     .replace(/</g, "&lt;")}</pre>`;
 
   const smsBody = `NurseNest invoice paid: ${amountLabel} | user ${userId.slice(0, 8)}… | sub ${args.subscriptionId.slice(0, 12)}…`;
+  let delivered = false;
+  const failures: string[] = [];
 
   if (notifyEmail) {
     try {
@@ -434,7 +448,13 @@ async function runOwnerInvoicePaymentSucceededNotificationsJob(
         skippedReason: r.skippedReason,
         eventIdPrefix: args.event.id.slice(0, 12),
       });
+      if (r.ok) {
+        delivered = true;
+      } else {
+        failures.push(`email:${r.skippedReason ?? "unknown"}`);
+      }
     } catch (e) {
+      failures.push(`email_exception:${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`);
       safeServerLog(LOG_SCOPE, "invoice_email_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
@@ -445,17 +465,32 @@ async function runOwnerInvoicePaymentSucceededNotificationsJob(
   if (notifyPhone) {
     try {
       const r = await sendTwilioSmsIfConfigured(notifyPhone, smsBody);
+      if (r.ok) {
+        delivered = true;
+      } else {
+        failures.push(`sms:${r.skippedReason ?? "unknown"}`);
+      }
       safeServerLog(LOG_SCOPE, "invoice_sms_result", {
         ok: r.ok,
         skippedReason: r.skippedReason,
         eventIdPrefix: args.event.id.slice(0, 12),
       });
     } catch (e) {
+      failures.push(`sms_exception:${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`);
       safeServerLog(LOG_SCOPE, "invoice_sms_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
       });
     }
+  }
+
+  if (!delivered) {
+    await releaseStripeOwnerPaidSubscriptionNotifyClaim(args.event.id);
+    throw notificationFailure(
+      "invoice_payment_succeeded",
+      args.event.id.slice(0, 12),
+      failures.length ? failures : ["no_channel_delivered"],
+    );
   }
 }
 
@@ -472,27 +507,17 @@ export type ScheduleInvoicePaymentFailedArgs = {
 };
 
 /**
- * Owner email/SMS after `invoice.payment_failed`. Runs after HTTP response via Next `after`.
- * Never throws to callers.
+ * Owner email/SMS for `invoice.payment_failed`. Throws when no notification channel succeeds.
  */
-export function scheduleOwnerInvoicePaymentFailedNotification(args: ScheduleInvoicePaymentFailedArgs): void {
+export async function scheduleOwnerInvoicePaymentFailedNotification(args: ScheduleInvoicePaymentFailedArgs): Promise<void> {
   if (!args.event.livemode && !shouldIncludeTestModeOwnerNotifies()) return;
-  safeServerLog(LOG_SCOPE, "invoice_payment_failed_notify_scheduled", {
+  safeServerLog(LOG_SCOPE, "invoice_payment_failed_notify_started", {
     eventIdPrefix: args.event.id.slice(0, 12),
     correlation: args.correlation,
     subscriptionIdPrefix: args.subscriptionId.slice(0, 14),
     severity: "error",
   });
-  after(async () => {
-    try {
-      await runOwnerInvoicePaymentFailedNotificationsJob(args);
-    } catch (e) {
-      safeServerLog(LOG_SCOPE, "invoice_payment_failed_job_error", {
-        message: e instanceof Error ? e.message.slice(0, 240) : String(e),
-        eventIdPrefix: args.event.id.slice(0, 12),
-      });
-    }
-  });
+  await runOwnerInvoicePaymentFailedNotificationsJob(args);
 }
 
 async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoicePaymentFailedArgs): Promise<void> {
