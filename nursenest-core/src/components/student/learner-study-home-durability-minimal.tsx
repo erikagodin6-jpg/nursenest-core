@@ -21,7 +21,7 @@ export function LearnerStudyHomeDurabilityMinimal({
   banner,
   showShell = true,
 }: {
-  crumbs: BreadcrumbCrumb[];
+  crumbs?: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   locale: string;
   examsNavLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
