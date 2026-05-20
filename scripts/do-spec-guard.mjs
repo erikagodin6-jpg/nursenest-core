@@ -16,11 +16,30 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const require = createRequire(import.meta.url);
-const yaml = require("js-yaml");
-
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dir, "..");
+
+function requireFromInstalledPackage(moduleName) {
+  const packageRequirePaths = [
+    import.meta.url,
+    path.join(ROOT, "package.json"),
+    path.join(ROOT, "nursenest-core", "package.json"),
+  ];
+
+  for (const requirePath of packageRequirePaths) {
+    try {
+      return createRequire(requirePath)(moduleName);
+    } catch (error) {
+      if (error?.code !== "MODULE_NOT_FOUND") throw error;
+    }
+  }
+
+  throw new Error(
+    `Cannot find module "${moduleName}". Install dependencies from the repo root or nursenest-core/ before running do-spec-guard.`,
+  );
+}
+
+const yaml = requireFromInstalledPackage("js-yaml");
 
 /** The one and only spec file that may be used with doctl apps update. */
 export const CANONICAL_SPEC_PATH = path.join(ROOT, ".do", "app-nursenest-core-next.yaml");
@@ -236,6 +255,11 @@ export function validateSpec(spec) {
   if (!web) {
     failures.push('Missing "web" service component — the spec must contain a service named "web".');
   } else {
+    if ("liveness_health_check" in web) {
+      failures.push(
+        'Web service uses unsupported "liveness_health_check" field. DigitalOcean App Platform rejects this field; use service.health_check only.',
+      );
+    }
     // Must be image-based deploy — github: source causes the "Selecting branch" clone hang
     if (web.github) {
       failures.push(
