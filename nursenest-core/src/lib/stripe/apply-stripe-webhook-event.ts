@@ -660,7 +660,7 @@ export async function applyStripeWebhookEvent(
       }
       await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);
 
-      scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible({
+      await scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible({
         stripe,
         event,
         session,
@@ -1066,7 +1066,7 @@ export async function applyStripeWebhookEvent(
             });
           }
         }
-        scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification({
+        await scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification({
           stripe,
           event,
           invoice,
@@ -1154,7 +1154,7 @@ export async function applyStripeWebhookEvent(
             planCountry: true,
           },
         });
-        scheduleOwnerInvoicePaymentFailedNotification({
+        await scheduleOwnerInvoicePaymentFailedNotification({
           stripe,
           event,
           invoice,

@@ -528,6 +528,12 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
       "[NurseNest][CRITICAL] Invoice payment FAILED notification dropped — neither ADMIN_SUBSCRIPTION_NOTIFY_EMAIL nor ADMIN_SUBSCRIPTION_NOTIFY_PHONE is set.",
       { eventIdPrefix: args.event.id.slice(0, 12), userId: args.userId, subscriptionId: args.subscriptionId },
     );
+    throw notificationFailure("invoice_payment_failed", args.event.id.slice(0, 12), ["no_admin_notification_recipients"]);
+  }
+
+  const claim = await claimStripeOwnerPaidSubscriptionNotifyOrDuplicate(args.event.id);
+  if (claim === "duplicate") {
+    safeServerLog(LOG_SCOPE, "invoice_payment_failed_skipped_duplicate_event", { eventIdPrefix: args.event.id.slice(0, 12) });
     return;
   }
 
@@ -579,6 +585,8 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
   const textBody = lines.join("\n");
   const htmlBody = `<pre style="white-space:pre-wrap;font-family:system-ui,monospace;font-size:14px;color:#dc2626;">${textBody.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</pre>`;
   const smsBody = `NurseNest PAYMENT FAILED: ${amountDue} | ${customerEmail ?? args.userId.slice(0, 8) + "…"} | sub ${args.subscriptionId.slice(0, 12)}… | reason: ${failureMessage?.slice(0, 80) ?? "—"} | retry: ${nextRetryIso?.slice(0, 16) ?? "—"}`;
+  let delivered = false;
+  const failures: string[] = [];
 
   if (notifyEmail) {
     try {
@@ -590,6 +598,9 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
       });
       if (!r.ok) {
         console.error("[NurseNest][CRITICAL] Payment-failed admin email did not send.", { skippedReason: r.skippedReason });
+        failures.push(`email:${r.skippedReason ?? "unknown"}`);
+      } else {
+        delivered = true;
       }
       safeServerLog(LOG_SCOPE, "invoice_payment_failed_email_result", {
         ok: r.ok,
@@ -598,22 +609,38 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
       });
     } catch (e) {
       console.error("[NurseNest][CRITICAL] Payment-failed admin email threw.", e);
+      failures.push(`email_exception:${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`);
     }
   }
 
   if (notifyPhone) {
     try {
       const r = await sendTwilioSmsIfConfigured(notifyPhone, smsBody);
+      if (r.ok) {
+        delivered = true;
+      } else {
+        failures.push(`sms:${r.skippedReason ?? "unknown"}`);
+      }
       safeServerLog(LOG_SCOPE, "invoice_payment_failed_sms_result", {
         ok: r.ok,
         skippedReason: r.skippedReason,
         eventIdPrefix: args.event.id.slice(0, 12),
       });
     } catch (e) {
+      failures.push(`sms_exception:${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`);
       safeServerLog(LOG_SCOPE, "invoice_payment_failed_sms_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
       });
     }
+  }
+
+  if (!delivered) {
+    await releaseStripeOwnerPaidSubscriptionNotifyClaim(args.event.id);
+    throw notificationFailure(
+      "invoice_payment_failed",
+      args.event.id.slice(0, 12),
+      failures.length ? failures : ["no_channel_delivered"],
+    );
   }
 }
