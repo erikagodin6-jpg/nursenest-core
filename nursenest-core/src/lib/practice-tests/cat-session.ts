@@ -1071,11 +1071,15 @@ export async function advanceCatPracticeTest(params: {
   if (study && state.catStudyAwaitingContinue === true) {
     const last = state.results[state.results.length - 1];
     if (!last || last.questionId !== currentId) {
-      safeServerLog("cat_runner", "cat_resume_state_invalid", {
-        event: "cat_resume_state_invalid",
-        current_question: currentId.slice(0, 16),
-        last_recorded: last?.questionId?.slice(0, 16),
-      });
+      logTestingModelScopedEvent(
+        "cat_runner",
+        "cat_resume_state_invalid",
+        params.config.pathwayId ?? null,
+        {
+          current_question: currentId.slice(0, 16),
+          last_recorded: last?.questionId?.slice(0, 16),
+        },
+      );
       state = { ...state, catStudyAwaitingContinue: false };
       return catAfterScoredStep({
         ids,
@@ -1144,10 +1148,12 @@ export async function advanceCatPracticeTest(params: {
         params.config.pathwayId ?? null,
       );
       if (!studyFeedback) {
-        safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
-          event: "cat_study_feedback_build_failed",
-          phase: "final_item",
-        });
+        logTestingModelScopedEvent(
+          "cat_runner",
+          "cat_study_feedback_build_failed",
+          params.config.pathwayId ?? null,
+          { phase: "final_item" },
+        );
         studyFeedback = buildMinimalCatStudyFeedbackPayload({
           questionId: currentId,
           isCorrect: result.correct,
@@ -1167,10 +1173,12 @@ export async function advanceCatPracticeTest(params: {
       params.config.pathwayId ?? null,
     );
     if (!studyFeedback) {
-      safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
-        event: "cat_study_feedback_build_failed",
-        phase: "mid_session",
-      });
+      logTestingModelScopedEvent(
+        "cat_runner",
+        "cat_study_feedback_build_failed",
+        params.config.pathwayId ?? null,
+        { phase: "mid_session" },
+      );
       studyFeedback = buildMinimalCatStudyFeedbackPayload({
         questionId: currentId,
         isCorrect: result.correct,
