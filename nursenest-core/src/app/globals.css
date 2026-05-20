@@ -1763,11 +1763,11 @@ html[data-theme] .nn-marketing-surface {
      */
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: 0.75rem;
+    column-gap: clamp(1rem, 2vw, 2.5rem);
     row-gap: 0.5rem;
     width: 100%;
-    min-height: 3.625rem;
-    padding-block: 0.45rem;
+    min-height: 4.75rem;
+    padding-block: 0;
   }
 
   .nn-header-desktop-grid > .nn-header-brand-cluster {
@@ -1887,16 +1887,17 @@ html[data-theme] .nn-marketing-surface {
 /* Marketing header: content rhythm — slightly wider horizontal padding than page sections
    so logo/wordmark and nav labels keep breathing room (backgrounds stay on full-bleed wrappers). */
 .nn-header-primary-inner-shell.nn-section-shell {
-  padding-inline: clamp(1.125rem, 2.5vw, 2.5rem);
+  max-width: 100rem;
+  padding-inline: clamp(1.25rem, 3vw, 2.5rem);
 }
 @media (min-width: 640px) {
   .nn-header-primary-inner-shell.nn-section-shell {
-    padding-inline: clamp(1.375rem, 2.8vw, 2.75rem);
+    padding-inline: clamp(1.5rem, 3.5vw, 3rem);
   }
 }
 @media (min-width: 1024px) {
   .nn-header-primary-inner-shell.nn-section-shell {
-    padding-inline: clamp(1.5rem, 3vw, 3rem);
+    padding-inline: clamp(2rem, 4vw, 4rem);
   }
 }
 

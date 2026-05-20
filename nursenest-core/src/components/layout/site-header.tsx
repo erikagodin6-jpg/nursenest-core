@@ -935,7 +935,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 Non-row4 dark themes: all links (brand + pathway combined) in center. */}
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
+              className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-2 px-0 sm:gap-3 xl:gap-4"
               data-testid="marketing-header-brand-nav"
               data-nn-header-row="brand-nav"
             >
@@ -1068,10 +1068,10 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
           data-nn-header-row="class-pathway"
           data-testid="marketing-header-unified-nav"
         >
-          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[30px] items-center gap-x-1 gap-y-0 py-1 md:min-h-[32px] md:py-1.5">
+          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[36px] items-center gap-x-2 gap-y-0 overflow-x-auto py-1.5 scrollbar-none md:min-h-[40px] md:py-2">
             <nav
               aria-label={t("nav.marketingPathways")}
-              className="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-0.5 xl:gap-x-1"
+              className="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-2 xl:gap-x-3"
             >
               {/* Tier hub chips: RN / RPN / NP / New Grad / Allied */}
               {tierHubMenus.map((menu) => (

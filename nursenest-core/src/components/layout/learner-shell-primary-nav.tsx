@@ -413,7 +413,7 @@ export type LearnerShellNavProps = {
   pathwayPillLabel: string | null;
   pathwayId: string | null;
   pathwayHubHref: string | null;
-  examsLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
+  examsLabel: import("@/lib/testing/testing-model-types").LearnerExamsSurfaceLabel;
   /** When true, show Printouts in learner shell nav (server: printable store + public flag). */
   printablesNavVisible?: boolean;
   /** When true (RN/NP only), show dedicated ECG nav item and ECG items in Clinical Modules flyout. Hidden from RPN/LVN_LPN. */
