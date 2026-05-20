@@ -8,8 +8,8 @@ import { CNPLE_PATHWAY_ID } from "@/lib/exam-pathways/cnple-pathway";
 import {
   getTestingModelForPathwayId,
   isLoftTestingModel,
-  type TestingModel,
-} from "@/lib/testing/testing-model";
+} from "@/lib/testing/testing-model-pathway-map";
+import type { TestingModel } from "@/lib/testing/testing-model-types";
 
 export const PREMIUM_EXAM_SHELL_RN_PATHWAY_IDS = [
   "us-rn-nclex-rn",
