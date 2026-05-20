@@ -5,13 +5,15 @@ import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/prac
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
-  CNPLE_PATHWAY_ID,
   getCoachingPolicyForPathway,
   getCoachingPolicyForTestingModel,
-  getTestingModelDefinition,
-  getTestingModelForPathwayId,
   validateCoachingCopyForPathway,
-} from "@/lib/testing/testing-model";
+} from "@/lib/testing/testing-coaching-policy";
+import { getTestingModelDefinition } from "@/lib/testing/testing-model-definitions";
+import {
+  CNPLE_PATHWAY_ID,
+  getTestingModelForPathwayId,
+} from "@/lib/testing/testing-model-pathway-map";
 import type { CaseSessionScore } from "@/lib/cases/longitudinal-case-types";
 import type { PostExamCoachingReport } from "@/lib/learner/post-exam-coaching/types";
 
