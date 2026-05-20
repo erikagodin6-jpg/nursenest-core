@@ -8,7 +8,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry-slugs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -148,7 +147,17 @@ function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean 
   return patterns.some((p) => matchPattern(p.tokens, parts, 0, 0));
 }
 
-const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
+function readProgrammaticSlugs(): readonly string[] {
+  const sourcePath = path.join(ROOT, "src", "lib", "seo", "programmatic-registry-slugs.ts");
+  if (!fs.existsSync(sourcePath)) return [];
+
+  const source = fs.readFileSync(sourcePath, "utf8");
+  const arrayMatch = source.match(/PROGRAMMATIC_SEO_SLUGS\s*=\s*\[([\s\S]*?)\]\s*as\s+const/);
+  if (!arrayMatch) return [];
+  return [...arrayMatch[1].matchAll(/"([^"]+)"/g)].map((match) => match[1]).filter(Boolean);
+}
+
+const PROGRAMMATIC_SLUGS = new Set(readProgrammaticSlugs());
 
 function readMarketingLocaleCodes(): readonly string[] {
   const sourcePath = path.join(ROOT, "src", "lib", "i18n", "marketing-languages.ts");
