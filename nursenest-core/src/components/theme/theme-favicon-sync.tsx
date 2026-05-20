@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo } from "react";
 
+import { nursenestAppIcons } from "@/lib/branding/app-icons";
 import { resolveThemeLogo } from "@/lib/branding/resolve-theme-logo";
 import { parseRegisteredThemeId } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 
-const FALLBACK_FAVICON = "/logos/arctic-frost-leaf.svg";
+const FALLBACK_FAVICON = nursenestAppIcons.svg;
 const FAVICON_SELECTORS = [
   'link[rel="icon"]',
   'link[rel="shortcut icon"]',

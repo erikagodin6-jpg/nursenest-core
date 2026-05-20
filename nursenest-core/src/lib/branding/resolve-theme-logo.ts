@@ -160,8 +160,10 @@ export function themeLogoSpaceKeyForRegisteredTheme(
   return THEME_LOGO_SPACE_KEYS[themeId] ?? null;
 }
 
+import { NURSENEST_NAV_LEAF_SVG_PATH } from "@/lib/branding/app-icons";
+
 /** Same-origin leaf mark: Spaces `arcticfrost…_leaf.png` is a horizontal brand; header/footer use this SVG. */
-const ARCTIC_FROST_LEAF_PUBLIC_PATH = "/logos/arctic-frost-leaf.svg";
+const ARCTIC_FROST_LEAF_PUBLIC_PATH = NURSENEST_NAV_LEAF_SVG_PATH;
 
 /**
  * Single entry point for the in-app theme wordmark URL.
