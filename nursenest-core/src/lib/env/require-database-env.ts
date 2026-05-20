@@ -51,11 +51,14 @@ export function isDatabaseContractSkippedPhase(): boolean {
 
   if (phase === "phase-production-build" || phase === "phase-development-build") return true;
   if (lifecycle === "build") return true;
+  if (lifecycle === "build:lesson-indexes" || lifecycle === "verify:lesson-indexes") return true;
   /** Docker compile entry (`Dockerfile` → `npm run heroku-postbuild`) — never `start` / standalone CMD. */
   if (lifecycle === "heroku-postbuild") return true;
   if (argv.includes("next build")) return true;
   if (argv.includes("run-next-prod-build.mjs")) return true;
   if (argv.includes("run-buildpack-build.mjs")) return true;
+  if (argv.includes("build-normalized-lesson-indexes.runner.mts")) return true;
+  if (argv.includes("verify-normalized-lesson-indexes.runner.mts")) return true;
   if (/prisma\s+generate\b/i.test(argv)) return true;
   // `npm run db:generate` → `tsx scripts/run-prisma-with-env.mts generate` (no `prisma` token in argv).
   if (/run-prisma-with-env\.(?:mts?|cjs|js)\s+generate\b/i.test(argv)) return true;
