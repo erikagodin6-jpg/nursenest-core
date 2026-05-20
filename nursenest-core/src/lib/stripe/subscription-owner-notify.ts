@@ -165,8 +165,17 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
   const notifyPhone = process.env.ADMIN_SUBSCRIPTION_NOTIFY_PHONE?.trim();
 
   if (!notifyEmail && !notifyPhone) {
+    console.error(
+      "[NurseNest][CRITICAL] Paid subscription checkout notification dropped — neither ADMIN_SUBSCRIPTION_NOTIFY_EMAIL nor ADMIN_SUBSCRIPTION_NOTIFY_PHONE is set.",
+      {
+        eventIdPrefix: args.event.id.slice(0, 12),
+        userId: args.userId,
+        amountTotal,
+        hint: "Set ADMIN_SUBSCRIPTION_NOTIFY_EMAIL in DigitalOcean App Platform environment variables.",
+      },
+    );
     safeServerLog(LOG_SCOPE, "skipped_no_recipients", {
-      severity: "warning",
+      severity: "error",
       eventIdPrefix: args.event.id.slice(0, 12),
       hint: "Set ADMIN_SUBSCRIPTION_NOTIFY_EMAIL and/or ADMIN_SUBSCRIPTION_NOTIFY_PHONE",
     });
@@ -230,12 +239,20 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
         html: htmlEmailShell("Paid subscription checkout", htmlBody),
         text: textBody,
       });
+      if (!r.ok) {
+        console.error("[NurseNest][CRITICAL] Admin notification email failed to send after paid subscription checkout.", {
+          skippedReason: r.skippedReason,
+          to: notifyEmail,
+          eventIdPrefix: args.event.id.slice(0, 12),
+        });
+      }
       safeServerLog(LOG_SCOPE, "email_result", {
         ok: r.ok,
         skippedReason: r.skippedReason,
         eventIdPrefix: args.event.id.slice(0, 12),
       });
     } catch (e) {
+      console.error("[NurseNest][CRITICAL] Admin notification email threw during paid subscription checkout.", e);
       safeServerLog(LOG_SCOPE, "email_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
@@ -356,8 +373,17 @@ async function runOwnerInvoicePaymentSucceededNotificationsJob(
   const notifyPhone = process.env.ADMIN_SUBSCRIPTION_NOTIFY_PHONE?.trim();
 
   if (!notifyEmail && !notifyPhone) {
+    console.error(
+      "[NurseNest][CRITICAL] Invoice payment succeeded notification dropped — neither ADMIN_SUBSCRIPTION_NOTIFY_EMAIL nor ADMIN_SUBSCRIPTION_NOTIFY_PHONE is set.",
+      {
+        eventIdPrefix: args.event.id.slice(0, 12),
+        userId,
+        amountPaid,
+        hint: "Set ADMIN_SUBSCRIPTION_NOTIFY_EMAIL in DigitalOcean App Platform environment variables.",
+      },
+    );
     safeServerLog(LOG_SCOPE, "invoice_skipped_no_recipients", {
-      severity: "warning",
+      severity: "error",
       eventIdPrefix: args.event.id.slice(0, 12),
     });
     return;
@@ -425,6 +451,109 @@ async function runOwnerInvoicePaymentSucceededNotificationsJob(
       });
     } catch (e) {
       safeServerLog(LOG_SCOPE, "invoice_sms_exception", {
+        message: e instanceof Error ? e.message.slice(0, 200) : String(e),
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    }
+  }
+}
+
+export type ScheduleInvoicePaymentFailedArgs = {
+  stripe: Stripe;
+  event: Stripe.Event;
+  invoice: Stripe.Invoice;
+  userId: string;
+  subscriptionId: string;
+  customerId: string | null;
+  planTierLabel: string | null;
+  correlation: string;
+};
+
+/**
+ * Owner email/SMS after `invoice.payment_failed`. Runs after HTTP response via Next `after`.
+ * Never throws to callers.
+ */
+export function scheduleOwnerInvoicePaymentFailedNotification(args: ScheduleInvoicePaymentFailedArgs): void {
+  if (!args.event.livemode && !shouldIncludeTestModeOwnerNotifies()) return;
+  safeServerLog(LOG_SCOPE, "invoice_payment_failed_notify_scheduled", {
+    eventIdPrefix: args.event.id.slice(0, 12),
+    correlation: args.correlation,
+    subscriptionIdPrefix: args.subscriptionId.slice(0, 14),
+    severity: "warning",
+  });
+  after(async () => {
+    try {
+      await runOwnerInvoicePaymentFailedNotificationsJob(args);
+    } catch (e) {
+      safeServerLog(LOG_SCOPE, "invoice_payment_failed_job_error", {
+        message: e instanceof Error ? e.message.slice(0, 240) : String(e),
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    }
+  });
+}
+
+async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoicePaymentFailedArgs): Promise<void> {
+  const notifyEmail = process.env.ADMIN_SUBSCRIPTION_NOTIFY_EMAIL?.trim();
+  const notifyPhone = process.env.ADMIN_SUBSCRIPTION_NOTIFY_PHONE?.trim();
+  if (!notifyEmail && !notifyPhone) {
+    console.error(
+      "[NurseNest][CRITICAL] Invoice payment FAILED notification dropped — neither ADMIN_SUBSCRIPTION_NOTIFY_EMAIL nor ADMIN_SUBSCRIPTION_NOTIFY_PHONE is set.",
+      { eventIdPrefix: args.event.id.slice(0, 12) },
+    );
+    return;
+  }
+
+  const currency = args.invoice.currency ?? "usd";
+  const amountDue = typeof args.invoice.amount_due === "number" ? formatMoney(args.invoice.amount_due, currency) : "—";
+  const ts = new Date(args.event.created * 1000).toISOString();
+  const lines = [
+    `PAYMENT FAILED — subscription invoice`,
+    ``,
+    `User id: ${args.userId}`,
+    `Amount due: ${amountDue}`,
+    `Plan tier: ${args.planTierLabel ?? "—"}`,
+    `Subscription id: ${args.subscriptionId}`,
+    `Customer id: ${args.customerId ?? "—"}`,
+    `Stripe event: ${args.event.id} (${args.event.type})`,
+    `Livemode: ${args.event.livemode ? "live" : "test"}`,
+    `Event time (UTC): ${ts}`,
+  ];
+  const textBody = lines.join("\n");
+  const htmlBody = `<pre style="white-space:pre-wrap;font-family:system-ui,monospace;font-size:14px;color:#dc2626;">${textBody.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</pre>`;
+  const smsBody = `NurseNest PAYMENT FAILED: ${amountDue} | user ${args.userId.slice(0, 8)}… | sub ${args.subscriptionId.slice(0, 12)}…`;
+
+  if (notifyEmail) {
+    try {
+      const r = await sendTransactionalEmailHtml({
+        to: notifyEmail,
+        subject: `[NurseNest] PAYMENT FAILED — ${amountDue} (${args.subscriptionId.slice(0, 10)}…)`,
+        html: htmlEmailShell("Payment failed", htmlBody),
+        text: textBody,
+      });
+      if (!r.ok) {
+        console.error("[NurseNest][CRITICAL] Payment-failed admin email did not send.", { skippedReason: r.skippedReason });
+      }
+      safeServerLog(LOG_SCOPE, "invoice_payment_failed_email_result", {
+        ok: r.ok,
+        skippedReason: r.skippedReason,
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    } catch (e) {
+      console.error("[NurseNest][CRITICAL] Payment-failed admin email threw.", e);
+    }
+  }
+
+  if (notifyPhone) {
+    try {
+      const r = await sendTwilioSmsIfConfigured(notifyPhone, smsBody);
+      safeServerLog(LOG_SCOPE, "invoice_payment_failed_sms_result", {
+        ok: r.ok,
+        skippedReason: r.skippedReason,
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    } catch (e) {
+      safeServerLog(LOG_SCOPE, "invoice_payment_failed_sms_exception", {
         message: e instanceof Error ? e.message.slice(0, 200) : String(e),
         eventIdPrefix: args.event.id.slice(0, 12),
       });

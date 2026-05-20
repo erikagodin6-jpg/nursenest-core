@@ -37,6 +37,7 @@ import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-
 import {
   scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible,
   scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification,
+  scheduleOwnerInvoicePaymentFailedNotification,
 } from "@/lib/stripe/subscription-owner-notify";
 import {
   adminPaidSubscriptionSmsInputFromSubscription,
@@ -1112,6 +1113,16 @@ export async function applyStripeWebhookEvent(
             planTier: true,
             planCountry: true,
           },
+        });
+        scheduleOwnerInvoicePaymentFailedNotification({
+          stripe,
+          event,
+          invoice,
+          userId: row.userId,
+          subscriptionId: subId,
+          customerId: row.stripeCustomerId ?? null,
+          planTierLabel: row.planTier != null ? String(row.planTier) : null,
+          correlation,
         });
         logBillingTransition({
           kind: "invoice_payment_failed",

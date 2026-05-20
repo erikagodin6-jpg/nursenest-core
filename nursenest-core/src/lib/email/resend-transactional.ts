@@ -25,6 +25,13 @@ export async function sendTransactionalEmailHtml(params: {
     "NurseNest <onboarding@resend.dev>";
 
   if (!key) {
+    const isProd = process.env.NODE_ENV === "production";
+    if (isProd) {
+      console.error(
+        "[NurseNest][CRITICAL] RESEND_API_KEY is not set in production — transactional email will not send.",
+        { subject: params.subject.slice(0, 120), to: params.to },
+      );
+    }
     safeServerLog("email", "transactional_skipped", { reason: "no_resend_key", subject: params.subject.slice(0, 80) });
     return { ok: false, skippedReason: "no_resend_key" };
   }
