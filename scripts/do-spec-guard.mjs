@@ -16,11 +16,27 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const require = createRequire(import.meta.url);
-const yaml = require("js-yaml");
-
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dir, "..");
+
+function requireInstalledDependency(specifier) {
+  const candidates = [
+    path.join(ROOT, "package.json"),
+    path.join(ROOT, "nursenest-core", "package.json"),
+    path.join(process.cwd(), "package.json"),
+  ];
+  for (const packageJsonPath of candidates) {
+    if (!existsSync(packageJsonPath)) continue;
+    try {
+      return createRequire(packageJsonPath)(specifier);
+    } catch (error) {
+      if (error?.code !== "MODULE_NOT_FOUND") throw error;
+    }
+  }
+  return createRequire(import.meta.url)(specifier);
+}
+
+const yaml = requireInstalledDependency("js-yaml");
 
 /** The one and only spec file that may be used with doctl apps update. */
 export const CANONICAL_SPEC_PATH = path.join(ROOT, ".do", "app-nursenest-core-next.yaml");

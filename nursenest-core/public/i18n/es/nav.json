@@ -310,5 +310,7 @@
   "nav.tierDrop.toolsDesc": "Tarjetas, tutor con IA y utilidades de estudio",
   "nav.tierDrop.toolsTitle": "Herramientas de estudio",
   "nav.topicAdaptiveTests": "Exámenes adaptativos por tema",
-  "nav.ecgMastery": "ECG Interpretation"
+  "nav.ecgMastery": "ECG Interpretation",
+  "nav.marketingPathways": "Rutas de preparación",
+  "nav.regionChangeHint": "Usa la configuración para cambiar tu país o ruta de estudio."
 }
