@@ -22,6 +22,8 @@ import {
   getCoachingPolicyForPathway,
   getCoachingPolicyForTestingModel,
   getLearnerDashboardProfile,
+  getTestingModelResultsProfile,
+  isDashboardWidgetEligible,
   getTestingEngineCapabilities,
   getTestingModelAnalyticsDimensions,
   getTestingModelDefinition,
@@ -174,6 +176,9 @@ describe("dashboard governance", () => {
     assert.equal(profile.showAdaptiveProgression, false);
     assert.equal(profile.showCatStreakSemantics, false);
     assert.match(profile.primaryMetricLabel, /competency balance/i);
+    assert.ok(profile.suppressedWidgets.includes("passProbability"));
+    assert.equal(isDashboardWidgetEligible(CNPLE_PATHWAY_ID, "adaptiveEngine"), false);
+    assert.equal(isDashboardWidgetEligible(CNPLE_PATHWAY_ID, "passProbability"), false);
   });
 
   it("CAT dashboard allows adaptive progression", () => {
@@ -254,15 +259,13 @@ describe("CNPLE second-pass isolation (routing + UI + telemetry)", () => {
     assert.match(content, /redirect\("\/app\/cases\/cnple"\)/);
   });
 
-  it("post-exam UI uses LOFT hero for loft_simulation sessions", () => {
+  it("post-exam UI uses presentation layer for hero selection", () => {
     const content = src("components/student/post-exam-adaptive-report.tsx");
+    assert.match(content, /getTestingModelResultsProfile/);
     assert.match(content, /LoftSimulationResultsHero/);
-    assert.match(content, /report\.sessionKind === "loft_simulation"/);
-    assert.doesNotMatch(
-      content,
-      /loft_simulation[\s\S]{0,400}<CatResultsHero/,
-      "LOFT sessions must not render CatResultsHero",
-    );
+    assert.match(content, /presentation\.heroVariant === "loft_simulation"/);
+    assert.match(content, /export function PostExamPerformanceReport/);
+    assert.match(content, /PostExamAdaptiveReport = PostExamPerformanceReport/);
   });
 
   it("CNPLE case completion routes through governed post-exam report", () => {
@@ -326,5 +329,54 @@ describe("CNPLE second-pass isolation (routing + UI + telemetry)", () => {
     assert.equal(report.overall.passOutlookPct, null);
     assert.equal(report.overall.passOutlookBand, null);
     assert.equal(report.overall.readinessResult, null);
+  });
+});
+
+describe("third-pass presentation + governed analytics", () => {
+  it("LOFT results profile forbids pass probability presentation", () => {
+    const profile = getTestingModelResultsProfile(CNPLE_PATHWAY_ID, "loft_simulation");
+    assert.equal(profile.heroVariant, "loft_simulation");
+    assert.equal(profile.showPassProbability, false);
+    assert.equal(profile.showConfidenceEstimate, false);
+    assert.match(profile.anotherSessionCtaLabel, /LOFT simulation/i);
+    assert.doesNotMatch(profile.paywallUpsellCopy, /\badaptive sessions\b/i);
+  });
+
+  it("CAT results profile allows pass probability when adaptive", () => {
+    const profile = getTestingModelResultsProfile("us-rn-nclex-rn", "cat");
+    assert.equal(profile.heroVariant, "cat_adaptive");
+    assert.equal(profile.showPassProbability, true);
+  });
+
+  it("governed analytics blocks cat_ events on LOFT pathways", async () => {
+    const { captureGovernedLearnerProductEvent } = await import(
+      "@/lib/observability/governed-learner-analytics"
+    );
+    const { getPsychometricTelemetryViolationCount, resetPsychometricTelemetryViolationCount } =
+      await import("@/lib/testing/testing-telemetry-governance");
+    resetPsychometricTelemetryViolationCount();
+    captureGovernedLearnerProductEvent("user-test", { hasAccess: true, country: "CA", tier: "NP" }, "cat_advance", {
+      pathway_id: CNPLE_PATHWAY_ID,
+    });
+    assert.ok(getPsychometricTelemetryViolationCount() >= 1);
+  });
+
+  it("presentation registry module exists", () => {
+    const content = src("lib/testing/testing-model-presentation.ts");
+    assert.match(content, /getTestingModelResultsProfile/);
+    assert.match(content, /getTestingModelProgressSemantics/);
+    assert.match(content, /getTestingModelRecommendationSemantics/);
+  });
+
+  it("governed learner analytics module exists", () => {
+    const content = src("lib/observability/governed-learner-analytics.ts");
+    assert.match(content, /captureGovernedLearnerProductEvent/);
+    assert.match(content, /assertPathwayPostHogCapture/);
+  });
+
+  it("copy governance module for AI/CMS display", () => {
+    const content = src("lib/testing/psychometric-copy-governance.ts");
+    assert.match(content, /governLearnerDisplayCopy/);
+    assert.match(content, /governMarketingCopy/);
   });
 });
