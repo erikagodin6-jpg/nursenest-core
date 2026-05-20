@@ -7,7 +7,7 @@
  * Post-submit rationale via `PracticeRationaleFullPanel` + lesson links (`linear_commit`).
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   NclexPracticeExamLayout,
@@ -28,7 +28,15 @@ import {
   tryNormalizeBowtiePayload,
 } from "@/lib/questions/bowtie-adapter";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
-import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import type {
+  PracticeTestConfigJson,
+  PracticeTestPathwayClientShell,
+  PracticeTestResultsJson,
+} from "@/lib/practice-tests/types";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
 type QRow = {
@@ -207,7 +215,7 @@ async function submitTestApi(testId: string): Promise<{
 
 export function NclexPracticeRunner({
   testId,
-  userId: _userId,
+  userId,
   pathwayLabel: pathwayLabelProp,
 }: {
   testId: string;
@@ -234,6 +242,15 @@ export function NclexPracticeRunner({
   const [transitioning, setTransitioning] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const fallbackMeasurementSystem = useMemo(
+    () => resolveMeasurementSystemForLearnerPathway(pathwayId, {}),
+    [pathwayId],
+  );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const resolveMeasureText = useCallback(
+    (text: string) => resolveMeasurementTokens(text, measurementSystem),
+    [measurementSystem],
+  );
 
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
@@ -499,15 +516,28 @@ export function NclexPracticeRunner({
       {adaptivePostMiss?.questionId === currentId && pathwayId ? (
         <PracticeAdaptivePostMissPanel
           payload={adaptivePostMiss.payload}
-          testConfig={{ pathwayId }}
+          testConfig={{
+            questionCount: total,
+            topicNames: [],
+            difficultyMin: null,
+            difficultyMax: null,
+            selectionMode: "random",
+            pathwayId,
+            timedMode,
+            timeLimitSec,
+          } satisfies PracticeTestConfigJson}
           pathwaySurface={{
             id: pathwayId,
-            countrySlug: "",
-            roleTrack: "",
-            examCode: "",
+            countrySlug: pathwayId.startsWith("us-") ? "us" : "canada",
+            roleTrack: pathwayId.includes("-np-") ? "np" : pathwayId.includes("-rn-") ? "rn" : "rpn",
+            examCode: pathwayId.includes("nclex-rn") ? "nclex-rn" : pathwayId.includes("np") ? "np" : "rex-pn",
             shortName: pathwayLabel,
-            examFamily: null,
-          }}
+            examFamily: pathwayId.includes("np")
+              ? "NP"
+              : pathwayId.includes("nclex-rn")
+                ? "NCLEX_RN"
+                : "REX_PN",
+          } as PracticeTestPathwayClientShell}
           tx={(_key, fallback) => fallback}
         />
       ) : null}

@@ -212,13 +212,15 @@ export function PracticeTestRunnerClient({
   const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
   const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
+  const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
+  const [saving, setSaving] = useState(false);
 
   const activePathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? initialPathwaySurface?.id ?? null;
   const pathwayCountryByPathwayId = useMemo(() => {
     const map: Record<string, string> = {};
     for (const surf of [pathwaySurface, initialPathwaySurface]) {
       if (!surf) continue;
-      map[surf.id] = surf.countrySlug === "us" ? "US" : surf.countrySlug === "ca" ? "CA" : "US";
+      map[surf.id] = surf.countrySlug === "us" ? "US" : surf.countrySlug === "canada" ? "CA" : "US";
     }
     return map;
   }, [pathwaySurface, initialPathwaySurface]);
@@ -238,7 +240,6 @@ export function PracticeTestRunnerClient({
       disabled={saving || qLoading}
     />
   );
-  const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
   const [catMode, setCatMode] = useState(false);
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
@@ -255,7 +256,6 @@ export function PracticeTestRunnerClient({
   const catExamKeyboardAdvanceRef = useRef(false);
   /** Dedupes rapid Enter / Space activation (OS key-repeat). */
   const catExamPrimaryActionGateMsRef = useRef(0);
-  const [saving, setSaving] = useState(false);
   const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
   const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
   /** Bumps when user retries a failed per-question fetch (effect deps exclude full cache). */
