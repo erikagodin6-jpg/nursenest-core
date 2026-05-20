@@ -52,7 +52,10 @@ export async function register() {
 
       // Node instrumentation (deferred)
       try {
-        const mod = await import("@/lib/instrumentation/register-node");
+        const importRuntime = Function("specifier", "return import(specifier)") as (
+          specifier: string,
+        ) => Promise<{ registerNodeInstrumentation?: () => Promise<void> | void }>;
+        const mod = await importRuntime("@/lib/instrumentation/register-node");
         if (typeof mod.registerNodeInstrumentation === "function") {
           await mod.registerNodeInstrumentation();
         }

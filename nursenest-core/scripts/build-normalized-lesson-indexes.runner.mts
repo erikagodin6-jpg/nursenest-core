@@ -7,10 +7,23 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
-import { LESSON_CATEGORIES } from "@/lib/lessons/lesson-taxonomy";
-import { countMarketingHubLessonsByDisplayCategoryForPathway } from "@/lib/lessons/marketing-lessons-hub-category";
 import {
+  buildLessonNormalizationCoverageReport,
+  lessonNormalizationCoverageJsonPath,
+  lessonNormalizationCoverageMarkdownPath,
+  writeLessonNormalizationCoverageReports,
+} from "./lesson-normalization-coverage.mts";
+
+const canonicalHubsModule = await import("@/lib/lessons/canonical-lessons-hubs");
+const lessonTaxonomyModule = await import("@/lib/lessons/lesson-taxonomy");
+const marketingHubModule = await import("@/lib/lessons/marketing-lessons-hub-category");
+const catalogSyncModule = await import("@/lib/lessons/pathway-lesson-catalog-sync");
+const safeServerLogModule = await import("@/lib/observability/safe-server-log");
+
+const { ALLIED_MARKETING_CORE_PATHWAY_IDS } = canonicalHubsModule.default ?? canonicalHubsModule;
+const { LESSON_CATEGORIES } = lessonTaxonomyModule.default ?? lessonTaxonomyModule;
+const { countMarketingHubLessonsByDisplayCategoryForPathway } = marketingHubModule.default ?? marketingHubModule;
+const {
   getCatalogLessonsRaw,
   getCatalogLessonsRawFromBundledOnly,
   getCatalogPathwayLessonsSync,
@@ -19,14 +32,8 @@ import {
   getMarketingHubEffectiveCatalogSlugSet,
   listCatalogPathwayIdsWithLessonsSync,
   resetCatalogLessonsRawMergeCacheForTests,
-} from "@/lib/lessons/pathway-lesson-catalog-sync";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  buildLessonNormalizationCoverageReport,
-  lessonNormalizationCoverageJsonPath,
-  lessonNormalizationCoverageMarkdownPath,
-  writeLessonNormalizationCoverageReports,
-} from "./lesson-normalization-coverage.mts";
+} = catalogSyncModule.default ?? catalogSyncModule;
+const { safeServerLog } = safeServerLogModule.default ?? safeServerLogModule;
 
 const SCHEMA_V1 = 1;
 const MANIFEST_SCHEMA_V1 = 1;

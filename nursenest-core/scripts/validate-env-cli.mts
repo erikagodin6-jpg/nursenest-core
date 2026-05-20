@@ -14,11 +14,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { config } from "dotenv";
-import {
-  buildEnvDiagnosticsReport,
-  formatEnvDiagnosticsReportHuman,
-  formatEnvDiagnosticsReportJson,
-} from "../src/lib/env/env-diagnostics";
 
 const root = process.cwd();
 
@@ -36,6 +31,12 @@ const ci = argv.includes("--ci");
 const production = argv.includes("--production");
 
 const profile = production ? "production" : ci ? "ci" : "dev";
+const diagnosticsModule = await import("../src/lib/env/env-diagnostics.ts");
+const {
+  buildEnvDiagnosticsReport,
+  formatEnvDiagnosticsReportHuman,
+  formatEnvDiagnosticsReportJson,
+} = diagnosticsModule.default ?? diagnosticsModule;
 
 const report = buildEnvDiagnosticsReport({ profile, strict });
 

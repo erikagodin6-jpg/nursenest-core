@@ -8,11 +8,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "../src/lib/marketing-i18n/marketing-i18n-shard-groups.ts";
-import { scanFlatMarketingMessagesForForbiddenValues } from "../src/lib/marketing-i18n/marketing-message-value-policy.ts";
 
 const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const enDir = path.join(pkgRoot, "public", "i18n", "en");
+const shardGroupsModule = await import("../src/lib/marketing-i18n/marketing-i18n-shard-groups.ts");
+const valuePolicyModule = await import("../src/lib/marketing-i18n/marketing-message-value-policy.ts");
+const { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } = shardGroupsModule.default ?? shardGroupsModule;
+const { scanFlatMarketingMessagesForForbiddenValues } = valuePolicyModule.default ?? valuePolicyModule;
 
 function main() {
   if (!fs.existsSync(enDir)) {

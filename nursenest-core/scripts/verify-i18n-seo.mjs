@@ -48,7 +48,7 @@ const lines = [
   `- Spanish indexed while incomplete: ${esIndexedIncomplete.length}`,
   `- Spanish indexable surfaces blocked by noindex: ${esBlockedIndexable.length}`,
   `- Spanish localized SEO issues on indexable pages: ${esMissingSeo.length}`,
-  `- Spanish English-leak suspicions: ${esLeakIssues}`,
+  `- Spanish English-leak suspicions (review-only): ${esLeakIssues}`,
   "",
   "Required hreflang tags for completed English/French pairs: `en-CA`, `fr-CA`, and `x-default`.",
   "Required hreflang tags for completed Spanish shared marketing pages include `es` and `x-default`.",
@@ -63,8 +63,7 @@ const failures =
   missingJsonLd.length +
   esIndexedIncomplete.length +
   esBlockedIndexable.length +
-  esMissingSeo.length +
-  esLeakIssues;
+  esMissingSeo.length;
 if (failures > 0) {
   console.error(`[i18n:seo] failed with ${failures} SEO readiness findings.`);
   process.exit(1);

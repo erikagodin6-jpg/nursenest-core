@@ -8,8 +8,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -149,8 +147,43 @@ function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean 
   return patterns.some((p) => matchPattern(p.tokens, parts, 0, 0));
 }
 
-const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
-const MARKETING_LOCALE_CODES = MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
+function readProgrammaticSlugs(): readonly string[] {
+  const sourcePath = path.join(ROOT, "src", "lib", "seo", "programmatic-registry-slugs.ts");
+  if (!fs.existsSync(sourcePath)) return [];
+
+  const source = fs.readFileSync(sourcePath, "utf8");
+  const arrayMatch = source.match(/PROGRAMMATIC_SEO_SLUGS\s*=\s*\[([\s\S]*?)\]\s*as\s+const/);
+  if (!arrayMatch) return [];
+  return [...arrayMatch[1].matchAll(/"([^"]+)"/g)].map((match) => match[1]).filter(Boolean);
+}
+
+const PROGRAMMATIC_SLUGS = new Set(readProgrammaticSlugs());
+
+function readMarketingLocaleCodes(): readonly string[] {
+  const sourcePath = path.join(ROOT, "src", "lib", "i18n", "marketing-languages.ts");
+  const fallback = ["en", "fr", "es", "tl", "hi", "pt"];
+  if (!fs.existsSync(sourcePath)) return fallback;
+
+  const source = fs.readFileSync(sourcePath, "utf8");
+  const codes: string[] = [];
+  const seen = new Set<string>();
+  const codeStarts = [...source.matchAll(/\{\s*code:\s*"([^"]+)"/g)];
+  for (let i = 0; i < codeStarts.length; i++) {
+    const code = codeStarts[i]?.[1];
+    const from = codeStarts[i]?.index ?? 0;
+    const to = i + 1 < codeStarts.length ? (codeStarts[i + 1]?.index ?? source.length) : source.length;
+    if (!code || seen.has(code)) continue;
+    const slice = source.slice(from, to);
+    const tier = slice.match(/\btier:\s*"(full|partial|incomplete)"/)?.[1];
+    if (tier === "full" || tier === "partial") {
+      seen.add(code);
+      codes.push(code);
+    }
+  }
+  return codes.length > 0 ? codes : fallback;
+}
+
+const MARKETING_LOCALE_CODES = readMarketingLocaleCodes();
 
 /** Second segment allowed under /{locale}/ for non-programmatic marketing routes (static pages). */
 const LOCALE_STATIC_SECONDS = new Set([
