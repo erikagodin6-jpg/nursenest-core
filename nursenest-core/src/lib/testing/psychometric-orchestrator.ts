@@ -15,7 +15,6 @@ import {
 import {
   CNPLE_PATHWAY_ID,
   getTestingModelForPathwayId,
-  pathwaySupportsCapability,
 } from "@/lib/testing/testing-model-pathway-map";
 import type { TestingModel } from "@/lib/testing/testing-model-types";
 import {
@@ -32,7 +31,10 @@ import {
   type TestingModelRecommendationSemantics,
   type TestingModelResultsProfile,
 } from "@/lib/testing/testing-model-presentation";
-import type { TestingModelCapability } from "@/lib/testing/testing-model-capabilities";
+import {
+  pathwaySupportsCapability,
+  type TestingModelCapability,
+} from "@/lib/testing/testing-model-capabilities";
 import {
   getTestingModelReadinessSemantics,
   type TestingModelReadinessSemantics,

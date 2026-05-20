@@ -11,6 +11,7 @@
  * - policies/* — telemetry, readiness, and domain policy engines
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import type { TestingModelAnalyticsDimensions } from "@/lib/testing/testing-telemetry-governance";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
   catPathwayExamCodeLabel,

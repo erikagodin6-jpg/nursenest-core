@@ -134,6 +134,10 @@ export const PH = {
   learnerCatLearningLinkClicked: "learner_cat_learning_link_clicked",
   /** Learner clicked a CAT CTA from study-loop surfaces. */
   learnerStudyLoopCatCtaClicked: "learner_study_loop_cat_cta_clicked",
+  /** Learner clicked a LOFT CTA from study-loop surfaces. */
+  learnerStudyLoopLoftCtaClicked: "learner_study_loop_loft_cta_clicked",
+  /** Learner clicked a linear practice CTA from study-loop surfaces. */
+  learnerStudyLoopPracticeCtaClicked: "learner_study_loop_practice_cta_clicked",
   /** Lesson page: bank-backed study loop intro card shown (eligible lesson). */
   learnerLessonStudyLoopShown: "learner_lesson_study_loop_shown",
   learnerLessonStudyLoopPreStarted: "learner_lesson_study_loop_pre_started",
