@@ -7,8 +7,19 @@ import os from "node:os";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-import {
+import { buildLessonNormalizationCoverageReport } from "./lesson-normalization-coverage.mts";
+import { getLessonVerifyMode as getLessonVerifyModeFromEnv } from "./lesson-index-verify-mode.mjs";
+
+const examPathwaysModule = await import("@/lib/exam-pathways/exam-pathways-catalog");
+const catalogSyncModule = await import("@/lib/lessons/pathway-lesson-catalog-sync");
+const generatedIndexModule = await import("@/lib/lessons/pathway-lesson-generated-index");
+const lessonRoutesModule = await import("@/lib/lessons/lesson-routes");
+const canonicalHubsModule = await import("@/lib/lessons/canonical-lessons-hubs");
+const marketingHubModule = await import("@/lib/lessons/marketing-lessons-hub-category");
+const safeServerLogModule = await import("@/lib/observability/safe-server-log");
+
+const { getExamPathwayById } = examPathwaysModule.default ?? examPathwaysModule;
+const {
   getCatalogLessonsRaw,
   getCatalogLessonsRawFromBundledOnly,
   getLessonCatalogMemoizationStats,
@@ -16,14 +27,12 @@ import {
   getMarketingHubEffectiveCatalogSlugSet,
   listCatalogPathwayIdsWithLessonsSync,
   resetCatalogLessonsRawMergeCacheForTests,
-} from "@/lib/lessons/pathway-lesson-catalog-sync";
-import { parsePathwayLessonGeneratedIndexV1 } from "@/lib/lessons/pathway-lesson-generated-index";
-import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
-import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
-import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
-import { buildLessonNormalizationCoverageReport } from "./lesson-normalization-coverage.mts";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { getLessonVerifyMode as getLessonVerifyModeFromEnv } from "./lesson-index-verify-mode.mjs";
+} = catalogSyncModule.default ?? catalogSyncModule;
+const { parsePathwayLessonGeneratedIndexV1 } = generatedIndexModule.default ?? generatedIndexModule;
+const { marketingPathwayLessonDetailPath } = lessonRoutesModule.default ?? lessonRoutesModule;
+const { ALLIED_MARKETING_CORE_PATHWAY_IDS } = canonicalHubsModule.default ?? canonicalHubsModule;
+const { getMarketingLessonsHubCatalogLessons } = marketingHubModule.default ?? marketingHubModule;
+const { safeServerLog } = safeServerLogModule.default ?? safeServerLogModule;
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const realIndexDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
