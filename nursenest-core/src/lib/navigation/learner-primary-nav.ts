@@ -3,10 +3,7 @@
  */
 
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
-import {
-  type LearnerExamsSurfaceLabel,
-  resolveLearnerExamsNavHref,
-} from "@/lib/testing/testing-model";
+import type { LearnerExamsSurfaceLabel } from "@/lib/testing/testing-model-types";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-feature-flag";
@@ -78,7 +75,21 @@ function withPathwayQuery(base: string, pathwayId: string | null): string {
   return base.includes("?") ? `${base}&${q}` : `${base}?${q}`;
 }
 
-export type { LearnerExamsSurfaceLabel } from "@/lib/testing/testing-model";
+export type { LearnerExamsSurfaceLabel } from "@/lib/testing/testing-model-types";
+
+function resolveLearnerExamsNavHref(
+  pathwayId: string | null | undefined,
+  examsLabel?: LearnerExamsSurfaceLabel,
+): string {
+  if (examsLabel === "LOFT Simulation") {
+    return "/app/cases/cnple";
+  }
+  if (examsLabel === "CAT Exams" && pathwayId?.trim()) {
+    const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
+    return `/app/practice-tests/cat-launch?${q.toString()}`;
+  }
+  return "/app/practice-tests?startMode=practice_exam";
+}
 
 /**
  * Ordered: Lessons → Practice → Flashcards → CAT → Reports → Profile (max 6).
