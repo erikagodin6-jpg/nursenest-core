@@ -96,7 +96,7 @@ export function buildLearnerPrimaryNavItems(
     examsLabel === "LOFT Simulation"
       ? resolveLearnerExamsNavHref(pathwayId, examsLabel)
       : examsLabel === "Exams"
-        ? "/app/practice-tests?startMode=practice_exam"
+        ? withPathwayQuery("/app/practice-tests?startMode=practice_exam", pathwayId)
         : resolveStudySurfaceCatHref({
             pathwayId,
             availablePathwayIds: pathwayId ? [pathwayId] : [],
