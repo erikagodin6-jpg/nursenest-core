@@ -1,6 +1,6 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-16T22:33:13.637Z
+Generated: 2026-05-20T09:31:35.051Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
@@ -9,7 +9,7 @@ Hindi status: pass
 Tagalog status: pass
 Portuguese status: pass
 REx-PN French status: noindex until translations pass
-Spanish coverage: 100% (18722/18722)
+Spanish coverage: 100% (18769/18769)
 Hindi coverage: 100% (17563/17563)
 Tagalog coverage: 100% (17563/17563)
 Portuguese coverage: 100% (17563/17563)
