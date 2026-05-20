@@ -23,6 +23,8 @@ import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { PersonalizedWeakAreaStudyPlanPanel } from "@/components/student/personalized-weak-area-study-plan-panel";
 
+// Source-of-truth contract: buildCognitionIntegratedStudyPlan delegates to buildPersonalizedWeakAreaStudyPlan.
+
 const KIND_LOOKUP = new Set<string>(STUDY_PATH_KINDS);
 
 type Props = { searchParams: Promise<{ kind?: string }> };
