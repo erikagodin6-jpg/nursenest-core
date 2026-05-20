@@ -110,7 +110,7 @@ function RecentGainsBlock({
 }
 
 export type LearnerStudyHomeProps = {
-  crumbs: BreadcrumbCrumb[];
+  crumbs?: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   /** Marketing locale — matches shell nav label casing. */
   locale: string;
@@ -154,7 +154,7 @@ export type LearnerStudyHomeProps = {
 };
 
 export function LearnerStudyHome({
-  crumbs,
+  crumbs = [{ name: "Dashboard", href: "/app" }],
   t,
   locale,
   examsNavLabel,

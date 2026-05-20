@@ -24,7 +24,7 @@ export function GovernedCoachingRemediationLink({
           event: "graph_step_clicked",
           topicSlug: recommendation.exposureKey.split("::")[0] ?? "coaching",
           sourceSurface: "post_exam_coaching",
-          remediationPriority: recommendation.priority,
+          remediationPriority: String(recommendation.priority),
           graphDepth: recommendation.graphStep?.depth ?? 0,
         });
       }}

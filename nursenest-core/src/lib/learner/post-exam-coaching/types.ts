@@ -118,6 +118,7 @@ export type ReadinessReliabilityAssessment = {
 
 export type PostExamCoachingReport = {
   coachingModel: CoachingModel;
+  certaintyTier?: string;
   semantics: CoachingSemanticsCopy;
   readinessReliability: ReadinessReliabilityAssessment;
   readinessBand: ReadinessBand;
@@ -127,4 +128,5 @@ export type PostExamCoachingReport = {
   clinicalJudgment: StructuredClinicalInsight[];
   recommendations: CoachingRecommendation[];
   dashboardFeed: PostExamDashboardFeed;
+  learnerState?: import("@/lib/learner/rn-coaching-intelligence/learner-state-types").RnLearnerStateSnapshot | null;
 };

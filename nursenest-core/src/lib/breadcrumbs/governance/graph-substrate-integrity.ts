@@ -2,7 +2,7 @@
  * Graph substrate integrity — validates orchestration authorities stay unified.
  */
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { EDUCATIONAL_GRAPH_VERSION } from "@/lib/breadcrumbs/governance/graph-os-constants";
 
@@ -50,7 +50,7 @@ export function auditGraphSubstrateIntegrity(repoRoot = process.cwd()): GraphSub
 }
 
 function scanDir(dir: string, violations: string[], repoRoot: string): void {
-  if (!statSync(dir, { throwIf: false })?.isDirectory()) return;
+  if (!existsSync(dir) || !statSync(dir).isDirectory()) return;
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) scanDir(p, violations, repoRoot);

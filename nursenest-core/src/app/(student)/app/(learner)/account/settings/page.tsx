@@ -9,6 +9,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 const SETTING_DESTINATIONS: readonly { href: string; titleKey?: string; title?: string; bodyKey?: string; body?: string }[] = [
   {

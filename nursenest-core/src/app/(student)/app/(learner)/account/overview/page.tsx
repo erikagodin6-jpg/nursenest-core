@@ -44,6 +44,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -170,7 +171,7 @@ export default async function LearnerAccountOverviewPage() {
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
           subscriberCountry: entitlement.country,
-          preferredPathwayId: premiumSnapshot.cognition?.pathwayId ?? premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
+          preferredPathwayId: premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
           availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
           userId,
           entitlement,

@@ -29,6 +29,7 @@ import { ProbabilityUpliftCard } from "@/components/study/probability-uplift-car
 import { AdaptiveDailyPlanCard } from "@/components/study/adaptive-daily-plan-card";
 import { BehindScheduleAlert } from "@/components/study/behind-schedule-alert";
 import {
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   PRIMARY_CTA,

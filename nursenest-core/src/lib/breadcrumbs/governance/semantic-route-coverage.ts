@@ -2,7 +2,7 @@
  * Semantic route coverage diagnostics — academy registry, graph routes, governed surfaces.
  */
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { ACADEMY_PATHNAME_REGISTRY, normalizeEducationalPathname } from "@/lib/breadcrumbs/pathname-normalization";
 import { detectOntologyNamespaceConflicts, listBreadcrumbRoots } from "@/lib/breadcrumbs/breadcrumb-root-registry";
@@ -37,7 +37,7 @@ const LEGACY_MANUAL_BREADCRUMB_ALLOWLIST = new Set([
 ]);
 
 function walkPages(dir: string, acc: string[] = []): string[] {
-  if (!statSync(dir, { throwIf: false })?.isDirectory()) return acc;
+  if (!existsSync(dir) || !statSync(dir).isDirectory()) return acc;
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     const st = statSync(p);
@@ -80,7 +80,7 @@ export function computeSemanticRouteCoverage(repoRoot = REPO_ROOT): SemanticRout
   const orphanedNodeCount = issues.filter((i) => i.startsWith("glossary_orphan")).length;
 
   const focusAreaDetail = join(learner, "account/focus-areas/[topic]/page.tsx");
-  const focusAreaRouteCount = statSync(focusAreaDetail, { throwIf: false })?.isFile() ? 1 : 0;
+  const focusAreaRouteCount = existsSync(focusAreaDetail) && statSync(focusAreaDetail).isFile() ? 1 : 0;
   if (!focusAreaRouteCount) {
     issues.push("focus_area_detail_route_missing");
   }

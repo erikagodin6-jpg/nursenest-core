@@ -1,7 +1,10 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { CoachingModel } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
-import { resolveRnCompetencyForTopic } from "@/lib/educational-graph/rn-competency-ontology";
+import {
+  defaultReasoningChainForCompetency,
+  resolveRnCompetencyForTopic,
+} from "@/lib/educational-graph/rn-competency-ontology";
 import type {
   EduGraphStep,
   EduGraphStepKind,
@@ -172,5 +175,6 @@ export function orchestrateEducationalGraph(input: OrchestrateEducationalGraphIn
     competencyLabel: competency?.label ?? null,
     steps,
     studySequence: steps.map((s) => s.description),
+    reasoningChain: competency ? [...defaultReasoningChainForCompetency(competency.id)] : [],
   };
 }

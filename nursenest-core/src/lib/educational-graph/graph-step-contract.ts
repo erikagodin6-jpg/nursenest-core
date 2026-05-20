@@ -1,4 +1,5 @@
 import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
+import type { ClinicalReasoningRelation } from "@/lib/educational-graph/rn-competency-ontology";
 
 export type GraphSourceSurface =
   | "marketing_lesson"
@@ -48,4 +49,5 @@ export type EducationalGraphTraversal = {
   competencyLabel: string | null;
   steps: EduGraphStep[];
   studySequence: string[];
+  reasoningChain: ClinicalReasoningRelation[];
 };

@@ -5,7 +5,7 @@ import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 
 type LearnerDashboardPageShellProps = {
-  crumbs: BreadcrumbCrumb[];
+  crumbs?: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   heroHeading: string;
   identity?: DashboardIdentity | null;
@@ -14,7 +14,7 @@ type LearnerDashboardPageShellProps = {
 };
 
 export function LearnerDashboardPageShell({
-  crumbs,
+  crumbs = [{ name: "Dashboard", href: "/app" }],
   t,
   heroHeading,
   identity,
