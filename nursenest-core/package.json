@@ -518,8 +518,6 @@
     "zod-validation-error": "^3.5.4"
   },
   "devDependencies": {
-    "eslint": "^9.0.0",
-    "eslint-config-next": "16.2.6",
     "@aws-sdk/client-s3": "^3.750.0",
     "@aws-sdk/lib-storage": "^3.750.0",
     "@babel/generator": "^7.29.1",
@@ -551,6 +549,9 @@
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.4",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.2.6",
+    "js-yaml": "^4.1.1",
     "mime-types": "^2.1.35",
     "png-to-ico": "^2.1.8",
     "postcss": "^8.5.6",

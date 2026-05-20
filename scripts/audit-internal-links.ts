@@ -8,8 +8,8 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
+import * as programmaticRegistryModule from "../nursenest-core/src/lib/seo/programmatic-registry";
+import * as marketingLanguagesModule from "../nursenest-core/src/lib/i18n/marketing-languages";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,6 +27,21 @@ type SegToken =
   | { kind: "optionalCatchAll" };
 
 type RoutePattern = { tokens: SegToken[]; source: string };
+type ProgrammaticRegistryExports = {
+  getAllProgrammaticSlugs: () => string[];
+};
+type MarketingLanguagesExports = {
+  MARKETING_LANGUAGES: { code: string }[];
+};
+
+const programmaticRegistry =
+  (programmaticRegistryModule as unknown as ProgrammaticRegistryExports).getAllProgrammaticSlugs
+    ? (programmaticRegistryModule as unknown as ProgrammaticRegistryExports)
+    : ((programmaticRegistryModule as unknown as { default: ProgrammaticRegistryExports }).default);
+const marketingLanguages =
+  (marketingLanguagesModule as unknown as MarketingLanguagesExports).MARKETING_LANGUAGES
+    ? (marketingLanguagesModule as unknown as MarketingLanguagesExports)
+    : ((marketingLanguagesModule as unknown as { default: MarketingLanguagesExports }).default);
 
 const IGNORE_DIRS = new Set([
   "node_modules",
@@ -149,8 +164,8 @@ function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean 
   return patterns.some((p) => matchPattern(p.tokens, parts, 0, 0));
 }
 
-const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
-const MARKETING_LOCALE_CODES = MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
+const PROGRAMMATIC_SLUGS = new Set(programmaticRegistry.getAllProgrammaticSlugs());
+const MARKETING_LOCALE_CODES = marketingLanguages.MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
 
 /** Second segment allowed under /{locale}/ for non-programmatic marketing routes (static pages). */
 const LOCALE_STATIC_SECONDS = new Set([
