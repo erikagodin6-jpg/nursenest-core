@@ -16,6 +16,7 @@ import {
   catPathwayShortCatLabel,
 } from "@/lib/exam-pathways/cat-pathway-labels";
 import { getTestingModelDefinition } from "@/lib/testing/testing-model-definitions";
+import type { TestingModelAnalyticsDimensions } from "@/lib/testing/testing-telemetry-governance";
 import {
   CNPLE_PATHWAY_ID,
   getTestingModelForPathwayId,

@@ -8,8 +8,13 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
+import * as programmaticRegistry from "../nursenest-core/src/lib/seo/programmatic-registry";
+import * as marketingLanguages from "../nursenest-core/src/lib/i18n/marketing-languages";
+
+const programmaticRegistryExports = (programmaticRegistry as any).default ?? programmaticRegistry;
+const marketingLanguageExports = (marketingLanguages as any).default ?? marketingLanguages;
+const { getAllProgrammaticSlugs } = programmaticRegistryExports;
+const { MARKETING_LANGUAGES } = marketingLanguageExports;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

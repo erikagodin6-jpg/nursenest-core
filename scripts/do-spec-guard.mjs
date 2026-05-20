@@ -17,7 +17,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const yaml = require("js-yaml");
+function requireFromCwd(id) {
+  return createRequire(path.join(process.cwd(), "package.json"))(id);
+}
+
+let yaml;
+try {
+  yaml = require("js-yaml");
+} catch (error) {
+  if (error?.code !== "MODULE_NOT_FOUND") throw error;
+  yaml = requireFromCwd("js-yaml");
+}
 
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dir, "..");

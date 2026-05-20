@@ -20,8 +20,8 @@ export function governLearnerDisplayCopy(
   pathwayId: string | null | undefined,
   text: string,
 ): LearnerCopyGovernanceResult {
-  const sanitized = sanitizeLearnerCopyForPathway(pathwayId, text);
-  const violations = validatePsychometricCopyForPathway(pathwayId, sanitized);
+  const violations = validatePsychometricCopyForPathway(pathwayId, text);
+  const sanitized = sanitizeLearnerCopyForPathway(pathwayId, text, "");
   if (violations.length > 0) {
     return { ok: false, violations, sanitized };
   }
@@ -41,7 +41,7 @@ export function assertLearnerDisplayCopy(pathwayId: string | null | undefined, t
 
 /** CMS / marketing publish gate. */
 export function governMarketingCopy(pathwayId: string | null | undefined, text: string) {
-  return validateTestingModelMarketingLanguage(pathwayId, text);
+  return validateTestingModelMarketingLanguage(pathwayId ?? "unknown", text);
 }
 
 /** Model-only validation (no pathway context). */
