@@ -11,10 +11,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { config } from "dotenv";
-import {
-  evaluateDatabaseUrlShape,
-  runDatabaseUrlShapeGuardForProcess,
-} from "../../src/lib/db/database-url-drift-audit";
 
 const explicitDotenvPath = process.env.DOTENV_CONFIG_PATH?.trim();
 const dotenvPath = explicitDotenvPath
@@ -26,6 +22,12 @@ const dotenvPath = explicitDotenvPath
 if (fs.existsSync(dotenvPath)) {
   config({ path: dotenvPath, override: false, quiet: true });
 }
+
+const driftAuditModule = await import("../../src/lib/db/database-url-drift-audit.ts");
+const {
+  evaluateDatabaseUrlShape,
+  runDatabaseUrlShapeGuardForProcess,
+} = driftAuditModule.default ?? driftAuditModule;
 
 const outcome = runDatabaseUrlShapeGuardForProcess();
 if (outcome === "fail") {
