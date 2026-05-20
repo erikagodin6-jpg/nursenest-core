@@ -18,7 +18,7 @@ import {
   buildEnvDiagnosticsReport,
   formatEnvDiagnosticsReportHuman,
   formatEnvDiagnosticsReportJson,
-} from "../src/lib/env/env-diagnostics";
+} from "../src/lib/env/env-diagnostics.ts";
 
 const root = process.cwd();
 
