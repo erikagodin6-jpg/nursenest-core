@@ -14,19 +14,9 @@
 import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
-import {
-  AESTHETIC_THEMES,
-  applyLearnerTheme,
-  assertHtmlTheme,
-  type AestheticThemeId,
-  VIEWPORTS,
-} from "../helpers/aesthetic-audit-shared";
+import { applyMarketingTheme, type AestheticThemeId, VIEWPORTS } from "../helpers/aesthetic-audit-shared";
 import { stabilizePageForCapture } from "../helpers/aesthetic-stabilization";
 import { PAID_USER_AUTH_FILE, VISUAL_QA_LEARNER_AUTH_FILE } from "../helpers/auth-state-paths";
-
-const AUTH_STORAGE = existsSync(VISUAL_QA_LEARNER_AUTH_FILE)
-  ? VISUAL_QA_LEARNER_AUTH_FILE
-  : PAID_USER_AUTH_FILE;
 import { clickBeginExamAfterPracticeHubStart } from "../helpers/cat-practice-exam-flow";
 import {
   catPositiveBowtieQuestion,
@@ -34,7 +24,16 @@ import {
   catPositiveSataQuestion,
   CAT_POSITIVE_FIXTURE_STEMS,
 } from "../helpers/cat-positive-question-fixtures";
-import { PAID_E2E_DEFAULT_PATHWAY_ID, learnerAppMainLandmark } from "../helpers/paid-learner-shell";
+import {
+  learnerAppMainLandmark,
+  PAID_E2E_DEFAULT_PATHWAY_ID,
+  waitForAuthenticatedLearnerShell,
+} from "../helpers/paid-learner-shell";
+import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
+
+const AUTH_STORAGE = existsSync(VISUAL_QA_LEARNER_AUTH_FILE)
+  ? VISUAL_QA_LEARNER_AUTH_FILE
+  : PAID_USER_AUTH_FILE;
 
 /** Playwright cwd is `nursenest-core/`; repo root is one level up. */
 const REPO_ROOT = path.resolve(process.cwd(), "..");
@@ -63,9 +62,14 @@ async function applyThemeInPlace(page: Page, theme: AestheticThemeId): Promise<v
   await page.waitForTimeout(200);
 }
 
-async function settle(page: Page, withLearnerShell: boolean): Promise<void> {
+type SettleMode = "full" | "main" | "none";
+
+async function settle(page: Page, mode: SettleMode): Promise<void> {
   await page.waitForLoadState("domcontentloaded");
-  if (withLearnerShell) {
+  if (mode === "full") {
+    await waitForAuthenticatedLearnerShell(page);
+    await expectNoSubscriptionPaywall(page, "RN CAT mockup capture");
+  } else if (mode === "main") {
     await learnerAppMainLandmark(page).waitFor({ state: "visible", timeout: 120_000 });
   }
   await page.evaluate(() => document.fonts.ready).catch(() => {});
@@ -77,9 +81,14 @@ async function capture(
   filePath: string,
   selector?: string,
 ): Promise<void> {
-  const target = selector ? page.locator(selector).first() : page;
-  await expect(target).toBeVisible({ timeout: 120_000 });
-  await target.screenshot({ path: filePath, animations: "disabled", timeout: 90_000 });
+  if (selector) {
+    const target = page.locator(selector).first();
+    await expect(target).toBeVisible({ timeout: 120_000 });
+    await target.screenshot({ path: filePath, animations: "disabled", timeout: 90_000 });
+  } else {
+    await expect(page.locator("body")).toBeVisible({ timeout: 120_000 });
+    await page.screenshot({ path: filePath, fullPage: true, animations: "disabled", timeout: 90_000 });
+  }
 }
 
 async function installQuestionPatch(
@@ -116,18 +125,22 @@ async function startCatExam(page: Page, origin: string, theme?: AestheticThemeId
     `${origin}/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pid)}`,
     { waitUntil: "domcontentloaded", timeout: 180_000 },
   );
-  if (theme) {
-    await applyLearnerTheme(page, theme);
-    await assertHtmlTheme(page, theme);
+  if (page.url().includes("/login")) {
+    throw new Error("Auth expired — re-run visual-qa:auth");
   }
-  await settle(page, true);
-  await expect(page.locator("[data-nn-qa-practice-hub-start-test]")).toBeVisible({ timeout: 60_000 });
-  await page.locator("[data-nn-qa-practice-hub-start-test]").click();
+  if (theme) await applyMarketingTheme(page, theme);
+  await settle(page, "full");
+  const start = page
+    .locator("[data-nn-qa-practice-hub-start-test]")
+    .or(page.locator("[data-nn-e2e-practice-hub-cat-exam]"))
+    .first();
+  await expect(start).toBeVisible({ timeout: 120_000 });
+  await start.click();
   await clickBeginExamAfterPracticeHubStart(page);
   await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
   await expect(page.locator("[data-cat-exam-root]")).toBeVisible({ timeout: 120_000 });
   if (theme) await applyThemeInPlace(page, theme);
-  await settle(page, false);
+  await settle(page, "none");
 }
 
 if (existsSync(AUTH_STORAGE)) {
@@ -154,9 +167,8 @@ test.describe("RN CAT exam mockup PNG capture", () => {
           { waitUntil: "domcontentloaded", timeout: 180_000 },
         );
         if (page.url().includes("/login")) test.skip(true, "Auth expired — re-run visual-qa:auth");
-        await applyLearnerTheme(page, theme);
-        await assertHtmlTheme(page, theme);
-        await settle(page, true);
+        await applyMarketingTheme(page, theme);
+        await settle(page, "full");
         await capture(page, outPath("01-cat-hub", theme, vp));
       });
 
@@ -168,9 +180,8 @@ test.describe("RN CAT exam mockup PNG capture", () => {
           { waitUntil: "domcontentloaded", timeout: 180_000 },
         );
         if (page.url().includes("/login")) test.skip(true, "Auth expired");
-        await applyLearnerTheme(page, theme);
-        await assertHtmlTheme(page, theme);
-        await settle(page, true);
+        await applyMarketingTheme(page, theme);
+        await settle(page, "main");
         await capture(page, outPath("02-cat-launch", theme, vp));
       });
     }
@@ -186,7 +197,7 @@ test.describe("RN CAT exam mockup PNG capture", () => {
         await expect(
           page.locator(".nn-cat-question-stem").filter({ hasText: CAT_POSITIVE_FIXTURE_STEMS.mcq }),
         ).toBeVisible({ timeout: 60_000 });
-        await assertHtmlTheme(page, theme);
+        if (theme) await applyThemeInPlace(page, theme);
         await capture(page, outPath("03-exam-mcq", theme, "desktop"), "[data-cat-exam-root]");
       } finally {
         await page.unroute("**/api/practice-tests/*/question*");
@@ -202,7 +213,7 @@ test.describe("RN CAT exam mockup PNG capture", () => {
         await expect(
           page.locator(".nn-cat-question-stem").filter({ hasText: CAT_POSITIVE_FIXTURE_STEMS.sata }),
         ).toBeVisible({ timeout: 60_000 });
-        await assertHtmlTheme(page, theme);
+        if (theme) await applyThemeInPlace(page, theme);
         await capture(page, outPath("04-exam-sata", theme, "desktop"), "[data-cat-exam-root]");
       } finally {
         await page.unroute("**/api/practice-tests/*/question*");
@@ -218,7 +229,7 @@ test.describe("RN CAT exam mockup PNG capture", () => {
         await expect(
           page.locator(".nn-cat-question-stem").filter({ hasText: CAT_POSITIVE_FIXTURE_STEMS.bowtie }),
         ).toBeVisible({ timeout: 60_000 });
-        await assertHtmlTheme(page, theme);
+        if (theme) await applyThemeInPlace(page, theme);
         await capture(page, outPath("05-exam-bowtie", theme, "desktop"), "[data-cat-exam-root]");
       } finally {
         await page.unroute("**/api/practice-tests/*/question*");
@@ -236,9 +247,8 @@ test.describe("RN CAT exam mockup PNG capture", () => {
           { waitUntil: "domcontentloaded", timeout: 180_000 },
         );
         if (page.url().includes("/login")) test.skip(true, "Auth expired");
-        await applyLearnerTheme(page, theme);
-        await assertHtmlTheme(page, theme);
-        await settle(page, true);
+        await applyMarketingTheme(page, theme);
+        await settle(page, "full");
         await capture(page, outPath("00-practice-hub", theme, vp));
       });
     }

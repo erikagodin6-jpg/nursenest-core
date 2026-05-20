@@ -143,6 +143,11 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true },
+      /** Learner canonical routes (consolidation); query strings preserved by Next.js. */
+      { source: "/app/command-center", destination: "/app", permanent: false },
+      { source: "/app/practice", destination: "/app/practice-tests", permanent: false },
+      { source: "/app/cat", destination: "/app/practice-tests", permanent: false },
+      { source: "/app/practice-exams", destination: "/app/practice-tests", permanent: false },
       /** New Grad public marketing canonical lives on newgrad.nursenest.ca. */
       {
         source: "/",

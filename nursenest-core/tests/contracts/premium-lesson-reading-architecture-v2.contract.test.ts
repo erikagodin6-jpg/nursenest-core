@@ -22,6 +22,14 @@ const SECTION_NAV_PATH = path.resolve(
   ROOT,
   "src/components/lessons/lesson-section-nav.tsx",
 );
+const READING_VIEWPORT_PATH = path.resolve(
+  ROOT,
+  "src/components/lessons/lesson-reading-viewport.tsx",
+);
+const PROGRESS_RAIL_PATH = path.resolve(
+  ROOT,
+  "src/components/lessons/lesson-compact-progress-rail.tsx",
+);
 const SECTION_CARD_PATH = path.resolve(
   ROOT,
   "src/components/lessons/lesson-section-card.tsx",
@@ -67,6 +75,8 @@ describe("premium lesson reading architecture v2", () => {
   const marketingDetail = read(MARKETING_DETAIL_PATH);
   const learnerDetail = read(LEARNER_DETAIL_PATH);
   const sectionNav = read(SECTION_NAV_PATH);
+  const readingViewport = read(READING_VIEWPORT_PATH);
+  const progressRail = read(PROGRESS_RAIL_PATH);
   const sectionCard = read(SECTION_CARD_PATH);
   const stickyDock = read(STICKY_DOCK_PATH);
   const retentionHelper = read(RETENTION_HELPER_PATH);
@@ -85,8 +95,8 @@ describe("premium lesson reading architecture v2", () => {
       );
       assert.match(
         source,
-        /<LessonSectionNav/,
-        `${label} horizontal nav mount missing`,
+        /<LessonReadingViewport/,
+        `${label} reading viewport mount missing`,
       );
       assert.match(
         source,
@@ -175,12 +185,28 @@ describe("premium lesson reading architecture v2", () => {
     assert.match(retentionHelper, /exam_tips/);
   });
 
-  it("uses a sticky horizontal segmented nav rather than a rail or drawer", () => {
+  it("uses a reading-first viewport with constrained side rails", () => {
+    assert.match(readingViewport, /nn-lesson-reading-viewport/);
+    assert.match(readingViewport, /LessonCompactProgressRail/);
+    assert.match(readingViewport, /layout="rail"/);
     assert.match(sectionNav, /data-nn-premium-horizontal-lesson-nav/);
     assert.match(sectionNav, /nn-lesson-section-nav--horizontal/);
-    assert.match(sectionNav, /nn-lesson-horizontal-nav__list/);
+    assert.match(sectionNav, /nn-lesson-section-nav--rail/);
+    assert.match(progressRail, /nn-lesson-progress-rail/);
     assert.equal(sectionNav.includes("<aside"), false);
-    assert.equal(sectionNav.includes("<details"), false);
+    for (const [label, css] of [
+      ["marketing", marketingCss],
+      ["learner", learnerCss],
+    ] as const) {
+      assert.match(css, /\.nn-lesson-reading-viewport/, `${label} reading viewport grid missing`);
+      assert.match(
+        css,
+        /grid-template-columns:\s*minmax\(10\.5rem,\s*15rem\)\s*minmax\(0,\s*1fr\)\s*minmax\(10\.5rem,\s*13\.75rem\)/,
+        `${label} constrained side-rail grid missing`,
+      );
+      assert.match(css, /max-width:\s*15rem/, `${label} left rail width cap missing`);
+      assert.match(css, /max-width:\s*13\.75rem/, `${label} right rail width cap missing`);
+    }
   });
 
   it("adds the canonical recognize interpret act workflow module without inventing clinical copy", () => {
@@ -243,7 +269,7 @@ describe("premium lesson reading architecture v2", () => {
     }
   });
 
-  it("keeps RN lessons on the wide colored-section reading canvas without affecting side rails", () => {
+  it("keeps RN lessons on the wide colored-section reading canvas with modular section cards", () => {
     assert.match(marketingDetail, /nn-lesson-page-shell--rn/);
     assert.match(learnerDetail, /nn-lesson-page-shell--rn/);
     for (const [label, css] of [
@@ -252,7 +278,7 @@ describe("premium lesson reading architecture v2", () => {
     ] as const) {
       assert.match(css, /--nn-rn-lesson-canvas-wide:\s*min\(100%,\s*87\.5rem\)/, `${label} RN canvas width missing`);
       assert.match(css, /\.nn-premium-lesson-detail-shell\.nn-lesson-page-shell--rn/, `${label} RN shell selector missing`);
-      assert.match(css, /border-left:\s*4px solid color-mix\(in srgb, var\(--lsc-color\)/, `${label} RN colored section accent missing`);
+      assert.match(css, /border-left:\s*4px solid color-mix\(in srgb, var\(--lsc-color\)/, `${label} colored section accent missing`);
       assert.match(css, /max-width:\s*96ch/, `${label} RN readable prose width missing`);
     }
   });

@@ -143,6 +143,9 @@ pg_dump*.sql
 # Extra export / scratch output names
 export-output/
 exports/
+# Design PNG captures for lesson mockups (Playwright)
+!lesson-mockups/exports/
+!lesson-mockups/exports/**
 backups/
 *-export.jsonl
 local-backup/

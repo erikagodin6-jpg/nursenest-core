@@ -39,7 +39,7 @@ import {
   extractExamFocusHighYieldLines,
   extractSecondaryExamContextLines,
 } from "@/lib/lessons/pathway-lesson-study-extract";
-import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
+import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
@@ -538,16 +538,16 @@ export async function PathwayLessonDetailPageBody({
             className="nn-lesson-layout nn-lesson-layout--premium-reading mt-5"
             data-nn-premium-lessons-reading-layout
           >
-            <LessonSectionNav
+            <LessonReadingViewport
               sections={tocNavSections}
               progress={lessonProgress}
               progressVisible={Boolean(userId) && fullAccess}
-            />
-            <div
-              className="nn-lesson-main nn-lesson-main--blossom min-w-0"
-              data-testid="pathway-lesson-main-column"
-              data-nn-premium-lessons-reading-main
             >
+              <div
+                className="nn-lesson-main nn-lesson-main--blossom min-w-0"
+                data-testid="pathway-lesson-main-column"
+                data-nn-premium-lessons-reading-main
+              >
               {matchedLessonImage.url &&
               hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
                 <LessonClinicalImageCard
@@ -814,7 +814,8 @@ export async function PathwayLessonDetailPageBody({
                   linkMode="marketing"
                 />
               </PathwayLessonAssessmentExperience>
-            </div>
+              </div>
+            </LessonReadingViewport>
           </div>
           <LessonStickyReviewDock enabled={fullAccess} />
 

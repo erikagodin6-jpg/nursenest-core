@@ -95,7 +95,7 @@ import {
 } from "@/components/lessons/lesson-section-card";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
-import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
+import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
@@ -1332,15 +1332,15 @@ async function LessonDetailPageInner({ params }: Props) {
         </div>
 
         <div className="nn-lesson-layout nn-lesson-layout--premium-reading">
-          <LessonSectionNav
+          <LessonReadingViewport
             sections={navSections}
             progress={initialProgress}
             progressVisible={Boolean(userId) && entitlement.hasAccess}
-          />
-          <div
-            className="nn-lesson-main min-w-0"
-            data-testid="pathway-lesson-main-column"
           >
+            <div
+              className="nn-lesson-main min-w-0"
+              data-testid="pathway-lesson-main-column"
+            >
             <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--main">
               {studyLoopBankActive ? (
                 <PathwayLessonStudyLoopOrchestrator
@@ -1363,7 +1363,8 @@ async function LessonDetailPageInner({ params }: Props) {
                 pathwayLessonMainColumn
               )}
             </div>
-          </div>
+            </div>
+          </LessonReadingViewport>
         </div>
         <LessonStickyReviewDock enabled={entitlement.hasAccess} />
       </div>

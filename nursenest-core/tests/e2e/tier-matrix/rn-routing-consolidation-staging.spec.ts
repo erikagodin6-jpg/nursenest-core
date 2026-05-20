@@ -147,7 +147,17 @@ test.describe("RN routing @anonymous — practice aliases", () => {
     test(`${alias} → /app/practice-tests or auth gate`, async ({ page, baseURL }) => {
       const origin = requireOrigin(baseURL);
       const url = new URL(`${alias}?pathwayId=${US_PATHWAY}`, origin).toString();
+      await page.context().clearCookies();
       await page.goto(url, { waitUntil: "domcontentloaded" });
+      await page
+        .waitForURL(
+          (u) => {
+            const p = new URL(u).pathname;
+            return p === "/app/practice-tests" || /\/login/i.test(p);
+          },
+          { timeout: 45_000 },
+        )
+        .catch(() => undefined);
       const landed = new URL(page.url());
       const onCanonical = landed.pathname === "/app/practice-tests";
       const onLogin = /\/login/i.test(landed.pathname);
@@ -295,13 +305,20 @@ test.describe("RN routing @authenticated — pathway-scoped nav clicks", () => {
 test.describe("RN routing @authenticated — lessons layout", () => {
   test.skip(!hasPaidTestCredentials(), "Set E2E_PAID_EMAIL + E2E_PAID_PASSWORD");
 
-  test("US lessons hub uses premium module shell", async ({ page }) => {
+  test("US lessons hub uses premium module shell and max-w-6xl", async ({ page }) => {
     await page.goto(learnerLessonsUrl(US_PATHWAY), { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
     await expect(page.locator('[data-nn-premium-platform-module="lessons"]')).toBeVisible({ timeout: 60_000 });
     await expect(page.locator(".nn-lesson-layout--triple")).toHaveCount(0);
-    const shell = page.locator(".nn-learner-app");
-    await expect(shell).toBeVisible();
+    await expect(page.locator(".nn-premium-lessons-app-list.max-w-6xl").first()).toBeVisible({ timeout: 60_000 });
+  });
+
+  test("CA lessons hub layout when entitled", async ({ page }) => {
+    test.skip(process.env.E2E_CA_RN_PATHWAY_ENABLED !== "1", "Set E2E_CA_RN_PATHWAY_ENABLED=1");
+    await page.goto(learnerLessonsUrl(CA_PATHWAY), { waitUntil: "domcontentloaded" });
+    expectNotLoginUrl(page);
+    await expect(page.locator('[data-nn-premium-platform-module="lessons"]')).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator(".nn-premium-lessons-app-list.max-w-6xl").first()).toBeVisible({ timeout: 60_000 });
   });
 });
 
@@ -319,11 +336,11 @@ test.describe("RN routing @anonymous @mobile — marketing hub", () => {
   });
 });
 
-test.describe("RN routing @authenticated @mobile — learner shell", () => {
-  test.use({ viewport: { width: 390, height: 844 } });
+test.describe("RN routing @authenticated @mobile @pixel — learner shell", () => {
+  test.use({ viewport: { width: 412, height: 915 } });
   test.skip(!hasPaidTestCredentials(), "Set E2E_PAID_EMAIL + E2E_PAID_PASSWORD");
 
-  test("bottom nav visible on /app", async ({ page }) => {
+  test("bottom nav visible on /app (Pixel 7)", async ({ page }) => {
     await page.goto("/app", { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
     await expect(page.getByRole("navigation", { name: "Learner bottom navigation" })).toBeVisible({
@@ -349,5 +366,217 @@ test.describe("RN routing @anonymous — unauthenticated /app gates", () => {
       true,
     );
     await expect(page.locator("#nn-learner-main")).toHaveCount(0);
+  });
+});
+
+// ── P0: anonymous alias → login callback → canonical after auth ───────────────
+
+test.describe("RN routing @anonymous @post-auth — alias canonicalization @p0", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+  test.skip(!hasPaidTestCredentials(), "Requires setup-paid-auth + E2E_PAID_* for post-login assertion");
+
+  for (const alias of ["/app/practice", "/app/cat", "/app/practice-exams"] as const) {
+    test(`${alias} callbackUrl preserved → practice-tests after login`, async ({ page, baseURL }) => {
+      const origin = requireOrigin(baseURL);
+      const creds = getPaidTestCredentials();
+      if (!creds) test.skip();
+
+      const start = new URL(`${alias}?pathwayId=${US_PATHWAY}`, origin).toString();
+      await page.context().clearCookies();
+      await page.goto(start, { waitUntil: "domcontentloaded" });
+      await page
+        .waitForURL(
+          (url) => {
+            const p = new URL(url).pathname;
+            return (
+              /\/login/i.test(p) ||
+              p === "/app/practice-tests" ||
+              p.replace(/\/$/, "") === alias.replace(/\/$/, "")
+            );
+          },
+          { timeout: 45_000 },
+        )
+        .catch(() => undefined);
+
+      const landed = new URL(page.url());
+      const onLogin = /\/login/i.test(landed.pathname);
+      const alreadyCanonical =
+        landed.pathname === "/app/practice-tests" &&
+        landed.searchParams.get("pathwayId") === US_PATHWAY;
+
+      expect(
+        onLogin || alreadyCanonical,
+        `anonymous ${alias} must gate to login or redirect to practice-tests — got ${page.url()}`,
+      ).toBe(true);
+
+      if (onLogin) {
+        const loginHref = page.url();
+        expect(loginHref.toLowerCase()).toMatch(/callbackurl/);
+        await loginWithCredentials(page, creds!.email, creds!.password, {
+          loginUrl: `${new URL(loginHref).pathname}${new URL(loginHref).search}`,
+          navigationOrigin: origin,
+          enterLearnerApp: false,
+        });
+      } else if (!alreadyCanonical) {
+        await loginWithCredentials(page, creds!.email, creds!.password, {
+          navigationOrigin: origin,
+          enterLearnerApp: false,
+        });
+      }
+
+      await page.waitForURL(
+        (url) => new URL(url).pathname === "/app/practice-tests",
+        { timeout: 90_000 },
+      );
+      const final = new URL(page.url());
+      expect(final.pathname).toBe("/app/practice-tests");
+      expect(final.searchParams.get("pathwayId")).toBe(US_PATHWAY);
+      expect(final.pathname).not.toBe(alias.replace(/^\//, ""));
+      await expect(page.locator('[data-testid="learner-shell"]')).toHaveCount(1);
+    });
+  }
+});
+
+// ── P0: JWT/session parity stress (10×) ──────────────────────────────────────
+
+test.describe("RN routing @authenticated — JWT/session parity stress @p0", () => {
+  test.skip(!hasPaidTestCredentials(), "Set E2E_PAID_EMAIL + E2E_PAID_PASSWORD");
+  test.describe.configure({ timeout: 600_000 });
+
+  async function stressRoute(page: Page, path: string, label: string) {
+    const diag = attachRnRoutingDiagnostics(page);
+    for (let i = 0; i < 10; i++) {
+      await page.goto(path, { waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(page);
+      await waitForStableLearnerPathname(page, { label: `${label} iter ${i + 1} load` });
+      await page.reload({ waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(page);
+      await waitForStableLearnerPathname(page, { label: `${label} iter ${i + 1} reload` });
+      const tab = await page.context().newPage();
+      await tab.goto(path, { waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(tab);
+      await tab.close();
+      await page.goBack({ waitUntil: "domcontentloaded" }).catch(() => undefined);
+      await page.goForward({ waitUntil: "domcontentloaded" }).catch(() => undefined);
+    }
+    expect(diag.hydrationWarnings, formatDiagnosticsForFailure(diag)).toHaveLength(0);
+  }
+
+  test(`US lessons 10× refresh/tab/back-forward (${US_PATHWAY})`, async ({ page }) => {
+    await stressRoute(page, learnerLessonsUrl(US_PATHWAY), "lessons");
+  });
+
+  test(`US practice-tests 10× refresh/tab (${US_PATHWAY})`, async ({ page }) => {
+    await stressRoute(page, learnerPracticeTestsUrl(US_PATHWAY), "practice-tests");
+  });
+});
+
+// ── Pathway propagation from /app ────────────────────────────────────────────
+
+test.describe("RN routing @authenticated — dashboard nav propagation", () => {
+  test.skip(!hasPaidTestCredentials(), "Set E2E_PAID_EMAIL + E2E_PAID_PASSWORD");
+
+  async function assertNavPreservesPathway(page: Page, pathwayId: string) {
+    await page.goto(`/app?pathwayId=${encodeURIComponent(pathwayId)}`, { waitUntil: "domcontentloaded" });
+    expectNotLoginUrl(page);
+    await expectPaidLearnerShellReady(page, "dashboard nav");
+    const nav = learnerShellStudyNavigation(page);
+    const checks: Array<{ pattern: RegExp; pathHint: RegExp }> = [
+      { pattern: /lessons/i, pathHint: /\/app\/lessons/ },
+      { pattern: /practice/i, pathHint: /\/app\/practice/ },
+      { pattern: /flashcards/i, pathHint: /\/app\/flashcards/ },
+      { pattern: /cat|exams/i, pathHint: /\/app\/practice-tests/ },
+      { pattern: /progress|reports/i, pathHint: /\/app\/account\/progress/ },
+    ];
+    for (const { pattern, pathHint } of checks) {
+      const link = nav.getByRole("link", { name: pattern }).first();
+      await expect(link).toBeVisible({ timeout: 30_000 });
+      await link.click();
+      await page.waitForLoadState("domcontentloaded");
+      expectNotLoginUrl(page);
+      expect(new URL(page.url()).pathname).toMatch(pathHint);
+      const pid = new URL(page.url()).searchParams.get("pathwayId");
+      if (pid) expect(pid).toBe(pathwayId);
+      await page.goto(`/app?pathwayId=${encodeURIComponent(pathwayId)}`, { waitUntil: "domcontentloaded" });
+    }
+  }
+
+  test(`US RN nav preserves ${US_PATHWAY}`, async ({ page }) => {
+    await assertNavPreservesPathway(page, US_PATHWAY);
+  });
+
+  test(`Canada RN nav preserves ${CA_PATHWAY} when entitled`, async ({ page }) => {
+    test.skip(process.env.E2E_CA_RN_PATHWAY_ENABLED !== "1", "Set E2E_CA_RN_PATHWAY_ENABLED=1 or E2E_CA_PAID_*");
+    await assertNavPreservesPathway(page, CA_PATHWAY);
+  });
+});
+
+// ── CA-only project (dedicated CA entitled account) ────────────────────────────
+
+test.describe("RN routing @ca-only — Canada entitlement", () => {
+  test(`CA lessons + practice-tests load (${CA_PATHWAY})`, async ({ page }) => {
+    for (const path of [learnerLessonsUrl(CA_PATHWAY), learnerPracticeTestsUrl(CA_PATHWAY)]) {
+      await page.goto(path, { waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(page);
+      await waitForStableLearnerPathname(page, { label: `ca ${path}` });
+      expect(new URL(page.url()).searchParams.get("pathwayId")).toBe(CA_PATHWAY);
+      await expect(page.locator('[data-testid="learner-shell"]')).toHaveCount(1);
+    }
+  });
+});
+
+// ── HTTP redirect contracts ──────────────────────────────────────────────────
+
+test.describe("RN routing @http — learner redirect contracts", () => {
+  test.skip(!hasPaidTestCredentials(), "Requires authenticated storage state");
+
+  const cases = [
+    { input: "/app/command-center", expectedPath: "/app", preserveQuery: false },
+    { input: `/app/practice?pathwayId=${US_PATHWAY}`, expectedPath: "/app/practice-tests", preserveQuery: true },
+    { input: `/app/cat?pathwayId=${US_PATHWAY}`, expectedPath: "/app/practice-tests", preserveQuery: true },
+    { input: `/app/practice-exams?pathwayId=${US_PATHWAY}`, expectedPath: "/app/practice-tests", preserveQuery: true },
+  ] as const;
+
+  for (const { input, expectedPath, preserveQuery } of cases) {
+    test(`HTTP ${input} → ${expectedPath}`, async ({ request, baseURL }) => {
+      const origin = requireOrigin(baseURL);
+      const start = new URL(input, origin).toString();
+      const chain = await followHttpRedirectChain(request, start);
+      assertNoRedirectLoop(chain.hops, input);
+      const finalPath = new URL(chain.finalUrl).pathname.replace(/\/$/, "") || "/";
+      expect(finalPath).toBe(expectedPath);
+      if (preserveQuery) {
+        expect(new URL(chain.finalUrl).searchParams.get("pathwayId")).toBe(US_PATHWAY);
+      }
+      const aliasStillPresent = chain.hops.some((h) => {
+        try {
+          const p = new URL(h.location ?? h.from).pathname;
+          return p === "/app/practice" || p === "/app/cat" || p === "/app/practice-exams";
+        } catch {
+          return false;
+        }
+      });
+      if (expectedPath === "/app/practice-tests") {
+        expect(aliasStillPresent || finalPath === "/app/practice-tests").toBe(true);
+      }
+    });
+  }
+});
+
+// ── Mobile: iPhone 14 + Pixel 7 ──────────────────────────────────────────────
+
+test.describe("RN routing @authenticated @mobile @iphone — learner shell", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  test.skip(!hasPaidTestCredentials(), "Set E2E_PAID_EMAIL + E2E_PAID_PASSWORD");
+
+  test("bottom nav + pathway on lessons (iPhone 14)", async ({ page }) => {
+    await page.goto(learnerLessonsUrl(US_PATHWAY), { waitUntil: "domcontentloaded" });
+    expectNotLoginUrl(page);
+    await expect(page.getByRole("navigation", { name: "Learner bottom navigation" })).toBeVisible({
+      timeout: 30_000,
+    });
+    const navCount = await page.getByRole("navigation", { name: /Learner (bottom|primary)/i }).count();
+    expect(navCount).toBeLessThanOrEqual(2);
+    expect(new URL(page.url()).searchParams.get("pathwayId")).toBe(US_PATHWAY);
   });
 });
