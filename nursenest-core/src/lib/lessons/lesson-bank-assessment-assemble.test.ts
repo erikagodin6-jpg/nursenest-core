@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import type { LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import {
+  LESSON_ASSESSMENT_POST_MIN,
+  LESSON_ASSESSMENT_PRE_MIN,
   assemblePathwayLessonBankAssessmentsFromParts,
   orderedExplicitLessonBankItemsForConfiguredIds,
 } from "@/lib/lessons/lesson-bank-assessment-assembly-pure";
@@ -16,6 +18,14 @@ function bank(id: string, stem: string): LessonBankQuizItem {
   };
 }
 
+function authored(prefix: string, count: number): PathwayLessonQuizItem[] {
+  return Array.from({ length: count }, (_, i) => ({
+    question: `${prefix} ${i + 1}?`,
+    options: ["a", "b"],
+    correct: 0,
+  }));
+}
+
 test("orderedExplicitLessonBankItemsForConfiguredIds preserves authoring order", () => {
   const id1 = "aaaaaaaaaaaaaaaa";
   const id2 = "bbbbbbbbbbbbbbbb";
@@ -25,56 +35,88 @@ test("orderedExplicitLessonBankItemsForConfiguredIds preserves authoring order",
     [id2, bank(id2, "Second")],
     [id3, bank(id3, "Third")],
   ]);
+
   assert.deepEqual(
     orderedExplicitLessonBankItemsForConfiguredIds([id3, id1, id2], m).map((x) => x.examQuestionId),
     [id3, id1, id2],
   );
 });
 
-test("assemblePathwayLessonBankAssessmentsFromParts: explicit pre replaces merged bank; post can fall back independently", () => {
-  const idPre = "dddddddddddddddd";
-  const explicitPre: PathwayLessonQuizItem[] = [bank(idPre, "Explicit pre only?")];
-  const catalogPost: PathwayLessonQuizItem[] = [{ question: "Catalog post?", options: ["a", "b"], correct: 1 }];
-  const pool: LessonBankQuizItem[] = [];
-  for (let i = 0; i < 20; i++) {
-    const id = `eeeeeeeeeeee${String(i).padStart(2, "0")}`;
-    pool.push(bank(id, `Pool ${i}?`));
-  }
-  const out = assemblePathwayLessonBankAssessmentsFromParts({
-    lesson: { preTest: [{ question: "Legacy pre?", options: ["p", "q"], correct: 0 }], postTest: catalogPost },
-    lessonKey: "path:lesson-z",
-    pool,
-    explicitPre,
-    explicitPost: null,
-  });
-  assert.equal(out.preTest.length, 1);
-  assert.equal(out.preTest[0]?.question, "Explicit pre only?");
-  assert.ok(out.postTest.length >= 1, "post side still merges catalog + bank when explicit post absent");
-  assert.ok(out.postTest.some((q) => q.question === "Catalog post?"));
-});
+test("explicit pre/post assessments are authoritative and preserve order", () => {
+  const explicitPre: PathwayLessonQuizItem[] = [
+    bank("pre-2", "Second readiness question?"),
+    bank("pre-1", "First readiness question?"),
+  ];
 
-test("assemblePathwayLessonBankAssessmentsFromParts: explicit post replaces merged; pre can fall back", () => {
-  const idPost = "ffffffffffffffff";
-  const explicitPost: PathwayLessonQuizItem[] = [bank(idPost, "Explicit post?")];
-  const pool: LessonBankQuizItem[] = [];
-  for (let i = 0; i < 20; i++) {
-    const id = `99999999999999${String(i).padStart(2, "0")}`;
-    pool.push(bank(id, `P2 ${i}?`));
-  }
+  const explicitPost: PathwayLessonQuizItem[] = [
+    bank("post-3", "Third retention question?"),
+    bank("post-1", "First retention question?"),
+  ];
+
   const out = assemblePathwayLessonBankAssessmentsFromParts({
-    lesson: { preTest: [{ question: "Catalog pre?", options: ["a", "b"], correct: 0 }], postTest: undefined },
-    lessonKey: "path:lesson-y",
-    pool,
-    explicitPre: null,
+    lesson: {
+      preTest: authored("Legacy authored pre", LESSON_ASSESSMENT_PRE_MIN),
+      postTest: authored("Legacy authored post", LESSON_ASSESSMENT_POST_MIN),
+    },
+    lessonKey: "cardiac:afib",
+    pool: authored("Generic pathway filler", 20) as LessonBankQuizItem[],
+    explicitPre,
     explicitPost,
   });
-  assert.equal(out.postTest.length, 1);
-  assert.equal(out.postTest[0]?.question, "Explicit post?");
-  assert.ok(out.preTest.length >= 1);
+
+  assert.deepEqual(
+    out.preTest.map((q) => q.question),
+    ["Second readiness question?", "First readiness question?"],
+  );
+
+  assert.deepEqual(
+    out.postTest.map((q) => q.question),
+    ["Third retention question?", "First retention question?"],
+  );
+});
+
+test("sparse authored quizzes do not backfill from broad pathway pools", () => {
+  const out = assemblePathwayLessonBankAssessmentsFromParts({
+    lesson: {
+      preTest: authored("Weak pre", LESSON_ASSESSMENT_PRE_MIN - 1),
+      postTest: authored("Weak post", LESSON_ASSESSMENT_POST_MIN - 1),
+    },
+    lessonKey: "neuro:stroke",
+    pool: Array.from({ length: 30 }, (_, i) =>
+      bank(`pool-${i}`, `Generic med surg pathway question ${i}?`),
+    ),
+    explicitPre: null,
+    explicitPost: null,
+  });
+
+  assert.equal(out.preTest.length, 0);
+  assert.equal(out.postTest.length, 0);
+});
+
+test("sufficient authored lesson assessments render without unrelated padding", () => {
+  const out = assemblePathwayLessonBankAssessmentsFromParts({
+    lesson: {
+      preTest: authored("COPD readiness", LESSON_ASSESSMENT_PRE_MIN),
+      postTest: authored("COPD retention", LESSON_ASSESSMENT_POST_MIN),
+    },
+    lessonKey: "respiratory:copd",
+    pool: Array.from({ length: 50 }, (_, i) =>
+      bank(`bank-${i}`, `Unrelated pathway question ${i}?`),
+    ),
+    explicitPre: null,
+    explicitPost: null,
+  });
+
+  assert.equal(out.preTest.length, LESSON_ASSESSMENT_PRE_MIN);
+  assert.equal(out.postTest.length, LESSON_ASSESSMENT_POST_MIN);
+
+  assert.ok(out.preTest.every((q) => q.question.startsWith("COPD readiness")));
+  assert.ok(out.postTest.every((q) => q.question.startsWith("COPD retention")));
 });
 
 test("assemblePathwayLessonBankAssessmentsFromParts drops items that fail mini-quiz render contract", () => {
   const badCatalog: PathwayLessonQuizItem[] = [{ question: " ", options: ["a"], correct: 0 }];
+
   const out = assemblePathwayLessonBankAssessmentsFromParts({
     lesson: { preTest: badCatalog, postTest: undefined },
     lessonKey: "path:bad",
@@ -82,5 +124,6 @@ test("assemblePathwayLessonBankAssessmentsFromParts drops items that fail mini-q
     explicitPre: null,
     explicitPost: null,
   });
+
   assert.equal(out.preTest.length, 0);
 });
