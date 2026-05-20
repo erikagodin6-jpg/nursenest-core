@@ -653,6 +653,50 @@ body:has(.nn-nclex-exam-page) {
   background: #fff;
 }
 
+/* Practice: inline rationale band below stem/options (CAT-aligned single column) */
+.nn-nclex-question-inner--practice {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nn-nclex-practice-rationale-band {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: min(32vh, 14rem);
+  overflow: hidden;
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, transparent);
+}
+
+.nn-nclex-practice-rationale-band .nn-practice-rationale-full,
+.nn-nclex-practice-rationale-band .nn-practice-rationale-full__scroll {
+  max-height: min(32vh, 14rem);
+}
+
+.nn-nclex-practice-rationale-band .nn-practice-rationale-full__scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.nn-nclex-question-loading,
+.nn-nclex-bowtie-slot {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.nn-nclex-bowtie-slot > * {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
 /* ── 11. RATIONALE PANEL ────────────────────────────────────────────────── */
 .nn-nclex-rationale {
   display: flex;

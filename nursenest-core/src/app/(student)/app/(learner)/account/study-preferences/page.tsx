@@ -12,6 +12,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { parseMeasurementPreference } from "@/lib/measurements/measurement-preference";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";

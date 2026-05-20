@@ -6,6 +6,7 @@ import { LearnerAccountSettingsPanel } from "@/components/student/learner-accoun
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import {
   ALLOWED_QBANK_SESSION_SIZES,

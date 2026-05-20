@@ -51,7 +51,14 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
-import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { cookies } from "next/headers";
+import { LessonMeasurementUnitsBar } from "@/components/lessons/lesson-measurement-units-bar";
+import {
+  parseMeasurementPreference,
+  readMeasurementPreferenceFromCookieStore,
+  type MeasurementPreference,
+} from "@/lib/measurements/measurement-preference";
+import { resolveLessonMeasurementSystem } from "@/lib/measurements/resolve-lesson-measurement-system";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
@@ -96,6 +103,12 @@ import {
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
+import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
+import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
+import {
+  PREMIUM_LESSON_READING_V2_SHELL_CLASS,
+  usesPremiumLessonReadingV2Layout,
+} from "@/lib/lessons/premium-lesson-reading-v2";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
@@ -602,9 +615,32 @@ async function LessonDetailPageInner({ params }: Props) {
       pathway != null
         ? contentTierForPathwayLessonRender(pathway, tier)
         : (tier ?? undefined);
+    const cookieStore = await cookies();
+    const cookieMeasurementPreference: MeasurementPreference | null =
+      readMeasurementPreferenceFromCookieStore(cookieStore);
+    let profileMeasurementPreference: MeasurementPreference | null = null;
+    if (userId) {
+      try {
+        const prefRow = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { measurementPreference: true },
+        });
+        profileMeasurementPreference = parseMeasurementPreference(
+          prefRow?.measurementPreference ?? null,
+        );
+      } catch {
+        /* optional */
+      }
+    }
+    const measurementPreference =
+      cookieMeasurementPreference ?? profileMeasurementPreference;
     const lessonMeasurementSystem =
       pathway != null
-        ? getMeasurementSystemForCountry(pathway.countryCode)
+        ? resolveLessonMeasurementSystem({
+            countryCode: pathway.countryCode,
+            pathwayId: pathway.id,
+            preference: measurementPreference,
+          })
         : null;
 
     const omitHy = new Set(record.omitHighYieldSectionIds ?? []);
@@ -646,6 +682,23 @@ async function LessonDetailPageInner({ params }: Props) {
     );
     const articleSections =
       learningSections.length > 0 ? learningSections : displaySections;
+    const isRnLessonPathway =
+      pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn";
+    const usesReadingV2Layout = usesPremiumLessonReadingV2Layout({
+      pathwayId,
+      examFamily: pathway?.examFamily ?? null,
+      roleTrack: pathway?.roleTrack ?? null,
+    });
+    const clinicalPearlsSection = retentionSections.find(
+      (section) => section.kind === "clinical_pearls",
+    );
+    const rnClinicalPearlLines = usesReadingV2Layout
+      ? extractClinicalPearlLines(
+          typeof clinicalPearlsSection?.body === "string"
+            ? clinicalPearlsSection.body
+            : "",
+        )
+      : [];
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
       let editorialRhythmCounter = 0;
@@ -974,9 +1027,11 @@ async function LessonDetailPageInner({ params }: Props) {
             }
             compactSubscriberBanner
           >
-            <article className="nn-lesson-article-flow nn-premium-lesson-article">
+            <article
+              className={`nn-lesson-article-flow nn-premium-lesson-article${usesReadingV2Layout ? " nn-lesson-reading-stack" : ""}`}
+            >
               {articleSections.length > 0
-                ? articleSections.map((section) => {
+                ? articleSections.map((section, sectionIndex) => {
                     const surfaceHeading = pathwayLessonSectionSurfaceHeading(
                       section,
                       pathway?.countryCode,
@@ -1004,6 +1059,11 @@ async function LessonDetailPageInner({ params }: Props) {
                         id={section.id}
                         heading={surfaceHeading}
                         kind={section.kind ?? null}
+                        className={
+                          usesReadingV2Layout
+                            ? rnLessonSectionStackClass(sectionIndex)
+                            : undefined
+                        }
                         editorialRhythmIndex={editorialRhythmIndexBySectionId.get(
                           section.id,
                         )}
@@ -1279,12 +1339,9 @@ async function LessonDetailPageInner({ params }: Props) {
       </>
     );
 
-    const isRnLessonPathway =
-      pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn";
-
     return (
       <div
-        className={`nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
+        className={`nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}${pathway?.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <StaffEditLivePageBanner
           adminHref={buildAdminPathwayLessonStableEditHref({
@@ -1331,11 +1388,21 @@ async function LessonDetailPageInner({ params }: Props) {
           ) : null}
         </div>
 
+        <div className="mt-4 flex justify-end">
+          <LessonMeasurementUnitsBar
+            fallbackSystem={lessonMeasurementSystem ?? "US"}
+            initialPreference={measurementPreference}
+            syncToProfile={Boolean(userId)}
+          />
+        </div>
+
         <div className="nn-lesson-layout nn-lesson-layout--premium-reading">
           <LessonReadingViewport
             sections={navSections}
             progress={initialProgress}
             progressVisible={Boolean(userId) && entitlement.hasAccess}
+            layout={usesReadingV2Layout ? "rn-v2" : "default"}
+            clinicalPearls={rnClinicalPearlLines}
           >
             <div
               className="nn-lesson-main min-w-0"

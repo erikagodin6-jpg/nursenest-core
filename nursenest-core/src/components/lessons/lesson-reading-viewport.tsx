@@ -4,6 +4,9 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { ListTree, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonCompactProgressRail } from "@/components/lessons/lesson-compact-progress-rail";
+import { LessonClinicalPearlsRail } from "@/components/lessons/lesson-clinical-pearls-rail";
+import { LessonReadingProgressStrip } from "@/components/lessons/lesson-reading-progress-strip";
+import type { ClinicalPearlLine } from "@/lib/lessons/extract-clinical-pearl-lines";
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -16,20 +19,26 @@ type SectionEntry = {
 
 /**
  * Reading-first lesson layout: dominant center column with constrained side rails.
- * Side navigation yields space before the teaching body does.
+ * RN v2 uses a left rail + full-width reading stack (no right study tips rail).
  */
 export function LessonReadingViewport({
   sections,
   progress,
   progressVisible = false,
+  layout = "default",
+  clinicalPearls = [],
   children,
 }: {
   sections: SectionEntry[];
   progress?: PathwayLessonProgressStatus | null;
   progressVisible?: boolean;
+  /** RN stream uses the v2.7 reading workspace (left rail + pearls, no right rail). */
+  layout?: "default" | "rn-v2";
+  clinicalPearls?: ClinicalPearlLine[];
   children: ReactNode;
 }) {
   const { t } = useMarketingI18n();
+  const rnLayout = layout === "rn-v2";
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -54,9 +63,14 @@ export function LessonReadingViewport({
     <div
       className="nn-lesson-reading-viewport"
       data-nn-lesson-reading-viewport
+      data-layout={rnLayout ? "rn-v2" : undefined}
       data-left-collapsed={leftCollapsed ? "true" : undefined}
       data-right-collapsed={rightCollapsed ? "true" : undefined}
     >
+      {rnLayout ? (
+        <LessonReadingProgressStrip sections={sections} />
+      ) : null}
+
       <div className="nn-lesson-reading-viewport__mobile-bar">
         <button
           type="button"
@@ -68,6 +82,9 @@ export function LessonReadingViewport({
           <ListTree className="h-5 w-5 shrink-0" aria-hidden />
           <span>{t("learner.lessons.nav.contentsLabel")}</span>
         </button>
+        {rnLayout && clinicalPearls.length > 0 ? (
+          <LessonClinicalPearlsRail pearls={clinicalPearls} />
+        ) : null}
       </div>
 
       <aside
@@ -99,6 +116,12 @@ export function LessonReadingViewport({
             progress={progress}
             progressVisible={progressVisible}
           />
+          {rnLayout ? (
+            <LessonClinicalPearlsRail
+              pearls={clinicalPearls}
+              collapsed={leftCollapsed}
+            />
+          ) : null}
         </div>
       </aside>
 
@@ -109,18 +132,20 @@ export function LessonReadingViewport({
         {children}
       </div>
 
-      <aside
-        className="nn-lesson-reading-viewport__right"
-        aria-label={t("learner.lessons.nav.ariaSectionsNav")}
-      >
-        <LessonCompactProgressRail
-          sections={sections}
-          progress={progress}
-          progressVisible={progressVisible}
-          collapsed={rightCollapsed}
-          onToggleCollapsed={() => setRightCollapsed((value) => !value)}
-        />
-      </aside>
+      {!rnLayout ? (
+        <aside
+          className="nn-lesson-reading-viewport__right"
+          aria-label={t("learner.lessons.nav.ariaSectionsNav")}
+        >
+          <LessonCompactProgressRail
+            sections={sections}
+            progress={progress}
+            progressVisible={progressVisible}
+            collapsed={rightCollapsed}
+            onToggleCollapsed={() => setRightCollapsed((value) => !value)}
+          />
+        </aside>
+      ) : null}
 
       {mobileDrawerOpen ? (
         <div
@@ -154,6 +179,9 @@ export function LessonReadingViewport({
               progressVisible={progressVisible}
               onNavigate={closeMobileDrawer}
             />
+            {rnLayout && clinicalPearls.length > 0 ? (
+              <LessonClinicalPearlsRail pearls={clinicalPearls} />
+            ) : null}
           </div>
         </div>
       ) : null}

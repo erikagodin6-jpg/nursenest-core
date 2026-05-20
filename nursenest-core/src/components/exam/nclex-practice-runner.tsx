@@ -3,11 +3,11 @@
 /**
  * NclexPracticeRunner — NCLEX-style Practice Exam (learning mode).
  *
- * Shows immediate rationale after each answer in the right-hand panel.
- * Uses the same /api/practice-tests/[id] endpoints as PracticeTestRunnerClient.
+ * Same fixed-viewport shell as CAT (`NclexPracticeExamLayout` / `NclexCatExamLayout`).
+ * Post-submit rationale via `PracticeRationaleFullPanel` + lesson links (`linear_commit`).
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   NclexPracticeExamLayout,
@@ -16,14 +16,18 @@ import {
   NclexQuestionStem,
   type NclexAnswerCardState,
 } from "@/components/exam/nclex-exam-layout";
-import { buildNclexDistractors } from "@/components/exam/nclex-rationale-panel";
-import type { NclexRationalePanelStatus } from "@/components/exam/nclex-rationale-panel";
+import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
+import {
+  PracticeAdaptivePostMissPanel,
+  type PracticeAdaptivePostMissPayload,
+} from "@/components/student/practice-adaptive-post-miss-panel";
 import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
 import {
   coerceBowtieDraftAnswer,
   isBowtieAnswerComplete,
   tryNormalizeBowtiePayload,
 } from "@/lib/questions/bowtie-adapter";
+import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
@@ -41,14 +45,15 @@ type QRow = {
 
 type LinearFeedback = {
   isCorrect: boolean;
-  correctKeys: string[];
+  topic?: string | null;
   rationale: string | null;
-  correctAnswerExplanation: string | null;
+  correctKeys: string[];
+  correctAnswerExplanation?: string | null;
   distractorRationalesMap: Record<string, string> | null;
   keyTakeaway: string | null;
+  relatedLessons: { title: string; href: string }[];
   clinicalPearlDisplay: string | null;
   referenceSource: string | null;
-  topic?: string | null;
 };
 
 function parseOptions(raw: unknown): string[] {
@@ -74,33 +79,50 @@ function isBowtieQuestion(q: QRow): boolean {
 }
 
 async function loadSession(testId: string) {
-  const res = await fetchWithRetry(`/api/practice-tests/${testId}`, { method: "GET" });
+  const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=full`, { method: "GET" });
   if (!res.ok) throw new Error("Failed to load session");
   const j = await res.json() as {
-    test?: {
-      questionIds?: unknown;
-      answers?: Record<string, unknown>;
-      cursorIndex?: number;
-      timedMode?: boolean;
-      timeLimitSec?: number | null;
-      elapsedMs?: number | null;
-      status?: string;
-      results?: PracticeTestResultsJson | null;
-    };
+    status?: string;
     pathwaySurface?: { shortName?: string | null; id?: string | null } | null;
+    timedMode?: boolean;
+    timeLimitSec?: number | null;
+    elapsedMs?: number | null;
+    cursorIndex?: number;
+    answers?: Record<string, unknown>;
+    questionIds?: unknown;
+    questions?: unknown[];
+    results?: PracticeTestResultsJson | null;
+    adaptiveState?: unknown;
   };
-  const t = j.test ?? {};
+
+  const questionIds = Array.isArray(j.questionIds) ? j.questionIds.map(String) : [];
+  const questionCache: Record<string, QRow> = {};
+  if (Array.isArray(j.questions)) {
+    for (const q of j.questions) {
+      if (q && typeof q === "object") {
+        const row = q as Record<string, unknown>;
+        if (typeof row.id === "string" && row.id) {
+          questionCache[row.id] = row as unknown as QRow;
+        }
+      }
+    }
+  }
+
   return {
-    questionIds: Array.isArray(t.questionIds) ? t.questionIds.map(String) : [],
-    answers: t.answers ?? {},
-    cursorIndex: t.cursorIndex ?? 0,
-    timedMode: t.timedMode ?? false,
-    timeLimitSec: t.timeLimitSec ?? null,
-    elapsedMs: t.elapsedMs ?? null,
-    status: t.status ?? "IN_PROGRESS",
-    results: t.results ?? null,
+    questionIds,
+    questionCache,
+    answers: (j.answers && typeof j.answers === "object" && !Array.isArray(j.answers))
+      ? (j.answers as Record<string, unknown>)
+      : {},
+    cursorIndex: j.cursorIndex ?? 0,
+    timedMode: j.timedMode ?? false,
+    timeLimitSec: j.timeLimitSec ?? null,
+    elapsedMs: j.elapsedMs ?? null,
+    status: j.status ?? "IN_PROGRESS",
+    results: j.results ?? null,
     pathwayLabel: j.pathwaySurface?.shortName ?? null,
     pathwayId: j.pathwaySurface?.id ?? null,
+    committedQuestionIds: getLinearCommittedQuestionIds(j.adaptiveState),
   };
 }
 
@@ -118,32 +140,54 @@ async function fetchQuestion(testId: string, questionId: string): Promise<QRow |
   }
 }
 
-async function commitAnswerApi(
+async function linearCommitApi(
   testId: string,
-  questionIndex: number,
-  selectedOption: unknown,
-  flagged: boolean,
+  questionId: string,
+  answers: Record<string, unknown>,
+  cursorIndex: number,
 ): Promise<{
   ok: boolean;
   feedback?: LinearFeedback;
+  committedQuestionIds?: string[];
+  adaptivePostMiss?: PracticeAdaptivePostMissPayload | null;
   error?: string;
 }> {
   const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      action: "commit_answer",
-      questionIndex,
-      selectedOption,
-      flagged,
+      action: "linear_commit",
+      questionId,
+      answers,
+      cursorIndex,
     }),
   });
   const j = await res.json() as {
     ok?: boolean;
     feedback?: LinearFeedback;
+    committedQuestionIds?: string[];
+    adaptivePostMiss?: PracticeAdaptivePostMissPayload | null;
     error?: string;
   };
-  return { ok: j.ok ?? res.ok, feedback: j.feedback, error: j.error };
+  return {
+    ok: j.ok ?? res.ok,
+    feedback: j.feedback,
+    committedQuestionIds: j.committedQuestionIds,
+    adaptivePostMiss: j.adaptivePostMiss ?? null,
+    error: j.error,
+  };
+}
+
+async function saveSessionProgress(
+  testId: string,
+  answers: Record<string, unknown>,
+  cursorIndex: number,
+): Promise<void> {
+  await fetchWithRetry(`/api/practice-tests/${testId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "save", answers, cursorIndex }),
+  }).catch(() => { /* best-effort flag / cursor persistence */ });
 }
 
 async function submitTestApi(testId: string): Promise<{
@@ -153,7 +197,7 @@ async function submitTestApi(testId: string): Promise<{
   const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "submit" }),
+    body: JSON.stringify({ action: "complete" }),
   });
   const j = await res.json() as { ok?: boolean; results?: PracticeTestResultsJson };
   return { ok: j.ok ?? res.ok, results: j.results };
@@ -163,7 +207,7 @@ async function submitTestApi(testId: string): Promise<{
 
 export function NclexPracticeRunner({
   testId,
-  userId,
+  userId: _userId,
   pathwayLabel: pathwayLabelProp,
 }: {
   testId: string;
@@ -180,6 +224,10 @@ export function NclexPracticeRunner({
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [committedIds, setCommittedIds] = useState<Set<string>>(new Set());
   const [feedback, setFeedback] = useState<Record<string, LinearFeedback>>({});
+  const [adaptivePostMiss, setAdaptivePostMiss] = useState<{
+    questionId: string;
+    payload: PracticeAdaptivePostMissPayload;
+  } | null>(null);
   const [results, setResults] = useState<PracticeTestResultsJson | null>(null);
   const [pathwayLabel, setPathwayLabel] = useState(pathwayLabelProp ?? "NCLEX-RN®");
   const [pathwayId, setPathwayId] = useState<string | null>(null);
@@ -187,20 +235,23 @@ export function NclexPracticeRunner({
   const [submitting, setSubmitting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Timer
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
 
   const mountedRef = useRef(true);
   const inFlightRef = useRef(false);
+  const answersRef = useRef<Record<string, unknown>>({});
 
   useEffect(() => {
     mountedRef.current = true;
     return () => { mountedRef.current = false; };
   }, []);
 
-  // Load session
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
+
   useEffect(() => {
     void (async () => {
       try {
@@ -212,7 +263,9 @@ export function NclexPracticeRunner({
           return;
         }
         setQuestionIds(s.questionIds);
+        setQuestionCache(s.questionCache);
         setAnswers(s.answers ?? {});
+        setCommittedIds(new Set(s.committedQuestionIds));
         setIdx(s.cursorIndex ?? 0);
         setTimedMode(s.timedMode);
         setTimeLimitSec(s.timeLimitSec ?? null);
@@ -229,7 +282,6 @@ export function NclexPracticeRunner({
     })();
   }, [testId]);
 
-  // Prefetch Q
   useEffect(() => {
     if (phase !== "ready") return;
     const ids = questionIds.slice(idx, idx + 2);
@@ -243,7 +295,6 @@ export function NclexPracticeRunner({
     }
   }, [phase, idx, questionIds, questionCache, testId]);
 
-  // Timer
   useEffect(() => {
     if (!timedMode || remainingSec === null || isPaused) return;
     if (remainingSec <= 0) { void handleFinish(); return; }
@@ -273,21 +324,40 @@ export function NclexPracticeRunner({
 
   function setAnswerForCurrent(val: unknown) {
     if (!currentId || isCommitted) return;
-    setAnswers((prev) => ({ ...prev, [currentId]: val }));
+    setAnswers((prev) => {
+      const next = { ...prev, [currentId]: val };
+      answersRef.current = next;
+      return next;
+    });
   }
 
   async function handleSubmit() {
     if (!currentId || !hasAnswer || isCommitted || inFlightRef.current) return;
     inFlightRef.current = true;
     setSubmitting(true);
+    const qidAtCommit = currentId;
+    const idxAtCommit = idx;
     try {
-      const resp = await commitAnswerApi(testId, idx, raw, flagged[currentId] ?? false);
+      const resp = await linearCommitApi(testId, currentId, answersRef.current, idx);
       if (!mountedRef.current) return;
-      if (resp.ok) {
-        setCommittedIds((prev) => new Set([...prev, currentId]));
-        if (resp.feedback) {
-          setFeedback((prev) => ({ ...prev, [currentId]: resp.feedback! }));
-        }
+      if (!resp.ok) {
+        setError(resp.error ?? "Could not submit answer.");
+        return;
+      }
+      setCommittedIds((prev) => new Set([...prev, currentId]));
+      if (Array.isArray(resp.committedQuestionIds)) {
+        setCommittedIds(new Set(resp.committedQuestionIds));
+      }
+      if (resp.feedback) {
+        setFeedback((prev) => ({ ...prev, [currentId]: resp.feedback! }));
+      }
+      if (
+        resp.adaptivePostMiss &&
+        !resp.feedback?.isCorrect &&
+        idxAtCommit === idx &&
+        questionIds[idxAtCommit] === qidAtCommit
+      ) {
+        setAdaptivePostMiss({ questionId: qidAtCommit, payload: resp.adaptivePostMiss });
       }
     } finally {
       if (mountedRef.current) { setSubmitting(false); inFlightRef.current = false; }
@@ -296,11 +366,14 @@ export function NclexPracticeRunner({
 
   function handleNext() {
     if (idx < questionIds.length - 1) {
+      setAdaptivePostMiss((prev) => (prev?.questionId === currentId ? null : prev));
       setTransitioning(true);
       setTimeout(() => {
         if (!mountedRef.current) return;
-        setIdx((prev) => prev + 1);
+        const nextIdx = idx + 1;
+        setIdx(nextIdx);
         setTransitioning(false);
+        void saveSessionProgress(testId, answersRef.current, nextIdx);
       }, 200);
     } else {
       void handleFinish();
@@ -312,8 +385,10 @@ export function NclexPracticeRunner({
       setTransitioning(true);
       setTimeout(() => {
         if (!mountedRef.current) return;
-        setIdx((prev) => prev - 1);
+        const nextIdx = idx - 1;
+        setIdx(nextIdx);
         setTransitioning(false);
+        void saveSessionProgress(testId, answersRef.current, nextIdx);
       }, 200);
     }
   }
@@ -334,48 +409,13 @@ export function NclexPracticeRunner({
     }
   }
 
-  // ── Build rationale props ─────────────────────────────────────────────────
-
-  function buildRationaleProps(): {
-    status: NclexRationalePanelStatus;
-    correctAnswerText?: string | null;
-    correctAnswerLetter?: string | null;
-    correctExplanation?: string | null;
-    distractors: { letter: string; text: string; reason: string }[];
-    keyTakeaway?: string | null;
-    referenceSource?: string | null;
-    clinicalPearl?: string | null;
-  } {
-    if (!isCommitted || !currentFeedback) {
-      return { status: "waiting", distractors: [] };
-    }
-    const status: NclexRationalePanelStatus = currentFeedback.isCorrect ? "correct" : "incorrect";
-    const correctKey = currentFeedback.correctKeys[0];
-    const correctIdx = optsCanonical.indexOf(correctKey ?? "");
-    const correctText = correctIdx >= 0 ? (optsDisplay[correctIdx] ?? correctKey) : correctKey;
-    const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
-    const correctLetter = correctIdx >= 0 ? (LETTERS[correctIdx] ?? null) : null;
-
-    const optDisplayMap: Record<string, string> = {};
-    optsCanonical.forEach((k, i) => { optDisplayMap[k] = optsDisplay[i] ?? k; });
-
-    const distractors = buildNclexDistractors(
-      optsCanonical,
-      currentFeedback.correctKeys,
-      optDisplayMap,
-      currentFeedback.distractorRationalesMap,
-    );
-
-    return {
-      status,
-      correctAnswerText: correctText ?? null,
-      correctAnswerLetter: correctLetter,
-      correctExplanation: currentFeedback.correctAnswerExplanation ?? currentFeedback.rationale,
-      distractors,
-      keyTakeaway: currentFeedback.keyTakeaway,
-      referenceSource: currentFeedback.referenceSource,
-      clinicalPearl: currentFeedback.clinicalPearlDisplay,
-    };
+  function toggleFlag() {
+    if (!currentId) return;
+    setFlagged((prev) => {
+      const next = { ...prev, [currentId]: !prev[currentId] };
+      void saveSessionProgress(testId, answersRef.current, idx);
+      return next;
+    });
   }
 
   // ── Renders ───────────────────────────────────────────────────────────────
@@ -391,43 +431,34 @@ export function NclexPracticeRunner({
   if (phase === "error") {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p style={{ color: "#dc2626", marginBottom: "1rem" }}>{error}</p>
-        <Link href="/app/practice-tests" style={{ color: "#0f2d57", fontWeight: 600 }}>Return to practice tests</Link>
+        <p className="text-[var(--semantic-danger)]" style={{ marginBottom: "1rem" }}>{error}</p>
+        <Link href="/app/practice-tests" className="font-semibold text-[var(--semantic-brand)]">
+          Return to practice tests
+        </Link>
       </div>
     );
   }
 
-  // Results
   if (results) {
     return (
-      <div style={{ position: "fixed", inset: 0, overflow: "auto", background: "#f5f7fa", zIndex: 100 }}>
+      <div className="nn-nclex-exam-page" data-nclex-shell="practice" style={{ position: "fixed", inset: 0, overflow: "auto", zIndex: 200 }}>
         <div style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#0f172a", marginBottom: "1.5rem" }}>
+          <h1 className="text-2xl font-extrabold text-[var(--semantic-text-primary)]" style={{ marginBottom: "1.5rem" }}>
             Practice Exam Results
           </h1>
-          <p style={{ fontSize: "1.125rem", fontWeight: 700, color: "#0f172a" }}>
+          <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
             Score: {results.scoreCorrect} / {results.scoreTotal} ({Math.round(results.accuracyPct ?? 0)}%)
           </p>
           <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
             <Link
               href={`/app/practice-tests/${testId}/results`}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.375rem",
-                height: "2.5rem", padding: "0 1.25rem", borderRadius: "0.5rem",
-                background: "#0f2d57", color: "#fff", fontWeight: 700, fontSize: "0.875rem",
-                textDecoration: "none",
-              }}
+              className="inline-flex h-10 items-center rounded-lg bg-[var(--semantic-brand)] px-5 text-sm font-bold text-[var(--role-cta-foreground)] no-underline"
             >
               View detailed results
             </Link>
             <Link
               href="/app/practice-tests"
-              style={{
-                display: "inline-flex", alignItems: "center",
-                height: "2.5rem", padding: "0 1.25rem", borderRadius: "0.5rem",
-                border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151",
-                fontWeight: 600, fontSize: "0.875rem", textDecoration: "none",
-              }}
+              className="inline-flex h-10 items-center rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-secondary)] no-underline"
             >
               Back to practice tests
             </Link>
@@ -437,12 +468,52 @@ export function NclexPracticeRunner({
     );
   }
 
-  // Exam
-  const rationaleProps = buildRationaleProps();
   const total = questionIds.length;
   const unanswered = questionIds.filter((id) => !committedIds.has(id)).length;
 
-  // Build answer card states for current question
+  const optDisplayMap: Record<string, string> = {};
+  optsCanonical.forEach((k, i) => { optDisplayMap[k] = optsDisplay[i] ?? k; });
+
+  const rationaleStatus = !isCommitted || !currentFeedback
+    ? ("waiting" as const)
+    : currentFeedback.isCorrect
+      ? ("correct" as const)
+      : ("incorrect" as const);
+
+  const rationaleSlot = (
+    <>
+      <PracticeRationaleFullPanel
+        status={rationaleStatus}
+        correctKeys={currentFeedback?.correctKeys ?? []}
+        optionDisplayMap={optDisplayMap}
+        allOptionKeys={optsCanonical}
+        correctAnswerExplanation={currentFeedback?.correctAnswerExplanation ?? null}
+        rationale={currentFeedback?.rationale ?? null}
+        distractorRationalesMap={currentFeedback?.distractorRationalesMap ?? null}
+        keyTakeaway={currentFeedback?.keyTakeaway ?? null}
+        relatedLessons={currentFeedback?.relatedLessons ?? []}
+        clinicalPearlDisplay={currentFeedback?.clinicalPearlDisplay ?? null}
+        referenceSource={currentFeedback?.referenceSource ?? null}
+        showDistractorFallback
+      />
+      {adaptivePostMiss?.questionId === currentId && pathwayId ? (
+        <PracticeAdaptivePostMissPanel
+          payload={adaptivePostMiss.payload}
+          testConfig={{ pathwayId }}
+          pathwaySurface={{
+            id: pathwayId,
+            countrySlug: "",
+            roleTrack: "",
+            examCode: "",
+            shortName: pathwayLabel,
+            examFamily: null,
+          }}
+          tx={(_key, fallback) => fallback}
+        />
+      ) : null}
+    </>
+  );
+
   function getOptionState(canonical: string): NclexAnswerCardState {
     if (!isCommitted || !currentFeedback) {
       const isSelected = isSata
@@ -461,11 +532,11 @@ export function NclexPracticeRunner({
   }
 
   const answerContent = !current ? (
-    <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <div className="nn-nclex-question-loading">
       <div className="nn-nclex-spinner" />
     </div>
   ) : isBowtie && bowtiePayload ? (
-    <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
+    <div className="nn-nclex-bowtie-slot">
       <BowtieQuestionRenderer
         payload={bowtiePayload}
         value={raw}
@@ -489,7 +560,7 @@ export function NclexPracticeRunner({
   ) : (
     <NclexAnswerList>
       {optsCanonical.map((canonical, i) => {
-        const display = optsDisplay[i] ?? canonical;
+        const display = resolveMeasureText(optsDisplay[i] ?? canonical);
         const state = getOptionState(canonical);
         if (isSata) {
           return (
@@ -530,10 +601,7 @@ export function NclexPracticeRunner({
       totalQuestions={total}
       remainingSec={timedMode ? remainingSec : null}
       flagged={flagged[currentId ?? ""] ?? false}
-      onFlag={() => {
-        if (!currentId) return;
-        setFlagged((prev) => ({ ...prev, [currentId]: !prev[currentId] }));
-      }}
+      onFlag={toggleFlag}
       onFinish={handleFinish}
       onPrev={handlePrev}
       onNext={handleNext}
@@ -549,16 +617,16 @@ export function NclexPracticeRunner({
       questionFormat={current?.questionFormat}
       isSata={isSata}
       showTypePanel={true}
-      rationaleStatus={rationaleProps.status}
-      correctAnswerText={rationaleProps.correctAnswerText}
-      correctAnswerLetter={rationaleProps.correctAnswerLetter}
-      correctExplanation={rationaleProps.correctExplanation}
-      distractors={rationaleProps.distractors}
-      keyTakeaway={rationaleProps.keyTakeaway}
-      referenceSource={rationaleProps.referenceSource}
-      clinicalPearl={rationaleProps.clinicalPearl}
+      rationaleSlot={rationaleSlot}
       transitioning={transitioning}
       unansweredCount={unanswered}
+      unitsControl={
+        <ExamMeasurementUnitToggle
+          fallbackSystem={fallbackMeasurementSystem}
+          syncToProfile={Boolean(userId)}
+          disabled={submitting || transitioning}
+        />
+      }
     >
       <NclexQuestionStem
         stem={current?.stem ?? ""}

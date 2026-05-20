@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Calculator, Flag, FileText, X } from "lucide-react";
 
 export type NclexCatTopBarProps = {
@@ -18,6 +19,8 @@ export type NclexCatTopBarProps = {
   onNotes: () => void;
   onEndTest: () => void;
   disabled?: boolean;
+  /** SI / conventional units control (CAT, practice shells). */
+  unitsControl?: ReactNode;
 };
 
 function fmt(sec: number): { text: string; tier: "normal" | "warn" | "critical" } {
@@ -42,6 +45,7 @@ export function NclexCatTopBar({
   onNotes,
   onEndTest,
   disabled = false,
+  unitsControl = null,
 }: NclexCatTopBarProps) {
   const timer = remainingSec != null ? fmt(remainingSec) : null;
 
@@ -94,6 +98,12 @@ export function NclexCatTopBar({
           )}
         </div>
       </div>
+
+      {unitsControl ? (
+        <div className="nn-nclex-top-bar__section" aria-label="Measurement units">
+          {unitsControl}
+        </div>
+      ) : null}
 
       {/* Calculator */}
       <div className="nn-nclex-top-bar__section">
@@ -165,6 +175,7 @@ export function NclexPracticeTopBar({
   onPause,
   onFinish,
   disabled = false,
+  unitsControl = null,
 }: {
   questionNumber: number;
   totalQuestions: number;
@@ -173,6 +184,7 @@ export function NclexPracticeTopBar({
   onPause?: () => void;
   onFinish: () => void;
   disabled?: boolean;
+  unitsControl?: ReactNode;
 }) {
   const timer = remainingSec != null ? fmt(remainingSec) : null;
 
@@ -184,6 +196,12 @@ export function NclexPracticeTopBar({
       </div>
 
       <span className="nn-nclex-practice-mode-badge">Practice Exam · Learning Mode</span>
+
+      {unitsControl ? (
+        <div style={{ marginLeft: "0.5rem" }} aria-label="Measurement units">
+          {unitsControl}
+        </div>
+      ) : null}
 
       <div style={{ flex: 1 }} />
 
