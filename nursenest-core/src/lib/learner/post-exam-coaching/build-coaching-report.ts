@@ -10,7 +10,7 @@ import {
   toRnCoachingInput,
 } from "@/lib/learner/rn-coaching-intelligence/coaching-orchestration";
 import { governCoachingReportCopy } from "@/lib/learner/rn-coaching-intelligence/ai-coaching-governance";
-import { validateCoachingCopyForPathway } from "@/lib/testing/testing-model";
+import { validateCoachingCopyForPathway } from "@/lib/testing/testing-coaching-policy";
 import type { PostExamCoachingReport } from "@/lib/learner/post-exam-coaching/types";
 import type { RnCoachingIntelligenceReport } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 
