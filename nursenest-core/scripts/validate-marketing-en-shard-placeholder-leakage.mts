@@ -8,11 +8,22 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "../src/lib/marketing-i18n/marketing-i18n-shard-groups.ts";
 import { scanFlatMarketingMessagesForForbiddenValues } from "../src/lib/marketing-i18n/marketing-message-value-policy.ts";
 
 const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const enDir = path.join(pkgRoot, "public", "i18n", "en");
+const MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS = [
+  "marketing",
+  "nav",
+  "brand",
+  "components",
+  "common",
+  "auth",
+  "billing",
+  "learner",
+  "errors",
+  "pages",
+] as const;
 
 function main() {
   if (!fs.existsSync(enDir)) {
