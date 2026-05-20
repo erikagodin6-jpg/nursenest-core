@@ -1,9 +1,18 @@
 /**
  * Host memory / cgroup sampling — uses `fs`/`os`; do not import from Edge or from `db.ts`.
  */
-import fs from "node:fs";
-import os from "node:os";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+function requireNodeModule<T>(id: string): T | null {
+  try {
+    const req = Function("return typeof require === 'function' ? require : null")() as
+      | ((moduleId: string) => T)
+      | null;
+    return req ? req(id) : null;
+  } catch {
+    return null;
+  }
+}
 
 function safeMemoryUsage(): NodeJS.MemoryUsage | null {
   try {
@@ -19,6 +28,8 @@ function safeMemoryUsage(): NodeJS.MemoryUsage | null {
 /** cgroup v2 memory limit when running under Docker / App Platform; else null. */
 function readCgroupMemoryLimitMb(): number | null {
   try {
+    const fs = requireNodeModule<typeof import("node:fs")>("node:fs");
+    if (!fs) return null;
     const raw = fs.readFileSync("/sys/fs/cgroup/memory.max", "utf8").trim();
     if (!raw || raw === "max") return null;
     const bytes = Number(raw);
@@ -40,7 +51,8 @@ export function logMemoryPressureSample(context: string): void {
   const heapMb = Math.round(m.heapUsed / 1024 / 1024);
   const externalMb = Math.round((m.external ?? 0) / 1024 / 1024);
   const cgroupMb = readCgroupMemoryLimitMb();
-  const hostTotalMb = Math.round(os.totalmem() / 1024 / 1024);
+  const os = requireNodeModule<typeof import("node:os")>("node:os");
+  const hostTotalMb = os ? Math.round(os.totalmem() / 1024 / 1024) : 0;
   const limitMb = cgroupMb ?? hostTotalMb;
   const warnPct = Number(process.env.PERF_MEMORY_RSS_WARN_PCT?.trim() ?? "70");
   const threshold = Number.isFinite(warnPct) && warnPct > 0 && warnPct <= 100 ? warnPct : 70;
