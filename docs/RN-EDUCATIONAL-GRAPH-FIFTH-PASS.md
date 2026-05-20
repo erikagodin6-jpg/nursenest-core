@@ -1,7 +1,7 @@
-# RN Educational Graph — Fifth Convergence Pass
+# RN Educational Graph — Fifth + Sixth (Runtime Closure) Pass
 
 **Date:** 2026-05-20  
-**Status:** Substantial convergence; thin-adapter target partially met with documented residual debt.
+**Status:** Graph substrate authoritative; runtime closure modules landed; residual debt narrowed to Study Coach API and tutor session routes.
 
 ## Executive summary
 
@@ -157,24 +157,71 @@ node nursenest-core/scripts/audit-route-canonicalization.mjs
 
 ## 10. Remaining semantic debt inventory
 
-| Priority | Item |
-|----------|------|
-| P0 | Plumb `graphSteps` on all AI tutor API/session entry points |
-| P0 | Interpretation marketing/hub cards without `EduGraphStep` — materialize step at render |
-| P1 | Server `captureGovernedGraphTelemetryServer` on dashboard RSC + study-plan |
-| P1 | Unify coaching `recordCoachingTelemetry` with governed graph events |
-| P1 | Glossary entities as first-class orchestrator traversal nodes (not only metadata) |
-| P2 | Deprecate `buildDashboardCards` local heuristics when session always has pathwayId |
-| P2 | Expand glossary audit threshold from 150 → 200 in contract when registry count confirmed |
+| Priority | Item | Status after runtime closure |
+|----------|------|------------------------------|
+| P0 | Plumb `graphSteps` on all AI tutor API/session entry points | Helpers ready; `/api/coach` and tutor shell still separate |
+| P0 | Interpretation entry `EduGraphStep` materialization | **Done** — hub uses `GovernedInterpretationLink` |
+| P1 | Server graph telemetry on dashboard RSC + adaptive API | **Done** — `emitLearnerDashboardGraphTelemetry`, adaptive route |
+| P1 | Coaching telemetry graph lineage | **Done** — `coaching-graph-telemetry-bridge` + V5 merge |
+| P1 | Glossary as native orchestrator nodes | **Done** — `glossary_traversal` surface + `buildGlossaryGraphNode` |
+| P2 | Remove `buildDashboardCards` legacy fallback | Deprecated; substrate default pathway when session empty |
+| P2 | Study-plan / remediation review server capture | Pending dedicated hooks |
+
+---
+
+## Sixth pass — graph runtime closure (this delivery)
+
+### Universal tutoring continuity
+
+- `ai-tutor-substrate-governance.ts` — `resolveTutoringGraphSteps`, `buildGovernedTutoringPromptContext`, lineage snapshots, drift assertions.
+- `tutoring-continuity-replay.ts` — session checkpoint recovery with replay divergence detection.
+- Contract: `ai-tutor-substrate-governance.contract.test.ts`.
+
+### Authenticated server graph telemetry
+
+- `governed-server-telemetry.ts` — `emitGovernedServerGraphTelemetry()` with full lineage envelope.
+- `graph-lineage-envelope.ts` — `pathwayId`, `graphVersion`, `ontologyRevision`, `educationalIntent`, `testing_model`, `cognitionReliabilityTier`, `continuityCheckpointId`.
+- Wired: learner dashboard RSC, adaptive recommendations API, adaptive wire projection.
+- Contract: `server-telemetry-lineage.contract.test.ts`.
+
+### Glossary native traversal
+
+- New `GraphSourceSurface`: `glossary_traversal` (orchestrator emits glossary steps on glossary surfaces).
+- `glossary-graph-node.ts` uses native traversal; validation prevents orphan nodes.
+
+### Interpretation graph materialization
+
+- `interpretation-graph-step-materialization.ts` + `ClinicalInterpretationGuideCard` on hub listing.
+
+### Coaching telemetry convergence
+
+- `coaching-graph-telemetry-bridge.ts` merges graph lineage into authoritative coaching events.
+- Cognition V5 emits graph lineage props on every governed event.
+
+### Replayable graph runtime
+
+- `graph-runtime-replay.ts` — dashboard, remediation, adaptive, interpretation replay snapshots.
+- Contract: `graph-runtime-replay.contract.test.ts`, `graph-resilience.contract.test.ts`.
+
+### Runtime resilience
+
+- `graph-substrate-integrity.ts` — healthy / degraded / conflicting / orphaned tiers + step salvage.
+- `ontology-runtime-integrity.ts` — namespace conflict detection + replay reconciliation.
+
+### CI
+
+- **48** graph/cognition contract tests passing (includes new closure suites).
+- `audit-rn-coaching-governance.mjs` extended for runtime closure modules.
 
 ---
 
 ## Files touched (representative)
 
-- `dashboard-substrate-orchestration.ts`, `dashboard-orchestration-v3.ts`
-- `learner-coaching-dashboard-panel.tsx`
-- `graph-step-next-action.ts`, `capture-governed-graph-telemetry-server.ts`
-- `ai-tutor-cognition-envelope.ts`, `prompt-composition.ts`, `tutoring-provider.ts`
-- `nursing-glossary-competency-generated.ts`, `nursing-glossary-governance.ts`
-- `graph-orchestration-enforcement.contract.test.ts`, `glossary-governance.contract.test.ts`
-- `graph-governance-observability.ts`, `audit-route-canonicalization.mjs`
+- `governed-server-telemetry.ts`, `graph-lineage-envelope.ts`, `graph-runtime-replay.ts`
+- `ai-tutor-substrate-governance.ts`, `tutoring-continuity-replay.ts`
+- `interpretation-graph-step-materialization.ts`, `clinical-interpretation-guide-card.tsx`
+- `emit-learner-dashboard-graph-telemetry.ts`, `coaching-graph-telemetry-bridge.ts`
+- `graph-substrate-integrity.ts`, `ontology-runtime-integrity.ts`
+- `dashboard-orchestration-v3.ts`, `adaptive-wire-cognition-projection.ts`
+- `app/(learner)/page.tsx`, `api/learner/adaptive-recommendations/route.ts`
+- `*.contract.test.ts` (tutor, replay, glossary, server lineage, resilience)

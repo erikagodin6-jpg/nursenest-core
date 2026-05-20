@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { BlogStudyAnchorStrip } from "@/components/blog/blog-study-anchor-strip";
 import { BlogFaqPageJsonLd } from "@/components/seo/seo-json-ld";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
@@ -93,10 +92,7 @@ export async function RegionalBlogIndexPage({ clusterSlug, searchParams }: Index
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <Breadcrumbs crumbs={crumbs} schemaItems={schemaItems} pathname={base} analyticsIntent="discovery" />
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
           {labels.h1} — {labels.examShort} study articles
@@ -289,10 +285,12 @@ export async function RegionalBlogDetailPage({ clusterSlug, postSlug }: DetailPr
       {emitFaqJsonLd ? (
         <BlogFaqPageJsonLd items={mergedFaqItems.map((f) => ({ question: f.q, answer: f.a }))} />
       ) : null}
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <Breadcrumbs
+        crumbs={crumbs}
+        schemaItems={schemaItems}
+        pathname={`${base}/${post.slug}`}
+        analyticsIntent="discovery"
+      />
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
         ← Back to {labels.short} articles
       </Link>

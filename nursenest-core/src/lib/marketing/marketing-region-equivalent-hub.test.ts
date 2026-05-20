@@ -11,7 +11,7 @@ test("maps Canada RN hub overview to US RN hub when switching to US", () => {
 });
 
 test("maps Canada PN hub to US PN when switching to US", () => {
-  assert.equal(equivalentExamHubUrlAfterRegionToggle("/canada/rpn/rex-pn", "US"), "/us/pn/nclex-pn");
+  assert.equal(equivalentExamHubUrlAfterRegionToggle("/canada/pn/rex-pn", "US"), "/us/pn/nclex-pn");
 });
 
 test("returns null when already in target country", () => {

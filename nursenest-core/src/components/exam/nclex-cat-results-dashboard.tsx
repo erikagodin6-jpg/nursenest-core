@@ -1,5 +1,7 @@
 "use client";
 
+import { governPdfExportCopy } from "@/lib/measurements/measurement-surface-convergence";
+
 import Link from "next/link";
 import {
   LayoutDashboard,
@@ -276,13 +278,14 @@ export function NclexCatResultsDashboard({
   const se = results.abilityStdError ?? catReport?.se;
   const abilityBand = catReport?.result ?? (band === "likely" ? "PASS" : band === "risk" ? "FAIL" : "BORDERLINE");
 
-  const interpretation =
+  const rawInterpretation =
     results.catCoach?.readinessNarrative ??
     (band === "likely"
       ? "You are more likely to pass if your current ability holds steady."
       : band === "risk"
         ? "Continued study is recommended before your exam."
         : "Continue focusing on your weaker areas — consistent performance is key.");
+  const interpretation = governPdfExportCopy(rawInterpretation, pathwayId ?? null);
 
   const domainScores = buildDomainScores(results);
 

@@ -63,7 +63,24 @@ export function EngagementNudgeStrip({
     return true;
   });
 
-  if (loading || filtered.length === 0) return null;
+  if (loading) {
+    return (
+      <div
+        className="nn-engagement-nudge-reserve grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+        aria-busy="true"
+        aria-label="Study reminders loading"
+      >
+        <div className="nn-engagement-nudge rounded-2xl p-4">
+          <div className="nn-skeleton nn-skeleton-shimmer h-4 w-32 rounded-full" />
+          <div className="nn-skeleton nn-skeleton-shimmer mt-2 h-3 w-full rounded-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (filtered.length === 0) {
+    return <div className="nn-engagement-nudge-reserve nn-engagement-nudge-reserve--settled" aria-hidden />;
+  }
 
   const visible = filtered.slice(0, maxItems);
 

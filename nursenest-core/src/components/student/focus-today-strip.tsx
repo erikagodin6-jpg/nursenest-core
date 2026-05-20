@@ -79,7 +79,11 @@ export function FocusTodayStrip({
 
   if (plan === null) {
     return (
-      <section className="nn-dash-section" aria-busy="true" aria-label={t("learner.focusToday.title")}>
+      <section
+        className="nn-dash-section nn-focus-today-reserve"
+        aria-busy="true"
+        aria-label={t("learner.focusToday.title")}
+      >
         <div className="nn-focus-today-surface nn-focus-today-surface--loading rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] p-4 sm:p-5">
           <div className="nn-skeleton nn-skeleton-shimmer mb-3 h-3 w-28 rounded-full" />
           <div className="nn-skeleton nn-skeleton-shimmer mb-4 h-3 w-full max-w-md rounded-full" />
@@ -97,7 +101,7 @@ export function FocusTodayStrip({
   const weakSlice = weakTopicFallback.slice(0, 5);
 
   if (remediationItems.length === 0 && weakSlice.length === 0) {
-    return null;
+    return <div className="nn-focus-today-reserve nn-coaching-dashboard-reserve--settled" aria-hidden />;
   }
 
   const showRemediation = plan.enabled && remediationItems.length > 0;

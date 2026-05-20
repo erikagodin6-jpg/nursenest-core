@@ -44,7 +44,7 @@ The image runs `npm run heroku-postbuild` (which sets `NN_POSTBUILD_NEXT_BUILD=1
 3. **Remove** `environment_slug: node-js` for that component (image supplies Node).
 4. Set **`build_command` empty** or omit — the image build is the compile. Do **not** run `npm run build` again on the platform unless you intend a second compile.
 5. Keep **`run_command: npm run start`** and **`http_port: 8080`** aligned with the Dockerfile `CMD` / `PORT`.
-6. Re-apply secrets (`DATABASE_URL`, auth, etc.) as **RUN_TIME only** for DB connection strings. **Do not** add `DATABASE_URL`, `DIRECT_URL`, or `DATABASE_DIRECT_URL` to App Platform **build-time** env: Docker passes them into `RUN` layers and they can override runtime secrets (see root `Dockerfile` — no image-wide `ARG`/`ENV` for `DATABASE_URL`; Prisma `generate` uses an ephemeral URL on the `RUN` line only).
+6. Re-apply secrets (`DATABASE_URL`, auth, etc.) as **`RUN_TIME` only** for DB connection strings on **GHCR image deploys** (see `docs/ops/ghcr-runtime-database-url.md`). **Do not** add `DATABASE_URL`, `DIRECT_URL`, or `DATABASE_DIRECT_URL` to Docker `build-args` or image `ENV`. Prisma `generate` uses an ephemeral one-line URL on the `db:generate` `RUN` only (root `Dockerfile`).
 
 ## Local image build
 

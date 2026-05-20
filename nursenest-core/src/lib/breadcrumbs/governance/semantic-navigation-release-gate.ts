@@ -56,6 +56,30 @@ export function runStaticSemanticReleaseGate(repoRoot = process.cwd()): Semantic
   for (const v of substrate.remediationDivergence) {
     failures.push({ code: "remediation_traversal_divergence", detail: v });
   }
+  for (const v of substrate.shadowAuthorityViolations ?? []) {
+    failures.push({ code: "shadow_authority", detail: v });
+  }
+  for (const v of substrate.adaptiveHeuristicViolations ?? []) {
+    failures.push({ code: "non_governed_adaptive", detail: v });
+  }
+
+  const psychIssues = validatePsychometricLineage(resolvePsychometricLineageStamp({ pathwayId: "us-rn-nclex-rn" }));
+  for (const issue of psychIssues) {
+    if (issue.code !== "missing_testing_model") {
+      failures.push({ code: `psychometric_lineage_${issue.code}`, detail: issue.detail });
+    }
+  }
+
+  const replayFrame = captureGraphTelemetryReplayFrame({
+    kind: "glossary_traversal",
+    pathname: "/nursing-glossary/sample",
+    pathwayId: "us-rn-nclex-rn",
+  });
+  const replaySnapshot = buildGraphTelemetryReplaySnapshot([replayFrame]);
+  const replayDrift = assertReplayLineageConsistent(replaySnapshot);
+  if (replayDrift.length) {
+    failures.push({ code: "replay_lineage_drift", detail: replayDrift.join(";") });
+  }
 
   for (const c of ontologyConflicts) {
     failures.push({ code: "ontology_namespace_conflict", detail: c });
@@ -87,6 +111,8 @@ export function writeSemanticReleaseGateArtifacts(
     join(outDir, "structured-data-governance-snapshot.json"),
     JSON.stringify({ failures: report.failures, ok: report.ok }, null, 2),
   );
+  const governanceStatus = reportSemanticGovernanceStatus(process.cwd());
+  writeFileSync(join(outDir, "semantic-governance-status.json"), JSON.stringify(governanceStatus, null, 2));
   report.artifactDir = outDir;
   return outDir;
 }

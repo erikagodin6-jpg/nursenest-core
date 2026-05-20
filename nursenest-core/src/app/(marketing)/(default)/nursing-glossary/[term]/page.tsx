@@ -9,6 +9,8 @@ import { DEFAULT_INTERPRETATION_PATHWAY_ID } from "@/lib/clinical-interpretation
 import { GlossaryRelatedTerms } from "@/components/seo/glossary-related-terms";
 import { definedTermJsonLd } from "@/lib/educational-graph/structured-data-educational-entities";
 import { glossaryGraphMetadataForTerm } from "@/lib/educational-graph/nursing-glossary-governance";
+import { buildGlossaryGraphNode, validateGlossaryGraphNode } from "@/lib/educational-graph/glossary-graph-node";
+import { captureGraphTelemetryReplayFrame } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 import { getNursingGlossaryTerm } from "@/lib/seo/nursing-glossary-registry";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
 
@@ -48,6 +50,23 @@ export default async function NursingGlossaryTermPage({ params }: Props) {
     .filter((t): t is NonNullable<typeof t> => Boolean(t));
 
   const termPath = `${GLOSSARY_HUB_PATH}/${entry.slug}`;
+  if (pathway) {
+    const glossaryNode = buildGlossaryGraphNode(
+      { termSlug: entry.slug, termLabel: entry.term, topicSlug: entry.topicSlug, pathway },
+      pathway.id,
+    );
+    const orphan = validateGlossaryGraphNode(glossaryNode);
+    if (orphan && process.env.NODE_ENV === "development") {
+      console.warn("[glossary-graph-node]", orphan);
+    }
+    captureGraphTelemetryReplayFrame({
+      kind: "glossary_traversal",
+      pathname: termPath,
+      pathwayId: pathway.id,
+      topicSlug: entry.topicSlug,
+      educationalIntent: "glossary",
+    });
+  }
   const breadcrumbs = pathway
     ? resolveBreadcrumbResolution({
         kind: "nursing-glossary-term",
@@ -66,7 +85,12 @@ export default async function NursingGlossaryTermPage({ params }: Props) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <BreadcrumbsFromResolution resolution={breadcrumbs} pathname={termPath} />
+      <BreadcrumbsFromResolution
+        resolution={breadcrumbs}
+        pathname={termPath}
+        pathwayId={pathway?.id}
+        educationalIntent="glossary"
+      />
       <h1 className="text-3xl font-semibold text-[var(--theme-heading-text)]">{entry.term}</h1>
       <p className="mt-4 text-lg leading-8 text-[var(--theme-body-text)]">{entry.definition}</p>
       <p className="mt-8 text-sm">

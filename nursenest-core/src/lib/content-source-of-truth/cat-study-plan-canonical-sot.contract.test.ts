@@ -35,8 +35,9 @@ describe("CAT / study-plan / weak-area surfaces — canonical Prisma-backed cont
     assert.ok(!snap.includes("client/src/data"));
   });
 
-  it("study-plan page wires personalized plan builder (server)", () => {
+  it("study-plan page wires cognition-integrated study plan (server)", () => {
     const page = readSrc("app/(student)/app/(learner)/study-plan/page.tsx");
-    assert.match(page, /buildPersonalizedWeakAreaStudyPlan/);
+    assert.match(page, /buildCognitionIntegratedStudyPlan/);
+    assert.match(page, /buildGovernedAdaptiveRecommendations/);
   });
 });

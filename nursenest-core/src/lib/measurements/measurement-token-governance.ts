@@ -17,6 +17,8 @@ import type {
   MeasurementKind,
 } from "@/lib/measurements/measurement-domain";
 import { categoryToMeasurementKind } from "@/lib/measurements/measurement-domain";
+import { parseMeasurementTokenV2, TOKEN_V2_RE } from "@/lib/measurements/measurement-token-v2";
+import { renderParsedTokenV2 } from "@/lib/measurements/render-measurement-token-v2";
 
 export type MeasurementTokenValidationError = {
   code: "unknown_category" | "unknown_unit" | "invalid_value" | "unsupported_conversion";
@@ -107,9 +109,10 @@ export function parseCanonicalMeasurementToken(
 
   const unitKey = normalizeUnit(unitRaw);
   let spec = UNIT_SPECS[unitKey];
-  if (!spec && category === "electrolytes" && (unitKey === "mmol/l" || unitKey === "meq/l")) {
+  if (category === "electrolytes" && (unitKey === "mmol/l" || unitKey === "meq/l")) {
+    const cr = categoryRaw.toLowerCase();
     const kind: MeasurementKind =
-      categoryRaw.toLowerCase() === "sodium" ? "sodium" : "potassium";
+      cr === "sodium" ? "sodium" : cr === "creatinine" ? "creatinine" : "potassium";
     spec = { siUnit: "mmol/l", toSi: (v) => v, kind };
   }
   if (!spec) {
@@ -185,23 +188,40 @@ export function resolveCanonicalTokensWithProvenance(
   const errors: MeasurementTokenValidationError[] = [];
   const segments: TokenRenderSegment[] = [];
   let lastIndex = 0;
-  const re = new RegExp(CANONICAL_TOKEN_RE.source, CANONICAL_TOKEN_RE.flags);
+  const re = new RegExp(TOKEN_V2_RE.source, TOKEN_V2_RE.flags);
 
   let match: RegExpExecArray | null;
   while ((match = re.exec(text)) !== null) {
     if (match.index > lastIndex) {
       segments.push({ type: "text", value: text.slice(lastIndex, match.index) });
     }
-    const parsed = parseCanonicalMeasurementToken(match[1], match[2], match[3]);
-    if ("error" in parsed) {
-      errors.push(parsed.error);
+    const parsedV2 = parseMeasurementTokenV2(match[0]);
+    if ("error" in parsedV2) {
+      errors.push(parsedV2.error);
       segments.push({ type: "text", value: match[0] });
+    } else if (parsedV2.type === "literal") {
+      const rendered = renderParsedTokenV2(parsedV2, renderedSystem, instructionalSystem, options);
+      segments.push({
+        type: "rendered",
+        value: rendered,
+        measurement: {
+          category: parsedV2.category,
+          kind: "potassium",
+          valueSi: 0,
+          authoredSystem: instructionalSystem,
+        },
+      });
     } else {
       const authored = {
-        ...parsed.measurement,
-        authoredSystem: parsed.measurement.authoredSystem ?? instructionalSystem,
+        ...parsedV2.measurement,
+        authoredSystem: parsedV2.measurement.authoredSystem ?? instructionalSystem,
       };
-      const rendered = renderAuthoredMeasurement(authored, renderedSystem, options);
+      const rendered = renderParsedTokenV2(
+        { ...parsedV2, measurement: authored } as typeof parsedV2,
+        renderedSystem,
+        instructionalSystem,
+        options,
+      );
       segments.push({ type: "rendered", value: rendered, measurement: authored });
     }
     lastIndex = match.index + match[0].length;
@@ -215,10 +235,10 @@ export function resolveCanonicalTokensWithProvenance(
 
 export function lintMeasurementTokensInText(text: string): MeasurementTokenValidationError[] {
   const errors: MeasurementTokenValidationError[] = [];
-  const re = new RegExp(CANONICAL_TOKEN_RE.source, CANONICAL_TOKEN_RE.flags);
+  const re = new RegExp(TOKEN_V2_RE.source, TOKEN_V2_RE.flags);
   let match: RegExpExecArray | null;
   while ((match = re.exec(text)) !== null) {
-    const parsed = parseCanonicalMeasurementToken(match[1], match[2], match[3]);
+    const parsed = parseMeasurementTokenV2(match[0]);
     if ("error" in parsed) errors.push(parsed.error);
   }
   return errors;

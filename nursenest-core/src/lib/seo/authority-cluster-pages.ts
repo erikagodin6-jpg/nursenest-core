@@ -33,7 +33,7 @@ export type AuthorityClusterPage = {
 };
 
 const CNPLE_BASE = "/canada/np/cnple";
-const REX_BASE = "/canada/rpn/rex-pn";
+const REX_BASE = "/canada/pn/rex-pn";
 const RT_BASE = "/allied-health/respiratory-therapy";
 const CA_RN_BASE = "/canada-nclex-rn";
 const NP_FNP_BASE = "/np-specialty/fnp";

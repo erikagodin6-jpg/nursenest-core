@@ -68,6 +68,8 @@ model User {
   baselineAssessmentCompletedAt DateTime?
   /// * Summary: { correctCount, totalQuestions, weakTopics: string[], at: string }
   baselineAssessmentSummary     Json?
+  /// * Governed RN learner cognition envelope (versioned); see cognition-snapshot-migrations.ts.
+  learnerCognitionEnvelope      Json?                       @map("learner_cognition_envelope")
   /// * Lowercase, trimmed email for dedup (dot-stripping, alias-insensitive).
   normalizedEmail               String?
   emailVerified                 Boolean                     @default(false)

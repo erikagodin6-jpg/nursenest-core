@@ -33,16 +33,39 @@ export function AdaptiveRecommendationLoopPanel({
       const json = (await res.json().catch(() => null)) as AdaptiveTeachingLoopRecommendation | null;
       if (!cancelled && json) setData(json);
     };
-    void run();
+    const schedule = () => {
+      void run();
+    };
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(schedule, { timeout: 3000 });
+      return () => {
+        cancelled = true;
+        cancelIdleCallback(id);
+      };
+    }
+    const t = window.setTimeout(schedule, 0);
     return () => {
       cancelled = true;
+      window.clearTimeout(t);
     };
   }, [userId, fallbackTopics, fallbackKey]);
 
-  if (!data) return null;
+  if (!data) {
+    return (
+      <div
+        className="nn-adaptive-loop-reserve mt-6 rounded-xl border border-border/60 bg-muted/15 p-4"
+        aria-busy="true"
+        aria-label="Priority review loop loading"
+      >
+        <div className="nn-skeleton nn-skeleton-shimmer h-3 w-36 rounded-full" />
+        <div className="nn-skeleton nn-skeleton-shimmer mt-3 h-3 w-full max-w-md rounded-full" />
+        <div className="nn-skeleton nn-skeleton-shimmer mt-4 h-14 w-full rounded-lg" />
+      </div>
+    );
+  }
 
   return (
-    <div className="mt-6 rounded-xl border border-border/60 bg-muted/15 p-4">
+    <div className="nn-adaptive-loop-reserve mt-6 rounded-xl border border-border/60 bg-muted/15 p-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Priority review loop</p>
       <p className="mt-1 text-sm text-foreground">
         <span className="font-medium">Prioritized topic:</span>{" "}

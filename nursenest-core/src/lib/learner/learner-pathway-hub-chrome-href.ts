@@ -22,7 +22,7 @@ export async function learnerPathwayHubChromeHrefForTierFallback(tier: string): 
   }
   if (t === "RPN") {
     const p = getExamPathwayById("ca-rpn-rex-pn");
-    return p ? learnerPathwayHubChromeHref(p) : "/canada/rpn/rex-pn";
+    return p ? learnerPathwayHubChromeHref(p) : "/canada/pn/rex-pn";
   }
   if (t === "LVN_LPN") {
     const p = getExamPathwayById("us-lpn-nclex-pn");

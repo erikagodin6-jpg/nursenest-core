@@ -23,22 +23,57 @@ const TONE_CLASS: Record<DashboardOrchestrationV3["cards"][0]["tone"], string> =
  * Dashboard orchestration V3 — graph-substrate cards when pathway is known; governed graph telemetry on CTAs.
  */
 export function LearnerCoachingDashboardPanel() {
-  const [orch, setOrch] = useState<DashboardOrchestrationV3 | null>(null);
+  const [orch, setOrch] = useState<DashboardOrchestrationV3 | null | undefined>(undefined);
 
   useEffect(() => {
-    const composed = composeDashboardOrchestrationV3();
-    if (composed.cards.length > 0 || composed.feed) {
-      setOrch(composed);
-      recordCoachingTelemetry("coaching_report_generated", {
-        surface: "dashboard_v3",
-        card_count: composed.cards.length,
-        remediation_fatigue: composed.remediationFatigue,
-        graph_authoritative: Boolean(composed.graphActions?.length),
-      });
+    const run = () => {
+      const composed = composeDashboardOrchestrationV3();
+      if (composed.cards.length > 0 || composed.feed) {
+        setOrch(composed);
+        const emit = () => {
+          recordCoachingTelemetry("coaching_report_generated", {
+            surface: "dashboard_v3",
+            card_count: composed.cards.length,
+            remediation_fatigue: composed.remediationFatigue,
+            graph_authoritative: Boolean(composed.graphActions?.length),
+          });
+        };
+        if (typeof requestIdleCallback === "function") {
+          requestIdleCallback(emit, { timeout: 4000 });
+        } else {
+          window.setTimeout(emit, 0);
+        }
+      } else {
+        setOrch(null);
+      }
+    };
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(run, { timeout: 2000 });
+      return () => cancelIdleCallback(id);
     }
+    const t = window.setTimeout(run, 0);
+    return () => window.clearTimeout(t);
   }, []);
 
-  if (!orch || (orch.cards.length === 0 && !orch.feed)) return null;
+  if (orch === undefined) {
+    return (
+      <section
+        className="nn-coaching-dashboard-reserve nn-dash-section"
+        aria-busy="true"
+        aria-label="Study intelligence loading"
+      >
+        <div className="nn-skeleton nn-skeleton-shimmer mb-3 h-3 w-32 rounded-full" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="nn-skeleton nn-skeleton-shimmer min-h-[5.5rem] rounded-2xl" />
+          <div className="nn-skeleton nn-skeleton-shimmer min-h-[5.5rem] rounded-2xl" />
+        </div>
+      </section>
+    );
+  }
+
+  if (!orch || (orch.cards.length === 0 && !orch.feed)) {
+    return <div className="nn-coaching-dashboard-reserve nn-coaching-dashboard-reserve--settled" aria-hidden />;
+  }
 
   const actionByCardId = new Map(
     (orch.graphActions ?? []).map((a) => [`graph-${a.stepId}`, a.step] as const),

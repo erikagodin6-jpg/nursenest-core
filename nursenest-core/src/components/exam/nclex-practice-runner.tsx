@@ -29,7 +29,7 @@ import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-lin
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { governMeasurementSurfaceCopy } from "@/lib/measurements/measurement-surface-convergence";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
@@ -247,8 +247,14 @@ export function NclexPracticeRunner({
   );
   const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
   const resolveMeasureText = useCallback(
-    (text: string) => resolveMeasurementTokens(text, measurementSystem),
-    [measurementSystem],
+    (text: string) =>
+      governMeasurementSurfaceCopy(text, {
+        measurementSystem,
+        pathwayId: pathwayId ?? null,
+        aiSurface: "coaching",
+        sourceSurface: "practice",
+      }),
+    [measurementSystem, pathwayId],
   );
   const [transitioning, setTransitioning] = useState(false);
   const [submitting, setSubmitting] = useState(false);

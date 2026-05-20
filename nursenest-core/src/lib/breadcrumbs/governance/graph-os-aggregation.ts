@@ -31,7 +31,10 @@ export function recordGraphOsEvent(
     | "pathway_continue"
     | "pathway_recovery"
     | "semantic_route_view"
-    | "continuity_interrupt",
+    | "continuity_interrupt"
+    | "hydration_fallback"
+    | "tutoring_continue"
+    | "tutoring_complete",
   meta?: { depth?: number },
 ): void {
   switch (event) {
@@ -74,8 +77,20 @@ export function recordGraphOsEvent(
     case "continuity_interrupt":
       bucket.continuityInterruptions = (bucket.continuityInterruptions ?? 0) + 1;
       break;
+    case "hydration_fallback":
+      bucket.hydrationFallbacks = (bucket.hydrationFallbacks ?? 0) + 1;
+      break;
+    case "tutoring_continue":
+      bucket.tutoringContinuations = (bucket.tutoringContinuations ?? 0) + 1;
+      break;
+    case "tutoring_complete":
+      bucket.tutoringCompletions = (bucket.tutoringCompletions ?? 0) + 1;
+      break;
     default:
       break;
+  }
+  if (event === "glossary_traversal" && meta?.depth != null) {
+    bucket.glossaryDepths = [...(bucket.glossaryDepths ?? []), meta.depth];
   }
 }
 
@@ -111,4 +126,8 @@ export function resetGraphOsAggregationForTests(): void {
   bucket.pathwayRecoveries = 0;
   bucket.semanticRouteViews = 0;
   bucket.continuityInterruptions = 0;
+  bucket.hydrationFallbacks = 0;
+  bucket.tutoringContinuations = 0;
+  bucket.tutoringCompletions = 0;
+  bucket.glossaryDepths = [];
 }

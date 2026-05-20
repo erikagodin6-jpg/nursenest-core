@@ -48,7 +48,7 @@ test("RT cluster pages have highYieldTips populated", () => {
 
 test("every authority cluster page nextSteps links to pages within its cluster", () => {
   const cnpleBase = "/canada/np/cnple";
-  const rexBase = "/canada/rpn/rex-pn";
+  const rexBase = "/canada/pn/rex-pn";
   const rtBase = "/allied-health/respiratory-therapy";
 
   const pages = listAuthorityClusterPages();

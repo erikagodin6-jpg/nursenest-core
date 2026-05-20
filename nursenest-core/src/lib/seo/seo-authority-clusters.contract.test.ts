@@ -27,12 +27,12 @@ const CNPLE_CLUSTER_PATHS = [
 ] as const;
 
 const REX_PN_CLUSTER_PATHS = [
-  "/canada/rpn/rex-pn",
-  "/canada/rpn/rex-pn/questions",
-  "/canada/rpn/rex-pn/study-guide",
-  "/canada/rpn/rex-pn/cat",
-  "/canada/rpn/rex-pn/pharmacology",
-  "/canada/rpn/rex-pn/client-needs",
+  "/canada/pn/rex-pn",
+  "/canada/pn/rex-pn/questions",
+  "/canada/pn/rex-pn/study-guide",
+  "/canada/pn/rex-pn/cat",
+  "/canada/pn/rex-pn/pharmacology",
+  "/canada/pn/rex-pn/client-needs",
 ] as const;
 
 const RT_CLUSTER_PATHS = [
@@ -115,7 +115,7 @@ test("CNPLE sitemap route imports CNPLE_HUB_SITEMAP_PATHS", () => {
 test("authority cluster hub page files do not set noindex", () => {
   const hubs = [
     "src/app/(marketing)/(default)/canada/np/cnple/page.tsx",
-    "src/app/(marketing)/(default)/canada/rpn/rex-pn/page.tsx",
+    "src/app/(marketing)/(default)/canada/pn/rex-pn/page.tsx",
     "src/app/(marketing)/(default)/allied-health/respiratory-therapy/page.tsx",
   ];
   for (const hubPath of hubs) {
@@ -130,7 +130,7 @@ test("authority cluster hub page files do not set noindex", () => {
 test("authority cluster [topic] page files set index:true not index:false", () => {
   const topicPages = [
     "src/app/(marketing)/(default)/canada/np/cnple/[topic]/page.tsx",
-    "src/app/(marketing)/(default)/canada/rpn/rex-pn/[topic]/page.tsx",
+    "src/app/(marketing)/(default)/canada/pn/rex-pn/[topic]/page.tsx",
     "src/app/(marketing)/(default)/allied-health/respiratory-therapy/[topic]/page.tsx",
   ];
   for (const pagePath of topicPages) {
@@ -220,8 +220,8 @@ test("all required cluster page paths have corresponding route files", () => {
     "/canada/np/cnple/case-based-questions": "src/app/(marketing)/(default)/canada/np/cnple/case-based-questions/page.tsx",
     "/canada/np/cnple/provisional-registration": "src/app/(marketing)/(default)/canada/np/cnple/provisional-registration/page.tsx",
     "/canada/np/cnple/loft-exam": "src/app/(marketing)/(default)/canada/np/cnple/loft-exam/page.tsx",
-    "/canada/rpn/rex-pn": "src/app/(marketing)/(default)/canada/rpn/rex-pn/page.tsx",
-    "/canada/rpn/rex-pn/questions": "src/app/(marketing)/(default)/canada/rpn/rex-pn/[topic]/page.tsx",
+    "/canada/pn/rex-pn": "src/app/(marketing)/(default)/canada/pn/rex-pn/page.tsx",
+    "/canada/pn/rex-pn/questions": "src/app/(marketing)/(default)/canada/pn/rex-pn/[topic]/page.tsx",
     "/allied-health/respiratory-therapy": "src/app/(marketing)/(default)/allied-health/respiratory-therapy/page.tsx",
     "/allied-health/respiratory-therapy/ventilation": "src/app/(marketing)/(default)/allied-health/respiratory-therapy/[topic]/page.tsx",
   };

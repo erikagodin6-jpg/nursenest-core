@@ -21,7 +21,7 @@ test("missing lesson routes recover to the pathway lessons hub", async () => {
 });
 
 test("pathway child routes recover to the matching pathway hub", async () => {
-  const context = await resolveNotFoundRouteContext("/canada/rpn/rex-pn/unknown-child");
+  const context = await resolveNotFoundRouteContext("/canada/pn/rex-pn/unknown-child");
 
   assert.equal(context.kind, "pathway_overview");
   assert.equal(context.pathway?.id, "ca-rpn-rex-pn");

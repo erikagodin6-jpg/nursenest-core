@@ -45,7 +45,7 @@ describe("year-long NurseNest SEO blog schedule seed", () => {
       "/app/practice-tests",
       "/ecg-interpretation",
       "/advanced-ecg-nursing",
-      "/canada/rpn/rex-pn",
+      "/canada/pn/rex-pn",
       "/canada/np/cnple/simulation",
       "/allied-health/respiratory",
     ]) {

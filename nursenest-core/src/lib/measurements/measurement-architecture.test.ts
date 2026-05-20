@@ -11,6 +11,11 @@ import {
   parseCanonicalMeasurementToken,
   resolveCanonicalTokensWithProvenance,
 } from "@/lib/measurements/measurement-token-governance";
+import { parseMeasurementTokenV2 } from "@/lib/measurements/measurement-token-v2";
+import { analyzeTrendSeries } from "@/lib/measurements/measurement-trend-intelligence";
+import { buildInterpretationPanel } from "@/lib/measurements/measurement-interpretation-engine";
+import { validateAiMeasurementCopy } from "@/lib/measurements/measurement-ai-governance";
+import { auditMeasurementGovernance } from "@/lib/measurements/measurement-governance-registry";
 import {
   resolveMeasurementRenderContext,
   resolveRenderedMeasurementSystem,
@@ -223,5 +228,80 @@ describe("pathway policy metadata", () => {
     assert.equal(p.measurementContext, "canada");
     assert.equal(p.instructionalSystem, "si");
     assert.equal(p.examLabel, "CNPLE");
+  });
+});
+
+describe("measurement token V2 trends", () => {
+  it("parses two-point trend tokens", () => {
+    const p = parseMeasurementTokenV2("[[potassium:5.2>6.1:mmol/L|trend]]");
+    assert.equal(p.type, "trend");
+    if (p.type === "trend") {
+      assert.equal(p.priorValueSi, 5.2);
+      assert.equal(p.currentValueSi, 6.1);
+    }
+  });
+
+  it("parses multi-point comma trend tokens", () => {
+    const p = parseMeasurementTokenV2("[[potassium:4.8,5.2,6.1:mmol/L|trend]]");
+    assert.equal(p.type, "trend");
+    if (p.type === "trend") {
+      assert.deepEqual(p.valuesSi, [4.8, 5.2, 6.1]);
+    }
+  });
+
+  it("renders multi-point trend in output", () => {
+    const text = "K+ [[potassium:4.8,5.2,6.1:mmol/L|trend]]";
+    const out = resolveCanonicalTokensWithProvenance(text, "si", "si");
+    assert.match(out.output, /6\.1 mmol\/L/);
+    assert.match(out.output, /worsening|Electrolyte trend|acute/i);
+  });
+});
+
+describe("trend intelligence V2", () => {
+  it("classifies worsening potassium series", () => {
+    const t = analyzeTrendSeries({
+      category: "electrolytes",
+      valuesSi: [4.8, 5.2, 6.1],
+      kind: "potassium",
+    });
+    assert.ok(t);
+    assert.ok(t!.trajectory === "worsening" || t!.trajectory === "acute_change");
+    assert.ok(t!.priorityScore >= 60);
+  });
+});
+
+describe("interpretation engine", () => {
+  it("builds hyperkalemia interpretation panel", () => {
+    const p = parseCanonicalMeasurementToken("potassium", "6.2", "mmol/L");
+    assert.ok(!("error" in p));
+    if ("measurement" in p) {
+      const panel = buildInterpretationPanel({
+        measurement: p.measurement,
+        renderedSystem: "si",
+        pathwayId: "us-rn-nclex-rn",
+        countryCode: "US",
+      });
+      assert.equal(panel.domain, "electrolyte");
+      assert.equal(panel.abnormality, "critical");
+      assert.ok(panel.competencyLinks.competencyTopicKeys.length > 0);
+    }
+  });
+});
+
+describe("AI measurement governance", () => {
+  it("blocks unsafe insulin conversion claims", () => {
+    const issues = validateAiMeasurementCopy(
+      "Convert insulin 10 units to exactly 0.1 mmol/L for the exam.",
+      { highRiskCategories: ["drug_dosage"] },
+    );
+    assert.ok(issues.some((i) => i.severity === "block"));
+  });
+});
+
+describe("consumer governance registry", () => {
+  it("tracks partial and governed surfaces", () => {
+    const audit = auditMeasurementGovernance();
+    assert.ok(audit.governed >= 5);
+    assert.ok(audit.partial >= 3);
   });
 });

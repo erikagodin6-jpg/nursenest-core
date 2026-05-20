@@ -8,7 +8,7 @@ import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-pla
 
 function lessonHubForExam(exam: string, country: "US" | "CA" | "unspecified"): string {
   const e = exam.toLowerCase();
-  if (/rex-?pn/.test(e)) return "/canada/rpn/rex-pn/lessons";
+  if (/rex-?pn/.test(e)) return "/canada/pn/rex-pn/lessons";
   if (country === "CA" && /nclex|rn/.test(e)) return "/canada/rn/nclex-rn/lessons";
   if (/allied/.test(e)) return "/allied/allied-health/lessons";
   return "/us/rn/nclex-rn/lessons";

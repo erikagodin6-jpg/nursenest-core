@@ -183,9 +183,19 @@ live spec.
 
 ## Architecture Notes
 
-- `DATABASE_URL` and `AUTH_SECRET` are scoped `RUN_AND_BUILD_TIME` (not `RUN_TIME`) as a workaround
-  for a DigitalOcean App Platform bug where runtime-only secrets occasionally do not reach the first
-  Node process after certain spec-update deploys.
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is also `RUN_AND_BUILD_TIME` because it is baked into the
-  client bundle during `next build`.
-- All other secrets are `RUN_TIME` only.
+### GHCR pre-built images (production path today)
+
+- Deploy pulls `ghcr.io/.../nursenest:sha-*` — **no App Platform build step**.
+- All `type: SECRET` keys in `.do/app-nursenest-core-next.yaml` must use **`scope: RUN_TIME`** so secrets
+  are injected when the container starts.
+- **`RUN_AND_BUILD_TIME` secrets are not applied** to image-only services — this caused production
+  `DATABASE_URL` to be missing in `start-standalone.mjs`. See `docs/ops/ghcr-runtime-database-url.md`.
+
+### Buildpack / in-platform build (rollback path)
+
+- If reverting to `environment_slug: node-js` + `source_dir: nursenest-core`, build-time env may be
+  required again for `next build` — revisit scopes only when switching deploy models.
+
+### Client bundle
+
+- `NEXT_PUBLIC_*` values are baked during **Docker/GHA image build**, not during DO runtime.

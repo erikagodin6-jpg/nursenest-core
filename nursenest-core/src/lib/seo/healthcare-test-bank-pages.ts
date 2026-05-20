@@ -130,7 +130,7 @@ export const HEALTHCARE_TEST_BANK_PAGES = [
   {
     id: "ca-rpn-rex-pn-test-bank",
     pathwayId: "ca-rpn-rex-pn",
-    path: "/canada/rpn/rex-pn/test-bank",
+    path: "/canada/pn/rex-pn/test-bank",
     title: "REx-PN Test Bank — Canadian RPN Practice",
     description: "REx-PN test bank for Canadian RPN prep with client-needs questions, rationales, CAT practice, lessons, and flashcards.",
     h1: "REx-PN test bank for Canadian practical nurses",
@@ -149,13 +149,13 @@ export const HEALTHCARE_TEST_BANK_PAGES = [
     examSpecificPositioning:
       "REx-PN practice must stay inside Canadian practical nursing scope. The bank emphasizes client-needs categories, stable-versus-unstable cues, medication risk, therapeutic communication, and when to escalate to the RN or provider.",
     premiumCta: sharedCta("Start premium REx-PN practice", "/pricing", "Unlock RPN sets, CAT practice, remediation, and study tools."),
-    freePracticeCta: sharedCta("Try REx-PN practice questions", "/canada/rpn/rex-pn/questions", "Start with the public RPN question hub."),
+    freePracticeCta: sharedCta("Try REx-PN practice questions", "/canada/pn/rex-pn/questions", "Start with the public RPN question hub."),
     links: {
-      questions: sharedCta("REx-PN practice questions", "/canada/rpn/rex-pn/questions", "Client-needs practice with rationales."),
-      cat: sharedCta("REx-PN CAT exam practice", "/canada/rpn/rex-pn/cat", "Adaptive practice for exam stamina."),
-      flashcards: sharedCta("REx-PN flashcards", "/canada/rpn/rex-pn/flashcards", "Recall for medications, safety, and fundamentals."),
-      lessons: sharedCta("REx-PN lessons", "/canada/rpn/rex-pn/lessons", "Target weak topics after practice sets."),
-      pricing: sharedCta("REx-PN pricing", "/canada/rpn/rex-pn/pricing", "Compare RPN access options."),
+      questions: sharedCta("REx-PN practice questions", "/canada/pn/rex-pn/questions", "Client-needs practice with rationales."),
+      cat: sharedCta("REx-PN CAT exam practice", "/canada/pn/rex-pn/cat", "Adaptive practice for exam stamina."),
+      flashcards: sharedCta("REx-PN flashcards", "/canada/pn/rex-pn/flashcards", "Recall for medications, safety, and fundamentals."),
+      lessons: sharedCta("REx-PN lessons", "/canada/pn/rex-pn/lessons", "Target weak topics after practice sets."),
+      pricing: sharedCta("REx-PN pricing", "/canada/pn/rex-pn/pricing", "Compare RPN access options."),
     },
     sections: [
       {

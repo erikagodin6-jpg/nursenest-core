@@ -99,6 +99,11 @@ import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/me
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
+import {
+  captureClientOrchestratedAnalytics,
+  governClientTelemetryCapture,
+} from "@/lib/educational-cognition/client-telemetry-governance";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import {
@@ -342,12 +347,25 @@ export function PracticeTestRunnerClient({
   const debugEventCapRef = useRef(0);
   const logSessionEvent = useCallback(
     (event: string, detail?: Record<string, unknown>) => {
-      if (process.env.NODE_ENV !== "development") return;
-      if (debugEventCapRef.current >= 48) return;
-      debugEventCapRef.current += 1;
-      console.debug("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
+      const pathwayId = testConfig?.pathwayId ?? activePathwayId;
+      const governed = governClientTelemetryCapture({
+        pathwayId,
+        event,
+        catSessionActive: catMode,
+        sessionKind: catMode ? "cat" : testConfig?.linearDeliveryMode ? "loft_simulation" : null,
+      });
+      if (process.env.NODE_ENV === "development") {
+        if (debugEventCapRef.current < 48) {
+          debugEventCapRef.current += 1;
+          console.debug("[practice-test-runner]", governed.normalizedEvent, {
+            testId,
+            violation: governed.violationCode,
+            ...(detail ?? {}),
+          });
+        }
+      }
     },
-    [testId],
+    [testId, testConfig?.pathwayId, testConfig?.linearDeliveryMode, activePathwayId, catMode],
   );
 
   const load = useCallback(async () => {
@@ -648,6 +666,17 @@ export function PracticeTestRunnerClient({
         setSavedElapsedMs(elapsedMs ?? null);
         if (fromTimer) setRemainingSec(0);
         logSessionEvent("submit_success", { fromTimer, elapsedMs: elapsedMs ?? null });
+        void captureClientOrchestratedAnalytics(
+          testConfig?.pathwayId ?? activePathwayId,
+          PH.learnerPracticeTestSessionCompleted,
+          {
+            test_id: testId,
+            delivery: catMode ? "cat" : "linear",
+            from_timer: fromTimer,
+            source_surface: "practice_test_runner",
+          },
+          { catSessionActive: catMode },
+        );
       } catch (e) {
         if (fromTimer) autoSubmitRef.current = false;
         setError(e instanceof Error ? e.message : "Submit failed");
@@ -660,7 +689,16 @@ export function PracticeTestRunnerClient({
         setSaving(false);
       }
     },
-    [sessionStartMs, testId, testConfig, questionIds, linearCommittedIds, logSessionEvent],
+    [
+      sessionStartMs,
+      testId,
+      testConfig,
+      questionIds,
+      linearCommittedIds,
+      logSessionEvent,
+      activePathwayId,
+      catMode,
+    ],
   );
 
   useEffect(() => {

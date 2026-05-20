@@ -3,8 +3,7 @@ import Link from "next/link";
 import { ExamCountdownCard } from "@/components/student/dashboard/exam-countdown-card";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
-import { EngagementNudgeStrip } from "@/components/student/engagement-nudge-strip";
-import { SpacedReviewReminder } from "@/components/student/spaced-review-reminder";
+import dynamic from "next/dynamic";
 import { LearnerDashboardCommandCenter } from "@/components/student/learner-dashboard-command-center";
 import { LearnerDashboardInsightPanels } from "@/components/student/learner-dashboard-insight-panels";
 import { BenchmarkCard } from "@/components/student/dashboard/benchmark-card";
@@ -12,7 +11,6 @@ import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboa
 import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dashboard-user-panel-band";
 import { LearnerStudyModesBand } from "@/components/student/learner-study-modes-band";
 import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
-import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { LearnerContinueLearningCard } from "@/components/student/learner-continue-learning-card";
 import { PremiumLearnerHub, type RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
 import { DashboardCoachCard } from "@/components/student/dashboard/coach-card";
@@ -43,7 +41,20 @@ import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { LearnerDashboardReadinessNextStrip } from "@/components/student/learner-dashboard-readiness-next-strip";
 import { PostExamDashboardBridgeBanner } from "@/components/student/post-exam-dashboard-bridge";
-import { LearnerCoachingDashboardPanel } from "@/components/student/learner-coaching-dashboard-panel";
+const LearnerCoachingDashboardPanel = dynamic(() =>
+  import("@/components/student/learner-coaching-dashboard-panel").then(
+    (m) => m.LearnerCoachingDashboardPanel,
+  ),
+);
+const SpacedReviewReminder = dynamic(() =>
+  import("@/components/student/spaced-review-reminder").then((m) => m.SpacedReviewReminder),
+);
+const EngagementNudgeStrip = dynamic(() =>
+  import("@/components/student/engagement-nudge-strip").then((m) => m.EngagementNudgeStrip),
+);
+const WeakAreasDashboardClient = dynamic(() =>
+  import("@/components/student/weak-areas-dashboard-client").then((m) => m.WeakAreasDashboardClient),
+);
 import { LearnerHubClinicalQuickLaunch } from "@/components/student/learner-hub-clinical-quick-launch";
 import { LearnerDashboardHubLayout, type LearnerDashboardHubNavItem } from "@/components/student/learner-dashboard-hub-layout";
 import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboard-mobile-fold";

@@ -21,7 +21,7 @@ const { PrismaClient } = require(join(APP_ROOT, "node_modules/@prisma/client"));
 
 const PATHWAY_URLS = [
   { id: "us-rn-nclex-rn", pattern: "/us/rn/nclex-rn/lessons" },
-  { id: "ca-rpn-rex-pn", pattern: "/canada/rpn/rex-pn/lessons" },
+  { id: "ca-rpn-rex-pn", pattern: "/canada/pn/rex-pn/lessons" },
   { id: "us-np-fnp", pattern: "/us/np/fnp/lessons" },
 ];
 

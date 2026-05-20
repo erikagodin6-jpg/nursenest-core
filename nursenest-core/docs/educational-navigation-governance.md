@@ -272,6 +272,34 @@ Marketing: pass `pathname` to `BreadcrumbsFromResolution` / `AcademyBreadcrumbBa
 
 ---
 
+## Graph runtime closure (sixth pass)
+
+### Universal tutoring continuity
+
+- `ai-tutor-substrate-governance.ts` — graph-only tutoring steps; `buildGovernedTutoringPromptContext` copies `graphSteps` from envelope.
+- `tutoring-continuity-replay.ts` — checkpoint replay for session recovery.
+
+### Authenticated server telemetry lineage
+
+- `emitGovernedServerGraphTelemetry()` stamps `pathwayId`, `graphVersion`, `ontologyRevision`, `educationalIntent`, `testing_model`, `cognitionReliabilityTier`, `continuityCheckpointId`.
+- Dashboard RSC + adaptive API wired; coaching events merge lineage via `coaching-graph-telemetry-bridge.ts`.
+
+### Glossary native traversal
+
+- `GraphSourceSurface.glossary_traversal` — glossary steps emitted from `orchestrateEducationalGraph()`.
+- `buildGlossaryGraphNode()` + `validateGlossaryGraphNode()` prevent orphan glossary nodes.
+
+### Interpretation entry materialization
+
+- `materializeInterpretationEntryGraphStep()` + `GovernedInterpretationLink` on clinical interpretation hub cards.
+
+### Replay + resilience
+
+- `graph-runtime-replay.ts` — deterministic replay snapshots for dashboard, tutoring, interpretation.
+- `graph-substrate-integrity.ts` / `ontology-runtime-integrity.ts` — integrity tiers without silent alternate graph authorities.
+
+---
+
 ## Semantic authority guarantees (graph OS final pass)
 
 **Resolution flow (mandatory):**
@@ -518,3 +546,39 @@ Substrate audit: `governance/graph-substrate-integrity.ts`.
 | `build-breadcrumb-schema.ts` | Shared JSON-LD builder |
 
 UI entry: `@/components/navigation/breadcrumbs` (`Breadcrumbs`, `BreadcrumbsFromResolution`).
+
+---
+
+## Platform closure pass
+
+### Organization-Level Semantic Enforcement
+
+Branch protection must require `qa:semantic-navigation-gate:static` and breadcrumb governance workflows. See `docs/governance/org-semantic-governance-policy.md`.
+
+### Replayable Graph Telemetry
+
+`graph-telemetry-replay.ts` and `semantic-lineage-replay.ts` provide deterministic replay snapshots preserving `ontologyRevision`, `graphVersion`, `pathwayId`, `testing_model`, and continuity checkpoints.
+
+### Psychometric Lineage Guarantees
+
+All graph-aware telemetry surfaces propagate psychometric stamps via `resolvePsychometricLineageStamp()` and `buildSemanticTelemetryLineage()`.
+
+### Educator Graph Intelligence
+
+`getEducatorGraphSummary()` and `buildEducatorGraphInsights()` expose aggregate-only metrics — never raw cognition envelopes.
+
+### AI Tutor Substrate Governance
+
+Tutoring must use `composeTutoringPromptFromGraphSteps()`; contract: `ai-tutor-governance.contract.test.ts`.
+
+### Glossary Traversal as Native Graph Nodes
+
+`buildGlossaryGraphNode()` in `educational-graph/glossary-graph-node.ts` — first-class traversal nodes with orchestrated steps.
+
+### Semantic Replay & Continuity Recovery
+
+Contracts: `graph-telemetry-replay.contract.test.ts`, `psychometric-lineage.contract.test.ts`.
+
+### Runtime Semantic Resilience
+
+Integrity tiers: healthy, degraded, conflicting, orphaned, replay-divergent. UI adapters use `guardOntologyIntegrityForSurface()` — never throw.

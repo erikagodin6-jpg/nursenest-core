@@ -23,6 +23,10 @@ export function EducGraphNextStepsPanel({
   if (visible.length === 0) return null;
 
   return (
+    <div
+      className="nn-educ-graph-next-steps-stable"
+      style={{ ["--nn-graph-steps-rows" as string]: String(Math.min(visible.length, maxVisible)) }}
+    >
     <LearnerReportInset tone="supportive">
       <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-secondary)]">
         {title}
@@ -52,5 +56,6 @@ export function EducGraphNextStepsPanel({
         ))}
       </ul>
     </LearnerReportInset>
+    </div>
   );
 }

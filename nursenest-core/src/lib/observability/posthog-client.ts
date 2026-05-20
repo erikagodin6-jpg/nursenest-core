@@ -49,20 +49,46 @@ export async function initPosthogClient(): Promise<void> {
   });
 }
 
+function scheduleIdleTask(run: () => void, timeoutMs: number): void {
+  if (typeof requestIdleCallback === "function") {
+    requestIdleCallback(run, { timeout: timeoutMs });
+  } else {
+    window.setTimeout(run, Math.min(timeoutMs, 2500));
+  }
+}
+
+async function captureClientEvent(
+  event: string,
+  props?: Record<string, string | number | boolean | undefined>,
+): Promise<void> {
+  if (!process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
+  try {
+    const posthog = await getPosthogClient();
+    if (!posthog) return;
+    if (!initialized) {
+      await initPosthogClient();
+    }
+    if (!initialized) return;
+    posthog.capture(event, props);
+  } catch {
+    // ignore
+  }
+}
+
 export async function trackClientEvent(
   event: string,
   props?: Record<string, string | number | boolean | undefined>,
 ): Promise<void> {
   if (typeof window === "undefined") return;
   if (adminLearnerQaSessionSuppress) return;
-  if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
-  try {
-    const posthog = await getPosthogClient();
-    if (!posthog) return;
-    posthog.capture(event, props);
-  } catch {
-    // ignore
+  if (!process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
+  if (initialized) {
+    await captureClientEvent(event, props);
+    return;
   }
+  scheduleIdleTask(() => {
+    void captureClientEvent(event, props);
+  }, 5000);
 }
 
 export async function identifyPosthogUser(distinctId: string): Promise<void> {

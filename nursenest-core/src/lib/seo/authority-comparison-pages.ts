@@ -28,9 +28,9 @@ const cnpleLinks = [
 ] as const;
 
 const rexLinks = [
-  { label: "REx-PN practice questions", href: "/canada/rpn/rex-pn/practice-questions" },
-  { label: "REx-PN CAT simulation", href: "/canada/rpn/rex-pn/cat-simulation" },
-  { label: "REx-PN study plan", href: "/canada/rpn/rex-pn/study-plan" },
+  { label: "REx-PN practice questions", href: "/canada/pn/rex-pn/practice-questions" },
+  { label: "REx-PN CAT simulation", href: "/canada/pn/rex-pn/cat-simulation" },
+  { label: "REx-PN study plan", href: "/canada/pn/rex-pn/study-plan" },
 ] as const;
 
 export const AUTHORITY_COMPARISON_PAGES: readonly AuthorityComparisonPage[] = [
@@ -276,8 +276,8 @@ export const AUTHORITY_COMPARISON_PAGES: readonly AuthorityComparisonPage[] = [
       { label: "Choose RN if", body: "you are pursuing a baccalaureate nursing degree, interested in acute care, specialty, or advanced practice, and plan to write NCLEX-RN to become registered in Canada." },
     ],
     internalLinks: [
-      { label: "REx-PN practice questions", href: "/canada/rpn/rex-pn/questions" },
-      { label: "REx-PN study hub", href: "/canada/rpn/rex-pn" },
+      { label: "REx-PN practice questions", href: "/canada/pn/rex-pn/questions" },
+      { label: "REx-PN study hub", href: "/canada/pn/rex-pn" },
       { label: "NCLEX-RN Canada study hub", href: "/canada/rn/nclex-rn" },
       { label: "Canada new grad resources", href: "/canada/new-grad" },
     ],

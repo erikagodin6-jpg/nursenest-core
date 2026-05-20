@@ -5,7 +5,7 @@ import type { GraphTelemetryEventName, GraphTelemetryPayload } from "@/lib/educa
 import type { EduGraphStep, GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import { graphTelemetryPayload } from "@/lib/educational-graph/graph-telemetry";
 import { toGovernedGraphCaptureProps } from "@/lib/educational-graph/governed-graph-telemetry-props";
-import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/unified-educational-substrate";
+import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/educational-ontology-constants";
 
 /**
  * Server-side governed graph telemetry — entitlement-aware, cognition-normalized.
@@ -20,6 +20,7 @@ export function captureGovernedGraphTelemetryServer(args: {
   sourceSurface: GraphSourceSurface;
   cognition: EducationalCognitionContext;
   stepCount?: number;
+  lineageProps?: Record<string, string | number | boolean | undefined>;
 }): void {
   const step = args.step;
   const base = step
@@ -45,6 +46,7 @@ export function captureGovernedGraphTelemetryServer(args: {
   const props = toGovernedGraphCaptureProps(payload, args.cognition);
   props.remediation_pathway = args.cognition.ontology.remediationPathwayIds[0];
   if (args.stepCount != null) props.step_count = args.stepCount;
+  if (args.lineageProps) Object.assign(props, args.lineageProps);
 
   captureGovernedLearnerProductEvent(args.userId, args.entitlement, args.event, props);
 }

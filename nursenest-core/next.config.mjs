@@ -506,7 +506,11 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
+  /** Set `NN_PRODUCTION_SOURCE_MAPS=1` in deploy to upload maps to error monitoring only. */
+  productionBrowserSourceMaps: envTruthy("NN_PRODUCTION_SOURCE_MAPS"),
+
   images: {
+    formats: ["image/avif", "image/webp"],
     qualities: [68, 75],
     // Next image optimizer cache. Source assets are versioned/remote CDN-backed;
     // a longer floor reduces repeat image fetches and PageSpeed cache-lifetime noise.

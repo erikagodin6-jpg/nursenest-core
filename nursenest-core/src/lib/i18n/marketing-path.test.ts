@@ -27,7 +27,7 @@ test("marketing-path re-exports locale stripping helper for shared callers", () 
 
 test("withMarketingLocale does not prefix exam hub country paths", () => {
   assert.equal(withMarketingLocale("fr", "/us/rn/nclex-rn/lessons"), "/us/rn/nclex-rn/lessons");
-  assert.equal(withMarketingLocale("de", "/canada/rpn/rex-pn"), "/canada/rpn/rex-pn");
+  assert.equal(withMarketingLocale("de", "/canada/pn/rex-pn"), "/canada/pn/rex-pn");
 });
 
 test("withMarketingLocale does not prefix global expansion /exams/ hubs (avoid /tl/exams/... 404s)", () => {
@@ -54,7 +54,7 @@ test("isExpansionExamMarketingPath", () => {
 
 test("isExamHubMarketingPath detects us/canada hubs", () => {
   assert.equal(isExamHubMarketingPath("/us/rn/nclex-rn"), true);
-  assert.equal(isExamHubMarketingPath("/canada/rpn/rex-pn"), true);
+  assert.equal(isExamHubMarketingPath("/canada/pn/rex-pn"), true);
   assert.equal(isExamHubMarketingPath("/fr/pricing"), false);
   assert.equal(isExamHubMarketingPath("/pricing"), false);
 });
@@ -91,9 +91,9 @@ test("globalRegionSlugFromRegionalMarketingPublicPath covers /exams and country-
 });
 
 test("canonicalExamHubPathFromPossiblyLocalizedPath strips non-English locale prefixes from exam hubs", () => {
-  assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/fr/canada/rpn/rex-pn"), {
+  assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/fr/canada/pn/rex-pn"), {
     locale: "fr",
-    canonicalPath: "/canada/rpn/rex-pn",
+    canonicalPath: "/canada/pn/rex-pn",
   });
   assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/es/us/rn/nclex-rn/questions"), {
     locale: "es",

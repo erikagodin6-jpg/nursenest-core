@@ -150,6 +150,14 @@ export const EXPECTED_RUN_COMMAND = "node scripts/start-standalone.mjs";
 /** Valid container registry types for the web service image source. */
 export const VALID_REGISTRY_TYPES = Object.freeze(["GHCR", "DOCR", "DOCKER_HUB"]);
 
+/** Runtime DB/auth secrets must be RUN_TIME when deploying pre-built GHCR images (no DO build step). */
+export const GHCR_RUNTIME_SECRET_KEYS = Object.freeze([
+  "DATABASE_URL",
+  "DIRECT_URL",
+  "AUTH_SECRET",
+  "NEXTAUTH_SECRET",
+]);
+
 const RUNTIME_SCOPES = new Set(["RUN_TIME", "RUN_AND_BUILD_TIME"]);
 
 /**
@@ -230,9 +238,35 @@ export function validateSpec(spec) {
     );
   }
 
-  // Web component structural checks
+  // GHCR: secrets scoped only to build never reach the container at runtime
   const services = Array.isArray(spec?.services) ? spec.services : [];
   const web = services.find((s) => s.name === "web");
+  if (web?.image?.registry_type === "GHCR") {
+    for (const entry of Array.isArray(web.envs) ? web.envs : []) {
+      if (entry?.type !== "SECRET") continue;
+      const scope = entry.scope ?? "RUN_TIME";
+      if (scope === "BUILD_TIME") {
+        failures.push(
+          `GHCR secret "${entry.key}" is BUILD_TIME only — will not be injected into the running container.`,
+        );
+      }
+      if (scope === "RUN_AND_BUILD_TIME") {
+        failures.push(
+          `GHCR secret "${entry.key}" must use scope RUN_TIME (pre-built image; App Platform build step is skipped).`,
+        );
+      }
+    }
+    for (const key of GHCR_RUNTIME_SECRET_KEYS) {
+      const entry = envMap.get(key);
+      if (!entry) continue;
+      const scope = entry.scope ?? "RUN_TIME";
+      if (scope !== "RUN_TIME") {
+        failures.push(`GHCR runtime secret "${key}" must have scope RUN_TIME (found ${scope}).`);
+      }
+    }
+  }
+
+  // Web component structural checks
   if (!web) {
     failures.push('Missing "web" service component — the spec must contain a service named "web".');
   } else {

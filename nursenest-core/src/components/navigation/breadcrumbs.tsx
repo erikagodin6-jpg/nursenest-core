@@ -17,6 +17,9 @@ export function Breadcrumbs({
   className = "min-h-9 mb-4",
   pathname,
   analyticsIntent = "education",
+  pathwayId,
+  remediationPathwayId,
+  educationalIntent,
 }: {
   crumbs: BreadcrumbCrumb[];
   schemaItems?: BreadcrumbSchemaItem[];
@@ -26,6 +29,9 @@ export function Breadcrumbs({
   /** When set, breadcrumb clicks emit privacy-safe navigation analytics. */
   pathname?: string;
   analyticsIntent?: BreadcrumbIntent;
+  pathwayId?: string | null;
+  remediationPathwayId?: string;
+  educationalIntent?: string;
 }) {
   const schema = schemaItems ?? [];
   return (
@@ -39,6 +45,9 @@ export function Breadcrumbs({
               pathname={pathname}
               intent={analyticsIntent ?? "education"}
               navClassName={navClassName}
+              pathwayId={pathwayId}
+              remediationPathwayId={remediationPathwayId}
+              educationalIntent={educationalIntent}
             />
           ) : (
             <BreadcrumbTrail items={crumbs} navClassName={navClassName} />
@@ -55,6 +64,9 @@ export function BreadcrumbsFromResolution({
   suppressSchema,
   className,
   pathname,
+  pathwayId,
+  remediationPathwayId,
+  educationalIntent,
 }: {
   resolution: BreadcrumbResolution;
   navClassName?: string;
@@ -62,6 +74,9 @@ export function BreadcrumbsFromResolution({
   suppressSchema?: boolean;
   className?: string;
   pathname?: string;
+  pathwayId?: string | null;
+  remediationPathwayId?: string;
+  educationalIntent?: string;
 }) {
   const emitSchema = suppressSchema === undefined ? shouldEmitResolverBreadcrumbSchema(resolution) : !suppressSchema;
   return (
@@ -73,6 +88,9 @@ export function BreadcrumbsFromResolution({
       className={className}
       pathname={pathname}
       analyticsIntent={resolution.intent}
+      pathwayId={pathwayId}
+      remediationPathwayId={remediationPathwayId}
+      educationalIntent={educationalIntent}
     />
   );
 }

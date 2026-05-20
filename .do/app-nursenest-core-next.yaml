@@ -135,25 +135,27 @@ services:
         scope: RUN_AND_BUILD_TIME
         value: https://nursenest.ca
       # Secret: set value in DO dashboard — DO preserves existing value when type=SECRET
+      # RUN_TIME only: GHCR pre-built images skip App Platform build; RUN_AND_BUILD_TIME secrets
+      # are not injected into the running container (see docs/ops/ghcr-runtime-database-url.md).
       - key: AUTH_SECRET
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       # Legacy alias kept for compatibility
       - key: NEXTAUTH_SECRET
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── Database ───────────────────────────────────────────────────────────
       # Pooled connection URL (PgBouncer). Used by all runtime queries.
       # Secret: set value in DO dashboard
       - key: DATABASE_URL
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       # Direct (non-pooled) connection. Required by Prisma schema.prisma directUrl.
       # Falls back to DATABASE_URL if unset, but should be explicitly set for
       # migrations and introspection to bypass PgBouncer.
       - key: DIRECT_URL
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── AI / OpenAI ────────────────────────────────────────────────────────
@@ -168,39 +170,39 @@ services:
         value: anthropic/claude-3.5-sonnet
       # Secrets
       - key: AI_INTEGRATIONS_OPENAI_API_KEY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: OPENAI_API_KEY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: OPENROUTER_API_KEY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── Storage (DigitalOcean Spaces) ──────────────────────────────────────
       - key: SPACES_KEY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: SPACES_SECRET
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── Cron ───────────────────────────────────────────────────────────────
       - key: CRON_SECRET
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── Stripe API keys (secrets — set in DO dashboard) ────────────────────
       - key: STRIPE_SECRET_KEY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: STRIPE_WEBHOOK_SECRET
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       # NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is currently empty in production.
       # Set via DO dashboard: pk_live_... (required for Stripe.js on checkout page).
       - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── ECG module flags ────────────────────────────────────────────────────
@@ -336,16 +338,16 @@ services:
 
       # LVN/LPN — NCLEX-PN US (Stripe prices not yet created; set in DO dashboard when ready)
       - key: STRIPE_PRICE_LVN_LPN_MONTHLY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: STRIPE_PRICE_LVN_LPN_3MONTH
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: STRIPE_PRICE_LVN_LPN_6MONTH
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
       - key: STRIPE_PRICE_LVN_LPN_YEARLY
-        scope: RUN_AND_BUILD_TIME
+        scope: RUN_TIME
         type: SECRET
 
       # ── QA + reliability runtime keys ─────────────────────────────────────

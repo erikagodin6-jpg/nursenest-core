@@ -6,7 +6,7 @@
  * IDs: fr-31 through fr-80
  * DISTINCT from french-blog-posts.ts (fr-1 through fr-30)
  *
- * Route: /fr/canada/rpn/rex-pn/blog/{{slug}}
+ * Route: /fr/canada/pn/rex-pn/blog/{{slug}}
  */
 
 import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
@@ -22,7 +22,7 @@ export type FR2Topic = {
 export type FR2Post = FR2Topic & { wordCount: number; sections: FR2Section[]; faq: FR2Faq[]; references: FR2Ref[] };
 
 function L() {
-  const base = "/fr/canada/rpn/rex-pn";
+  const base = "/fr/canada/pn/rex-pn";
   return { lessons: `${base}/lessons`, questions: `${base}/questions`, cat: `${base}/cat`, pricing: `${base}/pricing`, lesson: (s: string) => `${base}/lessons/${s}` };
 }
 const lnk = L();

@@ -77,7 +77,7 @@ function getLegacyRoutes(): Record<string, string> {
     "/exam-prep": "/lessons",
     "/register": "/signup",
 
-    "/rex-pn": "/canada/rpn/rex-pn",
+    "/rex-pn": "/canada/pn/rex-pn",
     "/nclex-rn": "/lessons",
 
     "/np-exam-practice-questions": CANONICAL_PATHWAY_HUB.usNp,

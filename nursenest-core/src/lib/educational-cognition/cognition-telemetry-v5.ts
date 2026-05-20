@@ -7,6 +7,9 @@ import { captureCognitionOrchestratedEvent } from "@/lib/educational-cognition/c
 import { deriveTimingRiskBand } from "@/lib/educational-cognition/timing-cognition";
 import { normalizeCognitionTelemetryProps } from "@/lib/educational-cognition/cognition-telemetry-governance";
 import { recordCoachingTelemetry } from "@/lib/learner/rn-coaching-intelligence/coaching-telemetry";
+import { mergeCoachingPropsWithGraphLineage } from "@/lib/learner/rn-coaching-intelligence/coaching-graph-telemetry-bridge";
+import { buildGraphLineageEnvelope } from "@/lib/educational-graph/graph-lineage-envelope";
+import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
 import {
   buildCognitionVersionMetadata,
   cognitionVersionTelemetryProps,
@@ -105,7 +108,16 @@ export function emitCognitionTelemetryV5(
       source_surface: sourceSurface,
     },
   });
-  const merged = filterCognitionTelemetryProps(lineage.props);
+  const graphLineage = buildGraphLineageEnvelope({
+    pathwayId: ctx.pathwayId,
+    sourceSurface,
+    testingModel: ctx.psychometric.model ?? getTestingModelForPathwayId(ctx.pathwayId),
+    topicSlug: typeof props.topic_slug === "string" ? props.topic_slug : undefined,
+  });
+  const merged = filterCognitionTelemetryProps({
+    ...lineage.props,
+    ...mergeCoachingPropsWithGraphLineage(event, lineage.props, graphLineage),
+  });
   recordCoachingTelemetry(event, merged);
 }
 

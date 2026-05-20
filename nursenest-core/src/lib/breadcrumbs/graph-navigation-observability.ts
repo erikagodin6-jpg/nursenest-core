@@ -3,6 +3,8 @@
  */
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { recordGraphOsEvent } from "@/lib/breadcrumbs/governance/graph-os-aggregation";
+import { resolvePsychometricLineageStamp } from "@/lib/breadcrumbs/governance/psychometric-lineage-validation";
 
 export type GraphObservabilityMetric =
   | "educational_navigation.schema_drift"
@@ -25,15 +27,28 @@ export type GraphObservabilityPayload = {
   remediationPathwayId?: string;
   graphDepth?: number;
   detail?: string;
+  testing_model?: string;
+  graphVersion?: string;
+  ontologyRevision?: string;
+  educationalIntent?: string;
+  cognitionReliabilityTier?: string;
 };
 
 export function recordGraphObservability(payload: GraphObservabilityPayload): void {
+  const psych = resolvePsychometricLineageStamp({
+    pathwayId: payload.remediationPathwayId ?? null,
+    educationalIntent: payload.educationalIntent,
+  });
   safeServerLog("educational_graph_os", payload.metric, {
     pathname: payload.pathname?.slice(0, 200),
     ontology_namespace: payload.ontologyNamespace?.slice(0, 80),
     remediation_pathway_id: payload.remediationPathwayId?.slice(0, 120),
     graph_depth: payload.graphDepth != null ? String(payload.graphDepth) : undefined,
     detail: payload.detail?.slice(0, 200),
+    testing_model: (payload.testing_model ?? psych.testing_model).slice(0, 40),
+    graph_version: (payload.graphVersion ?? psych.graphVersion).slice(0, 40),
+    ontology_revision: (payload.ontologyRevision ?? psych.ontologyRevision).slice(0, 80),
+    cognition_reliability: payload.cognitionReliabilityTier ?? psych.cognitionReliabilityTier,
   });
 }
 
@@ -112,10 +127,12 @@ export function recordRemediationReturnSuccess(remediationPathwayId: string): vo
 }
 
 export function recordNormalizationFallbackTriggered(pathname: string, declared?: string, derived?: string): void {
+  recordGraphOsEvent("hydration_fallback");
   recordGraphObservability({
     metric: "normalization.fallback",
     pathname,
     detail: `declared=${declared ?? ""};derived=${derived ?? ""}`,
+    educationalIntent: "hydration_replay",
   });
 }
 

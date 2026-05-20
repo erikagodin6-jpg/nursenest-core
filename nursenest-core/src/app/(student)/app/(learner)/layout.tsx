@@ -1,7 +1,3 @@
-import "@/app/learner-exam-shell.css";
-import "@/app/learner-exam-session-premium.css";
-import "@/app/learner-loft-simulation.css";
-import "@/app/learner-flashcard-premium.css";
 import "@/app/learner-cockpit-premium.css";
 import "@/app/learner-surface-primitives.css";
 import "../../../../../styles/tokens.css";
@@ -13,6 +9,7 @@ import "@/app/learner-premium-ds.css";
 // Phase 2 extraction: CAT exam, practice session, lesson detail, dashboard, review,
 // coach, study queue, question/option rendering, confidence controls from globals.css.
 import "@/app/styles/learner/learner-global.css";
+import "@/app/learner-dashboard-performance.css";
 
 import type { ReactNode } from "react";
 import { Suspense } from "react";
@@ -32,7 +29,15 @@ import { LearnerShellLanguageControl } from "@/components/student/learner-shell-
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
-import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
+import dynamic from "next/dynamic";
+
+const LearnerAppSectionAnalytics = dynamic(
+  () =>
+    import("@/components/observability/learner-app-section-analytics").then((m) => ({
+      default: m.LearnerAppSectionAnalytics,
+    })),
+  { ssr: false },
+);
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";

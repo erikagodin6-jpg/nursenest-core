@@ -27,6 +27,14 @@ export {
 export { TUTORING_SAFETY_DISCLAIMERS } from "@/lib/ai-tutor/safety-copy";
 export { createTutoringProvider, type TutoringProviderFactoryKind } from "@/lib/ai-tutor/tutoring-provider-factory";
 export { StubTutoringProvider } from "@/lib/ai-tutor/tutoring-provider";
+export {
+  assertTutoringUsesGraphStepsOnly,
+  buildGovernedTutoringPromptContext,
+  buildTutoringGraphContinuitySnapshot,
+  resolveTutoringGraphSteps,
+  tutoringLineageTelemetryProps,
+} from "@/lib/ai-tutor/ai-tutor-substrate-governance";
+export { captureTutoringContinuityReplay, recoverTutoringContinuation } from "@/lib/ai-tutor/tutoring-continuity-replay";
 export type {
   TutoringEntitlementSnapshot,
   TutoringExplainOptions,

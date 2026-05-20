@@ -2,7 +2,15 @@ import Link from "next/link";
 import { CheckCircle2, Circle, Compass, Flag, Heart, Target } from "lucide-react";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { retentionPromptHints } from "@/lib/learner/exam-plan-engine";
-import { AdaptiveRecommendationLoopPanel } from "@/components/student/adaptive-recommendation-loop-panel";
+import dynamic from "next/dynamic";
+
+const AdaptiveRecommendationLoopPanel = dynamic(
+  () =>
+    import("@/components/student/adaptive-recommendation-loop-panel").then(
+      (m) => m.AdaptiveRecommendationLoopPanel,
+    ),
+  { ssr: false },
+);
 import type { GovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
 import { GovernedNextActionLink } from "@/components/educational-graph/governed-next-action-link";
 import { EducGraphNextStepsPanel } from "@/components/educational-cognition/educ-graph-next-steps-panel";
@@ -72,7 +80,7 @@ export function AdaptiveStudyOverview({
     : null;
 
   return (
-    <section className="nn-card p-6">
+    <section className="nn-card nn-adaptive-overview-root p-6">
       {showHeading ? (
         <div className="flex items-start gap-2">
           <Compass className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
@@ -257,7 +265,7 @@ export function AdaptiveStudyOverview({
       ) : null}
 
       {graphNextSteps.length > 1 ? (
-        <div className="mt-6">
+        <div className="nn-adaptive-overview-graph-slot mt-6">
           <EducGraphNextStepsPanel
             steps={graphNextSteps}
             title="Graph-guided study path"

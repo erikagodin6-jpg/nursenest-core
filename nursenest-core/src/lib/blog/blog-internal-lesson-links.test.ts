@@ -10,7 +10,7 @@ import {
 test("isAllowedBlogInternalHref rejects app and accepts pathway lessons", () => {
   assert.equal(isAllowedBlogInternalHref("/app/study-plan"), false);
   assert.equal(isAllowedBlogInternalHref("/us/rn/nclex-rn/lessons/fluid-balance"), true);
-  assert.equal(isAllowedBlogInternalHref("/canada/rpn/rex-pn/questions"), true);
+  assert.equal(isAllowedBlogInternalHref("/canada/pn/rex-pn/questions"), true);
 });
 
 test("effectiveLessonHref respects removal and replacement", () => {

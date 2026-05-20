@@ -8,7 +8,7 @@ import {
 
 test("isWellFormedExamHubPath accepts canonical three-segment hubs", () => {
   assert.equal(isWellFormedExamHubPath("/us/rn/nclex-rn"), true);
-  assert.equal(isWellFormedExamHubPath("/canada/rpn/rex-pn"), true);
+  assert.equal(isWellFormedExamHubPath("/canada/pn/rex-pn"), true);
   assert.equal(isWellFormedExamHubPath("/np-exam-prep"), true);
   assert.equal(isWellFormedExamHubPath("/canada-np-exam-prep"), true);
   assert.equal(isWellFormedExamHubPath("/np-clinical-cases"), true);

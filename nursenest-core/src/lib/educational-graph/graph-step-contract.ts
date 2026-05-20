@@ -24,7 +24,8 @@ export type GraphSourceSurface =
   | "dashboard_feed"
   | "study_plan"
   | "ai_tutor"
-  | "recommendation_engine";
+  | "recommendation_engine"
+  | "glossary_traversal";
 
 export type EducationalIntent =
   | "mechanism_framing"

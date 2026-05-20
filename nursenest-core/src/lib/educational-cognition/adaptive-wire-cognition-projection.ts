@@ -26,6 +26,8 @@ import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptiv
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { maxGraphStepsForReliability } from "@/lib/educational-cognition/cognition-reliability";
 import { loadDurableLearnerCognitionEnvelopeSync } from "@/lib/educational-cognition/learner-cognition-persistence";
+import { resolveEducationalCognitionContext } from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import { emitGovernedServerGraphTelemetry } from "@/lib/educational-graph/governed-server-telemetry";
 
 function studyNudgesFromRanked(
   pathwayId: string,
@@ -107,6 +109,22 @@ export async function projectAdaptiveWireBundleFromCognition(args: {
     topicTrends: args.topicPerformance?.trends ?? [],
     userId: args.userId,
     entitlement: args.entitlement,
+  });
+
+  const cognitionCtx = resolveEducationalCognitionContext(args.pathwayId, {
+    userId: args.userId,
+    readinessResult: args.readiness,
+    weakTopics: args.weakTopics,
+    topicTrends: args.topicPerformance?.trends ?? [],
+  });
+  emitGovernedServerGraphTelemetry({
+    userId: args.userId,
+    entitlement: args.entitlement,
+    event: "next_best_action_clicked",
+    cognition: cognitionCtx,
+    sourceSurface: "recommendation_engine",
+    step: governed.cognition.primaryGraphStep ?? undefined,
+    topicSlug: args.weakTopics[0]?.topic,
   });
 
   const envelope = loadDurableLearnerCognitionEnvelopeSync(args.userId);

@@ -50,6 +50,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: "[deploy-guard] Dockerfile must not bake DATABASE_URL"
+        run: node nursenest-core/scripts/verify-dockerfile-database-url.mjs
+
+      - name: "[deploy-guard] GHCR runtime secret scopes (RUN_TIME)"
+        run: node scripts/audit-ghcr-runtime-secret-scopes.mjs .do/app-nursenest-core-next.yaml
+
       - name: Build and push image
         id: build
         uses: docker/build-push-action@v6

@@ -1,8 +1,8 @@
-import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolvePathwayOverviewSeoBreadcrumbs } from "@/lib/breadcrumbs/governance/seo-surface-breadcrumb-governance";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
-import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
 import { NpInventoryHeading } from "@/components/exam-pathways/exam-pathway-np-inventory-heading";
 import { ExamPathwayWaitlistBanner } from "@/components/exam-pathways/exam-pathway-waitlist-banner";
@@ -59,8 +59,10 @@ export function ExamPathwayHub({
   const pathwayLessonCount = pathwayLessonCountProp ?? ZERO_LESSON_COUNT;
   validateLearnerCopyForExamContext(pathway, heroTitle ?? pathway.displayName, "hub_hero");
   validateLearnerCopyForExamContext(pathway, heroLead ?? pathway.seoDescription, "hub_hero");
-  const hubOpts = { hubBasePath: marketingHubPath };
-  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, hubOpts);
+  const breadcrumbResolution = resolvePathwayOverviewSeoBreadcrumbs(pathway, {
+    hubBasePath: marketingHubPath,
+    pathname: marketingHubPath,
+  });
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
 
   return (
@@ -79,7 +81,11 @@ export function ExamPathwayHub({
           examFamily={String(pathway.examFamily)}
         />
       ) : null}
-      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+      <BreadcrumbsFromResolution
+        resolution={breadcrumbResolution}
+        pathname={marketingHubPath}
+        navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
+      />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
       <MarketingPathwayHubHeroBand
         className="mt-1"

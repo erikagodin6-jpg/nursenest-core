@@ -67,7 +67,7 @@ describe("marketing route integrity", () => {
   });
 
   it("canonical Canada REx-PN hub matches validator and well-formed guard (locale prefix handled by middleware)", () => {
-    const href = "/canada/rpn/rex-pn";
+    const href = "/canada/pn/rex-pn";
     assert.equal(isWellFormedExamHubPath(href), true);
     assert.equal(isValidPath(href), true);
   });
@@ -145,7 +145,7 @@ describe("marketing route integrity", () => {
     );
 
     const canadaPn = await resolveExamPathwaySafe("canada", "rpn", "rex-pn", {
-      pathname: "/canada/rpn/rex-pn",
+      pathname: "/canada/pn/rex-pn",
     });
     assert.ok(canadaPn);
     assert.equal(canadaPn.id, "ca-rpn-rex-pn");

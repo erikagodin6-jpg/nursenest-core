@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { ClinicalInterpretationGuideCard } from "@/components/clinical-interpretation/clinical-interpretation-guide-card";
+import { materializeInterpretationEntryGraphStep } from "@/lib/educational-graph/interpretation-graph-step-materialization";
 import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import {
   CLINICAL_INTERPRETATION_HUB_PATH,
-  clinicalInterpretationGuidePath,
   listPublishedClinicalInterpretationGuides,
 } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
@@ -43,16 +43,11 @@ export default function ClinicalInterpretationHubPage() {
       {guides.length > 0 ? (
         <ul className="mt-10 grid gap-4 sm:grid-cols-2">
           {guides.map((g) => (
-            <li key={g.id}>
-              <Link
-                href={clinicalInterpretationGuidePath(g.slug)}
-                className="block rounded-lg border border-[var(--semantic-border-soft)] p-4 hover:underline"
-              >
-                <span className="block text-sm font-medium text-primary">{g.category.replace(/_/g, " ")}</span>
-                <span className="mt-2 block font-semibold text-[var(--theme-heading-text)]">{g.h1}</span>
-                <span className="mt-2 block text-sm text-[var(--semantic-text-secondary)]">{g.metaDescription}</span>
-              </Link>
-            </li>
+            <ClinicalInterpretationGuideCard
+              key={g.id}
+              entry={g}
+              graphStep={materializeInterpretationEntryGraphStep(g, null)}
+            />
           ))}
         </ul>
       ) : null}

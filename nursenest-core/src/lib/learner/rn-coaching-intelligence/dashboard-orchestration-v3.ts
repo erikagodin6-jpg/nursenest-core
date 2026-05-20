@@ -49,18 +49,21 @@ export function composeDashboardOrchestrationFromContext(
   return buildDashboardCards({ feed, learnerState });
 }
 
+/** @deprecated Local heuristics — substrate orchestration is authoritative. */
+function buildDashboardCardsLegacy(): DashboardOrchestrationV3 {
+  const feed = readDashboardFeedFromSession();
+  const learnerState = readLearnerStateFromSession();
+  return buildDashboardCards({ feed, learnerState });
+}
+
 export function composeDashboardOrchestrationV3(): DashboardOrchestrationV3 {
   const learnerState = readLearnerStateFromSession();
-  const pathwayId = learnerState?.pathwayId ?? null;
-  if (pathwayId) {
-    try {
-      return toDashboardOrchestrationV3(resolveDashboardSubstrateOrchestration({ pathwayId }));
-    } catch {
-      /* session-only fallback */
-    }
+  const pathwayId = (learnerState?.pathwayId ?? "us-rn-nclex-rn").trim();
+  try {
+    return toDashboardOrchestrationV3(resolveDashboardSubstrateOrchestration({ pathwayId }));
+  } catch {
+    return buildDashboardCardsLegacy();
   }
-  const feed = readDashboardFeedFromSession();
-  return buildDashboardCards({ feed, learnerState });
 }
 
 function buildDashboardCards(args: {

@@ -96,6 +96,13 @@ export const COGNITION_TELEMETRY_ALLOWLIST = new Set([
   "hydration_mode",
   "graph_step_count",
   "confidence_tier",
+  "continuity_checkpoint_id",
+  "educational_intent",
+  "cognition_reliability_tier",
+  "graph_authoritative",
+  "ontology_namespace",
+  "competency_id",
+  "topic_slug",
 ]);
 
 export function filterCognitionTelemetryProps(

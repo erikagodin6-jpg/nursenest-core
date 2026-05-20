@@ -56,6 +56,7 @@ import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
+import { emitLearnerDashboardGraphTelemetry } from "@/lib/educational-cognition/emit-learner-dashboard-graph-telemetry";
 import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
 import { SocialStudyDashboardCard } from "@/components/student/social-study-dashboard-card";
 
@@ -107,10 +108,10 @@ export async function generateMetadata(): Promise<Metadata> {
 function LearnerDashboardBodyFallback() {
   return (
     <>
-      <section className="nn-dash-band" aria-hidden>
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
-          <div className="nn-skeleton-block nn-skeleton-block--tall rounded-2xl" />
-          <div className="nn-skeleton-block nn-skeleton-block--tall rounded-2xl" />
+      <section className="nn-dash-band nn-dash-band--priority" aria-hidden>
+        <div className="nn-dash-skeleton-priority-matrix">
+          <div className="nn-dash-skeleton-priority-matrix__primary nn-skeleton-block rounded-2xl" />
+          <div className="nn-dash-skeleton-priority-matrix__rail nn-skeleton-block rounded-2xl" />
         </div>
       </section>
 
@@ -292,6 +293,17 @@ async function LearnerDashboardHeavyContent({
           source: "rsc:learner-dashboard-adaptive",
           topicPerformance: premiumSnapshot.topicPerformance,
           supplementalWeakTopicRows: studySnap?.weakTopics ?? null,
+        });
+      }
+
+      if (preferredPathwayId && entitlement.hasAccess && !skipNonCriticalHome) {
+        emitLearnerDashboardGraphTelemetry({
+          userId,
+          entitlement,
+          pathwayId: preferredPathwayId,
+          readiness: studySnap?.readiness ?? null,
+          topicTrends: premiumSnapshot.topicPerformance?.trends,
+          weakTopics: studySnap?.weakTopics ?? undefined,
         });
       }
 
@@ -501,18 +513,16 @@ async function LearnerDashboardDeferredContent({
 
   return (
     <LearnerDashboardPageShell t={t} heroHeading={heroHeading} identity={identity}>
-      <Suspense fallback={<LearnerDashboardBodyFallback />}>
-        <LearnerDashboardHeavyContent
-          t={t}
-          locale={locale}
-          session={session}
-          userId={userId}
-          entitlement={entitlement}
-          userDisplayName={userDisplayName}
-          userLearnerPath={userLearnerPath}
-          userAlliedProfessionKey={userAlliedProfessionKey}
-        />
-      </Suspense>
+      <LearnerDashboardHeavyContent
+        t={t}
+        locale={locale}
+        session={session}
+        userId={userId}
+        entitlement={entitlement}
+        userDisplayName={userDisplayName}
+        userLearnerPath={userLearnerPath}
+        userAlliedProfessionKey={userAlliedProfessionKey}
+      />
     </LearnerDashboardPageShell>
   );
 }

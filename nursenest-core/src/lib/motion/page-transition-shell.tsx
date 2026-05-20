@@ -86,6 +86,8 @@ function isStrategySessionPath(pathname: string): boolean {
  * Learner shell: skip transitions on active study / exam-style flows.
  */
 export function learnerShellShouldDisablePageTransition(pathname: string): boolean {
+  /** Dashboard hub: avoid framer-motion wrapper + route enter on LCP path. */
+  if (pathname === "/app") return true;
   if (pathname === "/app/questions" || pathname === "/app/questions/bank" || pathname === "/app/questions/session")
     return true;
   if (pathname.startsWith("/app/baseline-assessment")) return true;

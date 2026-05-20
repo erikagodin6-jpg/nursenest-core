@@ -20,7 +20,7 @@ function routeFileForPath(urlPath: string): string {
 test("phase 1 healthcare test-bank registry activates only the five requested pages", () => {
   assert.deepEqual([...listHealthcareTestBankPagePaths()].sort(), [
     "/canada/np/cnple/test-bank",
-    "/canada/rpn/rex-pn/test-bank",
+    "/canada/pn/rex-pn/test-bank",
     "/us/np/agpcnp/test-bank",
     "/us/np/fnp/test-bank",
     "/us/rn/nclex-rn/test-bank",

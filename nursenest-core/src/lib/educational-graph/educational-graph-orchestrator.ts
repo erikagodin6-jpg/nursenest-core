@@ -72,6 +72,7 @@ function makeStep(partial: Omit<EduGraphStep, "stepId"> & { href: string; stepKi
 }
 
 function isMarketingSurface(surface: GraphSourceSurface): boolean {
+  if (surface === "glossary_traversal") return false;
   return surface === "marketing_lesson" || surface === "topic_hub_public";
 }
 

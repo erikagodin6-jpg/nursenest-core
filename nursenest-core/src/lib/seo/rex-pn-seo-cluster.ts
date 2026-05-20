@@ -6,7 +6,7 @@
  * NurseNest is an independent prep platform and is not affiliated with CNA or CNO.
  */
 
-/** Legacy RPN marketing aliases — prefer canonical `/canada/pn/rex-pn` (301 from `/canada/rpn/rex-pn/*`). */
+/** Legacy RPN marketing aliases — prefer canonical `/canada/pn/rex-pn` (301 from `/canada/pn/rex-pn/*`). */
 export const REX_PN_HUB = "/canada/pn/rex-pn" as const;
 export const REX_PN_QUESTIONS = "/canada/pn/rex-pn/questions" as const;
 export const REX_PN_STUDY_GUIDE = "/canada/pn/rex-pn/study-guide" as const;

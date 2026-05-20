@@ -45,7 +45,12 @@ export function WeakAreasDashboardClient({ initial }: Props) {
   }, []);
 
   useEffect(() => {
-    const t = window.setTimeout(() => void refresh(), 300);
+    const run = () => void refresh();
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(run, { timeout: 3500 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(run, 300);
     return () => window.clearTimeout(t);
   }, [refresh]);
 

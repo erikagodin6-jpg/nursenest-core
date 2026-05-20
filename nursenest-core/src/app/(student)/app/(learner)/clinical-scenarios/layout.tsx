@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import "@/app/learner-loft-simulation.css";
 import { clinicalScenariosRobotsMetadata } from "@/lib/clinical-scenarios/clinical-scenarios-metadata";
 import { requireClinicalScenariosLearnerShellAccess } from "@/lib/clinical-scenarios/clinical-scenario-learner-layout-gate.server";
 

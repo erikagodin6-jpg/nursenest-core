@@ -30,7 +30,8 @@ export function recordCoachingTelemetry(
     const w = window as Window & {
       posthog?: { capture: (e: string, p: Record<string, unknown>) => void };
     };
-    w.posthog?.capture(`rn_coaching_${event}`, props);
+    const eventName = props.graph_authoritative === true ? event : `rn_coaching_${event}`;
+    w.posthog?.capture(eventName, props);
   } catch {
     /* analytics optional */
   }

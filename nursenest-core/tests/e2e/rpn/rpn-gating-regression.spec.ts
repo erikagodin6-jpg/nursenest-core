@@ -42,10 +42,10 @@ for (const { path, name } of PN_HUBS) {
 }
 
 test.describe("RPN/LPN route isolation", () => {
-  test("Canada RPN hub is at /canada/rpn/rex-pn (not /canada/rn/)", async ({ page }) => {
+  test("Canada RPN legacy alias redirects to canonical /canada/pn/rex-pn", async ({ page }) => {
     const r = await page.goto("/canada/rpn/rex-pn", { waitUntil: "domcontentloaded" });
-    expect(r?.status()).toBe(200);
-    expect(r?.url()).toContain("/canada/rpn/rex-pn");
+    expect(r?.status()).toBeLessThan(400);
+    expect(r?.url()).toContain("/canada/pn/rex-pn");
   });
 
   test("US LPN hub is at /us/lpn/nclex-pn (not /us/rn/)", async ({ page }) => {

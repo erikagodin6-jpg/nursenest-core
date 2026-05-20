@@ -83,9 +83,9 @@ export const AUTHORITY_RESOURCE_PAGES: readonly AuthorityResourcePage[] = [
       ],
     },
     internalLinks: [
-      { label: "REx-PN study plan", href: "/canada/rpn/rex-pn/study-plan" },
-      { label: "REx-PN practice questions", href: "/canada/rpn/rex-pn/practice-questions" },
-      { label: "REx-PN CAT simulation", href: "/canada/rpn/rex-pn/cat-simulation" },
+      { label: "REx-PN study plan", href: "/canada/pn/rex-pn/study-plan" },
+      { label: "REx-PN practice questions", href: "/canada/pn/rex-pn/practice-questions" },
+      { label: "REx-PN CAT simulation", href: "/canada/pn/rex-pn/cat-simulation" },
     ],
     faq: [
       { question: "How long should a REx-PN study plan be?", answer: "Many learners use 6 to 10 weeks, but the right length depends on baseline diagnostic performance, available time, and repeated miss patterns." },
@@ -187,7 +187,7 @@ export const AUTHORITY_RESOURCE_PAGES: readonly AuthorityResourcePage[] = [
     internalLinks: [
       { label: "Clinical readiness tools", href: "/tools/lab-values" },
       { label: "CNPLE clinical judgment", href: "/canada/np/cnple/clinical-judgment" },
-      { label: "REx-PN priority questions", href: "/canada/rpn/rex-pn/priority-questions" },
+      { label: "REx-PN priority questions", href: "/canada/pn/rex-pn/priority-questions" },
     ],
     faq: [
       { question: "Can this ECG guide diagnose a patient?", answer: "No. It is an educational study aid. Clinical ECG interpretation requires patient assessment, local protocols, and qualified clinical review." },
@@ -220,7 +220,7 @@ export const AUTHORITY_RESOURCE_PAGES: readonly AuthorityResourcePage[] = [
     },
     internalLinks: [
       { label: "CNPLE pharmacology questions", href: "/canada/np/cnple/pharmacology-questions" },
-      { label: "REx-PN pharmacology questions", href: "/canada/rpn/rex-pn/pharmacology-questions" },
+      { label: "REx-PN pharmacology questions", href: "/canada/pn/rex-pn/pharmacology-questions" },
       { label: "CNPLE practice questions", href: "/canada/np/cnple/practice-questions" },
     ],
     faq: [

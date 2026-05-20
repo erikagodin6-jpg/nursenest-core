@@ -41,6 +41,8 @@ export function maxGraphStepsForSurface(
       return fatigue >= 0.6 ? Math.min(5, STUDY_PLAN_BLOCK_MAX) : STUDY_PLAN_BLOCK_MAX;
     case "ai_tutor":
       return Math.min(AI_TUTOR_DYNAMIC_MAX, REMEDIATION_LADDER_MAX_STEPS);
+    case "glossary_traversal":
+      return Math.min(6, TOPIC_HUB_GRAPH_MAX_LINKS);
     case "post_exam_coaching":
     case "recommendation_engine":
     case "app_remediation":
@@ -57,6 +59,7 @@ export function isAuthenticatedGraphSurface(surface: GraphSourceSurface): boolea
     surface === "dashboard_feed" ||
     surface === "study_plan" ||
     surface === "ai_tutor" ||
-    surface === "recommendation_engine"
+    surface === "recommendation_engine" ||
+    surface === "glossary_traversal"
   );
 }

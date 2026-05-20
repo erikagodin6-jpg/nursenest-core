@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@/app/learner-flashcard-premium.css";
 
 /** Private learner flashcard study surfaces — not indexed (SEO pages live under `/flashcards`). */
 export const dynamic = "force-dynamic";

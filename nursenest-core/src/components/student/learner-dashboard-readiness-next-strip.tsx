@@ -86,7 +86,7 @@ export function LearnerDashboardReadinessNextStrip({
                   <div className="mt-3">
                     <div className="nn-progress-track-semantic flex h-2 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)]">
                       <div
-                        className={`${fillClass} h-full rounded-full transition-[width] duration-700 ease-out`}
+                        className={`${fillClass} h-full rounded-full motion-reduce:transition-none`}
                         style={{ width: `${scorePct}%` }}
                       />
                     </div>
@@ -139,7 +139,7 @@ export function LearnerDashboardReadinessNextStrip({
                   <div className="mt-2.5">
                     <div className="nn-progress-track-semantic flex h-2 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)]">
                       <div
-                        className={`${trajectoryFill} h-full rounded-full transition-[width] duration-700 ease-out`}
+                        className={`${trajectoryFill} h-full rounded-full motion-reduce:transition-none`}
                         style={{ width: `${scorePct}%` }}
                       />
                     </div>

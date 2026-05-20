@@ -10,7 +10,7 @@ import {
   type GraphTelemetryPayload,
 } from "@/lib/educational-graph/graph-telemetry";
 import type { EduGraphStep, GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
-import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/unified-educational-substrate";
+import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/educational-ontology-constants";
 import { logGraphGovernanceViolation } from "@/lib/educational-graph/graph-governance-observability";
 import { toGovernedGraphCaptureProps } from "@/lib/educational-graph/governed-graph-telemetry-props";
 import { trackClientEvent } from "@/lib/observability/posthog-client";

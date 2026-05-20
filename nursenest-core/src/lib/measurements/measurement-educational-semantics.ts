@@ -15,6 +15,33 @@ export type InstructionalImportance =
   | "bedside_priority"
   | "trend_dependent";
 
+export type CognitiveComplexity = "recall" | "interpretation" | "integration" | "clinical_judgment";
+
+const SEVERITY_PRIORITY: Record<EducationalSeverity, number> = {
+  normal: 25,
+  watch: 45,
+  urgent: 70,
+  critical: 92,
+};
+
+export function scoreRemediationPriority(semantics: MeasurementEducationalSemantics): number {
+  let score = SEVERITY_PRIORITY[semantics.severity];
+  if (semantics.criticalValueSignificance) score += 8;
+  if (semantics.bedsideUrgency) score += 6;
+  if (semantics.trendImportant) score += 4;
+  if (semantics.instructionalImportance === "bedside_priority") score += 5;
+  return Math.min(100, score);
+}
+
+export function cognitiveComplexityForSemantics(
+  semantics: MeasurementEducationalSemantics,
+): CognitiveComplexity {
+  if (semantics.bedsideUrgency && semantics.criticalValueSignificance) return "clinical_judgment";
+  if (semantics.trendImportant) return "integration";
+  if (semantics.interpretationHint) return "interpretation";
+  return "recall";
+}
+
 export type MeasurementEducationalSemantics = {
   severity: EducationalSeverity;
   instructionalImportance: InstructionalImportance;

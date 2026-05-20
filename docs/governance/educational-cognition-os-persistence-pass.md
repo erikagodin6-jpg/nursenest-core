@@ -14,6 +14,17 @@ RnLearnerStateSnapshot
 
 Learner-facing surfaces are **thin adapters** over this substrate. No parallel learner-state systems, recommendation planners, or graph continuity stores may be introduced.
 
+### Platform closure alignment
+
+| Concern | Module |
+|---------|--------|
+| Psychometric lineage | `psychometric-lineage-validation.ts` |
+| Replayable telemetry | `graph-telemetry-replay.ts`, `semantic-lineage-replay.ts` |
+| Org enforcement | `org-semantic-governance-policy.md`, `semantic-navigation-release-gate.ts` |
+| Educator aggregates | `educator-graph-insights.ts`, `graph-os-aggregation.ts` |
+| Runtime resilience | `ontology-runtime-integrity.ts` (incl. `replay-divergent`) |
+| Dashboard substrate | `composeDashboardOrchestrationFromContext` → `resolveDashboardSubstrateOrchestration` |
+
 ---
 
 ## Production Persistence Lifecycle

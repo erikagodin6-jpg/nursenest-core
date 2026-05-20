@@ -46,7 +46,12 @@ export function buildReasoningChainNavigation(args: {
   topicLabel?: string;
   pathwayId?: string | null;
   pathname?: string;
-  sourceSurface?: "topic_hub_public" | "app_remediation" | "dashboard_feed" | "post_exam_coaching";
+  sourceSurface?:
+    | "topic_hub_public"
+    | "app_remediation"
+    | "dashboard_feed"
+    | "post_exam_coaching"
+    | "glossary_traversal";
 }): ReasoningChainNavigationFrame {
   const traversal = orchestrateBreadcrumbGraph({
     topicSlug: args.topicSlug,

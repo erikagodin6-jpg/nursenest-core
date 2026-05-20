@@ -110,13 +110,13 @@ Understanding this format is critical. [Study clinical judgment and prioritizati
 
 The REx-PN is not just a new name — it's a fundamentally different exam. It uses computer adaptive testing, tests clinical judgment differently, and requires a different preparation approach than what worked for the CPNRE.
 
-[CTA:early] See how ready you are right now. [Try free REx-PN practice questions](/en/canada/rpn/rex-pn/questions) to test your baseline.`,
+[CTA:early] See how ready you are right now. [Try free REx-PN practice questions](/en/canada/pn/rex-pn/questions) to test your baseline.`,
       },
       {
         heading: "What Makes the REx-PN Different",
         body: `The REx-PN uses Computer Adaptive Testing (CAT). Unlike the old fixed-length CPNRE, the REx-PN adjusts question difficulty based on your answers. You'll answer between 85 and 150 questions, and the exam ends when it has enough evidence to determine whether you meet the competency standard.
 
-The exam focuses heavily on clinical judgment within the RPN scope of practice. You need to know what RPNs can and cannot do — [review the Canadian RPN high-yield topics](/en/canada/rpn/rex-pn/lessons/canadian-rpn-high-yield-gold) to understand exactly what's tested.
+The exam focuses heavily on clinical judgment within the RPN scope of practice. You need to know what RPNs can and cannot do — [review the Canadian RPN high-yield topics](/en/canada/pn/rex-pn/lessons/canadian-rpn-high-yield-gold) to understand exactly what's tested.
 
 Key difference from CPNRE: more emphasis on applied reasoning, less on pure recall. Questions ask "What should the RPN do?" not "What is the definition of?"`,
       },
@@ -126,25 +126,25 @@ Key difference from CPNRE: more emphasis on applied reasoning, less on pure reca
 
 **2. Studying RN content instead of RPN scope.** Many online resources are NCLEX-RN focused. RPNs have a different scope of practice — make sure your study materials respect that boundary.
 
-**3. Skipping pharmacology.** [High-alert medications](/en/canada/rpn/rex-pn/lessons/high-alert-medications-gold) are tested frequently. Know your drug classes, safe administration, and common adverse effects.
+**3. Skipping pharmacology.** [High-alert medications](/en/canada/pn/rex-pn/lessons/high-alert-medications-gold) are tested frequently. Know your drug classes, safe administration, and common adverse effects.
 
-**4. Not practicing under timed, adaptive conditions.** Paper practice tests don't simulate the pressure of CAT. Use [adaptive practice exams](/en/canada/rpn/rex-pn/cat) to build real exam stamina.`,
+**4. Not practicing under timed, adaptive conditions.** Paper practice tests don't simulate the pressure of CAT. Use [adaptive practice exams](/en/canada/pn/rex-pn/cat) to build real exam stamina.`,
       },
       {
         heading: "4-Week REx-PN Study Plan",
-        body: `**Week 1:** Focus on [clinical judgment and prioritization](/en/canada/rpn/rex-pn/lessons/clinical-judgment-prioritization-gold). This is the exam's backbone.
+        body: `**Week 1:** Focus on [clinical judgment and prioritization](/en/canada/pn/rex-pn/lessons/clinical-judgment-prioritization-gold). This is the exam's backbone.
 
-**Week 2:** Cover pharmacology, infection control, and safety. Review [high-alert medications](/en/canada/rpn/rex-pn/lessons/high-alert-medications-gold) and [sepsis recognition](/en/canada/rpn/rex-pn/lessons/sepsis-early-recognition-gold).
+**Week 2:** Cover pharmacology, infection control, and safety. Review [high-alert medications](/en/canada/pn/rex-pn/lessons/high-alert-medications-gold) and [sepsis recognition](/en/canada/pn/rex-pn/lessons/sepsis-early-recognition-gold).
 
-**Week 3:** Practice daily with [REx-PN practice questions](/en/canada/rpn/rex-pn/questions). Identify and drill your weak topics.
+**Week 3:** Practice daily with [REx-PN practice questions](/en/canada/pn/rex-pn/questions). Identify and drill your weak topics.
 
-**Week 4:** Take full-length [adaptive practice tests](/en/canada/rpn/rex-pn/cat). Review rationales for every question you miss.
+**Week 4:** Take full-length [adaptive practice tests](/en/canada/pn/rex-pn/cat). Review rationales for every question you miss.
 
-[CTA:mid] Get a structured study plan with daily recommendations. [Start studying with NurseNest](/en/canada/rpn/rex-pn/lessons).`,
+[CTA:mid] Get a structured study plan with daily recommendations. [Start studying with NurseNest](/en/canada/pn/rex-pn/lessons).`,
       },
       {
         heading: "Your Next Step",
-        body: `[CTA:final] NurseNest is the only platform built specifically for Canadian RPNs preparing for the REx-PN. Get RPN-scoped lessons, practice questions with detailed rationales, and adaptive practice exams. [Start your free trial](/en/canada/rpn/rex-pn/pricing) and pass the REx-PN with confidence.`,
+        body: `[CTA:final] NurseNest is the only platform built specifically for Canadian RPNs preparing for the REx-PN. Get RPN-scoped lessons, practice questions with detailed rationales, and adaptive practice exams. [Start your free trial](/en/canada/pn/rex-pn/pricing) and pass the REx-PN with confidence.`,
       },
     ],
   },
@@ -471,7 +471,7 @@ The key isn't spending more money. It's studying the right topics in the right w
 
 You need questions designed specifically for the REx-PN format.
 
-[CTA:early] [Start practicing now](/en/canada/rpn/rex-pn/questions) with free REx-PN-style practice questions.`,
+[CTA:early] [Start practicing now](/en/canada/pn/rex-pn/questions) with free REx-PN-style practice questions.`,
       },
       {
         heading: "What REx-PN Questions Look Like",
@@ -482,23 +482,23 @@ Key differences from the old CPNRE:
 - Computer adaptive format — questions get harder or easier based on your performance
 - Variable length (85-150 questions)
 
-Understanding the [Canadian RPN scope and high-yield content](/en/canada/rpn/rex-pn/lessons/canadian-rpn-high-yield-gold) is essential for answering scope-of-practice questions correctly.`,
+Understanding the [Canadian RPN scope and high-yield content](/en/canada/pn/rex-pn/lessons/canadian-rpn-high-yield-gold) is essential for answering scope-of-practice questions correctly.`,
       },
       {
         heading: "How to Use Practice Questions Effectively",
         body: `**1. Do questions daily.** Consistency is more important than volume. Start with 30 questions per day and build to 50-75.
 
-**2. Always read the rationale.** Every [practice question](/en/canada/rpn/rex-pn/questions) teaches you something — but only if you review why the correct answer is right and why the others are wrong.
+**2. Always read the rationale.** Every [practice question](/en/canada/pn/rex-pn/questions) teaches you something — but only if you review why the correct answer is right and why the others are wrong.
 
 **3. Focus on RPN scope.** Don't practice with RN-level questions. You need questions that respect the practical nurse scope of practice.
 
-**4. Simulate the exam.** Take [adaptive practice tests](/en/canada/rpn/rex-pn/cat) under timed conditions at least twice before your exam date.
+**4. Simulate the exam.** Take [adaptive practice tests](/en/canada/pn/rex-pn/cat) under timed conditions at least twice before your exam date.
 
-[CTA:mid] [Take an adaptive REx-PN practice exam](/en/canada/rpn/rex-pn/cat) to assess your current readiness level.`,
+[CTA:mid] [Take an adaptive REx-PN practice exam](/en/canada/pn/rex-pn/cat) to assess your current readiness level.`,
       },
       {
         heading: "Your Next Step",
-        body: `[CTA:final] NurseNest is the only platform built specifically for Canadian RPNs preparing for the REx-PN. Get RPN-scoped practice questions, detailed rationales, and adaptive practice exams. [Start your free trial](/en/canada/rpn/rex-pn/pricing).`,
+        body: `[CTA:final] NurseNest is the only platform built specifically for Canadian RPNs preparing for the REx-PN. Get RPN-scoped practice questions, detailed rationales, and adaptive practice exams. [Start your free trial](/en/canada/pn/rex-pn/pricing).`,
       },
     ],
   },

@@ -224,7 +224,7 @@ function internalLinksIn(row: PlannedRow): string[] {
     links.add("/nclex-question-bank");
     links.add("/free-nclex-practice-questions");
   }
-  if (row.family === "rex-pn") links.add("/canada/rpn/rex-pn/questions");
+  if (row.family === "rex-pn") links.add("/canada/pn/rex-pn/questions");
   if (row.family === "cnple") links.add("/canada/np/cnple/questions");
   if (row.family === "allied") links.add("/allied/allied-health");
   return [...links].slice(0, 8);

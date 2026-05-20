@@ -86,7 +86,7 @@ function addDays(date: Date, daysToAdd: number, hourToronto: number): Date {
 const subjects = [
   ["Hyperkalemia", "why it causes peaked T waves", "ECG", "ECG", "ecg", "ECG interpretation", "/ecg-interpretation", "/advanced-ecg-nursing"],
   ["ABG interpretation", "a stepwise nursing method", "RN", "RN", "rn", "ABGs", "/app/lessons", "/app/questions"],
-  ["REx-PN CAT exams", "how adaptive testing works", "RPN", "REx-PN", "rex-pn", "REx-PN", "/canada/rpn/rex-pn", "/app/practice-tests"],
+  ["REx-PN CAT exams", "how adaptive testing works", "RPN", "REx-PN", "rex-pn", "REx-PN", "/canada/pn/rex-pn", "/app/practice-tests"],
   ["CNPLE LOFT simulation", "how NP clinical reasoning is tested", "NP", "CNPLE", "cnple", "CNPLE", "/canada/np/cnple/simulation", "/app/cases/cnple"],
   ["COPD CO2 retention", "why hypercapnia happens", "RN", "RN", "rn", "Respiratory", "/app/lessons", "/app/practice-tests"],
   ["SVT versus ventricular tachycardia", "how nurses tell them apart", "ECG", "ECG", "ecg", "ECG interpretation", "/ecg-interpretation", "/app/flashcards"],
@@ -97,12 +97,12 @@ const subjects = [
   ["Atrial flutter versus atrial fibrillation", "ECG recognition", "ECG", "ECG", "ecg", "ECG interpretation", "/ecg-interpretation", "/advanced-ecg-nursing"],
   ["Sepsis hypotension", "why vasodilation drops blood pressure", "RN", "RN", "rn", "Critical care", "/app/lessons", "/app/questions"],
   ["DKA potassium shifts", "why potassium can be high before treatment", "RN", "RN", "rn", "Endocrine", "/app/questions", "/app/flashcards"],
-  ["Isolation precautions", "NCLEX and REx-PN traps", "RPN", "REx-PN", "rex-pn", "Infection control", "/canada/rpn/rex-pn", "/app/questions"],
+  ["Isolation precautions", "NCLEX and REx-PN traps", "RPN", "REx-PN", "rex-pn", "Infection control", "/canada/pn/rex-pn", "/app/questions"],
   ["Heart failure priorities", "what to assess first", "RN", "NCLEX-RN", "rn", "Cardiac", "/canada/rn/nclex-rn", "/app/practice-tests"],
   ["Torsades de pointes", "recognition and magnesium rationale", "ECG", "ECG", "ecg", "ECG interpretation", "/ecg-interpretation", "/advanced-ecg-nursing"],
   ["Elevated lactate", "what it means in sepsis and shock", "ALLIED", "Allied Health", "respiratory", "Critical care", "/allied-health/respiratory/blog", "/app/lessons"],
   ["Respiratory therapy ABGs", "ventilation versus oxygenation", "ALLIED", "Respiratory Therapy", "respiratory", "Respiratory therapy", "/allied-health/respiratory", "/app/questions"],
-  ["Pharmacology safety", "high-alert medication exam traps", "RPN", "REx-PN", "rex-pn", "Pharmacology", "/canada/rpn/rex-pn", "/app/flashcards"],
+  ["Pharmacology safety", "high-alert medication exam traps", "RPN", "REx-PN", "rex-pn", "Pharmacology", "/canada/pn/rex-pn", "/app/flashcards"],
   ["Delegation questions", "RN scope versus PN scope", "RN", "NCLEX-RN", "rn", "Delegation", "/canada/rn/nclex-rn", "/app/questions"],
   ["SOAP notes for CNPLE", "assessment and plan reasoning", "NP", "CNPLE", "cnple", "NP clinical reasoning", "/canada/np/cnple/simulation", "/app/cases/cnple"],
   ["Preeclampsia", "magnesium sulfate and seizure prevention", "RN", "NCLEX-RN", "rn", "Maternal newborn", "/app/lessons", "/app/questions"],
@@ -150,7 +150,7 @@ function topicAt(i: number): TopicSeed {
     category,
     primaryKeyword: `${subject.toLowerCase()} ${angle.replace(/—/g, "").toLowerCase()}`,
     secondaryKeywords: [subject.toLowerCase(), category.toLowerCase(), `${exam.toLowerCase()} study guide`],
-    ctaHref: tier === "NP" ? "/canada/np/cnple/simulation" : tier === "RPN" ? "/canada/rpn/rex-pn" : tier === "ALLIED" ? linkA : tier === "ECG" ? "/ecg-interpretation" : "/app/practice-tests",
+    ctaHref: tier === "NP" ? "/canada/np/cnple/simulation" : tier === "RPN" ? "/canada/pn/rex-pn" : tier === "ALLIED" ? linkA : tier === "ECG" ? "/ecg-interpretation" : "/app/practice-tests",
     ctaText:
       tier === "NP"
         ? "Build CNPLE clinical reasoning with NurseNest simulations."

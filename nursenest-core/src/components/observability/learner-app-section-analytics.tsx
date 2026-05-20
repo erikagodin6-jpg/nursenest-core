@@ -19,7 +19,16 @@ export function LearnerAppSectionAnalytics() {
     const key = `${section}:${pathname}`;
     if (last.current === key) return;
     last.current = key;
-    trackClientEvent(PH.appSectionView, { actor: "authenticated", section, path: pathname });
+
+    const emit = () => {
+      void trackClientEvent(PH.appSectionView, { actor: "authenticated", section, path: pathname });
+    };
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(emit, { timeout: 4000 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(emit, 1500);
+    return () => window.clearTimeout(t);
   }, [pathname]);
 
   return null;

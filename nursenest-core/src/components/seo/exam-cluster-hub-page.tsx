@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveExamClusterSeoBreadcrumbs } from "@/lib/breadcrumbs/governance/seo-surface-breadcrumb-governance";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import type { BreadcrumbResolution } from "@/lib/seo/breadcrumb-types";
@@ -53,7 +53,7 @@ export function ExamClusterHubPage({
   ctaBody,
   disclaimer,
 }: ExamClusterHubProps) {
-  const { crumbs, schemaItems } = breadcrumbs;
+  const governedBreadcrumbs = resolveExamClusterSeoBreadcrumbs(breadcrumbs, path);
 
   return (
     <>
@@ -65,11 +65,10 @@ export function ExamClusterHubPage({
           description,
         })}
       />
-      <BreadcrumbJsonLd items={schemaItems} />
       {faq && faq.length > 0 ? <FaqJsonLd items={faq} /> : null}
 
       <div className="mx-auto max-w-3xl nn-marketing-x pb-[var(--nn-rhythm-tight-y)] pt-[var(--nn-rhythm-page-y)]">
-        <BreadcrumbTrail items={crumbs} />
+        <BreadcrumbsFromResolution resolution={governedBreadcrumbs} pathname={path} />
 
         <article className="nn-marketing-body">
           <p className="nn-marketing-eyebrow text-[var(--semantic-text-muted)]">{eyebrow}</p>

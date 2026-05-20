@@ -3,7 +3,8 @@
  */
 import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 import type { GraphTelemetryPayload } from "@/lib/educational-graph/graph-telemetry";
-import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/unified-educational-substrate";
+import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/educational-ontology-constants";
+import { GRAPH_VERSION } from "@/lib/educational-cognition/cognition-version-governance";
 import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
 
 function cognitionCapabilityCsv(ctx: EducationalCognitionContext | null | undefined): string {
@@ -33,6 +34,14 @@ export function toGovernedGraphCaptureProps(
     cognition_capabilities: cognitionCapabilityCsv(ctx),
     ontology_namespace: payload.ontologyNamespace ?? payload.ontology_namespace ?? EDUCATIONAL_ONTOLOGY_NAMESPACE,
     remediation_pathway: ctx?.ontology.remediationPathwayIds[0],
+    graph_version: GRAPH_VERSION,
+    ontology_revision: payload.ontologyNamespace ?? payload.ontology_namespace ?? EDUCATIONAL_ONTOLOGY_NAMESPACE,
+    educational_intent:
+      payload.stepKind === "interpretation"
+        ? "interpretation"
+        : payload.stepKind === "glossary"
+          ? "terminology"
+          : undefined,
     event: payload.event,
   };
 }

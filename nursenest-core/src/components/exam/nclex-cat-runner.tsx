@@ -38,7 +38,7 @@ import {
   type CatExamUiPhase,
 } from "@/lib/practice-tests/cat-exam-ui-state";
 import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
-import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { governMeasurementSurfaceCopy } from "@/lib/measurements/measurement-surface-convergence";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
@@ -246,6 +246,16 @@ export function NclexCatRunner({
     [pathwayId, pathwayCountryByPathwayId],
   );
   const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const governExamCopy = useCallback(
+    (text: string) =>
+      governMeasurementSurfaceCopy(text, {
+        measurementSystem,
+        pathwayId,
+        aiSurface: "coaching",
+        sourceSurface: "cat",
+      }),
+    [measurementSystem, pathwayId],
+  );
 
   // Timer
   const [timedMode, setTimedMode] = useState(false);
@@ -548,13 +558,13 @@ export function NclexCatRunner({
   const bowtiePayload = isBowtie && current
     ? tryNormalizeBowtiePayload(
         current.questionFormat ?? current.questionType,
-        rawStem ? resolveMeasurementTokens(rawStem, measurementSystem) : rawStem,
+        rawStem ? governExamCopy(rawStem) : rawStem,
         current.options,
       )
     : bowtiePayloadEarly;
 
   const stemText = current?.stem
-    ? resolveMeasurementTokens(current.stem, measurementSystem)
+    ? governExamCopy(current.stem)
     : "";
   // Detect inline SATA instruction
   const sataInstruction = isSata ? "Select all that apply." : null;
@@ -577,7 +587,7 @@ export function NclexCatRunner({
   ) : (
     <NclexAnswerList>
       {optsCanonical.map((canonical, i) => {
-        const display = resolveMeasurementTokens(optsDisplay[i] ?? canonical, measurementSystem);
+        const display = governExamCopy(optsDisplay[i] ?? canonical);
         const isSelected = isSata
           ? Array.isArray(raw) && raw.includes(canonical)
           : raw === canonical;

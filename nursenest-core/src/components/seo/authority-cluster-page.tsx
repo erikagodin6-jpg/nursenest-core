@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveDiscoveryBreadcrumbResolution } from "@/lib/breadcrumbs/discovery-breadcrumb-governance";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { listAuthorityComparisonPages } from "@/lib/seo/authority-comparison-pages";
@@ -23,7 +23,7 @@ const clusterLabels: Record<AuthorityClusterPage["cluster"], string> = {
 
 function clusterBasePath(page: AuthorityClusterPage): string {
   if (page.cluster === "cnple") return "/canada/np/cnple";
-  if (page.cluster === "rex-pn") return "/canada/rpn/rex-pn";
+  if (page.cluster === "rex-pn") return "/canada/pn/rex-pn";
   if (page.cluster === "ca-rn") return "/canada-nclex-rn";
   if (page.cluster === "np-fnp") return "/np-specialty/fnp";
   if (page.cluster === "np-agpcnp") return "/np-specialty/agpcnp";
@@ -151,26 +151,26 @@ export function AuthorityClusterPageView({ page }: { page: AuthorityClusterPage 
   const siblingLinks = siblings.slice(0, 7);
   const assetLinks = relatedAssetLinks(page).slice(0, 4);
   const comparisonLinks = relatedComparisonLinks(page).slice(0, 4);
-  const crumbs = [
-    { name: "Home", href: "/" },
-    { name: clusterLabels[page.cluster], href: clusterBasePath(page) },
-    { name: page.h1 },
-  ];
-  const schemaItems = [
-    { name: "Home", item: absoluteUrl("/") },
-    { name: clusterLabels[page.cluster], item: absoluteUrl(clusterBasePath(page)) },
-    { name: page.h1, item: absoluteUrl(page.path) },
-  ];
+  const breadcrumbResolution = resolveDiscoveryBreadcrumbResolution({
+    hubLabel: clusterLabels[page.cluster],
+    hubPath: clusterBasePath(page),
+    leafLabel: page.h1,
+    leafPath: page.path,
+    pathname: page.path,
+  });
 
   return (
     <>
       <WebPageJsonLd title={page.title} description={page.description} path={page.path} inLanguage="en-CA" />
-      <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={[...page.faq]} />
       <ArticleJsonLd page={page} />
 
       <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <BreadcrumbTrail items={crumbs} />
+        <BreadcrumbsFromResolution
+          resolution={breadcrumbResolution}
+          pathname={page.path}
+          navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
+        />
 
         {/* ── CAT product CTA — only for authority pages that own a /cat URL ── */}
         {page.slug === "cat" ? (

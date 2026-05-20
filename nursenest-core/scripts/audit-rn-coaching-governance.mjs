@@ -198,6 +198,39 @@ if (!/cognitionVersionTelemetryProps/.test(telemetryV5)) {
   pass("telemetry V5 includes cognition version metadata");
 }
 
+const graphRuntimeModules = [
+  "src/lib/educational-graph/governed-server-telemetry.ts",
+  "src/lib/educational-graph/graph-lineage-envelope.ts",
+  "src/lib/educational-graph/graph-runtime-replay.ts",
+  "src/lib/ai-tutor/ai-tutor-substrate-governance.ts",
+  "src/lib/ai-tutor/tutoring-continuity-replay.ts",
+  "src/lib/educational-graph/interpretation-graph-step-materialization.ts",
+  "src/lib/educational-cognition/emit-learner-dashboard-graph-telemetry.ts",
+  "src/lib/learner/rn-coaching-intelligence/coaching-graph-telemetry-bridge.ts",
+];
+for (const rel of graphRuntimeModules) {
+  const p = path.join(ROOT, rel);
+  if (!fs.existsSync(p)) fail(rel, "Missing graph-runtime closure module");
+  else pass(`${rel} present`);
+}
+
+const tutorGov = fs.readFileSync(path.join(ROOT, "src/lib/ai-tutor/ai-tutor-substrate-governance.ts"), "utf8");
+if (!/resolveTutoringGraphSteps/.test(tutorGov) || !/orchestrateEducationalGraph/.test(tutorGov)) {
+  fail("ai-tutor-substrate-governance", "Tutor must derive from orchestrateEducationalGraph only");
+} else {
+  pass("AI tutor substrate governance enforces graph authority");
+}
+
+const coachBridge = fs.readFileSync(
+  path.join(ROOT, "src/lib/learner/rn-coaching-intelligence/coaching-graph-telemetry-bridge.ts"),
+  "utf8",
+);
+if (!/graphLineageTelemetryProps/.test(coachBridge)) {
+  fail("coaching-graph-telemetry-bridge", "Coaching must merge graph lineage");
+} else {
+  pass("coaching telemetry converges on graph lineage");
+}
+
 const contractSuites = [
   "cognition-repair.contract.test.ts",
   "cognition-integrity.contract.test.ts",
@@ -294,6 +327,33 @@ if (!fs.existsSync(pwSpec)) {
   fail("playwright-breadcrumb-governance", "Missing runtime governance spec");
 } else {
   pass("playwright-breadcrumb-governance.spec.ts present");
+}
+
+const closureContracts = [
+  "psychometric-lineage.contract.test.ts",
+  "graph-telemetry-replay.contract.test.ts",
+  "ai-tutor-governance.contract.test.ts",
+  "educator-graph-intelligence.contract.test.ts",
+  "semantic-resilience.contract.test.ts",
+];
+for (const name of closureContracts) {
+  const p = path.join(ROOT, "src/lib/breadcrumbs/governance", name);
+  if (!fs.existsSync(p)) fail("platform-closure-contracts", `Missing ${name}`);
+  else pass(`platform closure contract: ${name}`);
+}
+
+const psychLineage = path.join(ROOT, "src/lib/breadcrumbs/governance/psychometric-lineage-validation.ts");
+if (!fs.existsSync(psychLineage)) {
+  fail("psychometric-lineage-validation", "Missing psychometric lineage module");
+} else {
+  pass("psychometric-lineage-validation present");
+}
+
+const tutorProvider = fs.readFileSync(path.join(ROOT, "src/lib/ai-tutor/tutoring-provider.ts"), "utf8");
+if (!/composeTutoringPromptFromGraphSteps/.test(tutorProvider)) {
+  fail("ai-tutor-governance", "tutoring-provider must use composeTutoringPromptFromGraphSteps");
+} else {
+  pass("tutoring-provider graph prompt composition");
 }
 
 if (failures.length > 0) {

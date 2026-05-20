@@ -260,7 +260,7 @@ function lessonRoute(lesson) {
   const ROUTE_MAP = {
     "ca-rn-nclex-rn": "/canada/rn/nclex-rn/lessons",
     "us-rn-nclex-rn": "/us/rn/nclex-rn/lessons",
-    "ca-rpn-rex-pn": "/canada/rpn/rex-pn/lessons",
+    "ca-rpn-rex-pn": "/canada/pn/rex-pn/lessons",
     "us-rn-nclex-pn": "/us/lpn/nclex-pn/lessons",
     "np-us-np-fnp": "/us/np/fnp/lessons",
     "np-ca-np-cnple": "/canada/np/cnple/lessons",

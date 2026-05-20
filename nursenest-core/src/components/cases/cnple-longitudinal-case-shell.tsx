@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import {
+  CNPLE_LOFT_PATHWAY_ID,
+  governLoftCaseCopy,
+  loftSafeVitalTrendDisplay,
+  trackSurfaceOrchestrationTelemetry,
+} from "@/lib/measurements/measurement-surface-convergence";
 import type {
   CaseStepPayload,
   CaseStepAdvanceResult,
@@ -124,6 +131,22 @@ export function CnpleLongitudinalCaseShell({
     setMobileTab("scenario");
   }, [advanceResult]);
 
+  const { measurementSystem } = useMeasurementPreference("SI");
+  const governCopy = useCallback(
+    (text: string) => governLoftCaseCopy(text, measurementSystem, CNPLE_LOFT_PATHWAY_ID),
+    [measurementSystem],
+  );
+  const simulationMode = currentStep.mode === "SIMULATION";
+
+  useEffect(() => {
+    trackSurfaceOrchestrationTelemetry({
+      event: "interpretation_viewed",
+      sourceSurface: "loft",
+      pathwayId: CNPLE_LOFT_PATHWAY_ID,
+      learnerStateReason: `loft_step_${currentStep.stepIndex}`,
+    });
+  }, [currentStep.stepIndex, currentStep.sessionId]);
+
   const step = currentStep.step;
   const evolved = currentStep.evolvedState;
   const trajectoryState = currentStep.trajectoryState;
@@ -182,7 +205,7 @@ export function CnpleLongitudinalCaseShell({
             compact={false}
           />
           {evolved?.evolvedVitals?.length ? (
-            <EvolvedVitalsTrendRow vitals={evolved.evolvedVitals} />
+            <EvolvedVitalsTrendRow vitals={evolved.evolvedVitals} simulationMode={simulationMode} />
           ) : null}
           {activeMeds.length > 0 && (
             evolved?.medicationAdherenceRecords?.length ? (
@@ -218,21 +241,22 @@ export function CnpleLongitudinalCaseShell({
               timestamp={followUpIntervalLabel(step.followUpInterval)}
               variant={clinicalDirectionToVariant(step.clinicalUpdate.direction)}
             >
-              {step.updateNarrative}
+              {governCopy(step.updateNarrative)}
             </FollowUpUpdateCard>
           )}
 
           {evolved?.patientMessages?.map((msg, i) => (
-            <PatientMessageCard key={i} message={msg} />
+            <PatientMessageCard key={i} message={msg} governCopy={governCopy} />
           ))}
 
           {trajectoryState?.activeSafetyFlags?.length ? (
-            <SafetyFlagBanner flags={trajectoryState.activeSafetyFlags} />
+            <SafetyFlagBanner flags={trajectoryState.activeSafetyFlags} governCopy={governCopy} />
           ) : null}
 
           <ScenarioNarrativePanel
             text={step.scenarioText}
             clinicalUpdate={step.clinicalUpdate}
+            governCopy={governCopy}
           />
 
           <QuestionPanel
@@ -243,6 +267,7 @@ export function CnpleLongitudinalCaseShell({
             onSubmit={handleSubmit}
             onContinue={handleContinue}
             isSubmitting={isSubmitting}
+            governCopy={governCopy}
           />
         </main>
 
@@ -258,6 +283,8 @@ export function CnpleLongitudinalCaseShell({
             <EvolvedLabTrendPanel
               labs={labs}
               evolvedLabs={evolved?.evolvedLabs ?? []}
+              simulationMode={simulationMode}
+              governCopy={governCopy}
             />
           )}
           {(step.diagnosticArtifacts ?? [])
@@ -277,7 +304,12 @@ export function CnpleLongitudinalCaseShell({
           {labs.length === 0 && (step.diagnosticArtifacts ?? []).filter(a => a.type !== "lab_panel").length === 0 && (
             <EmptyDiagnosticsPanel />
           )}
-          <ClinicalNotesPanel judmentFocus={step.question.clinicalJudgmentFocus ?? "Clinical judgment and safe next-step reasoning."} domain={step.cnpleDomain} />
+          <ClinicalNotesPanel
+            judmentFocus={governCopy(
+              step.question.clinicalJudgmentFocus ?? "Clinical judgment and safe next-step reasoning.",
+            )}
+            domain={step.cnpleDomain}
+          />
         </aside>
       </div>
     </div>
@@ -368,9 +400,11 @@ function CaseProgressHeader({
 function ScenarioNarrativePanel({
   text,
   clinicalUpdate,
+  governCopy,
 }: {
   text: string;
   clinicalUpdate: { direction: string; newFindings?: string[] };
+  governCopy: (t: string) => string;
 }) {
   return (
     <div
@@ -387,7 +421,7 @@ function ScenarioNarrativePanel({
         Clinical scenario
       </p>
       <p className="text-[14px] leading-[1.7]" style={{ color: "var(--semantic-text-primary)" }}>
-        {text}
+        {governCopy(text)}
       </p>
       {clinicalUpdate.newFindings && clinicalUpdate.newFindings.length > 0 && (
         <ul className="mt-3 space-y-1 border-t pt-3" style={{ borderColor: "var(--semantic-border-soft)" }}>
@@ -404,7 +438,7 @@ function ScenarioNarrativePanel({
                         : "var(--semantic-brand)",
                 }}
               />
-              {f}
+              {governCopy(f)}
             </li>
           ))}
         </ul>
@@ -421,6 +455,7 @@ function QuestionPanel({
   onSubmit,
   onContinue,
   isSubmitting,
+  governCopy,
 }: {
   step: CaseStepPayload;
   selectedOption: string | null;
@@ -429,6 +464,7 @@ function QuestionPanel({
   onSubmit: () => void;
   onContinue: () => void;
   isSubmitting: boolean;
+  governCopy: (t: string) => string;
 }) {
   const { question } = step.step;
   const answered = advanceResult !== null;
@@ -443,7 +479,7 @@ function QuestionPanel({
         Clinical judgment question
       </p>
       <p className="mb-4 text-[14px] font-semibold leading-[1.65]" style={{ color: "var(--semantic-text-primary)" }}>
-        {question.stem}
+        {governCopy(question.stem)}
       </p>
 
       <div className="space-y-2.5" role="radiogroup" aria-label="Answer options">
@@ -526,7 +562,7 @@ function QuestionPanel({
                 {opt.id}
               </span>
               <span className="text-[13px] leading-[1.46]" style={{ color: "var(--semantic-text-primary)" }}>
-                {opt.label}
+                {governCopy(opt.label)}
               </span>
             </button>
           );
@@ -534,7 +570,7 @@ function QuestionPanel({
       </div>
 
       {answered && step.mode === "PRACTICE" && (
-        <RationaleReveal result={advanceResult} />
+        <RationaleReveal result={advanceResult} governCopy={governCopy} />
       )}
       {answered && step.mode === "SIMULATION" && (
         <div className="mt-4 rounded-xl border px-4 py-3" style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-surface)" }}>
@@ -582,7 +618,13 @@ function QuestionPanel({
   );
 }
 
-function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
+function RationaleReveal({
+  result,
+  governCopy,
+}: {
+  result: CaseStepAdvanceResult;
+  governCopy: (t: string) => string;
+}) {
   const trajectoryColor =
     result.trajectory === "optimal"
       ? "var(--semantic-success)"
@@ -605,7 +647,7 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
           Outcome — {result.trajectory.replace("_", " ")}
         </p>
         <p className="text-[13px] leading-relaxed" style={{ color: "var(--semantic-text-primary)" }}>
-          {result.consequence}
+          {governCopy(result.consequence)}
         </p>
       </div>
 
@@ -615,7 +657,7 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
             Rationale
           </p>
           <p className="text-[13px] leading-relaxed" style={{ color: "var(--semantic-text-primary)" }}>
-            {result.rationale}
+            {governCopy(result.rationale)}
           </p>
         </div>
       )}
@@ -626,7 +668,7 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
             Why your answer was incorrect
           </p>
           <p className="text-[13px] leading-relaxed" style={{ color: "var(--semantic-text-primary)" }}>
-            {result.whyWrong}
+            {governCopy(result.whyWrong)}
           </p>
         </div>
       )}
@@ -761,7 +803,13 @@ function StabilityBadge({ state }: { state: PatientStabilityState }) {
   );
 }
 
-function EvolvedVitalsTrendRow({ vitals }: { vitals: EvolvedVitalReading[] }) {
+function EvolvedVitalsTrendRow({
+  vitals,
+  simulationMode,
+}: {
+  vitals: EvolvedVitalReading[];
+  simulationMode: boolean;
+}) {
   const trending = vitals.filter((v) => v.trend && v.trend !== "stable");
   if (trending.length === 0) return null;
   return (
@@ -771,13 +819,19 @@ function EvolvedVitalsTrendRow({ vitals }: { vitals: EvolvedVitalReading[] }) {
       data-cnple-vitals="trend-row"
     >
       <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
-        Vital trends
+        {simulationMode ? "Serial vitals" : "Vital trends"}
       </p>
       <div className="flex flex-wrap gap-2">
         {trending.map((v) => (
           <span key={v.label} className="flex items-center gap-1 text-[12px]">
             <span style={{ color: "var(--semantic-text-muted)" }}>{v.label}</span>
-            <TrendArrow trend={v.trend!} />
+            {simulationMode ? (
+              <span style={{ color: "var(--semantic-text-secondary)" }}>
+                {loftSafeVitalTrendDisplay(v.trend!, true)}
+              </span>
+            ) : (
+              <TrendArrow trend={v.trend!} />
+            )}
           </span>
         ))}
       </div>
@@ -785,7 +839,13 @@ function EvolvedVitalsTrendRow({ vitals }: { vitals: EvolvedVitalReading[] }) {
   );
 }
 
-function PatientMessageCard({ message }: { message: { type: string; text: string } }) {
+function PatientMessageCard({
+  message,
+  governCopy,
+}: {
+  message: { type: string; text: string };
+  governCopy: (t: string) => string;
+}) {
   const msgColor =
     message.type === "symptom_improvement" ? "var(--semantic-success)"
     : message.type === "symptom_worsening" ? "var(--semantic-warning-contrast)"
@@ -804,13 +864,19 @@ function PatientMessageCard({ message }: { message: { type: string; text: string
         Patient reports
       </p>
       <p className="text-[13px] leading-relaxed" style={{ color: "var(--semantic-text-primary)" }}>
-        {message.text}
+        {governCopy(message.text)}
       </p>
     </div>
   );
 }
 
-function SafetyFlagBanner({ flags }: { flags: Array<{ code: string; label: string; severity: "warning" | "critical" }> }) {
+function SafetyFlagBanner({
+  flags,
+  governCopy,
+}: {
+  flags: Array<{ code: string; label: string; severity: "warning" | "critical" }>;
+  governCopy: (t: string) => string;
+}) {
   const hasCritical = flags.some((f) => f.severity === "critical");
   const borderColor = hasCritical ? "var(--semantic-danger)" : "var(--semantic-warning-contrast)";
   const bg = hasCritical
@@ -828,7 +894,7 @@ function SafetyFlagBanner({ flags }: { flags: Array<{ code: string; label: strin
       <ul className="space-y-0.5">
         {flags.map((f) => (
           <li key={f.code} className="text-[12px]" style={{ color: "var(--semantic-text-primary)" }}>
-            {f.label}
+            {governCopy(f.label)}
           </li>
         ))}
       </ul>
@@ -867,9 +933,13 @@ function DelayedConsequenceAlert({
 function EvolvedLabTrendPanel({
   labs,
   evolvedLabs,
+  simulationMode,
+  governCopy,
 }: {
   labs: LabResult[];
   evolvedLabs: EvolvedLabValue[];
+  simulationMode: boolean;
+  governCopy: (t: string) => string;
 }) {
   const trendsById = new Map(evolvedLabs.map((l) => [l.test, l.trend]));
   return (
@@ -907,7 +977,7 @@ function EvolvedLabTrendPanel({
             return (
               <tr key={`${r.test}-${i}`}>
                 <td className="px-4 py-2.5" style={{ color: "var(--semantic-text-secondary)" }}>
-                  {r.test}
+                  {governCopy(r.test)}
                 </td>
                 <td className="px-4 py-2.5 text-right">
                   <span className="inline-flex items-center gap-1">
@@ -917,9 +987,14 @@ function EvolvedLabTrendPanel({
                         color: r.flag === "C" ? "var(--semantic-danger)" : r.flag ? "var(--semantic-warning-contrast)" : "var(--semantic-text-primary)",
                       }}
                     >
-                      {r.value}{r.unit ? ` ${r.unit}` : ""}
+                      {governCopy(`${r.value}${r.unit ? ` ${r.unit}` : ""}`)}
                     </span>
-                    {trend && <TrendArrow trend={trend} />}
+                    {trend && !simulationMode ? <TrendArrow trend={trend} /> : null}
+                    {trend && simulationMode ? (
+                      <span className="text-[10px]" style={{ color: "var(--semantic-text-muted)" }}>
+                        {loftSafeVitalTrendDisplay(trend, true)}
+                      </span>
+                    ) : null}
                   </span>
                 </td>
                 <td className="hidden px-4 py-2.5 text-right text-[12px] sm:table-cell" style={{ color: "var(--semantic-text-muted)" }}>

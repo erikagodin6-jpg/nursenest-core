@@ -8,6 +8,8 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { isAdaptiveLearningEnabled } from "@/lib/adaptive-learning/adaptive-learning-flags";
 import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
+import { resolveEducationalCognitionContext } from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import { emitGovernedServerGraphTelemetry } from "@/lib/educational-graph/governed-server-telemetry";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -45,6 +47,16 @@ export async function GET(req: Request) {
         { status: 503, headers: mergeSubscriberPrivateCacheHeaders() },
       );
     }
+
+    const ctx = resolveEducationalCognitionContext(payload.pathwayId, { userId: gate.userId });
+    emitGovernedServerGraphTelemetry({
+      userId: gate.userId,
+      entitlement: gate.entitlement,
+      event: "next_best_action_clicked",
+      cognition: ctx,
+      sourceSurface: "recommendation_engine",
+      topicSlug: payload.recommendations.rankedWeakTopics[0]?.topicKey,
+    });
 
     return NextResponse.json(
       {

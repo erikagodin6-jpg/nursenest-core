@@ -22,6 +22,7 @@
     "do:spec:diff": "node scripts/do-spec-diff.mjs",
     "do:deploy:safe": "node scripts/do-deploy-safe.mjs",
     "do:spec:guard": "node scripts/do-spec-guard.mjs",
+    "audit:ghcr-runtime-secrets": "node scripts/audit-ghcr-runtime-secret-scopes.mjs",
     "test:do-spec-validator": "node nursenest-core/scripts/test-do-spec-validator.mjs",
     "verify:dist": "node scripts/verify-dist-artifacts.mjs",
     "production:build": "bash scripts/production-build.sh",

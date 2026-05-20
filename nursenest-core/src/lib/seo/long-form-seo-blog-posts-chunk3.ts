@@ -233,7 +233,7 @@ export const LF3_POSTS: LF3Post[] = [
     ],
     references: [
       { text: "Canadian Nurses Association (CNA). REx-PN candidate information. Retrieved from cna-aiic.ca" },
-      { text: "NurseNest. REx-PN client needs guide. Retrieved from nursenest.ca/canada/rpn/rex-pn/client-needs" },
+      { text: "NurseNest. REx-PN client needs guide. Retrieved from nursenest.ca/canada/pn/rex-pn/client-needs" },
     ],
   },
 
@@ -270,7 +270,7 @@ export const LF3_POSTS: LF3Post[] = [
     ],
     references: [
       { text: "Canadian Nurses Association (CNA). REx-PN examination information. Retrieved from cna-aiic.ca" },
-      { text: "NurseNest. REx-PN practice questions. Retrieved from nursenest.ca/canada/rpn/rex-pn/questions" },
+      { text: "NurseNest. REx-PN practice questions. Retrieved from nursenest.ca/canada/pn/rex-pn/questions" },
     ],
   },
 

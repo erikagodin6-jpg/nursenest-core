@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerShellMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import "@/app/learner-exam-shell.css";
+import "@/app/learner-exam-session-premium.css";
+import "@/app/learner-loft-simulation.css";
 import "./exam-shell.css";
 
 /**

@@ -20,7 +20,7 @@ export type FR3Topic = {
 export type FR3Post = FR3Topic & { wordCount: number; sections: FR3Section[]; faq: FR3Faq[]; references: FR3Ref[] };
 
 function L() {
-  const base = "/fr/canada/rpn/rex-pn";
+  const base = "/fr/canada/pn/rex-pn";
   return {
     lessons: `${base}/lessons`, questions: `${base}/questions`, cat: `${base}/cat`,
     pricing: `${base}/pricing`,

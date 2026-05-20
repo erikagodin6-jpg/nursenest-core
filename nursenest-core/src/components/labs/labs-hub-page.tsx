@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MeasurementInterpretationPanel } from "@/components/measurements/measurement-interpretation-panel";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import type { LabCategoryDefinition, LabLessonDefinition, LabTrack, LabsStudyLinks } from "@/lib/labs/labs-engine";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
@@ -268,6 +269,21 @@ export function LabsHubPage({ trackLabel, labTrack, hasAccess, categories, inven
                 <p className="mt-2 text-sm font-semibold text-[var(--semantic-text-primary)]">{row.label}</p>
                 <p className="mt-1 text-xs font-medium text-[var(--semantic-text-secondary)]">{row.threshold}</p>
                 <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{row.whyItMatters}</p>
+                {/potassium|hyperkalemia|\bK\+/i.test(row.label) ? (
+                  <div className="mt-3">
+                    <MeasurementInterpretationPanel
+                      measurement={{
+                        category: "electrolytes",
+                        kind: "potassium",
+                        valueSi: 6.2,
+                        authoredSystem: "si",
+                      }}
+                      measurementSystem={measurementSystem}
+                      trendValuesSi={[5.2, 5.8, 6.2]}
+                      compact
+                    />
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>

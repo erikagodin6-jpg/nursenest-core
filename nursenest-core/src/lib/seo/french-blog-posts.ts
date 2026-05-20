@@ -13,7 +13,7 @@
  *   - conversion-blog-posts.ts → English REx-PN post (cv-ca-2)
  *   - long-form-seo-blog-posts.ts → English Canada RPN posts
  *
- * Route: /fr/canada/rpn/rex-pn/blog/{{slug}}
+ * Route: /fr/canada/pn/rex-pn/blog/{{slug}}
  */
 
 import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
@@ -58,7 +58,7 @@ export type FrenchBlogPost = FrenchBlogTopic & {
 // ── Link helper (French Canadian locale) ─────────────────────────────────────
 
 function L() {
-  const base = "/fr/canada/rpn/rex-pn";
+  const base = "/fr/canada/pn/rex-pn";
   return {
     lessons: `${base}/lessons`,
     questions: `${base}/questions`,

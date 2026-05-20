@@ -31,14 +31,14 @@ export function buildGlossaryGraphNode(
     topicSlug: ctx.topicSlug,
     topicLabel: ctx.termLabel,
     pathwayId,
-    sourceSurface: "topic_hub_public",
+    sourceSurface: "glossary_traversal",
   });
   const reasoning = buildReasoningChainNavigation({
     topicSlug: ctx.topicSlug,
     topicLabel: ctx.termLabel,
     pathwayId,
     pathname: entity.canonicalHref,
-    sourceSurface: "topic_hub_public",
+    sourceSurface: "glossary_traversal",
   });
 
   return {

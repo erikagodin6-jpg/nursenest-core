@@ -19,32 +19,60 @@ interface DueSummary {
   learning: number;
 }
 
+type SpacedReviewState = "loading" | DueSummary | "empty";
+
 export function SpacedReviewReminder() {
-  const [data, setData] = useState<DueSummary | null>(null);
+  const [state, setState] = useState<SpacedReviewState>("loading");
 
   const fetchDue = useCallback(async () => {
     try {
       const res = await fetch("/api/flashcards/due-summary");
-      if (!res.ok) return;
+      if (!res.ok) {
+        setState("empty");
+        return;
+      }
       const json = await res.json();
-      setData({
+      const summary: DueSummary = {
         dueToday: json.dueToday ?? 0,
         overdue: json.overdue ?? 0,
         learning: json.learning ?? 0,
-      });
+      };
+      const total = summary.dueToday + summary.overdue;
+      setState(total === 0 ? "empty" : summary);
     } catch {
-      // non-critical
+      setState("empty");
     }
   }, []);
 
   useEffect(() => {
-    fetchDue();
+    const run = () => void fetchDue();
+    if (typeof requestIdleCallback === "function") {
+      const id = requestIdleCallback(run, { timeout: 2500 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(run, 0);
+    return () => window.clearTimeout(t);
   }, [fetchDue]);
 
-  if (!data) return null;
+  if (state === "loading") {
+    return (
+      <div
+        className="nn-spaced-review-reserve nn-engagement-nudge rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] p-4"
+        aria-busy="true"
+        aria-label="Flashcard review reminder loading"
+      >
+        <div className="nn-skeleton nn-skeleton-shimmer h-4 w-40 rounded-full" />
+        <div className="nn-skeleton nn-skeleton-shimmer mt-3 h-3 w-full max-w-sm rounded-full" />
+      </div>
+    );
+  }
 
+  if (state === "empty") {
+    return <div className="nn-spaced-review-reserve nn-spaced-review-reserve--settled" aria-hidden />;
+  }
+
+  const data = state;
   const total = data.dueToday + data.overdue;
-  if (total === 0) return null;
 
   const isOverdue = data.overdue > 0;
 

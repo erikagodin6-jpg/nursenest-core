@@ -18,6 +18,8 @@ import {
   canonicalEntriesForDomain,
   resolveCanonicalTopic,
 } from "@/lib/remediation/topic-taxonomy";
+import { presentCnpleReadinessForPathway } from "@/lib/testing/policies/readiness-policy";
+import { CNPLE_PATHWAY_ID } from "@/lib/testing/testing-model-pathway-map";
 
 export type CnpleDomainReadiness = {
   domain: CnpleDomainCode;
@@ -238,4 +240,11 @@ export function summarizeReadinessReport(report: CnpleReadinessReport): {
     topCriticalGaps: report.criticalGaps.slice(0, 5),
     prescribingSafetyWarnings,
   };
+}
+
+/** Governed presentation wrapper — delegates pass-outlook framing to readiness-policy. */
+export function presentGovernedCnpleReadinessReport(report: CnpleReadinessReport) {
+  const summary = summarizeReadinessReport(report);
+  const presentation = presentCnpleReadinessForPathway(CNPLE_PATHWAY_ID, report);
+  return { ...summary, presentation };
 }

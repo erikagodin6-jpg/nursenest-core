@@ -24,6 +24,7 @@ import {
   resolveEcgCurriculumUnitIdForTag,
   getEcgRhythmTagEntry,
 } from "@/lib/ecg-module/ecg-rhythm-tag-registry";
+import { governEcgDrillCopy, trackSurfaceOrchestrationTelemetry } from "@/lib/measurements/measurement-surface-convergence";
 
 type EcgQuestion = {
   id: string;
@@ -491,7 +492,7 @@ function EcgQuestionCard({
 
       {item.clinicalPriority ? (
         <p className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))]">
-          Clinical priority: {item.clinicalPriority}
+          Clinical priority: {governEcgDrillCopy(item.clinicalPriority)}
         </p>
       ) : null}
 
@@ -538,7 +539,7 @@ function EcgQuestionCard({
             tabIndex={-1}
             className="text-sm font-semibold leading-snug text-[var(--semantic-text-primary)] outline-none sm:text-base"
           >
-            {item.questionText}
+            {governEcgDrillCopy(item.questionText)}
           </h2>
 
           {item.options.length > 0 ? (
@@ -580,7 +581,7 @@ function EcgQuestionCard({
                           {isCorrectOption ? "✓" : isSelected ? "✗" : ""}
                         </span>
                       ) : null}
-                      {option.text}
+                      {governEcgDrillCopy(option.text)}
                     </span>
                   </button>
                 );
@@ -723,8 +724,14 @@ function EcgQuestionCard({
 
 /** Rationale section — fires telemetry on first render (learner has seen it). */
 function RationaleSection({ rationale, onView }: { rationale: string; onView: () => void }) {
+  const governed = governEcgDrillCopy(rationale);
   useEffect(() => {
     onView();
+    trackSurfaceOrchestrationTelemetry({
+      event: "interpretation_completed",
+      sourceSurface: "labs",
+      learnerStateReason: "ecg_drill_rationale",
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -737,7 +744,7 @@ function RationaleSection({ rationale, onView }: { rationale: string; onView: ()
         Rationale
       </p>
       <p className="mt-1.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-        {rationale}
+        {governed}
       </p>
     </div>
   );
