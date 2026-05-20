@@ -8,8 +8,28 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
+import * as programmaticRegistryModule from "../nursenest-core/src/lib/seo/programmatic-registry";
+import * as marketingLocalePolicyModule from "../nursenest-core/src/lib/i18n/marketing-locale-policy";
+
+type ProgrammaticRegistryModule = {
+  getAllProgrammaticSlugs: () => string[];
+};
+
+type MarketingLocalePolicyModule = {
+  MARKETING_LOCALE_CODES: readonly string[];
+};
+
+function unwrapModuleDefault<T extends object>(moduleValue: T | { default: T }): T {
+  const maybeDefault = (moduleValue as { default?: T }).default;
+  return maybeDefault ?? (moduleValue as T);
+}
+
+const { getAllProgrammaticSlugs } = unwrapModuleDefault(
+  programmaticRegistryModule as unknown as ProgrammaticRegistryModule | { default: ProgrammaticRegistryModule },
+);
+const { MARKETING_LOCALE_CODES } = unwrapModuleDefault(
+  marketingLocalePolicyModule as unknown as MarketingLocalePolicyModule | { default: MarketingLocalePolicyModule },
+);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -150,7 +170,6 @@ function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean 
 }
 
 const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
-const MARKETING_LOCALE_CODES = MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
 
 /** Second segment allowed under /{locale}/ for non-programmatic marketing routes (static pages). */
 const LOCALE_STATIC_SECONDS = new Set([

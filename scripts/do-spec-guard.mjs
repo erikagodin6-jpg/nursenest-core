@@ -17,7 +17,24 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const yaml = require("js-yaml");
+
+function loadYamlParser() {
+  try {
+    return require("js-yaml");
+  } catch (error) {
+    const cwdPackageJson = path.join(process.cwd(), "package.json");
+    if (existsSync(cwdPackageJson)) {
+      try {
+        return createRequire(cwdPackageJson)("js-yaml");
+      } catch {
+        // Fall through to the original module resolution error for a clear missing dependency.
+      }
+    }
+    throw error;
+  }
+}
+
+const yaml = loadYamlParser();
 
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dir, "..");
