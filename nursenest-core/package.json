@@ -37,6 +37,8 @@
     "content:audit:exam-keys": "npx tsx scripts/audit-exam-question-exam-keys.ts",
     "content:repair:exam-keys": "npx tsx scripts/repair-exam-question-exam-keys.ts",
     "env:check": "node ../scripts/check-required-env.mjs",
+    "env:validate": "node scripts/validate-env.mjs",
+    "prisma:health": "node scripts/check-prisma-health.mjs",
     "prebuild": "node ../scripts/ensure-build-toolchain.mjs && npm run guard:build-scripts && npm run build:prepare-content",
     "build": "node scripts/run-buildpack-build.mjs && node ../scripts/verify-dist-artifacts.mjs",
     "build:prepare-content": "node scripts/run-build-prepare-content.mjs",
