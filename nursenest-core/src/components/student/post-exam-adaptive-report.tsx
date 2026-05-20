@@ -18,7 +18,7 @@ import { recordRemediationExposure } from "@/lib/learner/rn-coaching-intelligenc
 import { recordCoachingTelemetry } from "@/lib/learner/rn-coaching-intelligence/coaching-telemetry";
 import { PostExamRemediationBreadcrumb } from "@/components/navigation/post-exam-remediation-breadcrumb";
 import { PostExamCoachingIntelligencePanels } from "@/components/student/post-exam-coaching-intelligence-panels";
-import { normalizeTopicKey } from "@/lib/linking/link-resolver";
+import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import {
