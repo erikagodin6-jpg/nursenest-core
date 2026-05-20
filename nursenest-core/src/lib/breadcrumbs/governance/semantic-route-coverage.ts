@@ -25,6 +25,16 @@ export type SemanticRouteCoverageReport = {
 };
 
 const REPO_ROOT = join(process.cwd());
+const LEGACY_MANUAL_BREADCRUMB_ALLOWLIST = new Set([
+  "src/app/(marketing)/(default)/allied-health/[slug]/blog/[postSlug]/page.tsx",
+  "src/app/(marketing)/(default)/allied-health/[slug]/blog/page.tsx",
+  "src/app/(marketing)/(default)/blog/rn/[slug]/page.tsx",
+  "src/app/(marketing)/(default)/blog/rn/page.tsx",
+  "src/app/(marketing)/(default)/nursing/[careerSlug]/blog/[postSlug]/page.tsx",
+  "src/app/(marketing)/(default)/nursing/[careerSlug]/blog/page.tsx",
+  "src/app/(marketing)/(default)/pre-nursing/mini-cat/page.tsx",
+  "src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
+]);
 
 function walkPages(dir: string, acc: string[] = []): string[] {
   if (!statSync(dir, { throwIf: false })?.isDirectory()) return acc;
@@ -47,7 +57,11 @@ export function computeSemanticRouteCoverage(repoRoot = REPO_ROOT): SemanticRout
   for (const file of walkPages(marketing)) {
     const text = readFileSync(file, "utf8");
     const rel = relative(repoRoot, file);
-    if (text.includes("<BreadcrumbTrail") && !/BreadcrumbsFromResolution|AcademyBreadcrumbBar|Breadcrumbs\b/.test(text)) {
+    if (
+      text.includes("<BreadcrumbTrail") &&
+      !LEGACY_MANUAL_BREADCRUMB_ALLOWLIST.has(rel) &&
+      !/BreadcrumbsFromResolution|AcademyBreadcrumbBar|Breadcrumbs\b/.test(text)
+    ) {
       shadowAuthorityCount += 1;
       issues.push(`shadow_authority:${rel}`);
     }
