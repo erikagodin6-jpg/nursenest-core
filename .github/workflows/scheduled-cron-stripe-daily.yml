@@ -22,6 +22,18 @@ jobs:
         run: |
           set -euo pipefail
           test -n "${BASE:-}" && test -n "${CRON_SECRET:-}" || { echo "Missing PRODUCTION_CRON_BASE_URL or CRON_SECRET"; exit 1; }
+          BASE="$(printf '%s' "$BASE" | tr -d '\r\n')"
+          BASE="${BASE#"${BASE%%[![:space:]]*}"}"
+          BASE="${BASE%"${BASE##*[![:space:]]}"}"
+          BASE="${BASE%\"}"
+          BASE="${BASE#\"}"
+          BASE="${BASE%\'}"
+          BASE="${BASE#\'}"
+          BASE="${BASE%/}"
+          case "$BASE" in
+            http://*|https://*) ;;
+            *) echo "::error::PRODUCTION_CRON_BASE_URL must be an http(s) URL"; exit 1 ;;
+          esac
           curl -fsS -X POST "${BASE}/api/cron/stripe-reconcile" \
             -H "Authorization: Bearer ${CRON_SECRET}" \
             -H "Content-Type: application/json" \
