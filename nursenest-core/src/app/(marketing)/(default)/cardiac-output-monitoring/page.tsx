@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Activity, ArrowRight, BookOpen } from "lucide-react";
+import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
+import { labsClinicalModuleLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -30,31 +32,16 @@ export async function generateMetadata(): Promise<Metadata> {
         courseMode: "online",
         educationalLevel: "Professional",
       },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "Hemodynamic Monitoring", item: `${SITE_ORIGIN}/hemodynamic-monitoring` },
-          { "@type": "ListItem", position: 3, name: "Cardiac Output Monitoring", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
-    ],
+],
   });
 }
 
 export default function CardiacOutputMonitoringPage() {
+  const breadcrumbResolution = labsClinicalModuleLeafBreadcrumbs("Cardiac Output Monitoring", PATH);
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-        <Link href="/" className="hover:text-primary">Home</Link>
-        <span>/</span>
-        <Link href="/hemodynamic-monitoring" className="hover:text-primary">Hemodynamic Monitoring</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">Cardiac Output Monitoring</span>
-      </nav>
-
-      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
         Cardiac output monitoring: thermodilution, Fick principle, cardiac index, and clinical interpretation
       </h1>
       <p className="text-lg text-gray-600 leading-relaxed mb-10">{PAGE_DESCRIPTION}</p>

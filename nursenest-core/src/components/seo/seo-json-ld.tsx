@@ -175,7 +175,6 @@ export async function OrganizationJsonLd() {
           sameAs: [] as string[],
         }}
       />
-      <MarketingFallbackBreadcrumbJsonLd />
     </>
   );
 }

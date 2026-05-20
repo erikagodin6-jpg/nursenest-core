@@ -20,7 +20,7 @@ export function LearnerCoreStudyShortcuts({
   locale,
 }: {
   pathwayId: string | null;
-  examsLabel: "CAT Exams" | "Exams";
+  examsLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
   t: LearnerMarketingT;
   locale: string;
 }) {
@@ -31,7 +31,9 @@ export function LearnerCoreStudyShortcuts({
       {items.map((item) => {
         const labelKey = learnerPrimaryNavLabelKey(item.key);
         let label = formatTitleCase(t(labelKey), locale);
-        if (item.key === "cat" && examsLabel === "Exams") {
+        if (item.key === "cat" && examsLabel === "LOFT Simulation") {
+          label = "LOFT Simulation";
+        } else if (item.key === "cat" && examsLabel === "Exams") {
           label = formatTitleCase(t("learner.shell.nav.examsSurface"), locale);
         }
         return (

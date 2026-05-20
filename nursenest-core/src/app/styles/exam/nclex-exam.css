@@ -254,7 +254,10 @@ body:has(.nn-nclex-exam-page) {
 
 .nn-nclex-type-panel__icon-wrap--sata   { background: #eef2ff; color: #4338ca; }
 .nn-nclex-type-panel__icon-wrap--bowtie { background: #fdf4ff; color: #9333ea; }
-.nn-nclex-type-panel__icon-wrap--mcq    { background: #f0fdf4; color: #16a34a; }
+.nn-nclex-type-panel__icon-wrap--mcq    {
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  color: var(--semantic-success);
+}
 .nn-nclex-type-panel__icon-wrap--matrix { background: #fff7ed; color: #ea580c; }
 .nn-nclex-type-panel__icon-wrap--drag   { background: #fef9c3; color: #ca8a04; }
 .nn-nclex-type-panel__icon-wrap--hl     { background: #fff1f2; color: #e11d48; }
@@ -409,22 +412,22 @@ body:has(.nn-nclex-exam-page) {
 }
 
 .nn-nclex-answer-card--selected {
-  border-color: #3b82f6;
-  background: #eff6ff;
-  box-shadow: 0 0 0 2px rgba(59,130,246,0.14);
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: var(--nn-exam-option-selected-bg, color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--semantic-brand) 14%, transparent);
 }
 
 .nn-nclex-answer-card--correct {
-  border-color: #16a34a;
-  background: #f0fdf4;
-  box-shadow: 0 0 0 2px rgba(22,163,74,0.11);
+  border-color: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-border-soft));
+  background: var(--nn-correct-bg, color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface)));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--semantic-success) 11%, transparent);
   cursor: default;
 }
 
 .nn-nclex-answer-card--incorrect {
-  border-color: #dc2626;
-  background: #fef2f2;
-  box-shadow: 0 0 0 2px rgba(220,38,38,0.09);
+  border-color: color-mix(in srgb, var(--semantic-danger) 38%, var(--semantic-border-soft));
+  background: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 9%, var(--semantic-surface)));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--semantic-danger) 9%, transparent);
   cursor: default;
 }
 
@@ -445,9 +448,15 @@ body:has(.nn-nclex-exam-page) {
   transition: border-color 110ms ease, background 110ms ease;
 }
 
-.nn-nclex-answer-card--selected .nn-nclex-answer-card__control {
-  border-color: #3b82f6;
-  background: #3b82f6;
+.nn-nclex-answer-card--selected:not(.nn-nclex-answer-card--correct):not(.nn-nclex-answer-card--incorrect) .nn-nclex-answer-card__control {
+  border-color: var(--semantic-brand);
+  background: var(--semantic-brand);
+}
+
+.nn-nclex-answer-card--correct .nn-nclex-answer-card__control,
+.nn-nclex-answer-card--correct.nn-nclex-answer-card--selected .nn-nclex-answer-card__control {
+  border-color: var(--semantic-success);
+  background: var(--semantic-success);
 }
 
 .nn-nclex-answer-card__control--checkbox { border-radius: 0.25rem; }
@@ -484,9 +493,21 @@ body:has(.nn-nclex-exam-page) {
   transition: border-color 110ms ease, background 110ms ease, color 110ms ease;
 }
 
-.nn-nclex-answer-card--selected  .nn-nclex-answer-card__letter { border-color: #3b82f6; background: #dbeafe; color: #1d4ed8; }
-.nn-nclex-answer-card--correct   .nn-nclex-answer-card__letter { border-color: #16a34a; background: #dcfce7; color: #15803d; }
-.nn-nclex-answer-card--incorrect .nn-nclex-answer-card__letter { border-color: #dc2626; background: #fee2e2; color: #dc2626; }
+.nn-nclex-answer-card--selected:not(.nn-nclex-answer-card--correct):not(.nn-nclex-answer-card--incorrect) .nn-nclex-answer-card__letter {
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+.nn-nclex-answer-card--correct   .nn-nclex-answer-card__letter {
+  border-color: color-mix(in srgb, var(--semantic-success) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 14%, var(--semantic-surface));
+  color: var(--semantic-success-contrast, var(--semantic-success));
+}
+.nn-nclex-answer-card--incorrect .nn-nclex-answer-card__letter {
+  border-color: color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface));
+  color: var(--semantic-danger-contrast, var(--semantic-danger));
+}
 
 /* Answer text — truncate if card is too compressed
  *
@@ -594,11 +615,11 @@ body:has(.nn-nclex-exam-page) {
   align-items: center;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid #bbf7d0;
-  background: #f0fdf4;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
   font-size: 0.625rem;
   font-weight: 700;
-  color: #15803d;
+  color: var(--semantic-success);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -660,26 +681,208 @@ body:has(.nn-nclex-exam-page) {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  gap: clamp(0.35rem, 0.9vh, 0.625rem);
+}
+
+/* Stem + options shrink when rationale band is active (zero page scroll) */
+.nn-nclex-exam-page--rationale-active .nn-nclex-question-stem {
+  max-height: clamp(3.5rem, 16vh, 5.5rem);
+  font-size: clamp(0.8125rem, 1.55vh, 0.9375rem);
+  line-height: 1.45;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.nn-nclex-exam-page--rationale-active .nn-nclex-answer-list {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.nn-nclex-exam-page--rationale-active .nn-nclex-answer-card {
+  max-height: clamp(2.25rem, 5.5vh, 3.25rem);
+  min-height: 2rem;
+  padding-block: 0.35rem;
+}
+
+.nn-nclex-exam-page--rationale-active .nn-nclex-answer-card__text {
+  font-size: clamp(0.75rem, 1.35vh, 0.8125rem);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .nn-nclex-practice-rationale-band {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
-  max-height: min(32vh, 14rem);
   overflow: hidden;
-  margin-top: 0.25rem;
-  padding-top: 0.25rem;
+  margin-top: 0;
+  padding: clamp(0.5rem, 1.1vh, 0.75rem) clamp(0.625rem, 1.25vw, 0.875rem);
   border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 42%, var(--semantic-surface));
 }
 
+.nn-nclex-practice-rationale-band--active {
+  flex: 0 0 clamp(7.5rem, 28vh, 10.5rem);
+}
+
+/* Legacy full panel — not used in NCLEX viewport shell */
 .nn-nclex-practice-rationale-band .nn-practice-rationale-full,
 .nn-nclex-practice-rationale-band .nn-practice-rationale-full__scroll {
-  max-height: min(32vh, 14rem);
+  max-height: none;
+  overflow: hidden;
 }
 
 .nn-nclex-practice-rationale-band .nn-practice-rationale-full__scroll {
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow-y: hidden;
+}
+
+/* ── Compact rationale (viewport-fit, no scroll) ─────────────────────── */
+.nn-nclex-rationale-compact {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.35rem, 0.75vh, 0.5rem);
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(0.5rem, 1vh, 0.625rem) clamp(0.625rem, 1.2vw, 0.75rem);
+  border-radius: 0.625rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+}
+
+.nn-nclex-rationale-compact--waiting {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 3.25rem;
+  color: var(--semantic-text-muted);
+}
+
+.nn-nclex-rationale-compact__wait-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: var(--semantic-text-muted);
+}
+
+.nn-nclex-rationale-compact__wait-text {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.nn-nclex-rationale-compact--correct {
+  border-color: color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface));
+}
+
+.nn-nclex-rationale-compact--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+}
+
+.nn-nclex-rationale-compact__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.nn-nclex-rationale-compact__status-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.nn-nclex-rationale-compact--correct .nn-nclex-rationale-compact__status-icon {
+  color: var(--semantic-success);
+}
+
+.nn-nclex-rationale-compact--incorrect .nn-nclex-rationale-compact__status-icon {
+  color: var(--semantic-danger);
+}
+
+.nn-nclex-rationale-compact__head-text {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.nn-nclex-rationale-compact__status-label {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-nclex-rationale-compact--correct .nn-nclex-rationale-compact__status-label {
+  color: var(--semantic-success);
+}
+
+.nn-nclex-rationale-compact--incorrect .nn-nclex-rationale-compact__status-label {
+  color: var(--semantic-danger);
+}
+
+.nn-nclex-rationale-compact__answer-line {
+  margin: 0.125rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--semantic-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+}
+
+.nn-nclex-rationale-compact__answer-kicker {
+  font-weight: 700;
+  color: var(--semantic-text-muted);
+}
+
+.nn-nclex-rationale-compact__lesson-link {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  text-decoration: none;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nn-nclex-rationale-compact__lesson-link:hover {
+  text-decoration: underline;
+}
+
+.nn-nclex-rationale-compact__why,
+.nn-nclex-rationale-compact__distractor,
+.nn-nclex-rationale-compact__takeaway {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.nn-nclex-rationale-compact__distractor-kicker,
+.nn-nclex-rationale-compact__takeaway-kicker {
+  font-weight: 700;
+  color: var(--semantic-text-muted);
 }
 
 .nn-nclex-question-loading,
@@ -760,8 +963,14 @@ body:has(.nn-nclex-exam-page) {
   flex-shrink: 0;
 }
 
-.nn-nclex-rationale__answer-card--correct  { background: #f0fdf4; border: 1px solid #bbf7d0; }
-.nn-nclex-rationale__answer-card--incorrect { background: #fef2f2; border: 1px solid #fecaca; }
+.nn-nclex-rationale__answer-card--correct  {
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+}
+.nn-nclex-rationale__answer-card--incorrect {
+  background: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface)));
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
+}
 
 .nn-nclex-rationale__answer-badge {
   width: 2rem;
@@ -775,8 +984,30 @@ body:has(.nn-nclex-exam-page) {
   flex-shrink: 0;
 }
 
-.nn-nclex-rationale__answer-badge--correct   { background: #16a34a; color: #fff; }
-.nn-nclex-rationale__answer-badge--incorrect { background: #dc2626; color: #fff; }
+.nn-nclex-rationale__answer-badge--correct   { background: var(--semantic-success); color: var(--semantic-brand-contrast, #fff); }
+.nn-nclex-rationale__answer-badge--incorrect { background: var(--semantic-danger); color: var(--semantic-brand-contrast, #fff); }
+
+.nn-nclex-rationale__section--pearl {
+  border-color: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface));
+}
+.nn-nclex-rationale__section-icon--success {
+  background: var(--semantic-success);
+  color: var(--semantic-brand-contrast, #fff);
+}
+
+.nn-nclex-answer-card__status-icon--correct {
+  color: var(--semantic-success);
+}
+.nn-nclex-answer-card__status-icon--correct circle:first-child {
+  fill: color-mix(in srgb, var(--semantic-success) 14%, var(--semantic-surface));
+}
+.nn-nclex-answer-card__status-icon--incorrect {
+  color: var(--semantic-danger);
+}
+.nn-nclex-answer-card__status-icon--incorrect circle:first-child {
+  fill: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface)));
+}
 
 .nn-nclex-rationale__answer-verdict {
   font-size: 0.75rem;

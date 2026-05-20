@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
+import { labsHubChildBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { ArrowRight, CheckCircle2, FlaskConical, Heart, Zap } from "lucide-react";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -160,29 +162,20 @@ export async function generateMetadata(): Promise<Metadata> {
           acceptedAnswer: { "@type": "Answer", text: faq.answer },
         })),
       },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "Labs Interpretation", item: `${SITE_ORIGIN}/labs-interpretation` },
-          { "@type": "ListItem", position: 3, name: "Advanced Labs", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
     ],
   } as Metadata));
 }
 
 export default function AdvancedLabsInterpretationPage() {
+  const breadcrumbResolution = labsHubChildBreadcrumbs(
+    "Labs Interpretation",
+    "/labs-interpretation",
+    "Advanced Labs",
+    PATH,
+  );
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-primary">Home</Link>
-        <span>/</span>
-        <Link href="/labs-interpretation" className="hover:text-primary">Labs Interpretation</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">Advanced Labs</span>
-      </nav>
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
 
       {/* Hero */}
       <div className="mb-10">

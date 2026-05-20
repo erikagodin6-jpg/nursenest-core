@@ -18,9 +18,12 @@ function source(rel: string): string {
 // ─── Canonical key contract ────────────────────────────────────────────────
 
 describe("CNPLE canonical pathway key", () => {
-  it("CNPLE_PATHWAY_ID constant is ca-np-cnple", () => {
-    const src = source("src/lib/exam-pathways/cnple-pathway.ts");
-    assert.match(src, /CNPLE_PATHWAY_ID\s*=\s*["']ca-np-cnple["']/);
+  it("CNPLE_PATHWAY_ID is exported from cnple-pathway (testing-model source)", () => {
+    const cnplePathway = source("src/lib/exam-pathways/cnple-pathway.ts");
+    assert.match(cnplePathway, /CNPLE_PATHWAY_ID/);
+    assert.match(cnplePathway, /testing-model/);
+    const testingModel = source("src/lib/testing/testing-model.ts");
+    assert.match(testingModel, /CNPLE_PATHWAY_ID\s*=\s*["']ca-np-cnple["']/);
   });
 
   it("exam-pathways-data uses ca-np-cnple as pathway id and cnple as examCode", () => {
@@ -29,14 +32,26 @@ describe("CNPLE canonical pathway key", () => {
     assert.match(src, /examCode:\s*["']cnple["']/);
   });
 
+  it("testing-model pathway map and definitions enforce LOFT for CNPLE", () => {
+    const map = source("src/lib/testing/testing-model-pathway-map.ts");
+    assert.match(map, /["']ca-np-cnple["']:\s*["']LOFT["']/);
+    const defs = source("src/lib/testing/testing-model-definitions.ts");
+    assert.match(defs, /allowsDifficultyAdaptation:\s*false/);
+    assert.match(defs, /blueprint_constrained/);
+    const governance = source("src/lib/testing/psychometric-isolation.ts");
+    assert.match(governance, /assertNoCatLanguageForLoftPathway/);
+  });
+
   it("CNPLE pathway marks engineType as LOFT not CAT", () => {
     const readiness = source("src/lib/exam-pathways/pathway-readiness-config.ts");
     assert.match(readiness, /["']ca-np-cnple["'][^}]*engineType:\s*["']LOFT["']/s);
   });
 
-  it("pathway-cat-marketing-copy marks CNPLE as a LOFT pathway", () => {
+  it("pathway-cat-marketing-copy derives LOFT copy from testing-model", () => {
     const src = source("src/lib/exam-pathways/pathway-cat-marketing-copy.ts");
-    assert.match(src, /LOFT_PATHWAY_IDS[^;]*ca-np-cnple/s);
+    assert.match(src, /testing-model/);
+    assert.match(src, /getPathwaySimulationDisplayCopy/);
+    assert.doesNotMatch(src, /LOFT_PATHWAY_IDS/);
   });
 });
 
@@ -161,9 +176,10 @@ describe("CNPLE key consistency", () => {
     );
   });
 
-  it("cnple-pathway.ts exports isCnplePathway helper", () => {
+  it("cnple-pathway.ts re-exports isCnplePathway from testing-model", () => {
     const src = source("src/lib/exam-pathways/cnple-pathway.ts");
-    assert.match(src, /export function isCnplePathway/);
+    assert.match(src, /isCnplePathway/);
+    assert.match(src, /testing-model/);
   });
 
   it("CNPLE flashcard query uses NP tier filter (not a CAT-scoped filter)", () => {

@@ -129,9 +129,9 @@ const productCtas = {
     { label: "Review RN lessons", href: "/us/rn/nclex-rn/lessons", intent: "study" },
   ],
   rex: [
-    { label: "Start REx-PN questions", href: "/canada/rpn/rex-pn/questions", intent: "primary" },
-    { label: "Try REx-PN CAT", href: "/canada/rpn/rex-pn/cat", intent: "secondary" },
-    { label: "Review RPN lessons", href: "/canada/rpn/rex-pn/lessons", intent: "study" },
+    { label: "Start REx-PN questions", href: "/canada/pn/rex-pn/questions", intent: "primary" },
+    { label: "Try REx-PN CAT", href: "/canada/pn/rex-pn/cat", intent: "secondary" },
+    { label: "Review RPN lessons", href: "/canada/pn/rex-pn/lessons", intent: "study" },
   ],
   cnple: [
     { label: "Start CNPLE questions", href: "/canada/np/cnple/questions", intent: "primary" },
@@ -177,7 +177,7 @@ export const HEALTHCARE_EXAM_AUTHORITY_PILLARS = [
     id: "ca-rpn-rex-pn",
     family: "rex-pn",
     label: "REx-PN Canada",
-    canonicalPath: "/canada/rpn/rex-pn",
+    canonicalPath: "/canada/pn/rex-pn",
     status: "live",
     targetQueries: ["REx-PN exam prep", "REx-PN practice questions", "REx-PN question bank", "REx-PN CAT exam"],
     title: "REx-PN Exam Prep, CAT Practice & Question Bank | NurseNest",
@@ -186,9 +186,9 @@ export const HEALTHCARE_EXAM_AUTHORITY_PILLARS = [
     h1: "REx-PN exam prep for Canadian practical nurses",
     conversionCtas: productCtas.rex,
     internalLinks: [
-      link("REx-PN practice questions", "/canada/rpn/rex-pn/questions", ["REx-PN practice questions", "RPN question bank"]),
-      link("REx-PN CAT exam", "/canada/rpn/rex-pn/cat", ["REx-PN CAT exam", "adaptive REx-PN practice"]),
-      link("REx-PN pharmacology", "/canada/rpn/rex-pn/pharmacology", ["REx-PN pharmacology", "practical nursing meds"]),
+      link("REx-PN practice questions", "/canada/pn/rex-pn/questions", ["REx-PN practice questions", "RPN question bank"]),
+      link("REx-PN CAT exam", "/canada/pn/rex-pn/cat", ["REx-PN CAT exam", "adaptive REx-PN practice"]),
+      link("REx-PN pharmacology", "/canada/pn/rex-pn/pharmacology", ["REx-PN pharmacology", "practical nursing meds"]),
     ],
   }),
   pillar({
@@ -364,7 +364,7 @@ export const HEALTHCARE_EXAM_TOPIC_CLUSTERS = [
     canonicalTopic: "Insulin safety and diabetes questions",
     targetQueries: ["insulin nursing questions", "diabetes nursing questions", "insulin NCLEX questions"],
     pageIntent: "pharmacology",
-    requiredInternalLinks: ["/us/rn/nclex-rn/questions", "/canada/rpn/rex-pn/questions", "/canada/np/cnple/questions"],
+    requiredInternalLinks: ["/us/rn/nclex-rn/questions", "/canada/pn/rex-pn/questions", "/canada/np/cnple/questions"],
     status: "planned",
   },
   {
@@ -373,7 +373,7 @@ export const HEALTHCARE_EXAM_TOPIC_CLUSTERS = [
     canonicalTopic: "COPD and respiratory practice questions",
     targetQueries: ["COPD nursing questions", "respiratory therapy ABG questions", "oxygen therapy questions"],
     pageIntent: "practice-questions",
-    requiredInternalLinks: ["/us/rn/nclex-rn/questions", "/canada/rpn/rex-pn/questions", "/allied/respiratory"],
+    requiredInternalLinks: ["/us/rn/nclex-rn/questions", "/canada/pn/rex-pn/questions", "/allied/respiratory"],
     status: "planned",
   },
   {
@@ -392,7 +392,7 @@ export const HEALTHCARE_EXAM_TOPIC_CLUSTERS = [
     canonicalTopic: "Dosage calculation practice",
     targetQueries: ["dosage calculations", "med math nursing questions", "dosage calculation practice test"],
     pageIntent: "pharmacology",
-    requiredInternalLinks: ["/tools/dosage-calculator", "/us/rn/nclex-rn/questions", "/canada/rpn/rex-pn/questions"],
+    requiredInternalLinks: ["/tools/dosage-calculator", "/us/rn/nclex-rn/questions", "/canada/pn/rex-pn/questions"],
     status: "planned",
   },
   {
@@ -401,7 +401,7 @@ export const HEALTHCARE_EXAM_TOPIC_CLUSTERS = [
     canonicalTopic: "Prioritization, delegation, and SATA questions",
     targetQueries: ["prioritization nursing questions", "delegation NCLEX questions", "SATA nursing questions"],
     pageIntent: "prioritization",
-    requiredInternalLinks: ["/nclex-next-gen-question-types", "/us/rn/nclex-rn/questions", "/canada/rpn/rex-pn/questions"],
+    requiredInternalLinks: ["/nclex-next-gen-question-types", "/us/rn/nclex-rn/questions", "/canada/pn/rex-pn/questions"],
     status: "planned",
   },
   {

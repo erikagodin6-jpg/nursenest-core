@@ -18,6 +18,13 @@ import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import {
+  pathwayUsesLoftNclexExamPresentation,
+} from "@/lib/practice-tests/premium-exam-shell-pathways";
+import {
+  practiceTestConfigRecord,
+  resolvePremiumNclexShellRoute,
+} from "@/lib/practice-tests/resolve-premium-nclex-shell-route";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 
 type Props = { params: Promise<{ id: string }> };
@@ -61,7 +68,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
 
   let initialPathwaySurface: PracticeTestPathwayClientShell | null = null;
   let nclexShellMode: "cat" | "practice" | null = null;
-  // pathwayLabel for NCLEX runners — resolved below
+  let nclexShellPresentation: "standard" | "loft" = "standard";
   let pathwayLabelForShell: string | null = null;
 
   if (userId && id.length >= 8) {
@@ -69,32 +76,17 @@ export default async function PracticeTestRunPage({ params }: Props) {
       where: { id, userId },
       select: { config: true },
     });
-    const raw = row?.config;
-    const pathwayId =
-      raw && typeof raw === "object" && !Array.isArray(raw) && typeof (raw as Record<string, unknown>).pathwayId === "string"
-        ? String((raw as Record<string, unknown>).pathwayId).trim()
-        : "";
+    const parsed = practiceTestConfigRecord(row?.config);
+    const pathwayId = parsed?.pathwayId ?? "";
 
-    // Detect which shell to render from stored config.
-    // Priority:
-    //   1. exam_simulation      → NclexCatRunner     (locked exam, no rationale)
-    //   2. catAdaptiveSessionType "practice" → PracticeTestRunnerClient
-    //      (CAT-based guided practice uses cat_advance + catStudyReveal; the
-    //       NclexPracticeRunner uses commit_answer and is only for linear sessions)
-    //   3. linear practice      → NclexPracticeRunner (commit_answer + split rationale)
-    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
-      const cfg = raw as Record<string, unknown>;
-      if (cfg.catPresentationMode === "exam_simulation") {
-        nclexShellMode = "cat";
-      } else if (
-        cfg.catAdaptiveSessionType !== "practice" &&
-        cfg.linearDeliveryMode === "practice" &&
-        cfg.linearRationaleVisibility === "after_each"
-      ) {
-        nclexShellMode = "practice";
+    if (parsed) {
+      nclexShellMode = resolvePremiumNclexShellRoute({
+        config: parsed.config,
+        pathwayId,
+      });
+      if (nclexShellMode && pathwayUsesLoftNclexExamPresentation(pathwayId)) {
+        nclexShellPresentation = "loft";
       }
-      // catAdaptiveSessionType === "practice" falls through to PracticeTestRunnerClient
-      // which already handles cat_advance + catStudyReveal correctly.
     }
 
     if (pathwayId) {
@@ -132,11 +124,6 @@ export default async function PracticeTestRunPage({ params }: Props) {
     );
   }
 
-  // NCLEX shell mode: render the new polished exam shells.
-  // CAT exam simulation → NclexCatRunner (locked, no rationale).
-  // Linear practice → NclexPracticeRunner (commit_answer + split rationale).
-  // CAT guided practice falls through to PracticeTestRunnerClient below —
-  // that runner already handles cat_advance + catStudyReveal correctly.
   if (nclexShellMode === "cat") {
     return (
       <ExamSessionErrorBoundary surface="practice_test">
@@ -156,6 +143,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
           testId={id}
           userId={userId}
           pathwayLabel={pathwayLabelForShell}
+          shellPresentation={nclexShellPresentation}
         />
       </ExamSessionErrorBoundary>
     );

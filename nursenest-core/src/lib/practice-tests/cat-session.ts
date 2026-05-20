@@ -9,6 +9,11 @@ import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import {
+  assertCatAdaptiveEngineAllowed,
+  assertCatEngineAllowedForPathwayId,
+  logTestingModelScopedEvent,
+} from "@/lib/testing/testing-model";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import {
@@ -71,7 +76,6 @@ import {
 } from "@/lib/practice-tests/recent-practice-question-ids";
 import { GUIDED_PRACTICE_ORDER_SEED_SUFFIX } from "@/lib/practice-tests/cat-session-seed-suffixes";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { STUDY_DIVERSITY_CAT_STEP_RECENT_SESSION_LOOKBACK } from "@/lib/study/study-diversity-config";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
@@ -276,6 +280,14 @@ export async function createCatPracticeTestPayload(
   let pathway: ExamPathwayDefinition | null = null;
 
   if (requestedPathwayId) {
+    const loftGuard = assertCatEngineAllowedForPathwayId(requestedPathwayId);
+    if (!loftGuard.ok) {
+      return {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
+        message: loftGuard.message,
+      };
+    }
     const resolved = getExamPathwayById(requestedPathwayId);
     if (!resolved) {
       return {
@@ -301,6 +313,16 @@ export async function createCatPracticeTestPayload(
         code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
         message:
           "Adaptive (CAT) practice is not available for this track yet. Use pathway lessons and the question bank, join the waitlist from the pathway hub if offered, or switch to an active exam track your plan includes.",
+      };
+    }
+    try {
+      assertCatAdaptiveEngineAllowed(requestedPathwayId);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "CAT engine not allowed for this pathway.";
+      return {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
+        message,
       };
     }
     pathway = resolved;
@@ -478,10 +500,8 @@ export async function createCatPracticeTestPayload(
     const guidedPickInput: PickQuestionsInput = { ...poolInput, questionCount: runLength };
     const catExamFeedbackMode: CatExamFeedbackMode = "study";
 
-    safeServerLog("practice_test", "cat_session_create", {
-      event: "cat_session_create",
+    logTestingModelScopedEvent("practice_test", "cat_session_create", pathwayIdForRecent, {
       userIdPrefix: userId.slice(0, 8),
-      pathwayId: pathwayIdForRecent ?? undefined,
       poolSize: pool.length,
       candidatePoolSize,
       recentSessionsScanned: recentPack.sessionsScanned,
@@ -539,10 +559,8 @@ export async function createCatPracticeTestPayload(
       catFixedItemOrder: order,
     };
     const catExamFeedbackModeFixed: CatExamFeedbackMode = "test";
-    safeServerLog("practice_test", "cat_session_create", {
-      event: "cat_session_create",
+    logTestingModelScopedEvent("practice_test", "cat_session_create", pathwayIdForRecent, {
       userIdPrefix: userId.slice(0, 8),
-      pathwayId: pathwayIdForRecent ?? undefined,
       poolSize: pool.length,
       candidatePoolSize: poolForSelection.length,
       fixedLength: order.length,
@@ -601,10 +619,8 @@ export async function createCatPracticeTestPayload(
 
   const catExamFeedbackMode: CatExamFeedbackMode = sim ? "test" : examFeedbackMode;
 
-  safeServerLog("practice_test", "cat_session_create", {
-    event: "cat_session_create",
+  logTestingModelScopedEvent("practice_test", "cat_session_create", pathwayIdForRecent, {
     userIdPrefix: userId.slice(0, 8),
-    pathwayId: pathwayIdForRecent ?? undefined,
     poolSize: pool.length,
     candidatePoolSize: poolForSelection.length,
     recentSessionsScanned: recentPack.sessionsScanned,
@@ -727,16 +743,20 @@ async function catPoolAndSelectOpts(
   const saltOk = typeof config.sessionPickSalt === "string" && config.sessionPickSalt.trim().length >= 8;
   const presentationMode = config.catPresentationMode ?? "practice";
   if (!sim && !saltOk) {
-    safeServerLog("practice_test", "cat_adaptive_pick_missing_session_pick_salt", {
-      feature_surface: "cat_adaptive",
-      outcome: "invariant_violation",
-      fallback_used: "false",
-      user_id_prefix: userId.slice(0, 8),
-      pathway_id: config.pathwayId ?? "",
-      selection_basis: String(config.catSelectionBasis ?? ""),
-      pool_size: String(poolForSelection.length),
-      presentation_mode: presentationMode,
-    });
+    logTestingModelScopedEvent(
+      "practice_test",
+      "cat_adaptive_pick_missing_session_pick_salt",
+      config.pathwayId ?? null,
+      {
+        feature_surface: "cat_adaptive",
+        outcome: "invariant_violation",
+        fallback_used: "false",
+        user_id_prefix: userId.slice(0, 8),
+        selection_basis: String(config.catSelectionBasis ?? ""),
+        pool_size: String(poolForSelection.length),
+        presentation_mode: presentationMode,
+      },
+    );
   }
   return {
     pool: poolForSelection,
@@ -835,8 +855,7 @@ async function catAfterScoredStep(params: {
     },
   );
   if (!next.selected) {
-    safeServerLog("cat_runner", "cat_adaptive_step", {
-      event: "cat_pool_exhausted",
+    logTestingModelScopedEvent("cat_runner", "cat_pool_exhausted", config.pathwayId ?? null, {
       poolSize: pool.length,
       usedCount: used.size,
       ...(next.detail ? { detail: next.detail } : {}),
@@ -859,8 +878,7 @@ async function catAfterScoredStep(params: {
   }
 
   const newIds = [...ids, next.selected.id];
-  safeServerLog("cat_runner", "cat_adaptive_step", {
-    event: "cat_advance_continue",
+  logTestingModelScopedEvent("cat_runner", "cat_advance_continue", config.pathwayId ?? null, {
     poolSize: pool.length,
     usedCount: used.size,
     nextQuestionIdPrefix: next.selected.id.slice(0, 12),
@@ -936,12 +954,16 @@ async function advanceGuidedCatPracticeTest(params: {
   if (state.catStudyAwaitingContinue === true) {
     const last = state.results[state.results.length - 1];
     if (!last || last.questionId !== currentId) {
-      safeServerLog("cat_runner", "cat_resume_state_invalid", {
-        event: "cat_resume_state_invalid",
-        mode: "guided_practice",
-        current_question: currentId.slice(0, 16),
-        last_recorded: last?.questionId?.slice(0, 16),
-      });
+      logTestingModelScopedEvent(
+        "cat_runner",
+        "cat_resume_state_invalid",
+        params.config.pathwayId ?? null,
+        {
+          mode: "guided_practice",
+          current_question: currentId.slice(0, 16),
+          last_recorded: last?.questionId?.slice(0, 16),
+        },
+      );
       return { kind: "error", message: "Study step state was out of sync. Refresh and try again." };
     }
     state = { ...state, catStudyAwaitingContinue: false };
@@ -994,10 +1016,12 @@ async function advanceGuidedCatPracticeTest(params: {
     params.config.pathwayId ?? null,
   );
   if (!studyFeedback) {
-    safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
-      event: "cat_study_feedback_build_failed",
-      phase: "guided_practice",
-    });
+    logTestingModelScopedEvent(
+      "cat_runner",
+      "cat_study_feedback_build_failed",
+      params.config.pathwayId ?? null,
+      { phase: "guided_practice" },
+    );
     studyFeedback = buildMinimalCatStudyFeedbackPayload({
       questionId: currentId,
       isCorrect: result.correct,

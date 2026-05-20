@@ -413,7 +413,7 @@ export type LearnerShellNavProps = {
   pathwayPillLabel: string | null;
   pathwayId: string | null;
   pathwayHubHref: string | null;
-  examsLabel: "CAT Exams" | "Exams";
+  examsLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
   /** When true, show Printouts in learner shell nav (server: printable store + public flag). */
   printablesNavVisible?: boolean;
   /** When true (RN/NP only), show dedicated ECG nav item and ECG items in Clinical Modules flyout. Hidden from RPN/LVN_LPN. */
@@ -434,7 +434,9 @@ function useLearnerNavItems({
     const rows: LearnerShellNavRow[] = built.map((row) => {
       const labelKey = learnerPrimaryNavLabelKey(row.key);
       let label = formatTitleCase(t(labelKey), locale);
-      if (row.key === "cat" && examsLabel === "Exams") {
+      if (row.key === "cat" && examsLabel === "LOFT Simulation") {
+        label = formatTitleCase("LOFT Simulation", locale);
+      } else if (row.key === "cat" && examsLabel === "Exams") {
         label = formatTitleCase(t("learner.shell.nav.examsSurface"), locale);
       }
       return {

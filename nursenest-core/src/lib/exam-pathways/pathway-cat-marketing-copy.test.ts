@@ -55,6 +55,19 @@ describe("pathway CAT marketing copy", () => {
     }
   });
 
+  it("CNPLE CAT landing helpers use simulation wording, not CAT product label", () => {
+    const pathway = getExamPathwayById("ca-np-cnple");
+    assert.ok(pathway);
+    const rc = readinessConfigForPathway(pathway);
+    const pc = publicCopyForReadinessConfig(rc, pathway);
+    const title = pathwayCatLandingTitle(pathway);
+    const subtitle = pathwayCatLandingSubtitle(pathway, pc);
+    assert.match(title, /simulation/i);
+    assert.doesNotMatch(title, /\bCAT\b/i);
+    assert.match(subtitle, /not CAT/i);
+    assert.doesNotMatch(subtitle, /Computerized adaptive testing/i);
+  });
+
   it("CNPLE public copy uses LOFT simulation label, not CAT beta", () => {
     const pathway = getExamPathwayById("ca-np-cnple");
     assert.ok(pathway);
@@ -80,12 +93,10 @@ describe("marketing CAT route source (static string regression)", () => {
 });
 
 describe("CAT eligibility server module (static regression)", () => {
-  it("keeps staff/admin entitlement bypass before subscription tier checks", () => {
+  it("routes LOFT pathways away from CAT eligibility via testing-model", () => {
     const src = readFileSync(join(__dirname, "cat-eligibility.ts"), "utf8");
-    assert.ok(
-      src.includes("accessScopeIsStaffLearnerEntitlementBypass(entitlement)"),
-      "staff bypass must stay server-side for CAT marketing + app gates",
-    );
+    assert.ok(src.includes("pathwayUsesLoftEngine"), "CNPLE must not surface as CAT-eligible");
+    assert.ok(src.includes("loftPathwayCatSurfaceBlock"), "LOFT pathways need dedicated CAT-surface messaging");
   });
 });
 

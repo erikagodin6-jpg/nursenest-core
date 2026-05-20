@@ -6,6 +6,9 @@ import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shel
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
+import { pathwayLessonsHubFaqSchema } from "@/lib/seo/pathway-lessons-hub-faq-schema";
+import { TopicHubEducationalIntro } from "@/components/lessons/topic-hub-educational-intro";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
@@ -1441,6 +1444,7 @@ export default async function PathwayLessonsHubPage({
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+      <FaqJsonLd items={pathwayLessonsHubFaqSchema(pathway)} />
       <MarketingLessonsHubStickyStudyChrome>
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
         <LessonHubClinicalModulesStrip
@@ -1450,6 +1454,9 @@ export default async function PathwayLessonsHubPage({
           compact
         />
       </MarketingLessonsHubStickyStudyChrome>
+      {topicSlugNorm && !alliedTaxonomyNorm ? (
+        <TopicHubEducationalIntro pathway={pathway} topicSlug={topicSlugNorm} />
+      ) : null}
       {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
         <div className="mt-3">
           <LearnerStudyLiveSyncBanner />

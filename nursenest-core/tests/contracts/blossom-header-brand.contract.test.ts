@@ -53,6 +53,10 @@ const LAYOUT_SRC = readFileSync(
   join(ROOT, "src/app/layout.tsx"),
   "utf-8",
 );
+const APP_ICONS_SRC = readFileSync(
+  join(ROOT, "src/lib/branding/app-icons.ts"),
+  "utf-8",
+);
 
 // ─── WCAG helpers ────────────────────────────────────────────────────────────
 
@@ -309,24 +313,34 @@ describe("favicon metadata in layout.tsx", () => {
   it("layout.tsx metadata includes favicon.ico in icon array", () => {
     assert.match(
       LAYOUT_SRC,
-      /favicon\.ico/,
-      "layout.tsx must reference favicon.ico in the metadata icons so browsers that auto-request /favicon.ico see an updated asset",
+      /nursenestAppIcons\.ico/,
+      "layout.tsx must reference nursenestAppIcons.ico so browsers that auto-request /favicon.ico see the generated asset",
+    );
+    assert.match(
+      APP_ICONS_SRC,
+      /\/favicon\.ico/,
+      "app-icons.ts must define the favicon.ico public path",
     );
   });
 
   it("favicon.ico reference includes a cache-busting version string", () => {
     assert.match(
-      LAYOUT_SRC,
-      /favicon\.ico\?v=/,
-      "favicon.ico must include a cache-busting query param (e.g. ?v=2026-05-17) to force browser re-fetch after updates",
+      APP_ICONS_SRC,
+      /\/favicon\.ico\?v=/,
+      "app-icons.ts must version favicon.ico to force browser re-fetch after updates",
     );
   });
 
   it("SVG favicon includes a cache-busting version string", () => {
     assert.match(
       LAYOUT_SRC,
-      /arctic-frost-leaf\.svg\?v=/,
-      "SVG favicon must include a cache-busting query param so browsers re-fetch updated assets",
+      /nursenestAppIcons\.svg/,
+      "layout must reference versioned SVG favicon via nursenestAppIcons",
+    );
+    assert.match(
+      LAYOUT_SRC,
+      /app-icons/,
+      "layout must import canonical app icon paths from @/lib/branding/app-icons",
     );
   });
 });

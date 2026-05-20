@@ -5,11 +5,12 @@ import {
   ArrowRight,
   BookOpen,
   CheckCircle2,
-  ChevronRight,
   ClipboardList,
   Gauge,
   Zap,
 } from "lucide-react";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { ecgStandaloneLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -160,17 +161,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function EcgPracticeQuestionsPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "NurseNest", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "ECG Interpretation", item: `${SITE_ORIGIN}/ecg` },
-          { "@type": "ListItem", position: 3, name: "ECG Practice Questions", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
+  const breadcrumbResolution = ecgStandaloneLeafBreadcrumbs("ECG Practice Questions", PATH);
+  const jsonLdGraph = [
       {
         "@type": "Course",
         name: "ECG Practice Questions for Nurses",
@@ -192,19 +184,12 @@ export default function EcgPracticeQuestionsPage() {
           acceptedAnswer: { "@type": "Answer", text: item.answer },
         })),
       },
-    ],
-  };
+    ];
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
-      {/* Breadcrumb */}
-      <nav className="mb-6 flex items-center gap-2 text-xs text-[var(--semantic-text-muted)]" aria-label="Breadcrumb">
-        <Link href="/ecg" className="hover:text-[var(--semantic-brand)]">ECG Interpretation</Link>
-        <ChevronRight className="h-3 w-3" aria-hidden />
-        <span className="text-[var(--semantic-text-primary)] font-medium">ECG Practice Questions</span>
-      </nav>
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
 
       {/* Header */}
       <header className="mb-10">

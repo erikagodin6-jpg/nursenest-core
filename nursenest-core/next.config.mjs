@@ -229,9 +229,8 @@ const nextConfig = {
       { source: "/canada/allied/allied-health", destination: "/allied/allied-health", permanent: true },
       { source: "/canada/allied/allied-health/:path*", destination: "/allied/allied-health/:path*", permanent: true },
       /** RPN authority aliases → canonical PN/RPN product study surfaces. */
-      { source: "/canada/rpn/rex-pn/lessons", destination: "/canada/pn/rex-pn/lessons", permanent: true },
-      { source: "/canada/rpn/rex-pn/flashcards", destination: "/canada/pn/rex-pn/flashcards", permanent: true },
-      { source: "/canada/rpn/rex-pn/pricing", destination: "/canada/pn/rex-pn/pricing", permanent: true },
+      { source: "/canada/rpn/rex-pn", destination: "/canada/pn/rex-pn", permanent: true },
+      { source: "/canada/rpn/rex-pn/:path*", destination: "/canada/pn/rex-pn/:path*", permanent: true },
     ];
   },
 

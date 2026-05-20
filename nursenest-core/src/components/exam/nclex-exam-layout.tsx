@@ -244,7 +244,11 @@ export function NclexCatExamLayout({
 // PRACTICE EXAM LAYOUT
 // ─────────────────────────────────────────────────────────────────────────────
 
+export type NclexPracticeShellPresentation = "standard" | "loft";
+
 export type NclexPracticeExamLayoutProps = {
+  /** `loft` = CNPLE-style linear licensing chrome (same grid, LOFT tokens). */
+  shellPresentation?: NclexPracticeShellPresentation;
   questionNumber: number;
   totalQuestions: number;
   remainingSec?: number | null;
@@ -268,6 +272,8 @@ export type NclexPracticeExamLayoutProps = {
   children: ReactNode;
   /** Post-submit rationale (PracticeRationaleFullPanel + lesson links). */
   rationaleSlot?: ReactNode;
+  /** When true, type panel hides to preserve viewport for rationale band (direction E). */
+  rationaleActive?: boolean;
   noteText?: string;
   onNoteSave?: (text: string) => void;
   transitioning?: boolean;
@@ -276,6 +282,7 @@ export type NclexPracticeExamLayoutProps = {
 };
 
 export function NclexPracticeExamLayout({
+  shellPresentation = "standard",
   questionNumber,
   totalQuestions,
   remainingSec,
@@ -298,6 +305,7 @@ export function NclexPracticeExamLayout({
   showTypePanel = true,
   children,
   rationaleSlot,
+  rationaleActive = false,
   noteText = "",
   onNoteSave,
   transitioning = false,
@@ -309,13 +317,22 @@ export function NclexPracticeExamLayout({
   const [showNotes, setShowNotes] = useState(false);
 
   const questionType = inferNclexQuestionType(questionFormat, isSata);
+  const loftPresentation = shellPresentation === "loft";
 
   return (
     <div
-      className="nn-nclex-exam-page nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-premium-convergence"
+      className={[
+        "nn-nclex-exam-page",
+        "nn-cat-exam-chrome",
+        "nn-cat-exam-chrome--premium",
+        loftPresentation ? "nn-cat-adaptive-exam-session" : "nn-cat-premium-convergence",
+        rationaleActive ? "nn-nclex-exam-page--rationale-active" : "",
+      ].filter(Boolean).join(" ")}
       data-nclex-shell="practice"
       data-cat-exam-root=""
-      data-nn-cat-premium-convergence=""
+      data-nn-cat-premium-convergence={loftPresentation ? undefined : ""}
+      data-nclex-practice-rationale={rationaleActive ? "active" : "idle"}
+      {...(loftPresentation ? { "data-nn-loft-simulation-shell": "" } : {})}
     >
 
       {/* ── Fixed top bar ─────────────────────────────────────────────── */}
@@ -332,7 +349,7 @@ export function NclexPracticeExamLayout({
 
       {/* ── Body (same single-column shell as CAT) ─────────────────────── */}
       <div className="nn-nclex-exam-body">
-        {showTypePanel && <NclexQuestionTypePanel type={questionType} />}
+        {showTypePanel && !rationaleActive && <NclexQuestionTypePanel type={questionType} />}
 
         <div
           className={[
@@ -355,7 +372,13 @@ export function NclexPracticeExamLayout({
           >
             {children}
             {rationaleSlot ? (
-              <div className="nn-nclex-practice-rationale-band nn-question-session-rationale">
+              <div
+                className={[
+                  "nn-nclex-practice-rationale-band",
+                  "nn-question-session-rationale",
+                  rationaleActive ? "nn-nclex-practice-rationale-band--active" : "",
+                ].filter(Boolean).join(" ")}
+              >
                 {rationaleSlot}
               </div>
             ) : null}
@@ -473,15 +496,29 @@ export function NclexAnswerCard({
   /* Correctness icon */
   const statusIcon =
     state === "correct" ? (
-      <svg className="nn-nclex-answer-card__status-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-label="Correct">
-        <circle cx="10" cy="10" r="9" stroke="#16a34a" strokeWidth="1.5" fill="#dcfce7" />
-        <polyline points="6,10 9,13 14,7" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <svg
+        className="nn-nclex-answer-card__status-icon nn-nclex-answer-card__status-icon--correct"
+        width="18"
+        height="18"
+        viewBox="0 0 20 20"
+        fill="none"
+        aria-label="Correct"
+      >
+        <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
+        <polyline points="6,10 9,13 14,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ) : state === "incorrect" ? (
-      <svg className="nn-nclex-answer-card__status-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-label="Incorrect">
-        <circle cx="10" cy="10" r="9" stroke="#dc2626" strokeWidth="1.5" fill="#fee2e2" />
-        <line x1="7" y1="7" x2="13" y2="13" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" />
-        <line x1="13" y1="7" x2="7" y2="13" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" />
+      <svg
+        className="nn-nclex-answer-card__status-icon nn-nclex-answer-card__status-icon--incorrect"
+        width="18"
+        height="18"
+        viewBox="0 0 20 20"
+        fill="none"
+        aria-label="Incorrect"
+      >
+        <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="7" y1="7" x2="13" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <line x1="13" y1="7" x2="7" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ) : null;
 

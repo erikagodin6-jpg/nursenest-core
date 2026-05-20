@@ -36,6 +36,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { buildEcgModuleHubLinkCandidate } from "@/lib/ecg-module/ecg-linked-learning";
+import { mechanismExplainerLinkCandidatesForLesson } from "@/lib/linking/mechanism-link-candidates";
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
@@ -659,6 +660,11 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
   const dbFlashOk = dbFlash.filter((c) => c.strength !== "weak");
   const hubExtras = pathwayHubCandidates(pathway);
   const ecgHub = buildEcgModuleHubLinkCandidate({ pathway, lesson, locale });
+  const mechanismHubs = mechanismExplainerLinkCandidatesForLesson({
+    topicKey: topicKey ?? lesson.topicSlug,
+    topicHints: [lesson.topic, lesson.topicSlug],
+    excludeHrefs: exclude,
+  });
   const dbLessonBlogs = await fetchRelatedBlogCandidatesForPathwayLesson({
     pathway,
     lesson,
@@ -672,7 +678,7 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
     questions: [registry.questions, hubExtras.filter((c) => c.kind === "question")],
     blogs: [dbLessonBlogs, registry.blogs],
     cat: [registry.cat, hubExtras.filter((c) => c.kind === "cat")],
-    hubs: [ecgHub ? [ecgHub] : []],
+    hubs: [mechanismHubs, ecgHub ? [ecgHub] : []],
   });
 }
 

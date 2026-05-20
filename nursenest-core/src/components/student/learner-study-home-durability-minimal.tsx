@@ -24,7 +24,7 @@ export function LearnerStudyHomeDurabilityMinimal({
   crumbs: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   locale: string;
-  examsNavLabel: "CAT Exams" | "Exams";
+  examsNavLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
   identity: DashboardIdentity;
   heroHeading: string;
   pathwayId: string | null;

@@ -57,12 +57,14 @@ export default async function AccountStudyPreferencesPage() {
 
   let defaultPathwayLabel: string | null = null;
   let emailEngagementOptOut = false;
+  let measurementPreference = null;
   try {
     const u = await prisma.user.findUnique({
       where: { id: userId },
-      select: { learnerPath: true, emailEngagementOptOut: true },
+      select: { learnerPath: true, emailEngagementOptOut: true, measurementPreference: true },
     });
     emailEngagementOptOut = Boolean(u?.emailEngagementOptOut);
+    measurementPreference = parseMeasurementPreference(u?.measurementPreference ?? null);
     const lp = u?.learnerPath?.trim();
     if (lp) {
       const p = getExamPathwayById(lp);
@@ -100,6 +102,7 @@ export default async function AccountStudyPreferencesPage() {
         showExamPlanForm={showExamPlan}
         initialStudySettings={studySettings}
         initialEmailEngagementOptOut={emailEngagementOptOut}
+        initialMeasurementPreference={measurementPreference}
         t={t}
       />
 

@@ -2407,6 +2407,21 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
 .nn-cat-results__section {
   margin-top: 40px;
 }
+.nn-post-exam-report__section {
+  margin-top: 32px;
+  padding: 20px;
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--semantic-surface));
+}
+@media (min-width: 640px) {
+  .nn-post-exam-report__section {
+    padding: 24px;
+  }
+}
+.nn-post-exam-report__bar-row + .nn-post-exam-report__bar-row {
+  margin-top: 0.75rem;
+}
 .nn-cat-results__section-title {
   font-size: 1.0625rem;
   font-weight: 700;
@@ -7379,16 +7394,16 @@ html[data-theme="deep-twilight"] {
 
 @media (min-width: 1024px) {
   .nn-lesson-reading-viewport {
-    grid-template-columns: minmax(10.5rem, 15rem) minmax(0, 1fr) minmax(10.5rem, 13.75rem);
-    gap: clamp(1rem, 1.4vw, 1.75rem);
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 13.75rem);
+    gap: clamp(1rem, 1.5vw, 2rem);
   }
 
   .nn-lesson-reading-viewport[data-left-collapsed="true"] {
-    grid-template-columns: 3.25rem minmax(0, 1fr) minmax(10.5rem, 13.75rem);
+    grid-template-columns: 3.25rem minmax(0, 1fr) minmax(0, 13.75rem);
   }
 
   .nn-lesson-reading-viewport[data-right-collapsed="true"] {
-    grid-template-columns: minmax(10.5rem, 15rem) minmax(0, 1fr) 3.25rem;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 3.25rem;
   }
 
   .nn-lesson-reading-viewport[data-left-collapsed="true"][data-right-collapsed="true"] {

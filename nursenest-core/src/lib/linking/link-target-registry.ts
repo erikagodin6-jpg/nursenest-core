@@ -19,14 +19,15 @@
  */
 
 import type { LinkTarget } from "@/lib/linking/internal-link-types";
+import { getCatalogDerivedLinkTargets } from "@/lib/linking/catalog-derived-link-targets";
 
 // ── Pathway question base paths (canonical) ───────────────────────────────────
 
 const Q = {
   usRn: "/us/rn/nclex-rn/questions",
   usPn: "/us/lpn/nclex-pn/questions",
-  usNp: "/us/np/nclex-rn/questions",
-  caRpn: "/canada/rpn/rex-pn/questions",
+  usNp: "/us/np/fnp/questions",
+  caRpn: "/canada/pn/rex-pn/questions",
   shared: "/question-bank",
 };
 
@@ -35,8 +36,8 @@ const Q = {
 const L = {
   usRn: "/us/rn/nclex-rn/lessons",
   usPn: "/us/lpn/nclex-pn/lessons",
-  caRpn: "/canada/rpn/rex-pn/lessons",
-  allied: "/allied-health",
+  caRpn: "/canada/pn/rex-pn/lessons",
+  allied: "/allied/allied-health/lessons",
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -67,7 +68,7 @@ function lessonTarget(
       : pathwayBase.includes("nclex-pn")
         ? "us-nclex-pn"
         : pathwayBase.includes("rex-pn")
-          ? "ca-rex-pn"
+          ? "ca-rpn-rex-pn"
           : null,
     eligible: true,
   };
@@ -487,6 +488,19 @@ const REGISTRY_ENTRIES: LinkTarget[] = [
 /** Internal: topic-key → all targets for that topic. */
 const _index = new Map<string, LinkTarget[]>();
 
+let _catalogTargetsBootstrapped = false;
+
+function _bootstrapCatalogDerivedTargets(): void {
+  if (_catalogTargetsBootstrapped) return;
+  _catalogTargetsBootstrapped = true;
+  for (const target of getCatalogDerivedLinkTargets()) {
+    REGISTRY_ENTRIES.push(target);
+    const list = _index.get(target.topicKey) ?? [];
+    list.push(target);
+    _index.set(target.topicKey, list);
+  }
+}
+
 function _buildIndex(): void {
   for (const target of REGISTRY_ENTRIES) {
     const list = _index.get(target.topicKey) ?? [];
@@ -504,6 +518,7 @@ _buildIndex();
  * Returns an empty array if the topic is not in the registry.
  */
 export function getTargetsForTopic(topicKey: string): LinkTarget[] {
+  _bootstrapCatalogDerivedTargets();
   return _index.get(topicKey) ?? [];
 }
 
@@ -512,6 +527,7 @@ export function getTargetsForTopic(topicKey: string): LinkTarget[] {
  * Useful for secondary/fallback matching.
  */
 export function getTargetsByBodySystem(bodySystem: string): LinkTarget[] {
+  _bootstrapCatalogDerivedTargets();
   return REGISTRY_ENTRIES.filter((t) => t.bodySystem === bodySystem);
 }
 
@@ -530,10 +546,12 @@ export function registerLinkTargets(targets: LinkTarget[]): void {
 
 /** Total number of registered link targets (useful for admin/debug). */
 export function registrySize(): number {
+  _bootstrapCatalogDerivedTargets();
   return REGISTRY_ENTRIES.length;
 }
 
 /** All canonical topic keys that have at least one registered target. */
 export function registeredTopicKeys(): string[] {
+  _bootstrapCatalogDerivedTargets();
   return [..._index.keys()].sort();
 }

@@ -21,6 +21,7 @@ import type {
   CaseSessionAnalyticsPayload,
 } from "@/lib/cases/longitudinal-case-types";
 import type { CnpleDomainSlug } from "@/lib/np/cnple-domain-tags";
+import { getTestingModelAnalyticsDimensions } from "@/lib/testing/testing-model";
 
 // ── Builder ───────────────────────────────────────────────────────────────────
 
@@ -105,7 +106,15 @@ export function buildCaseSessionAnalytics(params: {
 export function toCaseAnalyticsPostHogEvent(
   payload: CaseSessionAnalyticsPayload,
 ): Record<string, string | number | boolean> {
+  const analytics = getTestingModelAnalyticsDimensions(payload.pathwayId);
   return {
+    testing_model: analytics.testingModel,
+    simulation_family: analytics.simulationFamily,
+    psychometric_style: analytics.psychometricStyle,
+    remediation_style: analytics.remediationStyle,
+    analytics_model: analytics.analyticsModel,
+    exam_model: analytics.testingModel,
+    simulation_type: analytics.simulationFamily,
     cnple_case_scenario_id: payload.scenarioId,
     cnple_case_pathway_id: payload.pathwayId,
     cnple_case_mode: payload.mode,

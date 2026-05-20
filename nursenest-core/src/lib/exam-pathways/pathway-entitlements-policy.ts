@@ -3,12 +3,14 @@ import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-sc
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { pathwayUsesCatEngine } from "@/lib/testing/testing-model";
 
 /**
  * Whether pathway-scoped adaptive (CAT) **practice** may be started for this catalog row.
- * Waitlist / upcoming tracks stay discoverable for lessons and the question bank, but CAT stays off until the product is ready.
+ * LOFT pathways (CNPLE) never use the CAT engine — simulation is case/linear only.
  */
 export function pathwayAllowsCatAdaptiveStart(pathway: ExamPathwayDefinition): boolean {
+  if (!pathwayUsesCatEngine(pathway.id)) return false;
   if (pathway.status === "hidden") return false;
   if (pathway.acquisitionMode === "info_only") return false;
   if (pathway.status === "upcoming" && pathway.acquisitionMode === "waitlist") return false;

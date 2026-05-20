@@ -6,6 +6,7 @@ import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { marketingThemeBeforeInteractiveInlineScript } from "@/lib/theme/marketing-theme-before-interactive-seed";
 
+import { nursenestAppIcons } from "@/lib/branding/app-icons";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
@@ -38,11 +39,7 @@ const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
 
 // IMPORTANT:
 // The old arch favicon damaged brand consistency across tabs/bookmarks.
-// Force all favicon surfaces to use the canonical NurseNest leaf branding.
-const NURSENEST_LEAF_FAVICON = "/logos/arctic-frost-leaf.svg?v=2026-05-18-leaf";
-const NURSENEST_LEAF_PNG_192 = "/icon-192.png?v=2026-05-18-leaf";
-const NURSENEST_LEAF_PNG_512 = "/icon-512.png?v=2026-05-18-leaf";
-const NURSENEST_APPLE_ICON = "/apple-touch-icon.png?v=2026-05-18-leaf";
+// All favicon surfaces use the canonical NurseNest leaf (same geometry as SiteBrandLogoMark).
 
 function navigationIntentBeforeInteractiveInlineScript(): string {
   return `
@@ -87,12 +84,14 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: NURSENEST_LEAF_FAVICON, type: "image/svg+xml", sizes: "any" },
-      { url: NURSENEST_LEAF_PNG_192, type: "image/png", sizes: "192x192" },
-      { url: NURSENEST_LEAF_PNG_512, type: "image/png", sizes: "512x512" },
+      { url: nursenestAppIcons.ico, sizes: "48x48", type: "image/x-icon" },
+      { url: nursenestAppIcons.svg, type: "image/svg+xml", sizes: "any" },
+      { url: nursenestAppIcons.png192, type: "image/png", sizes: "192x192" },
+      { url: nursenestAppIcons.png512, type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: NURSENEST_APPLE_ICON, sizes: "180x180" }],
-    shortcut: [{ url: NURSENEST_LEAF_FAVICON, type: "image/svg+xml" }],
+    apple: [{ url: nursenestAppIcons.apple, sizes: "180x180", type: "image/png" }],
+    shortcut: [{ url: nursenestAppIcons.ico, type: "image/x-icon" }],
+    other: [{ rel: "mask-icon", url: nursenestAppIcons.mask, color: "#375f7a" }],
   },
   openGraph: {
     type: "website",

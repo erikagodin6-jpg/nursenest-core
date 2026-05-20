@@ -280,12 +280,12 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                         </FLink>
                       </li>
                       <li>
-                        <FLink href="/canada/rpn/rex-pn/cat" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                        <FLink href="/canada/pn/rex-pn/cat" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
                           REx-PN CAT exam
                         </FLink>
                       </li>
                       <li>
-                        <FLink href="/canada/rpn/rex-pn/pharmacology" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                        <FLink href="/canada/pn/rex-pn/pharmacology" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
                           REx-PN pharmacology
                         </FLink>
                       </li>

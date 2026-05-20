@@ -1,5 +1,5 @@
 /**
- * Canonical topic taxonomy for CNPLE adaptive remediation.
+ * Canonical topic taxonomy for CNPLE competency-based remediation.
  *
  * Maps raw topic strings (from questions, flashcards, lessons, remediation events)
  * to stable canonical IDs and CNPLE competency domain codes.

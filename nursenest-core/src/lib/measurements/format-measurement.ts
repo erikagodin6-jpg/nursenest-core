@@ -1,116 +1,61 @@
 /**
- * Canonical values are stored in **SI** internally (mmol/L glucose, µmol/L creatinine, °C, kg, cm, …).
- * {@link formatMeasurementFromSi} converts + labels for US vs SI displays.
+ * Back-compat formatting API — delegates to {@link convertClinicalMeasurement}.
  */
-import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
+import { convertClinicalMeasurement } from "@/lib/measurements/convert-clinical-measurement";
+import {
+  clinicalToLegacySystem,
+  legacyToClinicalSystem,
+  type MeasurementKind,
+  type MeasurementSystem,
+} from "@/lib/measurements/measurement-domain";
 
-export type MeasurementKind =
-  | "glucose"
-  | "creatinine"
-  | "hemoglobin"
-  | "potassium"
-  | "temperature"
-  | "weight"
-  | "height";
+export type { MeasurementKind } from "@/lib/measurements/measurement-domain";
 
-/** Conversion / formatting constants (clinical rounding). */
-const GLUCOSE_MMOL_TO_MGDL = 18.0182;
-const CREAT_UMOL_TO_MGDL = 88.4;
-const HGB_GL_TO_GDL = 0.1;
-const LB_PER_KG = 2.20462;
-const CM_PER_IN = 2.54;
-
-function roundTo(n: number, decimals: number): number {
-  const f = 10 ** decimals;
-  return Math.round(n * f) / f;
+function kindToCategory(kind: MeasurementKind): import("./measurement-domain").MeasurementCategory {
+  switch (kind) {
+    case "glucose":
+      return "glucose";
+    case "potassium":
+    case "sodium":
+    case "creatinine":
+      return "electrolytes";
+    case "hemoglobin":
+      return "hematology";
+    case "temperature":
+      return "temperature";
+    case "weight":
+      return "weight";
+    case "height":
+      return "height";
+    default:
+      return "glucose";
+  }
 }
 
-/**
- * Format a single value already expressed in **canonical SI** units for the target display system.
- */
 export function formatMeasurementFromSi(
   valueSi: number,
   kind: MeasurementKind,
   system: MeasurementSystem,
   options?: { decimals?: number; dual?: boolean },
 ): string {
-  const dual = options?.dual === true;
-  const primary = formatMeasurementFromSiPrimary(valueSi, kind, system, options?.decimals);
-  if (!dual) return primary;
-  const other: MeasurementSystem = system === "US" ? "SI" : "US";
-  const secondary = formatMeasurementFromSiPrimary(valueSi, kind, other, options?.decimals);
-  return `${primary} (≈ ${secondary})`;
-}
-
-function formatMeasurementFromSiPrimary(
-  valueSi: number,
-  kind: MeasurementKind,
-  system: MeasurementSystem,
-  decimalsOverride?: number,
-): string {
-  switch (kind) {
-    case "glucose": {
-      if (system === "US") {
-        const mg = roundTo(valueSi * GLUCOSE_MMOL_TO_MGDL, decimalsOverride ?? 0);
-        return `${mg} mg/dL`;
-      }
-      const v = roundTo(valueSi, decimalsOverride ?? 1);
-      return `${v} mmol/L`;
-    }
-    case "creatinine": {
-      if (system === "US") {
-        const mgdl = roundTo(valueSi / CREAT_UMOL_TO_MGDL, decimalsOverride ?? 2);
-        return `${mgdl} mg/dL`;
-      }
-      const umol = roundTo(valueSi, decimalsOverride ?? 0);
-      return `${umol} µmol/L`;
-    }
-    case "hemoglobin": {
-      if (system === "US") {
-        const gdl = roundTo(valueSi * HGB_GL_TO_GDL, decimalsOverride ?? 1);
-        return `${gdl} g/dL`;
-      }
-      const gl = roundTo(valueSi, decimalsOverride ?? 0);
-      return `${gl} g/L`;
-    }
-    case "potassium": {
-      const v = roundTo(valueSi, decimalsOverride ?? 1);
-      return `${v} mmol/L`;
-    }
-    case "temperature": {
-      if (system === "US") {
-        const f = roundTo((valueSi * 9) / 5 + 32, decimalsOverride ?? 1);
-        return `${f}°F`;
-      }
-      const c = roundTo(valueSi, decimalsOverride ?? 1);
-      return `${c}°C`;
-    }
-    case "weight": {
-      if (system === "US") {
-        const lb = roundTo(valueSi * LB_PER_KG, decimalsOverride ?? 1);
-        return `${lb} lb`;
-      }
-      const kg = roundTo(valueSi, decimalsOverride ?? 1);
-      return `${kg} kg`;
-    }
-    case "height": {
-      if (system === "US") {
-        const totalIn = valueSi / CM_PER_IN;
-        const ft = Math.floor(totalIn / 12);
-        const inch = roundTo(totalIn - ft * 12, decimalsOverride ?? 0);
-        return `${ft}'${inch}"`;
-      }
-      const cm = roundTo(valueSi, decimalsOverride ?? 0);
-      return `${cm} cm`;
-    }
-    default:
-      return String(valueSi);
+  const rendered = legacyToClinicalSystem(system);
+  const result = convertClinicalMeasurement({
+    valueSi,
+    category: kindToCategory(kind),
+    kind,
+    authoredSystem: "si",
+    renderedSystem: rendered,
+    options: {
+      decimalsOverride: options?.decimals,
+      showEducationalEquivalent: options?.dual === true,
+    },
+  });
+  if (result.dualShown && result.displaySecondary) {
+    return `${result.displayPrimary} (≈ ${result.displaySecondary})`;
   }
+  return result.displayPrimary;
 }
 
-/**
- * Convenience: format using a partial exam context shape.
- */
 export function formatMeasurementFromSiWithContext(
   valueSi: number,
   kind: MeasurementKind,
@@ -120,7 +65,6 @@ export function formatMeasurementFromSiWithContext(
   return formatMeasurementFromSi(valueSi, kind, ctx.measurementSystem, options);
 }
 
-/** Spec name: canonical SI numeric + kind + exam context → formatted string with units. */
 export function formatMeasurement(
   valueSi: number,
   kind: MeasurementKind,
@@ -129,3 +73,6 @@ export function formatMeasurement(
 ): string {
   return formatMeasurementFromSiWithContext(valueSi, kind, examContext, options);
 }
+
+/** @internal re-export for token layer */
+export { clinicalToLegacySystem, legacyToClinicalSystem };

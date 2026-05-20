@@ -2,9 +2,14 @@
  * LOFT simulation policy helpers.
  *
  * Distinguishes fixed-form linear licensing simulations (CNPLE-style) from
- * adaptive CAT delivery. This is intentionally lightweight so route layers,
- * session loaders, and runner shells can adopt it incrementally.
+ * adaptive CAT delivery. Delegates pathway classification to testing-model.
  */
+
+import {
+  getTestingModelForPathwayId,
+  isLoftTestingModel,
+  testingModelForPathwaySlug,
+} from "@/lib/testing/testing-model";
 
 export type LoftSimulationPolicyInput = {
   examCode?: string | null;
@@ -28,12 +33,13 @@ export function isLoftSimulationPolicy(input: LoftSimulationPolicyInput): boolea
   if (simulationKind === "loft") return true;
   if (deliveryMode === "linear_exam") return true;
 
-  // NP Canada CNPLE linear simulation.
   if (examCode === "cnple") return true;
 
-  // Safety fallback for future route naming.
+  const pathwayId = pathwaySlug || null;
+  if (pathwayId && isLoftTestingModel(testingModelForPathwaySlug(pathwayId))) return true;
+  if (pathwayId && isLoftTestingModel(getTestingModelForPathwayId(pathwayId))) return true;
+
   if (pathwaySlug.includes("cnple")) return true;
-  if (pathwaySlug.includes("simulation")) return true;
 
   return false;
 }

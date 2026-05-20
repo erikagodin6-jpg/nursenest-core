@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { ecgHubBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import {
   Activity,
   ArrowRight,
   BookOpen,
   Brain,
   CheckCircle2,
-  ChevronRight,
   ClipboardList,
   Crosshair,
   Heart,
@@ -235,9 +236,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function EcgAuthorityHubPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
+  const breadcrumbResolution = ecgHubBreadcrumbs();
+  const jsonLdGraph = [
       {
         "@type": "Article",
         "@id": `${SITE_ORIGIN}${PATH}#article`,
@@ -295,30 +295,12 @@ export default function EcgAuthorityHubPage() {
           acceptedAnswer: { "@type": "Answer", text: answer },
         })),
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${SITE_ORIGIN}${PATH}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "ECG Interpretation", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
-    ],
-  };
+  ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      {/* ── Breadcrumb ── */}
-      <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-1.5 text-xs text-[var(--semantic-text-muted)]">
-        <Link href="/" className="hover:text-[var(--semantic-brand)]">Home</Link>
-        <ChevronRight className="h-3 w-3 shrink-0" aria-hidden />
-        <span aria-current="page" className="text-[var(--semantic-text-secondary)]">ECG Interpretation</span>
-      </nav>
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
 
       {/* ── Hero ── */}
       <header className="relative overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-chart-4)_06%,var(--semantic-surface))] px-6 py-10 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:py-14">

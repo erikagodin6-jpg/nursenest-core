@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
+import { labsClinicalModuleLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { Activity, ArrowRight, BookOpen, CheckCircle2, Heart, Target, TrendingUp, Zap } from "lucide-react";
+import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
+import { labsClinicalModuleLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -166,16 +170,7 @@ export async function generateMetadata(): Promise<Metadata> {
           acceptedAnswer: { "@type": "Answer", text: item.answer },
         })),
       },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "Clinical Modules", item: `${SITE_ORIGIN}/clinical-modules` },
-          { "@type": "ListItem", position: 3, name: "Hemodynamics Monitoring", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
-    ],
+],
   });
 }
 
@@ -188,16 +183,10 @@ const LEVEL_COLOR: Record<string, string> = {
 };
 
 export default function HemodynamicsMonitoringPage() {
+  const breadcrumbResolution = labsClinicalModuleLeafBreadcrumbs("Hemodynamics Monitoring", PATH);
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-        <span aria-hidden>/</span>
-        <Link href="/clinical-modules" className="hover:text-primary transition-colors">Clinical Modules</Link>
-        <span aria-hidden>/</span>
-        <span className="text-gray-900 font-medium">Hemodynamics Monitoring</span>
-      </nav>
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
 
       {/* Hero */}
       <header className="mb-10">

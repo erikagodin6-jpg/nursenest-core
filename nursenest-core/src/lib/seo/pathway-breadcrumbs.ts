@@ -1,5 +1,13 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, marketingHubRoleSegment } from "@/lib/exam-pathways/build-exam-pathway-path";
+import {
+  learnerPathwayLessonEducationBreadcrumbs,
+  pathwayLessonDetailEducationBreadcrumbs,
+  pathwayLessonsCategoryEducationBreadcrumbs,
+  pathwayLessonsHubEducationBreadcrumbs,
+  pathwayTopicClusterEducationBreadcrumbs,
+} from "@/lib/breadcrumbs/pathway-education-breadcrumbs";
+import type { PathwayLessonCategoryBreadcrumb } from "@/lib/breadcrumbs/breadcrumb-types";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { HUB } from "@/lib/navigation/canonical-destinations";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
@@ -105,7 +113,7 @@ export function pathwayOverviewBreadcrumbs(
   return { crumbs, schemaItems };
 }
 
-/** Lessons hub for a pathway. */
+/** Lessons hub for a pathway (education-first: Home → Exam → Lessons). */
 export function pathwayLessonsHubBreadcrumbs(
   pathway: ExamPathwayDefinition,
   opts?: PathwayMarketingHubBreadcrumbOpts,
@@ -113,129 +121,52 @@ export function pathwayLessonsHubBreadcrumbs(
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const hub = opts?.hubBasePath;
-  const p = examPathwaySurfacePrefix(pathway, opts);
-  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
-  const crumbs: BreadcrumbCrumb[] = [
-    HOME,
-    p.countryCrumb(true),
-    p.roleCrumb(true),
-    p.hubCrumb(true),
-    { name: "Lessons", href: undefined, i18nKey: LESSONS_KEY },
-  ];
-  const schemaItems: BreadcrumbSchemaItem[] = [
-    HOME_ITEM,
-    p.countrySchema(),
-    p.roleSchema(),
-    p.hubSchema(),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
-  ];
-  return { crumbs, schemaItems };
+  return pathwayLessonsHubEducationBreadcrumbs(pathway, opts);
 }
 
-/** Topic cluster: … → Lessons (linked) → topic (current). */
+/** Topic cluster: Home → {Exam} → Lessons → {Topic} (education-first). */
 export function pathwayTopicClusterBreadcrumbs(
   pathway: ExamPathwayDefinition,
   topicSlug: string,
   topicLabel: string,
   opts?: PathwayMarketingHubBreadcrumbOpts,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const hub = opts?.hubBasePath;
-  const p = examPathwaySurfacePrefix(pathway, opts);
-  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
-  const topicPath = `${pathwayHubChildPath(pathway, hub, "lessons")}?topicSlug=${encodeURIComponent(topicSlug.trim().toLowerCase())}`;
-  const crumbs: BreadcrumbCrumb[] = [
-    HOME,
-    p.countryCrumb(true),
-    p.roleCrumb(true),
-    p.hubCrumb(true),
-    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
-    { name: topicLabel, href: undefined },
-  ];
-  const schemaItems: BreadcrumbSchemaItem[] = [
-    HOME_ITEM,
-    p.countrySchema(),
-    p.roleSchema(),
-    p.hubSchema(),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
-    { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) },
-  ];
-  return { crumbs, schemaItems };
+  return pathwayTopicClusterEducationBreadcrumbs(pathway, topicSlug, topicLabel, opts);
 }
 
-/** Display category hub: … → Lessons (linked) → category label (current). */
+/** Display category hub: Home → Exam → {Category} (education-first). */
 export function pathwayLessonsDisplayCategoryBreadcrumbs(
   pathway: ExamPathwayDefinition,
   categoryLabel: string,
   categoryUrlSegment: string,
   opts?: PathwayMarketingHubBreadcrumbOpts,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const hub = opts?.hubBasePath;
-  const p = examPathwaySurfacePrefix(pathway, opts);
-  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
-  const seg = categoryUrlSegment.trim().toLowerCase();
-  const categoryPath = seg ? `${lessonsPath}/${encodeURIComponent(seg)}` : lessonsPath;
-  const crumbs: BreadcrumbCrumb[] = [
-    HOME,
-    p.countryCrumb(true),
-    p.roleCrumb(true),
-    p.hubCrumb(true),
-    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
-    { name: categoryLabel, href: undefined },
-  ];
-  const schemaItems: BreadcrumbSchemaItem[] = [
-    HOME_ITEM,
-    p.countrySchema(),
-    p.roleSchema(),
-    p.hubSchema(),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
-    { name: categoryLabel, item: toAbsoluteSiteUrl(categoryPath) },
-  ];
-  return { crumbs, schemaItems };
+  const category: PathwayLessonCategoryBreadcrumb = {
+    label: categoryLabel,
+    slug: categoryUrlSegment.trim().toLowerCase(),
+  };
+  return pathwayLessonsCategoryEducationBreadcrumbs(pathway, category, opts);
 }
 
-/** Single lesson page: Home → … → Lessons → lesson title (current). */
+/** Single lesson page: Home → Exam → Category → Lesson (education-first when category supplied). */
 export function pathwayLessonDetailBreadcrumbs(
   pathway: ExamPathwayDefinition,
   lessonSlug: string,
   lessonTitle: string,
-  opts?: PathwayMarketingHubBreadcrumbOpts,
+  opts?: PathwayMarketingHubBreadcrumbOpts & {
+    category?: PathwayLessonCategoryBreadcrumb | null;
+  },
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const hub = opts?.hubBasePath;
-  const p = examPathwaySurfacePrefix(pathway, opts);
-  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
-  const lessonPath = pathwayHubChildPath(pathway, hub, `lessons/${lessonSlug}`);
-  const crumbs: BreadcrumbCrumb[] = [
-    HOME,
-    p.countryCrumb(true),
-    p.roleCrumb(true),
-    p.hubCrumb(true),
-    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
-    { name: lessonTitle, href: undefined },
-  ];
-  const schemaItems: BreadcrumbSchemaItem[] = [
-    HOME_ITEM,
-    p.countrySchema(),
-    p.roleSchema(),
-    p.hubSchema(),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
-    { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
-  ];
-  return { crumbs, schemaItems };
+  return pathwayLessonDetailEducationBreadcrumbs(pathway, lessonSlug, lessonTitle, opts?.category, opts);
 }
 
 /** `/app` pathway lesson: visible trail only (no BreadcrumbList); links to public marketing URLs. */
-export function learnerPathwayLessonBreadcrumbs(pathway: ExamPathwayDefinition, lessonTitle: string): BreadcrumbCrumb[] {
-  const p = examPathwaySurfacePrefix(pathway);
-  const lessonsPath = pathwayHubChildPath(pathway, undefined, "lessons");
-  return [
-    HOME,
-    p.countryCrumb(true),
-    p.roleCrumb(true),
-    p.hubCrumb(true),
-    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
-    { name: lessonTitle, href: undefined },
-  ];
+export function learnerPathwayLessonBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  lessonTitle: string,
+  category?: PathwayLessonCategoryBreadcrumb | null,
+): BreadcrumbCrumb[] {
+  return learnerPathwayLessonEducationBreadcrumbs(pathway, lessonTitle, category);
 }
 
 /** Marketing question bank hub for a pathway. */

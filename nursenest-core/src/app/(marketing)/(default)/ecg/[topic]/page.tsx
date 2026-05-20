@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Activity, ArrowRight } from "lucide-react";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { ecgTopicBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -69,16 +71,9 @@ export default async function EcgTopicPage({ params }: PageProps) {
   if (!page) notFound();
 
   const PATH = `/ecg/${topic}`;
-  const breadcrumbs = [
-    { name: "NurseNest", href: "/" },
-    { name: "ECG Interpretation", href: "/ecg-interpretation" },
-    { name: "ECG Topics", href: "/ecg" },
-    { name: page.h1.split(":")[0]?.trim() ?? page.title, href: PATH },
-  ];
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
+  const topicLabel = page.h1.split(":")[0]?.trim() ?? page.title;
+  const breadcrumbResolution = ecgTopicBreadcrumbs(topicLabel, PATH);
+  const jsonLdGraph = [
       {
         "@type": "Article",
         "@id": `${SITE_ORIGIN}${PATH}`,
@@ -93,15 +88,6 @@ export default async function EcgTopicPage({ params }: PageProps) {
           name: "NurseNest",
           url: SITE_ORIGIN,
         },
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: breadcrumbs.map((c, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            name: c.name,
-            item: `${SITE_ORIGIN}${c.href}`,
-          })),
-        },
       },
       {
         "@type": "FAQPage",
@@ -111,29 +97,14 @@ export default async function EcgTopicPage({ params }: PageProps) {
           acceptedAnswer: { "@type": "Answer", text: f.answer },
         })),
       },
-    ],
-  };
+    ];
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
 
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--semantic-text-muted)]">
-            {breadcrumbs.map((c, i) => (
-              <li key={c.href} className="flex items-center gap-1.5">
-                {i > 0 && <span aria-hidden>/</span>}
-                {i < breadcrumbs.length - 1 ? (
-                  <Link href={c.href} className="hover:underline">{c.name}</Link>
-                ) : (
-                  <span className="text-[var(--semantic-text-secondary)]">{c.name}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
+        <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
 
         {/* Header */}
         <header className="mb-8 space-y-4">

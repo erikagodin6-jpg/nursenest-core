@@ -12,6 +12,10 @@ import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-qu
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-readiness-floor";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import {
+  getPathwaySimulationDisplayCopy,
+  pathwayUsesLoftEngine,
+} from "@/lib/testing/testing-model";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
 
@@ -74,9 +78,34 @@ export type CatEligibilityAssessment = {
   debugDetail?: string;
 };
 
+function pathwayProductLabel(pathway: ExamPathwayDefinition): string {
+  if (pathwayUsesLoftEngine(pathway.id)) {
+    return getPathwaySimulationDisplayCopy(pathway).shortLabel;
+  }
+  return catPathwayShortCatLabel(pathway);
+}
+
+function loftPathwayCatSurfaceBlock(pathway: ExamPathwayDefinition): CatEligibilityAssessment {
+  const sim = getPathwaySimulationDisplayCopy(pathway).shortLabel;
+  const line = catPathwayRegionalExamLine(pathway);
+  const marketingCatPath = marketingCatPathForPathway(pathway);
+  return {
+    eligible: false,
+    reason: "pathway_upcoming",
+    nextAction: "browse_pathway_hub",
+    marketingPrimaryCta: "sign_in_to_cat",
+    safeUserMessage: `${sim} is linear LOFT licensing prep for ${line} — use the pathway simulation hub, not adaptive CAT.`,
+    pathway,
+    pathwayId: pathway.id,
+    marketingCatPath,
+    appCatStartPath: null,
+    logCode: "CAT_PATHWAY_UPCOMING",
+  };
+}
+
 function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatEligibilityAssessment | null {
   if (pathway.acquisitionMode === "info_only") {
-    const cat = catPathwayShortCatLabel(pathway);
+    const cat = pathwayProductLabel(pathway);
     return {
       eligible: false,
       reason: "pathway_info_only",
@@ -91,7 +120,7 @@ function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatElig
     };
   }
   if (pathway.status === "upcoming" && pathway.acquisitionMode === "waitlist") {
-    const cat = catPathwayShortCatLabel(pathway);
+    const cat = pathwayProductLabel(pathway);
     return {
       eligible: false,
       reason: "pathway_waitlist",
@@ -106,7 +135,7 @@ function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatElig
     };
   }
   if (!pathwayAllowsCatAdaptiveStart(pathway)) {
-    const cat = catPathwayShortCatLabel(pathway);
+    const cat = pathwayProductLabel(pathway);
     return {
       eligible: false,
       reason: "pathway_upcoming",
@@ -130,6 +159,9 @@ export function assessMarketingCatSurfaceWithoutAuth(
   pathway: ExamPathwayDefinition,
   questionSnapshot: PathwayQuestionBankSnapshot,
 ): CatEligibilityAssessment {
+  if (pathwayUsesLoftEngine(pathway.id)) {
+    return loftPathwayCatSurfaceBlock(pathway);
+  }
   const block = pathwayWaitlistOrUpcomingBlock(pathway);
   if (block) return block;
 
@@ -185,6 +217,10 @@ type SubscriberInput = {
 export async function assessCatEligibilityForSubscriberAndPathway(input: SubscriberInput): Promise<CatEligibilityAssessment> {
   const { userId, entitlement, pathway } = input;
   const marketingCatPath = marketingCatPathForPathway(pathway);
+
+  if (pathwayUsesLoftEngine(pathway.id)) {
+    return loftPathwayCatSurfaceBlock(pathway);
+  }
 
   if (entitlement === "error") {
     return {

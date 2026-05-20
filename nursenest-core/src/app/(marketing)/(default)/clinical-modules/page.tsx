@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { clinicalModulesHubBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { Activity, ArrowRight, FlaskConical, Stethoscope, Zap } from "lucide-react";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -143,14 +145,8 @@ const MODULES = [
 ];
 
 export default function ClinicalModulesPage() {
-  const breadcrumbs = [
-    { name: "NurseNest", href: "/" },
-    { name: "Clinical Modules", href: PATH },
-  ];
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
+  const breadcrumbResolution = clinicalModulesHubBreadcrumbs();
+  const jsonLdGraph = [
       {
         "@type": "WebPage",
         "@id": `${SITE_ORIGIN}${PATH}`,
@@ -158,15 +154,6 @@ export default function ClinicalModulesPage() {
         name: PAGE_TITLE,
         description: PAGE_DESCRIPTION,
         inLanguage: "en",
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: breadcrumbs.map((c, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            name: c.name,
-            item: `${SITE_ORIGIN}${c.href}`,
-          })),
-        },
       },
       {
         "@type": "ItemList",
@@ -179,29 +166,14 @@ export default function ClinicalModulesPage() {
           url: `${SITE_ORIGIN}${m.learnMore}`,
         })),
       },
-    ],
-  };
+    ];
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
 
       <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--semantic-text-muted)]">
-            {breadcrumbs.map((c, i) => (
-              <li key={c.href} className="flex items-center gap-1.5">
-                {i > 0 && <span aria-hidden>/</span>}
-                {i < breadcrumbs.length - 1 ? (
-                  <Link href={c.href} className="hover:underline">{c.name}</Link>
-                ) : (
-                  <span className="text-[var(--semantic-text-secondary)]">{c.name}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
+        <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
 
         {/* Header */}
         <header className="mb-10 space-y-3">

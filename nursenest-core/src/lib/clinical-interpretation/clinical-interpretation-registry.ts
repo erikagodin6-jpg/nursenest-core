@@ -154,7 +154,7 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
       marketingHrefs: [LAB_VALUES_MODULE],
     },
     schema: { faqEligible: true, learningResourceEligible: true },
-    status: "figma_pending",
+    status: "published",
     targetQueries: ["ABG interpretation", "arterial blood gas nursing", "acid base interpretation", "PaCO2 HCO3"],
   },
   {
@@ -324,7 +324,7 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
       marketingHrefs: [LAB_VALUES_MODULE],
     },
     schema: { faqEligible: true, learningResourceEligible: true },
-    status: "figma_pending",
+    status: "published",
     targetQueries: ["electrolyte interpretation", "hyperkalemia nursing", "hyponatremia nursing", "ECG electrolytes"],
   },
   {
@@ -392,7 +392,7 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
       marketingHrefs: [],
     },
     schema: { faqEligible: true, learningResourceEligible: true },
-    status: "figma_pending",
+    status: "published",
     targetQueries: ["sepsis interpretation", "lactate sepsis nursing", "septic shock nursing assessment", "qSOFA nursing"],
   },
   {
@@ -434,6 +434,10 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
 export function getClinicalInterpretationBySlug(slug: string): ClinicalInterpretationEntry | undefined {
   const key = slug.trim();
   return CLINICAL_INTERPRETATION_REGISTRY.find((e) => e.slug === key);
+}
+
+export function listPublishedClinicalInterpretationGuides(): ClinicalInterpretationEntry[] {
+  return CLINICAL_INTERPRETATION_REGISTRY.filter((e) => e.status === "published");
 }
 
 export function getClinicalInterpretationById(id: ClinicalInterpretationId): ClinicalInterpretationEntry | undefined {

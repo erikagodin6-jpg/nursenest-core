@@ -22,7 +22,8 @@ import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesso
 import { loadMarketingPathwayLessonViewerContext } from "@/lib/lessons/marketing-pathway-lesson-viewer-context.server";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { marketingPathwayLessonsIndexPath, marketingPathwayLessonsCategoryPath } from "@/lib/lessons/lesson-routes";
+import { displayCategoryForPathwayMarketingHubLesson } from "@/lib/lessons/marketing-lessons-hub-category";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
   getPathwayLessonPreviewKind,
@@ -34,8 +35,8 @@ import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-local
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
-import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
-import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
@@ -128,6 +129,10 @@ import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLessonDetailMarketingI18nLayer } from "@/components/lessons/pathway-lesson-detail-marketing-i18n-layer";
+import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
+import { PathwayLessonTopicSiblingsStrip } from "@/components/lessons/pathway-lesson-topic-siblings-strip";
+import { PathwayLessonRemediationChain } from "@/components/lessons/pathway-lesson-remediation-chain";
+import { buildLessonDetailAutomaticRelatedExcludeHrefs } from "@/lib/linking/lesson-detail-automatic-related-excludes";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -263,6 +268,14 @@ export async function PathwayLessonDetailPageBody({
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const blogHubPath = buildExamPathwayPath(pathway, "blog");
+  const pathwayQuestionsHref = buildExamPathwayPath(pathway, "questions");
+  const pathwayFlashcardsHref = buildExamPathwayPath(pathway, "flashcards");
+  const automaticRelatedExcludeHrefs = buildLessonDetailAutomaticRelatedExcludeHrefs({
+    pathway,
+    lessonSlug: lesson.slug,
+    lessonTopicSlug: lesson.topicSlug,
+    blogHubPath,
+  });
   const lessonQuizEmbed = resolveQuizEmbedQuestionsForLessonSlug(lesson.slug);
 
   const lessonProgress =
@@ -290,11 +303,15 @@ export async function PathwayLessonDetailPageBody({
   const displayLessonTitle = cleanLessonTitleForDisplay(
     seoSurface.displayTitle,
   );
-  const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(
+  const breadcrumbResolution = resolveBreadcrumbResolution({
+    kind: "pathway-lesson-detail",
+    intent: "education",
     pathway,
-    lesson.slug,
-    displayLessonTitle,
-  );
+    lesson,
+    lessonTitleDisplay: displayLessonTitle,
+  });
+  const lessonCategory = displayCategoryForPathwayMarketingHubLesson(lesson, pathway.id);
+  const lessonCategoryHubPath = marketingPathwayLessonsCategoryPath(pathway, lessonCategory.slug);
   const lessonQuality = classifyPathwayLesson(lesson);
   const contentDates =
     contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;
@@ -444,13 +461,24 @@ export async function PathwayLessonDetailPageBody({
             dateModified={contentDates?.dateModified ?? null}
             aboutOccupation={seoSurface.structuredAboutOccupation}
           />
-          <div className="sr-only">
-            <BreadcrumbBar
-              crumbs={crumbs}
-              schemaItems={schemaItems}
-              navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
-            />
-          </div>
+          <BreadcrumbsFromResolution
+            resolution={breadcrumbResolution}
+            navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
+          />
+          <p className="nn-marketing-caption -mt-2 mb-3 text-[var(--theme-muted-text)]">
+            <Link
+              href={lessonCategoryHubPath}
+              className="font-medium text-primary hover:underline [overflow-wrap:anywhere]"
+            >
+              More in {lessonCategory.label}
+            </Link>
+            <span aria-hidden className="mx-1.5 text-[var(--theme-separator)]">
+              ·
+            </span>
+            <Link href={base} className="text-primary hover:underline">
+              All {examName} lessons
+            </Link>
+          </p>
           <LessonReadingScrollProgress />
           <PathwayLessonSequenceNavBar
             adjacent={lessonAdjacentHrefs}
@@ -869,6 +897,20 @@ export async function PathwayLessonDetailPageBody({
           </div>
           <LessonStickyReviewDock enabled={fullAccess} />
 
+          <PathwayLessonTopicSiblingsStrip
+            pathway={pathway}
+            topicSlug={lesson.topicSlug}
+            topicLabel={lesson.topic}
+            excludeSlug={lesson.slug}
+          />
+
+          <PathwayLessonRemediationChain
+            pathway={pathway}
+            topicSlug={lesson.topicSlug}
+            topicLabel={lesson.topic}
+            lessonSlug={lesson.slug}
+          />
+
           <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
             <PathwayLessonDetailDeferred
               pathway={pathway}
@@ -880,6 +922,20 @@ export async function PathwayLessonDetailPageBody({
               userId={userId}
             />
           </Suspense>
+
+          <AutomaticRelatedContentForPublic
+            surface="lesson"
+            pathway={pathway}
+            lesson={{
+              slug: lesson.slug,
+              title: lesson.title,
+              topic: lesson.topic,
+              topicSlug: lesson.topicSlug,
+              bodySystem: lesson.bodySystem,
+            }}
+            locale={lessonContentLocale}
+            excludeHrefs={automaticRelatedExcludeHrefs}
+          />
 
           <div
             className="mt-8 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] px-4 py-3 text-center shadow-[var(--semantic-shadow-soft)] sm:px-5"
@@ -901,17 +957,17 @@ export async function PathwayLessonDetailPageBody({
               </Link>
               {" · "}
               <Link
-                href={HUB.flashcards}
+                href={pathwayFlashcardsHref}
                 className="font-medium text-primary hover:underline"
               >
-                Flashcards Hub
+                {examName} flashcards
               </Link>
               {" · "}
               <Link
-                href={HUB.questionBank}
+                href={pathwayQuestionsHref}
                 className="font-medium text-primary hover:underline"
               >
-                Practice Questions
+                {examName} practice questions
               </Link>
               {" · "}
               <Link

@@ -28,7 +28,6 @@ function shouldSkipPathForAccessLog(rawUrl: string): boolean {
   if (pathOnly.startsWith("/_next/static/") || pathOnly.startsWith("/_next/image")) return true;
   if (
     pathOnly === "/favicon.ico" ||
-    pathOnly === "/favicon-v2.ico" ||
     pathOnly === "/robots.txt" ||
     pathOnly === "/healthz"
   )

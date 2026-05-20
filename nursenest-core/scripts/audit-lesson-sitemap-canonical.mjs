@@ -18,7 +18,7 @@ const CATALOG_DIR = path.join(__dirname, "../src/content/pathway-lessons");
 const PATHWAY_ROUTES = {
   "ca-rn-nclex-rn": "/canada/rn/nclex-rn/lessons",
   "us-rn-nclex-rn": "/us/rn/nclex-rn/lessons",
-  "ca-rpn-rex-pn": "/canada/rpn/rex-pn/lessons",
+  "ca-rpn-rex-pn": "/canada/pn/rex-pn/lessons",
   "us-lpn-nclex-pn": "/us/lpn/nclex-pn/lessons",
   "np-us-np-fnp": "/us/np/fnp/lessons",
   "us-np-fnp": "/us/np/fnp/lessons",
