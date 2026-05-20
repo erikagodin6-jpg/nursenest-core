@@ -6,7 +6,7 @@ import {
   resolvePreferredCatPathwayId,
 } from "@/lib/exam-pathways/pathway-cat-flow";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
-import { pathwayUsesLoftEngine } from "@/lib/testing/testing-model";
+import { pathwayUsesLoftEngine } from "@/lib/testing/testing-model-pathway-map";
 
 export type StudyLoopCatAuthState = "signed_in" | "public";
 export type StudyLoopCatIntent = "start" | "weak_focus";
