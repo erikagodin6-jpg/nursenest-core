@@ -43,6 +43,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install deploy guard dependencies
+        run: |
+          npm install --prefix /tmp/deploy-guard-deps --no-save --ignore-scripts --no-audit --no-fund js-yaml@4.1.1
+          echo "NODE_PATH=/tmp/deploy-guard-deps/node_modules" >> "$GITHUB_ENV"
+
       - name: Guard DigitalOcean production domains
         run: node ../scripts/verify-digitalocean-domain-persistence.mjs
 
