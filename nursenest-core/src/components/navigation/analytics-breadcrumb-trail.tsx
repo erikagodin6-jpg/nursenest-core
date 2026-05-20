@@ -5,10 +5,6 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
 import type { BreadcrumbSurface } from "@/lib/breadcrumbs/breadcrumb-surface";
-import {
-  trackBreadcrumbClicked,
-  trackBreadcrumbRendered,
-} from "@/lib/breadcrumbs/breadcrumb-telemetry";
 import type { BreadcrumbSchemaOwner } from "@/lib/breadcrumbs/breadcrumb-schema-governance";
 import { trackNavigationEvent } from "@/lib/breadcrumbs/navigation-analytics";
 import {
@@ -37,7 +33,6 @@ export function AnalyticsBreadcrumbTrail({
   testing_model,
   interpretationChainDepth,
   glossaryTraversalContinuity,
-  schemaOwner = "none",
   breadcrumbDepth,
 }: {
   items: BreadcrumbCrumb[];
@@ -80,20 +75,6 @@ export function AnalyticsBreadcrumbTrail({
       pathname,
       pathwayId: pathwayId ?? remediationPathwayId ?? null,
       educationalIntent: psych.educationalIntent,
-    });
-    trackBreadcrumbRendered({
-      breadcrumbIntent: intent,
-      breadcrumbSurface: breadcrumbSurface ?? "unknown",
-      breadcrumbDepth: breadcrumbDepth ?? items.length,
-      canonicalRoot: canonicalRoot ?? "home",
-      schemaOwner,
-      ontologyClassification: "unknown",
-      pathname,
-      competencyId: competencyId ?? undefined,
-      topicSlug,
-      educationalIntent: psych.educationalIntent,
-      cognitionReliabilityTier: psych.cognitionReliabilityTier,
-      graphVersion: psych.graphVersion,
     });
     trackNavigationEvent({
       event: "breadcrumb_rendered",
@@ -143,19 +124,6 @@ export function AnalyticsBreadcrumbTrail({
       items={items}
       navClassName={navClassName}
       onCrumbClick={(index, crumb) => {
-        trackBreadcrumbClicked({
-          breadcrumbIntent: intent,
-          breadcrumbSurface: breadcrumbSurface ?? "unknown",
-          breadcrumbDepth: breadcrumbDepth ?? items.length,
-          canonicalRoot: canonicalRoot ?? "home",
-          schemaOwner,
-          ontologyClassification: "unknown",
-          pathname,
-          crumbIndex: index,
-          crumbLabel: crumb.name,
-          competencyId: competencyId ?? undefined,
-          topicSlug,
-        });
         const event =
           breadcrumbSurface === "remediation" || breadcrumbSurface === "post_exam"
             ? index < items.length - 1
