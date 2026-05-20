@@ -43,7 +43,6 @@ export { governCoachingReportCopy, validateRemediationRecommendation } from "@/l
 export {
   buildOrchestratedPostExamReport,
   buildEnrichedPostExamPerformanceReport,
-  loadLearnerCoachingContextForUser,
   type BuildOrchestratedPostExamInput,
 } from "@/lib/learner/rn-coaching-intelligence/coaching-orchestration";
 
