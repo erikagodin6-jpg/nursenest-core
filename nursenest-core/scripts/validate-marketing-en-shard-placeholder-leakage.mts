@@ -8,7 +8,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { scanFlatMarketingMessagesForForbiddenValues } from "../src/lib/marketing-i18n/marketing-message-value-policy.ts";
 
 const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const enDir = path.join(pkgRoot, "public", "i18n", "en");
@@ -24,6 +23,142 @@ const MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS = [
   "errors",
   "pages",
 ] as const;
+
+type FlatMessageScanHit = {
+  file: string;
+  key: string;
+  value: string;
+  reason: string;
+};
+
+const MIRROR_ROOTS = ["title", "description", "label", "question", "answer", "text", "body", "link", "lead", "kicker"] as const;
+const MARKETING_FORBIDDEN_WHOLE_VALUE_CI = new Set(
+  [
+    "label",
+    "placeholder",
+    "todo",
+    "tbd",
+    "stub",
+    "lorem",
+    "heading",
+    "eyebrow",
+    "intro",
+    "lead",
+    "kicker",
+    "title",
+    "body",
+    "link",
+    "subtitle",
+    "cta",
+    "button",
+    "copy",
+    "string",
+  ].map((s) => s.toLowerCase()),
+);
+const MARKETING_FORBIDDEN_VALUE_SUBSTRINGS = ["lorem ipsum", "<<stub", "tbd —", "{{missing", "[missing:"] as const;
+const FORBIDDEN_SHOUTY_TEMPLATE_TOKENS = new Set([
+  "LABEL",
+  "KICKER",
+  "TITLE",
+  "DESCRIPTION",
+  "LEAD",
+  "QUESTION",
+  "ANSWER",
+  "BODY",
+  "LINK",
+  "TEXT",
+  "PLACEHOLDER",
+  "CTA",
+  "BUTTON",
+  "STUB",
+  "TODO",
+  "TBD",
+]);
+
+function mirrorRootFromMessageKey(messageKey: string): string | null {
+  const segRaw = messageKey.includes(".") ? (messageKey.split(".").pop() ?? messageKey) : messageKey;
+  const seg = segRaw.toLowerCase().replace(/\d+$/u, "");
+
+  if ((MIRROR_ROOTS as readonly string[]).includes(seg)) return seg;
+
+  for (const root of MIRROR_ROOTS) {
+    if (seg.startsWith(root) && seg.length > root.length) return root;
+  }
+
+  return null;
+}
+
+function isKeyContentMirrorStub(messageKey: string, value: string): boolean {
+  const v = value.trim();
+  const root = mirrorRootFromMessageKey(messageKey);
+
+  return Boolean(v && root && v.toLowerCase() === root);
+}
+
+function isForbiddenShoutyTemplateToken(value: string): boolean {
+  const t = value.trim();
+  return /^[A-Z0-9_]{3,40}$/u.test(t) && FORBIDDEN_SHOUTY_TEMPLATE_TOKENS.has(t);
+}
+
+function marketingShardUsesStrictPublicPageLeafPolicy(fileLabel: string): boolean {
+  return fileLabel === "en/pages.json";
+}
+
+function scanFlatMarketingMessagesForForbiddenValues(
+  fileLabel: string,
+  messages: Record<string, unknown>,
+): FlatMessageScanHit[] {
+  const hits: FlatMessageScanHit[] = [];
+  const strictLeafPolicy = marketingShardUsesStrictPublicPageLeafPolicy(fileLabel);
+
+  for (const [key, val] of Object.entries(messages)) {
+    if (typeof val !== "string") continue;
+
+    const t = val.trim();
+    if (!t) continue;
+
+    let substringHit: string | null = null;
+    for (const sub of MARKETING_FORBIDDEN_VALUE_SUBSTRINGS) {
+      if (t.toLowerCase().includes(sub.toLowerCase())) {
+        substringHit = sub;
+        break;
+      }
+    }
+    if (substringHit) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: `forbidden substring "${substringHit}"`,
+      });
+      continue;
+    }
+
+    if (isForbiddenShoutyTemplateToken(t)) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: "invalid marketing copy",
+      });
+      continue;
+    }
+
+    if (
+      strictLeafPolicy &&
+      (isKeyContentMirrorStub(key, t) || MARKETING_FORBIDDEN_WHOLE_VALUE_CI.has(t.toLowerCase()))
+    ) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: "invalid marketing copy",
+      });
+    }
+  }
+
+  return hits;
+}
 
 function main() {
   if (!fs.existsSync(enDir)) {
