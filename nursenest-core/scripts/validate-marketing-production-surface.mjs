@@ -240,7 +240,7 @@ function readJson(filePath) {
 function assertLayoutSingleChrome() {
   const src = fs.readFileSync(DEFAULT_MARKETING_LAYOUT, "utf8");
   const footers = src.match(/<SiteFooter\b/g) ?? [];
-  const headers = src.match(/<SiteHeader\b/g) ?? [];
+  const headers = src.match(/<SiteHeader(?:Server)?\b/g) ?? [];
   // The default marketing layout has one normal footer plus optional static-home and failsafe branches.
   // Guard against accidental duplicate chrome without rejecting mutually exclusive render paths.
   if (footers.length < 1 || footers.length > 3) {
