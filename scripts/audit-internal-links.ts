@@ -9,7 +9,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
+import * as marketingLanguagesModule from "../nursenest-core/src/lib/i18n/marketing-languages";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -150,7 +150,40 @@ function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean 
 }
 
 const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
-const MARKETING_LOCALE_CODES = MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
+const MARKETING_LOCALE_CODES = (
+  Array.isArray(marketingLanguagesModule.MARKETING_LANGUAGES)
+    ? marketingLanguagesModule.MARKETING_LANGUAGES.map((l) => l.code)
+    : [
+        "en",
+        "fr",
+        "es",
+        "tl",
+        "hi",
+        "ta",
+        "te",
+        "bn",
+        "mr",
+        "gu",
+        "zh",
+        "zh-tw",
+        "ar",
+        "ko",
+        "pt",
+        "pa",
+        "vi",
+        "ht",
+        "ur",
+        "ja",
+        "fa",
+        "de",
+        "th",
+        "tr",
+        "id",
+        "it",
+        "hu",
+        "ru",
+      ]
+) as readonly string[];
 
 /** Second segment allowed under /{locale}/ for non-programmatic marketing routes (static pages). */
 const LOCALE_STATIC_SECONDS = new Set([
