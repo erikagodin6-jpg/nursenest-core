@@ -440,6 +440,20 @@ export async function applyStripeWebhookEvent(
     const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.userId ?? session.client_reference_id ?? undefined;
     const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
+    const sessionEmail =
+      session.customer_email ??
+      (session.customer_details && typeof session.customer_details === "object"
+        ? (session.customer_details as { email?: string | null }).email
+        : null) ??
+      null;
+    safeServerLog("stripe_webhook", "checkout_session_processing", {
+      eventIdPrefix,
+      correlation,
+      subscriptionIdPrefix: subId?.slice(0, 14) ?? "",
+      customerEmail: sessionEmail ? sessionEmail.slice(0, 60) : "",
+      mode: session.mode ?? "",
+      severity: "info",
+    });
     if (userId && subId) {
       const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
       const durationMeta = session.metadata?.duration ?? undefined;
@@ -854,6 +868,15 @@ export async function applyStripeWebhookEvent(
     const billingReason = (invoice as Stripe.Invoice & { billing_reason?: string | null }).billing_reason;
     const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
     const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
+    const invoiceEmail = (invoice as Stripe.Invoice & { customer_email?: string | null }).customer_email ?? null;
+    safeServerLog("stripe_webhook", "invoice_payment_succeeded_processing", {
+      eventIdPrefix,
+      correlation,
+      subscriptionIdPrefix: subId?.slice(0, 14) ?? "",
+      customerEmail: invoiceEmail ? invoiceEmail.slice(0, 60) : "",
+      billingReason: billingReason ?? "",
+      severity: "info",
+    });
     if (subId) {
       let invoiceStripeSubscription: Stripe.Subscription | null = null;
       const row = await prisma.subscription.findUnique({
@@ -1082,6 +1105,23 @@ export async function applyStripeWebhookEvent(
     const invoice = event.data.object as Stripe.Invoice;
     const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
     const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
+    const failedInvoiceEmail = (invoice as Stripe.Invoice & { customer_email?: string | null }).customer_email ?? null;
+    const failureMsg = (invoice as Stripe.Invoice & { last_payment_error?: { message?: string | null } | null })
+      .last_payment_error?.message ?? null;
+    console.error("[NurseNest] invoice.payment_failed received", {
+      eventIdPrefix,
+      subscriptionIdPrefix: subId?.slice(0, 14) ?? "",
+      customerEmail: failedInvoiceEmail ?? "",
+      failureReason: failureMsg?.slice(0, 120) ?? "—",
+    });
+    safeServerLog("stripe_webhook", "invoice_payment_failed_processing", {
+      eventIdPrefix,
+      correlation,
+      subscriptionIdPrefix: subId?.slice(0, 14) ?? "",
+      customerEmail: failedInvoiceEmail ? failedInvoiceEmail.slice(0, 60) : "",
+      failureReason: failureMsg?.slice(0, 120) ?? "",
+      severity: "error",
+    });
     if (subId) {
       const row = await prisma.subscription.findUnique({
         where: { stripeSubscriptionId: subId },
@@ -1123,6 +1163,7 @@ export async function applyStripeWebhookEvent(
           customerId: row.stripeCustomerId ?? null,
           planTierLabel: row.planTier != null ? String(row.planTier) : null,
           correlation,
+          customerEmail: (invoice as Stripe.Invoice & { customer_email?: string | null }).customer_email ?? null,
         });
         logBillingTransition({
           kind: "invoice_payment_failed",

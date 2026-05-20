@@ -259,7 +259,8 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
       });
     }
   } else {
-    safeServerLog(LOG_SCOPE, "email_skipped", { reason: "ADMIN_SUBSCRIPTION_NOTIFY_EMAIL unset", severity: "warning" });
+    console.error("[NurseNest][CRITICAL] ADMIN_SUBSCRIPTION_NOTIFY_EMAIL is not set — checkout notification email skipped.");
+    safeServerLog(LOG_SCOPE, "email_skipped", { reason: "ADMIN_SUBSCRIPTION_NOTIFY_EMAIL unset", severity: "error" });
   }
 
   if (notifyPhone) {
@@ -277,7 +278,7 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
       });
     }
   } else {
-    safeServerLog(LOG_SCOPE, "sms_skipped", { reason: "ADMIN_SUBSCRIPTION_NOTIFY_PHONE unset", severity: "warning" });
+    safeServerLog(LOG_SCOPE, "sms_skipped", { reason: "ADMIN_SUBSCRIPTION_NOTIFY_PHONE unset", severity: "info" });
   }
 }
 
@@ -467,6 +468,7 @@ export type ScheduleInvoicePaymentFailedArgs = {
   customerId: string | null;
   planTierLabel: string | null;
   correlation: string;
+  customerEmail?: string | null;
 };
 
 /**
@@ -479,7 +481,7 @@ export function scheduleOwnerInvoicePaymentFailedNotification(args: ScheduleInvo
     eventIdPrefix: args.event.id.slice(0, 12),
     correlation: args.correlation,
     subscriptionIdPrefix: args.subscriptionId.slice(0, 14),
-    severity: "warning",
+    severity: "error",
   });
   after(async () => {
     try {
@@ -499,10 +501,37 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
   if (!notifyEmail && !notifyPhone) {
     console.error(
       "[NurseNest][CRITICAL] Invoice payment FAILED notification dropped — neither ADMIN_SUBSCRIPTION_NOTIFY_EMAIL nor ADMIN_SUBSCRIPTION_NOTIFY_PHONE is set.",
-      { eventIdPrefix: args.event.id.slice(0, 12) },
+      { eventIdPrefix: args.event.id.slice(0, 12), userId: args.userId, subscriptionId: args.subscriptionId },
     );
     return;
   }
+
+  // Resolve customer email — prefer inline invoice field, fall back to Stripe customer lookup
+  let customerEmail = args.customerEmail?.trim() || null;
+  if (!customerEmail) {
+    const rawEmail = (args.invoice as Stripe.Invoice & { customer_email?: string | null }).customer_email;
+    customerEmail = typeof rawEmail === "string" && rawEmail.trim() ? rawEmail.trim() : null;
+  }
+  if (!customerEmail && args.customerId) {
+    try {
+      const customer = await args.stripe.customers.retrieve(args.customerId);
+      if (!customer.deleted && "email" in customer && typeof customer.email === "string" && customer.email.trim()) {
+        customerEmail = customer.email.trim();
+      }
+    } catch {
+      // non-blocking
+    }
+  }
+
+  // Failure reason and next retry from invoice
+  const failureMessage =
+    (args.invoice as Stripe.Invoice & { last_payment_error?: { message?: string | null } | null })
+      .last_payment_error?.message ?? null;
+  const nextPaymentAttempt =
+    (args.invoice as Stripe.Invoice & { next_payment_attempt?: number | null }).next_payment_attempt;
+  const nextRetryIso = typeof nextPaymentAttempt === "number"
+    ? new Date(nextPaymentAttempt * 1000).toISOString()
+    : null;
 
   const currency = args.invoice.currency ?? "usd";
   const amountDue = typeof args.invoice.amount_due === "number" ? formatMoney(args.invoice.amount_due, currency) : "—";
@@ -510,8 +539,11 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
   const lines = [
     `PAYMENT FAILED — subscription invoice`,
     ``,
+    `Customer email: ${customerEmail ?? "—"}`,
     `User id: ${args.userId}`,
     `Amount due: ${amountDue}`,
+    `Failure reason: ${failureMessage ?? "—"}`,
+    `Next retry (UTC): ${nextRetryIso ?? "—"}`,
     `Plan tier: ${args.planTierLabel ?? "—"}`,
     `Subscription id: ${args.subscriptionId}`,
     `Customer id: ${args.customerId ?? "—"}`,
@@ -521,7 +553,7 @@ async function runOwnerInvoicePaymentFailedNotificationsJob(args: ScheduleInvoic
   ];
   const textBody = lines.join("\n");
   const htmlBody = `<pre style="white-space:pre-wrap;font-family:system-ui,monospace;font-size:14px;color:#dc2626;">${textBody.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</pre>`;
-  const smsBody = `NurseNest PAYMENT FAILED: ${amountDue} | user ${args.userId.slice(0, 8)}… | sub ${args.subscriptionId.slice(0, 12)}…`;
+  const smsBody = `NurseNest PAYMENT FAILED: ${amountDue} | ${customerEmail ?? args.userId.slice(0, 8) + "…"} | sub ${args.subscriptionId.slice(0, 12)}… | reason: ${failureMessage?.slice(0, 80) ?? "—"} | retry: ${nextRetryIso?.slice(0, 16) ?? "—"}`;
 
   if (notifyEmail) {
     try {
