@@ -3,7 +3,7 @@ import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-sc
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { pathwayUsesCatEngine } from "@/lib/testing/testing-model";
+import { pathwayUsesCatEngine } from "@/lib/testing/testing-model-pathway-map";
 
 /**
  * Whether pathway-scoped adaptive (CAT) **practice** may be started for this catalog row.
