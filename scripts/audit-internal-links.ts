@@ -8,7 +8,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
+import * as programmaticRegistryModule from "../nursenest-core/src/lib/seo/programmatic-registry";
 import * as marketingLanguagesModule from "../nursenest-core/src/lib/i18n/marketing-languages";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -149,7 +149,7 @@ function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean 
   return patterns.some((p) => matchPattern(p.tokens, parts, 0, 0));
 }
 
-const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
+const PROGRAMMATIC_SLUGS = new Set(programmaticRegistryModule.getAllProgrammaticSlugs());
 const MARKETING_LOCALE_CODES = marketingLanguagesModule.MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
 
 /** Second segment allowed under /{locale}/ for non-programmatic marketing routes (static pages). */
