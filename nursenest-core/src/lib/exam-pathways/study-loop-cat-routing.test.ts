@@ -73,6 +73,30 @@ describe("resolveStudyLoopCatDestination", () => {
     assert.equal(destination.isPathwayScoped, false);
   });
 
+  it("routes CNPLE to LOFT simulation (not CAT) when signed in", () => {
+    const destination = resolveStudyLoopCatDestination({
+      authState: "signed_in",
+      pathwayId: "ca-np-cnple",
+      intent: "start",
+    });
+
+    assert.equal(destination.kind, "app_loft_simulation");
+    assert.equal(destination.href, "/app/cases/cnple");
+    assert.equal(destination.pathwayId, "ca-np-cnple");
+  });
+
+  it("routes CNPLE public users to marketing simulation hub", () => {
+    const destination = resolveStudyLoopCatDestination({
+      authState: "public",
+      pathwayId: "ca-np-cnple",
+      intent: "start",
+    });
+
+    assert.equal(destination.kind, "public");
+    assert.match(destination.href, /\/canada\/np\/cnple\/simulation/);
+    assert.equal(destination.pathwayId, "ca-np-cnple");
+  });
+
   it("uses the public exam-selection surface when logged-out pathway context is missing", () => {
     const destination = resolveStudyLoopCatDestination({
       authState: "public",

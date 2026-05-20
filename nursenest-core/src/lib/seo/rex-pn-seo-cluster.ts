@@ -6,12 +6,13 @@
  * NurseNest is an independent prep platform and is not affiliated with CNA or CNO.
  */
 
-export const REX_PN_HUB = "/canada/rpn/rex-pn" as const;
-export const REX_PN_QUESTIONS = "/canada/rpn/rex-pn/questions" as const;
-export const REX_PN_STUDY_GUIDE = "/canada/rpn/rex-pn/study-guide" as const;
-export const REX_PN_CAT = "/canada/rpn/rex-pn/cat" as const;
-export const REX_PN_PHARMACOLOGY = "/canada/rpn/rex-pn/pharmacology" as const;
-export const REX_PN_CLIENT_NEEDS = "/canada/rpn/rex-pn/client-needs" as const;
+/** Legacy RPN marketing aliases — prefer canonical `/canada/pn/rex-pn` (301 from `/canada/rpn/rex-pn/*`). */
+export const REX_PN_HUB = "/canada/pn/rex-pn" as const;
+export const REX_PN_QUESTIONS = "/canada/pn/rex-pn/questions" as const;
+export const REX_PN_STUDY_GUIDE = "/canada/pn/rex-pn/study-guide" as const;
+export const REX_PN_CAT = "/canada/pn/rex-pn/cat" as const;
+export const REX_PN_PHARMACOLOGY = "/canada/pn/rex-pn/pharmacology" as const;
+export const REX_PN_CLIENT_NEEDS = "/canada/pn/rex-pn/client-needs" as const;
 
 export const REX_PN_CLUSTER = {
   hub: REX_PN_HUB,

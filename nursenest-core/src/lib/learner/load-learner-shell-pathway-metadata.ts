@@ -7,6 +7,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { learnerPathwayHubChromeHref } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { countryLabelFromSlug, formatRoleTrackLabel } from "@/lib/seo/breadcrumb-utils";
+import {
+  getLearnerExamsSurfaceLabel,
+  type LearnerExamsSurfaceLabel,
+} from "@/lib/testing/testing-model";
 
 export type LearnerPathwayNavMetadata = {
   showBaselinePrompt: boolean;
@@ -15,7 +19,7 @@ export type LearnerPathwayNavMetadata = {
   pathwayHubHref: string | null;
   /** e.g. "RN • United States • NCLEX-RN" — derived from pathway registry, no extra queries. */
   pathwayContextBar: string | null;
-  examsLabel: "CAT Exams" | "Exams";
+  examsLabel: LearnerExamsSurfaceLabel;
 };
 
 /** Visible pathway context (tier · country · exam short name). */
@@ -58,7 +62,7 @@ export function isLearnerPathwayNavMetadata(v: unknown): v is LearnerPathwayNavM
     (o.pathwayShortLabel === null || typeof o.pathwayShortLabel === "string") &&
     (o.pathwayHubHref === null || typeof o.pathwayHubHref === "string") &&
     (o.pathwayContextBar === null || typeof o.pathwayContextBar === "string") &&
-    (o.examsLabel === "CAT Exams" || o.examsLabel === "Exams")
+    (o.examsLabel === "CAT Exams" || o.examsLabel === "Exams" || o.examsLabel === "LOFT Simulation")
   );
 }
 
@@ -87,7 +91,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
   let pathwayId: string | null = null;
   let pathwayHubHref: string | null = null;
   let pathwayContextBar: string | null = null;
-  let examsLabel: "CAT Exams" | "Exams" = "Exams";
+  let examsLabel: LearnerExamsSurfaceLabel = "Exams";
 
   if (u != null) {
     const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
@@ -102,14 +106,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       if (visiblePathway) {
         pathwayHubHref = learnerPathwayHubChromeHref(visiblePathway);
         pathwayContextBar = formatPathwayContextBar(visiblePathway);
-        if (
-          visiblePathway.roleTrack === "rn" ||
-          visiblePathway.roleTrack === "rpn" ||
-          visiblePathway.roleTrack === "lpn" ||
-          visiblePathway.roleTrack === "np"
-        ) {
-          examsLabel = "CAT Exams";
-        }
+        examsLabel = getLearnerExamsSurfaceLabel(visiblePathway.id);
       }
     } else if (u.alliedProfessionKey) {
       const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";

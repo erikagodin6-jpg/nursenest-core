@@ -22,7 +22,6 @@ import type {
   PracticeTestResultsJson,
 } from "@/lib/practice-tests/types";
 import { CatLiveTransparencyStrip } from "@/components/student/cat-live-transparency-strip";
-import { CatResultsCoachSection } from "@/components/student/cat-results-coach-section";
 import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-panel";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
@@ -90,10 +89,12 @@ import {
 import { StudyPlanFromResults } from "@/components/study/study-plan";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
-import { ResultsSummary } from "@/components/study/cat-results-summary";
+import { PostExamAdaptiveReport } from "@/components/student/post-exam-adaptive-report";
+import type { PostExamQuestionOutcome } from "@/lib/learner/post-exam-performance-report";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
@@ -212,13 +213,32 @@ export function PracticeTestRunnerClient({
   const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
   const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
+  const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
+  const [catMode, setCatMode] = useState(false);
+  const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
+  const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
+  const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<number[]>([]);
+  const [catLiveTransparency, setCatLiveTransparency] = useState(false);
+  /**
+   * CAT exam (test) mode UI phase — explicit submit → lock → single `cat_advance` per transition.
+   * Study mode ignores this; server contract is unchanged (`action: "cat_advance"`).
+   */
+  const [catExamUiPhase, setCatExamUiPhase] = useState<CatExamUiPhase>("answering");
+  const catExamUiPhaseRef = useRef<CatExamUiPhase>("answering");
+  const catExamAdvanceButtonRef = useRef<HTMLButtonElement | null>(null);
+  /** When true, after the next item loads we move focus to the first option (keyboard-driven flow). */
+  const catExamKeyboardAdvanceRef = useRef(false);
+  /** Dedupes rapid Enter / Space activation (OS key-repeat). */
+  const catExamPrimaryActionGateMsRef = useRef(0);
+  const [saving, setSaving] = useState(false);
 
   const activePathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? initialPathwaySurface?.id ?? null;
   const pathwayCountryByPathwayId = useMemo(() => {
     const map: Record<string, string> = {};
     for (const surf of [pathwaySurface, initialPathwaySurface]) {
       if (!surf) continue;
-      map[surf.id] = surf.countrySlug === "us" ? "US" : surf.countrySlug === "ca" ? "CA" : "US";
+      const pathway = getExamPathwayById(surf.id);
+      if (pathway) map[surf.id] = String(pathway.countryCode);
     }
     return map;
   }, [pathwaySurface, initialPathwaySurface]);
@@ -238,24 +258,6 @@ export function PracticeTestRunnerClient({
       disabled={saving || qLoading}
     />
   );
-  const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
-  const [catMode, setCatMode] = useState(false);
-  const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
-  const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
-  const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<number[]>([]);
-  const [catLiveTransparency, setCatLiveTransparency] = useState(false);
-  /**
-   * CAT exam (test) mode UI phase — explicit submit → lock → single `cat_advance` per transition.
-   * Study mode ignores this; server contract is unchanged (`action: "cat_advance"`).
-   */
-  const [catExamUiPhase, setCatExamUiPhase] = useState<CatExamUiPhase>("answering");
-  const catExamUiPhaseRef = useRef<CatExamUiPhase>("answering");
-  const catExamAdvanceButtonRef = useRef<HTMLButtonElement | null>(null);
-  /** When true, after the next item loads we move focus to the first option (keyboard-driven flow). */
-  const catExamKeyboardAdvanceRef = useRef(false);
-  /** Dedupes rapid Enter / Space activation (OS key-repeat). */
-  const catExamPrimaryActionGateMsRef = useRef(0);
-  const [saving, setSaving] = useState(false);
   const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
   const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
   /** Bumps when user retries a failed per-question fetch (effect deps exclude full cache). */
@@ -1674,6 +1676,26 @@ export function PracticeTestRunnerClient({
     const linearFbAccuracyPct =
       linearFbCount > 0 ? Math.round((linearFbCorrect / linearFbCount) * 100) : 0;
 
+    const incorrectSet = new Set(results.incorrectQuestionIds ?? []);
+    const postExamQuestionOutcomes: PostExamQuestionOutcome[] = [];
+    for (let i = 0; i < questionIds.length; i++) {
+      const qid = questionIds[i];
+      if (!qid) continue;
+      const fb = linearPracticeFeedback[qid];
+      const q = questionCache[qid];
+      let isCorrect: boolean | null = null;
+      if (fb != null) isCorrect = fb.isCorrect;
+      else if (incorrectSet.size > 0) isCorrect = !incorrectSet.has(qid);
+      if (isCorrect == null) continue;
+      postExamQuestionOutcomes.push({
+        questionId: qid,
+        isCorrect,
+        questionType: q?.questionType ?? null,
+        topic: q?.topic ?? null,
+        tags: q?.tags ?? null,
+      });
+    }
+
     return (
       <div
         {...(catMode
@@ -1682,13 +1704,26 @@ export function PracticeTestRunnerClient({
             ? { "data-nn-qa-practice-exam-results-root": "" }
             : {})}
       >
-        {/* ── Spec §7 structured results ─────────────────────────── */}
-        <ResultsSummary
-          results={results}
-          testId={testId}
-          elapsedMs={savedElapsedMs}
-          pathwayId={testConfig?.pathwayId ?? null}
-        />
+        {/* ── Post-exam adaptive performance report ─────────────── */}
+        <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
+          <PostExamAdaptiveReport
+            results={results}
+            testId={testId}
+            config={testConfig}
+            pathwayId={testConfig?.pathwayId ?? null}
+            elapsedMs={savedElapsedMs}
+            timedMode={timedMode}
+            timeLimitSec={timeLimitSec}
+            questionOutcomes={postExamQuestionOutcomes}
+            confidenceByQuestionId={confidence}
+            learnerUserId={userId ?? null}
+            isEntitled={isEntitled}
+            onOpenTeachingReview={
+              teachingReviewItems === null ? () => void loadTeachingReview() : undefined
+            }
+            teachingReviewLoading={teachingReviewLoading}
+          />
+        </div>
 
         {!results.catReport && linearFbCount > 0 ? (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
@@ -1837,17 +1872,6 @@ export function PracticeTestRunnerClient({
           </div>
         )}
 
-        {/* ── Coach card (CAT-specific, premium) ──────────────────── */}
-        {results.catReport ? (
-          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-            <CatResultsCoachSection
-              coach={results.catCoach}
-              catExamFeedbackMode={results.catExamFeedbackMode ?? testConfig?.catExamFeedbackMode ?? null}
-              pathwayId={testConfig?.pathwayId ?? null}
-            />
-          </div>
-        ) : null}
-
         {/* ── Study loop next card ─────────────────────────────────── */}
         {adaptivePlanEnabled ? (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
@@ -1855,35 +1879,18 @@ export function PracticeTestRunnerClient({
           </div>
         ) : null}
 
-        {/* ── Teaching review (post-exam rationale access) ─────────── */}
-        <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-          <div className="nn-cat-question-card nn-premium-cat-results-panel space-y-3 border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] shadow-sm">
-            <h3 className="font-semibold text-[var(--semantic-text-primary)]">
-              Teaching review
-            </h3>
-            <p className="text-sm text-[var(--semantic-text-secondary)]">
-              {testConfig?.catAdaptiveSessionType === "practice"
-                ? "Guided adaptive sessions may show teaching notes between items. Open the full breakdown for consolidated review, distractors, and figures."
-                : "Licensing-style CAT keeps rationales and answer keys out of the live session. Open the full breakdown below when you are ready to debrief."}
-            </p>
-            {teachingReviewItems === null ? (
-              <button
-                type="button"
-                disabled={teachingReviewLoading}
-                className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold disabled:opacity-50"
-                onClick={() => void loadTeachingReview()}
-              >
-                {teachingReviewLoading ? "Loading…" : "Open teaching review"}
-              </button>
-            ) : teachingReviewItems.length === 0 ? (
-              <p className="text-sm text-[var(--semantic-text-muted)]">
-                No review items available for this session.
-              </p>
-            ) : (
+        {teachingReviewItems != null && teachingReviewItems.length > 0 ? (
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
+            <div className="nn-cat-question-card nn-premium-cat-results-panel space-y-3 border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] shadow-sm">
+              <h3 className="font-semibold text-[var(--semantic-text-primary)]">Teaching review</h3>
               <PracticeTestTeachingReviewPanel items={teachingReviewItems} />
-            )}
+            </div>
           </div>
-        </div>
+        ) : teachingReviewItems != null && teachingReviewItems.length === 0 ? (
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
+            <p className="text-sm text-[var(--semantic-text-muted)]">No review items available for this session.</p>
+          </div>
+        ) : null}
 
         {/* ── Study notes ─────────────────────────────────────────── */}
         <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">

@@ -3,6 +3,12 @@
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
 import { commitMeasurementPreferenceToProfile } from "@/lib/measurements/commit-measurement-preference-to-profile";
+import {
+  buildMeasurementAnalyticsPayload,
+  trackMeasurementAnalytics,
+} from "@/lib/measurements/measurement-analytics";
+import { legacyToClinicalSystem } from "@/lib/measurements/measurement-domain";
+import { getPathwayMeasurementPolicy } from "@/lib/measurements/pathway-measurement-policy";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 
 /**
@@ -14,12 +20,16 @@ export function ExamMeasurementUnitToggle({
   syncToProfile = true,
   className = "",
   disabled = false,
+  pathwayId = null,
+  analyticsSurface,
 }: {
   fallbackSystem: MeasurementSystem;
   initialPreference?: MeasurementPreference | null;
   syncToProfile?: boolean;
   className?: string;
   disabled?: boolean;
+  pathwayId?: string | null;
+  analyticsSurface?: string;
 }) {
   const { preference, setPreference } = useMeasurementPreference(fallbackSystem, initialPreference);
 
@@ -28,6 +38,17 @@ export function ExamMeasurementUnitToggle({
     if (syncToProfile) {
       void commitMeasurementPreferenceToProfile(next);
     }
+    const policy = getPathwayMeasurementPolicy(pathwayId);
+    void trackMeasurementAnalytics(
+      buildMeasurementAnalyticsPayload({
+        event: "measurement_toggle_session",
+        pathwayId,
+        instructionalSystem: policy.instructionalSystem,
+        renderedSystem: legacyToClinicalSystem(next === "imperial" ? "US" : "SI"),
+        measurementContext: policy.measurementContext,
+        surface: analyticsSurface,
+      }),
+    );
   }
 
   return (

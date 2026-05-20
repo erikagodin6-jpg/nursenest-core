@@ -15,7 +15,13 @@ export type ClinicalInterpretationId =
   | "electrolyte-interpretation"
   | "fluid-overload-vs-dehydration"
   | "sepsis-interpretation"
-  | "hemodynamic-interpretation";
+  | "hemodynamic-interpretation"
+  | "cbc-patterns"
+  | "coagulation-interpretation"
+  | "renal-lab-trends"
+  | "liver-lab-patterns"
+  | "ventilator-interpretation"
+  | "acid-base-progression";
 
 export type ClinicalInterpretationCategory =
   | "acid_base"
@@ -154,7 +160,7 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
       marketingHrefs: [LAB_VALUES_MODULE],
     },
     schema: { faqEligible: true, learningResourceEligible: true },
-    status: "figma_pending",
+    status: "published",
     targetQueries: ["ABG interpretation", "arterial blood gas nursing", "acid base interpretation", "PaCO2 HCO3"],
   },
   {
@@ -324,7 +330,7 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
       marketingHrefs: [LAB_VALUES_MODULE],
     },
     schema: { faqEligible: true, learningResourceEligible: true },
-    status: "figma_pending",
+    status: "published",
     targetQueries: ["electrolyte interpretation", "hyperkalemia nursing", "hyponatremia nursing", "ECG electrolytes"],
   },
   {
@@ -392,7 +398,7 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
       marketingHrefs: [],
     },
     schema: { faqEligible: true, learningResourceEligible: true },
-    status: "figma_pending",
+    status: "published",
     targetQueries: ["sepsis interpretation", "lactate sepsis nursing", "septic shock nursing assessment", "qSOFA nursing"],
   },
   {
@@ -429,11 +435,159 @@ export const CLINICAL_INTERPRETATION_REGISTRY: readonly ClinicalInterpretationEn
     status: "figma_pending",
     targetQueries: ["hemodynamic interpretation", "MAP nursing", "shock nursing assessment", "vasopressor nursing"],
   },
+  {
+    id: "cbc-patterns",
+    slug: "cbc-patterns",
+    category: "laboratory",
+    seoTitle: "CBC Patterns for Nurses | Anemia, Infection & Platelet Clues",
+    metaDescription:
+      "Interpret CBC trends for nursing judgment: hemoglobin patterns, WBC shifts, platelet risk, and when to escalate — linked to assessment and transfusion safety.",
+    h1: "CBC Pattern Interpretation for Nurses",
+    segmentation: {
+      freeHighlights: ["Hgb/Hct anemia framing", "WBC left shift basics", "Platelet thresholds and bleeding risk"],
+      premiumHighlights: ["Oncology CBC trajectories", "Transfusion decision support drills"],
+    },
+    difficulty: "intermediate",
+    examRelevance: ["nclex_rn", "new_grad", "clinical_practice"],
+    related: {
+      lessonSlugs: [],
+      topicSlugs: ["hematology", "infection"],
+      appToolHrefs: [LABS_HUB, LAB_DRILLS, REPORT_CARD],
+      marketingHrefs: [LAB_VALUES_MODULE],
+    },
+    schema: { faqEligible: true, learningResourceEligible: true },
+    status: "draft",
+    targetQueries: ["CBC interpretation nursing", "low hemoglobin nursing", "platelet nursing"],
+  },
+  {
+    id: "coagulation-interpretation",
+    slug: "coagulation-interpretation",
+    category: "laboratory",
+    seoTitle: "Coagulation Labs for Nurses | INR, aPTT & Bleeding Risk",
+    metaDescription:
+      "Coagulation interpretation for nurses: INR, aPTT, anticoagulant monitoring, and bleeding precautions tied to prioritization and safety.",
+    h1: "Coagulation Interpretation for Nurses",
+    segmentation: {
+      freeHighlights: ["INR vs aPTT purpose", "Anticoagulant monitoring basics"],
+      premiumHighlights: ["Heparin drip titration scenarios", "Reversal and escalation cases"],
+    },
+    difficulty: "intermediate",
+    examRelevance: ["nclex_rn", "clinical_practice"],
+    related: {
+      lessonSlugs: [],
+      topicSlugs: ["anticoagulation", "pharmacology"],
+      appToolHrefs: [LABS_HUB, MED_CALC, REPORT_CARD],
+      marketingHrefs: [],
+    },
+    schema: { faqEligible: true, learningResourceEligible: true },
+    status: "draft",
+    targetQueries: ["INR nursing", "aPTT nursing", "anticoagulation monitoring"],
+  },
+  {
+    id: "renal-lab-trends",
+    slug: "renal-lab-trends",
+    category: "laboratory",
+    seoTitle: "Renal Lab Trends for Nurses | Creatinine, BUN & AKI Clues",
+    metaDescription:
+      "Renal lab interpretation: creatinine trends, BUN/creatinine ratio intuition, urine output context, and AKI nursing priorities.",
+    h1: "Renal Lab Trend Interpretation for Nurses",
+    segmentation: {
+      freeHighlights: ["Creatinine trend basics", "Urine output and perfusion links"],
+      premiumHighlights: ["AKI staging drills", "Contrast and nephrotoxin case sets"],
+    },
+    difficulty: "intermediate",
+    examRelevance: ["nclex_rn", "new_grad"],
+    related: {
+      lessonSlugs: [],
+      topicSlugs: ["acute-kidney-injury", "fluid-balance"],
+      appToolHrefs: [LABS_HUB, LABS_HUB, REPORT_CARD],
+      marketingHrefs: [LAB_VALUES_MODULE],
+    },
+    schema: { faqEligible: true, learningResourceEligible: true },
+    status: "draft",
+    targetQueries: ["renal labs nursing", "creatinine nursing", "AKI labs"],
+  },
+  {
+    id: "liver-lab-patterns",
+    slug: "liver-lab-patterns",
+    category: "laboratory",
+    seoTitle: "Liver Labs for Nurses | AST, ALT, Bilirubin & Encephalopathy Risk",
+    metaDescription:
+      "Liver lab patterns for nurses: hepatocellular vs cholestatic clues, bilirubin jaundice context, and escalation when synthetic function fails.",
+    h1: "Liver Lab Pattern Interpretation for Nurses",
+    segmentation: {
+      freeHighlights: ["AST/ALT ratio orientation", "Bilirubin and jaundice assessment"],
+      premiumHighlights: ["Hepatic encephalopathy progression cases"],
+    },
+    difficulty: "intermediate",
+    examRelevance: ["nclex_rn", "clinical_practice"],
+    related: {
+      lessonSlugs: [],
+      topicSlugs: ["gastrointestinal", "liver"],
+      appToolHrefs: [LABS_HUB, REPORT_CARD],
+      marketingHrefs: [],
+    },
+    schema: { faqEligible: true, learningResourceEligible: true },
+    status: "draft",
+    targetQueries: ["liver labs nursing", "elevated bilirubin nursing"],
+  },
+  {
+    id: "ventilator-interpretation",
+    slug: "ventilator-interpretation",
+    category: "critical_care",
+    seoTitle: "Ventilator Basics for Nurses | Modes, Alarms & Oxygenation",
+    metaDescription:
+      "Ventilator interpretation essentials: mode literacy, alarm response, oxygenation vs ventilation mismatch, and nursing escalation.",
+    h1: "Ventilator Interpretation for Nurses",
+    segmentation: {
+      freeHighlights: ["Peak pressure vs plateau basics", "FiO₂ and PEEP orientation"],
+      premiumHighlights: ["ARDS lung-protective ventilation cases"],
+    },
+    difficulty: "advanced",
+    examRelevance: ["nclex_rn", "new_grad", "clinical_practice"],
+    related: {
+      lessonSlugs: [],
+      topicSlugs: ["respiratory-failure", "copd"],
+      appToolHrefs: [CLINICAL_SCENARIOS_APP, PRACTICE_TESTS, REPORT_CARD],
+      marketingHrefs: [],
+    },
+    schema: { faqEligible: true, learningResourceEligible: true },
+    status: "draft",
+    targetQueries: ["ventilator nursing", "PEEP nursing", "ventilator alarms"],
+  },
+  {
+    id: "acid-base-progression",
+    slug: "acid-base-progression",
+    category: "acid_base",
+    seoTitle: "Acid-Base Progression for Nurses | Compensation & Mixed Disorders",
+    metaDescription:
+      "Track acid-base progression: compensation windows, mixed disorder hints, and nursing actions when compensation fails.",
+    h1: "Acid-Base Progression for Nurses",
+    segmentation: {
+      freeHighlights: ["Expected compensation rules", "When to suspect mixed disorders"],
+      premiumHighlights: ["Ventilator-linked acid-base trajectories"],
+    },
+    difficulty: "advanced",
+    examRelevance: ["nclex_rn", "clinical_practice"],
+    related: {
+      lessonSlugs: [],
+      topicSlugs: ["abg-interpretation", "metabolic-acidosis"],
+      appToolHrefs: [LABS_HUB, PRACTICE_TESTS, REPORT_CARD],
+      marketingHrefs: [],
+    },
+    schema: { faqEligible: true, learningResourceEligible: true },
+    status: "draft",
+    targetQueries: ["acid base compensation nursing", "mixed acid base disorder"],
+  },
 ] as const;
 
 export function getClinicalInterpretationBySlug(slug: string): ClinicalInterpretationEntry | undefined {
   const key = slug.trim();
   return CLINICAL_INTERPRETATION_REGISTRY.find((e) => e.slug === key);
+}
+
+export function listPublishedClinicalInterpretationGuides(): ClinicalInterpretationEntry[] {
+  return CLINICAL_INTERPRETATION_REGISTRY.filter((e) => e.status === "published");
 }
 
 export function getClinicalInterpretationById(id: ClinicalInterpretationId): ClinicalInterpretationEntry | undefined {

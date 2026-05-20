@@ -47,6 +47,10 @@ import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identi
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  getLearnerExamsSurfaceLabel,
+  type LearnerExamsSurfaceLabel,
+} from "@/lib/testing/testing-model";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
@@ -67,11 +71,10 @@ type DashboardSessionLike = {
 function examsNavLabelFromLearnerContext(
   learnerPath: string | null | undefined,
   tier: string | null | undefined,
-): "CAT Exams" | "Exams" {
+): LearnerExamsSurfaceLabel {
   const pathway = learnerPath ? getExamPathwayById(learnerPath) : null;
   if (pathway) {
-    const rt = pathway.roleTrack;
-    if (rt === "rn" || rt === "rpn" || rt === "lpn" || rt === "np") return "CAT Exams";
+    return getLearnerExamsSurfaceLabel(pathway.id);
   }
   const u = (tier ?? "").toUpperCase();
   if (u === "RN" || u === "RPN" || u === "LVN_LPN" || u === "NP") return "CAT Exams";

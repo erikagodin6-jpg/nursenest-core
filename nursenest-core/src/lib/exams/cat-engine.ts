@@ -24,6 +24,7 @@ import {
 import { hashSeedToUint32 } from "@/lib/practice-tests/session-seeded-random";
 import { buildCatBlueprintAdminDiagnostics } from "@/lib/exams/cat-blueprint-mapping-quality";
 import { getExamConfig } from "@/lib/exams/exam-config";
+import { assertModelSupportsCapability } from "@/lib/testing/testing-model-capabilities";
 import {
   CAT_STATE_VERSION,
   CAT_STATE_VERSION_LEGACY,
@@ -445,6 +446,7 @@ export function selectNextQuestion(
   options?: CatSelectOptions,
   selectContext?: CatSelectContext,
 ): { selected: CatPoolRow | null; fallback: boolean; detail?: string } {
+  assertModelSupportsCapability("CAT", "adaptive_selection", "cat_engine.selectNextQuestion");
   const unused = pool.filter((p) => !usedIds.has(p.id));
   if (unused.length === 0) {
     return { selected: null, fallback: true, detail: "pool_exhausted" };

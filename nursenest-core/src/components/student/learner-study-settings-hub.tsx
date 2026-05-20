@@ -24,6 +24,7 @@ export function LearnerStudySettingsHub({
   showExamPlanForm,
   initialStudySettings,
   initialEmailEngagementOptOut,
+  initialMeasurementPreference = null,
   t,
 }: {
   userId: string;
@@ -33,6 +34,7 @@ export function LearnerStudySettingsHub({
   initialStudySettings: StudySettings;
   /** When true, learner has opted out of retention / study nudge emails. */
   initialEmailEngagementOptOut: boolean;
+  initialMeasurementPreference?: MeasurementPreference | null;
   t: LearnerMarketingT;
 }) {
   const [bank, setBank] = useState<LearnerStudyDefaultsV1["questionBank"]>(() => defaultLearnerStudyDefaults().questionBank);
@@ -110,8 +112,10 @@ export function LearnerStudySettingsHub({
           <div className="rounded-2xl border border-border/60 bg-background/70 p-4">
             <MeasurementSystemToggle
               fallbackSystem="SI"
+              initialPreference={initialMeasurementPreference}
+              syncToProfile
               title="Measurement units"
-              description="Choose how lab values, medication math, and allied study examples display across study surfaces on this device."
+              description="Choose SI (metric) or conventional (US customary) units for lessons, practice exams, CAT, flashcards, and question rationales. Saved to your account and this browser."
             />
           </div>
         </div>

@@ -19,17 +19,17 @@ cd nursenest-core
 npm run capture:rn-practice-exam-hub
 ```
 
-Output: `reports/screenshots/rn-practice-exam-hub-mockups-2026/*.png` (30 files: 5 states × 3 themes × 2 viewports).
+Output: `reports/screenshots/rn-practice-exam-hub-mockups-2026/hub--*.png` (9 files: 3 views × 3 themes, desktop).
 
-## States
+**Full index:** `lesson-mockups/VIEW-CAT-AND-PRACTICE-MOCKUPS.md`
 
-| State | Purpose |
+## Views (gallery control bar)
+
+| View | Purpose |
 |-------|---------|
-| `default` | Categories tab, no selection |
-| `category` | Pharmacology tile selected |
-| `system` | Body systems tab, cardiovascular selected |
-| `weak` | Weak & unanswered tab + banner |
-| `count-open` | Question-count popover / slider visible |
+| `default` | Hub landing, category grid, 25-question preset |
+| `filters_active` | Category + system + weak & unanswered filters highlighted |
+| `count_custom` | Custom question count input visible |
 
 ## Product notes
 

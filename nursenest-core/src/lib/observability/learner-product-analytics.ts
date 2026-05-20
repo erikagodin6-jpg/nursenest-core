@@ -1,10 +1,12 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildGlobalExamContext, examContextAnalyticsProps } from "@/lib/exam-context";
 import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
+import { captureGovernedLearnerProductEvent } from "@/lib/observability/governed-learner-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { CAT_RESULTS_COACH_FALLBACK_HEADLINE } from "@/lib/practice-tests/cat-results-coach";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
 
 /**
  * PostHog capture enriched with entitlement context. **Do not await** in API routes so responses stay fast;
@@ -41,8 +43,10 @@ export function capturePracticeTestCompletedAnalytics(
   try {
     const res = results as PracticeTestResultsJson;
     const sel = cfg?.selectionMode ?? "unknown";
-    const cat = sel === "cat";
-    const examSim = cfg?.catPresentationMode === "exam_simulation";
+    const pathwayId = cfg?.pathwayId ?? null;
+    const testingModel = getTestingModelForPathwayId(pathwayId);
+    const cat = sel === "cat" && testingModel === "CAT";
+    const examSim = cat && cfg?.catPresentationMode === "exam_simulation";
     const readiness = readinessFromResults(results);
 
     const catFeedback = cfg?.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined;
@@ -57,33 +61,38 @@ export function capturePracticeTestCompletedAnalytics(
 
     const examCtx = buildGlobalExamContext(cfg?.pathwayId ?? null, "en");
 
-    captureLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
+    captureGovernedLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
       selection_mode: String(sel),
       cat_mode: cat,
       exam_simulation: examSim,
       cat_exam_feedback_mode: catFeedback,
-      pathway_id: cfg?.pathwayId ?? undefined,
+      pathway_id: pathwayId ?? undefined,
       ...examContextAnalyticsProps(examCtx),
       score_total: typeof res?.scoreTotal === "number" ? res.scoreTotal : undefined,
       score_correct: typeof res?.scoreCorrect === "number" ? res.scoreCorrect : undefined,
       accuracy_pct: typeof res?.accuracyPct === "number" ? res.accuracyPct : undefined,
       readiness_label: readiness,
       pass_outlook_pct:
-        coach != null && typeof coach.passOutlookPercent === "number" ? coach.passOutlookPercent : undefined,
-      cat_coach_present: coach != null,
+        cat && coach != null && typeof coach.passOutlookPercent === "number"
+          ? coach.passOutlookPercent
+          : undefined,
+      cat_coach_present: cat ? coach != null : undefined,
       cat_confidence_level:
-        coach?.confidenceLevel === "low" || coach?.confidenceLevel === "medium" || coach?.confidenceLevel === "high"
+        cat &&
+        (coach?.confidenceLevel === "low" ||
+          coach?.confidenceLevel === "medium" ||
+          coach?.confidenceLevel === "high")
           ? coach.confidenceLevel
           : undefined,
       coach_reliability_level:
         coach?.reliabilityLevel === "low" || coach?.reliabilityLevel === "medium" || coach?.reliabilityLevel === "high"
           ? coach.reliabilityLevel
           : undefined,
-      cat_pattern_codes: patternCodes || undefined,
+      cat_pattern_codes: cat ? patternCodes || undefined : undefined,
     });
 
     if (readiness) {
-      captureLearnerProductEvent(userId, entitlement, PH.learnerReadinessScoreReached, {
+      captureGovernedLearnerProductEvent(userId, entitlement, PH.learnerReadinessScoreReached, {
         readiness_label: readiness,
         selection_mode: String(sel),
         exam_simulation: examSim,
@@ -113,7 +122,9 @@ export function captureCatCoachGenerationAnalytics(
       typeof coach.generatedAt === "string" &&
       coach.generatedAt.length > 4;
 
-    captureLearnerProductEvent(userId, entitlement, PH.learnerCatCoachGenerated, {
+    if (getTestingModelForPathwayId(cfg?.pathwayId) !== "CAT") return;
+
+    captureGovernedLearnerProductEvent(userId, entitlement, PH.learnerCatCoachGenerated, {
       selection_mode: String(cfg?.selectionMode ?? "unknown"),
       cat_exam_feedback_mode: cfg?.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined,
       pathway_id: cfg?.pathwayId ?? undefined,

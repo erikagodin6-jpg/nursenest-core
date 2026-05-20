@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Activity, ArrowRight, BookOpen, Heart, Lock, Zap } from "lucide-react";
+import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
+import { labsClinicalModuleLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -95,16 +97,7 @@ export async function generateMetadata(): Promise<Metadata> {
           acceptedAnswer: { "@type": "Answer", text: item.answer },
         })),
       },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "Hemodynamic Monitoring", item: `${SITE_ORIGIN}/hemodynamic-monitoring` },
-          { "@type": "ListItem", position: 3, name: "Advanced Hemodynamic Monitoring", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
-      {
+{
         "@context": "https://schema.org",
         "@type": "Product",
         name: "Advanced Hemodynamic Monitoring Add-On",
@@ -123,17 +116,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function AdvancedHemodynamicMonitoringPage() {
+  const breadcrumbResolution = labsClinicalModuleLeafBreadcrumbs("Advanced Hemodynamic Monitoring", PATH);
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-        <Link href="/" className="hover:text-primary">Home</Link>
-        <span>/</span>
-        <Link href="/hemodynamic-monitoring" className="hover:text-primary">Hemodynamic Monitoring</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">Advanced Hemodynamics</span>
-      </nav>
-
-      <div className="mb-8">
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+<div className="mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-700 text-sm font-semibold mb-4">
           <Lock className="w-4 h-4" />
           Premium add-on — $149 CAD one-time · RN &amp; NP only

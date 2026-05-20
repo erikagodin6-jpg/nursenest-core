@@ -3,6 +3,10 @@
  */
 
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import {
+  type LearnerExamsSurfaceLabel,
+  resolveLearnerExamsNavHref,
+} from "@/lib/testing/testing-model";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-feature-flag";
@@ -74,11 +78,11 @@ function withPathwayQuery(base: string, pathwayId: string | null): string {
   return base.includes("?") ? `${base}&${q}` : `${base}?${q}`;
 }
 
-export type LearnerExamsSurfaceLabel = "CAT Exams" | "Exams";
+export type { LearnerExamsSurfaceLabel } from "@/lib/testing/testing-model";
 
 /**
  * Ordered: Lessons → Practice → Flashcards → CAT → Reports → Profile (max 6).
- * @param examsLabel — label-only; all exam entries land on the live premium practice-tests surface.
+ * @param examsLabel — label + destination; LOFT pathways route to CNPLE case simulation.
  */
 export function buildLearnerPrimaryNavItems(
   pathwayId: string | null,
@@ -87,14 +91,17 @@ export function buildLearnerPrimaryNavItems(
   const lessonsHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.lessons, pathwayId);
   const practiceHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.practice, pathwayId);
   const flashHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.flashcards, pathwayId);
-  const useCatBuilder = options?.examsLabel !== "Exams";
-  const catHref = useCatBuilder
-    ? resolveStudySurfaceCatHref({
-        pathwayId,
-        availablePathwayIds: pathwayId ? [pathwayId] : [],
-      })
-    : "/app/practice-tests?startMode=practice_exam";
-  const catMatch = "/app/practice-tests";
+  const examsLabel = options?.examsLabel;
+  const catHref =
+    examsLabel === "LOFT Simulation"
+      ? resolveLearnerExamsNavHref(pathwayId, examsLabel)
+      : examsLabel === "Exams"
+        ? withPathwayQuery("/app/practice-tests?startMode=practice_exam", pathwayId)
+        : resolveStudySurfaceCatHref({
+            pathwayId,
+            availablePathwayIds: pathwayId ? [pathwayId] : [],
+          });
+  const catMatch = examsLabel === "LOFT Simulation" ? "/app/cases/cnple" : "/app/practice-tests";
 
   return [
     { key: "lessons", href: lessonsHref, matchBase: "/app/lessons" },

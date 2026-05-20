@@ -145,6 +145,7 @@ export default function CnpleCaseSessionPage({ params }: PageProps) {
           result={finalResult}
           caseTitle={patientCase.title}
           sessionId={sessionId ?? ""}
+          mode={mode}
           onReview={handleReview}
         />
       </div>

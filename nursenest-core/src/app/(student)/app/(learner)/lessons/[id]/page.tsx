@@ -75,6 +75,8 @@ import {
 import { resolveQuizEmbedQuestionsForLessonSlug } from "@/lib/lessons/lesson-quiz-embeds";
 import { PathwayLessonQuizEmbedSection } from "@/components/lessons/pathway-lesson-quiz-embed-section";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import {
   pathwayLessonPremiumSectionBodyText,
   pathwayLessonSectionSurfaceHeading,
@@ -983,8 +985,25 @@ async function LessonDetailPageInner({ params }: Props) {
       return `Study this lesson in your ${pn} context — checks and drills stay on the same exam track.`;
     })();
 
+    const learnerBreadcrumbCrumbs =
+      pathway != null
+        ? resolveBreadcrumbResolution({
+            kind: "learner-pathway-lesson",
+            intent: "learner",
+            pathway,
+            lesson: record,
+            lessonTitleDisplay: cleanLessonTitleForDisplay(displayTitle),
+          }).crumbs
+        : [];
+
     const pathwayLessonMainColumn = (
       <>
+        {learnerBreadcrumbCrumbs.length > 0 ? (
+          <BreadcrumbTrail
+            items={learnerBreadcrumbCrumbs}
+            navClassName="mb-3 text-xs text-[var(--theme-muted-text)]"
+          />
+        ) : null}
         <LessonNavButtons
           position="top"
           backHref="/app/lessons"

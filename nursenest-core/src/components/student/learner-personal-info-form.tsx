@@ -7,7 +7,6 @@ import { CountryCode, TierCode } from "@prisma/client";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import type { PersonalProfilePayload } from "@/lib/learner/load-personal-profile";
 import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
-import { measurementSystemToPreference } from "@/lib/measurements/measurement-preference";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 const TIERS: TierCode[] = [TierCode.PRE_NURSING, TierCode.NEW_GRAD, TierCode.RPN, TierCode.LVN_LPN, TierCode.RN, TierCode.NP, TierCode.ALLIED];
@@ -47,6 +46,9 @@ export function LearnerPersonalInfoForm({
     initial.dailyQuestionGoal != null ? String(initial.dailyQuestionGoal) : "",
   );
   const [examFocus, setExamFocus] = useState(initial.examFocus ?? "");
+  const [measurementPreference, setMeasurementPreference] = useState<MeasurementPreference | null>(
+    initial.measurementPreference,
+  );
   const [pathwayOptions, setPathwayOptions] = useState(initial.pathwayOptions);
   const [lastServerRegion, setLastServerRegion] = useState<ServerRegionSnapshot>(() => ({
     country: initial.country,
@@ -70,6 +72,7 @@ export function LearnerPersonalInfoForm({
     setStudyGoal(p.studyGoal ?? "");
     setDailyQuestionGoal(p.dailyQuestionGoal != null ? String(p.dailyQuestionGoal) : "");
     setExamFocus(p.examFocus ?? "");
+    setMeasurementPreference(p.measurementPreference);
     setPathwayOptions(p.pathwayOptions);
     setLastServerRegion({
       country: p.country,
@@ -148,6 +151,7 @@ export function LearnerPersonalInfoForm({
           studyGoal: studyGoal.trim() ? studyGoal.trim() : null,
           examFocus: examFocus.trim() ? examFocus.trim() : null,
           dailyQuestionGoal: dailyQuestionGoalPayload,
+          measurementPreference,
         }),
       });
       const j = (await res.json()) as { ok?: boolean; error?: string; profile?: PersonalProfilePayload };
@@ -315,6 +319,29 @@ export function LearnerPersonalInfoForm({
               ))}
             </select>
             <p className="mt-2 text-xs text-muted-foreground">{t("learner.personalPage.pathwayHint")}</p>
+          </div>
+        </section>
+
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-primary/[0.05] to-transparent px-5 py-4">
+            <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Measurement units</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Default for lessons, practice exams, CAT, flashcards, and rationales across NurseNest.
+            </p>
+          </div>
+          <div className="p-5">
+            <MeasurementSystemToggle
+              fallbackSystem={resolveMeasurementSystemForLearnerPathway(
+                learnerPath.trim() || null,
+                Object.fromEntries(pathwayOptions.map((o) => [o.id, country])),
+                measurementPreference,
+              )}
+              initialPreference={measurementPreference}
+              syncToProfile
+              onPreferenceCommitted={(pref) => setMeasurementPreference(pref)}
+              title="Units"
+              description="SI (metric) or conventional (US customary). Also adjustable in any study session; changes sync here when you save the form."
+            />
           </div>
         </section>
 

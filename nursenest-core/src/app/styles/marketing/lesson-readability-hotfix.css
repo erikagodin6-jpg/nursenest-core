@@ -745,16 +745,17 @@
 
 @media (min-width: 1024px) {
   .nn-lesson-reading-viewport {
-    grid-template-columns: minmax(10.5rem, 15rem) minmax(0, 1fr) minmax(10.5rem, 13.75rem);
-    gap: clamp(1rem, 1.4vw, 1.75rem);
+    /* Reading column grows first; side rails cap at 240px / 220px */
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 13.75rem);
+    gap: clamp(1rem, 1.5vw, 2rem);
   }
 
   .nn-lesson-reading-viewport[data-left-collapsed="true"] {
-    grid-template-columns: 3.25rem minmax(0, 1fr) minmax(10.5rem, 13.75rem);
+    grid-template-columns: 3.25rem minmax(0, 1fr) minmax(0, 13.75rem);
   }
 
   .nn-lesson-reading-viewport[data-right-collapsed="true"] {
-    grid-template-columns: minmax(10.5rem, 15rem) minmax(0, 1fr) 3.25rem;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 3.25rem;
   }
 
   .nn-lesson-reading-viewport[data-left-collapsed="true"][data-right-collapsed="true"] {
@@ -776,11 +777,18 @@
   }
 
   .nn-lesson-reading-viewport__left {
-    max-width: 15rem;
+    max-width: 15rem; /* 240px */
+    width: 100%;
   }
 
   .nn-lesson-reading-viewport__right {
-    max-width: 13.75rem;
+    max-width: 13.75rem; /* 220px */
+    width: 100%;
+  }
+
+  .nn-lesson-reading-viewport__surface {
+    max-width: none;
+    min-width: 0;
   }
 }
 

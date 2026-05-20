@@ -8,6 +8,7 @@ import { ProtectedPremiumContent } from "@/components/student/protected-premium-
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
 import {
   questionIdsWithIncorrectAttempts,
   readQuestionPerformanceEvents,
@@ -492,6 +493,7 @@ export function PracticeQuestionSessionClient({
             }
             right={
               <div className="flex justify-end gap-2">
+                <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} />
                 <ExamSessionThemeTrigger />
               </div>
             }

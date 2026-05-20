@@ -7,7 +7,7 @@
  * Post-submit rationale via `PracticeRationaleFullPanel` + lesson links (`linear_commit`).
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   NclexPracticeExamLayout,
@@ -15,12 +15,10 @@ import {
   NclexAnswerCard,
   NclexQuestionStem,
   type NclexAnswerCardState,
+  type NclexPracticeShellPresentation,
 } from "@/components/exam/nclex-exam-layout";
-import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
-import {
-  PracticeAdaptivePostMissPanel,
-  type PracticeAdaptivePostMissPayload,
-} from "@/components/student/practice-adaptive-post-miss-panel";
+import { NclexPracticeRationaleCompact } from "@/components/exam/nclex-practice-rationale-compact";
+import type { PracticeAdaptivePostMissPayload } from "@/components/student/practice-adaptive-post-miss-panel";
 import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
 import {
   coerceBowtieDraftAnswer,
@@ -29,6 +27,11 @@ import {
 } from "@/lib/questions/bowtie-adapter";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
 type QRow = {
@@ -207,12 +210,14 @@ async function submitTestApi(testId: string): Promise<{
 
 export function NclexPracticeRunner({
   testId,
-  userId: _userId,
+  userId,
   pathwayLabel: pathwayLabelProp,
+  shellPresentation = "standard",
 }: {
   testId: string;
   userId: string;
   pathwayLabel?: string | null;
+  shellPresentation?: NclexPracticeShellPresentation;
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -231,6 +236,20 @@ export function NclexPracticeRunner({
   const [results, setResults] = useState<PracticeTestResultsJson | null>(null);
   const [pathwayLabel, setPathwayLabel] = useState(pathwayLabelProp ?? "NCLEX-RN®");
   const [pathwayId, setPathwayId] = useState<string | null>(null);
+  const [pathwayCountryCode, setPathwayCountryCode] = useState<string | null>(null);
+  const pathwayCountryByPathwayId = useMemo(() => {
+    if (!pathwayId || !pathwayCountryCode) return {};
+    return { [pathwayId]: pathwayCountryCode };
+  }, [pathwayId, pathwayCountryCode]);
+  const fallbackMeasurementSystem = useMemo(
+    () => resolveMeasurementSystemForLearnerPathway(pathwayId, pathwayCountryByPathwayId),
+    [pathwayId, pathwayCountryByPathwayId],
+  );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const resolveMeasureText = useCallback(
+    (text: string) => resolveMeasurementTokens(text, measurementSystem),
+    [measurementSystem],
+  );
   const [transitioning, setTransitioning] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -274,7 +293,11 @@ export function NclexPracticeRunner({
           setRemainingSec(Math.max(0, s.timeLimitSec - used));
         }
         if (s.pathwayLabel) setPathwayLabel(s.pathwayLabel);
-        if (s.pathwayId) setPathwayId(s.pathwayId);
+        if (s.pathwayId) {
+          setPathwayId(s.pathwayId);
+          const pathway = getExamPathwayById(s.pathwayId);
+          if (pathway) setPathwayCountryCode(String(pathway.countryCode));
+        }
         setPhase("ready");
       } catch {
         if (mountedRef.current) { setError("Could not load session."); setPhase("error"); }
@@ -472,7 +495,9 @@ export function NclexPracticeRunner({
   const unanswered = questionIds.filter((id) => !committedIds.has(id)).length;
 
   const optDisplayMap: Record<string, string> = {};
-  optsCanonical.forEach((k, i) => { optDisplayMap[k] = optsDisplay[i] ?? k; });
+  optsCanonical.forEach((k, i) => {
+    optDisplayMap[k] = resolveMeasureText(optsDisplay[i] ?? k);
+  });
 
   const rationaleStatus = !isCommitted || !currentFeedback
     ? ("waiting" as const)
@@ -480,38 +505,40 @@ export function NclexPracticeRunner({
       ? ("correct" as const)
       : ("incorrect" as const);
 
+  const wrongKey = currentFeedback && !currentFeedback.isCorrect && raw
+    ? (isSata && Array.isArray(raw)
+        ? raw.find((k) => !currentFeedback.correctKeys.includes(String(k)))
+        : typeof raw === "string" && !currentFeedback.correctKeys.includes(raw)
+          ? raw
+          : null)
+    : null;
+  const primaryDistractorTextRaw =
+    wrongKey && currentFeedback?.distractorRationalesMap
+      ? currentFeedback.distractorRationalesMap[wrongKey] ?? null
+      : null;
+  const primaryDistractorText = primaryDistractorTextRaw
+    ? resolveMeasureText(primaryDistractorTextRaw)
+    : null;
+
   const rationaleSlot = (
-    <>
-      <PracticeRationaleFullPanel
-        status={rationaleStatus}
-        correctKeys={currentFeedback?.correctKeys ?? []}
-        optionDisplayMap={optDisplayMap}
-        allOptionKeys={optsCanonical}
-        correctAnswerExplanation={currentFeedback?.correctAnswerExplanation ?? null}
-        rationale={currentFeedback?.rationale ?? null}
-        distractorRationalesMap={currentFeedback?.distractorRationalesMap ?? null}
-        keyTakeaway={currentFeedback?.keyTakeaway ?? null}
-        relatedLessons={currentFeedback?.relatedLessons ?? []}
-        clinicalPearlDisplay={currentFeedback?.clinicalPearlDisplay ?? null}
-        referenceSource={currentFeedback?.referenceSource ?? null}
-        showDistractorFallback
-      />
-      {adaptivePostMiss?.questionId === currentId && pathwayId ? (
-        <PracticeAdaptivePostMissPanel
-          payload={adaptivePostMiss.payload}
-          testConfig={{ pathwayId }}
-          pathwaySurface={{
-            id: pathwayId,
-            countrySlug: "",
-            roleTrack: "",
-            examCode: "",
-            shortName: pathwayLabel,
-            examFamily: null,
-          }}
-          tx={(_key, fallback) => fallback}
-        />
-      ) : null}
-    </>
+    <NclexPracticeRationaleCompact
+      status={rationaleStatus}
+      correctKeys={currentFeedback?.correctKeys ?? []}
+      optionDisplayMap={optDisplayMap}
+      correctAnswerExplanation={
+        currentFeedback?.correctAnswerExplanation
+          ? resolveMeasureText(currentFeedback.correctAnswerExplanation)
+          : null
+      }
+      rationale={
+        currentFeedback?.rationale ? resolveMeasureText(currentFeedback.rationale) : null
+      }
+      primaryDistractorText={primaryDistractorText}
+      keyTakeaway={
+        currentFeedback?.keyTakeaway ? resolveMeasureText(currentFeedback.keyTakeaway) : null
+      }
+      relatedLessons={currentFeedback?.relatedLessons ?? []}
+    />
   );
 
   function getOptionState(canonical: string): NclexAnswerCardState {
@@ -597,6 +624,7 @@ export function NclexPracticeRunner({
 
   return (
     <NclexPracticeExamLayout
+      shellPresentation={shellPresentation}
       questionNumber={idx + 1}
       totalQuestions={total}
       remainingSec={timedMode ? remainingSec : null}
@@ -629,7 +657,7 @@ export function NclexPracticeRunner({
       }
     >
       <NclexQuestionStem
-        stem={current?.stem ?? ""}
+        stem={current?.stem ? resolveMeasureText(current.stem) : ""}
         instruction={isSata ? "Select all that apply." : null}
       />
       {answerContent}

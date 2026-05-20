@@ -540,8 +540,7 @@ export function NclexCatRunner({
 
   const questionNumber = idx + 1;
   const isTransitioning = catUiPhase === "advancing";
-  const examPhase: CatExamUiPhase =
-    catUiPhase === "completed" ? "answering" : catUiPhase;
+  const examPhase: CatExamUiPhase = catUiPhase;
   const optionsLocked = catExamOptionsInteractionLocked(examPhase);
   const examPrimaryBusy = catExamFooterPrimaryBusy(examPhase, advanceInFlightRef.current);
 
@@ -648,7 +647,7 @@ export function NclexCatRunner({
         <ExamMeasurementUnitToggle
           fallbackSystem={fallbackMeasurementSystem}
           syncToProfile={Boolean(userId)}
-          disabled={disabled}
+          disabled={examPrimaryBusy || isTransitioning}
         />
       }
     >

@@ -12,6 +12,7 @@ import {
 import { safeAwait } from "@/lib/async/safe-await";
 import { mergeMarketingMessagesWithPublicOverrides } from "@/lib/marketing/merge-marketing-messages-with-public-overrides";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { shouldEmitMarketingLayoutBreadcrumbFallback } from "@/lib/breadcrumbs/layout-fallback-policy";
 import { buildMarketingRouteBreadcrumbItems } from "@/lib/seo/marketing-route-breadcrumbs";
 
 const MARKETING_MAIN_SHARDS_TIMEOUT_MS = 2600;
@@ -116,7 +117,10 @@ export async function MarketingMainI18nShards({
     loadPrimaryAndFallback(locale),
     readMarketingRequestPathname(),
   ]);
-  const breadcrumbItems = buildMarketingRouteBreadcrumbItems(requestPathname);
+  const emitLayoutBreadcrumbFallback = shouldEmitMarketingLayoutBreadcrumbFallback(requestPathname);
+  const breadcrumbItems = emitLayoutBreadcrumbFallback
+    ? buildMarketingRouteBreadcrumbItems(requestPathname)
+    : [];
 
   return (
     <MarketingI18nShardLayer

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AcademyBreadcrumbBar } from "@/components/clinical-academy/clinical-academy-chrome";
+import { labsHubBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { ArrowRight, CheckCircle2, FlaskConical, Zap } from "lucide-react";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -75,29 +77,15 @@ export async function generateMetadata(): Promise<Metadata> {
           acceptedAnswer: { "@type": "Answer", text: faq.answer },
         })),
       },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "Clinical Modules", item: `${SITE_ORIGIN}/clinical-modules` },
-          { "@type": "ListItem", position: 3, name: "Lab Interpretation", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
     ],
   } as Metadata));
 }
 
 export default function LabsInterpretationPage() {
+  const breadcrumbResolution = labsHubBreadcrumbs("Lab Interpretation", PATH);
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-primary">Home</Link>
-        <span>/</span>
-        <Link href="/clinical-modules" className="hover:text-primary">Clinical Modules</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">Lab Interpretation</span>
-      </nav>
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
 
       <div className="mb-10">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-semibold mb-4">

@@ -38,9 +38,13 @@ export type BreadcrumbItem = {
   includeInSchema: boolean;
 };
 
+import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
+
 export type BreadcrumbResolution = {
   /** Visible `<BreadcrumbTrail>` */
   crumbs: BreadcrumbCrumb[];
   /** JSON-LD for indexable pages only; omit component when empty or for /app */
   schemaItems: BreadcrumbSchemaItem[];
+  /** Explicit trail semantics — drives schema suppression on learner routes. */
+  intent?: BreadcrumbIntent;
 };

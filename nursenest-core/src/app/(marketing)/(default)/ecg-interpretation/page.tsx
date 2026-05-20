@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { ecgStandaloneLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { Activity, BookOpen, Gauge, Zap } from "lucide-react";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -190,14 +192,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function EcgInterpretationPage() {
-  const breadcrumbs = [
-    { name: "NurseNest", href: "/" },
-    { name: "ECG Interpretation", href: PATH },
-  ];
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
+  const breadcrumbResolution = ecgStandaloneLeafBreadcrumbs("ECG Interpretation", PATH);
+  const jsonLdGraph = [
       {
         "@type": "WebPage",
         "@id": `https://nursenest.io${PATH}`,
@@ -205,15 +201,6 @@ export default function EcgInterpretationPage() {
         name: PAGE_TITLE,
         description: PAGE_DESCRIPTION,
         inLanguage: "en",
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: breadcrumbs.map((crumb, idx) => ({
-            "@type": "ListItem",
-            position: idx + 1,
-            name: crumb.name,
-            item: `https://nursenest.io${crumb.href}`,
-          })),
-        },
       },
       {
         "@type": "FAQPage",
@@ -226,32 +213,13 @@ export default function EcgInterpretationPage() {
           },
         })),
       },
-    ],
-  };
+    ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--semantic-text-muted)]">
-            {breadcrumbs.map((crumb, idx) => (
-              <li key={crumb.href} className="flex items-center gap-1.5">
-                {idx > 0 && <span aria-hidden>/</span>}
-                {idx < breadcrumbs.length - 1 ? (
-                  <Link href={crumb.href} className="hover:underline">
-                    {crumb.name}
-                  </Link>
-                ) : (
-                  <span className="text-[var(--semantic-text-secondary)]">{crumb.name}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
+        <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
 
         <header className="mb-8 space-y-4">
           <div className="flex items-center gap-2">

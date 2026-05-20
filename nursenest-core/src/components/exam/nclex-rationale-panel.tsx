@@ -140,15 +140,9 @@ export function NclexRationalePanel({
 
             {/* Clinical pearl */}
             {clinicalPearl && (
-              <div
-                className="nn-nclex-rationale__section"
-                style={{ borderColor: "#bbf7d0", background: "#f0fdf4" }}
-              >
+              <div className="nn-nclex-rationale__section nn-nclex-rationale__section--pearl">
                 <div className="nn-nclex-rationale__section-header">
-                  <div
-                    className="nn-nclex-rationale__section-icon"
-                    style={{ background: "#16a34a", color: "#fff" }}
-                  >
+                  <div className="nn-nclex-rationale__section-icon nn-nclex-rationale__section-icon--success">
                     ✦
                   </div>
                   <span className="nn-nclex-rationale__section-title">Clinical Pearl</span>

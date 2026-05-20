@@ -1,37 +1,64 @@
 /**
  * User-facing copy for pathway practice-session landing (marketing + shared naming).
- * CAT pathways use adaptive copy; LOFT pathways (CNPLE) use linear simulation copy.
+ * Derives CAT vs LOFT vs linear wording from {@link @/lib/testing/testing-model}.
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import type { PathwayReadinessPublicCopy } from "@/lib/exam-pathways/pathway-readiness-config";
+import {
+  getPathwaySimulationDisplayCopy,
+  isLoftTestingModel,
+  getTestingModelForPathway,
+  validateTestingModelMarketingLanguage,
+} from "@/lib/testing/testing-model";
 
-const LOFT_PATHWAY_IDS = new Set(["ca-np-cnple"]);
+function assertPathwayMarketingCopy(pathway: ExamPathwayDefinition, text: string): string {
+  const audit = validateTestingModelMarketingLanguage(pathway.id, text);
+  if (!audit.ok) {
+    const messages = [
+      ...audit.violations.map((v) => v.message),
+      ...(audit.cnpleAudit && !audit.cnpleAudit.ok
+        ? audit.cnpleAudit.violations.map((i) => i.message)
+        : []),
+    ];
+    throw new Error(
+      `Marketing psychometric audit failed for ${pathway.id}: ${messages.join(" ")}`,
+    );
+  }
+  return text;
+}
 
 export function pathwayCatLandingTitle(pathway: ExamPathwayDefinition): string {
-  if (LOFT_PATHWAY_IDS.has(pathway.id)) {
-    return `${pathway.shortName} simulation`;
-  }
-  return catPathwayShortCatLabel(pathway);
+  return assertPathwayMarketingCopy(
+    pathway,
+    getPathwaySimulationDisplayCopy(pathway).landingTitle,
+  );
 }
 
 export function pathwayCatLandingSubtitle(
   pathway: ExamPathwayDefinition,
   publicCopy: PathwayReadinessPublicCopy,
 ): string {
-  const line = catPathwayRegionalExamLine(pathway);
-  if (LOFT_PATHWAY_IDS.has(pathway.id)) {
-    return `CNPLE-style simulation (linear fixed-length, not CAT) for ${line}. ${publicCopy.subtitle}`;
-  }
-  return `Computerized adaptive testing (CAT) for ${line}. ${publicCopy.subtitle}`;
+  const display = getPathwaySimulationDisplayCopy(pathway);
+  return assertPathwayMarketingCopy(
+    pathway,
+    `${display.landingSubtitleLead} ${publicCopy.subtitle}`,
+  );
 }
 
 export function pathwayCatMetadataDescription(
   pathway: ExamPathwayDefinition,
   publicCopy: PathwayReadinessPublicCopy,
 ): string {
-  if (LOFT_PATHWAY_IDS.has(pathway.id)) {
-    return `${pathway.shortName} simulation — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`;
+  const display = getPathwaySimulationDisplayCopy(pathway);
+  if (isLoftTestingModel(getTestingModelForPathway(pathway))) {
+    return assertPathwayMarketingCopy(
+      pathway,
+      `${display.shortLabel} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`,
+    );
   }
-  return `${catPathwayShortCatLabel(pathway)} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`;
+  return assertPathwayMarketingCopy(
+    pathway,
+    `${catPathwayShortCatLabel(pathway)} — ${publicCopy.subtitle} Sign in to run a session scoped to ${pathway.displayName}.`,
+  );
 }

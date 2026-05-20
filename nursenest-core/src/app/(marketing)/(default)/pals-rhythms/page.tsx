@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Activity, Baby, BookOpen, ChevronRight, Heart } from "lucide-react";
+import { Activity, Baby, BookOpen, Heart } from "lucide-react";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { ecgStandaloneLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -123,17 +125,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function PalsRhythmsPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "NurseNest", item: SITE_ORIGIN },
-          { "@type": "ListItem", position: 2, name: "ECG Interpretation", item: `${SITE_ORIGIN}/ecg` },
-          { "@type": "ListItem", position: 3, name: "PALS Rhythms", item: `${SITE_ORIGIN}${PATH}` },
-        ],
-      },
+  const breadcrumbResolution = ecgStandaloneLeafBreadcrumbs("PALS Rhythms", PATH);
+  const jsonLdGraph = [
       {
         "@type": "Course",
         name: "PALS Rhythms for Nurses",
@@ -149,20 +142,12 @@ export default function PalsRhythmsPage() {
           acceptedAnswer: { "@type": "Answer", text: item.answer },
         })),
       },
-    ],
-  };
+    ];
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
-      <nav className="mb-6 flex items-center gap-2 text-xs text-[var(--semantic-text-muted)]" aria-label="Breadcrumb">
-        <Link href="/ecg" className="hover:text-[var(--semantic-brand)]">ECG Interpretation</Link>
-        <ChevronRight className="h-3 w-3" aria-hidden />
-        <Link href="/pediatric-ecg" className="hover:text-[var(--semantic-brand)]">Pediatric ECG</Link>
-        <ChevronRight className="h-3 w-3" aria-hidden />
-        <span className="text-[var(--semantic-text-primary)] font-medium">PALS Rhythms</span>
-      </nav>
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
 
       <header className="mb-10">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_06%,var(--semantic-surface))] px-3 py-1 text-xs font-semibold text-[var(--semantic-chart-4)]">

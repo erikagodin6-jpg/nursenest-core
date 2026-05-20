@@ -114,7 +114,7 @@ export const NURSING_MECHANISM_CLUSTERS = [
     relatedCalculatorsTools: ["/tools/lab-values"],
     relatedPracticeCatHooks: ["/question-bank", "/practice-exams", "/app/dashboard"],
     seoPriority: 1,
-    status: "draft",
+    status: "published",
   }),
   makeCluster({
     topicArea: "electrolyte physiology",
@@ -166,7 +166,7 @@ export const NURSING_MECHANISM_CLUSTERS = [
     relatedCalculatorsTools: ["/tools/lab-values"],
     relatedPracticeCatHooks: ["/question-bank", "/practice-exams", "/app/dashboard"],
     seoPriority: 1,
-    status: "draft",
+    status: "published",
   }),
   makeCluster({
     topicArea: "respiratory compensation",
@@ -179,7 +179,7 @@ export const NURSING_MECHANISM_CLUSTERS = [
     relatedCalculatorsTools: ["/tools/lab-values"],
     relatedPracticeCatHooks: ["/question-bank", "/practice-exams", "/app/dashboard"],
     seoPriority: 2,
-    status: "draft",
+    status: "published",
   }),
   makeCluster({
     topicArea: "acid/base disorders",
@@ -192,7 +192,7 @@ export const NURSING_MECHANISM_CLUSTERS = [
     relatedCalculatorsTools: ["/tools/lab-values"],
     relatedPracticeCatHooks: ["/question-bank", "/practice-exams", "/app/dashboard"],
     seoPriority: 1,
-    status: "draft",
+    status: "published",
   }),
   makeCluster({
     topicArea: "endocrine disorders",
@@ -205,7 +205,7 @@ export const NURSING_MECHANISM_CLUSTERS = [
     relatedCalculatorsTools: ["/tools/lab-values"],
     relatedPracticeCatHooks: ["/question-bank", "/practice-exams", "/app/dashboard"],
     seoPriority: 1,
-    status: "draft",
+    status: "published",
   }),
   makeCluster({
     topicArea: "acid/base disorders",
@@ -231,7 +231,7 @@ export const NURSING_MECHANISM_CLUSTERS = [
     relatedCalculatorsTools: ["/tools/lab-values"],
     relatedPracticeCatHooks: ["/question-bank", "/practice-exams", "/app/dashboard"],
     seoPriority: 1,
-    status: "draft",
+    status: "published",
   }),
   makeCluster({
     topicArea: "respiratory compensation",
@@ -389,14 +389,36 @@ export function listPublishedNursingMechanismSitemapPaths(): string[] {
   return listPublishedNursingMechanismClusters().map(nursingMechanismCanonicalPath);
 }
 
+function primaryLessonsHubForMechanism(cluster: NursingMechanismCluster): { label: string; href: string } {
+  const lessonPath = cluster.relatedLessons[0];
+  if (lessonPath && lessonPath.includes("/lessons/")) {
+    const hub = lessonPath.replace(/\/lessons\/[^/]+$/, "/lessons");
+    const label = hub.includes("/canada/pn/rex-pn")
+      ? "REx-PN lessons"
+      : hub.includes("/canada/rn/")
+        ? "NCLEX-RN lessons (Canada)"
+        : hub.includes("/us/rn/")
+          ? "NCLEX-RN lessons"
+          : "Lessons";
+    return { label, href: hub };
+  }
+  return { label: "NCLEX-RN lessons", href: "/us/rn/nclex-rn/lessons" };
+}
+
 export function buildNursingMechanismBreadcrumbJsonLd(cluster: NursingMechanismCluster): Record<string, unknown> {
+  const lessonsHub = primaryLessonsHubForMechanism(cluster);
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: toAbsoluteSiteUrl("/") },
-      { "@type": "ListItem", position: 2, name: "Nursing Mechanisms", item: toAbsoluteSiteUrl(NURSING_MECHANISM_CANONICAL_BASE_PATH) },
-      { "@type": "ListItem", position: 3, name: cluster.suggestedTitle, item: nursingMechanismCanonicalUrl(cluster) },
+      { "@type": "ListItem", position: 2, name: lessonsHub.label, item: toAbsoluteSiteUrl(lessonsHub.href) },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `Mechanism: ${cluster.suggestedTitle.split(":")[0]?.trim() || cluster.suggestedTitle}`,
+        item: nursingMechanismCanonicalUrl(cluster),
+      },
     ],
   };
 }

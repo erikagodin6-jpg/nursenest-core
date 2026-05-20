@@ -6,10 +6,16 @@ import {
   resolvePreferredCatPathwayId,
 } from "@/lib/exam-pathways/pathway-cat-flow";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayUsesLoftEngine } from "@/lib/testing/testing-model";
 
 export type StudyLoopCatAuthState = "signed_in" | "public";
 export type StudyLoopCatIntent = "start" | "weak_focus";
-export type StudyLoopCatDestinationKind = "public" | "app_start" | "app_weak_focus" | "generic_chooser";
+export type StudyLoopCatDestinationKind =
+  | "public"
+  | "app_start"
+  | "app_weak_focus"
+  | "app_loft_simulation"
+  | "generic_chooser";
 
 export type ResolveStudyLoopCatDestinationArgs = {
   authState: StudyLoopCatAuthState;
@@ -40,6 +46,21 @@ export function resolveStudyLoopCatDestination(
 ): StudyLoopCatDestination {
   const intent = args.intent ?? "start";
   const knownPathwayId = resolveKnownPathwayId(args);
+
+  if (knownPathwayId && pathwayUsesLoftEngine(knownPathwayId)) {
+    const loftHref =
+      args.authState === "signed_in"
+        ? "/app/cases/cnple"
+        : buildExamPathwayPath(getExamPathwayById(knownPathwayId)!, "simulation");
+    return {
+      kind: args.authState === "signed_in" ? "app_loft_simulation" : "public",
+      href: loftHref,
+      pathwayId: knownPathwayId,
+      isPathwayScoped: true,
+      authState: args.authState,
+      intent,
+    };
+  }
 
   if (args.authState === "signed_in" && knownPathwayId) {
     if (intent === "weak_focus") {

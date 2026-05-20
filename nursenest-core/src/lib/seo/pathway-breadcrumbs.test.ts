@@ -34,19 +34,25 @@ test("overview: Home → Country → Role → Pathway hub; Canada links to exams
   assert.equal(schemaItems[3]?.item, toAbsoluteSiteUrl(buildExamPathwayPath(caRn!)));
 });
 
-test("lesson detail: schema last item is lesson URL", () => {
+test("lesson detail with category: Home → Exam → Category → Lesson", () => {
   const lessonSlug = "fluid-balance-acute-care";
   const lessonTitle = "Fluid lesson";
-  const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(caRn!, lessonSlug, lessonTitle);
+  const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(caRn!, lessonSlug, lessonTitle, {
+    category: { label: "Cardiovascular", slug: "cardiovascular" },
+  });
   const lessonPath = `/canada/rn/nclex-rn/lessons/${lessonSlug}`;
-  assert.equal(crumbs[5]?.name, lessonTitle);
+  assert.equal(crumbs.length, 4);
+  assert.equal(crumbs[1]?.name, "NCLEX-RN");
+  assert.equal(crumbs[2]?.name, "Cardiovascular");
+  assert.equal(crumbs[3]?.name, lessonTitle);
   assert.equal(schemaItems[schemaItems.length - 1]?.item, toAbsoluteSiteUrl(lessonPath));
 });
 
-test("US PN lesson: United States country crumb links to practice-exams", () => {
+test("lesson detail without category: Home → Exam → Lessons → Lesson", () => {
   const { crumbs } = pathwayLessonDetailBreadcrumbs(usPn!, "topic-a", "Lesson A");
-  assert.equal(crumbs[1]?.name, "United States");
-  assert.equal(crumbs[1]?.href, "/practice-exams");
+  assert.equal(crumbs.length, 4);
+  assert.equal(crumbs[1]?.name.includes("NCLEX"), true);
+  assert.equal(crumbs[2]?.name, "Lessons");
 });
 
 test("Canada REx-PN and US NCLEX-PN: role crumb href uses marketing /pn segment (not internal rpn/lpn)", () => {
@@ -67,15 +73,30 @@ test("REx-PN overview trail does not surface the global exam-lessons index label
   assert.equal(crumbs[3]?.name.includes("REx"), true);
 });
 
-test("lessons hub, topic cluster, questions hub, cat, pricing share the same country + role crumbs", () => {
-  const overview = pathwayOverviewBreadcrumbs(caRn!);
+test("lessons hub: education-first Home → Exam → Lessons", () => {
   const lessons = pathwayLessonsHubBreadcrumbs(caRn!);
+  assert.equal(lessons.crumbs.length, 3);
+  assert.equal(lessons.crumbs[1]?.name, "NCLEX-RN");
+  assert.equal(lessons.crumbs[2]?.name, "Lessons");
+});
+
+test("topic cluster: education-first Home → Exam → Lessons → Topic", () => {
   const topic = pathwayTopicClusterBreadcrumbs(caRn!, "cardio", "Cardiovascular");
+  assert.equal(topic.crumbs.length, 4);
+  assert.equal(topic.crumbs[1]?.name, "NCLEX-RN");
+  assert.equal(topic.crumbs[2]?.name, "Lessons");
+  assert.equal(topic.crumbs[3]?.name, "Cardiovascular");
+  assert.equal(topic.crumbs[1]?.href?.includes("nclex-rn"), true);
+  assert.equal(topic.crumbs[0]?.name, "Home");
+});
+
+test("questions hub, cat, pricing share geo country + role crumbs", () => {
+  const overview = pathwayOverviewBreadcrumbs(caRn!);
   const questions = pathwayQuestionsHubBreadcrumbs(caRn!);
   const cat = pathwayCatPracticeBreadcrumbs(caRn!);
   const pricing = pathwayPricingBreadcrumbs(caRn!);
 
-  for (const b of [lessons, topic, questions, cat, pricing]) {
+  for (const b of [questions, cat, pricing]) {
     assert.equal(b.crumbs[1]?.name, overview.crumbs[1]?.name);
     assert.equal(b.crumbs[1]?.href, overview.crumbs[1]?.href);
     assert.equal(b.crumbs[2]?.name, overview.crumbs[2]?.name);
@@ -118,8 +139,8 @@ test("NP subpages: omit hubBasePath so breadcrumbs match core pathway URLs", () 
   assert.ok(usFnp);
   const coreHub = buildExamPathwayPath(usFnp!);
   const lessons = pathwayLessonsHubBreadcrumbs(usFnp!);
-  assert.equal(lessons.crumbs[3]?.href, coreHub);
-  assert.equal(lessons.schemaItems[4]?.item, toAbsoluteSiteUrl(`${coreHub}/lessons`));
+  assert.equal(lessons.crumbs[1]?.href, coreHub);
+  assert.equal(lessons.schemaItems[2]?.item, toAbsoluteSiteUrl(`${coreHub}/lessons`));
 });
 
 test("NP questions hub: question bank schema matches core canonical URL", () => {

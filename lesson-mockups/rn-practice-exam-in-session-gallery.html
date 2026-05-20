@@ -21,16 +21,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:transparent}
 [data-theme="blossom"]{
   --semantic-surface:#fffcfb;--semantic-panel-muted:#fff5f7;--semantic-border-soft:#f5e4e8;
   --semantic-text-primary:#3b1224;--semantic-text-secondary:#6b3a4d;--semantic-text-muted:#9a6b7d;
-  --semantic-brand:#b8325a;--semantic-brand-mix:#e85d8a;--semantic-info:#7c3aed;--semantic-success:#059669;
-  --semantic-warning:#ca8a04;--semantic-danger:#dc2626;--semantic-chart-1:#e85d8a;--semantic-chart-2:#059669;
+  --semantic-brand:#b8325a;--semantic-brand-mix:#e85d8a;--semantic-info:#7c3aed;--semantic-success:#2ecc71;
+  --semantic-warning:#f39c12;--semantic-danger:#e14d8f;--semantic-chart-1:#e85d8a;--semantic-chart-2:#2ecc71;
   --semantic-chart-3:#7c3aed;--semantic-chart-4:#ca8a04;--semantic-chart-5:#dc2626;
   --theme-heading-text:#3b1224;--nav-bg:#fffcfb;--nav-fg:#3b1224;
 }
 [data-theme="midnight"]{
   --semantic-surface:#121a2e;--semantic-panel-muted:#1a2438;--semantic-border-soft:#2a3650;
   --semantic-text-primary:#e8eef8;--semantic-text-secondary:#a8b8d0;--semantic-text-muted:#7b8ca8;
-  --semantic-brand:#5eb8e8;--semantic-brand-mix:#7ec8f0;--semantic-info:#60a5fa;--semantic-success:#4ade80;
-  --semantic-warning:#fbbf24;--semantic-danger:#fb7185;--semantic-chart-1:#7ec8f0;--semantic-chart-2:#4ade80;
+  --semantic-brand:#5eb8e8;--semantic-brand-mix:#7ec8f0;--semantic-info:#60a5fa;--semantic-success:#34d399;
+  --semantic-warning:#fbbf24;--semantic-danger:#fb7185;--semantic-chart-1:#7ec8f0;--semantic-chart-2:#34d399;
   --semantic-chart-3:#a78bfa;--semantic-chart-4:#fbbf24;--semantic-chart-5:#fb7185;
   --theme-heading-text:#f1f5f9;--nav-bg:#0c1220;--nav-fg:#e8eef8;
 }
@@ -63,17 +63,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:transparent}
 .progress-fill{height:100%;width:30%;background:linear-gradient(90deg,var(--semantic-chart-1),var(--semantic-chart-2));border-radius:0 2px 2px 0}
 
 .exam-body{flex:1;min-height:0;display:flex;overflow:hidden}
-.q-scroll{flex:1;min-height:0;overflow:auto;padding:24px 32px 16px}
-.qcard{border:1px solid var(--semantic-border-soft);border-radius:16px;padding:24px 28px;background:var(--semantic-surface);box-shadow:0 6px 24px -12px color-mix(in srgb,var(--semantic-brand) 15%,transparent)}
-.qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--semantic-border-soft)}
+.q-area{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:clamp(12px,2vh,20px) clamp(16px,2.5vw,28px) 8px}
+.q-stack{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;gap:10px}
+.qhead{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding-bottom:8px;border-bottom:1px solid var(--semantic-border-soft)}
 .qpill{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--semantic-brand);background:color-mix(in srgb,var(--semantic-brand) 9%,var(--semantic-surface));border:1px solid color-mix(in srgb,var(--semantic-brand) 22%,var(--semantic-border-soft));padding:4px 10px;border-radius:6px}
-.stem{font-size:1rem;line-height:1.72;color:var(--theme-heading-text);max-width:52rem;margin-bottom:18px}
+.stem{flex-shrink:0;font-size:clamp(.88rem,1.6vh,.98rem);line-height:1.5;color:var(--theme-heading-text);max-width:52rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.stem--compact{font-size:clamp(.82rem,1.45vh,.9rem);-webkit-line-clamp:2}
 .stem strong{font-weight:700}
-.opt-list{display:flex;flex-direction:column;gap:9px}
+.opt-list{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;overflow:hidden}
 .opt{border:1.5px solid var(--semantic-border-soft);border-radius:12px;background:var(--semantic-surface);overflow:hidden}
-.opt-row{display:flex;gap:12px;align-items:flex-start;padding:14px 16px}
+.opt-row{display:flex;gap:10px;align-items:flex-start;padding:10px 12px}
 .opt-letter{min-width:26px;height:26px;border-radius:7px;background:var(--semantic-panel-muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--semantic-text-muted)}
-.opt-text{font-size:14px;line-height:1.55;color:var(--semantic-text-secondary);flex:1}
+.opt-text{font-size:13px;line-height:1.4;color:var(--semantic-text-secondary);flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .opt.sel{border-color:var(--semantic-brand);background:color-mix(in srgb,var(--semantic-brand) 6%,var(--semantic-surface))}
 .opt.sel .opt-letter{background:var(--semantic-brand);color:#fff}
 .opt.sel .opt-text{color:var(--semantic-text-primary);font-weight:600}
@@ -82,19 +83,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:transparent}
 .opt.err{border-color:color-mix(in srgb,var(--semantic-danger) 45%,var(--semantic-border-soft));background:color-mix(in srgb,var(--semantic-danger) 8%,var(--semantic-surface))}
 .opt.err .opt-letter{background:var(--semantic-danger);color:#fff}
 .opt.dim{opacity:.5}
-.opt-rat{display:none;padding:10px 16px 12px 54px;font-size:12px;line-height:1.6;color:var(--semantic-text-muted);border-top:1px solid var(--semantic-border-soft)}
-.opt-rat.show{display:block}
-.opt.ok .opt-rat{background:color-mix(in srgb,var(--semantic-success) 6%,var(--semantic-surface));color:color-mix(in srgb,var(--semantic-success) 55%,var(--semantic-text-secondary))}
-.opt.err .opt-rat{background:color-mix(in srgb,var(--semantic-danger) 6%,var(--semantic-surface));color:color-mix(in srgb,var(--semantic-danger) 50%,var(--semantic-text-secondary))}
-.rat-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
-.rat-tag.ok{color:var(--semantic-success)}
-.rat-tag.err{color:var(--semantic-danger)}
-.full-rat{display:none;margin-top:14px;padding:16px 18px;border-radius:12px;border:1px solid var(--semantic-border-soft);background:var(--semantic-panel-muted)}
-.full-rat.show{display:block}
-.full-rat h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--semantic-success);margin-bottom:8px}
-.full-rat p{font-size:13px;line-height:1.65;color:var(--semantic-text-secondary)}
-.lesson-link{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:12px;font-weight:700;color:var(--semantic-brand);text-decoration:none}
-.lesson-link:hover{text-decoration:underline}
+.rationale-band{flex:0 0 clamp(7.5rem,28vh,10.5rem);min-height:0;overflow:hidden;padding:10px 12px;border-radius:10px;border:1px solid var(--semantic-border-soft);background:var(--semantic-surface)}
+.rationale-band.waiting{flex:0 0 3.25rem;background:color-mix(in srgb,var(--semantic-panel-muted) 55%,var(--semantic-surface));color:var(--semantic-text-muted);font-size:12px;display:flex;align-items:center;gap:8px}
+.rationale-band.ok{border-color:color-mix(in srgb,var(--semantic-success) 30%,var(--semantic-border-soft));background:color-mix(in srgb,var(--semantic-success) 7%,var(--semantic-surface))}
+.rationale-band.err{border-color:color-mix(in srgb,var(--semantic-danger) 30%,var(--semantic-border-soft));background:color-mix(in srgb,var(--semantic-danger) 7%,var(--semantic-surface))}
+.rat-head{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;margin-bottom:6px}
+.rat-status{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.rat-status.ok{color:var(--semantic-success)}.rat-status.err{color:var(--semantic-danger)}
+.rat-answer{font-size:12px;font-weight:600;line-height:1.35;color:var(--semantic-text-primary);flex:1;min-width:10rem}
+.rat-lesson{font-size:11px;font-weight:700;color:var(--semantic-brand);text-decoration:none;white-space:nowrap}
+.rat-why,.rat-distractor{font-size:12px;line-height:1.45;color:var(--semantic-text-secondary);margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rat-distractor{margin-top:4px}
 .chk{width:20px;height:20px;border-radius:5px;border:2px solid var(--semantic-border-soft);flex-shrink:0;margin-top:2px}
 .opt.sel .chk{background:var(--semantic-success);border-color:var(--semantic-success)}
 
@@ -108,7 +107,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:transparent}
 <body>
 
 <div class="ctrl">
-  <h1>RN Practice exam in-session · Submit → rationale → Next · Ocean / Blossom / Midnight</h1>
+  <h1>RN Practice exam in-session · ZERO SCROLL viewport 1280×900 · rationale band</h1>
   <div class="ctrl-row">
     <span class="ctrl-label">State</span>
     <div id="state-tabs"></div>
@@ -126,7 +125,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:transparent}
     <header class="exam-top" id="exam-top"></header>
     <div class="progress-strip"><div class="progress-fill"></div></div>
     <div class="exam-body">
-      <div class="q-scroll" id="q-content"></div>
+      <div class="q-area" id="q-content"></div>
     </div>
     <footer class="exam-foot" id="exam-foot"></footer>
   </div>
@@ -169,56 +168,61 @@ function renderTop(state) {
 
 function renderMcqOpts(showRat, wrongPick) {
   const opts = [
-    { l: 'A', t: 'Administer furosemide 40 mg IV as ordered', rat: 'Pharmacology follows ABC stabilization — not first.', ok: false, err: wrongPick === 'A' },
-    { l: 'B', t: 'Position high-Fowler and apply O₂ 2–4 L/min via nasal cannula', rat: 'Correct: reduces preload and treats SpO₂ 92% immediately.', ok: true, err: false },
-    { l: 'C', t: 'Obtain 12-lead ECG before provider callback', rat: 'Assessment is important but secondary to breathing.', ok: false, err: false },
-    { l: 'D', t: 'Increase IV rate to maintain preload', rat: 'Contraindicated with fluid overload and crackles.', ok: false, err: false },
+    { l: 'A', t: 'Administer furosemide 40 mg IV as ordered', ok: false, err: wrongPick === 'A' },
+    { l: 'B', t: 'Position high-Fowler and apply O₂ 2–4 L/min via nasal cannula', ok: true, err: false },
+    { l: 'C', t: 'Obtain 12-lead ECG before provider callback', ok: false, err: false },
+    { l: 'D', t: 'Increase IV rate to maintain preload', ok: false, err: false },
   ];
   return opts.map(o => {
     const sel = !showRat && o.l === 'B';
-    const cls = showRat
-      ? (o.ok ? 'ok' : o.err ? 'err' : 'dim')
-      : (sel ? 'sel' : '');
-    const ratHtml = showRat ? `
-      <div class="opt-rat show">
-        <div class="rat-tag ${o.ok ? 'ok' : o.err ? 'err' : ''}">${o.ok ? 'Correct answer' : o.err ? 'Your answer' : 'Why not ' + o.l}</div>
-        ${o.rat}
-      </div>` : '';
-    return `<div class="opt ${cls}"><div class="opt-row"><span class="opt-letter">${o.l}</span><span class="opt-text">${o.t}</span></div>${ratHtml}</div>`;
+    const cls = showRat ? (o.ok ? 'ok' : o.err ? 'err' : 'dim') : (sel ? 'sel' : '');
+    return `<div class="opt ${cls}"><div class="opt-row"><span class="opt-letter">${o.l}</span><span class="opt-text">${o.t}</span></div></div>`;
   }).join('');
 }
 
 function renderSataOpts() {
   const items = [
-    { t: 'Elevate head of bed to high-Fowler', sel: true, rat: 'Reduces venous return — key for dyspnea.' },
-    { t: 'Apply supplemental oxygen', sel: true, rat: 'Targets SpO₂ below 94%.' },
-    { t: 'Restrict fluids to 1 L/day', sel: false, rat: 'May be ordered later; not universal first action.' },
-    { t: 'Increase IV maintenance rate', sel: false, rat: 'Harmful with pulmonary edema.' },
+    { t: 'Elevate head of bed to high-Fowler', sel: true },
+    { t: 'Apply supplemental oxygen', sel: true },
+    { t: 'Restrict fluids to 1 L/day', sel: false },
+    { t: 'Increase IV maintenance rate', sel: false },
   ];
   return items.map(o => `
-    <div class="opt ok">
+    <div class="opt ${o.sel ? 'ok' : 'dim'}">
       <div class="opt-row"><span class="chk"></span><span class="opt-text">${o.t}</span></div>
-      <div class="opt-rat show"><div class="rat-tag ok">Rationale</div>${o.rat}</div>
     </div>`).join('');
+}
+
+function renderRationaleBand(state) {
+  if (state === 'pre_submit') {
+    return `<div class="rationale-band waiting"><span aria-hidden="true">◎</span><span>Submit to reveal rationale and lesson links.</span></div>`;
+  }
+  const ok = state === 'rationale_correct' || state === 'sata_rationale';
+  const cls = ok ? 'ok' : 'err';
+  const status = ok ? 'Correct' : 'Incorrect';
+  const answer = ok
+    ? 'Position high-Fowler and apply O₂ 2–4 L/min via nasal cannula'
+    : 'Administer furosemide 40 mg IV as ordered';
+  const why = ok
+    ? 'ABC priority: position and oxygenation precede diuretics when SpO₂ is compromised.'
+    : 'Pharmacology follows ABC stabilization — diuretics are not the first nursing action when breathing is compromised.';
+  const distr = ok ? '' : '<p class="rat-distractor"><strong>Why not yours · </strong>Assessment is important but secondary to breathing when SpO₂ is 92%.</p>';
+  return `<div class="rationale-band ${cls}">
+    <div class="rat-head"><span class="rat-status ${cls}">${status}</span><span class="rat-answer"><strong>Answer · </strong>${answer}</span>
+    <a class="rat-lesson" href="#">↗ Acute HF — nursing priorities</a></div>
+    <p class="rat-why">${why}</p>${distr}</div>`;
 }
 
 function renderContent() {
   renderTop(currentState);
-  const stem = `<p class="stem">A <strong>68-year-old client</strong> with acute heart failure reports increased dyspnea, SpO₂ <strong>92%</strong> on room air, bilateral crackles, and 2+ edema. <strong>Which action should the nurse take first?</strong></p>`;
-  let body = '';
-  if (currentState === 'sata_rationale') {
-    body = `<div class="qcard"><div class="qhead"><span class="qpill">Select all that apply · Cardiovascular</span><button type="button" class="icon-btn">Flag</button></div>${stem}<div class="opt-list">${renderSataOpts()}</div>
-      <div class="full-rat show"><h3>Clinical rationale</h3><p>Immediate nursing actions focus on airway, breathing, and reducing preload. Fluid restriction and diuretics may follow once oxygenation improves.</p>
-      <a class="lesson-link" href="#">↗ Review: Heart failure exacerbation lesson</a></div></div>`;
-  } else {
-    const showRat = currentState !== 'pre_submit';
-    const wrong = currentState === 'rationale_incorrect';
-    body = `<div class="qcard"><div class="qhead"><span class="qpill">Cardiovascular &amp; oxygenation</span><button type="button" class="icon-btn">Flag</button></div>${stem}
-      <div class="opt-list">${renderMcqOpts(showRat, wrong ? 'A' : null)}</div>
-      ${showRat ? `<div class="full-rat show"><h3>Clinical rationale</h3><p>ABC priority: position and oxygenation precede diuretics when SpO₂ is compromised. Maslow physiological needs guide FIRST-action items.</p>
-      <a class="lesson-link" href="#">↗ Open lesson: Acute HF — nursing priorities</a></div>` : ''}
-    </div>`;
-  }
+  const reviewed = currentState !== 'pre_submit';
+  const stemCls = reviewed ? 'stem stem--compact' : 'stem';
+  const stem = `<p class="${stemCls}">A <strong>68-year-old client</strong> with acute heart failure reports increased dyspnea, SpO₂ <strong>92%</strong> on room air, bilateral crackles, and 2+ edema. <strong>Which action should the nurse take first?</strong></p>`;
+  const head = `<div class="qhead"><span class="qpill">${currentState === 'sata_rationale' ? 'Select all that apply · Cardiovascular' : 'Cardiovascular &amp; oxygenation'}</span><button type="button" class="icon-btn">Flag</button></div>`;
+  const opts = currentState === 'sata_rationale'
+    ? renderSataOpts()
+    : renderMcqOpts(reviewed, currentState === 'rationale_incorrect' ? 'A' : null);
+  const body = `<div class="q-stack">${head}${stem}<div class="opt-list">${opts}</div>${renderRationaleBand(currentState)}</div>`;
   document.getElementById('q-content').innerHTML = body;
 
   const foot = document.getElementById('exam-foot');

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Activity, ArrowRight, CheckCircle2 } from "lucide-react";
+import { AcademyBreadcrumbBar, ClinicalAcademyJsonLdGraph } from "@/components/clinical-academy/clinical-academy-chrome";
+import { ecgAdvancedLeafBreadcrumbs } from "@/lib/breadcrumbs/academy-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -148,16 +150,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function MedicationEcgChangesPage() {
-  const breadcrumbs = [
-    { name: "NurseNest", href: "/" },
-    { name: "ECG Interpretation", href: "/ecg-interpretation" },
-    { name: "Advanced ECG for Nurses", href: PILLAR },
-    { name: "Medication-Induced ECG Changes", href: PATH },
-  ];
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
+  const breadcrumbResolution = ecgAdvancedLeafBreadcrumbs('Medication-Induced ECG Changes', PATH);
+  const jsonLdGraph = [
       {
         "@type": "Article",
         "@id": `https://nursenest.io${PATH}`,
@@ -167,15 +162,6 @@ export default function MedicationEcgChangesPage() {
         headline: PAGE_H1,
         inLanguage: "en",
         author: { "@type": "Organization", name: "NurseNest" },
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: breadcrumbs.map((c, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            name: c.name,
-            item: `https://nursenest.io${c.href}`,
-          })),
-        },
       },
       {
         "@type": "FAQPage",
@@ -185,29 +171,14 @@ export default function MedicationEcgChangesPage() {
           acceptedAnswer: { "@type": "Answer", text: f.answer },
         })),
       },
-    ],
-  };
+    ];
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--semantic-text-muted)]">
-            {breadcrumbs.map((c, i) => (
-              <li key={c.href} className="flex items-center gap-1.5">
-                {i > 0 && <span aria-hidden>/</span>}
-                {i < breadcrumbs.length - 1 ? (
-                  <Link href={c.href} className="hover:underline">{c.name}</Link>
-                ) : (
-                  <span className="text-[var(--semantic-text-secondary)]">{c.name}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
-
-        <header className="mb-10 space-y-4">
+        <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
+<header className="mb-10 space-y-4">
           <div className="flex items-center gap-2">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_08%,var(--semantic-surface))] text-[var(--semantic-chart-1)]">
               <Activity className="h-5 w-5" aria-hidden />

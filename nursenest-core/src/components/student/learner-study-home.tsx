@@ -43,6 +43,7 @@ import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { LearnerDashboardReadinessNextStrip } from "@/components/student/learner-dashboard-readiness-next-strip";
+import { PostExamDashboardBridgeBanner } from "@/components/student/post-exam-dashboard-bridge";
 import { LearnerHubClinicalQuickLaunch } from "@/components/student/learner-hub-clinical-quick-launch";
 import { LearnerDashboardHubLayout, type LearnerDashboardHubNavItem } from "@/components/student/learner-dashboard-hub-layout";
 import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboard-mobile-fold";
@@ -114,7 +115,7 @@ export type LearnerStudyHomeProps = {
   /** Marketing locale — matches shell nav label casing. */
   locale: string;
   /** Same CAT vs Exams rule as `app/(learner)/layout.tsx` for canonical study links. */
-  examsNavLabel: "CAT Exams" | "Exams";
+  examsNavLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
   identity: DashboardIdentity;
   heroHeading: string;
   snapshot: PremiumDashboardSnapshot;
@@ -267,6 +268,8 @@ export function LearnerStudyHome({
       navHeading={t("learner.studyHome.shortcutsNavLabel")}
       items={hubNavItems}
     >
+      <PostExamDashboardBridgeBanner />
+
       {/* 1 — Premium hero strip: readiness snapshot + optional exam/streak + primary next action */}
       <LearnerDashboardReadinessNextStrip
         t={t}

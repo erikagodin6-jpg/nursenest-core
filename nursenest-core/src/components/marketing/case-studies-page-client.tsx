@@ -27,7 +27,7 @@ export function CaseStudiesPageClient() {
   const [picked, setPicked] = useState<Record<string, number | null>>({});
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl">
       <header className="mb-10">
         <h1 className="nn-marketing-h1">Clinical case studies</h1>
         <p className="nn-marketing-lead mt-3 text-[var(--theme-muted-text)]">

@@ -53,7 +53,7 @@ export function LearnerDashboardUserPanelBand({
   t: LearnerMarketingT;
   locale: string;
   pathwayId: string | null;
-  examsNavLabel: "CAT Exams" | "Exams";
+  examsNavLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
   entitlement: AccessScope | "error";
   includeStudyShortcuts: boolean;
 }) {
