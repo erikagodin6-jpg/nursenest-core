@@ -79,3 +79,23 @@ export function scoreEducationalRelevance(input: {
 export function passesEducationalRelevanceThreshold(score: number): boolean {
   return score >= MIN_EDUCATIONAL_RELEVANCE_SCORE;
 }
+
+export function auditGraphTraversal(steps: readonly { href: string; stepKind?: string; competencyId?: string | null }[]): GraphAuditIssue[] {
+  const issues = auditRemediationSteps(steps.map((s) => s.href));
+  const kinds = steps.map((s) => s.stepKind).filter(Boolean);
+  if (kinds.length >= 3 && kinds[0] === kinds[kinds.length - 1] && kinds[0] === "reassessment") {
+    issues.push({ code: "circular_hint", message: "Remediation path may loop reassessment without scaffold steps." });
+  }
+  const withoutCompetency = steps.filter((s) => s.competencyId == null).length;
+  if (withoutCompetency === steps.length && steps.length > 2) {
+    issues.push({ code: "orphan_topic", message: "Traversal has no competency mapping for topic cluster." });
+  }
+  return issues;
+}
+
+/** Detect circular or reassessment-only remediation paths (graph-loop governance). */
+export function detectRemediationLoops(
+  steps: readonly { href: string; stepKind?: string; competencyId?: string | null }[],
+): GraphAuditIssue[] {
+  return auditGraphTraversal(steps).filter((i) => i.code === "circular_hint" || i.code === "duplicate_href");
+}

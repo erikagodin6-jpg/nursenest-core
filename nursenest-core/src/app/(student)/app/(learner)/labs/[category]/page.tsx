@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import type { LabCategorySlug } from "@/lib/labs/labs-engine";
 import { LABS_CATEGORIES, listLabLessonsForTrack } from "@/lib/labs/labs-engine";
 import { loadLabsRouteContext } from "@/lib/labs/labs-route-loader";
@@ -38,16 +38,7 @@ export default async function LabsCategoryRoute({ params }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <BreadcrumbTrail
-          items={[
-            { name: "Home", href: "/" },
-            { name: "Dashboard", href: "/app" },
-            { name: "Labs", href: "/app/labs" },
-            { name: meta.heading, href: undefined },
-          ]}
-        />
-      </div>
+      <LearnerBreadcrumbTrail kind="labs-category" categoryLabel={meta.heading} pathname="/app/labs" />
       <header className="nn-learner-page-hero space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">Labs</p>
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{meta.heading}</h1>

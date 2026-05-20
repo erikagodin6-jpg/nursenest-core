@@ -13,7 +13,7 @@ export default function CaseStudiesPage() {
   const breadcrumbResolution = caseStudiesBreadcrumbs();
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-      <BreadcrumbsFromResolution resolution={breadcrumbResolution} />
+      <BreadcrumbsFromResolution resolution={breadcrumbResolution} pathname="/case-studies" />
       <CaseStudiesPageClient />
     </div>
   );

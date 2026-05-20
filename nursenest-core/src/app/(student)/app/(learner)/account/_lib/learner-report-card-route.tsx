@@ -5,7 +5,7 @@ import {
   LearnerProfileSummaryCard,
   LearnerReportCardHero,
 } from "@/components/learner-account-ui";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
@@ -21,7 +21,6 @@ import { aggregateTopicsByCanonicalStudyCategory } from "@/lib/learner/learner-a
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function LearnerReportCardRouteBody({
@@ -48,7 +47,7 @@ export async function LearnerReportCardRouteBody({
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
           body={t("learner.profile.signedOutHint")}
@@ -65,7 +64,7 @@ export async function LearnerReportCardRouteBody({
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
@@ -83,7 +82,7 @@ export async function LearnerReportCardRouteBody({
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
@@ -121,7 +120,7 @@ export async function LearnerReportCardRouteBody({
         className="py-2 nn-learner-report-card-convergence"
         data-nn-learner-report-card-convergence=""
       >
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
         <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
         <StudyToolsReportCardInset userId={userId} />
@@ -149,7 +148,7 @@ export async function LearnerReportCardRouteBody({
       className="py-2 nn-learner-report-card-convergence"
       data-nn-learner-report-card-convergence=""
     >
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
       <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
 

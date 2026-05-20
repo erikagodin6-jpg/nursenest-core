@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -13,7 +13,6 @@ import { catLaunchPathwayIdForLearnerStartPage } from "@/lib/practice-tests/reso
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -48,7 +47,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -67,7 +66,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -100,7 +99,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <PremiumEmptyState
           headline="Adaptive CAT"
@@ -176,7 +175,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   return (
     <div className="mx-auto min-w-0 w-full max-w-6xl space-y-4 px-4 pb-6 sm:px-6">
       <div className="mb-1">
-        <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
       </div>
       <p className="mt-2 max-w-3xl text-sm text-[var(--semantic-text-secondary)]">
         Select your exam pathway, review conditions, then start. Timing, navigation, and min/max item rules follow the pathway

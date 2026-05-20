@@ -46,4 +46,16 @@ describe("SEO graph hardening — contracts", () => {
     assert.ok(fs.existsSync(path.join(repoRoot, "src/app/(marketing)/(default)/clinical-interpretation/page.tsx")));
     assert.ok(fs.existsSync(path.join(repoRoot, "src/app/(marketing)/(default)/nursing-glossary/page.tsx")));
   });
+
+  it("route canonicalization audit script scans content and blog seeds", () => {
+    const script = read("scripts/audit-route-canonicalization.mjs");
+    assert.match(script, /blog-static-longtail/);
+    assert.match(script, /walkContent/);
+  });
+
+  it("lesson remediation chain uses governed telemetry client", () => {
+    const chain = read("src/components/lessons/pathway-lesson-remediation-chain.tsx");
+    assert.match(chain, /orchestrateEducationalGraph/);
+    assert.match(chain, /PathwayLessonRemediationChainClient/);
+  });
 });

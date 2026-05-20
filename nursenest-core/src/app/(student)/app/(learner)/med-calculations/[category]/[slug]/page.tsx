@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { MedCalculationsLessonPage } from "@/components/med-calculations/med-calculations-lesson-page";
 import {
   buildMedCalcStudyLinks,
   getMedCalcFlashcards,
   getMedCalcLessonByCategoryAndSlug,
   getMedCalcQuestions,
+  listMedCalcCategoriesForTrack,
   type MedCalcCategorySlug,
 } from "@/lib/med-calculations/med-calculations-engine";
 import { loadMedCalculationsRouteContext } from "@/lib/med-calculations/med-calculations-route-loader";
@@ -35,19 +36,17 @@ export default async function MedCalculationsLessonRoute({ params }: Props) {
   const questions = getMedCalcQuestions(lesson);
   const flashcards = getMedCalcFlashcards(lesson);
   const studyLinks = buildMedCalcStudyLinks(context.pathwayId, lesson.questionTopic);
+  const categoryLabel =
+    listMedCalcCategoriesForTrack(context.track).find((c) => c.slug === lesson.category)?.title ?? category;
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <BreadcrumbTrail
-          items={[
-            { name: "Home", href: "/" },
-            { name: "Dashboard", href: "/app" },
-            { name: "Medication calculations", href: "/app/med-calculations" },
-            { name: lesson.shortTitle, href: undefined },
-          ]}
-        />
-      </div>
+      <LearnerBreadcrumbTrail
+        kind="med-cal-lesson"
+        categoryLabel={categoryLabel}
+        lessonTitle={lesson.shortTitle}
+        pathname="/app/med-calculations"
+      />
       <MedCalculationsLessonPage
         userId={context.userId}
         lesson={lesson}

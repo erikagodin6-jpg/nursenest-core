@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BookX, Flame } from "lucide-react";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { MistakeNotebookClient } from "@/components/mistakes/mistake-notebook-client";
@@ -41,7 +40,7 @@ export default async function MistakeNotebookPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
         <PremiumEmptyState
           headline="Mistake Notebook"
           body="Sign in to track your missed questions and learn from your errors more effectively."
@@ -63,7 +62,7 @@ export default async function MistakeNotebookPage() {
   if (entitlement === "error" || !entitlement.hasAccess) {
     const gate = (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
         <SubscriptionPaywall context="lessons" />
       </div>
     );
@@ -89,7 +88,7 @@ export default async function MistakeNotebookPage() {
 
   return (
     <div className="space-y-8">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <header

@@ -40,7 +40,7 @@ export default function CardiacOutputMonitoringPage() {
   const breadcrumbResolution = labsClinicalModuleLeafBreadcrumbs("Cardiac Output Monitoring", PATH);
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} className="mb-8" />
 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
         Cardiac output monitoring: thermodilution, Fick principle, cardiac index, and clinical interpretation
       </h1>

@@ -2,13 +2,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { SUPPORT_EMAIL, SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,7 +32,7 @@ export default async function AccountSupportPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.support.title")}
           body={t("learner.profile.signedOutHint")}
@@ -49,7 +48,7 @@ export default async function AccountSupportPage() {
 
   return (
     <LearnerAccountShell className="space-y-8 py-2" data-testid="learner-account-support">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerAccountPageHero
         eyebrow={t("learner.account.shell.kicker")}
         title={t("learner.account.support.title")}

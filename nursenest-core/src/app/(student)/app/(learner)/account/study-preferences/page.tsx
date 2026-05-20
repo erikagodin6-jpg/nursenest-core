@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerStudySettingsHub } from "@/components/student/learner-study-settings-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -14,7 +14,6 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { parseMeasurementPreference } from "@/lib/measurements/measurement-preference";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -41,7 +40,7 @@ export default async function AccountStudyPreferencesPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.studyPreferences.title")}
           body={t("learner.profile.signedOutHint")}
@@ -80,7 +79,7 @@ export default async function AccountStudyPreferencesPage() {
 
   return (
     <LearnerAccountShell className="py-2">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerAccountPageHero title={t("learner.account.studyPreferences.title")} description={t("learner.account.studyPreferences.intro")} />
 
       {verifyFailed ? (

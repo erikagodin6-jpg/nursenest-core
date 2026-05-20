@@ -4,10 +4,8 @@ import { redirect } from "next/navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { loadUnifiedReviewData } from "@/lib/study/unified-review-engine";
 import { loadReviewQueueInitialData } from "@/lib/study/review-queue-data";
 import { UnifiedReviewHero } from "@/components/study/unified-review-hero";
@@ -55,18 +53,13 @@ export default async function ReviewQueuePage() {
     redirect("/login?callbackUrl=/app/review");
   }
 
-  const crumbs: BreadcrumbCrumb[] = [
-    ...appShellBreadcrumbs("dashboard"),
-    { name: "Smart Review", href: "/app/review" },
-  ];
-
   const entitlement = await resolveEntitlementForPage(userId);
   const isEntitled = entitlement !== "error" && entitlement.hasAccess;
 
   if (!isEntitled) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="review" pathname="/app/review" />
         <div className="mx-auto max-w-2xl">
           <ContextualPaywallCard context="smart_review" />
         </div>
@@ -104,7 +97,7 @@ export default async function ReviewQueuePage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="review" pathname="/app/review" />
       <h1 className="sr-only">Smart Review Queue</h1>
 
       {/* ── Hero: multi-source stats ───────────────────────────────────────── */}

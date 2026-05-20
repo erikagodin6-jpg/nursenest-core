@@ -1,6 +1,6 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { listTopicSiblingLessonsForMarketing } from "@/lib/lessons/pathway-lesson-topic-siblings";
+import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
+import { toMarketingRemediationChainSteps } from "@/lib/educational-graph/graph-step-adapters";
 
 export type MarketingRemediationChainStep = {
   kind: "lesson" | "questions" | "flashcards";
@@ -9,7 +9,7 @@ export type MarketingRemediationChainStep = {
 };
 
 /**
- * Competency-oriented remediation steps for public lesson surfaces (catalog-backed, bounded).
+ * @deprecated Prefer {@link orchestrateEducationalGraph} — legacy shape for callers not yet migrated.
  */
 export function buildMarketingLessonRemediationChain(input: {
   pathway: ExamPathwayDefinition;
@@ -18,34 +18,13 @@ export function buildMarketingLessonRemediationChain(input: {
   anchorLessonSlug: string;
   maxLessonSteps?: number;
 }): MarketingRemediationChainStep[] {
-  const topic = input.topicSlug.trim().toLowerCase();
-  const label = input.topicLabel.trim() || topic.replace(/-/g, " ");
-  if (!topic) return [];
-
-  const siblings = listTopicSiblingLessonsForMarketing({
-    pathway: input.pathway,
-    topicSlug: topic,
-    excludeSlug: input.anchorLessonSlug,
-    limit: input.maxLessonSteps ?? 4,
+  const traversal = orchestrateEducationalGraph({
+    topicSlug: input.topicSlug,
+    topicLabel: input.topicLabel,
+    marketingPathway: input.pathway,
+    anchorLessonSlug: input.anchorLessonSlug,
+    sourceSurface: "marketing_lesson",
+    maxLessonSteps: input.maxLessonSteps ?? 4,
   });
-
-  const steps: MarketingRemediationChainStep[] = [];
-  for (const s of siblings.slice(0, input.maxLessonSteps ?? 4)) {
-    steps.push({ kind: "lesson", label: s.title, href: s.href });
-  }
-
-  const questionsHref = `${buildExamPathwayPath(input.pathway, "questions")}?topic=${encodeURIComponent(topic)}`;
-  steps.push({
-    kind: "questions",
-    label: `Practice ${label} questions`,
-    href: questionsHref,
-  });
-
-  steps.push({
-    kind: "flashcards",
-    label: `${label} flashcards`,
-    href: `/flashcards/${encodeURIComponent(topic)}`,
-  });
-
-  return steps.slice(0, 6);
+  return toMarketingRemediationChainSteps(traversal.steps);
 }

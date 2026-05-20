@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadMotivationPayload } from "@/lib/study/motivation-data";
 import { StudyStreakCard } from "@/components/study/study-streak-card";
@@ -40,7 +39,7 @@ export default async function AccountMotivationPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Progress" pathname="/app/account" />
         <PremiumEmptyState
           headline="Progress & Motivation"
           body="Sign in to see your study streak, topic progress, and readiness evolution."
@@ -62,7 +61,7 @@ export default async function AccountMotivationPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Progress" pathname="/app/account" />
         <PremiumEmptyState
           headline="Progress & Motivation"
           body="We could not verify your subscription status. Please try again."
@@ -79,7 +78,7 @@ export default async function AccountMotivationPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Progress" pathname="/app/account" />
         <PremiumEmptyState
           headline="Progress & Motivation"
           body="Detailed progress tracking is available with a NurseNest subscription."
@@ -100,7 +99,7 @@ export default async function AccountMotivationPage() {
   if (payload.degraded?.active) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Progress" pathname="/app/account" />
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
             Progress
@@ -116,7 +115,7 @@ export default async function AccountMotivationPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Progress" pathname="/app/account" />
 
       {/* Page header */}
       <div className="nn-learner-page-hero">

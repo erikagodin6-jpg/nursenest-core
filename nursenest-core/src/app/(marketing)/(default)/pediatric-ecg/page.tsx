@@ -152,7 +152,7 @@ export default function PediatricEcgPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
       <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} />
 
       <header className="mb-10">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_06%,var(--semantic-surface))] px-3 py-1 text-xs font-semibold text-[var(--semantic-chart-3)]">

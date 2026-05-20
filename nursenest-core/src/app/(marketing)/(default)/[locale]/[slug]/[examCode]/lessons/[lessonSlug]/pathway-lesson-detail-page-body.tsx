@@ -305,7 +305,6 @@ export async function PathwayLessonDetailPageBody({
   );
   const breadcrumbResolution = resolveBreadcrumbResolution({
     kind: "pathway-lesson-detail",
-    intent: "education",
     pathway,
     lesson,
     lessonTitleDisplay: displayLessonTitle,
@@ -463,6 +462,7 @@ export async function PathwayLessonDetailPageBody({
           />
           <BreadcrumbsFromResolution
             resolution={breadcrumbResolution}
+            pathname={pathname}
             navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
           />
           <p className="nn-marketing-caption -mt-2 mb-3 text-[var(--theme-muted-text)]">

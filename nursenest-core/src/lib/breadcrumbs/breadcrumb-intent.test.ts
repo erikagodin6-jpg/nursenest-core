@@ -12,7 +12,6 @@ test("learner intent suppresses schema items", () => {
   assert.ok(pathway);
   const resolution = resolveBreadcrumbResolution({
     kind: "learner-pathway-lesson",
-    intent: "learner",
     pathway,
     lesson: { slug: "test-lesson", title: "Test", topic: "cardio" },
     lessonTitleDisplay: "Test Lesson",
@@ -25,7 +24,7 @@ test("learner intent suppresses schema items", () => {
 test("education intent emits schema", () => {
   assert.equal(intentEmitsBreadcrumbSchema("education"), true);
   assert.equal(intentEmitsBreadcrumbSchema("learner"), false);
-  const ecg = resolveBreadcrumbResolution({ kind: "ecg-hub", intent: "education" });
+  const ecg = resolveBreadcrumbResolution({ kind: "ecg-hub" });
   assert.equal(ecg.intent, "education");
   assert.ok(ecg.schemaItems.length >= 2);
 });

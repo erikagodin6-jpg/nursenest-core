@@ -1,105 +1,146 @@
 /**
- * Clinical academy breadcrumbs (ECG, labs, hemodynamics) — education intent.
+ * Clinical academy breadcrumbs — education intent via canonical root registry.
  */
 
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem, BreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-types";
-import { attachIntentToResolution } from "@/lib/breadcrumbs/breadcrumb-intent";
-import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
+import {
+  getBreadcrumbRoot,
+  rootCrumbFromDefinition,
+  rootSchemaFromDefinition,
+} from "@/lib/breadcrumbs/breadcrumb-root-registry";
+import { applyGovernedBreadcrumbResolution } from "@/lib/breadcrumbs/governed-breadcrumb-resolution";
+import { canonicalBreadcrumbHref, canonicalMarketingPath } from "@/lib/breadcrumbs/canonical-breadcrumb-href-builder";
 
-const HOME: BreadcrumbCrumb = { name: "Home", href: "/", i18nKey: "breadcrumbs.home" };
-const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/", i18nKey: "breadcrumbs.home" };
+function homeCrumb(): BreadcrumbCrumb {
+  const home = getBreadcrumbRoot("home")!;
+  return rootCrumbFromDefinition(home, true);
+}
 
-const CLINICAL_MODULES = { name: "Clinical Modules", href: "/clinical-modules" };
-const CLINICAL_MODULES_ITEM: BreadcrumbSchemaItem = {
-  name: "Clinical Modules",
-  item: toAbsoluteSiteUrl("/clinical-modules"),
-};
+function homeSchema(): BreadcrumbSchemaItem {
+  const home = getBreadcrumbRoot("home")!;
+  return rootSchemaFromDefinition(home);
+}
 
-const ECG_HUB = { name: "ECG Interpretation", href: "/ecg" };
-const ECG_HUB_ITEM: BreadcrumbSchemaItem = {
-  name: "ECG Interpretation",
-  item: toAbsoluteSiteUrl("/ecg"),
-};
-
-function educationResolution(
+function governedAcademy(
+  pathname: string,
   crumbs: BreadcrumbCrumb[],
   schemaItems: BreadcrumbSchemaItem[],
+  canonicalRootId: "ecg" | "clinical_modules",
 ): BreadcrumbResolution {
-  return attachIntentToResolution({ crumbs, schemaItems }, "education");
+  return applyGovernedBreadcrumbResolution({
+    resolution: { crumbs, schemaItems },
+    surface: "academy",
+    pathname,
+    canonicalRootId,
+  });
 }
 
 /** `/ecg` hub */
 export function ecgHubBreadcrumbs(): BreadcrumbResolution {
-  return educationResolution([HOME, { name: "ECG Interpretation", href: undefined }], [HOME_ITEM, ECG_HUB_ITEM]);
+  const ecg = getBreadcrumbRoot("ecg")!;
+  return governedAcademy(
+    ecg.href,
+    [homeCrumb(), rootCrumbFromDefinition(ecg, false)],
+    [homeSchema(), rootSchemaFromDefinition(ecg)],
+    "ecg",
+  );
 }
 
 /** `/ecg/{topic}` cluster topic */
 export function ecgTopicBreadcrumbs(topicLabel: string, topicPath: string): BreadcrumbResolution {
-  return educationResolution(
-    [HOME, ECG_HUB, { name: topicLabel, href: undefined }],
-    [HOME_ITEM, ECG_HUB_ITEM, { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) }],
+  const ecg = getBreadcrumbRoot("ecg")!;
+  const path = canonicalMarketingPath(topicPath);
+  return governedAcademy(
+    path,
+    [homeCrumb(), rootCrumbFromDefinition(ecg, true), { name: topicLabel, href: undefined }],
+    [homeSchema(), rootSchemaFromDefinition(ecg), { name: topicLabel, item: canonicalBreadcrumbHref(path) }],
+    "ecg",
   );
 }
 
 /** `/advanced-ecg-nursing` hub */
 export function ecgAdvancedHubBreadcrumbs(): BreadcrumbResolution {
-  return educationResolution(
-    [HOME, ECG_HUB, { name: "Advanced ECG for Nurses", href: undefined }],
+  const ecg = getBreadcrumbRoot("ecg")!;
+  const advancedPath = "/advanced-ecg-nursing";
+  return governedAcademy(
+    advancedPath,
+    [homeCrumb(), rootCrumbFromDefinition(ecg, true), { name: "Advanced ECG for Nurses", href: undefined }],
     [
-      HOME_ITEM,
-      ECG_HUB_ITEM,
-      { name: "Advanced ECG for Nurses", item: toAbsoluteSiteUrl("/advanced-ecg-nursing") },
+      homeSchema(),
+      rootSchemaFromDefinition(ecg),
+      { name: "Advanced ECG for Nurses", item: canonicalBreadcrumbHref(advancedPath) },
     ],
+    "ecg",
   );
 }
 
 /** Leaf under `/advanced-ecg-nursing/*` */
 export function ecgAdvancedLeafBreadcrumbs(leafLabel: string, leafPath: string): BreadcrumbResolution {
-  return educationResolution(
+  const ecg = getBreadcrumbRoot("ecg")!;
+  const path = canonicalMarketingPath(leafPath);
+  const advancedPath = "/advanced-ecg-nursing";
+  return governedAcademy(
+    path,
     [
-      HOME,
-      ECG_HUB,
-      { name: "Advanced ECG for Nurses", href: "/advanced-ecg-nursing" },
+      homeCrumb(),
+      rootCrumbFromDefinition(ecg, true),
+      { name: "Advanced ECG for Nurses", href: advancedPath },
       { name: leafLabel, href: undefined },
     ],
     [
-      HOME_ITEM,
-      ECG_HUB_ITEM,
-      { name: "Advanced ECG for Nurses", item: toAbsoluteSiteUrl("/advanced-ecg-nursing") },
-      { name: leafLabel, item: toAbsoluteSiteUrl(leafPath) },
+      homeSchema(),
+      rootSchemaFromDefinition(ecg),
+      { name: "Advanced ECG for Nurses", item: canonicalBreadcrumbHref(advancedPath) },
+      { name: leafLabel, item: canonicalBreadcrumbHref(path) },
     ],
+    "ecg",
   );
 }
 
-/** Standalone ECG marketing pages that sit beside the hub (e.g. `/ecg-interpretation`, `/pals-rhythms`). */
+/** Standalone ECG marketing pages (e.g. `/ecg-interpretation`, `/pals-rhythms`). */
 export function ecgStandaloneLeafBreadcrumbs(leafLabel: string, leafPath: string): BreadcrumbResolution {
-  return educationResolution(
-    [HOME, ECG_HUB, { name: leafLabel, href: undefined }],
-    [HOME_ITEM, ECG_HUB_ITEM, { name: leafLabel, item: toAbsoluteSiteUrl(leafPath) }],
+  const ecg = getBreadcrumbRoot("ecg")!;
+  const path = canonicalMarketingPath(leafPath);
+  return governedAcademy(
+    path,
+    [homeCrumb(), rootCrumbFromDefinition(ecg, true), { name: leafLabel, href: undefined }],
+    [homeSchema(), rootSchemaFromDefinition(ecg), { name: leafLabel, item: canonicalBreadcrumbHref(path) }],
+    "ecg",
   );
 }
 
 /** `/clinical-modules` hub */
 export function clinicalModulesHubBreadcrumbs(): BreadcrumbResolution {
-  return educationResolution(
-    [HOME, { name: "Clinical Modules", href: undefined }],
-    [HOME_ITEM, CLINICAL_MODULES_ITEM],
+  const mod = getBreadcrumbRoot("clinical_modules")!;
+  return governedAcademy(
+    mod.href,
+    [homeCrumb(), rootCrumbFromDefinition(mod, false)],
+    [homeSchema(), rootSchemaFromDefinition(mod)],
+    "clinical_modules",
   );
 }
 
 /** `/labs-interpretation`, `/advanced-labs-interpretation` hubs */
 export function labsHubBreadcrumbs(hubLabel: string, hubPath: string): BreadcrumbResolution {
-  return educationResolution(
-    [HOME, CLINICAL_MODULES, { name: hubLabel, href: undefined }],
-    [HOME_ITEM, CLINICAL_MODULES_ITEM, { name: hubLabel, item: toAbsoluteSiteUrl(hubPath) }],
+  const mod = getBreadcrumbRoot("clinical_modules")!;
+  const path = canonicalMarketingPath(hubPath);
+  return governedAcademy(
+    path,
+    [homeCrumb(), rootCrumbFromDefinition(mod, true), { name: hubLabel, href: undefined }],
+    [homeSchema(), rootSchemaFromDefinition(mod), { name: hubLabel, item: canonicalBreadcrumbHref(path) }],
+    "clinical_modules",
   );
 }
 
 /** Hemodynamics / labs leaf under clinical modules */
 export function labsClinicalModuleLeafBreadcrumbs(leafLabel: string, leafPath: string): BreadcrumbResolution {
-  return educationResolution(
-    [HOME, CLINICAL_MODULES, { name: leafLabel, href: undefined }],
-    [HOME_ITEM, CLINICAL_MODULES_ITEM, { name: leafLabel, item: toAbsoluteSiteUrl(leafPath) }],
+  const mod = getBreadcrumbRoot("clinical_modules")!;
+  const path = canonicalMarketingPath(leafPath);
+  return governedAcademy(
+    path,
+    [homeCrumb(), rootCrumbFromDefinition(mod, true), { name: leafLabel, href: undefined }],
+    [homeSchema(), rootSchemaFromDefinition(mod), { name: leafLabel, item: canonicalBreadcrumbHref(path) }],
+    "clinical_modules",
   );
 }
 
@@ -110,18 +151,23 @@ export function labsHubChildBreadcrumbs(
   leafLabel: string,
   leafPath: string,
 ): BreadcrumbResolution {
-  return educationResolution(
+  const mod = getBreadcrumbRoot("clinical_modules")!;
+  const hub = canonicalMarketingPath(hubPath);
+  const leaf = canonicalMarketingPath(leafPath);
+  return governedAcademy(
+    leaf,
     [
-      HOME,
-      CLINICAL_MODULES,
-      { name: hubLabel, href: hubPath },
+      homeCrumb(),
+      rootCrumbFromDefinition(mod, true),
+      { name: hubLabel, href: hub },
       { name: leafLabel, href: undefined },
     ],
     [
-      HOME_ITEM,
-      CLINICAL_MODULES_ITEM,
-      { name: hubLabel, item: toAbsoluteSiteUrl(hubPath) },
-      { name: leafLabel, item: toAbsoluteSiteUrl(leafPath) },
+      homeSchema(),
+      rootSchemaFromDefinition(mod),
+      { name: hubLabel, item: canonicalBreadcrumbHref(hub) },
+      { name: leafLabel, item: canonicalBreadcrumbHref(leaf) },
     ],
+    "clinical_modules",
   );
 }

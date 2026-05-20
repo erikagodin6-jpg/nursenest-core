@@ -175,7 +175,7 @@ export default function EcgCaseSimulationsPage() {
     <>
       <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
+        <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} />
 <header className="mb-10 space-y-4">
           <div className="flex items-center gap-2">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_08%,var(--semantic-surface))] text-[var(--semantic-chart-1)]">

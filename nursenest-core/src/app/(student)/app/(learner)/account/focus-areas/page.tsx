@@ -1,17 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountEmptyState } from "@/components/student/learner-account-empty-state";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -32,13 +32,12 @@ export default async function AccountFocusAreasPage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.focus-areas");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.focusAreas"));
   const entitlement = await resolveEntitlementForPage(userId);
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Focus areas" pathname="/app/account/focus-areas" />
         <PremiumEmptyState
           headline={t("learner.account.focusAreas.title")}
           body={t("learner.profile.signedOutHint")}
@@ -55,7 +54,7 @@ export default async function AccountFocusAreasPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Focus areas" pathname="/app/account/focus-areas" />
         <PremiumEmptyState
           headline={t("learner.account.focusAreas.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -72,7 +71,7 @@ export default async function AccountFocusAreasPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Focus areas" pathname="/app/account/focus-areas" />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.focusAreas.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.focusAreas.lockedBody")}</p>
@@ -87,10 +86,19 @@ export default async function AccountFocusAreasPage() {
   const weak = topicPerf.weakTopics;
   const strong = topicPerf.strongTopics;
   const empty = weak.length === 0 && strong.length === 0;
+  const primaryWeak = weak[0];
+  const primarySlug = primaryWeak ? normalizeTopicKey(primaryWeak.topic) ?? primaryWeak.topic : null;
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail
+        kind="focus-areas"
+        primaryTopicSlug={primarySlug}
+        primaryTopicLabel={primarySlug}
+        persistentWeakTopics={weak.map((w) => w.topic).filter(Boolean)}
+        pathname="/app/account/focus-areas"
+        topicSlug={primarySlug ?? undefined}
+      />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.focusAreas.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.focusAreas.intro")}</p>
@@ -121,7 +129,12 @@ export default async function AccountFocusAreasPage() {
                   : t("learner.profile.topics.missMany", { count: w.missed });
               return (
                 <li key={w.topic} className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3 text-sm">
-                  <span className="font-semibold text-foreground">{w.topic}</span>
+                  <Link
+                    href={`/app/account/focus-areas/${encodeURIComponent(normalizeTopicKey(w.topic) ?? w.topic)}`}
+                    className="font-semibold text-foreground hover:underline"
+                  >
+                    {w.topic}
+                  </Link>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {acc != null ? t("learner.profile.topics.accuracyLine", { pct: acc }) : t("learner.common.notAvailable")} · {missLabel}
                   </p>

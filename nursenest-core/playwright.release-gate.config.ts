@@ -142,5 +142,10 @@ export default defineConfig({
         ...(paidAuthEnabled ? { storageState: PAID_USER_AUTH_FILE } : {}),
       },
     },
+    {
+      name: "release-semantic-navigation",
+      testMatch: /tests\/e2e\/seo\/playwright-breadcrumb-governance\.spec\.ts$/,
+      use: { ...devices["Desktop Chrome"] },
+    },
   ],
 });

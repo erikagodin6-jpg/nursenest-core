@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { DEFAULT_INTERPRETATION_PATHWAY_ID } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
+import { GlossaryRelatedTerms } from "@/components/seo/glossary-related-terms";
 import { definedTermJsonLd } from "@/lib/educational-graph/structured-data-educational-entities";
+import { glossaryGraphMetadataForTerm } from "@/lib/educational-graph/nursing-glossary-governance";
 import { getNursingGlossaryTerm } from "@/lib/seo/nursing-glossary-registry";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
 
@@ -43,17 +47,26 @@ export default async function NursingGlossaryTermPage({ params }: Props) {
     .map((s) => getNursingGlossaryTerm(s))
     .filter((t): t is NonNullable<typeof t> => Boolean(t));
 
+  const termPath = `${GLOSSARY_HUB_PATH}/${entry.slug}`;
+  const breadcrumbs = pathway
+    ? resolveBreadcrumbResolution({
+        kind: "nursing-glossary-term",
+        pathway,
+        termLabel: entry.term,
+        termSlug: entry.slug,
+        topicSlug: entry.topicSlug,
+      })
+    : resolveBreadcrumbResolution({
+        kind: "glossary-term",
+        examLabel: "NCLEX-RN",
+        examPath: "/us/rn/nclex-rn",
+        termLabel: entry.term,
+        termPath,
+      });
+
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-[var(--theme-muted-text)]">
-        <Link href={GLOSSARY_HUB_PATH} className="hover:underline">
-          Glossary
-        </Link>
-        <span aria-hidden className="mx-2">
-          /
-        </span>
-        <span className="text-[var(--theme-heading-text)]">{entry.term}</span>
-      </nav>
+      <BreadcrumbsFromResolution resolution={breadcrumbs} pathname={termPath} />
       <h1 className="text-3xl font-semibold text-[var(--theme-heading-text)]">{entry.term}</h1>
       <p className="mt-4 text-lg leading-8 text-[var(--theme-body-text)]">{entry.definition}</p>
       <p className="mt-8 text-sm">
@@ -67,24 +80,13 @@ export default async function NursingGlossaryTermPage({ params }: Props) {
           Practice questions
         </Link>
       </p>
-      {related.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Related terms</h2>
-          <ul className="mt-3 flex flex-col gap-2 text-sm">
-            {related.map((r) => (
-              <li key={r.slug}>
-                <Link href={`${GLOSSARY_HUB_PATH}/${r.slug}`} className="font-medium text-primary hover:underline">
-                  {r.term}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+      <GlossaryRelatedTerms terms={related} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(definedTermJsonLd(entry, `${GLOSSARY_HUB_PATH}/${entry.slug}`)),
+          __html: JSON.stringify(
+            definedTermJsonLd(entry, glossaryGraphMetadataForTerm(entry).canonicalHref),
+          ),
         }}
       />
     </article>

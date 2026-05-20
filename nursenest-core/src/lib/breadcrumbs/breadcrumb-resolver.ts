@@ -1,5 +1,5 @@
 /**
- * Canonical breadcrumb resolver — explicit intent + single entry for trails/schema.
+ * Canonical breadcrumb resolver — surface-derived intent (callers must not pass intent).
  */
 
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -9,12 +9,7 @@ import type {
   BreadcrumbSchemaItem,
   PathwayLessonCategoryBreadcrumb,
 } from "@/lib/breadcrumbs/breadcrumb-types";
-import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
-import {
-  attachIntentToResolution,
-  defaultIntentForResolverKind,
-  intentEmitsBreadcrumbSchema,
-} from "@/lib/breadcrumbs/breadcrumb-intent";
+import { intentEmitsBreadcrumbSchema } from "@/lib/breadcrumbs/breadcrumb-intent";
 import {
   pathwayLessonDetailEducationBreadcrumbs,
   pathwayLessonsCategoryEducationBreadcrumbs,
@@ -32,15 +27,26 @@ import {
   labsClinicalModuleLeafBreadcrumbs,
   labsHubChildBreadcrumbs,
 } from "@/lib/breadcrumbs/academy-breadcrumbs";
-import { glossaryIndexBreadcrumbs, glossaryTermBreadcrumbs } from "@/lib/breadcrumbs/glossary-breadcrumbs";
+import {
+  glossaryIndexBreadcrumbs,
+  glossaryTermBreadcrumbs,
+  nursingGlossaryHubBreadcrumbs,
+  nursingGlossaryTermBreadcrumbs,
+} from "@/lib/breadcrumbs/glossary-breadcrumbs";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { PathwayMarketingHubBreadcrumbOpts } from "@/lib/seo/pathway-breadcrumbs";
 import { displayCategoryForPathwayMarketingHubLesson } from "@/lib/lessons/marketing-lessons-hub-category";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { caseStudiesBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-
-type ResolverBase = { intent?: BreadcrumbIntent };
-
-export type ResolvePathwayLessonDetailBreadcrumbsInput = ResolverBase & {
+import {
+  applyGovernedBreadcrumbResolution,
+  type GovernedBreadcrumbResolution,
+} from "@/lib/breadcrumbs/governed-breadcrumb-resolution";
+import {
+  resolveSurfaceFromResolverKind,
+  type BreadcrumbSurface,
+} from "@/lib/breadcrumbs/breadcrumb-surface";
+export type ResolvePathwayLessonDetailBreadcrumbsInput = {
   kind: "pathway-lesson-detail";
   pathway: ExamPathwayDefinition;
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">;
@@ -48,20 +54,20 @@ export type ResolvePathwayLessonDetailBreadcrumbsInput = ResolverBase & {
   opts?: PathwayMarketingHubBreadcrumbOpts;
 };
 
-export type ResolvePathwayCategoryBreadcrumbsInput = ResolverBase & {
+export type ResolvePathwayCategoryBreadcrumbsInput = {
   kind: "pathway-lessons-category";
   pathway: ExamPathwayDefinition;
   category: PathwayLessonCategoryBreadcrumb;
   opts?: PathwayMarketingHubBreadcrumbOpts;
 };
 
-export type ResolvePathwayLessonsHubBreadcrumbsInput = ResolverBase & {
+export type ResolvePathwayLessonsHubBreadcrumbsInput = {
   kind: "pathway-lessons-hub";
   pathway: ExamPathwayDefinition;
   opts?: PathwayMarketingHubBreadcrumbOpts;
 };
 
-export type ResolvePathwayTopicClusterBreadcrumbsInput = ResolverBase & {
+export type ResolvePathwayTopicClusterBreadcrumbsInput = {
   kind: "pathway-topic-cluster";
   pathway: ExamPathwayDefinition;
   topicSlug: string;
@@ -69,60 +75,68 @@ export type ResolvePathwayTopicClusterBreadcrumbsInput = ResolverBase & {
   opts?: PathwayMarketingHubBreadcrumbOpts;
 };
 
-export type ResolveLearnerPathwayLessonBreadcrumbsInput = ResolverBase & {
+export type ResolveLearnerPathwayLessonBreadcrumbsInput = {
   kind: "learner-pathway-lesson";
   pathway: ExamPathwayDefinition;
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">;
   lessonTitleDisplay: string;
 };
 
-export type ResolveEcgHubBreadcrumbsInput = ResolverBase & { kind: "ecg-hub" };
-export type ResolveEcgTopicBreadcrumbsInput = ResolverBase & {
+export type ResolveEcgHubBreadcrumbsInput = { kind: "ecg-hub" };
+export type ResolveEcgTopicBreadcrumbsInput = {
   kind: "ecg-topic";
   topicLabel: string;
   topicPath: string;
 };
-export type ResolveEcgAdvancedHubBreadcrumbsInput = ResolverBase & { kind: "ecg-advanced-hub" };
-export type ResolveEcgAdvancedLeafBreadcrumbsInput = ResolverBase & {
+export type ResolveEcgAdvancedHubBreadcrumbsInput = { kind: "ecg-advanced-hub" };
+export type ResolveEcgAdvancedLeafBreadcrumbsInput = {
   kind: "ecg-advanced-leaf";
   leafLabel: string;
   leafPath: string;
 };
-export type ResolveEcgStandaloneLeafBreadcrumbsInput = ResolverBase & {
+export type ResolveEcgStandaloneLeafBreadcrumbsInput = {
   kind: "ecg-standalone-leaf";
   leafLabel: string;
   leafPath: string;
 };
-export type ResolveLabsHubBreadcrumbsInput = ResolverBase & {
+export type ResolveLabsHubBreadcrumbsInput = {
   kind: "labs-hub";
   hubLabel: string;
   hubPath: string;
 };
-export type ResolveLabsClinicalModuleLeafBreadcrumbsInput = ResolverBase & {
+export type ResolveLabsClinicalModuleLeafBreadcrumbsInput = {
   kind: "labs-leaf";
   leafLabel: string;
   leafPath: string;
 };
-export type ResolveLabsHubChildBreadcrumbsInput = ResolverBase & {
+export type ResolveLabsHubChildBreadcrumbsInput = {
   kind: "labs-hub-child";
   hubLabel: string;
   hubPath: string;
   leafLabel: string;
   leafPath: string;
 };
-export type ResolveGlossaryIndexBreadcrumbsInput = ResolverBase & {
+export type ResolveGlossaryIndexBreadcrumbsInput = {
   kind: "glossary-index";
   examLabel: string;
   examPath: string;
 };
-export type ResolveGlossaryTermBreadcrumbsInput = ResolverBase & {
+export type ResolveGlossaryTermBreadcrumbsInput = {
   kind: "glossary-term";
   examLabel: string;
   examPath: string;
   termLabel: string;
   termPath: string;
 };
-export type ResolveCaseStudiesBreadcrumbsInput = ResolverBase & { kind: "case-studies" };
+export type ResolveNursingGlossaryHubInput = { kind: "nursing-glossary-hub" };
+export type ResolveNursingGlossaryTermInput = {
+  kind: "nursing-glossary-term";
+  pathway: ExamPathwayDefinition;
+  termLabel: string;
+  termSlug: string;
+  topicSlug: string;
+};
+export type ResolveCaseStudiesBreadcrumbsInput = { kind: "case-studies" };
 
 export type BreadcrumbResolverInput =
   | ResolvePathwayLessonDetailBreadcrumbsInput
@@ -140,6 +154,8 @@ export type BreadcrumbResolverInput =
   | ResolveLabsHubChildBreadcrumbsInput
   | ResolveGlossaryIndexBreadcrumbsInput
   | ResolveGlossaryTermBreadcrumbsInput
+  | ResolveNursingGlossaryHubInput
+  | ResolveNursingGlossaryTermInput
   | ResolveCaseStudiesBreadcrumbsInput;
 
 export function categoryBreadcrumbFromLesson(
@@ -150,24 +166,30 @@ export function categoryBreadcrumbFromLesson(
   return { label: descriptor.label, slug: descriptor.slug };
 }
 
-function withIntent(
-  resolution: { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] },
+function governPathwayResolution(
   kind: string,
-  intent?: BreadcrumbIntent,
-): BreadcrumbResolution {
-  const resolvedIntent = intent ?? defaultIntentForResolverKind(kind);
-  const base = attachIntentToResolution(resolution, resolvedIntent);
-  if (!intentEmitsBreadcrumbSchema(resolvedIntent)) {
-    return { ...base, schemaItems: [] };
-  }
-  return base;
+  raw: { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] },
+  pathway: ExamPathwayDefinition,
+  meta?: { topicSlug?: string; competencyId?: string | null },
+): GovernedBreadcrumbResolution {
+  const surface = resolveSurfaceFromResolverKind(kind);
+  const pathname = buildExamPathwayPath(pathway);
+  return applyGovernedBreadcrumbResolution({
+    resolution: raw,
+    surface,
+    pathname,
+    canonicalRootId: "lessons",
+    topicSlug: meta?.topicSlug,
+    competencyId: meta?.competencyId,
+  });
 }
 
 export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbResolution | BreadcrumbCrumb[] {
   switch (input.kind) {
     case "pathway-lesson-detail": {
       const category = categoryBreadcrumbFromLesson(input.lesson, input.pathway.id);
-      return withIntent(
+      return governPathwayResolution(
+        input.kind,
         pathwayLessonDetailEducationBreadcrumbs(
           input.pathway,
           input.lesson.slug,
@@ -175,71 +197,100 @@ export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbRe
           category,
           input.opts,
         ),
-        input.kind,
-        input.intent,
+        input.pathway,
+        { topicSlug: input.lesson.topic ?? undefined, competencyId: category.slug },
       );
     }
     case "pathway-lessons-category":
-      return withIntent(
-        pathwayLessonsCategoryEducationBreadcrumbs(input.pathway, input.category, input.opts),
+      return governPathwayResolution(
         input.kind,
-        input.intent,
+        pathwayLessonsCategoryEducationBreadcrumbs(input.pathway, input.category, input.opts),
+        input.pathway,
+        { competencyId: input.category.slug },
       );
     case "pathway-lessons-hub":
-      return withIntent(
-        pathwayLessonsHubEducationBreadcrumbs(input.pathway, input.opts),
+      return governPathwayResolution(
         input.kind,
-        input.intent,
+        pathwayLessonsHubEducationBreadcrumbs(input.pathway, input.opts),
+        input.pathway,
       );
     case "pathway-topic-cluster":
-      return withIntent(
-        pathwayTopicClusterEducationBreadcrumbs(input.pathway, input.topicSlug, input.topicLabel, input.opts),
+      return governPathwayResolution(
         input.kind,
-        input.intent,
+        pathwayTopicClusterEducationBreadcrumbs(input.pathway, input.topicSlug, input.topicLabel, input.opts),
+        input.pathway,
+        { topicSlug: input.topicSlug },
       );
     case "learner-pathway-lesson": {
       const category = categoryBreadcrumbFromLesson(input.lesson, input.pathway.id);
-      return learnerPathwayLessonEducationBreadcrumbs(input.pathway, input.lessonTitleDisplay, category);
+      const crumbs = learnerPathwayLessonEducationBreadcrumbs(
+        input.pathway,
+        input.lessonTitleDisplay,
+        category,
+      );
+      return applyGovernedBreadcrumbResolution({
+        resolution: { crumbs, schemaItems: [] },
+        surface: "review_session",
+        pathname: `/app/lessons/${input.lesson.slug}`,
+        canonicalRootId: "lessons",
+        topicSlug: input.lesson.topic ?? undefined,
+      });
     }
     case "ecg-hub":
-      return withIntent(ecgHubBreadcrumbs(), input.kind, input.intent);
+      return ecgHubBreadcrumbs();
     case "ecg-topic":
-      return withIntent(ecgTopicBreadcrumbs(input.topicLabel, input.topicPath), input.kind, input.intent);
+      return ecgTopicBreadcrumbs(input.topicLabel, input.topicPath);
     case "ecg-advanced-hub":
-      return withIntent(ecgAdvancedHubBreadcrumbs(), input.kind, input.intent);
+      return ecgAdvancedHubBreadcrumbs();
     case "ecg-advanced-leaf":
-      return withIntent(ecgAdvancedLeafBreadcrumbs(input.leafLabel, input.leafPath), input.kind, input.intent);
+      return ecgAdvancedLeafBreadcrumbs(input.leafLabel, input.leafPath);
     case "ecg-standalone-leaf":
-      return withIntent(ecgStandaloneLeafBreadcrumbs(input.leafLabel, input.leafPath), input.kind, input.intent);
+      return ecgStandaloneLeafBreadcrumbs(input.leafLabel, input.leafPath);
     case "labs-hub":
-      return withIntent(labsHubBreadcrumbs(input.hubLabel, input.hubPath), input.kind, input.intent);
+      return labsHubBreadcrumbs(input.hubLabel, input.hubPath);
     case "labs-leaf":
-      return withIntent(labsClinicalModuleLeafBreadcrumbs(input.leafLabel, input.leafPath), input.kind, input.intent);
+      return labsClinicalModuleLeafBreadcrumbs(input.leafLabel, input.leafPath);
     case "labs-hub-child":
-      return withIntent(
-        labsHubChildBreadcrumbs(input.hubLabel, input.hubPath, input.leafLabel, input.leafPath),
-        input.kind,
-        input.intent,
-      );
+      return labsHubChildBreadcrumbs(input.hubLabel, input.hubPath, input.leafLabel, input.leafPath);
     case "glossary-index":
-      return withIntent(glossaryIndexBreadcrumbs(input.examLabel, input.examPath), input.kind, input.intent);
+      return glossaryIndexBreadcrumbs(input.examLabel, input.examPath);
     case "glossary-term":
-      return withIntent(
-        glossaryTermBreadcrumbs(input.examLabel, input.examPath, input.termLabel, input.termPath),
-        input.kind,
-        input.intent,
-      );
-    case "case-studies":
-      return withIntent(caseStudiesBreadcrumbs(), input.kind, input.intent ?? "education");
+      return glossaryTermBreadcrumbs(input.examLabel, input.examPath, input.termLabel, input.termPath);
+    case "nursing-glossary-hub":
+      return nursingGlossaryHubBreadcrumbs();
+    case "nursing-glossary-term":
+      return nursingGlossaryTermBreadcrumbs({
+        pathway: input.pathway,
+        termLabel: input.termLabel,
+        termSlug: input.termSlug,
+        topicSlug: input.topicSlug,
+      });
+    case "case-studies": {
+      const raw = caseStudiesBreadcrumbs();
+      return applyGovernedBreadcrumbResolution({
+        resolution: raw,
+        surface: "case_study",
+        pathname: "/case-studies",
+        canonicalRootId: "case_studies",
+      });
+    }
     default:
-      return { crumbs: [], schemaItems: [], intent: "education" };
+      return applyGovernedBreadcrumbResolution({
+        resolution: { crumbs: [], schemaItems: [] },
+        surface: "unknown",
+        pathname: "/",
+      });
   }
 }
 
 export function resolveBreadcrumbResolution(input: BreadcrumbResolverInput): BreadcrumbResolution {
   const result = resolveBreadcrumbs(input);
   if (Array.isArray(result)) {
-    return withIntent({ crumbs: result, schemaItems: [] }, input.kind, input.intent ?? "learner");
+    return applyGovernedBreadcrumbResolution({
+      resolution: { crumbs: result, schemaItems: [] },
+      surface: resolveSurfaceFromResolverKind(input.kind),
+      pathname: "/app",
+    });
   }
   return result;
 }
@@ -249,3 +300,6 @@ export function shouldEmitResolverBreadcrumbSchema(resolution: BreadcrumbResolut
   const intent = resolution.intent ?? "education";
   return intentEmitsBreadcrumbSchema(intent) && resolution.schemaItems.length > 0;
 }
+
+/** @internal re-export for tests */
+export { resolveSurfaceFromResolverKind, type BreadcrumbSurface };

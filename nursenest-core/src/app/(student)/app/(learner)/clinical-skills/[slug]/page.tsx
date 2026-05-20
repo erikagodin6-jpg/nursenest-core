@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { ClinicalSkillDetailClient } from "@/components/clinical-skills/clinical-skill-detail-client";
 import { getClinicalSkillBySlug } from "@/lib/clinical-skills/clinical-skills-catalog";
 import { loadClinicalSkillsRouteContext } from "@/lib/clinical-skills/clinical-skills-route-context.server";
@@ -28,16 +28,7 @@ export default async function ClinicalSkillDetailRoute({ params, searchParams }:
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <BreadcrumbTrail
-          items={[
-            { name: "Home", href: "/" },
-            { name: "Dashboard", href: "/app" },
-            { name: "Clinical skills", href: pathwayId ? `/app/clinical-skills?pathwayId=${encodeURIComponent(pathwayId)}` : "/app/clinical-skills" },
-            { name: skill.title, href: undefined },
-          ]}
-        />
-      </div>
+      <LearnerBreadcrumbTrail kind="clinical-skill" skillTitle={skill.title} pathname="/app/clinical-skills" />
       <ClinicalSkillDetailClient skill={skill} pathwayId={pathwayId} userId={ctx.userId} />
     </div>
   );

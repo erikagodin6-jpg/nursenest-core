@@ -28,6 +28,9 @@ export const PAGE_OWNED_BREADCRUMB_PREFIXES = [
   "/for-institutions",
   "/seo/",
   "/glossary",
+  "/nursing-glossary",
+  "/nursing-glossary",
+  "/clinical-interpretation",
   "/ecg",
   "/advanced-ecg",
   "/ecg-interpretation",
@@ -51,7 +54,7 @@ export const PAGE_OWNED_BREADCRUMB_PREFIXES = [
   "/advanced-hemodynamic",
   "/nursing-mechanisms",
   "/canada/np/cnple",
-  "/canada/rpn/rex-pn",
+  "/canada/pn/rex-pn",
   "/canada/new-grad",
   "/us/new-grad",
 ] as const;

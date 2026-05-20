@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSecurityHub } from "@/components/student/learner-security-hub";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -9,7 +9,6 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadAccountHubBundle } from "@/lib/learner/load-account-hub-snapshot";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,7 +33,7 @@ export default async function AccountSecurityPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.security.title")}
           body={t("learner.profile.signedOutHint")}
@@ -54,7 +53,7 @@ export default async function AccountSecurityPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.security.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.security.intro")}</p>

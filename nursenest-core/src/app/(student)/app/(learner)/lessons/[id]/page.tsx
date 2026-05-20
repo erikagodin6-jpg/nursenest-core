@@ -75,7 +75,7 @@ import {
 import { resolveQuizEmbedQuestionsForLessonSlug } from "@/lib/lessons/lesson-quiz-embeds";
 import { PathwayLessonQuizEmbedSection } from "@/components/lessons/pathway-lesson-quiz-embed-section";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import {
   pathwayLessonPremiumSectionBodyText,
@@ -985,23 +985,24 @@ async function LessonDetailPageInner({ params }: Props) {
       return `Study this lesson in your ${pn} context — checks and drills stay on the same exam track.`;
     })();
 
-    const learnerBreadcrumbCrumbs =
+    const learnerBreadcrumbResolution =
       pathway != null
         ? resolveBreadcrumbResolution({
             kind: "learner-pathway-lesson",
-            intent: "learner",
             pathway,
             lesson: record,
             lessonTitleDisplay: cleanLessonTitleForDisplay(displayTitle),
-          }).crumbs
-        : [];
+          })
+        : null;
 
     const pathwayLessonMainColumn = (
       <>
-        {learnerBreadcrumbCrumbs.length > 0 ? (
-          <BreadcrumbTrail
-            items={learnerBreadcrumbCrumbs}
+        {learnerBreadcrumbResolution ? (
+          <LearnerBreadcrumbTrail
+            resolution={learnerBreadcrumbResolution}
+            pathname="/app/lessons"
             navClassName="mb-3 text-xs text-[var(--theme-muted-text)]"
+            className="mb-0 min-h-0"
           />
         ) : null}
         <LessonNavButtons

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadGuidedStudyPayload } from "@/lib/study/guided-study-data";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
@@ -17,7 +16,6 @@ import {
   GuidedReviewLaterCard,
   GuidedRetestCard,
 } from "@/components/study/guided-study-stack";
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { BROWSE_LESSONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
 
@@ -39,11 +37,6 @@ export default async function GuidedStudyPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).guided");
   const userId = (session?.user as { id?: string })?.id ?? "";
 
-  const crumbs: BreadcrumbCrumb[] = [
-    ...appShellBreadcrumbs("dashboard"),
-    { name: "Guided Study", href: "/app/guided" },
-  ];
-
   // ── Auth guard ──────────────────────────────────────────────────────────────
   if (!userId) {
     redirect(loginWithCallback("/app/guided"));
@@ -52,7 +45,7 @@ export default async function GuidedStudyPage() {
   if (!isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="guided" pathname="/app/guided" />
         <PremiumEmptyState
           headline="Guided Study Mode"
           body="Sign in to access your personalized study guide."
@@ -75,7 +68,7 @@ export default async function GuidedStudyPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="guided" pathname="/app/guided" />
         <PremiumEmptyState
           headline="Guided Study Mode"
           body="We could not verify your subscription. Please try again."
@@ -92,7 +85,7 @@ export default async function GuidedStudyPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="guided" pathname="/app/guided" />
         <SubscriptionPaywall context="dashboard" />
       </div>
     );
@@ -106,7 +99,7 @@ export default async function GuidedStudyPage() {
 
   return (
     <div className="space-y-8">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="guided" pathname="/app/guided" />
 
       {payload.criticalLoadFailed || partialDegraded ? (
         <LearnerSilentSectionDegradedFallback surfaceName="guided-study" />

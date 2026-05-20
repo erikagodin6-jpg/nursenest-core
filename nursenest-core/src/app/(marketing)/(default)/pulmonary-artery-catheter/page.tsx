@@ -47,7 +47,7 @@ export default function PulmonaryArteryCatheterPage() {
   const breadcrumbResolution = labsClinicalModuleLeafBreadcrumbs("Pulmonary Artery Catheter", PATH);
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} className="mb-8" />
 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-700 text-sm font-semibold mb-6">
         <Lock className="w-4 h-4" />
         Advanced Hemodynamics add-on — $149 CAD one-time

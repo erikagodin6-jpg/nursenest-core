@@ -56,6 +56,13 @@ jobs:
       - name: "[deploy-guard] Canonical spec passes env protection checks"
         run: node ../scripts/do-spec-guard.mjs ../.do/app-nursenest-core-next.yaml
 
+      - name: "[deploy-guard] GHCR runtime secrets use RUN_TIME scope"
+        run: node ../scripts/audit-ghcr-runtime-secret-scopes.mjs ../.do/app-nursenest-core-next.yaml
+
+      - name: "[deploy-guard] Dockerfile must not bake DATABASE_URL"
+        run: node scripts/verify-dockerfile-database-url.mjs
+        working-directory: nursenest-core
+
       - name: "[deploy-guard] Forbidden spec: nursenest-core/live-app-spec.yaml is rejected"
         run: |
           if node ../scripts/do-spec-guard.mjs live-app-spec.yaml 2>/dev/null; then
@@ -99,6 +106,9 @@ jobs:
       # Enforced here only (removed from App Platform `heroku-postbuild` to cut deploy build memory).
       - name: Validate marketing production surface
         run: npm run validate:marketing-production-surface
+
+      - name: Semantic navigation static release gate
+        run: npm run qa:semantic-navigation-gate:static
 
       - name: Deploy precheck (ci:verify — build must pass before deploy)
         run: npm run ci:verify

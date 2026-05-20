@@ -31,7 +31,6 @@ import { buildLearnerReportCardViewModel } from "@/lib/learner/learner-report-ca
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildDashboardModel } from "@/lib/learner/next-best-action";
 import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timeline";
@@ -122,15 +121,9 @@ function LearnerDashboardBodyFallback() {
   );
 }
 
-function LearnerDashboardShellFallback({
-  t,
-  crumbs,
-}: {
-  t: LearnerMarketingT;
-  crumbs: ReturnType<typeof appShellBreadcrumbs>;
-}) {
+function LearnerDashboardShellFallback({ t }: { t: LearnerMarketingT }) {
   return (
-    <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={t("learner.dashboard.title")}>
+    <LearnerDashboardPageShell t={t} heroHeading={t("learner.dashboard.title")}>
       <LearnerDashboardBodyFallback />
     </LearnerDashboardPageShell>
   );
@@ -139,7 +132,6 @@ function LearnerDashboardShellFallback({
 async function LearnerDashboardHeavyContent({
   t,
   locale,
-  crumbs,
   session,
   userId,
   entitlement,
@@ -149,7 +141,6 @@ async function LearnerDashboardHeavyContent({
 }: {
   t: LearnerMarketingT;
   locale: string;
-  crumbs: ReturnType<typeof appShellBreadcrumbs>;
   session: DashboardSessionLike;
   userId: string;
   entitlement: Exclude<Awaited<ReturnType<typeof resolveEntitlementForPage>>, "error">;
@@ -307,7 +298,6 @@ async function LearnerDashboardHeavyContent({
       return (
         <>
           <LearnerStudyHome
-            crumbs={crumbs}
             t={t}
             locale={locale}
             examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
@@ -372,7 +362,6 @@ async function LearnerDashboardHeavyContent({
   });
   return (
     <LearnerStudyHomeDurabilityMinimal
-      crumbs={crumbs}
       t={t}
       locale={locale}
       examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
@@ -389,11 +378,9 @@ async function LearnerDashboardHeavyContent({
 async function LearnerDashboardDeferredContent({
   t,
   locale,
-  crumbs,
 }: {
   t: LearnerMarketingT;
   locale: string;
-  crumbs: ReturnType<typeof appShellBreadcrumbs>;
 }) {
   const session = (await getProtectedRouteSession("(student).app.(learner)")) as DashboardSessionLike;
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -401,7 +388,7 @@ async function LearnerDashboardDeferredContent({
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={t("learner.dashboard.title")}>
+      <LearnerDashboardPageShell t={t} heroHeading={t("learner.dashboard.title")}>
         <PremiumEmptyState
           headline={t("learner.dashboard.signedOutTitle")}
           body={t("learner.dashboard.signedOutHint")}
@@ -454,7 +441,7 @@ async function LearnerDashboardDeferredContent({
 
   if (entitlement === "error") {
     return (
-      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+      <LearnerDashboardPageShell t={t} heroHeading={heroHeading} identity={identity}>
         <PremiumEmptyState
           headline={t("learner.dashboard.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -474,9 +461,8 @@ async function LearnerDashboardDeferredContent({
       reason: "durability_degraded",
     });
     return (
-      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+      <LearnerDashboardPageShell t={t} heroHeading={heroHeading} identity={identity}>
         <LearnerStudyHomeDurabilityMinimal
-          crumbs={crumbs}
           t={t}
           locale={locale}
           examsNavLabel={examsNavLabel}
@@ -493,7 +479,7 @@ async function LearnerDashboardDeferredContent({
 
   if (!entitlement.hasAccess) {
     return (
-      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+      <LearnerDashboardPageShell t={t} heroHeading={heroHeading} identity={identity}>
         <section className="nn-dash-section">
           <div className="nn-learner-page-hero">
             <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
@@ -514,12 +500,11 @@ async function LearnerDashboardDeferredContent({
   }
 
   return (
-    <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+    <LearnerDashboardPageShell t={t} heroHeading={heroHeading} identity={identity}>
       <Suspense fallback={<LearnerDashboardBodyFallback />}>
         <LearnerDashboardHeavyContent
           t={t}
           locale={locale}
-          crumbs={crumbs}
           session={session}
           userId={userId}
           entitlement={entitlement}
@@ -534,11 +519,10 @@ async function LearnerDashboardDeferredContent({
 
 export default async function LearnerDashboardPage() {
   const { t, locale } = await getLearnerMarketingBundle();
-  const crumbs = appShellBreadcrumbs("dashboard");
 
   return (
-    <Suspense fallback={<LearnerDashboardShellFallback t={t} crumbs={crumbs} />}>
-      <LearnerDashboardDeferredContent t={t} locale={locale} crumbs={crumbs} />
+    <Suspense fallback={<LearnerDashboardShellFallback t={t} />}>
+      <LearnerDashboardDeferredContent t={t} locale={locale} />
     </Suspense>
   );
 }

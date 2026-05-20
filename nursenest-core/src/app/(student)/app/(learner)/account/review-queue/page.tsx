@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -10,7 +10,6 @@ import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -37,7 +36,7 @@ export default async function AccountReviewQueuePage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
           body={t("learner.profile.signedOutHint")}
@@ -54,7 +53,7 @@ export default async function AccountReviewQueuePage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -71,7 +70,7 @@ export default async function AccountReviewQueuePage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
           body={t("learner.account.reviewQueue.lockedBody")}
@@ -92,7 +91,7 @@ export default async function AccountReviewQueuePage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.reviewQueue.intro")}</p>

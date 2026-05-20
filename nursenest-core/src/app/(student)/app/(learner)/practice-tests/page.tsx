@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { ExamFamily, TierCode } from "@prisma/client";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { LearnerNpExamPracticePickSurface } from "@/components/student/learner-np-exam-practice-pick-surface";
@@ -26,7 +26,6 @@ import {
 } from "@/lib/learner/tier-scoped-study-routes";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -67,7 +66,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     return (
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="mb-5">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -86,7 +85,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -193,7 +192,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       return (
         <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
           <div className="mb-4">
-            <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+            <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
           </div>
           <ContentEmptyState
             variant="generic"
@@ -210,7 +209,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     return (
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
         <div className="mb-4">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <ContentEmptyState
           variant="generic"
@@ -226,7 +225,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     return (
       <div className="space-y-4">
         <div className="mb-4">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <LearnerRenderTraceBanner
           data-route="practice-tests"
@@ -258,7 +257,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -293,7 +292,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-2">
       <div className="mb-1">
-        <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
       </div>
       <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
       <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>

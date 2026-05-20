@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import type { ClinicalInterpretationEntry } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 import {
   CLINICAL_INTERPRETATION_HUB_PATH,
@@ -13,40 +15,17 @@ export function ClinicalInterpretationGuidePage({ entry }: Props) {
   const pathway = getExamPathwayById(DEFAULT_INTERPRETATION_PATHWAY_ID);
   const lessonsHref = pathway ? buildExamPathwayPath(pathway, "lessons") : "/us/rn/nclex-rn/lessons";
   const questionsHref = pathway ? buildExamPathwayPath(pathway, "questions") : "/us/rn/nclex-rn/questions";
+  const guidePath = `${CLINICAL_INTERPRETATION_HUB_PATH}/${entry.slug}`;
+  const breadcrumbs = resolveBreadcrumbResolution({
+    kind: "clinical-interpretation-guide",
+    category: entry.category,
+    guideTitle: entry.h1,
+    guideSlug: entry.slug,
+  });
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-[var(--theme-muted-text)]">
-        <ol className="flex flex-wrap gap-2">
-          <li>
-            <Link href="/" className="hover:underline">
-              Home
-            </Link>
-          </li>
-          <li aria-hidden="true">
-            /
-          </li>
-          <li>
-            <Link href={lessonsHref} className="hover:underline">
-              Lessons
-            </Link>
-          </li>
-          <li aria-hidden="true">
-            /
-          </li>
-          <li>
-            <Link href={CLINICAL_INTERPRETATION_HUB_PATH} className="hover:underline">
-              Clinical interpretation
-            </Link>
-          </li>
-          <li aria-hidden="true">
-            /
-          </li>
-          <li aria-current="page" className="text-[var(--theme-heading-text)]">
-            {entry.h1}
-          </li>
-        </ol>
-      </nav>
+      <BreadcrumbsFromResolution resolution={breadcrumbs} pathname={guidePath} />
 
       <header className="space-y-4">
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Clinical interpretation guide</p>

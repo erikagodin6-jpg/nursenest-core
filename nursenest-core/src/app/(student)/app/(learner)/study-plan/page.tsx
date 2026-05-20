@@ -9,7 +9,8 @@ import { StructuredStudyPathSection } from "@/components/student/structured-stud
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
+import { buildGovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
+import { warmDurableLearnerCognitionCache } from "@/lib/educational-cognition/learner-cognition-persistence";
 import {
   coalesceStudyPathKindParam,
   inferStudyPathKindFromLearnerProfile,
@@ -17,7 +18,7 @@ import {
   STUDY_PATH_KINDS,
 } from "@/lib/learner/structured-study-path";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
-import { buildPersonalizedWeakAreaStudyPlan } from "@/lib/learner/personalized-weak-area-study-plan";
+import { buildCognitionIntegratedStudyPlan } from "@/lib/educational-cognition/study-plan-cognition";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { PersonalizedWeakAreaStudyPlanPanel } from "@/components/student/personalized-weak-area-study-plan-panel";
@@ -52,7 +53,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
 
   let adaptive = null;
   let insightSnapshot = null;
-  let weakPlan: Awaited<ReturnType<typeof buildPersonalizedWeakAreaStudyPlan>> = null;
+  let weakPlan: Awaited<ReturnType<typeof buildCognitionIntegratedStudyPlan>> = null;
   let structuredPath: Awaited<ReturnType<typeof loadStructuredStudyPathForSubscriber>> | null = null;
   let inferredStudyKind = inferStudyPathKindFromLearnerProfile({});
   let studyKindFromQuery: (typeof STUDY_PATH_KINDS)[number] | null = null;
@@ -74,17 +75,19 @@ export default async function StudyPlanPage({ searchParams }: Props) {
         }),
       ]);
       if (topicPerf) {
-        weakPlan = await buildPersonalizedWeakAreaStudyPlan({
+        weakPlan = await buildCognitionIntegratedStudyPlan({
           userId,
           entitlement,
           learnerPath: userExam?.learnerPath ?? null,
           topicPerformance: topicPerf,
+          readinessResult: premiumSnapshot?.readiness ?? null,
         });
       }
 
       if (premiumSnapshot && topicPerf) {
+        await warmDurableLearnerCognitionCache(userId);
         insightSnapshot = premiumSnapshot.insights;
-        adaptive = buildAdaptiveRecommendations({
+        adaptive = await buildGovernedAdaptiveRecommendations({
           examDatePlanType: userExam?.examDatePlanType,
           examDate: userExam?.examDate ?? null,
           readiness: premiumSnapshot.readiness,
@@ -100,9 +103,10 @@ export default async function StudyPlanPage({ searchParams }: Props) {
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
           subscriberCountry: entitlement.country,
-          preferredPathwayId:
-            premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
+          preferredPathwayId: premiumSnapshot.cognition?.pathwayId ?? premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
           availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
+          userId,
+          entitlement,
         });
       }
 
@@ -151,7 +155,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
 
       {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading userId={userId} /> : null}
 
-      {weakPlan ? <PersonalizedWeakAreaStudyPlanPanel plan={weakPlan} t={t} /> : null}
+      {weakPlan ? <PersonalizedWeakAreaStudyPlanPanel plan={weakPlan.publicPlan} t={t} /> : null}
 
       {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
 

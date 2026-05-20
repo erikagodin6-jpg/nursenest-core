@@ -2,6 +2,8 @@ import {
   listNursingGlossaryTerms,
   type NursingGlossaryTerm,
 } from "@/lib/seo/nursing-glossary-registry";
+import { resolveRnCompetencyForTopic } from "@/lib/educational-graph/rn-competency-ontology";
+import { EDUCATIONAL_ONTOLOGY_NAMESPACE } from "@/lib/educational-graph/educational-ontology-constants";
 
 export const GLOSSARY_MIN_DEFINITION_CHARS = 72;
 export const GLOSSARY_TARGET_TERM_COUNT = 200;
@@ -11,6 +13,27 @@ export type GlossaryGovernanceIssue = {
   slug: string;
   message: string;
 };
+
+export type GlossaryGraphMetadata = {
+  competencyId: string | null;
+  ontologyNamespace: string;
+  canonicalHref: string;
+  telemetryNamespace: string;
+  interpretationTopicSlug: string | null;
+  remediationTopicSlug: string;
+};
+
+export function glossaryGraphMetadataForTerm(term: NursingGlossaryTerm): GlossaryGraphMetadata {
+  const competency = resolveRnCompetencyForTopic(term.topicSlug);
+  return {
+    competencyId: competency?.id ?? null,
+    ontologyNamespace: EDUCATIONAL_ONTOLOGY_NAMESPACE,
+    canonicalHref: `/nursing-glossary/${term.slug}`,
+    telemetryNamespace: `${EDUCATIONAL_ONTOLOGY_NAMESPACE}.glossary`,
+    interpretationTopicSlug: term.topicSlug,
+    remediationTopicSlug: term.topicSlug,
+  };
+}
 
 export function validateGlossaryTerm(term: NursingGlossaryTerm): GlossaryGovernanceIssue[] {
   const issues: GlossaryGovernanceIssue[] = [];

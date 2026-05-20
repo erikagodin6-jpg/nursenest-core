@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { MedCalculationsHubPage } from "@/components/med-calculations/med-calculations-hub-page";
 import {
   buildMedCalcStudyLinks,
@@ -21,15 +21,7 @@ export default async function MedCalculationsHubRoute() {
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <BreadcrumbTrail
-          items={[
-            { name: "Home", href: "/" },
-            { name: "Dashboard", href: "/app" },
-            { name: "Medication calculations", href: undefined },
-          ]}
-        />
-      </div>
+      <LearnerBreadcrumbTrail kind="med-cal-hub" pathname="/app/med-calculations" />
       <MedCalculationsHubPage
         trackLabel={context.trackLabel}
         hasAccess={context.hasAccess}

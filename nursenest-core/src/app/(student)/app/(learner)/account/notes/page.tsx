@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadNotesPagePayload } from "./actions";
 import { NotesIndexClient } from "./notes-index-client";
@@ -31,7 +30,7 @@ export default async function AccountNotesPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Notes & Highlights" pathname="/app/account" />
         <PremiumEmptyState
           headline="Notes & Highlights"
           body="Sign in to access your study notes, bookmarks, and saved rationales."
@@ -54,7 +53,7 @@ export default async function AccountNotesPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Notes & Highlights" pathname="/app/account" />
         <PremiumEmptyState
           headline="Notes & Highlights"
           body="We could not verify your subscription. Please try again."
@@ -71,7 +70,7 @@ export default async function AccountNotesPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Notes & Highlights" pathname="/app/account" />
         <SubscriptionPaywall context="dashboard" />
       </div>
     );
@@ -82,7 +81,7 @@ export default async function AccountNotesPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Notes & Highlights" pathname="/app/account" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <div

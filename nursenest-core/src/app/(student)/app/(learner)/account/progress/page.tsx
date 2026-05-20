@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { MedCalcReportCardInset } from "@/components/med-calculations/med-calc-report-card-inset";
@@ -13,7 +13,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadProgressPagePayload } from "@/lib/learner/load-progress-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -40,7 +39,7 @@ export default async function AccountProgressPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
           body={t("learner.profile.signedOutHint")}
@@ -59,7 +58,7 @@ export default async function AccountProgressPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -76,7 +75,7 @@ export default async function AccountProgressPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
           body={t("learner.profile.performanceGate.body")}
@@ -97,7 +96,7 @@ export default async function AccountProgressPage() {
   if (!payload) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
@@ -111,7 +110,7 @@ export default async function AccountProgressPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>

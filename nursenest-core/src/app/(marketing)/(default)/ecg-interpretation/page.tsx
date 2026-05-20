@@ -219,7 +219,7 @@ export default function EcgInterpretationPage() {
     <>
       <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
+        <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} />
 
         <header className="mb-8 space-y-4">
           <div className="flex items-center gap-2">

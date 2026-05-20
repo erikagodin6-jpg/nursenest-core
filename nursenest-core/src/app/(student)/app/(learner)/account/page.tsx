@@ -1,7 +1,6 @@
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCenterOverview } from "@/components/student/learner-account-center-overview";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { appAccountHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -22,7 +21,7 @@ export default async function LearnerAccountIndexPage() {
   const { t, locale } = await getLearnerMarketingBundle();
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={appAccountHubBreadcrumbs()} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerAccountCenterOverview t={t} locale={locale} />
     </div>
   );

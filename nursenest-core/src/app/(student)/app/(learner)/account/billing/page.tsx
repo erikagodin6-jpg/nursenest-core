@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerBillingPageContent } from "@/components/student/learner-billing-page-content";
 import { BillingPortalReturnBanner } from "@/components/student/billing-portal-return-banner";
@@ -9,7 +9,6 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { BillingSupportEmailNotice } from "@/components/student/billing-support-email-notice";
 
@@ -36,7 +35,7 @@ export default async function AccountBillingPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.billing.title")}
           body={t("learner.profile.signedOutHint")}
@@ -54,7 +53,7 @@ export default async function AccountBillingPage() {
   if (!payload) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.billing.title")}
           body={t("learner.account.loadFailed")}
@@ -70,7 +69,7 @@ export default async function AccountBillingPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <BillingPortalReturnBanner />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.billing.title")}</h1>

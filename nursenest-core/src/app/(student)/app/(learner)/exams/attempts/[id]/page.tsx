@@ -2,14 +2,13 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadExamAttemptDetailForSubscriber } from "@/lib/exams/load-exam-attempt-detail";
 import { MARKETING_LOCALE_COOKIE, normalizePreferredMarketingLocale } from "@/lib/i18n/marketing-locale-cookie";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 
 export const dynamic = "force-dynamic";
 
@@ -64,18 +63,16 @@ export default async function ExamAttemptReportPage({ params }: Props) {
   const data = await loadExamAttemptDetailForSubscriber(userId, entitlement, id);
   if (!data) notFound();
 
-  const crumbs: BreadcrumbCrumb[] = [
-    { name: t("nav.home"), href: "/" },
-    { name: t("nav.practiceExams"), href: "/app/practice-tests?startMode=practice_exam" },
-    { name: t("examAttempt.reportTitle"), href: undefined },
-  ];
-
   const r = data.review;
   const pct = r?.accuracyPct != null ? String(r.accuracyPct) : null;
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail
+        kind="exam-attempt"
+        attemptLabel={t("examAttempt.reportTitle")}
+        pathname="/app/exams"
+      />
       <div>
         <p className="text-sm text-muted-foreground">{data.attempt.examTitle}</p>
         <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{t("examAttempt.recorded")}</h1>

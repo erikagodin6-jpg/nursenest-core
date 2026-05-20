@@ -301,7 +301,7 @@ export default function EcgAuthorityHubPage() {
   return (
     <>
       <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
+      <AcademyBreadcrumbBar resolution={breadcrumbResolution} pathname={PATH} />
 
       {/* ── Hero ── */}
       <header className="relative overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-chart-4)_06%,var(--semantic-surface))] px-6 py-10 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:py-14">

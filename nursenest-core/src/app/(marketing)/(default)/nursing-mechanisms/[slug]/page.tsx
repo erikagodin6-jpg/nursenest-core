@@ -10,6 +10,7 @@ import {
   getNursingMechanismClusterBySlug,
   nursingMechanismCanonicalPath,
 } from "@/lib/seo/nursing-mechanism-clusters";
+import { learningResourceJsonLd } from "@/lib/educational-graph/structured-data-educational-entities";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -47,12 +48,22 @@ export default async function NursingMechanismExplainerPage({ params }: Props) {
   }
 
   const breadcrumbJsonLd = buildNursingMechanismBreadcrumbJsonLd(cluster);
+  const learningJsonLd = learningResourceJsonLd({
+    name: draft.metaTitle,
+    description: draft.metaDescription,
+    pagePath: nursingMechanismCanonicalPath(cluster),
+    about: cluster.topicArea,
+  });
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(learningJsonLd) }}
       />
       <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted-foreground">
         <ol className="flex flex-wrap gap-2">

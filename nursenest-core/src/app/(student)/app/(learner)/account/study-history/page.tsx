@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountEmptyState } from "@/components/student/learner-account-empty-state";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -11,7 +11,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -38,7 +37,7 @@ export default async function AccountStudyHistoryPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.studyHistory.title")}
           body={t("learner.profile.signedOutHint")}
@@ -55,7 +54,7 @@ export default async function AccountStudyHistoryPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.studyHistory.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -72,7 +71,7 @@ export default async function AccountStudyHistoryPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.studyHistory.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.studyHistory.lockedBody")}</p>
@@ -93,7 +92,7 @@ export default async function AccountStudyHistoryPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.studyHistory.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.studyHistory.intro")}</p>

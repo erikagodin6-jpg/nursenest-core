@@ -28,6 +28,10 @@ jobs:
         run: npm run audit:internal-links
       - name: Paywall surface audit
         run: npm run audit:paywall-security
+      - name: Semantic route coverage (nightly diagnostics)
+        run: npm run audit:semantic-route-coverage
+      - name: Educational Graph OS static gate
+        run: npm run qa:semantic-navigation-gate:static
       - name: Upload audit log if present
         if: failure()
         uses: actions/upload-artifact@v4

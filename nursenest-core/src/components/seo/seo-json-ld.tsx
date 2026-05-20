@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { shouldEmitMarketingLayoutBreadcrumbFallback } from "@/lib/breadcrumbs/layout-fallback-policy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
@@ -147,9 +148,9 @@ function buildMarketingBreadcrumbJsonLdForPathname(rawPathname: string | null): 
 async function MarketingFallbackBreadcrumbJsonLd() {
   try {
     const headerList = await headers();
-    const data = buildMarketingBreadcrumbJsonLdForPathname(
-      headerList.get("x-nn-request-pathname") ?? headerList.get("x-pathname") ?? null,
-    );
+    const pathname = headerList.get("x-nn-request-pathname") ?? headerList.get("x-pathname") ?? null;
+    if (!shouldEmitMarketingLayoutBreadcrumbFallback(pathname)) return null;
+    const data = buildMarketingBreadcrumbJsonLdForPathname(pathname);
     if (!data) return null;
     return <JsonLd data={data} />;
   } catch (error) {

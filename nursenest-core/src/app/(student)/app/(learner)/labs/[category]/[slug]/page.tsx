@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LabLessonPage } from "@/components/labs/lab-lesson-page";
 import {
   buildLabsStudyLinks,
   getLabLessonByCategoryAndSlug,
   getLabLessonFlashcards,
   getLabLessonQuestions,
+  LABS_CATEGORIES,
   type LabCategorySlug,
 } from "@/lib/labs/labs-engine";
 import { loadLabsRouteContext } from "@/lib/labs/labs-route-loader";
@@ -41,19 +42,16 @@ export default async function LabLessonRoute({ params }: Props) {
   const questions = getLabLessonQuestions(lesson);
   const flashcards = getLabLessonFlashcards(lesson);
   const studyLinks = buildLabsStudyLinks(context.pathwayId, lesson.practiceQuestionTopic);
+  const categoryLabel = LABS_CATEGORIES.find((c) => c.slug === lesson.category)?.title ?? category;
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <BreadcrumbTrail
-          items={[
-            { name: "Home", href: "/" },
-            { name: "Dashboard", href: "/app" },
-            { name: "Labs", href: "/app/labs" },
-            { name: lesson.shortTitle, href: undefined },
-          ]}
-        />
-      </div>
+      <LearnerBreadcrumbTrail
+        kind="labs-lesson"
+        categoryLabel={categoryLabel}
+        lessonTitle={lesson.shortTitle}
+        pathname="/app/labs"
+      />
       <LabLessonPage
         lesson={lesson}
         hasAccess={context.hasAccess}

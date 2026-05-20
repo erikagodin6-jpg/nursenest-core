@@ -1,6 +1,8 @@
+import { AnalyticsBreadcrumbTrail } from "@/components/navigation/analytics-breadcrumb-trail";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { shouldEmitResolverBreadcrumbSchema } from "@/lib/breadcrumbs/breadcrumb-resolver";
+import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
 import type { BreadcrumbCrumb, BreadcrumbResolution, BreadcrumbSchemaItem } from "@/lib/breadcrumbs/breadcrumb-types";
 
 /**
@@ -13,12 +15,17 @@ export function Breadcrumbs({
   navClassName = "nn-marketing-caption text-[var(--theme-muted-text)]",
   suppressSchema = false,
   className = "min-h-9 mb-4",
+  pathname,
+  analyticsIntent = "education",
 }: {
   crumbs: BreadcrumbCrumb[];
   schemaItems?: BreadcrumbSchemaItem[];
   navClassName?: string;
   suppressSchema?: boolean;
   className?: string;
+  /** When set, breadcrumb clicks emit privacy-safe navigation analytics. */
+  pathname?: string;
+  analyticsIntent?: BreadcrumbIntent;
 }) {
   const schema = schemaItems ?? [];
   return (
@@ -26,7 +33,16 @@ export function Breadcrumbs({
       {!suppressSchema && schema.length > 0 ? <BreadcrumbJsonLd items={schema} /> : null}
       {crumbs.length > 0 ? (
         <div className={className}>
-          <BreadcrumbTrail items={crumbs} navClassName={navClassName} />
+          {pathname ? (
+            <AnalyticsBreadcrumbTrail
+              items={crumbs}
+              pathname={pathname}
+              intent={analyticsIntent ?? "education"}
+              navClassName={navClassName}
+            />
+          ) : (
+            <BreadcrumbTrail items={crumbs} navClassName={navClassName} />
+          )}
         </div>
       ) : null}
     </>
@@ -38,12 +54,14 @@ export function BreadcrumbsFromResolution({
   navClassName,
   suppressSchema,
   className,
+  pathname,
 }: {
   resolution: BreadcrumbResolution;
   navClassName?: string;
   /** When omitted, defers to resolution intent (learner → no JSON-LD). */
   suppressSchema?: boolean;
   className?: string;
+  pathname?: string;
 }) {
   const emitSchema = suppressSchema === undefined ? shouldEmitResolverBreadcrumbSchema(resolution) : !suppressSchema;
   return (
@@ -53,6 +71,8 @@ export function BreadcrumbsFromResolution({
       navClassName={navClassName}
       suppressSchema={!emitSchema}
       className={className}
+      pathname={pathname}
+      analyticsIntent={resolution.intent}
     />
   );
 }

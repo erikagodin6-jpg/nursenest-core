@@ -175,7 +175,7 @@ export default function AdvancedLabsInterpretationPage() {
   );
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} className="mb-8" />
 
       {/* Hero */}
       <div className="mb-10">

@@ -1,11 +1,8 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { clinicalInterpretationGuidePath, listPublishedClinicalInterpretationGuides } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
-import { publishedMechanismForTopic } from "@/lib/linking/mechanism-link-candidates";
-import { normalizeTopicKey } from "@/lib/linking/link-resolver";
-import { topicHubEducationalIntro } from "@/lib/seo/topic-hub-educational-intros";
-import { resolveRnCompetencyForTopic } from "@/lib/educational-graph/rn-competency-ontology";
+import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
+import { toTopicHubLearningLinks } from "@/lib/educational-graph/graph-step-adapters";
 import { dedupeGraphHrefs, TOPIC_HUB_GRAPH_MAX_LINKS } from "@/lib/educational-graph/graph-governance";
+import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 
 export type TopicHubLearningLink = {
   label: string;
@@ -19,63 +16,55 @@ export type TopicHubLearningGraph = {
   competencyDescription: string | null;
   studySequence: string[];
   links: TopicHubLearningLink[];
+  nextBestAction: { title: string; href: string } | null;
 };
 
 export function buildTopicHubLearningGraph(
   pathway: ExamPathwayDefinition,
   topicSlug: string,
+  options?: {
+    learnerState?: RnLearnerStateSnapshot | null;
+    persistentWeakTopics?: readonly string[];
+    recentHrefs?: ReadonlySet<string>;
+    authenticated?: boolean;
+  },
 ): TopicHubLearningGraph | null {
-  const key = normalizeTopicKey(topicSlug) ?? topicSlug.trim().toLowerCase();
-  if (!key) return null;
-  const intro = topicHubEducationalIntro(key);
-  const competency = resolveRnCompetencyForTopic(key);
-
-  const links: TopicHubLearningLink[] = [];
-  const mechanism = publishedMechanismForTopic(key);
-  if (mechanism) {
-    links.push({ label: mechanism.label, href: mechanism.href, kind: "mechanism" });
-  }
-  for (const g of listPublishedClinicalInterpretationGuides()) {
-    if (g.related.topicSlugs.some((t) => (normalizeTopicKey(t) ?? t) === key)) {
-      links.push({
-        label: g.h1,
-        href: clinicalInterpretationGuidePath(g.slug),
-        kind: "interpretation",
-      });
-      break;
-    }
-  }
-  links.push({
-    label: "Practice questions",
-    href: `${buildExamPathwayPath(pathway, "questions")}?topic=${encodeURIComponent(key)}`,
-    kind: "questions",
-  });
-  links.push({
-    label: "Flashcards",
-    href: `/flashcards/${encodeURIComponent(key)}`,
-    kind: "flashcards",
-  });
-  links.push({
-    label: "Adaptive reassessment",
-    href: buildExamPathwayPath(pathway, "cat"),
-    kind: "cat",
+  const authenticated = options?.authenticated ?? Boolean(options?.learnerState);
+  const traversal = orchestrateEducationalGraph({
+    topicSlug,
+    marketingPathway: pathway,
+    pathwayId: pathway.id,
+    sourceSurface: authenticated ? "topic_hub_authenticated" : "topic_hub_public",
+    learnerState: options?.learnerState ?? null,
+    persistentWeakTopics: options?.persistentWeakTopics,
+    recentHrefs: options?.recentHrefs,
+    maxSteps: TOPIC_HUB_GRAPH_MAX_LINKS + 2,
   });
 
-  const deduped = dedupeGraphHrefs(links).slice(0, TOPIC_HUB_GRAPH_MAX_LINKS);
+  if (!traversal.steps.length) return null;
 
-  const studySequence = [
-    intro ? "Read the competency overview" : "Review foundational lessons in this topic",
-    mechanism ? "Study the mechanism explainer" : "Clarify pathophysiology with a focused lesson",
-    "Practice prioritization questions",
-    "Drill flashcards for recall",
-    "Reassess with a mixed adaptive set",
-  ];
+  const links = dedupeGraphHrefs(toTopicHubLearningLinks(traversal.steps, pathway)).slice(
+    0,
+    TOPIC_HUB_GRAPH_MAX_LINKS,
+  );
+
+  const next = traversal.steps[0];
+  const competency = traversal.competencyLabel
+    ? {
+        label: traversal.competencyLabel,
+        description:
+          authenticated && options?.learnerState?.remediationFatigueScore
+            ? "Pace remediation — one competency at a time before reassessment."
+            : null,
+      }
+    : { label: null, description: null };
 
   return {
-    topicSlug: key,
-    competencyLabel: competency?.label ?? null,
-    competencyDescription: competency?.description ?? null,
-    studySequence,
-    links: deduped,
+    topicSlug: traversal.topicSlug,
+    competencyLabel: competency.label,
+    competencyDescription: competency.description,
+    studySequence: [...traversal.studySequence],
+    links,
+    nextBestAction: next ? { title: next.title, href: next.href } : null,
   };
 }

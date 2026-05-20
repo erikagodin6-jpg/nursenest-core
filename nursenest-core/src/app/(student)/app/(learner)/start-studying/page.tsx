@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ContentStatus } from "@prisma/client";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isPathwayLessonStructuralPublicCompleteColumnPresent } from "@/lib/db/pathway-lesson-structural-column-runtime";
@@ -12,7 +12,6 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
@@ -66,7 +65,7 @@ export default async function StartStudyingPage() {
     ];
     return (
       <div className="space-y-8">
-        <BreadcrumbTrail items={fallbackCrumbs} />
+        <LearnerBreadcrumbTrail kind="session-recovery" resumeLabel="Start studying" pathname="/app/start-studying" />
         <header className="nn-learner-page-hero">
           <h1 className="text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
             {t("learner.startStudying.heroTitle")}
@@ -174,7 +173,7 @@ export default async function StartStudyingPage() {
 
   return (
     <div className="space-y-8">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="session-recovery" resumeLabel="Start studying" pathname="/app/start-studying" />
 
       <header className="nn-learner-page-hero">
         <h1 className="text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import { listNursingGlossaryTerms } from "@/lib/seo/nursing-glossary-registry";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
 
@@ -19,8 +21,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function NursingGlossaryHubPage() {
   const terms = listNursingGlossaryTerms().sort((a, b) => a.term.localeCompare(b.term));
 
+  const breadcrumbs = resolveBreadcrumbResolution({ kind: "nursing-glossary-hub" });
+
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+      <BreadcrumbsFromResolution resolution={breadcrumbs} pathname={GLOSSARY_HUB_PATH} className="mb-6" />
       <header className="space-y-3">
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Reference</p>
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">

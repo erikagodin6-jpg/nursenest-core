@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LabsHubPage } from "@/components/labs/labs-hub-page";
 import {
   buildLabsStudyLinks,
@@ -22,15 +22,7 @@ export default async function LabsHubRoute() {
 
   return (
     <div className="space-y-6">
-      <div className="mb-4">
-        <BreadcrumbTrail
-          items={[
-            { name: "Home", href: "/" },
-            { name: "Dashboard", href: "/app" },
-            { name: "Labs", href: undefined },
-          ]}
-        />
-      </div>
+      <LearnerBreadcrumbTrail kind="labs-hub" pathname="/app/labs" />
       <LabsHubPage
         trackLabel={context.trackLabel}
         labTrack={context.track}

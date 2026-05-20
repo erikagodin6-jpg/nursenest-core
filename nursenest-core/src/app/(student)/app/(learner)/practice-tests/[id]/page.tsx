@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
 import { NclexCatRunner } from "@/components/exam/nclex-cat-runner";
@@ -10,7 +10,6 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -54,7 +53,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
       </div>
@@ -110,7 +109,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <h1 className="text-2xl font-bold">{t("learner.practiceTests.run.title")}</h1>
         <p className="mt-2 text-sm text-muted">{t("learner.practiceTests.run.subtitleLocked")}</p>

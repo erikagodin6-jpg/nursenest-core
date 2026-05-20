@@ -9,7 +9,7 @@ import {
   LearnerRecommendedNextSteps,
   LearnerWeakAreasPanel,
 } from "@/components/learner-account-ui";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { LearnerAccountToolGrid } from "@/components/student/learner-account-tool-grid";
@@ -24,7 +24,7 @@ import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/s
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
-import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
+import { buildGovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import {
@@ -42,7 +42,6 @@ import {
 import type { Metadata } from "next";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -77,7 +76,7 @@ export default async function LearnerAccountOverviewPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.profile.signedOutTitle")}
           body={t("learner.profile.signedOutHint")}
@@ -155,7 +154,7 @@ export default async function LearnerAccountOverviewPage() {
     }
     if (premiumSnapshot && topicPerf) {
       try {
-        adaptive = buildAdaptiveRecommendations({
+        adaptive = await buildGovernedAdaptiveRecommendations({
           examDatePlanType: userRow?.examDatePlanType,
           examDate: userRow?.examDate ?? null,
           readiness: premiumSnapshot.readiness,
@@ -171,9 +170,10 @@ export default async function LearnerAccountOverviewPage() {
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
           subscriberCountry: entitlement.country,
-          preferredPathwayId:
-            premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
+          preferredPathwayId: premiumSnapshot.cognition?.pathwayId ?? premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
           availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
+          userId,
+          entitlement,
         });
       } catch {
         adaptive = null;
@@ -242,7 +242,7 @@ export default async function LearnerAccountOverviewPage() {
 
   return (
     <LearnerAccountShell className="py-2">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerAccountPageHero
         eyebrow={t("learner.profile.kicker")}
         title={t("learner.account.overview.title")}

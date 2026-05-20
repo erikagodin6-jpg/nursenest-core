@@ -39,12 +39,19 @@ export type BreadcrumbItem = {
 };
 
 import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
+import type { BreadcrumbSurface } from "@/lib/breadcrumbs/breadcrumb-surface";
 
 export type BreadcrumbResolution = {
   /** Visible `<BreadcrumbTrail>` */
   crumbs: BreadcrumbCrumb[];
   /** JSON-LD for indexable pages only; omit component when empty or for /app */
   schemaItems: BreadcrumbSchemaItem[];
-  /** Explicit trail semantics — drives schema suppression on learner routes. */
+  /** Derived from surface — do not set manually in product code. */
   intent?: BreadcrumbIntent;
+  /** Governance: surface classification (intent is derived from this). */
+  surface?: BreadcrumbSurface;
+  breadcrumbDepth?: number;
+  canonicalRoot?: string;
+  schemaOwner?: "page" | "layout_fallback" | "forbidden" | "none";
+  ontologyClassification?: string;
 };

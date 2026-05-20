@@ -27,7 +27,7 @@
 
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -72,12 +72,6 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 
 // ── Breadcrumbs ───────────────────────────────────────────────────────────────
 
-const CRUMBS = [
-  { name: "Home", href: "/" as const },
-  { name: "Study hub", href: "/app" as const },
-  { name: "My Exam Plan", href: undefined as undefined },
-];
-
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -102,7 +96,7 @@ export default async function ExamPlanPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={CRUMBS} />
+        <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
         <PremiumEmptyState
           headline="My Exam Plan"
           body="Sign in to access your personalized exam readiness dashboard."
@@ -119,7 +113,7 @@ export default async function ExamPlanPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={CRUMBS} />
+        <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
         <PremiumEmptyState
           headline="My Exam Plan"
           body={lt("learner.entitlement.verifyFailed")}
@@ -137,7 +131,7 @@ export default async function ExamPlanPage() {
     const snap = await getFreemiumSnapshot(userId);
     return (
       <div className="space-y-8">
-        <BreadcrumbTrail items={CRUMBS} />
+        <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
         <div
           className="rounded-2xl p-6 sm:p-8"
           style={{
@@ -174,7 +168,7 @@ export default async function ExamPlanPage() {
   if (!data) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={CRUMBS} />
+        <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
         <PremiumEmptyState
           headline="My Exam Plan"
           body="Complete a few practice sessions or your baseline assessment to activate your personalized exam plan."
@@ -247,7 +241,7 @@ export default async function ExamPlanPage() {
 
   return (
     <div className="space-y-10 pb-16">
-      <BreadcrumbTrail items={CRUMBS} />
+      <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
 
       {/* 1. Hero ──────────────────────────────────────────────────────────── */}
       <MyExamPlanHero

@@ -13,8 +13,12 @@ import { getTestingModelResultsProfile } from "@/lib/testing/testing-model-prese
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { buildEnrichedPostExamPerformanceReport } from "@/lib/learner/post-exam-coaching/build-coaching-report";
-import { persistDashboardFeedToSession } from "@/lib/learner/post-exam-coaching/dashboard-feed";
-import { recordRemediationExposure } from "@/lib/learner/post-exam-coaching/remediation-exposure";
+import { persistDashboardFeedToSession } from "@/lib/learner/rn-coaching-intelligence/dashboard-feed";
+import { recordRemediationExposure } from "@/lib/learner/rn-coaching-intelligence/remediation-exposure";
+import { recordCoachingTelemetry } from "@/lib/learner/rn-coaching-intelligence/coaching-telemetry";
+import { PostExamRemediationBreadcrumb } from "@/components/navigation/post-exam-remediation-breadcrumb";
+import { PostExamCoachingIntelligencePanels } from "@/components/student/post-exam-coaching-intelligence-panels";
+import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import {
@@ -165,6 +169,12 @@ export function PostExamPerformanceReport({
   useEffect(() => {
     if (report.coaching?.dashboardFeed) {
       persistDashboardFeedToSession(report.coaching.dashboardFeed);
+      recordCoachingTelemetry("coaching_report_generated", {
+        surface: "post_exam",
+        coaching_model: report.coaching.coachingModel,
+        reliability: report.coaching.readinessReliability.level,
+        certainty_tier: report.coaching.certaintyTier ?? "directional",
+      });
     }
   }, [report]);
 
@@ -294,6 +304,21 @@ export function PostExamPerformanceReport({
           ))}
         </ol>
       </section>
+
+      {report.coaching?.longitudinal?.persistentWeakTopics?.[0] ? (
+        <PostExamRemediationBreadcrumb
+          topicSlug={
+            normalizeTopicKey(report.coaching.longitudinal.persistentWeakTopics[0]) ??
+            report.coaching.longitudinal.persistentWeakTopics[0]
+          }
+          pathwayId={report.coaching.dashboardFeed?.pathwayId ?? null}
+          currentStepTitle="Post-exam remediation"
+          learnerState={report.coaching.learnerState ?? undefined}
+          persistentWeakTopics={report.coaching.longitudinal.persistentWeakTopics}
+        />
+      ) : null}
+
+      {report.coaching ? <PostExamCoachingIntelligencePanels coaching={report.coaching} /> : null}
 
       <section className="nn-post-exam-report__section" aria-labelledby="post-exam-summary-heading">
         <h2 id="post-exam-summary-heading" className="nn-cat-results__section-title">

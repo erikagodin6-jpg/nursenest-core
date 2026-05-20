@@ -1,11 +1,12 @@
 /**
  * Central breadcrumb entrypoint: marketing helpers + re-exports of pathway/blog builders.
  *
- * **Schema rule:** emit `BreadcrumbJsonLd` only on public indexable routes. App routes use `BreadcrumbTrail` + `appShellBreadcrumbs` (no JSON-LD).
+ * **Schema rule:** emit `BreadcrumbJsonLd` only on public indexable routes. App routes use `LearnerBreadcrumbTrail` (no JSON-LD).
  *
  * @see `breadcrumb-types.ts` for route-class audit notes.
  */
 
+import { resolveAppShellBreadcrumbCrumbs } from "@/lib/breadcrumbs/app-shell-breadcrumb-adapter";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 import type {
   BreadcrumbCrumb,
@@ -148,24 +149,14 @@ export function appAccountHubBreadcrumbs(): BreadcrumbCrumb[] {
   return [HOME, { name: "Dashboard", href: "/app" }, { name: "Account", href: undefined }];
 }
 
-/** App shell: UX only. No schema items. */
+/**
+ * App shell crumbs via governed learner resolver (no JSON-LD).
+ * @deprecated Use `resolveLearnerBreadcrumbResolution` / `LearnerBreadcrumbTrail` in pages.
+ */
 export function appShellBreadcrumbs(
   section: "dashboard" | "lessons" | "questions" | "exams" | "practice-tests",
 ): BreadcrumbCrumb[] {
-  switch (section) {
-    case "dashboard":
-      return [HOME, { name: "Dashboard", href: undefined }];
-    case "lessons":
-      return [HOME, { name: "Lessons", href: undefined }];
-    case "questions":
-      return [HOME, { name: "Question Bank", href: undefined }];
-    case "exams":
-      return [HOME, { name: "Practice Exams", href: undefined }];
-    case "practice-tests":
-      return [HOME, { name: "Practice Test", href: undefined }];
-    default:
-      return [HOME];
-  }
+  return resolveAppShellBreadcrumbCrumbs(section);
 }
 
 export * from "@/lib/seo/pathway-breadcrumbs";
@@ -188,14 +179,14 @@ export function cnpleHubClusterBreadcrumbs(leafName: string, leafPath: string): 
   };
 }
 
-/** Home > REx-PN Hub — for /canada/rpn/rex-pn. */
+/** Home > REx-PN Hub — for /canada/pn/rex-pn. */
 export function rexPnHubBreadcrumbs(): BreadcrumbResolution {
-  return simpleMarketingBreadcrumbs("REx-PN", "/canada/rpn/rex-pn");
+  return simpleMarketingBreadcrumbs("REx-PN", "/canada/pn/rex-pn");
 }
 
-/** Home > REx-PN > [leaf] — for /canada/rpn/rex-pn/* sub-pages. */
+/** Home > REx-PN > [leaf] — for /canada/pn/rex-pn/* sub-pages. */
 export function rexPnClusterBreadcrumbs(leafName: string, leafPath: string): BreadcrumbResolution {
-  const hubPath = "/canada/rpn/rex-pn";
+  const hubPath = "/canada/pn/rex-pn";
   return {
     crumbs: [
       HOME,

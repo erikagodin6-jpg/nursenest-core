@@ -141,7 +141,7 @@ export default function TelemetryNursingPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
       <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} />
 
       {/* Header */}
       <header className="mb-10">

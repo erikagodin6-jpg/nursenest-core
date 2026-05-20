@@ -4,6 +4,7 @@ import { auditNursingGlossaryRegistry } from "@/lib/educational-graph/nursing-gl
 import { auditRemediationSteps, dedupeGraphHrefs, passesEducationalRelevanceThreshold, scoreEducationalRelevance } from "@/lib/educational-graph/graph-governance";
 import { buildMarketingRemediationLadderV2 } from "@/lib/educational-graph/remediation-ladder-v2";
 import { resolveRnCompetencyForTopic, RN_COMPETENCY_NODES } from "@/lib/educational-graph/rn-competency-ontology";
+import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
 import { buildTopicHubLearningGraph } from "@/lib/educational-graph/topic-hub-learning-graph";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 
@@ -45,6 +46,18 @@ describe("RN educational graph — contracts", () => {
     assert.ok(graph.links.length <= 6);
     const deduped = dedupeGraphHrefs(graph.links);
     assert.equal(deduped.length, graph.links.length);
+  });
+
+  it("orchestrator returns stepId on every step", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const t = orchestrateEducationalGraph({
+      topicSlug: "sepsis",
+      marketingPathway: pathway,
+      sourceSurface: "topic_hub_public",
+    });
+    assert.ok(t.steps.every((s) => s.stepId.includes(":")));
+    assert.ok(t.competencyId === "infection_sepsis");
   });
 
   it("educational relevance scoring gates weak edges", () => {

@@ -16,13 +16,12 @@
 
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadCoachPageData } from "@/lib/study/coach-page-data";
 import { AdaptiveCoachHero } from "@/components/study/adaptive-coach-hero";
@@ -53,12 +52,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CoachPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).coach");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Study Coach");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="coach" pathname="/app/coach" />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
           body="Sign in to access your personalized study coach."
@@ -80,7 +78,7 @@ export default async function CoachPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="coach" pathname="/app/coach" />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
           body="We could not verify your subscription status. Please try again."
@@ -97,7 +95,7 @@ export default async function CoachPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="coach" pathname="/app/coach" />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
           body="The full study coach is available with a NurseNest subscription."
@@ -121,7 +119,7 @@ export default async function CoachPage() {
   if (!coachData) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="coach" pathname="/app/coach" />
 
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
@@ -162,7 +160,7 @@ export default async function CoachPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="coach" pathname="/app/coach" />
 
       {/* Page header */}
       <div className="nn-learner-page-hero">

@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 
 type CatInsightRow = {
   id: string;
@@ -58,7 +57,7 @@ export default function CatInsightsPage() {
   return (
     <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 pb-6 sm:px-6">
       <div className="mb-1">
-        <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
       </div>
       <div className="nn-learner-page-hero nn-cat-insights-hero rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">CAT confidence dashboard</h1>

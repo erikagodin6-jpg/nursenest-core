@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import {
   CLINICAL_INTERPRETATION_HUB_PATH,
   clinicalInterpretationGuidePath,
@@ -23,8 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ClinicalInterpretationHubPage() {
   const guides = listPublishedClinicalInterpretationGuides();
 
+  const breadcrumbs = resolveBreadcrumbResolution({ kind: "clinical-interpretation-hub" });
+
   return (
     <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+      <BreadcrumbsFromResolution resolution={breadcrumbs} pathname={CLINICAL_INTERPRETATION_HUB_PATH} />
       <header className="space-y-3">
         <p className="text-sm font-semibold uppercase tracking-wide text-primary">Clinical interpretation</p>
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">

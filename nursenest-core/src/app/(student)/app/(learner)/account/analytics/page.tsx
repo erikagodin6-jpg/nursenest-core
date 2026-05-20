@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
 import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
@@ -40,7 +39,7 @@ export default async function AccountAnalyticsPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Analytics" pathname="/app/account" />
         <PremiumEmptyState
           headline="Analytics"
           body="Sign in to access your performance analytics."
@@ -62,7 +61,7 @@ export default async function AccountAnalyticsPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Analytics" pathname="/app/account" />
         <PremiumEmptyState
           headline="Analytics"
           body="We could not verify your subscription status. Please try again."
@@ -79,7 +78,7 @@ export default async function AccountAnalyticsPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Analytics" pathname="/app/account" />
         <PremiumEmptyState
           headline="Analytics"
           body="Deeper analytics are available with a NurseNest subscription."
@@ -139,7 +138,7 @@ export default async function AccountAnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Analytics" pathname="/app/account" />
 
       {/* Page header */}
       <div className="nn-learner-page-hero">

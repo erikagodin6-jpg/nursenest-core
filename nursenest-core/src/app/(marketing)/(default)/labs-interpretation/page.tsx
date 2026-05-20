@@ -85,7 +85,7 @@ export default function LabsInterpretationPage() {
   const breadcrumbResolution = labsHubBreadcrumbs("Lab Interpretation", PATH);
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} className="mb-8" />
 
       <div className="mb-10">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-semibold mb-4">

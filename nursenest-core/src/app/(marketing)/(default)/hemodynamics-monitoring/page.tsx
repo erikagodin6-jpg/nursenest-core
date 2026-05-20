@@ -184,7 +184,7 @@ export default function HemodynamicsMonitoringPage() {
   const breadcrumbResolution = labsClinicalModuleLeafBreadcrumbs("Hemodynamics Monitoring", PATH);
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <AcademyBreadcrumbBar resolution={breadcrumbResolution} className="mb-8" />
+      <AcademyBreadcrumbBar pathname={PATH} resolution={breadcrumbResolution} className="mb-8" />
 
       {/* Hero */}
       <header className="mb-10">

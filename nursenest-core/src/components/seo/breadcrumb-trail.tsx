@@ -7,10 +7,13 @@ import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 export function BreadcrumbTrail({
   items,
   navClassName = "text-sm text-[var(--theme-muted-text)]",
+  onCrumbClick,
 }: {
   items: BreadcrumbCrumb[];
   /** Override root nav typography (e.g. `nn-marketing-caption` on public study hubs). */
   navClassName?: string;
+  /** Optional analytics hook (client components only). */
+  onCrumbClick?: (index: number, crumb: BreadcrumbCrumb) => void;
 }) {
   return (
     <nav aria-label="Breadcrumb" className={navClassName}>
@@ -32,7 +35,11 @@ export function BreadcrumbTrail({
                   {c.name}
                 </span>
               ) : (
-                <Link href={c.href} className="min-w-0 max-w-full break-words text-primary leading-snug [overflow-wrap:anywhere] hover:underline">
+                <Link
+                  href={c.href}
+                  className="min-w-0 max-w-full break-words text-primary leading-snug [overflow-wrap:anywhere] hover:underline"
+                  onClick={() => onCrumbClick?.(i, c)}
+                >
                   {c.name}
                 </Link>
               )}

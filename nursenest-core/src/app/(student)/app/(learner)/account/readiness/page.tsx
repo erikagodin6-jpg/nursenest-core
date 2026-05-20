@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
@@ -16,7 +16,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadReadinessDashboardData } from "@/lib/learner/readiness-dashboard-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -44,7 +43,7 @@ export default async function AccountReadinessPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.profile.signedOutHint")}
@@ -63,7 +62,7 @@ export default async function AccountReadinessPage() {
   if (entitlement === "error") {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
@@ -81,7 +80,7 @@ export default async function AccountReadinessPage() {
   if (!entitlement.hasAccess) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
@@ -108,7 +107,7 @@ export default async function AccountReadinessPage() {
   if (!payload || payload.degraded?.active) {
     return (
       <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
@@ -139,7 +138,7 @@ export default async function AccountReadinessPage() {
 
   return (
     <div className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
 
       {/* Page heading */}

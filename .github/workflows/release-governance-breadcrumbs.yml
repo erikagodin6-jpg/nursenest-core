@@ -1,0 +1,114 @@
+# Semantic navigation + Educational Graph OS release gate.
+# Blocks merge/promote when breadcrumb schema, pathname, or ontology governance regresses.
+name: Release governance — breadcrumbs
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "nursenest-core/src/lib/breadcrumbs/**"
+      - "nursenest-core/src/app/**"
+      - "nursenest-core/tests/e2e/seo/**"
+      - "nursenest-core/scripts/breadcrumb-governance-scan.mjs"
+      - "nursenest-core/scripts/run-semantic-navigation-release-gate.mjs"
+      - ".github/workflows/release-governance-breadcrumbs.yml"
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      preview_base_url:
+        description: "Deployed preview URL (no trailing slash)"
+        required: false
+        type: string
+
+concurrency:
+  group: release-governance-breadcrumbs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-governance:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Breadcrumb governance scan
+        run: node scripts/breadcrumb-governance-scan.mjs
+
+      - name: Semantic navigation static release gate
+        run: node --import tsx src/lib/breadcrumbs/governance/semantic-navigation-release-gate.ts
+        env:
+          SEMANTIC_GATE_WRITE_ARTIFACTS: "1"
+
+      - name: Governance contract tests
+        run: |
+          node --import tsx --test \
+            src/lib/breadcrumbs/governance/*.contract.test.ts \
+            src/lib/breadcrumbs/*.contract.test.ts
+
+      - name: Upload static governance artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-navigation-static-${{ github.run_id }}
+          path: |
+            nursenest-core/test-results/semantic-navigation-gate/*.json
+          if-no-files-found: ignore
+
+  runtime-governance:
+    runs-on: ubuntu-latest
+    needs: static-governance
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Resolve preview base URL
+        id: base
+        run: |
+          URL="${{ inputs.preview_base_url }}"
+          if [ -z "$URL" ]; then URL="${{ secrets.PLAYWRIGHT_PREVIEW_BASE_URL }}"; fi
+          if [ -z "$URL" ]; then URL="${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}"; fi
+          if [ -z "$URL" ]; then URL="https://nursenest.com"; fi
+          echo "url=${URL%/}" >> "$GITHUB_OUTPUT"
+
+      - name: Playwright semantic navigation gate
+        run: npx playwright test -c playwright.semantic-navigation-gate.config.ts --project=semantic-navigation-governance
+        env:
+          BASE_URL: ${{ steps.base.outputs.url }}
+          PLAYWRIGHT_BASE_URL: ${{ steps.base.outputs.url }}
+          PLAYWRIGHT_SKIP_WEB_SERVER: "1"
+          CI: "true"
+
+      - name: Upload Playwright failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-navigation-playwright-${{ github.run_id }}
+          path: |
+            nursenest-core/test-results/semantic-navigation-gate/**
+          retention-days: 14

@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { SocialStatKey, SocialVisibilityScope } from "@prisma/client";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
 import { SocialStudySettingsClient } from "@/components/student/social-study-settings-client";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +28,7 @@ export default async function AccountSocialPage() {
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <LearnerAccountShell className="space-y-8 py-2">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Social study" pathname="/app/account" />
         <LearnerAccountPageHero
           eyebrow={t("learner.account.shell.kicker")}
           title="Social study privacy"
@@ -50,7 +49,7 @@ export default async function AccountSocialPage() {
 
   return (
     <LearnerAccountShell className="space-y-8 py-2" data-testid="learner-account-social">
-      <BreadcrumbTrail items={crumbs} />
+      <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Social study" pathname="/app/account" />
       <LearnerAccountPageHero
         eyebrow={t("learner.account.shell.kicker")}
         title="Social study privacy"

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PracticeTestStatus } from "@prisma/client";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import {
   PracticeTestResultsStatic,
   type PracticeTestIncorrectReviewItem,
@@ -59,7 +59,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={RESULTS_CRUMBS} />
+          <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         </div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
       </div>
@@ -71,7 +71,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={RESULTS_CRUMBS} />
+          <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         </div>
         <h1 className="text-2xl font-bold">Practice test results</h1>
         <p className="mt-2 text-sm text-muted">Subscribe to view saved results.</p>
@@ -130,7 +130,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={RESULTS_CRUMBS} />
+          <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         </div>
         <h1 className="text-2xl font-bold">Practice test results</h1>
         <p className="mt-3 text-sm text-muted-foreground">
@@ -161,7 +161,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={RESULTS_CRUMBS} />
+          <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         </div>
         <h1 className="text-2xl font-bold">Practice test results</h1>
         <p className="mt-3 text-sm text-muted-foreground">This session was abandoned. Start a new practice test anytime.</p>
@@ -177,7 +177,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     return (
       <div>
         <div className="mb-4">
-          <BreadcrumbTrail items={RESULTS_CRUMBS} />
+          <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         </div>
         <p className="nn-card p-6 text-sm text-muted-foreground">
           Results are not available for this test. Open the test page to continue or review.
@@ -257,7 +257,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
   return (
     <div>
       <div className="mb-4">
-        <BreadcrumbTrail items={RESULTS_CRUMBS} />
+        <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       </div>
       <h1 className="text-2xl font-bold">Practice test results</h1>
       <p className="mt-1 text-sm text-muted">

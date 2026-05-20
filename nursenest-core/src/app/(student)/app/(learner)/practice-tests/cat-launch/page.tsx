@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { CatDirectLaunchClient } from "@/components/student/cat-direct-launch-client";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -11,7 +11,6 @@ import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entit
 import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
-import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -53,7 +52,7 @@ export default async function CatDirectLaunchPage({ searchParams }: Props) {
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -72,7 +71,7 @@ export default async function CatDirectLaunchPage({ searchParams }: Props) {
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
@@ -101,7 +100,7 @@ export default async function CatDirectLaunchPage({ searchParams }: Props) {
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
-          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
         <PremiumEmptyState
           headline="Exam simulation"
@@ -133,7 +132,7 @@ export default async function CatDirectLaunchPage({ searchParams }: Props) {
   return (
     <div className="mx-auto min-w-0 w-full max-w-6xl space-y-4 px-4 pb-6 sm:px-6">
       <div className="mb-1">
-        <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
       </div>
       <CatDirectLaunchClient pathwayId={pathwayId} pathwayShell={shell} />
     </div>
