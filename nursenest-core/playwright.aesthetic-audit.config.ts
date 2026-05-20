@@ -71,6 +71,17 @@ export default defineConfig({
       },
     },
     {
+      name: "rn-cat-mockup-capture",
+      testMatch: /rn-cat-exam-mockup-capture\.spec\.ts$/,
+      use: {
+        ...devices["Desktop Chrome"],
+        reducedMotion: "reduce",
+        launchOptions: {
+          args: ["--disable-dev-shm-usage", "--no-sandbox"],
+        },
+      },
+    },
+    {
       name: "aesthetic-before-after",
       testMatch: /aesthetic-before-after\.capture\.spec\.ts$/,
       use: {

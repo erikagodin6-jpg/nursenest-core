@@ -119,19 +119,19 @@ test("JSON-LD breadcrumb localization contract includes localized labels", () =>
 });
 
 test("sitemap safe URL collector includes indexable Spanish localized hubs", () => {
-  const urls = collectLocaleMarketingSitemapSafeUrls("https://www.nursenest.ca", "es");
-  assert.ok(urls.includes("https://www.nursenest.ca/es"));
-  assert.ok(urls.includes("https://www.nursenest.ca/es/pricing"));
-  assert.ok(urls.includes("https://www.nursenest.ca/es/lessons"));
-  assert.ok(urls.includes("https://www.nursenest.ca/es/question-bank"));
+  const urls = collectLocaleMarketingSitemapSafeUrls("https://nursenest.ca", "es");
+  assert.ok(urls.includes("https://nursenest.ca/es"));
+  assert.ok(urls.includes("https://nursenest.ca/es/pricing"));
+  assert.ok(urls.includes("https://nursenest.ca/es/lessons"));
+  assert.ok(urls.includes("https://nursenest.ca/es/question-bank"));
 });
 
 test("sitemap safe URL collector includes indexable Tagalog localized hubs", () => {
-  const urls = collectLocaleMarketingSitemapSafeUrls("https://www.nursenest.ca", "tl");
-  assert.ok(urls.includes("https://www.nursenest.ca/tl"));
-  assert.ok(urls.includes("https://www.nursenest.ca/tl/pricing"));
-  assert.ok(urls.includes("https://www.nursenest.ca/tl/lessons"));
-  assert.ok(urls.includes("https://www.nursenest.ca/tl/question-bank"));
+  const urls = collectLocaleMarketingSitemapSafeUrls("https://nursenest.ca", "tl");
+  assert.ok(urls.includes("https://nursenest.ca/tl"));
+  assert.ok(urls.includes("https://nursenest.ca/tl/pricing"));
+  assert.ok(urls.includes("https://nursenest.ca/tl/lessons"));
+  assert.ok(urls.includes("https://nursenest.ca/tl/question-bank"));
 });
 
 test("country exam readiness snapshot helper stays free of node:module and createRequire", () => {

@@ -6,7 +6,7 @@ import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
  *
  * **Sitemap:** one `Sitemap:` line pointing at `/sitemap.xml` (**sitemap index**). Child urlsets are listed inside the
  * index (`sitemap-core.xml`, `sitemap-blog.xml`, `sitemap-lessons.xml`, `sitemap-allied.xml`, `sitemap-new-grad.xml`).
- * All use `${CANONICAL_PRODUCTION_ORIGIN}` (https `www` in production). No `http:`, no legacy hostnames.
+ * All use `${CANONICAL_PRODUCTION_ORIGIN}` (the HTTPS apex production host). No `http:`, no legacy hostnames.
  *
  * ## Locale readiness — robots.txt is intentionally permissive for marketing locales
  *

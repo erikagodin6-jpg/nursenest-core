@@ -21,9 +21,9 @@ import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 import { waitForStableLearnerPathname } from "../helpers/redirect-loop-guard";
 import { formatPaidE2eFailureTaxonomy } from "../helpers/paid-e2e-failure-taxonomy";
+import { spawnWaitForAppReady } from "../helpers/spawn-wait-for-app-ready";
 
 setup("authenticate paid test account and save storage state", async ({ page, request }, testInfo) => {
-  const { spawnWaitForAppReady } = await import("../helpers/spawn-wait-for-app-ready");
   spawnWaitForAppReady();
 
   if (!process.env.DATABASE_URL?.trim()) {

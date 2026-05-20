@@ -21,6 +21,11 @@ export const FREE_USER_AUTH_FILE =
   process.env.PLAYWRIGHT_FREE_AUTH_STATE ??
   path.join(process.cwd(), "tests", "e2e", ".auth", "free-user.json");
 
+/** Canada RN entitled learner session (optional `E2E_CA_PAID_EMAIL` / `E2E_CA_PAID_PASSWORD`). */
+export const CA_PAID_USER_AUTH_FILE =
+  process.env.PLAYWRIGHT_CA_PAID_AUTH_STATE ??
+  path.join(process.cwd(), "tests", "e2e", ".auth", "ca-paid-user.json");
+
 /**
  * Visual QA / route-pack auth file (separate from default E2E `paid-user.json` so capture runs never
  * overwrite release-gate storage). Override: `PLAYWRIGHT_VISUAL_QA_AUTH_STATE`.

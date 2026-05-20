@@ -43,8 +43,8 @@ test("localizeBreadcrumbResolutionForLocale localizes visible and JSON-LD breadc
         { name: "Question bank", href: undefined, i18nKey: "breadcrumbs.questionBank" },
       ],
       schemaItems: [
-        { name: "Home", item: "https://www.nursenest.ca/", i18nKey: "breadcrumbs.home" },
-        { name: "Question bank", item: "https://www.nursenest.ca/question-bank", i18nKey: "breadcrumbs.questionBank" },
+        { name: "Home", item: "https://nursenest.ca/", i18nKey: "breadcrumbs.home" },
+        { name: "Question bank", item: "https://nursenest.ca/question-bank", i18nKey: "breadcrumbs.questionBank" },
       ],
     },
     primary,
@@ -52,9 +52,9 @@ test("localizeBreadcrumbResolutionForLocale localizes visible and JSON-LD breadc
   );
   assert.equal(loc.crumbs[0]?.name, "Inicio");
   assert.equal(loc.crumbs[0]?.href, "/es");
-  assert.equal(loc.schemaItems[0]?.item, "https://www.nursenest.ca/es");
+  assert.equal(loc.schemaItems[0]?.item, "https://nursenest.ca/es");
   assert.equal(loc.schemaItems[1]?.name, "Preguntas de práctica");
-  assert.equal(loc.schemaItems[1]?.item, "https://www.nursenest.ca/es/question-bank");
+  assert.equal(loc.schemaItems[1]?.item, "https://nursenest.ca/es/question-bank");
 });
 
 test("localized breadcrumb labels never fall back to raw i18n keys", () => {
@@ -66,8 +66,8 @@ test("localized breadcrumb labels never fall back to raw i18n keys", () => {
         { name: "Lessons", href: undefined, i18nKey: "breadcrumbs.lessons" },
       ],
       schemaItems: [
-        { name: "Home", item: "https://www.nursenest.ca/", i18nKey: "breadcrumbs.home" },
-        { name: "Lessons", item: "https://www.nursenest.ca/lessons", i18nKey: "breadcrumbs.lessons" },
+        { name: "Home", item: "https://nursenest.ca/", i18nKey: "breadcrumbs.home" },
+        { name: "Lessons", item: "https://nursenest.ca/lessons", i18nKey: "breadcrumbs.lessons" },
       ],
     },
     primary,

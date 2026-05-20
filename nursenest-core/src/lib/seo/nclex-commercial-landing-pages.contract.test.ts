@@ -79,7 +79,7 @@ test("NCLEX commercial landing routes exist for every published path", () => {
 });
 
 test("NCLEX commercial sitemap collector emits canonical absolute URLs", () => {
-  const origin = "https://www.nursenest.ca";
+  const origin = "https://nursenest.ca";
   const urls = collectNclexCommercialLandingUrls(origin);
   assert.equal(urls.length, pages.length);
   for (const page of pages) {

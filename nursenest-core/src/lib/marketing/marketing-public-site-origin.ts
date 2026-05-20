@@ -3,7 +3,7 @@
  * Kept separate so chrome can link off-Core without importing the full legacy route table.
  */
 export function marketingPublicSiteOrigin(): string {
-  return process.env.NEXT_PUBLIC_NURSENEST_ASSETS_BASE?.replace(/\/$/, "") ?? "https://www.nursenest.ca";
+  return process.env.NEXT_PUBLIC_NURSENEST_ASSETS_BASE?.replace(/\/$/, "") ?? "https://nursenest.ca";
 }
 
 /** Off-Core languages landing — same URL as `mapLegacyMarketingHref("/languages")`. */

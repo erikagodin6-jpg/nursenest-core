@@ -365,8 +365,67 @@ html[data-theme="apex"] .nn-premium-lessons-hub-hero {
     inset 0 1px 0 color-mix(in srgb, var(--semantic-info) 18%, transparent);
 }
 
+/* --- H11 lessons hub: category-first tile grid --- */
+.nn-lessons-hub-layout-h11 {
+  --nn-hub-tile-gap: 1.5rem;
+}
+
+.nn-hub-category-tile {
+  min-height: 8.75rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-lessons-hub-layout-h11 .grid {
+    gap: var(--nn-hub-tile-gap, 1.5rem);
+  }
+}
+
+.nn-lessons-hub-resume-compact {
+  max-width: 100%;
+}
+
+.nn-lessons-hub-category-header {
+  --nn-hub-cat-accent: var(--semantic-brand);
+}
+
+.nn-lessons-hub-lesson-row-h11 {
+  --nn-hub-cat-accent: var(--semantic-brand);
+}
+
+@media (max-width: 639px) {
+  .nn-lessons-hub-layout-h11 .nn-lessons-hub-lesson-row-h11 {
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .nn-lessons-hub-category-header .flex.flex-col.gap-4 {
+    gap: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lessons-hub-lesson-row-h11,
+  .nn-lessons-hub-lesson-row-h11:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+html[data-theme="ocean"] .nn-hub-category-tile,
+html[data-theme="blossom"] .nn-hub-category-tile,
+html[data-theme="aurora"] .nn-hub-category-tile,
+html[data-theme="sunset"] .nn-hub-category-tile {
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+html[data-theme="midnight"] .nn-hub-category-tile,
+html[data-theme="apex"] .nn-hub-category-tile {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 8px 24px -12px rgba(0, 0, 0, 0.35);
+}
+
 /* --- Exam-critical category card visual treatment --- */
-.nn-hub-category-card--exam-critical {
+.nn-hub-category-card--exam-critical,
+.nn-hub-category-tile.nn-hub-category-card--exam-critical {
   border-color: color-mix(in srgb, var(--nn-hub-cat-accent) 24%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--nn-hub-cat-accent) 6%, var(--semantic-surface));
 }

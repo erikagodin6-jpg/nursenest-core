@@ -85,3 +85,17 @@ export function getPaidTestCredentials(): PaidTestCredentials | null {
 export function hasPaidTestCredentials(): boolean {
   return getPaidTestCredentials() !== null;
 }
+
+/** Optional Canada RN–entitled account (separate from US paid fixture). */
+export function getCaPaidTestCredentials(): PaidTestCredentials | null {
+  const a = process.env.E2E_CA_PAID_EMAIL?.trim();
+  const b = process.env.E2E_CA_PAID_PASSWORD;
+  if (a && b !== undefined && String(b).length > 0) {
+    return { email: a, password: String(b) };
+  }
+  return null;
+}
+
+export function hasCaPaidTestCredentials(): boolean {
+  return getCaPaidTestCredentials() !== null;
+}

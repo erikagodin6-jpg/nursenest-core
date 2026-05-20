@@ -4,7 +4,9 @@
 export function stripToPlainText(raw: string | null | undefined): string {
   if (raw == null) return "";
   let s = String(raw);
-  s = s.replace(/<[^>]+>/g, " ");
+  // Strip real tags without deleting clinical comparison text such as
+  // "K+ < 3.5 mEq/L" or "digoxin level < 2.0 ng/mL".
+  s = s.replace(/<\/?[A-Za-z][^>]*>/g, " ");
   s = s.replace(/&nbsp;/gi, " ");
   s = s.replace(/&amp;/g, "&");
   s = s.replace(/&lt;/g, "<");

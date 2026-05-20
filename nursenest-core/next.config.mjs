@@ -182,21 +182,28 @@ const nextConfig = {
         destination: "https://newgrad.nursenest.ca/new-grad/:path*",
         permanent: true,
       },
-      /** Legacy allied host bookmarked sitemap → canonical www HTTPS urlset. */
+      /** Legacy allied host bookmarked sitemap → canonical apex HTTPS urlset. */
       {
         source: "/sitemap-allied.xml",
         has: [{ type: "host", value: "allied.nursenest.ca" }],
-        destination: "https://www.nursenest.ca/sitemap-allied.xml",
+        destination: "https://nursenest.ca/sitemap-allied.xml",
         permanent: true,
       },
-      /** Production HTTP bookmarks → canonical HTTPS www (requires `x-forwarded-proto` from the edge). */
+      /** Legacy www host bookmarks → canonical apex host. */
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.nursenest.ca" }],
+        destination: "https://nursenest.ca/:path*",
+        permanent: true,
+      },
+      /** Production HTTP bookmarks → canonical HTTPS apex (requires `x-forwarded-proto` from the edge). */
       {
         source: "/:path*",
         has: [
           { type: "header", key: "x-forwarded-proto", value: "http" },
           { type: "host", value: "www.nursenest.ca" },
         ],
-        destination: "https://www.nursenest.ca/:path*",
+        destination: "https://nursenest.ca/:path*",
         permanent: true,
       },
       {
@@ -205,7 +212,7 @@ const nextConfig = {
           { type: "header", key: "x-forwarded-proto", value: "http" },
           { type: "host", value: "nursenest.ca" },
         ],
-        destination: "https://www.nursenest.ca/:path*",
+        destination: "https://nursenest.ca/:path*",
         permanent: true,
       },
       /** RN blog hub canonical path is `/blog/rn/*` (lesson-derived SEO posts). */

@@ -41,6 +41,10 @@ function isChildSegmentOwnedCoreUrl(url: string, origin: string): boolean {
   const o = origin.endsWith("/") ? origin.slice(0, -1) : origin;
   if (!normalized.startsWith(o)) return false;
   const pathname = normalized.slice(o.length) || "/";
+  if (pathname === "/blog") return true;
+  if (pathname === "/allied-health" || pathname === "/allied/allied-health" || pathname.startsWith("/allied-health/")) {
+    return true;
+  }
   return CHILD_SEGMENT_OWNED_CORE_EXCLUSIONS.has(pathname);
 }
 

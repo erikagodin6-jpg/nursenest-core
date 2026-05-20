@@ -243,6 +243,20 @@ describe("premium lesson reading architecture v2", () => {
     }
   });
 
+  it("keeps RN lessons on the wide colored-section reading canvas without affecting side rails", () => {
+    assert.match(marketingDetail, /nn-lesson-page-shell--rn/);
+    assert.match(learnerDetail, /nn-lesson-page-shell--rn/);
+    for (const [label, css] of [
+      ["marketing", marketingCss],
+      ["learner", learnerCss],
+    ] as const) {
+      assert.match(css, /--nn-rn-lesson-canvas-wide:\s*min\(100%,\s*87\.5rem\)/, `${label} RN canvas width missing`);
+      assert.match(css, /\.nn-premium-lesson-detail-shell\.nn-lesson-page-shell--rn/, `${label} RN shell selector missing`);
+      assert.match(css, /border-left:\s*4px solid color-mix\(in srgb, var\(--lsc-color\)/, `${label} RN colored section accent missing`);
+      assert.match(css, /max-width:\s*96ch/, `${label} RN readable prose width missing`);
+    }
+  });
+
   it("reveals the sticky review dock only after the learner is deep into the lesson", () => {
     assert.match(stickyDock, /ratio > 0\.62/);
     assert.match(stickyDock, /requestAnimationFrame/);

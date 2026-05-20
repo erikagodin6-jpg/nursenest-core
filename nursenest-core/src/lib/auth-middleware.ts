@@ -124,7 +124,9 @@ export const { auth: middlewareAuth } = NextAuth({
       const signedInFromAuth = hasSignedInUser(auth);
 
       if (isAppPath(pathname)) {
-        return signedInFromAuth;
+        if (signedInFromAuth) return true;
+        // Match admin/internal: honor a readable session JWT when Edge `auth` is empty (cookie/header parity).
+        return hasReadableSessionJwt(request as NextRequest);
       }
 
       if (isAdminPath(pathname)) {

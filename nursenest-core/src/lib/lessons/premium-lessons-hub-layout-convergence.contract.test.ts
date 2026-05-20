@@ -86,9 +86,10 @@ describe("MarketingLessonsHubCategoryFirstIndex layout contract", () => {
     assert.match(src, /nn-hub-cat-accent/, "must apply --nn-hub-cat-accent CSS variable");
   });
 
-  it("renders ChevronRight arrow on category cards", () => {
-    const src = fs.readFileSync(categoryFirstIndexPath, "utf8");
-    assert.match(src, /ChevronRight/, "must render ChevronRight on each category card");
+  it("renders open affordance on category tiles (H11)", () => {
+    const tilePath = path.join(__dirname, "../../components/pathway-lessons/lessons-hub-category-tile.tsx");
+    const src = fs.readFileSync(tilePath, "utf8");
+    assert.match(src, /ArrowRight/, "category tiles must render ArrowRight open affordance");
   });
 
   it("renders category description when available", () => {
@@ -96,9 +97,13 @@ describe("MarketingLessonsHubCategoryFirstIndex layout contract", () => {
     assert.match(src, /cat\.description/, "must render cat.description");
   });
 
-  it("uses nn-hub-category-card class on category links", () => {
+  it("uses H11 layout markers on hub section and category tiles", () => {
     const src = fs.readFileSync(categoryFirstIndexPath, "utf8");
-    assert.match(src, /nn-hub-category-card/, "category cards must use nn-hub-category-card class");
+    assert.match(src, /data-nn-lessons-hub-layout="h11"/, "hub must declare H11 layout");
+    assert.match(src, /LessonsHubCategoryTile/, "must render LessonsHubCategoryTile");
+    const tilePath = path.join(__dirname, "../../components/pathway-lessons/lessons-hub-category-tile.tsx");
+    const tileSrc = fs.readFileSync(tilePath, "utf8");
+    assert.match(tileSrc, /nn-hub-category-tile/, "category tiles must use nn-hub-category-tile class");
   });
 
   it("has no yellow/decorative block artifacts in marketing hub markup", () => {
@@ -135,16 +140,10 @@ describe("Premium redesign CSS hub primitives", () => {
     assert.match(css, /\.nn-lessons-hub-trust-badge/, "must define .nn-lessons-hub-trust-badge");
   });
 
-  it("defines nn-hub-category-card styles with transition", () => {
+  it("defines nn-hub-category-tile styles (H11 layout)", () => {
     const css = resolveCssFile(premiumCssPath);
-    assert.match(css, /\.nn-hub-category-card/, "must define .nn-hub-category-card");
-    assert.match(css, /\.nn-hub-category-card\s*\{[\s\S]{0,80}transition/, "must include transition on hub category card");
-  });
-
-  it("includes prefers-reduced-motion guard for category card hover lift", () => {
-    const css = resolveCssFile(premiumCssPath);
-    const reducedSection = css.match(/@media \(prefers-reduced-motion: reduce\)[\s\S]{0,600}nn-hub-category-card/);
-    assert.ok(reducedSection, "must guard nn-hub-category-card transform with prefers-reduced-motion");
+    assert.match(css, /\.nn-hub-category-tile/, "must define .nn-hub-category-tile");
+    assert.match(css, /\.nn-lessons-hub-layout-h11/, "must define .nn-lessons-hub-layout-h11");
   });
 
   it("defines theme-aware stat card backgrounds for Ocean, Blossom, Midnight", () => {
@@ -216,16 +215,19 @@ describe("Category grid content hierarchy contract", () => {
       /EXAM_CRITICAL_CATEGORY_IDS\.has\(cat\.id\)/,
       "must check each category against exam-critical set",
     );
+    const tilePath = path.join(__dirname, "../../components/pathway-lessons/lessons-hub-category-tile.tsx");
+    const tileSrc = fs.readFileSync(tilePath, "utf8");
     assert.match(
-      src,
+      tileSrc,
       /nn-hub-category-card--exam-critical/,
-      "must apply exam-critical class to matching categories",
+      "must apply exam-critical class on category tiles",
     );
   });
 
   it("applies aria-disabled to empty category cards", () => {
-    const src = fs.readFileSync(categoryFirstIndexPath, "utf8");
-    assert.match(src, /aria-disabled=\{isEmpty/, "must mark empty cards aria-disabled");
+    const tilePath = path.join(__dirname, "../../components/pathway-lessons/lessons-hub-category-tile.tsx");
+    const tileSrc = fs.readFileSync(tilePath, "utf8");
+    assert.match(tileSrc, /aria-disabled=\{isEmpty/, "must mark empty cards aria-disabled");
   });
 });
 
@@ -235,13 +237,15 @@ describe("Category drill-down lesson rows contract", () => {
     "../../components/pathway-lessons/marketing-lessons-hub-category-lessons-surface.tsx",
   );
 
-  it("uses nn-lessons-hub-lesson-row class on individual lesson links", () => {
+  it("uses H11 lesson row component in category drill-down", () => {
     const src = fs.readFileSync(categoryLessonsSurfacePath, "utf8");
-    assert.match(
-      src,
-      /nn-lessons-hub-lesson-row/,
-      "lesson rows in category drill-down must use nn-lessons-hub-lesson-row class",
+    assert.match(src, /LessonsHubLessonRow/, "category surface must render LessonsHubLessonRow");
+    assert.match(src, /data-nn-lessons-hub-layout="h11"/, "category surface must use H11 layout");
+    const rowSrc = fs.readFileSync(
+      path.join(__dirname, "../../components/pathway-lessons/lessons-hub-lesson-row.tsx"),
+      "utf8",
     );
+    assert.match(rowSrc, /nn-lessons-hub-lesson-row-h11/, "lesson row must include H11 class");
   });
 
   it("renders directional affordance on lesson rows", () => {

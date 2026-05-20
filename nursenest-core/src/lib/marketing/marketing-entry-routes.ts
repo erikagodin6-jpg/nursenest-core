@@ -27,10 +27,10 @@ export const HUB = {
 export const RN = {
   /** Canonical public RN pathway hub root (same as {@link CANONICAL_PATHWAY_HUB.usRn}). */
   practiceProgrammatic: CANONICAL_PATHWAY_HUB.usRn,
-  usLessons: HUB.examLessons,
-  caLessons: HUB.examLessons,
-  usQuestions: HUB.questionBank,
-  caQuestions: HUB.questionBank,
+  usLessons: `${CANONICAL_PATHWAY_HUB.usRn}/lessons`,
+  caLessons: `${CANONICAL_PATHWAY_HUB.caRn}/lessons`,
+  usQuestions: `${CANONICAL_PATHWAY_HUB.usRn}/questions`,
+  caQuestions: `${CANONICAL_PATHWAY_HUB.caRn}/questions`,
   /** Subscriber app route (timed practice exams, history). Public entry: {@link HUB.practiceExams}. */
   appExams: "/app/practice-tests?startMode=practice_exam",
 } as const;

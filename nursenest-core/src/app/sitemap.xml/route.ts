@@ -12,8 +12,8 @@ const STATIC_SITEMAP_PATHS = ["/sitemap.xml"] as const;
  * Child routes enforce {@link filterPublicSitemapEntries} and DB fallbacks.
  * Response content-type is application/xml via {@link SITEMAP_XML_HEADERS}.
  *
- * Critical SEO invariant: the sitemap index must always emit the canonical HTTPS www origin. Do not read
- * NEXT_PUBLIC_APP_URL here; production env drift has previously made the root index advertise non-www child sitemaps.
+ * Critical SEO invariant: the sitemap index must always emit the canonical HTTPS apex origin. Do not read
+ * NEXT_PUBLIC_APP_URL here; production env drift has previously made the root index advertise alternate child hosts.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

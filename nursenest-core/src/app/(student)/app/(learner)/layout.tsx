@@ -431,7 +431,9 @@ export default async function LearnerShellLayout({ children }: { children: React
                   {LearnerTutorShellComponent ? <LearnerTutorShellComponent context={tutorContext} /> : null}
                 </LearnerSilentSectionBoundary>
               ) : null}
-              <LearnerAppFooter />
+              <div className="nn-learner-exam-chrome-dim">
+                <LearnerAppFooter />
+              </div>
             </div>
           </LearnerExamChromeGate>
         </LearnerExamStudyProviders>

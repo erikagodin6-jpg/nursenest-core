@@ -124,11 +124,17 @@
 .nn-premium-lesson-detail-shell {
   --nn-lesson-reader-max: 88ch;
   --nn-lesson-reader-wide: 112ch;
+  --nn-rn-lesson-canvas-wide: min(100%, 87.5rem);
   --nn-lesson-reading-surface: var(--semantic-surface);
   --nn-lesson-reading-soft: color-mix(in srgb, var(--semantic-panel-warm) 16%, var(--semantic-surface));
   --nn-lesson-reading-glass: color-mix(in srgb, var(--semantic-surface) 82%, transparent);
   --nn-lesson-reading-border: color-mix(in srgb, var(--semantic-border-soft) 86%, var(--semantic-brand) 14%);
   --nn-lesson-reading-shadow: 0 22px 58px -46px color-mix(in srgb, var(--semantic-text-primary) 24%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn {
+  --nn-lesson-reader-max: 96ch;
+  --nn-lesson-reader-wide: var(--nn-rn-lesson-canvas-wide);
 }
 
 .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom {
@@ -321,6 +327,15 @@
   margin-inline: auto;
 }
 
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-layout--premium-reading,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-main,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-premium-lesson-article,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-premium-lesson-reading-flow {
+  width: 100%;
+  max-width: var(--nn-rn-lesson-canvas-wide);
+  margin-inline: auto;
+}
+
 .nn-premium-lesson-detail-shell .nn-premium-lesson-article > * + * {
   margin-top: clamp(3.4rem, 7vw, 5.7rem);
 }
@@ -336,6 +351,46 @@
   background: transparent;
   box-shadow: none;
   padding: 0 0 clamp(2.3rem, 4vw, 3.4rem);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-section-card {
+  width: 100%;
+  max-width: none;
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn
+  .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 72%, var(--nn-lesson-reading-border));
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 8%, transparent), transparent 40%),
+    color-mix(in srgb, var(--lsc-soft) 26%, var(--nn-lesson-reading-surface) 74%);
+  padding: clamp(1.9rem, 3vw, 3rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 6%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn
+  .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn
+  .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 28%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 78%, var(--nn-lesson-reading-border));
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 12%, transparent), transparent 42%),
+    color-mix(in srgb, var(--lsc-soft) 34%, var(--nn-lesson-reading-surface) 66%);
+  padding: clamp(1.9rem, 3vw, 3rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 8%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--rn .nn-lesson-prose {
+  max-width: 96ch;
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--callout,

@@ -54,17 +54,16 @@ export function marketingStudyHubsForBlogExam(exam: string, country: BlogCountry
   });
 
   if (u.includes("NCLEX-RN") || u.includes("NCLEX RN")) {
-    const rnPath = { countrySlug: "canada" as const, roleTrack: "rn" as const, examCode: "nclex-rn" as const };
+    const rnPath = ca
+      ? ({ countrySlug: "canada" as const, roleTrack: "rn" as const, examCode: "nclex-rn" as const })
+      : ({ countrySlug: "us" as const, roleTrack: "rn" as const, examCode: "nclex-rn" as const });
     return {
       lessonsHub: ca ? RN.caLessons : RN.usLessons,
       questionBankHub: ca ? RN.caQuestions : RN.usQuestions,
       practiceExamsHub: HUB.practiceExams,
       flashcardsHub: HUB.flashcards,
-      pathwayQuestionsHub: ca ? buildExamPathwayPath(rnPath, "questions") : undefined,
-      pathwayCatHub: ca ? buildExamPathwayPath(rnPath, "cat") : buildExamPathwayPath(
-        { countrySlug: "us", roleTrack: "rn", examCode: "nclex-rn" },
-        "cat",
-      ),
+      pathwayQuestionsHub: buildExamPathwayPath(rnPath, "questions"),
+      pathwayCatHub: buildExamPathwayPath(rnPath, "cat"),
     };
   }
   if (u.includes("NCLEX-PN")) {

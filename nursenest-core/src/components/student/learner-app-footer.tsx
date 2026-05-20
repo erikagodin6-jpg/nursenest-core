@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const LEARNER_FOOTER_SECTIONS = [
+export const LEARNER_FOOTER_SECTIONS = [
   {
     title: "Company",
     links: [
@@ -39,14 +39,6 @@ const LEARNER_FOOTER_SECTIONS = [
       ["Credentialing Information", "/providers/credentialing"],
     ],
   },
-  {
-    title: "Patients",
-    links: [
-      ["Find Care", "/patients/find-care"],
-      ["How It Works", "/how-it-works"],
-      ["Insurance & Billing", "/patients/insurance-billing"],
-    ],
-  },
 ] as const;
 
 export function LearnerAppFooter() {
@@ -55,7 +47,7 @@ export function LearnerAppFooter() {
       className="mt-10 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]"
       aria-label="NurseNest footer"
     >
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {LEARNER_FOOTER_SECTIONS.map((section) => (
           <nav key={section.title} aria-label={section.title}>
             <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">

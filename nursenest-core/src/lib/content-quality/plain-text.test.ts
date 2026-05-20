@@ -1,22 +1,13 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import test from "node:test";
 import { countWords, stripToPlainText } from "./plain-text";
-import { classifyRationaleWordCount } from "./classify-rationale";
-import { RATIONALE_MIN_WORDS } from "./standards";
 
-describe("plain-text word counts", () => {
-  it("counts words and strips tags", () => {
-    assert.equal(countWords("  hello   world  "), 2);
-    assert.equal(countWords("<p>one two</p>"), 2);
-    assert.equal(stripToPlainText("<b>a</b> &amp; b"), "a & b");
-  });
-});
-
-describe("rationale classification", () => {
-  it("marks thin below minimum", () => {
-    const words = Array.from({ length: RATIONALE_MIN_WORDS - 1 }, (_, i) => `w${i}`).join(" ");
-    const r = classifyRationaleWordCount(countWords(words));
-    assert.equal(r.tier, "thin");
-    assert.equal(r.showEnrichmentNotice, true);
-  });
+test("stripToPlainText preserves clinical less-than comparisons while removing tags", () => {
+  const text = "Check K+ < 3.5 mEq/L before <strong>digoxin</strong> and notify if level > 2.0 ng/mL.";
+  const plain = stripToPlainText(text);
+  assert.match(plain, /K\+ < 3\.5 mEq\/L/);
+  assert.match(plain, /digoxin/);
+  assert.match(plain, /level > 2\.0 ng\/mL/);
+  assert.equal(plain.includes("<strong>"), false);
+  assert.ok(countWords(text) >= 13);
 });

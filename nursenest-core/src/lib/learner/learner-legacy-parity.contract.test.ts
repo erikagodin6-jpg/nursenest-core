@@ -81,7 +81,6 @@ describe("learner account nav — practical link set (parity with legacy /profil
     const src = readFileSync(navSrc, "utf8");
     const expected = [
       "/app",
-      "/app/command-center",
       "/app/account",
       "/app/account/overview",
       "/app/account/report",

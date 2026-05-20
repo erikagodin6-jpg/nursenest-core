@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
@@ -6,6 +7,11 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
+import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
+import { LessonsHubCategoryHeader } from "@/components/pathway-lessons/lessons-hub-category-header";
+import { LessonsHubLessonRow } from "@/components/pathway-lessons/lessons-hub-lesson-row";
+import { LessonsHubResumeCompact } from "@/components/pathway-lessons/lessons-hub-resume-compact";
+import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
@@ -31,9 +37,8 @@ import {
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
-import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
-import { loadMarketingHubLessonProgressMapWithTimeout } from "@/lib/lessons/marketing-hub-progress-safe";
+import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import {
   canShowPaidPathwayLessonProgress,
   loadMarketingPathwayLessonProgressSessionContext,
@@ -42,7 +47,6 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
-import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 type Props = {
@@ -154,19 +158,29 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
   let showPaidProgressChrome = false;
-  if (canShowResume && rows.length > 0) {
-    const pr = await loadMarketingHubLessonProgressMapWithTimeout({
-      userId: progressCtx.userId,
-      pathwayId: pathway.id,
-      lessonSlugs: rows.map((l) => l.slug).filter(Boolean),
-    });
-    progressMap = pr.map;
-    showPaidProgressChrome = !pr.timedOut;
+  let hubResume: Awaited<ReturnType<typeof loadPathwayHubSubscriberData>>["resume"] | null = null;
+  const catalogSlugs = catalogAll.map((l) => l.slug).filter(Boolean);
+  if (canShowResume && catalogSlugs.length > 0) {
+    const subscriber = await loadPathwayHubSubscriberData(
+      progressCtx.userId,
+      progressCtx.scope,
+      progressCtx.learnerPath,
+      pathway,
+      base,
+      catalogSlugs,
+    );
+    progressMap = subscriber.progressMap;
+    hubResume = subscriber.resume;
+    showPaidProgressChrome = true;
   }
   const categoryProgressSnapshot =
-    showPaidProgressChrome && rows.length > 0
-      ? buildLessonCategoryProgress({ lessons: rows, progressMap })
+    showPaidProgressChrome && filtered.length > 0
+      ? buildLessonCategoryProgress({ lessons: filtered, progressMap })
       : null;
+
+  const visual = getLessonHubSystemVisual(category.id);
+  const CategoryIcon = visual.icon;
+  const accentStyle = { "--nn-hub-cat-accent": `var(${visual.accentVar})` } as CSSProperties;
 
   const subtitle = formatSentenceCase(`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`);
 
@@ -192,12 +206,15 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-      <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
-      <LessonHubClinicalModulesStrip
-        pathway={pathway}
-        marketingLocale={lessonContentLocale}
-        signedIn={Boolean(progressCtx.userId.trim())}
-      />
+      <MarketingLessonsHubStickyStudyChrome>
+        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+        <LessonHubClinicalModulesStrip
+          pathway={pathway}
+          marketingLocale={lessonContentLocale}
+          signedIn={Boolean(progressCtx.userId.trim())}
+          compact
+        />
+      </MarketingLessonsHubStickyStudyChrome>
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"
@@ -208,39 +225,28 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         </div>
       ) : null}
 
+      {hubResume && (hubResume.lastTouched || hubResume.nextRecommended) ? (
+        <div className="mt-5">
+          <LessonsHubResumeCompact resume={hubResume} />
+        </div>
+      ) : null}
+
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub nn-lessons-hub-layout-h11 mt-8 scroll-mt-8"
         data-nn-qa-pathway-lessons-category="true"
+        data-nn-lessons-hub-layout="h11"
         aria-labelledby="lesson-category-heading"
       >
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
-          <h2 id="lesson-category-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
-            {category.label}
-          </h2>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-            {filtered.length.toLocaleString()} {filtered.length === 1 ? "Lesson" : "Lessons"}
-          </span>
-        </div>
-        {categoryProgressSnapshot ? (
-          <div className="-mt-2 mb-4 max-w-xl">
-            <p className="text-xs text-[var(--theme-muted-text)]">
-              <span className="hidden sm:inline">{categoryProgressSnapshot.percentComplete}% complete · </span>
-              <span aria-hidden="true">
-                {categoryProgressSnapshot.completedCount.toLocaleString()}/
-                {categoryProgressSnapshot.totalCount.toLocaleString()} lessons in this area
-              </span>
-              <span className="sr-only">
-                {`${categoryProgressSnapshot.completedCount.toLocaleString()} of ${categoryProgressSnapshot.totalCount.toLocaleString()} lessons completed in this category`}
-              </span>
-            </p>
-            <CategoryProgressBar
-              completedCount={categoryProgressSnapshot.completedCount}
-              inProgressCount={categoryProgressSnapshot.inProgressCount}
-              totalCount={Math.max(categoryProgressSnapshot.totalCount, 1)}
-            />
-          </div>
-        ) : null}
+        <LessonsHubCategoryHeader
+          title={category.label}
+          description={category.description}
+          lessonCount={filtered.length}
+          hubHref={base}
+          accentStyle={accentStyle}
+          icon={<CategoryIcon className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" aria-hidden />}
+          progress={categoryProgressSnapshot}
+        />
 
         {filtered.length === 0 ? (
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
@@ -269,7 +275,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
             </p>
           </div>
         ) : (
-          <ul className="space-y-1.5">
+          <ul className="flex flex-col gap-2.5 sm:gap-3">
             {rows.map((l) => {
               const href = pathwayLessonMarketingHubVerifiedCardHref(base, l);
               const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
@@ -277,18 +283,20 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
               return (
                 <li key={l.slug}>
                   {href ? (
-                    <Link
+                    <LessonsHubLessonRow
                       href={href}
-                      className="nn-lessons-hub-lesson-row group flex items-center justify-between gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2.5 text-sm font-medium text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)] focus-visible:ring-offset-1"
-                    >
-                      <span className="min-w-0 flex-1 truncate">{label}</span>
-                      <span className="flex shrink-0 items-center gap-2">
-                        {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
-                        <svg className="h-3.5 w-3.5 shrink-0 text-[var(--theme-muted-text)] transition group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                      </span>
-                    </Link>
+                      label={label}
+                      accentStyle={accentStyle}
+                      showProgress={showPaidProgressChrome}
+                      status={prog ?? "not_started"}
+                    />
                   ) : (
-                    <span className="block rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2.5 text-sm text-[var(--theme-muted-text)]">{label}</span>
+                    <span
+                      className="block min-h-[48px] rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm text-[var(--theme-muted-text)]"
+                      style={accentStyle}
+                    >
+                      {label}
+                    </span>
                   )}
                 </li>
               );

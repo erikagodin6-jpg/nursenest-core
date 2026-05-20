@@ -31,7 +31,7 @@ const dmSans = DM_Sans({
   adjustFontFallback: true,
 });
 
-const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
+const siteUrl = MARKETING_SITE_ORIGIN || "https://nursenest.ca";
 
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";

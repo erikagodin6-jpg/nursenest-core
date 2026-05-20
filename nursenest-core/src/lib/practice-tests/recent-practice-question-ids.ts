@@ -12,10 +12,20 @@ function asIdList(raw: unknown): string[] {
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
 }
 
-function pathwayIdFromConfigJson(config: unknown): string | null {
+export function pathwayIdFromConfigJson(config: unknown): string | null {
   if (!config || typeof config !== "object" || Array.isArray(config)) return null;
   const pid = (config as PracticeTestConfigJson).pathwayId;
   return typeof pid === "string" && pid.trim().length > 0 ? pid.trim() : null;
+}
+
+/**
+ * Whether a stored session row should be included when scanning for recent question IDs.
+ * - When targetPathwayId is a non-empty string: include only sessions matching that pathway.
+ * - When targetPathwayId is null: include all sessions (pathway-agnostic diversity).
+ */
+export function sessionMatchesPathwayFilter(config: unknown, targetPathwayId: string | null): boolean {
+  if (targetPathwayId === null) return true;
+  return pathwayIdFromConfigJson(config) === targetPathwayId;
 }
 
 /**
@@ -33,7 +43,6 @@ export async function recentPracticeQuestionIdsForPathway(params: {
   const { userId, pathwayId } = params;
   const sessionLookback = params.sessionLookback ?? STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT;
   const maxIds = params.maxIds ?? STUDY_DIVERSITY_PRACTICE_RECENT_MAX_IDS;
-  if (!pathwayId) return { ids: new Set(), sessionsScanned: 0 };
 
   const rows = await prisma.practiceTest.findMany({
     where: { userId },
@@ -45,7 +54,7 @@ export async function recentPracticeQuestionIdsForPathway(params: {
   const out: string[] = [];
   let sessionsScanned = 0;
   for (const r of rows) {
-    if (pathwayIdFromConfigJson(r.config) !== pathwayId) continue;
+    if (!sessionMatchesPathwayFilter(r.config, pathwayId)) continue;
     sessionsScanned += 1;
     if (sessionsScanned > sessionLookback) break;
     out.push(...asIdList(r.questionIds));
@@ -68,12 +77,11 @@ export async function recentPracticeQuestionIdsForPathway(params: {
  */
 export async function questionLastExposureStartedAtMsForPathway(params: {
   userId: string;
-  pathwayId: string;
+  pathwayId: string | null;
   sessionLookback?: number;
 }): Promise<Map<string, number>> {
   const sessionLookback = params.sessionLookback ?? STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT;
-  const pathwayId = params.pathwayId.trim();
-  if (!pathwayId) return new Map();
+  const pathwayId = params.pathwayId?.trim() ?? null;
 
   const rows = await prisma.practiceTest.findMany({
     where: { userId: params.userId },
@@ -85,7 +93,7 @@ export async function questionLastExposureStartedAtMsForPathway(params: {
   const out = new Map<string, number>();
   let sessionsScanned = 0;
   for (const r of rows) {
-    if (pathwayIdFromConfigJson(r.config) !== pathwayId) continue;
+    if (pathwayId !== null && pathwayIdFromConfigJson(r.config) !== pathwayId) continue;
     sessionsScanned += 1;
     if (sessionsScanned > sessionLookback) break;
     const t = r.startedAt.getTime();

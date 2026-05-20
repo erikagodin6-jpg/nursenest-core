@@ -2,14 +2,14 @@
  * Single source for the public production hostname used in sitemaps, robots, and absolute SEO URLs.
  *
  * Production crawl surfaces must never inherit a misconfigured `NEXT_PUBLIC_APP_URL` such as:
- * - `http://www.nursenest.ca`
- * - `https://nursenest.ca`
+ * - `http://nursenest.ca`
+ * - `https://www.nursenest.ca`
  * - `https://allied.nursenest.ca`
  *
  * Google Search Console treats those as different fetch/canonical surfaces. The public canonical is always the
- * HTTPS www host; localhost is allowed only for local development/test renders.
+ * HTTPS apex host; localhost is allowed only when `NN_ALLOW_LOCAL_CANONICAL_ORIGIN=1` is set for local tooling.
  */
-export const CANONICAL_PRODUCTION_ORIGIN = "https://www.nursenest.ca";
+export const CANONICAL_PRODUCTION_ORIGIN = "https://nursenest.ca";
 
 function isLocalDevelopmentOrigin(raw: string): boolean {
   try {
@@ -24,7 +24,7 @@ function isLocalDevelopmentOrigin(raw: string): boolean {
 export function resolveCanonicalSiteOrigin(): string {
   try {
     const raw = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "") ?? "";
-    if (raw && isLocalDevelopmentOrigin(raw)) return raw;
+    if (raw && process.env.NN_ALLOW_LOCAL_CANONICAL_ORIGIN === "1" && isLocalDevelopmentOrigin(raw)) return raw;
     return CANONICAL_PRODUCTION_ORIGIN;
   } catch {
     return CANONICAL_PRODUCTION_ORIGIN;

@@ -30,7 +30,7 @@ export const ADMIN_LEARNER_QA_MOBILE_FLOW_LINKS: readonly AdminLearnerQaMobileFl
   { label: "Billing / paywall", path: "/app/account/billing" },
   { label: "Study home", path: "/app" },
   { label: "Question bank", path: "/app/questions" },
-  { label: "Command center", path: "/app/command-center" },
+  { label: "Dashboard", path: "/app" },
   { label: "Start studying", path: "/app/start-studying" },
   { label: "Study plan", path: "/app/study-plan" },
 ] as const;

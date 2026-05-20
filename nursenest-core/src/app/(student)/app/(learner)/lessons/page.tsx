@@ -531,7 +531,7 @@ export default async function LessonsPage({ searchParams }: Props) {
 
       return (
         <div
-          className="nn-premium-lessons-system nn-app-lessons-hub-premium nn-premium-lessons-app-list mx-auto max-w-3xl space-y-6 px-4 py-8"
+          className="nn-premium-lessons-system nn-app-lessons-hub-premium nn-premium-lessons-app-list mx-auto w-full max-w-6xl space-y-6 px-4 py-8"
           data-nn-premium-full-platform-convergence=""
           data-nn-premium-platform-family="exam-study"
           data-nn-premium-platform-module="lessons"
@@ -653,7 +653,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
 
       <Suspense
-        fallback={<div className="nn-skeleton-block nn-skeleton-block--toolbar w-full max-w-3xl" aria-hidden />}
+        fallback={<div className="nn-skeleton-block nn-skeleton-block--toolbar w-full max-w-6xl" aria-hidden />}
       >
         <LearnerLessonsSearchToolbar initialQ={qEffective ?? ""} label="Search lessons" placeholder="Search by title, topic, or keyword" />
       </Suspense>

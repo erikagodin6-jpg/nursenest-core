@@ -13,14 +13,14 @@ function readAppFile(relativePath: string): string {
 }
 
 test("sitemap with blog posts returns more than 16 URLs", () => {
-  const mockUrls = Array.from({ length: 17 }, (_, i) => `https://www.nursenest.ca/blog/post-${i + 1}`);
+  const mockUrls = Array.from({ length: 17 }, (_, i) => `https://nursenest.ca/blog/post-${i + 1}`);
   const xml = buildSitemapUrlsetFromAbsoluteUrls(mockUrls);
   const matches = xml.match(/<url>/g) ?? [];
   assert.ok(matches.length > 16, `expected >16 <url> entries, got ${matches.length}`);
 });
 
 test("sitemap XML deduplicates URLs", () => {
-  const baseUrls = Array.from({ length: 10 }, (_, i) => `https://www.nursenest.ca/blog/post-${i + 1}`);
+  const baseUrls = Array.from({ length: 10 }, (_, i) => `https://nursenest.ca/blog/post-${i + 1}`);
   const withDuplicates = [...baseUrls, ...baseUrls.slice(0, 3)];
 
   const seen = new Set<string>();
@@ -37,13 +37,13 @@ test("sitemap XML deduplicates URLs", () => {
 });
 
 test("sitemap XML has valid structure", () => {
-  const urls = ["https://www.nursenest.ca/", "https://www.nursenest.ca/pricing"];
+  const urls = ["https://nursenest.ca/", "https://nursenest.ca/pricing"];
   const xml = buildSitemapUrlsetFromAbsoluteUrls(urls);
   assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
   assert.match(xml, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.match(xml, /<\/urlset>/);
-  assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/<\/loc>/);
-  assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/pricing<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/nursenest\.ca\/<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/nursenest\.ca\/pricing<\/loc>/);
 });
 
 test("sitemap.xml route serves sitemap index (no merged urlset)", () => {

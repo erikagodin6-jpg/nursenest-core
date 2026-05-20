@@ -20,8 +20,8 @@ import {
 const ROOT = process.cwd();
 
 describe("canonical + sitemap index invariants", () => {
-  it("uses https www production origin (GSC canonical)", () => {
-    assert.equal(CANONICAL_PRODUCTION_ORIGIN, "https://www.nursenest.ca");
+  it("uses HTTPS apex production origin (GSC canonical)", () => {
+    assert.equal(CANONICAL_PRODUCTION_ORIGIN, "https://nursenest.ca");
   });
 
   it("sitemap index XML is well-formed and child sitemap locs are unique", () => {
@@ -38,7 +38,7 @@ describe("canonical + sitemap index invariants", () => {
       `duplicate <loc> in sitemap index: ${locs.length - uniq.size} dupes`,
     );
     for (const loc of locs) {
-      assert.match(loc, /^https:\/\/www\.nursenest\.ca\/sitemap-[a-z0-9-]+\.xml$/);
+      assert.match(loc, /^https:\/\/nursenest\.ca\/sitemap-[a-z0-9-]+\.xml$/);
       assert.ok(!loc.includes("localhost"), loc);
       assert.ok(!loc.startsWith("http://"), loc);
     }

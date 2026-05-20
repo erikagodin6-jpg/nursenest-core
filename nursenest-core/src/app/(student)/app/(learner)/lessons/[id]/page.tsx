@@ -1279,8 +1279,13 @@ async function LessonDetailPageInner({ params }: Props) {
       </>
     );
 
+    const isRnLessonPathway =
+      pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn";
+
     return (
-      <div className="nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell">
+      <div
+        className={`nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
+      >
         <StaffEditLivePageBanner
           adminHref={buildAdminPathwayLessonStableEditHref({
             pathwayId,

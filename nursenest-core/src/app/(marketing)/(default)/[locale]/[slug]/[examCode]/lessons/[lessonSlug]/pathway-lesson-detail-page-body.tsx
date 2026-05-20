@@ -178,6 +178,8 @@ export async function PathwayLessonDetailPageBody({
   if (routeResolution.kind === "not_found") notFound();
 
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
+  const isRnLessonPathway =
+    pathway.id === "ca-rn-nclex-rn" || pathway.id === "us-rn-nclex-rn";
   const linkedLearningSignals =
     lesson.linkedLearningSignals ??
     computePathwayLessonLinkedLearningSignals(pathway.id, lesson);
@@ -388,7 +390,7 @@ export async function PathwayLessonDetailPageBody({
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
       <div className="mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
         <div
-          className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+          className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
         >
           <MarketingPathwayLessonDetailViewBeacon
             pathway={pathway}

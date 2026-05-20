@@ -21,7 +21,6 @@ export const LEARNER_ACCOUNT_NAV_GROUPS: readonly LearnerAccountNavGroup[] = [
     sectionKey: "learner.account.nav.groupStudy",
     items: [
       { href: "/app", key: "learner.account.nav.dashboard" },
-      { href: "/app/command-center", key: "learner.account.nav.studyHub" },
       { href: "/app/account/overview", key: "learner.account.nav.overview" },
     ],
   },

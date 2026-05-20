@@ -21,7 +21,7 @@ test("collectAlliedMarketingUrls emits only HTTPS-ready paths (no query strings)
   for (const u of urls) {
     const parsed = new URL(u);
     assert.equal(parsed.protocol, "https:");
-    assert.equal(parsed.hostname, "www.nursenest.ca");
+    assert.equal(parsed.hostname, "nursenest.ca");
     assert.equal(parsed.search, "");
     assert.equal(parsed.hash, "");
     assert.ok(
@@ -51,7 +51,7 @@ test("allied sitemap route builds valid urlset XML from filtered entries", () =>
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   assert.ok(locs.length >= 1);
   for (const loc of locs) {
-    assert.match(loc, /^https:\/\/www\.nursenest\.ca\//);
+    assert.match(loc, /^https:\/\/nursenest\.ca\//);
     assert.doesNotMatch(loc, /^http:\/\//);
     assert.doesNotMatch(loc, /allied\.nursenest\.ca/i);
   }

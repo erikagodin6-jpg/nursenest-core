@@ -3,7 +3,7 @@
  * Crawl seed marketing pages and verify same-origin `<a href>` links return 200 or 301/308 to same host.
  *
  * Env:
- * - `PUBLIC_LINKS_BASE` | `BASE_URL` (default `https://www.nursenest.ca`)
+ * - `PUBLIC_LINKS_BASE` | `BASE_URL` (default `https://nursenest.ca`)
  * - `PUBLIC_LINKS_MAX_PAGES` (default 120)
  * - `PUBLIC_LINKS_MAX_DEPTH` (default 2)
  */

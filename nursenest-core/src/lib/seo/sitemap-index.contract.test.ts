@@ -13,7 +13,7 @@ test("sitemap index XML declares sitemapindex schema", () => {
   assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
   assert.match(xml, /<sitemapindex xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.match(xml, /<sitemap>/);
-  assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/sitemap-core\.xml<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/nursenest\.ca\/sitemap-core\.xml<\/loc>/);
   assert.match(xml, /<\/sitemapindex>/);
 });
 

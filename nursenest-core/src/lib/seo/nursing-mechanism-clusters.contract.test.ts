@@ -144,7 +144,7 @@ test("breadcrumb JSON-LD uses canonical NurseNest URLs", () => {
     for (const [index, item] of (jsonLd.itemListElement ?? []).entries()) {
       assert.equal(item.position, index + 1);
       assert.ok(item.name?.trim());
-      assert.ok(item.item?.startsWith("https://www.nursenest.ca/"), `${cluster.slug} breadcrumb must use canonical URL`);
+      assert.ok(item.item?.startsWith("https://nursenest.ca/"), `${cluster.slug} breadcrumb must use canonical URL`);
     }
   }
 });

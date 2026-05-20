@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RN Lessons Hub — Category-First · 12 Layouts × 5 Themes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:#e8eef4}
+button,input{font-family:inherit}
+svg{display:block;flex-shrink:0}
+
+/* Gallery chrome */
+.g-chrome{background:#0c1220;position:sticky;top:0;z-index:500;border-bottom:1px solid #1e293b}
+.g-top{padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.g-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8}
+.g-title strong{color:#f8fafc;display:block;font-size:15px;letter-spacing:-.02em;text-transform:none;margin-top:2px}
+.g-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.g-btn{height:32px;padding:0 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:11px;font-weight:600;cursor:pointer}
+.g-btn.on{background:#f8fafc;color:#0f172a;border-color:#f8fafc}
+.g-theme-row{padding:8px 24px 10px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #1e293b;background:#0f1623}
+.g-theme-btn{height:28px;padding:0 12px;border-radius:999px;border:1px solid #334155;background:transparent;color:#94a3b8;font-size:10px;font-weight:700;cursor:pointer}
+.g-theme-btn.on{color:#0f172a;background:#fff;border-color:#fff}
+.g-subtabs{padding:10px 24px 14px;background:#f8fafc;display:flex;gap:6px;overflow-x:auto;flex-wrap:wrap;border-bottom:1px solid #e2e8f0}
+.g-subtab{padding:6px 12px;font-size:11px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e2e8f0;border-radius:999px;cursor:pointer;white-space:nowrap}
+.g-subtab.on{background:var(--active-sub,#0d7aaa);color:#fff;border-color:var(--active-sub,#0d7aaa)}
+.g-stage{padding:36px;display:flex;justify-content:center;min-height:calc(100vh - 160px)}
+.viewport{background:#fff;border-radius:14px;box-shadow:0 24px 80px rgba(15,23,42,.14);overflow:hidden}
+.viewport.desktop{width:1440px}
+.viewport.mobile{width:390px}
+.vp-label{text-align:center;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:14px}
+
+/* ══ NURSE NEST THEMES (mirrors theme-palettes / hub-system) ══ */
+[data-theme="ocean"]{
+  --bg:#f0f5fa;--surf:#fff;--panel:#f7fafd;--panel2:#eef4fa;
+  --border:rgba(176,218,240,.65);--border-s:rgba(26,174,224,.28);--div:rgba(176,218,240,.4);
+  --muted:#647894;--subtle:#94a3b8;--txt:#0f172a;--txt2:#455569;
+  --primary:#1aaee0;--primary-d:#0d7aaa;--primary-s:rgba(13,122,170,.09);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(6,88,140,.08);
+  --sh-lg:0 2px 0 rgba(0,0,0,.04),0 14px 42px -18px rgba(6,88,140,.12);
+  --c1:#e11d48;--c2:#4eb0ce;--c3:#0d9488;--c4:#7c3aed;--c5:#16a34a;--c6:#d97706;
+  --progress-t:rgba(176,218,240,.4);--progress-f:#1aaee0;
+  --hero-from:#f7fafd;--hero-to:rgba(26,174,224,.04);
+  --hero-blob1:rgba(26,174,224,.08);--hero-blob2:rgba(26,174,224,.05);
+  --chip-bg:rgba(13,122,170,.09);--chip-bdr:rgba(13,122,170,.22);--chip-fg:#0d7aaa;
+}
+[data-theme="blossom"]{
+  --bg:#fdf2fb;--surf:#fff;--panel:#fdf7fc;--panel2:#f9eef8;
+  --border:rgba(232,200,226,.7);--border-s:rgba(217,72,168,.28);--div:rgba(232,200,226,.45);
+  --muted:#7a6b84;--subtle:#9d8da8;--txt:#10182f;--txt2:#455569;
+  --primary:#d948a8;--primary-d:#b3359a;--primary-s:rgba(217,72,168,.08);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(180,60,160,.07);
+  --sh-lg:0 2px 0 rgba(0,0,0,.03),0 14px 42px -18px rgba(180,60,160,.1);
+  --c1:#e11d48;--c2:#7c3aed;--c3:#d948a8;--c4:#4eb0ce;--c5:#16a34a;--c6:#d97706;
+  --progress-t:rgba(232,200,226,.4);--progress-f:#d948a8;
+  --hero-from:#fdf7fc;--hero-to:rgba(217,72,168,.04);
+  --hero-blob1:rgba(217,72,168,.08);--hero-blob2:rgba(147,87,242,.06);
+  --chip-bg:rgba(217,72,168,.1);--chip-bdr:rgba(217,72,168,.25);--chip-fg:#b3359a;
+}
+[data-theme="aurora"]{
+  --bg:#f2f8ff;--surf:#fff;--panel:#f4f9ff;--panel2:#eaf3ff;
+  --border:rgba(180,210,240,.65);--border-s:rgba(99,160,217,.3);--div:rgba(180,210,240,.4);
+  --muted:#637282;--subtle:#8fa5b8;--txt:#1d3041;--txt2:#395266;
+  --primary:#5e8bd9;--primary-d:#3a6eb8;--primary-s:rgba(94,139,217,.08);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(30,80,160,.09);
+  --sh-lg:0 2px 0 rgba(0,0,0,.03),0 14px 42px -18px rgba(30,80,160,.13);
+  --c1:#e11d48;--c2:#5e8bd9;--c3:#0d9488;--c4:#7c3aed;--c5:#16a34a;--c6:#d97706;
+  --progress-t:rgba(180,210,240,.4);--progress-f:#5e8bd9;
+  --hero-from:#f4f9ff;--hero-to:rgba(94,139,217,.05);
+  --hero-blob1:rgba(94,139,217,.1);--hero-blob2:rgba(94,139,217,.06);
+  --chip-bg:rgba(94,139,217,.1);--chip-bdr:rgba(94,139,217,.25);--chip-fg:#3a6eb8;
+}
+[data-theme="sunset"]{
+  --bg:#fff8ed;--surf:#fffdf8;--panel:#fff4e8;--panel2:#ffecd5;
+  --border:rgba(239,214,183,.7);--border-s:rgba(198,120,56,.28);--div:rgba(239,214,183,.45);
+  --muted:#7a6652;--subtle:#a0886e;--txt:#3f3024;--txt2:#5c4a36;
+  --primary:#c67838;--primary-d:#a05c22;--primary-s:rgba(198,120,56,.09);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(100,60,20,.09);
+  --sh-lg:0 2px 0 rgba(0,0,0,.04),0 14px 42px -18px rgba(100,60,20,.13);
+  --c1:#e11d48;--c2:#c67838;--c3:#0d9488;--c4:#7c3aed;--c5:#16a34a;--c6:#d97706;
+  --progress-t:rgba(239,214,183,.45);--progress-f:#c67838;
+  --hero-from:#fff4e8;--hero-to:rgba(198,120,56,.04);
+  --hero-blob1:rgba(198,120,56,.1);--hero-blob2:rgba(198,120,56,.06);
+  --chip-bg:rgba(198,120,56,.1);--chip-bdr:rgba(198,120,56,.25);--chip-fg:#a05c22;
+}
+[data-theme="midnight"]{
+  --bg:#07111f;--surf:#111827;--panel:#0d1826;--panel2:#152032;
+  --border:rgba(49,68,102,.85);--border-s:rgba(56,189,248,.25);--div:rgba(49,68,102,.5);
+  --muted:#5e7a98;--subtle:#47607c;--txt:#f0f6ff;--txt2:#c8d8ed;
+  --primary:#38bdf8;--primary-d:#0ea5e9;--primary-s:rgba(56,189,248,.08);
+  --sh:0 2px 0 rgba(0,0,0,.2),0 6px 24px -10px rgba(0,0,0,.35);
+  --sh-lg:0 2px 0 rgba(0,0,0,.25),0 14px 42px -18px rgba(0,0,0,.5);
+  --c1:#f87171;--c2:#38bdf8;--c3:#34d399;--c4:#a78bda;--c5:#34d399;--c6:#fbbf24;
+  --progress-t:rgba(49,68,102,.55);--progress-f:#38bdf8;
+  --hero-from:#0d1826;--hero-to:rgba(56,189,248,.06);
+  --hero-blob1:rgba(56,189,248,.1);--hero-blob2:rgba(56,189,248,.06);
+  --chip-bg:rgba(56,189,248,.12);--chip-bdr:rgba(56,189,248,.25);--chip-fg:#7dd3fc;
+}
+
+.hub{background:var(--bg);color:var(--txt);min-height:920px;width:100%}
+.hub.mobile{min-height:800px;font-size:14px}
+.hub-body{max-width:1280px;margin:0 auto;padding:32px 40px 56px;display:flex;flex-direction:column;gap:32px}
+.hub.mobile .hub-body{padding:20px 16px 40px;gap:24px}
+
+/* Compact hero */
+.hub-hero{background:linear-gradient(135deg,var(--hero-from),var(--hero-to));border:1px solid var(--border);border-radius:18px;padding:28px 32px;position:relative;overflow:hidden;box-shadow:var(--sh)}
+.hub-hero-blob1{position:absolute;right:-50px;top:-60px;width:220px;height:220px;border-radius:50%;background:var(--hero-blob1);filter:blur(50px);pointer-events:none}
+.hub-hero-blob2{position:absolute;bottom:-40px;left:-30px;width:160px;height:160px;border-radius:50%;background:var(--hero-blob2);filter:blur(40px);pointer-events:none}
+.hub-hero-inner{position:relative}
+.hub-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--chip-fg);background:var(--chip-bg);border:1px solid var(--chip-bdr);padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:10px}
+.hub-hero h1{font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--txt)}
+.hub-hero-lead{font-size:14px;line-height:1.65;color:var(--txt2);max-width:56ch;margin-top:8px}
+.hub-hero-meta{display:flex;gap:12px;margin-top:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.hub-search{margin-top:16px;max-width:480px;background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh);font-size:13px;color:var(--subtle)}
+
+/* Tiny resume — NOT dominant */
+.h-resume{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surf);border:1px solid var(--border);border-radius:12px;box-shadow:var(--sh);font-size:12px}
+.h-resume-dot{width:8px;height:8px;border-radius:50%;background:var(--progress-f);flex-shrink:0}
+.h-resume-label{font-weight:700;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.h-resume-title{font-weight:700;color:var(--txt);margin-left:4px}
+.h-resume-meta{color:var(--muted);margin-left:8px}
+.h-resume-spacer{flex:1}
+.h-resume-btn{height:32px;padding:0 14px;border-radius:8px;background:var(--primary-d);color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;flex-shrink:0}
+.hub.mobile .h-resume{flex-wrap:wrap}
+.hub.mobile .h-resume-spacer{display:none}
+.hub.mobile .h-resume-btn{width:100%}
+
+/* Progress strip — subtle */
+.h-progress-strip{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh)}
+.h-progress-strip .bar{flex:1;height:6px;background:var(--progress-t);border-radius:99px;overflow:hidden}
+.h-progress-strip .bar span{display:block;height:100%;background:var(--progress-f);border-radius:99px;width:28%}
+.h-progress-strip .label{font-size:12px;font-weight:700;color:var(--txt)}
+.h-progress-strip .sub{font-size:11px;color:var(--muted)}
+
+/* ══ CATEGORIES — PRIMARY ══ */
+.h-cat-section{display:flex;flex-direction:column;gap:20px}
+.h-cat-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:4px}
+.h-cat-head h2{font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.h-cat-head p{font-size:13px;color:var(--muted);font-weight:500}
+.h-cat-filters{display:flex;gap:6px;flex-wrap:wrap}
+.h-filter{height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:var(--surf);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer}
+.h-filter.on{background:var(--chip-bg);color:var(--chip-fg);border-color:var(--chip-bdr)}
+
+/* System / category card */
+.sys-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s}
+.sys-card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
+.sys-accent{height:3px;width:100%}
+.sys-head{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sys-title{font-size:15px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:10px}
+.sys-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid transparent}
+.sys-icon svg{width:15px;height:15px}
+.sys-count{font-size:11px;color:var(--muted)}
+.sys-count b{color:var(--txt);font-weight:700}
+.sys-prog{margin:0 20px 12px;height:4px;background:var(--progress-t);border-radius:99px;overflow:hidden}
+.sys-prog span{display:block;height:100%;border-radius:99px}
+.sys-rows{padding:0 12px 14px}
+.sys-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;font-size:13px;color:var(--txt2)}
+.sys-row:hover{background:var(--panel)}
+.sys-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0}
+.sys-dot.done{background:var(--c5);border-color:var(--c5)}
+.sys-dot.active{background:var(--primary);border-color:var(--primary)}
+.sys-row-time{font-size:10px;color:var(--subtle);margin-left:auto;white-space:nowrap}
+.sys-more{display:flex;align-items:center;justify-content:center;gap:4px;padding:10px;border-top:1px solid var(--div);font-size:12px;font-weight:600;color:var(--primary-d);background:var(--panel);cursor:pointer}
+
+/* Category tile (simpler) */
+.cat-tile{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:24px 22px;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s;cursor:pointer;display:flex;flex-direction:column;gap:12px;min-height:140px}
+.cat-tile:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
+.cat-tile-accent{height:4px;width:48px;border-radius:99px}
+.cat-tile h3{font-size:16px;font-weight:700;color:var(--txt)}
+.cat-tile p{font-size:12px;color:var(--muted);line-height:1.5}
+.cat-tile-meta{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:11px;color:var(--muted)}
+.cat-tile-meta .pct{font-weight:700;color:var(--primary-d)}
+
+/* Layout grids */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.hub.mobile .grid-2,.hub.mobile .grid-3,.hub.mobile .grid-4,.hub.mobile .grid-2-1{grid-template-columns:1fr}
+
+/* Layout-specific */
+.c-h3 .cat-tile{min-height:160px;padding:28px 24px}
+.c-h3 .cat-tile h3{font-size:18px}
+.c-h4 .sys-card{grid-column:span 1}
+.c-h5 .cat-list{display:flex;flex-direction:column;gap:12px}
+.c-h5 .cat-row{display:flex;align-items:center;gap:16px;padding:20px 24px;background:var(--surf);border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh);cursor:pointer}
+.c-h5 .cat-row:hover{box-shadow:var(--sh-lg)}
+.c-h5 .cat-row-accent{width:4px;align-self:stretch;border-radius:99px;flex-shrink:0}
+.c-h5 .cat-row-body{flex:1}
+.c-h5 .cat-row-body h3{font-size:16px;font-weight:700}
+.c-h5 .cat-row-body p{font-size:12px;color:var(--muted);margin-top:4px}
+.c-h6 .hub-hero{padding:20px 24px}
+.c-h6 .hub-hero h1{font-size:22px}
+.c-h6 .h-cat-section{gap:28px}
+.c-h6 .h-cat-head h2{font-size:30px}
+.c-h7 .cat-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.c-h7 .cat-scroll::-webkit-scrollbar{display:none}
+.c-h7 .cat-tile{min-width:200px;flex-shrink:0}
+.c-h8 .grid-uneven{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.c-h8 .grid-uneven .tall{grid-row:span 2}
+.hub.mobile .grid-uneven{grid-template-columns:1fr}
+.c-h9 .hub-body{max-width:1520px}
+.c-h9 .grid-3{grid-template-columns:repeat(3,1fr);gap:20px}
+.c-h10 .hero-minimal{padding:0;border:none;background:transparent;box-shadow:none}
+.c-h10 .hero-minimal h1{font-size:20px}
+.c-h11 .cat-tile{text-align:left}
+.c-h12 .secondary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.hub.mobile .secondary-row{grid-template-columns:1fr}
+
+/* Secondary sections — small */
+.h-secondary{display:flex;flex-direction:column;gap:14px;opacity:.95}
+.h-secondary h3{font-size:14px;font-weight:700;color:var(--txt)}
+.h-mini-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.h-mini-card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:12px}
+.h-mini-card b{display:block;font-size:13px;font-weight:700;color:var(--txt);margin-bottom:4px}
+.h-mini-card span{color:var(--muted);font-size:11px}
+.hub.mobile .h-mini-cards{grid-template-columns:1fr}
+</style>
+</head>
+<body>
+
+<div class="g-chrome">
+  <div class="g-top">
+    <div class="g-title">RN Lessons Hub · Regenerated
+      <strong>Categories first · 12 layouts · 5 themes</strong>
+    </div>
+    <div class="g-controls">
+      <button class="g-btn on" id="btnDesktop" type="button">Desktop</button>
+      <button class="g-btn" id="btnMobile" type="button">Mobile</button>
+    </div>
+  </div>
+  <div class="g-theme-row" id="themeRow"></div>
+  <div class="g-subtabs" id="subTabs"></div>
+</div>
+
+<div class="g-stage">
+  <div class="viewport desktop" id="viewport">
+    <div class="vp-label" id="vpLabel">Ocean · H1 · Desktop</div>
+    <div id="mockRoot"></div>
+  </div>
+</div>
+
+<script>
+const THEMES = [
+  {id:'ocean',name:'Ocean',active:'#0d7aaa'},
+  {id:'blossom',name:'Blossom',active:'#b3359a'},
+  {id:'aurora',name:'Aurora',active:'#3a6eb8'},
+  {id:'sunset',name:'Sunset',active:'#a05c22'},
+  {id:'midnight',name:'Midnight',active:'#38bdf8'},
+];
+
+const CATEGORIES = [
+  {name:'Med-Surg',lessons:84,pct:34,accent:'var(--c1)',samples:['Pulmonary Embolism','Heart Failure Exacerbation','Sepsis Recognition']},
+  {name:'Pharmacology',lessons:62,pct:18,accent:'var(--c4)',samples:['Insulin & Hypoglycemia','Anticoagulants','Pain Management']},
+  {name:'Fundamentals',lessons:48,pct:52,accent:'var(--c3)',samples:['Vital Signs','Infection Control','Documentation']},
+  {name:'Pediatrics',lessons:36,pct:12,accent:'var(--c2)',samples:['Dehydration','Asthma Exacerbation','Immunizations']},
+  {name:'Mental Health',lessons:28,pct:8,accent:'var(--c4)',samples:['Therapeutic Communication','Schizophrenia Care','Suicide Risk']},
+  {name:'Maternity',lessons:32,pct:22,accent:'var(--c1)',samples:['Labor Stages','Preeclampsia','Newborn Assessment']},
+  {name:'Critical Care',lessons:40,pct:15,accent:'var(--c1)',samples:['Ventilator Basics','Shock States','ACLS Priorities']},
+  {name:'Prioritization',lessons:24,pct:41,accent:'var(--c6)',samples:['ABC Framework','Delegation Scenarios','Urgent vs Emergent']},
+  {name:'Delegation',lessons:18,pct:28,accent:'var(--c4)',samples:['Scope of Practice','Supervision Rules','Task Assignment']},
+  {name:'Leadership',lessons:20,pct:10,accent:'var(--c2)',samples:['Conflict Resolution','Quality Improvement','Staffing']},
+  {name:'NGN / Clinical Judgment',lessons:30,pct:5,accent:'var(--c5)',samples:['Clinical Decision Steps','Bow-tie Analysis','Trend Analysis']},
+];
+
+const CONCEPTS = [
+  {id:'h1',name:'H1 · System Cards (2-col)',cls:'',desc:'Primary 2-column system cards with lesson rows'},
+  {id:'h2',name:'H2 · Category Tiles (3-col)',cls:'',desc:'Large bright category tiles'},
+  {id:'h3',name:'H3 · Hero Tiles (4-col)',cls:'c-h3',desc:'Spacious 4-column category grid'},
+  {id:'h4',name:'H4 · Mixed Grid',cls:'c-h4',desc:'System cards + tile accents combined'},
+  {id:'h5',name:'H5 · Category List',cls:'c-h5',desc:'Full-width rows with accent bar'},
+  {id:'h6',name:'H6 · Category Focus',cls:'c-h6',desc:'Minimal hero, oversized category section'},
+  {id:'h7',name:'H7 · Horizontal Scroll',cls:'c-h7',desc:'Scrollable category panels'},
+  {id:'h8',name:'H8 · Bento Categories',cls:'c-h8',desc:'Asymmetric bento — categories dominate'},
+  {id:'h9',name:'H9 · Ultrawide Grid',cls:'c-h9',desc:'3-col system cards at 1520px'},
+  {id:'h10',name:'H10 · Ultra Minimal',cls:'c-h10',desc:'Tiny header, categories fill viewport'},
+  {id:'h11',name:'H11 · Tiles + Preview',cls:'c-h11',desc:'Tiles with lesson count + progress'},
+  {id:'h12',name:'H12 · Cards + Footer Strip',cls:'c-h12',desc:'Full category grid, compact secondary below'},
+];
+
+const ICON_HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+const ICON_SEARCH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+const ICON_BOOK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+
+let state = { theme:'ocean', concept:'h1', viewport:'desktop' };
+
+function iconFor(i) {
+  return ICON_BOOK;
+}
+
+function resumeMini() {
+  return `<div class="h-resume">
+    <span class="h-resume-dot"></span>
+    <span class="h-resume-label">Continue</span>
+    <span class="h-resume-title">Pulmonary Embolism</span>
+    <span class="h-resume-meta">72% · ~6 min</span>
+    <span class="h-resume-spacer"></span>
+    <button type="button" class="h-resume-btn">Resume</button>
+  </div>`;
+}
+
+function progressStrip() {
+  return `<div class="h-progress-strip">
+    <div><div class="label">28% library complete</div><div class="sub">94 of 342 lessons</div></div>
+    <div class="bar"><span></span></div>
+  </div>`;
+}
+
+function heroBlock(minimal) {
+  if (minimal) {
+    return `<div class="hero-minimal"><h1>NCLEX-RN Lesson Library</h1></div>`;
+  }
+  return `<div class="hub-hero">
+    <div class="hub-hero-blob1"></div><div class="hub-hero-blob2"></div>
+    <div class="hub-hero-inner">
+      <span class="hub-eyebrow">NCLEX-RN · Study Library</span>
+      <h1>NCLEX-RN Lesson Library</h1>
+      <p class="hub-hero-lead">Browse by clinical category. Each lesson is structured for NCLEX readiness with evidence-based content and practice questions.</p>
+      <div class="hub-hero-meta"><span>342 lessons</span><span>11 categories</span><span>~40 hrs total</span></div>
+      <div class="hub-search">${ICON_SEARCH}<span>Search lessons or topics…</span></div>
+    </div>
+  </div>`;
+}
+
+function catHead() {
+  return `<div class="h-cat-head">
+    <div>
+      <h2>Browse by category</h2>
+      <p>Select a clinical area to view all lessons</p>
+    </div>
+    <div class="h-cat-filters">
+      <span class="h-filter on">All</span>
+      <span class="h-filter">In progress</span>
+      <span class="h-filter">Not started</span>
+    </div>
+  </div>`;
+}
+
+function systemCard(cat, showRows) {
+  const rows = showRows ? cat.samples.map((t,i) =>
+    `<div class="sys-row"><span class="sys-dot ${i===0?'active':''}"></span><span>${t}</span><span class="sys-row-time">18 min</span></div>`
+  ).join('') : '';
+  const iconBg = cat.accent.replace('var(','').replace(')','');
+  return `<div class="sys-card">
+    <div class="sys-accent" style="background:${cat.accent}"></div>
+    <div class="sys-head">
+      <div class="sys-title">
+        <div class="sys-icon" style="background:color-mix(in srgb,${cat.accent} 12%,var(--surf));border-color:color-mix(in srgb,${cat.accent} 25%,transparent);color:${cat.accent}">${iconFor()}</div>
+        ${cat.name}
+      </div>
+      <div class="sys-count"><b>${cat.lessons}</b> lessons</div>
+    </div>
+    <div class="sys-prog"><span style="width:${cat.pct}%;background:${cat.accent}"></span></div>
+    ${rows ? `<div class="sys-rows">${rows}</div><div class="sys-more">View all ${cat.lessons} lessons</div>` : ''}
+  </div>`;
+}
+
+function catTile(cat) {
+  return `<div class="cat-tile">
+    <div class="cat-tile-accent" style="background:${cat.accent}"></div>
+    <h3>${cat.name}</h3>
+    <p>${cat.lessons} lessons · structured for NCLEX</p>
+    <div class="cat-tile-meta"><span>${cat.pct}% complete</span><span class="pct">Open →</span></div>
+  </div>`;
+}
+
+function catRow(cat) {
+  return `<div class="cat-row">
+    <div class="cat-row-accent" style="background:${cat.accent}"></div>
+    <div class="cat-row-body">
+      <h3>${cat.name}</h3>
+      <p>${cat.lessons} lessons · ${cat.pct}% complete</p>
+    </div>
+    <span style="font-size:12px;font-weight:600;color:var(--primary-d)">View →</span>
+  </div>`;
+}
+
+function secondarySmall() {
+  return `<div class="h-secondary">
+    <h3>High-yield & recently viewed</h3>
+    <div class="h-mini-cards">
+      <div class="h-mini-card"><b>PE — Med-Surg</b><span>High yield · 18 min</span></div>
+      <div class="h-mini-card"><b>Insulin therapy</b><span>Pharmacology · 14 min</span></div>
+      <div class="h-mini-card"><b>Sepsis recognition</b><span>Critical care · 20 min</span></div>
+    </div>
+  </div>`;
+}
+
+function categoriesPrimary(layout) {
+  const cats = CATEGORIES;
+  let grid = '';
+  if (layout === 'tiles-3') {
+    grid = `<div class="grid-3">${cats.map(catTile).join('')}</div>`;
+  } else if (layout === 'tiles-4') {
+    grid = `<div class="grid-4">${cats.map(catTile).join('')}</div>`;
+  } else if (layout === 'list') {
+    grid = `<div class="cat-list">${cats.map(catRow).join('')}</div>`;
+  } else if (layout === 'scroll') {
+    grid = `<div class="cat-scroll">${cats.map(catTile).join('')}</div>`;
+  } else if (layout === 'bento') {
+    grid = `<div class="grid-uneven">
+      <div class="tall">${systemCard(cats[0], true)}</div>
+      <div>${catTile(cats[1])}</div>
+      <div>${catTile(cats[2])}</div>
+      <div class="grid-2" style="grid-column:1/-1">${cats.slice(3,7).map(c => systemCard(c, false)).join('')}</div>
+    </div>`;
+  } else if (layout === 'cards-3') {
+    grid = `<div class="grid-3">${cats.map(c => systemCard(c, true)).join('')}</div>`;
+  } else if (layout === 'mixed') {
+    grid = `<div class="grid-2">${cats.slice(0,6).map(c => systemCard(c, true)).join('')}</div>
+      <div class="grid-4" style="margin-top:16px">${cats.slice(6).map(catTile).join('')}</div>`;
+  } else {
+    grid = `<div class="grid-2">${cats.map(c => systemCard(c, true)).join('')}</div>`;
+  }
+  return `<section class="h-cat-section">${catHead()}${grid}</section>`;
+}
+
+function render() {
+  const layoutMap = {
+    h1: 'cards-2', h2: 'tiles-3', h3: 'tiles-4', h4: 'mixed', h5: 'list',
+    h6: 'tiles-4', h7: 'scroll', h8: 'bento', h9: 'cards-3', h10: 'tiles-4',
+    h11: 'tiles-3', h12: 'tiles-4',
+  };
+  const concept = CONCEPTS.find(c => c.id === state.concept);
+  const layout = layoutMap[state.concept] || 'cards-2';
+  const minimalHero = state.concept === 'h10';
+  const showProgress = ['h4','h9','h12'].includes(state.concept);
+
+  let body = heroBlock(minimalHero);
+  body += resumeMini();
+  if (showProgress) body += progressStrip();
+  body += categoriesPrimary(layout);
+  if (['h1','h12'].includes(state.concept)) body += secondarySmall();
+
+  const cls = `hub ${concept?.cls || ''} ${state.viewport === 'mobile' ? 'mobile' : ''}`;
+  document.getElementById('mockRoot').innerHTML =
+    `<div class="${cls}" data-theme="${state.theme}"><div class="hub-body">${body}</div></div>`;
+
+  document.documentElement.style.setProperty('--active-sub', THEMES.find(t => t.id === state.theme)?.active || '#0d7aaa');
+
+  const themeName = THEMES.find(t => t.id === state.theme)?.name || 'Ocean';
+  document.getElementById('vpLabel').textContent =
+    `${themeName} · ${concept?.name || ''} · ${state.viewport === 'desktop' ? 'Desktop 1440' : 'Mobile 390'}`;
+  document.getElementById('viewport').className = 'viewport ' + state.viewport;
+}
+
+document.getElementById('themeRow').innerHTML = THEMES.map(t =>
+  `<button type="button" class="g-theme-btn ${state.theme===t.id?'on':''}" data-theme="${t.id}">${t.name}</button>`
+).join('');
+
+document.getElementById('subTabs').innerHTML = CONCEPTS.map(c =>
+  `<button type="button" class="g-subtab ${state.concept===c.id?'on':''}" data-id="${c.id}">${c.name}</button>`
+).join('');
+
+document.getElementById('themeRow').addEventListener('click', e => {
+  const b = e.target.closest('.g-theme-btn');
+  if (!b) return;
+  state.theme = b.dataset.theme;
+  document.querySelectorAll('.g-theme-btn').forEach(x => x.classList.toggle('on', x.dataset.theme === state.theme));
+  render();
+});
+
+document.getElementById('subTabs').addEventListener('click', e => {
+  const b = e.target.closest('.g-subtab');
+  if (!b) return;
+  state.concept = b.dataset.id;
+  document.querySelectorAll('.g-subtab').forEach(x => x.classList.toggle('on', x.dataset.id === state.concept));
+  render();
+});
+
+document.getElementById('btnDesktop').onclick = () => {
+  state.viewport = 'desktop';
+  document.getElementById('btnDesktop').classList.add('on');
+  document.getElementById('btnMobile').classList.remove('on');
+  render();
+};
+document.getElementById('btnMobile').onclick = () => {
+  state.viewport = 'mobile';
+  document.getElementById('btnMobile').classList.add('on');
+  document.getElementById('btnDesktop').classList.remove('on');
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
