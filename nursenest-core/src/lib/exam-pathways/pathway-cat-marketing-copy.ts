@@ -7,10 +7,12 @@ import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels"
 import type { PathwayReadinessPublicCopy } from "@/lib/exam-pathways/pathway-readiness-config";
 import {
   getPathwaySimulationDisplayCopy,
-  isLoftTestingModel,
   getTestingModelForPathway,
+} from "@/lib/testing/testing-model-display";
+import { isLoftTestingModel } from "@/lib/testing/testing-model-pathway-map";
+import {
   validateTestingModelMarketingLanguage,
-} from "@/lib/testing/testing-model";
+} from "@/lib/testing/testing-marketing-governance";
 
 function assertPathwayMarketingCopy(pathway: ExamPathwayDefinition, text: string): string {
   const audit = validateTestingModelMarketingLanguage(pathway.id, text);
