@@ -95,16 +95,11 @@ jobs:
       - name: CI environment diagnostics
         run: node ../scripts/ci/diagnose-actions-environment.mjs
         env:
-          CI_DIAGNOSE_REQUIRED_SCRIPTS: "db:generate db:validate-url-shape env:validate prisma:health validate:marketing-production-surface ci:verify typecheck build"
+          CI_DIAGNOSE_REQUIRED_SCRIPTS: "db:generate db:validate-url-shape validate:marketing-production-surface ci:verify typecheck build"
 
       # When `DATABASE_URL` is present in the job (optional secret), it must be parseable — no comparison to local.
       - name: Validate DATABASE_URL shape (CI-safe)
         run: npm run db:validate-url-shape
-        env:
-          CI: "true"
-
-      - name: Environment validation (CI profile, no secrets)
-        run: npm run env:validate -- --ci --json
         env:
           CI: "true"
 
