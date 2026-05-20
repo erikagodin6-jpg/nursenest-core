@@ -17,7 +17,6 @@ import type { RnCoachingIntelligenceReport } from "@/lib/learner/rn-coaching-int
 import type { PostExamCoachingReport } from "@/lib/learner/post-exam-coaching/types";
 import { attachCoachingToPerformanceReport } from "@/lib/learner/rn-coaching-intelligence/coaching-performance-merge";
 import { governCoachingReportCopy } from "@/lib/learner/rn-coaching-intelligence/ai-coaching-governance";
-import { loadLearnerCoachingContext } from "@/lib/learner/rn-coaching-intelligence/learner-coaching-context-loader";
 
 export type LearnerCoachingContextPayload = {
   topicTrends: TopicTrendRow[];
@@ -93,13 +92,6 @@ export function buildOrchestratedPostExamReport(
 /** @deprecated Use {@link buildOrchestratedPostExamReport} */
 export function buildEnrichedPostExamPerformanceReport(input: BuildOrchestratedPostExamInput) {
   return buildOrchestratedPostExamReport(input);
-}
-
-export async function loadLearnerCoachingContextForUser(
-  userId: string,
-  entitlement: Parameters<typeof loadLearnerCoachingContext>[1],
-): Promise<LearnerCoachingContextPayload> {
-  return loadLearnerCoachingContext(userId, entitlement);
 }
 
 export function sanitizeOrchestratedCopy(
