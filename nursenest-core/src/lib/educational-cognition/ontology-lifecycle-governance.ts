@@ -71,7 +71,7 @@ export function applyOntologyLifecycleToEnvelope(
   const operations: string[] = [];
   const fromRevision = envelope.ontologyRevision ?? "unknown";
   const migrationSteps = resolveOntologyMigrationPath(fromRevision, CURRENT_ONTOLOGY_REVISION);
-  let next = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
+  let next: DurableLearnerCognitionEnvelope = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
 
   for (const stepId of migrationSteps) {
     if (stepId === "current") break;
