@@ -29,15 +29,7 @@ import { LearnerShellLanguageControl } from "@/components/student/learner-shell-
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
-import nextDynamic from "next/dynamic";
-
-const LearnerAppSectionAnalytics = nextDynamic(
-  () =>
-    import("@/components/observability/learner-app-section-analytics").then((m) => ({
-      default: m.LearnerAppSectionAnalytics,
-    })),
-  { ssr: false },
-);
+import { LearnerAnalyticsLoader as LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics-loader";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
