@@ -35,13 +35,13 @@ jobs:
             host="${host%%/*}"
             echo "GET host=${host} path=${path}"
             local code=""
-            if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${base}${path}")"; then
+            if ! code="$(curl -L -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${base}${path}")"; then
               echo "::error::curl transport error (DNS/TLS/timeout) for host=${host} path=${path}"
               exit 1
             fi
             echo "HTTP status: ${code}"
             if [ "${code}" != "200" ]; then
-              echo "::error::Expected HTTP 200 for ${path}, got ${code} (host=${host})"
+              echo "::error::Expected HTTP 200 after redirects for ${path}, got ${code} (host=${host})"
               echo "Body (first 600 bytes):"
               head -c 600 /tmp/nn-health.body 2>/dev/null || true
               echo ""
@@ -71,13 +71,13 @@ jobs:
             host="${host%%/*}"
             echo "GET host=${host} path=${path}"
             local code=""
-            if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${b}${path}")"; then
+            if ! code="$(curl -L -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${b}${path}")"; then
               echo "::error::curl transport error for host=${host} path=${path}"
               exit 1
             fi
             echo "HTTP status: ${code}"
             if [ "${code}" != "200" ]; then
-              echo "::error::Expected HTTP 200 for ${path}, got ${code} (host=${host})"
+              echo "::error::Expected HTTP 200 after redirects for ${path}, got ${code} (host=${host})"
               head -c 600 /tmp/nn-health.body 2>/dev/null || true
               echo ""
               exit 1
