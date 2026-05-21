@@ -43,6 +43,16 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          normalize_base_url() {
+            local raw="$1"
+            raw="$(printf '%s' "$raw" | tr -d '[:space:]')"
+            raw="${raw%/}"
+            if [ "${raw#https://www.nursenest.ca}" != "$raw" ]; then
+              raw="https://nursenest.ca${raw#https://www.nursenest.ca}"
+            fi
+            printf '%s' "$raw"
+          }
+          BASE="$(normalize_base_url "${BASE:-}")"
           missing=()
           [ -z "${BASE:-}" ] && missing+=("PRODUCTION_CRON_BASE_URL")
           [ -z "${CRON_SECRET:-}" ] && missing+=("CRON_SECRET")
@@ -62,6 +72,16 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          normalize_base_url() {
+            local raw="$1"
+            raw="$(printf '%s' "$raw" | tr -d '[:space:]')"
+            raw="${raw%/}"
+            if [ "${raw#https://www.nursenest.ca}" != "$raw" ]; then
+              raw="https://nursenest.ca${raw#https://www.nursenest.ca}"
+            fi
+            printf '%s' "$raw"
+          }
+          BASE="$(normalize_base_url "$BASE")"
           path="/api/cron/blog-batch-schedule"
           host="${BASE#*//}"
           host="${host%%/*}"
@@ -90,6 +110,16 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          normalize_base_url() {
+            local raw="$1"
+            raw="$(printf '%s' "$raw" | tr -d '[:space:]')"
+            raw="${raw%/}"
+            if [ "${raw#https://www.nursenest.ca}" != "$raw" ]; then
+              raw="https://nursenest.ca${raw#https://www.nursenest.ca}"
+            fi
+            printf '%s' "$raw"
+          }
+          BASE="$(normalize_base_url "$BASE")"
           path="/api/cron/jobs"
           host="${BASE#*//}"
           host="${host%%/*}"
