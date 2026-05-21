@@ -22,6 +22,10 @@ const lessonsShellPath = path.join(
   "../../components/pathway-lessons/lessons-page-shell.tsx",
 );
 const readingV2Path = path.join(__dirname, "premium-lesson-reading-v2.ts");
+const assessmentExperiencePath = path.join(
+  __dirname,
+  "../../components/lessons/pathway-lesson-assessment-experience.tsx",
+);
 
 describe("marketing pathway lesson detail layout convergence", () => {
   it("detail body uses LessonsPageShell premium hub wrapper", () => {
@@ -62,5 +66,20 @@ describe("marketing pathway lesson detail layout convergence", () => {
   it("allied pathways use premium reading v2 layout", () => {
     const src = fs.readFileSync(readingV2Path, "utf8");
     assert.match(src, /roleTrack === "allied"/, "allied roleTrack must enable reading v2");
+  });
+
+  it("detail body uses designed pre/post assessment flow", () => {
+    const bodySrc = fs.readFileSync(detailBodyPath, "utf8");
+    assert.match(bodySrc, /PathwayLessonAssessmentExperience/, "detail must wrap reading in assessment experience");
+    assert.match(bodySrc, /topic=\{lesson\.topic\}/, "detail must pass lesson topic for assessment persistence");
+
+    const expSrc = fs.readFileSync(assessmentExperiencePath, "utf8");
+    assert.match(expSrc, /LessonAssessmentFlow/, "marketing assessments must use LessonAssessmentFlow");
+    assert.doesNotMatch(
+      expSrc,
+      /PathwayLessonLegacyStudyShell/,
+      "marketing must not use legacy study shell for pre/post",
+    );
+    assert.match(expSrc, /syntheticPathwayLessonId/, "assessment lessonId must match pathway progress keys");
   });
 });

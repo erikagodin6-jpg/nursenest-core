@@ -80,13 +80,12 @@ export type MarketingPathwayLessonAssessmentShellProps = {
   userId: string;
   pathwayId: string;
   lessonSlug: string;
+  topic: string;
   initialProgress: PathwayLessonProgressStatus;
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
   fullAccess: boolean;
   assessmentsEnabled?: boolean;
-  /** Optional section ids/headings for in-content jump nav (legacy lesson-detail sidebar). */
-  sectionAnchors?: readonly { id: string; label: string }[];
   children: ReactNode;
 };
 

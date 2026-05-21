@@ -673,19 +673,12 @@ export async function PathwayLessonDetailPageBody({
                 userId={userId}
                 pathwayId={pathway.id}
                 lessonSlug={lesson.slug}
+                topic={lesson.topic}
                 initialProgress={lessonProgress}
                 preTest={fullAccess ? bankAssessments.preTest : undefined}
                 postTest={fullAccess ? bankAssessments.postTest : undefined}
                 fullAccess={fullAccess}
                 assessmentsEnabled={studySettings.enablePrePostQuizzes}
-                sectionAnchors={
-                  usesReadingV2Layout
-                    ? undefined
-                    : displaySections.map((s) => ({
-                        id: s.id,
-                        label: s.heading,
-                      }))
-                }
               >
                 <LessonRecallProvider>
                   <div className="mt-5 sm:mt-6">

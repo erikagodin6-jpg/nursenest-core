@@ -6,6 +6,7 @@ import path from "node:path";
 const repoRoot = path.resolve(process.cwd());
 const learnerLayoutPath = path.join(repoRoot, "src/app/(student)/app/(learner)/layout.tsx");
 const marketingIndexPath = path.join(repoRoot, "src/app/styles/marketing/index.css");
+const premiumRedesignPath = path.join(repoRoot, "src/app/premium-redesign-2026.css");
 const marketingReadabilityCssPath = path.join(repoRoot, "src/app/styles/marketing/lesson-readability-hotfix.css");
 const learnerReadabilityCssPath = path.join(repoRoot, "src/app/styles/learner/lesson-readability-hotfix.css");
 
@@ -29,9 +30,16 @@ describe("lesson readability layout guards", () => {
   });
 
   it("keeps the public lesson readability stylesheet loaded after content surfaces", () => {
-    const source = readFileSync(marketingIndexPath, "utf8");
-    const contentSurfacesIndex = source.indexOf('@import "./content-surfaces.css";');
-    const readabilityIndex = source.indexOf('@import "./lesson-readability-hotfix.css";');
+    const indexSource = readFileSync(marketingIndexPath, "utf8");
+    const premiumSource = readFileSync(premiumRedesignPath, "utf8");
+    const contentSurfacesIndex = indexSource.indexOf('@import "./content-surfaces.css";');
+    const readabilityIndex = indexSource.indexOf('@import "./lesson-readability-hotfix.css";');
+    const premiumContentSurfacesIndex = premiumSource.indexOf(
+      '@import "./styles/marketing/content-surfaces.css";',
+    );
+    const premiumReadabilityIndex = premiumSource.indexOf(
+      '@import "./styles/marketing/lesson-readability-hotfix.css";',
+    );
 
     assert.ok(existsSync(marketingReadabilityCssPath), "Missing public lesson readability hotfix CSS file.");
     assert.notEqual(contentSurfacesIndex, -1, "Marketing content-surfaces.css import missing.");
@@ -39,6 +47,15 @@ describe("lesson readability layout guards", () => {
     assert.ok(
       readabilityIndex > contentSurfacesIndex,
       "Lesson readability hotfix must load after content-surfaces.css so its reader-width overrides win.",
+    );
+    assert.notEqual(
+      premiumReadabilityIndex,
+      -1,
+      "Lesson readability hotfix import missing from premium-redesign-2026.css (marketing lesson detail chain).",
+    );
+    assert.ok(
+      premiumReadabilityIndex > premiumContentSurfacesIndex,
+      "premium-redesign-2026.css must load lesson-readability-hotfix after content-surfaces.css.",
     );
   });
 
