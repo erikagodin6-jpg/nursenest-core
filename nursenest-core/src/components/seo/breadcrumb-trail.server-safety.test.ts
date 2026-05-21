@@ -10,6 +10,13 @@ const SOURCE = readFileSync(
 );
 
 describe("BreadcrumbTrail server safety", () => {
+  it("is a Client Component so Link onClick never crosses the RSC boundary", () => {
+    assert.ok(
+      SOURCE.includes('"use client"'),
+      "BreadcrumbTrail must be a Client Component (exam hub digest 386784597)",
+    );
+  });
+
   it("does not pass onClick to Link unless onCrumbClick is provided (RSC regression)", () => {
     assert.equal(
       SOURCE.includes("onClick={() => onCrumbClick?.("),
