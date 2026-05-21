@@ -4,11 +4,6 @@
 
 import type { BreadcrumbCrumb } from "@/lib/breadcrumbs/breadcrumb-types";
 import type { EducationalHierarchyNode } from "@/lib/breadcrumbs/navigation-ontology";
-import {
-  learnerWeakAreaCrumbsFromGraph,
-  type BreadcrumbGraphContext,
-} from "@/lib/breadcrumbs/breadcrumb-graph-convergence";
-import { buildRemediationNavigationLadder } from "@/lib/breadcrumbs/remediation-navigation";
 import type { GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import type { CoachingModel } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
@@ -223,21 +218,13 @@ export type LearnerWeakAreaContext = {
   coachingModel?: CoachingModel;
 };
 
-/** Competency-labeled weak-area trail via graph orchestration (live topic + learner state). */
+/** Competency-labeled weak-area trail (client-safe fallback — no graph orchestration). */
 export function learnerWeakAreaCrumbs(args: LearnerWeakAreaContext): BreadcrumbCrumb[] {
-  return learnerWeakAreaCrumbsFromGraph({
-    topicSlug: args.topicSlug,
-    topicLabel: args.topicLabel,
-    pathwayId: args.pathwayId ?? null,
-    sourceSurface: args.sourceSurface ?? "app_remediation",
-    learnerState: args.learnerState ?? null,
-    persistentWeakTopics: args.persistentWeakTopics,
-    coachingModel: args.coachingModel,
-    currentLabel: args.currentLabel,
-    currentHref: args.currentHref,
-    currentStepHref: args.currentStepHref,
-    studyPlanHref: args.studyPlanHref,
-  }).crumbs;
+  return truncateLearnerCrumbs([
+    LEARNER_HOME,
+    { name: args.topicLabel ?? args.topicSlug.replace(/-/g, " "), href: undefined },
+    { name: args.currentLabel, href: args.currentHref ?? args.currentStepHref },
+  ]);
 }
 
 /** Focus-areas hub with primary weak topic from performance data. */
@@ -290,7 +277,7 @@ export function learnerSessionRecoveryCrumbs(resumeLabel: string): BreadcrumbCru
   ]);
 }
 
-/** Competency progression trail from remediation graph (bounded steps). */
+/** Competency progression trail from remediation (client-safe fallback). */
 export function learnerRemediationLadderCrumbs(args: {
   topic: string;
   pathwayId: string | null;
@@ -300,14 +287,9 @@ export function learnerRemediationLadderCrumbs(args: {
   persistentWeakTopics?: readonly string[];
   sourceSurface?: GraphSourceSurface;
 }): BreadcrumbCrumb[] {
-  return learnerWeakAreaCrumbsFromGraph({
-    topicSlug: args.topic,
-    topicLabel: args.topic.replace(/-/g, " "),
-    pathwayId: args.pathwayId,
-    sourceSurface: args.sourceSurface ?? "post_exam_coaching",
-    learnerState: args.learnerState,
-    persistentWeakTopics: args.persistentWeakTopics,
-    currentLabel: args.currentStepTitle,
-    currentStepHref: args.currentStepHref,
-  }).crumbs;
+  return truncateLearnerCrumbs([
+    LEARNER_HOME,
+    { name: args.topic.replace(/-/g, " "), href: undefined },
+    { name: args.currentStepTitle, href: args.currentStepHref },
+  ]);
 }
