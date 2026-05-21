@@ -44,7 +44,7 @@ export type LearnerCognitionSubstrate = {
   ctx: EducationalCognitionContext;
   studyPlan: GovernedRnStudyPlan;
   dashboard: DashboardOrchestrationV3;
-  graphSteps: EduGraphStep[];
+  graphSteps: readonly EduGraphStep[];
   aiTutor: AiTutorContextEnvelope;
   timingRiskBand: ReturnType<typeof deriveTimingCognitionSignals>["riskBand"];
   studyPlanDensity: ReturnType<typeof studyPlanDensityFromTiming>;

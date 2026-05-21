@@ -12,7 +12,7 @@ import { emitCognitionTelemetryV5 } from "@/lib/educational-cognition/cognition-
  */
 export function buildAiTutorContextFromCognition(
   ctx: EducationalCognitionContext,
-  graphSteps: EduGraphStep[],
+  graphSteps: readonly EduGraphStep[],
 ): AiTutorContextEnvelope {
   const timing = deriveTimingCognitionSignals({ learnerState: ctx.learnerState });
   const base: AiTutorContextEnvelope = ctx.coachingReport
@@ -86,7 +86,6 @@ export function tutoringPromptContextFromAiEnvelope(
 ): TutoringPromptContext {
   return {
     ...partial,
-    pathwayId: partial.pathwayId ?? envelope.pathwayId,
     graphSteps: envelope.graphSteps,
   };
 }
