@@ -1,7 +1,6 @@
 "use client";
 
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
-import { remediationPathwayId } from "@/lib/breadcrumbs/breadcrumb-graph-convergence";
 import { buildRemediationNavigationLadder } from "@/lib/breadcrumbs/remediation-navigation";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 
@@ -49,5 +48,6 @@ export function PostExamRemediationBreadcrumb({
 }
 
 export function postExamRemediationPathwayId(pathwayId: string | null, topicSlug: string): string {
-  return remediationPathwayId(pathwayId, topicSlug);
+  const topic = topicSlug.trim().toLowerCase();
+  return pathwayId ? `${pathwayId}:${topic}` : `global:${topic}`;
 }
