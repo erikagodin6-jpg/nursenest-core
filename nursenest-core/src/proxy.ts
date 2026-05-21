@@ -19,6 +19,9 @@ import {
 
 let authProxyDepsPromise: Promise<{ runAuthMiddleware: NextMiddleware }> | null = null;
 
+const PUBLIC_ASSET_EXTENSION_RE =
+  /\.(?:avif|bmp|css|gif|ico|jpe?g|js|json|map|mp4|ogg|otf|pdf|png|svg|ttf|txt|webm|webmanifest|webp|woff2?)$/i;
+
 function loadAuthProxyDeps() {
   if (!authProxyDepsPromise) {
     authProxyDepsPromise = import("@/lib/auth-middleware")
@@ -50,6 +53,44 @@ function forwardRequest(request: NextRequest): NextResponse {
   if (cid) res.headers.set(NN_CORRELATION_HEADER, cid);
 
   return res;
+}
+
+export function isStaticAssetBypassPath(pathname: string): boolean {
+  if (!pathname || pathname === "/") return false;
+
+  if (
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/static/") ||
+    pathname.startsWith("/assets/") ||
+    pathname.startsWith("/images/") ||
+    pathname.startsWith("/img/") ||
+    pathname.startsWith("/logos/") ||
+    pathname.startsWith("/brand/") ||
+    pathname.startsWith("/marketing/homepage-screenshots/")
+  ) {
+    return true;
+  }
+
+  if (
+    pathname === "/favicon.ico" ||
+    pathname === "/apple-touch-icon.png" ||
+    pathname === "/manifest.json" ||
+    pathname === "/site.webmanifest" ||
+    pathname === "/mask-icon.svg" ||
+    pathname === "/icon-192.png" ||
+    pathname === "/icon-512.png"
+  ) {
+    return true;
+  }
+
+  if (
+    pathname.startsWith("/api/marketing-assets/") ||
+    pathname.startsWith("/api/assets/")
+  ) {
+    return true;
+  }
+
+  return PUBLIC_ASSET_EXTENSION_RE.test(pathname);
 }
 
 export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
@@ -108,6 +149,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   try {
     const req = ensureCorrelationId(request);
     const pathname = req.nextUrl.pathname;
+
+    if (isStaticAssetBypassPath(pathname)) {
+      return NextResponse.next();
+    }
 
     if (isPublicProbeOrCrawlerBypassPath(pathname)) {
       return forwardRequest(req);
@@ -168,14 +213,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 
 export const config = {
   matcher: [
-    "/",
-    "/app",
-    "/app/:path*",
-    "/admin",
-    "/admin/:path*",
-    "/internal",
-    "/internal/:path*",
-    "/api",
-    "/api/:path*",
+    /*
+     * Run proxy for application routes only. Static public files and Next build
+     * assets must never enter auth, marketing, or pathway resolution logic.
+     */
+    "/((?!_next/|static/|assets/|images/|img/|logos/|brand/|marketing/homepage-screenshots/|favicon\\.ico$|apple-touch-icon\\.png$|manifest\\.json$|site\\.webmanifest$|mask-icon\\.svg$|icon-192\\.png$|icon-512\\.png$|api/marketing-assets/|api/assets/|.*\\.(?:avif|bmp|css|gif|ico|jpe?g|js|json|map|mp4|ogg|otf|pdf|png|svg|ttf|txt|webm|webmanifest|webp|woff2?)$).*)",
   ],
 };

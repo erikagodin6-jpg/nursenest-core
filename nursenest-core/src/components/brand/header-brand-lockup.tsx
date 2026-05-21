@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Leaf } from "lucide-react";
+import { NURSENEST_NAV_LEAF_SVG_PATH } from "@/lib/branding/app-icons";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 
 /**
@@ -12,9 +13,16 @@ import { useThemeLogo } from "@/lib/theme/use-theme-logo";
  */
 export function HeaderBrandLockup() {
   const { url, kind } = useThemeLogo("leaf");
-  const [leafLoadFailed, setLeafLoadFailed] = useState(false);
+  const [failedUrls, setFailedUrls] = useState<ReadonlySet<string>>(() => new Set());
   const leafUrl = kind === "local" && typeof url === "string" && url.trim().length > 0 ? url : null;
-  const showLeafRaster = Boolean(leafUrl) && !leafLoadFailed;
+  const fallbackLeafUrl = NURSENEST_NAV_LEAF_SVG_PATH;
+  const displayLeafUrl =
+    leafUrl && !failedUrls.has(leafUrl)
+      ? leafUrl
+      : !failedUrls.has(fallbackLeafUrl)
+        ? fallbackLeafUrl
+        : null;
+  const showLeafRaster = Boolean(displayLeafUrl);
 
   return (
     <span
@@ -27,7 +35,7 @@ export function HeaderBrandLockup() {
       >
         {showLeafRaster ? (
           <img
-            src={leafUrl ?? ""}
+            src={displayLeafUrl ?? ""}
             alt="NurseNest leaf logo"
             draggable={false}
             width={128}
@@ -37,7 +45,10 @@ export function HeaderBrandLockup() {
             fetchPriority="high"
             data-nn-header-logo
             className="block h-full w-full max-h-full max-w-full bg-transparent object-contain object-center"
-            onError={() => setLeafLoadFailed(true)}
+            onError={() => {
+              if (!displayLeafUrl) return;
+              setFailedUrls((prev) => new Set(prev).add(displayLeafUrl));
+            }}
           />
         ) : (
           <Leaf

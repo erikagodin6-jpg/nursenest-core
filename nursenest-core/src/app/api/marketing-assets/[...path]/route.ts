@@ -1,4 +1,6 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { NextResponse } from "next/server";
 import { getMissingSpacesProxyEnvKeys } from "@/lib/marketing/spaces-proxy-env";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -11,7 +13,7 @@ const NO_STORE = { "Cache-Control": "no-store" } as const;
 let loggedMissingSpacesProxy = false;
 
 /** Allowed object key prefixes in the marketing bucket (screens + brand marks). */
-const ALLOW_PREFIXES = ["screenshots/", "brand/", "branding/"] as const;
+const ALLOW_PREFIXES = ["screenshots/", "brand/", "branding/", "marketing/homepage-screenshots/"] as const;
 
 /** Root-level public marketing files (e.g. `lavenderbrandlogo_transparent.png` or legacy `.gif` marks). */
 function isAllowedRootMarketingKey(key: string): boolean {
@@ -40,6 +42,28 @@ function getS3Client(): S3Client | null {
     credentials: { accessKeyId, secretAccessKey },
     forcePathStyle: false,
   });
+}
+
+async function localPublicAssetResponse(key: string): Promise<Response | null> {
+  if (!key.startsWith("marketing/homepage-screenshots/")) return null;
+
+  try {
+    const publicRoot = path.join(process.cwd(), "public");
+    const filePath = path.join(publicRoot, key);
+    if (!filePath.startsWith(publicRoot + path.sep)) return null;
+
+    const buf = await readFile(filePath);
+    return new NextResponse(buf, {
+      status: 200,
+      headers: {
+        "Content-Type": contentTypeForKey(key),
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Content-Type-Options": "nosniff",
+      },
+    });
+  } catch {
+    return null;
+  }
 }
 
 function contentTypeForKey(key: string): string {
@@ -84,6 +108,9 @@ export async function GET(
   const client = getS3Client();
 
   if (!client) {
+    const local = await localPublicAssetResponse(key);
+    if (local) return local;
+
     if (!loggedMissingSpacesProxy) {
       loggedMissingSpacesProxy = true;
       safeServerLog("marketing_assets", "spaces_proxy_unconfigured", {
