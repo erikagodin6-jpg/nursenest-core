@@ -58,11 +58,6 @@ export default async function StartStudyingPage() {
   );
 
   if (!user) {
-    const fallbackCrumbs: BreadcrumbCrumb[] = [
-      { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
-      { name: "Dashboard", href: "/app" },
-      { name: t("learner.startStudying.heroTitle"), href: undefined },
-    ];
     return (
       <div className="space-y-8">
         <LearnerBreadcrumbTrail kind="session-recovery" resumeLabel="Start studying" pathname="/app/start-studying" />
@@ -164,12 +159,6 @@ export default async function StartStudyingPage() {
   const entitlement = await resolveEntitlementForPage(userId);
   const questionsHref =
     pathwayId != null ? `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}` : "/app/questions";
-
-  const crumbs: BreadcrumbCrumb[] = [
-    { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
-    { name: "Dashboard", href: "/app" },
-    { name: t("learner.startStudying.heroTitle"), href: undefined },
-  ];
 
   return (
     <div className="space-y-8">

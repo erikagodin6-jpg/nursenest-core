@@ -83,6 +83,10 @@ export function emitCognitionTelemetryV5(
   sourceSurface: string,
   props: Record<string, string | number | boolean | null> = {},
 ): void {
+  const nonNullProps = Object.fromEntries(Object.entries(props).filter(([, value]) => value !== null)) as Record<
+    string,
+    string | number | boolean | undefined
+  >;
   const v5 = buildCognitionTelemetryV5Payload(ctx, sourceSurface);
   const versionMeta = cognitionVersionTelemetryProps(buildCognitionVersionMetadata());
   const explainAudit = serializeExplainabilityForAudit(
@@ -101,7 +105,7 @@ export function emitCognitionTelemetryV5(
     pathwayId: ctx.pathwayId,
     version: buildCognitionVersionMetadata(),
     extra: {
-      ...normalizeCognitionTelemetryProps(ctx, props as Record<string, string | number | boolean | undefined>),
+      ...normalizeCognitionTelemetryProps(ctx, nonNullProps),
       ...v5,
       ...versionMeta,
       ...explainAudit,
@@ -114,11 +118,22 @@ export function emitCognitionTelemetryV5(
     testingModel: ctx.psychometric.model ?? getTestingModelForPathwayId(ctx.pathwayId),
     topicSlug: typeof props.topic_slug === "string" ? props.topic_slug : undefined,
   });
-  const merged = filterCognitionTelemetryProps({
-    ...lineage.props,
-    ...mergeCoachingPropsWithGraphLineage(event, lineage.props, graphLineage),
-  });
-  recordCoachingTelemetry(event, merged);
+  const lineageProps = Object.fromEntries(Object.entries(lineage.props).filter(([, value]) => value != null)) as Record<
+    string,
+    string | number | boolean | null
+  >;
+  const mergedRaw = {
+    ...lineageProps,
+    ...mergeCoachingPropsWithGraphLineage(event, lineageProps, graphLineage),
+  };
+  const merged = filterCognitionTelemetryProps(
+    Object.fromEntries(Object.entries(mergedRaw).filter(([, value]) => value !== null)) as Record<
+      string,
+      string | number | boolean | undefined
+    >,
+  );
+  const coachingProps = merged as Record<string, string | number | boolean | null>;
+  recordCoachingTelemetry(event, coachingProps);
 }
 
 export function recordCognitionContextResolved(

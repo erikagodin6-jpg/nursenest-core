@@ -44,7 +44,7 @@ export function resolveFocusAreaGraphRoute(args: {
   const cognition = args.userId
     ? resolveEducationalCognitionContext(args.pathwayId ?? null, {
         userId: args.userId,
-        weakTopics: [...(args.weakTopics ?? [])],
+        weakTopicLabels: [...(args.weakTopics ?? [])],
       })
     : null;
 

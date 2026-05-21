@@ -41,7 +41,6 @@ export async function LearnerReportCardRouteBody({
   const session = await getProtectedRouteSession(sessionLabel);
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
-  const crumbs = appAccountBreadcrumbs(breadcrumbLeaf);
   const localeTag = locale.replace(/_/g, "-");
 
   if (!userId || !isDatabaseUrlConfigured()) {

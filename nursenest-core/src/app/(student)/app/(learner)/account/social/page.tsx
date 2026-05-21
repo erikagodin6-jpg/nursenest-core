@@ -23,7 +23,6 @@ export default async function AccountSocialPage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.social");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Social study");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

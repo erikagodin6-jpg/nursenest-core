@@ -33,7 +33,6 @@ export default async function AccountProgressPage() {
   const { t, locale } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.progress");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.progress"));
   const localeTag = locale.replace(/_/g, "-");
 
   if (!userId || !isDatabaseUrlConfigured()) {

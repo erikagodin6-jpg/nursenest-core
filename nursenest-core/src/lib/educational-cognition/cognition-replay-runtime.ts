@@ -60,7 +60,7 @@ export async function replayCognitionEnvelope(args: {
   let primaryNextTitle: string | null = null;
   let graphStepCount = 0;
 
-  if (args.entitlement?.hasAccess && args.userId) {
+  if (args.entitlement?.hasAccess && args.userId && ctx.readinessResult) {
     const governed = await buildGovernedAdaptiveRecommendations({
       preferredPathwayId: pathwayId,
       userId: args.userId,
@@ -107,3 +107,5 @@ export function diffReplayPrimaryNext(
     after: after.primaryNextTitle,
   };
 }
+
+export const replayCognitionEnvelopeHydration = replayCognitionEnvelope;
