@@ -101,6 +101,7 @@ export async function projectAdaptiveWireBundleFromCognition(args: {
   catOrPracticeProfile: PerformanceProfile | null;
 }): Promise<AdaptiveWireBundleJson | null> {
   if (!args.entitlement.hasAccess) return null;
+  if (!args.readiness) return null;
 
   const governed = await buildGovernedAdaptiveRecommendations({
     preferredPathwayId: args.pathwayId,

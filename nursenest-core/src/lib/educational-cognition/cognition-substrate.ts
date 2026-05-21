@@ -2,7 +2,7 @@
  * Educational Cognition OS — canonical substrate for all learner-facing intelligence surfaces.
  */
 import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
-import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
+import type { EduGraphStep, GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import {
   resolveEducationalCognitionContext,
   type ReadinessResult,
@@ -37,7 +37,7 @@ export type ResolveLearnerCognitionSubstrateInput = {
   weakTopicLabels?: string[];
   timing?: TimingIntelligenceResult | null;
   persistLearnerState?: boolean;
-  sourceSurface?: string;
+  sourceSurface?: GraphSourceSurface;
 };
 
 export type LearnerCognitionSubstrate = {
@@ -81,7 +81,7 @@ export function resolveLearnerCognitionSubstrate(
     topicSlug: topic.toLowerCase().replace(/\s+/g, "-"),
     topicLabel: topic,
     pathwayId,
-    sourceSurface: input.sourceSurface ?? "cognition_substrate",
+    sourceSurface: input.sourceSurface ?? "recommendation_engine",
     coachingModel: ctx.coachingModel,
     learnerState: ctx.learnerState,
     persistentWeakTopics: ctx.learnerState.competencyStates
@@ -98,7 +98,7 @@ export function resolveLearnerCognitionSubstrate(
   });
 
   const dashboard = composeDashboardOrchestrationFromContext(ctx);
-  const aiTutor = buildAiTutorContextFromCognition(ctx, traversal.steps);
+  const aiTutor = buildAiTutorContextFromCognition(ctx, [...traversal.steps]);
   const timingSignals = deriveTimingCognitionSignals({ learnerState: ctx.learnerState });
 
   if (input.persistLearnerState && input.userId) {
@@ -109,7 +109,7 @@ export function resolveLearnerCognitionSubstrate(
       prior?.graphContinuity,
       buildGraphContinuityFromTraversal({
         topicSlug,
-        steps: traversal.steps,
+        steps: [...traversal.steps],
         ctx,
         prior: prior?.graphContinuity,
         dashboardPrimaryHref: dashCard?.href ?? null,
@@ -128,7 +128,7 @@ export function resolveLearnerCognitionSubstrate(
     ctx,
     studyPlan,
     dashboard,
-    graphSteps: traversal.steps,
+    graphSteps: [...traversal.steps],
     aiTutor,
     timingRiskBand: timingSignals.riskBand,
     studyPlanDensity: studyPlanDensityFromTiming(timingSignals),

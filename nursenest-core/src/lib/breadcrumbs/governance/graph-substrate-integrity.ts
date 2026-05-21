@@ -86,7 +86,7 @@ function scanDir(
   adaptive: string[],
   repoRoot: string,
 ): void {
-  if (!statSync(dir, { throwIf: false })?.isDirectory()) return;
+  if (!statSync(dir, { throwIfNoEntry: false })?.isDirectory()) return;
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) {

@@ -36,6 +36,8 @@ export function defaultIntentForResolverKind(kind: string): BreadcrumbIntent {
     case "ecg-advanced-leaf":
     case "labs-hub":
     case "labs-leaf":
+    case "clinical-interpretation-hub":
+    case "clinical-interpretation-guide":
     case "glossary-term":
     case "case-studies":
     case "simple-marketing":

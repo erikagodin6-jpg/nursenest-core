@@ -201,7 +201,7 @@ export async function buildGovernedAdaptiveRecommendations(
       topicTrends: args.topicTrends ?? [],
       weakTopics: args.weakTopics,
       persistLearnerState: true,
-      sourceSurface: "adaptive_recommendations",
+      sourceSurface: "recommendation_engine",
     });
 
     const cognitionWeakTopics = weakTopicRowsFromCognition(substrate.ctx);

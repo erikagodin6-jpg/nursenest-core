@@ -1,9 +1,6 @@
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import { EMPTY_LEARNER_STATE } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
-import type {
-  CognitionReliabilityTier,
-  DurableLearnerCognitionEnvelope,
-} from "@/lib/educational-cognition/cognition-snapshot-types";
+import type { CognitionReliabilityTier } from "@/lib/educational-cognition/cognition-snapshot-types";
 import { buildFreshCognitionEnvelope } from "@/lib/educational-cognition/cognition-snapshot-migrations";
 import { inferReliabilityFromPersistSource } from "@/lib/educational-cognition/cognition-reliability";
 import {
@@ -146,7 +143,7 @@ function buildContinuityLineage(
 
 export function buildEnvelopeGovernanceMetadata(args: {
   envelope: DurableLearnerCognitionEnvelope | null;
-  hydrationState: CognitionHydrationState;
+  hydrationState: CognitionHydrationMode;
   reliabilityTier: CognitionReliabilityTier;
 }): CognitionEnvelopeGovernanceMetadata {
   const version = buildCognitionVersionMetadata({
