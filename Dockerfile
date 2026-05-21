@@ -9,6 +9,7 @@ RUN apk add --no-cache libc6-compat openssl \
 WORKDIR /app
 
 COPY nursenest-core/package.json nursenest-core/package-lock.json ./nursenest-core/
+COPY nursenest-core/scripts/shims/server-only ./nursenest-core/scripts/shims/server-only
 
 WORKDIR /app/nursenest-core
 ENV NODE_ENV=development
