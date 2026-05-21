@@ -1,8 +1,8 @@
 /**
  * Host memory / cgroup sampling — uses `fs`/`os`; do not import from Edge or from `db.ts`.
  */
-import fs from "fs";
-import os from "os";
+import fs from "node:fs";
+import os from "node:os";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function safeMemoryUsage(): NodeJS.MemoryUsage | null {
