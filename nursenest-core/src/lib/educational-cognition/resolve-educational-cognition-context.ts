@@ -127,7 +127,7 @@ export function resolveEducationalCognitionFromSession(
     { ...base, learnerState: coachingReport.learnerState, coachingReport },
     traversal.steps,
   );
-  const postMeasurementInput = resolveMeasurementCognitionInput({
+  const postMeasurementInput = governMeasurementCognitionInput({
     learnerState: coachingReport.learnerState,
   });
   const measurementSlice = buildMeasurementCognitionSlice(

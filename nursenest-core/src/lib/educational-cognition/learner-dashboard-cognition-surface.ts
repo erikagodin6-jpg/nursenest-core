@@ -6,10 +6,8 @@ import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/path
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { resolveSubscribedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
-import {
-  resolveEducationalCognitionContext,
-  type EducationalCognitionContext,
-} from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import { resolveEducationalCognitionContext } from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 
 export type LearnerDashboardCognitionSurface = {
   pathwayId: string;
@@ -40,7 +38,7 @@ export function buildLearnerDashboardCognitionSurface(
     ctx.learnerState.remediationFatigueScore >= 0.65;
 
   const coachingIntensityCap: LearnerDashboardCognitionSurface["coachingIntensityCap"] =
-    fatigueCapActive ? "low" : ctx.coachingModel === "supportive" ? "medium" : "high";
+    fatigueCapActive ? "low" : ctx.coachingModel === "linear_practice" ? "medium" : "high";
 
   const maxVisibleWidgets = fatigueCapActive ? 5 : ctx.dashboard.widgets.filter((w) => w.eligible).length > 6 ? 7 : 6;
 

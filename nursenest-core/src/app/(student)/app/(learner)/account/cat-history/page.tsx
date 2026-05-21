@@ -30,7 +30,6 @@ export default async function AccountCatHistoryPage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.cat-history");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.catHistory"));
   const entitlement = await resolveEntitlementForPage(userId);
 
   if (!userId || !isDatabaseUrlConfigured()) {

@@ -8,7 +8,7 @@ type CtaButton = {
 };
 
 type Props = {
-  title: string;
+  title?: string;
   subtitle?: string;
   /** Short pathway label (e.g. NCLEX-RN) — premium eyebrow, aligned with tier hub / homepage. */
   eyebrow?: string;

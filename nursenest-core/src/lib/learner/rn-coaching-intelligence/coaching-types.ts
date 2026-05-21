@@ -4,6 +4,15 @@ export type ReadinessBand = "not_ready" | "building" | "approaching" | "exam_rea
 
 export type CoachingModel = "cat_adaptive" | "loft_readiness" | "linear_practice";
 
+export type CoachingSessionKind =
+  | "cat"
+  | "practice_exam"
+  | "loft_simulation"
+  | "readiness_assessment"
+  | "timed_assessment";
+
+export type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
+
 export type ReadinessReliability = "high" | "moderate" | "low";
 
 export type ClinicalJudgmentPattern =

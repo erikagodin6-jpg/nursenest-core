@@ -78,7 +78,7 @@ export async function captureGovernedGraphTelemetry(args: {
   step?: EduGraphStep;
   pathwayId?: string | null;
   topicSlug?: string;
-  sourceSurface: GraphSourceSurface;
+  sourceSurface?: GraphSourceSurface;
   competencyId?: string | null;
   learnerStateReason?: string | null;
   remediationPriority?: number;
@@ -91,15 +91,17 @@ export async function captureGovernedGraphTelemetry(args: {
   const base = step
     ? graphTelemetryPayload(args.event, step, {
         pathwayId: args.pathwayId ?? step.pathwayId,
+        sourceSurface: args.sourceSurface ?? step.sourceSurface,
       })
     : ({
         event: args.event,
         competencyId: args.competencyId ?? null,
         stepKind: "remediation_review",
         topicSlug: args.topicSlug ?? "unknown",
-        sourceSurface: args.sourceSurface,
+        sourceSurface: args.sourceSurface ?? "recommendation_engine",
         learnerStateReason: args.learnerStateReason ?? null,
         remediationPriority: args.remediationPriority ?? 1,
+        graphDepth: args.graphDepth ?? 0,
         pathwayId: args.pathwayId ?? null,
       } satisfies GraphTelemetryPayload);
 
