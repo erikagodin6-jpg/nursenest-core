@@ -16,9 +16,9 @@ const GRAPH_AUTHORITATIVE_EVENTS = new Set<CoachingTelemetryEvent>([
 
 export function mergeCoachingPropsWithGraphLineage(
   event: CoachingTelemetryEvent,
-  props: Record<string, string | number | boolean | null>,
+  props: Record<string, string | number | boolean | null | undefined>,
   lineage?: GraphLineageEnvelope | null,
-): Record<string, string | number | boolean | null> {
+): Record<string, string | number | boolean | null | undefined> {
   if (!GRAPH_AUTHORITATIVE_EVENTS.has(event) || !lineage) return props;
   const merged = { ...props, ...graphLineageTelemetryProps(lineage) };
   merged.graph_authoritative = true;

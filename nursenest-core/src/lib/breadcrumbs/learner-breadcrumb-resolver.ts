@@ -13,6 +13,7 @@ import {
   learnerDashboardCrumbs,
   learnerExamAttemptCrumbs,
   learnerExamPlanCrumbs,
+  learnerFocusAreasHubCrumbs,
   learnerGuidedStudyCrumbs,
   learnerInterpretationStudyCrumbs,
   learnerLabsCategoryCrumbs,

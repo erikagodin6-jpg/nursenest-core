@@ -154,6 +154,13 @@ export function hydrateLearnerState(args: {
     hesitationProfile: deriveHesitationProfile(args.timing),
     reasoningPatterns: [...new Set([...base.reasoningPatterns, ...args.reasoningPatterns])].slice(-8),
     measurementWeaknesses: [...new Set([...base.measurementWeaknesses, ...measurementWeaknesses])].slice(-6),
+    focusAreaSlugs: [
+      ...new Set([
+        ...base.focusAreaSlugs,
+        ...args.sessionWeakLabels,
+        ...args.weakTopics.map((w) => w.normalizedTopic ?? w.topic),
+      ]),
+    ].slice(-12),
     competencyStates,
     remediationFatigueScore: Math.min(1, Math.max(base.remediationFatigueScore * 0.85, exposureFatigue)),
     confidenceInstability: Math.max(base.confidenceInstability, args.confidenceInstability ?? 0),

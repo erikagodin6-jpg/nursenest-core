@@ -106,11 +106,11 @@ export const COGNITION_TELEMETRY_ALLOWLIST = new Set([
 ]);
 
 export function filterCognitionTelemetryProps(
-  props: Record<string, string | number | boolean | undefined>,
+  props: Record<string, string | number | boolean | null | undefined>,
 ): Record<string, string | number | boolean> {
   const out: Record<string, string | number | boolean> = {};
   for (const [key, value] of Object.entries(props)) {
-    if (value === undefined) continue;
+    if (value == null) continue;
     const lower = key.toLowerCase();
     if (COGNITION_TELEMETRY_ALLOWLIST.has(lower) || lower.startsWith("cognition_")) {
       out[key] = value;

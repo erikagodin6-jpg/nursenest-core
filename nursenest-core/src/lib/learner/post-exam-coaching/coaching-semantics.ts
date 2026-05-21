@@ -107,7 +107,7 @@ export function sanitizeCoachingNarrative(
   }
   const governed = enforceGovernedAiMeasurementCopy({
     text: out,
-    surface: "loft",
+    surface: "loft_review",
     pathwayId,
     applyFallback: true,
   });

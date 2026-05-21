@@ -29,7 +29,6 @@ export function PostExamRemediationBreadcrumb({
       topic={topicSlug}
       pathwayId={pathwayId}
       currentStepTitle={currentStepTitle}
-      persistentWeakTopics={persistentWeakTopics}
       pathname="/app/practice-tests"
       topicSlug={topicSlug}
     />
