@@ -80,23 +80,6 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
 
-      - name: Render immutable DigitalOcean spec
-        run: |
-          cp .do/app-nursenest-core-next.yaml /tmp/app-nursenest-core-next.yaml
-          python3 - <<'PY'
-          from pathlib import Path
-          import os
-
-          spec_path = Path('/tmp/app-nursenest-core-next.yaml')
-          text = spec_path.read_text()
-          old = '      tag: latest'
-          new = f'      tag: sha-{os.environ["GITHUB_SHA"]}'
-          if old not in text:
-              raise SystemExit('Expected GHCR image tag line not found in DO spec')
-          spec_path.write_text(text.replace(old, new, 1))
-          PY
-          echo "Rendered DO spec image tag: sha-${GITHUB_SHA}"
-
       - name: Trigger DigitalOcean deployment
         env:
           DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
@@ -108,24 +91,37 @@ jobs:
 
           if [ -z "$DO_TOKEN" ]; then
             echo "::error::DIGITALOCEAN_ACCESS_TOKEN secret is not set — DigitalOcean will NOT deploy the new image."
-            echo ""
-            echo "The Docker image was pushed to GHCR successfully, but the live site will NOT update"
-            echo "because the DO deployment trigger was skipped."
-            echo ""
-            echo "To fix: GitHub repo → Settings → Secrets and variables → Actions → New repository secret"
-            echo "  Name:  DIGITALOCEAN_ACCESS_TOKEN"
-            echo "  Value: <DO personal access token with Apps write scope>"
-            echo ""
-            echo "Until then, deploy manually using an immutable sha tag:"
-            echo "  doctl apps update d6a4b825-4d70-4dd4-8d71-04b354d36f43 --spec .do/app-nursenest-core-next.yaml"
             exit 1
           fi
 
-          curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.124.0/doctl-1.124.0-linux-amd64.tar.gz \
-            | tar -xz -C /tmp
-          /tmp/doctl auth init --access-token "$DO_TOKEN"
+          APP_ID="d6a4b825-4d70-4dd4-8d71-04b354d36f43"
+          NEW_TAG="sha-${{ github.sha }}"
 
-          /tmp/doctl apps update d6a4b825-4d70-4dd4-8d71-04b354d36f43 --spec /tmp/app-nursenest-core-next.yaml
+          # Fetch current live spec from DO (preserves encrypted secret values).
+          # Patch only the image tag for the web service, then PUT the modified spec back.
+          # This prevents doctl --spec from clearing RUN_TIME secrets that have no
+          # value field in the repo spec (type: SECRET with no value = spec-only declaration).
+          CURRENT_SPEC=$(curl -fsSL \
+            -H "Authorization: Bearer $DO_TOKEN" \
+            "https://api.digitalocean.com/v2/apps/${APP_ID}/spec" \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps(d.get('spec', d)))")
 
-          echo "DigitalOcean app spec updated to image tag sha-${{ github.sha }}."
-          echo "Track at: https://cloud.digitalocean.com/apps/d6a4b825-4d70-4dd4-8d71-04b354d36f43"
+          PATCHED_SPEC=$(echo "$CURRENT_SPEC" | python3 - <<'PY'
+          import sys, json, os
+          spec = json.loads(sys.stdin.read())
+          tag = os.environ["NEW_TAG"]
+          for svc in spec.get("services", []):
+              if svc.get("name") == "web" and svc.get("image"):
+                  svc["image"]["tag"] = tag
+          print(json.dumps(spec))
+          PY
+          )
+
+          curl -fsSL -X PUT \
+            -H "Authorization: Bearer $DO_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.digitalocean.com/v2/apps/${APP_ID}" \
+            -d "{\"spec\": $PATCHED_SPEC}" > /dev/null
+
+          echo "DigitalOcean app spec updated to image tag ${NEW_TAG}."
+          echo "Track at: https://cloud.digitalocean.com/apps/${APP_ID}"
