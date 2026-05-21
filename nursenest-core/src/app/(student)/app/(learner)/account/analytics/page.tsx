@@ -34,7 +34,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AccountAnalyticsPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).account.analytics");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Analytics");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

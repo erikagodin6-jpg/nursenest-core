@@ -34,6 +34,8 @@ export type RnLearnerStateSnapshot = {
   reasoningPatterns: ClinicalJudgmentPattern[];
   /** Measurement / interpretation weakness tags (e.g. potassium_trend, abg). */
   measurementWeaknesses: string[];
+  /** Legacy persisted focus-area anchors retained for cognition snapshot migrations. */
+  focusAreaSlugs?: string[];
   competencyStates: RnCompetencyMasteryState[];
   /** 0–1 — high means rotate modalities / reduce CTAs. */
   remediationFatigueScore: number;
@@ -54,6 +56,7 @@ export const EMPTY_LEARNER_STATE = (pathwayId: string | null = null): RnLearnerS
   hesitationProfile: "moderate",
   reasoningPatterns: [],
   measurementWeaknesses: [],
+  focusAreaSlugs: [],
   competencyStates: [],
   remediationFatigueScore: 0,
   confidenceInstability: 0,

@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from "react";
 import {
   BLOSSOM_LEAF_128_AVIF,
   BLOSSOM_LEAF_128_WEBP,
@@ -18,7 +19,7 @@ type OptimizedBlossomLeafImageProps = {
   fetchPriority?: "high" | "low" | "auto";
   draggable?: boolean;
   "data-nn-header-logo"?: boolean;
-  onError?: () => void;
+  onError?: (event: SyntheticEvent<HTMLImageElement>) => void;
   onLoad?: () => void;
 };
 

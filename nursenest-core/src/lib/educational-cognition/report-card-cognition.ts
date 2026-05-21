@@ -9,8 +9,8 @@ import {
 } from "@/lib/educational-cognition/learner-dashboard-cognition-surface";
 import {
   resolveEducationalCognitionContext,
-  type EducationalCognitionContext,
 } from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 import {
   emitCognitionTelemetryV5,
   recordCognitionContextResolvedWithEntitlement,
@@ -85,7 +85,7 @@ export function presentReportCardCognition(
     graphNextSteps: steps.map((s) => ({
       title: s.title,
       href: s.href,
-      kind: s.kind,
+      kind: s.stepKind,
     })),
     measurementPriority: ctx.measurement.measurementPriorityScore,
     timingRiskBand:

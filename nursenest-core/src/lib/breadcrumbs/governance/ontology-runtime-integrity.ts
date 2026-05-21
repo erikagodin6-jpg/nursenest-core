@@ -20,6 +20,7 @@ import { assertReplayLineageConsistent } from "@/lib/breadcrumbs/governance/grap
 import type { GraphTelemetryReplaySnapshot } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 import { validateGlossaryGraphNode, buildGlossaryGraphNode } from "@/lib/educational-graph/glossary-graph-node";
 import type { GlossaryTermSemanticContext } from "@/lib/breadcrumbs/breadcrumb-semantic-integration";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 
 export type OntologyIntegrityTier =
   | "healthy"
@@ -143,14 +144,18 @@ export function validateOntologyRuntimeIntegrity(args: {
       issues.push(glossaryIssue);
       if (args.glossaryTermSlug) recordGlossaryOrphan(args.glossaryTermSlug);
       if (args.topicSlug && args.glossaryTermSlug) {
-        const recovery = recoverGlossaryLineage(
-          {
-            termSlug: args.glossaryTermSlug,
-            termLabel: args.glossaryTermSlug,
-            topicSlug: args.topicSlug,
-          },
-          args.pathwayId ?? null,
-        );
+        const pathway = args.pathwayId ? getExamPathwayById(args.pathwayId) : null;
+        const recovery = pathway
+          ? recoverGlossaryLineage(
+              {
+                termSlug: args.glossaryTermSlug,
+                termLabel: args.glossaryTermSlug,
+                topicSlug: args.topicSlug,
+                pathway,
+              },
+              args.pathwayId ?? null,
+            )
+          : null;
         if (recovery) repairHints.push(`glossary_recovery:${recovery}`);
         else repairHints.push("glossary_recovery:node_valid");
       }

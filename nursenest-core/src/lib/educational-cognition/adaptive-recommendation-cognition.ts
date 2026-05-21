@@ -177,7 +177,25 @@ function applyCognitionOverlay(
   };
 }
 
-export type BuildGovernedAdaptiveRecommendationsArgs = Parameters<typeof buildAdaptiveRecommendations>[0] & {
+const EMPTY_READINESS_RESULT: ReadinessResult = {
+  score: null,
+  band: "insufficient_data",
+  confidence: "low",
+  trend: null,
+  summary: "Readiness needs more practice data.",
+  factors: [],
+  whatToImprove: [],
+  nextActions: [],
+  holdingBack: [],
+  topWeakAreas: [],
+};
+
+export type BuildGovernedAdaptiveRecommendationsArgs = Partial<Omit<
+  Parameters<typeof buildAdaptiveRecommendations>[0],
+  "readiness"
+>> & {
+  readiness: ReadinessResult | null;
+  weakTopics: WeakTopicRow[];
   userId?: string | null;
   entitlement?: AccessScope | null;
   topicTrends?: TopicTrendRow[];
@@ -190,6 +208,25 @@ export async function buildGovernedAdaptiveRecommendations(
   args: BuildGovernedAdaptiveRecommendationsArgs,
 ): Promise<GovernedAdaptiveRecommendations> {
   const pathwayId = args.preferredPathwayId?.trim() || null;
+  const recommendationArgs: Parameters<typeof buildAdaptiveRecommendations>[0] = {
+    examDatePlanType: args.examDatePlanType ?? null,
+    examDate: args.examDate ?? null,
+    readiness: args.readiness ?? EMPTY_READINESS_RESULT,
+    weakTopics: args.weakTopics,
+    streakDays: args.streakDays ?? 0,
+    lessonPct: args.lessonPct ?? 0,
+    lessonsCompleted: args.lessonsCompleted ?? 0,
+    lessonsTotal: args.lessonsTotal ?? 0,
+    studyCadencePreference: args.studyCadencePreference ?? null,
+    continueLesson: args.continueLesson ?? null,
+    recommendedQuizTopic: args.recommendedQuizTopic ?? null,
+    mockCount: args.mockCount ?? 0,
+    practiceSessionCount: args.practiceSessionCount ?? 0,
+    subscriberCountry: args.subscriberCountry,
+    preferredPathwayId: args.preferredPathwayId,
+    availablePathwayIds: args.availablePathwayIds,
+    topicTrends: args.topicTrends,
+  };
 
   if (args.userId && args.entitlement?.hasAccess && pathwayId) {
     await warmDurableLearnerCognitionCache(args.userId);
@@ -207,7 +244,7 @@ export async function buildGovernedAdaptiveRecommendations(
     const cognitionWeakTopics = weakTopicRowsFromCognition(substrate.ctx);
 
     const base = buildAdaptiveRecommendations({
-      ...args,
+      ...recommendationArgs,
       preferredPathwayId: pathwayId,
       weakTopics: cognitionWeakTopics,
       recommendedQuizTopic: cognitionWeakTopics[0]?.topic ?? args.recommendedQuizTopic,
@@ -222,7 +259,7 @@ export async function buildGovernedAdaptiveRecommendations(
     return governed;
   }
 
-  const base = buildAdaptiveRecommendations(args);
+  const base = buildAdaptiveRecommendations(recommendationArgs);
   const model = getTestingModelForPathwayId(pathwayId);
   return {
     ...base,

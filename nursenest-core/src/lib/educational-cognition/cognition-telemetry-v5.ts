@@ -40,6 +40,14 @@ export type CognitionTelemetryV5Payload = {
   coaching_model: string;
 };
 
+function withoutNullTelemetryProps(
+  props: Record<string, string | number | boolean | null>,
+): Record<string, string | number | boolean | undefined> {
+  return Object.fromEntries(
+    Object.entries(props).map(([key, value]) => [key, value === null ? undefined : value]),
+  );
+}
+
 export function buildCognitionTelemetryV5Payload(
   ctx: EducationalCognitionContext,
   sourceSurface: string,
@@ -101,7 +109,7 @@ export function emitCognitionTelemetryV5(
     pathwayId: ctx.pathwayId,
     version: buildCognitionVersionMetadata(),
     extra: {
-      ...normalizeCognitionTelemetryProps(ctx, props as Record<string, string | number | boolean | undefined>),
+      ...normalizeCognitionTelemetryProps(ctx, withoutNullTelemetryProps(props)),
       ...v5,
       ...versionMeta,
       ...explainAudit,
@@ -114,10 +122,10 @@ export function emitCognitionTelemetryV5(
     testingModel: ctx.psychometric.model ?? getTestingModelForPathwayId(ctx.pathwayId),
     topicSlug: typeof props.topic_slug === "string" ? props.topic_slug : undefined,
   });
-  const merged = filterCognitionTelemetryProps({
+  const merged = filterCognitionTelemetryProps(withoutNullTelemetryProps({
     ...lineage.props,
     ...mergeCoachingPropsWithGraphLineage(event, lineage.props, graphLineage),
-  });
+  }));
   recordCoachingTelemetry(event, merged);
 }
 
