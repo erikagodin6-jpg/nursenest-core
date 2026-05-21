@@ -6,14 +6,13 @@ import { buildAiTutorContextEnvelope } from "@/lib/learner/rn-coaching-intellige
 import type { TutoringPromptContext } from "@/lib/ai-tutor/types";
 import { deriveTimingCognitionSignals } from "@/lib/educational-cognition/timing-cognition";
 import { emitCognitionTelemetryV5 } from "@/lib/educational-cognition/cognition-telemetry-v5";
-import type { TutoringPromptContext } from "@/lib/ai-tutor/types";
 
 /**
  * AI tutoring envelope from full cognition context + graph steps (not report-only).
  */
 export function buildAiTutorContextFromCognition(
   ctx: EducationalCognitionContext,
-  graphSteps: EduGraphStep[],
+  graphSteps: readonly EduGraphStep[],
 ): AiTutorContextEnvelope {
   const timing = deriveTimingCognitionSignals({ learnerState: ctx.learnerState });
   const base: AiTutorContextEnvelope = ctx.coachingReport

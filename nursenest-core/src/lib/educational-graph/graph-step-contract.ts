@@ -21,9 +21,13 @@ export type GraphSourceSurface =
   | "topic_hub_authenticated"
   | "app_remediation"
   | "post_exam_coaching"
+  | "post_session_cognition"
   | "dashboard_feed"
   | "study_plan"
   | "ai_tutor"
+  | "adaptive_recommendations"
+  | "cognition_substrate"
+  | "focus_area_detail"
   | "recommendation_engine"
   | "glossary_traversal";
 
@@ -46,7 +50,10 @@ export type EduGraphStepDifficulty = "foundational" | "intermediate" | "advanced
 export type EduGraphStep = {
   stepId: string;
   stepKind: EduGraphStepKind;
-  competencyId: RnCompetencyId | null;
+  /** Legacy presentation aliases retained while older graph consumers converge. */
+  kind?: EduGraphStepKind;
+  reason?: string;
+  competencyId: RnCompetencyId | string | null;
   topicSlug: string;
   title: string;
   description: string;

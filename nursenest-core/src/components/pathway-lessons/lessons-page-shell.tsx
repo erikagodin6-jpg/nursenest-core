@@ -8,7 +8,7 @@ type CtaButton = {
 };
 
 type Props = {
-  title: string;
+  title?: string;
   subtitle?: string;
   /** Short pathway label (e.g. NCLEX-RN) — premium eyebrow, aligned with tier hub / homepage. */
   eyebrow?: string;
@@ -52,7 +52,7 @@ function ctaClass(variant: CtaButton["variant"]): string {
  * trust badges as a slim inline row, toolbar flush below the title band.
  */
 export function LessonsPageShell({
-  title,
+  title = "",
   subtitle = "",
   eyebrow,
   pathwayTrack,

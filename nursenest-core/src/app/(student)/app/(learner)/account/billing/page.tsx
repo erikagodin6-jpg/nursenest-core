@@ -12,6 +12,7 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { BillingSupportEmailNotice } from "@/components/student/billing-support-email-notice";
 
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {

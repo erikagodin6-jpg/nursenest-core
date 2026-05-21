@@ -6,7 +6,7 @@ export type HesitationProfile = "low" | "moderate" | "high";
 export type CompetencyVolatility = "stable" | "improving" | "declining" | "plateau" | "volatile";
 
 export type RnCompetencyMasteryState = {
-  competencyId: RnCompetencyId;
+  competencyId: RnCompetencyId | string;
   masteryScore: number;
   volatility: CompetencyVolatility;
   sessionEvidenceCount: number;
@@ -34,6 +34,8 @@ export type RnLearnerStateSnapshot = {
   reasoningPatterns: ClinicalJudgmentPattern[];
   /** Measurement / interpretation weakness tags (e.g. potassium_trend, abg). */
   measurementWeaknesses: string[];
+  /** Compatibility alias for focus-area surfaces that predate measurementWeaknesses. */
+  focusAreaSlugs?: string[];
   competencyStates: RnCompetencyMasteryState[];
   /** 0–1 — high means rotate modalities / reduce CTAs. */
   remediationFatigueScore: number;
