@@ -101,14 +101,16 @@ jobs:
           # Patch only the image tag for the web service, then PUT the modified spec back.
           # This prevents doctl --spec from clearing RUN_TIME secrets that have no
           # value field in the repo spec (type: SECRET with no value = spec-only declaration).
-          CURRENT_SPEC=$(curl -fsSL \
+          curl -fsSL \
             -H "Authorization: Bearer $DO_TOKEN" \
-            "https://api.digitalocean.com/v2/apps/${APP_ID}/spec" \
-            | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps(d.get('spec', d)))")
+            "https://api.digitalocean.com/v2/apps/${APP_ID}" \
+            > /tmp/do-app.json
 
-          PATCHED_SPEC=$(echo "$CURRENT_SPEC" | python3 - <<'PY'
+          PATCHED_SPEC=$(python3 - <<'PY'
           import sys, json, os
-          spec = json.loads(sys.stdin.read())
+          with open("/tmp/do-app.json", "r", encoding="utf-8") as f:
+              payload = json.load(f)
+          spec = payload["app"]["spec"]
           tag = os.environ["NEW_TAG"]
           for svc in spec.get("services", []):
               if svc.get("name") == "web" and svc.get("image"):
