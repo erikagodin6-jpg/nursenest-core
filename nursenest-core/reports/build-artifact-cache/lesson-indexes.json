@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "8c54961f46ff3d8a0016148413831eb5626537d689c33a2dee9e73e3a6afe8d7",
-  "generatedAt": "2026-05-21T02:18:00.991Z",
+  "fingerprint": "16daad2761f48b38d3c11595c3d07854b3ff6ad1eaaa8c49cc185968116dd3f2",
+  "generatedAt": "2026-05-21T22:24:24.339Z",
   "inputs": [
     {
       "type": "file",
@@ -946,6 +946,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-detail-layout-convergence.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/marketing-pathway-lesson-progress-gate.test.ts"
     },
     {
@@ -1771,7 +1775,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 114251,
-    "verifyLessonIndexesMs": 120938
+    "buildLessonIndexesMs": 113172,
+    "verifyLessonIndexesMs": 113771
   }
 }

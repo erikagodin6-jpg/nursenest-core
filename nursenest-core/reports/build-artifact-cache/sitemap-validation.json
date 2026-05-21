@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "2b727135460e8cf7d3ad1afc5c7663c2765ecf82a91097bdce48582c0ceaf5da",
-  "generatedAt": "2026-05-21T21:04:10.133Z",
+  "fingerprint": "fa600dcbf5930ad8b8013e64500780658fd27b4f6b46bab1fe75a78e329384eb",
+  "generatedAt": "2026-05-21T22:24:55.667Z",
   "inputs": [
     {
       "type": "file",
@@ -4962,6 +4962,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-detail-layout-convergence.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/marketing-pathway-lesson-progress-gate.test.ts"
     },
     {
@@ -6513,6 +6517,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 14445
+    "durationMs": 30927
   }
 }
