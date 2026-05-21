@@ -18,6 +18,7 @@ export const revalidate = 86400;
 // Paths covered by other sitemap segments — exclude here to avoid duplicate <loc> entries.
 // /canada/np/cnple and /canada/np/cnple/questions → sitemap-pathways.xml (via pathway hub collector)
 // /canada/np/cnple/study-guide et al. → sitemap-cnple.xml (via CNPLE_HUB_SITEMAP_PATHS)
+// /canada/pn/rex-pn and /canada/pn/rex-pn/questions → sitemap-pathways.xml (via pathway hub collector)
 const OWNED_BY_EXISTING_SEGMENTS = new Set([
   "/canada/np/cnple",
   "/canada/np/cnple/questions",
@@ -25,6 +26,8 @@ const OWNED_BY_EXISTING_SEGMENTS = new Set([
   "/canada/np/cnple/case-based-questions",
   "/canada/np/cnple/provisional-registration",
   "/canada/np/cnple/loft-exam",
+  "/canada/pn/rex-pn",
+  "/canada/pn/rex-pn/questions",
 ]);
 
 export async function GET(request: Request): Promise<Response> {
