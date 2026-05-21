@@ -1,28 +1,34 @@
-/**
- * Canonical NurseNest app icon URLs — single source for layout metadata, manifest, and tests.
- * Raster assets are generated from `src/assets/brand/leaf-logo-favicon.svg` via `npm run icons:generate`.
- * Vector mark matches nav/header: same geometry as `SiteBrandLogoMark` arctic-frost leaf (`/logos/arctic-frost-leaf.svg`).
- */
-export const NURSENEST_APP_ICON_VERSION = "2026-05-20-pink" as const;
+/** Canonical externally hosted NurseNest app icon/logo URLs. */
+export const NURSENEST_APP_ICON_VERSION = "2026-05-21-cdn-pink" as const;
 
 /** Brand primary color for app icons. */
 export const NURSENEST_LEAF_BRAND_COLOR = "#f72fa8" as const;
 
-export const NURSENEST_CANONICAL_LEAF_SVG_PATH = "/brand/leaf-logo.svg" as const;
+export const NURSENEST_PINK_FAVICON_URL =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/pinkfavicon.png" as const;
 
-/** Legacy public path kept in sync with canonical mark (header/footer resolveThemeLogo). */
-export const NURSENEST_NAV_LEAF_SVG_PATH = "/logos/arctic-frost-leaf.svg" as const;
+export const NURSENEST_BLOSSOM_LEAF_LOGO_URL =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/hotpinkblossomleaflogo.png" as const;
+
+export const NURSENEST_AURORA_PAGE_LOGO_URL =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/00e0dc0f-b614-4e28-9fa9-33cdcf89cf0c.png" as const;
+
+export const NURSENEST_CANONICAL_LEAF_SVG_PATH = NURSENEST_BLOSSOM_LEAF_LOGO_URL;
+
+/** Header/footer leaf fallback. Uses the approved Blossom leaf, not a generated local mark. */
+export const NURSENEST_NAV_LEAF_SVG_PATH = NURSENEST_BLOSSOM_LEAF_LOGO_URL;
 
 function withVersion(path: string): string {
-  return `${path}?v=${NURSENEST_APP_ICON_VERSION}`;
+  return `${path}${path.includes("?") ? "&" : "?"}v=${NURSENEST_APP_ICON_VERSION}`;
 }
 
 export const nursenestAppIcons = {
-  svg: withVersion(NURSENEST_CANONICAL_LEAF_SVG_PATH),
+  favicon: withVersion(NURSENEST_PINK_FAVICON_URL),
+  svg: withVersion(NURSENEST_PINK_FAVICON_URL),
   navLeafSvg: withVersion(NURSENEST_NAV_LEAF_SVG_PATH),
-  ico: withVersion("/favicon.ico"),
-  apple: withVersion("/apple-touch-icon.png"),
-  png192: withVersion("/icon-192.png"),
-  png512: withVersion("/icon-512.png"),
-  mask: withVersion("/mask-icon.svg"),
+  ico: withVersion(NURSENEST_PINK_FAVICON_URL),
+  apple: withVersion(NURSENEST_PINK_FAVICON_URL),
+  png192: withVersion(NURSENEST_PINK_FAVICON_URL),
+  png512: withVersion(NURSENEST_PINK_FAVICON_URL),
+  mask: withVersion(NURSENEST_PINK_FAVICON_URL),
 } as const;

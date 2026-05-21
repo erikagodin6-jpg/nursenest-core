@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  NURSENEST_AURORA_PAGE_LOGO_URL,
+  NURSENEST_BLOSSOM_LEAF_LOGO_URL,
+} from "@/lib/branding/app-icons";
+import {
   THEME_LOGO_SPACE_KEYS,
   resolveThemeLogo,
 } from "@/lib/branding/resolve-theme-logo";
@@ -38,12 +42,26 @@ describe("resolveThemeLogo", () => {
     assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/slate-leaf_transparent.png");
   });
 
-  it("uses same-origin leaf-only SVG for arctic-frost leaf variant (CDN asset is full brand)", () => {
+  it("uses the approved CDN leaf assets for Blossom and Aurora", () => {
+    const blossom = resolveThemeLogo("blossom", "leaf");
+    assert.equal(blossom.kind, "local");
+    assert.equal(blossom.assetThemeId, "blossom");
+    assert.equal(blossom.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
+    assert.equal(blossom.objectKey, "hotpinkblossomleaflogo.png");
+
+    const aurora = resolveThemeLogo("aurora", "leaf");
+    assert.equal(aurora.kind, "local");
+    assert.equal(aurora.assetThemeId, "aurora");
+    assert.equal(aurora.url, NURSENEST_AURORA_PAGE_LOGO_URL);
+    assert.equal(aurora.objectKey, "00e0dc0f-b614-4e28-9fa9-33cdcf89cf0c.png");
+  });
+
+  it("uses the approved CDN fallback for arctic-frost leaf variant", () => {
     const r = resolveThemeLogo("arctic-frost", "leaf");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "arctic-frost");
-    assert.equal(r.url, "/logos/arctic-frost-leaf.svg");
-    assert.equal(r.objectKey, "logos/arctic-frost-leaf.svg");
+    assert.equal(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
+    assert.equal(r.objectKey, "hotpinkblossomleaflogo.png");
     const full = resolveThemeLogo("arctic-frost", "full");
     assert.ok(full.url?.includes("arcticfrost"), "full variant still uses CDN map for non-header callers");
   });
@@ -52,8 +70,8 @@ describe("resolveThemeLogo", () => {
     for (const t of THEME_OPTIONS) {
       const r = resolveThemeLogo(t.id, "full");
       assert.equal(r.kind, "local", t.id);
-      assert.ok(r.objectKey && r.objectKey.startsWith("Logos/"), t.id);
-      assert.ok(r.url && r.url.includes("/Logos/"), t.id);
+      assert.ok(r.objectKey, t.id);
+      assert.ok(r.url && r.url.startsWith("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/"), t.id);
       assert.equal(r.assetThemeId, t.id, t.id);
     }
   });

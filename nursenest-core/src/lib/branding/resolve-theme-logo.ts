@@ -6,6 +6,10 @@
  */
 import { parseRegisteredThemeId } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
+import {
+  NURSENEST_AURORA_PAGE_LOGO_URL,
+  NURSENEST_BLOSSOM_LEAF_LOGO_URL,
+} from "@/lib/branding/app-icons";
 
 export type ThemeLogoVariant = "full" | "leaf";
 
@@ -71,9 +75,9 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "berry-bonbon": CDN_LEAF_URLS["berry-bonbon"],
   bluebird: CDN_LEAF_URLS.bluebird,
   "blueberry-sherbet": CDN_LEAF_URLS["blueberry-sherbet"],
-  aurora: CDN_LEAF_URLS["pink-skies"],
+  aurora: NURSENEST_AURORA_PAGE_LOGO_URL,
   apex: CDN_LEAF_URLS["midnight-ink"],
-  blossom: CDN_LEAF_URLS["dusty-rose"],
+  blossom: NURSENEST_BLOSSOM_LEAF_LOGO_URL,
   blush: CDN_LEAF_URLS["petal-pop"],
   "clinical-light": CDN_LEAF_URLS["clinical-light"],
   coral: CDN_LEAF_URLS.coral,
@@ -133,11 +137,16 @@ export const NURSENEST_DEFAULT_LEAF_MARK_URL: string =
   THEME_LOGO_CDN_BY_THEME_ID[NURSENEST_DEFAULT_THEME] ?? "";
 
 function objectKeyFromCdnUrl(url: string): string | null {
-  const marker = "/Logos/";
-  const idx = url.indexOf(marker);
-  if (idx < 0) return null;
-  const rawKey = url.slice(idx + 1);
-  return rawKey.length > 0 ? rawKey : null;
+  try {
+    const pathname = new URL(url).pathname.replace(/^\/+/, "");
+    return pathname.length > 0 ? decodeURIComponent(pathname) : null;
+  } catch {
+    const marker = "/Logos/";
+    const idx = url.indexOf(marker);
+    if (idx < 0) return null;
+    const rawKey = url.slice(idx + 1);
+    return rawKey.length > 0 ? rawKey : null;
+  }
 }
 
 export const THEME_LOGO_SPACE_KEYS: Readonly<Record<string, string>> = Object.fromEntries(
@@ -181,25 +190,25 @@ export function resolveThemeLogo(
     return {
       url: ARCTIC_FROST_LEAF_PUBLIC_PATH,
       kind: "local",
-      objectKey: "logos/arctic-frost-leaf.svg",
+      objectKey: objectKeyFromCdnUrl(ARCTIC_FROST_LEAF_PUBLIC_PATH),
       assetThemeId: "arctic-frost",
     };
   }
 
   if (registered === "blossom" && logoVariant === "leaf") {
     return {
-      url: "/logos/blossom-leaf.png",
+      url: NURSENEST_BLOSSOM_LEAF_LOGO_URL,
       kind: "local",
-      objectKey: "logos/blossom-leaf.png",
+      objectKey: objectKeyFromCdnUrl(NURSENEST_BLOSSOM_LEAF_LOGO_URL),
       assetThemeId: "blossom",
     };
   }
 
   if (registered === "aurora" && logoVariant === "leaf") {
     return {
-      url: "/logos/aurora-leaf.png",
+      url: NURSENEST_AURORA_PAGE_LOGO_URL,
       kind: "local",
-      objectKey: "logos/aurora-leaf.png",
+      objectKey: objectKeyFromCdnUrl(NURSENEST_AURORA_PAGE_LOGO_URL),
       assetThemeId: "aurora",
     };
   }

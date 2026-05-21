@@ -38,8 +38,8 @@ const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
 // IMPORTANT:
-// The old arch favicon damaged brand consistency across tabs/bookmarks.
-// All favicon surfaces use the canonical NurseNest leaf (same geometry as SiteBrandLogoMark).
+// All favicon surfaces must use the approved CDN pink favicon. Do not generate
+// favicons from theme logos or local fallback marks.
 
 function navigationIntentBeforeInteractiveInlineScript(): string {
   return `
@@ -84,14 +84,10 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: nursenestAppIcons.ico, sizes: "48x48", type: "image/x-icon" },
-      { url: nursenestAppIcons.svg, type: "image/svg+xml", sizes: "any" },
-      { url: nursenestAppIcons.png192, type: "image/png", sizes: "192x192" },
-      { url: nursenestAppIcons.png512, type: "image/png", sizes: "512x512" },
+      { url: nursenestAppIcons.favicon, sizes: "any", type: "image/png" },
     ],
-    apple: [{ url: nursenestAppIcons.apple, sizes: "180x180", type: "image/png" }],
-    shortcut: [{ url: nursenestAppIcons.ico, type: "image/x-icon" }],
-    other: [{ rel: "mask-icon", url: nursenestAppIcons.mask, color: "#f72fa8" }],
+    apple: [{ url: nursenestAppIcons.favicon, sizes: "180x180", type: "image/png" }],
+    shortcut: [{ url: nursenestAppIcons.favicon, type: "image/png" }],
   },
   openGraph: {
     type: "website",

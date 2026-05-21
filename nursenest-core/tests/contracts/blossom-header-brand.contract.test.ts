@@ -310,29 +310,30 @@ describe("blossom theme-palettes.css — no blue/indigo logo-primary override", 
 // ─── Favicon metadata guard ───────────────────────────────────────────────────
 
 describe("favicon metadata in layout.tsx", () => {
-  it("layout.tsx metadata includes favicon.ico in icon array", () => {
+  it("layout.tsx metadata includes the approved CDN pink favicon only", () => {
     assert.match(
       LAYOUT_SRC,
-      /nursenestAppIcons\.ico/,
-      "layout.tsx must reference nursenestAppIcons.ico so browsers that auto-request /favicon.ico see the generated asset",
+      /nursenestAppIcons\.favicon/,
+      "layout.tsx must reference the canonical CDN pink favicon",
     );
     assert.match(
       APP_ICONS_SRC,
-      /\/favicon\.ico/,
-      "app-icons.ts must define the favicon.ico public path",
+      /pinkfavicon\.png/,
+      "app-icons.ts must define the approved pinkfavicon.png URL",
     );
+    assert.doesNotMatch(APP_ICONS_SRC, /"\/favicon\.ico"|apple-touch-icon|icon-192|icon-512|mask-icon/);
   });
 
-  it("favicon.ico reference includes a cache-busting version string", () => {
+  it("favicon reference includes a cache-busting version string", () => {
     assert.match(
       APP_ICONS_SRC,
-      /\/favicon\.ico/,
-      "app-icons.ts must define favicon.ico",
+      /pinkfavicon\.png/,
+      "app-icons.ts must define pinkfavicon.png",
     );
     assert.match(
       APP_ICONS_SRC,
       /NURSENEST_APP_ICON_VERSION/,
-      "app-icons.ts must centralize a cache-busting version for generated icons",
+      "app-icons.ts must centralize a cache-busting version for approved CDN icons",
     );
     assert.match(
       APP_ICONS_SRC,
