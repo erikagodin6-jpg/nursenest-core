@@ -53,18 +53,23 @@ export function buildReasoningChainNavigation(args: {
     | "post_exam_coaching"
     | "glossary_traversal";
 }): ReasoningChainNavigationFrame {
+  const topicSlug =
+    typeof args.topicSlug === "string" && args.topicSlug.trim().length > 0
+      ? args.topicSlug
+      : "focus-areas";
+  const topicLabel = args.topicLabel?.trim() ? args.topicLabel : "Focus areas";
   const traversal = orchestrateBreadcrumbGraph({
-    topicSlug: args.topicSlug,
-    topicLabel: args.topicLabel,
+    topicSlug,
+    topicLabel,
     pathwayId: args.pathwayId ?? null,
     sourceSurface: args.sourceSurface ?? "topic_hub_public",
-    currentLabel: args.topicLabel ?? args.topicSlug.replace(/-/g, " "),
+    currentLabel: topicLabel,
   });
 
   const chain = traversal.reasoningChain ?? [];
   const hrefSteps = traversal.steps.filter((s) => s.href);
   const steps: ReasoningChainNavStep[] = chain.map((relation, i) => ({
-    id: `${args.topicSlug}-${relation}-${i}`,
+    id: `${topicSlug}-${relation}-${i}`,
     label: RELATION_LABELS[relation] ?? relation.replace(/_/g, " "),
     href: hrefSteps[i]?.href,
     relation,
@@ -82,7 +87,7 @@ export function buildReasoningChainNavigation(args: {
   }
 
   return {
-    topicSlug: args.topicSlug,
+    topicSlug,
     competencyId: traversal.competencyId,
     steps,
     traversal,

@@ -9,7 +9,12 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { auditTopicClusterCrumbs } from "@/lib/breadcrumbs/topic-cluster-governance";
 import { hasGeoDepthPollution, validateEducationFirstTrail } from "@/lib/breadcrumbs/navigation-ontology";
 import { buildCompetencyNavigationFrame } from "@/lib/breadcrumbs/competency-navigation";
-import { learnerRemediationTrailCrumbs } from "@/lib/breadcrumbs/learner-navigation";
+import { buildReasoningChainNavigation } from "@/lib/breadcrumbs/reasoning-chain-navigation";
+import {
+  learnerFocusAreasHubCrumbs,
+  learnerRemediationTrailCrumbs,
+  learnerWeakAreaCrumbs,
+} from "@/lib/breadcrumbs/learner-navigation";
 import { learnerWeakAreaCrumbsFromGraph } from "@/lib/breadcrumbs/breadcrumb-graph-convergence";
 import { buildRemediationNavigationLadder } from "@/lib/breadcrumbs/remediation-navigation";
 import {
@@ -150,6 +155,36 @@ test("learner weak-area trail is competency-aware and bounded", () => {
   assert.ok(crumbs.length >= 3);
   assert.equal(crumbs[0]?.name, "Home");
   assert.equal(crumbs[crumbs.length - 1]?.name, "ECG monitoring");
+});
+
+test("learner weak-area crumbs tolerate missing topicSlug (production digest regression)", () => {
+  const crumbs = learnerWeakAreaCrumbs({
+    topicSlug: undefined as unknown as string,
+    topicLabel: "",
+    currentLabel: "Focus areas",
+  });
+  assert.equal(crumbs[0]?.name, "Home");
+  assert.equal(crumbs[crumbs.length - 1]?.name, "Focus areas");
+  assert.ok(crumbs.every((c) => typeof c.name === "string" && c.name.length > 0));
+});
+
+test("learner focus-areas hub crumbs tolerate null primary topic", () => {
+  const crumbs = learnerFocusAreasHubCrumbs({
+    primaryTopicSlug: null,
+    primaryTopicLabel: null,
+  });
+  assert.equal(crumbs[0]?.name, "Home");
+  assert.equal(crumbs[crumbs.length - 1]?.name, "Focus areas");
+});
+
+test("reasoning chain navigation tolerates missing topicSlug (production digest regression)", () => {
+  const frame = buildReasoningChainNavigation({
+    topicSlug: undefined as unknown as string,
+    topicLabel: "",
+    pathname: "/pricing",
+  });
+  assert.equal(frame.topicSlug, "focus-areas");
+  assert.ok(Array.isArray(frame.steps));
 });
 
 test("structured data audit catches duplicate FAQ on owned ECG route", () => {
