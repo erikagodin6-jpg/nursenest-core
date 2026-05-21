@@ -12,7 +12,7 @@ export function usesPremiumLessonReadingV2Layout(args: {
 }): boolean {
   const { pathwayId, examFamily, roleTrack } = args;
   if (examFamily === ExamFamily.NP) return true;
-  if (roleTrack === "rn" || roleTrack === "rpn") return true;
+  if (roleTrack === "allied" || roleTrack === "rn" || roleTrack === "rpn") return true;
   if (pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn") return true;
   if (pathwayId === "ca-rpn-rex-pn") return true;
   return false;

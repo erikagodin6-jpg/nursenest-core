@@ -23,6 +23,11 @@ type Props = {
   statCard?: { value: string; label: string };
   /** Trust badges — rendered as a compact inline row below the H1. */
   trustBadges?: string[];
+  /**
+   * Lesson detail pages supply their own title/header inside the hub body.
+   * Keeps the premium hub shell + body card without duplicating the compact hero H1.
+   */
+  omitHeroBand?: boolean;
   children: ReactNode;
 };
 
@@ -57,6 +62,7 @@ export function LessonsPageShell({
   backLink,
   statCard,
   trustBadges,
+  omitHeroBand = false,
   children,
 }: Props) {
   return (
@@ -68,7 +74,22 @@ export function LessonsPageShell({
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
-        {/* ── Compact hero band ── */}
+        {omitHeroBand ? (
+          backLink || eyebrow ? (
+            <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1">
+              {backLink ? (
+                <Link
+                  href={backLink.href}
+                  className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[var(--theme-muted-text)] underline-offset-2 transition hover:text-[var(--semantic-brand)] hover:underline"
+                >
+                  <span aria-hidden>←</span>
+                  <span className="max-w-[14rem] truncate">{backLink.label}</span>
+                </Link>
+              ) : null}
+              {eyebrow ? <p className="nn-premium-home-eyebrow shrink-0">{eyebrow}</p> : null}
+            </div>
+          ) : null
+        ) : (
         <section aria-labelledby="nn-lessons-hub-title">
           <div className="nn-nursing-tier-hub-hero-band nn-premium-lessons-hub-hero" data-nn-premium-lessons-hero>
 
@@ -147,6 +168,7 @@ export function LessonsPageShell({
             ) : null}
           </div>
         </section>
+        )}
 
         {/* ── Hub body — no heavy card wrapper; subtle surface separation ── */}
         <div

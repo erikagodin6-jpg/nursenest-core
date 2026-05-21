@@ -18,6 +18,7 @@ import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-mark
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingExamHubBasePath, marketingPathwayLessonsCategoryPath } from "@/lib/lessons/lesson-routes";
+import { buildMarketingLessonHubSurfaceChips } from "@/lib/marketing/marketing-lesson-hub-surface-chips";
 import {
   countPathwayMarketingHubLessonsByCategoryForPathway,
   displayCategoryForPathwayMarketingHubLesson,
@@ -32,7 +33,6 @@ import {
 } from "@/lib/lessons/marketing-pathway-lesson-progress-server";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
-import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
@@ -110,20 +110,10 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   const canStartCat =
     !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
-  const lessonHubSurfaceChips = [
-    { label: "Practice Questions", href: questionsHref },
-    {
-      label: questionSnapshotLoadRejected
-        ? "Adaptive CAT — Status Unavailable"
-        : canStartCat
-          ? "Adaptive CAT"
-          : "Adaptive CAT Unavailable",
-      href: catHref,
-    },
-    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
-    { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-    { label: "Exam Overview", href: overviewHref },
-  ];
+  const lessonHubSurfaceChips = buildMarketingLessonHubSurfaceChips(pathway, {
+    canStartCat,
+    questionSnapshotLoadRejected,
+  });
 
   const canadaHref =
     pathway.countrySlug === "canada" ? base : (equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base);
@@ -330,15 +320,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         </div>
       </section>
 
-      <StudyBottomNav
-        compact
-        relatedLinks={[
-          { label: "Practice Questions", href: questionsHref },
-          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT Unavailable", href: catHref },
-          { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-          { label: "Exam Overview", href: overviewHref },
-        ]}
-      />
+      <StudyBottomNav compact relatedLinks={lessonHubSurfaceChips} />
     </LessonsPageShell>
   );
 }

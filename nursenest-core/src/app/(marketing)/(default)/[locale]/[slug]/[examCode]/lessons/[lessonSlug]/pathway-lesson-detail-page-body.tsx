@@ -36,6 +36,13 @@ import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-l
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
+import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
+import { MarketingPathwayLessonHubStudyChrome } from "@/components/pathway-lessons/marketing-pathway-lesson-hub-study-chrome";
+import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
+import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
+import { buildMarketingLessonHubSurfaceChips } from "@/lib/marketing/marketing-lesson-hub-surface-chips";
 import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
@@ -267,6 +274,19 @@ export async function PathwayLessonDetailPageBody({
   });
 
   const base = marketingPathwayLessonsIndexPath(pathway);
+  let questionSnapshot = EMPTY_QUESTION_SNAPSHOT;
+  let questionSnapshotLoadRejected = false;
+  try {
+    questionSnapshot = await loadPathwayQuestionBankSnapshot(pathway.id);
+  } catch {
+    questionSnapshotLoadRejected = true;
+  }
+  const canStartCat =
+    !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
+  const lessonHubSurfaceChips = buildMarketingLessonHubSurfaceChips(pathway, {
+    canStartCat,
+    questionSnapshotLoadRejected,
+  });
   const blogHubPath = buildExamPathwayPath(pathway, "blog");
   const pathwayQuestionsHref = buildExamPathwayPath(pathway, "questions");
   const pathwayFlashcardsHref = buildExamPathwayPath(pathway, "flashcards");
@@ -437,9 +457,15 @@ export async function PathwayLessonDetailPageBody({
 
   return (
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
-      <div className="mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
+      <LessonsPageShell
+        omitHeroBand
+        eyebrow={pathway.shortName.trim() || pathway.displayName}
+        pathwayTrack={pathway.roleTrack}
+        backLink={{ label: `${examName} lessons`, href: base }}
+      >
         <div
           className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
+          data-nn-premium-lessons-system="detail"
         >
           <MarketingPathwayLessonDetailViewBeacon
             pathway={pathway}
@@ -464,6 +490,12 @@ export async function PathwayLessonDetailPageBody({
             resolution={breadcrumbResolution}
             pathname={pathname}
             navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
+          />
+          <MarketingPathwayLessonHubStudyChrome
+            pathway={pathway}
+            marketingLocale={lessonContentLocale}
+            viewerSignedIn={Boolean(userId)}
+            surfaceChips={lessonHubSurfaceChips}
           />
           <p className="nn-marketing-caption -mt-2 mb-3 text-[var(--theme-muted-text)]">
             <Link
@@ -1032,7 +1064,8 @@ export async function PathwayLessonDetailPageBody({
             <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} />
           ) : null}
         </div>
-      </div>
+        <StudyBottomNav compact relatedLinks={lessonHubSurfaceChips} />
+      </LessonsPageShell>
     </PathwayLessonDetailMarketingI18nLayer>
   );
 }
