@@ -135,6 +135,26 @@ function runNextBuildWithMemorySampling(nextArgs = ["build"]) {
   });
 }
 
+function runNextBuild(nextArgs = ["build"]) {
+  if (envTruthy("NN_SAMPLE_NEXT_BUILD_MEMORY")) {
+    return runNextBuildWithMemorySampling(nextArgs);
+  }
+
+  const child = spawnSync(process.execPath, [nextBin, ...nextArgs], {
+    cwd: packageRoot,
+    stdio: "inherit",
+    env: process.env,
+  });
+
+  return Promise.resolve({
+    status: child.status,
+    signal: child.signal,
+    error: child.error ?? null,
+    peakRssMb: 0,
+    peakProcessCount: 0,
+  });
+}
+
 function ensureBuildCacheVersionEnv() {
   if (String(process.env.BUILD_CACHE_VERSION ?? "").trim()) return;
 
@@ -260,8 +280,14 @@ function capV8HeapForPhysicalRam() {
   );
 }
 
-ensureNodeHeapOption();
-capV8HeapForPhysicalRam();
+if (envTruthy("NN_APPLY_NEXT_BUILD_HEAP_LIMIT")) {
+  ensureNodeHeapOption();
+  capV8HeapForPhysicalRam();
+} else {
+  const rawNodeOptions = String(process.env.NODE_OPTIONS ?? "");
+  process.env.NODE_OPTIONS = rawNodeOptions.replace(/--max-old-space-size=\d+/, "").replace(/\s+/g, " ").trim();
+  console.log("[next-prod-build] node_heap_limit=none");
+}
 
 function envTruthy(name) {
   return /^(1|true|yes)$/i.test(String(process.env[name] ?? "").trim());
@@ -342,14 +368,18 @@ console.error(
     bundler: useWebpackBuild ? "webpack" : "turbopack",
   })}`,
 );
-const nextBuildArgs = ["build", ...(useWebpackBuild ? ["--webpack"] : [])];
+const nextBuildArgs = [
+  "build",
+  ...(useWebpackBuild ? ["--webpack"] : []),
+  ...(envExplicitlyFalse("NN_NEXT_BUILD_DEBUG") ? [] : ["--debug"]),
+];
 console.log(
   `[next-prod-build] next_cli_invocation_start pid=${process.pid} bundler=${useWebpackBuild ? "webpack" : "turbopack"} args=${JSON.stringify(nextBuildArgs)}`,
 );
 const tNext = Date.now();
 let r;
 try {
-  r = await runNextBuildWithMemorySampling(nextBuildArgs);
+  r = await runNextBuild(nextBuildArgs);
 } finally {
   if (buildLockHeld) {
     releaseExclusiveNextBuildLock(packageRoot);
