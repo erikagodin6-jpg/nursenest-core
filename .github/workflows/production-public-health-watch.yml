@@ -35,7 +35,7 @@ jobs:
             host="${host%%/*}"
             echo "GET host=${host} path=${path}"
             local code=""
-            if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${base}${path}")"; then
+            if ! code="$(curl -sSL --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${base}${path}")"; then
               echo "::error::curl transport error (DNS/TLS/timeout) for host=${host} path=${path}"
               exit 1
             fi
@@ -71,7 +71,7 @@ jobs:
             host="${host%%/*}"
             echo "GET host=${host} path=${path}"
             local code=""
-            if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${b}${path}")"; then
+            if ! code="$(curl -sSL --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${b}${path}")"; then
               echo "::error::curl transport error for host=${host} path=${path}"
               exit 1
             fi

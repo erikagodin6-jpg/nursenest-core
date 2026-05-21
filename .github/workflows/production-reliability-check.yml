@@ -37,6 +37,16 @@ jobs:
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
+          normalize_base_url() {
+            local raw="$1"
+            raw="$(printf '%s' "$raw" | tr -d '[:space:]')"
+            raw="${raw%/}"
+            if [ "${raw#https://www.nursenest.ca}" != "$raw" ]; then
+              raw="https://nursenest.ca${raw#https://www.nursenest.ca}"
+            fi
+            printf '%s' "$raw"
+          }
+          BASE_URL="$(normalize_base_url "$BASE_URL")"
           BASE_URL="${BASE_URL%/}"
           echo "Probing ${BASE_URL}/api/internal/reliability/check"
           HTTP_CODE="$(curl -sS -o /tmp/nn-reliability.json -w "%{http_code}" \
@@ -67,6 +77,16 @@ jobs:
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
+          normalize_base_url() {
+            local raw="$1"
+            raw="$(printf '%s' "$raw" | tr -d '[:space:]')"
+            raw="${raw%/}"
+            if [ "${raw#https://www.nursenest.ca}" != "$raw" ]; then
+              raw="https://nursenest.ca${raw#https://www.nursenest.ca}"
+            fi
+            printf '%s' "$raw"
+          }
+          BASE_URL="$(normalize_base_url "$BASE_URL")"
           BASE_URL="${BASE_URL%/}"
           echo "Invoking bounded self-heal on ${BASE_URL}"
           curl -sS -f -X POST "${BASE_URL}/api/internal/reliability/self-heal" \
@@ -85,6 +105,16 @@ jobs:
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
+          normalize_base_url() {
+            local raw="$1"
+            raw="$(printf '%s' "$raw" | tr -d '[:space:]')"
+            raw="${raw%/}"
+            if [ "${raw#https://www.nursenest.ca}" != "$raw" ]; then
+              raw="https://nursenest.ca${raw#https://www.nursenest.ca}"
+            fi
+            printf '%s' "$raw"
+          }
+          BASE_URL="$(normalize_base_url "$BASE_URL")"
           BASE_URL="${BASE_URL%/}"
           HTTP_CODE="$(curl -sS -o /tmp/nn-reliability-2.json -w "%{http_code}" \
             -H "x-nursenest-reliability-secret: ${SECRET}" \
