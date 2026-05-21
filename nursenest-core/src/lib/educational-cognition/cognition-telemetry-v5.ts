@@ -95,13 +95,16 @@ export function emitCognitionTelemetryV5(
   const telemetrySurface: TelemetrySurface = sourceSurface.startsWith("/")
     ? partitionTelemetrySurface(sourceSurface)
     : "learner_authenticated";
+  const propsWithoutNull = Object.fromEntries(
+    Object.entries(props).filter(([, value]) => value !== null),
+  ) as Record<string, string | number | boolean | undefined>;
   const lineage = buildCognitionTelemetryLineage({
     surface: telemetrySurface,
     event,
     pathwayId: ctx.pathwayId,
     version: buildCognitionVersionMetadata(),
     extra: {
-      ...normalizeCognitionTelemetryProps(ctx, props as Record<string, string | number | boolean | undefined>),
+      ...normalizeCognitionTelemetryProps(ctx, propsWithoutNull),
       ...v5,
       ...versionMeta,
       ...explainAudit,

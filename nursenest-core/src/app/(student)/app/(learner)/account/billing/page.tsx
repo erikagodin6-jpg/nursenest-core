@@ -29,7 +29,6 @@ export default async function AccountBillingPage() {
   const { t, locale } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.billing");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.billing"));
   const localeTag = locale.replace(/_/g, "-");
 
   if (!userId || !isDatabaseUrlConfigured()) {

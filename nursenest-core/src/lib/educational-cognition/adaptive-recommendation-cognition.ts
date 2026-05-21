@@ -29,6 +29,19 @@ import {
   serializeExplainabilityForPublic,
 } from "@/lib/educational-cognition/cognition-explainability";
 
+const INSUFFICIENT_DATA_READINESS: ReadinessResult = {
+  score: null,
+  band: "insufficient_data",
+  confidence: "low",
+  trend: null,
+  summary: "Readiness needs more graded practice before NurseNest can infer a stable signal.",
+  factors: [],
+  whatToImprove: [],
+  nextActions: [],
+  holdingBack: [],
+  topWeakAreas: [],
+};
+
 export type GovernedAdaptiveRecommendations = AdaptiveLearnerRecommendations & {
   cognition: {
     pathwayId: string;
@@ -177,7 +190,11 @@ function applyCognitionOverlay(
   };
 }
 
-export type BuildGovernedAdaptiveRecommendationsArgs = Parameters<typeof buildAdaptiveRecommendations>[0] & {
+export type BuildGovernedAdaptiveRecommendationsArgs = Omit<
+  Parameters<typeof buildAdaptiveRecommendations>[0],
+  "readiness"
+> & {
+  readiness?: ReadinessResult | null;
   userId?: string | null;
   entitlement?: AccessScope | null;
   topicTrends?: TopicTrendRow[];
@@ -190,6 +207,7 @@ export async function buildGovernedAdaptiveRecommendations(
   args: BuildGovernedAdaptiveRecommendationsArgs,
 ): Promise<GovernedAdaptiveRecommendations> {
   const pathwayId = args.preferredPathwayId?.trim() || null;
+  const readiness = args.readiness ?? INSUFFICIENT_DATA_READINESS;
 
   if (args.userId && args.entitlement?.hasAccess && pathwayId) {
     await warmDurableLearnerCognitionCache(args.userId);
@@ -197,11 +215,11 @@ export async function buildGovernedAdaptiveRecommendations(
     const substrate = resolveLearnerCognitionSubstrate({
       pathwayId,
       userId: args.userId,
-      readinessResult: args.readiness,
+      readinessResult: readiness,
       topicTrends: args.topicTrends ?? [],
       weakTopics: args.weakTopics,
       persistLearnerState: true,
-      sourceSurface: "adaptive_recommendations",
+      sourceSurface: "recommendation_engine",
     });
 
     const cognitionWeakTopics = weakTopicRowsFromCognition(substrate.ctx);
@@ -209,12 +227,13 @@ export async function buildGovernedAdaptiveRecommendations(
     const base = buildAdaptiveRecommendations({
       ...args,
       preferredPathwayId: pathwayId,
+      readiness,
       weakTopics: cognitionWeakTopics,
       recommendedQuizTopic: cognitionWeakTopics[0]?.topic ?? args.recommendedQuizTopic,
     });
 
     const governed = applyCognitionOverlay(base, substrate);
-    emitCognitionTelemetryV5(substrate.ctx, "study_plan_generated", "adaptive_recommendations", {
+    emitCognitionTelemetryV5(substrate.ctx, "study_plan_generated", "recommendation_engine", {
       primary_kind: governed.primaryNext.kind,
       secondary_count: governed.secondary.length,
       graph_steps: governed.cognition.graphNextSteps.length,
@@ -222,7 +241,7 @@ export async function buildGovernedAdaptiveRecommendations(
     return governed;
   }
 
-  const base = buildAdaptiveRecommendations(args);
+  const base = buildAdaptiveRecommendations({ ...args, readiness });
   const model = getTestingModelForPathwayId(pathwayId);
   return {
     ...base,

@@ -51,7 +51,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function StudyCoachPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).study-coach");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Adaptive Study Coach");
 
   // ── Auth / DB guard ────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {
