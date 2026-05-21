@@ -96,7 +96,7 @@ export function LearnerCoachingDashboardPanel() {
       ) : null}
       <div className="grid gap-3 sm:grid-cols-2">
         {orch.cards.map((card) => {
-          const graphStep = actionByCardId.get(card.id);
+          const graphStep = actionByCardId.get(card.id as `graph-${string}`);
           const cta =
             card.href && graphStep ? (
               <GovernedNextActionLink

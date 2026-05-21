@@ -23,10 +23,13 @@ export type GlossaryTermSemanticContext = {
   termSlug: string;
   termLabel: string;
   topicSlug: string;
-  pathway: ExamPathwayDefinition;
+  pathway?: ExamPathwayDefinition;
 };
 
 export function resolveGlossaryTermBreadcrumbs(ctx: GlossaryTermSemanticContext): BreadcrumbResolution {
+  if (!ctx.pathway) {
+    return glossaryTermBreadcrumbs("Nursing glossary", GLOSSARY_HUB, ctx.termLabel, `${GLOSSARY_HUB}/${ctx.termSlug}`);
+  }
   const examPath = buildExamPathwayPath(ctx.pathway);
   const examLabel = pathwayRegionAwareExamName(ctx.pathway);
   return glossaryTermBreadcrumbs(examLabel, examPath, ctx.termLabel, `${GLOSSARY_HUB}/${ctx.termSlug}`);

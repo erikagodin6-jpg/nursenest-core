@@ -5,6 +5,7 @@ import {
   BLOSSOM_LEAF_64_WEBP,
   BLOSSOM_LEAF_DEFAULT_SRC,
 } from "@/lib/branding/blossom-leaf-assets";
+import type { ReactEventHandler } from "react";
 
 type OptimizedBlossomLeafImageProps = {
   alt: string;
@@ -18,8 +19,8 @@ type OptimizedBlossomLeafImageProps = {
   fetchPriority?: "high" | "low" | "auto";
   draggable?: boolean;
   "data-nn-header-logo"?: boolean;
-  onError?: () => void;
-  onLoad?: () => void;
+  onError?: ReactEventHandler<HTMLImageElement>;
+  onLoad?: ReactEventHandler<HTMLImageElement>;
 };
 
 /**
