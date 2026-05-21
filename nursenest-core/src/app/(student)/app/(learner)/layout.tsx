@@ -29,9 +29,9 @@ import { LearnerShellLanguageControl } from "@/components/student/learner-shell-
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
-const LearnerAppSectionAnalytics = dynamic(
+const LearnerAppSectionAnalytics = nextDynamic(
   () =>
     import("@/components/observability/learner-app-section-analytics").then((m) => ({
       default: m.LearnerAppSectionAnalytics,
