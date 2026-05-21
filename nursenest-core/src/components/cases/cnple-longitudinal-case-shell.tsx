@@ -2,12 +2,6 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
-import {
-  CNPLE_LOFT_PATHWAY_ID,
-  governLoftCaseCopy,
-  loftSafeVitalTrendDisplay,
-  trackSurfaceOrchestrationTelemetry,
-} from "@/lib/measurements/measurement-surface-convergence";
 import type {
   CaseStepPayload,
   CaseStepAdvanceResult,
@@ -27,6 +21,8 @@ import {
 } from "@/components/clinical/clinical-case-ui";
 import type { MedicationEntry, LabResult, TimelineEvent, VitalSign, AdherenceMedEntry } from "@/components/clinical/clinical-case-ui";
 import { mergeAdherenceWithMedications } from "@/lib/cases/medication-adherence";
+
+const CNPLE_LOFT_PATHWAY_ID = "ca-np-cnple";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CNPLE Longitudinal Case Shell
@@ -1017,6 +1013,28 @@ function TrendArrow({ trend }: { trend: "improving" | "worsening" | "stable" }) 
     <span className="text-[11px] font-bold" style={{ color: "var(--semantic-danger)" }} aria-label="worsening">↓</span>
   );
   return <span className="text-[11px]" style={{ color: "var(--semantic-text-muted)" }} aria-label="stable">→</span>;
+}
+
+function governLoftCaseCopy(text: string, _measurementSystem: string, _pathwayId: string): string {
+  return text;
+}
+
+function loftSafeVitalTrendDisplay(
+  trend: "improving" | "worsening" | "stable",
+  simulationMode: boolean,
+): string | null {
+  if (!simulationMode) return trend;
+  if (trend === "stable") return "stable";
+  return "Serial values changed — reassess before acting";
+}
+
+function trackSurfaceOrchestrationTelemetry(_args: {
+  event: "interpretation_viewed";
+  sourceSurface: "loft";
+  pathwayId: string;
+  learnerStateReason: string;
+}): void {
+  // Keep server analytics orchestration out of this client shell.
 }
 
 type MedChangeInput = CaseStepPayload["step"]["medicationChanges"][number];
