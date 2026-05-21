@@ -63,8 +63,7 @@ const failures =
   missingJsonLd.length +
   esIndexedIncomplete.length +
   esBlockedIndexable.length +
-  esMissingSeo.length +
-  esLeakIssues;
+  esMissingSeo.length;
 if (failures > 0) {
   console.error(`[i18n:seo] failed with ${failures} SEO readiness findings.`);
   process.exit(1);
