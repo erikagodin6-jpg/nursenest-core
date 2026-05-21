@@ -56,13 +56,16 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
   void command;
   const commandString = argv.join(" ");
   const isGenerate = commandString.includes("generate");
+  if (!isGenerate) return false;
   const isBuild =
     env.NN_APP_PLATFORM_BUILD === "true" ||
     env.NN_LOW_MEMORY_BUILD === "1" ||
     env.GITHUB_ACTIONS === "true" ||
     env.CI === "true";
-  const isBuildGenerate = isBuild && isGenerate;
-  return isBuildGenerate;
+  // prisma generate only reads schema.prisma — never connects to DB.
+  // Allow it to run safely whenever DATABASE_URL is absent, regardless of context.
+  const noDatabaseUrl = !env.DATABASE_URL?.trim();
+  return isBuild || noDatabaseUrl;
 }
 
 // prisma generate reads schema.prisma to emit TypeScript types — it never connects to the DB.

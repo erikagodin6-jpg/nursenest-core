@@ -1,7 +1,6 @@
 "use client";
 
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
-import { buildRemediationNavigationLadder } from "@/lib/breadcrumbs/remediation-navigation";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 
 /**
@@ -24,14 +23,6 @@ export function PostExamRemediationBreadcrumb({
   learnerState?: RnLearnerStateSnapshot | null;
   persistentWeakTopics?: readonly string[];
 }) {
-  const ladder = buildRemediationNavigationLadder({
-    topic: topicSlug,
-    pathwayId,
-    learnerState: learnerState ?? null,
-    persistentWeakTopics,
-    sourceSurface: "post_exam_coaching",
-  });
-
   return (
     <LearnerBreadcrumbTrail
       kind="remediation-ladder"
@@ -42,7 +33,6 @@ export function PostExamRemediationBreadcrumb({
       persistentWeakTopics={persistentWeakTopics}
       pathname="/app/practice-tests"
       topicSlug={topicSlug}
-      competencyId={ladder.competencyId ?? undefined}
     />
   );
 }
