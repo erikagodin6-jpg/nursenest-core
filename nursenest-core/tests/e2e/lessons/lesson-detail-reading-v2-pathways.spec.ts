@@ -46,7 +46,10 @@ async function expectReadingV2Layout(page: Page) {
       gridTemplateColumns: style.gridTemplateColumns,
     };
   });
-  expect(layout.display).toBe("grid");
+  expect(
+    layout.display,
+    "reading viewport must use CSS grid at desktop — missing lesson-readability-hotfix on marketing bundle",
+  ).toBe("grid");
   expect(layout.gridTemplateColumns).not.toBe("none");
   expect(layout.gridTemplateColumns.split(" ").length).toBeGreaterThanOrEqual(2);
 

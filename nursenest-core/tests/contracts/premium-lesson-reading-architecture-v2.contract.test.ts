@@ -46,6 +46,7 @@ const MARKETING_CSS_PATH = path.resolve(
   ROOT,
   "src/app/styles/marketing/lesson-readability-hotfix.css",
 );
+const PREMIUM_REDESIGN_PATH = path.resolve(ROOT, "src/app/premium-redesign-2026.css");
 const LEARNER_CSS_PATH = path.resolve(
   ROOT,
   "src/app/styles/learner/learner-global.css",
@@ -82,6 +83,25 @@ describe("premium lesson reading architecture v2", () => {
   const retentionHelper = read(RETENTION_HELPER_PATH);
   const marketingCss = read(MARKETING_CSS_PATH);
   const learnerCss = read(LEARNER_CSS_PATH);
+  const premiumRedesign = read(PREMIUM_REDESIGN_PATH);
+
+  it("loads lesson readability hotfix on the marketing stylesheet chain", () => {
+    const contentSurfacesIndex = premiumRedesign.indexOf(
+      '@import "./styles/marketing/content-surfaces.css";',
+    );
+    const readabilityIndex = premiumRedesign.indexOf(
+      '@import "./styles/marketing/lesson-readability-hotfix.css";',
+    );
+    assert.ok(contentSurfacesIndex >= 0, "premium-redesign missing content-surfaces import");
+    assert.ok(
+      readabilityIndex >= 0,
+      "premium-redesign missing lesson-readability-hotfix import — marketing lessons render v2 DOM without layout CSS",
+    );
+    assert.ok(
+      readabilityIndex > contentSurfacesIndex,
+      "lesson-readability-hotfix must load after content-surfaces in premium-redesign",
+    );
+  });
 
   it("ships on both live lesson detail surfaces instead of hiding behind unused code", () => {
     for (const [label, source] of [
@@ -205,7 +225,7 @@ describe("premium lesson reading architecture v2", () => {
       assert.match(css, /\.nn-lesson-reading-viewport/, `${label} reading viewport grid missing`);
       assert.match(
         css,
-        /grid-template-columns:\s*minmax\(10\.5rem,\s*15rem\)\s*minmax\(0,\s*1fr\)\s*minmax\(10\.5rem,\s*13\.75rem\)/,
+        /grid-template-columns:\s*minmax\(0,\s*15rem\)\s*minmax\(0,\s*1fr\)\s*minmax\(0,\s*13\.75rem\)/,
         `${label} constrained side-rail grid missing`,
       );
       assert.match(css, /max-width:\s*15rem/, `${label} left rail width cap missing`);

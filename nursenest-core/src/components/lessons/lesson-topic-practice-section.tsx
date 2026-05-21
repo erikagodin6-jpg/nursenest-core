@@ -4,7 +4,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { RelatedExamQuestionStem } from "@/lib/lessons/lesson-question-cross-links";
 import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
 import type { LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
-import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
+import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress-keys";
 import { LessonTopicLinkedQuiz } from "@/components/lessons/lesson-topic-linked-quiz";
 import {
   buildAppQuestionBankTopicDrillHref,

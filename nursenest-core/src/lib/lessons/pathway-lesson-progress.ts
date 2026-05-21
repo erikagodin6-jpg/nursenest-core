@@ -2,15 +2,14 @@ import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
+import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress-keys";
+
+export { syntheticPathwayLessonId };
 
 /** Never issue more than this many `lessonId IN (...)` keys per hub request (matches hub page cap). */
 export const PATHWAY_HUB_PROGRESS_SLUG_CAP = 64;
 
 export type PathwayLessonProgressStatus = "not_started" | "in_progress" | "completed";
-
-export function syntheticPathwayLessonId(pathwayId: string, slug: string): string {
-  return `pathway:${pathwayId}:${slug}`;
-}
 
 const PROGRESS_INVENTORY_CHUNK = 400;
 
