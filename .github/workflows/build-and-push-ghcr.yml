@@ -96,6 +96,7 @@ jobs:
 
           APP_ID="d6a4b825-4d70-4dd4-8d71-04b354d36f43"
           NEW_TAG="sha-${{ github.sha }}"
+          export NEW_TAG
 
           # Fetch current live spec from DO (preserves encrypted secret values).
           # Patch only the image tag for the web service, then PUT the modified spec back.
