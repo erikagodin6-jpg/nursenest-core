@@ -75,9 +75,6 @@ export function normalizeSnapshotShape(
     reasoningPatterns: Array.isArray(snapshot.reasoningPatterns)
       ? snapshot.reasoningPatterns
       : base.reasoningPatterns,
-    focusAreaSlugs: Array.isArray(snapshot.focusAreaSlugs)
-      ? snapshot.focusAreaSlugs
-      : base.focusAreaSlugs,
   };
 }
 

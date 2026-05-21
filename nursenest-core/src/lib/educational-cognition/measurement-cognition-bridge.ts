@@ -80,7 +80,7 @@ export function buildMeasurementCognitionSlice(
           category: authored.category,
           kind,
           valueSi: authored.valueSi,
-          authoredSystem: "SI",
+          authoredSystem: "si",
         },
         pathwayId: learnerState.pathwayId,
         trendValuesSi: authored.trendValuesSi,

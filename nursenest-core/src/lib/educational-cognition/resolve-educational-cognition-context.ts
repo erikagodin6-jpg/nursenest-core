@@ -15,6 +15,7 @@ import {
 import { buildEducationalOntologySlice } from "@/lib/educational-cognition/educational-ontology-registry";
 import { buildMeasurementCognitionSlice } from "@/lib/educational-cognition/measurement-cognition-bridge";
 import { governMeasurementCognitionInput } from "@/lib/educational-cognition/measurement-source-governance";
+import { resolveMeasurementCognitionInput } from "@/lib/educational-cognition/resolve-measurement-cognition-input";
 import { recordCognitionContextResolved } from "@/lib/educational-cognition/cognition-telemetry-v5";
 import { hydratePriorLearnerState, saveDurableLearnerCognition } from "@/lib/educational-cognition/learner-cognition-persistence";
 import { buildAiTutorContextFromCognition } from "@/lib/educational-cognition/ai-tutor-cognition-envelope";
@@ -119,13 +120,13 @@ export function resolveEducationalCognitionFromSession(
     topicSlug: weakTopic.toLowerCase().replace(/\s+/g, "-"),
     topicLabel: weakTopic,
     pathwayId,
-    sourceSurface: "post_session_cognition",
+    sourceSurface: "post_exam_coaching",
     coachingModel: base.coachingModel,
     learnerState: coachingReport.learnerState,
   });
   const aiTutorEnvelope = buildAiTutorContextFromCognition(
     { ...base, learnerState: coachingReport.learnerState, coachingReport },
-    traversal.steps,
+    [...traversal.steps],
   );
   const postMeasurementInput = resolveMeasurementCognitionInput({
     learnerState: coachingReport.learnerState,

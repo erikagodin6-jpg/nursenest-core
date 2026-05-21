@@ -11,9 +11,7 @@ import {
   countExposureForKey,
   wasRecentlyExposed,
 } from "@/lib/learner/rn-coaching-intelligence/remediation-exposure";
-import type { CoachingModel, CoachingRecommendation } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
-
-export type CoachingSessionKind = "cat" | "practice_exam" | "loft_simulation" | "readiness_assessment" | "timed_assessment";
+import type { CoachingModel, CoachingRecommendation, CoachingSessionKind } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 
 function reassessmentLabel(coachingModel: CoachingModel): string {
   return coachingModel === "loft_readiness" ? "LOFT reassessment" : "Adaptive reassessment";

@@ -1,5 +1,7 @@
 import type { DurableLearnerCognitionEnvelope } from "@/lib/educational-cognition/cognition-snapshot-types";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
+import type { RnCompetencyId } from "@/lib/educational-graph/rn-competency-ontology";
+import type { ClinicalJudgmentPattern } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 import {
   CURRENT_ONTOLOGY_REVISION,
   lookupOntologyMigration,
@@ -24,16 +26,12 @@ function applyAliasesToSnapshot(
     const next = aliases[c.competencyId];
     if (!next) return c;
     ops.push(`alias_competency:${c.competencyId}->${next}`);
-    return { ...c, competencyId: next };
+    return { ...c, competencyId: next as RnCompetencyId };
   });
-  const focusAreaSlugs = (snapshot.focusAreaSlugs ?? []).map((slug) => {
-    const next = focusRenames[slug] ?? aliases[slug];
-    if (!next) return slug;
-    ops.push(`rename_focus:${slug}->${next}`);
-    return next;
-  });
-  const reasoningPatterns = (snapshot.reasoningPatterns ?? []).map((p) => aliases[p] ?? p);
-  return { ...snapshot, competencyStates, focusAreaSlugs, reasoningPatterns };
+  const reasoningPatterns = (snapshot.reasoningPatterns ?? []).map((p) =>
+    (focusRenames[p] ?? aliases[p] ?? p) as ClinicalJudgmentPattern,
+  );
+  return { ...snapshot, competencyStates, reasoningPatterns };
 }
 
 function reconcileGraphContinuity(
@@ -69,7 +67,7 @@ export function applyOntologyLifecycleToEnvelope(
   const operations: string[] = [];
   const fromRevision = envelope.ontologyRevision ?? "unknown";
   const migrationSteps = resolveOntologyMigrationPath(fromRevision, CURRENT_ONTOLOGY_REVISION);
-  let next = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
+  let next: DurableLearnerCognitionEnvelope = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
 
   for (const stepId of migrationSteps) {
     if (stepId === "current") break;
