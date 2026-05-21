@@ -27,7 +27,7 @@ function confidenceFromReliability(tier: CognitionReliabilityTier): CognitionCon
 
 export function buildCognitionExplainability(args: {
   ctx: EducationalCognitionContext;
-  graphSteps?: EduGraphStep[];
+  graphSteps?: readonly EduGraphStep[];
   reliabilityTier?: CognitionReliabilityTier;
   primaryReason?: string;
 }): CognitionExplainability {
