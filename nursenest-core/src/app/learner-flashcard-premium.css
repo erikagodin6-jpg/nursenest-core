@@ -822,8 +822,315 @@ html[data-theme="midnight-indigo"] .nn-flashcard-study-premium {
   }
 }
 
+/* ── Hub setup: blossom / mint selection + session chips ───────────────────── */
+.nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"] {
+  border-color: #ffa9cc;
+  background: #ffc7de;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #ffa9cc 55%, transparent),
+    0 10px 28px -18px color-mix(in srgb, #ff8fbf 28%, transparent);
+  transform: translateY(-1px);
+}
+
+html[data-theme="blossom"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"],
+html[data-theme="garden"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"] {
+  border-color: #ffa9cc;
+  background: #ffc7de;
+}
+
+html[data-theme="ocean"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"],
+html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"] {
+  border-color: #b7efd1;
+  background: #d9f8e7;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #b7efd1 55%, transparent),
+    0 10px 28px -18px color-mix(in srgb, #7fd9a8 22%, transparent);
+}
+
+.nn-flashcards-hub-premium .nn-flashcards-all-systems-btn[data-active="true"],
+.nn-flashcards-hub-premium .nn-flashcards-session-chip[data-active="true"],
+.nn-flashcards-hub-premium .nn-flashcards-study-chip[data-active="true"] {
+  border-color: #ffa9cc;
+  background: #ffc7de;
+  color: var(--semantic-text-primary);
+  box-shadow: 0 0 0 1px color-mix(in srgb, #ffa9cc 40%, transparent);
+  transform: translateY(-1px);
+}
+
+html[data-theme="ocean"] .nn-flashcards-hub-premium .nn-flashcards-all-systems-btn[data-active="true"],
+html[data-theme="ocean"] .nn-flashcards-hub-premium .nn-flashcards-session-chip[data-active="true"],
+html[data-theme="ocean"] .nn-flashcards-hub-premium .nn-flashcards-study-chip[data-active="true"],
+html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-flashcards-all-systems-btn[data-active="true"],
+html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-flashcards-session-chip[data-active="true"],
+html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-flashcards-study-chip[data-active="true"] {
+  border-color: #b7efd1;
+  background: #d9f8e7;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #b7efd1 40%, transparent);
+}
+
+html[data-theme="mint-blossom"] .nn-flashcards-hub-premium .nn-flashcards-hub-setup-panel {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 55%, #b7efd1 22%);
+  background:
+    radial-gradient(480px 160px at 0% 0%, color-mix(in srgb, #d9f8e7 42%, transparent), transparent 68%),
+    radial-gradient(420px 140px at 100% 0%, color-mix(in srgb, #d6f0ff 28%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-surface) 96%, #fffefe);
+}
+
+.nn-flashcards-hub-premium .nn-flashcards-all-systems-btn,
+.nn-flashcards-hub-premium .nn-flashcards-session-chip,
+.nn-flashcards-hub-premium .nn-flashcards-study-chip {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-flashcards-hub-premium .nn-flashcards-all-systems-btn:focus-visible,
+.nn-flashcards-hub-premium .nn-flashcards-session-chip:focus-visible,
+.nn-flashcards-hub-premium .nn-flashcards-study-chip:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+}
+
+.nn-flashcards-hub-setup-panel {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, #ffc7de 22%);
+  background:
+    radial-gradient(
+      480px 160px at 0% 0%,
+      color-mix(in srgb, #d9f8e7 35%, transparent),
+      transparent 68%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 96%, #fff8fc);
+  padding: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+.nn-flashcards-hub-premium .nn-flashcards-quick-review-cta {
+  border-color: color-mix(in srgb, #ffa9cc 45%, var(--semantic-border-soft));
+  background: color-mix(in srgb, #ffc7de 72%, var(--semantic-surface));
+}
+
+.nn-flashcards-hub-premium .nn-flashcards-quick-review-cta:hover {
+  box-shadow: 0 12px 32px -22px color-mix(in srgb, #ff8fbf 35%, transparent);
+  transform: translateY(-1px);
+}
+
+.nn-flashcards-custom-limit-input {
+  min-height: 2.75rem;
+  width: 5.5rem;
+  border-radius: 9999px;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.35rem 0.85rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+.nn-flashcards-custom-limit-input:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--semantic-brand) 40%, var(--semantic-border-soft));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-brand) 18%, transparent);
+}
+
+.nn-flashcards-session-segment {
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-flashcards-session-segment[data-active="true"] {
+  border-color: #ffa9cc;
+  background: #ffc7de;
+  color: var(--semantic-text-primary);
+  box-shadow: 0 8px 24px -16px color-mix(in srgb, #ff8fbf 35%, transparent);
+  transform: translateY(-1px);
+}
+
+html[data-theme="ocean"] .nn-flashcards-session-segment[data-active="true"] {
+  border-color: #b7efd1;
+  background: #d9f8e7;
+}
+
+.nn-flashcards-session-segment--full[data-active="true"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 45%, #ffa9cc);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #ffc7de 70%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-panel-lavender) 40%, var(--semantic-surface))
+  );
+}
+
+.nn-flashcards-session-segment:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+}
+
+.nn-flashcards-collapsed-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.nn-flashcards-collapsed-panel > summary::after {
+  content: "▸";
+  float: right;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.nn-flashcards-collapsed-panel[open] > summary::after {
+  content: "▾";
+}
+
+.nn-flashcards-hub-premium .nn-flashcards-sticky-start {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  .nn-flashcards-hub-premium .nn-flashcards-sticky-start {
+    display: none !important;
+  }
+}
+
+/* Hub landing — study-first workspace + bottom analytics */
+.nn-flashcards-hub-workspace {
+  position: relative;
+}
+
+.nn-flashcards-readiness-strip--editorial {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+@media (min-width: 640px) {
+  .nn-flashcards-readiness-strip--editorial {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
+
+.nn-flashcards-resume-spotlight {
+  animation: nn-flashcards-resume-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes nn-flashcards-resume-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nn-flashcards-hero-action-row .nn-flashcards-deck-match-inline {
+  opacity: 0.92;
+}
+
+.nn-flashcards-hub-setup-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.nn-flashcards-hub-setup-panel > summary::after {
+  content: "▸";
+  float: right;
+  font-size: 0.75rem;
+  opacity: 0.45;
+  margin-top: 0.15rem;
+}
+
+.nn-flashcards-hub-setup-panel[open] > summary::after {
+  content: "▾";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-flashcards-resume-spotlight {
+    animation: none;
+  }
+}
+
+.nn-flashcards-hub-srs-row {
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+}
+
+.nn-flashcards-hub-analytics .nn-flashcards-analytics-heatmap span {
+  display: block;
+  aspect-ratio: 1;
+  min-height: 0.85rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 88%, var(--semantic-surface));
+}
+
+.nn-flashcards-hub-analytics .nn-flashcards-analytics-heatmap span[data-intensity="1"] {
+  background: color-mix(in srgb, var(--semantic-chart-2) 22%, var(--semantic-surface));
+}
+
+.nn-flashcards-hub-analytics .nn-flashcards-analytics-heatmap span[data-intensity="2"] {
+  background: color-mix(in srgb, var(--semantic-chart-3) 28%, var(--semantic-surface));
+}
+
+.nn-flashcards-hub-analytics .nn-flashcards-analytics-heatmap span[data-intensity="3"] {
+  background: color-mix(in srgb, var(--semantic-success) 32%, var(--semantic-surface));
+}
+
+.nn-flashcards-hub-analytics .nn-flashcards-analytics-heatmap span[data-intensity="4"] {
+  background: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-surface));
+}
+
+/* ── Practice exams hub (shared exam-study family) ─────────────────────────── */
+.nn-practice-tests-hub-premium[data-nn-learner-study-page-shell] {
+  scroll-padding-top: 0.75rem;
+}
+
+.nn-practice-tests-hub-premium .nn-premium-practice-hub-hero,
+.nn-practice-tests-hub-premium .nn-premium-practice-hub-builder {
+  color: var(--semantic-text-primary);
+}
+
+.nn-practice-tests-hub-premium .nn-lesson-system-card[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-brand) 28%, transparent),
+    var(--semantic-shadow-soft);
+  transform: translateY(-1px);
+}
+
+html[data-theme="ocean"] .nn-practice-tests-hub-premium .nn-lesson-system-card[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface));
+}
+
+.nn-practice-tests-hub-premium .nn-chip[data-selected="true"],
+.nn-practice-tests-hub-premium .nn-tab-pill[data-active="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  font-weight: 700;
+}
+
+.nn-practice-tests-hub-premium .nn-premium-practice-hub-builder {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-panel-cool));
+}
+
 @media (max-width: 639px) {
   .nn-flashcards-hub-premium {
+    padding-inline: 0;
+  }
+
+  .nn-practice-tests-hub-premium {
     padding-inline: 0;
   }
 

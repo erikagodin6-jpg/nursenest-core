@@ -5,7 +5,7 @@ import { buildStudyLoopCatClickProps } from "@/lib/observability/study-loop-cat-
 describe("study-loop-cat-analytics", () => {
   it("classifies pathway-scoped app starts", () => {
     const props = buildStudyLoopCatClickProps({
-      href: "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn",
+      href: "/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1",
       sourceSurface: "study_quick_links",
     });
 

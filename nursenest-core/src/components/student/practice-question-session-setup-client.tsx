@@ -8,8 +8,18 @@ import {
   buildPracticeAdaptiveCreatePayload,
   type PracticeAdaptiveSelectionBasis,
 } from "@/components/student/pathway-cat-start-payload";
-import { appPathwayCatFullSetupHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { appPathwayCatFullSetupHref, appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import {
+  ADAPTIVE_PRACTICE_DEFAULT_LENGTH,
+  ADAPTIVE_PRACTICE_FIXED_LENGTHS,
+  CONTINUOUS_PRACTICE_LABEL,
+  CONTINUOUS_PRACTICE_SEGMENT_LABEL,
+  estimateAdaptivePracticeDuration,
+  type AdaptivePracticeSessionLength,
+} from "@/lib/practice-tests/adaptive-practice-session-length";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -76,8 +86,36 @@ const POOL_EXHAUSTED_CODES = new Set([
 /** Internal API error codes that must never be shown verbatim in the learner UI. */
 const INTERNAL_ERROR_CODES = new Set(["INVALID_SURFACE", "session_create_failed", "session_id_missing"]);
 
-const QUESTION_COUNTS = [10, 20, 30, 50] as const;
-const DEFAULT_QUESTION_COUNT = 30;
+type PracticeSessionType = "adaptive_practice" | "full_cat" | "custom_cat";
+
+const SESSION_TYPE_OPTIONS: ReadonlyArray<{
+  id: PracticeSessionType;
+  label: string;
+  summary: string;
+  detail: string;
+}> = [
+  {
+    id: "adaptive_practice",
+    label: "Adaptive Practice",
+    summary: "Short to long runs · rationale after each question · untimed",
+    detail:
+      "Difficulty adjusts as you answer. Pick a question count or unlimited drilling; end the session whenever you are done.",
+  },
+  {
+    id: "full_cat",
+    label: "Full CAT Exam",
+    summary: "Timed · exam-style · rationales after completion",
+    detail:
+      "NCLEX-style adaptive length (typically 85–150 items). Stopping rules follow your pathway configuration — not the short practice caps.",
+  },
+  {
+    id: "custom_cat",
+    label: "Custom CAT Setup",
+    summary: "Configure timing, feedback, and presentation before launch",
+    detail:
+      "Simulates adaptive testing with your chosen rules. This may not match official NCLEX stopping behavior or readiness scoring on full CAT runs.",
+  },
+];
 
 const cardBase =
   "flex min-h-[4.25rem] flex-col justify-center rounded-[1.35rem] border px-4 py-3.5 text-left text-sm font-semibold transition sm:min-h-[4.5rem] sm:px-4 sm:py-4";
@@ -115,7 +153,8 @@ export function PracticeQuestionSessionSetupClient({
 
   const [selectedSystems, setSelectedSystems] = useState<Set<BodySystemId>>(new Set());
   const [specialFocus, setSpecialFocus] = useState<SpecialFocusId | null>(null);
-  const [questionCount, setQuestionCount] = useState<number>(DEFAULT_QUESTION_COUNT);
+  const [sessionType, setSessionType] = useState<PracticeSessionType>("adaptive_practice");
+  const [sessionLength, setSessionLength] = useState<AdaptivePracticeSessionLength>(ADAPTIVE_PRACTICE_DEFAULT_LENGTH);
   const [starting, setStarting] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
 
@@ -128,7 +167,7 @@ export function PracticeQuestionSessionSetupClient({
 
   const catDirectHref = useMemo(() => {
     if (!effectivePathwayId) return "/app/practice-tests";
-    let href = `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(effectivePathwayId)}`;
+    let href = appPathwayCatSessionStartPath(effectivePathwayId);
     if (alliedFromUrl && isAlliedMarketingCorePathwayId(effectivePathwayId)) {
       href += `&alliedProfession=${encodeURIComponent(alliedFromUrl)}`;
     }
@@ -178,7 +217,7 @@ export function PracticeQuestionSessionSetupClient({
       pathwayId: effectivePathwayId!,
       topicNames: override?.topicNames ?? topicNames,
       catSelectionBasis: override?.catSelectionBasis ?? catSelectionBasis,
-      questionCount,
+      sessionLength,
       selectionStrictness: "soft",
     });
     const res = await fetch("/api/practice-tests", {
@@ -219,6 +258,14 @@ export function PracticeQuestionSessionSetupClient({
       }
 
       if (!sessionId) throw new Error("session_id_missing");
+      trackClientEvent(PH.learnerAdaptivePracticeSetupStarted, {
+        pathway_id: effectivePathwayId,
+        session_length: sessionLength,
+        continuous: sessionLength === "unlimited",
+        topic_count: topicNames.length,
+        selection_basis: catSelectionBasis,
+        special_focus: specialFocus,
+      });
       // Include pathwayId so the exam page can load the pathway surface without
       // an extra DB round-trip and the learner never sees a second pathway selector.
       const dest = effectivePathwayId
@@ -236,7 +283,24 @@ export function PracticeQuestionSessionSetupClient({
       setStarting(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [effectivePathwayId, topicNames, catSelectionBasis, questionCount, starting, router]);
+  }, [effectivePathwayId, topicNames, catSelectionBasis, sessionLength, starting, router]);
+
+  const durationEstimate = useMemo(() => estimateAdaptivePracticeDuration(sessionLength), [sessionLength]);
+
+  const topicFocusLabel = useMemo(() => {
+    if (specialFocus === "weak") return "Weak areas prioritized";
+    if (specialFocus === "missed") return "Previously incorrect";
+    if (specialFocus === "starred") return "Starred questions";
+    if (selectedSystemCount === 0) return "All body systems";
+    if (selectedSystemCount === 1) {
+      const sys = BODY_SYSTEMS.find((s) => selectedSystems.has(s.id));
+      return sys?.label ?? "1 system";
+    }
+    return `${selectedSystemCount} body systems`;
+  }, [specialFocus, selectedSystemCount, selectedSystems]);
+
+  const sessionPreviewTitle =
+    sessionLength === "unlimited" ? "Continuous review" : "Adaptive Practice";
 
   return (
     <div className="space-y-8" data-testid="practice-adaptive-setup">
@@ -266,7 +330,95 @@ export function PracticeQuestionSessionSetupClient({
         </section>
       ) : null}
 
-      {/* 1. Body systems — lessons-hub style card grid */}
+      {/* Session type — separates adaptive practice from CAT flows */}
+      <section
+        className="space-y-4 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-surface))] p-5 sm:p-7"
+        aria-labelledby="session-type-heading"
+        data-testid="session-type-section"
+      >
+        <div className="space-y-1">
+          <p
+            id="session-type-heading"
+            className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]"
+          >
+            Session type
+          </p>
+          <p className="text-sm text-[var(--semantic-text-secondary)]">
+            Choose how you want to practice. Adaptive Practice stays on this page; CAT modes open their own launch flow.
+          </p>
+        </div>
+        <div className="grid gap-3 lg:grid-cols-3" role="radiogroup" aria-label="Session type">
+          {SESSION_TYPE_OPTIONS.map((opt) => {
+            const on = sessionType === opt.id;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                role="radio"
+                aria-checked={on}
+                data-testid={`session-type-${opt.id}`}
+                onClick={() => setSessionType(opt.id)}
+                className={on ? cardSelected("brand") : cardUnselected}
+              >
+                <span className="text-base font-semibold">{opt.label}</span>
+                <span className="mt-1 block text-xs font-normal text-[var(--semantic-text-muted)]">{opt.summary}</span>
+                {on ? (
+                  <span className="mt-2 block text-xs font-normal leading-relaxed text-[var(--semantic-text-secondary)]">
+                    {opt.detail}
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {sessionType !== "adaptive_practice" ? (
+        <section
+          className="space-y-4 rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-7"
+          data-testid="cat-mode-handoff"
+        >
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {sessionType === "full_cat"
+              ? "Full CAT uses pathway exam rules: timed delivery, test-mode feedback, and adaptive stopping between the configured minimum and maximum item counts."
+              : "Custom CAT lets you set presentation, timers, and question caps before the session starts."}
+          </p>
+          {sessionType === "full_cat" ? (
+            <p className="text-xs text-[var(--semantic-text-muted)]">
+              Exam length (85–150 adaptive) applies to NCLEX-style simulation on your pathway.
+            </p>
+          ) : null}
+          {sessionType === "custom_cat" ? (
+            <p
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-3 py-2.5 text-xs leading-relaxed text-[var(--semantic-text-secondary)]"
+              data-testid="custom-cat-warning"
+            >
+              This mode simulates adaptive testing but may not reflect official NCLEX stopping rules or the
+              same readiness scoring as a full CAT exam on your pathway.
+            </p>
+          ) : null}
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href={sessionType === "full_cat" ? catDirectHref : catFullSetupHref}
+              className="nn-btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-semibold"
+              data-testid="session-type-continue-link"
+            >
+              {sessionType === "full_cat" ? "Continue to Full CAT" : "Open Custom CAT setup"}
+            </Link>
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
+              onClick={() => setSessionType("adaptive_practice")}
+            >
+              Back to Adaptive Practice
+            </button>
+          </div>
+        </section>
+      ) : null}
+
+      {sessionType === "adaptive_practice" ? (
+        <>
+      {/* Body systems — lessons-hub style card grid */}
       <section
         className="space-y-4 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 sm:p-7"
         aria-labelledby="body-systems-heading"
@@ -401,39 +553,143 @@ export function PracticeQuestionSessionSetupClient({
         </div>
       </section>
 
-      {/* 3. Question count */}
-      <section className="space-y-3" aria-labelledby="question-count-heading">
-        <p
-          id="question-count-heading"
-          className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]"
+      {/* Question count — segmented control */}
+      <section className="space-y-4" aria-labelledby="question-count-heading">
+        <div className="space-y-1.5">
+          <p
+            id="question-count-heading"
+            className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]"
+          >
+            Question count
+          </p>
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{durationEstimate.detail}</p>
+        </div>
+        <div
+          className="grid grid-cols-4 gap-2 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] p-2 sm:grid-cols-8 sm:p-2.5"
+          role="group"
+          aria-label="Number of questions"
+          data-testid="question-count-group"
         >
-          Question count
-        </p>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Number of questions" data-testid="question-count-group">
-          {QUESTION_COUNTS.map((n) => {
-            const on = questionCount === n;
+          {ADAPTIVE_PRACTICE_FIXED_LENGTHS.map((n) => {
+            const on = sessionLength === n;
             return (
               <button
                 key={n}
                 type="button"
                 aria-pressed={on}
-                onClick={() => setQuestionCount(n)}
+                data-testid={`question-count-${n}`}
+                onClick={() => setSessionLength(n)}
                 className={[
-                  "min-h-11 min-w-[4.5rem] rounded-full border px-5 text-sm font-semibold transition",
+                  "min-h-12 rounded-2xl px-2 text-sm font-bold tabular-nums transition duration-200 motion-reduce:transition-none",
                   on
-                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_11%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                    : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]",
+                    ? "bg-[color-mix(in_srgb,var(--semantic-brand)_20%,var(--semantic-surface))] text-[var(--semantic-text-primary)] shadow-[0_2px_12px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] ring-2 ring-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
+                    : "bg-transparent text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-surface)] hover:text-[var(--semantic-text-primary)]",
                 ].join(" ")}
               >
                 {n}
               </button>
             );
           })}
+          <button
+            type="button"
+            aria-pressed={sessionLength === "unlimited"}
+            data-testid="question-count-continuous"
+            onClick={() => setSessionLength("unlimited")}
+            className={[
+              "col-span-4 min-h-12 rounded-2xl px-3 text-sm font-bold transition duration-200 motion-reduce:transition-none sm:col-span-8",
+              sessionLength === "unlimited"
+                ? "bg-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-surface))] text-[var(--semantic-text-primary)] shadow-[0_2px_12px_color-mix(in_srgb,var(--semantic-info)_20%,transparent)] ring-2 ring-[color-mix(in_srgb,var(--semantic-info)_48%,transparent)]"
+                : "bg-transparent text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-surface)] hover:text-[var(--semantic-text-primary)]",
+            ].join(" ")}
+          >
+            {CONTINUOUS_PRACTICE_SEGMENT_LABEL}
+          </button>
         </div>
+        {sessionLength === "unlimited" ? (
+          <p className="text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+            <span className="font-semibold text-[var(--semantic-text-secondary)]">{CONTINUOUS_PRACTICE_LABEL}</span>
+            {" — "}
+            adaptive difficulty stays on, progress saves as you go, and you can pause and resume from Practice Tests.
+          </p>
+        ) : null}
       </section>
 
-      {/* 4. Primary CTA */}
-      <div className="space-y-3">
+      {/* Session settings (adaptive practice defaults) */}
+      <section
+        className="space-y-3 rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-6"
+        aria-labelledby="session-settings-heading"
+        data-testid="session-settings-section"
+      >
+        <p
+          id="session-settings-heading"
+          className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]"
+        >
+          Session settings
+        </p>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {[
+            { label: "Rationale mode", value: "After each question (study mode)" },
+            { label: "Timing", value: "Untimed" },
+            { label: "Tutor mode", value: "On — review rationale before advancing" },
+            { label: "Pool filters", value: "Soft expansion when the slice is small" },
+            { label: "Difficulty", value: "Adaptive to your responses" },
+            {
+              label: "Stopping",
+              value:
+                sessionLength === "unlimited"
+                  ? "You end the session when ready"
+                  : `Ends after ${sessionLength} questions`,
+            },
+            { label: "Estimated time", value: durationEstimate.label },
+          ].map((row) => (
+            <li
+              key={row.label}
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_30%,var(--semantic-surface))] px-3 py-2.5"
+            >
+              <span className="block text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                {row.label}
+              </span>
+              <span className="mt-0.5 block text-sm font-medium text-[var(--semantic-text-primary)]">{row.value}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Session preview */}
+      <section
+        className="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] p-5 shadow-sm sm:p-6"
+        aria-labelledby="session-preview-heading"
+        data-testid="session-preview-card"
+      >
+        <p
+          id="session-preview-heading"
+          className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]"
+        >
+          Ready to start
+        </p>
+        <p className="mt-2 text-lg font-bold text-[var(--semantic-text-primary)]">{sessionPreviewTitle}</p>
+        <ul className="mt-3 space-y-1.5 text-sm text-[var(--semantic-text-secondary)]">
+          <li>
+            <span className="font-semibold text-[var(--semantic-text-primary)]">
+              {sessionLength === "unlimited" ? CONTINUOUS_PRACTICE_LABEL : `${sessionLength} questions`}
+            </span>
+            {" · "}
+            Tutor mode · {topicFocusLabel}
+          </li>
+          <li>
+            Estimated time:{" "}
+            <span className="font-medium text-[var(--semantic-text-primary)]">{durationEstimate.label}</span>
+            {" · "}
+            Untimed · Rationale after each question
+          </li>
+        </ul>
+      </section>
+
+      {/* Primary CTA — sticky on mobile */}
+      <div
+        className="space-y-3 sm:static sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sticky bottom-0 z-10 -mx-4 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 py-4 backdrop-blur-md sm:mx-0"
+        data-testid="adaptive-practice-cta"
+      >
         <button
           type="button"
           disabled={!effectivePathwayId || starting}
@@ -448,39 +704,36 @@ export function PracticeQuestionSessionSetupClient({
             {startError}
           </p>
         ) : null}
-        <p className="text-xs text-[var(--semantic-text-muted)]">
-          Rationale after each question · Adaptive difficulty · Untimed · Soft filters keep sessions full
+        <p className="max-w-xl text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+          Every option above is valid for this mode — you will not see a surprise minimum question error on start.
+          Progress saves to your account; resume in-progress sessions from Practice Tests when you return.
         </p>
       </div>
 
       <div className="border-t border-[var(--semantic-border-soft)]" data-testid="post-cta-divider" />
 
-      {/* 5. Secondary cards */}
       <section className="space-y-3" aria-labelledby="other-options-heading" data-testid="secondary-cards">
         <p
           id="other-options-heading"
           className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]"
         >
-          Other practice options
+          More ways to practice
         </p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <SecondaryCard
-            href={catDirectHref}
-            title="Run Full CAT"
-            body="Timed, exam-like adaptive session. No rationale mid-session."
-          />
-          <SecondaryCard
-            href={catFullSetupHref}
-            title="Custom CAT setup"
-            body="Configure presentation mode, time limits, and question count."
-          />
+        <div className="grid gap-3 sm:grid-cols-2">
           <SecondaryCard
             href="/app/questions/bank"
             title="Question bank"
             body="Search, filter, and browse questions by topic or keyword."
           />
+          <SecondaryCard
+            href="/app/practice-tests"
+            title="Practice tests hub"
+            body="Linear exams, recent attempts, and CAT history in one place."
+          />
         </div>
       </section>
+        </>
+      ) : null}
     </div>
   );
 }

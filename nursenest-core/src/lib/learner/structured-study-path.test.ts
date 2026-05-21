@@ -49,7 +49,7 @@ describe("structured-study-path", () => {
     assert.ok(firstAdvanced > firstBuild);
     assert.equal(last.phase, "adaptive");
     assert.equal(last.contentType, "cat");
-    assert.ok(last.href.includes("/app/practice-tests/cat-launch"));
+    assert.ok(last.href.includes("catLaunch=1"));
   });
 
   it("inserts weak_spot triplets after foundation", () => {

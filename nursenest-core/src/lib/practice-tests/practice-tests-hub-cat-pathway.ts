@@ -1,4 +1,18 @@
-import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
+import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "@/lib/practice-tests/types";
+
+/** Client shell for inline CAT launch from hub pathway options. */
+export function practiceTestPathwayClientShellFromOption(
+  option: PracticeTestPathwayOption,
+): PracticeTestPathwayClientShell {
+  return {
+    id: option.id,
+    countrySlug: option.countrySlug,
+    roleTrack: option.roleTrack,
+    examCode: option.examCode,
+    shortName: option.shortName,
+    examFamily: option.examFamily,
+  };
+}
 
 /** CAT dropdown options: only pathways that allow adaptive start. */
 export function catEligiblePathwayOptions(

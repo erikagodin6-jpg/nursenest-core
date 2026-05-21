@@ -1,8 +1,6 @@
 import { Suspense } from "react";
-import { redirect } from "next/navigation";
 import { ExamFamily, TierCode } from "@prisma/client";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
-import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { LearnerNpExamPracticePickSurface } from "@/components/student/learner-np-exam-practice-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
@@ -110,12 +108,6 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const requestedPathwayId = pathwayQueryRaw
     ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
     : null;
-
-  if (catRequested) {
-    const q = new URLSearchParams();
-    if (requestedPathwayId) q.set("pathwayId", requestedPathwayId);
-    redirect(q.toString() ? `/app/practice-tests/start?${q.toString()}` : "/app/practice-tests/start");
-  }
 
   let pathwayOptions: {
     id: string;
@@ -227,10 +219,6 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
         <div className="mb-4">
           <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
-        <LearnerRenderTraceBanner
-          data-route="practice-tests"
-          label="NN_RENDER_TRACE: practice exams live route (pathway picker)"
-        />
         {entitlement.tier === TierCode.NP ? (
           <LearnerNpExamPracticePickSurface
             title={t("learner.practiceTests.title")}
@@ -290,23 +278,18 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPid;
 
   return (
-    <div className="space-y-2">
-      <div className="mb-1">
-        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-      </div>
-      <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
-      <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
-        <PracticeTestsHubClient
-          pathwayOptions={pathwayOptions}
-          defaultPathwayId={defaultPathwayId}
-          pathwayDisplayName={pathwayDisplayName}
-          catEligiblePathwayIds={catEligiblePathwayIds}
-          examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
-          hubBootstrapSource={hubBootstrapSource}
-          catHref={catHref}
-          pathwayLessonPractice={pathwayLessonPractice}
-        />
-      </Suspense>
-    </div>
+    <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
+      <PracticeTestsHubClient
+        pathwayOptions={pathwayOptions}
+        defaultPathwayId={defaultPathwayId}
+        pathwayDisplayName={pathwayDisplayName}
+        catEligiblePathwayIds={catEligiblePathwayIds}
+        examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
+        hubBootstrapSource={hubBootstrapSource}
+        catHref={catHref}
+        pathwayLessonPractice={pathwayLessonPractice}
+        initialCatMode={catRequested}
+      />
+    </Suspense>
   );
 }

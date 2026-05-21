@@ -21,6 +21,10 @@ import {
   humanizeTopicSlug,
 } from "@/components/lessons/pathway-lesson-link-practice";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
+import {
+  clearFlashcardsCustomSessionCheckpoint,
+  saveFlashcardsCustomSessionCheckpoint,
+} from "@/lib/flashcards/flashcards-hub-preferences";
 
 type ApiCard = {
   id: string;
@@ -58,6 +62,18 @@ export function FlashcardCustomStudyClient() {
   const [summary, setSummary] = useState<SessionSummary | null>(null);
 
   const searchParamString = sp.toString();
+  const pathwayId = useMemo(() => {
+    const q = new URLSearchParams(searchParamString);
+    return q.get("pathwayId")?.trim() ?? "";
+  }, [searchParamString]);
+
+  const initialCardIndex = useMemo(() => {
+    const q = new URLSearchParams(searchParamString);
+    const raw = q.get("resumeIndex");
+    const n = raw ? Number(raw) : 0;
+    return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+  }, [searchParamString]);
+
   const queryString = useMemo(() => {
     const q = new URLSearchParams(searchParamString);
     q.set("includeCards", "1");
@@ -308,6 +324,24 @@ export function FlashcardCustomStudyClient() {
           onRate={onRate}
           sessionMeta={sessionMeta}
           enableLocalStudyPins
+          initialCardIndex={initialCardIndex}
+          onStudyProgress={({ index }) => {
+            if (!pathwayId || activeCards.length === 0) return;
+            const q = new URLSearchParams(searchParamString);
+            q.delete("includeCards");
+            q.delete("resumeIndex");
+            saveFlashcardsCustomSessionCheckpoint({
+              pathwayId,
+              queryString: q.toString(),
+              index,
+              totalCards: activeCards.length,
+              systemsLabel: categoriesLabel,
+              updatedAt: new Date().toISOString(),
+            });
+          }}
+          onSessionComplete={() => {
+            if (pathwayId) clearFlashcardsCustomSessionCheckpoint(pathwayId);
+          }}
         />
       </ExamSessionShell>
     </div>

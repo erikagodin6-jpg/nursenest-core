@@ -6,14 +6,15 @@
  *   2. Clinical illustration registry (small public assets) → source: "clinical_illustration"
  *   3. Lesson image map slug  (lesson-image-map.ts slugs[]) → source: "map_slug"
  *   4. Inventory exact slug   (inventory basename === lesson.slug) → source: "exact_slug"
- *   5. Inventory topic slug   (inventory basename === lesson.topicSlug) → source: "topic_slug"
- *   6. Lesson image map keyword (topic/topicSlug contains keyword) → source: "map_keyword"
- *   7. Lesson image map body system fallback (unique system match) → source: "map_body_system"
- *   8. null                   (no image shown — safe default)
+ *   5. Inventory semantic     (title / stripped slug / fuzzy basename) → source: "exact_slug" | "topic_slug"
+ *   6. Inventory topic slug   (inventory basename === lesson.topicSlug) → source: "topic_slug"
+ *   7. Lesson image map keyword (topic/topicSlug contains keyword) → source: "map_keyword"
+ *   8. Lesson image map body system fallback (unique system match) → source: "map_body_system"
+ *   9. null                   (no image shown — safe default)
  *
  * EDITORIAL WORKFLOW:
  *   1. Upload image to DigitalOcean Spaces named after the lesson slug:
- *        e.g. `abdominal-aortic-dissection.png`
+ *        e.g. `pulmonary-embolism.webp` or `uploads/images/pulmonary-embolism.webp`
  *   2. Run `node scripts/sync-lesson-image-inventory.mjs` to rebuild inventory.
  *   3. The image appears automatically on the matching lesson page.
  *
@@ -27,16 +28,22 @@ import { getInventoryKeys } from "@/lib/education-images/inventory";
 import { publicCdnUrlForObjectKey } from "@/lib/education-images/cdn-url";
 import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
 import { resolveCardiovascularClinicalIllustration } from "@/content/clinical-illustrations/cardiovascular";
+import {
+  collectLessonImageBasenameCandidates,
+  findInventoryObjectKeyForBasename,
+  normalizeLessonImageBasename,
+  resolveInventoryLessonImageKey,
+} from "@/lib/content/lesson-image-inventory-match";
 
 export type LessonImageSource =
-  | "override"          // came from LESSON_IMAGE_OVERRIDES
+  | "override" // came from LESSON_IMAGE_OVERRIDES
   | "clinical_illustration" // local premium clinical illustration registry
-  | "map_slug"          // exact slug match in lesson-image-map.ts
-  | "exact_slug"        // exact inventory basename match on lesson.slug
-  | "topic_slug"        // exact inventory basename match on lesson.topicSlug
-  | "map_keyword"       // keyword match in lesson-image-map.ts (topic/topicSlug text)
-  | "map_body_system"   // body system fallback in lesson-image-map.ts
-  | "none";             // no safe match found
+  | "map_slug" // exact slug match in lesson-image-map.ts
+  | "exact_slug" // inventory basename match on lesson.slug / title / fuzzy
+  | "topic_slug" // exact inventory basename match on lesson.topicSlug
+  | "map_keyword" // keyword match in lesson-image-map.ts (topic/topicSlug text)
+  | "map_body_system" // body system fallback in lesson-image-map.ts
+  | "none"; // no safe match found
 
 export type LessonImageResolution = {
   /** Public CDN URL, or null when no safe match exists. */
@@ -82,33 +89,9 @@ export type LessonImageQuery = {
   bodySystem?: string | null;
 };
 
-/** Preferred Spaces image prefixes, searched in order. Root prefix ("") catches root-level objects. */
-const IMAGE_PREFIXES = ["uploads/images/", "uploads/lesson-images/", ""] as const;
+/** Re-export for callers that need basename normalization only. */
+export { normalizeLessonImageBasename };
 
-/** Extensions tried in preference order (webp first for smallest file size). */
-const PREFERRED_EXTENSIONS = [".webp", ".png", ".jpg", ".jpeg"] as const;
-
-/**
- * Locate the best object key for a given lowercase basename.
- * Returns null if no matching key exists in the inventory.
- */
-function findKeyForBasename(
-  basename: string,
-  inventoryKeys: readonly string[],
-): string | null {
-  for (const prefix of IMAGE_PREFIXES) {
-    for (const ext of PREFERRED_EXTENSIONS) {
-      const candidate = `${prefix}${basename}${ext}`;
-      if (inventoryKeys.includes(candidate)) return candidate;
-    }
-  }
-  return null;
-}
-
-/**
- * Normalize a slug to a safe lowercase hyphenated basename for inventory lookup.
- * Mirrors the editorial convention: slugs are already lowercase and hyphenated.
- */
 function normalizeToBasename(raw: string): string {
   return raw.trim().toLowerCase();
 }
@@ -140,7 +123,6 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     );
   }
 
-  // 2. Lesson image map — exact slug match.
   const clinicalIllustration = resolveCardiovascularClinicalIllustration({
     slug,
     topic: query.topic,
@@ -160,11 +142,9 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     );
   }
 
-  // 3. Lesson image map — exact slug match.
   const mapSlugMatch = resolveImageFromLessonMap({
     slug,
     topicSlug: query.topicSlug,
-    // topic/bodySystem intentionally omitted: only slug match at this step
   });
   if (mapSlugMatch?.source === "map_slug") {
     return guardResolution(
@@ -180,8 +160,7 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
 
   const inventoryKeys = getInventoryKeys();
 
-  // 3. Inventory: exact slug match.
-  const slugKey = findKeyForBasename(slug, inventoryKeys);
+  const slugKey = findInventoryObjectKeyForBasename(slug, inventoryKeys);
   if (slugKey) {
     return guardResolution(
       {
@@ -194,11 +173,39 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     );
   }
 
-  // 4. Inventory: topic-slug fallback.
+  const semanticInventory = resolveInventoryLessonImageKey(
+    {
+      slug: query.slug,
+      title: query.title,
+      topicSlug: query.topicSlug,
+    },
+    inventoryKeys,
+  );
+  if (semanticInventory) {
+    const topicBasename = query.topicSlug
+      ? normalizeToBasename(query.topicSlug)
+      : null;
+    const source: LessonImageSource =
+      topicBasename &&
+      semanticInventory.matchedBasename === topicBasename &&
+      semanticInventory.matchedBasename !== slug
+        ? "topic_slug"
+        : "exact_slug";
+    return guardResolution(
+      {
+        url: publicCdnUrlForObjectKey(semanticInventory.objectKey),
+        objectKey: semanticInventory.objectKey,
+        alt,
+        source,
+      },
+      alt,
+    );
+  }
+
   if (query.topicSlug) {
     const topicBasename = normalizeToBasename(query.topicSlug);
     if (topicBasename && topicBasename !== slug) {
-      const topicKey = findKeyForBasename(topicBasename, inventoryKeys);
+      const topicKey = findInventoryObjectKeyForBasename(topicBasename, inventoryKeys);
       if (topicKey) {
         return guardResolution(
           {
@@ -210,10 +217,28 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
           alt,
         );
       }
+      const topicCandidates = collectLessonImageBasenameCandidates({
+        slug: topicBasename,
+        title: query.title,
+        topicSlug: topicBasename,
+      });
+      for (const basename of topicCandidates) {
+        const key = findInventoryObjectKeyForBasename(basename, inventoryKeys);
+        if (key) {
+          return guardResolution(
+            {
+              url: publicCdnUrlForObjectKey(key),
+              objectKey: key,
+              alt,
+              source: "topic_slug",
+            },
+            alt,
+          );
+        }
+      }
     }
   }
 
-  // 5 & 6. Lesson image map — keyword + body system fallback (fuzzy steps).
   const mapFuzzyMatch = resolveImageFromLessonMap({
     slug,
     topic: query.topic,

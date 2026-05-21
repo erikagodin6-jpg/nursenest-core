@@ -719,12 +719,99 @@ export function PracticeTestRunnerClient({
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const guidedPracticeCat = Boolean(catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice");
   /**
-   * Guided adaptive (`catAdaptiveSessionType: "practice"`) uses the split tutor shell + transparency strip.
-   * Standard licensing CAT stays exam-like: no per-item rationale during the session (post-run review only).
+   * Study feedback during CAT — guided fixed-length runs and continuous review (`catExamFeedbackMode: "study"`).
+   * Licensing CAT / exam simulation stays exam-like (no per-item rationale mid-session).
    */
-  const catFeedbackStudy = guidedPracticeCat;
+  const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
+  const continuousAdaptivePractice = Boolean(
+    testConfig?.studyLaunchPayload?.unlimited === true ||
+      (catFeedbackStudy &&
+        (testConfig?.catAdaptiveSessionType ?? "cat") === "cat" &&
+        testConfig?.catPresentationMode === "practice"),
+  );
   /** Licensing-style CAT: single-column exam shell; submit → lock → next; phase machine matches `catAdvance`. */
   const isExamStyle = catMode && !catFeedbackStudy;
+
+  const answeredQuestionCount = useMemo(
+    () => questionIds.filter((qid) => answers[qid] !== undefined).length,
+    [questionIds, answers],
+  );
+
+  const finalizePracticeSessionEarly = useCallback(async () => {
+    if (submitInFlightRef.current || status !== "IN_PROGRESS") return;
+    if (answeredQuestionCount < 1) {
+      setError(
+        tx(
+          "learner.practiceTests.run.endSessionNeedsAnswer",
+          "Answer at least one question before ending the session.",
+        ),
+      );
+      return;
+    }
+    const ok = window.confirm(
+      tx(
+        "learner.practiceTests.run.endSessionConfirm",
+        "End this practice session and view your summary? Progress is saved — you can start another session anytime from Practice Tests.",
+      ),
+    );
+    if (!ok) return;
+    submitInFlightRef.current = true;
+    setSaving(true);
+    logSessionEvent("end_session_early", { answered: answeredQuestionCount, total: questionIds.length });
+    try {
+      const elapsedMs =
+        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+      const res = await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "complete",
+          answers: answersRef.current,
+          cursorIndex: idxRef.current,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        }),
+      });
+      const data = (await res.json()) as { results?: PracticeTestResultsJson; error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Could not end session.");
+      setResults(data.results ?? null);
+      setStatus("COMPLETED");
+      setSavedElapsedMs(elapsedMs ?? null);
+      void captureClientOrchestratedAnalytics(
+        testConfig?.pathwayId ?? activePathwayId,
+        PH.learnerPracticeTestSessionCompleted,
+        {
+          test_id: testId,
+          delivery: catMode ? "cat" : "linear",
+          from_timer: false,
+          ended_early: true,
+          continuous_practice: continuousAdaptivePractice,
+          source_surface: "practice_test_runner",
+        },
+        { catSessionActive: catMode },
+      );
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not end session.");
+    } finally {
+      submitInFlightRef.current = false;
+      setSaving(false);
+    }
+  }, [
+    answeredQuestionCount,
+    status,
+    sessionStartMs,
+    testId,
+    questionIds.length,
+    logSessionEvent,
+    testConfig?.pathwayId,
+    activePathwayId,
+    catMode,
+    continuousAdaptivePractice,
+    tx,
+  ]);
+
+  const showEndPracticeSessionControl = Boolean(
+    status === "IN_PROGRESS" && (catFeedbackStudy || guidedPracticeCat),
+  );
   const catExamLeakWarnedRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -2637,6 +2724,21 @@ export function PracticeTestRunnerClient({
                   }
                   right={
                     <div className="flex flex-wrap items-center justify-end gap-2">
+                      {showEndPracticeSessionControl ? (
+                        <button
+                          type="button"
+                          data-testid="end-practice-session-btn"
+                          disabled={controlsBusy}
+                          className={
+                            continuousAdaptivePractice
+                              ? "inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-3 py-2 text-xs font-bold text-[var(--semantic-text-primary)] shadow-sm transition hover:opacity-95 disabled:opacity-40"
+                              : "inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-secondary)] transition hover:bg-[var(--semantic-panel-muted)] disabled:opacity-40"
+                          }
+                          onClick={() => void finalizePracticeSessionEarly()}
+                        >
+                          {tx("session.end", "End session")}
+                        </button>
+                      ) : null}
                       {examUnitsToggle}
                       <ExamSessionThemeTrigger variant="pill" />
                       <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
@@ -2644,6 +2746,14 @@ export function PracticeTestRunnerClient({
                   }
                 />
                 <ExamProgressBar current={idx + 1} total={total} />
+                {continuousAdaptivePractice ? (
+                  <p className="mx-3 mb-0 mt-1 text-xs text-[var(--semantic-text-muted)] sm:mx-4">
+                    {tx(
+                      "learner.practiceTests.run.continuousPracticeHint",
+                      "Continuous review — adaptive items until you end the session. Progress saves automatically.",
+                    )}
+                  </p>
+                ) : null}
                 {sessionRecoveryBanner}
                 {catPoolRelaxBanner}
                 <div className={`nn-cat-session min-h-0 flex-1 ${chromeClass}`}>
@@ -3452,15 +3562,27 @@ export function PracticeTestRunnerClient({
                   <div className="flex flex-wrap items-center justify-end gap-2">
                     <ExamSessionThemeTrigger variant="pill" />
                     <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
-                    <button
-                      type="button"
-                      disabled={controlsBusy}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
-                      onClick={() => void abandon()}
-                    >
-                      <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                      {tx("learner.practiceTests.run.endExam", "End")}
-                    </button>
+                    {showEndPracticeSessionControl ? (
+                      <button
+                        type="button"
+                        data-testid="end-practice-session-btn"
+                        disabled={controlsBusy}
+                        className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-3 py-2 text-xs font-bold text-[var(--semantic-text-primary)] shadow-sm transition hover:opacity-95 disabled:opacity-40"
+                        onClick={() => void finalizePracticeSessionEarly()}
+                      >
+                        {tx("session.end", "End session")}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={controlsBusy}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                        onClick={() => void abandon()}
+                      >
+                        <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                        {tx("learner.practiceTests.run.endExam", "End")}
+                      </button>
+                    )}
                   </div>
                 }
               />

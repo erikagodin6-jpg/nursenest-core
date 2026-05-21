@@ -1,3 +1,4 @@
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
 import {
@@ -171,9 +172,7 @@ export function planRemediationV3(args: {
   }
 
   if (out.length < cap && coachingModel === "cat_adaptive" && (sessionKind === "cat" || sessionKind === "readiness_assessment")) {
-    const href = pathwayId
-      ? `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(pathwayId)}`
-      : "/app/practice-tests";
+    const href = pathwayId ? appPathwayCatSessionStartPath(pathwayId) : "/app/practice-tests";
     if (!seenHref.has(href)) {
       out.push({
         priority: priority++,

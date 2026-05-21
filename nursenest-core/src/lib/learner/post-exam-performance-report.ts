@@ -4,6 +4,7 @@ import { isLoftSimulationPolicy } from "@/lib/practice-tests/loft-simulation-pol
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import {
   getCoachingPolicyForPathway,
   getCoachingPolicyForTestingModel,
@@ -440,7 +441,7 @@ function buildRecommendations(args: {
       priority: priority++,
       title: coaching.followUpAdaptiveSessionTitle,
       reason: coaching.followUpAdaptiveSessionReason ?? coaching.followUpSimulationReason,
-      href: pathwayId ? `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(pathwayId)}` : "/app/practice-tests",
+      href: pathwayId ? appPathwayCatSessionStartPath(pathwayId) : "/app/practice-tests",
       kind: "cat",
     });
   }

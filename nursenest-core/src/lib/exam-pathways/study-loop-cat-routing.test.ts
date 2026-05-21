@@ -11,7 +11,7 @@ describe("resolveStudyLoopCatDestination", () => {
     });
 
     assert.equal(destination.kind, "app_start");
-    assert.equal(destination.href, "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn");
+    assert.equal(destination.href, "/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1");
     assert.equal(destination.pathwayId, "us-rn-nclex-rn");
     assert.equal(destination.isPathwayScoped, true);
   });

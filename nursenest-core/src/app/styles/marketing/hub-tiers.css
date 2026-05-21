@@ -48,7 +48,7 @@
     radial-gradient(620px 320px at 50% 92%, color-mix(in srgb, var(--nn-pricing-tone-success) 7%, transparent), transparent 62%);
 }
 
-/* Blossom pricing — Figma homepage: bright pink / blue / violet pastels behind plan cards. */
+/* Blossom pricing — Figma homepage: bright pink / sky / mint pastels behind plan cards. */
 html[data-theme="blossom"] .nn-pricing-premium-root {
   --nn-pricing-tone-accent: var(--semantic-chart-2);
   --nn-pricing-card-bg-color: color-mix(in srgb, #ffffff 90%, var(--semantic-panel-cool));

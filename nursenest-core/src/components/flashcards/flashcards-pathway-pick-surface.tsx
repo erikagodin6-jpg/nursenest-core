@@ -22,7 +22,7 @@ export function FlashcardsPathwayPickSurface({
   return (
     <div
       className={[
-        "mx-auto w-full max-w-4xl space-y-6 px-4 py-8 sm:px-6",
+        "mx-auto w-full max-w-4xl space-y-8 px-4 py-10 sm:px-6 sm:py-12",
         isPracticeExamSurface ? "nn-practice-tests-hub-premium" : "nn-flashcards-hub-premium",
       ].join(" ")}
       data-nn-premium-full-platform-convergence=""
@@ -36,7 +36,7 @@ export function FlashcardsPathwayPickSurface({
           {isPracticeExamSurface ? "Practice exams" : "Flashcards"}
         </p>
         <h1 className="text-2xl font-semibold text-[var(--theme-fg)]">{title}</h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)]">{subtitle}</p>
+        <p className="max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{subtitle}</p>
       </header>
 
       {pathways.length === 0 ? (
@@ -45,12 +45,12 @@ export function FlashcardsPathwayPickSurface({
           preferences.
         </p>
       ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid gap-4 sm:grid-cols-2">
           {pathways.map((p) => (
             <li key={p.id}>
               <Link
                 href={`${base}?pathwayId=${encodeURIComponent(p.id)}`}
-                className="block min-h-[4.75rem] rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm font-medium text-[var(--theme-fg)] shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[var(--semantic-info)]"
+                className="nn-practice-pathway-pick-card block min-h-[5.25rem] rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-4 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] transition-[border-color,background-color,box-shadow,transform] hover:border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_42%,transparent)]"
               >
                 {p.label}
               </Link>

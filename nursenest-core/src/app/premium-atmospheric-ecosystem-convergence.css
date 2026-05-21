@@ -67,6 +67,15 @@ html[data-theme="blossom"] {
   --nn-atmosphere-plum: var(--semantic-accent-plum);
 }
 
+html[data-theme="mint-blossom"] {
+  --nn-atmosphere-mint: color-mix(in srgb, #b7efd1 68%, var(--semantic-surface));
+  --nn-atmosphere-aqua: color-mix(in srgb, #5eb8f0 52%, var(--semantic-surface));
+  --nn-atmosphere-lavender: color-mix(in srgb, #bfe7ff 48%, var(--semantic-surface));
+  --nn-atmosphere-peach: color-mix(in srgb, #ffb7d5 42%, var(--semantic-surface));
+  --nn-atmosphere-gold: color-mix(in srgb, #fff2b8 55%, var(--semantic-surface));
+  --nn-atmosphere-plum: color-mix(in srgb, #ffc7de 38%, var(--semantic-surface));
+}
+
 html[data-theme="midnight"] {
   --nn-atmosphere-mint: var(--semantic-accent-mint);
   --nn-atmosphere-aqua: var(--semantic-info);
@@ -103,6 +112,7 @@ html[data-theme="aurora"] {
 
 html[data-theme="ocean"] [data-nn-premium-full-platform-convergence],
 html[data-theme="blossom"] [data-nn-premium-full-platform-convergence],
+html[data-theme="mint-blossom"] [data-nn-premium-full-platform-convergence],
 html[data-theme="midnight"] [data-nn-premium-full-platform-convergence],
 html[data-theme="sunset"] [data-nn-premium-full-platform-convergence],
 html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {

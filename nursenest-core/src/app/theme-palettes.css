@@ -678,6 +678,7 @@
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
   [data-theme="blossom"],
+  [data-theme="mint-blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
@@ -1578,65 +1579,112 @@ html[data-theme="aurora"] {
   --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
 }
 
-/* Blossom — bright sakura / orchid / clinical-blue study atmosphere (pastel, optimistic; not Aurora). */
+/* Blossom — airy cotton-candy pink + sky / butter / mint accents (signature pastel; not Aurora violet). */
 html[data-theme="blossom"] {
-  --theme-primary: #d948a8;
-  --theme-primary-foreground: #ffffff;
-  --theme-secondary: color-mix(in srgb, #ddebff 32%, #ffffff);
-  --theme-secondary-foreground: #10182f;
-  --theme-accent: color-mix(in srgb, #e8f2ff 38%, #ffffff);
-  --theme-accent-foreground: #3f5fd8;
-  --theme-border: color-mix(in srgb, #3f5fd8 12%, #f5e8f4);
-  --theme-ring: #9357f2;
-  --theme-page-bg: color-mix(in srgb, #fff5fb 28%, color-mix(in srgb, #f0f7ff 22%, #ffffff));
-  --theme-surface-strong: color-mix(
-    in srgb,
-    #edf6ff 42%,
-    color-mix(in srgb, #fff1f8 24%, var(--theme-page-bg))
-  );
-  --theme-heading-text: #10182f;
-  --theme-body-text: color-mix(in srgb, #10182f 78%, #ffffff);
-  --theme-muted-text: color-mix(in srgb, #10182f 60%, #ffffff);
+  --theme-primary: #ffa9cc;
+  --theme-primary-foreground: #3a3142;
+  --theme-secondary: #fff9fb;
+  --theme-secondary-foreground: #554d5e;
+  --theme-accent: #fffdf8;
+  --theme-accent-foreground: #5eb8f0;
+  --theme-border: color-mix(in srgb, #ffb7d5 24%, #fff9fb);
+  --theme-ring: #ffb7d5;
+  --theme-page-bg: #fffdfb;
+  --theme-surface-strong: #fff9fb;
+  --theme-heading-text: #3a3142;
+  --theme-body-text: #4a4453;
+  --theme-muted-text: #554d5e;
 
-  --lesson-summary: color-mix(in srgb, #d948a8 11%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, #9357f2 11%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, #f38bbf 11%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, #22c7a7 11%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, #2f80ed 11%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, #8ce7cb 11%, #ffffff);
-  --lesson-medications: color-mix(in srgb, #f5b84b 12%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, #b9ccff 11%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, #9357f2 10%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, #d948a8 11%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, #3f5fd8 10%, #ffffff);
-  --lesson-notes: color-mix(in srgb, #fff5fb 55%, #ffffff);
+  --lesson-summary: color-mix(in srgb, #ffb7d5 14%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #bfe7ff 16%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #ffc7de 14%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #d6f0ff 15%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #d9f8e7 14%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #fff2b8 16%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #c8f2dc 13%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #fff6cc 15%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #ffa9cc 12%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #a9d8ff 14%, #ffffff);
+  --lesson-notes: color-mix(in srgb, #fff9fb 72%, #ffffff);
 
-  --state-success: color-mix(in srgb, #22c7a7 12%, #ffffff);
-  --state-warning: color-mix(in srgb, #f5b84b 12%, #ffffff);
-  --state-info: color-mix(in srgb, #2f80ed 10%, #ffffff);
-  --state-danger-soft: color-mix(in srgb, #d948a8 9%, #ffffff);
+  --state-success: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --state-warning: color-mix(in srgb, #fff2b8 15%, #ffffff);
+  --state-info: color-mix(in srgb, #bfe7ff 14%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #ffc7de 12%, #ffffff);
 
   /* --logo-primary / --logo-accent / --logo-text intentionally omitted:
      globals html[data-theme] defaults resolve correctly for blossom:
-       --logo-primary → var(--theme-primary) = #d948a8 (pink, matches CDN leaf)
-       --logo-accent  → var(--theme-accent)  = light pink
-       --logo-text    → var(--theme-heading-text) = #10182f (readable dark)
-     Any override to blue/indigo here would break leaf/wordmark colour parity. */
-  --theme-brand-accent: #9357f2;
-  --theme-brand-strong: #b3359a;
+       --logo-primary → var(--theme-primary) = soft blossom pink
+       --logo-accent  → var(--theme-accent)  = warm cream wash
+       --logo-text    → var(--theme-heading-text) = warm plum ink
+     Any override to blue/violet hex here would break leaf/wordmark colour parity. */
+  --theme-brand-accent: #bfe7ff;
+  --theme-brand-strong: #ff8fb8;
   --theme-nav-background: color-mix(
     in srgb,
-    #d948a8 5%,
-    color-mix(in srgb, #edf6ff 24%, color-mix(in srgb, #fff1f8 22%, #fffafd))
+    #ffb7d5 6%,
+    color-mix(in srgb, #fff9fb 44%, color-mix(in srgb, #d9f8e7 10%, #ffffff))
   );
-  --theme-nav-foreground: #10182f;
-  --theme-nav-hover: color-mix(in srgb, #d948a8 7%, transparent);
-  --theme-nav-hover-foreground: #10182f;
-  --theme-header-top-bg: color-mix(in srgb, #fff1f8 46%, color-mix(in srgb, #edf6ff 24%, #fffafd));
-  --theme-header-main-bg: color-mix(in srgb, #fff1f8 30%, color-mix(in srgb, #edf6ff 22%, #fffafd));
-  --theme-header-secondary-bg: color-mix(in srgb, #d948a8 4%, color-mix(in srgb, #edf6ff 18%, #ffffff));
-  --theme-header-secondary-fg: #10182f;
-  --theme-header-divider: color-mix(in srgb, #3f5fd8 10%, transparent);
+  --theme-nav-foreground: #3a3142;
+  --theme-nav-hover: color-mix(in srgb, #ffb7d5 10%, transparent);
+  --theme-nav-hover-foreground: #3a3142;
+  --theme-header-top-bg: color-mix(in srgb, #fff9fb 74%, color-mix(in srgb, #fffdf8 40%, #ffffff));
+  --theme-header-main-bg: color-mix(in srgb, #fff9fb 62%, color-mix(in srgb, #fafdfc 18%, #ffffff));
+  --theme-header-secondary-bg: color-mix(in srgb, #ffb7d5 5%, color-mix(in srgb, #fffdf8 22%, #ffffff));
+  --theme-header-secondary-fg: #3a3142;
+  --theme-header-divider: color-mix(in srgb, #ffb7d5 18%, transparent);
+}
+
+/* Mint Blossom — signature pink + mint + sky + butter (mint-forward airy shell). */
+html[data-theme="mint-blossom"] {
+  --theme-primary: #ffb7d5;
+  --theme-primary-foreground: #3a3142;
+  --theme-secondary: #d9f8e7;
+  --theme-secondary-foreground: #3a3142;
+  --theme-accent: #fffdf8;
+  --theme-accent-foreground: #5eb8f0;
+  --theme-border: color-mix(in srgb, #b7efd1 24%, #fff9fb);
+  --theme-ring: #b7efd1;
+  --theme-page-bg: #fafdfc;
+  --theme-surface-strong: #fffefe;
+  --theme-heading-text: #3a3142;
+  --theme-body-text: #4a4453;
+  --theme-muted-text: #554d5e;
+
+  --lesson-summary: color-mix(in srgb, #ffb7d5 12%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #bfe7ff 14%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #ffc7de 12%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #d6f0ff 14%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #d9f8e7 14%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #fff2b8 14%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #c8f2dc 12%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #fff6cc 14%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #ffa9cc 10%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #a9d8ff 12%, #ffffff);
+  --lesson-notes: color-mix(in srgb, #fafdfc 68%, #ffffff);
+
+  --state-success: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --state-warning: color-mix(in srgb, #fff2b8 14%, #ffffff);
+  --state-info: color-mix(in srgb, #bfe7ff 13%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #ffc7de 11%, #ffffff);
+
+  --theme-brand-accent: #b7efd1;
+  --theme-brand-strong: #ff8fb8;
+  --theme-nav-background: color-mix(
+    in srgb,
+    #c8f2dc 12%,
+    color-mix(in srgb, #fff9fb 46%, color-mix(in srgb, #d6f0ff 8%, #ffffff))
+  );
+  --theme-nav-foreground: #3a3142;
+  --theme-nav-hover: color-mix(in srgb, #b7efd1 12%, transparent);
+  --theme-nav-hover-foreground: #3a3142;
+  --theme-header-top-bg: color-mix(in srgb, #fafdfc 70%, color-mix(in srgb, #fffdf8 36%, #ffffff));
+  --theme-header-main-bg: color-mix(in srgb, #d9f8e7 10%, color-mix(in srgb, #fff9fb 58%, #ffffff));
+  --theme-header-secondary-bg: color-mix(in srgb, #b7efd1 6%, color-mix(in srgb, #fffdf8 20%, #ffffff));
+  --theme-header-secondary-fg: #3a3142;
+  --theme-header-divider: color-mix(in srgb, #b7efd1 16%, transparent);
 }
 
 html[data-theme="sunset"] {
@@ -2035,6 +2083,7 @@ html[data-theme="midnight"] {
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
   [data-theme="blossom"],
+  [data-theme="mint-blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
@@ -2090,6 +2139,64 @@ html[data-theme="midnight"] {
   --theme-border: color-mix(in srgb, var(--theme-primary) 8%, #e5e7eb);
   --theme-topbar-bg: #ffffff;
   --theme-topbar-text: #111827;
+}
+
+/* Blossom — warm pastel shell (overrides neutral grey normalization above). */
+html[data-theme="blossom"] {
+  --theme-secondary: #fff9fb;
+  --theme-secondary-foreground: #554d5e;
+  --theme-accent: #fffdf8;
+  --theme-accent-foreground: #5eb8f0;
+  --theme-border: color-mix(in srgb, #ffb7d5 22%, #fff9fb);
+  --theme-topbar-bg: #fffdf8;
+  --theme-topbar-text: #3a3142;
+  --color-softgray: #4a4453;
+  --theme-card-border: color-mix(in srgb, #ffb7d5 14%, #ffffff);
+  --theme-input-border: color-mix(in srgb, #ffb7d5 16%, #fff9fb);
+  --theme-separator: color-mix(in srgb, #ffb7d5 12%, #fff9fb);
+  --shadow-card:
+    0 1px 0 rgba(255, 183, 213, 0.1),
+    0 1px 3px rgba(255, 183, 213, 0.12),
+    0 14px 34px -16px rgba(191, 231, 255, 0.14);
+  --shadow-card-hover:
+    0 1px 0 rgba(255, 183, 213, 0.12),
+    0 6px 18px -6px rgba(255, 183, 213, 0.14),
+    0 20px 44px -16px rgba(191, 231, 255, 0.16);
+  --shadow-elevated:
+    0 10px 30px -10px rgba(191, 231, 255, 0.18),
+    0 2px 8px -2px rgba(255, 183, 213, 0.1);
+  --shadow-nav:
+    0 1px 2px rgba(255, 183, 213, 0.08),
+    0 4px 16px -4px rgba(191, 231, 255, 0.12);
+}
+
+/* Mint Blossom — mint-forward pastel shell + luminous card shadows. */
+html[data-theme="mint-blossom"] {
+  --theme-secondary: #d9f8e7;
+  --theme-secondary-foreground: #3a3142;
+  --theme-accent: #fffdf8;
+  --theme-accent-foreground: #5eb8f0;
+  --theme-border: color-mix(in srgb, #b7efd1 22%, #fff9fb);
+  --theme-topbar-bg: #fffefe;
+  --theme-topbar-text: #3a3142;
+  --color-softgray: #4a4453;
+  --theme-card-border: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --theme-input-border: color-mix(in srgb, #b7efd1 16%, #fff9fb);
+  --theme-separator: color-mix(in srgb, #b7efd1 12%, #fff9fb);
+  --shadow-card:
+    0 1px 0 rgba(183, 239, 209, 0.1),
+    0 1px 3px rgba(191, 231, 255, 0.1),
+    0 16px 36px -18px rgba(214, 240, 255, 0.14);
+  --shadow-card-hover:
+    0 1px 0 rgba(183, 239, 209, 0.12),
+    0 6px 18px -6px rgba(191, 231, 255, 0.12),
+    0 22px 48px -18px rgba(255, 183, 213, 0.12);
+  --shadow-elevated:
+    0 10px 30px -10px rgba(183, 239, 209, 0.16),
+    0 2px 8px -2px rgba(191, 231, 255, 0.1);
+  --shadow-nav:
+    0 1px 2px rgba(183, 239, 209, 0.08),
+    0 4px 16px -4px rgba(214, 240, 255, 0.12);
 }
 
 /* ============================================================

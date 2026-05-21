@@ -1,3 +1,4 @@
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 import type { PostExamSessionKind } from "@/lib/learner/post-exam-performance-report";
 import { buildCompetencyGraphSteps } from "@/lib/learner/post-exam-coaching/competency-graph-steps";
@@ -90,7 +91,7 @@ export function orchestrateCoachingRecommendations(args: {
 
   if (out.length < maxItems && (sessionKind === "cat" || sessionKind === "readiness_assessment") && coachingModel === "cat_adaptive") {
     const href = pathwayId
-      ? `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(pathwayId)}`
+      ? appPathwayCatSessionStartPath(pathwayId)
       : "/app/practice-tests";
     if (!seenHref.has(href)) {
       out.push({

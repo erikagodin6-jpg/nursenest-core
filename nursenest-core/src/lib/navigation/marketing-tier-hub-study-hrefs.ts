@@ -131,7 +131,11 @@ export function resolveMarketingTierHubStudyActionHref(
     if (actionId === "cat") {
       try {
         const u = new URL(raw, RESOLVE_URL_BASE);
-        if (u.pathname === "/app/practice-tests/cat-launch" && u.searchParams.get("pathwayId") === pathway.id) {
+        if (
+          (u.pathname === "/app/practice-tests/cat-launch" ||
+            (u.pathname === "/app/practice-tests" && u.searchParams.get("catLaunch") === "1")) &&
+          u.searchParams.get("pathwayId") === pathway.id
+        ) {
           return raw;
         }
       } catch {

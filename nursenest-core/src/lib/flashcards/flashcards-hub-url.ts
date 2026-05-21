@@ -49,14 +49,14 @@ export function buildAppFlashcardsCustomStudyHref(args: {
   mode?: FlashcardsHubMode;
   /** Starred card ids (pathway-safe: server intersects with pathway inventory). */
   starredStateIds?: readonly string[];
-  cardLimit?: number;
+  cardLimit?: number | "all";
   shuffle?: boolean;
 }): string {
   const q = new URLSearchParams();
   q.set("pathwayId", args.pathwayId);
   q.set("includeCards", "1");
   q.set("shuffle", args.shuffle === false ? "0" : "1");
-  q.set("cardLimit", String(args.cardLimit ?? 50));
+  q.set("cardLimit", args.cardLimit === "all" ? "all" : String(args.cardLimit ?? 50));
 
   if (args.systems?.length) {
     q.set("categories", [...new Set(args.systems)].join(","));

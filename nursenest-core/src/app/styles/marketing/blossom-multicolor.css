@@ -6,13 +6,13 @@
    and the nine-band lesson section system in theme-palettes.css.
 
    Palette roles (do not collapse to brand-only):
-     chart-1 pink · chart-2 violet · chart-3 blue · chart-4 mint
-     chart-5 rose · chart-6 seafoam · chart-7 periwinkle · chart-8 gold · chart-9 indigo
+     chart-1 pink · chart-2 sky · chart-3 blue · chart-4 mint
+     chart-5 rose · chart-6 seafoam · chart-7 periwinkle · chart-8 butter · chart-9 sky
    ========================================================================== */
 
 /* Homepage + marketing brand root — premium meters use distinct hues (not one bar color). */
-html[data-theme="blossom"] .nn-home-marketing-root,
-html[data-theme="blossom"] .nn-marketing-brand-root {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-home-marketing-root,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-brand-root {
   --nn-premium-tone-brand: var(--semantic-chart-1);
   --nn-premium-tone-info: var(--semantic-chart-3);
   --nn-premium-tone-success: var(--semantic-chart-4);
@@ -47,48 +47,48 @@ html[data-theme="blossom"] .nn-marketing-brand-root {
 }
 
 /* Section eyebrows — each homepage band gets its own accent dot (multi-hue hierarchy). */
-html[data-theme="blossom"] .nn-premium-home-section--pathways .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--pathways .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-1);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-1) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-section--ecosystem .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--ecosystem .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-2);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-2) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-section--clinical .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--clinical .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-3);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-3) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-section--readiness .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--readiness .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-4);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-4) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-section--trust .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--trust .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-5);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-5) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-section--social-study .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--social-study .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-7);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-7) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-section--cta .nn-premium-home-eyebrow::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section--cta .nn-premium-home-eyebrow::before {
   background: var(--semantic-chart-9);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--semantic-chart-9) 18%, transparent);
 }
 
-html[data-theme="blossom"] .nn-premium-home-eyebrow {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-eyebrow {
   border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--border-subtle));
   color: color-mix(in srgb, var(--semantic-chart-9) 72%, var(--palette-heading));
 }
 
 /* Pathway / depth / flow cards — stronger per-card tint (inherits nth-of-type chart vars from pathway-reading.css). */
-html[data-theme="blossom"] .nn-premium-pathway-card {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-pathway-card {
   background:
     radial-gradient(
       360px 180px at 100% 0%,
@@ -103,12 +103,12 @@ html[data-theme="blossom"] .nn-premium-pathway-card {
   border-color: color-mix(in srgb, var(--premium-card-accent) 24%, var(--border-subtle));
 }
 
-html[data-theme="blossom"] .nn-premium-depth-card,
-html[data-theme="blossom"] .nn-premium-flow-card {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-depth-card,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-flow-card {
   border-color: color-mix(in srgb, var(--depth-accent, var(--semantic-chart-2)) 22%, var(--border-subtle));
 }
 
-html[data-theme="blossom"] .nn-premium-mini-metric {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-mini-metric {
   border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--border-subtle));
   background:
     linear-gradient(
@@ -119,12 +119,12 @@ html[data-theme="blossom"] .nn-premium-mini-metric {
 }
 
 /* Tier hub chips — RN / PN / NP / New Grad / Allied each get pink, violet, blue, mint, or rose. */
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
   a:nth-child(5n + 1),
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
@@ -133,12 +133,12 @@ html[data-theme="blossom"]
   background: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--nn-header-primary-bg));
 }
 
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
   a:nth-child(5n + 2),
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
@@ -147,12 +147,12 @@ html[data-theme="blossom"]
   background: color-mix(in srgb, var(--semantic-chart-2) 14%, var(--nn-header-primary-bg));
 }
 
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
   a:nth-child(5n + 3),
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
@@ -161,12 +161,12 @@ html[data-theme="blossom"]
   background: color-mix(in srgb, var(--semantic-chart-3) 14%, var(--nn-header-primary-bg));
 }
 
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
   a:nth-child(5n + 4),
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
@@ -175,12 +175,12 @@ html[data-theme="blossom"]
   background: color-mix(in srgb, var(--semantic-chart-4) 14%, var(--nn-header-primary-bg));
 }
 
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
   a:nth-child(5n + 5),
-html[data-theme="blossom"]
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
   [data-nn-header-layout="marketing-row4"]
   .nn-marketing-nav-v31-tier-inner
   nav
@@ -190,7 +190,7 @@ html[data-theme="blossom"]
 }
 
 /* Lesson detail shell — hero wash uses three chart hues (matches lesson section bands). */
-html[data-theme="blossom"] .nn-premium-learner-lesson-hero::before {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-learner-lesson-hero::before {
   opacity: 0.2;
   background:
     radial-gradient(560px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-1) 28%, transparent), transparent 58%),
@@ -198,7 +198,7 @@ html[data-theme="blossom"] .nn-premium-learner-lesson-hero::before {
     radial-gradient(440px 160px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 22%, transparent), transparent 58%);
 }
 
-html[data-theme="blossom"] .nn-premium-pathway-lesson-header::after {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-pathway-lesson-header::after {
   opacity: 0.14;
   background:
     radial-gradient(520px 180px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 32%, transparent), transparent 56%),
@@ -206,7 +206,7 @@ html[data-theme="blossom"] .nn-premium-pathway-lesson-header::after {
 }
 
 /* Pricing plan cards — free tier pink wash, premium tier blue–violet wash. */
-html[data-theme="blossom"] .nn-pricing-plan-card:nth-of-type(1) {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-pricing-plan-card:nth-of-type(1) {
   background:
     linear-gradient(
       165deg,
@@ -216,7 +216,7 @@ html[data-theme="blossom"] .nn-pricing-plan-card:nth-of-type(1) {
   border-color: color-mix(in srgb, var(--semantic-chart-1) 22%, var(--semantic-border-soft));
 }
 
-html[data-theme="blossom"] .nn-pricing-plan-card:nth-of-type(2) {
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-pricing-plan-card:nth-of-type(2) {
   background:
     linear-gradient(
       165deg,

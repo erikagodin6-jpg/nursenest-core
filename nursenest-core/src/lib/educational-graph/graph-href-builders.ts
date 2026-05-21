@@ -1,3 +1,4 @@
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import {
@@ -97,9 +98,7 @@ export function reassessmentHref(args: {
       stepKind: "cat_exam",
     };
   }
-  const href = args.pathwayId
-    ? `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(args.pathwayId)}`
-    : "/app/practice-tests";
+  const href = args.pathwayId ? appPathwayCatSessionStartPath(args.pathwayId) : "/app/practice-tests";
   return { title: "Readiness reassessment", href, stepKind: "reassessment" };
 }
 

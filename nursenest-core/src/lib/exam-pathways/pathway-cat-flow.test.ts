@@ -8,11 +8,12 @@ import {
   resolveStudySurfaceCatHref,
 } from "@/lib/exam-pathways/pathway-cat-flow";
 
-test("appPathwayCatSessionStartPath always encodes pathwayId for CAT start", () => {
+test("appPathwayCatSessionStartPath always encodes pathwayId and inline launch on hub", () => {
   const href = appPathwayCatSessionStartPath("us-rn-nclex-rn");
-  assert.ok(href.startsWith("/app/practice-tests/cat-launch?"));
-  const q = new URLSearchParams(href.slice("/app/practice-tests/cat-launch?".length));
+  assert.ok(href.startsWith("/app/practice-tests?"));
+  const q = new URLSearchParams(href.slice("/app/practice-tests?".length));
   assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
+  assert.equal(q.get("catLaunch"), "1");
 });
 
 test("appCatWeakFocusPath keeps cat mode and pathway context", () => {
@@ -30,7 +31,7 @@ test("resolveStudySurfaceCatHref scopes CAT start when the pathway is unambiguou
     resolveStudySurfaceCatHref({
       availablePathwayIds: ["us-rn-nclex-rn"],
     }),
-    "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn",
+    "/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1",
   );
 });
 

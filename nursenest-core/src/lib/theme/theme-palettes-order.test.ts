@@ -110,6 +110,7 @@ const EXPECTED_COMPLETE_LIGHT_THEMES = [
   "north-sea",
   "aurora",
   "blossom",
+  "mint-blossom",
   "sunset",
   "ocean-air",
   "ocean",

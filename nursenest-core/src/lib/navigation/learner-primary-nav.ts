@@ -2,7 +2,7 @@
  * Canonical learner primary nav — one list for marketing header + `/app` learner shell.
  */
 
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { appPathwayCatSessionStartPath, resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { LearnerExamsSurfaceLabel } from "@/lib/testing/testing-model-types";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
@@ -85,8 +85,7 @@ function resolveLearnerExamsNavHref(
     return "/app/cases/cnple";
   }
   if (examsLabel === "CAT Exams" && pathwayId?.trim()) {
-    const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
-    return `/app/practice-tests/cat-launch?${q.toString()}`;
+    return appPathwayCatSessionStartPath(pathwayId.trim());
   }
   return "/app/practice-tests?startMode=practice_exam";
 }

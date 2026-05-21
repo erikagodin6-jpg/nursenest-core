@@ -124,6 +124,8 @@ export const PH = {
   learnerQuestionBankSessionStarted: "learner_question_bank_session_started",
   /** Practice test API: adaptive (CAT) session created. */
   learnerCatExamStarted: "learner_cat_exam_started",
+  /** Question bank adaptive practice setup: learner started a session from the hub. */
+  learnerAdaptivePracticeSetupStarted: "learner_adaptive_practice_setup_started",
   /** Practice test API: non-CAT linear/random session created. */
   learnerLinearPracticeTestStarted: "learner_linear_practice_test_started",
   /** Practice test finished (linear complete, CAT advance completed, or CAT finalize). */

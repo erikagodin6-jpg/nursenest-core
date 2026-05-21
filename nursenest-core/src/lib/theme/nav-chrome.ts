@@ -122,13 +122,21 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
 
   /* ── Premium clinical palettes ── */
   blossom: {
-    /* Bright Blossom chrome: white paper with pink, sky, and violet lift (Figma homepage mockup). */
-    chrome: "color-mix(in srgb, #d948a8 4%, color-mix(in srgb, #e8f2ff 18%, color-mix(in srgb, #fff5fb 14%, #ffffff)))",
-    foreground: "#10182f",
-    border: "color-mix(in srgb, #3f5fd8 14%, #f5e8f4)",
-    hoverBg: "color-mix(in srgb, #d948a8 8%, transparent)",
-    hoverFg: "#10182f",
-    panel: "color-mix(in srgb, #9357f2 6%, transparent)",
+    /* Bright Blossom chrome: luminous pink paper with sky lift (no violet/indigo rim). */
+    chrome: "color-mix(in srgb, #ffb7d5 5%, color-mix(in srgb, #fff9fb 42%, color-mix(in srgb, #d9f8e7 10%, #ffffff)))",
+    foreground: "#3a3142",
+    border: "color-mix(in srgb, #ffb7d5 16%, #fff9fb)",
+    hoverBg: "color-mix(in srgb, #ffb7d5 10%, transparent)",
+    hoverFg: "#3a3142",
+    panel: "color-mix(in srgb, #bfe7ff 8%, transparent)",
+  },
+  "mint-blossom": {
+    chrome: "color-mix(in srgb, #c8f2dc 12%, color-mix(in srgb, #fff9fb 48%, color-mix(in srgb, #d6f0ff 8%, #ffffff)))",
+    foreground: "#3a3142",
+    border: "color-mix(in srgb, #b7efd1 18%, #fff9fb)",
+    hoverBg: "color-mix(in srgb, #b7efd1 12%, transparent)",
+    hoverFg: "#3a3142",
+    panel: "color-mix(in srgb, #d9f8e7 10%, transparent)",
   },
   aurora: {
     /* Fallback when semantic tokens absent — pastel wash + ink (matches theme-palettes Aurora). */

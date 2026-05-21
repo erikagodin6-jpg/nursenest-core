@@ -694,9 +694,15 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         { status: 400 },
       );
     }
+    const studyLaunch = cfg.studyLaunchPayload as { unlimited?: boolean } | undefined;
+    const practicePresentationCat =
+      cfg.selectionMode === "cat" &&
+      cfg.catPresentationMode === "practice" &&
+      ((cfg.catAdaptiveSessionType ?? "cat") === "practice" || studyLaunch?.unlimited === true);
     if (
       cfg.selectionMode === "cat" &&
       (cfg.catAdaptiveSessionType ?? "cat") === "cat" &&
+      !practicePresentationCat &&
       answeredForComplete < 2
     ) {
       safeServerLog("cat_runner", "cat_complete_blocked_insufficient_adaptive_answers", {

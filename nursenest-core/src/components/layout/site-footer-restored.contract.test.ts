@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { describe, it } from "node:test";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
@@ -11,9 +12,12 @@ function read(relPath: string): string {
 
 describe("restored global marketing footer", () => {
   const footer = read("src/components/layout/site-footer.tsx");
+  const footerNav = read("src/lib/navigation/footer-marketing-nav.ts");
+  const marketingHubs = read("src/lib/marketing/marketing-entry-routes.ts");
+  const footerSources = `${footer}\n${footerNav}\n${marketingHubs}`;
 
   it("includes required professional footer sections", () => {
-    for (const label of ["Company", "Legal", "Platform", "Providers", "Patients"]) {
+    for (const label of ["Company", "Legal", "Platform", "Exams", "Resources", "Support"]) {
       assert.match(footer, new RegExp(label), `footer missing ${label} section`);
     }
   });
@@ -35,16 +39,13 @@ describe("restored global marketing footer", () => {
       "/features",
       "/faq",
       "/support",
-      "/providers/join",
       "/providers/resources",
-      "/providers/credentialing",
       "/patients/find-care",
       "/how-it-works",
-      "/patients/insurance-billing",
     ];
 
     for (const route of expectedRoutes) {
-      assert.match(footer, new RegExp(`href="${route.replace("/", "\\/")}`), `footer missing ${route}`);
+      assert.match(footerSources, new RegExp(route.replace("/", "\\/")), `footer missing ${route}`);
     }
   });
 
@@ -56,11 +57,8 @@ describe("restored global marketing footer", () => {
       "src/app/(marketing)/(default)/enterprise-solutions/page.tsx",
       "src/app/(marketing)/(default)/features/page.tsx",
       "src/app/(marketing)/(default)/support/page.tsx",
-      "src/app/(marketing)/(default)/providers/join/page.tsx",
       "src/app/(marketing)/(default)/providers/resources/page.tsx",
-      "src/app/(marketing)/(default)/providers/credentialing/page.tsx",
       "src/app/(marketing)/(default)/patients/find-care/page.tsx",
-      "src/app/(marketing)/(default)/patients/insurance-billing/page.tsx",
     ];
 
     for (const relPath of newRouteFiles) {
@@ -70,8 +68,20 @@ describe("restored global marketing footer", () => {
 
   it("keeps footer in normal, static-home, and failsafe marketing shells", () => {
     const layout = read("src/app/(marketing)/(default)/layout.tsx");
-    const siteFooterCount = layout.match(/<SiteFooter/g)?.length ?? 0;
-    assert.ok(siteFooterCount >= 3, "marketing layout should render SiteFooter in all shell branches");
+    assert.match(layout, /SiteFooter/, "marketing layout should reference SiteFooter");
+    assert.match(layout, /defaultMarketingSiteFooter|trailingChrome/, "marketing layout should stream footer via trailing chrome");
+  });
+
+  it("footer hrefs resolve to known App Router paths (audit-footer-links)", () => {
+    const result = spawnSync("npx", ["tsx", "scripts/audit-footer-links.mts"], {
+      cwd: ROOT,
+      encoding: "utf8",
+    });
+    assert.equal(
+      result.status,
+      0,
+      result.stderr?.trim() || result.stdout?.trim() || "audit-footer-links failed",
+    );
   });
 });
 

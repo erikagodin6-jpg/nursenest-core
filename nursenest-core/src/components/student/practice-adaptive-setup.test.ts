@@ -44,6 +44,7 @@ describe("buildPracticeAdaptiveCreatePayload", () => {
     assert.equal(p.catExamFeedbackMode, "study", "Practice mode must show rationale after each question");
     assert.equal(p.selectionMode, "cat");
     assert.equal(p.timedMode, false, "Practice mode must not be timed");
+    assert.equal(p.timeLimitSec, null, "Untimed practice must not send timeLimitSec: 0 (API min 120 when timed)");
     assert.equal(p.selectionStrictness, "soft");
   });
 
@@ -150,7 +151,7 @@ describe("buildPracticeAdaptiveCreatePayload", () => {
     assert.equal(p.catSelectionBasis, "missed");
   });
 
-  it("clamps questionCount to [10, 200]", () => {
+  it("clamps legacy questionCount to [10, 150] for fixed sessions", () => {
     const low = buildPracticeAdaptiveCreatePayload({
       pathwayId: "ca-rn-nclex-rn",
       topicNames: [],
@@ -158,6 +159,7 @@ describe("buildPracticeAdaptiveCreatePayload", () => {
       questionCount: 1,
     });
     assert.equal(low.questionCount, 10, "minimum is 10");
+    assert.equal(low.catAdaptiveSessionType, "practice");
 
     const high = buildPracticeAdaptiveCreatePayload({
       pathwayId: "ca-rn-nclex-rn",
@@ -165,7 +167,32 @@ describe("buildPracticeAdaptiveCreatePayload", () => {
       catSelectionBasis: "random",
       questionCount: 9999,
     });
-    assert.equal(high.questionCount, 200, "maximum is 200");
+    assert.equal(high.questionCount, 150, "fixed practice maximum is 150");
+  });
+
+  it("unlimited session uses CAT advance with study feedback and launch flag", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "ca-rn-nclex-rn",
+      topicNames: [],
+      catSelectionBasis: "random",
+      sessionLength: "unlimited",
+    });
+    assert.equal(p.catAdaptiveSessionType, "cat");
+    assert.equal(p.questionCount, 200);
+    assert.equal(p.studyLaunchPayload?.unlimited, true);
+    assert.equal(p.studyLaunchPayload?.mode, "adaptive_practice_unlimited");
+    assert.equal(p.timeLimitSec, null);
+  });
+
+  it("supports fixed sessionLength presets including 75 and 150", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "ca-rn-nclex-rn",
+      topicNames: [],
+      catSelectionBasis: "random",
+      sessionLength: 75,
+    });
+    assert.equal(p.questionCount, 75);
+    assert.equal(p.catAdaptiveSessionType, "practice");
   });
 
   it("includes pathwayId in the payload", () => {

@@ -150,12 +150,13 @@ export function LessonClinicalImageCard({
   return (
     <aside
       aria-label={label ?? "Clinical image for this lesson"}
-      className={`mx-auto mt-8 mb-2 w-full max-w-[min(44rem,100%)] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
+      className={`nn-lesson-clinical-image-card mx-auto mt-8 mb-2 w-full max-w-[min(44rem,100%)] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
       style={{
         background: "var(--lesson-media-surface)",
         border: "1px solid var(--lesson-media-border)",
         /* Shadow depth: calm, not dramatic */
-        boxShadow: "0 2px 12px -4px rgba(0,0,0,0.06), 0 1px 4px -1px rgba(0,0,0,0.04)",
+        boxShadow:
+          "0 10px 36px -28px color-mix(in srgb, var(--semantic-brand) 18%, transparent)",
       }}
     >
       {/* ── Inner padding wrapper ─────────────────────────────────────────── */}

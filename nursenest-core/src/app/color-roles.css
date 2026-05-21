@@ -149,15 +149,29 @@ html[data-theme="multi-pastel"] {
   --role-cta-on-soft: color-mix(in srgb, #3a6e9e 78%, var(--theme-heading-text));
 }
 
-/* Blossom CTA: align public action buttons to the bright mockup palette, not success green. */
+/* Blossom CTA: soft pink fill + warm ink (readable on pastel; no magenta/violet press states). */
 html[data-theme="blossom"] {
-  --role-cta: #d948a8;
-  --role-cta-foreground: #ffffff;
-  --role-cta-hover: #b3359a;
-  --role-cta-pressed: #8f1d6e;
-  --role-cta-shadow: color-mix(in srgb, #d948a8 38%, transparent);
-  --role-cta-soft: color-mix(in srgb, #d948a8 11%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, #d948a8 76%, var(--theme-heading-text));
+  --role-cta: #ffa9cc;
+  --role-cta-foreground: #3a3142;
+  --role-cta-hover: #ff9fc8;
+  --role-cta-pressed: #f08bb8;
+  --role-cta-shadow:
+    0 8px 24px -8px rgba(255, 183, 213, 0.35),
+    0 4px 14px -6px rgba(191, 231, 255, 0.22);
+  --role-cta-soft: color-mix(in srgb, #ffb7d5 16%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #ff8fb8 72%, var(--theme-heading-text));
+}
+
+html[data-theme="mint-blossom"] {
+  --role-cta: #ffb7d5;
+  --role-cta-foreground: #3a3142;
+  --role-cta-hover: #ffa9cc;
+  --role-cta-pressed: #f08bb8;
+  --role-cta-shadow:
+    0 8px 24px -8px rgba(183, 239, 209, 0.32),
+    0 4px 14px -6px rgba(191, 231, 255, 0.2);
+  --role-cta-soft: color-mix(in srgb, #d9f8e7 18%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #ff8fb8 68%, var(--theme-heading-text));
 }
 
 html[data-theme="dark-clinical"],

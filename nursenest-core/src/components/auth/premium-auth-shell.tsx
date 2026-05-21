@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { AuthLeafWatermark } from "@/components/brand/auth-leaf-watermark";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { MarketingAuthMintBlossomTheme } from "@/components/auth/marketing-auth-mint-blossom-theme";
 
 type PremiumAuthShellVariant = "login" | "signup" | "recovery" | "reset";
 
@@ -46,22 +47,25 @@ export function PremiumAuthShell({
   const isSignup = variant === "signup";
 
   return (
+    <MarketingAuthMintBlossomTheme>
     <main
       className="nn-premium-auth-system nn-marketing-x nn-rhythm-page"
       data-nn-premium-auth-system={variant}
+      data-nn-premium-color-depth=""
+      data-nn-premium-full-platform-convergence=""
     >
       <section className="nn-premium-auth-layout" aria-labelledby="premium-auth-heading">
         <aside className="nn-premium-auth-story" data-nn-premium-auth-story aria-label="NurseNest Study Ecosystem">
           <div className="nn-premium-auth-brand-row">
             <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
-            <span className="nn-premium-auth-theme-pill">Premium Access</span>
+            <span className="nn-premium-auth-theme-pill">Mint Blossom · Premium study</span>
           </div>
           <div className="nn-premium-auth-story-copy">
-            <p className="nn-premium-auth-eyebrow">One NurseNest Ecosystem</p>
-            <h2>Secure Access For Focused Clinical Studying</h2>
+            <p className="nn-premium-auth-eyebrow">Trusted by nursing students</p>
+            <h2>Calm, focused access to adaptive NCLEX readiness</h2>
             <p>
-              Continue from public study hubs into the same premium learning loop used across lessons, flashcards,
-              practice exams, CAT readiness, dashboards, and report cards.
+              Sign in once and return to the same premium study loop—lessons, flashcards, practice exams, and CAT
+              sessions—without losing your pathway or momentum.
             </p>
           </div>
           <div className="nn-premium-auth-ecosystem-grid" data-nn-premium-auth-ecosystem>
@@ -111,5 +115,6 @@ export function PremiumAuthShell({
         </section>
       </section>
     </main>
+    </MarketingAuthMintBlossomTheme>
   );
 }

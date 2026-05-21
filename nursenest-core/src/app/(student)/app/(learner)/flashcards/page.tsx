@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
-import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -220,10 +219,6 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   if (pathwayResolution?.state === "no_pathway_context") {
     return (
       <div className="space-y-2">
-        <LearnerRenderTraceBanner
-          data-route="flashcards"
-          label="NN_RENDER_TRACE: flashcards live route (pathway picker)"
-        />
         <FlashcardsPathwayPickSurface
           title={t("learner.flashcards.page.noPathwayHeadline") ?? t("learner.flashcards.page.title")}
           subtitle={
@@ -306,7 +301,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   });
   const alliedKeyForFlashcards =
     alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId) ? alliedProfessionFromQuery : "";
-  if (alliedKeyForFlashcards && catHref.includes("/app/practice-tests/cat-launch")) {
+  if (alliedKeyForFlashcards && (catHref.includes("catLaunch=1") || catHref.includes("/app/practice-tests/cat-launch"))) {
     catHref = appPathwayCatSessionStartPath(scopedPathwayId, { alliedProfession: alliedKeyForFlashcards });
   }
 
@@ -318,7 +313,6 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   return (
     <div className="space-y-2">
-      <LearnerRenderTraceBanner data-route="flashcards" label="NN_RENDER_TRACE: flashcards live route" />
       <Suspense
         fallback={
           <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">

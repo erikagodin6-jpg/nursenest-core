@@ -9,11 +9,11 @@
  * 2. "NurseNest" wordmark was near-black — the blossom CSS rule was reading
  *    `var(--logo-primary)` which .nn-header-logo-row overrides to
  *    `--nn-header-primary-fg` (#1F2536, dark navy).  The fix uses
- *    `var(--theme-primary)` (blossom pink #d948a8) instead.
+ *    `var(--theme-primary)` (soft blossom pink) instead.
  * 3. "NurseNest" wordmark was blue/purple — theme-palettes.css had
  *    `--logo-primary: #3f5fd8` for blossom, giving the wordmark a blue/indigo
  *    colour in contexts without .nn-header-logo-row.  The fix removes that
- *    override so the global default `var(--theme-primary)` (#d948a8) applies.
+ *    override so the global default `var(--theme-primary)` applies.
  *
  * Run from nursenest-core/:
  *   node --import tsx --test tests/contracts/blossom-header-brand.contract.test.ts
@@ -274,11 +274,11 @@ describe("blossom theme-palettes.css — no blue/indigo logo-primary override", 
       // Only reject known blue/purple hardcodes
       assert.doesNotMatch(
         value,
-        /#3f5fd8|#5f6af5|#9357f2/i,
+        /#3f5fd8|#5f6af5|#9357f2|#b084cc|#805ad5|#9f7aea/i,
         `blossom --logo-primary must not be a blue/purple hex; found: ${value}`,
       );
     }
-    // If absent, the global html[data-theme] default (var(--theme-primary)=#d948a8) applies — OK
+    // If absent, the global html[data-theme] default (var(--theme-primary)) applies — OK
   });
 
   it("theme-overrides.css blossom brand lockup rule does NOT use var(--logo-primary)", () => {

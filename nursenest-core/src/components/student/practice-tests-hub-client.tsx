@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   BarChart3,
@@ -49,6 +49,7 @@ import {
   hubCatStartBlocked,
   pathwayIdWhenEnteringCatMode,
   pathwayIdWhenLeavingCatMode,
+  practiceTestPathwayClientShellFromOption,
 } from "@/lib/practice-tests/practice-tests-hub-cat-pathway";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import {
@@ -59,6 +60,13 @@ import {
   resolvePriorityMessage,
 } from "@/lib/student/interaction-priority";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
+import {
+  appPathwayCatSessionStartPath,
+  isPracticeTestsHubCatLaunchParam,
+  PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM,
+} from "@/lib/exam-pathways/pathway-cat-flow";
+import { PracticeTestsHubAnalytics } from "@/components/student/practice-tests-hub-analytics";
+import { PracticeExamCatInlineLaunch } from "@/components/student/practice-exam-cat-inline-launch";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
@@ -208,6 +216,7 @@ export function PracticeTestsHubClient({
   hubBootstrapSource = "primary",
   catHref,
   pathwayLessonPractice = null,
+  initialCatMode = false,
 }: {
   examSimulationEnabled?: boolean;
   pathwayOptions?: PracticeTestPathwayOption[];
@@ -222,8 +231,11 @@ export function PracticeTestsHubClient({
   catHref?: string;
   /** PathwayLesson-derived practice + lesson counts (published catalog only). */
   pathwayLessonPractice?: PathwayLessonPracticeHubSnapshot | null;
+  /** When true (e.g. `?cat=1`), open the hub in CAT mode — no redirect to `/start`. */
+  initialCatMode?: boolean;
 }) {
   const { t } = useMarketingI18n();
+  const router = useRouter();
   const searchParams = useSearchParams();
   /** Stable dependency so URL-driven effects do not re-fire on unrelated `useSearchParams` identity churn. */
   const searchParamString = useMemo(() => searchParams.toString(), [searchParams]);
@@ -242,6 +254,7 @@ export function PracticeTestsHubClient({
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [catInlineLaunchOpen, setCatInlineLaunchOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [questionCount, setQuestionCount] = useState(20);
@@ -332,16 +345,61 @@ export function PracticeTestsHubClient({
     discoveryReady && discoveryStats.totalIndexed === 0 && (discoveryTotal ?? 0) === 0;
 
   const catExamStartHref = useMemo(() => {
-    if (!catHref?.trim()) return null;
-    try {
-      const u = new URL(catHref.trim(), typeof window !== "undefined" ? window.location.origin : "https://nursenest.local");
-      u.searchParams.set("mode", "cat");
-      if (pathwayId.trim()) u.searchParams.set("pathwayId", pathwayId.trim());
-      return `${u.pathname}${u.search}`;
-    } catch {
-      return catHref.trim();
+    const pid = pathwayId.trim() || (defaultPathwayId ?? "").trim();
+    if (!pid || !catOptions.some((p) => p.id === pid)) return null;
+    return appPathwayCatSessionStartPath(pid);
+  }, [pathwayId, defaultPathwayId, catOptions]);
+
+  const activeCatPathwayShell = useMemo(() => {
+    const pid = pathwayId.trim() || (defaultPathwayId ?? "").trim();
+    const opt = catOptions.find((p) => p.id === pid);
+    return opt ? practiceTestPathwayClientShellFromOption(opt) : null;
+  }, [pathwayId, defaultPathwayId, catOptions]);
+
+  const clearCatLaunchFromUrl = useCallback(() => {
+    const qp = new URLSearchParams(searchParamString);
+    if (!qp.has(PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM)) return;
+    qp.delete(PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM);
+    const qs = qp.toString();
+    router.replace(qs ? `/app/practice-tests?${qs}` : "/app/practice-tests", { scroll: false });
+  }, [router, searchParamString]);
+
+  const closeCatInlineLaunch = useCallback(() => {
+    setCatInlineLaunchOpen(false);
+    clearCatLaunchFromUrl();
+  }, [clearCatLaunchFromUrl]);
+
+  const openCatInlineLaunch = useCallback(() => {
+    if (!catExamStartHref || !activeCatPathwayShell) return;
+    setCatInlineLaunchOpen(true);
+    const qp = new URLSearchParams(searchParamString);
+    qp.set(PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM, "1");
+    const pid = pathwayId.trim() || (defaultPathwayId ?? "").trim();
+    if (pid) qp.set("pathwayId", pid);
+    router.replace(`/app/practice-tests?${qp.toString()}`, { scroll: false });
+  }, [
+    activeCatPathwayShell,
+    catExamStartHref,
+    defaultPathwayId,
+    pathwayId,
+    router,
+    searchParamString,
+  ]);
+
+  useEffect(() => {
+    const qp = new URLSearchParams(searchParamString);
+    if (!isPracticeTestsHubCatLaunchParam(qp.get(PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM))) {
+      setCatInlineLaunchOpen(false);
+      return;
     }
-  }, [catHref, pathwayId]);
+    const pid = (qp.get("pathwayId")?.trim() || pathwayId.trim() || defaultPathwayId?.trim() || "");
+    if (!pid || !catOptions.some((p) => p.id === pid)) {
+      setCatInlineLaunchOpen(false);
+      return;
+    }
+    if (pid !== pathwayId.trim()) setPathwayId(pid);
+    setCatInlineLaunchOpen(true);
+  }, [searchParamString, pathwayId, defaultPathwayId, catOptions]);
   const hasInProgressActivity = list.some((row) => row.status === "IN_PROGRESS");
   const hasRecentCompletion = list.some((row) => row.status === "COMPLETED" && isWithinRecentWindow(row.completedAt, nowMs));
   const hasWeakFocus =
@@ -408,7 +466,7 @@ export function PracticeTestsHubClient({
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/practice-tests");
+      const res = await fetch("/api/practice-tests", { credentials: "include", cache: "no-store" });
       const data = (await res.json()) as { tests?: TestListRow[]; error?: string };
       if (!res.ok) throw new Error(data.error ?? t("learner.practiceTests.hub.error.loadTests"));
       if (!Array.isArray(data.tests)) {
@@ -498,6 +556,12 @@ export function PracticeTestsHubClient({
   }, [creating, selectionMode, catPresentationMode, linearDeliveryMode, t]);
 
   useEffect(() => {
+    if (initialCatMode) {
+      setSelectionMode("cat");
+    }
+  }, [initialCatMode]);
+
+  useEffect(() => {
     const qp = new URLSearchParams(searchParamString);
     const pid = qp.get("pathwayId")?.trim();
     if (pid && pathwayOptions.some((p) => p.id === pid)) {
@@ -554,7 +618,7 @@ export function PracticeTestsHubClient({
           qp.set("language", selectedExamContext.language);
         }
         const discoveryUrl = qp.size > 0 ? `/api/questions/discovery?${qp.toString()}` : "/api/questions/discovery";
-        const res = await fetch(discoveryUrl);
+        const res = await fetch(discoveryUrl, { credentials: "include", cache: "no-store" });
         if (!res.ok) {
           if (!cancelled) {
             setDiscoveryTotal(null);
@@ -715,6 +779,7 @@ export function PracticeTestsHubClient({
           : { ...linearPayload, studyLaunchPayload };
       const res = await fetch("/api/practice-tests", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "x-nn-study-launch-surface": "practice_exams",
@@ -757,7 +822,31 @@ export function PracticeTestsHubClient({
   const questionsHubHref = `/app/questions${pathwayScopedQs}`;
   const lessonsHubHref = `/app/lessons${pathwayScopedQs}`;
   const flashcardsHubHref = `/app/flashcards${pathwayScopedQs}`;
-  const catEntryHref = (catHref?.trim() || catExamStartHref || "/app/practice-tests/start").trim();
+  const catEntryHref = (catExamStartHref || catHref?.trim() || "/app/practice-tests").trim();
+
+  const allCanonicalIds = CANONICAL_STUDY_CATEGORIES.map((c) => c.id);
+  const systemFilterLabel = useMemo(() => {
+    if (selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= allCanonicalIds.length) {
+      return "All body systems included";
+    }
+    const labels = selectedCanonicalIds
+      .map((id) => CANONICAL_STUDY_CATEGORIES.find((c) => c.id === id)?.label ?? id)
+      .slice(0, 4);
+    const extra = selectedCanonicalIds.length - labels.length;
+    return extra > 0 ? `${labels.join(", ")} +${extra}` : labels.join(", ");
+  }, [selectedCanonicalIds, allCanonicalIds.length, t]);
+
+  const recentForAnalytics = useMemo(
+    () =>
+      list.map((row) => ({
+        id: row.id,
+        accuracyPct: row.accuracyPct,
+        completedAt: row.completedAt,
+        questionCount: row.questionCount,
+        selectionMode: row.selectionMode,
+      })),
+    [list],
+  );
 
   const studyToolsRail = (
     <StudyToolsRail
@@ -774,7 +863,7 @@ export function PracticeTestsHubClient({
 
   return (
     <LearnerStudyPageShell
-      className="nn-practice-tests-hub-premium space-y-7 py-2 sm:space-y-8 sm:py-4"
+      className="nn-practice-tests-hub-premium space-y-8 py-3 sm:space-y-10 sm:py-5"
       data-nn-learner-area="practice-tests"
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"
@@ -790,7 +879,7 @@ export function PracticeTestsHubClient({
       <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(240px,280px)] xl:items-start xl:gap-10">
         <div className="min-w-0 space-y-7 sm:space-y-8">
       <header
-        className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_32%,var(--semantic-surface))_0%,var(--semantic-surface)_58%,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] sm:p-8"
+        className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_32%,var(--semantic-surface))_0%,var(--semantic-surface)_58%,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))_100%)] p-7 text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] sm:p-9"
         data-nn-e2e-practice-exam-first-hero
         data-nn-premium-platform-sticky-controls
       >
@@ -809,7 +898,7 @@ export function PracticeTestsHubClient({
             <h2 className="mt-2 text-3xl font-extrabold leading-[1.12] tracking-tight text-[var(--semantic-text-primary)] sm:text-4xl">
               {t("learner.practiceTests.examFirst.heroTitle")}
             </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.95rem]">
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-primary)] sm:text-[0.95rem]">
               {t("learner.practiceTests.examFirst.heroSubtitle")}
             </p>
             {poolLikelyEmpty ? (
@@ -825,8 +914,9 @@ export function PracticeTestsHubClient({
 
         <div className="relative mt-8 space-y-4">
           {catExamStartHref && catOptions.length > 0 ? (
-            <Link
-              href={catExamStartHref}
+            <button
+              type="button"
+              onClick={openCatInlineLaunch}
               className="nn-btn-primary group flex min-h-[3.75rem] w-full flex-col justify-center gap-1 rounded-2xl px-5 py-4 text-left text-base font-bold shadow-[0_14px_32px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] transition hover:brightness-[1.03] active:brightness-[0.98]"
               data-nn-e2e-exam-first-cta-cat
             >
@@ -837,7 +927,7 @@ export function PracticeTestsHubClient({
               <span className="text-xs font-medium opacity-95">
                 {t("learner.practiceTests.examFirst.ctaCatSublabel")}
               </span>
-            </Link>
+            </button>
           ) : (
             <div className="flex min-h-[3.25rem] flex-col justify-center rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_40%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
               {t("learner.practiceTests.hub.catUnavailableBody")}
@@ -984,7 +1074,7 @@ export function PracticeTestsHubClient({
         data-nn-e2e-practice-exams-builder
         data-nn-practice-exam-hub-convergence=""
         className={[
-          "nn-premium-practice-hub-builder scroll-mt-20 space-y-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7",
+          "nn-premium-practice-hub-builder scroll-mt-20 space-y-10 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool))] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8",
           isPriorityWinner(hubPriority, "weak_focus")
             ? "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] shadow-[var(--semantic-shadow-soft)]"
             : "",
@@ -1021,6 +1111,11 @@ export function PracticeTestsHubClient({
                   if (selectionMode === "cat" && catPresentationMode === "exam_simulation") {
                     applyExamSimulationDefaultsForPathway(next);
                   }
+                  const qp = new URLSearchParams(searchParamString);
+                  if (next.trim()) qp.set("pathwayId", next.trim());
+                  else qp.delete("pathwayId");
+                  const qs = qp.toString();
+                  router.replace(qs ? `/app/practice-tests?${qs}` : "/app/practice-tests", { scroll: false });
                 }}
               >
                 {selectionMode === "cat" && catOptions.length > 1 ? (
@@ -1095,13 +1190,14 @@ export function PracticeTestsHubClient({
                       {t("learner.practiceTests.hub.catConfigureCta")}
                     </button>
                     {catExamStartHref ? (
-                      <Link
-                        href={catExamStartHref}
+                      <button
+                        type="button"
+                        onClick={openCatInlineLaunch}
                         className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-bold text-[var(--semantic-brand-contrast)] shadow-sm transition hover:opacity-95"
                         data-nn-e2e-practice-hub-cat-exam
                       >
                         {t("learner.practiceTests.hub.startCatExam")}
-                      </Link>
+                      </button>
                     ) : null}
                   </div>
                 ) : (
@@ -1191,6 +1287,16 @@ export function PracticeTestsHubClient({
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
                 {t("learner.practiceTests.hub.stepCategories")}
               </p>
+            </div>
+            <div
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] px-4 py-3"
+              data-nn-practice-system-filter-summary
+              aria-live="polite"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                System filter
+              </p>
+              <p className="mt-1 text-sm font-semibold text-[var(--semantic-text-primary)]">{systemFilterLabel}</p>
             </div>
             <LearnerCategorySelector
               countsBySystem={countsByCanonical}
@@ -1723,9 +1829,18 @@ export function PracticeTestsHubClient({
           }}
           starting={creating}
         />
+
+        {activeCatPathwayShell ? (
+          <PracticeExamCatInlineLaunch
+            open={catInlineLaunchOpen}
+            onClose={closeCatInlineLaunch}
+            pathwayId={pathwayId.trim() || activeCatPathwayShell.id}
+            pathwayShell={activeCatPathwayShell}
+          />
+        ) : null}
       </section>
 
-      <section>
+      <section className="pt-2">
         <h2 className="text-lg font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.savedHistoryTitle")}</h2>
         <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.savedHistoryIntro")}</p>
         {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
@@ -1857,6 +1972,8 @@ export function PracticeTestsHubClient({
           </ul>
         )}
       </section>
+
+      <PracticeTestsHubAnalytics pathwayId={pathwayId.trim() || (defaultPathwayId ?? "")} recentSessions={recentForAnalytics} />
 
       <details className="nn-card rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] p-4 shadow-sm lg:hidden">
         <summary className="cursor-pointer list-none text-sm font-bold text-[var(--semantic-text-primary)] marker:content-none [&::-webkit-details-marker]:hidden">

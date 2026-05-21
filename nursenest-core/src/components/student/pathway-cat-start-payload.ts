@@ -8,6 +8,12 @@ import {
 } from "@/lib/exams/cat-exam-simulation";
 import type { CatPresentationMode, PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
+import {
+  ADAPTIVE_PRACTICE_DEFAULT_LENGTH,
+  ADAPTIVE_PRACTICE_UNLIMITED_CAP,
+  resolveAdaptivePracticeLaunchLength,
+  type AdaptivePracticeSessionLength,
+} from "@/lib/practice-tests/adaptive-practice-session-length";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 
 type ResolveReadinessStartQuestionCountInput = {
@@ -98,6 +104,8 @@ export type PracticeAdaptiveStudyLaunchPayload = {
   filters?: Record<string, string | number | boolean | null>;
   count?: number;
   shuffle?: boolean;
+  /** True when the learner chose unlimited practice (CAT advance until manual end). */
+  unlimited?: boolean;
 };
 
 export type PracticeAdaptiveCreatePayload = {
@@ -114,7 +122,7 @@ export type PracticeAdaptiveCreatePayload = {
   catAdaptiveSessionType: "practice";
   pathwayId: string;
   timedMode: false;
-  timeLimitSec: 0;
+  timeLimitSec: null;
   selectionStrictness: PracticeAdaptiveSelectionStrictness;
   studyLaunchPayload?: PracticeAdaptiveStudyLaunchPayload;
 };
@@ -134,13 +142,31 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
   pathwayId: string;
   topicNames: string[];
   catSelectionBasis: PracticeAdaptiveSelectionBasis;
-  questionCount: number;
+  /** Fixed count (10–150) or unlimited drilling cap. */
+  sessionLength?: AdaptivePracticeSessionLength;
+  /** @deprecated Prefer `sessionLength`; kept for callers passing a raw count. */
+  questionCount?: number;
   selectionStrictness?: PracticeAdaptiveSelectionStrictness;
   studyLaunchPayload?: PracticeAdaptiveStudyLaunchPayload;
 }): PracticeAdaptiveCreatePayload {
+  const sessionLength: AdaptivePracticeSessionLength =
+    opts.sessionLength ??
+    (typeof opts.questionCount === "number" && opts.questionCount > 0
+      ? (Math.max(10, Math.min(150, Math.floor(opts.questionCount))) as AdaptivePracticeSessionLength)
+      : ADAPTIVE_PRACTICE_DEFAULT_LENGTH);
+  const launch = resolveAdaptivePracticeLaunchLength(sessionLength);
+  const questionCount = Math.max(10, Math.min(ADAPTIVE_PRACTICE_UNLIMITED_CAP, launch.questionCount));
+  const studyLaunchPayload: PracticeAdaptiveStudyLaunchPayload = {
+    ...opts.studyLaunchPayload,
+    pathwayId: opts.studyLaunchPayload?.pathwayId ?? opts.pathwayId,
+    mode: launch.unlimited ? "adaptive_practice_unlimited" : (opts.studyLaunchPayload?.mode ?? "adaptive_practice"),
+    count: questionCount,
+    shuffle: opts.studyLaunchPayload?.shuffle ?? true,
+    ...(launch.unlimited ? { unlimited: true } : {}),
+  };
   return {
-    title: "Adaptive Practice Session",
-    questionCount: Math.max(10, Math.min(200, opts.questionCount)),
+    title: launch.unlimited ? "Unlimited Adaptive Practice" : "Adaptive Practice Session",
+    questionCount,
     topicNames: opts.topicNames,
     difficultyMin: null,
     difficultyMax: null,
@@ -148,12 +174,12 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
     catSelectionBasis: opts.catSelectionBasis,
     catPresentationMode: "practice",
     catExamFeedbackMode: "study",
-    catAdaptiveSessionType: "practice",
+    catAdaptiveSessionType: launch.catAdaptiveSessionType,
     pathwayId: opts.pathwayId,
     timedMode: false,
-    timeLimitSec: 0,
+    timeLimitSec: null,
     selectionStrictness: opts.selectionStrictness ?? "soft",
-    ...(opts.studyLaunchPayload ? { studyLaunchPayload: opts.studyLaunchPayload } : {}),
+    studyLaunchPayload,
   };
 }
 

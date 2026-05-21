@@ -1,0 +1,219 @@
+/* ==========================================================================
+   blossom-mint-polish.css — Blossom + Mint Blossom airy premium polish
+
+   Scope: html[data-theme="blossom"] and html[data-theme="mint-blossom"] only.
+   Goals: white space, luminous cards, lightweight type, spring gradients.
+   Does not alter Ocean, Midnight, Aurora, or lesson hotfix stacks globally.
+   ========================================================================== */
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variation-settings: "opsz" 14;
+
+  /* Airy spacing rhythm (marketing + learner shells) */
+  --nn-blossom-space-section: clamp(2.75rem, 6vw, 4.5rem);
+  --nn-blossom-space-card: clamp(1.25rem, 3vw, 1.75rem);
+  --nn-blossom-space-stack: clamp(1rem, 2.5vw, 1.5rem);
+  --nn-blossom-prose-max: 42rem;
+
+  /* Luminous surfaces */
+  --nn-blossom-page-wash: linear-gradient(
+    135deg,
+    color-mix(in srgb, #fff9fb 92%, #ffffff) 0%,
+    color-mix(in srgb, #e8fff3 38%, #ffffff) 45%,
+    color-mix(in srgb, #d6f0ff 32%, #ffffff) 100%
+  );
+  --nn-blossom-card-shadow:
+    0 1px 0 color-mix(in srgb, #ffb7d5 8%, transparent),
+    0 14px 40px -22px color-mix(in srgb, #bfe7ff 22%, transparent);
+  --nn-blossom-card-border: color-mix(in srgb, #ffb7d5 12%, #ffffff);
+}
+
+html[data-theme="mint-blossom"] {
+  --nn-blossom-page-wash: linear-gradient(
+    135deg,
+    color-mix(in srgb, #fafdfc 92%, #ffffff) 0%,
+    color-mix(in srgb, #d9f8e7 42%, #ffffff) 48%,
+    color-mix(in srgb, #d6f0ff 30%, #ffffff) 100%
+  );
+  --nn-blossom-card-shadow:
+    0 1px 0 color-mix(in srgb, #b7efd1 10%, transparent),
+    0 16px 42px -22px color-mix(in srgb, #d6f0ff 18%, transparent);
+  --nn-blossom-card-border: color-mix(in srgb, #b7efd1 14%, #ffffff);
+}
+
+/* Page atmosphere */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-brand-root,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-home-marketing-root {
+  background-image: var(--nn-blossom-page-wash);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-brand-root main::before {
+  opacity: 0.72;
+}
+
+/* Typography — lightweight, editorial */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) :where(
+    .nn-marketing-body,
+    .nn-marketing-body-sm,
+    .nn-premium-blog-prose :where(p, li),
+    .nn-premium-faq-redesign-panel p
+  ) {
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) :where(
+    .nn-marketing-h1,
+    .nn-marketing-h2,
+    .nn-marketing-h3,
+    .nn-marketing-h4,
+    .nn-premium-blog-prose :where(h2, h3),
+    .nn-premium-faq-redesign-question
+  ) {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-h1,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-title {
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-eyebrow,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-marketing-label {
+  font-weight: 600;
+}
+
+/* Cards — floating, soft, high whitespace */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  :where(
+    .nn-premium-pathway-card,
+    .nn-premium-depth-card,
+    .nn-premium-flow-card,
+    .nn-premium-faq-redesign-card,
+    .nn-premium-blog-post-card,
+    .nn-premium-blog-related-card,
+    .nn-pricing-plan-card,
+    .LearnerSurfaceCard,
+    .nn-learner-surface-card
+  ) {
+  border-width: 1px;
+  border-color: var(--nn-blossom-card-border);
+  box-shadow: var(--nn-blossom-card-shadow);
+  background: color-mix(in srgb, var(--semantic-surface) 94%, #ffffff);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  :where(.nn-premium-pathway-card, .nn-premium-depth-card, .nn-premium-flow-card) {
+  padding: var(--nn-blossom-space-card);
+}
+
+/* Buttons — soft blossom primary, mint secondary */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .btn-primary,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) [data-slot="button"].bg-primary,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-cta,
+html[data-theme="mint-blossom"] .nn-premium-auth-primary-button {
+  font-weight: 600;
+  box-shadow:
+    0 10px 24px -10px color-mix(in srgb, var(--role-cta) 42%, transparent),
+    0 2px 0 color-mix(in srgb, #ffffff 55%, transparent) inset;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .btn-primary:hover,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 32px -12px color-mix(in srgb, var(--role-cta) 48%, transparent),
+    0 0 0 1px color-mix(in srgb, #ffffff 40%, transparent) inset;
+}
+
+html[data-theme="mint-blossom"] .btn-secondary,
+html[data-theme="mint-blossom"] [data-variant="secondary"] {
+  background: color-mix(in srgb, #d9f8e7 72%, var(--semantic-surface));
+  border-color: color-mix(in srgb, #b7efd1 32%, var(--semantic-border-soft));
+  color: var(--theme-heading-text);
+}
+
+/* Section breathing room */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-home-section {
+  padding-block: var(--nn-blossom-space-section);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign {
+  padding-bottom: calc(var(--nn-blossom-space-section) + 4rem);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-list {
+  gap: var(--nn-blossom-space-stack);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-trigger {
+  min-height: 4.5rem;
+  padding: 1.1rem 1.15rem;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-panel {
+  padding: 0 1.15rem 1.35rem 4.1rem;
+}
+
+/* Blog — editorial, airy */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-blog-prose {
+  max-width: var(--nn-blossom-prose-max);
+  margin-inline: auto;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-blog-prose :where(h2) {
+  margin-top: 2.25rem;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-blog-prose :where(p + p) {
+  margin-top: 1.1rem;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-blog-toc,
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-blog-related {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 55%, #ffffff);
+  background: color-mix(in srgb, var(--semantic-surface) 88%, #ffffff);
+}
+
+/* Lesson reading — calm, distraction-free chrome */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-lesson-reading-shell--blossom {
+  --lesson-rail-gap: 1.35rem;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom
+  .nn-lesson-main--blossom {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom
+  .nn-lesson-article-flow
+  :where(p, li) {
+  font-weight: 400;
+  line-height: 1.72;
+  letter-spacing: -0.01em;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom
+  .nn-lesson-article-flow
+  :where(h2, h3) {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .btn-primary:hover,
+  :is(html[data-theme="blossom"], html[data-theme="mint-blossom"]) .nn-premium-faq-redesign-cta:hover {
+    transform: none;
+  }
+}

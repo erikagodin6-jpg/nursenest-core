@@ -129,17 +129,25 @@
 
 html[data-theme="blossom"] .nn-home-marketing-root {
   background-image:
-    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 22%, transparent), transparent 56%),
-    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-3) 20%, transparent), transparent 56%),
-    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 60%),
-    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-4) 16%, transparent), transparent 60%),
+    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 20%, transparent), transparent 56%),
+    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 56%),
+    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 60%),
+    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-8) 12%, transparent), transparent 60%),
     linear-gradient(
-      192deg,
-      color-mix(in srgb, var(--semantic-chart-1) 10%, var(--theme-page-bg)) 0%,
-      var(--theme-page-bg) 40%,
-      color-mix(in srgb, var(--semantic-chart-3) 9%, var(--theme-page-bg)) 66%,
-      color-mix(in srgb, var(--semantic-chart-2) 8%, var(--theme-page-bg)) 100%
+      180deg,
+      #fff9fb 0%,
+      #fffdf8 45%,
+      #e8fff3 100%
     );
+}
+
+html[data-theme="mint-blossom"] .nn-home-marketing-root {
+  background-image:
+    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 16%, transparent), transparent 56%),
+    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-7) 16%, transparent), transparent 56%),
+    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-4) 18%, transparent), transparent 60%),
+    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-8) 10%, transparent), transparent 60%),
+    linear-gradient(180deg, #fafdfc 0%, #fff9fb 42%, #d6f0ff 100%);
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
@@ -185,7 +193,7 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 60%);
 }
 
-/* Blossom — Figma nav v3.1: floating main pill (logo + Pricing…Tools) with pink / blue / violet rim */
+/* Blossom — Figma nav v3.1: floating main pill (logo + Pricing…Tools) with pink / sky rim */
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
   border-color: color-mix(
     in srgb,

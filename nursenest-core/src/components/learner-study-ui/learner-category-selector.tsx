@@ -19,6 +19,9 @@ export function LearnerCategorySelector({
   headingId,
   intro,
   searchPlaceholder = "Search categories…",
+  metaBySystem,
+  weakSystemIds,
+  strengthPctBySystem,
 }: {
   countsBySystem: Record<CanonicalStudyCategoryId, number>;
   selectedCanonicalIds: string[];
@@ -30,10 +33,15 @@ export function LearnerCategorySelector({
   headingId?: string;
   intro?: string;
   searchPlaceholder?: string;
+  /** Optional per-system secondary line under the title. */
+  metaBySystem?: Partial<Record<CanonicalStudyCategoryId, string>>;
+  weakSystemIds?: ReadonlySet<string>;
+  /** Per-system mastery/accuracy for personalized strength bars (0–100). */
+  strengthPctBySystem?: Partial<Record<CanonicalStudyCategoryId, number>>;
 }) {
   const allIds = CANONICAL_STUDY_CATEGORIES.map((s) => s.id);
-  const isCardSelected = (id: CanonicalStudyCategoryId) =>
-    selectedCanonicalIds.length === 0 ? true : selectedCanonicalIds.includes(id);
+  /** Empty selection = all systems (API); only explicit picks show as selected tiles. */
+  const isCardSelected = (id: CanonicalStudyCategoryId) => selectedCanonicalIds.includes(id);
 
   const filtered = CANONICAL_STUDY_CATEGORIES.filter((s) =>
     search ? s.label.toLowerCase().includes(search.toLowerCase()) : true,
@@ -83,6 +91,9 @@ export function LearnerCategorySelector({
               onToggle={() => onToggleCanonical(s.id)}
               icon={Icon}
               accentVar={visual.accentVar}
+              metaLine={metaBySystem?.[s.id] ?? null}
+              showWeakBadge={weakSystemIds?.has(s.id) ?? false}
+              strengthPctOverride={strengthPctBySystem?.[s.id]}
             />
           );
         })}

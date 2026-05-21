@@ -37,10 +37,10 @@ describe("blossom multicolor clinical spectrum", () => {
       assert.ok(!hues.includes(hex), `chart-${i} duplicates another chart slot: ${hex}`);
       hues.push(hex);
     }
-    assert.equal(hues[0], "#d948a8", "chart-1 should stay blossom pink");
-    assert.equal(hues[1], "#9357f2", "chart-2 should stay orchid violet");
-    assert.equal(hues[2], "#2f80ed", "chart-3 should stay clinical blue");
-    assert.notEqual(hues[4], hues[1], "chart-5 rose must differ from chart-2 violet");
+    assert.equal(hues[0], "#ffa9cc", "chart-1 should stay soft blossom pink");
+    assert.equal(hues[1], "#bfe7ff", "chart-2 should stay sky blue accent");
+    assert.equal(hues[2], "#7ec8ff", "chart-3 should stay clinical sky blue");
+    assert.notEqual(hues[4], hues[1], "chart-5 rose must differ from chart-2 sky");
   });
 
   it("lesson section bands use distinct base hues in theme-palettes", () => {
@@ -48,11 +48,11 @@ describe("blossom multicolor clinical spectrum", () => {
     const m = THEME_CSS.match(re);
     assert.ok(m?.[1], "blossom block in theme-palettes.css");
     const block = m[1];
-    assert.match(block, /--lesson-summary:[^;]*#d948a8/i);
-    assert.match(block, /--lesson-key-concepts:[^;]*#9357f2/i);
-    assert.match(block, /--lesson-diagnostics:[^;]*#2f80ed/i);
-    assert.match(block, /--lesson-interventions:[^;]*#8ce7cb/i);
-    assert.match(block, /--lesson-clinical-pearls:[^;]*#3f5fd8/i);
+    assert.match(block, /--lesson-summary:[^;]*#ffb7d5/i);
+    assert.match(block, /--lesson-key-concepts:[^;]*#bfe7ff/i);
+    assert.match(block, /--lesson-diagnostics:[^;]*#d6f0ff/i);
+    assert.match(block, /--lesson-interventions:[^;]*#d9f8e7/i);
+    assert.match(block, /--lesson-clinical-pearls:[^;]*#a9d8ff/i);
   });
 
   it("marketing CSS maps premium meters to multiple chart tokens", () => {

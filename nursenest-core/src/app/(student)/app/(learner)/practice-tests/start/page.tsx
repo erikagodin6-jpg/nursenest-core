@@ -8,7 +8,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
-import { isForcedCatFullSetupReviewParam } from "@/lib/exam-pathways/pathway-cat-flow";
+import { appPathwayCatSessionStartPath, isForcedCatFullSetupReviewParam } from "@/lib/exam-pathways/pathway-cat-flow";
 import { catLaunchPathwayIdForLearnerStartPage } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
@@ -123,7 +123,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
 
   /** Pathway is known → go straight to session bridge unless learner explicitly opened the full briefing. */
   if (initialPathwayId && !forceFullSetup) {
-    redirect(`/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(initialPathwayId)}`);
+    redirect(appPathwayCatSessionStartPath(initialPathwayId));
   }
 
   const pathwayOptions = catEligiblePathways.map((p) => ({

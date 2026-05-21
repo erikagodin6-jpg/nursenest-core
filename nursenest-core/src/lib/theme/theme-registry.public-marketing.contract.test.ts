@@ -7,20 +7,22 @@ import {
   themeOptionsForPublicMarketingPicker,
 } from "@/lib/theme/theme-registry";
 
-test("public marketing theme allowlist exposes Ocean, Midnight, Blossom, Aurora, Sunset", () => {
+test("public marketing theme allowlist exposes Ocean, Midnight, Blossom, Mint Blossom, Aurora, Sunset", () => {
   assert.deepEqual([...PUBLIC_MARKETING_THEME_ALLOWLIST], [
     NURSENEST_DEFAULT_THEME,
     "midnight",
     "blossom",
+    "mint-blossom",
     "aurora",
     "sunset",
   ]);
   const opts = themeOptionsForPublicMarketingPicker();
-  assert.equal(opts.length, 5);
+  assert.equal(opts.length, 6);
   assert.ok(opts.some((o) => o.id === NURSENEST_DEFAULT_THEME));
   assert.ok(opts.some((o) => o.id === "midnight"));
   assert.ok(opts.some((o) => o.id === "blossom"));
+  assert.ok(opts.some((o) => o.id === "mint-blossom"));
   assert.ok(opts.some((o) => o.id === "aurora"));
   assert.ok(opts.some((o) => o.id === "sunset"));
-  assert.equal(publicMarketingThemeChoiceCount(), 5);
+  assert.equal(publicMarketingThemeChoiceCount(), 6);
 });

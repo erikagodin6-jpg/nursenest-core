@@ -26,6 +26,15 @@ export function SafeLessonRemoteImage({
   if (!visible) return null;
   return (
     // eslint-disable-next-line @next/next/no-img-element -- CDN / catalog URLs; onError fallback
-    <img src={src} alt={alt} loading="lazy" decoding="async" className={className} onError={onError} />
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+      className={className}
+      onError={onError}
+      style={{ aspectRatio: "16 / 10", maxHeight: "min(70vh, 520px)" }}
+    />
   );
 }

@@ -124,22 +124,21 @@ describe("footer-seo.css — desktop accordion-summary hidden rule", () => {
 });
 
 describe("footer-seo.css — blossom theme contrast fix", () => {
-  it("blossom override sets --footer-fg to #ffffff for WCAG contrast on dark brand-strong background", () => {
-    // The blossom section must contain a rule that sets --footer-fg: #ffffff
+  it("blossom override sets warm plum --footer-fg for readable pastel footer", () => {
     const blossomSections = footerCss.match(
       /\[data-theme="blossom"\][^{]*\{[^}]*\}/g,
     ) ?? [];
     const hasFgOverride = blossomSections.some(
-      (block) => block.includes("--footer-fg") && block.includes("#ffffff"),
+      (block) => block.includes("--footer-fg") && block.includes("#3a3142"),
     );
     assert.ok(
       hasFgOverride,
-      '[data-theme="blossom"] must override --footer-fg: #ffffff in footer CSS ' +
-        "(blossom --footer-bg is dark #b3359a; inheriting dark nav-fg #10182f has no contrast)",
+      '[data-theme="blossom"] must override --footer-fg: #3a3142 in footer CSS ' +
+        "(warm ink on soft pink footer — avoids cold grey nav-fg inheritance)",
     );
   });
 
-  it("blossom override also recalculates --footer-muted and --footer-border from white", () => {
+  it("blossom override also recalculates --footer-muted and --footer-border for warm pastel footer", () => {
     const blossomSections = footerCss.match(
       /\[data-theme="blossom"\][^{]*\{[^}]*\}/g,
     ) ?? [];
@@ -147,12 +146,12 @@ describe("footer-seo.css — blossom theme contrast fix", () => {
       (block) =>
         block.includes("--footer-muted") &&
         block.includes("--footer-border") &&
-        block.includes("#ffffff"),
+        block.includes("#554d5e"),
     );
     assert.ok(
       hasMutedAndBorder,
       "[data-theme=\"blossom\"] footer rule must recalculate --footer-muted and --footer-border " +
-        "from #ffffff so all footer text tokens are light on the dark blossom background",
+        "with warm muted ink on the soft pink blossom footer",
     );
   });
 });

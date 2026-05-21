@@ -94,9 +94,14 @@ const createSchema = z
         filters: z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
         count: z.number().int().min(1).max(200).optional(),
         shuffle: z.boolean().optional(),
+        unlimited: z.boolean().optional(),
       })
       .optional(),
   })
+  .transform((d) => ({
+    ...d,
+    timeLimitSec: d.timedMode ? d.timeLimitSec : (d.timeLimitSec === 0 ? null : d.timeLimitSec ?? null),
+  }))
   .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 200, {
     message: "CAT maximum question cap is 200.",
     path: ["questionCount"],
@@ -444,14 +449,21 @@ export async function POST(req: Request) {
     // Resolve adaptive session type early — needed to decide whether readiness-config
     // bounds should apply.  Exam simulation always uses full CAT bounds regardless.
     const adaptiveSessionType = d.catPresentationMode === "exam_simulation" ? "cat" : d.catAdaptiveSessionType;
+    const unlimitedPracticeLaunch =
+      d.catPresentationMode === "practice" &&
+      d.studyLaunchPayload?.unlimited === true &&
+      d.studyLaunchPayload?.mode === "adaptive_practice_unlimited";
 
     // Guided practice sessions ("practice") use the caller's requested count so short
-    // runs (10–50 Q) are not inflated to the readiness-config max (e.g. 120 for NCLEX).
+    // runs (10–150 Q) are not inflated to the readiness-config max (e.g. 145 for NCLEX).
+    // Unlimited practice (study launch flag) keeps a high CAT cap for manual end.
     // Full CAT and exam simulation continue to respect the readiness / pathway cap.
     const configuredCount =
       adaptiveSessionType === "practice"
         ? d.questionCount
-        : readinessConfig?.maxQuestions ?? d.questionCount;
+        : unlimitedPracticeLaunch
+          ? Math.min(200, Math.max(10, d.questionCount))
+          : readinessConfig?.maxQuestions ?? d.questionCount;
     const enforcedQuestionCount =
       d.catPresentationMode === "exam_simulation" ? pathwayCap : Math.min(configuredCount, pathwayCap);
     const enforcedTimedMode =

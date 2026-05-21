@@ -1,19 +1,8 @@
 import { redirect } from "next/navigation";
-import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
-import { CatDirectLaunchClient } from "@/components/student/cat-direct-launch-client";
-import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
-import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
-import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 
 export const dynamic = "force-dynamic";
 
@@ -27,114 +16,27 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-type Props = { searchParams: Promise<{ pathwayId?: string }> };
+type Props = {
+  searchParams: Promise<{ pathwayId?: string; alliedProfession?: string }>;
+};
 
-export default async function CatDirectLaunchPage({ searchParams }: Props) {
-  const { t } = await getLearnerMarketingBundle();
+/** Legacy deep link — redirects to hub inline CAT launch (CNPLE still routes to LOFT cases). */
+export default async function CatDirectLaunchRedirectPage({ searchParams }: Props) {
   const sp = await searchParams;
   const pathwayId = typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 2 ? sp.pathwayId.trim() : null;
 
   if (!pathwayId) {
-    redirect("/app/practice-tests/start");
+    redirect("/app/practice-tests");
   }
 
-  // CNPLE uses LOFT (linear on-the-fly testing), not the CAT adaptive engine.
-  // Redirect any CNPLE launch attempt to the dedicated CNPLE cases hub.
   if (isCnplePathway(pathwayId)) {
     redirect("/app/cases/cnple");
   }
 
-  const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.cat_launch");
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
+  const allied =
+    typeof sp.alliedProfession === "string" && sp.alliedProfession.trim().length > 0
+      ? sp.alliedProfession.trim()
+      : null;
 
-  if (entitlement === "error") {
-    return (
-      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
-        <div className="mb-1">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
-            {t("learner.practiceTests.title")}
-          </h1>
-          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
-            {t("learner.entitlement.verifyFailed")}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!entitlement.hasAccess) {
-    const snap = userId ? await getFreemiumSnapshot(userId) : null;
-    return (
-      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
-        <div className="mb-1">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
-            {t("learner.practiceTests.title")}
-          </h1>
-          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
-            {t("learner.practiceTests.subtitle.locked")}
-          </p>
-        </div>
-        <div>
-          <SubscriptionPaywall
-            context="questions"
-            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
-            freemiumRemainingLessons={snap != null ? snap.lessonRemaining : undefined}
-          />
-        </div>
-        <FreemiumPreviewExhaustedSurface kind="cat" />
-      </div>
-    );
-  }
-
-  const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
-  const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
-
-  if (!catEligiblePathways.some((p) => p.id === pathwayId)) {
-    return (
-      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
-        <div className="mb-1">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <PremiumEmptyState
-          headline="Exam simulation"
-          body="This exam track is not available for adaptive sessions on your current plan, or CAT is not enabled for that track yet."
-          tone="default"
-          primaryCta={{
-            label: t("learner.dashboard.openAccountHub"),
-            href: "/app/account/study-preferences",
-            variant: "primary",
-          }}
-          secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
-      </div>
-    );
-  }
-
-  const pathway = catEligiblePathways.find((p) => p.id === pathwayId)!;
-  const shell: PracticeTestPathwayClientShell = {
-    id: pathway.id,
-    countrySlug: pathway.countrySlug,
-    roleTrack: pathway.roleTrack,
-    examCode: pathway.examCode,
-    shortName: pathway.shortName,
-    examFamily: pathway.examFamily,
-  };
-
-  return (
-    <div className="mx-auto min-w-0 w-full max-w-6xl space-y-4 px-4 pb-6 sm:px-6">
-      <div className="mb-1">
-        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-      </div>
-      <CatDirectLaunchClient pathwayId={pathwayId} pathwayShell={shell} />
-    </div>
-  );
+  redirect(appPathwayCatSessionStartPath(pathwayId, { alliedProfession: allied }));
 }

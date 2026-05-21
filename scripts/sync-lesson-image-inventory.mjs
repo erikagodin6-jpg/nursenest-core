@@ -41,11 +41,11 @@ const ENDPOINT =
 const KEY = process.env.SPACES_KEY?.trim();
 const SECRET = process.env.SPACES_SECRET?.trim();
 
-/** Object key prefixes to scan for lesson images. */
-const SCAN_PREFIXES = ["uploads/images/", "uploads/lesson-images/"];
+/** Object key prefixes to scan for lesson images ("" = bucket root, e.g. pulmonary-embolism.webp). */
+const SCAN_PREFIXES = ["uploads/images/", "uploads/lesson-images/", ""];
 
 /** Extensions considered valid lesson images. */
-const VALID_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif"]);
+const VALID_EXTENSIONS = new Set([".avif", ".webp", ".png", ".jpg", ".jpeg", ".gif"]);
 
 /** Skip auto-generated or AI-generated files (not editorial content). */
 function shouldSkipKey(key) {
@@ -91,6 +91,7 @@ async function listSpacesKeys() {
       const resp = await client.send(cmd);
       for (const obj of resp.Contents ?? []) {
         if (!obj.Key || shouldSkipKey(obj.Key)) continue;
+        if (prefix === "" && obj.Key.includes("/")) continue;
         allKeys.push(obj.Key);
       }
       if (!resp.IsTruncated) break;

@@ -10,8 +10,34 @@ export type ResolveStudySurfaceCatHrefArgs = {
   preferWeakFocus?: boolean;
 };
 
-/** Pathway-scoped CAT entry: `/app/practice-tests/cat-launch` verifies readiness and starts the exam shell immediately. */
+export const PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM = "catLaunch";
+
+/** True when the hub should open the inline CAT launch overlay (`catLaunch=1` or `true`). */
+export function isPracticeTestsHubCatLaunchParam(value: string | null | undefined): boolean {
+  if (typeof value !== "string") return false;
+  const v = value.trim().toLowerCase();
+  return v === "1" || v === "true";
+}
+
+/**
+ * Pathway-scoped CAT entry on the practice-tests hub: same shell, inline readiness + session start.
+ * Legacy `/app/practice-tests/cat-launch` redirects here.
+ */
 export function appPathwayCatSessionStartPath(
+  pathwayId: string,
+  opts?: { alliedProfession?: string | null },
+): string {
+  const q = new URLSearchParams({
+    pathwayId: pathwayId.trim(),
+    [PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM]: "1",
+  });
+  const ap = opts?.alliedProfession?.trim();
+  if (ap) q.set("alliedProfession", ap);
+  return `/app/practice-tests?${q.toString()}`;
+}
+
+/** Deep-link shim only — prefer {@link appPathwayCatSessionStartPath}. */
+export function appPathwayCatLaunchLegacyRedirectPath(
   pathwayId: string,
   opts?: { alliedProfession?: string | null },
 ): string {

@@ -13,8 +13,18 @@ lesson-mockups/design-png/
 
 **Or open the HTML designs directly (no PNG needed):**
 
-- `lesson-mockups/rn-lesson-detail-reading-v2-design.html`
+- `lesson-mockups/rn-lesson-detail-reading-v2-design.html` — Ocean theme
+- `lesson-mockups/rn-lesson-detail-reading-v2-mint-blossom.html` — **Mint Blossom** (review before implementation)
 - `lesson-mockups/rn-lesson-pre-post-assessment-design.html`
+
+**Mint Blossom PNGs** (after capture):
+
+```bash
+cd nursenest-core
+npx playwright test tests/e2e/preview/lesson-detail-reading-v2-mint-blossom.capture.spec.ts --project=chromium
+```
+
+Output folder: `lesson-mockups/design-png/lesson-detail-v2-mint-blossom/`
 
 Regenerate PNGs:
 

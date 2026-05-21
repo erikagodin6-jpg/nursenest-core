@@ -2,7 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Shuffle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   LearnerCategorySelector,
@@ -33,12 +35,27 @@ import type { FlashcardsHubServerPayload, FlashcardsPoolInventoryDiagnostics } f
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
-
-const CARD_COUNTS = [10, 20, 30, 50] as const;
+import { FlashcardsHubAnalytics } from "@/components/flashcards/flashcards-hub-analytics";
+import { FlashcardsHubReadinessStrip } from "@/components/flashcards/flashcards-hub-readiness-strip";
+import {
+  FLASHCARD_SESSION_PRESETS,
+  cardLimitQueryValue,
+  effectiveSessionCardCount,
+  readFlashcardsCustomSessionCheckpoint,
+  readFlashcardsHubPreferences,
+  resumeCustomSessionHref,
+  writeFlashcardsHubPreferences,
+  type FlashcardsHubCardLimit,
+  type FlashcardsHubPreferencesV1,
+} from "@/lib/flashcards/flashcards-hub-preferences";
+import { buildFlashcardsCategorySignals } from "@/lib/flashcards/flashcards-hub-category-signals";
+import { buildFlashcardsSessionPreview } from "@/lib/flashcards/flashcards-hub-session-copy";
+import { parseHubMode, parseHubSystemsFromSearchParams } from "@/lib/flashcards/flashcards-hub-url";
+import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 
 function buildCustomSessionQuery(args: {
   pathwayId: string;
-  cardLimit: number;
+  cardLimit: FlashcardsHubCardLimit;
   shuffleOn: boolean;
   /** Resolved flashcard builder category ids (server `categories` query). */
   selectedBuilderCategoryIds: string[];
@@ -56,7 +73,7 @@ function buildCustomSessionQuery(args: {
   q.set("pathwayId", args.pathwayId);
   q.set("includeCards", args.includeCards ? "1" : "0");
   q.set("shuffle", args.shuffleOn ? "1" : "0");
-  q.set("cardLimit", String(args.cardLimit));
+  q.set("cardLimit", cardLimitQueryValue(args.cardLimit));
   if (
     args.selectedBuilderCategoryIds.length > 0 &&
     args.selectedBuilderCategoryIds.length < args.allBuilderCategoryIds.length
@@ -116,6 +133,8 @@ export function FlashcardsHubClient({
   initialWeakOnly?: boolean;
 }) {
   const { t } = useMarketingI18n();
+  const searchParams = useSearchParams();
+  const prefsHydratedRef = useRef(false);
   const heroEyebrow = flashcardsHeroEyebrow?.trim() || pathwayDisplayName;
   const heroTitle = flashcardsHeroTitle?.trim() || t("learner.flashcards.hub.title");
   const heroSubtitle = flashcardsHeroSubtitle?.trim() || t("learner.flashcards.hub.subtitle");
@@ -146,7 +165,8 @@ export function FlashcardsHubClient({
     setPoolDiagnostics(initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null);
   }, [initialPoolDiagnostics, initialHub?.poolDiagnostics]);
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
-  const [cardLimit, setCardLimit] = useState(20);
+  const [cardLimit, setCardLimit] = useState<FlashcardsHubCardLimit>(20);
+  const [customLimitInput, setCustomLimitInput] = useState("");
   const [shuffleOn, setShuffleOn] = useState(true);
   const [weakOnly, setWeakOnly] = useState(Boolean(initialWeakOnly));
   useEffect(() => {
@@ -156,6 +176,139 @@ export function FlashcardsHubClient({
   const [starredOnly, setStarredOnly] = useState(false);
   const [notStudiedOnly, setNotStudiedOnly] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
+  const [weakTopics, setWeakTopics] = useState<TopicPerformanceSnapshot | null>(null);
+  const [resumeCk, setResumeCk] = useState(() =>
+    typeof window !== "undefined" ? readFlashcardsCustomSessionCheckpoint(scopedPathwayId) : null,
+  );
+
+  useEffect(() => {
+    setResumeCk(readFlashcardsCustomSessionCheckpoint(scopedPathwayId));
+  }, [scopedPathwayId, cardLimit, selectedCanonicalIds, shuffleOn, weakOnly]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetch("/api/learner/weak-areas", { credentials: "include", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (!cancelled && j && typeof j === "object") setWeakTopics(j as TopicPerformanceSnapshot);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [scopedPathwayId]);
+
+  const effectiveCardCount = useMemo(
+    () => effectiveSessionCardCount(cardLimit, matchingCards),
+    [cardLimit, matchingCards],
+  );
+
+  const isCustomCardLimit = useMemo(
+    () =>
+      cardLimit !== "all" &&
+      !(FLASHCARD_SESSION_PRESETS as readonly number[]).includes(cardLimit as number),
+    [cardLimit],
+  );
+
+  useEffect(() => {
+    if (prefsHydratedRef.current) return;
+    prefsHydratedRef.current = true;
+    const sp = new URLSearchParams(searchParams.toString());
+    const prefs = readFlashcardsHubPreferences(scopedPathwayId);
+
+    const urlSystems = parseHubSystemsFromSearchParams(sp);
+    if (urlSystems.length > 0) {
+      const valid = urlSystems.filter((id) =>
+        CANONICAL_STUDY_CATEGORIES.some((c) => c.id === id),
+      );
+      if (valid.length > 0) setSelectedCanonicalIds(valid);
+    } else if (prefs.selectedCanonicalIds.length > 0) {
+      setSelectedCanonicalIds([...prefs.selectedCanonicalIds]);
+    }
+
+    const urlLimit = sp.get("cardLimit")?.trim();
+    if (urlLimit === "all") {
+      setCardLimit("all");
+    } else if (urlLimit) {
+      const n = Number(urlLimit);
+      if (Number.isFinite(n) && n >= 10) {
+        const clamped = Math.min(500, Math.floor(n));
+        setCardLimit(clamped);
+        if (!(FLASHCARD_SESSION_PRESETS as readonly number[]).includes(clamped)) {
+          setCustomLimitInput(String(clamped));
+        }
+      }
+    } else {
+      setCardLimit(prefs.cardLimit);
+      if (prefs.customCardLimit != null) setCustomLimitInput(String(prefs.customCardLimit));
+    }
+
+    const hubMode = parseHubMode(sp);
+    if (hubMode === "weak") {
+      setWeakOnly(true);
+      setIncorrectOnly(false);
+      setStarredOnly(false);
+      setNotStudiedOnly(false);
+    } else if (hubMode === "incorrect") {
+      setWeakOnly(false);
+      setIncorrectOnly(true);
+      setStarredOnly(false);
+      setNotStudiedOnly(false);
+    } else if (hubMode === "starred") {
+      setWeakOnly(false);
+      setIncorrectOnly(false);
+      setStarredOnly(true);
+      setNotStudiedOnly(false);
+    } else if (hubMode === "unstudied") {
+      setWeakOnly(false);
+      setIncorrectOnly(false);
+      setStarredOnly(false);
+      setNotStudiedOnly(true);
+    } else if (!initialWeakOnly) {
+      setWeakOnly(prefs.weakOnly);
+      setIncorrectOnly(prefs.incorrectOnly);
+      setStarredOnly(prefs.starredOnly);
+      setNotStudiedOnly(prefs.notStudiedOnly);
+    }
+
+    const urlShuffle = sp.get("shuffle");
+    if (urlShuffle === "0" || urlShuffle === "1") {
+      setShuffleOn(urlShuffle === "1");
+    } else {
+      setShuffleOn(prefs.shuffleOn);
+    }
+  }, [scopedPathwayId, searchParams, initialWeakOnly]);
+
+  useEffect(() => {
+    if (!prefsHydratedRef.current) return;
+    const custom =
+      isCustomCardLimit && customLimitInput.trim()
+        ? Math.min(500, Math.max(10, Math.floor(Number(customLimitInput))))
+        : null;
+    const next: FlashcardsHubPreferencesV1 = {
+      v: 1,
+      cardLimit,
+      customCardLimit: Number.isFinite(custom as number) ? (custom as number) : null,
+      shuffleOn,
+      selectedCanonicalIds: selectedCanonicalIds as FlashcardsHubPreferencesV1["selectedCanonicalIds"],
+      weakOnly,
+      incorrectOnly,
+      starredOnly,
+      notStudiedOnly,
+    };
+    writeFlashcardsHubPreferences(scopedPathwayId, next);
+  }, [
+    scopedPathwayId,
+    cardLimit,
+    customLimitInput,
+    isCustomCardLimit,
+    shuffleOn,
+    selectedCanonicalIds,
+    weakOnly,
+    incorrectOnly,
+    starredOnly,
+    notStudiedOnly,
+  ]);
 
   const builderCategoriesRef = useRef(builderCategories);
   builderCategoriesRef.current = builderCategories;
@@ -180,6 +333,15 @@ export function FlashcardsHubClient({
   const sumCanonicalPool = useMemo(
     () => CANONICAL_STUDY_CATEGORIES.reduce((s, c) => s + (countsByCanonical[c.id] ?? 0), 0),
     [countsByCanonical],
+  );
+
+  const categorySignals = useMemo(
+    () =>
+      buildFlashcardsCategorySignals({
+        countsBySystem: countsByCanonical,
+        weakTopics,
+      }),
+    [countsByCanonical, weakTopics],
   );
 
   /** Slim progress row — ratio of current match to full pathway pool (semantic bar, not a score). */
@@ -473,11 +635,56 @@ export function FlashcardsHubClient({
     }
   };
 
-  const sessionSummaryLine = [
-    `${cardLimit} cards`,
-    selectedCanonicalIds.length === 0 ? "All systems" : `${selectedCanonicalIds.length} selected`,
-    shuffleOn ? "Shuffled" : "In order",
-  ].join(" · ");
+  const { preview: sessionPreviewCopy, ctaSubline } = useMemo(
+    () =>
+      buildFlashcardsSessionPreview({
+        effectiveCount: effectiveCardCount,
+        cardLimit,
+        selectedCanonicalIds,
+        shuffleOn,
+        weakOnly,
+        notStudiedOnly,
+        incorrectOnly,
+      }),
+    [
+      effectiveCardCount,
+      cardLimit,
+      selectedCanonicalIds,
+      shuffleOn,
+      weakOnly,
+      notStudiedOnly,
+      incorrectOnly,
+    ],
+  );
+
+  const resumeHref = resumeCk ? resumeCustomSessionHref(resumeCk) : null;
+  const resumeProgressPct =
+    resumeCk && resumeCk.totalCards > 0
+      ? Math.min(100, Math.round((resumeCk.index / resumeCk.totalCards) * 100))
+      : 0;
+  const resumeCardsRemaining =
+    resumeCk && resumeCk.totalCards > 0 ? Math.max(1, resumeCk.totalCards - resumeCk.index) : 0;
+
+  const quickReviewQuery = useMemo(
+    () =>
+      buildCustomSessionQuery({
+        pathwayId: scopedPathwayId,
+        cardLimit: 10,
+        shuffleOn: true,
+        selectedBuilderCategoryIds: [],
+        allBuilderCategoryIds,
+        weakOnly: false,
+        incorrectOnly: false,
+        starredOnly: false,
+        notStudiedOnly: false,
+        includeCards: true,
+        alliedProfession: apForQuery || null,
+        hubTopicSlug,
+      }),
+    [scopedPathwayId, allBuilderCategoryIds, apForQuery, hubTopicSlug],
+  );
+
+  const quickReviewHref = `/app/flashcards/custom?${quickReviewQuery}`;
 
   const startQuery = useMemo(
     () =>
@@ -688,36 +895,10 @@ export function FlashcardsHubClient({
   ]);
 
   const deckProgressFillClass = semanticFillClassForAccuracyPct(poolFillPct);
-  const hubDeckRows = [
-    {
-      title: "Continue studying",
-      body: "Pick up a fast MCQ-style recall session with rationales after every answer.",
-      metric: matchingCards != null ? `${matchingCards}` : "—",
-      meta: "adaptive cards matched",
-      href: startHref,
-      cta: "Resume micro-practice",
-    },
-    {
-      title: "Weak areas",
-      body: "Recover topics you missed, flagged, or rated as needing repetition.",
-      metric: weakOnly || incorrectOnly ? "Active" : "Focus",
-      meta: "spaced repetition queue",
-      href: weakAreaFlashcardsHref(scopedPathwayId),
-      cta: "Review weak areas",
-    },
-    {
-      title: "Priority & delegation",
-      body: "Short clinical questions that train recognition, interpretation, and action.",
-      metric: `${poolFillPct}%`,
-      meta: "current deck match",
-      href: startHref,
-      cta: "Start focused review",
-    },
-  ];
 
   return (
     <LearnerStudyPageShell
-      className="nn-flashcards-hub-premium space-y-6 py-4 sm:space-y-8 sm:py-5"
+      className="nn-flashcards-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-premium-flashcard-convergence
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"
@@ -729,58 +910,120 @@ export function FlashcardsHubClient({
       <h1 className="sr-only">{heroTitle}</h1>
 
       <header
-        className="nn-flashcards-hub-hero rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-5 py-5 shadow-[var(--semantic-shadow-soft)] sm:px-6 sm:py-5"
+        className="nn-flashcards-hub-workspace nn-flashcards-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
         data-nn-e2e-flashcards-compact-header
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-              {heroEyebrow}
-            </p>
-            <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
-              {heroTitle}
-            </h2>
-            <p className="mt-1.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-              {heroSubtitle}
-            </p>
+        <div
+          className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,transparent)] blur-3xl"
+          aria-hidden
+        />
+        <div className="relative space-y-6 sm:space-y-7">
+          <div className="space-y-4">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
+                {heroEyebrow}
+              </p>
+              <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
+                {heroTitle}
+              </h2>
+              <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
+                {heroSubtitle}
+              </p>
+            </div>
+            <FlashcardsHubReadinessStrip pathwayId={scopedPathwayId} />
           </div>
-          <LearnerCtaLink
-            href={startHref}
-            data-nn-e2e-start-review
-            className="inline-flex min-h-12 shrink-0 items-center justify-center px-6 py-3 text-base font-semibold shadow-[var(--semantic-shadow-soft)] sm:min-h-11 sm:px-7"
+
+          {resumeHref && resumeCk ? (
+            <div
+              className="nn-flashcards-resume-spotlight flex flex-col gap-4 border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] pt-5 sm:flex-row sm:items-center sm:justify-between"
+              data-nn-e2e-flashcards-resume
+            >
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">
+                  Continue studying
+                </p>
+                <p className="mt-1 text-lg font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
+                  Resume where you left off
+                </p>
+                <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
+                  {resumeCk.systemsLabel} · {resumeProgressPct}% through this run · ~{resumeCardsRemaining} card
+                  {resumeCardsRemaining === 1 ? "" : "s"} remaining
+                </p>
+              </div>
+              <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[12rem]">
+                <LearnerCtaLink
+                  href={resumeHref}
+                  data-nn-e2e-flashcards-resume-primary
+                  className="inline-flex min-h-12 w-full items-center justify-center px-8 text-base font-bold shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] sm:w-auto"
+                >
+                  Continue session →
+                </LearnerCtaLink>
+                <LearnerCtaLink
+                  href={startHref}
+                  variant="secondary"
+                  data-nn-e2e-start-review
+                  className="inline-flex min-h-10 w-full items-center justify-center px-5 text-sm font-semibold sm:w-auto"
+                >
+                  Start new adaptive session
+                </LearnerCtaLink>
+              </div>
+            </div>
+          ) : null}
+
+          <div
+            className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
+            data-nn-e2e-flashcards-deck-band
           >
-            {t("flashcards.startSession")}
-          </LearnerCtaLink>
+            <p
+              className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]"
+              data-nn-e2e-flashcards-session-preview
+            >
+              {sessionPreviewCopy}
+            </p>
+            <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="min-w-0 flex-1">
+                {resumeHref ? (
+                  <p className="text-xs text-[var(--semantic-text-muted)]" data-nn-e2e-flashcards-cta-subline>
+                    {ctaSubline}
+                  </p>
+                ) : (
+                  <>
+                    <LearnerCtaLink
+                      href={startHref}
+                      data-nn-e2e-start-review
+                      className="inline-flex min-h-12 w-full items-center justify-center px-8 py-3.5 text-base font-bold shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] sm:w-auto"
+                    >
+                      Start adaptive session
+                    </LearnerCtaLink>
+                    <p
+                      className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
+                      data-nn-e2e-flashcards-cta-subline
+                    >
+                      {ctaSubline}
+                    </p>
+                  </>
+                )}
+              </div>
+              <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
+                <span>
+                  <span className="font-semibold text-[var(--semantic-text-primary)]">Deck match </span>
+                  <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">
+                    {matchingCards != null ? matchingCards : "—"}
+                  </span>
+                </span>
+                <span className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline" aria-hidden />
+                <span className="hidden tabular-nums sm:inline">{poolFillPct}% of pathway pool</span>
+              </div>
+            </div>
+            <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-3 h-1.5 max-w-xl overflow-hidden rounded-full bg-[var(--semantic-progress-track)]">
+              <div
+                className={`h-full rounded-full ${deckProgressFillClass} transition-[width] duration-300 ease-out`}
+                style={{ width: `${poolFillPct}%` }}
+              />
+            </div>
+          </div>
         </div>
       </header>
-
-      <section className="nn-flashcards-micro-practice-board" aria-label="Flashcard micro-practice overview">
-        {hubDeckRows.map((row) => (
-          <Link key={row.title} href={row.href} className="nn-flashcards-micro-practice-card">
-            <span className="nn-flashcards-micro-practice-card__label">{row.title}</span>
-            <strong>{row.metric}</strong>
-            <span>{row.meta}</span>
-            <p>{row.body}</p>
-            <em>{row.cta} →</em>
-          </Link>
-        ))}
-      </section>
-
-      <section className="nn-flashcards-spaced-repetition-dock" aria-label="Spaced repetition dashboard">
-        <div>
-          <span className="nn-flashcards-spaced-repetition-dock__eyebrow">Spaced repetition</span>
-          <h2>Clinical recall, tuned by confidence.</h2>
-          <p>
-            Flashcards behave like rapid clinical questions. Rationale review and confidence ratings decide what returns
-            in future sessions.
-          </p>
-        </div>
-        <div className="nn-flashcards-spaced-repetition-dock__heatmap" aria-hidden>
-          {Array.from({ length: 28 }).map((_, i) => (
-            <span key={i} data-intensity={(i + selectedCanonicalIds.length + (weakOnly ? 2 : 0)) % 4} />
-          ))}
-        </div>
-      </section>
 
       {loadError ? (
         <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-danger)]">
@@ -789,7 +1032,7 @@ export function FlashcardsHubClient({
       ) : null}
 
       <section
-        className="nn-flashcards-deck-library-surface relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
+        className="nn-flashcards-deck-library-surface relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8"
         aria-labelledby="nn-flashcards-categories-heading"
         data-nn-e2e-flashcards-canonical-grid
       >
@@ -802,156 +1045,243 @@ export function FlashcardsHubClient({
           heading={t("learner.flashcards.hub.bodySystemsHeading")}
           headingId="nn-flashcards-categories-heading"
           searchPlaceholder="Search systems…"
-          intro="Select one or more body systems to focus your session. Counts show available cards per area."
+          intro="Systems adapt to your performance — weak areas, suggested focus, and deck depth appear on each tile."
+          metaBySystem={categorySignals.metaBySystem}
+          weakSystemIds={categorySignals.weakSystemIds}
+          strengthPctBySystem={categorySignals.strengthPctBySystem}
         />
 
-        {/* Quick selection row */}
-        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-3">
+        <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-4">
           <button
             type="button"
             onClick={() => setSelectedCanonicalIds([])}
             data-nn-e2e-all-systems-btn
-            className={`inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
-              selectedCanonicalIds.length === 0
-                ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))]"
-            }`}
+            data-active={selectedCanonicalIds.length === 0}
+            aria-pressed={selectedCanonicalIds.length === 0}
+            className="nn-flashcards-all-systems-btn inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] sm:min-h-9 sm:text-xs"
           >
-            All systems {selectedCanonicalIds.length === 0 ? "✓" : ""}
+            All systems
+            {selectedCanonicalIds.length === 0 ? (
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] text-[10px]" aria-hidden>
+                ✓
+              </span>
+            ) : null}
           </button>
           {selectedCanonicalIds.length > 0 ? (
-            <span className="text-xs text-[var(--semantic-text-muted)]">
-              {selectedCanonicalIds.length} selected — or pick All systems above
+            <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)]">
+              {selectedCanonicalIds.length} system{selectedCanonicalIds.length === 1 ? "" : "s"} selected
             </span>
-          ) : null}
+          ) : (
+            <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems below to focus your deck</span>
+          )}
         </div>
       </section>
 
       {hubContextualNotice}
 
-      <div
-        className="nn-flashcards-deck-match-band rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-6"
-        data-nn-e2e-flashcards-deck-band
+      <details
+        className="nn-flashcards-setup-panel nn-flashcards-hub-setup-panel nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
+        data-nn-e2e-flashcards-setup-panel
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="min-w-0 flex-1 space-y-2">
-            <div className="flex items-baseline justify-between gap-2 text-xs text-[var(--semantic-text-secondary)]">
-              <span className="font-medium text-[var(--semantic-text-primary)]">Deck match</span>
-              <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">
-                {matchingCards != null ? matchingCards : "—"}
-                {sumCanonicalPool > 0 ? (
-                  <span className="font-normal text-[var(--semantic-text-muted)]"> / {sumCanonicalPool}</span>
-                ) : null}
+        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
+          Fine-tune session length &amp; filters
+          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
+            Optional — most learners continue or start adaptive with defaults
+          </span>
+        </summary>
+        <div className="space-y-6 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
+        <div>
+          <h3 id="nn-flashcards-setup-heading" className="sr-only">
+            Session setup
+          </h3>
+        </div>
+
+        <div className="space-y-4" data-nn-e2e-flashcards-session-size>
+          <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Session size</p>
+          <div
+            className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap"
+            role="group"
+            aria-label="Session size"
+          >
+            {FLASHCARD_SESSION_PRESETS.map((n) => {
+              const on = cardLimit === n && !isCustomCardLimit;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  data-nn-e2e-session-size-preset={n}
+                  data-active={on}
+                  aria-pressed={on}
+                  className="nn-flashcards-session-segment min-h-12 flex-1 rounded-xl border border-[var(--semantic-border-soft)] px-4 py-3 text-sm font-bold text-[var(--semantic-text-secondary)] sm:min-w-[4.5rem] sm:flex-none"
+                  onClick={() => {
+                    setCardLimit(n);
+                    setCustomLimitInput("");
+                  }}
+                >
+                  {n}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              data-nn-e2e-session-size-preset="all"
+              data-active={cardLimit === "all"}
+              aria-pressed={cardLimit === "all"}
+              className="nn-flashcards-session-segment nn-flashcards-session-segment--full min-h-12 flex-[1.2] rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_30%,var(--semantic-border-soft))] px-4 py-3 text-left sm:min-w-[9rem]"
+              onClick={() => {
+                setCardLimit("all");
+                setCustomLimitInput("");
+              }}
+            >
+              <span className="block text-sm font-bold text-[var(--semantic-text-primary)]">Full review</span>
+              <span className="mt-0.5 block text-[11px] font-medium text-[var(--semantic-text-muted)]">
+                Deep study · all matched cards
               </span>
-            </div>
-            <div className="nn-progress-track-semantic nn-progress-track-semantic--md h-2 w-full overflow-hidden rounded-full bg-[var(--semantic-progress-track)]">
-              <div
-                className={`h-full rounded-full ${deckProgressFillClass} transition-[width] duration-300 ease-out`}
-                style={{ width: `${poolFillPct}%` }}
-              />
-            </div>
-            <p className="text-[11px] leading-snug text-[var(--semantic-text-muted)]">{sessionSummaryLine}</p>
+            </button>
           </div>
-          {/* Bottom Start CTA — saves scrolling after choosing systems */}
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
+            <label className="text-sm font-medium text-[var(--semantic-text-secondary)]" htmlFor="nn-flashcards-custom-limit">
+              Custom
+            </label>
+            <input
+              id="nn-flashcards-custom-limit"
+              type="number"
+              min={10}
+              max={500}
+              inputMode="numeric"
+              placeholder="25"
+              value={customLimitInput}
+              data-nn-e2e-custom-card-limit
+              className="nn-flashcards-custom-limit-input"
+              onChange={(e) => {
+                const raw = e.target.value;
+                setCustomLimitInput(raw);
+                const n = Number(raw);
+                if (Number.isFinite(n) && n >= 10) setCardLimit(Math.min(500, Math.floor(n)));
+              }}
+            />
+            <span className="text-xs text-[var(--semantic-text-muted)]">10–500 cards</span>
+          </div>
+        </div>
+
+        <LearnerFilterBar title="Study mode" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5 shadow-none">
+          <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
+            <LearnerCtaLink
+              href={quickReviewHref}
+              className="nn-flashcards-quick-review-cta inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold sm:min-h-9"
+              data-nn-e2e-flashcards-quick-review
+            >
+              Quick review · 10 cards
+            </LearnerCtaLink>
+            <button
+              type="button"
+              data-active={activePreset === "weak"}
+              aria-pressed={activePreset === "weak"}
+              className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+              onClick={() => applyFilterPreset("weak")}
+            >
+              Weak areas
+            </button>
+            <button
+              type="button"
+              data-active={activePreset === "unseen"}
+              aria-pressed={activePreset === "unseen"}
+              className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+              onClick={() => applyFilterPreset("unseen")}
+            >
+              Only unseen
+            </button>
+            {(
+              [
+                ["all", "All cards"],
+                ["starred", "Starred"],
+                ["incorrect", "Review incorrect"],
+              ] as const
+            ).map(([key, label]) => {
+              const on = activePreset === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  data-active={on}
+                  aria-pressed={on}
+                  className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+                  onClick={() => applyFilterPreset(key)}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            data-active={shuffleOn}
+            aria-pressed={shuffleOn}
+            className="nn-flashcards-study-chip mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:w-auto"
+            onClick={() => setShuffleOn((v) => !v)}
+            data-nn-e2e-flashcards-shuffle
+          >
+            <Shuffle className="h-4 w-4 text-[var(--semantic-chart-3)]" aria-hidden />
+            {shuffleOn ? "Shuffle on" : "Shuffle off"}
+          </button>
+        </LearnerFilterBar>
+        </div>
+      </details>
+
+      <div
+        className="nn-flashcards-sticky-start hidden fixed inset-x-0 bottom-0 z-20 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 py-3 shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_85%,transparent)] sm:px-6 md:hidden"
+        data-nn-e2e-flashcards-sticky-cta
+        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
+      >
+        <p className="mb-2 line-clamp-2 text-center text-[11px] text-[var(--semantic-text-muted)]">{ctaSubline}</p>
+        {resumeHref ? (
+          <LearnerCtaLink
+            href={resumeHref}
+            data-nn-e2e-flashcards-resume-bottom
+            className="inline-flex min-h-12 w-full items-center justify-center text-base font-bold"
+          >
+            Continue session →
+          </LearnerCtaLink>
+        ) : (
           <LearnerCtaLink
             href={startHref}
             data-nn-e2e-start-review-bottom
-            className="inline-flex shrink-0 min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold shadow-[var(--semantic-shadow-soft)]"
+            className="inline-flex min-h-12 w-full items-center justify-center text-base font-bold"
           >
-            {selectedCanonicalIds.length > 0
-              ? `Start — ${selectedCanonicalIds.length} system${selectedCanonicalIds.length === 1 ? "" : "s"} →`
-              : "Start — All systems →"}
+            Start adaptive session
           </LearnerCtaLink>
-        </div>
+        )}
       </div>
 
       <details
-        className="nn-flashcards-recovery-filters rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 sm:px-4"
+        className="nn-flashcards-recovery-filters nn-flashcards-collapsed-panel rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-transparent px-1 py-1"
         data-nn-e2e-flashcards-secondary
       >
-        <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
-          Filters, weak areas &amp; more{" "}
-          <span className="font-normal text-[var(--semantic-text-muted)]">(optional)</span>
+        <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)]">
+          Advanced filters &amp; links
         </summary>
-        <div className="mt-4 space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
-          <LearnerFilterBar
-            title="Quick presets"
-            className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-none sm:p-4"
-          >
-            <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
-              {(
-                [
-                  ["all", "All cards"],
-                  ["weak", "Weak areas"],
-                  ["starred", "Starred"],
-                  ["unseen", "Unseen"],
-                  ["incorrect", "Review incorrect"],
-                ] as const
-              ).map(([key, label]) => {
-                const on = activePreset === key;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => applyFilterPreset(key)}
-                    className={`min-h-11 rounded-full border px-3 py-2 text-sm font-semibold transition sm:min-h-0 sm:py-1.5 sm:text-xs ${
-                      on
-                        ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))]"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-              {activePreset === "custom" ? (
-                <span className="self-center text-xs text-[var(--semantic-text-muted)]">Custom mix</span>
-              ) : null}
-            </div>
-          </LearnerFilterBar>
-
-          <div className="space-y-3">
-            <p className="text-xs font-medium text-[var(--semantic-text-secondary)]">Fine-tune (same as API)</p>
-            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
+        <div className="mt-4 space-y-4 border-t border-[var(--semantic-border-soft)] pt-4">
+          {activePreset === "custom" ? (
+            <p className="text-xs text-[var(--semantic-text-muted)]">Multiple progress filters are active.</p>
+          ) : null}
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
               Weak areas only
             </label>
-            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
+            <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
               Previously incorrect
             </label>
-            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
+            <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
               Not studied
             </label>
-            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
+            <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
               Starred only
             </label>
           </div>
-
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
-            {CARD_COUNTS.map((n) => (
-              <button
-                key={n}
-                type="button"
-                className={`min-h-11 rounded-full border border-[var(--semantic-border-soft)] px-3 py-2 text-sm font-medium sm:min-h-0 sm:py-1 ${
-                  cardLimit === n
-                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
-                    : ""
-                }`}
-                onClick={() => setCardLimit(n)}
-              >
-                {n}
-              </button>
-            ))}
-          </div>
-
-          <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
-            <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
-            Shuffle order
-          </label>
 
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
             <Link
@@ -1023,6 +1353,15 @@ export function FlashcardsHubClient({
               </ul>
             </div>
           ) : null}
+        </div>
+      </details>
+
+      <details className="nn-flashcards-collapsed-panel rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] px-1 py-1">
+        <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)]">
+          Performance insights
+        </summary>
+        <div className="pt-3">
+          <FlashcardsHubAnalytics pathwayId={scopedPathwayId} />
         </div>
       </details>
     </LearnerStudyPageShell>

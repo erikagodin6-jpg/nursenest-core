@@ -70,13 +70,21 @@ import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silen
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
+import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { LearnerAppFooter } from "@/components/student/learner-app-footer";
+import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
+import { isFlashcardsHubLandingPath } from "@/lib/learner/flashcards-hub-focused-shell";
+import { isPracticeTestsHubLandingPath } from "@/lib/learner/practice-tests-hub-focused-shell";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
+
+function marketingChromeCountryFromSession(country: string | null | undefined): CountryCode {
+  return country === "US" ? "us" : "canada";
+}
 
 type AdminLearnerQaSimulationModule = typeof import("@/lib/admin/admin-learner-qa-simulation");
 
@@ -111,6 +119,9 @@ export default async function LearnerShellLayout({ children }: { children: React
   const isFocusedExamShell = isFocusedPracticeTestSessionPath(requestPathname);
   const normalizedLearnerPathname = requestPathname.split("?")[0]?.replace(/\/+$/, "") || "/app";
   const isLearnerDashboardRoute = normalizedLearnerPathname === "/app";
+  const isFlashcardsHubLanding = isFlashcardsHubLandingPath(normalizedLearnerPathname);
+  const isPracticeTestsHubLanding = isPracticeTestsHubLandingPath(normalizedLearnerPathname);
+  const isStudyHubLanding = isFlashcardsHubLanding || isPracticeTestsHubLanding;
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
   const session = await getProtectedRouteSession("(student).app.(learner)");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -303,7 +314,8 @@ export default async function LearnerShellLayout({ children }: { children: React
               entitlement.hasAccess &&
               entitlement.reason === "admin_override" &&
               !qaShell &&
-              !entitlement.adminLearnerQaSimulation ? (
+              !entitlement.adminLearnerQaSimulation &&
+              !isStudyHubLanding ? (
                 <div
                   role="region"
                   aria-label="Staff access override"
@@ -378,7 +390,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                       printablesNavVisible={printablesNavVisible}
                     />
                   </div>
-                  <LearnerStudyPathStrip pathwayId={pathwayId} />
+                  {!isStudyHubLanding ? <LearnerStudyPathStrip pathwayId={pathwayId} /> : null}
                 </div>
                 <LearnerShellMobileBottomNav
                   pathwayPillLabel={pathwayShortLabel}
@@ -388,7 +400,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   printablesNavVisible={printablesNavVisible}
                 />
               </div>
-              {studyNextBlock && !isLearnerDashboardRoute ? (
+              {studyNextBlock && !isLearnerDashboardRoute && !isStudyHubLanding ? (
                 <LearnerSilentSectionBoundary name="study_next">
                   <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
                     <Suspense
@@ -428,9 +440,15 @@ export default async function LearnerShellLayout({ children }: { children: React
                   {LearnerTutorShellComponent ? <LearnerTutorShellComponent context={tutorContext} /> : null}
                 </LearnerSilentSectionBoundary>
               ) : null}
-              <div className="nn-learner-exam-chrome-dim">
-                <LearnerAppFooter />
-              </div>
+              <MarketingCountryChromeProvider
+                country={marketingChromeCountryFromSession(
+                  (session?.user as { country?: string | null } | undefined)?.country,
+                )}
+              >
+                <div className="nn-learner-exam-chrome-dim nn-learner-site-footer-bleed mt-10">
+                  <LearnerAppFooter serverHasStaffSession={staffSession != null} />
+                </div>
+              </MarketingCountryChromeProvider>
             </div>
           </LearnerExamChromeGate>
         </LearnerExamStudyProviders>

@@ -94,13 +94,13 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
     );
   });
 
-  it("practice-tests/cat-launch exists as the direct CAT launch bridge", () => {
+  it("practice-tests/cat-launch redirects to hub inline CAT launch", () => {
     const launchPath = "src/app/(student)/app/(learner)/practice-tests/cat-launch/page.tsx";
-    assert.ok(exists(launchPath), `missing canonical CAT launch: ${launchPath}`);
+    assert.ok(exists(launchPath), `missing canonical CAT launch shim: ${launchPath}`);
     const src = read(launchPath);
     assert.ok(
-      src.includes("CatDirectLaunchClient") || src.includes("cat-direct-launch"),
-      `practice-tests/cat-launch must render the direct CAT launch UI`,
+      src.includes("appPathwayCatSessionStartPath") && src.includes("redirect("),
+      `practice-tests/cat-launch must redirect to hub inline launch`,
     );
   });
 });

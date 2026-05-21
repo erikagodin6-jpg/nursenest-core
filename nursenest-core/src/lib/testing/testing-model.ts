@@ -13,6 +13,7 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { TestingModelAnalyticsDimensions } from "@/lib/testing/testing-telemetry-governance";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import {
   catPathwayExamCodeLabel,
   catPathwayRegionalExamLine,
@@ -165,8 +166,7 @@ export function resolveLearnerExamsNavHref(
     return "/app/cases/cnple";
   }
   if (label === "CAT Exams" && pathwayId?.trim()) {
-    const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
-    return `/app/practice-tests/cat-launch?${q.toString()}`;
+    return appPathwayCatSessionStartPath(pathwayId.trim());
   }
   return "/app/practice-tests?startMode=practice_exam";
 }

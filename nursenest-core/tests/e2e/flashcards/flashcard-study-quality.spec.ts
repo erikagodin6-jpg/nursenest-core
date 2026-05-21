@@ -190,14 +190,9 @@ test.describe("Body-system filter appears on flashcards hub", () => {
       // When a specific system is selected, All Systems button text should NOT show checkmark
       expect(btnText?.includes("✓"), "All Systems should NOT show ✓ when a specific system is selected").toBe(false);
 
-      // Start session via bottom CTA (wired to selected categories)
-      const bottomCta = main.locator("[data-nn-e2e-start-review-bottom]");
-      if (await bottomCta.isVisible({ timeout: 10_000 }).catch(() => false)) {
-        await bottomCta.click();
-      } else {
-        const topCta = main.locator("[data-nn-e2e-start-review]");
-        await topCta.click();
-      }
+      const startCta = main.locator("[data-nn-e2e-start-review]").first();
+      await expect(startCta).toBeVisible({ timeout: 15_000 });
+      await startCta.click();
 
       await page.waitForURL(/\/app\/flashcards\/custom/, { timeout: 120_000 });
 

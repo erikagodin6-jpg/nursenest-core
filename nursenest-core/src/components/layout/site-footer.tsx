@@ -10,14 +10,14 @@ import { externalMarketingLanguagesHref } from "@/lib/marketing/marketing-public
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { FooterBrandLockup } from "@/components/brand/footer-brand-lockup";
 import { LeafWatermark } from "@/components/brand/leaf-watermark";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import {
   learnerMarketingPathwayIdFromSession,
-  publicExamPrepHubDestinations,
   publicMarketingExploreDestinations,
 } from "@/lib/navigation/canonical-destinations";
+import { footerMarketingNav } from "@/lib/navigation/footer-marketing-nav";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { HUB, loginWithCallback, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -29,6 +29,8 @@ import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { useMarketingChromeCountry } from "@/components/marketing/marketing-country-chrome-context";
 import { getCountryNavConfig } from "@/lib/marketing/countries/registry";
+import { REX_PN_CAT, REX_PN_PHARMACOLOGY } from "@/lib/seo/rex-pn-seo-cluster";
+import { RT_OXYGEN_THERAPY, RT_VENTILATION } from "@/lib/seo/rt-seo-cluster";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 
@@ -132,7 +134,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
   const { region } = useNursenestRegion();
   const marketingChromeCountry = useMarketingChromeCountry();
   const countryNav = getCountryNavConfig(marketingChromeCountry);
-  const examHubs = publicExamPrepHubDestinations(region);
+  const footerNav = footerMarketingNav(region);
   const explore = publicMarketingExploreDestinations(region);
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const user = session?.user;
@@ -169,14 +171,15 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           <div className="relative z-[1] space-y-8 md:space-y-9">
             <div className="nn-footer-premium-top nn-footer-columns grid grid-cols-1 gap-x-10 gap-y-10 xl:grid-cols-12">
               <div className="space-y-3 xl:col-span-4" data-nn-footer-brand>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 bg-transparent">
-                  <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
-                  <span className="text-lg font-semibold tracking-tight text-[var(--footer-fg)]">
-                    {formatTitleCase(t("brand.nurseNest"), locale)}
-                  </span>
-                </div>
-                <p className="max-w-md text-sm font-medium leading-relaxed text-[var(--footer-fg)]">
-                  {formatSentenceCase(t("footer.brandTagline"), locale)}
+                <FooterBrandLockup brandName={formatTitleCase(t("brand.nurseNest"), locale)} />
+                <p className="max-w-md text-sm font-semibold leading-relaxed text-[var(--footer-fg)]">
+                  {formatSentenceCase(
+                    footerCopyWithFallback(
+                      t("footer.brandTagline"),
+                      "Adaptive nursing education built for modern clinical learners.",
+                    ),
+                    locale,
+                  )}
                 </p>
                 <p className="max-w-md text-xs leading-relaxed text-[var(--footer-muted)]">
                   {formatSentenceCase(t("footer.supportingNursesGlobally"), locale)}
@@ -193,13 +196,13 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <FLink href="/about">About</FLink>
                     </li>
                     <li>
-                      <FLink href="/contact">Contact</FLink>
+                      <FLink href={footerNav.support.contact}>Contact</FLink>
                     </li>
                     <li>
                       <FLink href="/careers">Careers</FLink>
                     </li>
                     <li>
-                      <FLink href="/blog">Blog</FLink>
+                      <FLink href={footerNav.resources.blog}>Blog</FLink>
                     </li>
                   </ul>
                 </FooterPremiumNavColumn>
@@ -230,7 +233,28 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                 >
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                     <li>
-                      <FLink href="/pricing">Pricing</FLink>
+                      <FLink href={footerNav.platform.lessons}>Lessons</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.flashcards}>Flashcards</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.practiceExams}>Practice Exams</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.cat}>CAT Exams</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.ecg}>ECG</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.readinessAnalytics}>Readiness Analytics</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.pricing}>Pricing</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.platform.features}>Features</FLink>
                     </li>
                     <li>
                       <FLink href="/membership-tiers">Membership Tiers</FLink>
@@ -241,102 +265,33 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     <li>
                       <FLink href="/enterprise-solutions">Enterprise Solutions</FLink>
                     </li>
-                    <li>
-                      <FLink href="/features">Features</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/faq">FAQ</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/support">Support</FLink>
-                    </li>
-                    <li>
-                      <FLink href={examHubs.rn}>RN</FLink>
-                    </li>
-                    <li>
-                      <FLink href={examHubs.pn}>{pnRoleLabel}</FLink>
-                    </li>
-                    <li>
-                      <FLink href={examHubs.np}>NP</FLink>
-                    </li>
-                    <li>
-                      <FLink href={examHubs.allied}>{formatTitleCase(t("footer.alliedHealth"), locale)}</FLink>
-                    </li>
-                  </ul>
-                  {/* Authority cluster hub links for crawl depth ≤3 */}
-                  <div className="mt-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-bg)_88%,var(--semantic-brand))] px-3 py-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--footer-muted)]">
-                      Exam authority guides
-                    </p>
-                    <ul className="mt-2 space-y-1.5">
-                      <li>
-                        <FLink href="/canada/np/cnple/study-guide" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
-                          CNPLE study guide
-                        </FLink>
-                      </li>
-                      <li>
-                        <FLink href="/canada/np/cnple/loft-exam" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
-                          CNPLE LOFT format
-                        </FLink>
-                      </li>
-                      <li>
-                        <FLink href="/canada/pn/rex-pn/cat" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
-                          REx-PN CAT exam
-                        </FLink>
-                      </li>
-                      <li>
-                        <FLink href="/canada/pn/rex-pn/pharmacology" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
-                          REx-PN pharmacology
-                        </FLink>
-                      </li>
-                      <li>
-                        <FLink href="/allied-health/respiratory-therapy/ventilation" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
-                          RT ventilation
-                        </FLink>
-                      </li>
-                      <li>
-                        <FLink href="/allied-health/respiratory-therapy/oxygen-therapy" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
-                          Oxygen therapy
-                        </FLink>
-                      </li>
-                    </ul>
-                  </div>
-                </FooterPremiumNavColumn>
-
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-providers"
-                  title={formatTitleCase("Providers", locale)}
-                >
-                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
-                    <li>
-                      <FLink href="/providers/join">Join as a Provider</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/providers/resources">Provider Resources</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/providers/credentialing">Credentialing Information</FLink>
-                    </li>
                   </ul>
                 </FooterPremiumNavColumn>
 
-                <FooterPremiumNavColumn
-                  id="nn-footer-col-patients"
-                  title={formatTitleCase("Patients", locale)}
-                >
+                <FooterPremiumNavColumn id="nn-footer-col-exams" title={formatTitleCase("Exams", locale)}>
                   <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                     <li>
-                      <FLink href="/patients/find-care">Find Care</FLink>
+                      <FLink href={footerNav.exams.rn}>RN</FLink>
                     </li>
                     <li>
-                      <FLink href="/how-it-works">How It Works</FLink>
+                      <FLink href={footerNav.exams.pn}>{pnRoleLabel}</FLink>
                     </li>
                     <li>
-                      <FLink href="/patients/insurance-billing">Insurance & Billing</FLink>
+                      <FLink href={footerNav.exams.np}>NP</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.exams.allied}>
+                        {formatTitleCase(t("footer.alliedHealth"), locale)}
+                      </FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.exams.preNursing}>Pre-Nursing</FLink>
                     </li>
                   </ul>
                   <div className="nn-footer-premium-regional mt-6">
-                    <h3 className="nn-footer-col-heading mt-0 md:mt-2">{formatTitleCase(regionalHubLinksLabel, locale)}</h3>
+                    <h3 className="nn-footer-col-heading mt-0 md:mt-2">
+                      {formatTitleCase(regionalHubLinksLabel, locale)}
+                    </h3>
                     <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                       {countryNav.footerFeatured.map((item) => (
                         <li key={item.href}>
@@ -345,6 +300,110 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       ))}
                     </ul>
                   </div>
+                  <div className="mt-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-bg)_88%,var(--semantic-brand))] px-3 py-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--footer-muted)]">
+                      Exam authority guides
+                    </p>
+                    <ul className="mt-2 space-y-1.5">
+                      <li>
+                        <FLink
+                          href="/canada/np/cnple/study-guide"
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          CNPLE study guide
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
+                          href="/canada/np/cnple/loft-exam"
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          CNPLE LOFT format
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
+                          href={REX_PN_CAT}
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          REx-PN CAT exam
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
+                          href={REX_PN_PHARMACOLOGY}
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          REx-PN pharmacology
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
+                          href={RT_VENTILATION}
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          RT ventilation
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
+                          href={RT_OXYGEN_THERAPY}
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          Oxygen therapy
+                        </FLink>
+                      </li>
+                    </ul>
+                  </div>
+                </FooterPremiumNavColumn>
+
+                <FooterPremiumNavColumn
+                  id="nn-footer-col-resources"
+                  title={formatTitleCase("Resources", locale)}
+                >
+                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
+                    <li>
+                      <FLink href={footerNav.resources.nclexStudyGuides}>NCLEX Study Guides</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.resources.clinicalReasoning}>Clinical Reasoning</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.resources.testTakingStrategies}>Test-Taking Strategies</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.resources.faq}>FAQ</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.resources.blog}>Blog</FLink>
+                    </li>
+                  </ul>
+                </FooterPremiumNavColumn>
+
+                <FooterPremiumNavColumn
+                  id="nn-footer-col-support"
+                  title={formatTitleCase("Support", locale)}
+                >
+                  <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
+                    <li>
+                      <FLink href={footerNav.support.contact}>Contact</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.support.helpCenter}>Help Center</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.support.accessibility}>Accessibility</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.support.providerLinks}>Provider Links</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.support.findCare}>Find Care</FLink>
+                    </li>
+                    <li>
+                      <FLink href={footerNav.support.howItWorks}>How It Works</FLink>
+                    </li>
+                  </ul>
                 </FooterPremiumNavColumn>
               </div>
             </div>

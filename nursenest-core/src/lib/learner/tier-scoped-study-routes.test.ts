@@ -214,7 +214,10 @@ describe("tier-scoped app hrefs", () => {
   });
 
   it("RN hub CAT start href carries pathwayId only", () => {
-    assert.match(appPathwayCatSessionStartPath(RN), /^\/app\/practice-tests\/cat-launch\?pathwayId=us-rn-nclex-rn$/);
+    assert.match(
+      appPathwayCatSessionStartPath(RN),
+      /^\/app\/practice-tests\?pathwayId=us-rn-nclex-rn&catLaunch=1$/,
+    );
   });
 
   it("learner nav practice + CAT stay on same pathwayId when shell provides it", () => {

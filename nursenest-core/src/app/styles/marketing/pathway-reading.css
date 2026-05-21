@@ -24,7 +24,9 @@
       color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted)) 46%,
       color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--theme-page-bg)) 100%
     );
-  box-shadow: 0 28px 56px -44px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent);
+  box-shadow:
+    0 28px 56px -44px rgba(255, 183, 213, 0.14),
+    0 12px 32px -28px rgba(191, 231, 255, 0.12);
 }
 
 .nn-lesson-reading-shell--blossom .nn-lesson-main--blossom {
@@ -80,7 +82,9 @@
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--semantic-chart-4) 7%, transparent), transparent 42%),
     var(--bg-card);
-  box-shadow: 0 16px 38px color-mix(in srgb, var(--semantic-text-primary) 5%, transparent);
+  box-shadow:
+    0 16px 38px -12px rgba(255, 183, 213, 0.12),
+    0 8px 24px -10px rgba(191, 231, 255, 0.1);
 }
 
 .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-section-nav__progress strong {
@@ -286,7 +290,22 @@ html[data-theme="dark-mode"] .nn-premium-lesson-detail-shell.nn-lesson-reading-s
   }
 
   .nn-premium-auth-card {
-    padding: 1rem;
+    padding: clamp(1.25rem, 4vw, 1.65rem);
+  }
+
+  .nn-premium-auth-form {
+    margin-top: 1.75rem;
+    gap: 1.15rem;
+  }
+
+  .nn-premium-auth-input {
+    min-height: var(--nn-auth-input-height, 3.15rem);
+    border-color: color-mix(in srgb, var(--semantic-border-soft) 55%, var(--semantic-text-muted));
+    color: var(--semantic-text-primary);
+  }
+
+  .nn-premium-auth-input::placeholder {
+    color: color-mix(in srgb, var(--semantic-text-muted) 88%, var(--semantic-text-secondary));
   }
 
   .nn-premium-auth-header {
