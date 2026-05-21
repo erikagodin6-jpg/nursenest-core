@@ -43,6 +43,8 @@ export type BreadcrumbTelemetryPayload = {
   topicSlug?: string;
   pathwayId?: string | null;
   lineage?: SemanticTelemetryLineage;
+  ontologyRevision?: string;
+  testing_model?: string;
 };
 
 const renderedDedupe = new Set<string>();

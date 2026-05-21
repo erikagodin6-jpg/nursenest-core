@@ -28,7 +28,6 @@ export default async function AccountActivityPage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.activity");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.activity"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
