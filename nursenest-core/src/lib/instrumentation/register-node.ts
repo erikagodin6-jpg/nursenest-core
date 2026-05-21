@@ -11,6 +11,7 @@ import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "@/lib/env/runt
 import { emitEnvDiagnosticsBootSummary } from "@/lib/env/env-diagnostics";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log-core";
+import { logMemoryPressureSample } from "@/lib/observability/perf-log-host-memory";
 import { getAdminAiGenerationGate, warnAdminAiGenerationMisconfigurationIfNeeded } from "@/lib/ai/admin-ai-policy";
 import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
@@ -103,6 +104,9 @@ export async function registerNodeInstrumentation(): Promise<void> {
       });
     }
   }
+  void import("@/lib/observability/http-access-log-hook").then((m) => {
+    m.installHttpAccessLogHook();
+  });
   /** Defer: pulls `pricing-map` + matrix walk off the instrumentation critical path (readiness / handlers). */
   setImmediate(() => {
     void import("@/lib/stripe/pricing-map")
@@ -139,6 +143,7 @@ export async function registerNodeInstrumentation(): Promise<void> {
   if (process.env.NODE_ENV === "production" && Number.isFinite(memIntervalMs) && memIntervalMs >= 60_000) {
     const id = setInterval(() => {
       try {
+        logMemoryPressureSample("process_interval");
         const heap = typeof process.memoryUsage === "function" ? process.memoryUsage().heapUsed : 0;
         if (heap >= 512 * 1024 * 1024) {
           logHighMemory("process_interval");
