@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "a8fcad8df995bb6e9e7d0415bea4e3889c274865cc27cc69bbf272ce4392eb8d",
-  "generatedAt": "2026-05-13T12:48:03.175Z",
+  "fingerprint": "8c54961f46ff3d8a0016148413831eb5626537d689c33a2dee9e73e3a6afe8d7",
+  "generatedAt": "2026-05-21T02:18:00.991Z",
   "inputs": [
     {
       "type": "file",
@@ -30,7 +30,67 @@
     },
     {
       "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/dental-hygiene.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/dietetic-technician.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/emergency-medical-services.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/medical-assistant.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/medical-imaging.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/medical-laboratory-technology.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/mental-health-social-work.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/occupational-therapy.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/pharmacy-technician-advanced.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/pharmacy-technician-college-core.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/pharmacy-technician.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/physiotherapy-rehab.ts"
+    },
+    {
+      "type": "file",
       "path": "src/content/pathway-lessons/allied-professions/registry.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/respiratory-therapy-floor-practice.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/respiratory-therapy.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/sonography.ts"
     },
     {
       "type": "file",
@@ -282,6 +342,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/allied/allied-readiness-manifest.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-readiness-manifest.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/allied/allied-respiratory-pool-scope.contract.test.ts"
     },
     {
@@ -299,6 +367,14 @@
     {
       "type": "file",
       "path": "src/lib/allied/count-allied-pathway-lessons.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/pharmacy-tech-question-scope.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/pharmacy-technician-slice.contract.test.ts"
     },
     {
       "type": "file",
@@ -402,11 +478,19 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/canonical-link-rewriter.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/canonical-pathway-lesson-sections.ts"
     },
     {
       "type": "file",
       "path": "src/lib/lessons/cardiac-sounds-library-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/catalog-bundling-regression.test.ts"
     },
     {
       "type": "file",
@@ -443,6 +527,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/exam-takeaways-items.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/extract-clinical-pearl-lines.ts"
     },
     {
       "type": "file",
@@ -562,6 +650,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-editorial-governance.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-exam-domain.ts"
     },
     {
@@ -630,6 +722,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-overlay-architecture.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-progress-resolver.ts"
     },
     {
@@ -666,6 +762,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-readability-layout-guards.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-recall-types.ts"
     },
     {
@@ -675,6 +775,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lesson-region-exam.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-retention-section.ts"
     },
     {
       "type": "file",
@@ -803,6 +907,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/marketing-lesson-path-guard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lesson-remediation-chain.ts"
     },
     {
       "type": "file",
@@ -1270,6 +1378,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-topic-siblings.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/pathway-lesson-translation-diagnostics.ts"
     },
     {
@@ -1315,6 +1427,14 @@
     {
       "type": "file",
       "path": "src/lib/lessons/pathway-topic-sitemap-filter.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/premium-lesson-reading-v2.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/premium-lesson-reading-v2.ts"
     },
     {
       "type": "file",
@@ -1415,6 +1535,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/rn-nclex-respiratory-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-reading-stack.ts"
     },
     {
       "type": "file",
@@ -1647,7 +1771,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 130643,
-    "verifyLessonIndexesMs": 118994
+    "buildLessonIndexesMs": 114251,
+    "verifyLessonIndexesMs": 120938
   }
 }

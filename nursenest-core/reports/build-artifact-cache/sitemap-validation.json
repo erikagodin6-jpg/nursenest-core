@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "eceba1de17cb6d5811db75aa2c21c7a738191f595e316d3c0fcb4ee26df46f02",
-  "generatedAt": "2026-05-13T12:48:17.819Z",
+  "fingerprint": "d008e3365254c2ee9b1cff4cebb10e6fff58629248305159b4cb217218e2d3bf",
+  "generatedAt": "2026-05-21T04:05:13.238Z",
   "inputs": [
     {
       "type": "file",
@@ -518,6 +518,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/test-bank/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/[locale]/allied/page.tsx"
     },
     {
@@ -546,11 +550,63 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/acls-rhythms/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/adaptive-nclex-testing/page.tsx"
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/12-lead-stemi/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/acls-rhythms/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/critical-care-ecg/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/ecg-case-simulations/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/electrolyte-ecg-changes/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/medication-induced-ecg-changes/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/pediatric-ecg/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/rhythm-practice/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/telemetry-monitoring/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-hemodynamic-monitoring/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-hemodynamics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-labs-interpretation/page.tsx"
     },
     {
       "type": "file",
@@ -654,6 +710,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/arterial-line-interpretation/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/australia/[topic]/page.tsx"
     },
     {
@@ -671,6 +731,14 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/blog/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/canada-rn/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/canada-rn/page.tsx"
     },
     {
       "type": "file",
@@ -694,7 +762,23 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/nclex-pn/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/nclex-pn/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/blog/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/rex-pn/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/rex-pn/page.tsx"
     },
     {
       "type": "file",
@@ -711,6 +795,22 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/us-rn/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/blog/us-rn/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada-nclex-rn/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada-nclex-rn/page.tsx"
     },
     {
       "type": "file",
@@ -754,6 +854,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/test-bank/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/canada/page.tsx"
     },
     {
@@ -762,11 +866,35 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/flashcards/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/lessons/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/page.tsx"
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/pricing/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/test-bank/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/canadian-nclex-guide/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cardiac-output-monitoring/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/careers/page.tsx"
     },
     {
       "type": "file",
@@ -779,6 +907,18 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/china/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/clinical-interpretation/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/clinical-interpretation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/clinical-modules/page.tsx"
     },
     {
       "type": "file",
@@ -858,6 +998,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple/test-bank/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/compare/[slug]/page.tsx"
     },
     {
@@ -870,6 +1014,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/cookie-policy/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/critical-care-bundle/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/disclaimer/page.tsx"
     },
     {
@@ -878,11 +1030,27 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/ecg-practice-questions/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/ecg-telemetry-mastery/page.tsx"
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/ecg/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/ecg/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/editorial-policy/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/enterprise-solutions/page.tsx"
     },
     {
       "type": "file",
@@ -970,6 +1138,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/features/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/flashcards/[slug]/page.tsx"
     },
     {
@@ -998,6 +1170,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/hemodynamic-monitoring/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/hemodynamics-monitoring/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/how-it-works/page.tsx"
     },
     {
@@ -1023,6 +1203,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/korea/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/labs-interpretation/page.tsx"
     },
     {
       "type": "file",
@@ -1058,6 +1242,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/membership-tiers/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/mexico/[topic]/page.tsx"
     },
     {
@@ -1078,11 +1266,35 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/nclex-rn/test-bank/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/nclex-study-plan/page.tsx"
     },
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/nclex-vs-rex-pn/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/np-specialty/[specialty]/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/np-specialty/[specialty]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/np/test-bank/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/nursing-glossary/[term]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/nursing-glossary/page.tsx"
     },
     {
       "type": "file",
@@ -1103,6 +1315,22 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/pals-rhythms/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/patients/find-care/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/patients/insurance-billing/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/pediatric-ecg/page.tsx"
     },
     {
       "type": "file",
@@ -1162,6 +1390,22 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/providers/credentialing/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/providers/join/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/providers/resources/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/pulmonary-artery-catheter/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/question-bank/page.tsx"
     },
     {
@@ -1194,11 +1438,27 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/rex-pn/test-bank/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/seo/[slug]/page.tsx"
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/shock-and-perfusion/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/signup/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/support/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/telemetry-nursing/page.tsx"
     },
     {
       "type": "file",
@@ -2638,6 +2898,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/post-exam-coaching-context/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/pre-nursing-plan/route.ts"
     },
     {
@@ -2663,6 +2927,14 @@
     {
       "type": "file",
       "path": "src/app/api/learner/reset-progress/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/rn-coaching-context/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/rn-coaching-state/route.ts"
     },
     {
       "type": "file",
@@ -2747,6 +3019,26 @@
     {
       "type": "file",
       "path": "src/app/api/marketing/stamp-checkout-global-region-context/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/modules/ecg-pediatric/cases/[id]/attempt/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/modules/ecg-pediatric/cases/[id]/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/modules/ecg-pediatric/cases/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/modules/ecg-pediatric/topics/[id]/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/modules/ecg-pediatric/topics/route.ts"
     },
     {
       "type": "file",
@@ -2906,7 +3198,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/subscriptions/checkout/advanced-hemodynamics/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/subscriptions/checkout/advanced-labs/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/subscriptions/checkout/checkout-allied-metadata.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/subscriptions/checkout/critical-care-bundle/route.ts"
     },
     {
       "type": "file",
@@ -3070,6 +3374,34 @@
     },
     {
       "type": "file",
+      "path": "src/app/modules/ecg/pediatric/cases/[id]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/ecg/pediatric/cases/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/ecg/pediatric/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/hemodynamics-advanced/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/hemodynamics-advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/hemodynamics/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/hemodynamics/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/modules/lab-values/advanced/page.tsx"
     },
     {
@@ -3087,6 +3419,18 @@
     {
       "type": "file",
       "path": "src/app/modules/lab-values/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/labs-advanced/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/labs-advanced/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/labs-advanced/page.tsx"
     },
     {
       "type": "file",
@@ -3982,6 +4326,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/blog/regional-blog-cluster-page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/lib/blog/rn-lesson-seo-blog-generator.test.ts"
     },
     {
@@ -4031,6 +4379,10 @@
     {
       "type": "file",
       "path": "src/lib/blog/validate-localized-blog.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/blog/year-long-seo-schedule-seed.contract.test.ts"
     },
     {
       "type": "file",
@@ -4134,11 +4486,19 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/canonical-link-rewriter.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/canonical-pathway-lesson-sections.ts"
     },
     {
       "type": "file",
       "path": "src/lib/lessons/cardiac-sounds-library-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/catalog-bundling-regression.test.ts"
     },
     {
       "type": "file",
@@ -4175,6 +4535,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/exam-takeaways-items.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/extract-clinical-pearl-lines.ts"
     },
     {
       "type": "file",
@@ -4294,6 +4658,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-editorial-governance.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-exam-domain.ts"
     },
     {
@@ -4362,6 +4730,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-overlay-architecture.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-progress-resolver.ts"
     },
     {
@@ -4398,6 +4770,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-readability-layout-guards.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-recall-types.ts"
     },
     {
@@ -4407,6 +4783,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lesson-region-exam.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-retention-section.ts"
     },
     {
       "type": "file",
@@ -4535,6 +4915,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/marketing-lesson-path-guard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lesson-remediation-chain.ts"
     },
     {
       "type": "file",
@@ -5002,6 +5386,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-topic-siblings.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/pathway-lesson-translation-diagnostics.ts"
     },
     {
@@ -5047,6 +5435,14 @@
     {
       "type": "file",
       "path": "src/lib/lessons/pathway-topic-sitemap-filter.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/premium-lesson-reading-v2.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/premium-lesson-reading-v2.ts"
     },
     {
       "type": "file",
@@ -5147,6 +5543,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/rn-nclex-respiratory-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-reading-stack.ts"
     },
     {
       "type": "file",
@@ -5514,6 +5914,22 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/healthcare-exam-authority-architecture.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-exam-authority-architecture.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-test-bank-pages.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/healthcare-test-bank-pages.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/hindi-blog-posts-chunk2.ts"
     },
     {
@@ -5610,6 +6026,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/marketing-route-breadcrumbs.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/marketing-route-breadcrumbs.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/marketing-webpage-jsonld.test.ts"
     },
     {
@@ -5642,6 +6066,18 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/nursing-glossary-competency-generated.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/nursing-glossary-expansion.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/nursing-glossary-registry.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/nursing-mechanism-clusters.contract.test.ts"
     },
     {
@@ -5663,6 +6099,10 @@
     {
       "type": "file",
       "path": "src/lib/seo/pathway-lesson-content-dates.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/pathway-lessons-hub-faq-schema.ts"
     },
     {
       "type": "file",
@@ -6055,12 +6495,16 @@
     {
       "type": "file",
       "path": "src/lib/seo/tagalog-blog-posts.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/topic-hub-educational-intros.ts"
     }
   ],
   "outputs": [
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 14220
+    "durationMs": 2820
   }
 }

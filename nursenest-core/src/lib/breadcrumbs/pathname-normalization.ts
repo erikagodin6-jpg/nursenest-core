@@ -3,7 +3,6 @@
  */
 
 import type { BreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-types";
-import { remediationPathwayId } from "@/lib/breadcrumbs/breadcrumb-graph-convergence";
 import { getBreadcrumbRoot, type BreadcrumbRootDefinition } from "@/lib/breadcrumbs/breadcrumb-root-registry";
 import type { BreadcrumbSurface } from "@/lib/breadcrumbs/breadcrumb-surface";
 import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
@@ -86,7 +85,9 @@ export function resolveGraphNavigationTelemetryContext(args: {
     breadcrumbSurface: args.surface,
     competencyId,
     remediationPathwayId:
-      topicSlug != null ? remediationPathwayId(args.pathwayId ?? null, topicSlug) : undefined,
+      topicSlug != null
+        ? (args.pathwayId ? `${args.pathwayId}:${topicSlug.trim().toLowerCase()}` : `global:${topicSlug.trim().toLowerCase()}`)
+        : undefined,
     graphDepth,
     topicSlug,
     sourceSurface: args.sourceSurface,
