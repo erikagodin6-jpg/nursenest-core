@@ -103,9 +103,6 @@ export async function registerNodeInstrumentation(): Promise<void> {
       });
     }
   }
-  void import("@/lib/observability/http-access-log-hook").then((m) => {
-    m.installHttpAccessLogHook();
-  });
   /** Defer: pulls `pricing-map` + matrix walk off the instrumentation critical path (readiness / handlers). */
   setImmediate(() => {
     void import("@/lib/stripe/pricing-map")
