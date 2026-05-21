@@ -9,6 +9,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => ({

@@ -14,6 +14,7 @@ import { TopicProgressGrid } from "@/components/study/topic-progress-grid";
 import { ReadinessProgressCard } from "@/components/study/readiness-progress-card";
 import { MilestoneCard } from "@/components/study/milestone-card";
 import { loadMoreTopicsAction } from "./actions";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,

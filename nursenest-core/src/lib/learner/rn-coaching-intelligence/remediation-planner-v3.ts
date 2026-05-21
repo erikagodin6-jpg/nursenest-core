@@ -5,7 +5,6 @@ import {
   graphStepsToCoachingRecommendations,
 } from "@/lib/educational-graph/graph-step-adapters";
 import { maxGraphStepsForSurface } from "@/lib/educational-graph/graph-surface-caps";
-import type { RnCompetencyId } from "@/lib/educational-graph/rn-competency-ontology";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import {
   countExposureForKey,
@@ -23,7 +22,7 @@ function simulationFollowUpLabel(): string {
   return "Another LOFT simulation";
 }
 
-const UNSTABLE_PRIORITY: RnCompetencyId[] = [
+const UNSTABLE_PRIORITY: string[] = [
   "perfusion_hemodynamics",
   "respiratory_instability",
   "infection_sepsis",

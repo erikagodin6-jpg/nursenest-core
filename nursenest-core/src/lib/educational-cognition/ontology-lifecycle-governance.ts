@@ -32,7 +32,7 @@ function applyAliasesToSnapshot(
     ops.push(`rename_focus:${slug}->${next}`);
     return next;
   });
-  const reasoningPatterns = (snapshot.reasoningPatterns ?? []).map((p) => aliases[p] ?? p);
+  const reasoningPatterns = (snapshot.reasoningPatterns ?? []).map((p) => aliases[p] ?? p) as RnLearnerStateSnapshot["reasoningPatterns"];
   return { ...snapshot, competencyStates, focusAreaSlugs, reasoningPatterns };
 }
 
@@ -69,7 +69,7 @@ export function applyOntologyLifecycleToEnvelope(
   const operations: string[] = [];
   const fromRevision = envelope.ontologyRevision ?? "unknown";
   const migrationSteps = resolveOntologyMigrationPath(fromRevision, CURRENT_ONTOLOGY_REVISION);
-  let next = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
+  let next: DurableLearnerCognitionEnvelope = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
 
   for (const stepId of migrationSteps) {
     if (stepId === "current") break;

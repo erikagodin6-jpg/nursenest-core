@@ -15,6 +15,7 @@ import {
 import { buildEducationalOntologySlice } from "@/lib/educational-cognition/educational-ontology-registry";
 import { buildMeasurementCognitionSlice } from "@/lib/educational-cognition/measurement-cognition-bridge";
 import { governMeasurementCognitionInput } from "@/lib/educational-cognition/measurement-source-governance";
+import { resolveMeasurementCognitionInput } from "@/lib/educational-cognition/resolve-measurement-cognition-input";
 import { recordCognitionContextResolved } from "@/lib/educational-cognition/cognition-telemetry-v5";
 import { hydratePriorLearnerState, saveDurableLearnerCognition } from "@/lib/educational-cognition/learner-cognition-persistence";
 import { buildAiTutorContextFromCognition } from "@/lib/educational-cognition/ai-tutor-cognition-envelope";
@@ -156,3 +157,4 @@ export function resolveEducationalCognitionFromSession(
 }
 
 export type { ReadinessResult };
+export type { EducationalCognitionContext };

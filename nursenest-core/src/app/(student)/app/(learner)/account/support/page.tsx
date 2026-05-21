@@ -10,6 +10,7 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { SUPPORT_EMAIL, SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {

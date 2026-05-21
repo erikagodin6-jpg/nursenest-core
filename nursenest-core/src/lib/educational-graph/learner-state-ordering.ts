@@ -26,14 +26,14 @@ const KIND_WEIGHT_AUTHENTICATED: Record<EduGraphStepKind, number> = {
   loft_simulation: 2,
 };
 
-function competencyUrgency(competencyId: RnCompetencyId | null, state: RnLearnerStateSnapshot | null): number {
+function competencyUrgency(competencyId: string | null, state: RnLearnerStateSnapshot | null): number {
   if (!competencyId || !state) return 0;
   const row = state.competencyStates.find((c) => c.competencyId === competencyId);
-  if (!row) return UNSTABLE_COMPETENCY_PRIORITY.indexOf(competencyId) >= 0 ? 5 : 0;
+  if (!row) return UNSTABLE_COMPETENCY_PRIORITY.includes(competencyId as RnCompetencyId) ? 5 : 0;
   let score = 100 - row.masteryScore;
   if (row.persistentWeak) score += 25;
   if (row.volatility === "declining" || row.volatility === "volatile") score += 15;
-  if (UNSTABLE_COMPETENCY_PRIORITY.includes(competencyId)) score += 10;
+  if (UNSTABLE_COMPETENCY_PRIORITY.includes(competencyId as RnCompetencyId)) score += 10;
   return score;
 }
 

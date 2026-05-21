@@ -17,6 +17,7 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {

@@ -12,18 +12,18 @@ export type GraphNextStepPresentation = {
 
 const GRAPH_CHECKPOINT_STALE_MS = 14 * 24 * 60 * 60 * 1000;
 
-export function graphNextStepsFromSteps(steps: EduGraphStep[]): GraphNextStepPresentation[] {
+export function graphNextStepsFromSteps(steps: readonly EduGraphStep[]): GraphNextStepPresentation[] {
   return steps.map((s) => ({
     title: s.title,
     href: s.href,
-    kind: s.kind,
-    reason: s.reason,
+    kind: s.kind ?? s.stepKind,
+    reason: s.reason ?? s.description,
   }));
 }
 
 export function buildGraphContinuityFromTraversal(args: {
   topicSlug: string;
-  steps: EduGraphStep[];
+  steps: readonly EduGraphStep[];
   ctx: EducationalCognitionContext;
   prior?: PersistedGraphContinuity;
   dashboardPrimaryHref?: string | null;

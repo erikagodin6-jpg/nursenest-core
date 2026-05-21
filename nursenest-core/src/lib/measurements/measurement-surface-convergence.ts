@@ -162,10 +162,10 @@ export function trackSurfaceOrchestrationTelemetry(args: {
     buildMeasurementOrchestrationTelemetry({
       event: args.event,
       surface: args.sourceSurface,
-      pathwayId: args.pathwayId,
-      competencyId: args.competencyId,
-      interpretationId: args.interpretationId,
-      learnerStateReason: args.learnerStateReason,
+      pathwayId: args.pathwayId ?? undefined,
+      competencyId: args.competencyId ?? undefined,
+      interpretationId: args.interpretationId ?? undefined,
+      learnerStateReason: args.learnerStateReason ?? undefined,
     }),
   );
 }

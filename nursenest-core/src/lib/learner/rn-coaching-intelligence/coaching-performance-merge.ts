@@ -9,7 +9,7 @@ export function attachCoachingToPerformanceReport(
   coaching: PostExamCoachingReport & Partial<RnCoachingIntelligenceReport>,
 ): PostExamPerformanceReport & { coaching: PostExamCoachingReport & RnCoachingIntelligenceReport } {
   const pathwayId = coaching.dashboardFeed.pathwayId;
-  const trendSafe = loftSafeTrendLabel(base.overall.trendLabel, coaching.coachingModel, pathwayId);
+  const trendSafe = loftSafeTrendLabel(base.overall.trendLabel, coaching.coachingModel);
   const fullCoaching = coaching as PostExamCoachingReport & RnCoachingIntelligenceReport;
 
   return {

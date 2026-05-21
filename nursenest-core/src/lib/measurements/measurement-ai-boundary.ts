@@ -20,6 +20,7 @@ export type AiGenerationSurface =
   | "dashboard_summary"
   | "interpretation_explainer"
   | "study_plan"
+  | "loft"
   | "loft_review";
 
 export type GovernedAiCopyResult = {

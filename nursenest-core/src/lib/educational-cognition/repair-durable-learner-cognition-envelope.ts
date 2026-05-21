@@ -24,7 +24,7 @@ const VALID_PATTERNS = new Set<string>([
   ...RN_REASONING_ONTOLOGY.map((d) => d.pattern),
 ]);
 
-const VALID_COMPETENCY_IDS = new Set(RN_COMPETENCY_NODES.map((n) => n.id));
+const VALID_COMPETENCY_IDS = new Set<string>(RN_COMPETENCY_NODES.map((n) => n.id));
 
 function isValidLearnerHref(href: string): boolean {
   return href.startsWith("/app/") || href.startsWith("/modules/");

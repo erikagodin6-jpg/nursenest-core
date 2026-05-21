@@ -28,6 +28,7 @@ export type TutoringPromptContext = {
   topicKeys: string[];
   /** Named signals only (e.g. `weak_topic_priority`, `readiness_band`) — no PII. */
   signalNames: string[];
+  pathwayId?: string | null;
   locale?: string;
 };
 
