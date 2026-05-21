@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Leaf } from "lucide-react";
 import { NURSENEST_NAV_LEAF_SVG_PATH } from "@/lib/branding/app-icons";
+import { shouldUseOptimizedBlossomLeafDelivery } from "@/lib/branding/blossom-leaf-assets";
+import { OptimizedBlossomLeafImage } from "@/components/brand/optimized-blossom-leaf-image";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 
 /**
@@ -34,22 +36,40 @@ export function HeaderBrandLockup() {
         data-nn-header-lockup="leaf"
       >
         {showLeafRaster ? (
-          <img
-            src={displayLeafUrl ?? ""}
-            alt="NurseNest leaf logo"
-            draggable={false}
-            width={128}
-            height={128}
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-            data-nn-header-logo
-            className="block h-full w-full max-h-full max-w-full bg-transparent object-contain object-center"
-            onError={() => {
-              if (!displayLeafUrl) return;
-              setFailedUrls((prev) => new Set(prev).add(displayLeafUrl));
-            }}
-          />
+          shouldUseOptimizedBlossomLeafDelivery(displayLeafUrl) ? (
+            <OptimizedBlossomLeafImage
+              alt="NurseNest leaf logo"
+              draggable={false}
+              width={52}
+              height={52}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              data-nn-header-logo
+              className="block h-full w-full max-h-full max-w-full bg-transparent object-contain object-center"
+              onError={() => {
+                if (!displayLeafUrl) return;
+                setFailedUrls((prev) => new Set(prev).add(displayLeafUrl));
+              }}
+            />
+          ) : (
+            <img
+              src={displayLeafUrl ?? ""}
+              alt="NurseNest leaf logo"
+              draggable={false}
+              width={52}
+              height={52}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              data-nn-header-logo
+              className="block h-full w-full max-h-full max-w-full bg-transparent object-contain object-center"
+              onError={() => {
+                if (!displayLeafUrl) return;
+                setFailedUrls((prev) => new Set(prev).add(displayLeafUrl));
+              }}
+            />
+          )
         ) : (
           <Leaf
             className="h-[72%] w-[72%] shrink-0 opacity-[0.96] text-current"

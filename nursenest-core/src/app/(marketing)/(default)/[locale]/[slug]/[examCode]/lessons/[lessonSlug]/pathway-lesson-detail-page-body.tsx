@@ -77,7 +77,7 @@ import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
-import { PathwayLessonAssessmentExperience } from "@/components/lessons/pathway-lesson-assessment-experience";
+import { PathwayLessonAssessmentExperienceLazy } from "@/components/lessons/pathway-lesson-assessment-experience-lazy";
 import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
 import {
   pathwayCountryLabel,
@@ -669,7 +669,7 @@ export async function PathwayLessonDetailPageBody({
                 />
               ) : null}
 
-              <PathwayLessonAssessmentExperience
+              <PathwayLessonAssessmentExperienceLazy
                 userId={userId}
                 pathwayId={pathway.id}
                 lessonSlug={lesson.slug}
@@ -916,7 +916,7 @@ export async function PathwayLessonDetailPageBody({
                   linkedLearningSignals={linkedLearningSignals}
                   linkMode="marketing"
                 />
-              </PathwayLessonAssessmentExperience>
+              </PathwayLessonAssessmentExperienceLazy>
               </div>
             </LessonReadingViewport>
           </div>

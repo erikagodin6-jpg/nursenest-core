@@ -587,6 +587,12 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
   },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ],
   "overrides": {
     "@opentelemetry/core": "1.30.1",
     "next-auth": {

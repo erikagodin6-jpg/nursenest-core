@@ -49,7 +49,7 @@ export function LessonReadingScrollProgress() {
       <div className="nn-lesson-reading-progress__track" aria-hidden>
         <div
           className="nn-lesson-reading-progress__fill"
-          style={{ width: `${pct}%` }}
+          style={{ transform: `scaleX(${Math.max(0.01, pct / 100)})` }}
           data-nn-lesson-progress-fill
         />
       </div>

@@ -23,16 +23,30 @@ describe("resolveThemeLogo", () => {
     const r = resolveThemeLogo("ocean-mist", "full");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "ocean-mist");
-    assert.equal(r.objectKey, "hotpinkblossomleaflogo.png");
-    assert.equal(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
+    assert.equal(r.objectKey, "Logos/north-sea-leaf-transparent.png");
+    assert.equal(
+      r.url,
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+    );
   });
 
   it("falls back to the intentional default mapped theme for unknown theme strings", () => {
     const r = resolveThemeLogo("__not_a_theme__", "full");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "ocean");
-    assert.equal(r.objectKey, "hotpinkblossomleaflogo.png");
-    assert.equal(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
+    assert.equal(r.objectKey, "Logos/north-sea-leaf-transparent.png");
+    assert.equal(
+      r.url,
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png",
+    );
+  });
+
+  it("uses the blue North Sea leaf for Ocean (default theme)", () => {
+    const r = resolveThemeLogo("ocean", "leaf");
+    assert.equal(r.kind, "local");
+    assert.equal(r.assetThemeId, "ocean");
+    assert.ok(r.url?.includes("north-sea-leaf-transparent"));
+    assert.notEqual(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
   });
 
   it("returns an explicit mapped key for slate", () => {
@@ -47,7 +61,7 @@ describe("resolveThemeLogo", () => {
     assert.equal(blossom.kind, "local");
     assert.equal(blossom.assetThemeId, "blossom");
     assert.equal(blossom.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
-    assert.equal(blossom.objectKey, "hotpinkblossomleaflogo.png");
+    assert.equal(blossom.objectKey, "branding/blossom-leaf/leaf-128.webp");
 
     const aurora = resolveThemeLogo("aurora", "leaf");
     assert.equal(aurora.kind, "local");
@@ -56,12 +70,12 @@ describe("resolveThemeLogo", () => {
     assert.equal(aurora.objectKey, "00e0dc0f-b614-4e28-9fa9-33cdcf89cf0c.png");
   });
 
-  it("uses the approved CDN fallback for arctic-frost leaf variant", () => {
+  it("uses the arctic-frost CDN leaf for arctic-frost leaf variant", () => {
     const r = resolveThemeLogo("arctic-frost", "leaf");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "arctic-frost");
-    assert.equal(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
-    assert.equal(r.objectKey, "hotpinkblossomleaflogo.png");
+    assert.ok(r.url?.includes("arcticfrost"));
+    assert.notEqual(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
     const full = resolveThemeLogo("arctic-frost", "full");
     assert.ok(full.url?.includes("arcticfrost"), "full variant still uses CDN map for non-header callers");
   });
@@ -71,7 +85,12 @@ describe("resolveThemeLogo", () => {
       const r = resolveThemeLogo(t.id, "full");
       assert.equal(r.kind, "local", t.id);
       assert.ok(r.objectKey, t.id);
-      assert.ok(r.url && r.url.startsWith("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/"), t.id);
+      assert.ok(
+        r.url &&
+          (r.url.startsWith("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/") ||
+            r.url.startsWith("/branding/")),
+        t.id,
+      );
       assert.equal(r.assetThemeId, t.id, t.id);
     }
   });

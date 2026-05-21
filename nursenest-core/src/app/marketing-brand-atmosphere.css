@@ -8,7 +8,7 @@
    ===================================================================== */
 
 .nn-marketing-brand-root {
-  --nn-brand-leaf-svg: url("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/hotpinkblossomleaflogo.png");
+  --nn-brand-leaf-svg: url("/branding/blossom-leaf/leaf-128.webp?v=2026-05-21-opt1");
   --nn-brand-leaf-band-opacity: 0.048;
   --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-2) 38%, transparent);
   --nn-brand-page-wash-a: radial-gradient(120% 88% at 8% 0%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 58%);
@@ -253,8 +253,8 @@ html[data-theme="blossom"] .nn-learner-app.nn-brand-learner-atmosphere {
   z-index: 0;
   opacity: 0.045;
   background: var(--nn-learner-brand-leaf-tint);
-  -webkit-mask-image: url("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/hotpinkblossomleaflogo.png");
-  mask-image: url("https://nursenest-images.tor1.cdn.digitaloceanspaces.com/hotpinkblossomleaflogo.png");
+  -webkit-mask-image: url("/branding/blossom-leaf/leaf-128.webp?v=2026-05-21-opt1");
+  mask-image: url("/branding/blossom-leaf/leaf-128.webp?v=2026-05-21-opt1");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;

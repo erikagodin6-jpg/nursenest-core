@@ -60,7 +60,10 @@ export function LessonReadingProgressStrip({
         </span>
       </div>
       <div className="nn-lesson-reading-progress-strip__bar" aria-hidden="true">
-        <span style={{ width: `${pct}%` }} />
+        <span
+          className="nn-lesson-reading-progress-strip__fill"
+          style={{ transform: `scaleX(${Math.max(0.01, pct / 100)})` }}
+        />
       </div>
     </section>
   );

@@ -9,6 +9,7 @@ import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 import {
   NURSENEST_AURORA_PAGE_LOGO_URL,
   NURSENEST_BLOSSOM_LEAF_LOGO_URL,
+  NURSENEST_OCEAN_LEAF_LOGO_URL,
 } from "@/lib/branding/app-icons";
 
 export type ThemeLogoVariant = "full" | "leaf";
@@ -104,9 +105,9 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "multi-pastel": CDN_LEAF_URLS["rainbow-sherbet"],
   "neutral-sand": CDN_LEAF_URLS["neutral-sand"],
   "neutral-slate": CDN_LEAF_URLS["storm-slate"],
-  "north-sea": NURSENEST_BLOSSOM_LEAF_LOGO_URL,
-  ocean: NURSENEST_BLOSSOM_LEAF_LOGO_URL,
-  "ocean-mist": NURSENEST_BLOSSOM_LEAF_LOGO_URL,
+  "north-sea": NURSENEST_OCEAN_LEAF_LOGO_URL,
+  ocean: NURSENEST_OCEAN_LEAF_LOGO_URL,
+  "ocean-mist": NURSENEST_OCEAN_LEAF_LOGO_URL,
   "pastel-blush": CDN_LEAF_URLS["pink-skies"],
   "pastel-lavender": CDN_LEAF_URLS["sunny-lilac"],
   "pastel-lilac": CDN_LEAF_URLS["plum-mist"],
@@ -138,7 +139,7 @@ export const NURSENEST_DEFAULT_LEAF_MARK_URL: string =
 
 function objectKeyFromCdnUrl(url: string): string | null {
   try {
-    const pathname = new URL(url).pathname.replace(/^\/+/, "");
+    const pathname = new URL(url, "https://nursenest.ca").pathname.replace(/^\/+/, "");
     return pathname.length > 0 ? decodeURIComponent(pathname) : null;
   } catch {
     const marker = "/Logos/";
@@ -169,10 +170,8 @@ export function themeLogoSpaceKeyForRegisteredTheme(
   return THEME_LOGO_SPACE_KEYS[themeId] ?? null;
 }
 
-import { NURSENEST_NAV_LEAF_SVG_PATH } from "@/lib/branding/app-icons";
-
-/** Same-origin leaf mark: Spaces `arcticfrost…_leaf.png` is a horizontal brand; header/footer use this SVG. */
-const ARCTIC_FROST_LEAF_PUBLIC_PATH = NURSENEST_NAV_LEAF_SVG_PATH;
+/** Compact leaf for arctic-frost header slot (distinct from Ocean / Blossom marks). */
+const ARCTIC_FROST_LEAF_PUBLIC_PATH = CDN_LEAF_URLS["arctic-frost"];
 
 /**
  * Single entry point for the in-app theme wordmark URL.

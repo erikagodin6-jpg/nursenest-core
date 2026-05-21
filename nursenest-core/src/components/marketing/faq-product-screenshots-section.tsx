@@ -43,7 +43,7 @@ function FaqVisualItem({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
-        <span className="nn-marketing-body-sm font-semibold text-[var(--semantic-text-primary)]">{question}</span>
+        <span className="nn-marketing-body-sm font-medium text-[var(--semantic-text-primary)]">{question}</span>
         <ChevronDown
           className={`mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-text-muted)] transition-transform ${open ? "rotate-180" : ""}`}
           aria-hidden
@@ -90,7 +90,7 @@ export function FaqProductScreenshotsSection() {
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] px-5 py-5 shadow-[var(--elevation-rest)] sm:px-6">
-          <p className="nn-marketing-caption font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+          <p className="nn-marketing-caption font-semibold uppercase tracking-widest text-[var(--semantic-brand)]">
             Product Questions
           </p>
           <h2 id="product-faq-heading" className="nn-marketing-h2 mt-2">

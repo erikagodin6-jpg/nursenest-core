@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "fa600dcbf5930ad8b8013e64500780658fd27b4f6b46bab1fe75a78e329384eb",
-  "generatedAt": "2026-05-21T22:24:55.667Z",
+  "fingerprint": "47ffd9a3a79dcf5f37b4b0cf0df77374b206579c08818de742193e59edf28a7e",
+  "generatedAt": "2026-05-21T22:34:59.299Z",
   "inputs": [
     {
       "type": "file",
@@ -5290,6 +5290,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-progress-keys.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/pathway-lesson-progress-refresh.test.ts"
     },
     {
@@ -6517,6 +6521,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 30927
+    "durationMs": 30621
   }
 }

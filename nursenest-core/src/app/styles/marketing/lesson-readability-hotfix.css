@@ -1098,11 +1098,23 @@
   overflow: hidden;
 }
 
-.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar > span {
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar > span,
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__fill {
   display: block;
+  width: 100%;
   height: 100%;
   border-radius: inherit;
+  transform-origin: left center;
+  will-change: transform;
   background: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-secondary));
+  transition: transform 140ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar > span,
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__fill {
+    transition: none;
+  }
 }
 
 .nn-lesson-clinical-pearls-rail {

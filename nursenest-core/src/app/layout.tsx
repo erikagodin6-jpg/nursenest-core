@@ -187,6 +187,11 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link
+          rel="preconnect"
+          href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com"
+          crossOrigin="anonymous"
+        />
         <link rel="icon" href={nursenestAppIcons.favicon} sizes="any" type="image/png" />
         <link rel="shortcut icon" href={nursenestAppIcons.favicon} type="image/png" />
         <link rel="apple-touch-icon" href={nursenestAppIcons.favicon} sizes="180x180" type="image/png" />

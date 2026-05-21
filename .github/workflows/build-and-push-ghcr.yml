@@ -61,6 +61,10 @@ jobs:
       - name: Build and push image
         id: build
         uses: docker/build-push-action@v6
+        env:
+          # Job summary + downloadable build record (see Summaries in build-push-action README).
+          DOCKER_BUILD_SUMMARY: true
+          DOCKER_BUILD_RECORD_UPLOAD: true
         with:
           context: .
           file: Dockerfile
@@ -76,9 +80,33 @@ jobs:
             BUILD_WEBPACK_PARALLELISM=1
             NN_FORCE_SINGLE_BUILD_WORKER=true
             NN_TIMED_INCLUDE_NPM_PRUNE=1
+            BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048
+          shm-size: 2g
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
+
+      - name: Build job summary (failure hints)
+        if: failure() && steps.build.outcome == 'failure'
+        run: |
+          {
+            echo "## Docker build failed"
+            echo ""
+            echo "Open the **Build and push image** step above, then:"
+            echo "1. Expand the step — the **job summary** tab should list each Dockerfile \`RUN\` stage and errors."
+            echo "2. Download the **build record** artifact linked in that summary (if present) for full BuildKit logs."
+            echo ""
+            echo "### Common causes on \`ubuntu-latest\` (~7 GiB RAM)"
+            echo "- **OOM during \`npm run heroku-postbuild\`** — look for \`SIGKILL\` / exit code 137 / silent \`exit code: 1\` right after \`next build\`."
+            echo "- **Stale GHA build cache** — re-run with cache cleared or temporarily set \`cache-from:\` / \`cache-to:\` empty in the workflow."
+            echo ""
+            echo "### This repo’s mitigations (already in Dockerfile / build-args)"
+            echo "- \`NN_LOW_MEMORY_BUILD=1\`, \`BUILD_WEBPACK_PARALLELISM=1\`, \`NN_FORCE_SINGLE_BUILD_WORKER=true\`"
+            echo "- \`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048\` (heap cap for Next compile inside the image build)"
+            echo "- \`SKIP_I18N_PREBUILD=1\`, \`NN_SKIP_HEAVY_BUILD_REPORTS=1\`"
+            echo ""
+            echo "Commit: \`${{ github.sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Trigger DigitalOcean deployment
         env:

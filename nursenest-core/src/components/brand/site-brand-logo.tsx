@@ -7,7 +7,8 @@ import {
   brandLogoMarkPresentation,
   type BrandLogoMarkVariant,
 } from "@/lib/branding/logo-config";
-import { nursenestAppIcons } from "@/lib/branding/app-icons";
+import { shouldUseOptimizedBlossomLeafDelivery } from "@/lib/branding/blossom-leaf-assets";
+import { OptimizedBlossomLeafImage } from "@/components/brand/optimized-blossom-leaf-image";
 import { resolveThemeLogo } from "@/lib/branding/resolve-theme-logo";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
@@ -38,8 +39,7 @@ export function SiteBrandLogoMark({
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
   const { themeId, registeredThemeId, rawThemeId, url, kind } = useThemeLogo(logoVariant);
-  const fallbackUrl =
-    logoVariant === "leaf" ? nursenestAppIcons.navLeafSvg : resolveThemeLogo(NURSENEST_DEFAULT_THEME, logoVariant).url;
+  const fallbackUrl = resolveThemeLogo(NURSENEST_DEFAULT_THEME, logoVariant).url;
   const resolvedUrl = url ?? fallbackUrl;
   const [imageFailed, setImageFailed] = useState(false);
 
@@ -82,20 +82,44 @@ export function SiteBrandLogoMark({
 
   if (!finalUrl) return null;
 
+  const markDims =
+    variant === "footer" || variant === "auth"
+      ? { width: 52, height: 52 }
+      : variant === "hero"
+        ? { width: 96, height: 96 }
+        : { width: 52, height: 52 };
+
+  const imgLoading = variant === "header" ? "eager" : "lazy";
+
   return (
     <span className={`${slotClassName} ${className}`.trim()}>
-      <img
-        key={`${themeId}-${finalUrl}`}
-        src={finalUrl}
-        alt={BRAND_NAME}
-        width={320}
-        height={96}
-        loading="eager"
-        decoding="async"
-        className={imgClassName}
-        onLoad={handleLoad}
-        onError={handleError}
-      />
+      {shouldUseOptimizedBlossomLeafDelivery(finalUrl) ? (
+        <OptimizedBlossomLeafImage
+          key={`${themeId}-${finalUrl}`}
+          alt={BRAND_NAME}
+          width={markDims.width}
+          height={markDims.height}
+          loading={imgLoading}
+          decoding="async"
+          fetchPriority={variant === "header" ? "high" : undefined}
+          className={imgClassName}
+          onLoad={handleLoad}
+          onError={handleError}
+        />
+      ) : (
+        <img
+          key={`${themeId}-${finalUrl}`}
+          src={finalUrl}
+          alt={BRAND_NAME}
+          width={markDims.width}
+          height={markDims.height}
+          loading={imgLoading}
+          decoding="async"
+          className={imgClassName}
+          onLoad={handleLoad}
+          onError={handleError}
+        />
+      )}
     </span>
   );
 }
