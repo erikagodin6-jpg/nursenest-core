@@ -1,7 +1,7 @@
 "use client";
 
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
-import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
+import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-ids";
 import type { MarketingPathwayLessonAssessmentShellProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 /**

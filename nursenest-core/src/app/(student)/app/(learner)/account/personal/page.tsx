@@ -28,7 +28,6 @@ export default async function AccountPersonalPage() {
   const localeTag = locale.replace(/_/g, "-");
   const session = await getProtectedRouteSession("(student).app.(learner).account.personal");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.personal"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
