@@ -1897,7 +1897,14 @@ html[data-theme] .nn-marketing-surface {
 }
 @media (min-width: 1024px) {
   .nn-header-primary-inner-shell.nn-section-shell {
-    padding-inline: clamp(2rem, 4vw, 4rem);
+    max-width: 112rem;
+    padding-inline: clamp(2rem, 4vw, 4.5rem);
+  }
+}
+@media (min-width: 1536px) {
+  .nn-header-primary-inner-shell.nn-section-shell {
+    max-width: 120rem;
+    padding-inline: clamp(2.5rem, 4vw, 5rem);
   }
 }
 

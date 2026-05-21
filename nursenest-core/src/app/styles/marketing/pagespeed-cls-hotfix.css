@@ -11,8 +11,8 @@
    ========================================================================== */
 
 :root {
-  --nn-marketing-header-desktop-reserved-height: 7.85rem;
-  --nn-marketing-header-desktop-main-row-height: 4.25rem;
+  --nn-marketing-header-desktop-reserved-height: 8.45rem;
+  --nn-marketing-header-desktop-main-row-height: 4.75rem;
   --nn-marketing-header-desktop-tier-row-height: 2.35rem;
   --nn-marketing-header-utility-row-height: 1.875rem;
   --nn-marketing-header-mobile-reserved-height: 3.75rem;
@@ -55,8 +55,8 @@
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-auth-cluster {
-    min-width: 13.75rem;
-    max-width: 22rem;
+    min-width: 14.5rem;
+    max-width: 30rem;
     min-height: 2.75rem;
     flex-wrap: nowrap;
     overflow: hidden;

@@ -736,10 +736,10 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     href={guestMarketingSignupHref}
                     className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] min-w-0 max-w-none flex-1 shrink items-center justify-center whitespace-nowrap rounded-xl px-2.5 py-2 text-[11px] font-medium sm:max-w-none sm:flex-none sm:px-4 sm:text-sm`}
                     onClick={closeMegaBeforeAuthNav}
-                    aria-label="Start free account — nursing and healthcare exam prep"
-                    title="Start free — no credit card required"
+                    aria-label="Sign up for a NurseNest account"
+                    title="Sign up — no credit card required"
                   >
-                    {formatTitleCase(t("nav.signup"), locale)}
+                    {formatTitleCase(t("nav.signUp"), locale)}
                   </HeaderNavAnchor>
                 </div>
               ) : null}
@@ -830,7 +830,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
           ) : null}
 
           {/* ── Row 0: Utility row — desktop only, row4 themes (Ocean / Blossom / Midnight).
-              Country + Language + Theme + compact auth CTAs live here, above the logo row.
+              Country + Language + Theme live here, above the logo row.
               Thin, low visual weight, utility-only. Hidden on mobile (drawer handles these). */}
           {marketingRow4Layout ? (
             <div
@@ -843,69 +843,6 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   chromeMode="row4"
                   includeUnpublishedRegions={isAdminAuthenticated}
                 />
-                {/* Compact auth CTAs — h-[26px] to match utility trigger height. Desktop-only so
-                    44px touch-target rule does not apply. Show immediately during session load (CLS guard). */}
-                {!isAuthenticated ? (
-                  <div className="flex shrink-0 items-center gap-1.5 pl-1" aria-busy={isSessionPending || undefined}>
-                    <HeaderNavAnchor
-                      href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                      className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]"
-                      onClick={closeMegaBeforeAuthNav}
-                      aria-label="Log in to your NurseNest account"
-                      data-testid="utility-row-login"
-                    >
-                      {formatTitleCase(t("nav.logIn"), locale)}
-                    </HeaderNavAnchor>
-                    <HeaderNavAnchor
-                      href={guestMarketingSignupHref}
-                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
-                      onClick={closeMegaBeforeAuthNav}
-                      aria-label="Start free account — nursing and healthcare exam prep"
-                      data-testid="utility-row-signup"
-                    >
-                      {formatTitleCase(t("nav.signup"), locale)}
-                    </HeaderNavAnchor>
-                  </div>
-                ) : isAdminAuthenticated ? (
-                  <div className="flex shrink-0 items-center gap-1.5 pl-1">
-                    <Link
-                      href={ADMIN_DASHBOARD_HREF}
-                      prefetch={false}
-                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
-                      onClick={(e) => { closeMegaBeforeAuthNav(); navigateAdminDashboardHard(e); }}
-                    >
-                      {formatTitleCase(t("nav.admin"), locale)}
-                    </Link>
-                    <Link href="/app" className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]">
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                  </div>
-                ) : isMarketingEntitledLearner ? (
-                  <div className="flex shrink-0 items-center gap-1.5 pl-1">
-                    <Link
-                      href={resumeStudyingCta?.href ?? "/app"}
-                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
-                    >
-                      {resumeStudyingCta?.label ?? formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                    <Link href="/app" className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]">
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="flex shrink-0 items-center gap-1.5 pl-1">
-                    <Link
-                      href={localizeHref(HUB.pricing)}
-                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
-                      onClick={closeMegaBeforeAuthNav}
-                    >
-                      {formatTitleCase(t("nav.pricing"), locale)}
-                    </Link>
-                    <Link href="/app" className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]">
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                  </div>
-                )}
               </div>
             </div>
           ) : null}
@@ -959,101 +896,99 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               ))}
             </nav>
 
-            {/* row4: auth cluster is intentionally empty — auth lives in the utility row above.
+            {/* row4: auth lives in the primary shell for balanced brand | nav | actions.
                 Non-row4 dark themes: utility + auth here (no utility row). */}
             <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
               {!marketingRow4Layout ? (
-                <>
-                  <div
-                    data-testid="marketing-header-utility-inline"
-                    data-nn-header-band="utility"
-                    className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
-                  >
-                    <MarketingHeaderUtilityCluster
-                      chromeMode="dark-marketing"
-                      includeUnpublishedRegions={isAdminAuthenticated}
-                    />
-                  </div>
-                  {/* CLS guard: show guest buttons immediately during session load. */}
-                  {!isAuthenticated ? (
-                    <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
-                      <HeaderNavAnchor
-                        href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                        className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
-                        onClick={closeMegaBeforeAuthNav}
-                        aria-label="Log in to your NurseNest account"
-                      >
-                        {formatTitleCase(t("nav.logIn"), locale)}
-                      </HeaderNavAnchor>
-                      <HeaderNavAnchor
-                        href={guestMarketingSignupHref}
-                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                        onClick={closeMegaBeforeAuthNav}
-                        aria-label="Start free account — nursing and healthcare exam prep"
-                        title="Start free — no credit card required"
-                      >
-                        {formatTitleCase(t("nav.signup"), locale)}
-                      </HeaderNavAnchor>
-                    </div>
-                  ) : isAdminAuthenticated ? (
-                    <div className="flex shrink-0 items-center gap-2">
-                      <Link
-                        href={ADMIN_DASHBOARD_HREF}
-                        prefetch={false}
-                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                        onClick={(e) => { closeMegaBeforeAuthNav(); navigateAdminDashboardHard(e); }}
-                      >
-                        {formatTitleCase(t("nav.admin"), locale)}
-                      </Link>
-                      <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
-                        {formatTitleCase(t("nav.dashboard"), locale)}
-                      </Link>
-                      <SignOutButton
-                        className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                        redirectTo={withMarketingLocale(locale, "/login")}
-                      />
-                    </div>
-                  ) : isMarketingEntitledLearner ? (
-                    <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-                      <Link
-                        href={resumeStudyingCta?.href ?? "/app"}
-                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
-                      >
-                        {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
-                      </Link>
-                      <Link
-                        href="/app/account/overview"
-                        className="nn-header-account-trigger gap-1.5 px-2.5 sm:px-3"
-                        aria-label={formatTitleCase(t("nav.account"), locale)}
-                      >
-                        <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
-                        <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
-                      </Link>
-                      <SignOutButton
-                        className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                        redirectTo={withMarketingLocale(locale, "/login")}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex shrink-0 items-center gap-2">
-                      <Link
-                        href={localizeHref(HUB.pricing)}
-                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                        onClick={closeMegaBeforeAuthNav}
-                      >
-                        {formatTitleCase(t("nav.pricing"), locale)}
-                      </Link>
-                      <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
-                        {formatTitleCase(t("nav.dashboard"), locale)}
-                      </Link>
-                      <SignOutButton
-                        className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                        redirectTo={withMarketingLocale(locale, "/login")}
-                      />
-                    </div>
-                  )}
-                </>
+                <div
+                  data-testid="marketing-header-utility-inline"
+                  data-nn-header-band="utility"
+                  className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
+                >
+                  <MarketingHeaderUtilityCluster
+                    chromeMode="dark-marketing"
+                    includeUnpublishedRegions={isAdminAuthenticated}
+                  />
+                </div>
               ) : null}
+              {/* CLS guard: show guest buttons immediately during session load. */}
+              {!isAuthenticated ? (
+                <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
+                  <HeaderNavAnchor
+                    href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
+                    className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
+                    onClick={closeMegaBeforeAuthNav}
+                    aria-label="Log in to your NurseNest account"
+                  >
+                    {formatTitleCase(t("nav.logIn"), locale)}
+                  </HeaderNavAnchor>
+                  <HeaderNavAnchor
+                    href={guestMarketingSignupHref}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    onClick={closeMegaBeforeAuthNav}
+                    aria-label="Sign up for a NurseNest account"
+                    title="Sign up — no credit card required"
+                  >
+                    {formatTitleCase(t("nav.signUp"), locale)}
+                  </HeaderNavAnchor>
+                </div>
+              ) : isAdminAuthenticated ? (
+                <div className="flex shrink-0 items-center gap-2">
+                  <Link
+                    href={ADMIN_DASHBOARD_HREF}
+                    prefetch={false}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    onClick={(e) => { closeMegaBeforeAuthNav(); navigateAdminDashboardHard(e); }}
+                  >
+                    {formatTitleCase(t("nav.admin"), locale)}
+                  </Link>
+                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
+                    {formatTitleCase(t("nav.dashboard"), locale)}
+                  </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
+                </div>
+              ) : isMarketingEntitledLearner ? (
+                <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+                  <Link
+                    href={resumeStudyingCta?.href ?? "/app"}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
+                  >
+                    {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                  </Link>
+                  <Link
+                    href="/app/account/overview"
+                    className="nn-header-account-trigger gap-1.5 px-2.5 sm:px-3"
+                    aria-label={formatTitleCase(t("nav.account"), locale)}
+                  >
+                    <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
+                    <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
+                  </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
+                </div>
+              ) : (
+                <div className="flex shrink-0 items-center gap-2">
+                  <Link
+                    href={localizeHref(HUB.pricing)}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    onClick={closeMegaBeforeAuthNav}
+                  >
+                    {formatTitleCase(t("nav.pricing"), locale)}
+                  </Link>
+                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
+                    {formatTitleCase(t("nav.dashboard"), locale)}
+                  </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
+                </div>
+              )}
             </div>
           </div>{/* /nav-row */}
         </div>{/* /.nn-section-shell */}

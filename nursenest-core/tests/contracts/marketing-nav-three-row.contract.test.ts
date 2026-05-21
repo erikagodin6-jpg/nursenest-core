@@ -3,9 +3,10 @@
  *
  * Proves the 3-row header layout contract:
  *
- * Row 0 (utility row):  Country selector, Language selector, Theme selector,
- *                       Log In, Start Free / Dashboard — thin, above the logo.
- * Row 1 (brand nav):    NurseNest logo + Tools, Pricing, About, Blog, FAQ.
+ * Row 0 (utility row):  Country selector, Language selector, Theme selector —
+ *                       thin, above the logo.
+ * Row 1 (brand nav):    NurseNest logo + Tools, Pricing, About, Blog, FAQ
+ *                       + auth actions in the primary shell.
  * Row 2 (class rail):   RN, RPN, NP, New Grad, Allied,
  *                       Pre-Nursing, ECG, HESI, TEAS.
  *
@@ -62,13 +63,13 @@ describe("Test 1: Country/Language/Theme in utility row", () => {
     );
   });
 
-  it("Utility row contains auth CTAs (Log In / Start Free)", () => {
-    const utilityRowIdx = src.indexOf('data-testid="marketing-header-utility-row"');
-    assert.ok(utilityRowIdx !== -1);
-    const block = src.slice(utilityRowIdx, utilityRowIdx + 3000);
+  it("Primary shell contains auth CTAs (Log In / Sign up)", () => {
+    const primaryRowIdx = src.indexOf('data-testid="marketing-header-primary-row"');
+    assert.ok(primaryRowIdx !== -1);
+    const block = src.slice(primaryRowIdx, primaryRowIdx + 9000);
     assert.ok(
-      block.includes("utility-row-login") || block.includes("utility-row-signup"),
-      "Utility row must contain Log In / Start Free auth CTAs",
+      block.includes("nav.logIn") && block.includes("nav.signUp") && block.includes("nn-header-desktop-auth-cluster"),
+      "Primary shell must contain Log In / Sign up auth CTAs in the desktop auth cluster",
     );
   });
 });

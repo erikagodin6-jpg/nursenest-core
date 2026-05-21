@@ -319,8 +319,8 @@
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
-  min-height: 4.25rem;
-  padding: clamp(0.48rem, 0.9vw, 0.7rem) clamp(0.7rem, 1.4vw, 1.2rem);
+  min-height: 4.75rem;
+  padding: clamp(0.62rem, 1vw, 0.85rem) clamp(0.95rem, 1.6vw, 1.55rem);
   border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
   border-radius: 9999px;
   background:
@@ -392,9 +392,16 @@
 
 [data-nn-header-layout="marketing-row4"] .nn-header-login-receded {
   border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, transparent);
-  background: transparent;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-header-primary-bg) 90%, transparent),
+      color-mix(in srgb, var(--semantic-panel-cool) 8%, transparent)
+    );
   color: color-mix(in srgb, var(--nn-header-primary-fg) 72%, transparent);
-  box-shadow: none;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #ffffff 55%, transparent) inset,
+    0 10px 22px -20px color-mix(in srgb, var(--semantic-brand) 40%, transparent);
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-login-receded:hover {
@@ -405,9 +412,22 @@
 
 .nn-nav-cta--premium-soft {
   border-color: color-mix(in srgb, var(--semantic-brand) 54%, var(--header-border));
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-brand) 92%, var(--semantic-chart-5, #ff8ac8)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 76%, var(--semantic-info, #60a5fa)) 100%
+    );
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 42%, transparent) inset,
     0 14px 28px -18px color-mix(in srgb, var(--semantic-brand) 70%, transparent);
+}
+
+.nn-nav-cta--premium-soft:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #ffffff 44%, transparent) inset,
+    0 18px 34px -18px color-mix(in srgb, var(--semantic-brand) 76%, transparent);
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
