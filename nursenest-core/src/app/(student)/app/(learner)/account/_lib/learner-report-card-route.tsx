@@ -20,6 +20,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { aggregateTopicsByCanonicalStudyCategory } from "@/lib/learner/learner-account-category-aggregate";
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 

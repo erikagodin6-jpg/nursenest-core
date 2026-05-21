@@ -20,19 +20,21 @@ function applyAliasesToSnapshot(
   focusRenames: Record<string, string>,
   ops: string[],
 ): RnLearnerStateSnapshot {
-  let competencyStates = snapshot.competencyStates.map((c) => {
+  const competencyStates = snapshot.competencyStates.map((c) => {
     const next = aliases[c.competencyId];
     if (!next) return c;
     ops.push(`alias_competency:${c.competencyId}->${next}`);
     return { ...c, competencyId: next };
-  });
+  }) as RnLearnerStateSnapshot["competencyStates"];
   const focusAreaSlugs = (snapshot.focusAreaSlugs ?? []).map((slug) => {
     const next = focusRenames[slug] ?? aliases[slug];
     if (!next) return slug;
     ops.push(`rename_focus:${slug}->${next}`);
     return next;
   });
-  const reasoningPatterns = (snapshot.reasoningPatterns ?? []).map((p) => aliases[p] ?? p);
+  const reasoningPatterns = (snapshot.reasoningPatterns ?? []).map(
+    (p) => aliases[p] ?? p,
+  ) as RnLearnerStateSnapshot["reasoningPatterns"];
   return { ...snapshot, competencyStates, focusAreaSlugs, reasoningPatterns };
 }
 
@@ -69,7 +71,7 @@ export function applyOntologyLifecycleToEnvelope(
   const operations: string[] = [];
   const fromRevision = envelope.ontologyRevision ?? "unknown";
   const migrationSteps = resolveOntologyMigrationPath(fromRevision, CURRENT_ONTOLOGY_REVISION);
-  let next = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
+  let next: DurableLearnerCognitionEnvelope = { ...envelope, ontologyRevision: CURRENT_ONTOLOGY_REVISION };
 
   for (const stepId of migrationSteps) {
     if (stepId === "current") break;

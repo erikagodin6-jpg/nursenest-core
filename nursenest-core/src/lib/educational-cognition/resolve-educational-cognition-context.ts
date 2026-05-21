@@ -26,6 +26,8 @@ import type {
 import { logReadinessInconsistency } from "@/lib/educational-cognition/governance-observability";
 import type { BuildRnCoachingIntelligenceInput } from "@/lib/learner/rn-coaching-intelligence/build-rn-coaching-intelligence-report";
 
+export type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
+
 export function resolveEducationalCognitionContext(
   pathwayId: string | null | undefined,
   options: ResolveEducationalCognitionOptions = {},
@@ -127,7 +129,7 @@ export function resolveEducationalCognitionFromSession(
     { ...base, learnerState: coachingReport.learnerState, coachingReport },
     traversal.steps,
   );
-  const postMeasurementInput = resolveMeasurementCognitionInput({
+  const postMeasurementInput = governMeasurementCognitionInput({
     learnerState: coachingReport.learnerState,
   });
   const measurementSlice = buildMeasurementCognitionSlice(

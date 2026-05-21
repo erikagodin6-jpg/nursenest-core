@@ -13,6 +13,7 @@ import {
   learnerDashboardCrumbs,
   learnerExamAttemptCrumbs,
   learnerExamPlanCrumbs,
+  learnerFocusAreasHubCrumbs,
   learnerGuidedStudyCrumbs,
   learnerInterpretationStudyCrumbs,
   learnerLabsCategoryCrumbs,
@@ -84,7 +85,14 @@ export type LearnerBreadcrumbInput =
       currentLabel: string;
       currentHref?: string;
     }
-  | { kind: "remediation-ladder"; topic: string; pathwayId: string | null; currentStepTitle: string }
+  | {
+      kind: "remediation-ladder";
+      topic: string;
+      pathwayId: string | null;
+      currentStepTitle: string;
+      currentStepHref?: string;
+      persistentWeakTopics?: readonly string[];
+    }
   | {
       kind: "interpretation-study";
       interpretationLabel: string;

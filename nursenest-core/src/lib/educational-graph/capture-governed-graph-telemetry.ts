@@ -78,7 +78,7 @@ export async function captureGovernedGraphTelemetry(args: {
   step?: EduGraphStep;
   pathwayId?: string | null;
   topicSlug?: string;
-  sourceSurface: GraphSourceSurface;
+  sourceSurface?: GraphSourceSurface;
   competencyId?: string | null;
   learnerStateReason?: string | null;
   remediationPriority?: number;
@@ -88,6 +88,7 @@ export async function captureGovernedGraphTelemetry(args: {
   suppressDedupe?: boolean;
 }): Promise<void> {
   const step = args.step;
+  const sourceSurface = args.sourceSurface ?? step?.sourceSurface ?? "app_remediation";
   const base = step
     ? graphTelemetryPayload(args.event, step, {
         pathwayId: args.pathwayId ?? step.pathwayId,
@@ -97,10 +98,11 @@ export async function captureGovernedGraphTelemetry(args: {
         competencyId: args.competencyId ?? null,
         stepKind: "remediation_review",
         topicSlug: args.topicSlug ?? "unknown",
-        sourceSurface: args.sourceSurface,
+        sourceSurface,
         learnerStateReason: args.learnerStateReason ?? null,
         remediationPriority: args.remediationPriority ?? 1,
         pathwayId: args.pathwayId ?? null,
+        graphDepth: args.graphDepth ?? 0,
       } satisfies GraphTelemetryPayload);
 
   const payload: GraphTelemetryPayload = {

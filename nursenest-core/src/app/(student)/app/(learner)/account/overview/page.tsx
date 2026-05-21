@@ -10,6 +10,7 @@ import {
   LearnerWeakAreasPanel,
 } from "@/components/learner-account-ui";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { LearnerAccountToolGrid } from "@/components/student/learner-account-tool-grid";

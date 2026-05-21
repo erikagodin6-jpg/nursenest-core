@@ -6,14 +6,13 @@ import { buildAiTutorContextEnvelope } from "@/lib/learner/rn-coaching-intellige
 import type { TutoringPromptContext } from "@/lib/ai-tutor/types";
 import { deriveTimingCognitionSignals } from "@/lib/educational-cognition/timing-cognition";
 import { emitCognitionTelemetryV5 } from "@/lib/educational-cognition/cognition-telemetry-v5";
-import type { TutoringPromptContext } from "@/lib/ai-tutor/types";
 
 /**
  * AI tutoring envelope from full cognition context + graph steps (not report-only).
  */
 export function buildAiTutorContextFromCognition(
   ctx: EducationalCognitionContext,
-  graphSteps: EduGraphStep[],
+  graphSteps: readonly EduGraphStep[],
 ): AiTutorContextEnvelope {
   const timing = deriveTimingCognitionSignals({ learnerState: ctx.learnerState });
   const base: AiTutorContextEnvelope = ctx.coachingReport
@@ -37,7 +36,7 @@ export function buildAiTutorContextFromCognition(
           href: s.href,
           reason: s.description,
         })),
-        graphSteps,
+        graphSteps: [...graphSteps],
         measurementGaps: ctx.learnerState.measurementWeaknesses.slice(0, 5),
         tutoringPlanSummary: graphSteps[0]
           ? `Begin with ${graphSteps[0].title}: ${graphSteps[0].description}`
@@ -67,7 +66,7 @@ export function buildAiTutorContextFromCognition(
             reason: s.description,
           }))
         : base.remediationPriorities,
-    graphSteps: graphSteps.length > 0 ? graphSteps : (base.graphSteps ?? []),
+    graphSteps: graphSteps.length > 0 ? [...graphSteps] : (base.graphSteps ?? []),
     measurementGaps:
       base.measurementGaps.length > 0 ? base.measurementGaps : ctx.ontology.measurementWeaknessTags.slice(0, 5),
   };
@@ -87,7 +86,7 @@ export function tutoringPromptContextFromAiEnvelope(
 ): TutoringPromptContext {
   return {
     ...partial,
-    pathwayId: partial.pathwayId ?? envelope.pathwayId,
+    pathwayId: partial.pathwayId ?? envelope.pathwayId ?? undefined,
     graphSteps: envelope.graphSteps,
   };
 }

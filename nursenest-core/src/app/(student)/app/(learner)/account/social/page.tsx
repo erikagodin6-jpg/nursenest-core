@@ -3,6 +3,7 @@ import { SocialStatKey, SocialVisibilityScope } from "@prisma/client";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
 import { SocialStudySettingsClient } from "@/components/student/social-study-settings-client";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
