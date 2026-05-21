@@ -12,7 +12,6 @@ import { LoftSimulationResultsHero } from "@/components/study/loft-simulation-re
 import { getTestingModelResultsProfile } from "@/lib/testing/testing-model-presentation";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
-import { buildEnrichedPostExamPerformanceReport } from "@/lib/learner/post-exam-coaching/build-coaching-report";
 import { persistDashboardFeedToSession } from "@/lib/learner/rn-coaching-intelligence/dashboard-feed";
 import { recordRemediationExposure } from "@/lib/learner/rn-coaching-intelligence/remediation-exposure";
 import { recordCoachingTelemetry } from "@/lib/learner/rn-coaching-intelligence/coaching-telemetry";
@@ -147,9 +146,6 @@ export function PostExamPerformanceReport({
       recentSessionCount: coachingContext?.recentSessionCount,
       remediationUserId: learnerUserId ?? null,
     };
-    if (coachingContext && isEntitled) {
-      return buildEnrichedPostExamPerformanceReport(input);
-    }
     return buildPostExamPerformanceReport(input);
   }, [
     reportProp,
