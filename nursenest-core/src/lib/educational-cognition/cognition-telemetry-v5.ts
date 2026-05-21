@@ -40,6 +40,14 @@ export type CognitionTelemetryV5Payload = {
   coaching_model: string;
 };
 
+function dropNullTelemetryProps(
+  props: Record<string, string | number | boolean | null>,
+): Record<string, string | number | boolean | undefined> {
+  return Object.fromEntries(
+    Object.entries(props).map(([key, value]) => [key, value === null ? undefined : value]),
+  );
+}
+
 export function buildCognitionTelemetryV5Payload(
   ctx: EducationalCognitionContext,
   sourceSurface: string,
@@ -101,7 +109,7 @@ export function emitCognitionTelemetryV5(
     pathwayId: ctx.pathwayId,
     version: buildCognitionVersionMetadata(),
     extra: {
-      ...normalizeCognitionTelemetryProps(ctx, props as Record<string, string | number | boolean | undefined>),
+      ...normalizeCognitionTelemetryProps(ctx, dropNullTelemetryProps(props)),
       ...v5,
       ...versionMeta,
       ...explainAudit,

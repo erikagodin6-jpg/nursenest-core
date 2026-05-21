@@ -8,8 +8,8 @@ import { resolveSubscribedQuestionBankPathways } from "@/lib/learner/tier-scoped
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import {
   resolveEducationalCognitionContext,
-  type EducationalCognitionContext,
 } from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 
 export type LearnerDashboardCognitionSurface = {
   pathwayId: string;
@@ -40,7 +40,7 @@ export function buildLearnerDashboardCognitionSurface(
     ctx.learnerState.remediationFatigueScore >= 0.65;
 
   const coachingIntensityCap: LearnerDashboardCognitionSurface["coachingIntensityCap"] =
-    fatigueCapActive ? "low" : ctx.coachingModel === "supportive" ? "medium" : "high";
+    fatigueCapActive ? "low" : ctx.coachingModel === "linear_practice" ? "medium" : "high";
 
   const maxVisibleWidgets = fatigueCapActive ? 5 : ctx.dashboard.widgets.filter((w) => w.eligible).length > 6 ? 7 : 6;
 

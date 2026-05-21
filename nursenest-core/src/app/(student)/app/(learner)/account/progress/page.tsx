@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { MedCalcReportCardInset } from "@/components/med-calculations/med-calc-report-card-inset";

@@ -13,8 +13,8 @@ import {
 import type {
   CognitionContinuityLineage,
   CognitionEnvelopeGovernanceMetadata,
+  CognitionHydrationState,
   CognitionHydrationProvenance,
-  DurableLearnerCognitionEnvelope,
 } from "@/lib/educational-cognition/cognition-snapshot-types";
 
 export type CognitionHydrationMode = "full" | "partial" | "degraded" | "fresh";

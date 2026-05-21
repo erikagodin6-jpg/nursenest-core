@@ -3,6 +3,7 @@ import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provid
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BookX, Flame } from "lucide-react";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";

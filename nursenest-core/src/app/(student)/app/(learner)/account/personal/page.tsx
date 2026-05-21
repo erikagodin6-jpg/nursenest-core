@@ -3,6 +3,7 @@ import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPersonalInfoForm } from "@/components/student/learner-personal-info-form";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadPersonalProfilePayload } from "@/lib/learner/load-personal-profile";

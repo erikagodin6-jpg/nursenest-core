@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerBillingPageContent } from "@/components/student/learner-billing-page-content";
 import { BillingPortalReturnBanner } from "@/components/student/billing-portal-return-banner";

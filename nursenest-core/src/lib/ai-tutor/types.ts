@@ -18,6 +18,8 @@ import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 
 export type TutoringPromptContext = {
   entitlementSnapshot: TutoringEntitlementSnapshot;
+  /** Current pathway scope for graph-grounded tutoring. */
+  pathwayId?: string;
   /** When set, prompt composition uses graph-ordered remediation only. */
   graphSteps?: readonly EduGraphStep[];
   /** Opaque content ids (question id, lesson id, deck id, etc.) — never log stems. */

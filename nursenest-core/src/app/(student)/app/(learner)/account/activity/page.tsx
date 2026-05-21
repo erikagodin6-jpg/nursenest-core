@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
