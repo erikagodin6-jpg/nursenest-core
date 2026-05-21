@@ -29,7 +29,8 @@ export type GlossaryTermSemanticContext = {
 export type GlossaryTermGraphContext = Pick<
   GlossaryTermSemanticContext,
   "termSlug" | "termLabel" | "topicSlug"
->;
+> &
+  Partial<Pick<GlossaryTermSemanticContext, "pathway">>;
 
 export function resolveGlossaryTermBreadcrumbs(ctx: GlossaryTermSemanticContext): BreadcrumbResolution {
   const examPath = buildExamPathwayPath(ctx.pathway);
