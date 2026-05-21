@@ -220,9 +220,10 @@ export type LearnerWeakAreaContext = {
 
 /** Competency-labeled weak-area trail (client-safe fallback — no graph orchestration). */
 export function learnerWeakAreaCrumbs(args: LearnerWeakAreaContext): BreadcrumbCrumb[] {
+  const topicName = args.topicLabel ?? (args.topicSlug ? args.topicSlug.replace(/-/g, " ") : "");
   return truncateLearnerCrumbs([
     LEARNER_HOME,
-    { name: args.topicLabel ?? args.topicSlug.replace(/-/g, " "), href: undefined },
+    ...(topicName ? [{ name: topicName, href: undefined }] : []),
     { name: args.currentLabel, href: args.currentHref ?? args.currentStepHref },
   ]);
 }
