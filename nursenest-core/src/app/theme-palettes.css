@@ -1582,13 +1582,13 @@ html[data-theme="aurora"] {
 html[data-theme="blossom"] {
   --theme-primary: #d948a8;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: color-mix(in srgb, #ddebff 48%, #ffffff);
+  --theme-secondary: color-mix(in srgb, #ddebff 32%, #ffffff);
   --theme-secondary-foreground: #10182f;
-  --theme-accent: color-mix(in srgb, #f9d7e8 52%, #ffffff);
-  --theme-accent-foreground: #7a2364;
-  --theme-border: color-mix(in srgb, #3f5fd8 9%, #f1dff0);
+  --theme-accent: color-mix(in srgb, #e8f2ff 38%, #ffffff);
+  --theme-accent-foreground: #3f5fd8;
+  --theme-border: color-mix(in srgb, #3f5fd8 12%, #f5e8f4);
   --theme-ring: #9357f2;
-  --theme-page-bg: color-mix(in srgb, #fff1f8 42%, color-mix(in srgb, #edf6ff 26%, #fffafd));
+  --theme-page-bg: color-mix(in srgb, #fff5fb 28%, color-mix(in srgb, #f0f7ff 22%, #ffffff));
   --theme-surface-strong: color-mix(
     in srgb,
     #edf6ff 42%,
@@ -1598,18 +1598,18 @@ html[data-theme="blossom"] {
   --theme-body-text: color-mix(in srgb, #10182f 78%, #ffffff);
   --theme-muted-text: color-mix(in srgb, #10182f 60%, #ffffff);
 
-  --lesson-summary: color-mix(in srgb, #d948a8 8%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, #9357f2 9%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, #f38bbf 9%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, #22c7a7 10%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, #2f80ed 8%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, #22c7a7 9%, #ffffff);
-  --lesson-medications: color-mix(in srgb, #f5b84b 10%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, #8ce7cb 9%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, #9357f2 8%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, #d948a8 9%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, #2f80ed 8%, #ffffff);
-  --lesson-notes: #fdf4fb;
+  --lesson-summary: color-mix(in srgb, #d948a8 11%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #9357f2 11%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #f38bbf 11%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #22c7a7 11%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #2f80ed 11%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #8ce7cb 11%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #f5b84b 12%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #b9ccff 11%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #9357f2 10%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #d948a8 11%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #3f5fd8 10%, #ffffff);
+  --lesson-notes: color-mix(in srgb, #fff5fb 55%, #ffffff);
 
   --state-success: color-mix(in srgb, #22c7a7 12%, #ffffff);
   --state-warning: color-mix(in srgb, #f5b84b 12%, #ffffff);

@@ -48,6 +48,45 @@
     radial-gradient(620px 320px at 50% 92%, color-mix(in srgb, var(--nn-pricing-tone-success) 7%, transparent), transparent 62%);
 }
 
+/* Blossom pricing — Figma homepage: bright pink / blue / violet pastels behind plan cards. */
+html[data-theme="blossom"] .nn-pricing-premium-root {
+  --nn-pricing-tone-accent: var(--semantic-chart-2);
+  --nn-pricing-card-bg-color: color-mix(in srgb, #ffffff 90%, var(--semantic-panel-cool));
+}
+
+html[data-theme="blossom"] .nn-pricing-premium-root::before {
+  background:
+    radial-gradient(820px 420px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 22%, transparent), transparent 58%),
+    radial-gradient(780px 400px at 100% 4%, color-mix(in srgb, var(--semantic-chart-3) 20%, transparent), transparent 56%),
+    linear-gradient(
+      98deg,
+      color-mix(in srgb, var(--semantic-chart-1) 12%, transparent) 0%,
+      transparent 42%,
+      color-mix(in srgb, var(--semantic-chart-3) 11%, transparent) 100%
+    );
+}
+
+html[data-theme="blossom"] .nn-pricing-plan-card {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-chart-1) 8%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 6%, var(--semantic-surface)) 100%
+    );
+}
+
+html[data-theme="blossom"] .nn-pricing-plan-card[data-highlight="popular"] {
+  background:
+    radial-gradient(420px 180px at 50% -10%, color-mix(in srgb, var(--semantic-chart-3) 20%, transparent), transparent 70%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-chart-3) 10%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-chart-2) 8%, var(--semantic-surface)) 100%
+    );
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 42%, var(--semantic-border-soft));
+}
+
 .nn-pricing-hero-premium {
   box-shadow:
     0 24px 60px -38px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 34%, transparent),

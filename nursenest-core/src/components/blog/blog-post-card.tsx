@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { BlogTopicBadge } from "@/components/blog/blog-topic-badge";
 import { resolveBlogTopicPresentation } from "@/lib/blog/blog-post-category-visual";
+import { parseBlogPostCreatedAt } from "@/lib/blog/safe-blog-post-date";
 
 export type BlogPostCardFields = {
   slug: string;
   title: string;
   excerpt: string;
   category?: string | null;
-  createdAt: Date;
+  createdAt: Date | string;
 };
 
 function formatDate(d: Date): string {
@@ -21,6 +22,7 @@ export function BlogPostCard({
   post: BlogPostCardFields;
   featured?: boolean;
 }) {
+  const createdAt = parseBlogPostCreatedAt(post.createdAt);
   const href = `/blog/${encodeURIComponent(post.slug)}`;
   const topic = resolveBlogTopicPresentation(post.category);
   return (
@@ -45,9 +47,9 @@ export function BlogPostCard({
           )}
           <time
             className="shrink-0 text-xs tabular-nums text-[var(--theme-muted-text)]"
-            dateTime={post.createdAt.toISOString()}
+            dateTime={createdAt.toISOString()}
           >
-            {formatDate(post.createdAt)}
+            {formatDate(createdAt)}
           </time>
         </div>
         <h3

@@ -129,16 +129,16 @@
 
 html[data-theme="blossom"] .nn-home-marketing-root {
   background-image:
-    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 58%),
-    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 58%),
-    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 62%),
-    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-2) 9%, transparent), transparent 62%),
+    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 22%, transparent), transparent 56%),
+    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-3) 20%, transparent), transparent 56%),
+    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 60%),
+    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-4) 16%, transparent), transparent 60%),
     linear-gradient(
       192deg,
-      color-mix(in srgb, var(--semantic-chart-1) 6%, var(--theme-page-bg)) 0%,
-      var(--theme-page-bg) 42%,
-      color-mix(in srgb, var(--semantic-chart-3) 5%, var(--theme-page-bg)) 68%,
-      color-mix(in srgb, var(--semantic-chart-4) 5%, var(--theme-page-bg)) 100%
+      color-mix(in srgb, var(--semantic-chart-1) 10%, var(--theme-page-bg)) 0%,
+      var(--theme-page-bg) 40%,
+      color-mix(in srgb, var(--semantic-chart-3) 9%, var(--theme-page-bg)) 66%,
+      color-mix(in srgb, var(--semantic-chart-2) 8%, var(--theme-page-bg)) 100%
     );
 }
 
@@ -147,42 +147,65 @@ html[data-theme="blossom"] .nn-home-marketing-rich-hero {
   --hero-headline-secondary: var(--semantic-chart-3);
   --hero-headline-gradient: linear-gradient(
     92deg,
-    color-mix(in srgb, var(--semantic-chart-1) 93%, var(--semantic-border-soft)) 0%,
-    color-mix(in srgb, var(--semantic-chart-2) 91%, var(--semantic-border-soft)) 48%,
-    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-border-soft)) 100%
+    color-mix(in srgb, var(--semantic-chart-1) 96%, transparent) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 94%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-3) 95%, transparent) 100%
   );
-  --hero-headline-glow: drop-shadow(0 0 24px color-mix(in srgb, var(--semantic-chart-3) 32%, transparent))
-    drop-shadow(0 0 52px color-mix(in srgb, var(--semantic-chart-1) 20%, transparent));
-  --hero-ambient-radial: radial-gradient(122% 90% at 8% 26%, color-mix(in srgb, var(--semantic-chart-1) 19%, transparent) 0%, transparent 58%),
-    radial-gradient(102% 76% at 100% 14%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent) 0%, transparent 56%),
-    radial-gradient(92% 70% at 38% 100%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent) 0%, transparent 60%);
+  --hero-headline-glow: drop-shadow(0 0 24px color-mix(in srgb, var(--semantic-chart-3) 38%, transparent))
+    drop-shadow(0 0 52px color-mix(in srgb, var(--semantic-chart-1) 26%, transparent));
+  --hero-ambient-radial: radial-gradient(122% 90% at 8% 26%, color-mix(in srgb, var(--semantic-chart-1) 24%, transparent) 0%, transparent 58%),
+    radial-gradient(102% 76% at 100% 14%, color-mix(in srgb, var(--semantic-chart-3) 20%, transparent) 0%, transparent 56%),
+    radial-gradient(92% 70% at 38% 100%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent) 0%, transparent 60%);
   background:
-    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-1) 16%, transparent), transparent 60%),
-    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-chart-3) 15%, transparent), transparent 58%),
-    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 58%),
-    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 58%),
+    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-1) 24%, transparent), transparent 58%),
+    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-chart-3) 22%, transparent), transparent 56%),
+    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-2) 20%, transparent), transparent 56%),
+    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-chart-4) 16%, transparent), transparent 56%),
     var(--page-bg, var(--theme-page-bg));
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-image:
-    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-1) 11%, transparent), transparent 56%),
-    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
-    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent), transparent 58%),
+    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-1) 18%, transparent), transparent 54%),
+    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 56%),
+    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-2) 15%, transparent), transparent 56%),
     linear-gradient(
       176deg,
-      color-mix(in srgb, var(--semantic-chart-1) 6%, var(--theme-page-bg)) 0%,
-      color-mix(in srgb, var(--semantic-chart-3) 5%, var(--theme-page-bg)) 44%,
-      color-mix(in srgb, var(--semantic-chart-4) 5%, var(--theme-page-bg)) 100%
+      color-mix(in srgb, var(--semantic-chart-1) 9%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 8%, var(--theme-page-bg)) 44%,
+      color-mix(in srgb, var(--semantic-chart-2) 8%, var(--theme-page-bg)) 100%
     );
 }
 
 html[data-theme="blossom"] .nn-premium-home-section::before {
   background:
-    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 8%, transparent), transparent 62%),
-    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-chart-3) 8%, transparent), transparent 60%),
-    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 60%),
-    radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 7%, transparent), transparent 62%);
+    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 14%, transparent), transparent 60%),
+    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-chart-3) 13%, transparent), transparent 58%),
+    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-chart-2) 12%, transparent), transparent 58%),
+    radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 60%);
+}
+
+/* Blossom — Figma nav v3.1: floating main pill (logo + Pricing…Tools) with pink / blue / violet rim */
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-chart-1) 22%,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft))
+  );
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-header-primary-bg) 94%, #ffffff),
+      color-mix(
+        in srgb,
+        var(--semantic-chart-3) 10%,
+        color-mix(in srgb, var(--semantic-chart-1) 8%, var(--nn-header-primary-bg))
+      )
+    );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-3) 20%, transparent) inset,
+    0 18px 42px -28px color-mix(in srgb, var(--semantic-chart-1) 32%, transparent),
+    0 12px 32px -24px color-mix(in srgb, var(--semantic-chart-3) 24%, transparent);
 }
 
 /* =====================================================================
@@ -305,23 +328,53 @@ html[data-theme="blossom"] .nn-header-brand-lockup {
   color: var(--theme-primary);
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
-  border-color: color-mix(in srgb, var(--semantic-chart-5) 18%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-6) 5%, color-mix(in srgb, var(--semantic-chart-5) 5%, var(--nn-header-primary-bg)));
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"],
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 6%,
+    color-mix(in srgb, var(--semantic-chart-1) 5%, var(--nn-header-primary-bg))
+  );
+  border-top-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--header-border));
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover,
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-chart-1) 20%,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft))
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 10%,
+    color-mix(in srgb, var(--semantic-chart-1) 8%, var(--nn-header-primary-bg))
+  );
+}
+
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip:hover {
-  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-5) 9%, var(--nn-header-primary-bg));
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 28%, var(--semantic-chart-3));
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-1) 12%,
+    color-mix(in srgb, var(--semantic-chart-3) 14%, var(--nn-header-primary-bg))
+  );
+}
+
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 40%, var(--semantic-chart-3));
+  background: color-mix(
+    in srgb,
+    var(--semantic-brand) 14%,
+    color-mix(in srgb, var(--semantic-chart-3) 16%, var(--nn-header-primary-bg))
+  );
 }
 
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 button {
-  border-color: color-mix(in srgb, var(--semantic-chart-5) 24%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-6) 7%, var(--nn-header-primary-bg));
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-1) 8%, var(--nn-header-primary-bg));
   color: var(--theme-heading-text);
 }
 

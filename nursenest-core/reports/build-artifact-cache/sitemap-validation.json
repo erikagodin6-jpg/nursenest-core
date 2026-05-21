@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "d008e3365254c2ee9b1cff4cebb10e6fff58629248305159b4cb217218e2d3bf",
-  "generatedAt": "2026-05-21T04:05:13.238Z",
+  "fingerprint": "2b727135460e8cf7d3ad1afc5c7663c2765ecf82a91097bdce48582c0ceaf5da",
+  "generatedAt": "2026-05-21T21:04:10.133Z",
   "inputs": [
     {
       "type": "file",
@@ -4338,6 +4338,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/blog/safe-blog-post-date.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/blog/safe-blog-post-date.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/blog/safe-blog-queries.build-phase.test.mts"
     },
     {
@@ -6505,6 +6513,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 2820
+    "durationMs": 14445
   }
 }

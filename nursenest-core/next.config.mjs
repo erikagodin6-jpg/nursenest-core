@@ -106,6 +106,10 @@ const experimental = {
  * Keep this list intentionally scoped to the NP discoverability pass so we do not broaden unrelated
  * routing behavior while restoring specialty-first public entry points.
  */
+/** Approved tab/bookmark icon — must match `src/lib/branding/app-icons.ts`. */
+const APPROVED_PINK_FAVICON_CDN =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/pinkfavicon.png?v=2026-05-21-cdn-pink";
+
 const NP_PROGRAMMATIC_SEO_REWRITES = [
   "np-exam-prep",
   "np-exam-practice-questions",
@@ -142,6 +146,12 @@ const nextConfig = {
   /** Legacy crawler bookmarks → single canonical sitemap (avoid duplicate sitemap index signals). */
   async redirects() {
     return [
+      /** Legacy public icon paths → approved CDN (browsers often skip metadata and hit these URLs). */
+      { source: "/favicon.ico", destination: APPROVED_PINK_FAVICON_CDN, permanent: true },
+      { source: "/favicon.svg", destination: APPROVED_PINK_FAVICON_CDN, permanent: true },
+      { source: "/apple-touch-icon.png", destination: APPROVED_PINK_FAVICON_CDN, permanent: true },
+      { source: "/icon-192.png", destination: APPROVED_PINK_FAVICON_CDN, permanent: true },
+      { source: "/icon-512.png", destination: APPROVED_PINK_FAVICON_CDN, permanent: true },
       { source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true },
       /** Learner canonical routes (consolidation); query strings preserved by Next.js. */
       { source: "/app/command-center", destination: "/app", permanent: false },
@@ -482,6 +492,23 @@ const nextConfig = {
             value: "public, max-age=31536000, immutable",
           },
         ],
+      },
+      {
+        /** App icons — allow refresh after branding updates (avoid 1y immutable on old leaf favicon). */
+        source: "/favicon.ico",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, must-revalidate" }],
+      },
+      {
+        source: "/apple-touch-icon.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, must-revalidate" }],
+      },
+      {
+        source: "/icon-192.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, must-revalidate" }],
+      },
+      {
+        source: "/icon-512.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, must-revalidate" }],
       },
       {
         /**

@@ -13,6 +13,7 @@ import type { BlogPostStatus } from "@prisma/client";
 import { BlogPostStatus as BlogPostStatusValue } from "@prisma/client";
 import type { StaticBlogPostRecord } from "@/content/blog-static-posts";
 import type { BlogStaticLongtailRecord } from "@/lib/blog/blog-static-longtail-types";
+import { parseBlogPostCreatedAt } from "@/lib/blog/safe-blog-post-date";
 
 /** Upper bound for full in-memory merge of CMS + static index rows (list queries stay bounded). */
 export const BLOG_INDEX_MERGE_DB_MAX = 5000;
@@ -29,7 +30,7 @@ export type BlogIndexMergeRow = {
 };
 
 export function staticRecordToBlogIndexMergeRow(s: StaticBlogPostRecord): BlogIndexMergeRow {
-  const createdAt = new Date(`${s.createdAt}T12:00:00Z`);
+  const createdAt = parseBlogPostCreatedAt(s.createdAt);
   return {
     slug: s.slug,
     title: s.title,
@@ -43,8 +44,8 @@ export function staticRecordToBlogIndexMergeRow(s: StaticBlogPostRecord): BlogIn
 }
 
 export function blogStaticLongtailRecordToBlogIndexMergeRow(r: BlogStaticLongtailRecord): BlogIndexMergeRow {
-  const createdAt = new Date(`${r.createdAt}T12:00:00Z`);
-  const updatedAt = new Date(`${r.updatedAt}T12:00:00Z`);
+  const createdAt = parseBlogPostCreatedAt(r.createdAt);
+  const updatedAt = parseBlogPostCreatedAt(r.updatedAt || r.createdAt);
   return {
     slug: r.slug,
     title: r.title,

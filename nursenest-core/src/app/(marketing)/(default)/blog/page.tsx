@@ -23,6 +23,7 @@ import {
   preloadInlineContentMap,
 } from "@/components/inline-content";
 import { DEFAULT_MARKETING_BLOG_INDEX } from "@/lib/blog/blog-index-hero-copy";
+import { blogPostCreatedAtIso } from "@/lib/blog/safe-blog-post-date";
 
 const BLOG_INLINE_KEYS = [
   "inline.marketing.blog.index.h1",
@@ -119,7 +120,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
     title: p.title,
     excerpt: p.excerpt,
     category: p.category ?? null,
-    createdAt: p.createdAt.toISOString(),
+    createdAt: blogPostCreatedAtIso(p.createdAt),
   }));
 
   return (

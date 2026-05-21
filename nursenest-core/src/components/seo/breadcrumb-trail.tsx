@@ -34,11 +34,18 @@ export function BreadcrumbTrail({
                 >
                   {c.name}
                 </span>
+              ) : onCrumbClick ? (
+                <Link
+                  href={c.href}
+                  className="min-w-0 max-w-full break-words text-primary leading-snug [overflow-wrap:anywhere] hover:underline"
+                  onClick={() => onCrumbClick(i, c)}
+                >
+                  {c.name}
+                </Link>
               ) : (
                 <Link
                   href={c.href}
                   className="min-w-0 max-w-full break-words text-primary leading-snug [overflow-wrap:anywhere] hover:underline"
-                  onClick={() => onCrumbClick?.(i, c)}
                 >
                   {c.name}
                 </Link>

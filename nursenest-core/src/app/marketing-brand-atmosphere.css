@@ -33,6 +33,14 @@ html[data-theme="ocean"] .nn-marketing-brand-root {
   --nn-brand-page-wash-c: radial-gradient(94% 68% at 44% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent), transparent 60%);
 }
 
+html[data-theme="blossom"] .nn-marketing-brand-root {
+  --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-1) 42%, transparent);
+  --nn-brand-leaf-band-opacity: 0.052;
+  --nn-brand-page-wash-a: radial-gradient(120% 90% at 4% 0%, color-mix(in srgb, var(--semantic-chart-1) 18%, transparent), transparent 54%);
+  --nn-brand-page-wash-b: radial-gradient(104% 76% at 100% 8%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 54%);
+  --nn-brand-page-wash-c: radial-gradient(94% 68% at 44% 100%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 58%);
+}
+
 html[data-theme="sunset"] .nn-marketing-brand-root {
   --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-5) 36%, transparent);
   --nn-brand-page-wash-a: radial-gradient(118% 86% at 10% 0%, color-mix(in srgb, var(--semantic-warning) 11%, transparent), transparent 58%);
@@ -207,6 +215,11 @@ html[data-theme="sunset"] .nn-marketing-brand-root {
   opacity: 0.42;
 }
 
+html[data-theme="blossom"] .nn-marketing-brand-root .nn-pricing-premium-root::before {
+  opacity: 0.58;
+  background: var(--nn-brand-page-wash-a), var(--nn-brand-page-wash-b), var(--nn-brand-page-wash-c);
+}
+
 .nn-marketing-brand-root .nn-pricing-premium-root > * {
   position: relative;
   z-index: 1;
@@ -221,7 +234,7 @@ html[data-theme="sunset"] .nn-marketing-brand-root {
 }
 
 html[data-theme="blossom"] .nn-learner-app.nn-brand-learner-atmosphere {
-  --nn-learner-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-5) 30%, transparent);
+  --nn-learner-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-1) 32%, transparent);
 }
 
 :is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"], html[data-theme="apex"])

@@ -7,6 +7,7 @@ import {
   brandLogoMarkPresentation,
   type BrandLogoMarkVariant,
 } from "@/lib/branding/logo-config";
+import { nursenestAppIcons } from "@/lib/branding/app-icons";
 import { resolveThemeLogo } from "@/lib/branding/resolve-theme-logo";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
@@ -37,7 +38,8 @@ export function SiteBrandLogoMark({
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
   const { themeId, registeredThemeId, rawThemeId, url, kind } = useThemeLogo(logoVariant);
-  const fallbackUrl = resolveThemeLogo(NURSENEST_DEFAULT_THEME, logoVariant).url;
+  const fallbackUrl =
+    logoVariant === "leaf" ? nursenestAppIcons.navLeafSvg : resolveThemeLogo(NURSENEST_DEFAULT_THEME, logoVariant).url;
   const resolvedUrl = url ?? fallbackUrl;
   const [imageFailed, setImageFailed] = useState(false);
 

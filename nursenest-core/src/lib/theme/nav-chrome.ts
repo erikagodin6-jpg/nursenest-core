@@ -122,13 +122,13 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
 
   /* ── Premium clinical palettes ── */
   blossom: {
-    /* Bright original Blossom chrome: cream paper with happy pink, blue, and mint lift. */
-    chrome: "color-mix(in srgb, #d948a8 5%, color-mix(in srgb, #edf6ff 24%, color-mix(in srgb, #fff1f8 22%, #fffafd)))",
+    /* Bright Blossom chrome: white paper with pink, sky, and violet lift (Figma homepage mockup). */
+    chrome: "color-mix(in srgb, #d948a8 4%, color-mix(in srgb, #e8f2ff 18%, color-mix(in srgb, #fff5fb 14%, #ffffff)))",
     foreground: "#10182f",
-    border: "color-mix(in srgb, #3f5fd8 9%, #f1dff0)",
-    hoverBg: "color-mix(in srgb, #d948a8 7%, transparent)",
+    border: "color-mix(in srgb, #3f5fd8 14%, #f5e8f4)",
+    hoverBg: "color-mix(in srgb, #d948a8 8%, transparent)",
     hoverFg: "#10182f",
-    panel: "color-mix(in srgb, #d948a8 5%, transparent)",
+    panel: "color-mix(in srgb, #9357f2 6%, transparent)",
   },
   aurora: {
     /* Fallback when semantic tokens absent — pastel wash + ink (matches theme-palettes Aurora). */

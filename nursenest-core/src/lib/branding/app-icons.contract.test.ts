@@ -37,7 +37,13 @@ describe("NurseNest app icons (canonical leaf)", () => {
     const layout = readFileSync(path.join(pkgRoot, "src/app/layout.tsx"), "utf8");
     assert.match(layout, /from "@\/lib\/branding\/app-icons"/);
     assert.match(layout, /nursenestAppIcons\.favicon/);
+    assert.match(layout, /<link rel="icon" href=\{nursenestAppIcons\.favicon\}/);
     assert.doesNotMatch(layout, /mask-icon/);
+  });
+
+  it("public favicon.ico exists and is non-trivial after icons:generate", () => {
+    const ico = readFileSync(publicFile("/favicon.ico"));
+    assert.ok(ico.byteLength > 200, "favicon.ico should be regenerated from pinkfavicon.png");
   });
 
   it("manifest.json references only the approved CDN pink favicon", () => {
