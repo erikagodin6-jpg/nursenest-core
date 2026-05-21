@@ -35,7 +35,6 @@ export default async function AccountStudyPreferencesPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).account.study-preferences");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.settingsHub"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

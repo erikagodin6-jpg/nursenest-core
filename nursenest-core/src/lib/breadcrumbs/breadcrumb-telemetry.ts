@@ -34,7 +34,9 @@ export type BreadcrumbTelemetryPayload = {
   normalizedPathname?: string;
   semanticRouteKind?: string;
   ontologyNamespace?: string;
+  ontologyRevision?: string;
   graphVersion?: string;
+  testing_model?: string;
   educationalIntent?: string;
   cognitionReliabilityTier?: string;
   crumbIndex?: number;

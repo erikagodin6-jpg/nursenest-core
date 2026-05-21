@@ -16,6 +16,7 @@ export function PathwayLessonDetailPageLoadingFallback({ pathway }: { pathway: E
 
   return (
     <LessonsPageShell
+      title={`${examName} lesson`}
       omitHeroBand
       eyebrow={pathway.shortName.trim() || pathway.displayName}
       pathwayTrack={pathway.roleTrack}
