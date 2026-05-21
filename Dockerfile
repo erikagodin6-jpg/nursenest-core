@@ -15,7 +15,7 @@ WORKDIR /app/nursenest-core
 ENV NODE_ENV=development
 ENV HUSKY=0
 
-RUN npm ci --ignore-scripts --no-fund --no-audit
+RUN npm ci --ignore-scripts --no-fund --no-audit --install-links=false
 
 WORKDIR /app
 
