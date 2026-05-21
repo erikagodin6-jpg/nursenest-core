@@ -23,16 +23,16 @@ describe("resolveThemeLogo", () => {
     const r = resolveThemeLogo("ocean-mist", "full");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "ocean-mist");
-    assert.equal(r.objectKey, "Logos/north-sea-leaf-transparent.png");
-    assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png");
+    assert.equal(r.objectKey, "hotpinkblossomleaflogo.png");
+    assert.equal(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
   });
 
   it("falls back to the intentional default mapped theme for unknown theme strings", () => {
     const r = resolveThemeLogo("__not_a_theme__", "full");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "ocean");
-    assert.equal(r.objectKey, "Logos/north-sea-leaf-transparent.png");
-    assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png");
+    assert.equal(r.objectKey, "hotpinkblossomleaflogo.png");
+    assert.equal(r.url, NURSENEST_BLOSSOM_LEAF_LOGO_URL);
   });
 
   it("returns an explicit mapped key for slate", () => {
