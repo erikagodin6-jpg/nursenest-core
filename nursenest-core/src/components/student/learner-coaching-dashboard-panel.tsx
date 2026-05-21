@@ -75,7 +75,7 @@ export function LearnerCoachingDashboardPanel() {
     return <div className="nn-coaching-dashboard-reserve nn-coaching-dashboard-reserve--settled" aria-hidden />;
   }
 
-  const actionByCardId = new Map<string, DashboardOrchestrationV3["graphActions"][number]["step"]>(
+  const actionByCardId = new Map<string, NonNullable<DashboardOrchestrationV3["graphActions"]>[number]["step"]>(
     (orch.graphActions ?? []).map((a) => [`graph-${a.stepId}`, a.step] as const),
   );
 
