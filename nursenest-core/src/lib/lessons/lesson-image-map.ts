@@ -54,6 +54,38 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
 
   // ── Cardiovascular ────────────────────────────────────────────────────────
   {
+    objectKey: "acutecoronarysyndrome.jpeg",
+    slugs: [
+      "acute-coronary-syndrome",
+      "acs-nursing",
+      "acs-management",
+      "acute-coronary-syndrome-nursing",
+      "acute-coronary-syndrome-management",
+      "nstemi",
+      "stemi",
+      "stemi-nursing",
+      "nstemi-nursing",
+      "unstable-angina",
+      "unstable-angina-nursing",
+      "acs-pathophysiology",
+    ],
+    keywords: [
+      "acute coronary syndrome",
+      "acs",
+      "stemi",
+      "nstemi",
+      "unstable angina",
+      "myocardial infarction",
+      "heart attack nursing",
+      "acs management",
+      "coronary artery occlusion",
+      "plaque rupture",
+    ],
+    bodySystems: [],
+    category: "cardiovascular",
+    caption: "Acute coronary syndrome — STEMI/NSTEMI pathophysiology and nursing management",
+  },
+  {
     objectKey: "cardiacamyloidosis.png",
     slugs: [
       "cardiac-amyloidosis",
