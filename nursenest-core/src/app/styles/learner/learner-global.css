@@ -7175,22 +7175,31 @@ html[data-theme="deep-twilight"] {
 }
 
 .nn-lesson-retention-review-zone__head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.78fr);
-  align-items: end;
-  gap: clamp(1.5rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1rem, 2vw, 1.5rem);
   margin-bottom: clamp(1.35rem, 3vw, 2.2rem);
 }
 
+.nn-lesson-retention-review-zone__intro {
+  max-width: 44rem;
+}
+
+.nn-lesson-retention-review-zone__tagline {
+  max-width: 28rem;
+}
+
 .nn-lesson-retention-review-zone__head h2 {
-  margin-top: 0.9rem;
+  margin: 0;
   color: var(--semantic-text-primary);
   font-size: clamp(1.8rem, 2.4vw, 3rem);
   line-height: 1.05;
   letter-spacing: -0.045em;
 }
 
-.nn-lesson-retention-review-zone__head p:last-child {
+.nn-lesson-retention-review-zone__intro p:last-child {
+  margin-top: 0.85rem;
   color: var(--semantic-text-secondary);
   font-size: clamp(0.98rem, 0.25vw + 0.92rem, 1.08rem);
   line-height: 1.7;
@@ -7198,7 +7207,7 @@ html[data-theme="deep-twilight"] {
 
 .nn-lesson-retention-review-zone__sections {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -7208,6 +7217,22 @@ html[data-theme="deep-twilight"] {
   margin: 0;
   border-radius: 1rem;
   padding: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-retention-review-zone__head {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .nn-lesson-retention-review-zone__intro {
+    flex: 1 1 60%;
+  }
+
+  .nn-lesson-retention-review-zone__tagline {
+    flex: 0 1 40%;
+    padding-top: 0.15rem;
+  }
 }
 
 .nn-lesson-retention-review-zone .nn-lesson-quick-summary {

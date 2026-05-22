@@ -307,9 +307,18 @@
   gap: 1rem;
 }
 
+.nn-lesson-page-shell--reading-v2 .nn-lesson-retention-review-zone__intro,
+.nn-lesson-page-shell--reading-v2 .nn-lesson-retention-review-zone__tagline {
+  max-width: none;
+}
+
 .nn-lesson-page-shell--reading-v2 .nn-lesson-retention-review-zone__head h2 {
   font-size: 1.5rem;
   line-height: 1.15;
+}
+
+.nn-lesson-page-shell--reading-v2 .nn-lesson-retention-review-zone__sections {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
 }
 
 .nn-lesson-page-shell--reading-v2 .nn-lesson-sticky-review-dock {

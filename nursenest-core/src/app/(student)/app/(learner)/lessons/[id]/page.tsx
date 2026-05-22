@@ -1194,17 +1194,23 @@ async function LessonDetailPageInner({ params }: Props) {
           aria-labelledby="lesson-retention-review-heading"
           data-nn-premium-retention-review-zone
         >
-          <div className="nn-lesson-retention-review-zone__head">
-            <p className="nn-lesson-hero-eyebrow">Retention & exam readiness</p>
-            <h2 id="lesson-retention-review-heading">
-              Review after learning, not during it.
-            </h2>
-            <p>
-              Clinical pearls, traps, safety priorities, quick recall, and
-              related concepts live here so the main lesson stays calm and
-              uninterrupted.
-            </p>
-          </div>
+          <header className="nn-lesson-retention-review-zone__head">
+            <div className="nn-lesson-retention-review-zone__intro">
+              <p className="nn-lesson-hero-eyebrow">
+                Retention & exam readiness
+              </p>
+              <p>
+                Clinical pearls, traps, safety priorities, quick recall, and
+                related concepts live here so the main lesson stays calm and
+                uninterrupted.
+              </p>
+            </div>
+            <div className="nn-lesson-retention-review-zone__tagline">
+              <h2 id="lesson-retention-review-heading">
+                Review after learning, not during it.
+              </h2>
+            </div>
+          </header>
           {retentionSections.length > 0 ? (
             <div className="nn-lesson-retention-review-zone__sections">
               {retentionSections.map((section) => {

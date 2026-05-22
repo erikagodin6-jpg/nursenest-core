@@ -22,8 +22,7 @@ import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesso
 import { loadMarketingPathwayLessonViewerContext } from "@/lib/lessons/marketing-pathway-lesson-viewer-context.server";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { marketingPathwayLessonsIndexPath, marketingPathwayLessonsCategoryPath } from "@/lib/lessons/lesson-routes";
-import { displayCategoryForPathwayMarketingHubLesson } from "@/lib/lessons/marketing-lessons-hub-category";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
   getPathwayLessonPreviewKind,
@@ -329,8 +328,6 @@ export async function PathwayLessonDetailPageBody({
     lesson,
     lessonTitleDisplay: displayLessonTitle,
   });
-  const lessonCategory = displayCategoryForPathwayMarketingHubLesson(lesson, pathway.id);
-  const lessonCategoryHubPath = marketingPathwayLessonsCategoryPath(pathway, lessonCategory.slug);
   const lessonQuality = classifyPathwayLesson(lesson);
   const contentDates =
     contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;
@@ -497,20 +494,6 @@ export async function PathwayLessonDetailPageBody({
             viewerSignedIn={Boolean(userId)}
             surfaceChips={lessonHubSurfaceChips}
           />
-          <p className="nn-marketing-caption -mt-2 mb-3 text-[var(--theme-muted-text)]">
-            <Link
-              href={lessonCategoryHubPath}
-              className="font-medium text-primary hover:underline [overflow-wrap:anywhere]"
-            >
-              More in {lessonCategory.label}
-            </Link>
-            <span aria-hidden className="mx-1.5 text-[var(--theme-separator)]">
-              ·
-            </span>
-            <Link href={base} className="text-primary hover:underline">
-              All {examName} lessons
-            </Link>
-          </p>
           <LessonReadingScrollProgress />
           <PathwayLessonSequenceNavBar
             adjacent={lessonAdjacentHrefs}
@@ -810,19 +793,23 @@ export async function PathwayLessonDetailPageBody({
                   aria-labelledby="lesson-retention-review-heading"
                   data-nn-premium-retention-review-zone
                 >
-                  <div className="nn-lesson-retention-review-zone__head">
-                    <p className="nn-lesson-hero-eyebrow">
-                      Retention & exam readiness
-                    </p>
-                    <h2 id="lesson-retention-review-heading">
-                      Review after learning, not during it.
-                    </h2>
-                    <p>
-                      Clinical pearls, traps, safety priorities, quick recall,
-                      and related concepts live here so the main lesson stays
-                      calm and uninterrupted.
-                    </p>
-                  </div>
+                  <header className="nn-lesson-retention-review-zone__head">
+                    <div className="nn-lesson-retention-review-zone__intro">
+                      <p className="nn-lesson-hero-eyebrow">
+                        Retention & exam readiness
+                      </p>
+                      <p>
+                        Clinical pearls, traps, safety priorities, quick recall,
+                        and related concepts live here so the main lesson stays
+                        calm and uninterrupted.
+                      </p>
+                    </div>
+                    <div className="nn-lesson-retention-review-zone__tagline">
+                      <h2 id="lesson-retention-review-heading">
+                        Review after learning, not during it.
+                      </h2>
+                    </div>
+                  </header>
                   {retentionSections.length > 0 ? (
                     <div className="nn-lesson-retention-review-zone__sections">
                       {retentionSections.map((section) => (
@@ -907,6 +894,13 @@ export async function PathwayLessonDetailPageBody({
                   />
                 </section>
 
+                <PathwayLessonTopicSiblingsStrip
+                  pathway={pathway}
+                  topicSlug={lesson.topicSlug}
+                  topicLabel={lesson.topic}
+                  excludeSlug={lesson.slug}
+                />
+
                 <PathwayLessonActions
                   pathwayId={pathway.id}
                   lessonSlug={lesson.slug}
@@ -924,13 +918,6 @@ export async function PathwayLessonDetailPageBody({
             </LessonReadingViewport>
           </div>
           <LessonStickyReviewDock enabled={fullAccess} />
-
-          <PathwayLessonTopicSiblingsStrip
-            pathway={pathway}
-            topicSlug={lesson.topicSlug}
-            topicLabel={lesson.topic}
-            excludeSlug={lesson.slug}
-          />
 
           <PathwayLessonRemediationChain
             pathway={pathway}
