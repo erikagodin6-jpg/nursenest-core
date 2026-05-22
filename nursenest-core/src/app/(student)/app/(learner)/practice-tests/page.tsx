@@ -150,7 +150,12 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     });
     const tier = entitlement.tier != null ? String(entitlement.tier) : "";
     const country = entitlement.country != null ? String(entitlement.country) : "";
-    const snap = tier && country ? await readPracticeTestsHubBootstrapSnapshot({ tier, country }) : null;
+    let snap = null;
+    try {
+      snap = tier && country ? await readPracticeTestsHubBootstrapSnapshot({ tier, country }) : null;
+    } catch {
+      snap = null;
+    }
     if (snap?.payload) {
       hubBootstrapSource = "secondary";
       pathwayOptions =

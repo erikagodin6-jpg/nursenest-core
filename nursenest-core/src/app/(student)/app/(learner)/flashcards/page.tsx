@@ -177,10 +177,15 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         outcome: "error",
       });
 
-      const snap = await readFlashcardsHubPathwayBootstrapSnapshot({
-        tier: String(entitlement.tier ?? ""),
-        country: String(entitlement.country ?? ""),
-      });
+      let snap = null;
+      try {
+        snap = await readFlashcardsHubPathwayBootstrapSnapshot({
+          tier: String(entitlement.tier ?? ""),
+          country: String(entitlement.country ?? ""),
+        });
+      } catch {
+        snap = null;
+      }
 
       if (snap?.payload) {
         pathwayBootstrapSource = "secondary";
