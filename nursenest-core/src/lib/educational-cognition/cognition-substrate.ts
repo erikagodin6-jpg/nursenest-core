@@ -2,7 +2,7 @@
  * Educational Cognition OS — canonical substrate for all learner-facing intelligence surfaces.
  */
 import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
-import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
+import type { EduGraphStep, GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import {
   resolveEducationalCognitionContext,
   type ReadinessResult,
@@ -37,14 +37,14 @@ export type ResolveLearnerCognitionSubstrateInput = {
   weakTopicLabels?: string[];
   timing?: TimingIntelligenceResult | null;
   persistLearnerState?: boolean;
-  sourceSurface?: string;
+  sourceSurface?: GraphSourceSurface;
 };
 
 export type LearnerCognitionSubstrate = {
   ctx: EducationalCognitionContext;
   studyPlan: GovernedRnStudyPlan;
   dashboard: DashboardOrchestrationV3;
-  graphSteps: EduGraphStep[];
+  graphSteps: readonly EduGraphStep[];
   aiTutor: AiTutorContextEnvelope;
   timingRiskBand: ReturnType<typeof deriveTimingCognitionSignals>["riskBand"];
   studyPlanDensity: ReturnType<typeof studyPlanDensityFromTiming>;

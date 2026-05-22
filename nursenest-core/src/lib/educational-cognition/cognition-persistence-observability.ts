@@ -1,5 +1,6 @@
 import "server-only";
 
+import { Prisma } from "@prisma/client";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -96,7 +97,7 @@ export async function probeLearnerCognitionPersistence(): Promise<PersistenceHea
 
   try {
     await prisma.user.findFirst({
-      where: { learnerCognitionEnvelope: { not: null } },
+      where: { learnerCognitionEnvelope: { not: Prisma.DbNull } },
       select: { id: true },
       take: 1,
     });

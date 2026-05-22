@@ -3,6 +3,7 @@ import { EMPTY_LEARNER_STATE } from "@/lib/learner/rn-coaching-intelligence/lear
 import type {
   CognitionReliabilityTier,
   DurableLearnerCognitionEnvelope,
+  CognitionHydrationState,
 } from "@/lib/educational-cognition/cognition-snapshot-types";
 import { buildFreshCognitionEnvelope } from "@/lib/educational-cognition/cognition-snapshot-migrations";
 import { inferReliabilityFromPersistSource } from "@/lib/educational-cognition/cognition-reliability";
@@ -14,7 +15,6 @@ import type {
   CognitionContinuityLineage,
   CognitionEnvelopeGovernanceMetadata,
   CognitionHydrationProvenance,
-  DurableLearnerCognitionEnvelope,
 } from "@/lib/educational-cognition/cognition-snapshot-types";
 
 export type CognitionHydrationMode = "full" | "partial" | "degraded" | "fresh";

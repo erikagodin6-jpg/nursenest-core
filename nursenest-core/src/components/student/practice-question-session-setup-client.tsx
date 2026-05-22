@@ -264,7 +264,7 @@ export function PracticeQuestionSessionSetupClient({
         continuous: sessionLength === "unlimited",
         topic_count: topicNames.length,
         selection_basis: catSelectionBasis,
-        special_focus: specialFocus,
+        special_focus: specialFocus ?? undefined,
       });
       // Include pathwayId so the exam page can load the pathway surface without
       // an extra DB round-trip and the learner never sees a second pathway selector.

@@ -20,7 +20,9 @@ export function mergeCoachingPropsWithGraphLineage(
   lineage?: GraphLineageEnvelope | null,
 ): Record<string, string | number | boolean | null> {
   if (!GRAPH_AUTHORITATIVE_EVENTS.has(event) || !lineage) return props;
-  const merged = { ...props, ...graphLineageTelemetryProps(lineage) };
+  const merged = Object.fromEntries(
+    Object.entries({ ...props, ...graphLineageTelemetryProps(lineage) }).filter(([, value]) => value !== undefined),
+  ) as Record<string, string | number | boolean | null>;
   merged.graph_authoritative = true;
   return merged;
 }

@@ -1,3 +1,4 @@
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 /**
  * /app/study-coach — Premium Adaptive Study Engine
  *

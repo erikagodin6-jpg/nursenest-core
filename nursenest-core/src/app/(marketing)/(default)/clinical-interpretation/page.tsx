@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
 import { ClinicalInterpretationGuideCard } from "@/components/clinical-interpretation/clinical-interpretation-guide-card";
+import { clinicalInterpretationHubBreadcrumbs } from "@/lib/breadcrumbs/clinical-interpretation-breadcrumbs";
 import { materializeInterpretationEntryGraphStep } from "@/lib/educational-graph/interpretation-graph-step-materialization";
-import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
 import {
   CLINICAL_INTERPRETATION_HUB_PATH,
   listPublishedClinicalInterpretationGuides,
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ClinicalInterpretationHubPage() {
   const guides = listPublishedClinicalInterpretationGuides();
 
-  const breadcrumbs = resolveBreadcrumbResolution({ kind: "clinical-interpretation-hub" });
+  const breadcrumbs = clinicalInterpretationHubBreadcrumbs();
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6">

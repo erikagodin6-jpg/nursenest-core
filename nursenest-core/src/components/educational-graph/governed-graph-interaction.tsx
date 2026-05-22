@@ -11,7 +11,7 @@ import {
 import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 import type { GraphTelemetryEventName } from "@/lib/educational-graph/graph-telemetry";
 
-type GovernedGraphInteractionProps = Omit<ComponentProps<typeof Link>, "onClick"> & {
+type GovernedGraphInteractionProps = Omit<ComponentProps<typeof Link>, "href" | "onClick"> & {
   step: EduGraphStep;
   cognition?: EducationalCognitionContext | null;
   clickEvent?: GraphTelemetryEventName;

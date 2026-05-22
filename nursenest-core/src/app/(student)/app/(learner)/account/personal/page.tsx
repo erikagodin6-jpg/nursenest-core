@@ -9,6 +9,7 @@ import { loadPersonalProfilePayload } from "@/lib/learner/load-personal-profile"
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

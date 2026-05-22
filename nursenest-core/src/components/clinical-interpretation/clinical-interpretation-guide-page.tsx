@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
-import { resolveBreadcrumbResolution } from "@/lib/breadcrumbs/breadcrumb-resolver";
+import { clinicalInterpretationGuideBreadcrumbs } from "@/lib/breadcrumbs/clinical-interpretation-breadcrumbs";
 import type { ClinicalInterpretationEntry } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 import {
   CLINICAL_INTERPRETATION_HUB_PATH,
@@ -16,8 +16,7 @@ export function ClinicalInterpretationGuidePage({ entry }: Props) {
   const lessonsHref = pathway ? buildExamPathwayPath(pathway, "lessons") : "/us/rn/nclex-rn/lessons";
   const questionsHref = pathway ? buildExamPathwayPath(pathway, "questions") : "/us/rn/nclex-rn/questions";
   const guidePath = `${CLINICAL_INTERPRETATION_HUB_PATH}/${entry.slug}`;
-  const breadcrumbs = resolveBreadcrumbResolution({
-    kind: "clinical-interpretation-guide",
+  const breadcrumbs = clinicalInterpretationGuideBreadcrumbs({
     category: entry.category,
     guideTitle: entry.h1,
     guideSlug: entry.slug,

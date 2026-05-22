@@ -20,6 +20,7 @@ import {
   SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
