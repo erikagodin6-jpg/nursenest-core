@@ -8,7 +8,7 @@ import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-type SignInCallbackArgs = Parameters<NonNullable<NextAuthConfig["callbacks"]>["signIn"]>>[0];
+type SignInCallbackArgs = Parameters<NonNullable<NextAuthConfig["callbacks"]>["signIn"]>[0];
 
 export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, "signIn" | "redirect"> = {
   async signIn(params: SignInCallbackArgs) {

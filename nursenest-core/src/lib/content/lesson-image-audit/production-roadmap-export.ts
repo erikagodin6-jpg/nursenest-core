@@ -157,11 +157,13 @@ export function duplicateVisualSystemsMarkdown(
     bySystem.set(label, list);
   }
 
-  for (const [label, opps] of [...bySystem.entries()].sort((a, b) => {
+  const sortedSystems = [...bySystem.entries()].sort((a, b) => {
     const countA = a[1].reduce((s, o) => s + o.lessonCount, 0);
     const countB = b[1].reduce((s, o) => s + o.lessonCount, 0);
     return countB - countA;
-  })) {
+  });
+
+  for (const [label, opps] of sortedSystems) {
     lines.push(`### ${label}`, "");
     for (const opp of opps) {
       lines.push(
