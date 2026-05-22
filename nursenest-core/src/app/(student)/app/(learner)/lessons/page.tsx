@@ -700,7 +700,6 @@ export default async function LessonsPage({ searchParams }: Props) {
     </div>
   );
   } catch {
-    lessonsPerfMark("route_end", { route: "app_lessons_hub" });
     return (
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
         <ContentEmptyState

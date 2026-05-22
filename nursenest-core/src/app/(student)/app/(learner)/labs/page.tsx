@@ -14,7 +14,16 @@ export const metadata: Metadata = {
 };
 
 export default async function LabsHubRoute() {
-  const context = await loadLabsRouteContext("(student).app.(learner).labs");
+  let context;
+  try {
+    context = await loadLabsRouteContext("(student).app.(learner).labs");
+  } catch {
+    return (
+      <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 text-center text-sm text-[var(--semantic-text-secondary)]">
+        Labs could not load right now. Please try again in a moment.
+      </div>
+    );
+  }
   const entitlementScope = context.entitlement !== "error" ? context.entitlement : undefined;
   const categories = listLabCategoriesForTrack(context.track, entitlementScope);
   const inventory = countLabsInventoryForTrack(context.track, entitlementScope);

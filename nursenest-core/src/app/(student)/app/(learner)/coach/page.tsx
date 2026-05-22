@@ -114,7 +114,12 @@ export default async function CoachPage() {
   }
 
   // Load all coach data server-side (bounded queries)
-  const coachData = await loadCoachPageData(userId, entitlement);
+  let coachData = null;
+  try {
+    coachData = await loadCoachPageData(userId, entitlement);
+  } catch {
+    coachData = null;
+  }
 
   if (!coachData) {
     return (
