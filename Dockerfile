@@ -77,7 +77,7 @@ RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codeg
 # failures are attributable (the old single RUN && chain only reported exit code 1 for the layer).
 RUN chmod +x scripts/docker-build-production.sh \
   && NN_TIMED_INCLUDE_NPM_PRUNE="${NN_TIMED_INCLUDE_NPM_PRUNE:-}" \
-  ./scripts/docker-build-production.sh
+  bash scripts/docker-build-production.sh
 
 FROM node:20-alpine AS runner
 
@@ -91,12 +91,13 @@ ENV NODE_ENV=production \
   NODE_MAX_OLD_SPACE_SIZE_MB=1280 \
   NEXT_TELEMETRY_DISABLED=1
 
+# Unpack script from build context (always present); tarball from builder.
+COPY nursenest-core/scripts/docker-runner-unpack-standalone.sh ./scripts/docker-runner-unpack-standalone.sh
 COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
+# Shell-only unpack — do not import verify-standalone-artifact.mjs here (pulls ../../scripts/
+# before monorepo COPY). Use POSIX sh (Alpine default); do not require bash.
+RUN sh scripts/docker-runner-unpack-standalone.sh
 COPY --from=builder /app/nursenest-core/scripts ./scripts
-# Shell-only unpack — do not import verify-standalone-artifact.mjs here (it pulls ../../scripts/
-# before monorepo scripts are COPY'd into the runner layer).
-RUN chmod +x scripts/docker-runner-unpack-standalone.sh \
-  && ./scripts/docker-runner-unpack-standalone.sh
 COPY --from=builder /app/nursenest-core/public ./public
 COPY --from=builder /app/scripts ../scripts
 COPY --from=builder /app/script ../script
