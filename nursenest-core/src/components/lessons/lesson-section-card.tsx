@@ -111,6 +111,7 @@ export function LessonSectionCard({
   tierRelevanceLearnerSection = false,
   /** First section figure rendered as a lead visual under the heading (remaining figures stay in body). */
   sectionLeadFigure = null,
+  headerAction = null,
   children,
 }: {
   id: string;
@@ -127,6 +128,7 @@ export function LessonSectionCard({
    */
   tierRelevanceLearnerSection?: boolean;
   sectionLeadFigure?: PathwayLessonFigure | null;
+  headerAction?: ReactNode;
   children: ReactNode;
 }) {
   const theme = getLessonSectionTheme(kind, heading);
@@ -194,12 +196,15 @@ export function LessonSectionCard({
         className={["scroll-mt-24 mb-0", className].filter(Boolean).join(" ")}
       >
         {chipRow}
-        <h2
-          id={headingId}
-          className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]"
-        >
-          {heading?.trim() || "Section"}
-        </h2>
+        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <h2
+            id={headingId}
+            className="nn-lesson-section-heading text-[var(--theme-heading-text)]"
+          >
+            {heading?.trim() || "Section"}
+          </h2>
+          {headerAction}
+        </div>
         {workflowEl}
         <LessonSectionOptionalImage figure={sectionLeadFigure} />
         <div className={bodyGap}>{children}</div>
@@ -229,9 +234,12 @@ export function LessonSectionCard({
       style={style}
     >
       {chipRow}
-      <h2 className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
-        {heading?.trim() || "Section"}
-      </h2>
+      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <h2 className="nn-lesson-section-heading text-[var(--theme-heading-text)]">
+          {heading?.trim() || "Section"}
+        </h2>
+        {headerAction}
+      </div>
       {workflowEl}
       <LessonSectionOptionalImage figure={sectionLeadFigure} />
       <div className={bodyGap}>{children}</div>

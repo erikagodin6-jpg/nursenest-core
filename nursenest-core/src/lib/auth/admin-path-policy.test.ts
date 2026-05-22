@@ -118,7 +118,9 @@ test("support and content staff can access pathway lesson admin surfaces", () =>
   assert.equal(isPathAllowedForStaffTier("support", "/admin/pathway-lessons/abc"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/pathway-lessons"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/pathway-lessons/xyz"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/pathway-lessons/xyz/sections/signs_symptoms"), true);
   assert.equal(isPathAllowedForStaffTier("content", "/admin/pathway-lessons/pl1"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/pathway-lessons/xyz/sections/signs_symptoms"), true);
 });
 
 test("support and content staff can access internal courses admin surfaces", () => {

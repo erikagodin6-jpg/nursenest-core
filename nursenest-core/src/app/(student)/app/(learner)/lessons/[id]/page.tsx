@@ -99,10 +99,8 @@ import {
 } from "@/lib/lessons/pathway-lesson-study-extract";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
-import {
-  LessonSectionCard,
-  lessonSectionSurface,
-} from "@/components/lessons/lesson-section-card";
+import { lessonSectionSurface } from "@/components/lessons/lesson-section-card";
+import { AdminInlinePathwayLessonSectionEditor } from "@/components/lessons/admin-inline-pathway-lesson-section-editor";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
@@ -1075,11 +1073,14 @@ async function LessonDetailPageInner({ params }: Props) {
                     const sectionFiguresRest =
                       usableFigs.length > 1 ? usableFigs.slice(1) : undefined;
                     return (
-                      <LessonSectionCard
+                      <AdminInlinePathwayLessonSectionEditor
                         key={section.id}
-                        id={section.id}
+                        canEdit={staffSession}
+                        lessonId={id}
+                        sectionId={section.id}
                         heading={surfaceHeading}
                         kind={section.kind ?? null}
+                        initialBody={sectionBody}
                         className={
                           usesReadingV2Layout
                             ? rnLessonSectionStackClass(sectionIndex)
@@ -1152,7 +1153,7 @@ async function LessonDetailPageInner({ params }: Props) {
                             topic={record.topic}
                           />
                         ) : null}
-                      </LessonSectionCard>
+                      </AdminInlinePathwayLessonSectionEditor>
                     );
                   })
                 : null}
@@ -1231,11 +1232,14 @@ async function LessonDetailPageInner({ params }: Props) {
                       ? section.body
                       : "";
                 return (
-                  <LessonSectionCard
+                  <AdminInlinePathwayLessonSectionEditor
                     key={section.id}
-                    id={section.id}
+                    canEdit={staffSession}
+                    lessonId={id}
+                    sectionId={section.id}
                     heading={surfaceHeading}
                     kind={section.kind ?? null}
+                    initialBody={sectionBody}
                   >
                     <PathwayLessonSectionContent
                       text={sectionBody}
@@ -1256,7 +1260,7 @@ async function LessonDetailPageInner({ params }: Props) {
                         "learner.lessons.detail.sectionFiguresVisualLead",
                       )}
                     />
-                  </LessonSectionCard>
+                  </AdminInlinePathwayLessonSectionEditor>
                 );
               })}
             </div>
@@ -1365,7 +1369,7 @@ async function LessonDetailPageInner({ params }: Props) {
             practiceQuestionsHref={pathwayHubAppQuestionsHref(pathway.id, record.topic)}
             allLessonsHref={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
             practiceExamsHref="/app/practice-tests?startMode=practice_exam"
-            questionBankHref={pathwayHubAppQuestionsHref(pathway.id, null)}
+            questionBankHref={pathwayHubAppQuestionsHref(pathway.id, undefined)}
             hasAccess={entitlement.hasAccess}
           />
         ) : (
