@@ -18,10 +18,11 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
-import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
+import { OAuthProviderButtons } from "@/components/auth/oauth-provider-buttons";
 import { AuthFormLayout } from "@/components/auth/auth-experience/auth-form-layout";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
+import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 
 const TIER_LABEL: Record<SignupTierValue, string> = {
   RN: "RN",
@@ -38,6 +39,7 @@ export function SignupForm({
   privacyHref = "/privacy",
   contactHref = "/contact",
   forgotPasswordHref = "/forgot-password",
+  oauthProviders = [],
 }: {
   tier: SignupTierValue;
   onTierChange: (tier: SignupTierValue) => void;
@@ -45,6 +47,7 @@ export function SignupForm({
   privacyHref?: string;
   contactHref?: string;
   forgotPasswordHref?: string;
+  oauthProviders?: OAuthProviderId[];
 }) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
@@ -347,11 +350,12 @@ export function SignupForm({
         </div>
       </details>
 
-      <OAuthProviderButtonsServer
+      <OAuthProviderButtons
         redirectTarget={redirectTarget}
         disabled={pending || !clientReady}
         surface="signup"
         marketingLocale={locale}
+        providers={oauthProviders}
       />
 
       <TurnstileSignup onToken={onCaptcha} />

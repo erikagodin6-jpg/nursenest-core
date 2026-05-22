@@ -5,6 +5,7 @@ import { AuthSignupPathwayPanel } from "@/components/auth/auth-experience/auth-s
 import { AuthExperienceShell } from "@/components/auth/auth-experience/auth-experience-shell";
 import { SignupForm } from "@/components/auth/signup-form";
 import type { SignupTierValue } from "@/lib/marketing/signup-exam-focus-options";
+import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 
 export type SignupExperienceClientProps = {
   title: string;
@@ -13,6 +14,7 @@ export type SignupExperienceClientProps = {
   privacyHref: string;
   contactHref: string;
   forgotPasswordHref: string;
+  oauthProviders?: OAuthProviderId[];
   mobileEyebrow?: string;
 };
 
@@ -26,6 +28,7 @@ export function SignupExperienceClient({
   privacyHref,
   contactHref,
   forgotPasswordHref,
+  oauthProviders = [],
   mobileEyebrow = "NurseNest · Blossom",
 }: SignupExperienceClientProps) {
   const [tier, setTier] = useState<SignupTierValue>("RN");
@@ -52,6 +55,7 @@ export function SignupExperienceClient({
           privacyHref={privacyHref}
           contactHref={contactHref}
           forgotPasswordHref={forgotPasswordHref}
+          oauthProviders={oauthProviders}
         />
       </Suspense>
     </AuthExperienceShell>

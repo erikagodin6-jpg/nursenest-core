@@ -12,20 +12,23 @@ import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
-import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
+import { OAuthProviderButtons } from "@/components/auth/oauth-provider-buttons";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
+import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
   termsHref = "/terms",
   privacyHref = "/privacy",
   contactHref: _contactHref = "/contact",
+  oauthProviders = [],
 }: {
   forgotPasswordHref?: string;
   termsHref?: string;
   privacyHref?: string;
   /** Kept for API compatibility with marketing pages. */
   contactHref?: string;
+  oauthProviders?: OAuthProviderId[];
 } = {}) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
@@ -332,11 +335,12 @@ export function LoginForm({
       </div>
 
       {!alreadySignedIn ? (
-        <OAuthProviderButtonsServer
+        <OAuthProviderButtons
           redirectTarget={redirectTarget}
           disabled={pending || !clientReady}
           surface="login"
           marketingLocale={locale}
+          providers={oauthProviders}
           dividerPlacement="trailing"
           dividerLabel="or"
         />

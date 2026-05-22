@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
   "fingerprint": "3f7010029aa1db1a345c92d6c7eb056e15f70659725a413d664910f6f83cc15a",
-  "generatedAt": "2026-05-21T22:34:28.262Z",
+  "generatedAt": "2026-05-22T01:29:43.607Z",
   "inputs": [
     {
       "type": "file",
@@ -1774,12 +1774,12 @@
     }
   ],
   "outputs": [
-    "/root/nursenest-core/nursenest-core/src/content/pathway-lessons/generated-indexes",
-    "/root/nursenest-core/nursenest-core/src/content/pathway-lessons/generated-indexes/manifest.json"
+    "/workspace/nursenest-core/src/content/pathway-lessons/generated-indexes",
+    "/workspace/nursenest-core/src/content/pathway-lessons/generated-indexes/manifest.json"
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 113748,
-    "verifyLessonIndexesMs": 112213
+    "buildLessonIndexesMs": 38585,
+    "verifyLessonIndexesMs": 41472
   }
 }

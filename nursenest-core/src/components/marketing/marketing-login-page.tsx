@@ -14,6 +14,7 @@ import { pickLoginSurfaceMessages } from "@/lib/i18n/login-surface-message-keys"
 import { resolveLoginMarketingLocaleFromUrlSegment } from "@/lib/i18n/resolve-login-marketing-locale";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { listConfiguredOAuthProviderIds } from "@/lib/auth/oauth-config";
 
 type MarketingMessageMap = Record<string, string>;
 
@@ -91,6 +92,7 @@ export async function MarketingLoginPage({
 
   const forgotHref = withMarketingLocale(resolved, "/forgot-password");
   const contactHref = withMarketingLocale(resolved, "/contact");
+  const oauthProviders = listConfiguredOAuthProviderIds();
 
   const loginSurface = pickLoginSurfaceMessages(messages);
   const loginSurfaceFallback =
@@ -125,6 +127,7 @@ export async function MarketingLoginPage({
             termsHref={withMarketingLocale(resolved, "/terms")}
             privacyHref={withMarketingLocale(resolved, "/privacy")}
             contactHref={contactHref}
+            oauthProviders={oauthProviders}
           />
         </Suspense>
 
