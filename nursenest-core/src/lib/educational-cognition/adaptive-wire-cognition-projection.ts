@@ -105,9 +105,20 @@ export async function projectAdaptiveWireBundleFromCognition(args: {
 
   const governed = await buildGovernedAdaptiveRecommendations({
     preferredPathwayId: args.pathwayId,
+    examDatePlanType: null,
+    examDate: null,
     readiness: args.readiness,
     weakTopics: args.weakTopics,
     topicTrends: args.topicPerformance?.trends ?? [],
+    streakDays: 0,
+    lessonPct: 0,
+    lessonsCompleted: 0,
+    lessonsTotal: 0,
+    studyCadencePreference: null,
+    continueLesson: null,
+    recommendedQuizTopic: args.weakTopics[0]?.topic ?? null,
+    mockCount: 0,
+    practiceSessionCount: 0,
     userId: args.userId,
     entitlement: args.entitlement,
   });

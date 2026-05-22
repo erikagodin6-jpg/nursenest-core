@@ -114,12 +114,18 @@ export function emitCognitionTelemetryV5(
     testingModel: ctx.psychometric.model ?? getTestingModelForPathwayId(ctx.pathwayId),
     topicSlug: typeof props.topic_slug === "string" ? props.topic_slug : undefined,
   });
-  const merged = Object.fromEntries(
-    Object.entries(filterCognitionTelemetryProps({
+  const lineageInput = Object.fromEntries(
+    Object.entries({
     ...lineage.props,
     ...mergeCoachingPropsWithGraphLineage(event, lineage.props, graphLineage),
-    })).map(([key, value]) => [key, value === null ? undefined : value]),
+    }).map(([key, value]) => [key, value === null ? undefined : value]),
   ) as Record<string, string | number | boolean | undefined>;
+  const merged = Object.fromEntries(
+    Object.entries(filterCognitionTelemetryProps(lineageInput)).map(([key, value]) => [
+      key,
+      value === undefined ? null : value,
+    ]),
+  ) as Record<string, string | number | boolean | null>;
   recordCoachingTelemetry(event, merged);
 }
 

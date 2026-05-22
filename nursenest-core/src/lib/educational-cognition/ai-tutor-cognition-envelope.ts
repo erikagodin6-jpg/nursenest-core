@@ -88,7 +88,7 @@ export function tutoringPromptContextFromAiEnvelope(
     ...partial,
     entitlementSnapshot: {
       ...partial.entitlementSnapshot,
-      pathwayId: partial.entitlementSnapshot.pathwayId || envelope.pathwayId,
+      pathwayId: partial.entitlementSnapshot.pathwayId || envelope.pathwayId || "unknown",
     },
     graphSteps: envelope.graphSteps,
   };
