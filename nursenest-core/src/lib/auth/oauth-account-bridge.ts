@@ -79,9 +79,8 @@ async function suggestAvailableUsername(email: string): Promise<string> {
 }
 
 async function mapRowToBridgeUser(row: OAuthUserRow, isNewUser: boolean): Promise<OAuthBridgeUser> {
-  let subscriptionStatus = subscriptionStatusForSession(
-    await getUserAccess(row.id).catch(() => null),
-  );
+  const access = await getUserAccess(row.id).catch(() => null);
+  const subscriptionStatus = access ? subscriptionStatusForSession(access) : "none";
 
   return {
     id: row.id,

@@ -8,9 +8,12 @@ import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-type SignInCallbackArgs = Parameters<NonNullable<NextAuthConfig["callbacks"]>["signIn"]>[0];
+type AuthCallbacks = NonNullable<NextAuthConfig["callbacks"]>;
+type SignInCallback = NonNullable<AuthCallbacks["signIn"]>;
+type RedirectCallback = NonNullable<AuthCallbacks["redirect"]>;
+type SignInCallbackArgs = Parameters<SignInCallback>[0];
 
-export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, "signIn" | "redirect"> = {
+export const oauthAuthCallbacks: Pick<AuthCallbacks, "signIn" | "redirect"> = {
   async signIn(params: SignInCallbackArgs) {
     const account = params.account;
     if (!account?.provider || account.provider === "credentials") {
@@ -76,7 +79,7 @@ export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, 
 
 export function mergeAuthRedirectCallback(
   existing: NextAuthConfig["callbacks"] | undefined,
-): NextAuthConfig["callbacks"]["redirect"] {
+): RedirectCallback {
   const prior = existing?.redirect;
   return async (params) => {
     const oauthResult = await oauthAuthCallbacks.redirect!(params);

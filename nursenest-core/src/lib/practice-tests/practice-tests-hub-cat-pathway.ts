@@ -4,13 +4,14 @@ import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "
 export function practiceTestPathwayClientShellFromOption(
   option: PracticeTestPathwayOption,
 ): PracticeTestPathwayClientShell {
+  const shell = option as PracticeTestPathwayOption & Partial<PracticeTestPathwayClientShell>;
   return {
     id: option.id,
-    countrySlug: option.countrySlug,
-    roleTrack: option.roleTrack,
-    examCode: option.examCode,
-    shortName: option.shortName,
-    examFamily: option.examFamily,
+    countrySlug: shell.countrySlug ?? "us",
+    roleTrack: shell.roleTrack ?? "rn",
+    examCode: shell.examCode ?? option.examCodeLabel.toLowerCase(),
+    shortName: shell.shortName ?? option.examCodeLabel,
+    examFamily: option.examFamily as PracticeTestPathwayClientShell["examFamily"],
   };
 }
 
