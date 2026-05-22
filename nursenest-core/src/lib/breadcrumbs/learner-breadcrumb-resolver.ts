@@ -91,6 +91,7 @@ export type LearnerBreadcrumbInput =
       pathwayId: string | null;
       currentStepTitle: string;
       currentStepHref?: string;
+      persistentWeakTopics?: readonly string[];
     }
   | {
       kind: "interpretation-study";

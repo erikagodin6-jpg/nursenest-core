@@ -86,7 +86,10 @@ export function tutoringPromptContextFromAiEnvelope(
 ): TutoringPromptContext {
   return {
     ...partial,
-    pathwayId: partial.pathwayId ?? envelope.pathwayId,
+    entitlementSnapshot: {
+      ...partial.entitlementSnapshot,
+      pathwayId: partial.entitlementSnapshot.pathwayId || envelope.pathwayId,
+    },
     graphSteps: envelope.graphSteps,
   };
 }

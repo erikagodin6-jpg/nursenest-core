@@ -458,7 +458,7 @@ export async function PathwayLessonDetailPageBody({
   return (
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
       <LessonsPageShell
-        title={lessonTitleDisplay}
+        title={displayLessonTitle}
         omitHeroBand
         eyebrow={pathway.shortName.trim() || pathway.displayName}
         pathwayTrack={pathway.roleTrack}

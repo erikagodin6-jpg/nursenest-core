@@ -97,7 +97,7 @@ export function resolveLessonImageAuditStatus(args: {
     key.endsWith(".jpeg") ||
     (resolution.source === "map_body_system" && !key.endsWith(".webp"));
 
-  if (isLegacyRaster && status !== "no_image") {
+  if (isLegacyRaster) {
     status = "low_quality_image";
   }
 

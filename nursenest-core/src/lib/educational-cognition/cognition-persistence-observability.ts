@@ -96,8 +96,7 @@ export async function probeLearnerCognitionPersistence(): Promise<PersistenceHea
 
   try {
     await prisma.user.findFirst({
-      where: { learnerCognitionEnvelope: { not: null } },
-      select: { id: true },
+      select: { id: true, learnerCognitionEnvelope: true },
       take: 1,
     });
     health.columnAvailable = true;
