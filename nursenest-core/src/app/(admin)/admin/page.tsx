@@ -8,6 +8,7 @@ import { loadAdminDashboardOverview } from "@/lib/admin/load-admin-dashboard-ove
 import { AdminCommandCenter } from "@/components/admin/admin-command-center";
 import { AdminDashboardOverview } from "@/components/admin/admin-dashboard-overview";
 import { AdminLegacyOperationsHub } from "@/components/admin/admin-legacy-operations-hub";
+import { AdminUserStatsPanel } from "@/components/admin/admin-user-stats-panel";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -138,9 +139,12 @@ export default async function AdminPage() {
   await requireAdmin();
   return (
     <AdminPageShell>
-      <Suspense fallback={<AdminOverviewFallback />}>
-        <AdminOverviewSection />
-      </Suspense>
+      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <Suspense fallback={<AdminOverviewFallback />}>
+          <AdminOverviewSection />
+        </Suspense>
+        <AdminUserStatsPanel />
+      </div>
 
       <Suspense fallback={null}>
         <AdminLegacyOperationsSection />
