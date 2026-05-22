@@ -223,6 +223,35 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
     caption: "Eisenmenger syndrome — congenital heart disease complication",
   },
 
+  {
+    objectKey: "HypertensiveEncephalopathy.png",
+    slugs: [
+      "hypertensive-encephalopathy",
+      "hypertensive-encephalopathy-nursing",
+      "hypertensive-emergency",
+      "hypertensive-emergency-nursing",
+      "hypertensive-crisis-nursing",
+      "hypertensive-urgency",
+      "malignant-hypertension",
+      "hypertensive-crisis-encephalopathy",
+    ],
+    keywords: [
+      "hypertensive encephalopathy",
+      "hypertensive emergency",
+      "hypertensive crisis",
+      "malignant hypertension",
+      "end organ damage hypertension",
+      "acute severe hypertension",
+      "encephalopathy hypertension",
+      "posterior reversible encephalopathy",
+      "pres hypertension",
+      "nicardipine labetalol hypertensive",
+    ],
+    bodySystems: [],
+    category: "cardiovascular",
+    caption: "Hypertensive encephalopathy — end-organ damage, posterior reversible encephalopathy, and emergent blood pressure management",
+  },
+
   // ── Vascular ──────────────────────────────────────────────────────────────
   {
     objectKey: "DVT.png",
