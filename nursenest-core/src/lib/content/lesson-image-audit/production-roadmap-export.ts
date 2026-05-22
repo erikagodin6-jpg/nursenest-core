@@ -143,7 +143,7 @@ export function duplicateVisualSystemsMarkdown(
     "",
     "Modular illustration systems — build once, label variants across related lessons.",
     "",
-    `**${opportunities.length}** reuse groups identified.",
+    `**${opportunities.length}** reuse groups identified.`,
     "",
     "## Quick-win systems (batch these first)",
     "",
