@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import { FlashcardsHubClientBoundary } from "@/components/flashcards/flashcards-hub-client-boundary";
 import FlashcardErrorBoundary from "@/components/flashcards/flashcard-error-boundary";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -375,21 +376,23 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
           </BrandedPageLoader>
         }
       >
-        <FlashcardsHubClient
-          scopedPathwayId={scopedPathwayId}
-          pathwayDisplayName={pathwayDisplayName}
-          flashcardsHeroEyebrow={flashcardsHeroEyebrow}
-          flashcardsHeroTitle={flashcardsHeroTitle}
-          flashcardsHeroSubtitle={flashcardsHeroSubtitle}
-          pathwayBootstrapSource={pathwayBootstrapSource}
-          catHref={catHref}
-          initialHub={initialHub}
-          initialPoolDiagnostics={initialHub?.poolDiagnostics ?? null}
-          lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
-          alliedProfessionKey={alliedKeyForFlashcards || null}
-          hubTopicSlug={hubTopicFromQuery}
-          initialWeakOnly={initialWeakOnly}
-        />
+        <FlashcardsHubClientBoundary>
+          <FlashcardsHubClient
+            scopedPathwayId={scopedPathwayId}
+            pathwayDisplayName={pathwayDisplayName}
+            flashcardsHeroEyebrow={flashcardsHeroEyebrow}
+            flashcardsHeroTitle={flashcardsHeroTitle}
+            flashcardsHeroSubtitle={flashcardsHeroSubtitle}
+            pathwayBootstrapSource={pathwayBootstrapSource}
+            catHref={catHref}
+            initialHub={initialHub}
+            initialPoolDiagnostics={initialHub?.poolDiagnostics ?? null}
+            lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
+            alliedProfessionKey={alliedKeyForFlashcards || null}
+            hubTopicSlug={hubTopicFromQuery}
+            initialWeakOnly={initialWeakOnly}
+          />
+        </FlashcardsHubClientBoundary>
       </Suspense>
     </div>
   );
