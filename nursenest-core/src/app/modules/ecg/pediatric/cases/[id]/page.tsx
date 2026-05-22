@@ -2,7 +2,7 @@
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { use, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -164,9 +164,10 @@ function VitalsBar({ c }: { c: PediatricCaseSimulation }) {
 export default function PediatricCaseDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const caseData = PEDIATRIC_CASE_SIMULATIONS.find((c) => c.id === params.id);
+  const { id } = use(params);
+  const caseData = PEDIATRIC_CASE_SIMULATIONS.find((c) => c.id === id);
   if (!caseData) notFound();
 
   const [answeredPoints, setAnsweredPoints] = useState<Record<number, boolean>>({});

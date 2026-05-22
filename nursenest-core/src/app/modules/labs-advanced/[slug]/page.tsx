@@ -87,14 +87,15 @@ function PracticeCard({
 export default async function AdvancedLabsLessonPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const access = await loadAdvancedLabsAccess();
 
   if (!access.ok) {
     switch (access.reason) {
       case "sign_in_required":
-        redirect(`/login?next=/modules/labs-advanced/${params.slug}`);
+        redirect(`/login?next=/modules/labs-advanced/${slug}`);
       case "module_unavailable":
         redirect("/advanced-labs-interpretation");
       case "base_subscription_required":
@@ -106,7 +107,7 @@ export default async function AdvancedLabsLessonPage({
     }
   }
 
-  const lesson = getAdvancedLabsLessonBySlug(params.slug);
+  const lesson = getAdvancedLabsLessonBySlug(slug);
   if (!lesson) notFound();
 
   const levelStyle = LEVEL_STYLE[lesson.level] ?? "";
