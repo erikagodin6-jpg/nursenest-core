@@ -18,6 +18,7 @@ import {
   pathwaySectionsFromPlainBody,
   plainBodyFromPathwaySectionsJson,
 } from "@/lib/lessons/pathway-lesson-plain-body-sections";
+import { getLessonBySlug } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { contentItemLessonTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
@@ -65,9 +66,31 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       : await loadAdminPathwayLessonRow({ pathwayLessonId: id });
   if (!row) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const body = plainBodyFromPathwaySectionsJson(row.sections);
+  // When DB sections is empty (catalog-imported lesson never edited via admin),
+  // fall back to the catalog JSON so the editor has something to work with.
+  // The sections are returned as `catalogSections` so the client can display
+  // them as read-only seed content without overwriting the DB until the admin saves.
+  const dbSectionsEmpty = !Array.isArray(row.sections) || (row.sections as unknown[]).length === 0;
+  let catalogSections: unknown[] = [];
+  if (dbSectionsEmpty && row.pathwayId && row.slug) {
+    try {
+      const catalogLesson = getLessonBySlug(row.pathwayId, row.slug);
+      if (catalogLesson?.sections && catalogLesson.sections.length > 0) {
+        catalogSections = catalogLesson.sections;
+      }
+    } catch {
+      // catalog lookup failure is non-fatal
+    }
+  }
+
+  const effectiveSections = dbSectionsEmpty ? catalogSections : row.sections;
+  const body = plainBodyFromPathwaySectionsJson(effectiveSections);
   return NextResponse.json({
-    lesson: row,
+    lesson: {
+      ...row,
+      sections: effectiveSections,
+      _sectionsFromCatalog: dbSectionsEmpty && catalogSections.length > 0,
+    },
     body,
   });
 }

@@ -355,6 +355,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
   const [status, setStatus] = useState<ContentStatus>(ContentStatus.DRAFT);
   const [acknowledgeBelowQualityBar, setAcknowledgeBelowQualityBar] = useState(false);
   const [sections, setSections] = useState<AdminSection[]>([]);
+  const [sectionsFromCatalog, setSectionsFromCatalog] = useState(false);
 
   // Per-section save state: keyed by section id
   const [sectionSaving, setSectionSaving] = useState<Record<string, boolean>>({});
@@ -432,8 +433,9 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
       setSeoTitle(l.seoTitle);
       setSeoDescription(l.seoDescription);
       setStatus(l.status ?? ContentStatus.DRAFT);
+      setSectionsFromCatalog(Boolean((l as Record<string, unknown>)._sectionsFromCatalog));
 
-      // Load sections from the lesson JSON
+      // Load sections — may come from DB or catalog fallback (flagged by _sectionsFromCatalog)
       const rawSections = Array.isArray(l.sections) ? l.sections : [];
       if (rawSections.length > 0) {
         setSections(
@@ -441,9 +443,9 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
             .filter((s): s is Record<string, unknown> => s !== null && typeof s === "object")
             .map((s) => ({
               id: typeof s.id === "string" ? s.id : crypto.randomUUID(),
-              heading: typeof s.heading === "string" ? s.heading : "",
+              heading: typeof s.heading === "string" ? s.heading : (typeof (s as Record<string, unknown>).sectionTitle === "string" ? (s as Record<string, unknown>).sectionTitle as string : ""),
               kind: typeof s.kind === "string" ? s.kind : "intro",
-              body: typeof s.body === "string" ? s.body : "",
+              body: typeof s.body === "string" ? s.body : (typeof (s as Record<string, unknown>).content === "string" ? (s as Record<string, unknown>).content as string : ""),
             })),
         );
       } else if (j.body?.trim()) {
@@ -716,6 +718,12 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
             + Add section
           </button>
         </div>
+
+        {sectionsFromCatalog && sections.length > 0 ? (
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            ⚠️ Sections loaded from catalog JSON (DB is empty). Save now to persist these sections to the database.
+          </p>
+        ) : null}
 
         {sections.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
