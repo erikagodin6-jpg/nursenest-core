@@ -98,7 +98,7 @@ export function resolveLearnerCognitionSubstrate(
   });
 
   const dashboard = composeDashboardOrchestrationFromContext(ctx);
-  const aiTutor = buildAiTutorContextFromCognition(ctx, traversal.steps);
+  const aiTutor = buildAiTutorContextFromCognition(ctx, [...traversal.steps]);
   const timingSignals = deriveTimingCognitionSignals({ learnerState: ctx.learnerState });
 
   if (input.persistLearnerState && input.userId) {

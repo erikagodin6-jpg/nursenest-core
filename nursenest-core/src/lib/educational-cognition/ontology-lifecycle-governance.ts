@@ -86,7 +86,10 @@ export function applyOntologyLifecycleToEnvelope(
         operations,
       ),
     };
-    next = reconcileGraphContinuity(next, step.remediationPathwayRenames, step.deprecatedNodeIds, operations);
+    next = {
+      ...reconcileGraphContinuity(next, step.remediationPathwayRenames, step.deprecatedNodeIds, operations),
+      ontologyRevision: CURRENT_ONTOLOGY_REVISION,
+    };
     operations.push(`ontology_migration:${step.id}`);
   }
 

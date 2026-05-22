@@ -301,7 +301,7 @@ async function LearnerDashboardHeavyContent({
           userId,
           entitlement,
           pathwayId: preferredPathwayId,
-          readiness: coachSummary?.readiness ?? null,
+          readiness: null,
           topicTrends: premiumSnapshot.topicPerformance?.trends,
           weakTopics: studySnap?.weakTopics ?? undefined,
         });

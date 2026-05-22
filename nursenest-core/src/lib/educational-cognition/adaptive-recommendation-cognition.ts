@@ -192,12 +192,41 @@ function fallbackReadinessResult(): ReadinessResult {
   };
 }
 
-export type BuildGovernedAdaptiveRecommendationsArgs = Omit<Parameters<typeof buildAdaptiveRecommendations>[0], "readiness"> & {
+type AdaptiveRecommendationBaseArgs = Parameters<typeof buildAdaptiveRecommendations>[0];
+
+export type BuildGovernedAdaptiveRecommendationsArgs = Partial<Omit<AdaptiveRecommendationBaseArgs, "readiness">> & {
   readiness?: ReadinessResult | null;
   userId?: string | null;
   entitlement?: AccessScope | null;
   topicTrends?: TopicTrendRow[];
 };
+
+function withRecommendationDefaults(
+  args: BuildGovernedAdaptiveRecommendationsArgs,
+  readiness: ReadinessResult,
+): AdaptiveRecommendationBaseArgs & { topicTrends?: TopicTrendRow[]; userId?: string | null; entitlement?: AccessScope | null } {
+  return {
+    examDatePlanType: args.examDatePlanType ?? null,
+    examDate: args.examDate ?? null,
+    readiness,
+    weakTopics: args.weakTopics ?? [],
+    topicTrends: args.topicTrends ?? [],
+    streakDays: args.streakDays ?? 0,
+    lessonPct: args.lessonPct ?? 0,
+    lessonsCompleted: args.lessonsCompleted ?? 0,
+    lessonsTotal: args.lessonsTotal ?? 0,
+    studyCadencePreference: args.studyCadencePreference ?? null,
+    continueLesson: args.continueLesson ?? null,
+    recommendedQuizTopic: args.recommendedQuizTopic ?? null,
+    mockCount: args.mockCount ?? 0,
+    practiceSessionCount: args.practiceSessionCount ?? 0,
+    subscriberCountry: args.subscriberCountry,
+    preferredPathwayId: args.preferredPathwayId ?? null,
+    availablePathwayIds: args.availablePathwayIds,
+    userId: args.userId,
+    entitlement: args.entitlement,
+  };
+}
 
 /**
  * Cognition-driven adaptive recommendations — dashboard + graph authority (exam calendar shell only).
@@ -215,19 +244,19 @@ export async function buildGovernedAdaptiveRecommendations(
       userId: args.userId,
       readinessResult: args.readiness,
       topicTrends: args.topicTrends ?? [],
-      weakTopics: args.weakTopics,
+      weakTopics: args.weakTopics ?? [],
       persistLearnerState: true,
       sourceSurface: "recommendation_engine",
     });
 
     const cognitionWeakTopics = weakTopicRowsFromCognition(substrate.ctx);
 
+    const baseArgs = withRecommendationDefaults(args, args.readiness ?? fallbackReadinessResult());
     const base = buildAdaptiveRecommendations({
-      ...args,
+      ...baseArgs,
       preferredPathwayId: pathwayId,
-      readiness: args.readiness ?? fallbackReadinessResult(),
       weakTopics: cognitionWeakTopics,
-      recommendedQuizTopic: cognitionWeakTopics[0]?.topic ?? args.recommendedQuizTopic,
+      recommendedQuizTopic: cognitionWeakTopics[0]?.topic ?? baseArgs.recommendedQuizTopic,
     });
 
     const governed = applyCognitionOverlay(base, substrate);
@@ -239,7 +268,7 @@ export async function buildGovernedAdaptiveRecommendations(
     return governed;
   }
 
-  const base = buildAdaptiveRecommendations({ ...args, readiness: args.readiness ?? fallbackReadinessResult() });
+  const base = buildAdaptiveRecommendations(withRecommendationDefaults(args, args.readiness ?? fallbackReadinessResult()));
   const model = getTestingModelForPathwayId(pathwayId);
   return {
     ...base,
