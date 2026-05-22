@@ -191,11 +191,14 @@ async function getUserAccessCore(
         targetExamPathwayId: true,
         credentialVersion: true,
         email: true,
+        deletedAt: true,
       },
     }),
   );
 
   if (!user) return base;
+  // Soft-deleted accounts cannot access the platform until recovered (re-login clears deletedAt)
+  if (user.deletedAt != null) return base;
   if (isDeletedAccountEmail(user.email)) return base;
   telemetry.userFound = true;
 

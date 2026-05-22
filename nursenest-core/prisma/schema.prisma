@@ -176,9 +176,34 @@ model User {
   socialGroupMemberships                    SocialGroupMembership[]
   socialStatSnapshots                       SocialStatSnapshot[]
 
+  // ── Account lifecycle / inactivity management ──────────────────────────────
+  /// * Exempt from automatic inactivity deletion regardless of role/tier.
+  ///   Set manually by admins for special accounts (journalists, partners, etc.).
+  isDeletionExempt              Boolean                     @default(false) @map("is_deletion_exempt")
+  /// * Timestamp used as the baseline for inactivity calculation.
+  ///   Set to the user's last real activity; reset on login/activity to NULL.
+  inactivityBaselineAt          DateTime?                   @map("inactivity_baseline_at")
+  /// * First warning email sent (45 days inactive for free; 135 days for engaged).
+  warning1SentAt                DateTime?                   @map("warning1_sent_at")
+  /// * Second warning email sent (53 / 143 days inactive).
+  warning2SentAt                DateTime?                   @map("warning2_sent_at")
+  /// * Final warning email sent (59 / 149 days inactive).
+  warning3SentAt                DateTime?                   @map("warning3_sent_at")
+  /// * Timestamp when account was soft-deleted (60 / 150 days inactive).
+  ///   Non-null → account is soft-deleted; login blocked with recovery message.
+  deletedAt                     DateTime?                   @map("deleted_at")
+  /// * When the soft-delete is scheduled to escalate to permanent purge (deletedAt + 90 days).
+  scheduledPermanentDeletionAt  DateTime?                   @map("scheduled_permanent_deletion_at")
+  /// * Timestamp of permanent purge (PII cleared; row retained for audit).
+  permanentlyPurgedAt           DateTime?                   @map("permanently_purged_at")
+  /// * Human-readable last warning type sent for audit trail.
+  lastLifecycleEmailType        String?                     @map("last_lifecycle_email_type") @db.VarChar(64)
+
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
   @@index([isDemoUser])
+  @@index([deletedAt])
+  @@index([scheduledPermanentDeletionAt])
 }
 
 /// * Admin-managed binary assets on Spaces (blogs, lessons, marketing).
