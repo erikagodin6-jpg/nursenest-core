@@ -56,6 +56,7 @@
     "release:runtime-checklist": "node scripts/runtime-release-checklist.mjs",
     "verify:dist": "node ../scripts/verify-dist-artifacts.mjs",
     "heroku-postbuild": "NN_POSTBUILD_NEXT_BUILD=1 npm run build",
+    "build:docker:production": "bash scripts/docker-build-production.sh",
     "build:deploy": "npm run build:deploy:postbuild",
     "build:deploy:app-platform": "npm run build:deploy",
     "build:deploy:postbuild": "node scripts/assert-deploy-git-state.mjs && node scripts/verify-dockerfile-npm-scripts.mjs && node scripts/ensure-standalone-static.mjs && node scripts/ensure-standalone-public.mjs && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",

@@ -7,7 +7,7 @@ import Credentials from "next-auth/providers/credentials";
 import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { oauthAuthCallbacks } from "@/lib/auth/oauth-auth-callbacks";
-import { buildOAuthProviders } from "@/lib/auth/oauth-config";
+import { buildOAuthProviders } from "@/lib/auth/oauth-config.server";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { clearLoginFailures } from "@/lib/auth/login-lockout";

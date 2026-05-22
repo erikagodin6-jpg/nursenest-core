@@ -357,6 +357,7 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
   );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(pkg.scripts["verify:dockerfile-npm-scripts"], "node scripts/verify-dockerfile-npm-scripts.mjs");
+  assert.equal(pkg.scripts["build:docker:production"], "bash scripts/docker-build-production.sh");
   assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:postbuild");
   assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.equal(pkg.scripts["build:deploy:postbuild"].includes("npm run build"), false);
@@ -391,8 +392,14 @@ test("active DigitalOcean app spec builds before runtime, starts standalone boot
   assert.match(appSpec, /dockerfile_path:\s*Dockerfile/);
   assert.match(appSpec, /source_dir:\s*\./);
   const dockerfile = fs.readFileSync(path.join(__dirname, "..", "..", "Dockerfile"), "utf8");
-  assert.match(dockerfile, /npm run heroku-postbuild/);
-  assert.match(dockerfile, /npm run build:deploy/);
+  const dockerBuildSh = fs.readFileSync(
+    path.join(__dirname, "docker-build-production.sh"),
+    "utf8",
+  );
+  assert.match(dockerfile, /docker-build-production\.sh/);
+  assert.match(dockerBuildSh, /npm run heroku-postbuild/);
+  assert.match(dockerBuildSh, /npm run build:deploy/);
+  assert.match(dockerBuildSh, /set -euxo pipefail/);
   assert.match(appSpec, /run_command:.*start-standalone\.mjs/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
-import { topicStrengthChipClass } from "@/lib/ui/semantic-chips";
+import { topicStrengthChipClass } from "@/lib/ui/learner-semantic-chips";
 import { appCatWeakFocusPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { UserPerformanceSummaryPayload } from "@/lib/study/performance-summary-load";
 

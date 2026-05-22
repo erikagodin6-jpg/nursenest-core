@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { listConfiguredOAuthProviderIds } from "@/lib/auth/oauth-config";
+import { listConfiguredOAuthProviderIds } from "@/lib/auth/oauth-config-env";
 import { OAuthProviderButtons } from "@/components/auth/oauth-provider-buttons";
 import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 

@@ -23,7 +23,8 @@ const RESET_FORM_PATH = path.resolve(ROOT, "src/components/auth/reset-password-f
 const VERIFY_BANNER_PATH = path.resolve(ROOT, "src/components/auth/verify-status-banner.tsx");
 const TRIAL_BLOCKED_PATH = path.resolve(ROOT, "src/components/auth/trial-blocked-card.tsx");
 const AUTH_CONFIG_PATH = path.resolve(ROOT, "src/lib/auth.ts");
-const OAUTH_CONFIG_PATH = path.resolve(ROOT, "src/lib/auth/oauth-config.ts");
+const OAUTH_CONFIG_ENV_PATH = path.resolve(ROOT, "src/lib/auth/oauth-config-env.ts");
+const OAUTH_CONFIG_SERVER_PATH = path.resolve(ROOT, "src/lib/auth/oauth-config.server.ts");
 const AUTH_GOVERNANCE_PATH = path.resolve(ROOT, "src/lib/auth/auth-flow-governance.ts");
 const OAUTH_BUTTONS_PATH = path.resolve(ROOT, "src/components/auth/oauth-provider-buttons.tsx");
 const SCREENSHOT_DIR = path.resolve(ROOT, "docs/screenshots/premium-auth-system");
@@ -62,13 +63,15 @@ describe("premium auth convergence", () => {
   const forgotPage = read(FORGOT_PAGE_PATH);
   const resetPage = read(RESET_PAGE_PATH);
   const loginForm = read(LOGIN_FORM_PATH);
+  const oauthButtonsServer = read(path.resolve(ROOT, "src/components/auth/oauth-provider-buttons-server.tsx"));
   const signupForm = read(SIGNUP_FORM_PATH);
   const forgotForm = read(FORGOT_FORM_PATH);
   const resetForm = read(RESET_FORM_PATH);
   const verifyBanner = read(VERIFY_BANNER_PATH);
   const trialBlocked = read(TRIAL_BLOCKED_PATH);
   const authConfig = read(AUTH_CONFIG_PATH);
-  const oauthConfig = read(OAUTH_CONFIG_PATH);
+  const oauthConfigEnv = read(OAUTH_CONFIG_ENV_PATH);
+  const oauthConfigServer = read(OAUTH_CONFIG_SERVER_PATH);
   const authGovernance = read(AUTH_GOVERNANCE_PATH);
   const oauthButtons = read(OAUTH_BUTTONS_PATH);
 
@@ -91,9 +94,12 @@ describe("premium auth convergence", () => {
 
   it("keeps credentials auth and gates OAuth providers behind env configuration", () => {
     assert.match(authConfig, /Credentials\(/, "credentials provider must remain configured");
-    assert.match(authConfig, /buildOAuthProviders\(/, "OAuth providers must be composed from oauth-config");
-    assert.match(oauthConfig, /isGoogleOAuthConfigured/, "Google OAuth must be env-gated");
-    assert.match(oauthConfig, /isAppleOAuthConfigured/, "Apple OAuth must be env-gated");
+    assert.match(authConfig, /buildOAuthProviders\(/, "OAuth providers must be composed from oauth-config.server");
+    assert.match(authConfig, /oauth-config\.server/, "OAuth providers must load server-only oauth config");
+    assert.match(oauthConfigEnv, /isGoogleOAuthConfigured/, "Google OAuth must be env-gated");
+    assert.match(oauthConfigEnv, /isAppleOAuthConfigured/, "Apple OAuth must be env-gated");
+    assert.match(oauthConfigServer, /buildOAuthProviders/, "server oauth config must build providers");
+    assert.doesNotMatch(oauthConfigEnv, /node:fs/, "client-safe oauth env module must not import fs");
     assert.match(authConfig, /oauthAuthCallbacks/, "OAuth signIn/redirect callbacks must be wired");
     assert.match(authConfig, /pages:\s*{[\s\S]*signIn:\s*"\/login"[\s\S]*error:\s*"\/login"/, "Auth.js route contract changed");
   });
@@ -102,6 +108,7 @@ describe("premium auth convergence", () => {
     assert.match(authGovernance, /resolveAuthReturnDestination/, "governance must resolve post-auth destinations");
     assert.match(authGovernance, /resolveLearnerStudyCallbackPath/, "learner study callbacks must be first-class");
     assert.match(oauthButtons, /nn-premium-auth-oauth-button/, "OAuth UI must use premium Blossom classes");
+    assert.match(oauthButtonsServer, /oauth-config-env/, "OAuth button list must use client-safe oauth env module");
   });
 
   it("surfaces compliance copy, legal links, account deletion discoverability, and pathway labels", () => {

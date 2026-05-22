@@ -4,7 +4,7 @@ import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 import {
   isAppleOAuthConfigured,
   isGoogleOAuthConfigured,
-} from "@/lib/auth/oauth-config";
+} from "@/lib/auth/oauth-config-env";
 import { logOAuthAudit } from "@/lib/auth/oauth-audit-log";
 import { prisma } from "@/lib/db";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
