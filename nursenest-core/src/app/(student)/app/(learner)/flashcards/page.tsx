@@ -241,13 +241,18 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   const scopedPathwayId = pathwayResolution.defaultPathwayId;
 
-  const pathwayLessonFlashDiagnostics =
-    entitlement.hasAccess && scopedPathwayId
-      ? await flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
-          selectedCategories: [],
-          filterModeLabel: "all cards",
-        })
-      : null;
+  let pathwayLessonFlashDiagnostics = null;
+  try {
+    pathwayLessonFlashDiagnostics =
+      entitlement.hasAccess && scopedPathwayId
+        ? await flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
+            selectedCategories: [],
+            filterModeLabel: "all cards",
+          })
+        : null;
+  } catch {
+    pathwayLessonFlashDiagnostics = null;
+  }
 
   const catalogPathway = getExamPathwayById(scopedPathwayId);
   const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
@@ -255,44 +260,56 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
     catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPathwayId;
 
   let initialHub: FlashcardsHubServerPayload | null = null;
-  if (userId && isDatabaseUrlConfigured() && entitlement.hasAccess) {
-    if (catalogPathway) {
-      const inv = await loadFlashcardsExamInventoryForPathway({
-        userId,
-        entitlement,
-        pathway: catalogPathway,
-      });
-      if (inv.ok) {
-        initialHub = {
-          categoryOptions: inv.categoryOptions,
-          matchingTotal: inv.total,
-          lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
-          poolDiagnostics: inv.diagnostics,
-        };
+  try {
+    if (userId && isDatabaseUrlConfigured() && entitlement.hasAccess) {
+      if (catalogPathway) {
+        const inv = await loadFlashcardsExamInventoryForPathway({
+          userId,
+          entitlement,
+          pathway: catalogPathway,
+        });
+        if (inv.ok) {
+          initialHub = {
+            categoryOptions: inv.categoryOptions,
+            matchingTotal: inv.total,
+            lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+            poolDiagnostics: inv.diagnostics,
+          };
+        } else {
+          initialHub = {
+            categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+            matchingTotal: 0,
+            lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+          };
+        }
       } else {
-        /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
         initialHub = {
           categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
           matchingTotal: 0,
           lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
         };
       }
-    } else {
+    } else if (entitlement.hasAccess) {
       initialHub = {
         categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
         matchingTotal: 0,
         lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
       };
     }
-  } else if (entitlement.hasAccess) {
+  } catch {
     initialHub = {
       categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
       matchingTotal: 0,
-      lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+      lessonVirtualDiagnostics: null,
     };
   }
 
-  const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  let visiblePathwayIds: string[] = [];
+  try {
+    visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  } catch {
+    visiblePathwayIds = [];
+  }
   let catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: scopedPathwayId,

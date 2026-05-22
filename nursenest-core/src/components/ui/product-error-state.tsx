@@ -99,7 +99,7 @@ export function ProductErrorState({
               <button
                 type="button"
                 onClick={onRetry}
-                className="inline-flex min-h-[40px] items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-95"
+                className="inline-flex min-h-[40px] items-center justify-center rounded-xl bg-[var(--role-cta,var(--semantic-brand))] px-4 py-2 text-sm font-semibold text-[var(--role-cta-foreground,#fff)] transition-opacity hover:opacity-95"
               >
                 {retryLabel}
               </button>
@@ -114,7 +114,7 @@ export function ProductErrorState({
             ) : null}
             <Link
               href={homeHref}
-              className="inline-flex min-h-[40px] items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-primary underline-offset-4 hover:underline"
+              className="inline-flex min-h-[40px] items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-[var(--semantic-brand)] underline-offset-4 hover:underline"
             >
               {homeLabel}
             </Link>
