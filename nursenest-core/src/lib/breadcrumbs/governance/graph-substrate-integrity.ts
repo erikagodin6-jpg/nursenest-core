@@ -15,6 +15,14 @@ export type GraphSubstrateIntegrityReport = {
   adaptiveHeuristicViolations: string[];
 };
 
+function safeStat(pathname: string) {
+  try {
+    return statSync(pathname);
+  } catch {
+    return null;
+  }
+}
+
 const FORBIDDEN_PARALLEL_PATTERNS = [
   { re: /function\s+buildLocalBreadcrumbHierarchy/, label: "local breadcrumb hierarchy builder" },
   { re: /const\s+glossaryHierarchy\s*=/, label: "local glossary hierarchy" },
@@ -86,7 +94,7 @@ function scanDir(
   adaptive: string[],
   repoRoot: string,
 ): void {
-  if (!statSync(dir, { throwIf: false })?.isDirectory()) return;
+  if (!safeStat(dir)?.isDirectory()) return;
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) {

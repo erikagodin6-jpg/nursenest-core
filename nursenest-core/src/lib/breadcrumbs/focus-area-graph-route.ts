@@ -8,6 +8,7 @@ import { resolveGraphNavigationTelemetryContext } from "@/lib/breadcrumbs/pathna
 import { buildReasoningChainNavigation } from "@/lib/breadcrumbs/reasoning-chain-navigation";
 import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
+import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
 export type FocusAreaGraphRouteContext = {
   topicSlug: string;
@@ -44,7 +45,13 @@ export function resolveFocusAreaGraphRoute(args: {
   const cognition = args.userId
     ? resolveEducationalCognitionContext(args.pathwayId ?? null, {
         userId: args.userId,
-        weakTopics: [...(args.weakTopics ?? [])],
+        weakTopics: (args.weakTopics ?? []).map((topic): WeakTopicRow => ({
+          topic,
+          missed: 0,
+          attempted: 0,
+          missRate: 0,
+          normalizedTopic: normalizeTopicKey(topic) ?? topic,
+        })),
       })
     : null;
 

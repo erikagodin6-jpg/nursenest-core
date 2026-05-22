@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import type { NextAction } from "@/lib/learner/adaptive-recommendations";
 import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 import type { GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import { captureGovernedGraphTelemetry } from "@/lib/educational-graph/capture-governed-graph-telemetry";
 import { graphStepForTelemetryEvent } from "@/lib/educational-graph/graph-step-next-action";
 
-type GovernedNextActionLinkProps = Omit<ComponentProps<typeof Link>, "href" | "onClick"> & {
+type GovernedNextActionLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "onClick"> & {
   action: NextAction;
   graphStep?: EduGraphStep | null;
   sourceSurface: GraphSourceSurface;

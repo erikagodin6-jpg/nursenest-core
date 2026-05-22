@@ -148,6 +148,7 @@ export function validateOntologyRuntimeIntegrity(args: {
             termSlug: args.glossaryTermSlug,
             termLabel: args.glossaryTermSlug,
             topicSlug: args.topicSlug,
+            pathway: null as never,
           },
           args.pathwayId ?? null,
         );

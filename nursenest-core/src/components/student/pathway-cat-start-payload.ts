@@ -104,7 +104,6 @@ export type PracticeAdaptiveStudyLaunchPayload = {
   filters?: Record<string, string | number | boolean | null>;
   count?: number;
   shuffle?: boolean;
-  unlimited?: boolean;
   /** True when the learner chose unlimited practice (CAT advance until manual end). */
   unlimited?: boolean;
 };
