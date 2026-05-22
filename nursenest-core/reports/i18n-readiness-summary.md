@@ -1,6 +1,6 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-16T22:33:13.637Z
+Generated: 2026-05-22T01:24:20.693Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
@@ -9,15 +9,14 @@ Hindi status: pass
 Tagalog status: pass
 Portuguese status: pass
 REx-PN French status: noindex until translations pass
-Spanish coverage: 100% (18722/18722)
+Spanish coverage: 100% (18828/18828)
 Hindi coverage: 100% (17563/17563)
 Tagalog coverage: 100% (17563/17563)
 Portuguese coverage: 100% (17563/17563)
 
 ## Missing French Keys
 
-- /app: learner.shell.nav.clinicalModules
-- /app: learner.shell.nav.ecg
+- None in audited required key set.
 
 ## Missing Spanish Keys
 

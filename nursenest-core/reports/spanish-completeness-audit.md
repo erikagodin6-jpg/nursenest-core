@@ -1,13 +1,13 @@
 # Spanish Completeness Audit
 
-Generated: 2026-05-16T22:33:08.528Z
+Generated: 2026-05-22T01:24:20.619Z
 
-Spanish key coverage: 100% (18722/18722)
+Spanish key coverage: 100% (18828/18828)
 Missing Spanish keys: 0
 Extra Spanish keys: 0
 Placeholder fields: 0
-English leak suspicions: 4148
-English-identical fields for human review: 12323
+English leak suspicions: 4243
+English-identical fields for human review: 12427
 
 | Route | Surface | Score | Indexable | Review count | Top issue |
 | --- | --- | ---: | --- | ---: | --- |
@@ -16,12 +16,12 @@ English-identical fields for human review: 12323
 | /es/rn | rn-hub | 100 | yes | 80 | components.examPathwayHub.body.bulletFlashcards |
 | /es/rex-pn | rex-pn-hub | 100 | yes | 80 | components.examPathwayHub.body.bulletFlashcards |
 | /es/np | np-hub | 100 | yes | 80 | components.examPathwayHub.body.bulletFlashcards |
-| /es/allied | allied-hub | 100 | yes | 77 | allied.alliedHealthHub.alliedHealthCareers |
-| /es/lessons | lesson-library | 100 | yes | 56 | lessons.competitor.youtube |
-| /es/question-bank | practice-questions | 100 | yes | 51 | footer.applyNest |
-| /app/flashcards | flashcards | 100 | no | 48 | flashcards.categoryCardiovascular |
-| /app/practice-tests/cat-launch | cat | 100 | no | 38 | nav.allied.caseSims |
-| /es/login | auth | 100 | no | 40 | account.role.admin |
+| /es/allied | allied-hub | 100 | yes | 75 | allied.alliedHealthHub.alliedHealthCareers |
+| /es/lessons | lesson-library | 100 | yes | 54 | lessons.competitor.youtube |
+| /es/question-bank | practice-questions | 100 | yes | 49 | footer.applyNest |
+| /app/flashcards | flashcards | 100 | no | 47 | flashcards.categoryCardiovascular |
+| /app/practice-tests/cat-launch | cat | 100 | no | 32 | nav.allied.caseSims |
+| /es/login | auth | 100 | no | 80 | account.role.admin |
 
 ## Critical Review Fields
 
@@ -31,77 +31,77 @@ English-identical fields for human review: 12323
 - allied.alliedHealthHub.home
 - allied.alliedHealthHub.jobOutlook
 - allied.alliedHealthHub.salaryRange
-- components.examPathwayHub.body.bulletFlashcards
-- components.examPathwayHub.body.bulletFlashcardsBody
-- components.examPathwayHub.body.bulletLessons
-- components.examPathwayHub.body.bulletLessonsBody
-- components.examPathwayHub.body.bulletPracticeExams
-- components.examPathwayHub.body.bulletPracticeExamsBody
-- components.examPathwayHub.body.bulletPracticeItems
-- components.examPathwayHub.body.bulletPracticeItemsBody
-- components.examPathwayHub.body.catCtaSignedIn
-- components.examPathwayHub.body.catCtaSignup
-- components.examPathwayHub.body.catStripBody
-- components.examPathwayHub.body.catStripTitle
-- components.examPathwayHub.body.conversionHeadingDefault
-- components.examPathwayHub.body.conversionLeadDefault
-- components.examPathwayHub.body.ctaJoinOrSignInFooter
-- components.examPathwayHub.body.footerEntitlements
-- components.examPathwayHub.body.npSiblingsLabel
-- components.examPathwayHub.body.npSiblingsLead
-- components.examPathwayHub.body.prepDirectoryLink
-- components.examPathwayHub.body.prepExamsLink
-- components.examPathwayHub.body.prepLessonsLink
-- components.examPathwayHub.body.prepQuestionsLink
-- components.examPathwayHub.body.prepRhythmLabel
-- components.examPathwayHub.body.prepRhythmLine1
-- components.examPathwayHub.body.prepRhythmLine2
-- components.examPathwayHub.body.prepRhythmLine3
-- components.examPathwayHub.body.prepRhythmLine4
-- components.examPathwayHub.body.pricingCardBody
-- components.examPathwayHub.body.pricingCardTitle
-- components.examPathwayHub.body.shortcutCat
-- components.examPathwayHub.body.shortcutDashboard
-- components.examPathwayHub.body.shortcutQuestions
-- components.examPathwayHub.body.signedInHeading
-- components.examPathwayHub.body.tertiaryApp
-- components.examPathwayHub.body.tertiaryPricing
-- components.examPathwayHub.body.tryQuestions
-- components.examPathwayHub.npInventoryHeading
-- components.examPathwayHub.npPremium.assessmentBody
-- components.examPathwayHub.npPremium.assessmentTitle
-- components.examPathwayHub.npPremium.diagnosticBlockBody
-- components.examPathwayHub.npPremium.diagnosticBlockTitle
-- components.examPathwayHub.npPremium.diagnosticRouteNote
-- components.examPathwayHub.npPremium.guestSignInHint
-- components.examPathwayHub.npPremium.integrationLead
-- components.examPathwayHub.npPremium.integrationTitle
-- components.examPathwayHub.npPremium.metricItemBand
-- components.examPathwayHub.npPremium.metricModeShort
-- components.examPathwayHub.npPremium.metricTimer
-- components.examPathwayHub.npPremium.pharmBlockBody
-- components.examPathwayHub.npPremium.pharmBlockTitle
-- components.examPathwayHub.npPremium.quickLaunchTitle
-- components.examPathwayHub.npPremium.readinessLead
-- components.examPathwayHub.npPremium.readinessTitle
-- components.examPathwayHub.npPremium.reportBandConfidenceLabel
-- components.examPathwayHub.npPremium.reportBandExamDepthLabel
-- components.examPathwayHub.npPremium.reportBandMomentumLabel
-- components.examPathwayHub.npPremium.reportBody
-- components.examPathwayHub.npPremium.reportTitle
-- components.examPathwayHub.npPremium.specialtyLead
-- components.examPathwayHub.npPremium.specialtyTitle
-- components.examPathwayHub.npPremium.workstationEyebrow
-- components.examPathwayHub.pnMarketingHub.guidedPathSubtitle
-- components.examPathwayHub.pnMarketingHub.guidedPathTitle
-- components.examPathwayHub.pnMarketingHub.insightRailAria
-- components.examPathwayHub.pnMarketingHub.panelNgnBody
-- components.examPathwayHub.pnMarketingHub.panelNgnCta
-- components.examPathwayHub.pnMarketingHub.panelNgnKicker
-- components.examPathwayHub.pnMarketingHub.panelNgnTitle
-- components.examPathwayHub.pnMarketingHub.panelPriorBody
-- components.examPathwayHub.pnMarketingHub.panelPriorCta
-- components.examPathwayHub.pnMarketingHub.panelPriorKicker
-- components.examPathwayHub.pnMarketingHub.panelPriorTitle
-- components.examPathwayHub.pnMarketingHub.panelWorkflowBody
-- components.examPathwayHub.pnMarketingHub.panelWorkflowCta
+- auth.transition.accountRecovery.eyebrow
+- auth.transition.accountRecovery.help
+- auth.transition.accountRecovery.loadingDetail
+- auth.transition.accountRecovery.loadingHeadline
+- auth.transition.accountRecovery.message
+- auth.transition.accountRecovery.title
+- auth.transition.authError.eyebrow
+- auth.transition.authError.loadingHeadline
+- auth.transition.authError.rateLimitedEyebrow
+- auth.transition.authError.rateLimitedHelp
+- auth.transition.authError.rateLimitedMessage
+- auth.transition.authError.rateLimitedTitle
+- auth.transition.common.alreadySignedInHelp
+- auth.transition.common.ctaContinue
+- auth.transition.common.ctaResume
+- auth.transition.common.ctaStart
+- auth.transition.common.exploreLessons
+- auth.transition.common.signInContinue
+- auth.transition.common.signInPrefix
+- auth.transition.common.whatsNextEyebrow
+- auth.transition.emailVerified.eyebrow
+- auth.transition.emailVerified.help
+- auth.transition.emailVerified.messageGeneral
+- auth.transition.emailVerified.messageNp
+- auth.transition.emailVerified.messageRn
+- auth.transition.emailVerified.messageRpn
+- auth.transition.emailVerified.title
+- auth.transition.emailVerified.verifyBannerMessage
+- auth.transition.emailVerified.verifyBannerTitle
+- auth.transition.emailVerified.whatsNextTitleGeneral
+- auth.transition.emailVerified.whatsNextTitleNp
+- auth.transition.emailVerified.whatsNextTitleRn
+- auth.transition.emailVerified.whatsNextTitleRpn
+- auth.transition.loading.emailVerifiedDetail
+- auth.transition.loading.emailVerifiedHeadline
+- auth.transition.loading.oauthDetail
+- auth.transition.loading.oauthHeadline
+- auth.transition.loading.sessionDetail
+- auth.transition.loading.sessionHeadline
+- auth.transition.magicLink.confirmedEyebrow
+- auth.transition.magicLink.confirmedMessage
+- auth.transition.magicLink.confirmedTitle
+- auth.transition.magicLink.expiredEyebrow
+- auth.transition.magicLink.expiredHelp
+- auth.transition.magicLink.expiredMessage
+- auth.transition.magicLink.expiredTitle
+- auth.transition.magicLink.invalidEyebrow
+- auth.transition.magicLink.invalidMessage
+- auth.transition.magicLink.invalidTitle
+- auth.transition.magicLink.loadingDetail
+- auth.transition.magicLink.loadingHeadline
+- auth.transition.magicLink.sentEyebrow
+- auth.transition.magicLink.sentHelp
+- auth.transition.magicLink.sentMessage
+- auth.transition.magicLink.sentTitle
+- auth.transition.oauth.eyebrow
+- auth.transition.oauth.helpDefault
+- auth.transition.oauth.messageDefault
+- auth.transition.oauth.providerApple
+- auth.transition.oauth.providerGoogle
+- auth.transition.oauth.providerUnknown
+- auth.transition.oauth.title
+- auth.transition.passwordReset.eyebrow
+- auth.transition.passwordReset.help
+- auth.transition.passwordReset.loadingDetail
+- auth.transition.passwordReset.loadingHeadline
+- auth.transition.passwordReset.message
+- auth.transition.passwordReset.title
+- auth.transition.sessionExpired.eyebrow
+- auth.transition.sessionExpired.helpDefault
+- auth.transition.sessionExpired.message
+- auth.transition.sessionExpired.title
+- auth.transition.signIn.alreadySignedInSuffix
+- auth.transition.signIn.continuationNpDifferential
