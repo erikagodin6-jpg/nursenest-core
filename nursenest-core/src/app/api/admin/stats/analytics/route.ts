@@ -1,0 +1,183 @@
+import { type NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+export const dynamic = "force-dynamic";
+
+/**
+ * GET /api/admin/stats/analytics
+ *
+ * Comprehensive platform analytics for the admin dashboard.
+ * Runs all key operational queries in parallel with individual fallbacks.
+ *
+ * Raw SQL equivalents (run directly in psql/pgAdmin to verify):
+ *
+ * -- DAU
+ * SELECT COUNT(*) FROM "User"
+ *   WHERE "updatedAt" >= NOW() - INTERVAL '1 day' AND is_demo_user = false;
+ *
+ * -- WAU
+ * SELECT COUNT(*) FROM "User"
+ *   WHERE "updatedAt" >= NOW() - INTERVAL '7 days' AND is_demo_user = false;
+ *
+ * -- MAU
+ * SELECT COUNT(*) FROM "User"
+ *   WHERE "updatedAt" >= NOW() - INTERVAL '30 days' AND is_demo_user = false;
+ *
+ * -- Email domain distribution
+ * SELECT SPLIT_PART(email, '@', 2) AS domain, COUNT(*)
+ *   FROM "User" WHERE is_demo_user = false
+ *   GROUP BY domain ORDER BY COUNT(*) DESC LIMIT 30;
+ *
+ * -- Monthly signup growth
+ * SELECT DATE_TRUNC('month', "createdAt") AS month, COUNT(*) AS users
+ *   FROM "User" WHERE is_demo_user = false
+ *   GROUP BY month ORDER BY month ASC;
+ *
+ * -- Dead accounts (registered but never engaged)
+ * SELECT COUNT(*) FROM "User"
+ *   WHERE "createdAt" = "updatedAt" AND is_demo_user = false;
+ *
+ * -- New users today
+ * SELECT COUNT(*) FROM "User"
+ *   WHERE "createdAt" >= CURRENT_DATE AND is_demo_user = false;
+ *
+ * -- New users this month
+ * SELECT COUNT(*) FROM "User"
+ *   WHERE "createdAt" >= DATE_TRUNC('month', NOW()) AND is_demo_user = false;
+ */
+export async function GET(req: NextRequest) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+
+  if (!isDatabaseUrlConfigured()) {
+    return NextResponse.json({ error: "Database not configured." }, { status: 503 });
+  }
+
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const since1d  = new Date(now.getTime() - 1  * 24 * 60 * 60 * 1000);
+  const since7d  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000);
+  const since30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+  const realUsers = { is_demo_user: false } as const;
+
+  // Run each query independently so one failure doesn't kill the whole response
+  const [
+    totalUsers,
+    dau,
+    wau,
+    mau,
+    newToday,
+    newThisMonth,
+    deadAccounts,
+    monthlyGrowthRaw,
+    emailDomainsRaw,
+    practiceTestsStarted,
+    lessonsCompleted,
+  ] = await Promise.all([
+    // Total non-demo users
+    prisma.user.count({ where: realUsers }).catch(() => null),
+
+    // DAU — updatedAt within 24h
+    prisma.user.count({ where: { ...realUsers, updatedAt: { gte: since1d } } }).catch(() => null),
+
+    // WAU — updatedAt within 7 days
+    prisma.user.count({ where: { ...realUsers, updatedAt: { gte: since7d } } }).catch(() => null),
+
+    // MAU — updatedAt within 30 days
+    prisma.user.count({ where: { ...realUsers, updatedAt: { gte: since30d } } }).catch(() => null),
+
+    // New today (createdAt >= start of today UTC)
+    prisma.user.count({ where: { ...realUsers, createdAt: { gte: startOfToday } } }).catch(() => null),
+
+    // New this calendar month
+    prisma.user.count({ where: { ...realUsers, createdAt: { gte: startOfMonth } } }).catch(() => null),
+
+    // Dead accounts: createdAt === updatedAt (registered, never returned)
+    // Prisma doesn't support column-to-column comparison; use raw SQL
+    prisma.$queryRaw<[{ n: bigint }]>`
+      SELECT COUNT(*)::bigint AS n FROM "User"
+      WHERE "createdAt" = "updatedAt" AND is_demo_user = false
+    `.then((r) => Number(r[0]?.n ?? 0)).catch(() => null),
+
+    // Monthly signup growth (last 24 months)
+    prisma.$queryRaw<{ month: Date; users: bigint }[]>`
+      SELECT DATE_TRUNC('month', "createdAt") AS month, COUNT(*)::bigint AS users
+      FROM "User"
+      WHERE is_demo_user = false
+        AND "createdAt" >= NOW() - INTERVAL '24 months'
+      GROUP BY month
+      ORDER BY month ASC
+    `.catch(() => null),
+
+    // Email domain distribution (top 30)
+    prisma.$queryRaw<{ domain: string; count: bigint }[]>`
+      SELECT SPLIT_PART(email, '@', 2) AS domain, COUNT(*)::bigint AS count
+      FROM "User"
+      WHERE is_demo_user = false
+      GROUP BY domain
+      ORDER BY count DESC
+      LIMIT 30
+    `.catch(() => null),
+
+    // Practice tests started (total)
+    prisma.practiceTest.count().catch(() => null),
+
+    // Lessons completed — progress rows where completed = true
+    prisma.progress.count({ where: { completed: true } }).catch(() => null),
+  ]);
+
+  // Compute retention % (MAU / total, rough proxy)
+  const retentionPct =
+    totalUsers && mau != null && totalUsers > 0
+      ? Math.round((mau / totalUsers) * 100)
+      : null;
+
+  // Serialize monthly growth
+  const monthlyGrowth = monthlyGrowthRaw
+    ? monthlyGrowthRaw.map((r) => ({
+        month: r.month instanceof Date ? r.month.toISOString().slice(0, 7) : String(r.month),
+        users: Number(r.users),
+      }))
+    : null;
+
+  // Serialize email domains
+  const emailDomains = emailDomainsRaw
+    ? emailDomainsRaw.map((r) => ({
+        domain: r.domain,
+        count: Number(r.count),
+      }))
+    : null;
+
+  safeServerLog("admin_analytics", "query_ok", {
+    totalUsers: String(totalUsers ?? "?"),
+    dau: String(dau ?? "?"),
+    mau: String(mau ?? "?"),
+  });
+
+  return NextResponse.json({
+    generatedAt: now.toISOString(),
+    users: {
+      total: totalUsers,
+      dau,
+      wau,
+      mau,
+      newToday,
+      newThisMonth,
+      deadAccounts,
+      retentionPct,
+    },
+    growth: {
+      monthly: monthlyGrowth,
+    },
+    emailDomains,
+    activity: {
+      practiceTestsStarted,
+      lessonsCompleted,
+    },
+  });
+}

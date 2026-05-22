@@ -9,6 +9,7 @@ import { AdminCommandCenter } from "@/components/admin/admin-command-center";
 import { AdminDashboardOverview } from "@/components/admin/admin-dashboard-overview";
 import { AdminLegacyOperationsHub } from "@/components/admin/admin-legacy-operations-hub";
 import { AdminUserStatsPanel } from "@/components/admin/admin-user-stats-panel";
+import { AdminAnalyticsDashboard } from "@/components/admin/admin-analytics-dashboard";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -149,6 +150,10 @@ export default async function AdminPage() {
       <Suspense fallback={null}>
         <AdminLegacyOperationsSection />
       </Suspense>
+
+      <div className="mt-10">
+        <AdminAnalyticsDashboard />
+      </div>
 
       <Suspense fallback={<AdminCommandCenterFallback />}>
         <AdminCommandCenterSection />
