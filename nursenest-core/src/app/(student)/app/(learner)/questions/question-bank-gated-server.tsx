@@ -146,7 +146,12 @@ export async function QuestionBankGatedEntry({
   }
 
   if (!entitlement.hasAccess) {
-    const snap = userId ? await getFreemiumSnapshot(userId) : null;
+    let snap = null;
+    try {
+      snap = userId ? await getFreemiumSnapshot(userId) : null;
+    } catch {
+      snap = null;
+    }
     return (
       <div className="space-y-6">
         <div className="nn-learner-page-hero">
@@ -176,7 +181,12 @@ export async function QuestionBankGatedEntry({
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const protectionFlags = getServerPremiumProtectionFlags();
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
-  const studySettings = userId ? await loadStudySettings(userId) : null;
+  let studySettings = null;
+  try {
+    studySettings = userId ? await loadStudySettings(userId) : null;
+  } catch {
+    studySettings = null;
+  }
 
   if (variant === "launcher" && !launcherShouldOpenSession) {
     return (

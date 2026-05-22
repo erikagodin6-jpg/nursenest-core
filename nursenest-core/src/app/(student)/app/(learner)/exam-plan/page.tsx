@@ -128,7 +128,12 @@ export default async function ExamPlanPage() {
 
   // ── No subscription — preview mode ────────────────────────────────────────
   if (!entitlement.hasAccess) {
-    const snap = await getFreemiumSnapshot(userId);
+    let snap = null;
+    try {
+      snap = userId ? await getFreemiumSnapshot(userId) : null;
+    } catch {
+      snap = null;
+    }
     return (
       <div className="space-y-8">
         <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
@@ -162,7 +167,12 @@ export default async function ExamPlanPage() {
   }
 
   // ── Load initial page data ────────────────────────────────────────────────
-  const data = await loadExamPlanPageData(userId, entitlement);
+  let data = null;
+  try {
+    data = await loadExamPlanPageData(userId, entitlement);
+  } catch {
+    data = null;
+  }
 
   // No data yet (new user, no practice history)
   if (!data) {
