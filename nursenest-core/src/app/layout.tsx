@@ -38,8 +38,8 @@ const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
 // IMPORTANT:
-// All favicon surfaces must use the approved CDN pink favicon. Do not generate
-// favicons from theme logos or local fallback marks.
+// All favicon surfaces must use the approved pink favicon exported from
+// app-icons. App Router metadata is the canonical icon declaration.
 
 function navigationIntentBeforeInteractiveInlineScript(): string {
   return `
@@ -84,9 +84,10 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: nursenestAppIcons.favicon, sizes: "any", type: "image/png" },
+      { url: nursenestAppIcons.favicon, sizes: "64x64", type: "image/png" },
+      { url: nursenestAppIcons.ico, sizes: "16x16 32x32", type: "image/x-icon" },
     ],
-    apple: [{ url: nursenestAppIcons.favicon, sizes: "180x180", type: "image/png" }],
+    apple: [{ url: nursenestAppIcons.apple, sizes: "180x180", type: "image/png" }],
     shortcut: [{ url: nursenestAppIcons.favicon, type: "image/png" }],
   },
   openGraph: {
@@ -192,9 +193,6 @@ export default async function RootLayout({
           href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com"
           crossOrigin="anonymous"
         />
-        <link rel="icon" href={nursenestAppIcons.favicon} sizes="any" type="image/png" />
-        <link rel="shortcut icon" href={nursenestAppIcons.favicon} type="image/png" />
-        <link rel="apple-touch-icon" href={nursenestAppIcons.favicon} sizes="180x180" type="image/png" />
       </head>
       <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)] [font-family:var(--font-sans)] antialiased [font-synthesis:none] [text-rendering:optimizeLegibility]">
         <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">

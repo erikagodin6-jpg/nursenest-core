@@ -12,6 +12,7 @@ import sharp from "sharp";
 
 const PINK_FAVICON_URL =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/pinkfavicon.png";
+const VERSIONED_FAVICON_FILE = "favicon-pink-v3.png";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(__dirname, "..", "public");
@@ -37,6 +38,7 @@ async function main() {
 
   const png16 = await rasterSquare(source, 16);
   const png32 = await rasterSquare(source, 32);
+  const png64 = await rasterSquare(source, 64);
   const png180 = await rasterSquare(source, 180);
   const png192 = await rasterSquare(source, 192);
   const png512 = await rasterSquare(source, 512);
@@ -44,14 +46,15 @@ async function main() {
   const ico = await pngToIco([png16, png32]);
 
   await writeFile(path.join(publicDir, "favicon.ico"), ico);
+  await writeFile(path.join(publicDir, VERSIONED_FAVICON_FILE), png64);
   await writeFile(path.join(publicDir, "apple-touch-icon.png"), png180);
   await writeFile(path.join(publicDir, "icon-192.png"), png192);
   await writeFile(path.join(publicDir, "icon-512.png"), png512);
-  // PNG copy for clients that request /favicon.svg bookmark path — keep a tiny PNG alias via favicon link only
+  // PNG copy for clients that request /favicon.png directly.
   await writeFile(path.join(publicDir, "favicon.png"), png32);
 
   console.log(
-    "[sync-approved-pink-favicon-public] Wrote favicon.ico, apple-touch-icon.png, icon-192.png, icon-512.png, favicon.png from CDN pinkfavicon.png",
+    "[sync-approved-pink-favicon-public] Wrote favicon-pink-v3.png, favicon.ico, apple-touch-icon.png, icon-192.png, icon-512.png, favicon.png from CDN pinkfavicon.png",
   );
 }
 

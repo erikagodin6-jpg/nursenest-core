@@ -76,7 +76,6 @@ export function isStaticAssetBypassPath(pathname: string): boolean {
     pathname === "/apple-touch-icon.png" ||
     pathname === "/manifest.json" ||
     pathname === "/site.webmanifest" ||
-    pathname === "/mask-icon.svg" ||
     pathname === "/icon-192.png" ||
     pathname === "/icon-512.png"
   ) {
@@ -220,6 +219,6 @@ export const config = {
      * Run proxy for application routes only. Static public files and Next build
      * assets must never enter auth, marketing, or pathway resolution logic.
      */
-    "/((?!_next/|static/|assets/|images/|img/|logos/|brand/|marketing/homepage-screenshots/|favicon\\.ico$|apple-touch-icon\\.png$|manifest\\.json$|site\\.webmanifest$|mask-icon\\.svg$|icon-192\\.png$|icon-512\\.png$|api/marketing-assets/|api/assets/|.*\\.(?:avif|bmp|css|gif|ico|jpe?g|js|json|map|mp4|ogg|otf|pdf|png|svg|ttf|txt|webm|webmanifest|webp|woff2?)$).*)",
+    "/((?!_next/|static/|assets/|images/|img/|logos/|brand/|marketing/homepage-screenshots/|favicon\\.ico$|apple-touch-icon\\.png$|manifest\\.json$|site\\.webmanifest$|icon-192\\.png$|icon-512\\.png$|api/marketing-assets/|api/assets/|.*\\.(?:avif|bmp|css|gif|ico|jpe?g|js|json|map|mp4|ogg|otf|pdf|png|svg|ttf|txt|webm|webmanifest|webp|woff2?)$).*)",
   ],
 };
