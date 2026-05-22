@@ -2,8 +2,6 @@ import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { isNNSkipLessonIndexBuild } from "./run-lesson-indexes-for-build.mjs";
-
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export function getStandaloneServerCandidates(root = packageRoot) {
@@ -150,7 +148,10 @@ export function verifyStandaloneStaticAssetsPresent(root = packageRoot) {
  * package root and beside each standalone `server.js` (copied by ensure-standalone-static).
  */
 export function verifyPathwayLessonGeneratedIndexesArtifact(root = packageRoot) {
-  if (isNNSkipLessonIndexBuild()) {
+  const skipLessonIndexes = /^(1|true|yes)$/i.test(
+    String(process.env.NN_SKIP_LESSON_INDEX_BUILD ?? "").trim(),
+  );
+  if (skipLessonIndexes) {
     console.log("[lesson-indexes] standalone artifact check skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
     return;
   }

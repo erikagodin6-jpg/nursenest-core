@@ -37,6 +37,26 @@ The root `Dockerfile` compile stage sets `NN_LESSON_INDEX_VERIFY_MODE=manifest` 
 
 The image runs `npm run heroku-postbuild` (which sets `NN_POSTBUILD_NEXT_BUILD=1` and runs **one** production compile via `run-buildpack-build.mjs` → `run-next-prod-build.mjs`) and then `npm run build:deploy` (**post-compile**: git meta, standalone static sync, prune) — **not** a second `next build`.
 
+### Runner stage: tarball unpack (not a second compile)
+
+Builder packages `.next/standalone` into `.next-standalone-runtime.tar.gz`, then deletes the tree before `npm prune`. Runner unpacks with **`scripts/docker-runner-unpack-standalone.sh`** (shell only).
+
+**Do not** run `node -e "import … verify-standalone-artifact.mjs"` in a runner `RUN` **before** `COPY --from=builder /app/scripts ../scripts`. That module used to pull `../../scripts/build-artifact-cache.mjs` at load time and failed with `MODULE_NOT_FOUND` even when the tarball was valid — BuildKit only showed a long `set -euxo pipefail && node …` layer error.
+
+Runtime `CMD` → `start-standalone.mjs` → `verifyStandaloneArtifact()` is fine: monorepo `../scripts` is already on disk.
+
+Expected runner build logs:
+
+```text
+[docker-runner-unpack] ok standalone_server=.next/standalone/nursenest-core/server.js
+```
+
+If a runner step fails after this fix, grep `[docker-runner-unpack]` or `[docker-build-production]` and inspect tarball contents on the builder artifact:
+
+```bash
+tar -tzf nursenest-core/.next-standalone-runtime.tar.gz | head
+```
+
 ## Switching App Platform to Docker
 
 1. In the DO spec (or UI), set **`source_dir` to `/` (repo root)** so `../shared` and `../client` exist for Docker context.

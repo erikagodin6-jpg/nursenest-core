@@ -93,13 +93,10 @@ ENV NODE_ENV=production \
 
 COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
 COPY --from=builder /app/nursenest-core/scripts ./scripts
-RUN set -euxo pipefail \
-  && test -f .next-standalone-runtime.tar.gz \
-  && mkdir -p .next \
-  && tar -xzf .next-standalone-runtime.tar.gz -C .next \
-  && rm .next-standalone-runtime.tar.gz \
-  && test -d .next/standalone \
-  && node --input-type=module -e "import { resolveStandaloneServerPath } from './scripts/verify-standalone-artifact.mjs'; const p=resolveStandaloneServerPath(process.cwd()); if(!p){console.error('FATAL: standalone server.js missing after tar extract'); process.exit(1)} console.log('[runner] standalone_server='+p)"
+# Shell-only unpack — do not import verify-standalone-artifact.mjs here (it pulls ../../scripts/
+# before monorepo scripts are COPY'd into the runner layer).
+RUN chmod +x scripts/docker-runner-unpack-standalone.sh \
+  && ./scripts/docker-runner-unpack-standalone.sh
 COPY --from=builder /app/nursenest-core/public ./public
 COPY --from=builder /app/scripts ../scripts
 COPY --from=builder /app/script ../script
