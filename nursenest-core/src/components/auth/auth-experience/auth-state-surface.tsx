@@ -5,6 +5,12 @@ import { useRouter } from "next/navigation";
 import { AuthContinuationCard } from "@/components/auth/auth-experience/auth-continuation-card";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { useAuthRouteSearchState } from "@/components/auth/auth-experience/use-auth-route-search-state";
+import {
+  authTransitionMessageTone,
+  resolveAuthenticationErrorPresentation,
+  resolveOAuthContinuationPresentation,
+  resolveSessionExpiredPresentation,
+} from "@/lib/auth/auth-transition-governance";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -30,8 +36,16 @@ export function AuthOAuthContinuationBanner() {
 
   if (!oauthContinuing) return null;
 
-  const label = provider === "apple" ? "Apple" : provider === "google" ? "Google" : "your provider";
-  return <AuthContinuationCard providerLabel={label} studyHint={studyHint} />;
+  const oauthCopy = resolveOAuthContinuationPresentation(provider, studyHint);
+  return (
+    <AuthContinuationCard
+      providerLabel={oauthCopy.providerLabel}
+      studyHint={studyHint}
+      eyebrow={oauthCopy.eyebrow}
+      title={oauthCopy.title}
+      fallbackDetail={oauthCopy.help}
+    />
+  );
 }
 
 export function AuthSessionExpiredBanner() {
@@ -51,17 +65,15 @@ export function AuthSessionExpiredBanner() {
 
   if (!sessionExpired) return null;
 
+  const sessionCopy = resolveSessionExpiredPresentation(studyHint);
+
   return (
     <AuthMessageBanner
-      tone="warning"
+      tone={authTransitionMessageTone("session-expired")}
       stateId="session-expired"
-      title="Please sign in again"
-      message="For your security, we signed you out after inactivity. Your progress is saved."
-      help={
-        studyHint
-          ? `${studyHint.headline}. We will bring you back to the same study session when you sign in.`
-          : "Continue where you left off — we will return you to the same page when possible."
-      }
+      title={sessionCopy.title}
+      message={sessionCopy.message}
+      help={sessionCopy.help}
     />
   );
 }
@@ -87,13 +99,21 @@ export function AuthOAuthErrorBanner() {
 
   if (!oauthError) return null;
 
+  const errorCode = searchParams.get("error");
+  const transitionError = resolveAuthenticationErrorPresentation(errorCode) ?? {
+    eyebrow: "",
+    title: oauthError.title,
+    message: oauthError.message,
+    help: oauthError.help,
+  };
+
   return (
     <AuthMessageBanner
-      tone="danger"
+      tone={authTransitionMessageTone("authentication-error")}
       stateId="oauth-error"
-      title={oauthError.title}
-      message={oauthError.message}
-      help={oauthError.help}
+      title={transitionError.title}
+      message={transitionError.message}
+      help={transitionError.help}
     />
   );
 }

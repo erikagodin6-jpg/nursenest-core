@@ -163,6 +163,11 @@ html[data-theme="mint-blossom"] .nn-premium-auth-system {
   background: color-mix(in srgb, var(--auth-info) 8%, var(--auth-surface));
 }
 
+.nn-auth-message-banner[data-nn-auth-message-tone="success"] {
+  border-color: color-mix(in srgb, var(--auth-success) 32%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--auth-success) 10%, var(--auth-surface));
+}
+
 .nn-auth-message-banner__title {
   font-size: 0.92rem;
   font-weight: 700;
@@ -302,4 +307,89 @@ html[data-theme="mint-blossom"] .nn-premium-auth-system {
       color-mix(in srgb, var(--auth-surface) 92%, var(--auth-bg)) 35%
     );
   }
+}
+
+/* Auth transition loading (sign-in, OAuth, session restore) */
+.nn-auth-transition-loading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  border-radius: 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--auth-primary) 22%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--auth-primary) 6%, var(--auth-surface));
+  padding: 0.9rem 1rem;
+  animation: nn-auth-transition-fade-in 0.35s ease-out;
+}
+
+.nn-auth-transition-loading__mark {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding-top: 0.15rem;
+}
+
+.nn-auth-transition-loading__leaf {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.nn-auth-transition-loading__headline {
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: var(--auth-heading);
+}
+
+.nn-auth-transition-loading__detail {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--auth-subtext);
+}
+
+@keyframes nn-auth-transition-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Leaf watermark drift — opacity breathe only (preserves inline placement transform) */
+@keyframes nn-auth-leaf-opacity-breathe {
+  0%,
+  100% {
+    opacity: var(--nn-auth-leaf-opacity, 0.09);
+  }
+  50% {
+    opacity: calc(var(--nn-auth-leaf-opacity, 0.09) * 1.12);
+  }
+}
+
+.nn-auth-leaf-watermark--drift,
+.nn-auth-leaf-watermark--drift-slow {
+  animation: nn-auth-leaf-opacity-breathe 20s ease-in-out infinite;
+}
+
+.nn-auth-leaf-watermark--drift-slow {
+  animation-duration: 26s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-auth-transition-loading {
+    animation: none;
+  }
+
+  .nn-auth-leaf-watermark--drift,
+  .nn-auth-leaf-watermark--drift-slow {
+    animation: none;
+  }
+}
+
+.nn-auth-transition-success-ring {
+  animation: nn-auth-transition-fade-in 0.5s ease-out;
 }

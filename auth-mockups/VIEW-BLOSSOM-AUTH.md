@@ -68,7 +68,7 @@ Frames on page **Blossom Auth Premium** (desktop 1440×900 unless noted). Names 
 Reference (not in program eight): `auth/error · Desktop (reference)` `88:26` (PNG 09), `auth/loading · Desktop (reference)` `88:28`.
 
 **Next (per program):** Ocean / Midnight + light/dark variants on separate frames or variable modes — Blossom desktop/light is the approval baseline.  
-**Report:** `reports/auth-blossom-figma-FINAL.md`
+**Report:** `auth-mockups/auth-blossom-figma-FINAL.md`
 
 ## Implementation alignment
 

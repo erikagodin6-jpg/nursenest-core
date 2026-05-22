@@ -67,6 +67,24 @@ Use global NurseNest marketing footer: blossom leaf logo, multi-column links, so
 - `auth-mockups/design-png/blossom-auth/*.png` — captured mockups
 - `nursenest-core/tests/e2e/preview/blossom-auth.capture.spec.ts` — Playwright capture
 
+## Auth transition governance (code)
+
+Implementation copy, pathway-aware “What’s next” steps, watermark opacity bands, loading messages, and recovery-first error tone live in:
+
+`nursenest-core/src/lib/auth/auth-transition-governance.ts`
+
+Callback safety and resume paths remain in `auth-flow-governance.ts`; study continuation hints in `auth-study-continuation-context.ts`.
+
+| Transition | UI surface |
+|------------|------------|
+| Email verified | `AuthEmailVerifiedSuccess`, `VerifyStatusBanner` |
+| Session expired | `AuthSessionExpiredBanner` |
+| OAuth continuation | `AuthContinuationCard` |
+| Sign-in success / loading | `AuthTransitionLoading` on `LoginForm` |
+| Auth errors | `AuthOAuthErrorBanner`, login validation banner (info tone) |
+
+**Watermark bands:** hero 6–10% (`panel-hero`), ambient 3–6% (`page-ambient`), card corner ~5.5%; opacity via `authLeafOpacityForPlacement()` — never above primary content (`z-0` leaf, `z-[1]` copy).
+
 ## PR checklist (when implementing)
 
 - [ ] Before/after screenshots (same states as PNG 01–05)

@@ -68,13 +68,13 @@ For **each screen**, ship **desktop + mobile**, **light + dark**, themes **Ocean
 | Reference frames | `88:26` error, `88:28` loading (off main grid) |
 
 Full node ID table and PNG index: `auth-mockups/VIEW-BLOSSOM-AUTH.md`.  
-Program report: `reports/auth-blossom-figma-FINAL.md`.
+Program report: `auth-mockups/auth-blossom-figma-FINAL.md`.
 
 **Next wave (not blocking auth code):** Ocean / Midnight + light/dark duplicate frames; sign-up / forgot / verify **mobile** variants.
 
 ## Acceptance (PR / program report)
 
-- [x] Figma file link + frame IDs listed in PR or `reports/*-FINAL.md` (see `auth-mockups/VIEW-BLOSSOM-AUTH.md`, `reports/auth-blossom-figma-FINAL.md`)
+- [x] Figma file link + frame IDs listed in PR or `reports/*-FINAL.md` (see `auth-mockups/VIEW-BLOSSOM-AUTH.md`, `auth-mockups/auth-blossom-figma-FINAL.md`)
 - [x] Blossom desktop + mobile sign-in PNGs placed in Figma (Ocean/Midnight variants deferred)
 - [ ] Side-by-side Figma vs implementation for sign-in and sign-up (after auth route polish)
 - [ ] Post-login resume verified for tier-scoped study callbacks (`parseTierScopedAppStudyCallbackPath`)

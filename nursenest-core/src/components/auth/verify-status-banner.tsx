@@ -3,27 +3,31 @@
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { resolveVerifyEmailBannerPresentation } from "@/lib/auth/auth-transition-governance";
 
-const statusConfig: Record<string, { icon: typeof CheckCircle2; className: string; message: string }> = {
+const statusConfig: Record<
+  string,
+  { icon: typeof CheckCircle2; className: string; status: "success" | "expired" | "invalid" | "rate_limited" }
+> = {
   success: {
     icon: CheckCircle2,
     className: "nn-verify-status--success",
-    message: "Email verified. You can sign in now.",
+    status: "success",
   },
   expired: {
     icon: Clock,
     className: "nn-verify-status--warning",
-    message: "This verification link has expired. Sign in and request a new one.",
+    status: "expired",
   },
   invalid: {
     icon: AlertCircle,
     className: "nn-verify-status--warning",
-    message: "This verification link is invalid. Sign in and request a new one.",
+    status: "invalid",
   },
   rate_limited: {
     icon: AlertCircle,
     className: "nn-verify-status--warning",
-    message: "Too many attempts. Please wait a moment and try again.",
+    status: "rate_limited",
   },
 };
 
@@ -36,10 +40,18 @@ export function VerifyStatusBanner() {
   if (status && statusConfig[status]) {
     const config = statusConfig[status];
     const Icon = config.icon;
+    const copy = resolveVerifyEmailBannerPresentation(config.status);
     return (
-      <div className={`nn-verify-status ${config.className}`} data-nn-premium-auth-verification>
+      <div
+        className={`nn-verify-status ${config.className}`}
+        data-nn-premium-auth-verification
+        data-nn-auth-transition="email-verified"
+      >
         <Icon className="h-4 w-4 flex-shrink-0" aria-hidden />
-        <p>{config.message}</p>
+        <div>
+          <p className="font-semibold">{copy.title}</p>
+          <p className="mt-0.5 text-sm opacity-90">{copy.message}</p>
+        </div>
       </div>
     );
   }
