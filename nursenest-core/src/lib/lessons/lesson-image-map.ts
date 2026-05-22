@@ -54,6 +54,32 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
 
   // ── Cardiovascular ────────────────────────────────────────────────────────
   {
+    objectKey: "cardiactamponade.jpeg",
+    slugs: [
+      "cardiac-tamponade",
+      "cardiac-tamponade-nursing",
+      "pericardial-tamponade",
+      "tamponade-nursing",
+      "cardiac-tamponade-management",
+      "pericardiocentesis-nursing",
+      "obstructive-shock-tamponade",
+    ],
+    keywords: [
+      "cardiac tamponade",
+      "pericardial tamponade",
+      "tamponade",
+      "pericardial effusion",
+      "beck's triad",
+      "pulsus paradoxus",
+      "pericardiocentesis",
+      "obstructive shock tamponade",
+      "jvd tamponade",
+    ],
+    bodySystems: [],
+    category: "cardiovascular",
+    caption: "Cardiac tamponade — pericardial compression, Beck's triad, and emergent pericardiocentesis",
+  },
+  {
     objectKey: "CABG.jpeg",
     slugs: [
       "cabg",
