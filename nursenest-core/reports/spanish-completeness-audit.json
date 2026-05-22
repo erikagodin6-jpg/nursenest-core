@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-16T22:33:08.528Z",
+  "generatedAt": "2026-05-22T00:35:35.064Z",
   "locale": "es",
   "coveragePct": 100,
-  "totalEnglishKeys": 18722,
-  "totalSpanishKeys": 18722,
+  "totalEnglishKeys": 18769,
+  "totalSpanishKeys": 18769,
   "missingKeys": [],
   "extraKeys": [],
   "placeholderFields": [],
@@ -1019,12 +1019,12 @@
     "public/i18n/en/billing.json": "1a66c10c39fa74d08a5d736dc1fac485d405059b37762f6f28de143c97a7bc37",
     "public/i18n/en/brand.json": "25cfdcc361c11cf28cc65019cf3c6824c431e88d05dc1cec21410a065cba9ebd",
     "public/i18n/en/common.json": "4bcb4ccac7a1e2be6ad9295fee026b8d2d10260763d28d8318d08bb4e90ec37b",
-    "public/i18n/en/components.json": "b1f2adbe9cba184356cfd6f81404a1da9d7f0cb90592bedded3dcfabe908c352",
+    "public/i18n/en/components.json": "3a0cd715b1d069fd0077f514ee18af973f7cea246aff163107fb17d39fc664b7",
     "public/i18n/en/errors.json": "19bbd981ad47d0298b9999854dcc0923b68bd6a7b5eeb31a3696b7075281c8da",
     "public/i18n/en/learner.json": "7b0bc188fe8a6f378fb554876dea9cc991f8640bb0b20d7610638fd0ccae01ef",
     "public/i18n/en/marketing.json": "7fb36e20864a0d470b2e1a66820af705e1451df3040200bb48cdf0a958c553de",
-    "public/i18n/en/nav.json": "79fa14e4cbbfa0d7c9cae48addc77fcfe957936048475b535855b0542c9b1142",
-    "public/i18n/en/pages.json": "28a30c918c947e3c10d3aa7fdcb396f8ebf3ddd9b78cbea6a8479f8230c9bd18"
+    "public/i18n/en/nav.json": "31c52685d5a669be164c7addbed1f505549f264e9aa58c9d8ea51a5012256f8b",
+    "public/i18n/en/pages.json": "52ace475725aeca7ecf84c33bcbc5ad2be38db1bca829dd62e503c758c0543a4"
   },
   "frenchSnapshot": {
     "public/i18n/fr/allied.json": "449a65598a7fc7cadb1083fd2531c6050ea8d73049fccbd1231ba7da3a31de98",
