@@ -54,6 +54,39 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
 
   // ── Cardiovascular ────────────────────────────────────────────────────────
   {
+    objectKey: "atrialfibrillation.jpeg",
+    slugs: [
+      "atrial-fibrillation",
+      "afib-nursing",
+      "atrial-fibrillation-nursing",
+      "atrial-fibrillation-management",
+      "afib-management",
+      "atrial-fibrillation-anticoagulation",
+      "rate-vs-rhythm-control",
+      "afib-with-rvr",
+      "atrial-fibrillation-stroke-risk",
+      "paroxysmal-afib",
+      "persistent-afib",
+      "permanent-afib",
+    ],
+    keywords: [
+      "atrial fibrillation",
+      "afib",
+      "a-fib",
+      "atrial flutter",
+      "irregularly irregular",
+      "rate control afib",
+      "rhythm control afib",
+      "cardioversion",
+      "anticoagulation afib",
+      "chads vasc",
+      "stroke risk afib",
+    ],
+    bodySystems: [],
+    category: "cardiovascular",
+    caption: "Atrial fibrillation — ECG pattern, stroke risk, and rate/rhythm control nursing care",
+  },
+  {
     objectKey: "acutecoronarysyndrome.jpeg",
     slugs: [
       "acute-coronary-syndrome",
