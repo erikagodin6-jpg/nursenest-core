@@ -7,13 +7,18 @@ import {
   type AuthTransitionPresentation,
   type AuthTransitionPresentationInput,
 } from "@/lib/auth/auth-transition-presentation";
+import { createAuthTransitionTranslate } from "@/lib/auth/auth-transition-translate";
 
 export function useAuthTransitionPresentation(
   input: AuthTransitionPresentationInput,
 ): AuthTransitionPresentation {
   const { t } = useMarketingI18n();
+  const transitionT = useMemo(() => createAuthTransitionTranslate(t), [t]);
+  const studyHintKey = input.studyHint
+    ? `${input.studyHint.headline ?? ""}|${input.studyHint.detail ?? ""}`
+    : null;
   return useMemo(
-    () => resolveAuthTransitionPresentation(input, t),
+    () => resolveAuthTransitionPresentation(input, transitionT),
     [
       input.kind,
       input.pathway,
@@ -24,13 +29,13 @@ export function useAuthTransitionPresentation(
       input.onboardingState,
       input.magicLinkVariant,
       input.oauthProvider,
-      input.studyHint,
+      studyHintKey,
       input.signupTier,
       input.verifyStatus,
       input.primaryActionHref,
       input.secondaryActionHref,
       input.layout,
-      t,
+      transitionT,
     ],
   );
 }

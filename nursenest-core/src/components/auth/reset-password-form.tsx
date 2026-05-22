@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
+import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 
 type Props = {
   token: string;
   backToLoginHref: string;
-  backToLoginLabel: string;
   submitLabel: string;
   savingLabel?: string;
-  successMessage: string;
   errorGeneric: string;
   passwordLabel: string;
   confirmLabel: string;
@@ -20,10 +18,8 @@ type Props = {
 export function ResetPasswordForm({
   token,
   backToLoginHref,
-  backToLoginLabel,
   submitLabel,
   savingLabel = "Saving\u2026",
-  successMessage,
   errorGeneric,
   passwordLabel,
   confirmLabel,
@@ -70,22 +66,25 @@ export function ResetPasswordForm({
 
   if (!hasToken) {
     return (
-      <div className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-error-state>
-        <p className="nn-premium-auth-alert rounded-xl px-3 py-2 text-sm text-[var(--semantic-text-primary)]">{errorGeneric}</p>
-        <Link className="inline-block text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>
-          {backToLoginLabel}
-        </Link>
+      <div className="nn-premium-auth-form mt-6" data-nn-premium-auth-error-state>
+        <AuthTransitionShell
+          kind="magic-link-confirmation"
+          layout="panel"
+          magicLinkVariant="invalid"
+          primaryActionHref={backToLoginHref}
+        />
       </div>
     );
   }
 
   if (done) {
     return (
-      <div className="nn-premium-auth-form mt-6 space-y-4">
-        <p className="text-sm text-green-700">{successMessage}</p>
-        <Link className="nn-btn-primary inline-flex w-full justify-center rounded-xl px-4 py-2 font-bold" href={backToLoginHref}>
-          {backToLoginLabel}
-        </Link>
+      <div className="nn-premium-auth-form mt-6" data-nn-premium-auth-reset-success>
+        <AuthTransitionShell
+          kind="password-reset-success"
+          layout="panel"
+          primaryActionHref={backToLoginHref}
+        />
       </div>
     );
   }

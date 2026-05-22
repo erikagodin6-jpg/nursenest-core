@@ -26,10 +26,8 @@ export async function MarketingResetPasswordPage({
       <ResetPasswordForm
         token={token}
         backToLoginHref={loginHref}
-        backToLoginLabel={m["pages.resetPassword.backToLoginLabel"] ?? "Back To Sign In"}
         submitLabel={m["pages.resetPassword.submitLabel"] ?? "Update Password"}
         savingLabel={m["pages.resetPassword.savingLabel"] ?? "Saving\u2026"}
-        successMessage={m["pages.resetPassword.successMessage"] ?? "Your password has been updated. You can sign in now."}
         errorGeneric={
           m["pages.resetPassword.errorGeneric"] ??
           "This reset link is invalid or has expired. Request a new one from the Sign In page."

@@ -46,9 +46,10 @@ test.describe("Premium auth convergence", () => {
     await page.goto("/login?session=expired&callbackUrl=%2Fapp%2Fflashcards%3FpathwayId%3Dus-rn-nclex-rn", {
       waitUntil: "domcontentloaded",
     });
-    await expect(page.locator("[data-nn-premium-auth-session-expired]")).toBeVisible({ timeout: 15_000 });
-    await expect(page.getByText(/please sign in again/i)).toBeVisible();
-    await expect(page.getByText(/progress is saved/i)).toBeVisible();
+    await expect(page.locator('[data-auth-transition-kind="session-expired"]')).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator("[data-nn-premium-auth-session-expired]")).toBeVisible();
+    await expect(page.getByText(/session paused while you were away/i)).toBeVisible();
+    await expect(page.getByText(/study progress is saved/i)).toBeVisible();
   });
 
   test("Sign In exposes recovery, legal, account-creation, and premium OAuth hooks", async ({ page }) => {
@@ -71,6 +72,7 @@ test.describe("Premium auth convergence", () => {
 
     await page.goto("/reset-password?token=short", { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-nn-premium-auth-error-state]")).toBeVisible();
+    await expect(page.locator('[data-auth-transition-kind="magic-link-confirmation"]')).toBeVisible();
   });
 
   test("mobile auth layout is keyboard-safe and does not overflow", async ({ page }) => {

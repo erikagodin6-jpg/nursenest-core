@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
 import { AUTH_TRANSITION_I18N } from "./auth-transition-i18n-keys";
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../..");
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../../..");
 
 function loadJson(rel: string): Record<string, string> {
   return JSON.parse(readFileSync(join(repoRoot, rel), "utf8")) as Record<string, string>;

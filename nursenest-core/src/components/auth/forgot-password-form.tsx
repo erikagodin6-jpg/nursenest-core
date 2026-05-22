@@ -10,9 +10,6 @@ type Props = {
   backToLoginLabel: string;
   submitLabel: string;
   sendingLabel?: string;
-  successMessage: string;
-  /** Shown under the main success line — e.g. check spam, contact support (no account-existence hints). */
-  successDetail?: string;
   /** Fallback when the server returns an error without a safe `error` string. */
   errorMessage: string;
   /** Prefer over `errorMessage` for likely offline / failed-fetch cases. */
@@ -28,8 +25,6 @@ export function ForgotPasswordForm({
   backToLoginLabel,
   submitLabel,
   sendingLabel = "Sending\u2026",
-  successMessage,
-  successDetail,
   errorMessage,
   errorNetwork,
   errorServer,
@@ -105,11 +100,7 @@ export function ForgotPasswordForm({
   if (done) {
     return (
       <div className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-email-sent>
-        <AuthTransitionShell
-          kind="account-recovery"
-          layout="panel"
-          primaryActionHref={backToLoginHref}
-        />
+        <AuthTransitionShell kind="account-recovery" layout="panel" primaryActionHref={backToLoginHref} />
         {devUrl ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs break-all text-amber-950">
             <span className="font-semibold">Development only:</span> reset link{" "}
@@ -118,9 +109,6 @@ export function ForgotPasswordForm({
             </a>
           </p>
         ) : null}
-        <Link className="inline-block text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>
-          {backToLoginLabel}
-        </Link>
       </div>
     );
   }

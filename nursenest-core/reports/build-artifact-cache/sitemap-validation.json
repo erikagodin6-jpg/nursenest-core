@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "e114124769e35a57b487e9b389ee7f87b22fc01452256171a075fa7280a4874c",
-  "generatedAt": "2026-05-22T00:19:23.798Z",
+  "fingerprint": "ec0c291359ab822406072ae92f34f4c2d8790c60f0ca71b5fe6f09eab67aa66f",
+  "generatedAt": "2026-05-22T00:36:25.792Z",
   "inputs": [
     {
       "type": "file",
@@ -1498,6 +1498,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/verify-email/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/what-is-the-cnple/page.tsx"
     },
     {
@@ -1743,6 +1747,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/[locale]/tools/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/[locale]/verify-email/page.tsx"
     },
     {
       "type": "file",
@@ -6545,6 +6553,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 33813
+    "durationMs": 32248
   }
 }

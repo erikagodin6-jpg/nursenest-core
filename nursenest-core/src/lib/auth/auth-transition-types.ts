@@ -77,6 +77,8 @@ export type AuthTransitionPresentation = {
   motionPreset: AuthTransitionMotionPreset;
   accessibilityAnnouncement: string;
   help: string | null;
+  /** Resolved provider display name for OAuth continuation shells. */
+  oauthProviderLabel?: string | null;
 };
 
 export type AuthTransitionPresentationInput = {

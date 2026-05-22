@@ -10,7 +10,7 @@
   "auth.login": "Connexion",
   "auth.resetPassword": "Réinitialiser le mot de passe",
   "auth.signup": "Créer un compte",
-  "auth.transition.accountRecovery.eyebrow": "Account recovery",
+  "auth.transition.accountRecovery.eyebrow": "Récupération du compte",
   "auth.transition.accountRecovery.help": "Check spam or promotions. Contact support if you still cannot access your account.",
   "auth.transition.accountRecovery.loadingDetail": "Follow the steps in your inbox",
   "auth.transition.accountRecovery.loadingHeadline": "Helping you restore access",

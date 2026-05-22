@@ -11,6 +11,7 @@ import type { AuthExperienceState } from "@/components/auth/auth-experience/auth
 import { useAuthTransitionPresentation } from "@/components/auth/auth-experience/use-auth-transition-presentation";
 import type { AuthTransitionPresentationInput } from "@/lib/auth/auth-transition-types";
 import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
+import { authTransitionTelemetryProps } from "@/lib/auth/auth-transition-telemetry";
 
 export type AuthTransitionShellProps = AuthTransitionPresentationInput & {
   className?: string;
@@ -52,6 +53,7 @@ export function AuthTransitionShell({
     oauthProvider: oauthProvider ?? input.oauthProvider,
   });
   const resolvedLayout = input.layout ?? (input.kind === "email-verified" ? "full-page" : "inline");
+  const telemetry = authTransitionTelemetryProps(presentation, resolvedLayout);
 
   if (resolvedLayout === "full-page" && input.kind === "email-verified") {
     return (
@@ -59,11 +61,9 @@ export function AuthTransitionShell({
         <main
           className={`nn-premium-auth-verified nn-marketing-x nn-rhythm-page ${motionClass(presentation.motionPreset)} ${className}`.trim()}
           data-nn-premium-auth-verified=""
-          data-nn-auth-transition={input.kind}
-          data-nn-auth-transition-layout="full-page"
           aria-labelledby="auth-transition-heading"
+          {...telemetry}
         >
-          <span className="sr-only">{presentation.accessibilityAnnouncement}</span>
           {presentation.watermarkStyle.ambient !== "none" ? (
             <AuthLeafBackground placement="page-ambient" />
           ) : null}
@@ -133,11 +133,9 @@ export function AuthTransitionShell({
   }
 
   if (input.kind === "oauth-continuation") {
-    const label =
-      oauthProvider === "apple" ? "Apple" : oauthProvider === "google" ? "Google" : "your provider";
+    const label = presentation.oauthProviderLabel ?? "your provider";
     return (
-      <div className={className} data-nn-auth-transition-shell="" data-nn-auth-transition={input.kind}>
-        <span className="sr-only">{presentation.accessibilityAnnouncement}</span>
+      <div className={className} data-nn-auth-transition-shell="" {...telemetry}>
         <AuthContinuationCard
           providerLabel={label}
           studyHint={input.studyHint}
@@ -161,12 +159,12 @@ export function AuthTransitionShell({
       <div
         className={`nn-auth-transition-loading mb-4 ${motionClass(presentation.motionPreset)} ${className}`.trim()}
         data-nn-auth-transition-loading
-        data-nn-auth-transition={input.kind}
         role="status"
         aria-live="polite"
         aria-busy="true"
+        aria-label={presentation.accessibilityAnnouncement}
+        {...telemetry}
       >
-        <span className="sr-only">{presentation.accessibilityAnnouncement}</span>
         <div className="nn-auth-transition-loading__mark" aria-hidden>
           <span className="nn-auth-continuation-card__leaf nn-auth-transition-loading__leaf" />
           <span className="nn-auth-continuation-card__progress" />
@@ -188,12 +186,11 @@ export function AuthTransitionShell({
     return (
       <div
         className={`nn-auth-transition-panel mb-4 space-y-3 ${motionClass(presentation.motionPreset)} ${className}`.trim()}
-        data-nn-auth-transition={input.kind}
-        data-nn-auth-transition-layout="panel"
         role="status"
         aria-live="polite"
+        aria-label={presentation.accessibilityAnnouncement}
+        {...telemetry}
       >
-        <span className="sr-only">{presentation.accessibilityAnnouncement}</span>
         <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-brand)]">{presentation.eyebrow}</p>
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{presentation.title}</h2>
         <p className="text-sm text-[var(--semantic-text-secondary)]">{presentation.body}</p>
@@ -212,8 +209,7 @@ export function AuthTransitionShell({
   }
 
   return (
-    <div className={className} data-nn-auth-transition-shell="" data-nn-auth-transition={input.kind}>
-      <span className="sr-only">{presentation.accessibilityAnnouncement}</span>
+    <div className={className} data-nn-auth-transition-shell="" {...telemetry}>
       <AuthMessageBanner
         tone={presentation.tone}
         stateId={stateIdForKind(input.kind)}

@@ -28,14 +28,6 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
         backToLoginLabel={m["pages.forgotPassword.backToLoginLabel"] ?? "Back To Sign In"}
         submitLabel={m["pages.forgotPassword.submitLabel"] ?? "Send Reset Link"}
         sendingLabel={m["pages.forgotPassword.sendingLabel"] ?? "Sending\u2026"}
-        successMessage={
-          m["pages.forgotPassword.successMessage"] ??
-          "If an account exists for that email and it can receive a password reset, we will send a link."
-        }
-        successDetail={
-          m["pages.forgotPassword.successDetail"] ??
-          "Delivery can take a few minutes. Check your spam or promotions folder. If nothing arrives, use Contact Support above so we can help you restore access."
-        }
         errorMessage={m["pages.forgotPassword.errorMessage"] ?? "Unable to complete request. Try again."}
         errorNetwork={m["pages.forgotPassword.errorNetwork"]}
         errorServer={m["pages.forgotPassword.errorServer"]}

@@ -344,6 +344,7 @@ export function resolveAuthTransitionPresentation(
   let loadingCopy = { headline: t(K.signIn.loadingDefaultHeadline), detail: null as string | null };
   let primaryAction: AuthTransitionAction | null = null;
   let secondaryAction: AuthTransitionAction | null = null;
+  let oauthProviderLabelResolved: string | null = null;
 
   switch (kind) {
     case "email-verified": {
@@ -386,6 +387,7 @@ export function resolveAuthTransitionPresentation(
     }
     case "oauth-continuation": {
       const providerLabel = oauthProviderLabel(input.oauthProvider ?? null, t);
+      oauthProviderLabelResolved = providerLabel;
       eyebrow = t(K.oauth.eyebrow, { provider: providerLabel });
       title = t(K.oauth.title);
       body = studyHint?.headline ?? t(K.oauth.messageDefault);
@@ -523,5 +525,6 @@ export function resolveAuthTransitionPresentation(
     motionPreset: motionPresetForKind(kind),
     accessibilityAnnouncement,
     help,
+    oauthProviderLabel: oauthProviderLabelResolved,
   };
 }
