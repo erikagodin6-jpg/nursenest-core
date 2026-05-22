@@ -59,6 +59,10 @@ export type PracticeTestPathwayOption = {
   id: string;
   label: string;
   examFamily: string;
+  countrySlug?: ExamPathwayDefinition["countrySlug"];
+  roleTrack?: ExamPathwayDefinition["roleTrack"];
+  examCode?: string;
+  shortName?: string;
   /**
    * Mirrors {@link catPathwayExamCodeLabel} / `shortName` so hub UI can disambiguate CAT tracks
    * without importing the exam catalog client-side.
@@ -87,6 +91,7 @@ export type StudyLaunchPayload = {
   filters?: Record<string, string | number | boolean | null>;
   count?: number;
   shuffle?: boolean;
+  unlimited?: boolean;
 };
 
 /** Practice hub: bias/narrow pools without hard-failing when filters are too tight (server-side expansion). */

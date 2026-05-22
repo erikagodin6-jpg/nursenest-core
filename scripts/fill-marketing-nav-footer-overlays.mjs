@@ -25,11 +25,11 @@ import {
   mustachePlaceholders,
 } from "./lib/nav-i18n-audit.mjs";
 import { ensureRequiredEnNavKeys } from "./lib/ensure-en-nav-keys.mjs";
+import { loadLocaleFlatMarketingMap, resolveMarketingI18nAppRoot } from "./lib/i18n-app-root.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const NEST_ROOT = path.join(__dirname, "..");
-const REPO_ROOT = path.join(NEST_ROOT, "..");
-const EN_PATH = path.join(NEST_ROOT, "public", "i18n", "en.json");
+const REPO_ROOT = path.join(__dirname, "..");
+const NEST_ROOT = resolveMarketingI18nAppRoot(REPO_ROOT);
 const LOCALE_DIR = path.join(REPO_ROOT, "tools", "i18n", "marketing", "locale");
 
 const LANG_OPTS = {
@@ -117,13 +117,12 @@ async function fillLocale(code) {
   const opts = LANG_OPTS[code];
   if (!opts) throw new Error(`No LANG_OPTS for ${code}`);
 
-  const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
-  const mergedPath = path.join(NEST_ROOT, "public", "i18n", `${code}.json`);
-  if (!fs.existsSync(mergedPath)) {
-    console.warn(`[${code}] skip: missing ${mergedPath}`);
+  const en = loadLocaleFlatMarketingMap(NEST_ROOT, "en");
+  const locMap = loadLocaleFlatMarketingMap(NEST_ROOT, code);
+  if (!en || !locMap) {
+    console.warn(`[${code}] skip: missing compiled i18n shards`);
     return 0;
   }
-  const locMap = JSON.parse(fs.readFileSync(mergedPath, "utf8"));
   const r = auditOneLocale(code, en, locMap);
   const work = keysNeedingOverlayFix(r);
 
@@ -202,8 +201,8 @@ async function fillLocale(code) {
 
 async function main() {
   ensureRequiredEnNavKeys();
-  if (!fs.existsSync(EN_PATH)) {
-    console.error(`Missing ${EN_PATH} — run: npm run i18n:compile (repo root)`);
+  if (!loadLocaleFlatMarketingMap(NEST_ROOT, "en")) {
+    console.error(`Missing compiled English i18n shards — run: npm run i18n:compile (repo root)`);
     process.exit(1);
   }
 

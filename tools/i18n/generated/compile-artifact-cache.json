@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "i18n_compile",
-  "fingerprint": "eeae42e95035225ba4f5d97bb0fa775810ed1bc3840adfccd0f741da52e99418",
-  "generatedAt": "2026-05-22T00:18:48.468Z",
+  "fingerprint": "cfa70ee8a5c47a1c64ac7c9e1e592e34a066a8e9858049b9e1522fc13221b16c",
+  "generatedAt": "2026-05-22T01:04:39.664Z",
   "inputs": [
     {
       "type": "file",
@@ -1286,9 +1286,9 @@
     }
   ],
   "outputs": [
-    "/root/nursenest-core/client/public/i18n",
-    "/root/nursenest-core/nursenest-core/public/i18n",
-    "/root/nursenest-core/nursenest-core/src/lib/i18n/marketing-message-keys.generated.ts"
+    "/workspace/client/public/i18n",
+    "/workspace/nursenest-core/public/i18n",
+    "/workspace/nursenest-core/src/lib/i18n/marketing-message-keys.generated.ts"
   ],
   "metadata": {
     "languageCount": 22,

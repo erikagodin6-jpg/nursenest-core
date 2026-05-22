@@ -119,7 +119,7 @@ export function resolveEducationalCognitionFromSession(
     topicSlug: weakTopic.toLowerCase().replace(/\s+/g, "-"),
     topicLabel: weakTopic,
     pathwayId,
-    sourceSurface: "post_session_cognition",
+    sourceSurface: "post_exam_coaching",
     coachingModel: base.coachingModel,
     learnerState: coachingReport.learnerState,
   });
@@ -127,7 +127,7 @@ export function resolveEducationalCognitionFromSession(
     { ...base, learnerState: coachingReport.learnerState, coachingReport },
     traversal.steps,
   );
-  const postMeasurementInput = resolveMeasurementCognitionInput({
+  const postMeasurementInput = governMeasurementCognitionInput({
     learnerState: coachingReport.learnerState,
   });
   const measurementSlice = buildMeasurementCognitionSlice(

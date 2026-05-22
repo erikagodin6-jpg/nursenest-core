@@ -447,6 +447,102 @@ export const MANUAL_NAV_OVERRIDES = {
   },
 };
 
+const CARRYOVER_NAV_OVERRIDES = {
+  fr: {
+    "footer.howItWorks": "Fonctionnement",
+    "footer.regionalHubLinks": "Carrefours régionaux",
+    "nav.availableForRegion": "Disponible pour {{region}}",
+    "nav.onlyLanguageAvailable": "Seul {{language}} est disponible pour {{region}}.",
+    "nav.selectLanguage": "Choisir la langue",
+  },
+  es: {
+    "footer.howItWorks": "Cómo funciona",
+    "footer.regionalHubLinks": "Centros regionales",
+    "nav.availableForRegion": "Disponible para {{region}}",
+    "nav.onlyLanguageAvailable": "Solo {{language}} está disponible para {{region}}.",
+    "nav.selectLanguage": "Seleccionar idioma",
+  },
+  tl: {
+    "footer.howItWorks": "Paano ito gumagana",
+    "footer.regionalHubLinks": "Mga rehiyonal na hub",
+    "nav.availableForRegion": "Available para sa {{region}}",
+    "nav.onlyLanguageAvailable": "{{language}} lang ang available para sa {{region}}.",
+    "nav.selectLanguage": "Pumili ng wika",
+  },
+  hi: {
+    "footer.howItWorks": "यह कैसे काम करता है",
+    "footer.regionalHubLinks": "क्षेत्रीय हब",
+    "nav.availableForRegion": "{{region}} के लिए उपलब्ध",
+    "nav.onlyLanguageAvailable": "{{region}} के लिए केवल {{language}} उपलब्ध है।",
+    "nav.selectLanguage": "भाषा चुनें",
+  },
+  pt: {
+    "components.footer.npExamPrepCa": "Preparação NP (Canadá)",
+    "components.footer.npExamPrepUs": "Preparação NP (EUA)",
+    "footer.globalPathwaysLine": "Percursos na América do Norte, Ásia e Oriente Médio",
+    "footer.howItWorks": "Como funciona",
+    "footer.learnerSignIn": "Entrar como estudante",
+    "footer.linkNpExamPrepCa": "Preparação NP (Canadá)",
+    "footer.linkNpExamPrepUs": "Preparação NP (EUA)",
+    "footer.linkNursingExamPrepHub": "Hub de preparação para exames de enfermagem",
+    "footer.regionalHubLinks": "Hubs regionais",
+    "footer.supportingNursesGlobally": "Apoiando enfermeiros no mundo todo",
+    "nav.availableForRegion": "Disponível para {{region}}",
+    "nav.badge.alliedHealth": "Saúde aliada",
+    "nav.clearCountrySearch": "Limpar busca",
+    "nav.examTracks.more": "Mais trilhas",
+    "nav.getStarted": "Começar",
+    "nav.hub.lessonProgress": "{completed} de {total} aulas concluídas",
+    "nav.learnerMain.aria": "Navegação do estudante",
+    "nav.marketingFlow.learn": "Aprender",
+    "nav.marketingFlow.practice": "Praticar",
+    "nav.marketingMore": "Mais",
+    "nav.mega.allied.category.acute": "Atendimento de campo e agudo",
+    "nav.mega.allied.category.clinical": "Apoio clínico e comunitário",
+    "nav.mega.allied.category.lab": "Laboratório e imagem",
+    "nav.mega.allied.category.therapy": "Terapia e reabilitação",
+    "nav.mega.allied.hubDescription":
+      "Selecione sua carreira para acessar aulas, questões práticas e preparação para exames no escopo da sua profissão.",
+    "nav.mega.allied.label": "Aliados",
+    "nav.mega.examHubSuffix": "Hub do exame",
+    "nav.mega.group.learn": "Aprender",
+    "nav.mega.group.practice": "Praticar",
+    "nav.mega.group.studyTools": "Ferramentas de estudo",
+    "nav.mega.link.catReadiness": "Exame de prontidão CAT",
+    "nav.mega.link.howItWorks": "Como funciona",
+    "nav.mega.link.lessons": "Aulas",
+    "nav.mega.link.practiceExams": "Exames práticos",
+    "nav.mega.link.practiceQuestions": "Questões práticas",
+    "nav.mega.newGrad.hubDescription":
+      "Comece pela trilha principal para recém-formados e avance com atividades práticas de estudo.",
+    "nav.mega.newGrad.label": "Recém-formado",
+    "nav.mega.np.badgeCA": "Recomendado para o Canadá",
+    "nav.mega.np.badgeUS": "Recomendado para os EUA",
+    "nav.mega.np.hubDescription": "Abra o hub NP para escolher sua ramificação de exame e começar a estudar.",
+    "nav.mega.openHub": "Abrir hub",
+    "nav.mega.pn.badgeCA": "Recomendado para o Canadá",
+    "nav.mega.pn.badgeUS": "Recomendado para os EUA",
+    "nav.mega.pn.hubDescription": "Escolha o hub da sua região para iniciar uma preparação específica da trilha.",
+    "nav.mega.rn.hubDescription": "Comece no hub RN para praticar, fazer aulas e acompanhar sua prontidão.",
+    "nav.mega.startHere": "Comece aqui",
+    "nav.noCountriesFound": "Nenhum país encontrado",
+    "nav.onlyLanguageAvailable": "Somente {{language}} está disponível para {{region}}.",
+    "nav.pathwayHubsAria": "Hubs de exames por trilha",
+    "nav.searchCountriesAria": "Pesquisar países",
+    "nav.searchCountriesPlaceholder": "Pesquisar países...",
+    "nav.selectLanguage": "Selecionar idioma",
+    "nav.tierDrop.alliedDesc": "Preparação para certificações em disciplinas de saúde aliada",
+    "nav.tierDrop.alliedTitle": "Saúde aliada",
+    "nav.tierDrop.lpnDesc": "Preparação para exame de enfermagem prática para candidatos dos EUA (LPN/LVN)",
+    "nav.tierDrop.npDesc": "FNP, PMHNP, AGPCNP e outras trilhas de certificação NP",
+    "nav.tierDrop.npTitle": "Enfermeiro especialista",
+    "nav.tierDrop.preNursingDesc": "Cursos de base e preparação para exames de admissão",
+    "nav.tierDrop.rpnDesc": "Preparação para exame de enfermagem prática para candidatos canadenses (RPN)",
+    "nav.tierDrop.toolsDesc": "Flashcards, tutor de IA e utilitários de estudo",
+    "nav.tierDrop.toolsTitle": "Ferramentas de estudo",
+  },
+};
+
 function main() {
   ensureRequiredEnNavKeys();
   const en = loadLocaleFlatMarketingMap(APP_ROOT, "en");
@@ -476,7 +572,11 @@ function main() {
         n += 1;
       }
     }
-    for (const [k, v] of Object.entries(MANUAL_NAV_OVERRIDES[code] ?? {})) {
+    const manualOverrides = {
+      ...(MANUAL_NAV_OVERRIDES[code] ?? {}),
+      ...(CARRYOVER_NAV_OVERRIDES[code] ?? {}),
+    };
+    for (const [k, v] of Object.entries(manualOverrides)) {
       if (!audited.has(k)) {
         console.warn(`[${code}] skip non-audited key: ${k}`);
         continue;

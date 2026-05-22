@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
-const I18N_DIR = path.join(ROOT, "public", "i18n");
+const I18N_DIR = path.join(ROOT, "nursenest-core", "public", "i18n");
 
 const PATCH = {
   ko: {

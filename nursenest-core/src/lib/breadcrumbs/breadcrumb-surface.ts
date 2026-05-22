@@ -84,6 +84,7 @@ const RESOLVER_KIND_TO_SURFACE: Record<string, BreadcrumbSurface> = {
   "pathway-questions-hub": "qbank",
   "pathway-cat": "cat",
   "pathway-pricing": "pricing",
+  "clinical-interpretation-hub": "interpretation_guide",
   "clinical-interpretation-guide": "interpretation_guide",
 };
 
@@ -109,7 +110,7 @@ const LEARNER_KIND_TO_SURFACE: Record<string, LearnerBreadcrumbSurface> = {
   "study-trail": "review_session",
   "weak-area": "remediation",
   "remediation-ladder": "remediation",
-  "interpretation-study": "interpretation_guide",
+  "interpretation-study": "study_plan",
   "ai-tutor": "remediation",
   "session-recovery": "review_session",
   "focus-areas": "remediation",

@@ -24,7 +24,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AccountNotesPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).account.notes");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Notes & Highlights");
 
   // ── Auth guard ──────────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {

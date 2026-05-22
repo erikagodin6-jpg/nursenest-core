@@ -2,6 +2,9 @@ import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intellige
 import { EMPTY_LEARNER_STATE } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import type {
   CognitionReliabilityTier,
+  CognitionContinuityLineage,
+  CognitionEnvelopeGovernanceMetadata,
+  CognitionHydrationProvenance,
   DurableLearnerCognitionEnvelope,
 } from "@/lib/educational-cognition/cognition-snapshot-types";
 import { buildFreshCognitionEnvelope } from "@/lib/educational-cognition/cognition-snapshot-migrations";
@@ -10,12 +13,6 @@ import {
   buildCognitionVersionMetadata,
   GRAPH_VERSION,
 } from "@/lib/educational-cognition/cognition-version-governance";
-import type {
-  CognitionContinuityLineage,
-  CognitionEnvelopeGovernanceMetadata,
-  CognitionHydrationProvenance,
-  DurableLearnerCognitionEnvelope,
-} from "@/lib/educational-cognition/cognition-snapshot-types";
 
 export type CognitionHydrationMode = "full" | "partial" | "degraded" | "fresh";
 
@@ -146,7 +143,7 @@ function buildContinuityLineage(
 
 export function buildEnvelopeGovernanceMetadata(args: {
   envelope: DurableLearnerCognitionEnvelope | null;
-  hydrationState: CognitionHydrationState;
+  hydrationState: CognitionHydrationMode;
   reliabilityTier: CognitionReliabilityTier;
 }): CognitionEnvelopeGovernanceMetadata {
   const version = buildCognitionVersionMetadata({

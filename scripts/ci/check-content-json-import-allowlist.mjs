@@ -19,6 +19,18 @@ const PATHWAY_LESSONS_ALLOW = new Set([
   // TypeScript registry/shard files — small manifests, not bundle-bloating JSON
   "registry",
   "respiratory-therapy",
+  // Allied profession TS catalog shards (explicit manifests; not JSON corpora)
+  "pharmacy-technician",
+  "medical-laboratory-technology",
+  "medical-imaging",
+  "emergency-medical-services",
+  "sonography",
+  "medical-assistant",
+  "dental-hygiene",
+  "physiotherapy-rehab",
+  "occupational-therapy",
+  "mental-health-social-work",
+  "dietetic-technician",
   "new-grad-transition-catalog.json",
   "rn-nclex-master-map.json",
   "rn-nclex-cardiovascular-expansion-catalog.json",

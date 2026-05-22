@@ -49,7 +49,7 @@ export function AuthTransitionShell({
 }: AuthTransitionShellProps) {
   const presentation = useAuthTransitionPresentation({
     ...input,
-    oauthProvider: oauthProvider ?? input.oauthProvider,
+    oauthProvider,
   });
   const resolvedLayout = input.layout ?? (input.kind === "email-verified" ? "full-page" : "inline");
 

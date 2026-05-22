@@ -288,8 +288,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           path={pathname}
           name={pathway.displayName}
           description={pathway.seoDescription}
-          teaches={[pathway.examLabel, pathway.displayName]}
-          occupationalCredential={pathway.examLabel}
+          teaches={[pathway.shortName, pathway.displayName]}
+          occupationalCredential={pathway.shortName}
         />
 
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />

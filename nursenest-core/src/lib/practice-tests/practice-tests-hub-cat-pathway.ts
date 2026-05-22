@@ -1,16 +1,18 @@
 import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "@/lib/practice-tests/types";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 
 /** Client shell for inline CAT launch from hub pathway options. */
 export function practiceTestPathwayClientShellFromOption(
   option: PracticeTestPathwayOption,
 ): PracticeTestPathwayClientShell {
+  const pathway = getExamPathwayById(option.id);
   return {
     id: option.id,
-    countrySlug: option.countrySlug,
-    roleTrack: option.roleTrack,
-    examCode: option.examCode,
-    shortName: option.shortName,
-    examFamily: option.examFamily,
+    countrySlug: option.countrySlug ?? pathway?.countrySlug ?? "us",
+    roleTrack: option.roleTrack ?? pathway?.roleTrack ?? "rn",
+    examCode: option.examCode ?? pathway?.examCode ?? option.id,
+    shortName: option.shortName ?? pathway?.shortName ?? option.examCodeLabel ?? option.label,
+    examFamily: (option.examFamily ?? pathway?.examFamily) as PracticeTestPathwayClientShell["examFamily"],
   };
 }
 

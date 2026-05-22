@@ -2,7 +2,7 @@
  * Educational Cognition OS — canonical substrate for all learner-facing intelligence surfaces.
  */
 import { orchestrateEducationalGraph } from "@/lib/educational-graph/educational-graph-orchestrator";
-import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
+import type { EduGraphStep, GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import {
   resolveEducationalCognitionContext,
   type ReadinessResult,
@@ -37,14 +37,14 @@ export type ResolveLearnerCognitionSubstrateInput = {
   weakTopicLabels?: string[];
   timing?: TimingIntelligenceResult | null;
   persistLearnerState?: boolean;
-  sourceSurface?: string;
+  sourceSurface?: GraphSourceSurface;
 };
 
 export type LearnerCognitionSubstrate = {
   ctx: EducationalCognitionContext;
   studyPlan: GovernedRnStudyPlan;
   dashboard: DashboardOrchestrationV3;
-  graphSteps: EduGraphStep[];
+  graphSteps: readonly EduGraphStep[];
   aiTutor: AiTutorContextEnvelope;
   timingRiskBand: ReturnType<typeof deriveTimingCognitionSignals>["riskBand"];
   studyPlanDensity: ReturnType<typeof studyPlanDensityFromTiming>;
@@ -81,7 +81,7 @@ export function resolveLearnerCognitionSubstrate(
     topicSlug: topic.toLowerCase().replace(/\s+/g, "-"),
     topicLabel: topic,
     pathwayId,
-    sourceSurface: input.sourceSurface ?? "cognition_substrate",
+    sourceSurface: input.sourceSurface ?? "study_plan",
     coachingModel: ctx.coachingModel,
     learnerState: ctx.learnerState,
     persistentWeakTopics: ctx.learnerState.competencyStates
@@ -119,7 +119,7 @@ export function resolveLearnerCognitionSubstrate(
     saveDurableLearnerCognition(input.userId, ctx.learnerState, { graphContinuity });
   }
 
-  emitCognitionTelemetryV5(ctx, "study_plan_generated", input.sourceSurface ?? "cognition_substrate", {
+  emitCognitionTelemetryV5(ctx, "study_plan_generated", input.sourceSurface ?? "study_plan", {
     block_count: studyPlan.blocks.length,
     timing_risk_band: timingSignals.riskBand,
   });

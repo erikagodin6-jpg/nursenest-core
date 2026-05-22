@@ -34,7 +34,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AccountMotivationPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).account.motivation");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs("Progress");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

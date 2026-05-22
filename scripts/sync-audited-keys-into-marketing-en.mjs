@@ -9,16 +9,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getAuditedKeys } from "./lib/nav-i18n-audit.mjs";
 import { ensureRequiredEnNavKeys } from "./lib/ensure-en-nav-keys.mjs";
+import { loadLocaleFlatMarketingMap, resolveMarketingI18nAppRoot } from "./lib/i18n-app-root.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const NEST_ROOT = path.join(__dirname, "..");
-const REPO_ROOT = path.join(NEST_ROOT, "..");
-const EN_PATH = path.join(NEST_ROOT, "public", "i18n", "en.json");
+const REPO_ROOT = path.join(__dirname, "..");
+const NEST_ROOT = resolveMarketingI18nAppRoot(REPO_ROOT);
 const MARKETING_EN = path.join(REPO_ROOT, "tools", "i18n", "marketing", "marketing-en.json");
 
 function main() {
   ensureRequiredEnNavKeys();
-  const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
+  const en = loadLocaleFlatMarketingMap(NEST_ROOT, "en");
+  if (!en) throw new Error("Missing compiled English i18n shards — run npm run i18n:compile");
   const marketingEn = JSON.parse(fs.readFileSync(MARKETING_EN, "utf8"));
   const audited = getAuditedKeys(en);
   let added = 0;

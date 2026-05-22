@@ -214,7 +214,8 @@ export function SignupForm({
     }
   }
 
-  const signupTierForTransition = tier === "NP" ? "NP" : tier === "PN" ? "PN" : tier === "RN" ? "RN" : "ALLIED";
+  const signupTierForTransition =
+    tier === "NP" ? "NP" : tier === "RPN" || tier === "LVN_LPN" ? "PN" : tier === "RN" ? "RN" : "ALLIED";
 
   return (
     <AuthFormLayout

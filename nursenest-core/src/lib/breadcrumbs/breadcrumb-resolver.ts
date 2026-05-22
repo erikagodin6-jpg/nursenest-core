@@ -33,7 +33,15 @@ import {
   nursingGlossaryHubBreadcrumbs,
   nursingGlossaryTermBreadcrumbs,
 } from "@/lib/breadcrumbs/glossary-breadcrumbs";
+import {
+  clinicalInterpretationGuideBreadcrumbs,
+  clinicalInterpretationHubBreadcrumbs,
+} from "@/lib/breadcrumbs/clinical-interpretation-breadcrumbs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import {
+  clinicalInterpretationGuidePath,
+  type ClinicalInterpretationCategory,
+} from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 import type { PathwayMarketingHubBreadcrumbOpts } from "@/lib/seo/pathway-breadcrumbs";
 import { displayCategoryForPathwayMarketingHubLesson } from "@/lib/lessons/marketing-lessons-hub-category";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
@@ -137,6 +145,13 @@ export type ResolveNursingGlossaryTermInput = {
   topicSlug: string;
 };
 export type ResolveCaseStudiesBreadcrumbsInput = { kind: "case-studies" };
+export type ResolveClinicalInterpretationHubInput = { kind: "clinical-interpretation-hub" };
+export type ResolveClinicalInterpretationGuideInput = {
+  kind: "clinical-interpretation-guide";
+  category: ClinicalInterpretationCategory;
+  guideTitle: string;
+  guideSlug: string;
+};
 
 export type BreadcrumbResolverInput =
   | ResolvePathwayLessonDetailBreadcrumbsInput
@@ -156,7 +171,9 @@ export type BreadcrumbResolverInput =
   | ResolveGlossaryTermBreadcrumbsInput
   | ResolveNursingGlossaryHubInput
   | ResolveNursingGlossaryTermInput
-  | ResolveCaseStudiesBreadcrumbsInput;
+  | ResolveCaseStudiesBreadcrumbsInput
+  | ResolveClinicalInterpretationHubInput
+  | ResolveClinicalInterpretationGuideInput;
 
 export function categoryBreadcrumbFromLesson(
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">,
@@ -272,6 +289,28 @@ export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbRe
         surface: "case_study",
         pathname: "/case-studies",
         canonicalRootId: "case_studies",
+      });
+    }
+    case "clinical-interpretation-hub": {
+      const raw = clinicalInterpretationHubBreadcrumbs();
+      return applyGovernedBreadcrumbResolution({
+        resolution: raw,
+        surface: "interpretation_guide",
+        pathname: "/clinical-interpretation",
+        canonicalRootId: "clinical_interpretation",
+      });
+    }
+    case "clinical-interpretation-guide": {
+      const raw = clinicalInterpretationGuideBreadcrumbs({
+        category: input.category,
+        guideTitle: input.guideTitle,
+        guideSlug: input.guideSlug,
+      });
+      return applyGovernedBreadcrumbResolution({
+        resolution: raw,
+        surface: "interpretation_guide",
+        pathname: clinicalInterpretationGuidePath(input.guideSlug),
+        canonicalRootId: "clinical_interpretation",
       });
     }
     default:

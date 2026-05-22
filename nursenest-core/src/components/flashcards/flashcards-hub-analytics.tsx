@@ -6,7 +6,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
-import { topicStrengthChipClass } from "@/lib/ui/semantic-chips";
+import { topicStrengthChipClass } from "@/lib/ui/learner-semantic-chips";
 import type { FlashcardSrsStats } from "@/components/flashcards/flashcard-srs-stats-strip";
 
 type DueSummary = {

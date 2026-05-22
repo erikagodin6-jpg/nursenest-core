@@ -174,7 +174,7 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
     catSelectionBasis: opts.catSelectionBasis,
     catPresentationMode: "practice",
     catExamFeedbackMode: "study",
-    catAdaptiveSessionType: launch.catAdaptiveSessionType,
+    catAdaptiveSessionType: "practice",
     pathwayId: opts.pathwayId,
     timedMode: false,
     timeLimitSec: null,
