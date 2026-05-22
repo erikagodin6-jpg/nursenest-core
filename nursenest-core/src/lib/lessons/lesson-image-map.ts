@@ -54,6 +54,35 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
 
   // ── Cardiovascular ────────────────────────────────────────────────────────
   {
+    objectKey: "CABG.jpeg",
+    slugs: [
+      "cabg",
+      "cabg-nursing",
+      "coronary-artery-bypass-graft",
+      "coronary-artery-bypass-grafting",
+      "coronary-artery-bypass-surgery",
+      "cabg-postoperative-care",
+      "cabg-perioperative",
+      "open-heart-surgery-nursing",
+      "cardiac-surgery-cabg",
+    ],
+    keywords: [
+      "cabg",
+      "coronary artery bypass",
+      "bypass graft",
+      "open heart surgery",
+      "cardiac bypass",
+      "off pump cabg",
+      "on pump cabg",
+      "saphenous vein graft",
+      "internal mammary artery",
+      "cardiopulmonary bypass nursing",
+    ],
+    bodySystems: [],
+    category: "cardiovascular",
+    caption: "Coronary artery bypass grafting (CABG) — surgical revascularization and perioperative nursing care",
+  },
+  {
     objectKey: "atrialfibrillation.jpeg",
     slugs: [
       "atrial-fibrillation",
