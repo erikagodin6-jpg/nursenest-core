@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 
 type Props = {
@@ -104,8 +105,11 @@ export function ForgotPasswordForm({
   if (done) {
     return (
       <div className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-email-sent>
-        <p className="text-sm text-muted">{successMessage}</p>
-        {successDetail ? <p className="text-sm text-muted">{successDetail}</p> : null}
+        <AuthTransitionShell
+          kind="account-recovery"
+          layout="panel"
+          primaryActionHref={backToLoginHref}
+        />
         {devUrl ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs break-all text-amber-950">
             <span className="font-semibold">Development only:</span> reset link{" "}

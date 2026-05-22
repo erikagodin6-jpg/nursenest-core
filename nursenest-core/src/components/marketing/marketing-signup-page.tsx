@@ -1,7 +1,4 @@
-import { Suspense } from "react";
-import { AuthFlowTrustReassurance } from "@/components/auth/auth-flow-trust-reassurance";
-import { PremiumAuthShell } from "@/components/auth/premium-auth-shell";
-import { SignupForm } from "@/components/auth/signup-form";
+import { SignupExperienceClient } from "@/components/auth/signup-experience-client";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
@@ -11,27 +8,19 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
   const termsHref = withMarketingLocale(locale, "/terms");
   const privacyHref = withMarketingLocale(locale, "/privacy");
   const contactHref = withMarketingLocale(locale, "/contact");
+
   return (
-    <PremiumAuthShell
-      variant="signup"
-      title={m["pages.signup.h1"] ?? "Create Account"}
-      subtitle={m["pages.signup.subtitle"] ?? "Choose your pathway and start a connected NurseNest study plan."}
+    <SignupExperienceClient
+      title={m["pages.signup.h1"] ?? "Create account"}
+      subtitle={
+        m["pages.signup.subtitle"] ??
+        "Choose your pathway and start a connected NurseNest study plan."
+      }
       termsHref={termsHref}
       privacyHref={privacyHref}
       contactHref={contactHref}
-    >
-      <AuthFlowTrustReassurance
-        variant="signup"
-        contactHref={contactHref}
-      />
-      <Suspense fallback={<div className="mt-6 h-64 animate-pulse rounded-xl bg-muted/40" aria-hidden />}>
-        <SignupForm
-          termsHref={termsHref}
-          privacyHref={privacyHref}
-          contactHref={contactHref}
-          forgotPasswordHref={withMarketingLocale(locale, "/forgot-password")}
-        />
-      </Suspense>
-    </PremiumAuthShell>
+      forgotPasswordHref={withMarketingLocale(locale, "/forgot-password")}
+      mobileEyebrow="NurseNest · Blossom"
+    />
   );
 }

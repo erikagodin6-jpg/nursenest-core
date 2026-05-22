@@ -13,22 +13,29 @@ export async function GET(req: NextRequest) {
   const ip = getTrustedClientIp(req);
   const rl = await checkRateLimitUnified(`verify-email:${ip}`, { windowMs: 60_000, max: 15 });
   if (!rl.ok) {
-    return NextResponse.redirect(`${base}/login?verify=rate_limited`);
+    return NextResponse.redirect(`${base}/verify-email?status=rate_limited`);
   }
 
   const token = req.nextUrl.searchParams.get("token");
   if (!token || token.length < 20) {
-    return NextResponse.redirect(`${base}/login?verify=invalid`);
+    return NextResponse.redirect(`${base}/verify-email?status=invalid`);
   }
 
   const result = await consumeVerificationToken(token);
 
   if (!result.ok) {
     safeServerLog("auth", "email_verify_failed", { reason: result.reason, ip: ip.slice(0, 64) });
-    return NextResponse.redirect(`${base}/login?verify=${result.reason}`);
+    const reason = result.reason === "expired" ? "expired" : "invalid";
+    return NextResponse.redirect(`${base}/verify-email?status=${reason}`);
   }
 
   await captureServerEvent(analyticsDistinctId(result.userId), "email_verified", {}).catch(() => {});
 
-  return NextResponse.redirect(`${base}/login?verify=success`);
+  const callbackRaw = req.nextUrl.searchParams.get("callbackUrl");
+  const successUrl = new URL(`${base}/verify-email`);
+  successUrl.searchParams.set("status", "success");
+  if (callbackRaw?.trim()) {
+    successUrl.searchParams.set("callbackUrl", callbackRaw.trim());
+  }
+  return NextResponse.redirect(successUrl.toString());
 }

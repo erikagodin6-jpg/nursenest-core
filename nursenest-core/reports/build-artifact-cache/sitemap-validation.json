@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "47ffd9a3a79dcf5f37b4b0cf0df77374b206579c08818de742193e59edf28a7e",
-  "generatedAt": "2026-05-21T22:34:59.299Z",
+  "fingerprint": "e114124769e35a57b487e9b389ee7f87b22fc01452256171a075fa7280a4874c",
+  "generatedAt": "2026-05-22T00:19:23.798Z",
   "inputs": [
     {
       "type": "file",
@@ -806,14 +806,6 @@
     },
     {
       "type": "file",
-      "path": "src/app/(marketing)/(default)/canada-nclex-rn/[topic]/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/(marketing)/(default)/canada-nclex-rn/page.tsx"
-    },
-    {
-      "type": "file",
       "path": "src/app/(marketing)/(default)/canada-np-exam-prep/page.tsx"
     },
     {
@@ -859,6 +851,14 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/canada/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rn/nclex-rn/guide/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rn/nclex-rn/page.tsx"
     },
     {
       "type": "file",
@@ -2790,6 +2790,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/account/oauth-disconnect/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/adaptive-loop/route.ts"
     },
     {
@@ -3274,6 +3278,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/feed.xml/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/global-error.tsx"
     },
     {
@@ -3463,6 +3471,10 @@
     {
       "type": "file",
       "path": "src/app/robots.txt/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/rss.xml/route.ts"
     },
     {
       "type": "file",
@@ -4043,6 +4055,10 @@
     {
       "type": "file",
       "path": "src/lib/blog/blog-review-flags.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/blog/blog-rss-feed.ts"
     },
     {
       "type": "file",
@@ -6070,6 +6086,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/normalize-page-title.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/normalize-page-title.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/np-advanced-seo-inventory.test.ts"
     },
     {
@@ -6521,6 +6545,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 30621
+    "durationMs": 33813
   }
 }

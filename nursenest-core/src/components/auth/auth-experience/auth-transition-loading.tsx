@@ -1,37 +1,24 @@
 "use client";
 
-import type { AuthTransitionKind } from "@/lib/auth/auth-transition-governance";
-import { resolveAuthLoadingPresentation } from "@/lib/auth/auth-transition-governance";
+import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
+import type { AuthTransitionKind } from "@/lib/auth/auth-transition-types";
 
 export type AuthTransitionLoadingProps = {
   kind: AuthTransitionKind;
   callbackUrl?: string | null;
+  signupTier?: "RN" | "PN" | "NP" | "ALLIED" | null;
   className?: string;
 };
 
-/**
- * Premium auth loading strip — blossom pulse, no blank spinner screens.
- */
-export function AuthTransitionLoading({ kind, callbackUrl, className = "" }: AuthTransitionLoadingProps) {
-  const { headline, detail } = resolveAuthLoadingPresentation(kind, callbackUrl);
-
+/** @deprecated Prefer {@link AuthTransitionShell} with `showLoading` — retained for imports. */
+export function AuthTransitionLoading({ kind, callbackUrl, signupTier, className = "" }: AuthTransitionLoadingProps) {
   return (
-    <div
-      className={`nn-auth-transition-loading mb-4 ${className}`.trim()}
-      data-nn-auth-transition-loading
-      data-nn-auth-transition-kind={kind}
-      role="status"
-      aria-live="polite"
-      aria-busy="true"
-    >
-      <div className="nn-auth-transition-loading__mark" aria-hidden>
-        <span className="nn-auth-continuation-card__leaf nn-auth-transition-loading__leaf" />
-        <span className="nn-auth-continuation-card__progress" />
-      </div>
-      <div className="nn-auth-transition-loading__copy">
-        <p className="nn-auth-transition-loading__headline">{headline}</p>
-        {detail ? <p className="nn-auth-transition-loading__detail">{detail}</p> : null}
-      </div>
-    </div>
+    <AuthTransitionShell
+      kind={kind}
+      callbackUrl={callbackUrl}
+      signupTier={signupTier}
+      showLoading
+      className={className}
+    />
   );
 }

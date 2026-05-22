@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import type { NextAuthConfig } from "next-auth";
 import Apple from "next-auth/providers/apple";
 import Google from "next-auth/providers/google";
+import { generateAppleClientSecretJwt } from "@/lib/auth/apple-client-secret-jwt";
 
 function envTrim(key: string): string | undefined {
   const v = process.env[key]?.trim();
@@ -53,14 +54,16 @@ function buildAppleProvider(): NextAuthConfig["providers"][number] | null {
   const privateKey = resolveApplePrivateKey();
   if (!teamId || !keyId || !privateKey) return null;
 
+  const clientSecret = generateAppleClientSecretJwt({
+    clientId,
+    teamId,
+    keyId,
+    privateKey,
+  });
+
   return Apple({
     clientId,
-    clientSecret: {
-      appleId: clientId,
-      teamId,
-      keyId,
-      privateKey,
-    },
+    clientSecret,
   });
 }
 

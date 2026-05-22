@@ -35,11 +35,11 @@ test.describe("Premium auth convergence", () => {
 
   test("Sign Up exposes pathway selection and legal links", async ({ page }) => {
     await page.goto("/signup", { waitUntil: "domcontentloaded" });
-    await expect(page.locator('[data-nn-premium-auth-signup-pathway]')).toBeVisible();
-    await expect(page.locator('[data-nn-premium-auth-signup-pathway]').getByText("Choose Your Pathway")).toBeVisible();
-    await expect(page.locator("[data-nn-premium-auth-pathways]").getByText("RN / NCLEX-RN")).toBeVisible();
-    await expect(page.locator("[data-nn-premium-auth-pathways]").getByText("Pre-Nursing")).toBeVisible();
-    await expect(page.getByRole("button", { name: /create account/i })).toBeVisible();
+    await expect(page.locator("[data-nn-auth-signup-pathways]")).toBeVisible();
+    await expect(page.getByText("Choose your pathway").first()).toBeVisible();
+    await expect(page.locator("[data-nn-auth-signup-pathways]").getByText("RN")).toBeVisible();
+    await expect(page.locator("[data-nn-auth-signup-pathways]").getByText("NCLEX-RN")).toBeVisible();
+    await expect(page.getByRole("button", { name: /^continue$/i })).toBeVisible();
   });
 
   test("session expired recovery preserves premium shell", async ({ page }) => {
@@ -77,7 +77,7 @@ test.describe("Premium auth convergence", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/signup", { waitUntil: "domcontentloaded" });
     await expect(page.locator('[data-nn-premium-auth-system="signup"]')).toBeVisible();
-    await expect(page.locator("[data-nn-premium-auth-story]")).toBeHidden();
+    await expect(page.locator("[data-nn-premium-auth-signup-story], [data-nn-premium-auth-story]").first()).toBeHidden();
     await expect(page.locator("[data-nn-premium-auth-card]")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });

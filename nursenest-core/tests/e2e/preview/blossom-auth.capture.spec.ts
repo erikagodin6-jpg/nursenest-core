@@ -4,6 +4,9 @@
  * Source: auth-mockups/blossom-auth-premium-gallery.html
  * Output: auth-mockups/design-png/blossom-auth/*.png
  *
+ * Production transitions render via AuthTransitionShell (see docs/governance/AUTH-MOTION-SPEC.md).
+ * This capture validates static mock parity (spacing, watermark opacity, CTA hierarchy).
+ *
  * Run from nursenest-core/:
  *   npx playwright test tests/e2e/preview/blossom-auth.capture.spec.ts --project=chromium
  */

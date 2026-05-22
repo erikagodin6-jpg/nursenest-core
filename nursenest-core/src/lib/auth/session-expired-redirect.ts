@@ -27,9 +27,9 @@ export function requestHasAuthSessionCookie(request: NextRequest): boolean {
 
 export async function requestHasStaleAuthSession(request: NextRequest): Promise<boolean> {
   if (!requestHasAuthSessionCookie(request)) return false;
-  const secret = resolveAuthSecretFromEnv();
-  if (!secret) return false;
-  const token = await getAuthSessionJwtFromRequest(request, secret);
+  const resolved = resolveAuthSecretFromEnv();
+  if (!resolved.secret) return false;
+  const token = await getAuthSessionJwtFromRequest(request, resolved.secret);
   return !sessionJwtHasUserIdentity(token);
 }
 

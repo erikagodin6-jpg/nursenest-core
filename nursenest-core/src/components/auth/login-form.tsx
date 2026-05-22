@@ -11,13 +11,9 @@ import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
-import { AuthTransitionLoading } from "@/components/auth/auth-experience/auth-transition-loading";
+import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
-import {
-  authTransitionMessageTone,
-  resolveSignInSuccessPresentation,
-} from "@/lib/auth/auth-transition-governance";
-import { resolveAuthContinuationHint } from "@/lib/auth/auth-study-continuation-context";
+import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
@@ -49,12 +45,6 @@ export function LoginForm({
     () => resolveMarketingAuthRedirectTarget(pathname ?? "/", searchParams, locale),
     [searchParams, pathname, locale],
   );
-  const studyHint = useMemo(() => resolveAuthContinuationHint(redirectTarget), [redirectTarget]);
-  const signInSuccess = useMemo(
-    () => resolveSignInSuccessPresentation(redirectTarget),
-    [redirectTarget],
-  );
-
   /** Preserves `callbackUrl` (e.g. pricing + checkout intent) when switching to signup. */
   const signupHrefWithResume = useMemo(() => {
     const signupBase = withMarketingLocale(locale, "/signup");
@@ -250,12 +240,10 @@ export function LoginForm({
       }}
     >
       {alreadySignedIn ? (
-        <AuthMessageBanner
-          tone="success"
-          stateId="continuation"
-          title={studyHint?.headline ?? signInSuccess.loading.headline}
-          message={studyHint?.detail ?? signInSuccess.loading.detail}
-          help={`${signInSuccess.ctaLabel} — returning you to your study workspace.`}
+        <AuthTransitionShell
+          kind="sign-in-success"
+          layout="inline"
+          callbackUrl={redirectTarget}
         />
       ) : null}
 
@@ -315,7 +303,12 @@ export function LoginForm({
         </div>
       </div>
       {pending ? (
-        <AuthTransitionLoading kind="sign-in-success" callbackUrl={redirectTarget} />
+        <AuthTransitionShell
+          kind="sign-in-success"
+          layout="inline"
+          callbackUrl={redirectTarget}
+          showLoading
+        />
       ) : null}
 
       {error ? (

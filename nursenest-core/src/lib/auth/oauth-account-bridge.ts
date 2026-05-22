@@ -14,6 +14,7 @@ import {
 import { validateUsernameForSignup } from "@/lib/auth/username-rules";
 import { prisma } from "@/lib/db";
 import { getUserAccess, subscriptionStatusForSession } from "@/lib/entitlements/get-user-access";
+import type { SessionSubscriptionStatus } from "@/lib/entitlements/subscription-session-status";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
@@ -85,9 +86,13 @@ async function suggestAvailableUsername(email: string): Promise<string> {
 }
 
 async function mapRowToBridgeUser(row: OAuthUserRow, isNewUser: boolean): Promise<OAuthBridgeUser> {
-  const subscriptionStatus = subscriptionStatusForSession(
-    await getUserAccess(row.id).catch(() => null),
-  );
+  let subscriptionStatus: SessionSubscriptionStatus = "none";
+  try {
+    const ua = await getUserAccess(row.id);
+    subscriptionStatus = subscriptionStatusForSession(ua);
+  } catch {
+    // tolerate DB failure — do not block OAuth sign-in
+  }
 
   return {
     id: row.id,

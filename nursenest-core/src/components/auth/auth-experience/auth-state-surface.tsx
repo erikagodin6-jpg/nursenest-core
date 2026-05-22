@@ -2,20 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { AuthContinuationCard } from "@/components/auth/auth-experience/auth-continuation-card";
-import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
+import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { useAuthRouteSearchState } from "@/components/auth/auth-experience/use-auth-route-search-state";
-import {
-  authTransitionMessageTone,
-  resolveAuthenticationErrorPresentation,
-  resolveOAuthContinuationPresentation,
-  resolveSessionExpiredPresentation,
-} from "@/lib/auth/auth-transition-governance";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 export function AuthOAuthContinuationBanner() {
-  const { studyHint, oauthContinuing, provider, searchParams, pathname, oauthContinuingParam } =
+  const { studyHint, oauthContinuing, provider, searchParams, pathname, oauthContinuingParam, redirectTarget } =
     useAuthRouteSearchState();
   const trackedRef = useRef(false);
   const router = useRouter();
@@ -36,20 +29,20 @@ export function AuthOAuthContinuationBanner() {
 
   if (!oauthContinuing) return null;
 
-  const oauthCopy = resolveOAuthContinuationPresentation(provider, studyHint);
   return (
-    <AuthContinuationCard
-      providerLabel={oauthCopy.providerLabel}
+    <AuthTransitionShell
+      kind="oauth-continuation"
+      layout="inline"
+      oauthProvider={provider}
       studyHint={studyHint}
-      eyebrow={oauthCopy.eyebrow}
-      title={oauthCopy.title}
-      fallbackDetail={oauthCopy.help}
+      callbackUrl={redirectTarget}
     />
   );
 }
 
 export function AuthSessionExpiredBanner() {
-  const { studyHint, sessionExpired, searchParams, pathname, sessionExpiredParam } = useAuthRouteSearchState();
+  const { studyHint, sessionExpired, searchParams, pathname, sessionExpiredParam, redirectTarget } =
+    useAuthRouteSearchState();
   const trackedRef = useRef(false);
   const router = useRouter();
 
@@ -65,15 +58,12 @@ export function AuthSessionExpiredBanner() {
 
   if (!sessionExpired) return null;
 
-  const sessionCopy = resolveSessionExpiredPresentation(studyHint);
-
   return (
-    <AuthMessageBanner
-      tone={authTransitionMessageTone("session-expired")}
-      stateId="session-expired"
-      title={sessionCopy.title}
-      message={sessionCopy.message}
-      help={sessionCopy.help}
+    <AuthTransitionShell
+      kind="session-expired"
+      layout="inline"
+      studyHint={studyHint}
+      callbackUrl={redirectTarget}
     />
   );
 }
@@ -82,43 +72,32 @@ export function AuthOAuthErrorBanner() {
   const { oauthError, searchParams, pathname } = useAuthRouteSearchState();
   const errorTrackedRef = useRef(false);
   const router = useRouter();
+  const errorCode = searchParams.get("error");
 
   useEffect(() => {
-    const code = searchParams.get("error");
-    if (!oauthError || !code || errorTrackedRef.current) return;
+    if (!oauthError || !errorCode || errorTrackedRef.current) return;
     errorTrackedRef.current = true;
     trackProductEvent(PH.authOAuthSigninFailed, {
       actor: "anonymous",
-      error_code: code,
+      error_code: errorCode,
     });
     const sp = new URLSearchParams(searchParams.toString());
     sp.delete("error");
     const qs = sp.toString();
     router.replace(`${pathname}${qs ? `?${qs}` : ""}`);
-  }, [oauthError, pathname, router, searchParams]);
+  }, [oauthError, pathname, router, searchParams, errorCode]);
 
   if (!oauthError) return null;
 
-  const errorCode = searchParams.get("error");
-  const transitionError = resolveAuthenticationErrorPresentation(errorCode) ?? {
-    eyebrow: "",
-    title: oauthError.title,
-    message: oauthError.message,
-    help: oauthError.help,
-  };
-
   return (
-    <AuthMessageBanner
-      tone={authTransitionMessageTone("authentication-error")}
-      stateId="oauth-error"
-      title={transitionError.title}
-      message={transitionError.message}
-      help={transitionError.help}
+    <AuthTransitionShell
+      kind="authentication-error"
+      layout="inline"
+      error={errorCode}
     />
   );
 }
 
-/** Single mount for login — avoids triple Suspense boundaries. */
 export function AuthStateSurface() {
   return (
     <>

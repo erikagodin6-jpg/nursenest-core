@@ -2,10 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { getSession, signIn } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
-import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import {
   reconcileExamFocusForCountryAndTier,
@@ -18,21 +16,36 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { refreshThenReplaceIfDifferent } from "@/lib/auth/post-login-client-navigation";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
+import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
+import { AuthFormLayout } from "@/components/auth/auth-experience/auth-form-layout";
+import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
+import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
+
+const TIER_LABEL: Record<SignupTierValue, string> = {
+  RN: "RN",
+  RPN: "RPN",
+  LVN_LPN: "LPN",
+  NP: "NP",
+  ALLIED: "Allied",
+};
 
 export function SignupForm({
+  tier,
+  onTierChange,
   termsHref = "/terms",
   privacyHref = "/privacy",
   contactHref = "/contact",
   forgotPasswordHref = "/forgot-password",
 }: {
+  tier: SignupTierValue;
+  onTierChange: (tier: SignupTierValue) => void;
   termsHref?: string;
   privacyHref?: string;
   contactHref?: string;
   forgotPasswordHref?: string;
-} = {}) {
+}) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
   const pathname = usePathname() ?? "/";
@@ -43,6 +56,16 @@ export function SignupForm({
     () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
     [searchParams, pathname, locale],
   );
+
+  function verifyAfterSignupHref(email?: string) {
+    const base = withMarketingLocale(locale, "/verify-email");
+    const params = new URLSearchParams({ sent: "1" });
+    if (email?.trim()) params.set("email", email.trim());
+    if (redirectTarget && redirectTarget !== "/app/start-studying") {
+      params.set("callbackUrl", redirectTarget);
+    }
+    return `${base}?${params.toString()}`;
+  }
 
   const loginAfterSignupHref = useMemo(() => {
     const loginBase = withMarketingLocale(locale, "/login");
@@ -59,7 +82,6 @@ export function SignupForm({
   const [clientReady, setClientReady] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
-  const [tier, setTier] = useState<SignupTierValue>("RN");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
   /** When the widget is shown, `/api/signup` may require a token (see `isTurnstileEnforced`). */
@@ -69,6 +91,11 @@ export function SignupForm({
     Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()) && !turnstileQaBypassActive;
 
   const examOptions = useMemo(() => signupExamFocusOptions(country, tier, t), [country, tier, t]);
+  const continueSubtext = useMemo(() => {
+    const pathway = TIER_LABEL[tier] ?? "RN";
+    const exam = examOptions.find((o) => o.value === examFocus)?.label;
+    return exam ? `${pathway} pathway · ${exam}` : `${pathway} pathway`;
+  }, [tier, examFocus, examOptions]);
   const firstNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderFirstName"), "First name");
   const lastNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderLastName"), "Last name");
 
@@ -178,51 +205,8 @@ export function SignupForm({
         exam_focus: examFocus,
       });
 
-      let signInResult: Awaited<ReturnType<typeof signIn>>;
-      try {
-        signInResult = await signIn("credentials", {
-          email: payload.email,
-          password: payload.password,
-          rememberMe: "true",
-          redirect: false,
-          redirectTo: redirectTarget,
-        });
-      } catch (e) {
-        if (myGeneration !== submitGeneration.current) return;
-        console.error("[signup] post-register signIn threw", e);
-        const session = await getSession().catch(() => null);
-        if (session?.user) {
-          keepSpinnerUntilRedirect = true;
-          await refreshThenReplaceIfDifferent(router, redirectTarget, pathname, searchParams);
-          return;
-        }
-        keepSpinnerUntilRedirect = true;
-        router.push(loginAfterSignupHref);
-        return;
-      }
-
-      if (myGeneration !== submitGeneration.current) return;
-
-      let outcome = resolveLoginSubmitOutcome(signInResult, false);
-      if (outcome !== "success") {
-        const session = await getSession().catch(() => null);
-        outcome = resolveLoginSubmitOutcome(signInResult, Boolean(session?.user));
-      }
-
-      if (outcome === "success") {
-        keepSpinnerUntilRedirect = true;
-        await refreshThenReplaceIfDifferent(router, redirectTarget, pathname, searchParams);
-        return;
-      }
-
-      if (outcome === "rate_limited") {
-        setError(t("pages.signup.errorRateLimited"));
-        setErrorHelp(null);
-        return;
-      }
-
       keepSpinnerUntilRedirect = true;
-      router.push(loginAfterSignupHref);
+      router.push(verifyAfterSignupHref(payload.email));
     } finally {
       if (!keepSpinnerUntilRedirect) {
         setPending(false);
@@ -230,10 +214,12 @@ export function SignupForm({
     }
   }
 
+  const signupTierForTransition = tier === "NP" ? "NP" : tier === "PN" ? "PN" : tier === "RN" ? "RN" : "ALLIED";
+
   return (
-    <form
-      className="nn-premium-auth-form mt-6 space-y-4"
-      data-nn-premium-auth-form="signup"
+    <AuthFormLayout
+      formId="signup"
+      pending={pending}
       method="post"
       onSubmit={(e) => {
         e.preventDefault();
@@ -241,6 +227,15 @@ export function SignupForm({
         void onSubmit(new FormData(e.currentTarget));
       }}
     >
+      {pending ? (
+        <AuthTransitionShell
+          kind="sign-up-completion"
+          layout="inline"
+          callbackUrl={redirectTarget}
+          signupTier={signupTierForTransition}
+          showLoading
+        />
+      ) : null}
       <div className="grid gap-3 sm:grid-cols-2">
         <input
           className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
@@ -301,7 +296,7 @@ export function SignupForm({
           value={tier}
           onChange={(e) => {
             const next = e.target.value as SignupTierValue;
-            setTier(next);
+            onTierChange(next);
           }}
         >
           <option value="RPN">{t("pages.signup.tierRpn")}</option>
@@ -311,12 +306,13 @@ export function SignupForm({
           <option value="ALLIED">{t("pages.signup.tierAllied")}</option>
         </select>
       </div>
-      <div className="nn-premium-auth-onboarding rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-inset)] p-4" data-nn-premium-auth-signup-pathway>
-        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Choose Your Pathway</p>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t("pages.signup.onboardingTitle")}</p>
+      <details className="nn-premium-auth-signup-fine-tune rounded-xl border border-[var(--auth-border-soft)] bg-[color-mix(in_srgb,var(--auth-surface)_88%,transparent)] px-3 py-2.5">
+        <summary className="cursor-pointer text-xs font-semibold text-[var(--auth-subtext)]">
+          {t("pages.signup.onboardingTitle")}
+        </summary>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <select
-            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            className="nn-premium-auth-input rounded-lg px-3 py-2 text-sm"
             name="learnerPath"
             defaultValue="experienced"
           >
@@ -325,7 +321,7 @@ export function SignupForm({
             <option value="career_change">{t("pages.signup.pathCareerChange")}</option>
           </select>
           <select
-            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            className="nn-premium-auth-input rounded-lg px-3 py-2 text-sm"
             name="examFocus"
             value={examFocus}
             onChange={(e) => setExamFocus(e.target.value as SignupExamFocusValue)}
@@ -336,27 +332,20 @@ export function SignupForm({
               </option>
             ))}
           </select>
-          <select
-            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
-            name="studyGoal"
-            defaultValue="pass_first"
-          >
+          <select className="nn-premium-auth-input rounded-lg px-3 py-2 text-sm" name="studyGoal" defaultValue="pass_first">
             <option value="pass_first">{t("pages.signup.studyGoalPassFirst")}</option>
             <option value="raise_score">{t("pages.signup.studyGoalRaiseScore")}</option>
             <option value="speed">{t("pages.signup.studyGoalSpeed")}</option>
           </select>
-          <select
-            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
-            name="dailyStudyMinutes"
-            defaultValue="30"
-          >
+          <select className="nn-premium-auth-input rounded-lg px-3 py-2 text-sm" name="dailyStudyMinutes" defaultValue="30">
             <option value="15">{t("pages.signup.daily15")}</option>
             <option value="30">{t("pages.signup.daily30")}</option>
             <option value="45">{t("pages.signup.daily45")}</option>
             <option value="60">{t("pages.signup.daily60Plus")}</option>
           </select>
         </div>
-      </div>
+      </details>
+
       <OAuthProviderButtonsServer
         redirectTarget={redirectTarget}
         disabled={pending || !clientReady}
@@ -366,13 +355,13 @@ export function SignupForm({
 
       <TurnstileSignup onToken={onCaptcha} />
       {error || errorHelp ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="nn-premium-auth-alert rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
-        >
-          {error ? <p className="text-sm font-medium">{error}</p> : null}
-          {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
+        <div>
+          <AuthMessageBanner
+            tone={authTransitionMessageTone("authentication-error")}
+            stateId="validation-error"
+            title={error ?? t("pages.signup.errorGeneric")}
+            message={errorHelp}
+          />
           <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium">
             <Link href={loginAfterSignupHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
               {t("pages.signup.errorLinkSignIn")}
@@ -398,18 +387,24 @@ export function SignupForm({
         </Link>
         {t("pages.signup.legalAfter")}
       </p>
-      <button
-        className="nn-premium-auth-primary-button nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
-        type="submit"
-        disabled={pending || !clientReady || (turnstileGateActive && !captchaToken?.trim())}
-      >
-        {pending ? t("pages.signup.creatingAccount") : t("pages.signup.createAccount")}
-      </button>
+      <div className="nn-premium-auth-signup-cta">
+        <button
+          className="nn-premium-auth-primary-button nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
+          type="submit"
+          disabled={pending || !clientReady || (turnstileGateActive && !captchaToken?.trim())}
+          aria-busy={pending}
+        >
+          {pending ? t("pages.signup.creatingAccount") : "Continue"}
+        </button>
+        <p className="nn-premium-auth-signup-cta__subtext" aria-live="polite">
+          {continueSubtext}
+        </p>
+      </div>
       <p className="text-center text-sm text-muted-foreground">
         <Link href={loginAfterSignupHref} className="font-semibold text-primary underline-offset-2 hover:underline">
           {t("pages.signup.alreadyHaveAccount")}
         </Link>
       </p>
-    </form>
+    </AuthFormLayout>
   );
 }

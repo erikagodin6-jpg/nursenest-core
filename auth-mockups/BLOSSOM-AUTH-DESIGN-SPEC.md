@@ -69,19 +69,27 @@ Use global NurseNest marketing footer: blossom leaf logo, multi-column links, so
 
 ## Auth transition governance (code)
 
-Implementation copy, pathway-aware “What’s next” steps, watermark opacity bands, loading messages, and recovery-first error tone live in:
-
-`nursenest-core/src/lib/auth/auth-transition-governance.ts`
+| Layer | Module |
+|-------|--------|
+| Composition API | `resolveAuthTransitionPresentation()` in `auth-transition-presentation.ts` |
+| i18n keys | `auth.transition.*` in `tools/i18n/marketing/marketing-en.json` |
+| Pathway / watermark | `auth-transition-governance-core.ts` |
+| Public exports | `auth-transition-governance.ts` |
+| Unified renderer | `<AuthTransitionShell />` |
+| Motion | `docs/governance/AUTH-MOTION-SPEC.md` + `auth-tokens.css` |
 
 Callback safety and resume paths remain in `auth-flow-governance.ts`; study continuation hints in `auth-study-continuation-context.ts`.
 
-| Transition | UI surface |
-|------------|------------|
-| Email verified | `AuthEmailVerifiedSuccess`, `VerifyStatusBanner` |
-| Session expired | `AuthSessionExpiredBanner` |
-| OAuth continuation | `AuthContinuationCard` |
-| Sign-in success / loading | `AuthTransitionLoading` on `LoginForm` |
-| Auth errors | `AuthOAuthErrorBanner`, login validation banner (info tone) |
+| Transition | Shell `kind` | Layout |
+|------------|--------------|--------|
+| Email verified (full) | `email-verified` | `full-page` |
+| Email verified (banner) | `email-verified` | `inline` |
+| Session expired | `session-expired` | `inline` |
+| OAuth continuation | `oauth-continuation` | `inline` |
+| Sign-in / sign-up loading | `sign-in-success` / `sign-up-completion` | `inline` + `showLoading` |
+| Account recovery | `account-recovery` | `panel` |
+| Magic link | `magic-link-confirmation` | `inline` |
+| Auth errors | `authentication-error` | `inline` |
 
 **Watermark bands:** hero 6–10% (`panel-hero`), ambient 3–6% (`page-ambient`), card corner ~5.5%; opacity via `authLeafOpacityForPlacement()` — never above primary content (`z-0` leaf, `z-[1]` copy).
 

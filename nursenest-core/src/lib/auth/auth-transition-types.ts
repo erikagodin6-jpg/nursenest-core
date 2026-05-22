@@ -64,6 +64,9 @@ export type AuthTransitionPresentation = {
   kind: AuthTransitionKind;
   eyebrow: string;
   title: string;
+  /** Secondary heading (e.g. full-page “What’s next” column). */
+  whatsNextEyebrow: string | null;
+  whatsNextTitle: string | null;
   body: string;
   tone: AuthTransitionMessageTone;
   loadingCopy: { headline: string; detail: string | null };
