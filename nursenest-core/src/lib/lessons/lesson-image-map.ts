@@ -224,6 +224,36 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
   },
 
   {
+    objectKey: "InfectiveEndocarditis.png",
+    slugs: [
+      "infective-endocarditis",
+      "infective-endocarditis-nursing",
+      "bacterial-endocarditis",
+      "subacute-bacterial-endocarditis",
+      "acute-infective-endocarditis",
+      "endocarditis-nursing",
+      "endocarditis-management",
+      "endocarditis-complications",
+    ],
+    keywords: [
+      "infective endocarditis",
+      "bacterial endocarditis",
+      "endocarditis",
+      "janeway lesions",
+      "osler nodes",
+      "roth spots",
+      "splinter hemorrhages",
+      "duke criteria",
+      "vegetation endocarditis",
+      "mitral valve endocarditis",
+      "tricuspid endocarditis",
+      "iv drug use endocarditis",
+    ],
+    bodySystems: [],
+    category: "cardiovascular",
+    caption: "Infective endocarditis — valvular vegetation, Duke criteria, and antibiotic therapy nursing care",
+  },
+  {
     objectKey: "HypertensiveEncephalopathy.png",
     slugs: [
       "hypertensive-encephalopathy",

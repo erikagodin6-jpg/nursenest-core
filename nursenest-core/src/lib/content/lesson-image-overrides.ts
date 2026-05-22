@@ -130,4 +130,98 @@ export const LESSON_IMAGE_OVERRIDES: Readonly<Record<string, string>> = {
   "kawasaki-disease": "uploads/images/kawasaki-disease.webp",
   "kawasaki-syndrome": "uploads/images/kawasaki-disease.webp",
   "mucocutaneous-lymph-node-syndrome": "uploads/images/kawasaki-disease.webp",
+
+  // ── Canonical CDN clinical illustrations (priority 1 — override local SVG registry) ──
+  // These entries ensure the authoritative Spaces CDN images always win over the
+  // local SVG clinical illustration registry (which fires at priority 2).
+  // Object keys are bare Spaces bucket filenames; CDN URL is built by publicCdnUrlForObjectKey().
+
+  // Abdominal Aortic Aneurysm
+  "abdominal-aortic-aneurysm": "abdominalaorticaneurysm.jpeg",
+  "abdominal-aortic-aneurysm-nursing": "abdominalaorticaneurysm.jpeg",
+  "aaa-aneurysm": "abdominalaorticaneurysm.jpeg",
+  "aaa-nursing": "abdominalaorticaneurysm.jpeg",
+  "aortic-aneurysm-repair": "abdominalaorticaneurysm.jpeg",
+  "endovascular-aortic-repair": "abdominalaorticaneurysm.jpeg",
+  "evar-nursing": "abdominalaorticaneurysm.jpeg",
+  "open-aortic-repair": "abdominalaorticaneurysm.jpeg",
+
+  // Acute Coronary Syndrome
+  "acute-coronary-syndrome": "acutecoronarysyndrome.jpeg",
+  "acs-nursing": "acutecoronarysyndrome.jpeg",
+  "acs-management": "acutecoronarysyndrome.jpeg",
+  "acute-coronary-syndrome-nursing": "acutecoronarysyndrome.jpeg",
+  "acute-coronary-syndrome-management": "acutecoronarysyndrome.jpeg",
+  "nstemi": "acutecoronarysyndrome.jpeg",
+  "stemi": "acutecoronarysyndrome.jpeg",
+  "stemi-nursing": "acutecoronarysyndrome.jpeg",
+  "nstemi-nursing": "acutecoronarysyndrome.jpeg",
+  "unstable-angina": "acutecoronarysyndrome.jpeg",
+  "unstable-angina-nursing": "acutecoronarysyndrome.jpeg",
+  "acs-pathophysiology": "acutecoronarysyndrome.jpeg",
+
+  // Atrial Fibrillation
+  "atrial-fibrillation": "atrialfibrillation.jpeg",
+  "afib-nursing": "atrialfibrillation.jpeg",
+  "atrial-fibrillation-nursing": "atrialfibrillation.jpeg",
+  "atrial-fibrillation-management": "atrialfibrillation.jpeg",
+  "afib-management": "atrialfibrillation.jpeg",
+  "atrial-fibrillation-anticoagulation": "atrialfibrillation.jpeg",
+  "rate-vs-rhythm-control": "atrialfibrillation.jpeg",
+  "afib-with-rvr": "atrialfibrillation.jpeg",
+  "atrial-fibrillation-stroke-risk": "atrialfibrillation.jpeg",
+  "paroxysmal-afib": "atrialfibrillation.jpeg",
+  "persistent-afib": "atrialfibrillation.jpeg",
+  "permanent-afib": "atrialfibrillation.jpeg",
+
+  // Coronary Artery Bypass Grafting (CABG)
+  "cabg": "CABG.jpeg",
+  "cabg-nursing": "CABG.jpeg",
+  "coronary-artery-bypass-graft": "CABG.jpeg",
+  "coronary-artery-bypass-grafting": "CABG.jpeg",
+  "coronary-artery-bypass-surgery": "CABG.jpeg",
+  "cabg-postoperative-care": "CABG.jpeg",
+  "cabg-perioperative": "CABG.jpeg",
+  "open-heart-surgery-nursing": "CABG.jpeg",
+  "cardiac-surgery-cabg": "CABG.jpeg",
+
+  // Cardiac Tamponade
+  "cardiac-tamponade": "cardiactamponade.jpeg",
+  "cardiac-tamponade-nursing": "cardiactamponade.jpeg",
+  "pericardial-tamponade": "cardiactamponade.jpeg",
+  "tamponade-nursing": "cardiactamponade.jpeg",
+  "cardiac-tamponade-management": "cardiactamponade.jpeg",
+  "pericardiocentesis-nursing": "cardiactamponade.jpeg",
+  "obstructive-shock-tamponade": "cardiactamponade.jpeg",
+
+  // Deep Vein Thrombosis
+  "deep-vein-thrombosis": "DVT.png",
+  "dvt": "DVT.png",
+  "dvt-nursing": "DVT.png",
+  "lower-extremity-dvt": "DVT.png",
+  "deep-vein-thrombosis-nursing": "DVT.png",
+  "dvt-pe-prevention-nursing": "DVT.png",
+  "dvt-pe-nursing-priorities": "DVT.png",
+  "dvt-anticoagulation": "DVT.png",
+  "upper-extremity-dvt": "DVT.png",
+
+  // Hypertensive Encephalopathy
+  "hypertensive-encephalopathy": "HypertensiveEncephalopathy.png",
+  "hypertensive-encephalopathy-nursing": "HypertensiveEncephalopathy.png",
+  "hypertensive-emergency": "HypertensiveEncephalopathy.png",
+  "hypertensive-emergency-nursing": "HypertensiveEncephalopathy.png",
+  "hypertensive-crisis-nursing": "HypertensiveEncephalopathy.png",
+  "hypertensive-urgency": "HypertensiveEncephalopathy.png",
+  "malignant-hypertension": "HypertensiveEncephalopathy.png",
+  "hypertensive-crisis-encephalopathy": "HypertensiveEncephalopathy.png",
+
+  // Infective Endocarditis
+  "infective-endocarditis": "InfectiveEndocarditis.png",
+  "infective-endocarditis-nursing": "InfectiveEndocarditis.png",
+  "bacterial-endocarditis": "InfectiveEndocarditis.png",
+  "subacute-bacterial-endocarditis": "InfectiveEndocarditis.png",
+  "acute-infective-endocarditis": "InfectiveEndocarditis.png",
+  "endocarditis-nursing": "InfectiveEndocarditis.png",
+  "endocarditis-management": "InfectiveEndocarditis.png",
+  "endocarditis-complications": "InfectiveEndocarditis.png",
 };
