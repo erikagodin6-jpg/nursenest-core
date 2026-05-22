@@ -1,17 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Runner stage: unpack builder tarball into .next/standalone (no monorepo script imports).
-set -euxo pipefail
+set -eu
 
 log() {
   printf '[docker-runner-unpack] %s\n' "$*" >&2
 }
 
 resolve_server_js() {
-  if [[ -f .next/standalone/nursenest-core/server.js ]]; then
+  if [ -f .next/standalone/nursenest-core/server.js ]; then
     echo ".next/standalone/nursenest-core/server.js"
     return 0
   fi
-  if [[ -f .next/standalone/server.js ]]; then
+  if [ -f .next/standalone/server.js ]; then
     echo ".next/standalone/server.js"
     return 0
   fi
