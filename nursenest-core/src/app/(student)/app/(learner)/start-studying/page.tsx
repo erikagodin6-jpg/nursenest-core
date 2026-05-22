@@ -14,6 +14,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 
 export const dynamic = "force-dynamic";
 

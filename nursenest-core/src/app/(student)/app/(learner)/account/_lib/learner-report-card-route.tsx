@@ -1,5 +1,6 @@
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import {
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   LearnerAccountShell,
   LearnerCategoryProgressGrid,
   LearnerProfileSummaryCard,

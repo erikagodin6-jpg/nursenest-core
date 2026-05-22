@@ -14,6 +14,7 @@ import { PremiumNclexAnalyticsDashboard } from "@/components/study/premium-nclex
 import { AnalyticsDetailClient } from "./analytics-detail-client";
 import { loadMoreTrendData } from "./actions";
 import {
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   SIGN_IN_CTA,

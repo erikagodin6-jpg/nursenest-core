@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TrialStatus } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import {
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   LearnerAccountPageHero,
   LearnerAccountShell,
   LearnerCategoryProgressGrid,

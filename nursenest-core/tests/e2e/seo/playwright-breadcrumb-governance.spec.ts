@@ -32,14 +32,9 @@ const LEARNER_ROUTES = [
   "/app/coach",
 ] as const;
 
-test.describe("Semantic navigation release gate — runtime", () => {
-  test.use({
-    storageState: { cookies: [], origins: [] },
-    trace: "retain-on-failure",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
-  });
+test.use({ storageState: { cookies: [], origins: [] } });
 
+test.describe("Semantic navigation release gate — runtime", () => {
   for (const route of INDEXABLE_ROUTES) {
     for (const vp of VIEWPORTS) {
       test(`≤1 BreadcrumbList ${route} @ ${vp.name}`, async ({ page }, testInfo) => {

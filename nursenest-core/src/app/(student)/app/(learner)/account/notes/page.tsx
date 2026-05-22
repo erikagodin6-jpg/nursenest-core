@@ -10,6 +10,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadNotesPagePayload } from "./actions";
 import { NotesIndexClient } from "./notes-index-client";
 import { BROWSE_LESSONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

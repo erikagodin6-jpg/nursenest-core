@@ -109,7 +109,7 @@ const LEARNER_KIND_TO_SURFACE: Record<string, LearnerBreadcrumbSurface> = {
   "study-trail": "review_session",
   "weak-area": "remediation",
   "remediation-ladder": "remediation",
-  "interpretation-study": "interpretation_guide",
+  "interpretation-study": "remediation",
   "ai-tutor": "remediation",
   "session-recovery": "review_session",
   "focus-areas": "remediation",
