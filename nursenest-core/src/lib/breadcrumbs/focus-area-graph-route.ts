@@ -48,7 +48,7 @@ export function resolveFocusAreaGraphRoute(args: {
     attempted: 1,
     missRate: args.missRate ?? 1,
     strength: "weak",
-    normalizedTopic: normalizeTopicKey(topic),
+    normalizedTopic: normalizeTopicKey(topic) ?? undefined,
   }));
 
   const cognition = args.userId

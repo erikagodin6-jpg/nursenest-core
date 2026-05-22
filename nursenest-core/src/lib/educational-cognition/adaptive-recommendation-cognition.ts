@@ -194,7 +194,7 @@ function insufficientDataReadiness(): ReadinessResult {
   };
 }
 
-export type BuildGovernedAdaptiveRecommendationsArgs = Omit<AdaptiveRecommendationBaseArgs, "readiness"> & {
+export type BuildGovernedAdaptiveRecommendationsArgs = Partial<Omit<AdaptiveRecommendationBaseArgs, "readiness">> & {
   readiness: ReadinessResult | null;
   userId?: string | null;
   entitlement?: AccessScope | null;
@@ -209,6 +209,18 @@ export async function buildGovernedAdaptiveRecommendations(
 ): Promise<GovernedAdaptiveRecommendations> {
   const pathwayId = args.preferredPathwayId?.trim() || null;
   const adaptiveArgs: AdaptiveRecommendationBaseArgs = {
+    examDatePlanType: null,
+    examDate: null,
+    weakTopics: [],
+    streakDays: 0,
+    lessonPct: 0,
+    lessonsCompleted: 0,
+    lessonsTotal: 0,
+    studyCadencePreference: null,
+    continueLesson: null,
+    recommendedQuizTopic: null,
+    mockCount: 0,
+    practiceSessionCount: 0,
     ...args,
     readiness: args.readiness ?? insufficientDataReadiness(),
   };
