@@ -23,6 +23,9 @@ const RESET_FORM_PATH = path.resolve(ROOT, "src/components/auth/reset-password-f
 const VERIFY_BANNER_PATH = path.resolve(ROOT, "src/components/auth/verify-status-banner.tsx");
 const TRIAL_BLOCKED_PATH = path.resolve(ROOT, "src/components/auth/trial-blocked-card.tsx");
 const AUTH_CONFIG_PATH = path.resolve(ROOT, "src/lib/auth.ts");
+const OAUTH_CONFIG_PATH = path.resolve(ROOT, "src/lib/auth/oauth-config.ts");
+const AUTH_GOVERNANCE_PATH = path.resolve(ROOT, "src/lib/auth/auth-flow-governance.ts");
+const OAUTH_BUTTONS_PATH = path.resolve(ROOT, "src/components/auth/oauth-provider-buttons.tsx");
 const SCREENSHOT_DIR = path.resolve(ROOT, "docs/screenshots/premium-auth-system");
 
 const REQUIRED_THEMES = ["ocean", "blossom", "midnight", "sunset", "aurora"] as const;
@@ -65,6 +68,9 @@ describe("premium auth convergence", () => {
   const verifyBanner = read(VERIFY_BANNER_PATH);
   const trialBlocked = read(TRIAL_BLOCKED_PATH);
   const authConfig = read(AUTH_CONFIG_PATH);
+  const oauthConfig = read(OAUTH_CONFIG_PATH);
+  const authGovernance = read(AUTH_GOVERNANCE_PATH);
+  const oauthButtons = read(OAUTH_BUTTONS_PATH);
 
   it("keeps all five required themes covered by the premium auth layer", () => {
     for (const theme of REQUIRED_THEMES) {
@@ -83,11 +89,19 @@ describe("premium auth convergence", () => {
     assert.match(resetPage, /<PremiumAuthShell/, "reset password page must use shared shell");
   });
 
-  it("keeps auth logic and providers credentials-only unless explicitly configured", () => {
+  it("keeps credentials auth and gates OAuth providers behind env configuration", () => {
     assert.match(authConfig, /Credentials\(/, "credentials provider must remain configured");
-    assert.doesNotMatch(authConfig, /Google\(/, "Google provider should not be implied by UI");
-    assert.doesNotMatch(authConfig, /Apple\(/, "Apple provider should not be implied by UI");
+    assert.match(authConfig, /buildOAuthProviders\(/, "OAuth providers must be composed from oauth-config");
+    assert.match(oauthConfig, /isGoogleOAuthConfigured/, "Google OAuth must be env-gated");
+    assert.match(oauthConfig, /isAppleOAuthConfigured/, "Apple OAuth must be env-gated");
+    assert.match(authConfig, /oauthAuthCallbacks/, "OAuth signIn/redirect callbacks must be wired");
     assert.match(authConfig, /pages:\s*{[\s\S]*signIn:\s*"\/login"[\s\S]*error:\s*"\/login"/, "Auth.js route contract changed");
+  });
+
+  it("centralizes return-intent restoration in auth-flow-governance", () => {
+    assert.match(authGovernance, /resolveAuthReturnDestination/, "governance must resolve post-auth destinations");
+    assert.match(authGovernance, /resolveLearnerStudyCallbackPath/, "learner study callbacks must be first-class");
+    assert.match(oauthButtons, /nn-premium-auth-oauth-button/, "OAuth UI must use premium Blossom classes");
   });
 
   it("surfaces compliance copy, legal links, account deletion discoverability, and pathway labels", () => {

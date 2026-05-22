@@ -1,21 +1,45 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { TrialOnboardingFlow } from "@/components/onboarding/trial-onboarding-flow";
+import { trackProductEvent } from "@/lib/observability/product-analytics";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 export function OnboardingPageClient({
   userId,
   accountCountry,
+  resumeAfterOnboarding,
 }: {
   userId: string;
   accountCountry: string;
+  resumeAfterOnboarding?: string | null;
 }) {
   const router = useRouter();
+  const resumeTrackedRef = useRef(false);
+  const afterOnboarding =
+    resumeAfterOnboarding && resumeAfterOnboarding.startsWith("/")
+      ? resumeAfterOnboarding
+      : "/app/start-studying";
 
   useEffect(() => {
-    router.prefetch("/app/start-studying");
-  }, [router]);
+    router.prefetch(afterOnboarding);
+  }, [router, afterOnboarding]);
+
+  const handleComplete = () => {
+    if (!resumeTrackedRef.current) {
+      resumeTrackedRef.current = true;
+      trackProductEvent(PH.onboardingResumeSuccess, {
+        actor: "learner",
+        has_custom_resume: Boolean(resumeAfterOnboarding),
+      });
+    }
+    try {
+      router.replace(afterOnboarding);
+    } catch {
+      trackProductEvent(PH.onboardingResumeFailure, { actor: "learner" });
+    }
+  };
 
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 py-12">
@@ -41,7 +65,7 @@ export function OnboardingPageClient({
       <TrialOnboardingFlow
         userId={userId}
         accountCountry={accountCountry}
-        onComplete={() => router.replace("/app/start-studying")}
+        onComplete={handleComplete}
       />
     </div>
   );

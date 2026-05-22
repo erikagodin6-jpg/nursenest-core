@@ -392,7 +392,7 @@ export function PracticeTestsHubAnalytics({ pathwayId, recentSessions }: Props) 
                   href={appCatWeakFocusPath(pid)}
                   className="inline-flex min-h-10 items-center rounded-full bg-[var(--semantic-brand)] px-4 py-2 text-xs font-bold text-[var(--semantic-brand-contrast)]"
                 >
-                  Start weak-area focus
+                  Practice
                 </Link>
               ) : null}
               <Link

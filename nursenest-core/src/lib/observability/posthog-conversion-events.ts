@@ -7,6 +7,26 @@ export const PH = {
   checkoutStarted: "checkout_started",
   /** Signup form submit (before API response). */
   signupSubmitAttempt: "signup_submit_attempt",
+  /** User chose Google or Apple on marketing auth. */
+  authOAuthProviderSelected: "auth_oauth_provider_selected",
+  /** OAuth redirect / callback failure surfaced on login. */
+  authOAuthSigninFailed: "auth_oauth_signin_failed",
+  /** OAuth return landing while session is established. */
+  authOAuthContinuationViewed: "auth_oauth_continuation_viewed",
+  /** Session-expired banner on login with callback preserved. */
+  authSessionExpiredRecoveryViewed: "auth_session_expired_recovery_viewed",
+  /** Middleware redirected stale session to login with session=expired. */
+  sessionExpiredRedirected: "session_expired_redirected",
+  /** Auth.js redirect target rejected by governance. */
+  authCallbackRejected: "auth_callback_rejected",
+  /** Onboarding completed and resumed study callback. */
+  onboardingResumeSuccess: "onboarding_resume_success",
+  onboardingResumeFailure: "onboarding_resume_failure",
+  providerConnectStarted: "provider_connect_started",
+  providerConnectCompleted: "provider_connect_completed",
+  providerDisconnectCompleted: "provider_disconnect_completed",
+  /** First study navigation after OAuth signup (client/server funnel). */
+  authOAuthFirstStudyAction: "auth_oauth_first_study_action",
   /** Client-side success after signup API returns ok (before redirect to login). */
   signupSuccessClient: "signup_success_client",
   /**

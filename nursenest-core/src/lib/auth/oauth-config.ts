@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import type { NextAuthConfig } from "next-auth";
 import Apple from "next-auth/providers/apple";
 import Google from "next-auth/providers/google";
@@ -29,8 +30,7 @@ function resolveApplePrivateKey(): string | undefined {
   if (!path) return undefined;
 
   try {
-    const fs = require("node:fs") as typeof import("node:fs");
-    return fs.readFileSync(path, "utf8");
+    return readFileSync(path, "utf8");
   } catch {
     return undefined;
   }

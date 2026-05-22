@@ -55,11 +55,28 @@ For **each screen**, ship **desktop + mobile**, **light + dark**, themes **Ocean
 | Styles | `nursenest-core/src/app/styles/marketing/hub-system.css`, `pathway-reading.css` |
 | Trust strip | `nursenest-core/src/components/auth/auth-flow-trust-reassurance.tsx` |
 
+## Figma delivery (2026-05-21)
+
+**File:** https://www.figma.com/design/fZvJ2pfmWdUPauKPjUfvhU/ — page **`Blossom Auth Premium`**
+
+| Deliverable | Status |
+|-------------|--------|
+| Eight program frames (`auth/*`) | **On canvas** — row 1 desktop + row 2 mobile / verify / magic-link |
+| PNG-backed Blossom baselines | **Imported** into frames `87:2`–`88:24` from `auth-mockups/design-png/blossom-auth/` |
+| Verify-email pending + magic-link (3) | **Built in Figma** `102:2`, `102:14`, `102:24`, `102:34` (centered glass cards) |
+| Variables `NN / Blossom Auth` | **Created** — sakura, blush, warm-white, charcoal, mint (+ deep variants) |
+| Reference frames | `88:26` error, `88:28` loading (off main grid) |
+
+Full node ID table and PNG index: `auth-mockups/VIEW-BLOSSOM-AUTH.md`.  
+Program report: `reports/auth-blossom-figma-FINAL.md`.
+
+**Next wave (not blocking auth code):** Ocean / Midnight + light/dark duplicate frames; sign-up / forgot / verify **mobile** variants.
+
 ## Acceptance (PR / program report)
 
-- [ ] Figma file link + frame IDs listed in PR or `reports/*-FINAL.md`
-- [ ] Before/after screenshots (desktop + mobile, Blossom + one dark theme)
-- [ ] Side-by-side Figma vs implementation for sign-in and sign-up
+- [x] Figma file link + frame IDs listed in PR or `reports/*-FINAL.md` (see `auth-mockups/VIEW-BLOSSOM-AUTH.md`, `reports/auth-blossom-figma-FINAL.md`)
+- [x] Blossom desktop + mobile sign-in PNGs placed in Figma (Ocean/Midnight variants deferred)
+- [ ] Side-by-side Figma vs implementation for sign-in and sign-up (after auth route polish)
 - [ ] Post-login resume verified for tier-scoped study callbacks (`parseTierScopedAppStudyCallbackPath`)
 
 ## Related product work

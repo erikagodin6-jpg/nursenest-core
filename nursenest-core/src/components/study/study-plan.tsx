@@ -199,7 +199,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
                 {
                   type: "review" as const,
                   instruction: `Review the questions you answered incorrectly with high confidence. Understanding why builds stronger recall.`,
-                  actionLabel: "Review Session",
+                  actionLabel: "Review",
                   href: `/app/practice-tests/${testId}/results`,
                 },
               ]
@@ -207,19 +207,19 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "lesson",
             instruction: `Study the ${topic1} lesson. Focus on core concepts and take notes on anything unfamiliar.`,
-            actionLabel: "Open Lesson",
+            actionLabel: "Start",
             href: lessonsHref(pathwayId, topic1),
           },
           {
             type: "practice",
             instruction: `Answer 10 targeted questions on ${topic1} to check your understanding.`,
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "review",
             instruction: "Read the full explanation for every question you got wrong before moving on.",
-            actionLabel: "Review Results",
+            actionLabel: "Review",
             href: practiceHref(),
           },
         ],
@@ -232,19 +232,19 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "lesson",
             instruction: `Study the ${topic2} lesson. Focus on understanding the reasoning, not memorization.`,
-            actionLabel: "Open Lesson",
+            actionLabel: "Start",
             href: lessonsHref(pathwayId, topic2),
           },
           {
             type: "practice",
             instruction: `Answer 10 targeted questions on ${topic2}.`,
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "recap",
             instruction: "Briefly revisit yesterday's material to reinforce what you learned.",
-            actionLabel: "Review Day 1",
+            actionLabel: "Review",
             href: lessonsHref(pathwayId),
           },
         ],
@@ -257,13 +257,13 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "practice",
             instruction: "Answer 15 mixed questions covering your weak areas from Days 1 and 2.",
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "review",
             instruction: "Review your mistakes. Look for patterns in the types of questions you get wrong.",
-            actionLabel: "Review Results",
+            actionLabel: "Review",
             href: practiceHref(),
           },
           ...(hasManyUncertainCorrect
@@ -271,7 +271,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
                 {
                   type: "recap" as const,
                   instruction: "Some of your correct answers relied on guessing. Revisit those topics to build reliable knowledge.",
-                  actionLabel: "Revisit Lessons",
+                  actionLabel: "Review",
                   href: lessonsHref(pathwayId),
                 },
               ]
@@ -286,13 +286,13 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "lesson",
             instruction: `Study the ${topic3} lesson, paying attention to clinical decision-making scenarios.`,
-            actionLabel: "Open Lesson",
+            actionLabel: "Start",
             href: lessonsHref(pathwayId, topic3),
           },
           {
             type: "practice",
             instruction: `Answer 10 targeted questions on ${topic3}.`,
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
         ],
@@ -305,19 +305,19 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "review",
             instruction: "Review your notes and lesson summaries from this week.",
-            actionLabel: "Review Lessons",
+            actionLabel: "Review",
             href: lessonsHref(pathwayId),
           },
           {
             type: "practice",
             instruction: "Answer 20 mixed questions across all weak areas. Aim for consistency above 60%.",
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "recap",
             instruction: "Hold off on a CAT exam. Complete one or two more study sessions first to build consistency.",
-            actionLabel: "Continue Studying",
+            actionLabel: "Continue",
             href: practiceHref(),
           },
         ],
@@ -335,7 +335,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
                 {
                   type: "review" as const,
                   instruction: "Start by reviewing the questions you got wrong with high confidence to recalibrate.",
-                  actionLabel: "Review Session",
+                  actionLabel: "Review",
                   href: `/app/practice-tests/${testId}/results`,
                 },
               ]
@@ -343,19 +343,19 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "lesson",
             instruction: `Study the ${topic1} lesson, focusing on the areas where you scored below 60%.`,
-            actionLabel: "Open Lesson",
+            actionLabel: "Start",
             href: lessonsHref(pathwayId, topic1),
           },
           {
             type: "practice",
             instruction: `Answer 15 targeted questions on ${topic1}.`,
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "review",
             instruction: "Review incorrect answers. Note the clinical reasoning behind each correction.",
-            actionLabel: "Review Results",
+            actionLabel: "Review",
             href: practiceHref(),
           },
         ],
@@ -368,13 +368,13 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "lesson",
             instruction: `Study the ${topic2} lesson.`,
-            actionLabel: "Open Lesson",
+            actionLabel: "Start",
             href: lessonsHref(pathwayId, topic2),
           },
           {
             type: "practice",
             instruction: `Answer 15 targeted questions on ${topic2}.`,
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           ...(hasManyUncertainCorrect
@@ -382,7 +382,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
                 {
                   type: "recap" as const,
                   instruction: "Some correct answers relied on guessing. Revisit those sections to build confident recall.",
-                  actionLabel: "Revisit Lessons",
+                  actionLabel: "Review",
                   href: lessonsHref(pathwayId),
                 },
               ]
@@ -397,13 +397,13 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "practice",
             instruction: "Answer 20 questions under timed conditions. Aim for about 90 seconds per question.",
-            actionLabel: "Start Timed Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "review",
             instruction: "Review incorrect answers. Note which topics caused the most errors under time pressure.",
-            actionLabel: "Review Results",
+            actionLabel: "Review",
             href: practiceHref(),
           },
         ],
@@ -416,19 +416,19 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "review",
             instruction: `Revisit your notes on ${topic1} and ${topic2}. Focus on the gaps that keep reappearing.`,
-            actionLabel: "Review Lessons",
+            actionLabel: "Review",
             href: lessonsHref(pathwayId),
           },
           {
             type: "practice",
             instruction: "Answer 20 mixed questions to measure your consistency across all topics.",
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "recap",
             instruction: "Once you consistently score above 70% on mixed sets, you are ready to retake the CAT.",
-            actionLabel: "Start CAT When Ready",
+            actionLabel: "Start",
             href: practiceHref(),
           },
         ],
@@ -444,7 +444,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "practice",
             instruction: "Take a full CAT session when you feel mentally fresh. Simulate real exam conditions.",
-            actionLabel: "Start CAT",
+            actionLabel: "Start",
             href: practiceHref(),
           },
           ...(hasOverconfidence
@@ -452,7 +452,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
                 {
                   type: "review" as const,
                   instruction: "Review the high-confidence questions you got wrong. Even strong performers have calibration gaps.",
-                  actionLabel: "Review Session",
+                  actionLabel: "Review",
                   href: `/app/practice-tests/${testId}/results`,
                 },
               ]
@@ -460,7 +460,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "lesson",
             instruction: `After your CAT, review the ${topic1} lesson to reinforce your most persistent weak area.`,
-            actionLabel: "Open Lesson",
+            actionLabel: "Start",
             href: lessonsHref(pathwayId, topic1),
           },
         ],
@@ -473,13 +473,13 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "practice",
             instruction: `Answer 20 targeted questions across ${topic1} and ${topic2}. Prioritize clinical reasoning.`,
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "review",
             instruction: "Review every incorrect answer, paying close attention to your reasoning process.",
-            actionLabel: "Review Results",
+            actionLabel: "Review",
             href: practiceHref(),
           },
           ...(hasManyUncertainCorrect
@@ -487,7 +487,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
                 {
                   type: "recap" as const,
                   instruction: "Some correct answers relied on guessing. Revisit those topics to build confident mastery.",
-                  actionLabel: "Revisit Lessons",
+                  actionLabel: "Review",
                   href: lessonsHref(pathwayId),
                 },
               ]
@@ -502,19 +502,19 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           {
             type: "practice",
             instruction: "Answer 25 mixed-difficulty questions across all systems. Focus on consistency.",
-            actionLabel: "Start Practice",
+            actionLabel: "Practice",
             href: practiceHref(),
           },
           {
             type: "review",
             instruction: "Consolidate your notes. Flag any topics that keep appearing as weak.",
-            actionLabel: "Review Lessons",
+            actionLabel: "Review",
             href: lessonsHref(pathwayId),
           },
           {
             type: "recap",
             instruction: "You are exam-ready. Take another CAT to confirm your stability. Consistent scores across two or more sessions is a strong signal.",
-            actionLabel: "Start Another CAT",
+            actionLabel: "Start",
             href: practiceHref(),
           },
         ],

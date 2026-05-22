@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
-import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
+import { ExamPrepCourseProgramJsonLd, WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -283,6 +283,13 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           title={npPracticeSeo?.title ?? pathway.seoTitle}
           description={npPracticeSeo?.description ?? pathway.seoDescription}
           path={npPracticeSeo ? pathname : buildExamPathwayPath(pathway)}
+        />
+        <ExamPrepCourseProgramJsonLd
+          path={pathname}
+          name={pathway.displayName}
+          description={pathway.seoDescription}
+          teaches={[pathway.examLabel, pathway.displayName]}
+          occupationalCredential={pathway.examLabel}
         />
 
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />

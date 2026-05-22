@@ -1,3 +1,4 @@
+import { normalizeMarketingPageTitle } from "@/lib/seo/normalize-page-title";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export type NclexCommercialLandingId =
@@ -99,9 +100,14 @@ const rnCoreLinks = [
 
 const canadaLinks = [
   {
-    label: "Canadian RN hub",
+    label: "NCLEX-RN Canada exam prep",
     href: "/canada/rn/nclex-rn",
-    description: "Start with the Canadian RN pathway and connect lessons, questions, and exam readiness.",
+    description: "Commercial pathway hub for Canadian NCLEX-RN practice, lessons, and CAT readiness.",
+  },
+  {
+    label: "NCLEX-RN practice questions (Canada)",
+    href: "/canada/rn/nclex-rn/questions",
+    description: "Client-needs question bank with rationales for Canadian RN candidates.",
   },
   {
     label: "REx-PN lessons",
@@ -198,6 +204,7 @@ function page(args: Omit<NclexCommercialLandingPage, "path" | "status" | "compar
 }): NclexCommercialLandingPage {
   return {
     ...args,
+    title: normalizeMarketingPageTitle(args.title),
     path: `/${args.slug}`,
     status: args.status ?? "published",
     comparison: args.comparison ?? {
@@ -255,7 +262,7 @@ export const NCLEX_COMMERCIAL_LANDING_PAGES = [
     slug: "nclex-study-plan",
     targetQueries: ["nclex study plan", "30 day nclex study plan", "60 day nclex study plan", "90 day nclex study plan"],
     intent: ["informational", "exam-prep", "commercial"],
-    title: "NCLEX Study Plan: 30, 60, and 90 Day Schedules | NurseNest",
+    title: "NCLEX Study Plan: 30, 60, and 90 Day Schedules",
     metaDescription:
       "Build a realistic NCLEX study plan with daily pacing, lessons, practice questions, CAT milestones, remediation cycles, and burnout prevention.",
     h1: "NCLEX study plans for 30, 60, and 90 days",
@@ -670,7 +677,7 @@ export const NCLEX_COMMERCIAL_LANDING_PAGES = [
     slug: "canadian-nclex-guide",
     targetQueries: ["canadian nclex", "nclex canada", "nclex for internationally educated nurses canada"],
     intent: ["informational", "exam-prep", "long-tail"],
-    title: "Canadian NCLEX Guide for RN Students and IENs | NurseNest",
+    title: "Canadian NCLEX Guide for RN Students and IENs (2026)",
     metaDescription:
       "A Canadian NCLEX guide covering RN pathway context, registration steps to verify, Pearson VUE, timelines, study strategy, and REx-PN distinctions.",
     h1: "Canadian NCLEX guide for RN students and internationally educated nurses",
@@ -725,7 +732,7 @@ export const NCLEX_COMMERCIAL_LANDING_PAGES = [
     slug: "how-to-pass-nclex-2026",
     targetQueries: ["how to pass nclex", "how to pass nclex in 2026", "nclex tips 2026"],
     intent: ["informational", "exam-prep", "commercial"],
-    title: "How to Pass NCLEX in 2026: Clinical Judgment Study Strategy | NurseNest",
+    title: "How to Pass NCLEX in 2026: Clinical Judgment Strategy",
     metaDescription:
       "Learn how to pass NCLEX in 2026 with clinical judgment practice, NGN formats, rationales, CAT readiness, pacing, and weak-area recovery.",
     h1: "How to pass NCLEX in 2026 without studying randomly",
@@ -842,6 +849,32 @@ export function buildNclexCommercialBreadcrumbJsonLd(landing: NclexCommercialLan
       { "@type": "ListItem", position: 3, name: landing.h1, item: absoluteUrl(landing.path) },
     ],
   };
+}
+
+export function buildNclexCommercialArticleJsonLd(landing: NclexCommercialLandingPage): Record<string, unknown> {
+  const url = absoluteUrl(landing.path);
+  const isStudyPlan = landing.id === "nclex-study-plan" || landing.id === "rex-pn-study-plan";
+  const base: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": isStudyPlan ? ["Article", "HowTo"] : "Article",
+    "@id": `${url}#article`,
+    headline: landing.h1,
+    name: landing.h1,
+    description: landing.metaDescription,
+    url,
+    author: { "@type": "Organization", name: "NurseNest", url: absoluteUrl("/") },
+    publisher: { "@type": "Organization", name: "NurseNest", url: absoluteUrl("/") },
+    inLanguage: "en",
+  };
+  if (isStudyPlan && landing.timeline.length > 0) {
+    base.step = landing.timeline.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.body,
+    }));
+  }
+  return base;
 }
 
 export function buildNclexCommercialFaqJsonLd(landing: NclexCommercialLandingPage): Record<string, unknown> {

@@ -184,7 +184,7 @@ export function PracticeExamLauncherClient({ pathwayId }: { pathwayId: string | 
           disabled={isSubmitting}
           className="nn-btn-primary inline-flex min-h-11 min-w-[12rem] items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
         >
-          {isSubmitting ? "Starting…" : "Start practice exam"}
+          {isSubmitting ? "Starting…" : "Start"}
         </button>
         <Link
           href="/app/questions/bank"

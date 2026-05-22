@@ -317,7 +317,7 @@ export function PathwayCatSessionStartClient({
                 className="nn-btn-primary inline-flex min-h-12 items-center justify-center rounded-full px-7 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60"
                 onClick={() => void start()}
               >
-                {creating ? "Starting…" : readinessLoading ? "Checking pool…" : "Start exam →"}
+                {creating ? "Starting…" : readinessLoading ? "Checking pool…" : "Start"}
               </button>
               <Link
                 href="/app/practice-tests"

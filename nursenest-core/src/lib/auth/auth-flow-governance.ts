@@ -86,6 +86,15 @@ export function resolveMarketingCallbackPath(
  * Learner study destinations (flashcards, CAT, practice, analytics, etc.) with query/hash preserved.
  * Allows deep `/app/*` links except generic `/app` shell.
  */
+const TIER_SCOPED_LEARNER_PREFIXES = [
+  "/app/questions",
+  "/app/questions/session",
+  "/app/practice-tests",
+  "/app/practice-exams",
+  "/app/flashcards",
+  "/app/cat",
+] as const;
+
 export function resolveLearnerStudyCallbackPath(raw: string | null): string | null {
   const tierScoped = parseTierScopedAppStudyCallbackPath(raw);
   if (tierScoped) return tierScoped;
@@ -95,6 +104,13 @@ export function resolveLearnerStudyCallbackPath(raw: string | null): string | nu
 
   const pathname = pathnameFromSafeCallback(safe);
   if (!pathname.startsWith("/app/") || isLearnerAppShellCallbackPathname(pathname)) {
+    return null;
+  }
+
+  const requiresTierScopedPathwayId = TIER_SCOPED_LEARNER_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+  if (requiresTierScopedPathwayId) {
     return null;
   }
 
@@ -115,6 +131,14 @@ export function resolveAuthReturnDestination(
       return wrapWithOnboardingIfNeeded(learner, true);
     }
     return learner;
+  }
+
+  const safe = safeCallbackPath(rawCallback);
+  if (safe) {
+    const pathname = pathnameFromSafeCallback(safe);
+    if (pathname.startsWith("/app/")) {
+      return null;
+    }
   }
 
   return resolveMarketingCallbackPath(rawCallback, { rejectLearnerAppShell: true });
@@ -142,6 +166,47 @@ export function buildLoginHrefWithCallback(
     }
   }
   return `${loginBase}?${params.toString()}`;
+}
+
+/** Full learner path including query and hash for post-login resume. */
+export function buildLearnerResumePathFromParts(
+  pathname: string,
+  search: string,
+  hash: string,
+): string {
+  const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const q = search.startsWith("?") ? search : search ? `?${search}` : "";
+  const h = hash.startsWith("#") ? hash : hash ? `#${hash}` : "";
+  return `${path}${q}${h}`;
+}
+
+/**
+ * Safe callback for session-expired redirects: learner study paths, then generic safe paths.
+ */
+export function resolveSessionExpiredCallbackPath(rawPath: string): string {
+  const learner = resolveLearnerStudyCallbackPath(rawPath);
+  if (learner) return learner;
+  const marketing = resolveMarketingCallbackPath(rawPath, { rejectLearnerAppShell: false });
+  if (marketing) return marketing;
+  if (rawPath.startsWith("/app/") && !isLearnerAppShellCallbackPathname(rawPath.split("?")[0] ?? rawPath)) {
+    return rawPath;
+  }
+  return "/app/start-studying";
+}
+
+export function buildSessionExpiredLoginHref(resumePath: string, locale = "en"): string {
+  const callback = resolveSessionExpiredCallbackPath(resumePath);
+  return buildLoginHrefWithCallback(callback, locale, {
+    [AUTH_SESSION_EXPIRED_PARAM]: "expired",
+  });
+}
+
+/** Avoid redirect loops when already on login/signup with session=expired. */
+export function shouldSkipSessionExpiredRedirect(pathname: string, search: string): boolean {
+  const stripped = pathname.replace(/^\/(en|fr)(?=\/|$)/, "") || pathname;
+  if (!stripped.startsWith("/login") && !stripped.startsWith("/signup")) return false;
+  const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+  return params.get(AUTH_SESSION_EXPIRED_PARAM) === "expired";
 }
 
 export function wrapWithOnboardingIfNeeded(destination: string, needsOnboarding: boolean): string {

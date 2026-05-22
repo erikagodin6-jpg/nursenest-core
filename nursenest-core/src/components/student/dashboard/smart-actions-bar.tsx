@@ -8,7 +8,7 @@ import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 const ACTIONS = [
   {
     id: "smart_session",
-    label: "Start Smart Session",
+    label: "Start",
     href: "/app/questions",
     icon: <Brain className="h-4 w-4" />,
     color: "var(--semantic-chart-1)",

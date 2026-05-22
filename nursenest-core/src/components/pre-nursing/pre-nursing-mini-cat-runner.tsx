@@ -117,7 +117,7 @@ function IntroScreen({ onStart }: { onStart: () => void }) {
           color: "var(--role-cta-foreground, #fff)",
         }}
       >
-        Start adaptive exam →
+        Start
       </button>
       <p className="text-xs" style={{ color: "var(--semantic-text-secondary)" }}>
         No account required · Results shown at the end

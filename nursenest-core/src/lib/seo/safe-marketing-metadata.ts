@@ -13,6 +13,7 @@ import {
   isSeoHttpValidationStrict,
   validateMetadataAlternatesHttp,
 } from "@/lib/seo/seo-http-emit-validation";
+import { normalizeMarketingPageTitle } from "@/lib/seo/normalize-page-title";
 
 const METADATA_SLOW_MS = 2000;
 
@@ -43,13 +44,17 @@ export const FALLBACK_SITE_METADATA: Metadata = {
   description: "Adaptive practice, lessons, and exam-focused prep for nursing candidates.",
 };
 
-const BRAND_SUFFIX = "| NurseNest";
-
 function stripDuplicateBrandSuffix(title: Metadata["title"]): Metadata["title"] {
-  if (typeof title !== "string") return title;
-  const trimmed = title.trim();
-  if (!trimmed.endsWith(BRAND_SUFFIX)) return title;
-  return trimmed.slice(0, -BRAND_SUFFIX.length).trimEnd();
+  if (typeof title === "string") {
+    return normalizeMarketingPageTitle(title);
+  }
+  if (title && typeof title === "object" && "absolute" in title && typeof title.absolute === "string") {
+    return { ...title, absolute: normalizeMarketingPageTitle(title.absolute) };
+  }
+  if (title && typeof title === "object" && "default" in title && typeof title.default === "string") {
+    return { ...title, default: normalizeMarketingPageTitle(title.default) };
+  }
+  return title;
 }
 
 export type SafeMetadataContext = Partial<Metadata> & {

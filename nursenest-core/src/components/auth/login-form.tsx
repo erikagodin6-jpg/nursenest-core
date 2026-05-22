@@ -10,6 +10,8 @@ import { refreshThenReplaceIfDifferent } from "@/lib/auth/post-login-client-navi
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
+import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
+import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
@@ -224,6 +226,8 @@ export function LoginForm({
     <form
       className="nn-premium-auth-form mt-6 space-y-4"
       data-nn-premium-auth-form="login"
+      data-nn-auth-pending={pending ? "true" : "false"}
+      aria-busy={pending}
       /** Default HTML form method is GET — a submit before React hydrates would put credentials in the URL. */
       method="post"
       onSubmit={(e) => {
@@ -239,13 +243,14 @@ export function LoginForm({
           {t("pages.login.alreadySignedIn")}
         </p>
       ) : null}
+
       <div className="space-y-1.5">
         <label htmlFor="login-identifier" className="text-sm font-medium text-foreground">
           {t("pages.login.fieldIdentifierLabel")}
         </label>
         <input
           id="login-identifier"
-          className="nn-premium-auth-input w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          className="nn-premium-auth-input w-full rounded-xl px-3 py-2.5 text-sm"
           type="text"
           name="email"
           placeholder={t("pages.login.placeholderIdentifier")}
@@ -268,7 +273,7 @@ export function LoginForm({
         </div>
         <input
           id="login-password"
-          className="nn-premium-auth-input w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          className="nn-premium-auth-input w-full rounded-xl px-3 py-2.5 text-sm"
           type="password"
           name="password"
           placeholder={t("pages.login.placeholderPassword")}
@@ -294,42 +299,49 @@ export function LoginForm({
           </p>
         </div>
       </div>
-      {error || errorHelp ? (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="nn-premium-auth-alert rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
-        >
-          {error ? <p className="text-sm font-medium">{error}</p> : null}
-          {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
-        </div>
+      {error ? (
+        <AuthMessageBanner
+          tone="danger"
+          stateId="validation-error"
+          title={error}
+          message={errorHelp}
+        />
       ) : null}
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        {t("pages.login.legalBefore")}
-        {" "}
-        <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
-          {t("pages.login.termsLink")}
-        </Link>
-        {t("pages.login.legalAnd")}
-        <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
-          {t("pages.login.privacyLink")}
-        </Link>
-        {t("pages.login.legalAfter")}
-      </p>
-      <button
-        className="nn-premium-auth-primary-button w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)] disabled:pointer-events-none disabled:opacity-60"
-        type="submit"
-        disabled={pending || !clientReady}
-      >
-        {pending ? t("pages.login.signingIn") : t("pages.login.submit")}
-      </button>
+
+      <div className="nn-premium-auth-sticky-cta">
+        <button
+          className="nn-premium-auth-primary-button w-full rounded-xl px-4 py-3 text-sm font-semibold transition disabled:pointer-events-none disabled:opacity-60"
+          type="submit"
+          disabled={pending || !clientReady || alreadySignedIn}
+          aria-busy={pending}
+        >
+          {pending ? t("pages.login.signingIn") : t("pages.login.submit")}
+        </button>
+      </div>
+
       {!alreadySignedIn ? (
-        <p className="text-center text-sm text-muted-foreground">
-          {t("pages.login.signUpPrompt")}{" "}
-          <Link href={signupHrefWithResume} className="font-semibold text-primary underline-offset-4 hover:underline">
-            {t("pages.login.signUpCta")}
-          </Link>
-        </p>
+        <OAuthProviderButtonsServer
+          redirectTarget={redirectTarget}
+          disabled={pending || !clientReady}
+          surface="login"
+          marketingLocale={locale}
+          dividerPlacement="trailing"
+          dividerLabel="or"
+        />
+      ) : null}
+
+      {!alreadySignedIn ? (
+        <>
+          <p className="nn-premium-auth-mobile-trust text-center text-sm text-muted-foreground">
+            Trusted by nursing students nationwide
+          </p>
+          <p className="text-center text-sm text-muted-foreground">
+            {t("pages.login.signUpPrompt")}{" "}
+            <Link href={signupHrefWithResume} className="font-semibold text-primary underline-offset-4 hover:underline">
+              {t("pages.login.signUpCta")}
+            </Link>
+          </p>
+        </>
       ) : null}
     </form>
   );

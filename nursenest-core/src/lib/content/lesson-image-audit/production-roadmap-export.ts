@@ -14,6 +14,10 @@ function csvEscape(value: string | number | boolean | null | undefined): string 
   return s;
 }
 
+function mdInlineCode(value: string): string {
+  return "`" + value + "`";
+}
+
 const ROADMAP_CSV_COLUMNS: (keyof ImageProductionRoadmapItem)[] = [
   "productionPriority",
   "priorityScore",
@@ -55,18 +59,18 @@ export function imageProductionRoadmapToCsv(roadmap: ImageProductionRoadmap): st
 
 function formatLessonBlock(item: ImageProductionRoadmapItem, index: number): string[] {
   return [
-    `### ${index}. ${item.lessonTitle}`,
+    "### " + index + ". " + item.lessonTitle,
     "",
     `| Field | Value |`,
     `| --- | --- |`,
-    `| **Pathway** | ${item.pathway} (\`${item.pathwayId}\`) |`,
-    `| **Slug** | \`${item.slug}\` |`,
-    `| **Cluster** | ${item.cluster} |`,
-    `| **Status** | \`${item.currentImageStatus}\` (${item.backlogReason}) |`,
-    `| **Priority** | **${item.productionPriority}** (score ${item.priorityScore}) |`,
-    `| **Image type** | ${item.recommendedImageType.replace(/_/g, " ")} |`,
-    `| **Filename** | \`${item.recommendedFilename}\` |`,
-    `| **Alt text** | ${item.suggestedAltText} |`,
+    "| **Pathway** | " + item.pathway + " (" + mdInlineCode(item.pathwayId) + ") |",
+    "| **Slug** | " + mdInlineCode(item.slug) + " |",
+    "| **Cluster** | " + item.cluster + " |",
+    "| **Status** | " + mdInlineCode(item.currentImageStatus) + " (" + item.backlogReason + ") |",
+    "| **Priority** | **" + item.productionPriority + "** (score " + String(item.priorityScore) + ") |",
+    "| **Image type** | " + item.recommendedImageType.replace(/_/g, " ") + " |",
+    "| **Filename** | " + mdInlineCode(item.recommendedFilename) + " |",
+    "| **Alt text** | " + item.suggestedAltText + " |",
     `| **Clinical importance** | ${item.clinicalImportance}/100 |`,
     `| **Visual complexity** | ${item.visualComplexity}/100 |`,
     "",
@@ -90,7 +94,7 @@ function formatLessonBlock(item: ImageProductionRoadmapItem, index: number): str
     "",
     "```text",
     item.suggestedImagePrompt,
-    "```",
+    '```',
     "",
     "---",
     "",
@@ -120,7 +124,7 @@ export function priorityBacklogMarkdown(
   ];
 
   if (items.length === 0) {
-    lines.push("_No lessons in this tier for the current audit run._", "");
+    lines.push("_No lessons in this tier for the current audit run.", "");
     return lines.join("\n");
   }
 
@@ -143,7 +147,7 @@ export function duplicateVisualSystemsMarkdown(
     "",
     "Modular illustration systems — build once, label variants across related lessons.",
     "",
-    `**${opportunities.length}** reuse groups identified.",
+    `**${opportunities.length}** reuse groups identified.`,
     "",
     "## Quick-win systems (batch these first)",
     "",
@@ -162,41 +166,52 @@ export function duplicateVisualSystemsMarkdown(
     const countB = b[1].reduce((s, o) => s + o.lessonCount, 0);
     return countB - countA;
   })) {
-    lines.push(`### ${label}`, "");
+    lines.push("### " + label, "");
     for (const opp of opps) {
-      lines.push(
-        `#### ${opp.duplicateGroupId} — ${opp.lessonCount} lessons`,
+      const block: string[] = [
+        "#### " + opp.duplicateGroupId + " — " + String(opp.lessonCount) + " lessons",
         "",
         opp.recommendation,
         "",
-        `**Suggested base file:** \`${opp.recommendedFilename}\``,
-        opp.matchedObjectKey ? `**Current shared asset:** \`${opp.matchedObjectKey}\`` : "",
+        "**Suggested base file:** " + mdInlineCode(opp.recommendedFilename),
+      ];
+      if (opp.matchedObjectKey) {
+        block.push("**Current shared asset:** " + mdInlineCode(opp.matchedObjectKey));
+      }
+      block.push(
         "",
         "**Lessons:**",
         "",
-        ...opp.titles.slice(0, 12).map((t, i) => `- ${t} (\`${opp.lessonSlugs[i]}\`)`),
-        ...(opp.titles.length > 12 ? [`- _…and ${opp.titles.length - 12} more_`] : []),
-        "",
-        "---",
-        "",
+        ...opp.titles.slice(0, 12).map(
+          (t, i) => "- " + t + " (" + mdInlineCode(opp.lessonSlugs[i]!) + ")",
+        ),
       );
+      if (opp.titles.length > 12) {
+        block.push("- _...and " + String(opp.titles.length - 12) + " more_");
+      }
+      block.push("", "---", "");
+      lines.push(...block);
     }
   }
 
   if (opportunities.length === 0) {
-    lines.push("_No duplicate groups with 2+ lessons in this run._", "");
+    lines.push("_No duplicate groups with two or more lessons in this run.", "");
   }
 
   lines.push("## Proposed modular systems (backlog batching)", "", "Lessons sharing a visual system ID — build master art once.", "");
 
   for (const batch of proposedBatches.slice(0, 20)) {
     lines.push(
-      `### ${batch.label} (${batch.lessonCount} lessons)`,
+      "### " + batch.label + " (" + String(batch.lessonCount) + " lessons)",
       "",
       batch.recommendation,
       "",
-      ...batch.titles.slice(0, 8).map((t, i) => `- ${t} (\`${batch.slugs[i]}\`)`),
-      ...(batch.titles.length > 8 ? [`- _…and ${batch.titles.length - 8} more_`] : []),
+      ...batch.titles.slice(0, 8).map(
+        (t, i) => "- " + t + " (" + mdInlineCode(batch.slugs[i]!) + ")",
+      ),
+      ...(batch.titles.length > 8
+        ? ["- _...and " + String(batch.titles.length - 8) + " more_"]
+        : []),
       "",
       "---",
       "",
@@ -204,7 +219,10 @@ export function duplicateVisualSystemsMarkdown(
   }
 
   if (proposedBatches.length === 0) {
-    lines.push("_No proposed system batches (need 2+ backlog lessons per system)._", "");
+    lines.push(
+      "_No proposed system batches (need two or more backlog lessons per system).",
+      "",
+    );
   }
 
   return lines.join("\n");
@@ -232,11 +250,23 @@ export function clusterImageQueuesMarkdown(roadmap: ImageProductionRoadmap): str
     );
     for (const item of queue.items.slice(0, 40)) {
       lines.push(
-        `| ${item.productionPriority} | ${item.lessonTitle.replace(/\|/g, "/")} | \`${item.slug}\` | \`${item.recommendedFilename}\` | ${item.recommendedImageType.replace(/_/g, " ")} |`,
+        "| " +
+          item.productionPriority +
+          " | " +
+          item.lessonTitle.replace(/\|/g, "/") +
+          " | " +
+          mdInlineCode(item.slug) +
+          " | " +
+          mdInlineCode(item.recommendedFilename) +
+          " | " +
+          item.recommendedImageType.replace(/_/g, " ") +
+          " |",
       );
     }
     if (queue.items.length > 40) {
-      lines.push(`| … | _${queue.items.length - 40} more in CSV/JSON_ | | | |`);
+      lines.push(
+        "| ... | _" + String(queue.items.length - 40) + " more in CSV/JSON_ | | | |",
+      );
     }
     lines.push("", "---", "");
   }
@@ -270,7 +300,17 @@ export function imageProductionRoadmapSummaryMarkdown(roadmap: ImageProductionRo
 
   roadmap.all.slice(0, 25).forEach((item, i) => {
     lines.push(
-      `${i + 1}. **${item.lessonTitle}** — \`${item.slug}\` (${item.pathway}) — **${item.productionPriority}** — \`${item.recommendedFilename}\``,
+      String(i + 1) +
+        ". **" +
+        item.lessonTitle +
+        "** — " +
+        mdInlineCode(item.slug) +
+        " (" +
+        item.pathway +
+        ") — **" +
+        item.productionPriority +
+        "** — " +
+        mdInlineCode(item.recommendedFilename),
     );
   });
 
@@ -280,7 +320,7 @@ export function imageProductionRoadmapSummaryMarkdown(roadmap: ImageProductionRo
     "",
     ...(s.quickestWinSystems.length
       ? s.quickestWinSystems.map((w) => `- ${w}`)
-      : ["- _Run audit after inventory sync for richer system grouping._"]),
+      : ["- Run audit after inventory sync for richer system grouping."]),
     "",
     "## High learner value, no imagery",
     "",
@@ -291,7 +331,9 @@ export function imageProductionRoadmapSummaryMarkdown(roadmap: ImageProductionRo
     .slice(0, 20);
 
   for (const item of missingHigh) {
-    lines.push(`- **${item.lessonTitle}** (\`${item.slug}\`) — ${item.cluster}`);
+    lines.push(
+      "- **" + item.lessonTitle + "** (" + mdInlineCode(item.slug) + ") — " + item.cluster,
+    );
   }
 
   lines.push(
@@ -306,7 +348,13 @@ export function imageProductionRoadmapSummaryMarkdown(roadmap: ImageProductionRo
 
   for (const item of upgrades) {
     lines.push(
-      `- **${item.lessonTitle}** — status \`${item.currentImageStatus}\` — ${item.whyImageryNeeded.split(".")[0]}.`,
+      "- **" +
+        item.lessonTitle +
+        "** — status " +
+        mdInlineCode(item.currentImageStatus) +
+        " — " +
+        item.whyImageryNeeded.split(".")[0] +
+        ".",
     );
   }
 
@@ -328,18 +376,18 @@ export function imageProductionRoadmapSummaryMarkdown(roadmap: ImageProductionRo
     "",
     "| File | Purpose |",
     "| --- | --- |",
-    "| `critical-images.md` | CRITICAL production queue |",
-    "| `high-priority-images.md` | HIGH production queue |",
-    "| `medium-priority-images.md` | MEDIUM production queue |",
-    "| `duplicate-visual-systems.md` | Shared / modular visual systems |",
-    "| `image-production-roadmap.csv` | Spreadsheet for producers |",
-    "| `image-production-roadmap.json` | Full structured backlog |",
+    "| critical-images.md | CRITICAL production queue |",
+    "| high-priority-images.md | HIGH production queue |",
+    "| medium-priority-images.md | MEDIUM production queue |",
+    "| duplicate-visual-systems.md | Shared / modular visual systems |",
+    "| image-production-roadmap.csv | Spreadsheet for producers |",
+    "| image-production-roadmap.json | Full structured backlog |",
     "",
     "## Next actions",
     "",
     "1. Produce **CRITICAL** assets first (flagship NCLEX visuals: PE, STEMI, ABG, shock, insulin, ECG).",
     "2. Batch **duplicate-visual-systems** modules before one-off illustrations.",
-    "3. Upload to Spaces as `recommendedFilename` (`.webp` / `.avif`), sync inventory, re-run audit.",
+    "3. Upload to Spaces as recommendedFilename (.webp / .avif), sync inventory, re-run audit.",
     "",
   );
 

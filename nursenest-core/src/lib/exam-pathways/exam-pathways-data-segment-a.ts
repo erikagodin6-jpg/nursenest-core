@@ -35,7 +35,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     shortName: "NCLEX-RN",
     stripeTier: TierCode.RN,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
-    seoTitle: "NCLEX-RN practice questions for Canada | NurseNest",
+    seoTitle: "NCLEX-RN Exam Prep Canada — Practice Questions & CAT",
     seoDescription:
       "Practice NCLEX-RN questions with rationales and adaptive tests. Built for Canadian nurses.",
     status: "active",

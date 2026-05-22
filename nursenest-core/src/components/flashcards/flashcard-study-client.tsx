@@ -195,7 +195,7 @@ export function FlashcardStudyClient({
                 setSessionKey((k) => k + 1);
               }}
             >
-              Start fresh
+              {t("learner.flashcards.hub.ctaStart")}
             </button>
           </div>
         </div>

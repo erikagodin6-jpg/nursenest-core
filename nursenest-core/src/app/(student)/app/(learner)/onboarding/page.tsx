@@ -9,7 +9,14 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string }>;
+}) {
+  const sp = await searchParams;
+  const resumeAfterOnboarding =
+    typeof sp.callbackUrl === "string" && sp.callbackUrl.startsWith("/") ? sp.callbackUrl : null;
   const session = await getProtectedRouteSession("(student).app.(learner).onboarding");
   const userId = (session?.user as { id?: string })?.id;
 
@@ -30,5 +37,11 @@ export default async function OnboardingPage() {
     redirect("/app/start-studying");
   }
 
-  return <OnboardingPageClient userId={userId} accountCountry={user.country} />;
+  return (
+    <OnboardingPageClient
+      userId={userId}
+      accountCountry={user.country}
+      resumeAfterOnboarding={resumeAfterOnboarding}
+    />
+  );
 }

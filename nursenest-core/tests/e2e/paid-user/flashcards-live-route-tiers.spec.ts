@@ -67,7 +67,7 @@ test.describe("Flashcards live route — tier pathway matrix", () => {
       await expect(presets.getByRole("button", { name: "Weak areas" })).toBeVisible();
       await expect(presets.getByRole("button", { name: "Starred" })).toBeVisible();
       await expect(presets.getByRole("button", { name: "Unseen" })).toBeVisible();
-      await expect(presets.getByRole("button", { name: "Review incorrect" })).toBeVisible();
+      await expect(presets.getByRole("button", { name: "Review" })).toBeVisible();
 
       await expect(main.locator("[data-nn-e2e-start-review]")).toBeVisible({ timeout: 90_000 });
 

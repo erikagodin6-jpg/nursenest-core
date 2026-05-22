@@ -164,7 +164,7 @@ export function WeakAreasImpactSection({
               border: "1px solid color-mix(in srgb, var(--semantic-brand) 20%, transparent)",
             }}
           >
-            Start practice
+            Practice
           </Link>
         </div>
       </section>

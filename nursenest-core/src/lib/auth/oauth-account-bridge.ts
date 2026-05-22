@@ -4,12 +4,18 @@ import type { Account, Profile, User } from "next-auth";
 import { Prisma } from "@prisma/client";
 import { isDeletedAccountEmail } from "@/lib/account/delete-learner-account";
 import { normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
+import { logOAuthAudit } from "@/lib/auth/oauth-audit-log";
+import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
+import {
+  assertOAuthProviderIdentitySafe,
+  isApplePrivateRelayEmail,
+  profileEmailForOAuth,
+} from "@/lib/auth/oauth-provider-identity";
 import { validateUsernameForSignup } from "@/lib/auth/username-rules";
 import { prisma } from "@/lib/db";
 import { getUserAccess, subscriptionStatusForSession } from "@/lib/entitlements/get-user-access";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 
 const OAUTH_USER_SELECT = {
   id: true,
@@ -79,7 +85,7 @@ async function suggestAvailableUsername(email: string): Promise<string> {
 }
 
 async function mapRowToBridgeUser(row: OAuthUserRow, isNewUser: boolean): Promise<OAuthBridgeUser> {
-  let subscriptionStatus = subscriptionStatusForSession(
+  const subscriptionStatus = subscriptionStatusForSession(
     await getUserAccess(row.id).catch(() => null),
   );
 
@@ -100,29 +106,40 @@ async function mapRowToBridgeUser(row: OAuthUserRow, isNewUser: boolean): Promis
 }
 
 /**
- * Find or create a learner for OAuth sign-in. Links by verified email (including Apple private relay).
- * Returns null when sign-in must be rejected (deleted account, missing email).
+ * Find or create a learner for OAuth sign-in. Links by verified email when safe;
+ * provider subject IDs prevent ambiguous cross-account merges.
  */
 export async function resolveOAuthSignInUser(args: {
   user: User;
   account: Account | null | undefined;
   profile?: Profile;
   ip?: string;
-}): Promise<OAuthBridgeUser | "account_not_linked" | null> {
+  requestOrigin?: string;
+}): Promise<OAuthBridgeUser | null> {
   const provider = providerIdFromAccount(args.account);
   if (!provider) return null;
 
   const emailRaw =
     (typeof args.user.email === "string" && args.user.email) ||
-    (typeof args.profile?.email === "string" && args.profile.email) ||
-    "";
+    profileEmailForOAuth(args.profile, "");
   const email = emailRaw.trim().toLowerCase();
   if (!email) {
+    logOAuthAudit("oauth_signin_failure", {
+      provider,
+      reason: "missing_email",
+      requestOrigin: args.requestOrigin,
+    });
     safeServerLog("auth", "oauth_missing_email", { provider });
     return null;
   }
 
   if (isDeletedAccountEmail(email)) {
+    logOAuthAudit("oauth_signin_failure", {
+      provider,
+      normalizedEmail: email,
+      reason: "deleted_account",
+      requestOrigin: args.requestOrigin,
+    });
     return null;
   }
 
@@ -139,13 +156,37 @@ export async function resolveOAuthSignInUser(args: {
     });
   } catch (e) {
     safeServerLogCritical("auth", "oauth_lookup_failed", { provider }, e);
+    logOAuthAudit("oauth_signin_failure", { provider, reason: "lookup_failed", requestOrigin: args.requestOrigin });
     return null;
   }
 
   if (existing) {
-    if (existing.passwordHash && existing.authProvider === "credentials" && provider !== "google") {
-      /* Apple/Google both allowed to link to credentials by email — always allow same-email merge */
+    const identity = await assertOAuthProviderIdentitySafe({
+      userId: existing.id,
+      provider,
+      account: args.account,
+      email,
+      requestOrigin: args.requestOrigin,
+    });
+    if (!identity.ok) {
+      logOAuthAudit("oauth_signin_failure", {
+        provider,
+        learnerId: existing.id,
+        normalizedEmail: email,
+        reason: identity.reason,
+        requestOrigin: args.requestOrigin,
+      });
+      return null;
     }
+
+    logOAuthAudit("oauth_existing_account_matched", {
+      provider,
+      learnerId: existing.id,
+      normalizedEmail: email,
+      bridgeOccurred: true,
+      isApplePrivateRelay: isApplePrivateRelayEmail(email),
+      requestOrigin: args.requestOrigin,
+    });
 
     try {
       const updated = await prisma.user.update({
@@ -161,6 +202,12 @@ export async function resolveOAuthSignInUser(args: {
       return mapRowToBridgeUser(updated, false);
     } catch (e) {
       safeServerLogCritical("auth", "oauth_update_failed", { provider, userId: existing.id }, e);
+      logOAuthAudit("oauth_signin_failure", {
+        provider,
+        learnerId: existing.id,
+        reason: "update_failed",
+        requestOrigin: args.requestOrigin,
+      });
       return null;
     }
   }
@@ -186,6 +233,32 @@ export async function resolveOAuthSignInUser(args: {
       select: OAUTH_USER_SELECT,
     });
 
+    logOAuthAudit("oauth_account_created", {
+      provider,
+      learnerId: created.id,
+      normalizedEmail: email,
+      accountCreated: true,
+      isApplePrivateRelay: isApplePrivateRelayEmail(email),
+      requestOrigin: args.requestOrigin,
+    });
+
+    const identity = await assertOAuthProviderIdentitySafe({
+      userId: created.id,
+      provider,
+      account: args.account,
+      email,
+      requestOrigin: args.requestOrigin,
+    });
+    if (!identity.ok) {
+      logOAuthAudit("oauth_signin_failure", {
+        provider,
+        learnerId: created.id,
+        reason: identity.reason,
+        requestOrigin: args.requestOrigin,
+      });
+      return null;
+    }
+
     captureServerEvent(analyticsDistinctId(created.id), "auth_oauth_signup_completed", {
       provider,
       tier: created.tier,
@@ -199,9 +272,19 @@ export async function resolveOAuthSignInUser(args: {
         where: { email: { equals: email, mode: "insensitive" } },
         select: OAUTH_USER_SELECT,
       });
-      if (retry) return mapRowToBridgeUser(retry, false);
+      if (retry) {
+        logOAuthAudit("oauth_existing_account_matched", {
+          provider,
+          learnerId: retry.id,
+          normalizedEmail: email,
+          bridgeOccurred: true,
+          requestOrigin: args.requestOrigin,
+        });
+        return mapRowToBridgeUser(retry, false);
+      }
     }
     safeServerLogCritical("auth", "oauth_create_failed", { provider }, e);
+    logOAuthAudit("oauth_signin_failure", { provider, reason: "create_failed", requestOrigin: args.requestOrigin });
     return null;
   }
 }

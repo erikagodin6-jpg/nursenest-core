@@ -28,7 +28,11 @@ const OWNED_BY_EXISTING_SEGMENTS = new Set([
   "/canada/np/cnple/loft-exam",
   "/canada/pn/rex-pn",
   "/canada/pn/rex-pn/questions",
+  "/canada/rn/nclex-rn",
+  "/canada/rn/nclex-rn/questions",
 ]);
+
+const LEGACY_AUTHORITY_PATH_PREFIXES = ["/canada-nclex-rn"] as const;
 
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
@@ -38,7 +42,11 @@ export async function GET(request: Request): Promise<Response> {
     ...listAuthorityResourcePaths(),
   ];
   const entries: SitemapUrlEntry[] = authorityPaths
-    .filter((path) => !OWNED_BY_EXISTING_SEGMENTS.has(path))
+    .filter(
+      (path) =>
+        !OWNED_BY_EXISTING_SEGMENTS.has(path) &&
+        !LEGACY_AUTHORITY_PATH_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)),
+    )
     .map((path) => ({ loc: `${origin}${path}` }));
   const filtered = filterPublicSitemapEntries(entries, origin);
   const seen = new Set<string>();

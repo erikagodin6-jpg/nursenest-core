@@ -32,7 +32,7 @@ test("labs hub renders categories and study-loop entry points", () => {
   assert.match(html, /Flashcards/);
   assert.match(html, /Practice questions/);
   assert.match(html, /Practice tests/);
-  assert.match(html, /Start CAT/);
+  assert.match(html, />\s*Start\s*</);
   assert.match(html, /Lab drills/);
   assert.match(html, /RN focus/);
 });

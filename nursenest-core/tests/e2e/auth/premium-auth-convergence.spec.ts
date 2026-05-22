@@ -42,12 +42,26 @@ test.describe("Premium auth convergence", () => {
     await expect(page.getByRole("button", { name: /create account/i })).toBeVisible();
   });
 
-  test("Sign In exposes recovery, legal, and account-creation paths without fake providers", async ({ page }) => {
+  test("session expired recovery preserves premium shell", async ({ page }) => {
+    await page.goto("/login?session=expired&callbackUrl=%2Fapp%2Fflashcards%3FpathwayId%3Dus-rn-nclex-rn", {
+      waitUntil: "domcontentloaded",
+    });
+    await expect(page.locator("[data-nn-premium-auth-session-expired]")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/please sign in again/i)).toBeVisible();
+    await expect(page.getByText(/progress is saved/i)).toBeVisible();
+  });
+
+  test("Sign In exposes recovery, legal, account-creation, and premium OAuth hooks", async ({ page }) => {
     await page.goto("/login", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("link", { name: /reset.*password|forgot password/i }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: /sign up|create account/i }).first()).toBeVisible();
     await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
-    await expect(page.getByText(/Continue With Google|Continue With Apple/i)).toHaveCount(0);
+    const oauthRegion = page.locator("[data-nn-premium-auth-oauth]");
+    const oauthCount = await oauthRegion.count();
+    if (oauthCount > 0) {
+      await expect(page.getByRole("button", { name: /continue with google/i })).toBeVisible();
+      await expect(oauthRegion.locator(".nn-premium-auth-oauth-button").first()).toBeVisible();
+    }
   });
 
   test("verification and auth error states render inside premium shell", async ({ page }) => {

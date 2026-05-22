@@ -295,7 +295,7 @@ function IntroScreen({
           color: "var(--role-cta-foreground, #fff)",
         }}
       >
-        Start practice exam
+        Start
       </button>
     </div>
   );

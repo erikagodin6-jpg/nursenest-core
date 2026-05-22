@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BreadcrumbsFromResolution } from "@/components/navigation/breadcrumbs";
 import { resolveDiscoveryBreadcrumbResolution } from "@/lib/breadcrumbs/discovery-breadcrumb-governance";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
-import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
+import { ExamPrepCourseProgramJsonLd, WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { listAuthorityComparisonPages } from "@/lib/seo/authority-comparison-pages";
 import type { AuthorityClusterPage } from "@/lib/seo/authority-cluster-pages";
 import { listAuthorityClusterSiblings } from "@/lib/seo/authority-cluster-pages";
@@ -24,7 +24,7 @@ const clusterLabels: Record<AuthorityClusterPage["cluster"], string> = {
 function clusterBasePath(page: AuthorityClusterPage): string {
   if (page.cluster === "cnple") return "/canada/np/cnple";
   if (page.cluster === "rex-pn") return "/canada/pn/rex-pn";
-  if (page.cluster === "ca-rn") return "/canada-nclex-rn";
+  if (page.cluster === "ca-rn") return "/canada/rn/nclex-rn";
   if (page.cluster === "np-fnp") return "/np-specialty/fnp";
   if (page.cluster === "np-agpcnp") return "/np-specialty/agpcnp";
   if (page.cluster === "np-pmhnp") return "/np-specialty/pmhnp";
@@ -162,6 +162,21 @@ export function AuthorityClusterPageView({ page }: { page: AuthorityClusterPage 
   return (
     <>
       <WebPageJsonLd title={page.title} description={page.description} path={page.path} inLanguage="en-CA" />
+      <ExamPrepCourseProgramJsonLd
+        path={page.path}
+        name={page.h1}
+        description={page.description}
+        teaches={page.examTerms}
+        occupationalCredential={
+          page.cluster === "ca-rn"
+            ? "NCLEX-RN (Canada)"
+            : page.cluster === "rex-pn"
+              ? "REx-PN"
+              : page.cluster === "cnple"
+                ? "CNPLE"
+                : undefined
+        }
+      />
       <FaqJsonLd items={[...page.faq]} />
       <ArticleJsonLd page={page} />
 

@@ -341,7 +341,7 @@ export function LabLessonPage({ lesson, hasAccess, trackLabel, labTrack, questio
             Practice tests
           </Link>
           <Link href={studyLinks.catLaunchHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
-            Start CAT
+            Start
           </Link>
           <Link href={studyLinks.catHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
             CAT builder

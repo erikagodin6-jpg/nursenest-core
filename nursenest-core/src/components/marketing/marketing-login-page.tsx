@@ -4,8 +4,10 @@ import { AuthFlowTrustReassurance } from "@/components/auth/auth-flow-trust-reas
 import { LoginForm } from "@/components/auth/login-form";
 import { PremiumAuthShell } from "@/components/auth/premium-auth-shell";
 import { VerifyStatusBanner } from "@/components/auth/verify-status-banner";
+import { MarketingLoginPageClient } from "@/components/marketing/marketing-login-page-client";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { AuthIncidentNotice } from "@/components/marketing/auth-incident-notice";
+import { AuthStateSurface } from "@/components/auth/auth-experience/auth-state-surface";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { pickLoginSurfaceMessages } from "@/lib/i18n/login-surface-message-keys";
@@ -96,13 +98,20 @@ export async function MarketingLoginPage({
 
   return (
     <MarketingI18nShardLayer messages={loginSurface} fallbackMessages={loginSurfaceFallback}>
+      <MarketingLoginPageClient>
       <PremiumAuthShell
         variant="login"
-        title={message(messages, "pages.login.welcome", "Sign In")}
-        subtitle={message(messages, "pages.login.subtitle", "Sign in to continue your NurseNest study plan.")}
+        title={message(messages, "pages.login.welcome", "Sign in")}
+        subtitle={message(messages, "pages.login.subtitle", "Continue your adaptive study session.")}
         termsHref={withMarketingLocale(resolved, "/terms")}
         privacyHref={withMarketingLocale(resolved, "/privacy")}
         contactHref={contactHref}
+        mobileEyebrow="NurseNest · Blossom"
+        stateSurface={
+          <Suspense>
+            <AuthStateSurface />
+          </Suspense>
+        }
       >
         <Suspense>
           <VerifyStatusBanner />
@@ -167,6 +176,7 @@ export async function MarketingLoginPage({
           <AuthFlowTrustReassurance variant="login" layout="standalone" contactHref={contactHref} />
         </section>
       </PremiumAuthShell>
+      </MarketingLoginPageClient>
     </MarketingI18nShardLayer>
   );
 }

@@ -1,0 +1,305 @@
+/* ==========================================================================
+   auth-tokens.css — Semantic auth surfaces (theme-scalable)
+
+   Blossom + light is the current baseline; maps to --theme-* / --semantic-*.
+   Ocean, Midnight, and dark modes inherit via theme-palettes.css overrides.
+   ========================================================================== */
+
+.nn-premium-auth-system {
+  --auth-bg: var(--theme-page-bg, var(--semantic-surface));
+  --auth-surface: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  --auth-surface-elevated: color-mix(in srgb, var(--semantic-surface) 98%, white);
+  --auth-border: color-mix(in srgb, var(--semantic-border-soft) 74%, var(--nn-auth-accent-primary, var(--semantic-brand)) 16%);
+  --auth-border-soft: color-mix(in srgb, var(--semantic-border-soft) 82%, transparent);
+  --auth-heading: var(--theme-heading-text);
+  --auth-subtext: var(--semantic-text-secondary);
+  --auth-primary: var(--nn-auth-accent-primary, var(--semantic-brand));
+  --auth-primary-foreground: var(--role-cta-foreground, var(--semantic-surface));
+  --auth-focus: color-mix(in srgb, var(--auth-primary) 32%, var(--semantic-info) 18%);
+  --auth-divider: var(--auth-border-soft);
+  --auth-shadow: var(--semantic-shadow-soft);
+  --auth-shadow-md: var(--semantic-shadow-md, var(--semantic-shadow-soft));
+  --auth-input-bg: color-mix(in srgb, var(--semantic-surface) 98%, var(--semantic-panel-muted));
+  --auth-input-border: color-mix(in srgb, var(--auth-border-soft) 55%, var(--auth-primary) 12%);
+  --auth-button-primary: var(--role-cta, var(--semantic-brand));
+  --auth-button-secondary: color-mix(in srgb, var(--auth-surface-elevated) 88%, var(--semantic-panel-muted));
+  --auth-success: var(--semantic-success);
+  --auth-warning: var(--semantic-warning);
+  --auth-danger: var(--semantic-danger);
+  --auth-info: var(--semantic-info);
+  --auth-radius-input: 0.875rem;
+  --auth-radius-card: var(--nn-auth-radius-card, 1.55rem);
+  --auth-input-min-height: var(--nn-auth-input-height, 3.25rem);
+}
+
+html[data-theme="mint-blossom"] .nn-premium-auth-system {
+  --auth-bg: #fffcfa;
+  --auth-surface: color-mix(in srgb, #fffefe 96%, #ffffff);
+  --auth-surface-elevated: #ffffff;
+  --auth-input-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, #ffffff 98%, #d9f8e7),
+    color-mix(in srgb, #fffefe 92%, #ffffff)
+  );
+  --auth-input-border: color-mix(in srgb, #b7efd1 22%, var(--semantic-border-soft));
+  --auth-primary: var(--theme-brand-strong, #ff8fb8);
+  --auth-focus: color-mix(in srgb, #5eb8f0 38%, #ff8fb8);
+}
+
+.nn-premium-auth-input {
+  min-height: var(--auth-input-min-height);
+  border-color: var(--auth-input-border) !important;
+  background: var(--auth-input-bg) !important;
+  color: var(--auth-heading) !important;
+}
+
+.nn-premium-auth-input::placeholder {
+  color: color-mix(in srgb, var(--auth-subtext) 88%, var(--semantic-text-muted));
+}
+
+.nn-premium-auth-input:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--auth-primary) 42%, var(--auth-input-border)) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-focus) 55%, transparent);
+}
+
+.nn-premium-auth-primary-button {
+  min-height: var(--auth-input-min-height);
+  background: var(--auth-button-primary) !important;
+  color: var(--auth-primary-foreground) !important;
+  border: 1px solid color-mix(in srgb, var(--auth-primary) 22%, transparent);
+  box-shadow: var(--auth-shadow);
+}
+
+.nn-premium-auth-form[data-nn-auth-pending="true"] .nn-premium-auth-input,
+.nn-premium-auth-form[data-nn-auth-pending="true"] .nn-premium-auth-checkbox {
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.nn-premium-auth-form[data-nn-auth-pending="true"] .nn-premium-auth-primary-button {
+  min-height: var(--auth-input-min-height);
+}
+
+/* Figma 87:2 — story trust chips + readiness tiles */
+.nn-premium-auth-trust-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.nn-premium-auth-trust-chips > span {
+  font-size: 0.72rem;
+  padding: 0.38rem 0.72rem;
+  border-radius: 999px;
+  font-weight: 650;
+  border: 1px solid color-mix(in srgb, var(--auth-primary) 12%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive, var(--semantic-success)) 22%, var(--auth-surface-elevated));
+  color: var(--auth-subtext);
+}
+
+.nn-premium-auth-readiness-preview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.nn-premium-auth-readiness-tile {
+  padding: 1rem;
+  border-radius: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--auth-border-soft) 70%, var(--auth-primary) 10%);
+  background: color-mix(in srgb, var(--auth-surface-elevated) 82%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.nn-premium-auth-readiness-tile strong {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  color: var(--auth-primary);
+  line-height: 1.1;
+}
+
+.nn-premium-auth-readiness-tile span {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.74rem;
+  color: var(--auth-subtext);
+}
+
+.nn-premium-auth-mobile-eyebrow {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--auth-primary);
+  text-align: center;
+}
+
+/* Centralized auth state banners */
+.nn-auth-message-banner {
+  border-radius: 0.95rem;
+  border: 1px solid var(--auth-border-soft);
+  padding: 0.85rem 1rem;
+  background: var(--auth-surface);
+}
+
+.nn-auth-message-banner[data-nn-auth-message-tone="warning"] {
+  border-color: color-mix(in srgb, var(--auth-warning) 35%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--auth-warning) 10%, var(--auth-surface));
+}
+
+.nn-auth-message-banner[data-nn-auth-message-tone="danger"] {
+  border-color: color-mix(in srgb, var(--auth-danger) 35%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--auth-danger) 10%, var(--auth-surface));
+}
+
+.nn-auth-message-banner[data-nn-auth-message-tone="info"] {
+  border-color: color-mix(in srgb, var(--auth-info) 32%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--auth-info) 8%, var(--auth-surface));
+}
+
+.nn-auth-message-banner__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--auth-heading);
+}
+
+.nn-auth-message-banner__body {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--auth-heading);
+}
+
+.nn-auth-message-banner__help {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--auth-subtext);
+}
+
+.nn-auth-continuation-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border-radius: var(--auth-radius-card);
+  border: 1px solid color-mix(in srgb, var(--auth-info) 28%, var(--auth-border-soft));
+  background: color-mix(in srgb, var(--auth-info) 6%, var(--auth-surface));
+  padding: 1.35rem 1.25rem;
+  text-align: center;
+}
+
+.nn-auth-continuation-card__mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.nn-auth-continuation-card__leaf {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50% 50% 50% 12%;
+  background: linear-gradient(145deg, var(--semantic-success), var(--auth-primary));
+  transform: rotate(-18deg);
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--auth-primary) 35%, transparent);
+}
+
+.nn-auth-continuation-card__progress {
+  width: 12.5rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--auth-primary) 18%, var(--auth-border-soft));
+  overflow: hidden;
+  position: relative;
+}
+
+.nn-auth-continuation-card__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  border-radius: inherit;
+  background: var(--auth-primary);
+  animation: nn-auth-continuation-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes nn-auth-continuation-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-auth-continuation-card__progress::after {
+    animation: none;
+    width: 55%;
+  }
+}
+
+.nn-auth-continuation-card__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--auth-primary);
+}
+
+.nn-auth-continuation-card__title {
+  font-size: 1.35rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--auth-heading);
+}
+
+.nn-auth-continuation-card__headline {
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--auth-heading);
+}
+
+.nn-auth-continuation-card__detail {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--auth-subtext);
+}
+
+/* Figma 88:8 — mobile sticky primary CTA */
+.nn-premium-auth-mobile-trust {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .nn-premium-auth-mobile-trust {
+    display: block;
+  }
+
+  .nn-premium-auth-form[data-nn-premium-auth-form="login"] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nn-premium-auth-form[data-nn-premium-auth-form="login"] .nn-premium-auth-sticky-cta {
+    position: sticky;
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    z-index: 2;
+    margin-top: 0.5rem;
+    padding-top: 0.65rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--auth-surface) 0%, transparent) 0%,
+      color-mix(in srgb, var(--auth-surface) 92%, var(--auth-bg)) 35%
+    );
+  }
+}

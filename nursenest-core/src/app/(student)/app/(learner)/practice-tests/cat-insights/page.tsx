@@ -110,7 +110,7 @@ export default function CatInsightsPage() {
                   className="font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
                   href="/app/practice-tests"
                 >
-                  Start an adaptive test
+                  Start
                 </Link>
                 .
               </p>

@@ -697,7 +697,7 @@ export function PracticeQuestionSessionSetupClient({
           data-testid="start-practice-btn"
           className="nn-btn-primary inline-flex min-h-12 w-full items-center justify-center rounded-full px-8 text-base font-semibold shadow-md disabled:opacity-50 sm:w-auto sm:min-w-[18rem]"
         >
-          {starting ? "Starting…" : "Start Adaptive Practice"}
+          {starting ? "Starting…" : "Start"}
         </button>
         {startError ? (
           <p className="text-sm text-[var(--semantic-danger)]" role="alert">

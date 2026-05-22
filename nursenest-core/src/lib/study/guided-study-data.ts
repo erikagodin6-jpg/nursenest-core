@@ -196,7 +196,7 @@ function deriveNextStep(
       kind: "questions",
       title: `Practice: ${moderateWeak.topic}`,
       why: `${moderateWeak.topic} accuracy is ${moderateWeak.accuracyPct}% — focused practice will move this the most.`,
-      ctaLabel: "Start practice",
+      ctaLabel: "Start",
       href: questionsHref(moderateWeak.topic),
       urgency: "medium",
       topic: moderateWeak.topic,
@@ -209,7 +209,7 @@ function deriveNextStep(
       kind: "retest",
       title: "Take a readiness check",
       why: "Your practice scores are solid. A CAT session confirms where you really stand.",
-      ctaLabel: "Start CAT",
+      ctaLabel: "Start",
       href: "/app/practice-tests/start",
       urgency: "low",
     };
@@ -220,7 +220,7 @@ function deriveNextStep(
     kind: "questions",
     title: "Do a practice session",
     why: "Keep your momentum going with a focused question set.",
-    ctaLabel: "Practice now",
+    ctaLabel: "Practice",
     href: "/app/questions",
     urgency: "medium",
   };
@@ -265,7 +265,7 @@ function buildStudyStack(
       kind: "questions",
       title: `Practice 10 questions: ${questionTopic.topic}`,
       why: `Targeted repetition on ${questionTopic.topic} is the fastest way to raise your score.`,
-      ctaLabel: "Start practice",
+      ctaLabel: "Start",
       href: questionsHref(questionTopic.topic),
       urgency: "medium",
       topic: questionTopic.topic,
@@ -275,7 +275,7 @@ function buildStudyStack(
       kind: "questions",
       title: "Do a general practice session",
       why: "Regular mixed practice builds pattern recognition across topics.",
-      ctaLabel: "Practice now",
+      ctaLabel: "Practice",
       href: "/app/questions",
       urgency: "low",
     });
@@ -303,7 +303,7 @@ function buildStudyStack(
       kind: "retest",
       title: "Take a CAT readiness check",
       why: "Adaptive testing reveals your real exam readiness more accurately than practice alone.",
-      ctaLabel: "Start CAT",
+      ctaLabel: "Start",
       href: "/app/practice-tests/start",
       urgency: "low",
     });

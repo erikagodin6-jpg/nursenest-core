@@ -137,9 +137,14 @@ export const ALLIED = {
   caQuestions: buildAlliedGlobalHubPath("questions"),
 } as const;
 
-export function loginWithCallback(path: string): string {
-  const enc = encodeURIComponent(path.startsWith("/") ? path : `/${path}`);
-  return `${HUB.login}?callbackUrl=${enc}`;
+export function loginWithCallback(path: string, options?: { sessionExpired?: boolean }): string {
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  const params = new URLSearchParams();
+  params.set("callbackUrl", normalized);
+  if (options?.sessionExpired) {
+    params.set("session", "expired");
+  }
+  return `${HUB.login}?${params.toString()}`;
 }
 
 /** Signup with post-auth resume path (same shape as {@link loginWithCallback}). */

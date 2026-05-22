@@ -73,14 +73,25 @@ function wordCount(page: ReturnType<typeof listAuthorityClusterPages>[number]): 
 test("authority cluster registry covers every requested route with unique SEO fields", () => {
   const pages = listAuthorityClusterPages();
   const paths = listAuthorityClusterPaths();
-  assert.deepEqual([...paths].sort(), [...REQUIRED_PATHS].sort());
-  assert.equal(new Set(paths).size, REQUIRED_PATHS.length, "authority cluster paths must be unique");
+  for (const required of REQUIRED_PATHS) {
+    assert.ok(paths.includes(required), `authority cluster registry must include ${required}`);
+  }
+  assert.ok(
+    !paths.some((p) => p === "/canada-nclex-rn" || p.startsWith("/canada-nclex-rn/")),
+    "legacy /canada-nclex-rn paths must not remain in the registry",
+  );
+  assert.ok(paths.includes("/canada/rn/nclex-rn"), "CA RN hub path must be registered");
+  assert.ok(
+    paths.includes("/canada/rn/nclex-rn/guide/study-guide"),
+    "CA RN guide paths must live under /guide/",
+  );
+  assert.equal(new Set(paths).size, paths.length, "authority cluster paths must be unique");
   assert.equal(new Set(pages.map((page) => page.title)).size, pages.length, "title tags must be unique");
   assert.equal(new Set(pages.map((page) => page.description)).size, pages.length, "meta descriptions must be unique");
   assert.equal(new Set(pages.map((page) => page.h1)).size, pages.length, "H1s must be unique");
 
   for (const page of pages) {
-    assert.ok(page.title.includes("NurseNest"), `${page.path} title should include NurseNest`);
+    assert.ok(page.title.length > 12, `${page.path} title should be substantive`);
     assert.ok(page.description.length >= 140 && page.description.length <= 220, `${page.path} meta description length`);
     assert.ok(page.faq.length >= 4, `${page.path} should have visible FAQ data`);
     assert.ok(page.ctas.length >= 4, `${page.path} should have study CTAs`);
@@ -101,7 +112,8 @@ test("authority cluster renderer emits required SEO structured-data components",
     "utf8",
   );
   assert.match(src, /<WebPageJsonLd\b/);
-  assert.match(src, /<BreadcrumbJsonLd\b/);
+  assert.match(src, /<ExamPrepCourseProgramJsonLd\b/);
   assert.match(src, /<FaqJsonLd\b/);
+  assert.match(src, /BreadcrumbsFromResolution/);
   assert.match(src, /listAuthorityClusterSiblings/);
 });

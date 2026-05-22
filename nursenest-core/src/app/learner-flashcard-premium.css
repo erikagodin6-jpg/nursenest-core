@@ -1125,6 +1125,25 @@ html[data-theme="ocean"] .nn-practice-tests-hub-premium .nn-lesson-system-card[d
   border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-panel-cool));
 }
 
+/* Short hub action labels — compact copy, balanced tap targets */
+.nn-flashcards-hub-hero-action-row [data-nn-e2e-start-review],
+.nn-flashcards-resume-spotlight [data-nn-e2e-flashcards-resume-primary],
+.nn-flashcards-sticky-start [data-nn-e2e-flashcards-resume-bottom],
+.nn-flashcards-sticky-start [data-nn-e2e-start-review-bottom],
+.nn-premium-practice-hub-hero [data-nn-e2e-exam-first-cta-cat],
+.nn-premium-practice-hub-hero [data-nn-e2e-exam-first-cta-continue],
+.nn-premium-practice-hub-hero [data-nn-e2e-exam-first-cta-custom] {
+  min-width: 7.25rem;
+  padding-inline: clamp(1.25rem, 4vw, 1.75rem);
+  letter-spacing: 0.01em;
+}
+
+.nn-flashcards-hero-action-row,
+.nn-flashcards-resume-spotlight,
+.nn-premium-practice-hub-hero .relative.mt-8 {
+  gap: 0.75rem;
+}
+
 @media (max-width: 639px) {
   .nn-flashcards-hub-premium {
     padding-inline: 0;

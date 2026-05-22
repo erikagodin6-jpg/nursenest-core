@@ -990,3 +990,117 @@ html[data-theme="aurora"] .nn-premium-auth-system {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
+
+.nn-premium-auth-oauth {
+  margin-top: 0.25rem;
+}
+
+.nn-premium-auth-oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.1rem 0 0.85rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nn-premium-auth-oauth-divider::before,
+.nn-premium-auth-oauth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 82%, transparent);
+}
+
+.nn-premium-auth-oauth-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.nn-premium-auth-oauth-button {
+  display: inline-flex;
+  min-height: var(--nn-auth-input-height);
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, transparent);
+  padding: 0.65rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    background 0.18s ease;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-auth-oauth-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--semantic-brand) 28%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+.nn-premium-auth-oauth-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--semantic-shadow-md, var(--semantic-shadow-soft));
+}
+
+.nn-premium-auth-oauth-button:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+}
+
+.nn-premium-auth-oauth-button--google {
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  color: var(--theme-heading-text);
+}
+
+.nn-premium-auth-oauth-button--apple {
+  background: color-mix(in srgb, var(--theme-heading-text) 92%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-surface) 96%, white);
+  border-color: color-mix(in srgb, var(--theme-heading-text) 24%, var(--semantic-border-soft));
+}
+
+.nn-premium-auth-oauth-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nn-premium-auth-oauth-hint {
+  margin-top: 0.65rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-premium-auth-oauth-continuation {
+  border-radius: 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface));
+  padding: 0.85rem 1rem;
+}
+
+@media (max-width: 767px) {
+  .nn-premium-auth-oauth-button {
+    min-height: 3.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-auth-oauth-button {
+    transition: none;
+  }
+  .nn-premium-auth-oauth-button:hover:not(:disabled) {
+    transform: none;
+  }
+}

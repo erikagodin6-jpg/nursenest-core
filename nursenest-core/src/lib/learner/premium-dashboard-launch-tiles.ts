@@ -139,7 +139,7 @@ export function buildPremiumDashboardLaunchTiles(args: {
       desc: cnple
         ? "Practice the CNPLE linear case flow with Canadian NP clinical judgment scenarios."
         : t("learner.studyHome.quickLaunch.catDesc"),
-      cta: cnple ? "Start simulation" : t("learner.studyModes.cat.cta"),
+      cta: t("learner.studyModes.cat.cta"),
       tone: "chart4",
       icon: cnple ? Theater : Crosshair,
     },

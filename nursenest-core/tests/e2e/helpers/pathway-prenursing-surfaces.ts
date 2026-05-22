@@ -72,7 +72,7 @@ export async function preNursingMiniCatSurface(args: {
   const main = page.locator("main").first();
   await expect(main).toBeVisible({ timeout: 120_000 });
 
-  await page.getByRole("button", { name: /Start adaptive exam/i }).click();
+  await page.getByRole("button", { name: /^Start$/i }).click();
 
   const firstOpt = page.locator('ul[role="radiogroup"] button[role="radio"]').first();
   await expect(firstOpt).toBeVisible({ timeout: 60_000 });

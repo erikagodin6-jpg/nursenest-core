@@ -241,6 +241,14 @@ const nextConfig = {
       /** RPN authority aliases → canonical PN/RPN product study surfaces. */
       { source: "/canada/rpn/rex-pn", destination: "/canada/pn/rex-pn", permanent: true },
       { source: "/canada/rpn/rex-pn/:path*", destination: "/canada/pn/rex-pn/:path*", permanent: true },
+      /** Legacy Canada NCLEX bookmark → canonical RN pathway hub (query strings preserved). */
+      { source: "/canada-nclex-rn", destination: "/canada/rn/nclex-rn", permanent: true },
+      { source: "/canada-nclex-rn/overview", destination: "/canada/rn/nclex-rn", permanent: true },
+      {
+        source: "/canada-nclex-rn/:topic",
+        destination: "/canada/rn/nclex-rn/guide/:topic",
+        permanent: true,
+      },
     ];
   },
 

@@ -40,7 +40,7 @@ test.describe("Flashcards hub session setup", () => {
       await expect(main.locator("[data-nn-e2e-flashcards-readiness]")).toBeVisible({ timeout: 60_000 });
       await expect(main.locator("[data-nn-e2e-flashcards-readiness-headline]")).toBeVisible();
       await expect(main.locator("[data-nn-e2e-flashcards-session-preview]")).toBeVisible();
-      await expect(main.getByRole("link", { name: /Start adaptive session/i }).first()).toBeVisible();
+      await expect(main.getByRole("link", { name: /^Start$/i }).first()).toBeVisible();
       await expect(main.locator("[data-nn-e2e-flashcards-setup-panel]")).toBeVisible();
     } finally {
       observers.dispose();

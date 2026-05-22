@@ -1372,7 +1372,7 @@ export default async function PathwayLessonsHubPage({
               aria-disabled={!canStartCat}
               className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
             >
-              {canStartCat ? "Start adaptive exam" : "Adaptive exam unavailable"}
+              {canStartCat ? "Start" : "Adaptive exam unavailable"}
             </Link>
           </div>
         </div>

@@ -1,6 +1,6 @@
 # Lesson Image Coverage Audit
 
-Generated: 2026-05-21T23:31:08.554Z
+Generated: 2026-05-21T23:54:28.808Z
 
 ## Coverage
 
@@ -22,10 +22,10 @@ Generated: 2026-05-21T23:31:08.554Z
 
 ## Priority breakdown (should-have cohort)
 
-- **CRITICAL**: 0
-- **HIGH**: 57
-- **MEDIUM**: 151
-- **LOW**: 2954
+- **CRITICAL**: 50
+- **HIGH**: 87
+- **MEDIUM**: 90
+- **LOW**: 2935
 
 ## Production clusters
 
@@ -55,6 +55,10 @@ Generated: 2026-05-21T23:31:08.554Z
 - `missing-images.json` — production queue (no/low/fuzzy match among should-have)
 - `high-priority-images.json` — CRITICAL + HIGH roadmap
 - `duplicate-opportunities.json` — shared visual systems / reuse
+- `critical-images.md` / `high-priority-images.md` / `medium-priority-images.md` — human production queues
+- `image-production-roadmap.csv` / `.json` — full prioritized backlog
+- `duplicate-visual-systems.md` — modular reuse opportunities
+- `IMAGE-PRODUCTION-ROADMAP.md` — what to create next (executive summary)
 
 ## Next steps
 

@@ -109,13 +109,13 @@ export function CatAmbiguityPathwayPicker({
               <Link
                 href={href}
                 data-nn-qa-cat-ambiguity-option={option.id}
-                aria-label={`Start CAT for ${displayLabel}`}
+                aria-label={`Start ${displayLabel}`}
                 onClick={() => handleOptionClick(option.id)}
                 className="flex min-h-[44px] w-full items-center justify-between gap-3 rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-4 py-2.5 text-sm text-[var(--semantic-text-primary)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-brand)]/50 focus-visible:ring-offset-1"
               >
                 <span className="font-semibold">{displayLabel}</span>
                 <span className="shrink-0 text-xs font-medium text-[var(--semantic-brand)]" aria-hidden>
-                  Start CAT →
+                  Start
                 </span>
               </Link>
             </li>

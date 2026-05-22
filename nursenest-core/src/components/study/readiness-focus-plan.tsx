@@ -176,7 +176,7 @@ function buildFocusCards(args: {
     cards.push({
       title: `Study: ${topWeak.topic}`,
       body: `${topWeak.missRate}% miss rate on ${topWeak.topic} with ${topWeak.attempted} attempts. A focused lesson review before drilling tends to be more efficient than questions alone.`,
-      cta: "Start lesson →",
+      cta: "Start",
       href: lesson,
     });
   }
@@ -193,7 +193,7 @@ function buildFocusCards(args: {
     cards.push({
       title: "Increase Question Volume",
       body: "You have the foundation. Now increase the volume — aim for mixed-topic sessions to expose gaps you haven't encountered yet.",
-      cta: "Start mixed session →",
+      cta: "Start",
       href: "/app/questions?preset=mixed",
     });
   } else if (band === "near_ready") {
@@ -238,7 +238,7 @@ function buildFocusCards(args: {
     cards.push({
       title: "Take Another CAT",
       body: "Re-run a CAT to check if your readiness score has improved. A new data point updates all trend indicators and adjusts recommendations.",
-      cta: "Start a CAT →",
+      cta: "Start",
       href: "/app/practice-tests",
     });
   }

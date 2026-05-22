@@ -375,6 +375,49 @@ export function PathwayLessonMedicalEducationJsonLd({
   );
 }
 
+/** Commercial / pathway authority hubs: Course + EducationalOccupationalProgram (single JSON-LD node). */
+export function ExamPrepCourseProgramJsonLd({
+  path,
+  name,
+  description,
+  teaches,
+  occupationalCredential,
+}: {
+  path: string;
+  name: string;
+  description: string;
+  teaches: readonly string[];
+  occupationalCredential?: string;
+}) {
+  const url = absoluteUrl(path);
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": ["Course", "EducationalOccupationalProgram"],
+        "@id": `${url}#exam-prep-program`,
+        name,
+        description,
+        url,
+        provider: { "@id": ORG_ID },
+        educationalLevel: "Professional nursing licensure examination preparation",
+        teaches: [...teaches],
+        hasCourseInstance: {
+          "@type": "CourseInstance",
+          courseMode: "online",
+          courseWorkload:
+            "Self-paced lessons, adaptive practice questions, flashcards, CAT simulation, and rationale review",
+        },
+        ...(occupationalCredential
+          ? {
+              occupationalCredentialAwarded: occupationalCredential,
+            }
+          : {}),
+      }}
+    />
+  );
+}
+
 export function BlogFaqPageJsonLd({ items }: { items: { question: string; answer: string }[] }) {
   if (!items.length) return null;
   return (

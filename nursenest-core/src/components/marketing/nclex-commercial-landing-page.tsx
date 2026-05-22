@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { seoPageMetadata } from "@/lib/seo/marketing-metadata";
 import {
+  buildNclexCommercialArticleJsonLd,
   buildNclexCommercialFaqJsonLd,
   getNclexCommercialLandingBySlug,
   type LandingCta,
@@ -193,6 +194,7 @@ export function NclexCommercialLandingPage({ slug }: { slug: string }) {
 
   return (
     <main className="nn-nclex-commercial">
+      <JsonLd value={buildNclexCommercialArticleJsonLd(landing)} />
       <JsonLd value={buildNclexCommercialFaqJsonLd(landing)} />
 
       <section className="nn-nclex-commercial-hero">

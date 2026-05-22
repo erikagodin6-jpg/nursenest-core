@@ -35,7 +35,12 @@ export type AuthorityClusterPage = {
 const CNPLE_BASE = "/canada/np/cnple";
 const REX_BASE = "/canada/pn/rex-pn";
 const RT_BASE = "/allied-health/respiratory-therapy";
-const CA_RN_BASE = "/canada-nclex-rn";
+const CA_RN_BASE = "/canada/rn/nclex-rn";
+
+/** Authority SEO guides live under `/guide/*` so product routes (`/questions`, `/lessons`, …) stay canonical. */
+function caRnAuthorityPath(slug: string): string {
+  return slug === "overview" ? CA_RN_BASE : `${CA_RN_BASE}/guide/${slug}`;
+}
 const NP_FNP_BASE = "/np-specialty/fnp";
 const NP_AGPCNP_BASE = "/np-specialty/agpcnp";
 const NP_PMHNP_BASE = "/np-specialty/pmhnp";
@@ -615,12 +620,15 @@ function buildCaRnPage(
   tableRows: readonly (readonly string[])[],
   extraSection: string,
 ): AuthorityClusterPage {
-  const path = pagePath(CA_RN_BASE, slug);
+  const path = caRnAuthorityPath(slug);
   return {
     cluster: "ca-rn",
     slug,
     path,
-    title: slug === "overview" ? `NCLEX-RN Exam Prep for Canada (2026) | NurseNest` : `${topic} (2026) — NCLEX-RN Canada | NurseNest`,
+    title:
+      slug === "overview"
+        ? "NCLEX-RN Exam Prep for Canada (2026)"
+        : `${topic} (2026) — NCLEX-RN Canada Study Guide`,
     description: slug === "overview"
       ? `Prepare for the NCLEX-RN in Canada with CAT-adaptive practice questions, Next Generation NCLEX item types, client needs category review, and clinical judgment practice.`
       : `${topic} for NCLEX-RN preparation — Canadian registration context, client needs framing, NGN item types, and rationale-first practice questions.`,

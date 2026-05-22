@@ -1,17 +1,19 @@
 import type { NextAuthConfig } from "next-auth";
+import { cookies } from "next/headers";
 import {
   resolveAuthJsRedirectUrl,
   wrapWithOnboardingIfNeeded,
 } from "@/lib/auth/auth-flow-governance";
+import { trackAuthCallbackRejected } from "@/lib/auth/auth-redirect-telemetry";
+import { logOAuthAudit } from "@/lib/auth/oauth-audit-log";
 import { resolveOAuthSignInUser } from "@/lib/auth/oauth-account-bridge";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-type SignInCallbackArgs = Parameters<NonNullable<NextAuthConfig["callbacks"]>["signIn"]>>[0];
+const OAUTH_ONBOARDING_COOKIE = "nn_oauth_needs_onboarding";
 
 export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, "signIn" | "redirect"> = {
-  async signIn(params: SignInCallbackArgs) {
+  async signIn(params) {
     const account = params.account;
     if (!account?.provider || account.provider === "credentials") {
       return true;
@@ -20,18 +22,41 @@ export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, 
     const request = "request" in params ? (params.request as Request | undefined) : undefined;
     const ip = request ? getTrustedClientIp(request) : "unknown";
 
+    const requestOrigin =
+      request && "headers" in request
+        ? (request.headers.get("referer") ?? request.headers.get("origin") ?? undefined)
+        : undefined;
+
     const bridged = await resolveOAuthSignInUser({
       user: params.user,
       account,
       profile: params.profile,
       ip,
+      requestOrigin,
     });
 
-    if (bridged === "account_not_linked") {
+    if (!bridged) {
+      logOAuthAudit("oauth_signin_failure", {
+        provider: account.provider as "google" | "apple",
+        reason: "bridge_rejected",
+        requestOrigin,
+      });
       return false;
     }
-    if (!bridged) {
-      return false;
+
+    if (bridged.needsPathwayOnboarding) {
+      try {
+        const jar = await cookies();
+        jar.set(OAUTH_ONBOARDING_COOKIE, "1", {
+          maxAge: 120,
+          httpOnly: true,
+          sameSite: "lax",
+          path: "/",
+          secure: process.env.NODE_ENV === "production",
+        });
+      } catch {
+        /* cookies() unavailable in some edge paths — learner /app routes still gate onboarding */
+      }
     }
 
     params.user.id = bridged.id;
@@ -49,6 +74,14 @@ export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, 
     (params.user as { nnIsNewOAuthUser?: boolean }).nnIsNewOAuthUser = bridged.isNewUser;
     (params.user as { nnOAuthProvider?: string }).nnOAuthProvider = account.provider;
 
+    logOAuthAudit("oauth_signin_success", {
+      provider: account.provider as "google" | "apple",
+      learnerId: bridged.id,
+      accountCreated: bridged.isNewUser,
+      bridgeOccurred: !bridged.isNewUser,
+      requestOrigin,
+    });
+
     captureServerEvent(analyticsDistinctId(bridged.id), "auth_oauth_signin_success", {
       provider: account.provider,
       is_new_user: bridged.isNewUser,
@@ -58,32 +91,25 @@ export const oauthAuthCallbacks: Pick<NonNullable<NextAuthConfig["callbacks"]>, 
   },
 
   async redirect({ url, baseUrl }) {
-    let target = resolveAuthJsRedirectUrl(url, baseUrl);
+    const resolved = resolveAuthJsRedirectUrl(url, baseUrl);
+    const fallback = `${baseUrl}/login`;
+    if (resolved === fallback && url !== fallback && !url.startsWith("/login")) {
+      trackAuthCallbackRejected("unsafe_redirect_target", "oauth_redirect");
+    }
+    const target = resolved;
+    let needsOnboarding = false;
     try {
-      const parsed = new URL(target, baseUrl);
-      const needsOnboarding = parsed.searchParams.get("onboarding") === "1";
+      const jar = await cookies();
+      needsOnboarding = jar.get(OAUTH_ONBOARDING_COOKIE)?.value === "1";
       if (needsOnboarding) {
-        parsed.searchParams.delete("onboarding");
-        const dest = `${parsed.pathname}${parsed.search}${parsed.hash}`;
-        return wrapWithOnboardingIfNeeded(dest, true);
+        jar.delete(OAUTH_ONBOARDING_COOKIE);
       }
     } catch {
-      /* use target as-is */
+      /* no cookie access */
+    }
+    if (needsOnboarding) {
+      return wrapWithOnboardingIfNeeded(target, true);
     }
     return target;
   },
 };
-
-export function mergeAuthRedirectCallback(
-  existing: NextAuthConfig["callbacks"] | undefined,
-): NextAuthConfig["callbacks"]["redirect"] {
-  const prior = existing?.redirect;
-  return async (params) => {
-    const oauthResult = await oauthAuthCallbacks.redirect!(params);
-    if (prior) {
-      const merged = await prior(params);
-      if (merged && merged !== params.url) return merged;
-    }
-    return oauthResult;
-  };
-}

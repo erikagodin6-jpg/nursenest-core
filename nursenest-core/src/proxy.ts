@@ -197,7 +197,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     }
 
     if (res.status >= 300 && res.status < 400) {
-      return res as NextResponse;
+      const { maybeEnhanceSessionExpiredLoginRedirect } = await import(
+        "@/lib/auth/session-expired-redirect"
+      );
+      return (await maybeEnhanceSessionExpiredLoginRedirect(res, forwarded)) as NextResponse;
     }
 
     const final = NextResponse.next({

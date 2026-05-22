@@ -172,7 +172,7 @@ const STUDY_LOOP_LINKS: Array<{ hrefKey: keyof LabsStudyLinks; label: string }> 
   { hrefKey: "flashcardsHref", label: "Flashcards" },
   { hrefKey: "questionBankHref", label: "Practice questions" },
   { hrefKey: "practiceTestsTopicHref", label: "Practice tests" },
-  { hrefKey: "catLaunchHref", label: "Start CAT" },
+  { hrefKey: "catLaunchHref", label: "Start" },
   { hrefKey: "catHref", label: "CAT builder" },
   { hrefKey: "labDrillsHref", label: "Lab drills" },
 ];

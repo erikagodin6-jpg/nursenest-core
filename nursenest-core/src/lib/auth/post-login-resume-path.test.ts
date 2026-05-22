@@ -40,10 +40,10 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
   });
 
-  it("ignores deep /app routes as callbacks on auth pages", () => {
+  it("honors deep /app/lessons callbacks for learner intent preservation", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/lessons");
-    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app/lessons");
   });
 
   it("honors marketing callback paths", () => {
@@ -61,10 +61,10 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/blog", sp, "en"), "/");
   });
 
-  it("honors marketing callback with query on path", () => {
+  it("blocks auth-page callbacks and falls back to marketing home", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/login?foo=bar");
-    assert.equal(resolveMarketingAuthRedirectTarget("/signup", sp, "en"), "/login?foo=bar");
+    assert.equal(resolveMarketingAuthRedirectTarget("/signup", sp, "en"), "/");
   });
 
   it("honors locale-prefixed marketing paths as callback", () => {
@@ -79,10 +79,10 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/us/rn/nclex-rn/lessons", sp, "en"), "/");
   });
 
-  it("ignores /app/lessons callback and falls back to marketing home", () => {
+  it("honors /app/lessons callback from marketing study hubs", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/lessons");
-    assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/");
+    assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/app/lessons");
   });
 
   it("honors tier-scoped /app/questions?pathwayId=… callback after login", () => {
@@ -119,6 +119,12 @@ describe("resolveMarketingAuthRedirectTarget", () => {
       resolveMarketingAuthRedirectTarget("/login", sp, "en"),
       "/app/practice-tests/cat-launch?pathwayId=us-lpn-nclex-pn",
     );
+  });
+
+  it("honors learner analytics callback after login", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/account/analytics");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app/account/analytics");
   });
 
   it("honors tier-scoped /app/flashcards?pathwayId=… callback after login", () => {

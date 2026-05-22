@@ -32,7 +32,7 @@ test.describe("Practice Tests hub i18n", () => {
     }
 
     await expect(page.getByRole("heading", { name: "Practice for your exam" })).toBeVisible();
-    await expect(page.getByText("Start CAT exam", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Start", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("Build a focused practice set", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("Study tools", { exact: true }).first()).toBeVisible();
   });

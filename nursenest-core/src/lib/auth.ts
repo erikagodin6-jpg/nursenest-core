@@ -6,6 +6,8 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
+import { oauthAuthCallbacks } from "@/lib/auth/oauth-auth-callbacks";
+import { buildOAuthProviders } from "@/lib/auth/oauth-config";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { clearLoginFailures } from "@/lib/auth/login-lockout";
@@ -171,6 +173,7 @@ export const authConfig: NextAuthConfig = {
   },
 
   providers: [
+    ...buildOAuthProviders(),
     Credentials({
       credentials: {
         email: { label: "Email or username", type: "text" },
@@ -289,6 +292,8 @@ export const authConfig: NextAuthConfig = {
 
   callbacks: {
     ...authCallbacks,
+    signIn: oauthAuthCallbacks.signIn,
+    redirect: oauthAuthCallbacks.redirect,
     jwt: nodeJwtCallback,
   },
 };

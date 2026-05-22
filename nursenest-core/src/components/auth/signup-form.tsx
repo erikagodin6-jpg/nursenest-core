@@ -20,6 +20,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { refreshThenReplaceIfDifferent } from "@/lib/auth/post-login-client-navigation";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
+import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
 
 export function SignupForm({
   termsHref = "/terms",
@@ -356,6 +357,13 @@ export function SignupForm({
           </select>
         </div>
       </div>
+      <OAuthProviderButtonsServer
+        redirectTarget={redirectTarget}
+        disabled={pending || !clientReady}
+        surface="signup"
+        marketingLocale={locale}
+      />
+
       <TurnstileSignup onToken={onCaptcha} />
       {error || errorHelp ? (
         <div

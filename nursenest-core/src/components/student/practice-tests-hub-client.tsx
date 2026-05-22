@@ -545,15 +545,8 @@ export function PracticeTestsHubClient({
 
   const primaryStartLabel = useMemo(() => {
     if (creating) return t("learner.practiceTests.hub.building");
-    if (selectionMode === "cat") {
-      return catPresentationMode === "exam_simulation"
-        ? t("learner.practiceTests.hub.startCatExam")
-        : t("learner.practiceTests.hub.startCatAdaptive");
-    }
-    return linearDeliveryMode === "exam"
-      ? t("learner.practiceTests.hub.startPracticeExam")
-      : t("learner.practiceTests.hub.startPracticeQuestions");
-  }, [creating, selectionMode, catPresentationMode, linearDeliveryMode, t]);
+    return t("learner.practiceTests.hub.ctaStart");
+  }, [creating, t]);
 
   useEffect(() => {
     if (initialCatMode) {

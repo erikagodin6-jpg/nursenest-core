@@ -940,10 +940,10 @@ export function FlashcardsHubClient({
             >
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">
-                  Continue studying
+                  {t("learner.flashcards.hub.resumeEyebrow")}
                 </p>
                 <p className="mt-1 text-lg font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
-                  Resume where you left off
+                  {t("learner.flashcards.hub.resumeHeadline")}
                 </p>
                 <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
                   {resumeCk.systemsLabel} · {resumeProgressPct}% through this run · ~{resumeCardsRemaining} card
@@ -956,7 +956,7 @@ export function FlashcardsHubClient({
                   data-nn-e2e-flashcards-resume-primary
                   className="inline-flex min-h-12 w-full items-center justify-center px-8 text-base font-bold shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] sm:w-auto"
                 >
-                  Continue session →
+                  {t("learner.flashcards.hub.ctaResume")}
                 </LearnerCtaLink>
                 <LearnerCtaLink
                   href={startHref}
@@ -964,7 +964,7 @@ export function FlashcardsHubClient({
                   data-nn-e2e-start-review
                   className="inline-flex min-h-10 w-full items-center justify-center px-5 text-sm font-semibold sm:w-auto"
                 >
-                  Start new adaptive session
+                  {t("learner.flashcards.hub.ctaStart")}
                 </LearnerCtaLink>
               </div>
             </div>
@@ -993,7 +993,7 @@ export function FlashcardsHubClient({
                       data-nn-e2e-start-review
                       className="inline-flex min-h-12 w-full items-center justify-center px-8 py-3.5 text-base font-bold shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] sm:w-auto"
                     >
-                      Start adaptive session
+                      {t("learner.flashcards.hub.ctaStart")}
                     </LearnerCtaLink>
                     <p
                       className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
@@ -1171,7 +1171,7 @@ export function FlashcardsHubClient({
               className="nn-flashcards-quick-review-cta inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold sm:min-h-9"
               data-nn-e2e-flashcards-quick-review
             >
-              Quick review · 10 cards
+              {t("learner.flashcards.hub.quickReviewCta")}
             </LearnerCtaLink>
             <button
               type="button"
@@ -1195,7 +1195,7 @@ export function FlashcardsHubClient({
               [
                 ["all", "All cards"],
                 ["starred", "Starred"],
-                ["incorrect", "Review incorrect"],
+                ["incorrect", t("learner.flashcards.hub.filterReviewIncorrect")],
               ] as const
             ).map(([key, label]) => {
               const on = activePreset === key;
@@ -1240,7 +1240,7 @@ export function FlashcardsHubClient({
             data-nn-e2e-flashcards-resume-bottom
             className="inline-flex min-h-12 w-full items-center justify-center text-base font-bold"
           >
-            Continue session →
+            {t("learner.flashcards.hub.ctaResume")}
           </LearnerCtaLink>
         ) : (
           <LearnerCtaLink
@@ -1248,7 +1248,7 @@ export function FlashcardsHubClient({
             data-nn-e2e-start-review-bottom
             className="inline-flex min-h-12 w-full items-center justify-center text-base font-bold"
           >
-            Start adaptive session
+            {t("learner.flashcards.hub.ctaStart")}
           </LearnerCtaLink>
         )}
       </div>

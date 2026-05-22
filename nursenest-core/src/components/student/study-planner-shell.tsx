@@ -113,7 +113,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
               href={remediationTopicDrillHref(weak[0].topic)}
               className="inline-flex min-h-11 items-center justify-center rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] hover:bg-role-cta-hover"
             >
-              Start priority review drill
+              Practice
             </Link>
           ) : null}
           <Link

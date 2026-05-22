@@ -45,7 +45,7 @@ export function buildFlashcardsSessionPreview(args: {
   parts.push(args.shuffleOn ? "Shuffle on" : "In order");
   if (args.weakOnly) parts.push("Weak areas");
   if (args.notStudiedOnly) parts.push("Unseen only");
-  if (args.incorrectOnly) parts.push("Review incorrect");
+  if (args.incorrectOnly) parts.push("Incorrect only");
 
   return { preview, ctaSubline: parts.join(" · ") };
 }

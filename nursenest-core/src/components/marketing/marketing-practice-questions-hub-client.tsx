@@ -306,7 +306,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Random items across the full pathway scope.",
       href: startMixedHref,
       accent: "brand" as const,
-      cta: "Start mixed quiz",
+      cta: "Start",
       needsLinear: true,
       needsCat: false,
     },
@@ -316,7 +316,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Prioritize topics where accuracy is lowest after you have attempt data.",
       href: weakHref,
       accent: "info" as const,
-      cta: "Practice weak areas",
+      cta: "Practice",
       needsLinear: true,
       needsCat: false,
     },
@@ -326,7 +326,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Replay questions you answered incorrectly recently.",
       href: incorrectHref,
       accent: "warning" as const,
-      cta: "Review incorrect",
+      cta: "Review",
       needsLinear: true,
       needsCat: false,
     },
@@ -336,7 +336,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Bias toward questions you have not opened yet.",
       href: unseenHref,
       accent: "chart" as const,
-      cta: "Start unseen set",
+      cta: "Start",
       needsLinear: true,
       needsCat: false,
     },
@@ -346,7 +346,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Computerized adaptive testing for this pathway.",
       href: catAppHref,
       accent: "purple" as const,
-      cta: "Launch CAT",
+      cta: "Start",
       needsLinear: false,
       needsCat: true,
     },
@@ -476,9 +476,18 @@ export function MarketingPracticeQuestionsHubClient({
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           {linearPracticePoolUsable ? (
-            <Link href={startPrimaryHref} className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-bold nn-text-on-solid-fill shadow-sm hover:opacity-90" data-testid="start-selected-systems-practice">
-              {studyFilter !== "all" ? `Start practice: ${FILTER_LABELS[studyFilter]}` : selected.size > 0 ? "Start selected practice" : "Start mixed practice"}
-            </Link>
+            <div className="flex min-w-[8.5rem] flex-col gap-1.5">
+              <Link href={startPrimaryHref} className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-2.5 text-sm font-bold nn-text-on-solid-fill shadow-sm hover:opacity-90" data-testid="start-selected-systems-practice">
+                Start
+              </Link>
+              <p className="text-center text-[11px] leading-snug text-[var(--theme-muted-text)] sm:text-left">
+                {studyFilter !== "all"
+                  ? FILTER_LABELS[studyFilter]
+                  : selected.size > 0
+                    ? `${selected.size} ${selected.size === 1 ? "category" : "categories"} selected`
+                    : "Mixed pathway practice"}
+              </p>
+            </div>
           ) : (
             <Link href={lessonsHref} className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-bold nn-text-on-solid-fill shadow-sm hover:opacity-90" data-testid="start-selected-systems-practice">
               Browse clinical lessons
@@ -486,7 +495,7 @@ export function MarketingPracticeQuestionsHubClient({
           )}
           {catCompletePoolUsable ? (
             <button type="button" disabled={startingAdaptive} onClick={() => void startAdaptivePractice()} className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white px-6 py-2.5 text-sm font-bold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-surface)] disabled:opacity-50" data-testid="start-adaptive-selected-systems">
-              {startingAdaptive ? "Starting…" : "Start adaptive session"}
+              {startingAdaptive ? "Starting…" : "Start"}
             </button>
           ) : null}
           {catCompletePoolUsable ? (

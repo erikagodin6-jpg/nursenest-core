@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { normalizeMarketingPageTitle } from "@/lib/seo/normalize-page-title";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 type OgType = "website" | "article";
@@ -14,13 +15,14 @@ export function seoPageMetadata(args: {
   robots?: Metadata["robots"];
 }): Metadata {
   const canonical = absoluteUrl(args.path);
+  const title = normalizeMarketingPageTitle(args.title);
   return {
-    title: args.title,
+    title,
     description: args.description,
     alternates: { canonical },
     robots: args.robots,
     openGraph: {
-      title: args.title,
+      title,
       description: args.description,
       url: canonical,
       type: args.ogType ?? "website",

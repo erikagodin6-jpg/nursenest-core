@@ -3,16 +3,20 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
+import { LearnerConnectedAccounts } from "@/components/student/learner-connected-accounts";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
+import type { LearnerConnectedAccountsSnapshot } from "@/lib/auth/oauth-connected-accounts.server";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 
 export function LearnerSecurityHub({
   hasPassword,
   sessionMaxDays,
+  connectedAccounts,
 }: {
   hasPassword: boolean;
   sessionMaxDays: number;
+  connectedAccounts?: LearnerConnectedAccountsSnapshot | null;
 }) {
   const { t } = useMarketingI18n();
   const locale = useMarketingLocale();
@@ -20,6 +24,8 @@ export function LearnerSecurityHub({
 
   return (
     <div className="space-y-8">
+      {connectedAccounts ? <LearnerConnectedAccounts snapshot={connectedAccounts} /> : null}
+
       <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
         <div className="border-b border-border/60 bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.security.section.passwordTitle")}</h2>

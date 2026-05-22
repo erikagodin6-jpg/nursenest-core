@@ -44,7 +44,7 @@ export function buildFlashcardsReadinessNarrative(
     tone = "warning";
   } else if (masteryPct > 0) {
     headline = "Early deck exposure — small wins compound fast.";
-    support = "Use Continue studying or a 20-card adaptive session to establish a daily rhythm.";
+    support = "Use Resume or a short session from the hub to establish a daily rhythm.";
     tone = "warning";
   }
 

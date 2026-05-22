@@ -9,7 +9,8 @@ import {
   listAuthorityClusterPaths,
 } from "@/lib/seo/authority-cluster-pages";
 
-const CA_RN_BASE = "/canada-nclex-rn";
+const CA_RN_BASE = "/canada/rn/nclex-rn";
+const CA_RN_GUIDE_PREFIX = `${CA_RN_BASE}/guide`;
 
 const EXPECTED_CA_RN_SLUGS = [
   "overview",
@@ -30,15 +31,17 @@ describe("CA RN authority cluster — contract", () => {
     }
   });
 
-  it("ca-rn overview page has correct base path", () => {
+  it("ca-rn overview page canonical path is the pathway hub", () => {
     const page = getAuthorityClusterPage("ca-rn", "overview");
     expect(page?.path).toBe(CA_RN_BASE);
   });
 
-  it("ca-rn topic pages have correct path structure", () => {
+  it("ca-rn topic pages live under /guide/ away from product routes", () => {
     const pages = listAuthorityClusterPages().filter((p) => p.cluster === "ca-rn" && p.slug !== "overview");
     for (const page of pages) {
-      expect(page.path, `Path for ${page.slug} should start with base`).toMatch(new RegExp(`^${CA_RN_BASE}/`));
+      expect(page.path, `Path for ${page.slug} should be under guide prefix`).toMatch(
+        new RegExp(`^${CA_RN_GUIDE_PREFIX}/`),
+      );
     }
   });
 

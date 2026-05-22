@@ -95,6 +95,54 @@
       "example": "G-XXXXXXXXXX",
       "category": "analytics"
     },
+    "AUTH_GOOGLE_ID": {
+      "required": false,
+      "type": "string",
+      "description": "Google OAuth client ID for Auth.js Continue with Google",
+      "category": "auth"
+    },
+    "AUTH_GOOGLE_SECRET": {
+      "required": false,
+      "type": "string",
+      "description": "Google OAuth client secret for Auth.js",
+      "category": "auth"
+    },
+    "AUTH_APPLE_ID": {
+      "required": false,
+      "type": "string",
+      "description": "Apple Services ID (Sign in with Apple)",
+      "category": "auth"
+    },
+    "AUTH_APPLE_SECRET": {
+      "required": false,
+      "type": "string",
+      "description": "Pre-generated Apple client secret JWT (optional if using Team ID + Key ID + .p8)",
+      "category": "auth"
+    },
+    "AUTH_APPLE_TEAM_ID": {
+      "required": false,
+      "type": "string",
+      "description": "Apple Developer Team ID for Sign in with Apple",
+      "category": "auth"
+    },
+    "AUTH_APPLE_KEY_ID": {
+      "required": false,
+      "type": "string",
+      "description": "Apple Sign in with Apple key ID",
+      "category": "auth"
+    },
+    "AUTH_APPLE_PRIVATE_KEY": {
+      "required": false,
+      "type": "string",
+      "description": "Apple .p8 private key contents (use \\n for newlines in env)",
+      "category": "auth"
+    },
+    "AUTH_APPLE_PRIVATE_KEY_PATH": {
+      "required": false,
+      "type": "string",
+      "description": "Filesystem path to Apple .p8 private key (server only)",
+      "category": "auth"
+    },
     "DOMAIN": {
       "required": false,
       "type": "string",

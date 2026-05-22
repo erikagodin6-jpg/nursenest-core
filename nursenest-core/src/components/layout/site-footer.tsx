@@ -323,6 +323,22 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       </li>
                       <li>
                         <FLink
+                          href="/canada/rn/nclex-rn"
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          NCLEX-RN Canada hub
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
+                          href="/canada/rn/nclex-rn/guide/clinical-judgment"
+                          className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
+                        >
+                          NCLEX clinical judgment guide
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink
                           href={REX_PN_CAT}
                           className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed"
                         >

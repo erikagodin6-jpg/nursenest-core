@@ -369,7 +369,7 @@ export function PathwayQuestionsHubView({
                 accentClass="success"
                 title="Quick practice"
                 description={`Run a focused set of ${pathway.shortName} items and jump straight into rationales.`}
-                ctaLabel="Start items"
+                ctaLabel="Start"
                 ctaHref={appQuestionsScoped}
               />
               <StudyModeCard
@@ -377,7 +377,7 @@ export function PathwayQuestionsHubView({
                 accentClass="info"
                 title="Full session"
                 description="Open the in-app bank with all filters, topic drill, rationale tracking, and performance history."
-                ctaLabel="Open practice"
+                ctaLabel="Practice"
                 ctaHref={appQuestionsScoped}
               />
             </>
@@ -387,7 +387,7 @@ export function PathwayQuestionsHubView({
               accentClass="info"
               title="Clinical lessons"
               description="Use structured objectives and lesson links while the scored question bank for this pathway grows."
-              ctaLabel="View lessons"
+              ctaLabel="Start"
               ctaHref={lessonsHref}
             />
           )}
@@ -397,7 +397,7 @@ export function PathwayQuestionsHubView({
               accentClass="brand"
               title="Adaptive CAT"
               description="One question at a time. Difficulty adjusts from your answers using the pathway-scoped pool."
-              ctaLabel="Open CAT intro"
+              ctaLabel="Start"
               ctaHref={catHref}
             />
           ) : null}

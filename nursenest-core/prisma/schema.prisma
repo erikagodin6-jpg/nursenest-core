@@ -115,6 +115,7 @@ model User {
   contentAutomationLogs         ContentAutomationLog[]
   emailNotificationLogs         EmailNotificationLog[]
   emailVerificationTokens       EmailVerificationToken[]
+  oauthProviderLinks            OAuthProviderLink[]
   attempts                      ExamAttempt[]
   examSessions                  ExamSession[]
   flashcardDraftsCreated        GeneratedFlashcardDraft[]   @relation("FlashcardDraftCreatedBy")
@@ -708,6 +709,23 @@ model PasswordResetToken {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+/// * Immutable OAuth provider subject binding (Google/Apple). Subject ID is authoritative; email is a snapshot only.
+model OAuthProviderLink {
+  id                  String   @id @default(cuid())
+  userId              String
+  provider            String   @db.VarChar(16)
+  providerAccountId   String   @db.VarChar(255)
+  emailSnapshot       String?  @db.VarChar(320)
+  isApplePrivateRelay Boolean  @default(false)
+  linkedAt            DateTime @default(now())
+  lastSignInAt        DateTime?
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("oauth_provider_links")
 }
 
 /// * Email verification tokens; raw token is never stored (only SHA-256 hex).

@@ -1,28 +1,28 @@
 {
-  "generatedAt": "2026-05-11T13:15:47.283Z",
-  "totalFallbacks": 82,
+  "generatedAt": "2026-05-21T23:56:56.937Z",
+  "totalFallbacks": 61,
   "byLocale": {
-    "fr": 3,
-    "tl": 3,
-    "hi": 4,
-    "es": 3,
-    "zh": 4,
-    "zh-tw": 4,
-    "ar": 3,
-    "ko": 5,
-    "pt": 5,
-    "pa": 4,
-    "vi": 4,
-    "ht": 5,
-    "ur": 4,
-    "ja": 3,
-    "fa": 5,
-    "de": 3,
-    "th": 4,
-    "tr": 5,
-    "id": 3,
-    "it": 4,
-    "ru": 4
+    "fr": 2,
+    "tl": 2,
+    "hi": 3,
+    "es": 2,
+    "zh": 3,
+    "zh-tw": 3,
+    "ar": 2,
+    "ko": 4,
+    "pt": 4,
+    "pa": 3,
+    "vi": 3,
+    "ht": 4,
+    "ur": 3,
+    "ja": 2,
+    "fa": 4,
+    "de": 2,
+    "th": 3,
+    "tr": 4,
+    "id": 2,
+    "it": 3,
+    "ru": 3
   },
   "events": [
     {
@@ -46,16 +46,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "fr",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "tl",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
@@ -70,16 +60,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "tl",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -118,16 +98,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "hi",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "es",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
@@ -142,16 +112,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "es",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -190,16 +150,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "zh",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "zh-tw",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -232,16 +182,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "zh-tw",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "ar",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
@@ -256,16 +196,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ar",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -312,16 +242,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "ko",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "pt",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -348,16 +268,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -406,16 +316,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "pa",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "vi",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -442,16 +342,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "vi",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -498,16 +388,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "ht",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "ur",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -540,16 +420,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "ur",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "ja",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
@@ -564,16 +434,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ja",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -620,16 +480,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "fa",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "de",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
@@ -644,16 +494,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "de",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -684,16 +524,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "th",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -742,16 +572,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "tr",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "id",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
@@ -766,16 +586,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],
@@ -814,16 +624,6 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "it",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
       "locale": "ru",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -850,16 +650,6 @@
       "key": "components.examPathwayHub.studyModes.practiceCatTitle",
       "localizedValue": "CAT practice tests",
       "englishValue": "{{exam}} CAT",
-      "placeholdersInEnglish": [
-        "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ru",
-      "key": "components.examPathwayHub.studyModes.practiceCta",
-      "localizedValue": "Sign in to practice",
-      "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
       ],

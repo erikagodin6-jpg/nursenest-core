@@ -455,7 +455,7 @@ export function PremiumNclexAnalyticsDashboard({
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link href="/app/practice-tests" className="nn-btn-primary inline-flex min-h-11 items-center rounded-2xl px-5 text-sm font-bold">
-                Start CAT
+                Start
               </Link>
               <Link href="/app/account/readiness" className="nn-btn-secondary inline-flex min-h-11 items-center rounded-2xl px-5 text-sm font-bold">
                 Readiness details

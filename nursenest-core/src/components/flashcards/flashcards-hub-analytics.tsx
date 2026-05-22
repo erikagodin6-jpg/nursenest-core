@@ -208,7 +208,7 @@ export function FlashcardsHubAnalytics({ pathwayId, srsStats: srsOverride }: Pro
           href={weakAreaFlashcardsHref(pathwayId)}
           className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-2 text-sm font-semibold text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))]"
         >
-          Review weak areas →
+          Practice
         </Link>
       </div>
 

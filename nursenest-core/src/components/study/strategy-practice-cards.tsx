@@ -184,7 +184,7 @@ function MixedSessionCard({ count }: { count?: number }) {
             color: "var(--bg-page, #fff)",
           }}
         >
-          Start mixed session →
+          Start
         </Link>
       </div>
     </article>

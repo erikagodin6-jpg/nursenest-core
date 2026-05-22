@@ -296,7 +296,7 @@ export function PremiumLearnerHub({
             href="/app/lessons"
             className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
           >
-            Continue lessons
+            Continue
             <ChevronRight className="h-4 w-4" aria-hidden />
           </Link>
         </div>
@@ -453,7 +453,7 @@ export function PremiumLearnerHub({
           )}
           <div className="mt-4 flex flex-wrap gap-4">
             <Link href="/app/practice-tests?startMode=practice_exam" className="inline-flex text-sm font-semibold text-primary hover:underline">
-              Open practice exams
+              Start
             </Link>
             <Link href="/app/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
               Exam-specific lessons

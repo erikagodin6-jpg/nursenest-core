@@ -10,7 +10,7 @@ export function LessonContinuationStrip({ rows }: { rows: LessonContinuationRow[
       <div className="flex flex-wrap items-center gap-2">
         <BookOpen className="h-4 w-4 text-primary" aria-hidden />
         <h2 id="lesson-continuation-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-          Continue lessons
+          Continue
         </h2>
       </div>
       <p className="mt-1 text-xs text-muted">Resume where you left off on each track.</p>

@@ -145,7 +145,7 @@
     "smoke:paid-unlock": "node scripts/paid-unlock-smoke.mjs",
     "test:unit:onboarding": "node --import tsx --test src/lib/context/context-routing.test.ts",
     "test:unit:rt-ventilator": "node --import tsx --test src/lib/rt-ventilator/rt-ventilator-module-config.test.ts src/lib/rt-ventilator/rt-ventilator-content-taxonomy.contract.test.ts src/lib/rt-ventilator/rt-ventilator-bank-pool-gate.test.ts",
-    "test:unit:cta-copy": "node --import tsx --test src/lib/ui/cta-copy-policy.test.ts",
+    "test:unit:cta-copy": "node --import tsx --test src/lib/ui/cta-copy-policy.test.ts src/lib/ui/hub-action-cta.test.ts",
     "test:unit:clinical-interpretation": "node --import tsx --test src/lib/clinical-interpretation/clinical-interpretation-registry.test.ts",
     "test:unit:clinical-serp": "node --import tsx --test src/lib/seo/clinical-serp-patterns.contract.test.ts",
     "test:unit:simulation-seo": "node --import tsx --test src/lib/simulations/simulation-seo-registry.test.ts",
