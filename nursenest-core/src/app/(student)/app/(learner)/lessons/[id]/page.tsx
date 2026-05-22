@@ -47,6 +47,7 @@ import { countTotalWordsInLessonSections } from "@/lib/lessons/pathway-lesson-pr
 import { assertPathwayLessonNoLegacyFallbackWithSubstantiveIncoming } from "@/lib/lessons/pathway-lesson-render-invariants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LessonContinueStudyNextBlock } from "@/components/student/lesson-continue-study-next-block";
+import { LessonNextStepsPanel } from "@/components/lessons/lesson-next-steps-panel";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
@@ -1347,21 +1348,29 @@ async function LessonDetailPageInner({ params }: Props) {
             studyNextHint={studyNextHint}
           />
         )}
-        <LessonContinueStudyNextBlock bundle={pathwayContinue} />
         {pathway ? (
-          <LessonTopicPracticeSection
-            pathway={pathway}
-            lessonTopic={record.topic}
+          <LessonNextStepsPanel
+            pathwayId={pathway.id}
             topicSlug={record.topicSlug}
+            topicLabel={record.topic}
             lessonSlug={record.slug}
-            relatedQuestionStems={relatedQuestionStems}
-            bankEntitlement={entitlement}
-            fullQuizAccess={entitlement.hasAccess}
-            userId={userId}
-            appLinksMode="direct"
-            preloadedQuizItems={topicLinkedQuizPreload}
+            nextLesson={
+              pathwayNextApp
+                ? { href: pathwayNextApp.href, title: pathwayNextApp.title }
+                : pathwayContinue?.primary
+                  ? { href: pathwayContinue.primary.href, title: pathwayContinue.primary.title, reason: pathwayContinue.primary.reason }
+                  : null
+            }
+            flashcardsHref={pathwayHubAppFlashcardsHref(pathway.id, record.topicSlug)}
+            practiceQuestionsHref={pathwayHubAppQuestionsHref(pathway.id, record.topic)}
+            allLessonsHref={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
+            practiceExamsHref="/app/practice-tests?startMode=practice_exam"
+            questionBankHref={pathwayHubAppQuestionsHref(pathway.id, null)}
+            hasAccess={entitlement.hasAccess}
           />
-        ) : null}
+        ) : (
+          <LessonContinueStudyNextBlock bundle={pathwayContinue} />
+        )}
       </>
     );
 
