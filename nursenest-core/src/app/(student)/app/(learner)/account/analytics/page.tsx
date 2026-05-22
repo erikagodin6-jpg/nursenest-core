@@ -14,13 +14,13 @@ import { PremiumNclexAnalyticsDashboard } from "@/components/study/premium-nclex
 import { AnalyticsDetailClient } from "./analytics-detail-client";
 import { loadMoreTrendData } from "./actions";
 import {
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

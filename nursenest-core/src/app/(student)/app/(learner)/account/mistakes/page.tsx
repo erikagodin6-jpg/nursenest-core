@@ -16,11 +16,11 @@ import { BROWSE_QUESTIONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   loadMarketingMessageShards,
   loadMarketingMessageShardsSync,
 } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

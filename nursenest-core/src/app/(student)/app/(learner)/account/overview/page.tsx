@@ -2,7 +2,6 @@ import Link from "next/link";
 import { TrialStatus } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import {
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   LearnerAccountPageHero,
   LearnerAccountShell,
   LearnerCategoryProgressGrid,
@@ -45,6 +44,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

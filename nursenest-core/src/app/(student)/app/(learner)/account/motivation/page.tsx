@@ -15,12 +15,12 @@ import { ReadinessProgressCard } from "@/components/study/readiness-progress-car
 import { MilestoneCard } from "@/components/study/milestone-card";
 import { loadMoreTopicsAction } from "./actions";
 import {
-import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
