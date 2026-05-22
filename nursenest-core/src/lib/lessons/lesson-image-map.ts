@@ -225,17 +225,18 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
 
   // ── Vascular ──────────────────────────────────────────────────────────────
   {
-    objectKey: "dvt.png",
+    objectKey: "DVT.png",
     slugs: [
       "deep-vein-thrombosis",
       "dvt",
       "dvt-nursing",
       "lower-extremity-dvt",
       "deep-vein-thrombosis-nursing",
-      /** Bundled NCLEX-RN hub lessons (canonical catalog slugs) */
       "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
       "dvt-pe-prevention-nursing",
       "dvt-pe-nursing-priorities",
+      "dvt-anticoagulation",
+      "upper-extremity-dvt",
     ],
     keywords: [
       "deep vein thrombosis",
@@ -244,10 +245,12 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
       "vte prophylaxis",
       "blood clot leg",
       "lower extremity dvt",
+      "homan sign",
+      "anticoagulation dvt",
     ],
     bodySystems: ["vascular"],
     category: "vascular",
-    caption: "Deep vein thrombosis — vascular nursing assessment",
+    caption: "Deep vein thrombosis — venous clot formation, assessment, and anticoagulation nursing care",
   },
   {
     objectKey: "abdominalaorticaneurysm.jpeg",
