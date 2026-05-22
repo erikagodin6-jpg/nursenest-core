@@ -56,6 +56,14 @@ fi
 log "step=clean_build_caches"
 rm -rf .next .turbo node_modules/.cache
 
+# Hard-wire the V8 heap at the shell level so it survives subprocess spawning.
+# run-buildpack-build.mjs strips --max-old-space-size from NODE_OPTIONS before
+# passing to run-next-prod-build.mjs; setting it here AND having NN_APPLY_NEXT_BUILD_HEAP_LIMIT=1
+# ensures both the outer npm process and the inner next build child get the cap.
+_HEAP_MB="${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3072}"
+export NODE_OPTIONS="--max-old-space-size=${_HEAP_MB}"
+log "step=set_heap NODE_OPTIONS=${NODE_OPTIONS}"
+
 log "step=heroku_postbuild (npm run heroku-postbuild → single next production compile)"
 npm run heroku-postbuild
 

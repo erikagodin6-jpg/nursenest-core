@@ -35,7 +35,14 @@ function buildCompileChildEnv() {
   const tmpdirRaw = process.env.TMPDIR;
   const tmpdir = tmpdirRaw != null && String(tmpdirRaw).trim() !== "" ? String(tmpdirRaw).trim() : "/tmp";
   const rawNodeOptions = String(process.env.NODE_OPTIONS ?? "").trim();
-  const withoutHeap = rawNodeOptions.replace(/--max-old-space-size=\d+/, "").replace(/\s+/g, " ").trim();
+  // When NN_APPLY_NEXT_BUILD_HEAP_LIMIT=1 is set (Docker CI builds), preserve
+  // --max-old-space-size so run-next-prod-build.mjs receives it for capping.
+  // Without the flag (local dev), strip it and let run-next-prod-build apply
+  // its own logic based on BUILD_NODE_MAX_OLD_SPACE_SIZE_MB.
+  const applyHeapLimit = truthyEnv("NN_APPLY_NEXT_BUILD_HEAP_LIMIT");
+  const nodeOptions = applyHeapLimit
+    ? rawNodeOptions
+    : rawNodeOptions.replace(/--max-old-space-size=\d+/, "").replace(/\s+/g, " ").trim();
   return {
     ...process.env,
     TMPDIR: tmpdir,
@@ -45,7 +52,7 @@ function buildCompileChildEnv() {
     SKIP_I18N_PREBUILD: "1",
     SENTRY_ENABLED: "false",
     BUILD_LOG_MEMORY_USAGE: process.env.BUILD_LOG_MEMORY_USAGE ?? "1",
-    NODE_OPTIONS: withoutHeap,
+    NODE_OPTIONS: nodeOptions,
   };
 }
 
