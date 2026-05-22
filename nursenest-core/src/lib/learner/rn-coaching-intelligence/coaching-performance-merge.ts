@@ -1,4 +1,4 @@
-import { loftSafeTrendLabel, sanitizeCoachingNarrative } from "@/lib/learner/rn-coaching-intelligence/coaching-semantics";
+import { loftSafeTrendLabel, sanitizeCoachingNarrative } from "@/lib/learner/post-exam-coaching/coaching-semantics";
 import type { PostExamCoachingReport } from "@/lib/learner/post-exam-coaching/types";
 import type { RnCoachingIntelligenceReport } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 import type { PostExamPerformanceReport } from "@/lib/learner/post-exam-performance-report";

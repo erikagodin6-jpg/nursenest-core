@@ -6,10 +6,8 @@ import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/path
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { resolveSubscribedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
-import {
-  resolveEducationalCognitionContext,
-  type EducationalCognitionContext,
-} from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import { resolveEducationalCognitionContext } from "@/lib/educational-cognition/resolve-educational-cognition-context";
+import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 
 export type LearnerDashboardCognitionSurface = {
   pathwayId: string;

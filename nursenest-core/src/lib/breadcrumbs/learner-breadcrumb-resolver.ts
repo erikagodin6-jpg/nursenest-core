@@ -85,7 +85,15 @@ export type LearnerBreadcrumbInput =
       currentLabel: string;
       currentHref?: string;
     }
-  | { kind: "remediation-ladder"; topic: string; pathwayId: string | null; currentStepTitle: string }
+  | {
+      kind: "remediation-ladder";
+      topic: string;
+      pathwayId: string | null;
+      currentStepTitle: string;
+      currentStepHref?: string;
+      learnerState?: import("@/lib/learner/rn-coaching-intelligence/learner-state-types").RnLearnerStateSnapshot | null;
+      persistentWeakTopics?: readonly string[];
+    }
   | {
       kind: "interpretation-study";
       interpretationLabel: string;

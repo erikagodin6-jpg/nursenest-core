@@ -43,7 +43,7 @@ export function buildCognitionExplainability(args: {
   if (ctx.remediation.maxRecommendations <= 3) remediationSignals.push("bounded_remediation_queue");
   if (weakCompetencies.length) remediationSignals.push(`weak_competencies:${weakCompetencies.length}`);
 
-  const graphSignals = (args.graphSteps ?? []).slice(0, 4).map((s) => `${s.kind}:${s.stepId}`);
+  const graphSignals = (args.graphSteps ?? []).slice(0, 4).map((s) => `${s.stepKind}:${s.stepId}`);
 
   const derivedFrom: CognitionExplainability["derivedFrom"] = ["learner_state", "educational_graph"];
   if (remediationSignals.length) derivedFrom.push("remediation");

@@ -20,6 +20,7 @@ import { assertReplayLineageConsistent } from "@/lib/breadcrumbs/governance/grap
 import type { GraphTelemetryReplaySnapshot } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 import { validateGlossaryGraphNode, buildGlossaryGraphNode } from "@/lib/educational-graph/glossary-graph-node";
 import type { GlossaryTermSemanticContext } from "@/lib/breadcrumbs/breadcrumb-semantic-integration";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 
 export type OntologyIntegrityTier =
   | "healthy"
@@ -142,12 +143,14 @@ export function validateOntologyRuntimeIntegrity(args: {
     if (glossaryIssue) {
       issues.push(glossaryIssue);
       if (args.glossaryTermSlug) recordGlossaryOrphan(args.glossaryTermSlug);
-      if (args.topicSlug && args.glossaryTermSlug) {
+      const glossaryPathway = args.pathwayId ? getExamPathwayById(args.pathwayId) : null;
+      if (args.topicSlug && args.glossaryTermSlug && glossaryPathway) {
         const recovery = recoverGlossaryLineage(
           {
             termSlug: args.glossaryTermSlug,
             termLabel: args.glossaryTermSlug,
             topicSlug: args.topicSlug,
+            pathway: glossaryPathway,
           },
           args.pathwayId ?? null,
         );

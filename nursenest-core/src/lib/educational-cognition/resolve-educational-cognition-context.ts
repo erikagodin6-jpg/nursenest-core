@@ -14,6 +14,7 @@ import {
 } from "@/lib/educational-cognition/educational-policy-orchestrator";
 import { buildEducationalOntologySlice } from "@/lib/educational-cognition/educational-ontology-registry";
 import { buildMeasurementCognitionSlice } from "@/lib/educational-cognition/measurement-cognition-bridge";
+import { resolveMeasurementCognitionInput } from "@/lib/educational-cognition/resolve-measurement-cognition-input";
 import { governMeasurementCognitionInput } from "@/lib/educational-cognition/measurement-source-governance";
 import { recordCognitionContextResolved } from "@/lib/educational-cognition/cognition-telemetry-v5";
 import { hydratePriorLearnerState, saveDurableLearnerCognition } from "@/lib/educational-cognition/learner-cognition-persistence";
