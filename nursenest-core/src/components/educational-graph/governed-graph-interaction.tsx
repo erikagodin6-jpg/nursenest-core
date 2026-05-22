@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 import {
   captureGovernedGraphTelemetry,
@@ -11,7 +11,7 @@ import {
 import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 import type { GraphTelemetryEventName } from "@/lib/educational-graph/graph-telemetry";
 
-type GovernedGraphInteractionProps = Omit<ComponentProps<typeof Link>, "onClick"> & {
+type GovernedGraphInteractionProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "onClick"> & {
   step: EduGraphStep;
   cognition?: EducationalCognitionContext | null;
   clickEvent?: GraphTelemetryEventName;
