@@ -154,7 +154,7 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
       take: 8,
       select: { id: true, jobType: true, topic: true, summary: true, error: true, status: true, createdAt: true, blogPostId: true },
     }),
-  ]);
+  ]).catch(() => [null, [], [], [], [], [], []] as const);
 
   const queuedCount =
     campaignItems.filter(

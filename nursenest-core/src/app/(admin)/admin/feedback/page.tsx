@@ -59,7 +59,7 @@ export default async function AdminUserFeedbackPage({
           },
         })
       : Promise.resolve(null),
-  ]);
+  ]).catch(() => [[], 0, null] as const);
 
   return (
     <AdminFeedbackInboxView

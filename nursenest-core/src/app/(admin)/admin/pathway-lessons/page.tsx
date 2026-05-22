@@ -8,20 +8,25 @@ export const dynamic = "force-dynamic";
 export default async function AdminPathwayLessonsIndexPage() {
   await requireAdmin();
 
-  const rows = await prisma.pathwayLesson.findMany({
-    where: { locale: "en" },
-    select: {
-      id: true,
-      pathwayId: true,
-      slug: true,
-      title: true,
-      status: true,
-      locale: true,
-      updatedAt: true,
-    },
-    orderBy: { updatedAt: "desc" },
-    take: 80,
-  });
+  let rows: Awaited<ReturnType<typeof prisma.pathwayLesson.findMany>> = [];
+  try {
+    rows = await prisma.pathwayLesson.findMany({
+      where: { locale: "en" },
+      select: {
+        id: true,
+        pathwayId: true,
+        slug: true,
+        title: true,
+        status: true,
+        locale: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 80,
+    });
+  } catch {
+    rows = [];
+  }
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
