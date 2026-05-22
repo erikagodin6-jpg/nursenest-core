@@ -183,7 +183,7 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
 }
 /* Section-kind + body presentation — scan rhythm without changing authored meaning */
 .nn-lesson-section-card[data-lsc-kind="tier_specific_relevance"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--tier {
-  max-width: min(64ch, 100%);
+  max-width: min(75ch, 100%);
 }
 .nn-lesson-section-card[data-lsc-kind="labs_diagnostics"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--labs ol,
 .nn-lesson-section-card[data-lsc-kind="labs_diagnostics"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--labs ul {
@@ -205,7 +205,7 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
   line-height: 1.72;
 }
 .nn-lesson-section-card[data-lsc-kind="related_next_steps"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--next {
-  max-width: min(72ch, 100%);
+  max-width: min(75ch, 100%);
 }
 /* ==========================================================================
  * Lesson section semantic cards — coordinated multi-hue study palette

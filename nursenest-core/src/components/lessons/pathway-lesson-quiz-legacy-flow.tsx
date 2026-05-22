@@ -424,7 +424,7 @@ export function PathwayLessonQuizLegacyFlow({
               <h3 className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-xl" data-testid={`text-${testType}-title`}>
                 {variant === "pre" ? "Baseline check" : "Retention check"}
               </h3>
-              <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--theme-muted-text)]">
+              <p className="mt-1.5 max-w-[75ch] text-sm leading-relaxed text-[var(--theme-muted-text)]">
                 {variant === "pre"
                   ? "Prime prior knowledge before you read—quick, low stakes. Your result pairs with the reinforcement pass when you finish."
                   : "Close the loop on what you just studied—short, focused, and built for active recall."}

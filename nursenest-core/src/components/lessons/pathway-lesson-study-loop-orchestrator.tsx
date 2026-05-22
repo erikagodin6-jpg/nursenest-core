@@ -282,7 +282,7 @@ export function PathwayLessonStudyLoopOrchestrator({
           <h2 className="mt-1 text-base font-semibold" style={{ color: "var(--theme-heading-text)" }}>
             Test yourself before you start
           </h2>
-          <p className="mt-2 max-w-prose text-sm leading-6" style={{ color: "var(--semantic-text-secondary)" }}>
+          <p className="mt-2 max-w-[75ch] text-sm leading-6" style={{ color: "var(--semantic-text-secondary)" }}>
             {preQuizItems.length} quick questions from your question bank, matched to this lesson
             {poolCount < 12 ? ` (we found ${poolCount} related items; using the strongest matches).` : "."} Estimated{" "}
             {Math.max(3, Math.ceil(preQuizItems.length * 0.6))} minutes. You can skip anytime; the lesson is not blocked.

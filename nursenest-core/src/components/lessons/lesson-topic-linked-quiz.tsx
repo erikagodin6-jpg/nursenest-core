@@ -205,7 +205,7 @@ export function LessonTopicLinkedQuiz({
       </h2>
       <p
         className={
-          compact ? "mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)]" : "nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]"
+          compact ? "mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)]" : "nn-marketing-body-sm mt-2 max-w-[75ch] text-[var(--theme-muted-text)]"
         }
       >
         Work through exam-style questions from your {pathway.shortName} pool that match this lesson. Check each answer before

@@ -161,7 +161,7 @@ export function PathwayLessonPracticeTopicCta({
       <h2 id="lesson-practice-topic-cta" className="nn-marketing-h3 mt-2 text-[var(--theme-heading-text)]">
         Drill {topic.trim() || "this topic"} with items
       </h2>
-      <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-body-sm mt-2 max-w-[75ch] text-[var(--theme-muted-text)]">
         Answer {pathway.shortName}-scoped questions on {topic.trim() || "this content"} while the clinical story is still fresh.
         If rationales expose a weak spot, jump back to this topic in lessons—not a generic review.
       </p>

@@ -272,7 +272,7 @@ export function PathwayLessonLegacyStudyShell({
             <h2 className="mt-1 text-lg font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">
               Readiness check
             </h2>
-            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--theme-muted-text)]">
+            <p className="mt-1.5 max-w-[75ch] text-sm leading-relaxed text-[var(--theme-muted-text)]">
               Activate what you already know—{preCount} question{preCount === 1 ? "" : "s"}, low pressure. Then move straight
               into the lesson.
             </p>
@@ -337,7 +337,7 @@ export function PathwayLessonLegacyStudyShell({
             <h2 className="mt-1 text-lg font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">
               Reinforcement check
             </h2>
-            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--theme-muted-text)]">
+            <p className="mt-1.5 max-w-[75ch] text-sm leading-relaxed text-[var(--theme-muted-text)]">
               Short active recall—{postCount} question{postCount === 1 ? "" : "s"} to confirm retention and surface gaps
               before you practice further.
             </p>
