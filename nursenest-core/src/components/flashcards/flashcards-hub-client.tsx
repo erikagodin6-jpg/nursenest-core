@@ -21,7 +21,6 @@ import {
   parseFlashcardCustomSessionResponse,
   parseFlashcardInventoryResponse,
 } from "@/lib/flashcards/flashcard-custom-session-response";
-import { reportFlashcardInventoryMalformedSuccessPayload } from "@/lib/flashcards/flashcard-inventory-parse-telemetry.server";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import {
   countSavedStudyItems,
@@ -498,12 +497,16 @@ export function FlashcardsHubClient({
           return;
         }
         if (res.ok) {
-          void reportFlashcardInventoryMalformedSuccessPayload({
-            httpStatus: res.status,
-            messageLen: parsed.message.trim().length,
-            pathwayId: scopedPathwayId,
-            reason: "parse_failed_after_2xx",
-          });
+          logDedupedClientDiagnostic(
+            "flashcards_hub",
+            "inventory_malformed_success_payload",
+            scopedPathwayId,
+            {
+              pathwayId: scopedPathwayId,
+              httpStatus: res.status,
+              messageLen: parsed.message.trim().length,
+            },
+          );
         }
         const base = parsed.message.trim() ? parsed.message : "Could not load flashcard pool counts.";
         setLoadError(

@@ -75,7 +75,19 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
   );
 }
 
-export default async function FlashcardsPage({ searchParams }: PageProps) {
+export default async function FlashcardsPage(props: PageProps) {
+  try {
+    return await FlashcardsPageContent(props);
+  } catch (e) {
+    safeServerLog("learner_flashcards", "page_bootstrap_failed", {
+      error_name: e instanceof Error ? e.name : "unknown",
+      outcome: "error",
+    });
+    return <FlashcardErrorBoundary />;
+  }
+}
+
+async function FlashcardsPageContent({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
 
@@ -315,8 +327,19 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
     };
   }
 
-  if (!initialHub || initialHub.categoryOptions.length === 0) {
-    return <FlashcardErrorBoundary />;
+  if (!initialHub) {
+    initialHub = {
+      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+      matchingTotal: 0,
+      lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+    };
+  }
+
+  if (initialHub.categoryOptions.length === 0) {
+    initialHub = {
+      ...initialHub,
+      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+    };
   }
 
   let visiblePathwayIds: string[] = [];
