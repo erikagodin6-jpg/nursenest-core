@@ -1387,12 +1387,14 @@ async function LessonDetailPageInner({ params }: Props) {
             purposeLine={purposeLine}
             assessmentHint={assessmentHint}
           />
-          <div className="mt-4">
-            <LessonStudyPhaseProgress
-              progress={initialProgress}
-              persisted={Boolean(userId) && entitlement.hasAccess}
-            />
-          </div>
+          {!usesReadingV2Layout ? (
+            <div className="mt-4">
+              <LessonStudyPhaseProgress
+                progress={initialProgress}
+                persisted={Boolean(userId) && entitlement.hasAccess}
+              />
+            </div>
+          ) : null}
           {matchedLessonImage.url &&
           hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
             <div className="mt-4">

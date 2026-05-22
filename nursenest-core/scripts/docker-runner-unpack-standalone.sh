@@ -23,7 +23,7 @@ resolve_server_js() {
 log "step=preflight pwd=$(pwd)"
 if [ ! -f scripts/docker-runner-unpack-standalone.sh ]; then
   log "FATAL: unpack script missing from image context"
-  exit 127
+  exit 1
 fi
 if [ ! -f .next-standalone-runtime.tar.gz ]; then
   log "FATAL: missing .next-standalone-runtime.tar.gz (builder stage did not produce tarball)"

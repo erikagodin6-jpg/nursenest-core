@@ -464,7 +464,7 @@ export async function PathwayLessonDetailPageBody({
         backLink={{ label: `${examName} lessons`, href: base }}
       >
         <div
-          className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
+          className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom${usesReadingV2Layout ? " px-3 py-1 sm:px-5 sm:py-2" : " px-0 py-2 sm:px-6 sm:py-4"}${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
           data-nn-premium-lessons-system="detail"
         >
           <MarketingPathwayLessonDetailViewBeacon
@@ -533,6 +533,7 @@ export async function PathwayLessonDetailPageBody({
             difficultyLabel={difficultyLabel}
             updatedLabel={updatedLabel}
             reviewedLabel={reviewedLabel}
+            compactHero={usesReadingV2Layout}
             trailing={
               userId && fullAccess ? (
                 <PathwayLessonProgressBadgeLive
@@ -544,12 +545,14 @@ export async function PathwayLessonDetailPageBody({
               ) : null
             }
           />
-          <div className="mt-4">
-            <LessonStudyPhaseProgress
-              progress={lessonProgress}
-              persisted={Boolean(userId) && fullAccess}
-            />
-          </div>
+          {!usesReadingV2Layout ? (
+            <div className="mt-4">
+              <LessonStudyPhaseProgress
+                progress={lessonProgress}
+                persisted={Boolean(userId) && fullAccess}
+              />
+            </div>
+          ) : null}
           {showLocaleFallbackNotice ? (
             <aside
               className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-[var(--theme-body-text)]"
@@ -636,7 +639,7 @@ export async function PathwayLessonDetailPageBody({
           </div>
 
           <div
-            className="nn-lesson-layout nn-lesson-layout--premium-reading mt-5"
+            className={`nn-lesson-layout nn-lesson-layout--premium-reading ${usesReadingV2Layout ? "mt-2" : "mt-5"}`}
             data-nn-premium-lessons-reading-layout
           >
             <LessonReadingViewport

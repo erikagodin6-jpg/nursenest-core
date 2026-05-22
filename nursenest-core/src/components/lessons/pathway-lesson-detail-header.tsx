@@ -34,6 +34,8 @@ type Props = {
   assessmentFlowHint?: string | null;
   /** Centered marketing hero: title, topic, and chips align to the middle; wayfinding stays readable above. */
   heroLayout?: "default" | "centered";
+  /** Tighter NCLEX-style hero spacing (reading v2 shell). */
+  compactHero?: boolean;
 };
 
 /**
@@ -76,6 +78,7 @@ export function PathwayLessonDetailHeader({
   studyQuickLinks,
   assessmentFlowHint,
   heroLayout = "default",
+  compactHero = false,
 }: Props) {
   const place = pathwayCountryLabel(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
@@ -99,10 +102,15 @@ export function PathwayLessonDetailHeader({
       data-nn-lesson-hero-centered={centered ? "true" : undefined}
       data-nn-premium-lessons-reading-hero
       className={[
-        "nn-premium-pathway-lesson-header relative overflow-hidden rounded-xl border px-4 py-3.5 sm:px-5 sm:py-4",
-        centered
+        "nn-premium-pathway-lesson-header relative overflow-hidden border",
+        compactHero
+          ? "rounded-lg px-3 py-2 sm:px-4 sm:py-2.5"
+          : "rounded-xl px-4 py-3.5 sm:px-5 sm:py-4",
+        centered && !compactHero
           ? "nn-lesson-detail-hero border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand)_15%)] bg-[linear-gradient(165deg,color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--theme-page-bg))_0%,color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--theme-page-bg))_48%,color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--theme-page-bg))_100%)] shadow-[0_1px_0_color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)]"
-          : "rounded-lg border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-cool)_3%)]",
+          : compactHero
+            ? "rounded-lg border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[var(--semantic-surface)]"
+            : "rounded-lg border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-cool)_3%)]",
       ].join(" ")}
     >
       <p className="nn-lesson-hero-eyebrow" data-nn-premium-individual-lesson-header-meta>
@@ -111,7 +119,7 @@ export function PathwayLessonDetailHeader({
 
       <div
         className={[
-          "mt-4",
+          compactHero ? "mt-2" : "mt-4",
           centered ? "text-center" : "",
           !centered && hasTrailing ? "lg:flex lg:items-start lg:justify-between lg:gap-6" : "",
           centered && hasTrailing ? "lg:grid lg:grid-cols-[1fr_auto] lg:items-start lg:gap-4 lg:text-left" : "",
@@ -123,7 +131,14 @@ export function PathwayLessonDetailHeader({
           <h1 className={["nn-lesson-page-title text-balance", centered ? "text-center" : ""].filter(Boolean).join(" ")}>
             {displayLessonTitle}
           </h1>
-          <p className={["nn-lesson-hero-deck mt-5", centered ? "mx-auto" : ""].filter(Boolean).join(" ")}>
+          <p
+            className={[
+              compactHero ? "nn-lesson-hero-deck mt-2" : "nn-lesson-hero-deck mt-5",
+              centered ? "mx-auto" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
             {lessonTopic}
           </p>
           {assessmentFlowHint ? (

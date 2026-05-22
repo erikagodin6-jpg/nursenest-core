@@ -39,7 +39,7 @@ The image runs `npm run heroku-postbuild` (which sets `NN_POSTBUILD_NEXT_BUILD=1
 
 ### Runner stage: tarball unpack (not a second compile)
 
-Builder packages `.next/standalone` into `.next-standalone-runtime.tar.gz`, then deletes the tree before `npm prune`. Runner unpacks with **`scripts/docker-runner-unpack-standalone.sh`** (bash; the runner stage installs `apk add bash` — Alpine’s default shell is `sh` only, so `exit 127` means “bash not found” if that package is omitted).
+Builder packages `.next/standalone` into `.next-standalone-runtime.tar.gz`, then deletes the tree before `npm prune`. Runner unpacks with **`scripts/docker-runner-unpack-standalone.sh`** (POSIX `sh`, copied from build context before the `RUN`). **Exit 127** on the runner step usually meant `#!/usr/bin/env bash` without `apk add bash`, or invoking `./script` when the file was missing — use `sh scripts/docker-runner-unpack-standalone.sh` and `COPY nursenest-core/scripts/docker-runner-unpack-standalone.sh` from context.
 
 **Do not** run `node -e "import … verify-standalone-artifact.mjs"` in a runner `RUN` **before** `COPY --from=builder /app/scripts ../scripts`. That module used to pull `../../scripts/build-artifact-cache.mjs` at load time and failed with `MODULE_NOT_FOUND` even when the tarball was valid — BuildKit only showed a long `set -euxo pipefail && node …` layer error.
 

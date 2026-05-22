@@ -778,6 +778,10 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
    The --rail modifier variants below extend these base classes. */
 @import "./styles/shared/premium-stat-tiles.css";
 
+/* v2.7 compact clinical lesson reading (shared with marketing pathway lessons) */
+@import "./styles/marketing/lesson-readability-hotfix.css";
+@import "./styles/marketing/lesson-clinical-compact.css";
+
 .nn-premium-hero-stats--rail {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-bottom: 0;
