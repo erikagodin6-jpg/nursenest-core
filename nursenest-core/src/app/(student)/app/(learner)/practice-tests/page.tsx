@@ -266,10 +266,15 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     intent: "start",
   });
 
-  const pathwayLessonPractice =
-    defaultPathwayId && defaultPathwayId.trim().length > 0
-      ? await getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
-      : null;
+  let pathwayLessonPractice = null;
+  try {
+    pathwayLessonPractice =
+      defaultPathwayId && defaultPathwayId.trim().length > 0
+        ? await getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
+        : null;
+  } catch {
+    pathwayLessonPractice = null;
+  }
 
   const scopedPid = defaultPathwayId?.trim() ?? "";
   const catalogPathway = scopedPid ? getExamPathwayById(scopedPid) : undefined;

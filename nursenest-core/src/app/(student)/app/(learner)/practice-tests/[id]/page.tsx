@@ -63,7 +63,12 @@ export default async function PracticeTestRunPage({ params }: Props) {
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const protectionFlags = getServerPremiumProtectionFlags();
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
-  const studySettings = await loadStudySettings(userId);
+  let studySettings = null;
+  try {
+    studySettings = await loadStudySettings(userId);
+  } catch {
+    studySettings = null;
+  }
 
   let initialPathwaySurface: PracticeTestPathwayClientShell | null = null;
   let nclexShellMode: "cat" | "practice" | null = null;
@@ -71,36 +76,40 @@ export default async function PracticeTestRunPage({ params }: Props) {
   let pathwayLabelForShell: string | null = null;
 
   if (userId && id.length >= 8) {
-    const row = await prisma.practiceTest.findFirst({
-      where: { id, userId },
-      select: { config: true },
-    });
-    const parsed = practiceTestConfigRecord(row?.config);
-    const pathwayId = parsed?.pathwayId ?? "";
-
-    if (parsed) {
-      nclexShellMode = resolvePremiumNclexShellRoute({
-        config: parsed.config,
-        pathwayId,
+    try {
+      const row = await prisma.practiceTest.findFirst({
+        where: { id, userId },
+        select: { config: true },
       });
-      if (nclexShellMode && pathwayUsesLoftNclexExamPresentation(pathwayId)) {
-        nclexShellPresentation = "loft";
-      }
-    }
+      const parsed = practiceTestConfigRecord(row?.config);
+      const pathwayId = parsed?.pathwayId ?? "";
 
-    if (pathwayId) {
-      const p = getExamPathwayById(pathwayId);
-      if (p) {
-        pathwayLabelForShell = p.shortName ?? null;
-        initialPathwaySurface = {
-          id: p.id,
-          countrySlug: p.countrySlug,
-          roleTrack: p.roleTrack,
-          examCode: p.examCode,
-          shortName: p.shortName,
-          examFamily: p.examFamily,
-        };
+      if (parsed) {
+        nclexShellMode = resolvePremiumNclexShellRoute({
+          config: parsed.config,
+          pathwayId,
+        });
+        if (nclexShellMode && pathwayUsesLoftNclexExamPresentation(pathwayId)) {
+          nclexShellPresentation = "loft";
+        }
       }
+
+      if (pathwayId) {
+        const p = getExamPathwayById(pathwayId);
+        if (p) {
+          pathwayLabelForShell = p.shortName ?? null;
+          initialPathwaySurface = {
+            id: p.id,
+            countrySlug: p.countrySlug,
+            roleTrack: p.roleTrack,
+            examCode: p.examCode,
+            shortName: p.shortName,
+            examFamily: p.examFamily,
+          };
+        }
+      }
+    } catch {
+      // DB unavailable — shell renders without pathway surface; client recovers via API
     }
   }
 
