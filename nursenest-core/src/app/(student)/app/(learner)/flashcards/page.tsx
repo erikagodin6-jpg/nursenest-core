@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import FlashcardErrorBoundary from "@/components/flashcards/flashcard-error-boundary";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
@@ -38,6 +39,8 @@ import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/p
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
+const DEFAULT_FLASHCARDS_PATHWAY_ID = "ca-rn-nclex-rn";
+
 type PageProps = {
   searchParams: Promise<{
     pathwayId?: string | string[];
@@ -57,7 +60,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
           ? rawPid.trim()
           : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
             ? rawPid[0].trim()
-            : null;
+            : DEFAULT_FLASHCARDS_PATHWAY_ID;
       const { t } = await getLearnerMarketingBundle();
       const pathway = pathwayQueryRaw ? tryResolveExamPathwayForFlashcardsMetadataQuery(pathwayQueryRaw) : null;
       const title = pathway
@@ -93,7 +96,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       ? rawPid.trim()
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
       ? rawPid[0].trim()
-      : null;
+      : DEFAULT_FLASHCARDS_PATHWAY_ID;
 
   const rawTopic = sp.topic;
   const hubTopicFromQuery =
@@ -245,6 +248,9 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   }
 
   const scopedPathwayId = pathwayResolution.defaultPathwayId;
+  if (!scopedPathwayId) {
+    return <FlashcardErrorBoundary />;
+  }
 
   let pathwayLessonFlashDiagnostics = null;
   try {
@@ -307,6 +313,10 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       matchingTotal: 0,
       lessonVirtualDiagnostics: null,
     };
+  }
+
+  if (!initialHub || initialHub.categoryOptions.length === 0) {
+    return <FlashcardErrorBoundary />;
   }
 
   let visiblePathwayIds: string[] = [];

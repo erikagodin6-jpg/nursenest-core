@@ -37,6 +37,7 @@ import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import { FlashcardsHubAnalytics } from "@/components/flashcards/flashcards-hub-analytics";
 import { FlashcardsHubReadinessStrip } from "@/components/flashcards/flashcards-hub-readiness-strip";
+import FlashcardErrorBoundary from "@/components/flashcards/flashcard-error-boundary";
 import {
   FLASHCARD_SESSION_PRESETS,
   cardLimitQueryValue,
@@ -1026,9 +1027,20 @@ export function FlashcardsHubClient({
       </header>
 
       {loadError ? (
-        <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-danger)]">
-          {loadError}
-        </div>
+        builderCategories.length === 0 ? (
+          <FlashcardErrorBoundary error={new Error(loadError)} onRetry={refreshCategories} />
+        ) : (
+          <div
+            className="rounded-lg border px-3 py-2 text-sm"
+            style={{
+              background: "var(--surface-secondary, var(--semantic-panel-muted))",
+              borderColor: "var(--border-subtle, var(--semantic-border-soft))",
+              color: "var(--foreground, var(--semantic-text-primary))",
+            }}
+          >
+            {loadError}
+          </div>
+        )
       ) : null}
 
       <section
