@@ -135,7 +135,7 @@ export default async function LearnerAccountOverviewPage() {
       ACCOUNT_OVERVIEW_DB_TIMEOUT_MS,
       { scope: "learner_account_overview", label: "subscription_summary" },
     ),
-    loadLearnerProfileActivity(userId),
+    loadLearnerProfileActivity(userId).catch(() => null),
   ]);
 
   let premiumSnapshot = null;
