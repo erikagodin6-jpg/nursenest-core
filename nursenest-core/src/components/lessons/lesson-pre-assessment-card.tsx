@@ -54,7 +54,7 @@ function DiagnosticIdleCard({
             <h3 className="mt-1 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
               Quick readiness check
             </h3>
-            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            <p className="mt-1.5 max-w-[75ch] text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               {itemCount} questions · primes prior knowledge and shows baseline
               {priorScore
                 ? " · prior run scored " + priorScore.accuracyPct + "% — retake to measure growth"

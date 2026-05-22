@@ -174,7 +174,7 @@ function PostAssessmentIdleCard({
             <h3 className="mt-0.5 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
               Prove retention
             </h3>
-            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            <p className="mt-1.5 max-w-[75ch] text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               {retakeNote ?? (
                 <>
                   {itemCount} questions · active recall after reading

@@ -39,10 +39,10 @@ export function PathwayLessonLockedSectionsPreview({
         </div>
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-background/70 via-background/90 to-background p-6 text-center">
-        <p className="max-w-md nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">
+        <p className="max-w-[75ch] nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">
           Unlock full lesson + practice questions
         </p>
-        <p className="mt-2 max-w-md nn-marketing-caption">
+        <p className="mt-2 max-w-[75ch] nn-marketing-caption">
           {sections.length} more section{sections.length === 1 ? "" : "s"} with scenarios, priorities, and review drills.
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">

@@ -116,6 +116,30 @@
   letter-spacing: -0.02em;
 }
 
+.nn-premium-lesson-quick-summary.nn-lesson-quick-summary,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__header,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__grid,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary-card,
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary-card ul {
+  width: 100%;
+}
+
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__header {
+  max-width: min(100%, 75ch);
+}
+
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.nn-premium-lesson-quick-summary .nn-lesson-quick-summary-card {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+}
+
 @media (min-width: 768px) {
   .nn-premium-lesson-quick-summary .nn-lesson-quick-summary__grid {
     gap: 0.85rem 1rem;

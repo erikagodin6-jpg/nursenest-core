@@ -419,7 +419,7 @@ export function PathwayLessonSectionContent({
   const showEmptyPanel = !bodyEl && !examEl && !hasFigures && !hasSectionLeadFigure;
 
   return (
-    <div className="space-y-3">
+    <div className="w-full space-y-3">
       {bodyEl}
       {examEl}
       {showFiguresLead ? <LearnerSparsePanel>{figuresVisualLeadMessage}</LearnerSparsePanel> : null}

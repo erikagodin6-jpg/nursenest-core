@@ -41,6 +41,15 @@
   max-width: 100%;
 }
 
+.nn-premium-lesson-detail-shell .nn-lesson-section-card > div,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-callout,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .lv-lesson-sparse-panel,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-exam-focus-inline {
+  width: 100%;
+}
+
 .nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
   border-radius: 0;
   border: 0;
@@ -62,7 +71,7 @@
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-section-heading {
-  max-width: 34ch;
+  max-width: min(100%, 75ch);
   font-size: clamp(1.15rem, 0.72vw + 1rem, 1.42rem);
   line-height: 1.25;
 }
@@ -72,6 +81,23 @@
   max-width: var(--nn-lesson-reader-max);
   font-size: clamp(0.96rem, 0.18vw + 0.92rem, 1.03rem);
   line-height: 1.72;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-prose {
+  max-width: min(100%, 75ch);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-exam-focus-inline__body .nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-callout__body,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .lv-lesson-sparse-panel {
+  max-width: 100%;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-exam-focus-inline__card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li) {
@@ -472,6 +498,12 @@
   letter-spacing: -0.03em;
 }
 
+.nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2
+  .nn-lesson-section-card
+  .nn-lesson-section-heading {
+  max-width: min(100%, 75ch);
+}
+
 .nn-premium-lesson-detail-shell.nn-lesson-page-shell--reading-v2 .nn-premium-lesson-article > * + * {
   margin-top: 0;
 }
@@ -495,7 +527,7 @@
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-section-heading {
-  max-width: min(100%, 26ch);
+  max-width: min(100%, 75ch);
   font-size: clamp(1.75rem, 1.65vw + 1.15rem, 2.75rem);
   line-height: 1.08;
   letter-spacing: -0.04em;
@@ -507,6 +539,11 @@
   color: var(--semantic-text-secondary);
   font-size: clamp(1.02rem, 0.3vw + 0.96rem, 1.16rem);
   line-height: 1.84;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card .nn-lesson-prose {
+  max-width: min(100%, 75ch);
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li) {

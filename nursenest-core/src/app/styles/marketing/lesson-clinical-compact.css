@@ -245,6 +245,16 @@
   font-weight: 400 !important;
 }
 
+.nn-lesson-page-shell--reading-v2 .nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-lesson-page-shell--reading-v2 .nn-lesson-section-card .nn-lesson-prose {
+  width: 100%;
+  max-width: min(75ch, 100%) !important;
+}
+
+.nn-lesson-page-shell--reading-v2 .nn-lesson-section-card .nn-lesson-section-heading {
+  max-width: min(75ch, 100%) !important;
+}
+
 .nn-lesson-page-shell--reading-v2 .nn-lesson-content.nn-lesson-prose :where(p, li),
 .nn-lesson-page-shell--reading-v2 .nn-lesson-prose :where(p, li) {
   line-height: 1.55 !important;

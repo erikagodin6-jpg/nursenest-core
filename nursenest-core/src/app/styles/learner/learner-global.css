@@ -410,6 +410,36 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
   background: color-mix(in srgb, var(--lsc-color) 8%, transparent);
   border: 1px solid color-mix(in srgb, var(--lsc-color) 14%, var(--semantic-border-soft));
 }
+
+.nn-lesson-section-card > div,
+.nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-lesson-section-card .nn-lesson-prose,
+.nn-lesson-section-card .nn-lesson-callout,
+.nn-lesson-section-card .lv-lesson-sparse-panel,
+.nn-lesson-section-card .nn-lesson-exam-focus-inline {
+  width: 100%;
+}
+
+.nn-lesson-section-card .nn-lesson-content.nn-lesson-prose,
+.nn-lesson-section-card .nn-lesson-prose {
+  max-width: min(100%, 75ch);
+}
+
+.nn-lesson-section-card .nn-lesson-section-heading {
+  max-width: min(100%, 75ch);
+}
+
+.nn-lesson-section-card .nn-lesson-exam-focus-inline__body .nn-lesson-prose,
+.nn-lesson-section-card .nn-lesson-callout__body,
+.nn-lesson-section-card .lv-lesson-sparse-panel {
+  max-width: 100%;
+}
+
+.nn-lesson-section-card .nn-lesson-exam-focus-inline__card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
 .nn-lesson-page--learner-app .nn-lesson-section-card .nn-lesson-section-heading,
 .nn-lesson-page--learner-app .nn-lesson-section-heading {
   margin-top: 0.35rem;
