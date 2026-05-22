@@ -130,6 +130,33 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
     caption: "Deep vein thrombosis — vascular nursing assessment",
   },
   {
+    objectKey: "abdominalaorticaneurysm.jpeg",
+    slugs: [
+      "abdominal-aortic-aneurysm",
+      "aaa-aneurysm",
+      "aortic-aneurysm",
+      "abdominal-aortic-aneurysm-nursing",
+      "aaa-nursing",
+      "aortic-aneurysm-repair",
+      "endovascular-aortic-repair",
+      "evar-nursing",
+      "open-aortic-repair",
+    ],
+    keywords: [
+      "abdominal aortic aneurysm",
+      "aortic aneurysm",
+      "aaa",
+      "aortic dilation",
+      "endovascular aortic repair",
+      "evar",
+      "open aortic repair",
+      "aortic rupture",
+    ],
+    bodySystems: [],
+    category: "vascular",
+    caption: "Abdominal aortic aneurysm — vascular nursing assessment and management",
+  },
+  {
     objectKey: "carotidbodytumor.png",
     slugs: [
       "carotid-body-tumor",
