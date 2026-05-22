@@ -165,7 +165,7 @@ export function trackSurfaceOrchestrationTelemetry(args: {
       pathwayId: args.pathwayId,
       competencyId: args.competencyId,
       interpretationId: args.interpretationId,
-      learnerStateReason: args.learnerStateReason,
+      learnerStateReason: args.learnerStateReason ?? undefined,
     }),
   );
 }

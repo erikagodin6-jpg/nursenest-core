@@ -81,11 +81,15 @@ export function sanitizeCoachingNarrative(
   return out;
 }
 
-export function loftSafeTrendLabel(raw: string | null | undefined, model: CoachingModel): string | null {
+export function loftSafeTrendLabel(
+  raw: string | null | undefined,
+  model: CoachingModel,
+  pathwayId?: string | null,
+): string | null {
   if (!raw) return null;
   if (model === "loft_readiness") {
     if (/improving|slipping|cooling|theta/i.test(raw)) return "Performance steady across this simulation";
-    return sanitizeCoachingNarrative(raw, model);
+    return sanitizeCoachingNarrative(raw, model, pathwayId);
   }
   return raw;
 }

@@ -51,7 +51,6 @@ export default async function AccountSettingsHubPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).account.settings");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const userEmail = (session?.user as { email?: string | null })?.email ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.settings"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

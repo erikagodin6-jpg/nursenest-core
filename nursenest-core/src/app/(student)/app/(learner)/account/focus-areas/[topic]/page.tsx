@@ -64,7 +64,7 @@ export default async function AccountFocusAreaDetailPage({ params }: Props) {
     topicLabel: weakRow?.topic ?? topicSlug.replace(/-/g, " "),
     pathwayId: "ca-rn-nclex-rn",
     userId,
-    weakTopics: topicPerf.weakTopics.map((w) => w.topic),
+    weakTopics: topicPerf.weakTopics,
     missRate,
   });
 

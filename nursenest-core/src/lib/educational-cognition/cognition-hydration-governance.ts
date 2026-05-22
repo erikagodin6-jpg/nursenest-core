@@ -1,6 +1,10 @@
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import { EMPTY_LEARNER_STATE } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import type {
+  CognitionContinuityLineage,
+  CognitionEnvelopeGovernanceMetadata,
+  CognitionHydrationProvenance,
+  CognitionHydrationState,
   CognitionReliabilityTier,
   DurableLearnerCognitionEnvelope,
 } from "@/lib/educational-cognition/cognition-snapshot-types";
@@ -10,13 +14,6 @@ import {
   buildCognitionVersionMetadata,
   GRAPH_VERSION,
 } from "@/lib/educational-cognition/cognition-version-governance";
-import type {
-  CognitionContinuityLineage,
-  CognitionEnvelopeGovernanceMetadata,
-  CognitionHydrationProvenance,
-  DurableLearnerCognitionEnvelope,
-} from "@/lib/educational-cognition/cognition-snapshot-types";
-
 export type CognitionHydrationMode = "full" | "partial" | "degraded" | "fresh";
 
 export type CognitionHydrationResult = {

@@ -30,7 +30,6 @@ export default async function AccountReviewQueuePage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.review-queue");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.reviewQueue"));
   const entitlement = await resolveEntitlementForPage(userId);
 
   if (!userId || !isDatabaseUrlConfigured()) {

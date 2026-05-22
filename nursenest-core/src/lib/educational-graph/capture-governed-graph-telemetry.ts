@@ -78,7 +78,7 @@ export async function captureGovernedGraphTelemetry(args: {
   step?: EduGraphStep;
   pathwayId?: string | null;
   topicSlug?: string;
-  sourceSurface: GraphSourceSurface;
+  sourceSurface?: GraphSourceSurface;
   competencyId?: string | null;
   learnerStateReason?: string | null;
   remediationPriority?: number;
@@ -97,9 +97,10 @@ export async function captureGovernedGraphTelemetry(args: {
         competencyId: args.competencyId ?? null,
         stepKind: "remediation_review",
         topicSlug: args.topicSlug ?? "unknown",
-        sourceSurface: args.sourceSurface,
+        sourceSurface: args.sourceSurface ?? "recommendation_engine",
         learnerStateReason: args.learnerStateReason ?? null,
         remediationPriority: args.remediationPriority ?? 1,
+        graphDepth: args.graphDepth ?? 0,
         pathwayId: args.pathwayId ?? null,
       } satisfies GraphTelemetryPayload);
 
@@ -126,6 +127,7 @@ export function captureGraphStepViewed(
   void captureGovernedGraphTelemetry({
     event: "graph_step_viewed",
     step,
+    sourceSurface: step.sourceSurface,
     cognition,
     suppressDedupe: true,
   });
@@ -135,5 +137,5 @@ export function captureGraphStepClicked(
   step: EduGraphStep,
   cognition?: EducationalCognitionContext | null,
 ): void {
-  void captureGovernedGraphTelemetry({ event: "graph_step_clicked", step, cognition });
+  void captureGovernedGraphTelemetry({ event: "graph_step_clicked", step, sourceSurface: step.sourceSurface, cognition });
 }

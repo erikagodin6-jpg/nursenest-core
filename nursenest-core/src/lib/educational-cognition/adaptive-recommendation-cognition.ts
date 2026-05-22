@@ -177,7 +177,23 @@ function applyCognitionOverlay(
   };
 }
 
-export type BuildGovernedAdaptiveRecommendationsArgs = Parameters<typeof buildAdaptiveRecommendations>[0] & {
+function fallbackReadinessResult(): ReadinessResult {
+  return {
+    score: null,
+    band: "insufficient_data",
+    confidence: "low",
+    trend: null,
+    summary: "Readiness needs more learner activity before NurseNest can estimate it.",
+    factors: [],
+    whatToImprove: [],
+    nextActions: [],
+    holdingBack: [],
+    topWeakAreas: [],
+  };
+}
+
+export type BuildGovernedAdaptiveRecommendationsArgs = Omit<Parameters<typeof buildAdaptiveRecommendations>[0], "readiness"> & {
+  readiness?: ReadinessResult | null;
   userId?: string | null;
   entitlement?: AccessScope | null;
   topicTrends?: TopicTrendRow[];
@@ -201,7 +217,7 @@ export async function buildGovernedAdaptiveRecommendations(
       topicTrends: args.topicTrends ?? [],
       weakTopics: args.weakTopics,
       persistLearnerState: true,
-      sourceSurface: "adaptive_recommendations",
+      sourceSurface: "recommendation_engine",
     });
 
     const cognitionWeakTopics = weakTopicRowsFromCognition(substrate.ctx);
@@ -209,6 +225,7 @@ export async function buildGovernedAdaptiveRecommendations(
     const base = buildAdaptiveRecommendations({
       ...args,
       preferredPathwayId: pathwayId,
+      readiness: args.readiness ?? fallbackReadinessResult(),
       weakTopics: cognitionWeakTopics,
       recommendedQuizTopic: cognitionWeakTopics[0]?.topic ?? args.recommendedQuizTopic,
     });
@@ -222,7 +239,7 @@ export async function buildGovernedAdaptiveRecommendations(
     return governed;
   }
 
-  const base = buildAdaptiveRecommendations(args);
+  const base = buildAdaptiveRecommendations({ ...args, readiness: args.readiness ?? fallbackReadinessResult() });
   const model = getTestingModelForPathwayId(pathwayId);
   return {
     ...base,

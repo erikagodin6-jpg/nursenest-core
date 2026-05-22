@@ -34,6 +34,8 @@ export type RnLearnerStateSnapshot = {
   reasoningPatterns: ClinicalJudgmentPattern[];
   /** Measurement / interpretation weakness tags (e.g. potassium_trend, abg). */
   measurementWeaknesses: string[];
+  /** Durable route anchors for focus-area remediation pages. */
+  focusAreaSlugs?: string[];
   competencyStates: RnCompetencyMasteryState[];
   /** 0–1 — high means rotate modalities / reduce CTAs. */
   remediationFatigueScore: number;

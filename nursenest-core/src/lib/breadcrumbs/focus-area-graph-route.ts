@@ -8,6 +8,7 @@ import { resolveGraphNavigationTelemetryContext } from "@/lib/breadcrumbs/pathna
 import { buildReasoningChainNavigation } from "@/lib/breadcrumbs/reasoning-chain-navigation";
 import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
+import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
 export type FocusAreaGraphRouteContext = {
   topicSlug: string;
@@ -33,7 +34,7 @@ export function resolveFocusAreaGraphRoute(args: {
   topicLabel?: string;
   pathwayId?: string | null;
   userId?: string;
-  weakTopics?: readonly string[];
+  weakTopics?: readonly WeakTopicRow[];
   missRate?: number;
   learnerState?: RnLearnerStateSnapshot | null;
 }): FocusAreaGraphRouteContext {
@@ -55,7 +56,7 @@ export function resolveFocusAreaGraphRoute(args: {
     pathwayId: args.pathwayId ?? null,
     sourceSurface: "dashboard_feed",
     learnerState,
-    persistentWeakTopics: args.weakTopics,
+    persistentWeakTopics: args.weakTopics?.map((w) => w.topic),
     currentLabel: topicLabel,
     currentHref: pathname,
     currentStepHref: graphCurrentStepHref(topicSlug),
