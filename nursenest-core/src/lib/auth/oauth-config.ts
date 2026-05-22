@@ -60,7 +60,7 @@ function buildAppleProvider(): NextAuthConfig["providers"][number] | null {
       teamId,
       keyId,
       privateKey,
-    },
+    } as unknown as string,
   });
 }
 

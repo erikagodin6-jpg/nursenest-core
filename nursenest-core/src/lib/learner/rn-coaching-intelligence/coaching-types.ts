@@ -157,6 +157,12 @@ export type RnCoachingIntelligenceReport = {
   learnerState: import("@/lib/learner/rn-coaching-intelligence/learner-state-types").RnLearnerStateSnapshot;
 };
 
+export type {
+  RnCompetencyMasteryState,
+  RnLearnerStateSnapshot,
+} from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
+export type { CoachingSessionKind } from "@/lib/learner/rn-coaching-intelligence/remediation-planner-v3";
+
 export type QuestionOutcome = {
   questionId: string;
   isCorrect: boolean;

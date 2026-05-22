@@ -38,6 +38,8 @@ import type { PathwayMarketingHubBreadcrumbOpts } from "@/lib/seo/pathway-breadc
 import { displayCategoryForPathwayMarketingHubLesson } from "@/lib/lessons/marketing-lessons-hub-category";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { caseStudiesBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { CLINICAL_INTERPRETATION_HUB_PATH } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
+import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 import {
   applyGovernedBreadcrumbResolution,
   type GovernedBreadcrumbResolution,
@@ -137,6 +139,13 @@ export type ResolveNursingGlossaryTermInput = {
   topicSlug: string;
 };
 export type ResolveCaseStudiesBreadcrumbsInput = { kind: "case-studies" };
+export type ResolveClinicalInterpretationHubInput = { kind: "clinical-interpretation-hub" };
+export type ResolveClinicalInterpretationGuideInput = {
+  kind: "clinical-interpretation-guide";
+  category: string;
+  guideTitle: string;
+  guideSlug: string;
+};
 
 export type BreadcrumbResolverInput =
   | ResolvePathwayLessonDetailBreadcrumbsInput
@@ -156,7 +165,9 @@ export type BreadcrumbResolverInput =
   | ResolveGlossaryTermBreadcrumbsInput
   | ResolveNursingGlossaryHubInput
   | ResolveNursingGlossaryTermInput
-  | ResolveCaseStudiesBreadcrumbsInput;
+  | ResolveCaseStudiesBreadcrumbsInput
+  | ResolveClinicalInterpretationHubInput
+  | ResolveClinicalInterpretationGuideInput;
 
 export function categoryBreadcrumbFromLesson(
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">,
@@ -274,6 +285,44 @@ export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbRe
         canonicalRootId: "case_studies",
       });
     }
+    case "clinical-interpretation-hub":
+      return applyGovernedBreadcrumbResolution({
+        resolution: {
+          crumbs: [
+            { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+            { name: "Clinical interpretation", href: undefined },
+          ],
+          schemaItems: [
+            { name: "Home", item: toAbsoluteSiteUrl("/"), i18nKey: "breadcrumbs.home" },
+            { name: "Clinical interpretation", item: toAbsoluteSiteUrl(CLINICAL_INTERPRETATION_HUB_PATH) },
+          ],
+        },
+        surface: "interpretation_guide",
+        pathname: CLINICAL_INTERPRETATION_HUB_PATH,
+        canonicalRootId: "lessons",
+      });
+    case "clinical-interpretation-guide":
+      return applyGovernedBreadcrumbResolution({
+        resolution: {
+          crumbs: [
+            { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+            { name: "Clinical interpretation", href: CLINICAL_INTERPRETATION_HUB_PATH },
+            { name: input.category, href: CLINICAL_INTERPRETATION_HUB_PATH },
+            { name: input.guideTitle, href: undefined },
+          ],
+          schemaItems: [
+            { name: "Home", item: toAbsoluteSiteUrl("/"), i18nKey: "breadcrumbs.home" },
+            { name: "Clinical interpretation", item: toAbsoluteSiteUrl(CLINICAL_INTERPRETATION_HUB_PATH) },
+            {
+              name: input.guideTitle,
+              item: toAbsoluteSiteUrl(`${CLINICAL_INTERPRETATION_HUB_PATH}/${input.guideSlug}`),
+            },
+          ],
+        },
+        surface: "interpretation_guide",
+        pathname: `${CLINICAL_INTERPRETATION_HUB_PATH}/${input.guideSlug}`,
+        canonicalRootId: "lessons",
+      });
     default:
       return applyGovernedBreadcrumbResolution({
         resolution: { crumbs: [], schemaItems: [] },

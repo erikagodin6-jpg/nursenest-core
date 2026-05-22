@@ -83,6 +83,9 @@ export function emitCognitionTelemetryV5(
   sourceSurface: string,
   props: Record<string, string | number | boolean | null> = {},
 ): void {
+  const normalizedProps = Object.fromEntries(
+    Object.entries(props).map(([key, value]) => [key, value ?? undefined]),
+  ) as Record<string, string | number | boolean | undefined>;
   const v5 = buildCognitionTelemetryV5Payload(ctx, sourceSurface);
   const versionMeta = cognitionVersionTelemetryProps(buildCognitionVersionMetadata());
   const explainAudit = serializeExplainabilityForAudit(
@@ -101,7 +104,7 @@ export function emitCognitionTelemetryV5(
     pathwayId: ctx.pathwayId,
     version: buildCognitionVersionMetadata(),
     extra: {
-      ...normalizeCognitionTelemetryProps(ctx, props as Record<string, string | number | boolean | undefined>),
+      ...normalizeCognitionTelemetryProps(ctx, normalizedProps),
       ...v5,
       ...versionMeta,
       ...explainAudit,
@@ -112,12 +115,18 @@ export function emitCognitionTelemetryV5(
     pathwayId: ctx.pathwayId,
     sourceSurface,
     testingModel: ctx.psychometric.model ?? getTestingModelForPathwayId(ctx.pathwayId),
-    topicSlug: typeof props.topic_slug === "string" ? props.topic_slug : undefined,
+    topicSlug: typeof normalizedProps.topic_slug === "string" ? normalizedProps.topic_slug : undefined,
   });
-  const merged = filterCognitionTelemetryProps({
+  const mergedRaw = {
     ...lineage.props,
     ...mergeCoachingPropsWithGraphLineage(event, lineage.props, graphLineage),
-  });
+  };
+  const merged = filterCognitionTelemetryProps(
+    Object.fromEntries(Object.entries(mergedRaw).map(([key, value]) => [key, value ?? undefined])) as Record<
+      string,
+      string | number | boolean | undefined
+    >,
+  );
   recordCoachingTelemetry(event, merged);
 }
 

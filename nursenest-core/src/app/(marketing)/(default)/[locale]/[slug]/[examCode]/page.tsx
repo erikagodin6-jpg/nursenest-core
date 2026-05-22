@@ -276,6 +276,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     const InternationalRnHubSectionsComponent = intlSections
       ? (await import("@/components/marketing/international-rn-hub-sections")).InternationalRnHubSections
       : null;
+    const examCredentialLabel = pathway.shortName.trim() || pathway.displayName;
 
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
@@ -288,8 +289,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           path={pathname}
           name={pathway.displayName}
           description={pathway.seoDescription}
-          teaches={[pathway.examLabel, pathway.displayName]}
-          occupationalCredential={pathway.examLabel}
+          teaches={[examCredentialLabel, pathway.displayName]}
+          occupationalCredential={examCredentialLabel}
         />
 
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />

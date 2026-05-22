@@ -29,7 +29,6 @@ export default async function AccountSecurityPage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.security");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.security"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

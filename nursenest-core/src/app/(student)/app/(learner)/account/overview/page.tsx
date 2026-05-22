@@ -71,7 +71,6 @@ export default async function LearnerAccountOverviewPage() {
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const localeTag = locale.replace(/_/g, "-");
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.overview"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (

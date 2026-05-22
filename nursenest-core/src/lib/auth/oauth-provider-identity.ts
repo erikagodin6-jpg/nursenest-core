@@ -4,7 +4,7 @@ import type { Account, Profile } from "next-auth";
 import type { OAuthProviderId } from "@/lib/auth/auth-flow-governance";
 import { logOAuthAudit } from "@/lib/auth/oauth-audit-log";
 import { prisma } from "@/lib/db";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 const APPLE_RELAY_SUFFIX = "@privaterelay.appleid.com";
 

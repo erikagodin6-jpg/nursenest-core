@@ -118,8 +118,8 @@ export type PracticeAdaptiveCreatePayload = {
   catSelectionBasis: PracticeAdaptiveSelectionBasis;
   catPresentationMode: "practice";
   catExamFeedbackMode: "study";
-  /** Must be "practice" so the server uses practiceCatBounds instead of readiness-config bounds. */
-  catAdaptiveSessionType: "practice";
+  /** Practice adaptive sessions may use the CAT adapter while retaining practice presentation/feedback. */
+  catAdaptiveSessionType: "practice" | "cat";
   pathwayId: string;
   timedMode: false;
   timeLimitSec: null;
