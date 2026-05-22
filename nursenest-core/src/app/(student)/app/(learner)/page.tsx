@@ -153,7 +153,12 @@ async function LearnerDashboardHeavyContent({
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
-  const studySettings = await loadStudySettings(userId);
+  let studySettings = null;
+  try {
+    studySettings = await loadStudySettings(userId);
+  } catch {
+    studySettings = null;
+  }
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
 
   try {

@@ -699,6 +699,18 @@ export default async function LessonsPage({ searchParams }: Props) {
       ) : null}
     </div>
   );
+  } catch {
+    lessonsPerfMark("route_end", { route: "app_lessons_hub" });
+    return (
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <ContentEmptyState
+          variant="generic"
+          headline="Lessons temporarily unavailable"
+          body="The lesson library could not load right now. Please try again in a moment."
+          primaryCta={{ label: "Retry", href: "/app/lessons" }}
+        />
+      </div>
+    );
   } finally {
     lessonsPerfMark("route_end", { route: "app_lessons_hub" });
   }
