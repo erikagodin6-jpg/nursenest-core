@@ -24,7 +24,16 @@ test("practice_tests_hub_bootstrap rejects wrong surface", async () => {
         version: "v",
         capturedAt: new Date().toISOString(),
         payload: {
-          pathwayOptions: [{ id: "x", label: "y", examFamily: "NCLEX_RN", examCodeLabel: "RN" }],
+          pathwayOptions: [{
+            id: "x",
+            label: "y",
+            examFamily: "NCLEX_RN",
+            countrySlug: "us",
+            roleTrack: "rn",
+            examCode: "nclex-rn",
+            shortName: "RN",
+            examCodeLabel: "RN",
+          }],
           defaultPathwayId: "x",
           catEligiblePathwayIds: [],
         },

@@ -20,6 +20,7 @@ import {
   loadMarketingMessageShardsSync,
 } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

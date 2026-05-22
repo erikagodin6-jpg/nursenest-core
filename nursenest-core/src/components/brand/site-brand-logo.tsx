@@ -104,7 +104,11 @@ export function SiteBrandLogoMark({
           fetchPriority={variant === "header" ? "high" : undefined}
           className={imgClassName}
           onLoad={handleLoad}
-          onError={handleError}
+          onError={() => {
+            if (resolvedUrl) logBrandLogoLoadFailure(resolvedUrl, themeId, 0);
+            setImageFailed(true);
+            onMarkState?.("error");
+          }}
         />
       ) : (
         <img

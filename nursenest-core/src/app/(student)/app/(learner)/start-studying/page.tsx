@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ContentStatus } from "@prisma/client";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
+import type { BreadcrumbCrumb } from "@/lib/breadcrumbs/breadcrumb-types";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isPathwayLessonStructuralPublicCompleteColumnPresent } from "@/lib/db/pathway-lesson-structural-column-runtime";

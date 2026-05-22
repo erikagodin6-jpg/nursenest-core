@@ -16,6 +16,7 @@ import { parseMeasurementPreference } from "@/lib/measurements/measurement-prefe
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

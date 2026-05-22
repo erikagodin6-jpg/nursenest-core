@@ -10,6 +10,7 @@ import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-a
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

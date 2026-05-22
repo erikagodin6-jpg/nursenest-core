@@ -58,7 +58,11 @@ export type PracticeTestSelectionMode =
 export type PracticeTestPathwayOption = {
   id: string;
   label: string;
-  examFamily: string;
+  examFamily: ExamPathwayDefinition["examFamily"];
+  countrySlug: ExamPathwayDefinition["countrySlug"];
+  roleTrack: ExamPathwayDefinition["roleTrack"];
+  examCode: ExamPathwayDefinition["examCode"];
+  shortName: ExamPathwayDefinition["shortName"];
   /**
    * Mirrors {@link catPathwayExamCodeLabel} / `shortName` so hub UI can disambiguate CAT tracks
    * without importing the exam catalog client-side.

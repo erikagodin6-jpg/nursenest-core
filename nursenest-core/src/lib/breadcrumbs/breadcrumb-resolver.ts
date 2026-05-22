@@ -33,10 +33,15 @@ import {
   nursingGlossaryHubBreadcrumbs,
   nursingGlossaryTermBreadcrumbs,
 } from "@/lib/breadcrumbs/glossary-breadcrumbs";
+import {
+  clinicalInterpretationGuideBreadcrumbs,
+  clinicalInterpretationHubBreadcrumbs,
+} from "@/lib/breadcrumbs/clinical-interpretation-breadcrumbs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { PathwayMarketingHubBreadcrumbOpts } from "@/lib/seo/pathway-breadcrumbs";
 import { displayCategoryForPathwayMarketingHubLesson } from "@/lib/lessons/marketing-lessons-hub-category";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import type { ClinicalInterpretationCategory } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 import { caseStudiesBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import {
   applyGovernedBreadcrumbResolution,
@@ -137,6 +142,13 @@ export type ResolveNursingGlossaryTermInput = {
   topicSlug: string;
 };
 export type ResolveCaseStudiesBreadcrumbsInput = { kind: "case-studies" };
+export type ResolveClinicalInterpretationHubInput = { kind: "clinical-interpretation-hub" };
+export type ResolveClinicalInterpretationGuideInput = {
+  kind: "clinical-interpretation-guide";
+  category: ClinicalInterpretationCategory;
+  guideTitle: string;
+  guideSlug: string;
+};
 
 export type BreadcrumbResolverInput =
   | ResolvePathwayLessonDetailBreadcrumbsInput
@@ -156,7 +168,9 @@ export type BreadcrumbResolverInput =
   | ResolveGlossaryTermBreadcrumbsInput
   | ResolveNursingGlossaryHubInput
   | ResolveNursingGlossaryTermInput
-  | ResolveCaseStudiesBreadcrumbsInput;
+  | ResolveCaseStudiesBreadcrumbsInput
+  | ResolveClinicalInterpretationHubInput
+  | ResolveClinicalInterpretationGuideInput;
 
 export function categoryBreadcrumbFromLesson(
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">,
@@ -264,6 +278,14 @@ export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbRe
         termLabel: input.termLabel,
         termSlug: input.termSlug,
         topicSlug: input.topicSlug,
+      });
+    case "clinical-interpretation-hub":
+      return clinicalInterpretationHubBreadcrumbs();
+    case "clinical-interpretation-guide":
+      return clinicalInterpretationGuideBreadcrumbs({
+        category: input.category,
+        guideTitle: input.guideTitle,
+        guideSlug: input.guideSlug,
       });
     case "case-studies": {
       const raw = caseStudiesBreadcrumbs();

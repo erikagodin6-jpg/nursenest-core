@@ -20,6 +20,7 @@ import {
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

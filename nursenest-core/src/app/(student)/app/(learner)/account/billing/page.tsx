@@ -11,6 +11,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { BillingSupportEmailNotice } from "@/components/student/billing-support-email-notice";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

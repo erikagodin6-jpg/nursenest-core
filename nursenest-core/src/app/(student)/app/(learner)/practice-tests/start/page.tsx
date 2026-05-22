@@ -129,7 +129,11 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const pathwayOptions = catEligiblePathways.map((p) => ({
     id: p.id,
     label: `${p.shortName} — ${p.displayName}`,
-    examFamily: String(p.examFamily),
+    examFamily: p.examFamily,
+    countrySlug: p.countrySlug,
+    roleTrack: p.roleTrack,
+    examCode: p.examCode,
+    shortName: p.shortName,
     examCodeLabel: p.shortName.trim(),
   }));
   const pathwayShellById: Record<string, PracticeTestPathwayClientShell> = Object.fromEntries(

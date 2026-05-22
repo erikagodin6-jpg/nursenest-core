@@ -29,6 +29,7 @@ import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snap
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
+import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 
 type PageProps = {
   searchParams: Promise<{
@@ -109,12 +110,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
     : null;
 
-  let pathwayOptions: {
-    id: string;
-    label: string;
-    examFamily: string;
-    examCodeLabel: string;
-  }[] = [];
+  let pathwayOptions: PracticeTestPathwayOption[] = [];
   let defaultPathwayId: string | null = null;
   let catEligiblePathwayIds: string[] = [];
   let hubBootstrapSource: "primary" | "secondary" = "primary";
@@ -131,6 +127,10 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       id: p.id,
       label: `${p.shortName} — ${p.displayName}`,
       examFamily: p.examFamily,
+      countrySlug: p.countrySlug,
+      roleTrack: p.roleTrack,
+      examCode: p.examCode,
+      shortName: p.shortName,
       examCodeLabel: p.shortName.trim(),
     }));
     catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);

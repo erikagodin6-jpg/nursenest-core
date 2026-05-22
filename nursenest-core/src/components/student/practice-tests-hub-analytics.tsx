@@ -295,7 +295,7 @@ export function PracticeTestsHubAnalytics({ pathwayId, recentSessions }: Props) 
                 </p>
               </div>
               {catReadiness?.ok && catReadiness.availableQuestions != null ? (
-                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${topicStrengthChipClass("stable")}`}>
+                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${topicStrengthChipClass("strong")}`}>
                   {catReadiness.availableQuestions} CAT-ready items
                 </span>
               ) : null}

@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { captureGovernedGraphTelemetry } from "@/lib/educational-graph/capture-governed-graph-telemetry";
 import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 
-type GovernedRemediationCTAProps = Omit<ComponentProps<typeof Link>, "href" | "onClick"> & {
+type GovernedRemediationCTAProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "onClick"> & {
   step: EduGraphStep;
   children: ReactNode;
 };

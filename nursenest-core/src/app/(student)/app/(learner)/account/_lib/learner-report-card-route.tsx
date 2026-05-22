@@ -22,6 +22,7 @@ import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
 
 export async function LearnerReportCardRouteBody({
   t,

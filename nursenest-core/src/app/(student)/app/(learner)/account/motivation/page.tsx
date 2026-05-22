@@ -15,6 +15,7 @@ import { ReadinessProgressCard } from "@/components/study/readiness-progress-car
 import { MilestoneCard } from "@/components/study/milestone-card";
 import { loadMoreTopicsAction } from "./actions";
 import {
+import { learnerAccountLeafCrumbs as appAccountBreadcrumbs } from "@/lib/breadcrumbs/learner-navigation";
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   SIGN_IN_CTA,

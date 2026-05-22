@@ -93,6 +93,8 @@ ENV NODE_ENV=production \
 
 COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
 COPY --from=builder /app/nursenest-core/scripts ./scripts
+COPY --from=builder /app/scripts ../scripts
+COPY --from=builder /app/script ../script
 RUN set -euxo pipefail \
   && test -f .next-standalone-runtime.tar.gz \
   && mkdir -p .next \
@@ -101,8 +103,6 @@ RUN set -euxo pipefail \
   && test -d .next/standalone \
   && node --input-type=module -e "import { resolveStandaloneServerPath } from './scripts/verify-standalone-artifact.mjs'; const p=resolveStandaloneServerPath(process.cwd()); if(!p){console.error('FATAL: standalone server.js missing after tar extract'); process.exit(1)} console.log('[runner] standalone_server='+p)"
 COPY --from=builder /app/nursenest-core/public ./public
-COPY --from=builder /app/scripts ../scripts
-COPY --from=builder /app/script ../script
 COPY --from=builder /app/nursenest-core/package.json ./package.json
 
 EXPOSE 8080

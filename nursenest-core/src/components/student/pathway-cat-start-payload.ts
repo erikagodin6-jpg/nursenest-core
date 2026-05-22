@@ -104,6 +104,7 @@ export type PracticeAdaptiveStudyLaunchPayload = {
   filters?: Record<string, string | number | boolean | null>;
   count?: number;
   shuffle?: boolean;
+  unlimited?: boolean;
   /** True when the learner chose unlimited practice (CAT advance until manual end). */
   unlimited?: boolean;
 };
@@ -174,7 +175,7 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
     catSelectionBasis: opts.catSelectionBasis,
     catPresentationMode: "practice",
     catExamFeedbackMode: "study",
-    catAdaptiveSessionType: launch.catAdaptiveSessionType,
+    catAdaptiveSessionType: "practice",
     pathwayId: opts.pathwayId,
     timedMode: false,
     timeLimitSec: null,
