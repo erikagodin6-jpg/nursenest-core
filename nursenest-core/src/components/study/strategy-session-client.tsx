@@ -29,8 +29,8 @@ import { StrategyFilterBar } from "@/components/study/strategy-filter-bar";
 import type {
   StrategyQuestion,
   StrategySessionBatch,
-} from "@/app/(student)/app/(learner)/strategy/actions";
-import { loadMoreStrategyQuestions } from "@/app/(student)/app/(learner)/strategy/actions";
+} from "@/app/(app)/app/(learner)/strategy/actions";
+import { loadMoreStrategyQuestions } from "@/app/(app)/app/(learner)/strategy/actions";
 import type { SessionMode } from "@/lib/study/strategy-taxonomy";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 

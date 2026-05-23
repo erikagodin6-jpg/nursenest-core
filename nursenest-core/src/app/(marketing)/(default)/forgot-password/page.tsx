@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { MarketingForgotPasswordPage } from "@/components/marketing/marketing-forgot-password-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-
-
-export const dynamic = "force-dynamic";
 
 const FORGOT_PASSWORD_META_KEYS = ["pages.forgotPassword.metaTitle", "pages.forgotPassword.metaDescription"] as const;
 
@@ -32,7 +28,6 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-export default async function ForgotPasswordPage() {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  return <MarketingForgotPasswordPage locale={locale} />;
+export default function ForgotPasswordPage() {
+  return <MarketingForgotPasswordPage />;
 }

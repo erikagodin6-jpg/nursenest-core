@@ -20,7 +20,7 @@ import {
   traceLayout,
   traceProvider,
   withBuildTrace,
-} from "@/build/tracing";
+} from "../../../../build/tracing";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
