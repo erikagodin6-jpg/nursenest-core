@@ -12,6 +12,7 @@ COPY nursenest-core/package.json nursenest-core/package-lock.json ./nursenest-co
 COPY nursenest-core/scripts/shims/server-only ./nursenest-core/scripts/shims/server-only
 
 WORKDIR /app/nursenest-core
+
 ENV NODE_ENV=development
 ENV HUSKY=0
 
@@ -41,7 +42,6 @@ ARG VERCEL_GIT_COMMIT_SHA
 ARG VERCEL_GIT_COMMIT_REF
 ARG BUILD_WEBPACK_PARALLELISM
 ARG NN_FORCE_SINGLE_BUILD_WORKER
-ARG NN_TIMED_INCLUDE_NPM_PRUNE
 ARG BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
 
 ENV NODE_ENV=production \
@@ -71,14 +71,15 @@ ENV NODE_ENV=production \
   VERCEL_GIT_COMMIT_SHA=${VERCEL_GIT_COMMIT_SHA} \
   VERCEL_GIT_COMMIT_REF=${VERCEL_GIT_COMMIT_REF}
 
-# Never pass production DATABASE_URL/AUTH_SECRET into image layers — compile uses prisma-safe stubs.
-RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate
+RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
+  npm run db:generate
 
-# Staged build with set -euxo pipefail — each step logs [docker-build-production] step=… so BuildKit
-# failures are attributable (the old single RUN && chain only reported exit code 1 for the layer).
-RUN chmod +x scripts/docker-build-production.sh \
-  && NN_TIMED_INCLUDE_NPM_PRUNE="${NN_TIMED_INCLUDE_NPM_PRUNE:-}" \
-  bash scripts/docker-build-production.sh
+RUN rm -f src/middleware.ts src/middleware.js
+
+RUN NODE_OPTIONS="--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3072}" \
+  npm run heroku-postbuild
+
+RUN npm prune --omit=dev --no-fund --no-audit
 
 FROM node:20-alpine AS runner
 
@@ -89,21 +90,12 @@ WORKDIR /app/nursenest-core
 ENV NODE_ENV=production \
   PORT=8080 \
   HOSTNAME=0.0.0.0 \
-  NODE_MAX_OLD_SPACE_SIZE_MB=1280 \
   NEXT_TELEMETRY_DISABLED=1
 
-# Unpack script from build context (always present); tarball from builder.
-COPY nursenest-core/scripts/docker-runner-unpack-standalone.sh ./scripts/docker-runner-unpack-standalone.sh
-COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
-# Shell-only unpack — do not import verify-standalone-artifact.mjs here (pulls ../../scripts/
-# before monorepo COPY). Use POSIX sh (Alpine default); do not require bash.
-RUN sh scripts/docker-runner-unpack-standalone.sh
-COPY --from=builder /app/nursenest-core/scripts ./scripts
+COPY --from=builder /app/nursenest-core/.next/standalone ./
+COPY --from=builder /app/nursenest-core/.next/static ./.next/static
 COPY --from=builder /app/nursenest-core/public ./public
-COPY --from=builder /app/scripts ../scripts
-COPY --from=builder /app/script ../script
-COPY --from=builder /app/nursenest-core/package.json ./package.json
 
 EXPOSE 8080
 
-CMD ["node", "scripts/start-standalone.mjs"]
+CMD ["node", "server.js"]
