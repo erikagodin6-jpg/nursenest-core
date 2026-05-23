@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { NotFoundClient } from "@/components/errors/not-found-client";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Page Not Found",
   robots: { index: false, follow: true },
