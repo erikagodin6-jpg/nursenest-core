@@ -30,6 +30,18 @@ import { isBaseSubscriptionPlanCode } from "@/lib/subscriptions/subscription-pla
 
 export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
 
+/**
+ * Runtime cross-request cache to reduce entitlement DB pressure for hot routes.
+ *
+ * Notes:
+ * - This is intentionally short TTL, per-process, and best-effort (works in long-lived Node runtimes).
+ * - We never grant access based on a stale cache entry unless the cached value already hasPremium=true.
+ */
+type RuntimeUserAccessCacheEntry = { ua: UserAccess; cachedAtMs: number };
+const runtimeUserAccessCache = new Map<string, RuntimeUserAccessCacheEntry>();
+const RUNTIME_USER_ACCESS_CACHE_TTL_MS = 60_000;
+const RUNTIME_USER_ACCESS_STALE_IF_ERROR_MS = 10 * 60_000;
+
 /** Attach JWT sync fields from the loaded `User` row (see {@link UserAccess.sessionJwt}). */
 function withSessionJwt(
   partial: Omit<UserAccess, "sessionJwt">,
@@ -162,7 +174,36 @@ const getUserAccessCached = cache(async function getUserAccessCached(userId: str
  * is resolved multiple times (e.g. `resolveEntitlement` + layout).
  */
 export async function getUserAccess(userId: string): Promise<UserAccess> {
-  return getUserAccessCached(userId);
+  const now = Date.now();
+  const cached = runtimeUserAccessCache.get(userId);
+  if (cached && now - cached.cachedAtMs < RUNTIME_USER_ACCESS_CACHE_TTL_MS) {
+    return cached.ua;
+  }
+
+  try {
+    const ua = await getUserAccessCached(userId);
+
+    // Basic bound to avoid unbounded growth in very high cardinality scenarios.
+    if (runtimeUserAccessCache.size > 5000) runtimeUserAccessCache.clear();
+    runtimeUserAccessCache.set(userId, { ua, cachedAtMs: now });
+
+    return ua;
+  } catch (e) {
+    // Best-effort stale-while-error for *already premium* learners.
+    if (
+      cached &&
+      cached.ua.hasPremium === true &&
+      now - cached.cachedAtMs < RUNTIME_USER_ACCESS_STALE_IF_ERROR_MS
+    ) {
+      safeServerLog("entitlement", "get_user_access_runtime_cache_stale_used", {
+        userIdPrefix: userId.slice(0, 8),
+        cachedAgeMs: now - cached.cachedAtMs,
+      });
+      return cached.ua;
+    }
+
+    throw e;
+  }
 }
 
 type EntitlementReadTelemetry = {
