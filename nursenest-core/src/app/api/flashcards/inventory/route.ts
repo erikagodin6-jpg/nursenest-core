@@ -8,6 +8,26 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { isTransientDatabaseError } from "@/lib/resilience/with-retry";
+
+type InventoryCacheEntry = {
+  cachedAtMs: number;
+  body: {
+    success: true;
+    total: number;
+    categoryOptions: unknown[];
+    categories: unknown[];
+    diagnostics?: unknown;
+  };
+};
+
+const inventoryCache = new Map<string, InventoryCacheEntry>();
+const INVENTORY_CACHE_TTL_MS = 30_000;
+const INVENTORY_CACHE_MAX = 2000;
+
+function inventoryCacheKey(userId: string, pathwayId: string): string {
+  return `${userId}::${pathwayId}`;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -66,12 +86,43 @@ export async function GET(req: NextRequest) {
         );
       }
 
+      const cacheKey = inventoryCacheKey(gate.userId, pathway.id);
+      const cached = inventoryCache.get(cacheKey);
+      if (cached && Date.now() - cached.cachedAtMs < INVENTORY_CACHE_TTL_MS) {
+        const h = new Headers(headers);
+        h.set("x-nn-inventory-cache", "hit");
+        return NextResponse.json(cached.body, { status: 200, headers: h });
+      }
+
       const invStarted = performance.now();
-      const inv = await loadFlashcardsExamInventoryForPathway({
-        userId: gate.userId,
-        entitlement: gate.entitlement,
-        pathway,
-      });
+      let inv;
+      try {
+        inv = await loadFlashcardsExamInventoryForPathway({
+          userId: gate.userId,
+          entitlement: gate.entitlement,
+          pathway,
+        });
+      } catch (e) {
+        safeServerLog("flashcards", "inventory_route_db_threw", {
+          pathwayId: pathway.id,
+          inventoryRouteMs: Math.round(performance.now() - invStarted),
+          transient: isTransientDatabaseError(e) ? 1 : 0,
+        });
+
+        return NextResponse.json(
+          {
+            success: false,
+            code: "inventory_unavailable",
+            message: "Flashcard inventory is temporarily unavailable. Please retry.",
+            categories: [],
+            total: 0,
+            categoryOptions: [],
+            retryable: true,
+          },
+          { status: 503, headers },
+        );
+      }
+
       const inventoryRouteMs = Math.round(performance.now() - invStarted);
 
       if (!inv.ok) {
@@ -87,8 +138,16 @@ export async function GET(req: NextRequest) {
           );
         }
         return NextResponse.json(
-          { success: false, code: inv.code, message: inv.message, categories: [], total: 0, categoryOptions: [] },
-          { status: 500, headers },
+          {
+            success: false,
+            code: inv.code,
+            message: inv.message,
+            categories: [],
+            total: 0,
+            categoryOptions: [],
+            retryable: true,
+          },
+          { status: 503, headers },
         );
       }
 
@@ -102,16 +161,21 @@ export async function GET(req: NextRequest) {
         matchingCards: inv.total,
       });
 
-      return NextResponse.json(
-        {
-          success: true,
-          total: inv.total,
-          categoryOptions: inv.categoryOptions,
-          categories,
-          diagnostics: inv.diagnostics,
-        },
-        { headers },
-      );
+      const body = {
+        success: true as const,
+        total: inv.total,
+        categoryOptions: inv.categoryOptions,
+        categories,
+        diagnostics: inv.diagnostics,
+      };
+
+      if (inventoryCache.size > INVENTORY_CACHE_MAX) inventoryCache.clear();
+      inventoryCache.set(cacheKey, { cachedAtMs: Date.now(), body });
+
+      const h = new Headers(headers);
+      h.set("x-nn-inventory-cache", "miss");
+
+      return NextResponse.json(body, { headers: h });
     } catch (error) {
       safeServerLogCritical("flashcards", "inventory_route_error", {}, error);
       return NextResponse.json(

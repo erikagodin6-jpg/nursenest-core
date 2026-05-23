@@ -26,7 +26,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
-import { isBaseSubscriptionPlanCode } from "@/lib/subscriptions/subscription-plan-codes";
+import { MODULE_ADD_ON_PLAN_CODE_PREFIX } from "@/lib/subscriptions/subscription-plan-codes";
 
 export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
 
@@ -115,7 +115,7 @@ const SUBSCRIPTION_ENTITLEMENT_SELECT = {
  * Max rows read in one round-trip (newest first). If no ACTIVE_LIKE row appears in this window,
  * a narrow fallback query loads the newest ACTIVE_LIKE row (rare accounts with long cancellation history).
  */
-const SUBSCRIPTION_HISTORY_WINDOW = 80;
+const SUBSCRIPTION_HISTORY_WINDOW = 25;
 
 function emptyAccess(userId: string): UserAccess {
   return {
@@ -290,7 +290,11 @@ async function getUserAccessCore(
   telemetry.subscriptionQueries = 1;
   const subscriptionRows = await withRetry(() =>
     prisma.subscription.findMany({
-      where: { userId },
+      where: {
+        userId,
+        // Exclude module add-ons at the DB layer (reduces row count + avoids JS filtering overhead).
+        NOT: { planCode: { startsWith: MODULE_ADD_ON_PLAN_CODE_PREFIX } },
+      },
       orderBy: { createdAt: "desc" },
       take: SUBSCRIPTION_HISTORY_WINDOW,
       select: SUBSCRIPTION_ENTITLEMENT_SELECT,
@@ -298,7 +302,7 @@ async function getUserAccessCore(
   );
   telemetry.subscriptionRowsRead = subscriptionRows.length;
 
-  const baseSubscriptionRows = subscriptionRows.filter((row) => isBaseSubscriptionPlanCode(row.planCode));
+  const baseSubscriptionRows = subscriptionRows;
 
   const now = Date.now();
   let activeSubscription =
@@ -313,14 +317,18 @@ async function getUserAccessCore(
     telemetry.subscriptionQueries = 2;
     const fallbackRows = await withRetry(() =>
       prisma.subscription.findMany({
-        where: { userId, status: { in: ACTIVE_LIKE } },
+        where: {
+          userId,
+          status: { in: ACTIVE_LIKE },
+          NOT: { planCode: { startsWith: MODULE_ADD_ON_PLAN_CODE_PREFIX } },
+        },
         orderBy: { createdAt: "desc" },
         take: 8,
         select: SUBSCRIPTION_ENTITLEMENT_SELECT,
       }),
     );
     const fallbackActive =
-      fallbackRows.filter((row) => isBaseSubscriptionPlanCode(row.planCode)).find((s) => {
+      fallbackRows.find((s) => {
         if (s.status === SubscriptionStatus.PAST_DUE) return true;
         return activeLikePaidWindowOpen(s, now);
       }) ?? null;

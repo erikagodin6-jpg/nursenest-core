@@ -1,4 +1,13 @@
-import type { NextRequest } from "next/server";
+cd ~/nursenest-core
+
+git add \
+  nursenest-core/src/lib/entitlements/get-user-access.ts \
+  nursenest-core/src/lib/flashcards/load-flashcards-exam-inventory.server.ts \
+  nursenest-core/src/app/api/flashcards/inventory/route.ts \
+  nursenest-core/src/app/api/questions/discovery/route.ts
+
+git commit -m "fix(stability): reduce entitlement DB load + bound/cache paid aggregates"
+git pushimport type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { enforceDiscoveryProtection } from "@/lib/http/api-protection";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
@@ -20,6 +29,15 @@ import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics"
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 
 export const dynamic = "force-dynamic";
+
+type DiscoveryCacheEntry = { cachedAtMs: number; body: unknown };
+const discoveryCache = new Map<string, DiscoveryCacheEntry>();
+const DISCOVERY_CACHE_TTL_MS = 30_000;
+const DISCOVERY_CACHE_MAX = 2000;
+
+function discoveryCacheKey(userId: string, pathwayId: string | null, language: string): string {
+  return `${userId}::${pathwayId ?? ""}::${language}`;
+}
 
 /** Cap grouped rows returned to the client (must match SQL LIMITs in subscriber-discovery-aggregates). */
 const DISCOVERY_TOPIC_BUCKET_CAP = DISCOVERY_SQL_TOPIC_LIMIT;
@@ -44,6 +62,15 @@ export async function GET(req: NextRequest) {
   if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/questions/discovery", feature: SERVER_FEATURE.question, userId: gate.userId });
+
+  const cacheKey = discoveryCacheKey(gate.userId, requestedPathwayId, requestedLanguage);
+  const cached = discoveryCache.get(cacheKey);
+  if (cached && Date.now() - cached.cachedAtMs < DISCOVERY_CACHE_TTL_MS) {
+    const res = NextResponse.json(cached.body);
+    res.headers.set("x-nn-discovery-cache", "hit");
+    res.headers.set("Cache-Control", "private, no-store");
+    return res;
+  }
 
   try {
     if (requestedPathwayId && !examContext) {
@@ -125,7 +152,14 @@ export async function GET(req: NextRequest) {
       ...(discoveryDiagnostics ? { diagnostics: discoveryDiagnostics } : {}),
     };
     logLargeApiResponse("/api/questions/discovery", estimateJsonUtf8Bytes(discoveryBody));
-    return NextResponse.json(discoveryBody);
+
+    if (discoveryCache.size > DISCOVERY_CACHE_MAX) discoveryCache.clear();
+    discoveryCache.set(cacheKey, { cachedAtMs: Date.now(), body: discoveryBody });
+
+    const res = NextResponse.json(discoveryBody);
+    res.headers.set("x-nn-discovery-cache", "miss");
+    res.headers.set("Cache-Control", "private, no-store");
+    return res;
   } catch (e) {
     emitStructuredLog("question_load_failed", "error", {
       correlationId: correlationIdFromRequest(req),

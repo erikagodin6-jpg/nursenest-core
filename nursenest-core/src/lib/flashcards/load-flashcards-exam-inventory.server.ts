@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -127,6 +127,13 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
 
 const FLASHCARD_INVENTORY_GROUP_BY_LIMIT = 500;
 
+function flashcardsInventoryStatementTimeoutMs(): number {
+  const raw = process.env.NN_FLASHCARDS_INVENTORY_STATEMENT_TIMEOUT_MS?.trim();
+  const n = raw ? Number(raw) : 8000;
+  if (!Number.isFinite(n)) return 8000;
+  return Math.max(1500, Math.min(30_000, Math.floor(n)));
+}
+
 type GroupRow = { bodySystem: string | null; topic: string | null; cnt: bigint };
 
 /**
@@ -163,49 +170,72 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway);
 
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathway.id);
+  const statementTimeoutMs = flashcardsInventoryStatementTimeoutMs();
+
+  let legacyWhereForPrisma: ReturnType<typeof getCanonicalExamQuestionWhereForPathway> | null = null;
+  if (!accessScopeIsStaffLearnerEntitlementBypass(poolScope)) {
+    try {
+      legacyWhereForPrisma = getCanonicalExamQuestionWhereForPathway(poolScope, pathway);
+    } catch {
+      legacyWhereForPrisma = null;
+    }
+  }
+
   const prismaAggStarted = performance.now();
-  const [totalRow, groupRows, dedicatedFlashcardCount] = await Promise.all([
-    prisma.$queryRaw<[{ n: bigint }]>`
-      SELECT COUNT(*)::bigint AS n FROM exam_questions
-      WHERE ${whereSql}
-    `,
-    prisma.$queryRaw<GroupRow[]>`
-      SELECT
-        body_system AS "bodySystem",
-        topic,
-        COUNT(*)::bigint AS cnt
-      FROM exam_questions
-      WHERE ${whereSql}
-      GROUP BY body_system, topic
-      ORDER BY cnt DESC NULLS LAST
-      LIMIT ${FLASHCARD_INVENTORY_GROUP_BY_LIMIT}
-    `,
-    prisma.flashcard.count({
-      where: {
-        status: ContentStatus.PUBLISHED,
-        AND: [
-          flashcardAccessWhere(poolScope, pathwayOpts),
-          { deck: { pathwayId: pathway.id } },
-        ],
-      },
-    }),
-  ]);
+  const txResult = await prisma.$transaction(
+    async (tx) => {
+      // Bound aggregate queries so a single slow exam_questions scan doesn't wedge learner study surfaces.
+      await tx.$executeRaw(Prisma.sql`SET LOCAL statement_timeout = ${statementTimeoutMs}`);
+
+      const [totalRow, groupRows, dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount] =
+        await Promise.all([
+          tx.$queryRaw<[{ n: bigint }]>`
+            SELECT COUNT(*)::bigint AS n FROM exam_questions
+            WHERE ${whereSql}
+          `,
+          tx.$queryRaw<GroupRow[]>`
+            SELECT
+              body_system AS "bodySystem",
+              topic,
+              COUNT(*)::bigint AS cnt
+            FROM exam_questions
+            WHERE ${whereSql}
+            GROUP BY body_system, topic
+            ORDER BY cnt DESC NULLS LAST
+            LIMIT ${FLASHCARD_INVENTORY_GROUP_BY_LIMIT}
+          `,
+          tx.flashcard.count({
+            where: {
+              status: ContentStatus.PUBLISHED,
+              AND: [
+                flashcardAccessWhere(poolScope, pathwayOpts),
+                { deck: { pathwayId: pathway.id } },
+              ],
+            },
+          }),
+          legacyWhereForPrisma
+            ? tx.examQuestion
+                .count({ where: legacyWhereForPrisma })
+                .catch(() => null)
+            : Promise.resolve(null),
+        ]);
+
+      return { totalRow, groupRows, dedicatedFlashcardCount, legacyCanonicalPrismaPoolCount };
+    },
+    {
+      maxWait: 10_000,
+      timeout: Math.min(60_000, statementTimeoutMs + 10_000),
+    },
+  );
+
   const prismaParallelAggregateMs = Math.round(performance.now() - prismaAggStarted);
 
-  const total = bn(totalRow[0]?.n);
+  const total = bn(txResult.totalRow[0]?.n);
+  const groupRows = txResult.groupRows;
+  const dedicatedFlashcardCount = txResult.dedicatedFlashcardCount;
 
-  let legacyCanonicalPrismaPoolCount: number | null = null;
-  let legacyCanonicalPrismaCountMs = 0;
-  if (!accessScopeIsStaffLearnerEntitlementBypass(poolScope)) {
-    const tLeg = performance.now();
-    try {
-      const legacyWhere = getCanonicalExamQuestionWhereForPathway(poolScope, pathway);
-      legacyCanonicalPrismaPoolCount = await prisma.examQuestion.count({ where: legacyWhere });
-    } catch {
-      legacyCanonicalPrismaPoolCount = null;
-    }
-    legacyCanonicalPrismaCountMs = Math.round(performance.now() - tLeg);
-  }
+  const legacyCanonicalPrismaPoolCount = txResult.legacyCanonicalPrismaPoolCount;
+  const legacyCanonicalPrismaCountMs = 0;
 
   const groups = groupRows.map((g) => ({
     bodySystem: g.bodySystem,
