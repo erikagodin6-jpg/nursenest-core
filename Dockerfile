@@ -8,26 +8,12 @@ RUN apk add --no-cache libc6-compat openssl bash \
 
 WORKDIR /app
 
-COPY nursenest-core/package.json nursenest-core/package-lock.json ./nursenest-core/
-COPY nursenest-core/scripts/shims/server-only ./nursenest-core/scripts/shims/server-only
+COPY . .
 
-WORKDIR /app/nursenest-core
-
-ENV NODE_ENV=development
 ENV HUSKY=0
+ENV NODE_ENV=development
 
 RUN npm ci --ignore-scripts --no-fund --no-audit --install-links=false
-
-WORKDIR /app
-
-COPY shared ./shared
-COPY client ./client
-COPY nursenest-core ./nursenest-core
-COPY scripts ./scripts
-COPY script ./script
-COPY tools ./tools
-
-WORKDIR /app/nursenest-core
 
 ARG NN_BUILD_COMMIT
 ARG NN_BUILD_BRANCH
@@ -72,12 +58,12 @@ ENV NODE_ENV=production \
   VERCEL_GIT_COMMIT_REF=${VERCEL_GIT_COMMIT_REF}
 
 RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
-  npm run db:generate
-
-RUN rm -f src/middleware.ts src/middleware.js
+  npm --prefix nursenest-core run db:generate
 
 RUN NODE_OPTIONS="--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3072}" \
-  npm run heroku-postbuild
+  npm --prefix nursenest-core run build:production
+
+RUN npm run build
 
 RUN npm prune --omit=dev --no-fund --no-audit
 
@@ -85,17 +71,21 @@ FROM node:20-alpine AS runner
 
 RUN apk add --no-cache libc6-compat openssl
 
-WORKDIR /app/nursenest-core
+WORKDIR /app
 
 ENV NODE_ENV=production \
   PORT=8080 \
   HOSTNAME=0.0.0.0 \
   NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/nursenest-core/.next/standalone ./
-COPY --from=builder /app/nursenest-core/.next/static ./.next/static
-COPY --from=builder /app/nursenest-core/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/nursenest-core/scripts ./nursenest-core/scripts
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/package-lock.json ./package-lock.json
+COPY --from=builder /app/public ./public
 
 EXPOSE 8080
 
-CMD ["node", "server.js"]
+CMD ["node", "scripts/start-production.mjs"]

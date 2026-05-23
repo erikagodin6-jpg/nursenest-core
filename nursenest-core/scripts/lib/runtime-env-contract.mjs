@@ -1,16 +1,18 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-export const DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE = Object.freeze({
+export const DIGITALOCEAN_RUNTIME_EVIDENCE = Object.freeze({
   appName: "nursenest-core-next",
   componentName: "web",
   sourceDir: ".",
-  runCommand: "node scripts/start-standalone.mjs",
+  runCommand: "node scripts/start-production.mjs",
 });
 
 export const RUNTIME_ENV_PRESENCE_KEYS = Object.freeze([
   "DATABASE_URL",
+  "DIRECT_URL",
   "AUTH_SECRET",
+  "NEXTAUTH_SECRET",
   "STRIPE_SECRET_KEY",
   "NEXTAUTH_URL",
   "AUTH_URL",
@@ -74,7 +76,7 @@ export function resolveRuntimeContractContext(options = {}) {
   } = options;
 
   return {
-    ...DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
+    ...DIGITALOCEAN_RUNTIME_EVIDENCE,
     cwd,
     scriptPath: resolveRuntimeScriptPath(scriptPath),
     deploymentId: deploymentId ?? null,

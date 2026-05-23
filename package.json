@@ -13,7 +13,7 @@
     "build:client": "BUILD_TARGET=client NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=4096 npx tsx script/build.ts && node scripts/verify-dist-artifacts.mjs",
     "build:heavy": "BUILD_TARGET=heavy RUN_HEAVY_BUILD_TASKS=1 NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=4096 npx tsx script/build.ts && node scripts/verify-dist-artifacts.mjs",
     "content:export:question-banks": "tsx scripts/export-question-bank-json.ts",
-    "start": "node nursenest-core/scripts/start-standalone.mjs",
+    "start": "node scripts/start-production.mjs",
     "heroku:local": "node scripts/start-production.mjs",
     "verify:do-runtime": "node scripts/verify-digitalocean-runtime.mjs",
     "verify:do-domains": "node scripts/verify-digitalocean-domain-persistence.mjs",

@@ -50,7 +50,9 @@ export const FORBIDDEN_SPEC_PATHS = Object.freeze({
 export const REQUIRED_RUNTIME_ENV_KEYS = Object.freeze([
   // ── Core auth + DB ───────────────────────────────────────────────────────
   "DATABASE_URL",
+  "DIRECT_URL",
   "AUTH_SECRET",
+  "NEXTAUTH_SECRET",
   "NEXTAUTH_URL",
   "AUTH_URL",
   "NEXT_PUBLIC_APP_URL",
@@ -145,7 +147,7 @@ export const REQUIRED_AI_KEY_GROUP = Object.freeze([
 ]);
 
 /** Expected web component run_command. Must not change without explicit sign-off. */
-export const EXPECTED_RUN_COMMAND = "node scripts/start-standalone.mjs";
+export const EXPECTED_RUN_COMMAND = "node scripts/start-production.mjs";
 
 /** Valid container registry types for the web service image source. */
 export const VALID_REGISTRY_TYPES = Object.freeze(["GHCR", "DOCR", "DOCKER_HUB"]);

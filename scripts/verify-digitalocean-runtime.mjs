@@ -16,12 +16,13 @@ const specPath = path.join(root, ".do", "app-nursenest-core-next.yaml");
 const dockerfilePath = path.join(root, "Dockerfile");
 const packagePath = path.join(appRoot, "package.json");
 const rootPackagePath = path.join(root, "package.json");
-const standaloneStartPath = path.join(appRoot, "scripts", "start-standalone.mjs");
+const productionStartPath = path.join(root, "scripts", "start-production.mjs");
 
 const expectedAppName = "nursenest-core-next";
 const expectedServiceName = "web";
-const expectedSourceDir = ".";
-const expectedRunCommand = "node scripts/start-standalone.mjs";
+const expectedRunCommand = "node scripts/start-production.mjs";
+const expectedImageRegistryType = "GHCR";
+const expectedImageRepository = "erikagodin6-jpg/nursenest";
 const expectedAccountEmail = process.env.NN_DO_EXPECTED_ACCOUNT_EMAIL?.trim() || "erikagodin6@gmail.com";
 const expectedTeamName = process.env.NN_DO_EXPECTED_TEAM?.trim() || "My Team";
 const runtimeVisibleScopes = new Set(["RUN_TIME", "RUN_AND_BUILD_TIME"]);
@@ -198,16 +199,34 @@ function sanitizeEnvAttachment(specModel, key) {
 
 function summarizeSpec(specModel, label) {
   const service = findService(specModel);
+  const sourceType = service?.image
+    ? "image"
+    : service?.github
+      ? "github"
+      : service?.gitlab
+        ? "gitlab"
+        : service?.git
+          ? "git"
+          : service?.source_dir
+            ? "source_dir"
+            : "unknown";
   return {
     label,
     appName: specModel?.name ?? null,
     serviceName: service?.name ?? null,
     sourceDir: service?.source_dir ?? null,
+    sourceType,
     runCommand: service?.run_command ?? null,
+    imageRegistryType: service?.image?.registry_type ?? null,
+    imageRepository: service?.image?.repository ?? null,
+    imageTag: service?.image?.tag ?? null,
+    imageDigest: service?.image?.digest ?? null,
     ingressComponents: findIngressComponentNames(specModel),
     routeServices: findRouteServiceNames(specModel),
     databaseUrl: sanitizeEnvAttachment(specModel, "DATABASE_URL"),
+    directUrl: sanitizeEnvAttachment(specModel, "DIRECT_URL"),
     authSecret: sanitizeEnvAttachment(specModel, "AUTH_SECRET"),
+    nextauthSecret: sanitizeEnvAttachment(specModel, "NEXTAUTH_SECRET"),
   };
 }
 
@@ -243,7 +262,7 @@ function assertRunTimeGeneralKeyHasLiteralValue(specText, key) {
   }
 }
 
-function verifyStartScript({ label, command, baseDir, allowRootStandalone = false, dockerfile }) {
+function verifyStartScript({ label, command, baseDir, dockerfile, allowStandalone = false }) {
   if (typeof command !== "string" || !command.trim()) {
     fail(`${label} must expose a non-empty start command`);
     return;
@@ -251,11 +270,14 @@ function verifyStartScript({ label, command, baseDir, allowRootStandalone = fals
   if (command.includes("--import ./instrumentation.node.ts")) {
     fail(`${label} must not preload ./instrumentation.node.ts; it is optional and not copied into the Docker runtime image`);
   }
-  if (command.includes("start-production.mjs")) {
-    fail(`${label} must not use start-production.mjs in the standalone Docker runtime`);
-  }
-  if (!command.includes("scripts/start-standalone.mjs")) {
-    fail(`${label} must use scripts/start-standalone.mjs for production startup`);
+
+  if (!allowStandalone) {
+    if (command.includes("scripts/start-standalone.mjs")) {
+      fail(`${label} must not rely on scripts/start-standalone.mjs for production startup`);
+    }
+    if (!command.includes("scripts/start-production.mjs")) {
+      fail(`${label} must use scripts/start-production.mjs for production startup`);
+    }
   }
 
   const relativeRefs = [
@@ -273,24 +295,15 @@ function verifyStartScript({ label, command, baseDir, allowRootStandalone = fals
     if (ref.includes("instrumentation.node.ts")) {
       fail(`${label} references optional instrumentation preload ${ref}`);
     }
-    if (ref === "nursenest-core/scripts/start-standalone.mjs" && allowRootStandalone) {
-      continue;
-    }
     if (ref.startsWith("scripts/")) {
       continue;
     }
     if (ref.startsWith("./") && !ref.startsWith("./scripts/")) {
       fail(`${label} references ${ref}, which is not under a Docker-copied app runtime directory`);
     }
-    if (ref.startsWith("../scripts/")) {
-      assertIncludes(
-        dockerfile,
-        "COPY --from=builder /app/scripts ../scripts",
-        `Dockerfile runner stage for ${label} reference ${ref}`,
-      );
-    }
   }
 }
+
 
 function readPackageJson(file, label) {
   try {
@@ -402,11 +415,26 @@ function verifyLiveSpec(summary, label) {
   if (summary.serviceName !== expectedServiceName) {
     fail(`${label}: expected service ${expectedServiceName}, found ${summary.serviceName ?? "missing"}`);
   }
-  if (summary.sourceDir !== expectedSourceDir) {
-    fail(`${label}: expected source_dir ${expectedSourceDir}, found ${summary.sourceDir ?? "missing"}`);
-  }
   if (summary.runCommand !== expectedRunCommand) {
     fail(`${label}: expected run_command ${expectedRunCommand}, found ${summary.runCommand ?? "missing"}`);
+  }
+  if (summary.sourceType !== "image") {
+    fail(
+      `${label}: expected service ${expectedServiceName} to deploy from a pre-built image source, found ${summary.sourceType ?? "missing"}`,
+    );
+  }
+  if (summary.imageRegistryType !== expectedImageRegistryType) {
+    fail(
+      `${label}: expected image registry_type ${expectedImageRegistryType}, found ${summary.imageRegistryType ?? "missing"}`,
+    );
+  }
+  if (summary.imageRepository !== expectedImageRepository) {
+    fail(
+      `${label}: expected image repository ${expectedImageRepository}, found ${summary.imageRepository ?? "missing"}`,
+    );
+  }
+  if (!summary.imageTag && !summary.imageDigest) {
+    fail(`${label}: image tag or digest must be set for service ${expectedServiceName}`);
   }
   if (summary.ingressComponents.length > 0 && !summary.ingressComponents.includes(expectedServiceName)) {
     fail(`${label}: ingress does not route to ${expectedServiceName}; found ${summary.ingressComponents.join(", ")}`);
@@ -418,7 +446,7 @@ const specModel = parseSpecModel(specText, "repo");
 const dockerfile = read(dockerfilePath);
 const packageJson = readPackageJson(packagePath, "nursenest-core/package.json");
 const rootPackageJson = readPackageJson(rootPackagePath, "package.json");
-const standaloneStart = read(standaloneStartPath);
+const productionStart = read(productionStartPath);
 const lines = activeLines(specText);
 const keys = envKeys(lines);
 const repoSummary = summarizeSpec(specModel, "repo");
@@ -429,13 +457,6 @@ console.log(`[verify:do-runtime] repo spec summary ${JSON.stringify(repoSummary)
 assertRunTimeGeneralKeyHasLiteralValue(specText, "AI_ADMIN_GENERATION_ENABLED");
 verifyLiveSpec(repoSummary, "repo spec");
 
-const repoDockerfilePath = findService(specModel)?.dockerfile_path ?? null;
-if (repoDockerfilePath !== "Dockerfile") {
-  fail(`expected dockerfile_path: Dockerfile, found ${repoDockerfilePath ?? "missing"}`);
-}
-if (scalar(lines, "branch") !== "main") {
-  fail(`expected production branch main, found ${scalar(lines, "branch") ?? "missing"}`);
-}
 if (scalar(lines, "http_port") !== "8080") {
   fail(`expected http_port: 8080, found ${scalar(lines, "http_port") ?? "missing"}`);
 }
@@ -445,17 +466,14 @@ if (!/liveness_health_check:[\s\S]*http_path:\s*\/healthz/.test(specText)) {
 if (!/health_check:[\s\S]*http_path:\s*\/readyz/.test(specText)) {
   fail("health_check must point to /readyz");
 }
-for (const forbidden of ["ghcr.io", "image:", "image_name:", "docker_image:", "registry_image:"]) {
-  if (lines.some((line) => line.includes(forbidden))) {
-    fail(`app spec contains stale image/registry reference: ${forbidden}`);
-  }
-}
-
 if (!keys.has("AUTH_SECRET") && !keys.has("NEXTAUTH_SECRET")) {
   fail("app spec must declare AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");
 }
-if (!keys.has("NODE_MAX_OLD_SPACE_SIZE_MB")) {
-  fail("app spec must set NODE_MAX_OLD_SPACE_SIZE_MB for standalone child runtime heap");
+if (!keys.has("DIRECT_URL")) {
+  fail("app spec must declare DIRECT_URL as a runtime secret for Prisma migrations");
+}
+if (!keys.has("NEXTAUTH_SECRET")) {
+  fail("app spec must declare NEXTAUTH_SECRET as a runtime secret");
 }
 if (repoSummary.authSecret.present && repoSummary.authSecret.type !== "SECRET") {
   fail(`repo spec: AUTH_SECRET must be declared as type SECRET, found ${repoSummary.authSecret.type ?? "missing"}`);
@@ -478,34 +496,56 @@ if (!repoSummary.databaseUrl.present) {
     warn("repo spec: DATABASE_URL scope RUN_AND_BUILD_TIME is runtime-visible, but RUN_TIME is preferred.");
   }
 }
+if (!repoSummary.directUrl.present) {
+  fail(`repo spec: DIRECT_URL absent from effective runtime env for running service ${expectedServiceName}`);
+} else {
+  if (repoSummary.directUrl.attachment !== "service") {
+    fail(`repo spec: DIRECT_URL must be attached under services.${expectedServiceName}.envs, found ${repoSummary.directUrl.attachment ?? "missing"}`);
+  }
+  if (!runtimeVisibleScopes.has(repoSummary.directUrl.scope)) {
+    fail(
+      `repo spec: DIRECT_URL must be runtime-visible for service ${expectedServiceName}; found ${repoSummary.directUrl.scope ?? "missing"}`,
+    );
+  }
+  if (repoSummary.directUrl.type !== "SECRET") {
+    fail(`repo spec: DIRECT_URL must be declared as type SECRET, found ${repoSummary.directUrl.type ?? "missing"}`);
+  }
+}
+if (!repoSummary.nextauthSecret.present) {
+  fail(`repo spec: NEXTAUTH_SECRET absent from effective runtime env for service ${expectedServiceName}`);
+} else if (repoSummary.nextauthSecret.type !== "SECRET") {
+  fail(`repo spec: NEXTAUTH_SECRET must be declared as type SECRET, found ${repoSummary.nextauthSecret.type ?? "missing"}`);
+}
 
 if (!/FROM\s+node:20-alpine\s+AS\s+runner/.test(dockerfile)) {
   fail("Dockerfile must have a node:20-alpine runner stage");
 }
 for (const requiredCopy of [
-  "COPY --from=builder /app/nursenest-core/.next ./.next",
-  "COPY --from=builder /app/nursenest-core/public ./public",
-  "COPY --from=builder /app/nursenest-core/scripts ./scripts",
-  "COPY --from=builder /app/nursenest-core/package.json ./package.json",
+  "COPY --from=builder /app/node_modules ./node_modules",
+  "COPY --from=builder /app/dist ./dist",
+  "COPY --from=builder /app/scripts ./scripts",
+  "COPY --from=builder /app/nursenest-core/scripts ./nursenest-core/scripts",
+  "COPY --from=builder /app/package.json ./package.json",
+  "COPY --from=builder /app/package-lock.json ./package-lock.json",
+  "COPY --from=builder /app/public ./public",
 ]) {
   assertIncludes(dockerfile, requiredCopy, "Dockerfile runner stage");
 }
 assertIncludes(dockerfile, "EXPOSE 8080", "Dockerfile");
-assertIncludes(dockerfile, "NODE_MAX_OLD_SPACE_SIZE_MB=768", "Dockerfile runner ENV");
-if (!dockerfile.includes('CMD ["node", "scripts/start-standalone.mjs"]')) {
-  fail('Dockerfile runner CMD must start scripts/start-standalone.mjs directly');
+if (!dockerfile.includes('CMD ["node", "scripts/start-production.mjs"]')) {
+  fail('Dockerfile runner CMD must start scripts/start-production.mjs directly');
 }
 
 for (const requiredSnippet of [
-  "standalone_parent_pre_hydrate",
-  "standalone_parent_post_hydrate",
-  "standalone_parent_contract_validated",
-  "livenessProbePath = \"/healthz\"",
-  "readinessProbePath = \"/readyz\"",
-  "PORT: String(internalPort)",
-  "HOSTNAME: internalHost",
+  "[runtime_env]",
+  "DATABASE_URL_present=",
+  "DIRECT_URL_present=",
+  "AUTH_SECRET_present=",
+  "NEXTAUTH_SECRET_present=",
+  "require(dist/index.cjs)",
+  "dist/index.cjs is missing.",
 ]) {
-  assertIncludes(standaloneStart, requiredSnippet, "start-standalone.mjs");
+  assertIncludes(productionStart, requiredSnippet, "start-production.mjs");
 }
 
 verifyStartScript({
@@ -513,12 +553,12 @@ verifyStartScript({
   command: packageJson?.scripts?.start,
   baseDir: appRoot,
   dockerfile,
+  allowStandalone: true,
 });
 verifyStartScript({
   label: "package.json start",
   command: rootPackageJson?.scripts?.start,
   baseDir: root,
-  allowRootStandalone: true,
   dockerfile,
 });
 
@@ -531,7 +571,7 @@ for (const specFile of [".do/app-nursenest-core-next.yaml", ".do/app.yaml"]) {
     verifyStartScript({
       label: `${specFile} run_command`,
       command: specRunCommand,
-      baseDir: appRoot,
+      baseDir: root,
       dockerfile,
     });
   }
@@ -599,6 +639,26 @@ if (liveSpecSummary) {
     fail(`live app spec: AUTH_SECRET absent from effective runtime env for service ${expectedServiceName}`);
   } else if (liveSpecSummary.authSecret.type !== "SECRET") {
     fail(`live app spec: AUTH_SECRET must be type SECRET, found ${liveSpecSummary.authSecret.type ?? "missing"}`);
+  }
+  if (!liveSpecSummary.directUrl?.present) {
+    fail(`live app spec: DIRECT_URL absent from effective runtime env for service ${expectedServiceName}`);
+  } else {
+    if (liveSpecSummary.directUrl.attachment !== "service") {
+      fail(
+        `live app spec: DIRECT_URL must be attached under services.${expectedServiceName}.envs, found ${liveSpecSummary.directUrl.attachment ?? "missing"}`,
+      );
+    }
+    if (!runtimeVisibleScopes.has(liveSpecSummary.directUrl.scope)) {
+      fail(`live app spec: DIRECT_URL scope must be runtime-visible, found ${liveSpecSummary.directUrl.scope ?? "missing"}`);
+    }
+    if (liveSpecSummary.directUrl.type !== "SECRET") {
+      fail(`live app spec: DIRECT_URL must be type SECRET, found ${liveSpecSummary.directUrl.type ?? "missing"}`);
+    }
+  }
+  if (!liveSpecSummary.nextauthSecret?.present) {
+    fail(`live app spec: NEXTAUTH_SECRET absent from effective runtime env for service ${expectedServiceName}`);
+  } else if (liveSpecSummary.nextauthSecret.type !== "SECRET") {
+    fail(`live app spec: NEXTAUTH_SECRET must be type SECRET, found ${liveSpecSummary.nextauthSecret.type ?? "missing"}`);
   }
 }
 
@@ -714,8 +774,14 @@ const cacheSummary = {
     databaseUrlAttachedToService: liveSpecSummary?.databaseUrl?.attachment === "service",
     databaseUrlRuntimeVisible: runtimeVisibleScopes.has(liveSpecSummary?.databaseUrl?.scope),
     databaseUrlSecret: liveSpecSummary?.databaseUrl?.type === "SECRET",
+    directUrlAttached: Boolean(liveSpecSummary?.directUrl?.present),
+    directUrlAttachedToService: liveSpecSummary?.directUrl?.attachment === "service",
+    directUrlRuntimeVisible: runtimeVisibleScopes.has(liveSpecSummary?.directUrl?.scope),
+    directUrlSecret: liveSpecSummary?.directUrl?.type === "SECRET",
     authSecretAttached: Boolean(liveSpecSummary?.authSecret?.present),
     authSecretSecret: liveSpecSummary?.authSecret?.type === "SECRET",
+    nextauthSecretAttached: Boolean(liveSpecSummary?.nextauthSecret?.present),
+    nextauthSecretSecret: liveSpecSummary?.nextauthSecret?.type === "SECRET",
   },
   warnings,
   failed: failures.length > 0,
@@ -739,4 +805,4 @@ for (const message of warnings) {
 
 console.log("[verify:do-runtime] verified repo spec, live app spec, runtime env attachment, and deployment freshness");
 console.log("[verify:do-runtime] public health: /healthz immediate, /readyz gated by child readiness");
-console.log("[verify:do-runtime] startup command: node scripts/start-standalone.mjs");
+console.log("[verify:do-runtime] startup command: node scripts/start-production.mjs");

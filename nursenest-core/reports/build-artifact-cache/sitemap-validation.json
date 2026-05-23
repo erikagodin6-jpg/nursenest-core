@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "ec0c291359ab822406072ae92f34f4c2d8790c60f0ca71b5fe6f09eab67aa66f",
-  "generatedAt": "2026-05-22T00:36:25.792Z",
+  "fingerprint": "0c5527755d156c2fbfbc250bb61523ca64ec195deb57f6062779f9a5732014a5",
+  "generatedAt": "2026-05-23T08:16:02.426Z",
   "inputs": [
     {
       "type": "file",
@@ -1818,6 +1818,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/account-lifecycle/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/ai-assistant/route-handler.ts"
     },
     {
@@ -2374,6 +2378,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/pathway-lessons/[id]/sections/[sectionId]/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/pathway-lessons/lookup/route.ts"
     },
     {
@@ -2466,7 +2474,15 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/stats/analytics/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/stats/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/stats/users/route.ts"
     },
     {
       "type": "file",
@@ -6553,6 +6569,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 32248
+    "durationMs": 9162
   }
 }

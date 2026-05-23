@@ -1,280 +1,60 @@
 name: nursenest-core-next
-
 region: tor
-
 domains:
-
-* domain: nursenest.ca
-  type: PRIMARY
-  zone: nursenest.ca
-
-* domain: [www.nursenest.ca](http://www.nursenest.ca)
-  type: ALIAS
-  zone: nursenest.ca
-
+  - domain: nursenest.ca
+    type: PRIMARY
+    zone: nursenest.ca
+  - domain: www.nursenest.ca
+    type: ALIAS
+    zone: nursenest.ca
 ingress:
-rules:
-- component:
-name: web
-match:
-path:
-prefix: /
-
+  rules:
+    - component:
+        name: web
+      match:
+        path:
+          prefix: /
 services:
-
-* name: web
-
-  image:
-  registry_type: GHCR
-  registry: ghcr.io
-  repository: erikagodin6-jpg/nursenest
-  tag: latest
-
-  run_command: node scripts/start-production.mjs
-
-  http_port: 8080
-
-  instance_count: 1
-  instance_size_slug: basic-s
-
-  health_check:
-  http_path: /readyz
-  port: 8080
-  initial_delay_seconds: 240
-  period_seconds: 15
-  timeout_seconds: 15
-  success_threshold: 1
-  failure_threshold: 12
-
-  envs:
-
-  # ── Node / Build ───────────────────────────────────────────────────────
-
-  * key: NODE_VERSION
-    scope: RUN_AND_BUILD_TIME
-    value: 22.22.2
-
-  * key: NODE_ENV
-    scope: RUN_AND_BUILD_TIME
-    value: production
-
-  * key: NODE_OPTIONS
-    scope: RUN_AND_BUILD_TIME
-    value: --max-old-space-size=4096
-
-  * key: NODE_MAX_OLD_SPACE_SIZE_MB
-    scope: RUN_AND_BUILD_TIME
-    value: "1280"
-
-  * key: NEXT_TELEMETRY_DISABLED
-    scope: RUN_AND_BUILD_TIME
-    value: "1"
-
-  * key: TMPDIR
-    scope: RUN_AND_BUILD_TIME
-    value: /tmp
-
-  * key: PORT
-    scope: RUN_AND_BUILD_TIME
-    value: "8080"
-
-  * key: HOSTNAME
-    scope: RUN_AND_BUILD_TIME
-    value: 0.0.0.0
-
-  # ── Build tuning ───────────────────────────────────────────────────────
-
-  * key: RUN_HEAVY_BUILD_TASKS
-    scope: RUN_AND_BUILD_TIME
-    value: "false"
-
-  * key: SKIP_I18N_PREBUILD
-    scope: RUN_AND_BUILD_TIME
-    value: "1"
-
-  * key: NN_APP_PLATFORM_BUILD
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: NN_LESSON_INDEX_VERIFY_MODE
-    scope: RUN_AND_BUILD_TIME
-    value: manifest
-
-  * key: NN_SKIP_HEAVY_BUILD_REPORTS
-    scope: RUN_AND_BUILD_TIME
-    value: "1"
-
-  * key: NN_LOW_MEMORY_BUILD
-    scope: RUN_AND_BUILD_TIME
-    value: "1"
-
-  * key: NN_FORCE_SINGLE_BUILD_WORKER
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: NN_TIMED_INCLUDE_NPM_PRUNE
-    scope: RUN_AND_BUILD_TIME
-    value: "1"
-
-  * key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
-    scope: RUN_AND_BUILD_TIME
-    value: "4096"
-
-  * key: BUILD_WEBPACK_PARALLELISM
-    scope: RUN_AND_BUILD_TIME
-    value: "1"
-
-  * key: SENTRY_ENABLED
-    scope: RUN_AND_BUILD_TIME
-    value: "false"
-
-  # ── Runtime identity ───────────────────────────────────────────────────
-
-  * key: NN_BUILD_COMMIT
-    scope: RUN_AND_BUILD_TIME
-    value: ${web.COMMIT_HASH}
-
-  * key: NN_BUILD_BRANCH
-    scope: RUN_AND_BUILD_TIME
-    value: main
-
-  * key: NN_BOOTSTRAP_TEST_DELAY_MS
-    scope: RUN_AND_BUILD_TIME
-    value: "5000"
-
-  * key: NN_CHILD_HEALTH_TIMEOUT_MS
-    scope: RUN_AND_BUILD_TIME
-    value: "3000"
-
-  * key: NN_ENV_VALIDATION_MODE
-    scope: RUN_AND_BUILD_TIME
-
-  # ── App URL ────────────────────────────────────────────────────────────
-
-  * key: NEXT_PUBLIC_APP_URL
-    scope: RUN_AND_BUILD_TIME
-    value: https://nursenest.ca
-
-  # ── Auth ───────────────────────────────────────────────────────────────
-
-  * key: AUTH_TRUST_HOST
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: AUTH_URL
-    scope: RUN_AND_BUILD_TIME
-    value: https://nursenest.ca
-
-  * key: NEXTAUTH_URL
-    scope: RUN_AND_BUILD_TIME
-    value: https://nursenest.ca
-
-  * key: AUTH_SECRET
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: NEXTAUTH_SECRET
-    scope: RUN_TIME
-    type: SECRET
-
-  # ── Database ───────────────────────────────────────────────────────────
-
-  * key: DATABASE_URL
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: DIRECT_URL
-    scope: RUN_TIME
-    type: SECRET
-
-  # ── AI / OpenAI ────────────────────────────────────────────────────────
-
-  * key: AI_ADMIN_GENERATION_ENABLED
-    scope: RUN_AND_BUILD_TIME
-    value: "false"
-
-  * key: AI_PROVIDER
-    scope: RUN_AND_BUILD_TIME
-    value: OPENAI
-
-  * key: OPENROUTER_MODEL
-    scope: RUN_AND_BUILD_TIME
-    value: anthropic/claude-3.5-sonnet
-
-  * key: AI_INTEGRATIONS_OPENAI_API_KEY
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: OPENAI_API_KEY
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: OPENROUTER_API_KEY
-    scope: RUN_TIME
-    type: SECRET
-
-  # ── Storage ────────────────────────────────────────────────────────────
-
-  * key: SPACES_KEY
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: SPACES_SECRET
-    scope: RUN_TIME
-    type: SECRET
-
-  # ── Cron ───────────────────────────────────────────────────────────────
-
-  * key: CRON_SECRET
-    scope: RUN_TIME
-    type: SECRET
-
-  # ── Stripe ─────────────────────────────────────────────────────────────
-
-  * key: STRIPE_SECRET_KEY
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: STRIPE_WEBHOOK_SECRET
-    scope: RUN_TIME
-    type: SECRET
-
-  * key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-    scope: RUN_TIME
-    type: SECRET
-
-  # ── ECG module flags ───────────────────────────────────────────────────
-
-  * key: ENABLE_ECG_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: NEXT_PUBLIC_ENABLE_ECG_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: ENABLE_ADVANCED_ECG_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: ALLOW_ECG_EARLY_ACCESS_CHECKOUT
-    scope: RUN_AND_BUILD_TIME
-    value: "false"
-
-  # ── Hemodynamics module flags ─────────────────────────────────────────
-
-  * key: ENABLE_HEMODYNAMICS_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: NEXT_PUBLIC_ENABLE_HEMODYNAMICS_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: ENABLE_ADVANCED_HEMODYNAMICS_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
-
-  * key: NEXT_PUBLIC_ENABLE_ADVANCED_HEMODYNAMICS_MODULE
-    scope: RUN_AND_BUILD_TIME
-    value: "true"
+  - name: web
+    image:
+      registry_type: GHCR
+      registry: ghcr.io
+      repository: erikagodin6-jpg/nursenest
+      tag: latest
+    run_command: node scripts/start-production.mjs
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-s
+    health_check:
+      http_path: /readyz
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
+      success_threshold: 1
+      failure_threshold: 12
+    envs:
+      - key: NODE_ENV
+        scope: RUN_AND_BUILD_TIME
+        value: production
+      - key: PORT
+        scope: RUN_AND_BUILD_TIME
+        value: "8080"
+      - key: HOSTNAME
+        scope: RUN_AND_BUILD_TIME
+        value: 0.0.0.0
+      - key: NEXT_PUBLIC_APP_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://nursenest.ca
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: DIRECT_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NEXTAUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET

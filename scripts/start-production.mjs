@@ -52,6 +52,15 @@ logWithTimestamp("log", `cwd=${process.cwd()}`);
 logWithTimestamp("log", `app_root=${root}`);
 logWithTimestamp("log", `server_entry=${indexAbs}`);
 
+const hasValue = (value) => typeof value === "string" && value.trim().length > 0;
+const runtimePresence = [
+  `DATABASE_URL_present=${hasValue(process.env.DATABASE_URL)}`,
+  `DIRECT_URL_present=${hasValue(process.env.DIRECT_URL)}`,
+  `AUTH_SECRET_present=${hasValue(process.env.AUTH_SECRET)}`,
+  `NEXTAUTH_SECRET_present=${hasValue(process.env.NEXTAUTH_SECRET)}`,
+];
+logWithTimestamp("log", `[runtime_env] ${runtimePresence.join(" ")}`);
+
 if (!fs.existsSync(indexAbs)) {
   logWithTimestamp(
     "error",

@@ -45,6 +45,11 @@ START_BUILD="$(date +%s)"
 npm --prefix nursenest-core run build:production
 echo "[deploy-timing] npm_run_build_production_s=$(( $(date +%s) - START_BUILD ))"
 
+echo "[production-build] npm run build (monorepo dist)..."
+START_ROOT_BUILD="$(date +%s)"
+npm run build
+echo "[deploy-timing] npm_run_root_build_s=$(( $(date +%s) - START_ROOT_BUILD ))"
+
 if [ "${SKIP_BUNDLE_SIZE_CHECK:-0}" = "1" ]; then
   echo "[production-build] skipping check:bundle-size (SKIP_BUNDLE_SIZE_CHECK=1)"
 else

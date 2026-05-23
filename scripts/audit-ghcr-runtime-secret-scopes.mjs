@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * GHCR + App Platform: runtime secrets must use scope RUN_TIME (not RUN_AND_BUILD_TIME only).
- * Pre-built images skip DO build — build-scoped secrets never reach `start-standalone.mjs`.
+ * Pre-built images skip DO build — build-scoped secrets never reach `start-production.mjs`.
  *
  * Run: node scripts/audit-ghcr-runtime-secret-scopes.mjs [.do/app-nursenest-core-next.yaml]
  */
