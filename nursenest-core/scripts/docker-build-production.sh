@@ -56,6 +56,14 @@ fi
 log "step=clean_build_caches"
 rm -rf .next .turbo node_modules/.cache
 
+# Next.js v16+ treats `src/proxy.ts` as the replacement for `src/middleware.ts`.
+# If both exist, `next build` fails with:
+#   "Both middleware file .../middleware.ts and proxy file .../proxy.ts are detected"
+# The long-term fix is to delete src/middleware.ts from the repo, but we also
+# defensively remove it during Docker builds so CI/CD is not blocked.
+log "step=next_proxy_guard (remove deprecated src/middleware.ts if present)"
+rm -f src/middleware.ts src/middleware.js
+
 # Hard-wire the V8 heap at the shell level so it survives subprocess spawning.
 # run-buildpack-build.mjs strips --max-old-space-size from NODE_OPTIONS before
 # passing to run-next-prod-build.mjs; setting it here AND having NN_APPLY_NEXT_BUILD_HEAP_LIMIT=1
