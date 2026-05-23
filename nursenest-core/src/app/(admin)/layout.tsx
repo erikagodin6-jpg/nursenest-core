@@ -4,6 +4,7 @@ import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
@@ -36,6 +37,9 @@ async function adminGlobalCommandPaletteImportFallback() {
 }
 
 export default async function AdminGroupLayout({ children }: { children: React.ReactNode }) {
+  if (isBuildPhase()) {
+    return <>{children}</>;
+  }
   let AdminGlobalCommandPalette: AdminGlobalCommandPaletteFn;
   let loadMarketingMessageShards: LoadMarketingMessageShardsFn;
   try {

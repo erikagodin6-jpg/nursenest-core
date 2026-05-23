@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { NotFoundClient } from "@/components/errors/not-found-client";
+import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 
 export const dynamic = "force-dynamic";
 
@@ -8,8 +9,6 @@ export const metadata: Metadata = {
   title: "Page Not Found",
   robots: { index: false, follow: true },
 };
-
-const BUILD_PHASE = "phase-production-build";
 
 type ResumeStudyingForNotFound =
   Awaited<ReturnType<typeof import("@/lib/ui/not-found-resume")["loadResumeStudyingForNotFound"]>>;
@@ -45,7 +44,7 @@ async function readHeadersSafe(): Promise<Headers | null> {
 }
 
 async function buildNotFoundRecoverySuggestionsSafe(pathnameSnapshot: string) {
-  if (process.env.NEXT_PHASE === BUILD_PHASE) return [];
+  if (isBuildPhase()) return [];
 
   try {
     const mod = await import("@/lib/ui/not-found-recovery-suggestions");
@@ -59,7 +58,7 @@ async function loadNotFoundAuthContextSafe(): Promise<{
   isAuthenticated: boolean;
   resumeStudying: ResumeStudyingForNotFound | null;
 }> {
-  if (process.env.NEXT_PHASE === BUILD_PHASE) {
+  if (isBuildPhase()) {
     return { isAuthenticated: false, resumeStudying: null };
   }
 
@@ -97,7 +96,8 @@ async function loadNotFoundAuthContextSafe(): Promise<{
 }
 
 export default async function NotFound() {
-  const h = await readHeadersSafe();
+  const buildPhase = isBuildPhase();
+  const h = buildPhase ? null : await readHeadersSafe();
   const pathnameSnapshot = pathnameForNotFoundFromHeaders(h);
   const registryRecoveryLinks = await buildNotFoundRecoverySuggestionsSafe(pathnameSnapshot);
   const { isAuthenticated, resumeStudying } = await loadNotFoundAuthContextSafe();

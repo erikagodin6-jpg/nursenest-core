@@ -4,6 +4,7 @@ import Script from "next/script";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
+import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 import { marketingThemeBeforeInteractiveInlineScript } from "@/lib/theme/marketing-theme-before-interactive-seed";
 
 import { nursenestAppIcons } from "@/lib/branding/app-icons";
@@ -121,10 +122,7 @@ export const metadata: Metadata = {
 
 async function getSessionSafe() {
   if (process.env.NN_UI_PREVIEW_MODE === "1") return null;
-
-  const nextPhase = process.env["NEXT_PHASE"];
-  const isNonServerPhase = Boolean(nextPhase && !nextPhase.endsWith("server"));
-  if (isNonServerPhase) return null;
+  if (isBuildPhase()) return null;
 
   const hasSecret = Boolean(
     (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
@@ -182,6 +180,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (isBuildPhase()) {
+    return (
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    );
+  }
+
   const session = await getSessionSafe();
 
   return (

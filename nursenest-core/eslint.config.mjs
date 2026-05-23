@@ -25,6 +25,77 @@ const eslintConfig = defineConfig([
     },
   },
 
+  // ── Global error boundary: client-only guard ──
+  {
+    files: ["src/app/global-error.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "next/headers",
+                "next/cookies",
+                "next/server",
+                "@/lib/auth",
+                "@/lib/auth/**",
+                "@/server/**",
+              ],
+              message: "Global error boundary must stay client-only and request-agnostic.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // ── Shared pure + client-only modules: no server imports ──
+  {
+    files: [
+      "src/client/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+      "src/shared/pure/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "next/headers",
+                "next/cookies",
+                "next/server",
+                "@/lib/auth",
+                "@/lib/auth/**",
+                "@/server/**",
+              ],
+              message: "Shared/client modules must not depend on request-scoped server APIs.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // ── Layout safety: avoid request APIs in shared layouts ──
+  {
+    files: ["src/app/**/layout.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["next/headers", "next/cookies", "next/server"],
+              message: "Route layouts must remain build-safe. Move request APIs into loaders or route handlers.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // ── Layer isolation: marketing layer ──
   {
     files: ["src/app/(marketing)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],

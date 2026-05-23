@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
+import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
 
 async function getStaffSessionSafe() {
+  if (isBuildPhase()) return null;
   try {
     const { getStaffSession } = await import("@/lib/auth/staff-session");
     return await getStaffSession();
@@ -21,6 +23,9 @@ export const metadata: Metadata = {
 };
 
 export default async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
+  if (isBuildPhase()) {
+    return <>{children}</>;
+  }
   let locale = "en";
   let messages: Record<string, string> = {};
   let fallbackMessages: Record<string, string> | undefined = undefined;

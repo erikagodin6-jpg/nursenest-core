@@ -1,6 +1,7 @@
 import { AdminNavClient } from "@/components/admin/admin-nav-client";
 import { AdminAiGenerationBanner } from "@/components/admin/admin-ai-generation-banner";
 import { AdminAiGenerationProvider } from "@/components/admin/admin-ai-generation-context";
+import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 import { requireAdmin } from "@/lib/auth/guards";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -10,6 +11,10 @@ import { AdminRenderedI18nKeyDevGuard } from "@/components/admin/admin-rendered-
 export const dynamic = "force-dynamic";
 
 export default async function AdminSubLayout({ children }: { children: React.ReactNode }) {
+  if (isBuildPhase()) {
+    return <>{children}</>;
+  }
+
   await requireAdmin();
   const staff = await getStaffSession().catch(() => null);
   const tier: StaffTier = staff?.tier ?? "super";
