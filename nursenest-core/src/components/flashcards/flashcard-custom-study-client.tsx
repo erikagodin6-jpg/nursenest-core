@@ -126,9 +126,17 @@ export function FlashcardCustomStudyClient() {
       setError(null);
       try {
         const res = await fetch(`/api/flashcards/custom-session?${queryString}`, { credentials: "include" });
-        const json: unknown = await res.json();
+        let json: unknown;
+        try {
+          json = await res.json();
+        } catch (jsonErr) {
+          console.error("[flashcard-session] json parse failed", { status: res.status, err: jsonErr });
+          if (!cancelled) setError("Session returned invalid data. Please retry.");
+          return;
+        }
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         if (!parsed.ok) {
+          console.error("[flashcard-session] parse failed", { message: parsed.message, status: res.status });
           if (!cancelled) setError(parsed.message);
           return;
         }
@@ -136,8 +144,20 @@ export function FlashcardCustomStudyClient() {
           json && typeof json === "object" && Array.isArray((json as { cards?: unknown }).cards)
             ? ((json as { cards: ApiCard[] }).cards ?? [])
             : [];
+        const validCards = rawCards.filter(
+          (c) => c && typeof c.id === "string" && c.id.length > 0 &&
+                 typeof c.front === "string" && typeof c.back === "string",
+        );
+        if (process.env.NODE_ENV === "development") {
+          console.debug("[flashcard-session] cards ready", {
+            status: res.status,
+            raw: rawCards.length,
+            valid: validCards.length,
+            matching: parsed.summary?.matchingCards ?? 0,
+          });
+        }
         if (!cancelled) {
-          setCards(rawCards.filter((c) => c && typeof c.id === "string" && c.id.length > 0));
+          setCards(validCards);
           setSummary(
             parsed.summary
               ? {
@@ -150,7 +170,8 @@ export function FlashcardCustomStudyClient() {
               : null,
           );
         }
-      } catch {
+      } catch (err) {
+        console.error("[flashcard-session] network error", err);
         if (!cancelled) setError("Could not load this session. Check your connection and try again.");
       } finally {
         if (!cancelled) setLoading(false);
@@ -235,6 +256,28 @@ export function FlashcardCustomStudyClient() {
       /* non-fatal — progress is best-effort for custom sessions */
     }
   }, []);
+
+  const onStudyProgress = useCallback(
+    ({ index }: { index: number; revealed: boolean }) => {
+      if (!pathwayId || activeCards.length === 0) return;
+      const q = new URLSearchParams(searchParamString);
+      q.delete("includeCards");
+      q.delete("resumeIndex");
+      saveFlashcardsCustomSessionCheckpoint({
+        pathwayId,
+        queryString: q.toString(),
+        index,
+        totalCards: activeCards.length,
+        systemsLabel: categoriesLabel,
+        updatedAt: new Date().toISOString(),
+      });
+    },
+    [pathwayId, activeCards.length, searchParamString, categoriesLabel],
+  );
+
+  const onSessionComplete = useCallback(() => {
+    if (pathwayId) clearFlashcardsCustomSessionCheckpoint(pathwayId);
+  }, [pathwayId]);
 
   if (loading) {
     return (
@@ -325,23 +368,8 @@ export function FlashcardCustomStudyClient() {
           sessionMeta={sessionMeta}
           enableLocalStudyPins
           initialCardIndex={initialCardIndex}
-          onStudyProgress={({ index }) => {
-            if (!pathwayId || activeCards.length === 0) return;
-            const q = new URLSearchParams(searchParamString);
-            q.delete("includeCards");
-            q.delete("resumeIndex");
-            saveFlashcardsCustomSessionCheckpoint({
-              pathwayId,
-              queryString: q.toString(),
-              index,
-              totalCards: activeCards.length,
-              systemsLabel: categoriesLabel,
-              updatedAt: new Date().toISOString(),
-            });
-          }}
-          onSessionComplete={() => {
-            if (pathwayId) clearFlashcardsCustomSessionCheckpoint(pathwayId);
-          }}
+          onStudyProgress={onStudyProgress}
+          onSessionComplete={onSessionComplete}
         />
       </ExamSessionShell>
     </div>

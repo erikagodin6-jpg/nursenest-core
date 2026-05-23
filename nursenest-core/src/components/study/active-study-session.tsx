@@ -87,10 +87,21 @@ type Props = {
 
 /* ================= HELPERS ================= */
 
+function isValidCard(c: unknown): c is ActiveStudyCard {
+  if (!c || typeof c !== "object") return false;
+  const card = c as Record<string, unknown>;
+  return (
+    typeof card.id === "string" &&
+    card.id.trim().length > 0 &&
+    typeof card.prompt === "string" &&
+    typeof card.answer === "string"
+  );
+}
+
 function dedupeCardsById(cards: ActiveStudyCard[]): ActiveStudyCard[] {
   const seen = new Set<string>();
   return cards.filter((c) => {
-    if (!c.id || seen.has(c.id)) return false;
+    if (!isValidCard(c) || seen.has(c.id)) return false;
     seen.add(c.id);
     return true;
   });
@@ -159,7 +170,16 @@ export function ActiveStudySession({
   const { t } = useMarketingI18n();
   const [, bumpPins] = useReducer((x: number) => x + 1, 0);
 
-  const deduped = useMemo(() => dedupeCardsById(cards), [cards]);
+  const deduped = useMemo(() => {
+    const result = dedupeCardsById(cards);
+    if (process.env.NODE_ENV === "development" && result.length < cards.length) {
+      console.warn("[active-study-session] dropped cards: invalid or duplicate", {
+        total: cards.length,
+        kept: result.length,
+      });
+    }
+    return result;
+  }, [cards]);
   const sessionPathwayIdEarly = useMemo(
     () => deduped.find((c) => c.pathwayId)?.pathwayId ?? null,
     [deduped],
@@ -266,12 +286,14 @@ export function ActiveStudySession({
       }
       if (e.key === "ArrowLeft") {
         e.preventDefault();
+        setRevealed(false);
         setIndex((i) => Math.max(0, i - 1));
         return;
       }
       if (e.key === "ArrowRight") {
         if (!revealed) return;
         e.preventDefault();
+        setRevealed(false);
         setIndex((i) => Math.min(sessionCards.length - 1, i + 1));
         return;
       }
@@ -294,7 +316,7 @@ export function ActiveStudySession({
     );
   }
 
-  if (!current) {
+  if (!current || !isValidCard(current)) {
     return (
       <div className="mx-auto max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
         {t("flashcards.noCardsMatch")}
@@ -603,7 +625,7 @@ export function ActiveStudySession({
               <button
                 type="button"
                 className="nn-premium-flashcard-nav-btn"
-                onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                onClick={() => { setRevealed(false); setIndex((i) => Math.max(0, i - 1)); }}
               >
                 <ChevronLeft className="h-4 w-4" aria-hidden />
                 {t("flashcards.previous")}
@@ -611,7 +633,7 @@ export function ActiveStudySession({
               <button
                 type="button"
                 className="nn-premium-flashcard-nav-btn"
-                onClick={() => setIndex((i) => Math.min(sessionCards.length - 1, i + 1))}
+                onClick={() => { setRevealed(false); setIndex((i) => Math.min(sessionCards.length - 1, i + 1)); }}
                 disabled={!revealed}
               >
                 {t("flashcards.next")}
