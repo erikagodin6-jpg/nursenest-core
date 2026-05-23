@@ -571,13 +571,18 @@ async function buildAll() {
   if (target === "all" || target === "client") {
     const i18nCompileT = Date.now();
     if (skipI18nCompile) {
-      const enPath = path.join(APP_ROOT, "client/public/i18n/en.json");
-      if (!existsSync(enPath)) {
+      const candidatePaths = [
+        path.resolve(REPO_ROOT, "client/public/i18n/en.json"),
+        path.resolve(APP_ROOT, "client/public/i18n/en.json"),
+      ];
+      const resolvedI18nPath = candidatePaths.find((candidate) => existsSync(candidate));
+      if (!resolvedI18nPath) {
         console.error(
-          `[build] SKIP_I18N_COMPILE=1 but ${enPath} is missing. Commit i18n JSON or run a full build without SKIP_I18N_COMPILE.`,
+          `[build] SKIP_I18N_COMPILE=1 but no compiled i18n bundle was found. Checked paths: ${candidatePaths.join(", ")}. Run 'npm --prefix nursenest-core run i18n:compile' (or omit SKIP_I18N_COMPILE) before npm run build.`,
         );
         process.exit(1);
       }
+      console.log(`[build] using precompiled i18n bundle: ${resolvedI18nPath}`);
       log("skipping i18n compile (production deploy path)");
     } else {
       log("building i18n...");
