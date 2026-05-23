@@ -13,7 +13,7 @@ import { ReviewStartCards } from "@/components/study/review-start-cards";
 import { ConceptRiskSection } from "@/components/study/concept-risk-section";
 import { FlashcardReviewSection } from "@/components/study/flashcard-review-section";
 import { MasteredRecentlySection } from "@/components/study/mastered-recently-section";
-import { ReviewQueueClient } from "@/app/(student)/app/(learner)/review/review-queue-client";
+import { ReviewQueueClient } from "@/app/(app)/app/(learner)/review/review-queue-client";
 import { ContextualPaywallCard } from "@/components/study/premium-gate";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import type { UnifiedReviewData } from "@/lib/study/unified-review-types";

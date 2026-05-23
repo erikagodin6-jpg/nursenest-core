@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { traceLayout } from "../../../../../build/tracing";
+import { traceLayout } from "@/build/tracing";
 import "@/app/learner-exam-session-premium.css";
 
 /** Segment-level dynamic: question bank stays request-time (no static prerender at build). */

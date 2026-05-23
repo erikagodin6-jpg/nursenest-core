@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createTraceInfo, traceLayout, withBuildTrace } from "../../../../../build/tracing";
+import { createTraceInfo, traceLayout, withBuildTrace } from "@/build/tracing";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerShellMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import "@/app/learner-exam-shell.css";
