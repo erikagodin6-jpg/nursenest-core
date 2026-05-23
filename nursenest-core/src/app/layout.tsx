@@ -121,7 +121,11 @@ export const metadata: Metadata = {
 
 async function getSessionSafe() {
   if (process.env.NN_UI_PREVIEW_MODE === "1") return null;
-  if (process.env.NEXT_PHASE === "phase-production-build") return null;
+
+  const nextPhase = process.env["NEXT_PHASE"];
+  const isNonServerPhase = Boolean(nextPhase && !nextPhase.endsWith("server"));
+  if (isNonServerPhase) return null;
+
   const hasSecret = Boolean(
     (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
     (process.env.NEXTAUTH_SECRET &&
