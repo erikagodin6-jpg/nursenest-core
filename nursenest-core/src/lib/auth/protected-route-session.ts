@@ -36,13 +36,17 @@ async function activeSessionOrNull(session: Session, surface: string): Promise<S
       return null;
     }
   } catch (error) {
-    safeServerLog("auth", "protected_route_active_user_check_failed", {
+    // Transient DB error — JWT already validated the user identity. Fail open so that
+    // a temporary DB outage does not log out authenticated users and send them through
+    // the sign-in flow, which loses their deep-link destination.
+    safeServerLog("auth", "protected_route_active_user_check_db_unavailable", {
       surface,
       userIdPrefix: userId.slice(0, 8),
       detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
       severity: "warning",
+      outcome: "session_preserved_on_db_error",
     });
-    return null;
+    return session;
   }
 
   return session;

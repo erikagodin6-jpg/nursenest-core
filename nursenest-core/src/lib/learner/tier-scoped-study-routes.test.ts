@@ -167,6 +167,29 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
   });
 
+  it("allows /app/flashcards/custom with pathwayId (study session deep link)", () => {
+    const u = `/app/flashcards/custom?pathwayId=${encodeURIComponent(RN)}&cardLimit=20&shuffle=1`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
+  it("allows /app/flashcards/weak-areas with pathwayId", () => {
+    const u = `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(RN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
+  it("allows /app/questions/bank with pathwayId (question bank drill page)", () => {
+    const u = `/app/questions/bank?pathwayId=${encodeURIComponent(RN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
+  it("rejects /app/flashcards/custom without pathwayId", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards/custom?cardLimit=20"), null);
+  });
+
+  it("rejects /app/questions/bank without pathwayId", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions/bank"), null);
+  });
+
   it("allows /app/cat with pathwayId (post-login resume to CAT hub alias)", () => {
     const u = `/app/cat?pathwayId=${encodeURIComponent(RN)}`;
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);

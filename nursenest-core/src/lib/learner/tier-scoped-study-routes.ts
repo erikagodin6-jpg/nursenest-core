@@ -81,18 +81,21 @@ export function parseTierScopedAppStudyCallbackPath(raw: string | null): string 
   if (!raw?.trim()) return null;
   try {
     const u = new URL(raw.trim(), "http://localhost");
-    if (
-      u.pathname !== "/app/questions" &&
-      u.pathname !== "/app/questions/session" &&
-      u.pathname !== "/app/practice-tests" &&
-      u.pathname !== "/app/practice-tests/start" &&
-      u.pathname !== "/app/practice-tests/cat-launch" &&
-      u.pathname !== "/app/practice-exams" &&
-      u.pathname !== "/app/flashcards" &&
-      u.pathname !== "/app/cat"
-    ) {
-      return null;
-    }
+    const isStudySessionPath =
+      u.pathname === "/app/questions" ||
+      u.pathname === "/app/questions/session" ||
+      // Question bank drill page — same pathwayId pattern as the hub
+      u.pathname === "/app/questions/bank" ||
+      u.pathname === "/app/practice-tests" ||
+      u.pathname === "/app/practice-tests/start" ||
+      u.pathname === "/app/practice-tests/cat-launch" ||
+      u.pathname === "/app/practice-exams" ||
+      u.pathname === "/app/flashcards" ||
+      // Study session deep links — these carry pathwayId in query so they belong here
+      u.pathname === "/app/flashcards/custom" ||
+      u.pathname === "/app/flashcards/weak-areas" ||
+      u.pathname === "/app/cat";
+    if (!isStudySessionPath) return null;
     const pid = u.searchParams.get("pathwayId")?.trim() ?? "";
     if (!PATHWAY_ID_PARAM.test(pid)) return null;
     return `${u.pathname}${u.search}${u.hash}`;

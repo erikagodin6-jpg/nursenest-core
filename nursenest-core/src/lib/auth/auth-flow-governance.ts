@@ -229,6 +229,15 @@ export function resolveMarketingAuthRedirectTarget(
   const resolved = resolveAuthReturnDestination(raw, options);
   if (resolved) return resolved;
 
+  // If the callback was any /app/* path that couldn't be specifically preserved (e.g., a
+  // session-specific URL, a tier-scoped path without pathwayId, or a route not in the allowlist),
+  // land on the learner dashboard rather than the marketing home. Prevents authenticated users
+  // from ending up on the marketing site after signing in from within the app.
+  const rawTrimmed = raw?.trim() ?? "";
+  if (rawTrimmed.startsWith("/app/") && !rawTrimmed.startsWith("/app/api/")) {
+    return "/app";
+  }
+
   return postLoginMarketingHomePath(locale);
 }
 
