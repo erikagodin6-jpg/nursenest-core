@@ -26,8 +26,6 @@ import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-f
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { flashcardLessonVirtualDiagnosticsForPathway } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
-import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import {
@@ -265,76 +263,17 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     return <FlashcardErrorBoundary />;
   }
 
-  let pathwayLessonFlashDiagnostics = null;
-  try {
-    pathwayLessonFlashDiagnostics =
-      entitlement.hasAccess && scopedPathwayId
-        ? await flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
-            selectedCategories: [],
-            filterModeLabel: "all cards",
-          })
-        : null;
-  } catch {
-    pathwayLessonFlashDiagnostics = null;
-  }
-
   const catalogPathway = getExamPathwayById(scopedPathwayId);
   const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
   const pathwayDisplayName =
     catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPathwayId;
 
-  let initialHub: FlashcardsHubServerPayload | null = null;
-  try {
-    if (userId && isDatabaseUrlConfigured() && entitlement.hasAccess) {
-      if (catalogPathway) {
-        const inv = await loadFlashcardsExamInventoryForPathway({
-          userId,
-          entitlement,
-          pathway: catalogPathway,
-        });
-        if (inv.ok) {
-          initialHub = {
-            categoryOptions: inv.categoryOptions,
-            matchingTotal: inv.total,
-            lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
-            poolDiagnostics: inv.diagnostics,
-          };
-        } else {
-          initialHub = {
-            categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
-            matchingTotal: 0,
-            lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
-          };
-        }
-      } else {
-        initialHub = {
-          categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
-          matchingTotal: 0,
-          lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
-        };
-      }
-    } else if (entitlement.hasAccess) {
-      initialHub = {
-        categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
-        matchingTotal: 0,
-        lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
-      };
-    }
-  } catch {
-    initialHub = {
-      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
-      matchingTotal: 0,
-      lessonVirtualDiagnostics: null,
-    };
-  }
-
-  if (!initialHub) {
-    initialHub = {
-      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
-      matchingTotal: 0,
-      lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
-    };
-  }
+  let initialHub: FlashcardsHubServerPayload = {
+    categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+    matchingTotal: 0,
+    lessonVirtualDiagnostics: null,
+    poolDiagnostics: null,
+  };
 
   if (initialHub.categoryOptions.length === 0) {
     initialHub = {
