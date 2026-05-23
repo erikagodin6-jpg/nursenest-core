@@ -377,10 +377,22 @@ console.log(
   `[next-prod-build] next_cli_invocation_start pid=${process.pid} bundler=${useWebpackBuild ? "webpack" : "turbopack"} args=${JSON.stringify(nextBuildArgs)}`,
 );
 const tNext = Date.now();
+const memoryLogInterval = setInterval(() => {
+  try {
+    const m = process.memoryUsage();
+    console.log("[mem]", {
+      rss: Math.round(m.rss / 1024 / 1024),
+      heapUsed: Math.round(m.heapUsed / 1024 / 1024),
+    });
+  } catch (error) {
+    console.error("[mem] sampling_failed", error);
+  }
+}, 30000);
 let r;
 try {
   r = await runNextBuild(nextBuildArgs);
 } finally {
+  clearInterval(memoryLogInterval);
   if (buildLockHeld) {
     releaseExclusiveNextBuildLock(packageRoot);
     buildLockHeld = false;
