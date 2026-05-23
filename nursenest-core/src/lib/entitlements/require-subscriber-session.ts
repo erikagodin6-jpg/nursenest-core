@@ -7,6 +7,10 @@ import { productEvent } from "@/lib/observability/product-events";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import {
+  getAuthSessionWithJwtCookieFallback,
+  sessionHasUserIdentity,
+} from "@/lib/auth/server-session-jwt-fallback";
 
 export type SubscriberSessionOk = { ok: true; userId: string; entitlement: AccessScope; userAccess: UserAccess };
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
@@ -25,8 +29,32 @@ export function notSubscribedResponse() {
  */
 export async function requireSubscriberSession(): Promise<SubscriberSessionResult> {
   const correlation = (await requireSubscriberSessionDeps.correlationIdFromHeaders()) ?? "";
-  const session = await requireSubscriberSessionDeps.auth();
-  const userId = (session?.user as { id?: string } | undefined)?.id;
+
+  let session: unknown = null;
+  try {
+    session = await requireSubscriberSessionDeps.auth();
+  } catch (error) {
+    safeServerLog("auth", "subscriber_gate_session_read_failed", {
+      surface: "subscriber_gate",
+      correlation,
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+      severity: "warning",
+    });
+    session = null;
+  }
+
+  // Parity with `getProtectedRouteSession`: Node `auth()` can miss cookies under proxy/secure-cookie
+  // variation or throw under load. Use a JWT fallback before treating a request as unauthenticated.
+  if (!sessionHasUserIdentity(session as never)) {
+    try {
+      const fallback = await getAuthSessionWithJwtCookieFallback();
+      if (sessionHasUserIdentity(fallback)) session = fallback;
+    } catch {
+      // ignore
+    }
+  }
+
+  const userId = (session as { user?: { id?: string } } | null)?.user?.id;
   if (!userId) {
     safeServerLog("access", "unauthorized_no_session", {
       surface: "subscriber_gate",
