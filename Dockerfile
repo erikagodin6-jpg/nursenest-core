@@ -14,7 +14,9 @@ ENV HUSKY=0
 ENV NODE_ENV=development
 
 RUN npm ci --ignore-scripts --no-fund --no-audit --install-links=false
-RUN npm --prefix nursenest-core ci --ignore-scripts --no-fund --no-audit --install-links=false
+RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
+  DIRECT_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
+  npm --prefix nursenest-core ci --no-fund --no-audit --install-links=false
 RUN nursenest-core/node_modules/.bin/prisma --version
 
 ARG NN_BUILD_COMMIT
@@ -60,6 +62,7 @@ ENV NODE_ENV=production \
   VERCEL_GIT_COMMIT_REF=${VERCEL_GIT_COMMIT_REF}
 
 RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
+  DIRECT_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
   npm --prefix nursenest-core run db:generate
 
 RUN NODE_OPTIONS="--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3072}" \
