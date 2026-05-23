@@ -68,38 +68,8 @@ export function hrefForResolvedQuestionBankEntry(resolved: ResolvedQuestionBankP
   return "/app/account/study-preferences";
 }
 
-const PATHWAY_ID_PARAM = /^[a-z][a-z0-9-]{5,80}$/i;
-
-/**
- * Marketing auth may allow returning to these app routes when `pathwayId` is present,
- * so sign-in from a tier hub can resume the same exam track (still same-origin, path-only).
- *
- * Includes `/app/flashcards` and `/app/practice-tests` so hub study tiles survive login the same way as
- * the question bank and CAT start routes.
- */
-export function parseTierScopedAppStudyCallbackPath(raw: string | null): string | null {
-  if (!raw?.trim()) return null;
-  try {
-    const u = new URL(raw.trim(), "http://localhost");
-    const isStudySessionPath =
-      u.pathname === "/app/questions" ||
-      u.pathname === "/app/questions/session" ||
-      // Question bank drill page — same pathwayId pattern as the hub
-      u.pathname === "/app/questions/bank" ||
-      u.pathname === "/app/practice-tests" ||
-      u.pathname === "/app/practice-tests/start" ||
-      u.pathname === "/app/practice-tests/cat-launch" ||
-      u.pathname === "/app/practice-exams" ||
-      u.pathname === "/app/flashcards" ||
-      // Study session deep links — these carry pathwayId in query so they belong here
-      u.pathname === "/app/flashcards/custom" ||
-      u.pathname === "/app/flashcards/weak-areas" ||
-      u.pathname === "/app/cat";
-    if (!isStudySessionPath) return null;
-    const pid = u.searchParams.get("pathwayId")?.trim() ?? "";
-    if (!PATHWAY_ID_PARAM.test(pid)) return null;
-    return `${u.pathname}${u.search}${u.hash}`;
-  } catch {
-    return null;
-  }
-}
+// Callback URL validation for study routes has moved to:
+//   src/lib/auth/protected-study-routes.ts  →  normalizeStudyCallback()
+//
+// Adding a new study route: update STUDY_ROUTE_PREFIXES in protected-study-routes.ts.
+// No changes needed here or in auth-flow-governance.ts.

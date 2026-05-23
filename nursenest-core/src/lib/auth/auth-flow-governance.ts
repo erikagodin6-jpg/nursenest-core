@@ -4,7 +4,11 @@ import {
   safeCallbackPath,
   type SafeCallbackPathOptions,
 } from "@/lib/auth/safe-callback-path";
-import { parseTierScopedAppStudyCallbackPath } from "@/lib/learner/tier-scoped-study-routes";
+import {
+  isLearnerDeepLinkPath,
+  isStudyRoutePath,
+  normalizeStudyCallback,
+} from "@/lib/auth/protected-study-routes";
 
 /** Query param used across marketing + middleware for post-auth resume. */
 export const AUTH_CALLBACK_PARAM = "callbackUrl";
@@ -32,22 +36,6 @@ const AUTH_RESUME_BLOCKLIST_PREFIXES = [
   "/verify-email",
 ] as const;
 
-const LEARNER_DEEP_LINK_PREFIXES = [
-  "/app/questions",
-  "/app/questions/session",
-  "/app/practice-tests",
-  "/app/practice-exams",
-  "/app/flashcards",
-  "/app/cat",
-  "/app/lessons",
-  "/app/account/analytics",
-  "/app/study-plan",
-  "/app/study-coach",
-  "/app/exam-plan",
-  "/app/guided",
-  "/app/start-studying",
-] as const;
-
 function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
   const p = strippedPathname.split("?")[0] || "";
   return AUTH_RESUME_BLOCKLIST_PREFIXES.some((prefix) => p === prefix || p.startsWith(`${prefix}/`));
@@ -62,15 +50,15 @@ function pathnameFromSafeCallback(safe: string): string {
 }
 
 /**
- * Honors marketing + pathway hub URLs and tier-scoped study entry points.
- * Rejects bare `/app` learner shell roots (no accidental dashboard trap).
+ * Honors marketing + pathway hub URLs and study route deep links.
+ * Rejects bare `/app` learner shell roots and auth pages.
  */
 export function resolveMarketingCallbackPath(
   raw: string | null,
   opts?: SafeCallbackPathOptions,
 ): string | null {
-  const tierScoped = parseTierScopedAppStudyCallbackPath(raw);
-  if (tierScoped) return tierScoped;
+  const study = normalizeStudyCallback(raw);
+  if (study) return study;
 
   const safe = safeCallbackPath(raw, opts);
   if (!safe) return null;
@@ -85,19 +73,15 @@ export function resolveMarketingCallbackPath(
 /**
  * Learner study destinations (flashcards, CAT, practice, analytics, etc.) with query/hash preserved.
  * Allows deep `/app/*` links except generic `/app` shell.
+ *
+ * Study routes are validated via {@link normalizeStudyCallback} from protected-study-routes.ts.
+ * Non-study learner routes (lessons, analytics, etc.) are allowed via {@link isLearnerDeepLinkPath}.
+ * Adding a new study route: update STUDY_ROUTE_PREFIXES in protected-study-routes.ts only.
  */
-const TIER_SCOPED_LEARNER_PREFIXES = [
-  "/app/questions",
-  "/app/questions/session",
-  "/app/practice-tests",
-  "/app/practice-exams",
-  "/app/flashcards",
-  "/app/cat",
-] as const;
-
 export function resolveLearnerStudyCallbackPath(raw: string | null): string | null {
-  const tierScoped = parseTierScopedAppStudyCallbackPath(raw);
-  if (tierScoped) return tierScoped;
+  // Study routes: validated by the central classifier (pathwayId, UUID, session-id rules).
+  const study = normalizeStudyCallback(raw);
+  if (study !== null) return study;
 
   const safe = safeCallbackPath(raw);
   if (!safe) return null;
@@ -107,17 +91,12 @@ export function resolveLearnerStudyCallbackPath(raw: string | null): string | nu
     return null;
   }
 
-  const requiresTierScopedPathwayId = TIER_SCOPED_LEARNER_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
-  if (requiresTierScopedPathwayId) {
-    return null;
-  }
+  // Study route paths that normalizeStudyCallback rejected (e.g. session UUID, missing pathwayId
+  // on a hub route) must not fall through to the deep-link allowlist.
+  if (isStudyRoutePath(pathname)) return null;
 
-  const allowed = LEARNER_DEEP_LINK_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
-  return allowed ? safe : null;
+  // Non-study learner deep links (lessons, analytics, etc.).
+  return isLearnerDeepLinkPath(pathname) ? safe : null;
 }
 
 /** Unified post-auth destination: learner study links win over marketing paths. */

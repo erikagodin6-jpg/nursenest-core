@@ -52,11 +52,11 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app/account/analytics");
   });
 
-  it("falls back to /app (not marketing home) when callback was a stripped /app/* path", () => {
-    // e.g. /app/practice-tests/abc123 is a session-specific URL with no pathwayId — blocked
-    // but the user should land on the learner dashboard, not the marketing homepage
+  it("falls back to /app (not marketing home) when callback was a UUID session path", () => {
+    // A practice session UUID cannot be restored — the session is gone after logout.
+    // The user should land on the learner dashboard, not the marketing homepage.
     const sp = new URLSearchParams();
-    sp.set("callbackUrl", "/app/practice-tests/abc-session-uuid");
+    sp.set("callbackUrl", "/app/practice-tests/550e8400-e29b-41d4-a716-446655440000");
     const result = resolveMarketingAuthRedirectTarget("/login", sp, "en");
     assert.equal(result, "/app");
   });

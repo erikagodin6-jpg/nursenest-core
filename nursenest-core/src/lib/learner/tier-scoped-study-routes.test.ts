@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   hrefForResolvedQuestionBankEntry,
-  parseTierScopedAppStudyCallbackPath,
   resolveSubscribedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
@@ -134,98 +133,10 @@ describe("hrefForResolvedQuestionBankEntry", () => {
   });
 });
 
-describe("parseTierScopedAppStudyCallbackPath", () => {
-  it("allows /app/questions with pathwayId", () => {
-    assert.equal(
-      parseTierScopedAppStudyCallbackPath(`/app/questions?pathwayId=${encodeURIComponent(RN)}`),
-      `/app/questions?pathwayId=${encodeURIComponent(RN)}`,
-    );
-  });
-
-  it("allows /app/questions/session with pathwayId", () => {
-    const u = `/app/questions/session?pathwayId=${encodeURIComponent(RN)}&source=mixed_review&count=20&mode=tutor&shuffle=true`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/practice-tests/start with pathwayId", () => {
-    const u = `/app/practice-tests/start?pathwayId=${encodeURIComponent(PN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/practice-tests/cat-launch with pathwayId", () => {
-    const u = `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(PN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/practice-tests hub with pathwayId (tier hub resume after login)", () => {
-    const u = `/app/practice-tests?pathwayId=${encodeURIComponent(RN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/flashcards with pathwayId", () => {
-    const u = `/app/flashcards?pathwayId=${encodeURIComponent(RN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/flashcards/custom with pathwayId (study session deep link)", () => {
-    const u = `/app/flashcards/custom?pathwayId=${encodeURIComponent(RN)}&cardLimit=20&shuffle=1`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/flashcards/weak-areas with pathwayId", () => {
-    const u = `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(RN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("allows /app/questions/bank with pathwayId (question bank drill page)", () => {
-    const u = `/app/questions/bank?pathwayId=${encodeURIComponent(RN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("rejects /app/flashcards/custom without pathwayId", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards/custom?cardLimit=20"), null);
-  });
-
-  it("rejects /app/questions/bank without pathwayId", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions/bank"), null);
-  });
-
-  it("allows /app/cat with pathwayId (post-login resume to CAT hub alias)", () => {
-    const u = `/app/cat?pathwayId=${encodeURIComponent(RN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("rejects /app/cat without pathwayId", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/cat"), null);
-  });
-
-  it("allows /app/practice-exams alias with pathwayId (resumes to hub after login)", () => {
-    const u = `/app/practice-exams?pathwayId=${encodeURIComponent(RN)}`;
-    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
-  });
-
-  it("rejects /app/questions without pathwayId", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions"), null);
-  });
-
-  it("rejects /app/questions/session without pathwayId", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions/session?source=mixed_review"), null);
-  });
-
-  it("rejects /app/flashcards without pathwayId", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards"), null);
-  });
-
-  it("rejects pathwayId that fails slug validation", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards?pathwayId=bad"), null);
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions?pathwayId=RN"), null);
-  });
-
-  it("rejects generic /app/dashboard", () => {
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app"), null);
-    assert.equal(parseTierScopedAppStudyCallbackPath("/app/account"), null);
-  });
-});
+// parseTierScopedAppStudyCallbackPath has been removed.
+// Callback URL validation for study routes is now in:
+//   src/lib/auth/protected-study-routes.ts  →  normalizeStudyCallback()
+// See src/lib/auth/protected-study-routes.test.ts for the full test suite.
 
 describe("tier-scoped app hrefs", () => {
   it("RN hub practice href carries pathwayId only", () => {
