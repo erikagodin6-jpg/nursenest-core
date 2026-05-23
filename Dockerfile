@@ -14,6 +14,8 @@ ENV HUSKY=0
 ENV NODE_ENV=development
 
 RUN npm ci --ignore-scripts --no-fund --no-audit --install-links=false
+RUN npm --prefix nursenest-core ci --ignore-scripts --no-fund --no-audit --install-links=false
+RUN nursenest-core/node_modules/.bin/prisma --version
 
 ARG NN_BUILD_COMMIT
 ARG NN_BUILD_BRANCH

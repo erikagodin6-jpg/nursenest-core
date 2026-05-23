@@ -29,16 +29,26 @@ Safe Prisma commands:
 `);
 }
 
-function localPrismaCommand() {
+function resolvePrismaBinary() {
   const bin = process.platform === "win32" ? "prisma.cmd" : "prisma";
   const candidate = resolve(packageRoot, "node_modules", ".bin", bin);
-  return existsSync(candidate) ? candidate : "npx";
+  if (existsSync(candidate)) {
+    return candidate;
+  }
+  throw new Error(
+    "[prisma-safe] Prisma CLI not installed. Run `npm --prefix nursenest-core ci` to install the pinned Prisma version before invoking prisma-safe.",
+  );
 }
 
 function runPrisma(args) {
-  const command = localPrismaCommand();
-  const finalArgs = command === "npx" ? ["prisma", ...args] : args;
-  const result = spawnSync(command, finalArgs, {
+  let command;
+  try {
+    command = resolvePrismaBinary();
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    return 1;
+  }
+  const result = spawnSync(command, args, {
     cwd: packageRoot,
     stdio: "inherit",
     env: process.env,
