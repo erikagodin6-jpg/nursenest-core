@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
+import { traceLayout } from "@/build/tracing";
 
 export const dynamic = "force-dynamic";
 
@@ -15,11 +16,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdvancedHemodynamicsLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <PremiumLayoutVersionMarker surface="advanced-hemodynamics-module" />
-      {children}
-    </>
-  );
-}
+const AdvancedHemodynamicsLayout = traceLayout(
+  import.meta,
+  function AdvancedHemodynamicsLayout({ children }: { children: ReactNode }) {
+    return (
+      <>
+        <PremiumLayoutVersionMarker surface="advanced-hemodynamics-module" />
+        {children}
+      </>
+    );
+  },
+  { name: "AdvancedHemodynamicsLayout" },
+);
+
+export default AdvancedHemodynamicsLayout;

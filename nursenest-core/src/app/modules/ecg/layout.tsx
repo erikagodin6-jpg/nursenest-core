@@ -6,40 +6,53 @@ import { PremiumEducationalModuleShell } from "@/components/modules/premium-educ
 import { requireEcgModuleAccess } from "@/lib/ecg-module/ecg-module.server";
 import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
 import { isEcgModuleEnabled } from "@/lib/ecg-module/ecg-module-config";
+import { traceLayout, tracePageData } from "@/build/tracing";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const enabled = isEcgModuleEnabled();
-  const status = await getEcgModuleStatus();
-  const published = enabled && status === "published";
-  return {
-    robots: published
-      ? {
-          index: false,
-          follow: true,
-          googleBot: { index: false, follow: true },
-        }
-      : {
-          index: false,
-          follow: false,
-          googleBot: { index: false, follow: false },
-        },
-  };
-}
+const generateMetadataImpl = tracePageData(
+  import.meta,
+  async function generateMetadata(): Promise<Metadata> {
+    const enabled = isEcgModuleEnabled();
+    const status = await getEcgModuleStatus();
+    const published = enabled && status === "published";
+    return {
+      robots: published
+        ? {
+            index: false,
+            follow: true,
+            googleBot: { index: false, follow: true },
+          }
+        : {
+            index: false,
+            follow: false,
+            googleBot: { index: false, follow: false },
+          },
+    };
+  },
+  { name: "EcgModuleLayout.generateMetadata" },
+);
 
-export default async function EcgModuleLayout({ children }: { children: ReactNode }) {
-  await requireEcgModuleAccess();
-  return (
-    <PremiumEducationalModuleShell
-      eyebrow="Telemetry Module"
-      title="ECG Clinical Readiness"
-      description="Rhythm interpretation, worksheets, video drills, and scenario practice connected back to the NurseNest learner ecosystem."
-      backHref="/app"
-    >
-      <PremiumLayoutVersionMarker surface="ecg-module" />
-      <EcgModulePublicationNotice />
-      {children}
-    </PremiumEducationalModuleShell>
-  );
-}
+export const generateMetadata = generateMetadataImpl;
+
+const EcgModuleLayout = traceLayout(
+  import.meta,
+  async function EcgModuleLayout({ children }: { children: ReactNode }) {
+    await requireEcgModuleAccess();
+    return (
+      <PremiumEducationalModuleShell
+        eyebrow="Telemetry Module"
+        title="ECG Clinical Readiness"
+        description="Rhythm interpretation, worksheets, video drills, and scenario practice connected back to the NurseNest learner ecosystem."
+        backHref="/app"
+      >
+        <PremiumLayoutVersionMarker surface="ecg-module" />
+        <EcgModulePublicationNotice />
+        {children}
+      </PremiumEducationalModuleShell>
+    );
+  },
+  { name: "EcgModuleLayout" },
+);
+
+export default EcgModuleLayout;

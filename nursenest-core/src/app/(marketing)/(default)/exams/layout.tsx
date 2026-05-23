@@ -4,6 +4,14 @@
  */
 export const dynamic = "force-dynamic";
 
-export default function MarketingExamsLayout({ children }: { children: React.ReactNode }) {
-  return children;
-}
+import { traceLayout } from "@/build/tracing";
+
+const MarketingExamsLayout = traceLayout(
+  import.meta,
+  function MarketingExamsLayout({ children }: { children: React.ReactNode }) {
+    return children;
+  },
+  { name: "MarketingExamsLayout" },
+);
+
+export default MarketingExamsLayout;

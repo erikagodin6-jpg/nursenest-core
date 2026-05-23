@@ -1,3 +1,4 @@
+import { traceLayout, withBuildTrace, createTraceInfo } from "@/build/tracing";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -33,6 +34,30 @@ const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/se
 
 export const dynamic = "force-dynamic";
 
+const publicContentTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "loadMarketingPublicContentOverridesForLocale",
+  phase: "layout",
+});
+
+const staffSessionTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "getStaffSession",
+  phase: "layout",
+});
+
+const localeChromeTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "getMarketingLocaleLayoutChromePayload",
+  phase: "layout",
+});
+
+const defaultChromeTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "getMarketingDefaultLayoutChromeMessages",
+  phase: "layout",
+});
+
 async function loadPublicContentOverridesForLocaleSafe(locale: string): Promise<Record<string, string>> {
   try {
     const { loadMarketingPublicContentOverridesForLocale } = await import(
@@ -53,7 +78,9 @@ async function getStaffSessionSafe() {
   }
 }
 
-export default async function MarketingLocaleLayout({
+const MarketingLocaleLayout = traceLayout(
+  import.meta,
+  async function MarketingLocaleLayout({
   children,
   params,
 }: {
@@ -67,7 +94,7 @@ export default async function MarketingLocaleLayout({
   let fallbackMessages: Record<string, string> | undefined = undefined;
 
   try {
-    const payload = await getMarketingLocaleLayoutChromePayload(locale);
+    const payload = await withBuildTrace(localeChromeTrace, () => getMarketingLocaleLayoutChromePayload(locale));
     messages = payload.messages;
     fallbackMessages = payload.fallbackMessages;
   } catch (e) {
@@ -115,7 +142,9 @@ export default async function MarketingLocaleLayout({
       /* Sentry import failed — continue without telemetry */
     }
     try {
-      messages = mergeMinimalMarketingLayoutShellMessages(await getMarketingDefaultLayoutChromeMessages());
+      messages = mergeMinimalMarketingLayoutShellMessages(
+        await withBuildTrace(defaultChromeTrace, () => getMarketingDefaultLayoutChromeMessages()),
+      );
     } catch {
       messages = mergeMinimalMarketingLayoutShellMessages(messages);
     }
@@ -144,10 +173,10 @@ export default async function MarketingLocaleLayout({
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
   // PERF: getStaffSessionSafe() removed from blocking Promise.all — saves ~100ms TTFB.
   // Header/footer are client components with useSession(); staff UI activates client-side.
-  void getStaffSessionSafe().catch(() => null);
+  void withBuildTrace(staffSessionTrace, () => getStaffSessionSafe()).catch(() => null);
   const staffSession = null;
   const [publicContentOverrides, serverNarrowViewportHint] = await Promise.all([
-    loadPublicContentOverridesForLocaleSafe(locale),
+    withBuildTrace(publicContentTrace, () => loadPublicContentOverridesForLocaleSafe(locale)),
     readMarketingNarrowViewportServerHint(),
   ]);
 
@@ -189,4 +218,8 @@ export default async function MarketingLocaleLayout({
       </MarketingPublicContentEditProvider>
     </MarketingI18nProvider>
   );
-}
+  },
+  { name: "MarketingLocaleLayout" },
+);
+
+export default MarketingLocaleLayout;

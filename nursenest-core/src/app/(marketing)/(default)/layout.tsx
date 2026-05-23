@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
+
+import { traceLayout } from "@/build/tracing";
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { getEffectiveMarketingCountry } from "@/lib/marketing/get-effective-country";
 import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
@@ -175,8 +177,10 @@ function marketingDefaultLayoutStaticShellForHome({
   );
 }
 
-export default async function MarketingDefaultLocaleLayout({ children }: { children: ReactNode }) {
-  const layoutBootT0 = safeNowMs();
+const MarketingDefaultLocaleLayout = traceLayout(
+  import.meta,
+  async function MarketingDefaultLocaleLayout({ children }: { children: ReactNode }) {
+    const layoutBootT0 = safeNowMs();
 
   try {
     void loadRenderTrace()
@@ -529,5 +533,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
     });
   }
 
-  return marketingDefaultLayoutInner();
-}
+    return marketingDefaultLayoutInner();
+  },
+  { name: "MarketingDefaultLocaleLayout" },
+);
+
+export default MarketingDefaultLocaleLayout;

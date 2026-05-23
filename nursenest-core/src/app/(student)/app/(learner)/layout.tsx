@@ -14,6 +14,13 @@ import "@/app/learner-dashboard-performance.css";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { headers } from "next/headers";
+
+import {
+  createTraceInfo,
+  traceLayout,
+  traceProvider,
+  withBuildTrace,
+} from "@/build/tracing";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -88,33 +95,85 @@ function marketingChromeCountryFromSession(country: string | null | undefined): 
 
 type AdminLearnerQaSimulationModule = typeof import("@/lib/admin/admin-learner-qa-simulation");
 
-async function getAdminViewAsLearnerContextSafe(userId: string): Promise<AdminViewAsLearnerContext> {
-  try {
-    const { getAdminViewAsLearnerContext } = await import("@/lib/admin/admin-view-as-learner-context");
-    return await getAdminViewAsLearnerContext(userId);
-  } catch (error) {
-    layoutStderrTrace("learner_shell", "admin_view_as_context_import_failed", {
-      detail: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
-    });
-    return {
-      staffSession: null,
-      simulation: null,
-    };
-  }
-}
+const protectedSessionTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "getProtectedRouteSession",
+  phase: "layout",
+});
 
-async function loadAdminLearnerQaSimulationHelpersSafe(): Promise<AdminLearnerQaSimulationModule | null> {
-  try {
-    return await import("@/lib/admin/admin-learner-qa-simulation");
-  } catch (error) {
-    layoutStderrTrace("learner_shell", "admin_qa_helpers_import_failed", {
-      detail: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
-    });
-    return null;
-  }
-}
+const resolveEntitlementTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "resolveEntitlementForPage",
+  phase: "layout",
+});
 
-export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
+const paywallStatsTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "loadPaywallHomeStatsForShell",
+  phase: "layout",
+});
+
+const learnerPathwayNavTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "loadLearnerPathwayNavMetadata",
+  phase: "layout",
+});
+
+const learnerStudyNextTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "loadLearnerStudyNextBlock",
+  phase: "layout",
+});
+
+const adminQaModulesTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "adminQaModuleImports",
+  phase: "layout",
+});
+
+const learnerMarketingShardTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "loadMarketingMessageShards",
+  phase: "layout",
+});
+
+const getAdminViewAsLearnerContextSafe = traceProvider(
+  import.meta,
+  async function getAdminViewAsLearnerContextSafe(userId: string): Promise<AdminViewAsLearnerContext> {
+    try {
+      const { getAdminViewAsLearnerContext } = await import("@/lib/admin/admin-view-as-learner-context");
+      return await getAdminViewAsLearnerContext(userId);
+    } catch (error) {
+      layoutStderrTrace("learner_shell", "admin_view_as_context_import_failed", {
+        detail: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
+      });
+      return {
+        staffSession: null,
+        simulation: null,
+      };
+    }
+  },
+  { name: "LearnerShellLayout.getAdminViewAsLearnerContextSafe" },
+);
+
+const loadAdminLearnerQaSimulationHelpersSafe = traceProvider(
+  import.meta,
+  async function loadAdminLearnerQaSimulationHelpersSafe(): Promise<AdminLearnerQaSimulationModule | null> {
+    try {
+      return await import("@/lib/admin/admin-learner-qa-simulation");
+    } catch (error) {
+      layoutStderrTrace("learner_shell", "admin_qa_helpers_import_failed", {
+        detail: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
+      });
+      return null;
+    }
+  },
+  { name: "LearnerShellLayout.loadAdminLearnerQaSimulationHelpersSafe" },
+);
+
+const LearnerShellLayout = traceLayout(
+  import.meta,
+  async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
   const requestPathname = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
   const isFocusedExamShell = isFocusedPracticeTestSessionPath(requestPathname);
   const normalizedLearnerPathname = requestPathname.split("?")[0]?.replace(/\/+$/, "") || "/app";
@@ -123,7 +182,9 @@ export default async function LearnerShellLayout({ children }: { children: React
   const isPracticeTestsHubLanding = isPracticeTestsHubLandingPath(normalizedLearnerPathname);
   const isStudyHubLanding = isFlashcardsHubLanding || isPracticeTestsHubLanding;
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
-  const session = await getProtectedRouteSession("(student).app.(learner)");
+  const session = await withBuildTrace(protectedSessionTrace, async () =>
+    getProtectedRouteSession("(student).app.(learner)"),
+  );
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (isDegradedMode()) {
@@ -138,18 +199,20 @@ export default async function LearnerShellLayout({ children }: { children: React
   }
 
   const [entitlement, paywallHomeStats, viewAsCtx] = await Promise.all([
-    resolveEntitlementForPage(userId),
-    loadPaywallHomeStatsForShell(),
+    withBuildTrace(resolveEntitlementTrace, () => resolveEntitlementForPage(userId)),
+    withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell()),
     getAdminViewAsLearnerContextSafe(userId),
   ]);
   const { staffSession, simulation: qaShell } = viewAsCtx;
   const adminQaSimulationHelpers = qaShell ? await loadAdminLearnerQaSimulationHelpersSafe() : null;
 
   const adminQaModules = qaShell
-    ? await Promise.all([
-        import("@/components/admin/admin-learner-qa-posthog-suppressor"),
-        import("@/components/admin/admin-learner-qa-app-toolbar"),
-      ])
+    ? await withBuildTrace(adminQaModulesTrace, () =>
+        Promise.all([
+          import("@/components/admin/admin-learner-qa-posthog-suppressor"),
+          import("@/components/admin/admin-learner-qa-app-toolbar"),
+        ]),
+      )
     : null;
   const AdminLearnerQaPosthogSuppressor = adminQaModules?.[0].AdminLearnerQaPosthogSuppressor ?? null;
   const AdminLearnerQaAppToolbar = adminQaModules?.[1].AdminLearnerQaAppToolbar ?? null;
@@ -171,7 +234,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     ? adminQaSimulationHelpers?.learnerPathwayNavFromQaPayload(qaShell) ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA
     : await safeOptional(
         async () => {
-          const fresh = await loadLearnerPathwayNavMetadata(userId);
+          const fresh = await withBuildTrace(learnerPathwayNavTrace, () => loadLearnerPathwayNavMetadata(userId));
           if (entitlement !== "error") {
             setLearnerFallback(userId, entitlement, fresh);
           }
@@ -242,7 +305,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   let studyNextBlock: Awaited<ReturnType<typeof loadLearnerStudyNextBlock>> = null;
   if (!skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
     studyNextBlock = await safeOptional(
-      () => loadLearnerStudyNextBlock(userId, entitlement),
+      () => withBuildTrace(learnerStudyNextTrace, () => loadLearnerStudyNextBlock(userId, entitlement)),
       null,
       { label: "learner_study_next_block" },
     );
@@ -264,7 +327,9 @@ export default async function LearnerShellLayout({ children }: { children: React
   if (entitlement !== "error" && !entitlement.hasAccess) {
     try {
       const locale = await getMarketingLocaleForDefaultRoute();
-      const pagesMessages = await loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      const pagesMessages = await withBuildTrace(learnerMarketingShardTrace, () =>
+        loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
+      );
       const pagesFallback =
         locale === DEFAULT_MARKETING_LOCALE
           ? undefined
@@ -455,4 +520,8 @@ export default async function LearnerShellLayout({ children }: { children: React
       </PaywallHomeStatsProvider>
     </SentryLearnerShell>
   );
-}
+  },
+  { name: "LearnerShellLayout" },
+);
+
+export default LearnerShellLayout;

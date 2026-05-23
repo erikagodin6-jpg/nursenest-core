@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { createTraceInfo, traceLayout, withBuildTrace } from "@/build/tracing";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { AdvancedEcgModuleShell } from "@/components/advanced-ecg/advanced-ecg-module-shell";
 
@@ -16,11 +17,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdvancedEcgLayout({ children }: { children: ReactNode }) {
-  return (
-    <AdvancedEcgModuleShell>
-      <PremiumLayoutVersionMarker surface="advanced-ecg-module" />
-      {children}
-    </AdvancedEcgModuleShell>
-  );
-}
+const advancedEcgShellTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "AdvancedEcgModuleShell",
+  phase: "layout",
+});
+
+const AdvancedEcgLayout = traceLayout(
+  import.meta,
+  function AdvancedEcgLayout({ children }: { children: ReactNode }) {
+    return withBuildTrace(advancedEcgShellTrace, () => (
+      <AdvancedEcgModuleShell>
+        <PremiumLayoutVersionMarker surface="advanced-ecg-module" />
+        {children}
+      </AdvancedEcgModuleShell>
+    ));
+  },
+  { name: "AdvancedEcgLayout" },
+);
+
+export default AdvancedEcgLayout;

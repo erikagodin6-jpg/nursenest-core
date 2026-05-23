@@ -1,28 +1,52 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
+import {
+  createTraceInfo,
+  traceLayout,
+  traceProvider,
+  withBuildTrace,
+} from "@/build/tracing";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
 
-async function getStaffSessionSafe() {
-  if (isBuildPhase()) return null;
-  try {
-    const { getStaffSession } = await import("@/lib/auth/staff-session");
-    return await getStaffSession();
-  } catch {
-    return null;
-  }
-}
+const getStaffSessionSafe = traceProvider(
+  import.meta,
+  async function getStaffSessionSafe() {
+    if (isBuildPhase()) return null;
+    try {
+      const { getStaffSession } = await import("@/lib/auth/staff-session");
+      return await getStaffSession();
+    } catch {
+      return null;
+    }
+  },
+  { name: "AppSegmentLayout.getStaffSessionSafe" },
+);
 
 /** Learner app is auth-gated; keep subscriber lesson/question payloads out of search indexes even when metadata is missing on a leaf route. */
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
+const learnerMarketingBundleTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "getLearnerShellMarketingBundle",
+  phase: "layout",
+});
+
+const adminPaletteTrace = createTraceInfo(import.meta, {
+  kind: "provider",
+  name: "AdminGlobalCommandPalette",
+  phase: "layout",
+});
+
+const AppSegmentLayout = traceLayout(
+  import.meta,
+  async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
   if (isBuildPhase()) {
     return <>{children}</>;
   }
@@ -31,8 +55,10 @@ export default async function AppSegmentLayout({ children }: { children: React.R
   let fallbackMessages: Record<string, string> | undefined = undefined;
 
   try {
-    const { getLearnerShellMarketingBundle } = await import("@/lib/learner/learner-marketing-server");
-    const bundle = await getLearnerShellMarketingBundle();
+    const bundle = await withBuildTrace(learnerMarketingBundleTrace, async () => {
+      const { getLearnerShellMarketingBundle } = await import("@/lib/learner/learner-marketing-server");
+      return getLearnerShellMarketingBundle();
+    });
     locale = bundle.locale;
     messages = bundle.messages;
     fallbackMessages = bundle.fallbackMessages;
@@ -45,14 +71,21 @@ export default async function AppSegmentLayout({ children }: { children: React.R
 
   let adminPalette: ReactNode = null;
   try {
-    const staff = await getStaffSessionSafe();
+    const staff = await withBuildTrace(adminPaletteTrace, async () => getStaffSessionSafe());
     if (staff) {
-      const { AdminGlobalCommandPalette } = await import("@/components/admin/admin-global-command-palette");
-      adminPalette = (
-        <Suspense fallback={null}>
-          <AdminGlobalCommandPalette />
-        </Suspense>
-      );
+      const paletteTrace = createTraceInfo(import.meta, {
+        kind: "provider",
+        name: "AdminGlobalCommandPaletteImport",
+        phase: "layout",
+      });
+      await withBuildTrace(paletteTrace, async () => {
+        const { AdminGlobalCommandPalette } = await import("@/components/admin/admin-global-command-palette");
+        adminPalette = (
+          <Suspense fallback={null}>
+            <AdminGlobalCommandPalette />
+          </Suspense>
+        );
+      });
     }
   } catch (e) {
     console.error("[app-segment-layout] staff session / admin palette skipped", {
@@ -66,4 +99,8 @@ export default async function AppSegmentLayout({ children }: { children: React.R
       {adminPalette}
     </MarketingI18nProvider>
   );
-}
+  },
+  { name: "AppSegmentLayout" },
+);
+
+export default AppSegmentLayout;

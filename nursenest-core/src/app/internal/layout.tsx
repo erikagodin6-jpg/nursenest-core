@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { traceLayout } from "@/build/tracing";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +10,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function InternalSegmentLayout({ children }: { children: ReactNode }) {
-  return (
-    <div
+const InternalSegmentLayout = traceLayout(
+  import.meta,
+  function InternalSegmentLayout({ children }: { children: ReactNode }) {
+    return (
+      <div
       className="nn-marketing-surface min-h-screen bg-[var(--theme-bg)] px-4 py-4 text-[var(--theme-fg)] sm:px-6"
       data-nn-internal-premium-shell=""
     >
@@ -31,4 +34,8 @@ export default function InternalSegmentLayout({ children }: { children: ReactNod
       </div>
     </div>
   );
-}
+  },
+  { name: "InternalSegmentLayout" },
+);
+
+export default InternalSegmentLayout;
