@@ -92,11 +92,13 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
       { api: "subscriber_gate", correlation, severity: "error" },
       e,
     );
+    const headers = mergeSubscriberPrivateCacheHeaders();
+    headers.set("Retry-After", "3");
     return {
       ok: false,
       response: NextResponse.json(
-        { error: "Unable to verify access. Try again shortly.", code: "access_verify_failed" },
-        { status: 503, headers: mergeSubscriberPrivateCacheHeaders() },
+        { error: "Unable to verify access. Try again shortly.", code: "access_verify_failed", retryable: true },
+        { status: 503, headers },
       ),
     };
   }

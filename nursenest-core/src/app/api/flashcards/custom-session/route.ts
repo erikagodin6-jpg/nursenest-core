@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
-import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
-import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { classifyDatabaseFallbackKind } from "@/lib/db/safe-database";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import {
   buildFlashcardCustomSession,
   parseCustomSessionCardLimit,
@@ -16,18 +16,45 @@ import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnost
 
 export const dynamic = "force-dynamic";
 
+type CustomSessionCountOnlyCacheEntry = { cachedAtMs: number; body: unknown };
+const customSessionCountOnlyCache = new Map<string, CustomSessionCountOnlyCacheEntry>();
+const CUSTOM_SESSION_COUNT_ONLY_CACHE_TTL_MS = 15_000;
+const CUSTOM_SESSION_COUNT_ONLY_CACHE_MAX = 2000;
+
+function customSessionCountOnlyCacheKey(userId: string, url: string): string {
+  // Key by exact query string to avoid drift across filter combinations.
+  // Strip origin to keep key short.
+  try {
+    const u = new URL(url);
+    return `${userId}::${u.pathname}?${u.searchParams.toString()}`;
+  } catch {
+    return `${userId}::${url}`;
+  }
+}
+
 export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/flashcards/custom-session", "content", async () => {
     try {
-      const session = await getProtectedRouteSession("api.flashcards.custom-session");
-      const userId = (session?.user as { id?: string } | undefined)?.id;
-      if (!userId) {
-        return NextResponse.json({ error: "Sign in required", code: "auth_required" }, { status: 401 });
-      }
+      const headers = mergeSubscriberPrivateCacheHeaders();
 
-      const entitlement = await resolveEntitlement(userId);
-      if (!entitlement.hasAccess) {
-        return NextResponse.json({ error: "Subscription required", code: "subscription_required" }, { status: 403 });
+      const gate = await requireSubscriberSession();
+      if (!gate.ok) return gate.response;
+
+      const userId = gate.userId;
+      const entitlement = gate.entitlement;
+
+      // Cache count-only requests briefly to prevent query amplification when learners toggle filters
+      // or the client retries under transient network/DB pressure.
+      const includeCardsParam = req.nextUrl.searchParams.get("includeCards");
+      const includeCards = includeCardsParam === "1";
+      if (!includeCards) {
+        const cacheKey = customSessionCountOnlyCacheKey(userId, req.url);
+        const cached = customSessionCountOnlyCache.get(cacheKey);
+        if (cached && Date.now() - cached.cachedAtMs < CUSTOM_SESSION_COUNT_ONLY_CACHE_TTL_MS) {
+          const h = new Headers(headers);
+          h.set("x-nn-custom-session-cache", "hit");
+          return NextResponse.json(cached.body, { status: 200, headers: h });
+        }
       }
 
       const sp = req.nextUrl.searchParams;
@@ -61,7 +88,7 @@ export async function GET(req: NextRequest) {
       const shuffle = sp.get("shuffle") === "1";
       const mode = parseCustomSessionStudyMode(sp.get("mode"));
       const limit = parseCustomSessionCardLimit(sp.get("cardLimit"));
-      const includeCards = sp.get("includeCards") === "1";
+      // NOTE: includeCards is read above for cache gating.
       const sourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
 
       const topicIdsForLog =
@@ -112,11 +139,14 @@ export async function GET(req: NextRequest) {
           message: built.reason.slice(0, 400),
           pathwayId: pathwayId ?? "",
         });
+        const h = new Headers(headers);
+        h.set("Retry-After", "3");
         return NextResponse.json(
           {
             ok: false,
             code: built.code,
             error: built.message,
+            retryable: true,
             integrity: {
               querySucceeded: false,
               source: "error",
@@ -126,7 +156,7 @@ export async function GET(req: NextRequest) {
               reasonFailed: `${kind}:${built.reason}`.slice(0, 500),
             },
           },
-          { status: 503 },
+          { status: 503, headers: h },
         );
       }
 
@@ -151,24 +181,37 @@ export async function GET(req: NextRequest) {
             : undefined,
       });
 
-      return NextResponse.json({
+      const body = {
         ok: true,
         unsupportedFilters: [],
         summary: built.summary,
         categoryOptions: built.categoryOptions,
         cards: built.cards,
-      });
+      };
+
+      // Cache only count-only responses (includeCards=0); full card payloads can be large and user-state sensitive.
+      if (!includeCards) {
+        const cacheKey = customSessionCountOnlyCacheKey(userId, req.url);
+        if (customSessionCountOnlyCache.size > CUSTOM_SESSION_COUNT_ONLY_CACHE_MAX) customSessionCountOnlyCache.clear();
+        customSessionCountOnlyCache.set(cacheKey, { cachedAtMs: Date.now(), body });
+        const h = new Headers(headers);
+        h.set("x-nn-custom-session-cache", "miss");
+        return NextResponse.json(body, { status: 200, headers: h });
+      }
+
+      return NextResponse.json(body, { headers });
     } catch (error) {
-      console.error("FLASHCARD CUSTOM SESSION ERROR:", error);
+      safeServerLogCritical("flashcards", "custom_session_route_error", {}, error);
+      const h = mergeSubscriberPrivateCacheHeaders();
+      h.set("Retry-After", "3");
       return NextResponse.json(
         {
           ok: false,
-          code: "internal_error",
-          error: "Flashcard session could not be loaded. Please retry.",
-          categories: [],
-          total: 0,
+          code: "service_unavailable",
+          error: "Flashcard session is temporarily unavailable. Please retry.",
+          retryable: true,
         },
-        { status: 500 },
+        { status: 503, headers: h },
       );
     }
   });
