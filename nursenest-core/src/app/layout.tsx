@@ -193,6 +193,10 @@ export default async function RootLayout({
           href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com"
           crossOrigin="anonymous"
         />
+        <meta
+          name="google-site-verification"
+          content="mgL8FKfo4i_Od-46msNNRvvD670iU2jXoc0UlOMiTUk"
+        />
       </head>
       <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)] [font-family:var(--font-sans)] antialiased [font-synthesis:none] [text-rendering:optimizeLegibility]">
         <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
