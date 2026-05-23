@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { DM_Sans } from "next/font/google";
 import Script from "next/script";
 
-import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
-import { AppThemeProvider } from "@/components/theme/app-theme-provider";
-import {
-  createTraceInfo,
-  endBuildTrace,
-  noteBuildRequestApiUsage,
-  startBuildTrace,
-  traceLayout,
-  traceProvider,
-  withBuildTrace,
-} from "@/build/tracing";
-import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 import { marketingThemeBeforeInteractiveInlineScript } from "@/lib/theme/marketing-theme-before-interactive-seed";
-
 import { nursenestAppIcons } from "@/lib/branding/app-icons";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
@@ -129,123 +117,7 @@ export const metadata: Metadata = {
   robots: process.env.NODE_ENV === "production" ? "index, follow" : "noindex",
 };
 
-const getSessionTraceInfo = createTraceInfo(import.meta, {
-  kind: "provider",
-  name: "getSessionSafe",
-  phase: "layout",
-});
-
-const authTraceInfo = createTraceInfo(import.meta, {
-  kind: "provider",
-  name: "auth()",
-  phase: "auth",
-});
-
-async function getSessionSafe() {
-  const trace = startBuildTrace(getSessionTraceInfo);
-
-  let session: Awaited<ReturnType<typeof import("@/lib/auth")["auth"]>> | null = null;
-  let skippedReason: string | undefined;
-
-  try {
-    if (process.env.NN_UI_PREVIEW_MODE === "1") {
-      skippedReason = "preview-mode";
-      return null;
-    }
-    if (isBuildPhase()) {
-      skippedReason = "build-phase";
-      return null;
-    }
-
-    const hasSecret = Boolean(
-      (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
-      (process.env.NEXTAUTH_SECRET &&
-        process.env.NEXTAUTH_SECRET.trim().length > 0),
-    );
-    if (!hasSecret) {
-      skippedReason = "no-auth-secret";
-      return null;
-    }
-
-    // Skip the auth DB call when no session cookie is present. Unauthenticated
-    // visitors (the vast majority of marketing traffic) pay zero DB latency;
-    // the client-side SessionProvider fetches the session via /api/auth/session
-    // on hydration if needed. Authenticated users still trigger the full auth()
-    // call because a session cookie is present.
-    try {
-      const { cookies } = await import("next/headers");
-      noteBuildRequestApiUsage({ api: "cookies", module: "next/headers" });
-      const jar = await cookies();
-      const hasSession =
-        jar.has("authjs.session-token") ||
-        jar.has("__Secure-authjs.session-token") ||
-        jar.has("next-auth.session-token") ||
-        jar.has("__Secure-next-auth.session-token");
-      if (!hasSession) {
-        skippedReason = "no-session-cookie";
-        return null;
-      }
-    } catch {
-      // Can't read cookies (e.g. static export) - fall through to auth().
-    }
-
-    try {
-      session = await withBuildTrace(authTraceInfo, async () => {
-        const { auth } = await import("@/lib/auth");
-        return auth();
-      });
-      return session;
-    } catch (error) {
-      console.error(
-        "[root-layout] auth failed; continuing without session",
-        error,
-      );
-      skippedReason = "auth-error";
-      return null;
-    }
-  } finally {
-    endBuildTrace(trace, {
-      hasSession: Boolean(session),
-      skippedReason,
-    });
-  }
-}
-
-const SafeProviders = traceProvider(
-  import.meta,
-  function SafeProviders({
-    session,
-    children,
-  }: {
-    session: Awaited<ReturnType<typeof getSessionSafe>>;
-    children: React.ReactNode;
-  }) {
-    return (
-      <AppThemeProvider>
-        <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
-      </AppThemeProvider>
-    );
-  },
-  { name: "SafeProviders" },
-);
-
-const RootLayout = traceLayout(
-  import.meta,
-  async function RootLayoutComponent({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
-    if (isBuildPhase()) {
-    return (
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    );
-  }
-
-  const session = await getSessionSafe();
-
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
@@ -271,12 +143,8 @@ const RootLayout = traceLayout(
         <Script id="nn-navigation-intent-seed" strategy="beforeInteractive">
           {navigationIntentBeforeInteractiveInlineScript()}
         </Script>
-        <SafeProviders session={session}>{children}</SafeProviders>
+        {children}
       </body>
     </html>
   );
-  },
-  { name: "RootLayout" },
-);
-
-export default RootLayout;
+}
