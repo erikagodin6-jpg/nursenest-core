@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
   const since7d  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000);
   const since30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  const realUsers = { is_demo_user: false } as const;
+  const realUsers = { isDemoUser: false } as const;
 
   // Run each query independently so one failure doesn't kill the whole response
   const [

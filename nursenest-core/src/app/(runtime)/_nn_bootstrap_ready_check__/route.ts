@@ -1,4 +1,4 @@
-import { GET as healthGet } from "../api/health/route";
+import { GET as healthGet } from "../../api/health/route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

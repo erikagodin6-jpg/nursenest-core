@@ -16,6 +16,7 @@
  */
 
 import { type NextRequest, NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { runAccountLifecycleCron } from "@/lib/account-lifecycle/lifecycle-engine";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -123,6 +124,6 @@ export async function GET(req: NextRequest) {
 // Lazy import to avoid loading prisma at module-level
 import { prisma } from "@/lib/db";
 
-async function prisma_count(where: Parameters<typeof prisma.user.count>[0]["where"]): Promise<number> {
-  return prisma.user.count({ where: { is_demo_user: false, ...where } }).catch(() => 0);
+async function prisma_count(where: Prisma.UserWhereInput): Promise<number> {
+  return prisma.user.count({ where: { isDemoUser: false, ...where } }).catch(() => 0);
 }
