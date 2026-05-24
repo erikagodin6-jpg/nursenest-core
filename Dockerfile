@@ -12,22 +12,20 @@ COPY package.json package-lock.json ./
 
 COPY nursenest-core/package.json nursenest-core/package.json
 COPY nursenest-core/package-lock.json nursenest-core/package-lock.json
-COPY nursenest-core/scripts nursenest-core/scripts
-COPY nursenest-core/prisma nursenest-core/prisma
 
 ENV HUSKY=0
 ENV NODE_ENV=development
 
 RUN npm ci --ignore-scripts --no-fund --no-audit --install-links=false
 
+# Copy remaining workspace sources (context trimmed via .dockerignore)
+COPY . .
+
 # Install app workspace dependencies
 RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
   DIRECT_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
   npm --prefix nursenest-core ci --no-fund --no-audit --install-links=false
 RUN nursenest-core/node_modules/.bin/prisma --version
-
-# Copy remaining workspace sources after dependency install (context trimmed via .dockerignore).
-COPY . .
 
 ARG NN_BUILD_COMMIT
 ARG NN_BUILD_BRANCH
