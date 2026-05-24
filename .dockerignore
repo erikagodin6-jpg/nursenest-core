@@ -26,6 +26,8 @@ nursenest-core/client
 **/.next
 **/dist
 **/build
+!nursenest-core/src/build
+!nursenest-core/src/build/**
 !nursenest-core/src/lib/build
 !nursenest-core/src/lib/build/**
 **/.turbo

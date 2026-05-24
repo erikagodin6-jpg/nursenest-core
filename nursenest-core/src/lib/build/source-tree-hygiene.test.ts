@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..", "..", "..");
+const workspaceRoot = path.resolve(repoRoot, "..");
 
 test("src/ has no *.save editor backup files", () => {
   const out = execSync('find src -name "*.save" 2>/dev/null || true', {
@@ -20,5 +21,18 @@ test("src/ has no *.save editor backup files", () => {
     out,
     "",
     `Remove stray *.save files from src/ (git history retains content). Found:\n${out || "(none)"}`,
+  );
+});
+
+test("Docker context includes build tracing source used by Next layouts", () => {
+  const out = execSync("git check-ignore -v nursenest-core/src/build/tracing/index.ts || true", {
+    cwd: workspaceRoot,
+    encoding: "utf8",
+  }).trim();
+
+  assert.equal(
+    out,
+    "",
+    `Docker context must include src/build/tracing because app layouts import @/build/tracing. Matching ignore rule:\n${out}`,
   );
 });
