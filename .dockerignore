@@ -20,6 +20,12 @@ client/replit_integrations
 # Docs, screenshots, and nested client public — not needed in production image
 nursenest-core/docs
 nursenest-core/client
+docs/
+qa-reports/
+reports/
+screenshots/
+lesson-mockups/
+auth-mockups/
 
 # Dependencies & build outputs (reinstalled / rebuilt in image)
 **/node_modules
@@ -62,6 +68,18 @@ docs/verification-screenshots
 # Misc caches
 **/.eslintcache
 **/tsconfig.tsbuildinfo
+
+# Monorepo assets not needed for Docker builds
+(admin)/
+(app)/
+(marketing)/
+(runtime)/
+auth-mockups/
+lesson-mockups/
+qa-reports/
+screenshots/
+reports/
+docs/screenshots/
 
 # Large test artifacts and screenshots — never needed at runtime
 nursenest-core/playwright/

@@ -24,17 +24,8 @@ RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codeg
   npm --prefix nursenest-core ci --no-fund --no-audit --install-links=false
 RUN nursenest-core/node_modules/.bin/prisma --version
 
-# Copy remaining workspaces and runtime assets after dependency install to maximise layer cache reuse.
-COPY scripts ./scripts
-COPY shared ./shared
-COPY packages ./packages
-COPY client ./client
-COPY content ./content
-COPY data ./data
-COPY docs ./docs
-COPY tools ./tools
-COPY .do ./.do
-COPY nursenest-core nursenest-core
+# Copy remaining workspace sources after dependency install (context trimmed via .dockerignore).
+COPY . .
 
 ARG NN_BUILD_COMMIT
 ARG NN_BUILD_BRANCH

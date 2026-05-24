@@ -78,13 +78,8 @@ jobs:
             NN_TIMED_INCLUDE_NPM_PRUNE=1
             BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048
           shm-size: 2g
-          cache-from: ''
-          cache-to: ''
           provenance: false
           sbom: false
-          buildkit-inline-cache: false
-          progress: plain
-          outputs: type=image
 
       - name: Build job summary (failure hints)
         if: failure() && steps.build.outcome == 'failure'
