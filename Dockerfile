@@ -12,6 +12,8 @@ COPY package.json package-lock.json ./
 
 COPY nursenest-core/package.json nursenest-core/package.json
 COPY nursenest-core/package-lock.json nursenest-core/package-lock.json
+COPY nursenest-core/scripts nursenest-core/scripts
+COPY nursenest-core/prisma nursenest-core/prisma
 
 ENV HUSKY=0
 ENV NODE_ENV=development
