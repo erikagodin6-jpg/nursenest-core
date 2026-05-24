@@ -47,9 +47,6 @@ const isLowMemoryBuild =
  *
  * Note: Next.js 14.2 resolves `next.config.js` / `next.config.mjs` only (not `next.config.ts`).
  */
-/** Fixed low parallelism for all environments (local, CI, production compile) — avoids RAM spikes and duplicate workers. */
-const webpackParallelism = 1;
-
 function shouldEmitBuildConfigDiagnostics() {
   if (String(process.env.NN_NEXT_BUILD_CONFIG_LOG ?? "").trim() === "0") return false;
   return (
@@ -70,15 +67,12 @@ if (shouldEmitBuildConfigDiagnostics()) {
       GITHUB_ACTIONS: process.env.GITHUB_ACTIONS ?? null,
       NN_APP_PLATFORM_BUILD: process.env.NN_APP_PLATFORM_BUILD ?? null,
       NN_FORCE_SINGLE_BUILD_WORKER: process.env.NN_FORCE_SINGLE_BUILD_WORKER ?? null,
-      experimentalCpus: 1,
-      webpackParallelism,
       webpackPersistentCache: false,
       webpackBuildWorker: false,
       workerThreads: false,
       memoryBasedWorkersCount: false,
       parallelServerCompiles: false,
       parallelServerBuildTraces: false,
-      experimentalStaticGenerationMaxConcurrency: 1,
       skipNextIntegratedLintAndTypes: true,
     }),
   );
@@ -86,17 +80,6 @@ if (shouldEmitBuildConfigDiagnostics()) {
 
 const experimental = {
   externalDir: true,
-  cpus: 1,
-  /** Prevents Next from scaling static workers from free RAM (can overshoot on small VMs). */
-  memoryBasedWorkersCount: false,
-  parallelServerCompiles: false,
-  parallelServerBuildTraces: false,
-  workerThreads: false,
-  /** Next 16 reads this under `experimental` (see `next/dist/server/config-schema.js`). */
-  staticGenerationMaxConcurrency: 1,
-  /**
-   * `false`: keep webpack in the main Node process (avoids a second heap during `next build`).
-   */
   webpackBuildWorker: false,
 };
 
@@ -536,8 +519,11 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  /** Set `NN_PRODUCTION_SOURCE_MAPS=1` in deploy to upload maps to error monitoring only. */
-  productionBrowserSourceMaps: envTruthy("NN_PRODUCTION_SOURCE_MAPS"),
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  productionBrowserSourceMaps: false,
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -581,10 +567,10 @@ const nextConfig = {
       "@shared": sharedRoot,
       "@legacy-client": legacyClientRoot,
     };
-    config.parallelism = webpackParallelism;
     // PackFileCacheStrategy can throw ENOENT under load; disabling persistent cache trims disk + mmap pressure.
     if (!dev) {
       config.cache = false;
+      config.devtool = false;
     }
     if (!dev && isServer) {
       config.plugins = config.plugins || [];

@@ -56,6 +56,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
+        "./nursenest-core/src/*"
+      ],
+      "@client/*": [
         "./client/src/*"
       ],
       "@shared/*": [

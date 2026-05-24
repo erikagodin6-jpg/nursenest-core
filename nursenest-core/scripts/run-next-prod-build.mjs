@@ -305,6 +305,7 @@ const lowMemoryHeuristic =
     process.env.GITHUB_ACTIONS === "true" ||
     envTruthy("NN_APP_PLATFORM_BUILD") ||
     autoLowMemoryHost);
+const forceWebpackEnv = envTruthy("NN_FORCE_WEBPACK_BUILD");
 console.log(
   "[next-prod-build] compile_profile",
   JSON.stringify({
@@ -315,26 +316,23 @@ console.log(
     GITHUB_ACTIONS: process.env.GITHUB_ACTIONS ?? null,
     NN_APP_PLATFORM_BUILD: process.env.NN_APP_PLATFORM_BUILD ?? null,
     NODE_OPTIONS_has_heap: /--max-old-space-size=\d+/.test(String(process.env.NODE_OPTIONS ?? "")),
-    preferredBundler: !envExplicitlyFalse("NN_FORCE_WEBPACK_BUILD") &&
-      (envTruthy("NN_FORCE_WEBPACK_BUILD") || lowMemoryHeuristic)
-      ? "webpack"
-      : "turbopack",
+    preferredBundler: forceWebpackEnv ? "webpack" : "turbopack",
   }),
 );
 
-const useWebpackBuild =
-  !envExplicitlyFalse("NN_FORCE_WEBPACK_BUILD") &&
-  (envTruthy("NN_FORCE_WEBPACK_BUILD") || lowMemoryHeuristic);
+const useWebpackBuild = forceWebpackEnv;
 
 if (useWebpackBuild) {
   process.env.NEXT_DISABLE_TURBOPACK = "1";
+} else {
+  delete process.env.NEXT_DISABLE_TURBOPACK;
 }
 
 if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
   process.env.NEXT_TELEMETRY_DISABLED = "1";
 }
 if (!String(process.env.NN_FORCE_SINGLE_BUILD_WORKER ?? "").trim()) {
-  process.env.NN_FORCE_SINGLE_BUILD_WORKER = "true";
+  delete process.env.NN_FORCE_SINGLE_BUILD_WORKER;
 }
 
 const graphIsolationSnapshot = collectBuildGraphIsolationSnapshot({ packageRoot });
@@ -371,7 +369,7 @@ console.error(
 const nextBuildArgs = [
   "build",
   ...(useWebpackBuild ? ["--webpack"] : []),
-  ...(envExplicitlyFalse("NN_NEXT_BUILD_DEBUG") ? [] : ["--debug"]),
+  ...(envTruthy("NN_NEXT_BUILD_DEBUG") ? ["--debug"] : []),
 ];
 console.log(
   `[next-prod-build] next_cli_invocation_start pid=${process.pid} bundler=${useWebpackBuild ? "webpack" : "turbopack"} args=${JSON.stringify(nextBuildArgs)}`,
