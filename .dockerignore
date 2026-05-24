@@ -69,3 +69,22 @@ nursenest-core/playwright-report-full-regression/
 nursenest-core/playwright-report-full-regression/**
 playwright-report-full-regression/
 playwright-report-full-regression/**
+
+# Deployment reports, rollback snapshots, and other large archives
+rollback-snapshots/
+**/rollback-snapshots/
+deploy/
+
+# Visual acceptance + screenshot captures
+nursenest-core/.visual-acceptance/
+nursenest-core/preview-screenshots/
+**/preview-screenshots/**
+
+# Large binary assets that should never enter the image
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+**/*.zip
+**/*.gz
+**/*.mp4
+**/*.mov

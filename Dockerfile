@@ -8,16 +8,33 @@ RUN apk add --no-cache libc6-compat openssl bash \
 
 WORKDIR /app
 
-COPY . .
+COPY package.json package-lock.json ./
+
+COPY nursenest-core/package.json nursenest-core/package.json
+COPY nursenest-core/package-lock.json nursenest-core/package-lock.json
 
 ENV HUSKY=0
 ENV NODE_ENV=development
 
 RUN npm ci --ignore-scripts --no-fund --no-audit --install-links=false
+
+# Install app workspace dependencies
 RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
   DIRECT_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
   npm --prefix nursenest-core ci --no-fund --no-audit --install-links=false
 RUN nursenest-core/node_modules/.bin/prisma --version
+
+# Copy remaining workspaces and runtime assets after dependency install to maximise layer cache reuse.
+COPY scripts ./scripts
+COPY shared ./shared
+COPY packages ./packages
+COPY client ./client
+COPY content ./content
+COPY data ./data
+COPY docs ./docs
+COPY tools ./tools
+COPY .do ./.do
+COPY nursenest-core nursenest-core
 
 ARG NN_BUILD_COMMIT
 ARG NN_BUILD_BRANCH
