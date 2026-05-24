@@ -53,8 +53,9 @@ on_err() {
 
 trap on_err ERR
 
-export BUILD_WEBPACK_PARALLELISM="${BUILD_WEBPACK_PARALLELISM:-1}"
-export NN_FORCE_SINGLE_BUILD_WORKER="${NN_FORCE_SINGLE_BUILD_WORKER:-true}"
+unset BUILD_WEBPACK_PARALLELISM
+unset NN_FORCE_SINGLE_BUILD_WORKER
+unset NN_LOW_MEMORY_BUILD
 
 log "step=preflight pwd=$(pwd) node=$(node -v) npm=$(npm -v)"
 log "env BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-unset}"

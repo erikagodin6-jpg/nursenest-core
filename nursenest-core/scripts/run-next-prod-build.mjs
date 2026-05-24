@@ -217,6 +217,26 @@ for (const key of BUNDLER_ENV_KEYS) {
   delete process.env[key];
 }
 
+const forcedWebpackRequested = /^(1|true|yes)$/i.test(String(process.env.NN_FORCE_WEBPACK_BUILD ?? "").trim());
+const THROTTLE_ENV_KEYS = [
+  "NN_FORCE_SINGLE_BUILD_WORKER",
+  "NN_FORCE_WEBPACK_BUILD",
+  "NN_LOW_MEMORY_BUILD",
+  "BUILD_WEBPACK_PARALLELISM",
+  "NEXT_DISABLE_TURBOPACK",
+  "NEXT_FORCE_WEBPACK_BUILD",
+];
+
+for (const key of THROTTLE_ENV_KEYS) {
+  delete process.env[key];
+}
+
+process.env.TURBOPACK = "1";
+process.env.NEXT_TURBOPACK = "1";
+process.env.NN_FORCE_MULTI_WORKER = "1";
+process.env.NN_LOW_MEMORY_BUILD = "0";
+process.env.NN_FORCE_SINGLE_BUILD_WORKER = "0";
+
 let nextBin;
 
 try {
@@ -305,7 +325,7 @@ const lowMemoryHeuristic =
     process.env.GITHUB_ACTIONS === "true" ||
     envTruthy("NN_APP_PLATFORM_BUILD") ||
     autoLowMemoryHost);
-const forceWebpackEnv = envTruthy("NN_FORCE_WEBPACK_BUILD");
+const forceWebpackEnv = forcedWebpackRequested;
 console.log(
   "[next-prod-build] compile_profile",
   JSON.stringify({

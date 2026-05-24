@@ -3,6 +3,11 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+process.env.TURBOPACK = "1";
+process.env.NEXT_TURBOPACK = "1";
+process.env.NEXT_DISABLE_TURBOPACK = undefined;
+process.env.NEXT_FORCE_TURBOPACK = "1";
+
 function envTruthy(name) {
   return /^(1|true|yes)$/i.test(String(process.env[name] ?? "").trim());
 }

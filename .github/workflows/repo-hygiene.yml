@@ -35,5 +35,7 @@ jobs:
           node scripts/ci/check-forbidden-tracked-paths.mjs
           node scripts/ci/check-content-json-import-allowlist.mjs
           node scripts/ci/check-no-client-pathway-json.mjs
+      - name: Build throttle flags guard
+        run: node scripts/ci/check-no-build-throttle-flags.mjs
       - name: Catalog JSON soft size budget (warn only)
         run: node scripts/ci/check-catalog-json-size-budget.mjs

@@ -77,8 +77,6 @@ jobs:
             NN_BUILD_BRANCH=main
             GITHUB_SHA=${{ github.sha }}
             GITHUB_REF_NAME=main
-            BUILD_WEBPACK_PARALLELISM=1
-            NN_FORCE_SINGLE_BUILD_WORKER=true
             NN_TIMED_INCLUDE_NPM_PRUNE=1
             BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048
           shm-size: 2g
@@ -101,7 +99,7 @@ jobs:
             echo "- **Stale GHA build cache** — re-run with cache cleared or temporarily set \`cache-from:\` / \`cache-to:\` empty in the workflow."
             echo ""
             echo "### This repo’s mitigations (already in Dockerfile / build-args)"
-            echo "- \`NN_LOW_MEMORY_BUILD=1\`, \`BUILD_WEBPACK_PARALLELISM=1\`, \`NN_FORCE_SINGLE_BUILD_WORKER=true\`"
+            echo "- Turbopack + multi-worker compile enforced inside the build wrapper"
             echo "- \`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048\` (heap cap for Next compile inside the image build)"
             echo "- \`SKIP_I18N_PREBUILD=1\`, \`NN_SKIP_HEAVY_BUILD_REPORTS=1\`"
             echo ""
