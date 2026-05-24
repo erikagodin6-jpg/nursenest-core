@@ -17,6 +17,7 @@ export function PathwayLessonDetailPageLoadingFallback({ pathway }: { pathway: E
   return (
     <LessonsPageShell
       omitHeroBand
+      title="Loading lesson"
       eyebrow={pathway.shortName.trim() || pathway.displayName}
       pathwayTrack={pathway.roleTrack}
       backLink={{ label: `${examName} lessons`, href: base }}

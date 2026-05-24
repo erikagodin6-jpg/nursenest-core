@@ -10,6 +10,7 @@ import { recordCoachingTelemetry } from "@/lib/learner/rn-coaching-intelligence/
 import { GovernedNextActionLink } from "@/components/educational-graph/governed-next-action-link";
 import { captureGovernedGraphTelemetry } from "@/lib/educational-graph/capture-governed-graph-telemetry";
 import { nextActionFromGraphStep } from "@/lib/educational-graph/graph-step-next-action";
+import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 
 const TONE_CLASS: Record<DashboardOrchestrationV3["cards"][0]["tone"], string> = {
   momentum: "nn-semantic-inset--positive",
@@ -75,7 +76,7 @@ export function LearnerCoachingDashboardPanel() {
     return <div className="nn-coaching-dashboard-reserve nn-coaching-dashboard-reserve--settled" aria-hidden />;
   }
 
-  const actionByCardId = new Map(
+  const actionByCardId = new Map<string, EduGraphStep>(
     (orch.graphActions ?? []).map((a) => [`graph-${a.stepId}`, a.step] as const),
   );
 

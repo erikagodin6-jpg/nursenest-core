@@ -46,6 +46,7 @@ import {
   resolveSurfaceFromResolverKind,
   type BreadcrumbSurface,
 } from "@/lib/breadcrumbs/breadcrumb-surface";
+import type { ClinicalInterpretationCategory } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 export type ResolvePathwayLessonDetailBreadcrumbsInput = {
   kind: "pathway-lesson-detail";
   pathway: ExamPathwayDefinition;
@@ -138,6 +139,12 @@ export type ResolveNursingGlossaryTermInput = {
 };
 export type ResolveCaseStudiesBreadcrumbsInput = { kind: "case-studies" };
 export type ResolveClinicalInterpretationHubInput = { kind: "clinical-interpretation-hub" };
+export type ResolveClinicalInterpretationGuideInput = {
+  kind: "clinical-interpretation-guide";
+  category: ClinicalInterpretationCategory;
+  guideTitle: string;
+  guideSlug: string;
+};
 
 export type BreadcrumbResolverInput =
   | ResolvePathwayLessonDetailBreadcrumbsInput
@@ -158,7 +165,8 @@ export type BreadcrumbResolverInput =
   | ResolveNursingGlossaryHubInput
   | ResolveNursingGlossaryTermInput
   | ResolveCaseStudiesBreadcrumbsInput
-  | ResolveClinicalInterpretationHubInput;
+  | ResolveClinicalInterpretationHubInput
+  | ResolveClinicalInterpretationGuideInput;
 
 export function categoryBreadcrumbFromLesson(
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">,
@@ -184,6 +192,13 @@ function governPathwayResolution(
     topicSlug: meta?.topicSlug,
     competencyId: meta?.competencyId,
   });
+}
+
+function clinicalInterpretationCategoryLabel(category: ClinicalInterpretationCategory): string {
+  return category
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbResolution | BreadcrumbCrumb[] {
@@ -288,6 +303,22 @@ export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbRe
         surface: "interpretation_guide",
         pathname: "/clinical-interpretation",
         canonicalRootId: "clinical_interpretation",
+      });
+    case "clinical-interpretation-guide":
+      return applyGovernedBreadcrumbResolution({
+        resolution: {
+          crumbs: [
+            { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+            { name: "Clinical interpretation", href: "/clinical-interpretation" },
+            { name: clinicalInterpretationCategoryLabel(input.category), href: undefined },
+            { name: input.guideTitle, href: undefined },
+          ],
+          schemaItems: [],
+        },
+        surface: "interpretation_guide",
+        pathname: `/clinical-interpretation/${input.guideSlug}`,
+        canonicalRootId: "clinical_interpretation",
+        competencyId: input.category,
       });
     default:
       return applyGovernedBreadcrumbResolution({

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { AuthExperienceShell, type AuthExperienceShellVariant } from "@/components/auth/auth-experience/auth-experience-shell";
+import { AuthExperienceShell } from "@/components/auth/auth-experience/auth-experience-shell";
+import type { AuthExperienceShellVariant } from "@/components/auth/auth-experience/auth-experience-types";
 
 export { AUTH_EDUCATIONAL_DISCLAIMER } from "@/components/auth/auth-experience/constants";
 

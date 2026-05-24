@@ -55,13 +55,13 @@ export function SiteBrandLogoMark({
     onMarkState?.("ready");
   }, [onMarkState, themeId, registeredThemeId, rawThemeId, resolvedUrl]);
 
-  const handleError = useCallback((event: SyntheticEvent<HTMLImageElement>) => {
+  const handleError = useCallback((event?: SyntheticEvent<HTMLImageElement>) => {
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console -- dev diagnostic
       console.debug("[logo-debug] image error", { themeId, url: resolvedUrl });
     }
     if (resolvedUrl) logBrandLogoLoadFailure(resolvedUrl, themeId, 0);
-    event.currentTarget.style.display = "none";
+    if (event) event.currentTarget.style.display = "none";
     setImageFailed(true);
     onMarkState?.("error");
   }, [onMarkState, themeId, resolvedUrl]);
