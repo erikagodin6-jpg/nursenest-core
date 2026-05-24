@@ -4,6 +4,8 @@ export const STUDY_TOOL_ROUTES = {
   createDeck: "/app/study-tools/create",
   sharedDecks: "/app/study-tools/shared",
   publicDecks: "/app/study-tools/public",
+  flashcardsHub: "/app/study-tools/flashcards",
+  flashcardsDecks: "/app/study-tools/flashcards/decks",
   matching: "/app/matching",
   fillInTheBlank: "/app/fill-in-the-blank",
   ordering: "/app/ordering",
@@ -16,6 +18,10 @@ export const STUDY_TOOL_ROUTES = {
 } as const;
 
 export type StudyToolRouteKey = keyof typeof STUDY_TOOL_ROUTES;
+
+export function flashcardDeckHref(deckId: string): string {
+  return `/app/study-tools/flashcards/decks/${encodeURIComponent(deckId)}`;
+}
 
 export function withStudyToolPathwayQuery(base: string, pathwayId: string | null): string {
   if (!pathwayId?.trim()) return base;
