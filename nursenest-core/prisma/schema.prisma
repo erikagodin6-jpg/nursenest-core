@@ -138,6 +138,9 @@ model User {
   flashcardProgress             FlashcardProgress[]
   flashcardStudySessions        FlashcardStudySession[]
   flashcardUserStats            FlashcardUserStats?
+  flashcardSessions             FlashcardSession[]
+  flashcardAttempts             FlashcardAttempt[]
+  flashcardMastery              FlashcardMastery[]
   verifiedStudyDecksOwned       VerifiedStudyDeck[]         @relation("VerifiedStudyDeckOwner")
   verifiedStudyDeckSharesToMe   VerifiedStudyDeckShare[]     @relation("VerifiedStudyDeckShareTarget")
   verifiedStudyDeckSharesSent   VerifiedStudyDeckShare[]     @relation("VerifiedStudyDeckShareInvitedBy")
@@ -1738,6 +1741,7 @@ model FlashcardDeck {
   cards         Flashcard[]
   tags          FlashcardDeckOnTag[]
   studySessions FlashcardStudySession[]
+  sessions      FlashcardSession[]
 
   @@index([status, visibility, country])
   @@index([status, examFamily])
@@ -1895,6 +1899,62 @@ model FlashcardUserStats {
   user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("flashcard_user_stats")
+}
+
+/// * Full study session: tracks lifecycle (ACTIVE → COMPLETED) for a learner studying a curated deck.
+/// * One ACTIVE session per user per deck; resuming returns the existing row.
+model FlashcardSession {
+  id          String                @id @default(cuid())
+  userId      String                @map("user_id")
+  deckId      String                @map("deck_id")
+  status      FlashcardSessionStatus @default(ACTIVE)
+  startedAt   DateTime              @default(now()) @map("started_at")
+  completedAt DateTime?             @map("completed_at")
+  cardCount   Int                   @default(0) @map("card_count")
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deck        FlashcardDeck         @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  attempts    FlashcardAttempt[]
+
+  @@index([userId, status])
+  @@index([userId, deckId])
+  @@map("flashcard_sessions")
+}
+
+/// * One row per card answered within a FlashcardSession.
+model FlashcardAttempt {
+  id          String           @id @default(cuid())
+  sessionId   String           @map("session_id")
+  userId      String           @map("user_id")
+  flashcardId String           @map("flashcard_id")
+  selectedKey String?          @map("selected_key") @db.VarChar(8)
+  isCorrect   Boolean?         @map("is_correct")
+  guessed     Boolean          @default(false)
+  confidence  Int?
+  bookmarked  Boolean          @default(false)
+  answeredAt  DateTime         @default(now()) @map("answered_at")
+  session     FlashcardSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([userId, flashcardId])
+  @@map("flashcard_attempts")
+}
+
+/// * Aggregate mastery per user per card: level 0=unseen, 1=learning, 2=familiar, 3=mastered.
+/// * Upserted on every FlashcardAttempt — no FK to FlashcardAttempt (scale).
+model FlashcardMastery {
+  userId        String    @map("user_id")
+  flashcardId   String    @map("flashcard_id")
+  level         Int       @default(0)
+  totalAttempts Int       @default(0) @map("total_attempts")
+  correctCount  Int       @default(0) @map("correct_count")
+  lastAttemptAt DateTime? @map("last_attempt_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, flashcardId])
+  @@index([userId, level])
+  @@map("flashcard_mastery")
 }
 
 /// * Learner-owned verified study card decks (Quizlet-style, NurseNest-governed — not open free-text publishing).
@@ -3634,6 +3694,13 @@ enum FlashcardDeckVisibility {
   PUBLIC_PREVIEW
   SUBSCRIBER
   HIDDEN
+}
+
+enum FlashcardSessionStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ABANDONED
 }
 
 /// * Exam-style micro-question tagging for flashcards (NCLEX-like stems + rationales).
