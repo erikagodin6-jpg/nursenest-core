@@ -11,6 +11,7 @@ import {
 } from "@/lib/educational-graph/graph-lineage-envelope";
 import { tutoringPromptContextFromAiEnvelope } from "@/lib/educational-cognition/ai-tutor-cognition-envelope";
 import type { AiTutorContextEnvelope } from "@/lib/learner/rn-coaching-intelligence/ai-tutor-context-envelope";
+import type { RnCompetencyMasteryState } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
 import type { CognitionReliabilityTier } from "@/lib/educational-cognition/cognition-snapshot-types";
@@ -61,8 +62,8 @@ export function resolveTutoringGraphSteps(args: {
     coachingModel: args.cognition?.coachingModel,
     learnerState: args.cognition?.learnerState,
     persistentWeakTopics: args.cognition?.learnerState.competencyStates
-      .filter((c) => c.persistentWeak)
-      .map((c) => c.competencyId.replace(/_/g, " ")),
+      .filter((c: RnCompetencyMasteryState) => c.persistentWeak)
+      .map((c: RnCompetencyMasteryState) => c.competencyId.replace(/_/g, " ")),
   });
   return traversal.steps;
 }

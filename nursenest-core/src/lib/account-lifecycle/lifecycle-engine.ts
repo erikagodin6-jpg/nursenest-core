@@ -13,7 +13,7 @@
  */
 
 import "server-only";
-import { UserRole, SubscriptionStatus } from "@prisma/client";
+import { UserRole, SubscriptionStatus, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LIFECYCLE, addDays } from "@/lib/account-lifecycle/lifecycle-config";
@@ -45,13 +45,13 @@ async function getEngagedUserIds(userIds: string[]): Promise<Set<string>> {
 }
 
 /** Core where clause that excludes already-deleted, protected roles, and exempt accounts. */
-function activeNonProtectedWhere() {
+function activeNonProtectedWhere(): Prisma.UserWhereInput {
   return {
     deletedAt: null,
     isDeletionExempt: false,
-    is_demo_user: false,
+    isDemoUser: false,
     role: { notIn: [...PROTECTED_ROLES] },
-  } as const;
+  };
 }
 
 export type LifecycleRunResult = {
