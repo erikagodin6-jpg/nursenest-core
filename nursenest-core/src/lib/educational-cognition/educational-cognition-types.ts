@@ -2,8 +2,9 @@
  * Unified educational cognition contracts — learner-state, psychometric, remediation, dashboard.
  */
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
-import type { CoachingModel, RnCoachingIntelligenceReport, RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
+import type { CoachingModel, RnCoachingIntelligenceReport } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 import type { AiTutorContextEnvelope } from "@/lib/learner/rn-coaching-intelligence/ai-tutor-context-envelope";
+import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import type { PsychometricOrchestrationContext } from "@/lib/testing/psychometric-orchestrator";
 import type { TestingModelReadinessSemantics } from "@/lib/testing/policies/readiness-policy";
 import type { PsychometricDashboardWidgetId } from "@/lib/testing/testing-dashboard-governance";

@@ -25,7 +25,10 @@ export type GraphSourceSurface =
   | "study_plan"
   | "ai_tutor"
   | "recommendation_engine"
-  | "glossary_traversal";
+  | "glossary_traversal"
+  | "adaptive_recommendations"
+  | "cognition_substrate"
+  | "post_session_cognition";
 
 export type EducationalIntent =
   | "mechanism_framing"
