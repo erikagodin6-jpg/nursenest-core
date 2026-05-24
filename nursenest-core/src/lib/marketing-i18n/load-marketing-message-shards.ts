@@ -2,6 +2,7 @@ import "server-only";
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import type { I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
@@ -24,7 +25,14 @@ import type { I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
 const DEFAULT_LOCALE = "en";
 
 /** Primary: CWD-relative (works when server cwd = package root). */
-const I18N_DIR_CWD = /* turbopackIgnore: true */ `${process.cwd()}/public/i18n`;
+const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
+
+const I18N_DIR_MODULE_RELATIVE = /* turbopackIgnore: true */ path.resolve(
+  MODULE_DIR,
+  "../../../public/i18n",
+);
+
+const I18N_DIR_CWD = I18N_DIR_MODULE_RELATIVE;
 
 /**
  * Secondary: file-relative path from this module's location.
@@ -32,22 +40,13 @@ const I18N_DIR_CWD = /* turbopackIgnore: true */ `${process.cwd()}/public/i18n`;
  * Walking up from `src/lib/marketing-i18n/` reaches the package root reliably.
  * turbopackIgnore prevents Turbopack from resolving this at build time.
  */
-const I18N_DIR_MODULE_RELATIVE = /* turbopackIgnore: true */ path.resolve(
-  __dirname,
-  "../../../../public/i18n",
-);
-
 /**
  * Tertiary: standalone output's own public directory (populated by ensure-standalone-public.mjs).
  * Resolves relative to the project root's .next/standalone directory.
  */
 const I18N_DIR_STANDALONE_PUBLIC = /* turbopackIgnore: true */ path.resolve(
-  process.cwd(),
-  ".next",
-  "standalone",
-  "nursenest-core",
-  "public",
-  "i18n",
+  MODULE_DIR,
+  "../../../.next/standalone/nursenest-core/public/i18n",
 );
 
 /** Resolved candidate list evaluated once at module load — avoids repeated existence checks. */

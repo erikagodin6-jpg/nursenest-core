@@ -17,7 +17,8 @@
  * on disk and are read on-demand into process-level module caches.
  */
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import path, { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { buildLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
@@ -47,7 +48,10 @@ import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scal
 // Path resolution: `process.cwd()` in Next.js server == the project root where
 // package.json lives (i.e. nursenest-core/). All src/ paths are relative to it.
 function readCatalogJsonSync<T>(srcRelPath: string): T {
-  const abs = join(process.cwd(), srcRelPath);
+  const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
+const PACKAGE_ROOT = /* turbopackIgnore: true */ path.resolve(MODULE_DIR, "../../..");
+
+const abs = join(PACKAGE_ROOT, srcRelPath);
   const perfEnabled =
     process.env.LESSON_PERF_DEBUG === "1" || process.env.NODE_ENV !== "production";
   const t0 = perfEnabled ? Date.now() : 0;
