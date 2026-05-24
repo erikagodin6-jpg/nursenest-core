@@ -5,6 +5,7 @@ import {
   buildCognitionVersionMetadata,
   type CognitionVersionMetadata,
 } from "@/lib/educational-cognition/cognition-version-governance";
+import type { RnCompetencyMasteryState } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 
 export type CognitionConfidenceTier = "low" | "medium" | "high";
 
@@ -34,8 +35,8 @@ export function buildCognitionExplainability(args: {
   const { ctx } = args;
   const reliability = args.reliabilityTier ?? "inferred";
   const weakCompetencies = ctx.learnerState.competencyStates
-    .filter((c) => c.persistentWeak || c.masteryScore < 55)
-    .map((c) => c.competencyId.replace(/_/g, " "))
+    .filter((c: RnCompetencyMasteryState) => c.persistentWeak || c.masteryScore < 55)
+    .map((c: RnCompetencyMasteryState) => c.competencyId.replace(/_/g, " "))
     .slice(0, 5);
 
   const remediationSignals: string[] = [];
@@ -43,7 +44,7 @@ export function buildCognitionExplainability(args: {
   if (ctx.remediation.maxRecommendations <= 3) remediationSignals.push("bounded_remediation_queue");
   if (weakCompetencies.length) remediationSignals.push(`weak_competencies:${weakCompetencies.length}`);
 
-  const graphSignals = (args.graphSteps ?? []).slice(0, 4).map((s) => `${s.kind}:${s.stepId}`);
+  const graphSignals = (args.graphSteps ?? []).slice(0, 4).map((s) => `${s.stepKind}:${s.stepId}`);
 
   const derivedFrom: CognitionExplainability["derivedFrom"] = ["learner_state", "educational_graph"];
   if (remediationSignals.length) derivedFrom.push("remediation");

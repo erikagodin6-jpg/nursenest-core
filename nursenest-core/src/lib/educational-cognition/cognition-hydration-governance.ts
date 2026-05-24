@@ -14,7 +14,6 @@ import type {
   CognitionContinuityLineage,
   CognitionEnvelopeGovernanceMetadata,
   CognitionHydrationProvenance,
-  DurableLearnerCognitionEnvelope,
 } from "@/lib/educational-cognition/cognition-snapshot-types";
 
 export type CognitionHydrationMode = "full" | "partial" | "degraded" | "fresh";
@@ -146,7 +145,7 @@ function buildContinuityLineage(
 
 export function buildEnvelopeGovernanceMetadata(args: {
   envelope: DurableLearnerCognitionEnvelope | null;
-  hydrationState: CognitionHydrationState;
+  hydrationState: CognitionHydrationMode;
   reliabilityTier: CognitionReliabilityTier;
 }): CognitionEnvelopeGovernanceMetadata {
   const version = buildCognitionVersionMetadata({

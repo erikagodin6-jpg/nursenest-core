@@ -6,7 +6,8 @@ import { buildAiTutorContextEnvelope } from "@/lib/learner/rn-coaching-intellige
 import type { TutoringPromptContext } from "@/lib/ai-tutor/types";
 import { deriveTimingCognitionSignals } from "@/lib/educational-cognition/timing-cognition";
 import { emitCognitionTelemetryV5 } from "@/lib/educational-cognition/cognition-telemetry-v5";
-import type { TutoringPromptContext } from "@/lib/ai-tutor/types";
+import type { ClinicalJudgmentPattern } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
+import type { RnCompetencyMasteryState } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 
 /**
  * AI tutoring envelope from full cognition context + graph steps (not report-only).
@@ -25,9 +26,9 @@ export function buildAiTutorContextFromCognition(
         readinessReliability: ctx.readinessResult ? "moderate" : "low",
         softenPredictions: !ctx.readinessSemantics.allowsPassOutlook,
         persistentWeakTopics: ctx.learnerState.competencyStates
-          .filter((c) => c.persistentWeak)
-          .map((c) => c.competencyId.replace(/_/g, " ")),
-        reasoningFocusAreas: ctx.learnerState.reasoningPatterns.map((p) => ({
+          .filter((c: RnCompetencyMasteryState) => c.persistentWeak)
+          .map((c: RnCompetencyMasteryState) => c.competencyId.replace(/_/g, " ")),
+        reasoningFocusAreas: ctx.learnerState.reasoningPatterns.map((p: ClinicalJudgmentPattern) => ({
           pattern: p.replace(/_/g, " "),
           guidance: "Reinforce clinical reasoning in this pattern before expanding scope.",
         })),
@@ -87,7 +88,6 @@ export function tutoringPromptContextFromAiEnvelope(
 ): TutoringPromptContext {
   return {
     ...partial,
-    pathwayId: partial.pathwayId ?? envelope.pathwayId,
     graphSteps: envelope.graphSteps,
   };
 }
