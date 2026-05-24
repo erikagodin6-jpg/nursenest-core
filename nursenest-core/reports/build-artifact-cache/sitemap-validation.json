@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "be56de5636a4fd2139a72daaf9b98c6ee4f79aaad58eccc75d81419038a06b05",
-  "generatedAt": "2026-05-24T12:22:21.863Z",
+  "fingerprint": "e9add4a7f1702507ce5bfdde171603f5b32fc9c30f491a9a1277496b7000b331",
+  "generatedAt": "2026-05-24T21:29:05.099Z",
   "inputs": [
     {
       "type": "file",
@@ -447,6 +447,18 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/decks/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/flashcards/decks/[deckId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/flashcards/decks/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/flashcards/page.tsx"
     },
     {
       "type": "file",
@@ -2483,6 +2495,10 @@
     {
       "type": "file",
       "path": "src/app/(runtime)/readyz/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/actions/flashcards/session-actions.ts"
     },
     {
       "type": "file",
@@ -7081,6 +7097,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 36055
+    "durationMs": 34075
   }
 }

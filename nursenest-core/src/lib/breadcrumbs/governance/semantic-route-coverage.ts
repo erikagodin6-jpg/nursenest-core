@@ -27,7 +27,7 @@ export type SemanticRouteCoverageReport = {
 const REPO_ROOT = join(process.cwd());
 
 function walkPages(dir: string, acc: string[] = []): string[] {
-  if (!statSync(dir, { throwIf: false })?.isDirectory()) return acc;
+  if (!statSync(dir, { throwIfNoEntry: false })?.isDirectory()) return acc;
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     const st = statSync(p);
@@ -66,7 +66,7 @@ export function computeSemanticRouteCoverage(repoRoot = REPO_ROOT): SemanticRout
   const orphanedNodeCount = issues.filter((i) => i.startsWith("glossary_orphan")).length;
 
   const focusAreaDetail = join(learner, "account/focus-areas/[topic]/page.tsx");
-  const focusAreaRouteCount = statSync(focusAreaDetail, { throwIf: false })?.isFile() ? 1 : 0;
+  const focusAreaRouteCount = statSync(focusAreaDetail, { throwIfNoEntry: false })?.isFile() ? 1 : 0;
   if (!focusAreaRouteCount) {
     issues.push("focus_area_detail_route_missing");
   }

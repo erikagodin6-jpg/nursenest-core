@@ -7,6 +7,7 @@ import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
 import { APP_ROOT, REPO_ROOT, logResolvedPathsOnce } from "./repo-root";
 import { execSync } from "child_process";
+import whyIsNodeRunning from "why-is-node-running";
 
 logResolvedPathsOnce();
 process.chdir(REPO_ROOT);
@@ -702,21 +703,6 @@ function resolvePackageJsonForNodeRequire(): string {
   return repoPath("package.json");
 }
 
-function dumpHandles() {
-  // @ts-ignore
-  const handles = process._getActiveHandles?.() ?? [];
-  // @ts-ignore
-  const requests = process._getActiveRequests?.() ?? [];
-  console.log("\n[debug] ACTIVE HANDLES:");
-  for (const h of handles) {
-    console.log("-", h?.constructor?.name);
-  }
-  console.log("\n[debug] ACTIVE REQUESTS:");
-  for (const r of requests) {
-    console.log("-", r?.constructor?.name);
-  }
-}
-
 async function main() {
   const workspaceRequire = createRequire(resolvePackageJsonForNodeRequire());
   runEsbuild = (workspaceRequire("esbuild") as typeof import("esbuild")).build;
@@ -724,8 +710,7 @@ async function main() {
     (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite")
   ).build;
   await buildAll();
-  dumpHandles();
-  await Promise.resolve();
+  whyIsNodeRunning();
   console.log("[build] forcing clean process exit");
   process.exit(0);
 }

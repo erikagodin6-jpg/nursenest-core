@@ -26,6 +26,13 @@ export type GlossaryTermSemanticContext = {
   pathway: ExamPathwayDefinition;
 };
 
+export type GlossaryGraphSemanticContext = Pick<
+  GlossaryTermSemanticContext,
+  "termSlug" | "termLabel" | "topicSlug"
+> & {
+  pathway?: ExamPathwayDefinition;
+};
+
 export function resolveGlossaryTermBreadcrumbs(ctx: GlossaryTermSemanticContext): BreadcrumbResolution {
   const examPath = buildExamPathwayPath(ctx.pathway);
   const examLabel = pathwayRegionAwareExamName(ctx.pathway);
@@ -84,7 +91,7 @@ export type GraphNativeEntityContext = {
 };
 
 export function buildGlossaryGraphEntity(
-  ctx: GlossaryTermSemanticContext,
+  ctx: GlossaryGraphSemanticContext,
   pathwayId: string | null,
 ): GraphNativeEntityContext {
   const traversal = orchestrateBreadcrumbGraph({

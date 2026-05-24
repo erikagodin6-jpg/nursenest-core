@@ -42,9 +42,9 @@ export function resolveFocusAreaGraphRoute(args: {
   const pathname = focusAreaDetailPathname(topicSlug);
 
   const cognition = args.userId
-    ? resolveEducationalCognitionContext(args.pathwayId ?? null, {
+      ? resolveEducationalCognitionContext(args.pathwayId ?? null, {
         userId: args.userId,
-        weakTopics: [...(args.weakTopics ?? [])],
+        weakTopicLabels: [...(args.weakTopics ?? [])],
       })
     : null;
 

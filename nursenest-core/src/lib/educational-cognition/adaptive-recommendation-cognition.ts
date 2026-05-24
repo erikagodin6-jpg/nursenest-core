@@ -19,6 +19,7 @@ import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway
 import type { EducationalCognitionContext } from "@/lib/educational-cognition/educational-cognition-types";
 import { warmDurableLearnerCognitionCache } from "@/lib/educational-cognition/learner-cognition-persistence";
 import { graphNextStepsFromSteps } from "@/lib/educational-cognition/graph-next-step-continuity";
+import type { RnCompetencyMasteryState } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import {
   buildCognitionVersionMetadata,
   type CognitionVersionMetadata,
@@ -46,9 +47,9 @@ export type GovernedAdaptiveRecommendations = AdaptiveLearnerRecommendations & {
 
 function weakTopicRowsFromCognition(ctx: EducationalCognitionContext): WeakTopicRow[] {
   const labels = ctx.learnerState.competencyStates
-    .filter((c) => c.persistentWeak || c.masteryScore < 55)
-    .sort((a, b) => a.masteryScore - b.masteryScore)
-    .map((c) => {
+    .filter((c: RnCompetencyMasteryState) => c.persistentWeak || c.masteryScore < 55)
+    .sort((a: RnCompetencyMasteryState, b: RnCompetencyMasteryState) => a.masteryScore - b.masteryScore)
+    .map((c: RnCompetencyMasteryState) => {
       const missRate = Math.max(0, Math.min(1, (100 - c.masteryScore) / 100));
       const attempted = Math.max(1, c.sessionEvidenceCount);
       return {

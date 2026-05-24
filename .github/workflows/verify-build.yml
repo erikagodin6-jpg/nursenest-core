@@ -42,6 +42,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify lockfile (mobile-shared workspace)
+        run: npm ci
+        working-directory: nursenest-core/packages/nursenest-mobile-shared
+
+      - name: Verify lockfile (mobile app workspace)
+        run: npm ci
+        working-directory: nursenest-core/apps/mobile
+
+      - name: Validate Prisma Schema
+        run: npx prisma validate
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
       - name: Install deploy guard dependencies
         run: |
           npm install --prefix /tmp/deploy-guard-deps --no-save --ignore-scripts --no-audit --no-fund js-yaml@4.1.1

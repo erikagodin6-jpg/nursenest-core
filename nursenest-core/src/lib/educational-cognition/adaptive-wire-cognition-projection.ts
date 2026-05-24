@@ -101,12 +101,25 @@ export async function projectAdaptiveWireBundleFromCognition(args: {
   catOrPracticeProfile: PerformanceProfile | null;
 }): Promise<AdaptiveWireBundleJson | null> {
   if (!args.entitlement.hasAccess) return null;
+  if (!args.readiness) return null;
 
   const governed = await buildGovernedAdaptiveRecommendations({
     preferredPathwayId: args.pathwayId,
     readiness: args.readiness,
     weakTopics: args.weakTopics,
     topicTrends: args.topicPerformance?.trends ?? [],
+    examDatePlanType: null,
+    examDate: null,
+    streakDays: 0,
+    lessonPct: 0,
+    lessonsCompleted: 0,
+    lessonsTotal: args.lessonCandidates.length,
+    studyCadencePreference: null,
+    continueLesson: null,
+    recommendedQuizTopic: args.weakTopics[0]?.topic ?? null,
+    mockCount: 0,
+    practiceSessionCount: args.catOrPracticeProfile ? 1 : 0,
+    subscriberCountry: args.entitlement.country,
     userId: args.userId,
     entitlement: args.entitlement,
   });

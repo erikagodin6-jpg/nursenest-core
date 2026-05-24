@@ -19,7 +19,7 @@ import {
 import { assertReplayLineageConsistent } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 import type { GraphTelemetryReplaySnapshot } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 import { validateGlossaryGraphNode, buildGlossaryGraphNode } from "@/lib/educational-graph/glossary-graph-node";
-import type { GlossaryTermSemanticContext } from "@/lib/breadcrumbs/breadcrumb-semantic-integration";
+import type { GlossaryGraphSemanticContext } from "@/lib/breadcrumbs/breadcrumb-semantic-integration";
 
 export type OntologyIntegrityTier =
   | "healthy"
@@ -77,7 +77,7 @@ export function salvageRemediationChain(topicSlug: string, pathname: string): st
 }
 
 export function recoverGlossaryLineage(
-  ctx: GlossaryTermSemanticContext,
+  ctx: GlossaryGraphSemanticContext,
   pathwayId: string | null,
 ): string | null {
   const node = buildGlossaryGraphNode(ctx, pathwayId);

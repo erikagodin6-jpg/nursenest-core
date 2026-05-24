@@ -418,7 +418,8 @@
     "test:e2e:ecg-nav": "npx playwright test tests/e2e/ecg/ecg-nav-visibility.spec.ts --project=chromium",
     "test:ecg-seo-authority": "node --import tsx --test src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts",
     "test:ecg-cluster": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts",
-    "test:ecg-full": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/ecg-module/ecg-route-existence.contract.test.ts"
+    "test:ecg-full": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/ecg-module/ecg-route-existence.contract.test.ts",
+    "knip": "knip"
   },
   "dependencies": {
     "@auth/core": "0.37.2",
@@ -573,6 +574,7 @@
     "drizzle-kit": "^0.31.4",
     "eslint": "^9.0.0",
     "eslint-config-next": "16.2.6",
+    "knip": "^6.14.2",
     "mime-types": "^2.1.35",
     "png-to-ico": "^2.1.8",
     "postcss": "^8.5.6",
@@ -584,7 +586,8 @@
     "typescript": "5.8.3",
     "vite": "^7.1.9",
     "vite-plugin-circular-dependency": "^0.5.0",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "why-is-node-running": "^3.2.2"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
