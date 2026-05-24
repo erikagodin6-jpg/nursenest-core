@@ -68,7 +68,8 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: true
+          push: false
+          load: true
           tags: ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}
           build-args: |
             NN_BUILD_COMMIT=${{ github.sha }}
@@ -80,6 +81,12 @@ jobs:
           shm-size: 2g
           provenance: false
           sbom: false
+
+      - name: Inspect locally loaded image (diagnostic)
+        if: success()
+        run: |
+          docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}" | head
+          docker history --no-trunc ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }} | head
 
       - name: Build job summary (failure hints)
         if: failure() && steps.build.outcome == 'failure'
@@ -104,6 +111,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Trigger DigitalOcean deployment
+        if: steps.build.outputs.digest
         env:
           DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: |
