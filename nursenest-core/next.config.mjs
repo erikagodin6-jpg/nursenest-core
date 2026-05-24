@@ -524,10 +524,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   productionBrowserSourceMaps: false,
 
   images: {

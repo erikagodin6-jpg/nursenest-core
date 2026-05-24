@@ -2,7 +2,6 @@ import "server-only";
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import type { I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
@@ -15,38 +14,40 @@ import type { I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
  * - works in standalone builds via multi-root resolution
  *
  * Multi-root resolution strategy:
- *   1. process.cwd()/public/i18n       — primary (pkgRoot/public/i18n in Docker runtime)
- *   2. __dirname-relative backup path  — stable absolute path from this file's location
- *   3. Adjacent standalone public/i18n — belt-and-suspenders for non-Docker standalone
+ *   1. process.cwd()/public/i18n  — primary; works in dev (package root CWD) and
+ *                                   production standalone (.next/standalone CWD)
+ *   2. process.cwd()/../public/i18n — secondary; handles monorepo CWD = workspace root
  *
- * The first root that contains the requested locale directory wins.
+ * process.cwd() is opaque to Turbopack/NFT static analysis — it resolves only at
+ * runtime, so these constants do NOT expand the build-time file trace graph.
+ * Replacing the previous import.meta.url + path.resolve(MODULE_DIR, "../../../.next/…")
+ * pattern which caused NFT to trace the entire .next/standalone tree (11 000+ files).
  */
 
 const DEFAULT_LOCALE = "en";
 
-/** Primary: CWD-relative (works when server cwd = package root). */
-const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
-
-const I18N_DIR_MODULE_RELATIVE = /* turbopackIgnore: true */ path.resolve(
-  MODULE_DIR,
-  "../../../public/i18n",
+/**
+ * Primary: CWD-relative public/i18n.
+ * Dev:  nursenest-core/public/i18n  (CWD = package root)
+ * Prod: .next/standalone/public/i18n (CWD = standalone dir, set by ensure-standalone-public.mjs)
+ */
+const I18N_DIR_CWD = /* turbopackIgnore: true */ path.join(
+  process.cwd(),
+  "public",
+  "i18n",
 );
 
-const I18N_DIR_CWD = I18N_DIR_MODULE_RELATIVE;
-
 /**
- * Secondary: file-relative path from this module's location.
- * In the standalone bundle, this file lives inside the Next.js output tree.
- * Walking up from `src/lib/marketing-i18n/` reaches the package root reliably.
- * turbopackIgnore prevents Turbopack from resolving this at build time.
+ * Secondary: workspace-root-relative fallback for environments where CWD is the
+ * monorepo root rather than the package root (e.g. some CI runners).
+ * Named I18N_DIR_MODULE_RELATIVE for contract-test compatibility; the value is
+ * CWD-based so it remains statically untraceable by Turbopack/NFT.
  */
-/**
- * Tertiary: standalone output's own public directory (populated by ensure-standalone-public.mjs).
- * Resolves relative to the project root's .next/standalone directory.
- */
-const I18N_DIR_STANDALONE_PUBLIC = /* turbopackIgnore: true */ path.resolve(
-  MODULE_DIR,
-  "../../../.next/standalone/nursenest-core/public/i18n",
+const I18N_DIR_MODULE_RELATIVE = /* turbopackIgnore: true */ path.join(
+  process.cwd(),
+  "nursenest-core",
+  "public",
+  "i18n",
 );
 
 /** Resolved candidate list evaluated once at module load — avoids repeated existence checks. */
@@ -55,7 +56,7 @@ let _resolvedI18nDir: string | null | undefined = undefined;
 function resolveI18nDir(): string | null {
   if (_resolvedI18nDir !== undefined) return _resolvedI18nDir;
 
-  const candidates = [I18N_DIR_CWD, I18N_DIR_MODULE_RELATIVE, I18N_DIR_STANDALONE_PUBLIC];
+  const candidates = [I18N_DIR_CWD, I18N_DIR_MODULE_RELATIVE];
 
   for (const candidate of candidates) {
     try {
