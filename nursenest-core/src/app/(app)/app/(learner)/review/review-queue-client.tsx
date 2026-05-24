@@ -17,7 +17,7 @@ import { useMemo } from "react";
 import type { ScoredReviewItem, ReviewModeLabel } from "@/lib/study/srs-scheduler";
 import { DueReviewSection } from "@/components/study/due-review-section";
 import { ReviewQueueFilterController } from "@/components/study/review-queue-filters";
-import { loadMoreReviewItems } from "@/app/(student)/app/(learner)/review/actions";
+import { loadMoreReviewItems } from "@/app/(app)/app/(learner)/review/actions";
 
 interface PagedTier {
   items: ScoredReviewItem[];

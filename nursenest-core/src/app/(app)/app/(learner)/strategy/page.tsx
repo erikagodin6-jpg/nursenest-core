@@ -4,7 +4,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { StrategyOverviewSection } from "@/components/study/strategy-overview-section";
 import { StrategyPracticeCards } from "@/components/study/strategy-practice-cards";
-import { loadStrategyCounts } from "@/app/(student)/app/(learner)/strategy/actions";
+import { loadStrategyCounts } from "@/app/(app)/app/(learner)/strategy/actions";
 
 export default async function StrategyHubPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).strategy");

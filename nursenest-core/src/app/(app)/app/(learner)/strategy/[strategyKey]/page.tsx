@@ -6,7 +6,7 @@ import { StrategySessionClient } from "@/components/study/strategy-session-clien
 import {
   loadStrategySession,
   loadStrategyCounts,
-} from "@/app/(student)/app/(learner)/strategy/actions";
+} from "@/app/(app)/app/(learner)/strategy/actions";
 import { getStrategy, isStrategyKey, MIXED_STRATEGY_KEY } from "@/lib/study/strategy-taxonomy";
 import Link from "next/link";
 
