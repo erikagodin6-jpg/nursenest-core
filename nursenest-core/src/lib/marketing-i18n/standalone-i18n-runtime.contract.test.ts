@@ -78,12 +78,16 @@ describe("Standalone i18n runtime contracts", () => {
 
   // ── Shard loader multi-root robustness ────────────────────────────────────
 
-  it("load-marketing-message-shards uses multi-root resolution (not single cwd path)", () => {
+  it("load-marketing-message-shards uses single bounded process.cwd() path (not import.meta.url)", () => {
     const src = source("src/lib/marketing-i18n/load-marketing-message-shards.ts");
-    // Must have multiple candidate paths for robustness
-    assert.match(src, /I18N_DIR_CWD/, "must define CWD-based primary path");
-    assert.match(src, /I18N_DIR_MODULE_RELATIVE/, "must define module-relative secondary path");
+    // Must use process.cwd() — NFT-opaque at static analysis time
+    assert.match(src, /process\.cwd\(\)/, "must use process.cwd() for the i18n directory root");
+    // Must use resolveI18nDir() abstraction for cached lookup
     assert.match(src, /resolveI18nDir/, "must use resolveI18nDir() to select the correct root");
+    // Must NOT use import.meta.url — that lets NFT statically resolve __dirname equivalents
+    assert.doesNotMatch(src, /import\.meta\.url/, "must not use import.meta.url — triggers NFT trace explosion");
+    // Must NOT use fileURLToPath — paired with import.meta.url for __dirname resolution
+    assert.doesNotMatch(src, /fileURLToPath/, "must not use fileURLToPath — paired with import.meta.url");
   });
 
   it("load-marketing-message-shards emits diagnostic log when i18n dir not found (not throws)", () => {

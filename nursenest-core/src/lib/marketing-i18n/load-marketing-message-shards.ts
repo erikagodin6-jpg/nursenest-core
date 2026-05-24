@@ -11,71 +11,39 @@ import type { I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
  * - never throws
  * - never blocks indefinitely (callers wrap with timeout)
  * - always returns something (empty object as worst-case)
- * - works in standalone builds via multi-root resolution
- *
- * Multi-root resolution strategy:
- *   1. process.cwd()/public/i18n  — primary; works in dev (package root CWD) and
- *                                   production standalone (.next/standalone CWD)
- *   2. process.cwd()/../public/i18n — secondary; handles monorepo CWD = workspace root
- *
- * process.cwd() is opaque to Turbopack/NFT static analysis — it resolves only at
- * runtime, so these constants do NOT expand the build-time file trace graph.
- * Replacing the previous import.meta.url + path.resolve(MODULE_DIR, "../../../.next/…")
- * pattern which caused NFT to trace the entire .next/standalone tree (11 000+ files).
+ * - bounded to a single deterministic directory so Turbopack/NFT tracing stays stable
  */
 
 const DEFAULT_LOCALE = "en";
 
 /**
- * Primary: CWD-relative public/i18n.
- * Dev:  nursenest-core/public/i18n  (CWD = package root)
- * Prod: .next/standalone/public/i18n (CWD = standalone dir, set by ensure-standalone-public.mjs)
+ * Canonical marketing i18n root. Production standalone builds copy `public/i18n`
+ * alongside the standalone output, so `process.cwd()` is sufficient. An explicit
+ * `NN_I18N_DIR` override is available for tests or bespoke environments.
  */
-const I18N_DIR_CWD = /* turbopackIgnore: true */ path.join(
-  process.cwd(),
-  "public",
-  "i18n",
-);
+const ENV_I18N_DIR = process.env.NN_I18N_DIR?.trim();
+const I18N_DIR = ENV_I18N_DIR ? path.resolve(ENV_I18N_DIR) : path.join(process.cwd(), "public", "i18n");
 
-/**
- * Secondary: workspace-root-relative fallback for environments where CWD is the
- * monorepo root rather than the package root (e.g. some CI runners).
- * Named I18N_DIR_MODULE_RELATIVE for contract-test compatibility; the value is
- * CWD-based so it remains statically untraceable by Turbopack/NFT.
- */
-const I18N_DIR_MODULE_RELATIVE = /* turbopackIgnore: true */ path.join(
-  process.cwd(),
-  "nursenest-core",
-  "public",
-  "i18n",
-);
-
-/** Resolved candidate list evaluated once at module load — avoids repeated existence checks. */
+/** Cached existence check so repeated lookups avoid touching the filesystem. */
 let _resolvedI18nDir: string | null | undefined = undefined;
 
 function resolveI18nDir(): string | null {
   if (_resolvedI18nDir !== undefined) return _resolvedI18nDir;
 
-  const candidates = [I18N_DIR_CWD, I18N_DIR_MODULE_RELATIVE];
-
-  for (const candidate of candidates) {
-    try {
-      if (existsSync(candidate)) {
-        _resolvedI18nDir = candidate;
-        return candidate;
-      }
-    } catch {
-      // continue to next candidate
+  try {
+    if (existsSync(I18N_DIR)) {
+      _resolvedI18nDir = I18N_DIR;
+      return _resolvedI18nDir;
     }
+  } catch {
+    // ignore and fall through to null logging below
   }
 
-  // No candidate found — log once, return null (triggers English fallback in all callers)
   _resolvedI18nDir = null;
   try {
-    const searched = candidates.join(", ");
     process.stderr.write(
-      `[nn-i18n] public/i18n not found at any candidate path. ` +
-        `Shard loading will use English defaults. Searched: [${searched}]\n`,
+      `[nn-i18n] public/i18n not found at expected path: ${I18N_DIR}. ` +
+        "Shard loading will use English defaults.\n",
     );
   } catch {
     // ignore logging failure
@@ -92,8 +60,7 @@ function readShard(
   shard: I18nShardFilename
 ): Record<string, string> {
   try {
-    const file = `${baseDir}/${locale}/${shard}.json`;
-    if (!existsSync(file)) return {};
+    const file = path.join(baseDir, locale, `${shard}.json`);
     const parsed = JSON.parse(readFileSync(file, "utf8"));
     return parsed && typeof parsed === "object" && !Array.isArray(parsed)
       ? (parsed as Record<string, string>)
