@@ -69,9 +69,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/nursenest:latest
-            ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}
           build-args: |
             NN_BUILD_COMMIT=${{ github.sha }}
             NN_BUILD_BRANCH=main
@@ -80,9 +78,8 @@ jobs:
             NN_TIMED_INCLUDE_NPM_PRUNE=1
             BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=2048
           shm-size: 2g
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           provenance: false
+          sbom: false
 
       - name: Build job summary (failure hints)
         if: failure() && steps.build.outcome == 'failure'
@@ -111,8 +108,7 @@ jobs:
           DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: |
           echo "Image pushed:"
-          echo "  latest: ghcr.io/${{ github.repository_owner }}/nursenest:latest"
-          echo "  sha:    ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}"
+          echo "  sha: ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}"
           echo "  digest: ${{ steps.build.outputs.digest }}"
 
           if [ -z "$DO_TOKEN" ]; then

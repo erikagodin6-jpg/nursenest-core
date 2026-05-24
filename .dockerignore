@@ -62,3 +62,10 @@ docs/verification-screenshots
 # Misc caches
 **/.eslintcache
 **/tsconfig.tsbuildinfo
+
+# Large test artifacts and screenshots — never needed at runtime
+nursenest-core/playwright/
+nursenest-core/playwright-report-full-regression/
+nursenest-core/playwright-report-full-regression/**
+playwright-report-full-regression/
+playwright-report-full-regression/**
