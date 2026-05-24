@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -9,6 +10,18 @@ import {
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 40;
+
+type FeedbackListRow = Prisma.UserFeedbackReportGetPayload<{
+  include: { user: { select: { id: true; email: true; name: true } } };
+}>;
+
+type FeedbackDetailRow = Prisma.UserFeedbackReportGetPayload<{
+  include: {
+    user: { select: { id: true; email: true; name: true } };
+    duplicateOf: { select: { id: true; summary: true; createdAt: true; status: true } };
+    childDuplicates: { select: { id: true; summary: true; createdAt: true; status: true } };
+  };
+}>;
 
 export default async function AdminUserFeedbackPage({
   searchParams,
@@ -59,7 +72,7 @@ export default async function AdminUserFeedbackPage({
           },
         })
       : Promise.resolve(null),
-  ]).catch(() => [[], 0, null] as const);
+  ]).catch((): [FeedbackListRow[], number, FeedbackDetailRow | null] => [[], 0, null]);
 
   return (
     <AdminFeedbackInboxView

@@ -1,14 +1,27 @@
 import Link from "next/link";
+import type { Prisma } from "@prisma/client";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 export const dynamic = "force-dynamic";
 
+type PathwayLessonIndexRow = Prisma.PathwayLessonGetPayload<{
+  select: {
+    id: true;
+    pathwayId: true;
+    slug: true;
+    title: true;
+    status: true;
+    locale: true;
+    updatedAt: true;
+  };
+}>;
+
 export default async function AdminPathwayLessonsIndexPage() {
   await requireAdmin();
 
-  let rows: Awaited<ReturnType<typeof prisma.pathwayLesson.findMany>> = [];
+  let rows: PathwayLessonIndexRow[] = [];
   try {
     rows = await prisma.pathwayLesson.findMany({
       where: { locale: "en" },

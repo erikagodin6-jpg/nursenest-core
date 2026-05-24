@@ -13,6 +13,7 @@ import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-d
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 export const dynamic = "force-dynamic";

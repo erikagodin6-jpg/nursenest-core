@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { SocialStatKey, SocialVisibilityScope } from "@prisma/client";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
 import { SocialStudySettingsClient } from "@/components/student/social-study-settings-client";

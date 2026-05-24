@@ -7,9 +7,9 @@ import { test as base } from "@playwright/test";
 import { attachPageObservers, type PageObservers } from "../helpers/attach-observers";
 
 export const test = base.extend<{ observers: PageObservers }>({
-  observers: async ({ page }, use) => {
+  observers: async ({ page }, runFixture) => {
     const observers = attachPageObservers(page, { profile: "public" });
-    await use(observers);
+    await runFixture(observers);
     observers.dispose();
   },
 });

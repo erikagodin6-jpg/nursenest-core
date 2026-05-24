@@ -44,6 +44,7 @@ import { BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-ca
 import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
@@ -153,11 +154,11 @@ async function LearnerDashboardHeavyContent({
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
-  let studySettings = null;
+  let studySettings = DEFAULT_STUDY_SETTINGS;
   try {
     studySettings = await loadStudySettings(userId);
   } catch {
-    studySettings = null;
+    studySettings = DEFAULT_STUDY_SETTINGS;
   }
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
 
@@ -306,7 +307,7 @@ async function LearnerDashboardHeavyContent({
           userId,
           entitlement,
           pathwayId: preferredPathwayId,
-          readiness: studySnap?.readiness ?? null,
+          readiness: premiumSnapshot.readiness,
           topicTrends: premiumSnapshot.topicPerformance?.trends,
           weakTopics: studySnap?.weakTopics ?? undefined,
         });

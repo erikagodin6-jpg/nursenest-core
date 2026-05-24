@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T14:54:49.667Z",
+  "generatedAt": "2026-05-24T12:19:42.469Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
@@ -660,6 +660,69 @@
       ],
       "exclusions": [
         {
+          "id": "us-pn-angina",
+          "slug": "us-pn-angina",
+          "title": "Angina – PN scope",
+          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
+          "id": "us-pn-dysrhythmias",
+          "slug": "us-pn-dysrhythmias",
+          "title": "Dysrhythmias – PN scope",
+          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
+          "id": "us-pn-potassium-imbalance",
+          "slug": "us-pn-potassium-imbalance",
+          "title": "Potassium imbalance – PN scope",
+          "reason": "Section \"introduction\" below minimum word count (29 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (42 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (58 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
+          "id": "us-pn-insulin-hypoglycemia",
+          "slug": "us-pn-insulin-hypoglycemia",
+          "title": "Insulin & hypoglycemia – PN scope",
+          "reason": "Section \"introduction\" below minimum word count (30 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (43 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (59 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
+          "id": "us-pn-anticoagulants",
+          "slug": "us-pn-anticoagulants",
+          "title": "Anticoagulants – PN scope",
+          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
+          "id": "us-pn-antibiotics",
+          "slug": "us-pn-antibiotics",
+          "title": "Antibiotics – PN scope",
+          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
+          "id": "us-pn-general-nursing-clinical",
+          "slug": "us-pn-general-nursing-clinical",
+          "title": "General nursing clinical judgment – PN",
+          "reason": "Section \"introduction\" below minimum word count (31 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (44 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (60 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
+        },
+        {
           "id": "documentation-do-nots",
           "slug": "documentation-do-nots",
           "title": "Documentation Do-Nots",
@@ -844,69 +907,6 @@
           "slug": "restraint-monitoring-requirements",
           "title": "Restraint Monitoring Requirements",
           "reason": "Section \"introduction\" below minimum word count (27 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (40 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (56 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-angina",
-          "slug": "us-pn-angina",
-          "title": "Angina – PN scope",
-          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-dysrhythmias",
-          "slug": "us-pn-dysrhythmias",
-          "title": "Dysrhythmias – PN scope",
-          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-potassium-imbalance",
-          "slug": "us-pn-potassium-imbalance",
-          "title": "Potassium imbalance – PN scope",
-          "reason": "Section \"introduction\" below minimum word count (29 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (42 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (58 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-insulin-hypoglycemia",
-          "slug": "us-pn-insulin-hypoglycemia",
-          "title": "Insulin & hypoglycemia – PN scope",
-          "reason": "Section \"introduction\" below minimum word count (30 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (43 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (59 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-anticoagulants",
-          "slug": "us-pn-anticoagulants",
-          "title": "Anticoagulants – PN scope",
-          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-antibiotics",
-          "slug": "us-pn-antibiotics",
-          "title": "Antibiotics – PN scope",
-          "reason": "Section \"introduction\" below minimum word count (28 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (41 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (57 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-          "reasonCode": "not_public_complete",
-          "allowed": true,
-          "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
-        },
-        {
-          "id": "us-pn-general-nursing-clinical",
-          "slug": "us-pn-general-nursing-clinical",
-          "title": "General nursing clinical judgment – PN",
-          "reason": "Section \"introduction\" below minimum word count (31 < 180).; Introduction should contain at least 2 real paragraphs (split with a blank line).; Section \"pathophysiology_overview\" below minimum word count (44 < 140).; Section \"signs_symptoms\" below minimum word count (34 < 120).; Missing required premium section: red_flags; Section \"labs_diagnostics\" below minimum word count (30 < 100).; Section \"nursing_assessment_interventions\" below minimum word count (60 < 180).; Section \"clinical_pearls\" below minimum word count (52 < 100).; Section \"client_education\" below minimum word count (48 < 100).; Missing required premium section: tier_specific_relevance; Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.; Missing required premium section: related_next_steps; Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).; Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
           "reasonCode": "not_public_complete",
           "allowed": true,
           "allowlistComment": "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected."
@@ -1237,7 +1237,7 @@
         }
       ],
       "unexpectedExclusionCount": 0,
-      "sampleRenderableLessonPath": "/us/pn/nclex-pn/lessons/acute-coronary-syndrome-gold",
+      "sampleRenderableLessonPath": "/us/pn/nclex-pn/lessons/clinical-casebook-acs-chest-pain-gold",
       "forcePublishEnabled": false,
       "forcePublishedLessons": []
     },

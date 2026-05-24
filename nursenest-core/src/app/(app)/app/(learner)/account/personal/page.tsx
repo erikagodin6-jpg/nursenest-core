@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPersonalInfoForm } from "@/components/student/learner-personal-info-form";

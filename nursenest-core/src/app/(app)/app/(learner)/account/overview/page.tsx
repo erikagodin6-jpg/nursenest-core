@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { TrialStatus } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import {
@@ -25,7 +26,10 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { buildGovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
-import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
+import {
+  loadLearnerProfileActivity,
+  type LearnerProfileActivity,
+} from "@/lib/learner/load-learner-profile-activity";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import {
   remediationCatPracticeHref,
@@ -59,6 +63,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const ACCOUNT_OVERVIEW_DB_TIMEOUT_MS = 1500;
+const EMPTY_PROFILE_ACTIVITY: LearnerProfileActivity = { mocks: [], practiceTests: [], lessons: [] };
 
 function tierLabel(t: string): string {
   return t.replace(/_/g, " ");
@@ -135,7 +140,7 @@ export default async function LearnerAccountOverviewPage() {
       ACCOUNT_OVERVIEW_DB_TIMEOUT_MS,
       { scope: "learner_account_overview", label: "subscription_summary" },
     ),
-    loadLearnerProfileActivity(userId).catch(() => null),
+    loadLearnerProfileActivity(userId).catch(() => EMPTY_PROFILE_ACTIVITY),
   ]);
 
   let premiumSnapshot = null;

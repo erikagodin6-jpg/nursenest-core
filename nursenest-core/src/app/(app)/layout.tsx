@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { Session } from "next-auth";
 import type { ReactNode } from "react";
 
 import {
@@ -35,10 +36,10 @@ const authTraceInfo = createTraceInfo(import.meta, {
   phase: "auth",
 });
 
-async function getSessionSafe() {
+async function getSessionSafe(): Promise<Session | null> {
   const trace = startBuildTrace(getSessionTraceInfo);
 
-  let session: Awaited<ReturnType<typeof import("@/lib/auth")["auth"]>> | null = null;
+  let session: Session | null = null;
   let skippedReason: string | undefined;
 
   try {

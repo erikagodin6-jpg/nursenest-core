@@ -63,7 +63,7 @@
     "verify:standalone-artifact": "node scripts/verify-standalone-artifact.mjs",
     "verify:dockerfile-npm-scripts": "node scripts/verify-dockerfile-npm-scripts.mjs",
     "production:build": "bash ../scripts/production-build.sh",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=9999",
     "check": "tsc",
     "test": "node scripts/run-node-test-filter.mjs",
     "typecheck": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && tsc --noEmit --incremental false",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";

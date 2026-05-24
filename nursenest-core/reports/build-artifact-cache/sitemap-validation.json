@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "0c5527755d156c2fbfbc250bb61523ca64ec195deb57f6062779f9a5732014a5",
-  "generatedAt": "2026-05-23T08:16:02.426Z",
+  "fingerprint": "be56de5636a4fd2139a72daaf9b98c6ee4f79aaad58eccc75d81419038a06b05",
+  "generatedAt": "2026-05-24T12:22:21.863Z",
   "inputs": [
     {
       "type": "file",
@@ -11,10 +11,6 @@
     {
       "type": "file",
       "path": "scripts/sitemap-segmentation-validate.mts"
-    },
-    {
-      "type": "file",
-      "path": "src/app/_nn_bootstrap_ready_check__/route.ts"
     },
     {
       "type": "file",
@@ -415,6 +411,674 @@
     {
       "type": "file",
       "path": "src/app/(admin)/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/fill-in-the-blank/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/lab-drills/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/matching/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/medication-drills/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/ordering/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/create/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/decks/[deckId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/decks/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/public/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/(study-tools)/study-tools/shared/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/_lib/learner-report-card-route.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/activity/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/analytics/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/analytics/analytics-detail-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/analytics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/billing/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/cat-history/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/focus-areas/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/focus-areas/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/mistakes/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/mistakes/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/motivation/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/motivation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/notes/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/notes/notes-index-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/notes/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/overview/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/personal/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/progress/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/question-bank-performance/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/readiness/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/report-card/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/report/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/review-queue/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/security/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/settings/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/social/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/study-history/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/study-preferences/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/support/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/baseline-assessment/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/cases/cnple/[caseId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/cases/cnple/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/cat/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-scenarios/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-scenarios/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-skills/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-skills/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/coach/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/command-center/command-center-redirect.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/command-center/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/ecg-video-quiz/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exam-plan/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exam-plan/exam-plan-lazy-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exam-plan/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exams/attempts/[id]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exams/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exams/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/exams/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/[deckRef]/loading.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/custom/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/loading.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/weak-areas/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/guided/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/labs/[category]/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/labs/[category]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/labs/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/learner-hub-trace-import.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/learner-shell-import-guardrail.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/learner-shell-staff-override.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/[id]/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/[id]/loading.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/[id]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/loading.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/med-calculations/[category]/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/med-calculations/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/onboarding/onboarding-page-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/onboarding/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/osce/[stationId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/osce/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-exams/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/[id]/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/[id]/loading.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/[id]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/[id]/results/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/cat-insights/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/start/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/printables/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/printables/printables-learner-hub.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/profile/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/bank/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/question-bank-gated-server.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/session/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/quick-start/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/quick-start/quick-start-flow-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/review/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/review/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/review/review-queue-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/start-studying/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/strategy/[strategyKey]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/strategy/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/strategy/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/study-coach/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/study-plan/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/loading.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-advanced/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-advanced/route-contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-interpretation/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-interpretation/lessons/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-interpretation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-interpretation/practice/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg-interpretation/quiz/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/advanced/lessons/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/advanced/scenarios/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/advanced/video-drills/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/advanced/worksheets/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/basic/lessons/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/basic/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/basic/quizzes/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/basic/worksheets/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/pediatric/cases/[id]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/pediatric/cases/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/ecg/pediatric/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/hemodynamics-advanced/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/hemodynamics-advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/hemodynamics/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/hemodynamics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/lab-values/advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/lab-values/basic/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/lab-values/basics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/lab-values/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/lab-values/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/labs-advanced/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/labs-advanced/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/labs-advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/rt-ventilator/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/rt-ventilator/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/rt-ventilator/scenarios/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/modules/rt-ventilator/waveforms/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/profile/page.tsx"
     },
     {
       "type": "file",
@@ -1798,11 +2462,27 @@
     },
     {
       "type": "file",
-      "path": "src/app/(student)/layout.tsx"
+      "path": "src/app/(runtime)/_nn_bootstrap_ready_check__/route.ts"
     },
     {
       "type": "file",
-      "path": "src/app/(student)/profile/page.tsx"
+      "path": "src/app/(runtime)/healthz/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(runtime)/internal/courses/[courseId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(runtime)/internal/courses/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(runtime)/internal/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(runtime)/readyz/route.ts"
     },
     {
       "type": "file",
@@ -3306,23 +3986,11 @@
     },
     {
       "type": "file",
+      "path": "src/app/global-error.client.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/global-error.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/healthz/route.ts"
-    },
-    {
-      "type": "file",
-      "path": "src/app/internal/courses/[courseId]/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/internal/courses/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/internal/layout.tsx"
     },
     {
       "type": "file",
@@ -3330,163 +3998,7 @@
     },
     {
       "type": "file",
-      "path": "src/app/modules/ecg-advanced/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-advanced/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-advanced/route-contract.test.ts"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-interpretation/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-interpretation/lessons/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-interpretation/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-interpretation/practice/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg-interpretation/quiz/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/advanced/lessons/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/advanced/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/advanced/scenarios/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/advanced/video-drills/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/advanced/worksheets/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/basic/lessons/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/basic/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/basic/quizzes/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/basic/worksheets/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/pediatric/cases/[id]/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/pediatric/cases/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/ecg/pediatric/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/hemodynamics-advanced/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/hemodynamics-advanced/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/hemodynamics/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/hemodynamics/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/lab-values/advanced/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/lab-values/basic/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/lab-values/basics/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/lab-values/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/lab-values/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/labs-advanced/[slug]/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/labs-advanced/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/labs-advanced/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/rt-ventilator/layout.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/rt-ventilator/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/rt-ventilator/scenarios/page.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/modules/rt-ventilator/waveforms/page.tsx"
-    },
-    {
-      "type": "file",
       "path": "src/app/not-found.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/readyz/route.ts"
     },
     {
       "type": "file",
@@ -6569,6 +7081,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 9162
+    "durationMs": 36055
   }
 }

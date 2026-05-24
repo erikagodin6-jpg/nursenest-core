@@ -13,6 +13,7 @@ import { AdminBlogControlPanelClient } from "@/components/admin/admin-blog-contr
 import { AdminAiGenerationProvider } from "@/components/admin/admin-ai-generation-context";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { getAdminBlogOperationsStatus } from "@/lib/blog/admin-blog-operations-status";
+import type { AdminBlogOperationsStatus } from "@/lib/blog/admin-blog-operations-status";
 import { parseBlogBatchItemRepairMeta } from "@/lib/blog/blog-generation-repair-classifier";
 import { AdminBlogRepairRetryButton } from "@/components/admin/admin-blog-repair-retry-button";
 import { formatDisplayLabel, formatPrismaEnumLabel, humanizeAdminOperationalMessage } from "@/lib/ui/format-display-label";
@@ -57,6 +58,20 @@ function automationBadgeClass(status: ContentAutomationLogStatus): string {
 function fmtDate(value: Date | null | undefined): string {
   return value ? value.toISOString().replace("T", " ").slice(0, 16) : "No date";
 }
+
+const BLOG_OPS_STATUS_FALLBACK: AdminBlogOperationsStatus = {
+  canonicalBlogPostCount: 0,
+  localizedVariantCount: null,
+  staticFallbackEnabled: false,
+  productionMode: process.env.NODE_ENV === "production",
+  translationGenerationAvailable: false,
+  recentActivity: {
+    lastGenerationAttempt: null,
+    lastGenerationSuccess: null,
+    lastGenerationFailure: null,
+    lastWeakUpgradeRun: null,
+  },
+};
 
 export default async function AdminBlogConsolePage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
   await requireAdmin();
@@ -154,7 +169,7 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
       take: 8,
       select: { id: true, jobType: true, topic: true, summary: true, error: true, status: true, createdAt: true, blogPostId: true },
     }),
-  ]).catch(() => [null, [], [], [], [], [], []] as const);
+  ]).catch(() => [BLOG_OPS_STATUS_FALLBACK, [], [], [], [], [], []] as const);
 
   const queuedCount =
     campaignItems.filter(

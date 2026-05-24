@@ -275,3 +275,146 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   );
 }
+
+export default function EcgHubPage() {
+  const breadcrumbs = ecgHubBreadcrumbs();
+  const jsonLdGraph = [
+    {
+      "@type": "WebPage",
+      "@id": `${SITE_ORIGIN}${PATH}#webpage`,
+      url: `${SITE_ORIGIN}${PATH}`,
+      name: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
+      inLanguage: "en-CA",
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_ORIGIN}${PATH}#faq`,
+      mainEntity: FAQ_ITEMS.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    },
+  ];
+
+  return (
+    <main className="bg-[var(--semantic-page-bg)] text-[var(--semantic-text-primary)]">
+      <ClinicalAcademyJsonLdGraph graph={jsonLdGraph} />
+      <section className="border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+          <AcademyBreadcrumbBar resolution={breadcrumbs} pathname={PATH} />
+          <div className="grid gap-8 lg:grid-cols-[1fr_340px] lg:items-start">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
+                ECG academy
+              </p>
+              <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
+                {PAGE_H1}
+              </h1>
+              <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--semantic-text-secondary)]">
+                {PAGE_DESCRIPTION}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/modules/ecg/basic/lessons"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--semantic-brand)] px-5 py-3 text-sm font-semibold text-white"
+                >
+                  Start ECG lessons
+                  <ArrowRight className="h-4 w-4" aria-hidden />
+                </Link>
+                <Link
+                  href="/advanced-ecg-nursing"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--semantic-border-soft)] px-5 py-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
+                >
+                  Explore advanced ECG
+                  <Zap className="h-4 w-4" aria-hidden />
+                </Link>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-raised)] p-5">
+              <h2 className="text-base font-semibold">Integrated study loop</h2>
+              <ul className="mt-4 space-y-3 text-sm text-[var(--semantic-text-secondary)]">
+                {[
+                  "Rhythm recognition",
+                  "Clinical reasoning",
+                  "Adaptive practice",
+                  "Flashcard reinforcement",
+                ].map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-6xl gap-4 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8">
+        {CTA_ITEMS.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.key}
+              href={item.href}
+              className={`rounded-2xl border p-5 transition ${TONE_CLASSES[item.tone]}`}
+            >
+              <Icon className={`h-5 w-5 ${TONE_ICON_CLASSES[item.tone]}`} aria-hidden />
+              <h2 className="mt-4 text-lg font-semibold">{item.label}</h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--semantic-text-secondary)]">
+                {item.description}
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+                Open
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </span>
+            </Link>
+          );
+        })}
+      </section>
+
+      <section className="border-y border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <CoverageList title="Core ECG coverage" items={COVERAGE_CORE} />
+          <CoverageList title="Advanced ECG coverage" items={COVERAGE_ADVANCED} />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold">ECG topic clusters</h2>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {CLUSTER_LINKS.map((link) => (
+            <Link
+              key={link.slug}
+              href={`/ecg/${link.slug}`}
+              className="rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-text-primary)]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function CoverageList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h2 className="text-xl font-bold">{title}</h2>
+      <ul className="mt-4 space-y-2 text-sm leading-6 text-[var(--semantic-text-secondary)]">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

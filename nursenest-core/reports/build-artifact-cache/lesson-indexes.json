@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "907b2000db06071bd42ceb23f4793b4d9ad4382fc96e48d8dc02c4927359cf02",
-  "generatedAt": "2026-05-22T14:54:52.645Z",
+  "fingerprint": "7e89d1acabf1dd6e50c7bed6c49025102f2fa58378e046ccc519af25ae89f07f",
+  "generatedAt": "2026-05-24T12:21:45.419Z",
   "inputs": [
     {
       "type": "file",
@@ -1778,8 +1778,8 @@
     "/root/nursenest-core/nursenest-core/src/content/pathway-lessons/generated-indexes/manifest.json"
   ],
   "metadata": {
-    "verifyMode": "light",
-    "buildLessonIndexesMs": 113629,
-    "verifyLessonIndexesMs": 2626
+    "verifyMode": "deep",
+    "buildLessonIndexesMs": 119879,
+    "verifyLessonIndexesMs": 122693
   }
 }

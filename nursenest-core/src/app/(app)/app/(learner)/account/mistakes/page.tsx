@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BookX, Flame } from "lucide-react";

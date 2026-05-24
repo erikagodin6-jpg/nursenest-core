@@ -16,6 +16,7 @@ import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-la
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 
 import { prisma } from "@/lib/db";
@@ -196,7 +197,7 @@ export default async function PracticeTestRunPage({
     userId || "unknown",
   );
 
-  let studySettings = null;
+  let studySettings = DEFAULT_STUDY_SETTINGS;
 
   try {
     studySettings = await loadStudySettings(userId);
@@ -206,7 +207,7 @@ export default async function PracticeTestRunPage({
       error,
     );
 
-    studySettings = null;
+    studySettings = DEFAULT_STUDY_SETTINGS;
   }
 
   let initialPathwaySurface:

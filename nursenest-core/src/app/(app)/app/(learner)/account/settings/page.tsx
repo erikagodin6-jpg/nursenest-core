@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { AccountDeleteDangerZone } from "@/components/account/account-delete-danger-zone";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";

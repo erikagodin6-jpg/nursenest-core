@@ -305,7 +305,7 @@ const LearnerShellLayout = traceLayout(
   let studyNextBlock: Awaited<ReturnType<typeof loadLearnerStudyNextBlock>> = null;
   if (!skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
     studyNextBlock = await safeOptional(
-      () => withBuildTrace(learnerStudyNextTrace, () => loadLearnerStudyNextBlock(userId, entitlement)),
+      async () => await withBuildTrace(learnerStudyNextTrace, () => loadLearnerStudyNextBlock(userId, entitlement)),
       null,
       { label: "learner_study_next_block" },
     );

@@ -137,6 +137,7 @@ export type ResolveNursingGlossaryTermInput = {
   topicSlug: string;
 };
 export type ResolveCaseStudiesBreadcrumbsInput = { kind: "case-studies" };
+export type ResolveClinicalInterpretationHubInput = { kind: "clinical-interpretation-hub" };
 
 export type BreadcrumbResolverInput =
   | ResolvePathwayLessonDetailBreadcrumbsInput
@@ -156,7 +157,8 @@ export type BreadcrumbResolverInput =
   | ResolveGlossaryTermBreadcrumbsInput
   | ResolveNursingGlossaryHubInput
   | ResolveNursingGlossaryTermInput
-  | ResolveCaseStudiesBreadcrumbsInput;
+  | ResolveCaseStudiesBreadcrumbsInput
+  | ResolveClinicalInterpretationHubInput;
 
 export function categoryBreadcrumbFromLesson(
   lesson: Pick<PathwayLessonRecord, "slug" | "title" | "topic">,
@@ -274,6 +276,19 @@ export function resolveBreadcrumbs(input: BreadcrumbResolverInput): BreadcrumbRe
         canonicalRootId: "case_studies",
       });
     }
+    case "clinical-interpretation-hub":
+      return applyGovernedBreadcrumbResolution({
+        resolution: {
+          crumbs: [
+            { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+            { name: "Clinical interpretation", href: undefined },
+          ],
+          schemaItems: [],
+        },
+        surface: "interpretation_guide",
+        pathname: "/clinical-interpretation",
+        canonicalRootId: "clinical_interpretation",
+      });
     default:
       return applyGovernedBreadcrumbResolution({
         resolution: { crumbs: [], schemaItems: [] },
