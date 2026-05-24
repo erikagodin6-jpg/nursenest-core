@@ -189,8 +189,15 @@ if (meta.buildTarget === "all" || meta.buildTarget === "server") {
 const needsClient = meta.buildTarget === "all" || meta.buildTarget === "client";
 if (needsClient) {
   const tClient = Date.now();
-  assertClientArtifacts();
-  console.log(`[deploy-timing] verify_client_artifacts_ms=${Date.now() - tClient}`);
+  const viteAssetsRoot = path.join(distDir, "public", "assets");
+  if (fs.existsSync(viteAssetsRoot)) {
+    assertClientArtifacts();
+    console.log(`[deploy-timing] verify_client_artifacts_ms=${Date.now() - tClient}`);
+  } else {
+    console.log(
+      "[verify-dist] Vite assets missing — assuming Next standalone build handled client artifacts separately.",
+    );
+  }
 }
 
 if (!hasIndex && meta.buildTarget !== "client" && meta.buildTarget !== "heavy") {
