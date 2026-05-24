@@ -29,6 +29,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function LocalizedForgotPasswordPage({ params }: Props) {
-  const { locale } = await params;
-  return <MarketingForgotPasswordPage locale={locale} />;
+  await params;
+  return <MarketingForgotPasswordPage />;
 }

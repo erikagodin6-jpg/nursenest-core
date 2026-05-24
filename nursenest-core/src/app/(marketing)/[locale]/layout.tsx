@@ -173,7 +173,7 @@ const MarketingLocaleLayout = traceLayout(
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
   // PERF: getStaffSessionSafe() removed from blocking Promise.all — saves ~100ms TTFB.
   // Header/footer are client components with useSession(); staff UI activates client-side.
-  void withBuildTrace(staffSessionTrace, () => getStaffSessionSafe()).catch(() => null);
+  void Promise.resolve(withBuildTrace(staffSessionTrace, () => getStaffSessionSafe())).catch(() => null);
   const staffSession = null;
   const [publicContentOverrides, serverNarrowViewportHint] = await Promise.all([
     withBuildTrace(publicContentTrace, () => loadPublicContentOverridesForLocaleSafe(locale)),
