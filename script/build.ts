@@ -702,6 +702,21 @@ function resolvePackageJsonForNodeRequire(): string {
   return repoPath("package.json");
 }
 
+function dumpHandles() {
+  // @ts-ignore
+  const handles = process._getActiveHandles?.() ?? [];
+  // @ts-ignore
+  const requests = process._getActiveRequests?.() ?? [];
+  console.log("\n[debug] ACTIVE HANDLES:");
+  for (const h of handles) {
+    console.log("-", h?.constructor?.name);
+  }
+  console.log("\n[debug] ACTIVE REQUESTS:");
+  for (const r of requests) {
+    console.log("-", r?.constructor?.name);
+  }
+}
+
 async function main() {
   const workspaceRequire = createRequire(resolvePackageJsonForNodeRequire());
   runEsbuild = (workspaceRequire("esbuild") as typeof import("esbuild")).build;
@@ -709,6 +724,10 @@ async function main() {
     (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite")
   ).build;
   await buildAll();
+  dumpHandles();
+  await Promise.resolve();
+  console.log("[build] forcing clean process exit");
+  process.exit(0);
 }
 
 main().catch((err) => {
