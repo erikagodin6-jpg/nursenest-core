@@ -118,8 +118,8 @@ export type PracticeAdaptiveCreatePayload = {
   catSelectionBasis: PracticeAdaptiveSelectionBasis;
   catPresentationMode: "practice";
   catExamFeedbackMode: "study";
-  /** Must be "practice" so the server uses practiceCatBounds instead of readiness-config bounds. */
-  catAdaptiveSessionType: "practice";
+  /** Fixed review uses practice bounds; continuous review uses CAT advance until manual end. */
+  catAdaptiveSessionType: "practice" | "cat";
   pathwayId: string;
   timedMode: false;
   timeLimitSec: null;
