@@ -57,6 +57,10 @@ export function normalizeSnapshotShape(
   pathwayId: string | null,
 ): RnLearnerStateSnapshot {
   const base = EMPTY_LEARNER_STATE(pathwayId);
+  const legacySnapshot = snapshot as unknown as Record<string, unknown>;
+  const legacyFocusAreaSlugs = Array.isArray(legacySnapshot.focusAreaSlugs)
+    ? legacySnapshot.focusAreaSlugs.filter((slug): slug is string => typeof slug === "string")
+    : [];
   return {
     ...base,
     ...snapshot,
@@ -71,13 +75,12 @@ export function normalizeSnapshotShape(
       : base.competencyStates,
     measurementWeaknesses: Array.isArray(snapshot.measurementWeaknesses)
       ? snapshot.measurementWeaknesses
-      : base.measurementWeaknesses,
+      : legacyFocusAreaSlugs.length > 0
+        ? legacyFocusAreaSlugs
+        : base.measurementWeaknesses,
     reasoningPatterns: Array.isArray(snapshot.reasoningPatterns)
       ? snapshot.reasoningPatterns
       : base.reasoningPatterns,
-    focusAreaSlugs: Array.isArray(snapshot.focusAreaSlugs)
-      ? snapshot.focusAreaSlugs
-      : base.focusAreaSlugs,
   };
 }
 
