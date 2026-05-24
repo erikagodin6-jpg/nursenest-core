@@ -73,3 +73,13 @@ test.describe("lesson detail premium shells", () => {
 
   test("dark theme class: lesson shell still renders", async ({ page }) => {
     await page.emulateMedia({
+      colorScheme: "dark",
+    });
+    await page.goto(`${baseURL}/us/rn/nclex-rn/lessons/us-rn-pulmonary-embolism`, {
+      waitUntil: "domcontentloaded",
+      timeout: 180_000,
+    });
+    await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
+    await expect(page.locator("article.nn-lesson-article-flow")).toBeVisible();
+  });
+});

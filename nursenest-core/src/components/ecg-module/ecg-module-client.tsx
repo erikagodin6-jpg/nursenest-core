@@ -180,17 +180,17 @@ function CurriculumLessonCard({
 
   const base = { rhythm_tag: rhythmTag, level, mode, question_id: questionId, is_correct: isCorrect };
 
+  useEffect(() => {
+    if (registryEntry) return;
+    trackEcgCurriculumUnitMissing(
+      { rhythm_tag: rhythmTag, level, mode, question_id: questionId },
+      { lookupType: "rhythmTag" },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registryEntry, rhythmTag]);
+
   // Graceful fallback for unknown tags (not in registry at all)
   if (!registryEntry) {
-    // Fire observability event — this should not happen in production if seeding is correct
-    useEffect(() => {
-      trackEcgCurriculumUnitMissing(
-        { rhythm_tag: rhythmTag, level, mode, question_id: questionId },
-        { lookupType: "rhythmTag" },
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rhythmTag]);
-
     return (
       <div
         className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_05%,var(--semantic-surface))] px-4 py-3"

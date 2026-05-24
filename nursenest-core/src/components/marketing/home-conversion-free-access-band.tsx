@@ -20,13 +20,7 @@ function safeT(
  * Fully defensive — never crashes if i18n is missing or broken.
  */
 export function HomeConversionFreeAccessBand() {
-  let t: ((key: string) => string) | undefined;
-
-  try {
-    t = useMarketingI18n()?.t;
-  } catch {
-    // fallback safe mode
-  }
+  const t = useMarketingI18n().t;
 
   return (
     <section

@@ -39,19 +39,10 @@ function safePath(locale: string, path: string) {
 }
 
 export function HomeExamSelectionSection() {
-  let locale = "en";
-  let t: ((k: string) => string) | undefined;
-
-  try {
-    const ctx = useMarketingI18n();
-    locale = safeLocale(ctx.locale);
-    t = ctx.t;
-  } catch {}
-
-  let region: MarketingRegionToggle = "CA";
-  try {
-    region = safeRegion(useNursenestRegion().region) as MarketingRegionToggle;
-  } catch {}
+  const ctx = useMarketingI18n();
+  const locale = safeLocale(ctx.locale);
+  const t = ctx.t;
+  const region = safeRegion(useNursenestRegion().region) as MarketingRegionToggle;
 
   let hubs: Record<string, string> = {
     rn: marketingExamHubPath(region, "rn"),

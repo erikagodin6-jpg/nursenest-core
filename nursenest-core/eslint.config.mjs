@@ -1,6 +1,9 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
+import nextPlugin from "@next/eslint-plugin-next";
+import reactPlugin from "eslint-plugin-react";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 /**
  * ESLint flat config (v9).
@@ -18,7 +21,12 @@ const eslintConfig = defineConfig([
 
   // ── React Hooks rules (explicit — not inherited, so they can't silently regress) ──
   {
-    plugins: { "react-hooks": reactHooks },
+    plugins: {
+      "@next/next": nextPlugin,
+      "@typescript-eslint": tsPlugin,
+      react: reactPlugin,
+      "react-hooks": reactHooks,
+    },
     rules: {
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",

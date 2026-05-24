@@ -26,16 +26,8 @@ function safeCall(fn: any, fallback: any) {
 }
 
 export function HomeFeatureDeepDivesSection() {
-  let locale = "en";
-  let region: MarketingRegionToggle = "CA";
-
-  try {
-    locale = safe(useMarketingI18n()?.locale, "en");
-  } catch {}
-
-  try {
-    region = safe(useNursenestRegion()?.region, "CA") as MarketingRegionToggle;
-  } catch {}
+  const locale = safe(useMarketingI18n().locale, "en");
+  const region = safe(useNursenestRegion().region, "CA") as MarketingRegionToggle;
 
   const loc = (path: string) => {
     try {

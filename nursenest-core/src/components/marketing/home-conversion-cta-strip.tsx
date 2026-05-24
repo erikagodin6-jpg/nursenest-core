@@ -46,20 +46,10 @@ function safeLocalizedPath(locale: string, path: string): string {
 }
 
 export function HomeConversionCtaStrip({ placement }: { placement: HomeConversionCtaStripPlacement }) {
-  let locale = "en";
-  let t: ((key: string) => string) | undefined;
-
-  try {
-    const i18n = useMarketingI18n();
-    locale = i18n.locale || "en";
-    t = i18n.t;
-  } catch {}
-
-  let region = "CA";
-
-  try {
-    region = useNursenestRegion().region || "CA";
-  } catch {}
+  const i18n = useMarketingI18n();
+  const locale = i18n.locale || "en";
+  const t = i18n.t;
+  const region = useNursenestRegion().region || "CA";
 
   return (
     <div

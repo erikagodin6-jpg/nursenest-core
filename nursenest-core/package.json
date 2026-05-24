@@ -122,7 +122,6 @@
     "capture:rn-practice-exam-in-session": "npx playwright test tests/e2e/preview/rn-practice-exam-in-session.capture.spec.ts --project=chromium",
     "capture:rn-practice-exam-hub": "npx playwright test tests/e2e/preview/rn-practice-exam-hub.capture.spec.ts --project=chromium",
     "capture:rn-practice-cat-mockups": "npm run capture:rn-cat-exam-in-session && npm run capture:rn-practice-exam-in-session && npm run capture:rn-practice-exam-hub",
-    "capture:rn-practice-exam-hub": "npx playwright test tests/e2e/preview/rn-practice-exam-hub.capture.spec.ts --project=chromium",
     "visual-qa:capture": "node scripts/validate-visual-qa-env.mjs && node scripts/validate-visual-qa-env.mjs --require-learner-visual-storage && npx playwright test -c playwright.visual-qa.config.ts --project=visual-qa-route-pack",
     "visual-qa:critical": "node scripts/validate-visual-qa-env.mjs --require-learner-visual-storage && npx playwright test -c playwright.visual-qa.config.ts --project=visual-qa-critical-regression",
     "aesthetic-before-after:capture": "npx playwright test -c playwright.aesthetic-audit.config.ts --project=aesthetic-before-after tests/e2e/visual-qa/aesthetic-before-after.capture.spec.ts",
@@ -538,11 +537,9 @@
     "ws": "^8.20.0",
     "xlsx": "^0.18.5",
     "zod": "^3.25.76",
-    "zod-validation-error": "^3.5.4"
+    "zod-validation-error": "^5.0.0"
   },
   "devDependencies": {
-    "eslint": "^9.0.0",
-    "eslint-config-next": "16.2.6",
     "@aws-sdk/client-s3": "^3.750.0",
     "@aws-sdk/lib-storage": "^3.750.0",
     "@babel/generator": "^7.29.1",
@@ -574,6 +571,8 @@
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.4",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.2.6",
     "mime-types": "^2.1.35",
     "png-to-ico": "^2.1.8",
     "postcss": "^8.5.6",

@@ -30,19 +30,10 @@ function safePath(locale: string, path: string) {
 }
 
 export function HomeConversionHero(props: { questionCount?: number; lessonCount?: number }) {
-  let locale = "en";
-  let t: ((k: string) => string) | undefined;
-
-  try {
-    const ctx = useMarketingI18n();
-    locale = safeLocale(ctx.locale);
-    t = ctx.t;
-  } catch {}
-
-  let region = "CA";
-  try {
-    region = safeRegion(useNursenestRegion().region);
-  } catch {}
+  const ctx = useMarketingI18n();
+  const locale = safeLocale(ctx.locale);
+  const t = ctx.t;
+  const region = safeRegion(useNursenestRegion().region);
 
   const q = props.questionCount ?? 0;
   const lessons = props.lessonCount ?? 0;

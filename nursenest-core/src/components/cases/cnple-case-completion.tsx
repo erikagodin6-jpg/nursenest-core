@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
 import type { CaseStepAdvanceResult } from "@/lib/cases/longitudinal-case-types";
 import { buildPostExamPerformanceReportFromCase } from "@/lib/learner/post-exam-performance-report";
 import { PostExamAdaptiveReport } from "@/components/student/post-exam-adaptive-report";
@@ -24,17 +23,15 @@ export function CnpleCaseCompletion({
   onReview: () => void;
 }) {
   const score = result.score;
-  if (!score) return null;
-
-  const report = useMemo(
-    () =>
-      buildPostExamPerformanceReportFromCase({
+  const report = score
+    ? buildPostExamPerformanceReportFromCase({
         score,
         caseTitle,
         mode,
-      }),
-    [score, caseTitle, mode],
-  );
+      })
+    : null;
+
+  if (!score || !report) return null;
 
   return (
     <div className="space-y-6" data-cnple-case="completion">

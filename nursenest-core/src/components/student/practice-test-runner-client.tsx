@@ -3234,50 +3234,44 @@ export function PracticeTestRunnerClient({
   const linearFooterSubmitLabel = tx("learner.practiceTests.run.linearFooterSubmitAnswer", "Submit answer");
   const linearFooterFinishLabel = tx("learner.practiceTests.run.linearFooterFinishTest", "Finish test");
 
-  const linearRemediationCopy = useMemo(
-    () => ({
-      title: tx("learner.practiceTests.run.remediationCardTitle", "Strengthen weak areas"),
-      topicLabel: tx("learner.practiceTests.run.remediationTopicLabel", "Focus topic"),
-      flashcardsCta: tx("learner.practiceTests.run.remediationFlashcardsCta", "Open flashcards hub"),
-      topicDrillCta: tx("learner.practiceTests.run.remediationTopicDrillCta", "Drill questions on this topic"),
-      weakFlashcardsCta: tx("learner.practiceTests.run.remediationWeakFlashcardsCta", "Weak-area flashcards"),
-    }),
-    [tx],
-  );
+  const linearRemediationCopy = {
+    title: tx("learner.practiceTests.run.remediationCardTitle", "Strengthen weak areas"),
+    topicLabel: tx("learner.practiceTests.run.remediationTopicLabel", "Focus topic"),
+    flashcardsCta: tx("learner.practiceTests.run.remediationFlashcardsCta", "Open flashcards hub"),
+    topicDrillCta: tx("learner.practiceTests.run.remediationTopicDrillCta", "Drill questions on this topic"),
+    weakFlashcardsCta: tx("learner.practiceTests.run.remediationWeakFlashcardsCta", "Weak-area flashcards"),
+  };
 
-  const linearRationalePanelCopy = useMemo(
-    (): PracticeRationaleFullPanelCopy => ({
-      panelTitle: tx("learner.practiceTests.run.rationaleReviewHeading", "Rationale & Review"),
-      waitingPrimary: tx("learner.practiceTests.run.rationaleWaitingPrimary", "Review appears after you answer."),
-      waitingSecondary: tx(
-        "learner.practiceTests.run.rationaleWaitingSecondary",
-        "Submit your response to see the correct answer, teaching rationale, distractor review, and optional references. Prioritize airway, breathing, and circulation when choosing the most urgent option.",
-      ),
-      lockedTitle: tx("learner.practiceTests.run.rationaleLockedTitle", "Answer Locked"),
-      lockedBody: tx(
-        "learner.practiceTests.run.rationaleLockedBody",
-        "Your answer is submitted. Explanations and correct keys are revealed when you finish the full exam.",
-      ),
-      correctAnswer: tx("learner.practiceTests.run.rationaleCorrectAnswer", "Correct Answer"),
-      whyCorrect: tx("learner.practiceTests.run.rationaleWhyCorrect", "Why This Is Correct"),
-      whyOthersIncorrect: tx(
-        "learner.practiceTests.run.rationaleWhyOthersIncorrect",
-        "Why The Other Options Are Incorrect",
-      ),
-      clinicalPearl: tx("learner.practiceTests.run.rationaleClinicalPearl", "Clinical Pearl"),
-      keyTakeawayHeading: tx("learner.practiceTests.run.rationaleKeyTakeawayHeading", "Key Takeaway"),
-      referencesSource: tx("learner.practiceTests.run.rationaleReferencesSource", "References / Source"),
-      relatedLessonsSection: tx(
-        "learner.practiceTests.run.rationaleRelatedLessonsSection",
-        "Related Lessons",
-      ),
-      missingDistractorFallback: tx(
-        "learner.practiceTests.run.rationaleMissingDistractorFallback",
-        "No separate rationale is available for this option.",
-      ),
-    }),
-    [tx],
-  );
+  const linearRationalePanelCopy: PracticeRationaleFullPanelCopy = {
+    panelTitle: tx("learner.practiceTests.run.rationaleReviewHeading", "Rationale & Review"),
+    waitingPrimary: tx("learner.practiceTests.run.rationaleWaitingPrimary", "Review appears after you answer."),
+    waitingSecondary: tx(
+      "learner.practiceTests.run.rationaleWaitingSecondary",
+      "Submit your response to see the correct answer, teaching rationale, distractor review, and optional references. Prioritize airway, breathing, and circulation when choosing the most urgent option.",
+    ),
+    lockedTitle: tx("learner.practiceTests.run.rationaleLockedTitle", "Answer Locked"),
+    lockedBody: tx(
+      "learner.practiceTests.run.rationaleLockedBody",
+      "Your answer is submitted. Explanations and correct keys are revealed when you finish the full exam.",
+    ),
+    correctAnswer: tx("learner.practiceTests.run.rationaleCorrectAnswer", "Correct Answer"),
+    whyCorrect: tx("learner.practiceTests.run.rationaleWhyCorrect", "Why This Is Correct"),
+    whyOthersIncorrect: tx(
+      "learner.practiceTests.run.rationaleWhyOthersIncorrect",
+      "Why The Other Options Are Incorrect",
+    ),
+    clinicalPearl: tx("learner.practiceTests.run.rationaleClinicalPearl", "Clinical Pearl"),
+    keyTakeawayHeading: tx("learner.practiceTests.run.rationaleKeyTakeawayHeading", "Key Takeaway"),
+    referencesSource: tx("learner.practiceTests.run.rationaleReferencesSource", "References / Source"),
+    relatedLessonsSection: tx(
+      "learner.practiceTests.run.rationaleRelatedLessonsSection",
+      "Related Lessons",
+    ),
+    missingDistractorFallback: tx(
+      "learner.practiceTests.run.rationaleMissingDistractorFallback",
+      "No separate rationale is available for this option.",
+    ),
+  };
 
   const linearQuestionStem =
     typeof current.stem === "string" && current.stem.trim().length > 0

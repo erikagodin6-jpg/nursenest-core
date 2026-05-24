@@ -13,7 +13,6 @@ import "@/app/learner-dashboard-performance.css";
 
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { headers } from "next/headers";
 
 import {
   createTraceInfo,
@@ -85,6 +84,7 @@ import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-v
 import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
 import { isFlashcardsHubLandingPath } from "@/lib/learner/flashcards-hub-focused-shell";
 import { isPracticeTestsHubLandingPath } from "@/lib/learner/practice-tests-hub-focused-shell";
+import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -174,7 +174,7 @@ const loadAdminLearnerQaSimulationHelpersSafe = traceProvider(
 const LearnerShellLayout = traceLayout(
   import.meta,
   async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
-  const requestPathname = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
+  const requestPathname = await resolveLearnerRequestPathname();
   const isFocusedExamShell = isFocusedPracticeTestSessionPath(requestPathname);
   const normalizedLearnerPathname = requestPathname.split("?")[0]?.replace(/\/+$/, "") || "/app";
   const isLearnerDashboardRoute = normalizedLearnerPathname === "/app";

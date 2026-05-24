@@ -9,7 +9,7 @@
  * Runs (in order):
  *   1) release-health (API + healthz burst)
  *   2) post-deploy smoke (public home)
- *   3) One `/_next/static/**/*.css` asset returns `text/css`
+ *   3) One Next static CSS asset returns `text/css`
  *   4) `qa:verify:production:core` (guest, login, free, paid, admin — skips missing creds)
  *
  * Build-time checks (single compile, standalone on disk) belong in CI after `docker build`
