@@ -11,6 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(root, "dist");
 const verifyT0 = Date.now();
 const cwd = process.cwd();
+const nestedNextPackageRoot = path.join(cwd, "nursenest-core");
 
 function die(msg) {
   console.error(`[verify-dist] FAIL: ${msg}`);
@@ -43,6 +44,10 @@ async function maybeVerifyNextStandalone() {
     `[deploy-timing] verify_dist_total_s=${((Date.now() - verifyT0) / 1000).toFixed(2)}`,
   );
   return true;
+}
+
+function hasNestedNextStandalone() {
+  return fs.existsSync(path.join(nestedNextPackageRoot, ".next", "standalone"));
 }
 
 /**
@@ -113,6 +118,12 @@ function assertClientArtifacts() {
   }
   const js = fs.readdirSync(assets).filter((f) => f.endsWith(".js"));
   if (js.length === 0) {
+    if (hasNestedNextStandalone()) {
+      console.log(
+        `[verify-dist] Legacy Vite assets contain no JS; Next standalone artifact is present at ${path.join(nestedNextPackageRoot, ".next", "standalone")}.`,
+      );
+      return;
+    }
     die("dist/public/assets contains no .js bundles.");
   }
   const en = path.join(distDir, "public", "i18n", "en.json");

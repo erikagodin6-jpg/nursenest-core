@@ -131,11 +131,11 @@
   },
   "tl": {
     "name": "Filipino",
-    "totalKeys": 17951,
-    "missingKeys": 1,
-    "untranslatedKeys": 2489,
-    "mixedKeys": 116,
-    "coverage": 86.1,
+    "totalKeys": 21293,
+    "missingKeys": 0,
+    "untranslatedKeys": 2486,
+    "mixedKeys": 117,
+    "coverage": 86.2,
     "byContentType": {
       "optional": {
         "total": 14497,
@@ -175,10 +175,10 @@
       },
       "ui": {
         "total": 1230,
-        "translated": 1216,
-        "missing": 1,
-        "untranslated": 13,
-        "coverage": 98.9,
+        "translated": 1220,
+        "missing": 0,
+        "untranslated": 10,
+        "coverage": 99.2,
         "threshold": 100,
         "passed": false
       },
@@ -192,9 +192,7 @@
         "passed": false
       }
     },
-    "missing": [
-      "dashboard.nextStepMockExams"
-    ],
+    "missing": [],
     "untranslated": [
       "allied.alliedDiagnostic.alliedHealthDiagnosticAssessment",
       "allied.alliedHome.alliedHealthCareersCertificationExam",
@@ -231,13 +229,13 @@
       "data.pre_nursing_health_assessment.visualAcuityHearingNasalPatency",
       "data.pre_nursing_nutrition_foundations.saturatedFatTransFatSodium",
       "home.diff.languagesDesc",
+      "home.hero.dynamicSubtitle",
       "home.mostTested.sepsisDesc",
       "jobs.seoTitle",
       "lesson.assessmentFindingsSubtitle",
       "lessons.lesson.advanced-cardiac-auscultation-np",
       "lessons.lesson.anaphylaxis-advanced-np",
-      "lessons.lesson.ards-management-np",
-      "lessons.lesson.bacterial-vaginosis-np"
+      "lessons.lesson.ards-management-np"
     ]
   },
   "hi": {
@@ -344,18 +342,18 @@
   },
   "es": {
     "name": "Spanish",
-    "totalKeys": 17951,
-    "missingKeys": 1,
-    "untranslatedKeys": 12907,
-    "mixedKeys": 91,
-    "coverage": 28.1,
+    "totalKeys": 21293,
+    "missingKeys": 0,
+    "untranslatedKeys": 12785,
+    "mixedKeys": 92,
+    "coverage": 28.8,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 1908,
+        "translated": 1940,
         "missing": 0,
-        "untranslated": 12589,
-        "coverage": 13.2,
+        "untranslated": 12557,
+        "coverage": 13.4,
         "threshold": 90,
         "passed": false
       },
@@ -388,10 +386,10 @@
       },
       "ui": {
         "total": 1230,
-        "translated": 1062,
-        "missing": 1,
-        "untranslated": 167,
-        "coverage": 86.3,
+        "translated": 1153,
+        "missing": 0,
+        "untranslated": 77,
+        "coverage": 93.7,
         "threshold": 100,
         "passed": false
       },
@@ -405,9 +403,7 @@
         "passed": false
       }
     },
-    "missing": [
-      "dashboard.nextStepMockExams"
-    ],
+    "missing": [],
     "untranslated": [
       "allied.alliedAdmin.active",
       "allied.alliedAdmin.active2",
@@ -646,17 +642,17 @@
   },
   "ar": {
     "name": "Arabic",
-    "totalKeys": 17951,
-    "missingKeys": 1,
-    "untranslatedKeys": 3567,
+    "totalKeys": 21293,
+    "missingKeys": 0,
+    "untranslatedKeys": 3492,
     "mixedKeys": 5,
-    "coverage": 80.1,
+    "coverage": 80.5,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 11123,
+        "translated": 11112,
         "missing": 0,
-        "untranslated": 3374,
+        "untranslated": 3385,
         "coverage": 76.7,
         "threshold": 90,
         "passed": false
@@ -690,10 +686,10 @@
       },
       "ui": {
         "total": 1230,
-        "translated": 1089,
-        "missing": 1,
-        "untranslated": 140,
-        "coverage": 88.5,
+        "translated": 1176,
+        "missing": 0,
+        "untranslated": 54,
+        "coverage": 95.6,
         "threshold": 100,
         "passed": false
       },
@@ -707,9 +703,7 @@
         "passed": false
       }
     },
-    "missing": [
-      "dashboard.nextStepMockExams"
-    ],
+    "missing": [],
     "untranslated": [
       "allied.alliedInstitutions.nameschooledu",
       "allied.alliedPricing.nursenestAlliedVsGenericTest",
@@ -722,15 +716,15 @@
       "components.footer.alliedCareers",
       "components.footer.alliedPricing",
       "components.footer.applynest",
-      "components.footer.bloodTransfusionSimulator",
       "components.footer.burnoutPrevention",
       "components.footer.clinicalReferences",
       "components.footer.clinicalSimulators",
-      "components.footer.clinicalSkillsGuides",
-      "components.footer.deterioratingPatientSim",
       "components.footer.diagnosticImaging",
       "components.footer.electrolyteAmpAbgSimulator",
-      "components.footer.examFormatUpdates"
+      "components.footer.examFormatUpdates",
+      "components.footer.healthcarePolicy",
+      "components.footer.internationalRecruitment",
+      "components.footer.licensingPolicyChanges"
     ],
     "mixed": [
       "data.pre_nursing_terminology.commonConfusionOtomyVsOstomy",
@@ -1386,9 +1380,9 @@
   },
   "ja": {
     "name": "Japanese",
-    "totalKeys": 17951,
-    "missingKeys": 1,
-    "untranslatedKeys": 14033,
+    "totalKeys": 21293,
+    "missingKeys": 0,
+    "untranslatedKeys": 14035,
     "mixedKeys": 2,
     "coverage": 21.8,
     "byContentType": {
@@ -1430,10 +1424,10 @@
       },
       "ui": {
         "total": 1230,
-        "translated": 681,
-        "missing": 1,
-        "untranslated": 548,
-        "coverage": 55.4,
+        "translated": 680,
+        "missing": 0,
+        "untranslated": 550,
+        "coverage": 55.3,
         "threshold": 100,
         "passed": false
       },
@@ -1447,9 +1441,7 @@
         "passed": false
       }
     },
-    "missing": [
-      "dashboard.nextStepMockExams"
-    ],
+    "missing": [],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1588,18 +1580,18 @@
   },
   "de": {
     "name": "German",
-    "totalKeys": 17951,
-    "missingKeys": 1,
-    "untranslatedKeys": 14410,
-    "mixedKeys": 95,
-    "coverage": 19.7,
+    "totalKeys": 21293,
+    "missingKeys": 0,
+    "untranslatedKeys": 14380,
+    "mixedKeys": 96,
+    "coverage": 19.9,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 788,
+        "translated": 813,
         "missing": 0,
-        "untranslated": 13709,
-        "coverage": 5.4,
+        "untranslated": 13684,
+        "coverage": 5.6,
         "threshold": 90,
         "passed": false
       },
@@ -1632,10 +1624,10 @@
       },
       "ui": {
         "total": 1230,
-        "translated": 706,
-        "missing": 1,
-        "untranslated": 523,
-        "coverage": 57.4,
+        "translated": 712,
+        "missing": 0,
+        "untranslated": 518,
+        "coverage": 57.9,
         "threshold": 100,
         "passed": false
       },
@@ -1649,9 +1641,7 @@
         "passed": false
       }
     },
-    "missing": [
-      "dashboard.nextStepMockExams"
-    ],
+    "missing": [],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1693,8 +1683,8 @@
       "home.faq.a13",
       "home.faq.a5",
       "home.flashcardTrust.subtitle",
-      "lessons.lesson.abdominal-exam-np",
-      "lessons.lesson.cognitive-screening-np"
+      "home.hero.dynamicSubtitle",
+      "lessons.lesson.abdominal-exam-np"
     ]
   },
   "th": {
@@ -1959,18 +1949,18 @@
   },
   "id": {
     "name": "Indonesian",
-    "totalKeys": 3317,
-    "missingKeys": 14635,
-    "untranslatedKeys": 2,
-    "mixedKeys": 1,
-    "coverage": 18.5,
+    "totalKeys": 21293,
+    "missingKeys": 0,
+    "untranslatedKeys": 3619,
+    "mixedKeys": 4,
+    "coverage": 79.8,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 181,
-        "missing": 14316,
-        "untranslated": 0,
-        "coverage": 1.2,
+        "translated": 11109,
+        "missing": 0,
+        "untranslated": 3388,
+        "coverage": 76.6,
         "threshold": 90,
         "passed": false
       },
@@ -1985,68 +1975,68 @@
       },
       "lessons": {
         "total": 1712,
-        "translated": 1635,
-        "missing": 77,
-        "untranslated": 0,
-        "coverage": 95.5,
+        "translated": 1695,
+        "missing": 0,
+        "untranslated": 17,
+        "coverage": 99,
         "threshold": 100,
         "passed": false
       },
       "blogs": {
         "total": 64,
-        "translated": 42,
-        "missing": 22,
-        "untranslated": 0,
-        "coverage": 65.6,
+        "translated": 58,
+        "missing": 0,
+        "untranslated": 6,
+        "coverage": 90.6,
         "threshold": 95,
         "passed": false
       },
       "ui": {
         "total": 1230,
-        "translated": 1031,
-        "missing": 197,
-        "untranslated": 2,
-        "coverage": 83.8,
+        "translated": 1025,
+        "missing": 0,
+        "untranslated": 205,
+        "coverage": 83.3,
         "threshold": 100,
         "passed": false
       },
       "questions": {
         "total": 298,
-        "translated": 275,
-        "missing": 23,
-        "untranslated": 0,
-        "coverage": 92.3,
+        "translated": 295,
+        "missing": 0,
+        "untranslated": 3,
+        "coverage": 99,
         "threshold": 100,
         "passed": false
       }
     },
-    "missing": [
-      "allied.alliedAdmin.5layerProductionSystem",
-      "allied.alliedAdmin.accepted",
-      "allied.alliedAdmin.accepted2",
-      "allied.alliedAdmin.active",
-      "allied.alliedAdmin.active2",
-      "allied.alliedAdmin.adminAccessRequired",
+    "missing": [],
+    "untranslated": [
       "allied.alliedAdmin.adminAccessRequiredToSeed",
-      "allied.alliedAdmin.allTypes",
-      "allied.alliedAdmin.alliedContentPipeline",
-      "allied.alliedAdmin.allowedQuestionTypes",
-      "allied.alliedAdmin.approve",
-      "allied.alliedAdmin.autoflashcards",
       "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",
       "allied.alliedAdmin.autoflashcardsWithLessonLinksIn",
-      "allied.alliedAdmin.avgRationaleWords",
-      "allied.alliedAdmin.avgWords",
-      "allied.alliedAdmin.batchSize25100",
-      "allied.alliedAdmin.batchesOf50",
       "allied.alliedAdmin.blueprintgovernedDifficultycognitivedomainDi",
-      "allied.alliedAdmin.bundles"
-    ],
-    "untranslated": [
-      "home.heroFeatures.learningAreasSubtitle",
-      "home.heroFeatures.multilingualCallout"
+      "allied.alliedAdmin.clinicalVignettesWithPatientDemographics",
+      "allied.alliedAdmin.coversCbtDbtEmdrPsychodynamic",
+      "allied.alliedAdmin.createAQuestionSetAnd",
+      "allied.alliedAdmin.createOneToEnableBatch",
+      "allied.alliedAdmin.noCognitiveDataAvailableYet",
+      "allied.alliedAdmin.noDataYetGenerateQuestions",
+      "allied.alliedAdmin.noDifficultyDataAvailableYet",
+      "allied.alliedAdmin.noDraftsToReviewRun",
+      "allied.alliedAdmin.productionDbVerifiedBeforeWrites",
+      "allied.alliedAdmin.publishingValidationChecklist",
+      "allied.alliedAdmin.questionSetsAvailableForPurchase",
+      "allied.alliedAdmin.validationGatesRationaleMin600",
+      "allied.alliedAdmin.youNeedAdminPrivilegesTo",
+      "allied.alliedDashboard.noActiveStudyPlanCreate",
+      "allied.alliedDashboard.noCriticalWeakAreasDetected",
+      "allied.alliedDashboard.noReadinessExamsCompletedYet"
     ],
     "mixed": [
+      "home.faq.a13",
+      "home.faq.a5",
+      "home.hero.dynamicSubtitle",
       "mockExams.tierNpDesc"
     ]
   }
