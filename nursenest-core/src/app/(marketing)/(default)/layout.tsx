@@ -368,7 +368,10 @@ const MarketingDefaultLocaleLayout = traceLayout(
         // Fire staff session in background — never awaited for render
         // SiteHeader + SiteFooter are client components that call useSession()
         // to detect staff roles client-side.
-        void getStaffSessionSafe().catch(() => null);
+        // Only call during request-time (when headers are available) to avoid contaminating ISR build
+        if (rawHeaderList) {
+          void getStaffSessionSafe().catch(() => null);
+        }
         const staffSession = null; // always null for server render; client-side useSession() handles staff UI
 
         const [
