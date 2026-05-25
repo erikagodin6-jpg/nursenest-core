@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { BANK_MODULE_SLUGS } from "@/lib/pre-nursing/pre-nursing-question-bank";
 import {
@@ -52,9 +53,15 @@ export function PreNursingModuleEngagement({
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [saving, setSaving] = useState(false);
   const [hint, setHint] = useState<PreNursingFuturePathwayHint | null>(null);
+  const { status } = useSession();
 
   const load = useCallback(async () => {
     const local = readLocalPreNursingCompleted();
+    if (status !== "authenticated") {
+      setSignedIn(false);
+      setCompleted(new Set(local));
+      return;
+    }
     try {
       const res = await fetch("/api/learner/pre-nursing-progress", { method: "GET" });
       if (!res.ok) {
@@ -70,13 +77,15 @@ export function PreNursingModuleEngagement({
       setSignedIn(false);
       setCompleted(new Set(local));
     }
-  }, []);
+  }, [status]);
 
   useEffect(() => {
+    if (status === "loading") return;
     void load();
-  }, [load]);
+  }, [load, status]);
 
   useEffect(() => {
+    if (status !== "authenticated") return;
     void (async () => {
       try {
         const res = await fetch("/api/learner/pre-nursing-plan", { method: "GET" });
@@ -90,7 +99,7 @@ export function PreNursingModuleEngagement({
         /* optional */
       }
     })();
-  }, []);
+  }, [status]);
 
   const isDone = completed.has(slug);
   const { pct } = preNursingCompletionFraction(completed.size);
@@ -127,6 +136,12 @@ export function PreNursingModuleEngagement({
           selected_pathway_hint: hint ?? "unsure",
         });
       }
+    }
+
+    if (status !== "authenticated") {
+      setSignedIn(false);
+      setSaving(false);
+      return;
     }
 
     try {

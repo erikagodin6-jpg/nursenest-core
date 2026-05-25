@@ -14,6 +14,7 @@ import {
   TrendingDown,
   XCircle,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import {
   buildPracticeAdaptiveCreatePayload,
   type PracticeAdaptiveSelectionBasis,
@@ -139,6 +140,7 @@ export function MarketingPracticeQuestionsHubClient({
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [startingAdaptive, setStartingAdaptive] = useState(false);
   const [adaptiveError, setAdaptiveError] = useState<string | null>(null);
+  const { status: authStatus } = useSession();
 
   const pid = pathway.id;
   const apForApp =
@@ -238,6 +240,14 @@ export function MarketingPracticeQuestionsHubClient({
   async function startAdaptivePractice() {
     if (startingAdaptive) return;
     setAdaptiveError(null);
+    if (authStatus === "unauthenticated") {
+      window.location.assign(catAppHref);
+      return;
+    }
+    if (authStatus === "loading") {
+      setAdaptiveError("Checking your sign-in status. Try again in a moment.");
+      return;
+    }
     setStartingAdaptive(true);
     try {
       const topicNames = practiceHubIdsToCatTopicNames([...selected]);
@@ -494,8 +504,8 @@ export function MarketingPracticeQuestionsHubClient({
             </Link>
           )}
           {catCompletePoolUsable ? (
-            <button type="button" disabled={startingAdaptive} onClick={() => void startAdaptivePractice()} className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white px-6 py-2.5 text-sm font-bold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-surface)] disabled:opacity-50" data-testid="start-adaptive-selected-systems">
-              {startingAdaptive ? "Starting…" : "Start"}
+            <button type="button" disabled={startingAdaptive || authStatus === "loading"} onClick={() => void startAdaptivePractice()} className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white px-6 py-2.5 text-sm font-bold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-surface)] disabled:opacity-50" data-testid="start-adaptive-selected-systems">
+              {startingAdaptive ? "Starting…" : authStatus === "loading" ? "Checking…" : "Start"}
             </button>
           ) : null}
           {catCompletePoolUsable ? (

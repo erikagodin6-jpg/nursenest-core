@@ -8,14 +8,13 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { CnpleReportCard, CNPLE_DOMAIN_LABELS } from "@/components/cnple/cnple-report-card";
 import type { CnpleDomainResult } from "@/components/cnple/cnple-report-card";
 import { CnpleProvisionalDisclaimer } from "@/components/cnple/cnple-provisional-disclaimer";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
@@ -61,9 +60,6 @@ export default async function PathwayReportCardPage({ params }: Props) {
     hubBasePath: buildExamPathwayPath(pathway),
   });
 
-  const session = await getOptionalPublicSession({ pathname, surface: "marketing.report_card" }).catch(() => null);
-  const isSignedIn = Boolean((session?.user as { id?: string } | undefined)?.id);
-
   const hubHref = buildExamPathwayPath(pathway);
   const simulationHref = `${hubHref}/simulation`;
   const practiceHref = buildExamPathwayPath(pathway, "questions");
@@ -99,9 +95,8 @@ export default async function PathwayReportCardPage({ params }: Props) {
             <CnpleProvisionalDisclaimer variant="subtle" surface="short" hideWhenConfirmed />
           </div>
         ) : null}
-        {!isSignedIn ? (
-          /* Not signed in — show preview + sign-in prompt */
-          <div>
+        {/* Public preview: real learner report data stays in the authenticated app runtime. */}
+        <div>
             <div className="mb-8">
               <p
                 className="text-[12px] font-bold uppercase tracking-widest"
@@ -218,36 +213,7 @@ export default async function PathwayReportCardPage({ params }: Props) {
                 {pathway.shortName} Hub
               </Link>
             </div>
-          </div>
-        ) : (
-          /* Signed in — show prompt to complete a session */
-          <div className="text-center py-16">
-            <p className="text-[18px] font-bold" style={{ color: "var(--semantic-text-primary)" }}>
-              No session results yet
-            </p>
-            <p className="mt-2 text-[14px]" style={{ color: "var(--semantic-text-muted)" }}>
-              Complete a {isCnple ? "CNPLE simulation" : "practice session"} to see your domain report card here.
-            </p>
-            <div className="mt-6 flex justify-center gap-3">
-              {isCnple ? (
-                <Link
-                  href={simulationHref}
-                  className="rounded-full px-7 py-3 text-[14px] font-bold"
-                  style={{ background: "var(--semantic-brand)", color: "#fff" }}
-                >
-                  Start CNPLE Simulation
-                </Link>
-              ) : null}
-              <Link
-                href={practiceHref}
-                className="rounded-full border px-7 py-3 text-[14px] font-semibold"
-                style={{ borderColor: "var(--semantic-border-soft)", color: "var(--semantic-text-secondary)", background: "var(--semantic-surface)" }}
-              >
-                Practice Questions
-              </Link>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </>
   );

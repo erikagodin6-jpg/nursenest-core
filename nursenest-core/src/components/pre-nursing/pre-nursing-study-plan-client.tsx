@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
@@ -27,6 +29,7 @@ function daysUntil(iso: string | null): number | null {
 }
 
 export function PreNursingStudyPlanClient() {
+  const { status } = useSession();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +39,11 @@ export function PreNursingStudyPlanClient() {
   const [hint, setHint] = useState("unsure");
 
   const load = useCallback(async () => {
+    if (status !== "authenticated") {
+      setData(null);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -61,14 +69,19 @@ export function PreNursingStudyPlanClient() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [status]);
 
   useEffect(() => {
+    if (status === "loading") return;
     void load();
-  }, [load]);
+  }, [load, status]);
 
   async function onSave(e: React.FormEvent) {
     e.preventDefault();
+    if (status !== "authenticated") {
+      window.location.assign(loginWithCallback("/pre-nursing/study-plan"));
+      return;
+    }
     setSaving(true);
     setError(null);
     try {

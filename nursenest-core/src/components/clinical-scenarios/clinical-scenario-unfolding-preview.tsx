@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import {
   aggregateTrajectoryLabel,
@@ -176,6 +177,7 @@ export function ClinicalScenarioUnfoldingPreview({
   /** Catalog lesson slugs + weak flashcards deep link — computed server-side; no duplicated bodies. */
   studyCompletionLinks?: ClinicalScenarioCompletionStudyBundle | null;
 }) {
+  const { status: authStatus } = useSession();
   const branching = useMemo(() => scenarioUsesBranchingEngine(scenario.stages), [scenario.stages]);
   const branchStages = useMemo(() => scenario.stages.map(toBranchingStageView), [scenario.stages]);
   const isPremiumScenario = scenario.isPremium === true;
@@ -262,6 +264,7 @@ export function ClinicalScenarioUnfoldingPreview({
       reachedStageOrder: number;
       completed: boolean;
     }) => {
+      if (authStatus !== "authenticated") return;
       const trajAgg = aggregateTrajectoryLabel(args.trajectoryPath);
       const reached = Math.min(args.reachedStageOrder, Math.max(0, scenario.stages.length - 1));
       void fetch("/api/learner/clinical-scenario-analytics", {
@@ -342,6 +345,7 @@ export function ClinicalScenarioUnfoldingPreview({
       completed,
     });
   }, [
+    authStatus,
     branchPending,
     branchStage,
     branchState,

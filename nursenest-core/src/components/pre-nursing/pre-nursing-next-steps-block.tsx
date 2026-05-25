@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import {
@@ -26,8 +27,10 @@ const ROUTES: Array<{
 
 export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hub" | "module" | "study_plan" }) {
   const [hint, setHint] = useState<PreNursingFuturePathwayHint>("unsure");
+  const { status } = useSession();
 
   useEffect(() => {
+    if (status !== "authenticated") return;
     void (async () => {
       try {
         const res = await fetch("/api/learner/pre-nursing-plan", { method: "GET" });
@@ -41,7 +44,7 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
         // leave as unsure
       }
     })();
-  }, []);
+  }, [status]);
 
   const prioritizedHref = examPrepHrefForHint(hint);
   const secondaryHref = secondaryExamPrepHrefForHint(hint);
@@ -130,4 +133,3 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
     </section>
   );
 }
-

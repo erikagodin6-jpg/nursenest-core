@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
@@ -13,8 +14,14 @@ export function PreNursingAccountCapture({
   sourceSurface: "hub" | "module" | "study_plan";
 }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const { status } = useSession();
 
   useEffect(() => {
+    if (status === "loading") return;
+    if (status !== "authenticated") {
+      setSignedIn(false);
+      return;
+    }
     void (async () => {
       try {
         const res = await fetch("/api/learner/pre-nursing-progress", { method: "GET" });
@@ -28,7 +35,7 @@ export function PreNursingAccountCapture({
         setSignedIn(false);
       }
     })();
-  }, []);
+  }, [status]);
 
   if (signedIn === true) {
     return (
@@ -81,4 +88,3 @@ export function PreNursingAccountCapture({
     </section>
   );
 }
-

@@ -4,21 +4,17 @@ import { notFound } from "next/navigation";
 import { AlliedMarketingPathwayMissing } from "@/components/marketing/allied-marketing-pathway-missing";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
 import {
   ALLIED_HUB_CATEGORY_META,
   getPathwayOrThrow,
   resolveAlliedProfessionFromRouteSlug,
 } from "@/lib/allied/allied-professions-registry";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
   fallbackAlliedPathwayHubOverview,
   loadAlliedPathwayHubOverview,
 } from "@/lib/marketing/allied-pathway-hub-overview";
 import {
-  parseMeasurementPreference,
   readMeasurementPreferenceFromCookieStore,
   type MeasurementPreference,
 } from "@/lib/measurements/measurement-preference";
@@ -77,25 +73,6 @@ export default async function AlliedCareerHubPage({ params }: Props) {
   try {
     const fromCookie = readMeasurementPreferenceFromCookieStore(await cookies());
     if (fromCookie) alliedInitialMeasurement = fromCookie;
-  } catch {
-    // ignore
-  }
-  try {
-    const session = await getOptionalPublicSession({
-      pathname: hubPath,
-      surface: "marketing.default.allied.career",
-    });
-    const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
-    viewerSignedIn = Boolean(userId);
-    if (userId && isDatabaseUrlConfigured()) {
-      alliedMeasurementSync = true;
-      const row = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { measurementPreference: true },
-      });
-      const fromDb = parseMeasurementPreference(row?.measurementPreference ?? null);
-      if (fromDb) alliedInitialMeasurement = fromDb;
-    }
   } catch {
     // ignore
   }

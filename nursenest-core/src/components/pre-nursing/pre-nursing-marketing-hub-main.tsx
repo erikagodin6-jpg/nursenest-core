@@ -3,7 +3,6 @@ import { PreNursingLandingClient } from "@/components/pre-nursing/pre-nursing-la
 import { PreNursingMarketingHubActions } from "@/components/pre-nursing/pre-nursing-marketing-hub-actions";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
-import { auth } from "@/lib/auth";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -37,10 +36,8 @@ export async function PreNursingMarketingHubMain({
     throw new Error(`Pre-Nursing hub: missing pathway registry entry "${pathwayId}"`);
   }
 
-  const session = await auth();
-  const signedIn = Boolean((session?.user as { id?: string } | undefined)?.id);
   const practiceAppPath = pathwayHubAppPracticeTestsHref(pathway.id);
-  const practiceHref = signedIn ? practiceAppPath : loginWithCallback(practiceAppPath);
+  const practiceHref = loginWithCallback(practiceAppPath);
 
   const lessonsPublicHref = withMarketingLocale(marketingLocale, "/pre-nursing/lessons");
   const flashcardsPublicHref = withMarketingLocale(marketingLocale, "/flashcards");
@@ -76,7 +73,7 @@ export async function PreNursingMarketingHubMain({
           <PreNursingLandingClient modulesOnly marketingLocale={marketingLocale} />
         </div>
 
-        <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={signedIn} rootClassName="mt-2 sm:mt-4" />
+        <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={false} rootClassName="mt-2 sm:mt-4" />
       </section>
     </div>
   );

@@ -10,12 +10,11 @@ import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-f
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { CnpleProvisionalDisclaimer } from "@/components/cnple/cnple-provisional-disclaimer";
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
@@ -85,12 +84,7 @@ export default async function CnpleSimulationLandingPage({ params }: Props) {
   }
 
   const { crumbs, schemaItems } = pathwayCatPracticeBreadcrumbs(pathway, { hubBasePath: buildExamPathwayPath(pathway) });
-  const session = await getOptionalPublicSession({ pathname, surface: "marketing.cnple_simulation_landing" }).catch(() => null);
-  const isSignedIn = Boolean((session?.user as { id?: string } | undefined)?.id);
-
-  const catStartHref = isSignedIn
-    ? appPathwayCatSessionStartPath(pathway.id)
-    : loginWithCallback(appPathwayCatSessionStartPath(pathway.id));
+  const catStartHref = loginWithCallback(appPathwayCatSessionStartPath(pathway.id));
   const practiceHref = buildExamPathwayPath(pathway, "questions");
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const reportCardHref = `${buildExamPathwayPath(pathway)}/report-card`;

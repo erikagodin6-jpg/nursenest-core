@@ -5,16 +5,12 @@ import { AlliedHealthSubdomainHomepage } from "@/components/marketing/allied-hea
 import { AlliedMarketingPathwayMissing } from "@/components/marketing/allied-marketing-pathway-missing";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { getCanonicalAlliedPathway, ALLIED_GLOBAL_HUB_PATH, buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-pathway";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
   fallbackAlliedPathwayHubOverview,
   loadAlliedPathwayHubOverview,
 } from "@/lib/marketing/allied-pathway-hub-overview";
 import {
-  parseMeasurementPreference,
   readMeasurementPreferenceFromCookieStore,
   type MeasurementPreference,
 } from "@/lib/measurements/measurement-preference";
@@ -65,24 +61,6 @@ export default async function GlobalAlliedHealthHubPage() {
   try {
     const fromCookie = readMeasurementPreferenceFromCookieStore(await cookies());
     if (fromCookie) alliedInitialMeasurement = fromCookie;
-  } catch {
-    // ignore
-  }
-  try {
-    const session = await getOptionalPublicSession({
-      pathname: ALLIED_GLOBAL_HUB_PATH,
-      surface: "marketing.default.allied.global_hub",
-    });
-    const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
-    if (userId && isDatabaseUrlConfigured()) {
-      alliedMeasurementSync = true;
-      const row = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { measurementPreference: true },
-      });
-      const fromDb = parseMeasurementPreference(row?.measurementPreference ?? null);
-      if (fromDb) alliedInitialMeasurement = fromDb;
-    }
   } catch {
     // ignore
   }
