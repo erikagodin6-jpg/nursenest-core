@@ -20,7 +20,7 @@ import { alliedHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 already set below
 export const revalidate = 86400;
 
 const BASE = "/allied-health";

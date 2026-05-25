@@ -17,11 +17,13 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
 /**
- * Dynamic rendering required (layout reads cookies for region/locale).
- * Removing revalidate=0 restores unstable_cache (1-hour TTL) for home stats,
- * so the DB is not hit on every warm request.
+ * 🧊 ISR window for homepage: revalidates every 5 minutes.
+ * The default layout above already provides `revalidate: 300`.
+ * This explicit `revalidate` ensures the homepage follows the same ISR policy.
+ * 
+ * Homepage stats use unstable_cache (1-hour TTL) — they are not refetched on every request.
  */
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 
 function safeRegionCards(): string[] {

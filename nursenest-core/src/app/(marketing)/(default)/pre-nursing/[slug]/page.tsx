@@ -6,7 +6,7 @@ const RESERVED = new Set(["lessons", "study-plan"]);
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 below
 export const revalidate = 86400;
 
 /**

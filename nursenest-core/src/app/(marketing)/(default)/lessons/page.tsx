@@ -30,7 +30,7 @@ import {
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: parent layout handles dynamic; revalidate: 600 already set below
 export const revalidate = 600;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 const LESSONS_BUILD_MESSAGE_SHARDS = [...MARKETING_PAGE_BODY_MESSAGE_SHARDS, "billing"] as const;

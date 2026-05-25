@@ -29,7 +29,9 @@ import {
 } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const dynamic = "force-dynamic";
+// Converted to ISR for scalability - flashcard hub is public educational content
+// that tolerates 30min stale data. Reduces force-dynamic count and improves TTFB.
+export const revalidate = 1800; // 30 minutes
 
 const TRUST_FEATURES = [
   {

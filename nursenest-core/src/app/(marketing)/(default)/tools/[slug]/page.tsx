@@ -12,7 +12,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 already set below
 export const revalidate = 86400;
 
 async function metaForSlug(

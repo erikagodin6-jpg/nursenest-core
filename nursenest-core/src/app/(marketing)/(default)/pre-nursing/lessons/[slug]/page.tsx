@@ -25,9 +25,10 @@ function getPreNursingStrings(): Record<string, string> {
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamic = "force-dynamic";
+// Converted to ISR - pre-nursing lesson detail pages are educational content
+// Already had revalidate=86400, removing force-dynamic to enable ISR caching
 export const dynamicParams = true;
-export const revalidate = 86400;
+export const revalidate = 86400; // 24 hours
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dict = getPreNursingStrings();

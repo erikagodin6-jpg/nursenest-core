@@ -32,7 +32,7 @@ const PRE_NURSING_LESSONS_INLINE_KEYS = [
   "inline.marketing.preNursing.lessons.intro",
 ] as const;
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 already set below
 export const revalidate = 86400;
 
 type Props = { searchParams: Promise<{ page?: string }> };
