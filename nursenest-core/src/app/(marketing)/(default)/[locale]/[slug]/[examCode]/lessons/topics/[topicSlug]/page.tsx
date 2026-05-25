@@ -5,7 +5,7 @@ import {
   normalizeMarketingLessonsHubTopicSlug,
 } from "@/lib/lessons/lesson-routes";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: parent layout handles dynamic; child can set own revalidate
 export const dynamicParams = true;
 
 type Props = {

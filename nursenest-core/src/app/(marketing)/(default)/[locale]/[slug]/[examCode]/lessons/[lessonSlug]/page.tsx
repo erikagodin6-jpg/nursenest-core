@@ -37,7 +37,7 @@ import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
  */
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
-export const dynamic = "force-dynamic";
+// 🧊 ISR: parent layout handles dynamic; child can set own revalidate
 export const dynamicParams = true;
 /**
  * Per-request render (no shared ISR snapshot). `maxDuration` allows cold DB + related queries under load.

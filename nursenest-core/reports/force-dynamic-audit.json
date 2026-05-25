@@ -810,36 +810,6 @@
     "reason": "Needs manual review for optimization strategy"
   },
   {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/clinical-scenarios/page.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/flashcards/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/topics/[topicSlug]/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
     "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/osce/[stationId]/page.tsx",
     "classification": "unclassified",
     "priority": "high",
@@ -853,18 +823,6 @@
   },
   {
     "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/pricing/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/questions/page.tsx",
     "classification": "unclassified",
     "priority": "high",
     "reason": "Needs manual review for optimization strategy"

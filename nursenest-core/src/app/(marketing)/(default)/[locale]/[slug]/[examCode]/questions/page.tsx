@@ -58,7 +58,7 @@ import {
   marketingLinearPracticeBankUsable,
 } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 already set below
 export const dynamicParams = true;
 export const revalidate = 86400;
 

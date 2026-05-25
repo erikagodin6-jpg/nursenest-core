@@ -11,7 +11,7 @@ import { pathwayPricingBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 already set below
 export const dynamicParams = true;
 export const revalidate = 86400;
 

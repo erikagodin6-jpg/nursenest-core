@@ -188,7 +188,7 @@ function logMarketingHubPipelineActualCounts(
   });
 }
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: revalidate: 86400 already set below
 export const dynamicParams = true;
 export const revalidate = 86400;
 /** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */

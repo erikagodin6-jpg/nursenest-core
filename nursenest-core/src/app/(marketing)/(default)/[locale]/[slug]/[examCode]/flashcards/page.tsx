@@ -14,7 +14,7 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR: parent layout handles dynamic; child can set own revalidate
 export const dynamicParams = true;
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
