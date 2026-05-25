@@ -19,11 +19,15 @@
  * the optional-public-auth-island pattern (client island, lazy loaded).
  */
 import type { ReactNode } from "react";
+import { SiteHeaderStatic } from "@/components/layout/site-header-static";
+import { SiteFooterStatic } from "@/components/layout/site-footer-static";
 
 export default function PublicStaticLayout({ children }: { children: ReactNode }) {
   return (
     <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
-      {children}
+      <SiteHeaderStatic />
+      <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+      <SiteFooterStatic />
     </div>
   );
 }

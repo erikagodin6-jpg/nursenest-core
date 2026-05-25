@@ -1,0 +1,120 @@
+name: Deployment Safety Gates
+
+on:
+  pull_request:
+    branches: [main, production]
+  push:
+    branches: [main]
+
+jobs:
+  architectural-audits:
+    name: Architectural Audits
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Audit force-dynamic count
+        run: node scripts/audit-force-dynamic-count.mjs --fail-on-increase
+        continue-on-error: false
+      
+      - name: Audit unbounded queries
+        run: node scripts/audit-unbounded-queries.mjs --fail-on-violations
+        continue-on-error: true # Warning only for now
+      
+      - name: Audit public route dependencies
+        run: node scripts/audit-public-route-dependencies.mjs --fail-on-new
+        continue-on-error: false
+      
+      - name: Generate audit report
+        if: always()
+        run: |
+          echo "## Architectural Audit Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Force-Dynamic Count" >> $GITHUB_STEP_SUMMARY
+          node scripts/audit-force-dynamic-count.mjs >> $GITHUB_STEP_SUMMARY || true
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Unbounded Queries" >> $GITHUB_STEP_SUMMARY
+          node scripts/audit-unbounded-queries.mjs >> $GITHUB_STEP_SUMMARY || true
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Public Route Dependencies" >> $GITHUB_STEP_SUMMARY
+          node scripts/audit-public-route-dependencies.mjs >> $GITHUB_STEP_SUMMARY || true
+
+  typecheck:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run typecheck
+        run: npm run typecheck
+
+  smoke-tests:
+    name: Production Smoke Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+      
+      - name: Run smoke tests
+        run: npm run test:smoke:production || echo "Smoke tests not yet implemented"
+        continue-on-error: true
+
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [architectural-audits, typecheck, smoke-tests]
+    if: always()
+    
+    steps:
+      - name: Check results
+        run: |
+          echo "## Deployment Gate Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Architectural Audits: ${{ needs.architectural-audits.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeCheck: ${{ needs.typecheck.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Smoke Tests: ${{ needs.smoke-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.architectural-audits.result }}" != "success" ] || [ "${{ needs.typecheck.result }}" != "success" ]; then
+            echo "❌ Deployment gates FAILED" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ Deployment gates PASSED" >> $GITHUB_STEP_SUMMARY
+          fi

@@ -16,6 +16,10 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
 
+// 🧊 ISR window: pricing content changes infrequently.
+// Revalidates at most every hour. Individual plan data can be stale up to 1h.
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
@@ -44,6 +48,8 @@ type PricingPageProps = {
 /**
  * Resolves quickly (searchParams only) so `loading.tsx` does not block on FAQ / i18n shards.
  * Plan cards stream in the first Suspense branch; JSON-LD + FAQ follow in parallel.
+ *
+ * 🧊 ISR-compatible: no force-dynamic needed. searchParams access is safe during ISR.
  */
 export default async function PricingPage({ searchParams }: PricingPageProps) {
   const resolvedSearch = searchParams ? await searchParams : {};
