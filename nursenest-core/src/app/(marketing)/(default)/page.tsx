@@ -3,7 +3,6 @@ import {
   type HomeRestoredWithDeferredStatsProps,
 } from "@/components/marketing/home-restored-with-deferred-stats.server";
 import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing-home-emergency-fallback";
-import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 
 import {
@@ -12,12 +11,6 @@ import {
 } from "@/components/marketing/home-blog-teaser-section.server";
 
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import {
-  loadMarketingMessageShards,
-  loadMarketingMessageShardsSync,
-} from "@/lib/marketing-i18n/load-marketing-message-shards";
-import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
@@ -64,34 +57,19 @@ async function safeBlog() {
   }
 }
 
-async function loadHomePageBodyMessages() {
-  try {
-    const locale = await getMarketingLocaleForDefaultRoute();
-    const messages = await loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-    const fallbackMessages =
-      locale === DEFAULT_MARKETING_LOCALE
-        ? undefined
-        : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-    return { messages, fallbackMessages };
-  } catch {
-    return null;
-  }
-}
-
 /**
  * HOMEPAGE
  *
- * All optional data dependencies (blog, body messages) are fetched in parallel
- * using Promise.allSettled so a slow/failed optional fetch cannot block the
+ * Optional data dependencies are fetched in parallel using Promise.allSettled
+ * so a slow/failed optional fetch cannot block the
  * primary render or produce a 504. Stats and carousel are bounded inside
  * HomeRestoredWithDeferredStats via their own timeout guards.
  */
 export default async function HomePage() {
   try {
     // Run all optional data fetches in parallel — none can reject the render.
-    const [blogResult, bodyMessagesResult, marketingRegionResult] = await Promise.allSettled([
+    const [blogResult, marketingRegionResult] = await Promise.allSettled([
       safeBlog(),
-      loadHomePageBodyMessages(),
       getMarketingRegionFromCookies(),
     ]);
 
@@ -100,8 +78,6 @@ export default async function HomePage() {
         ? blogResult.value
         : <HomeBlogTeaserSectionShell m={{}} posts={[]} />;
 
-    const bodyMessages =
-      bodyMessagesResult.status === "fulfilled" ? bodyMessagesResult.value : null;
     const marketingRegion =
       marketingRegionResult.status === "fulfilled" ? marketingRegionResult.value : "CA";
     const title = defaultHomeMetaTitle(marketingRegion);
@@ -129,16 +105,7 @@ export default async function HomePage() {
       </>
     );
 
-    if (!bodyMessages) return content;
-
-    return (
-      <MarketingI18nShardLayer
-        messages={bodyMessages.messages}
-        fallbackMessages={bodyMessages.fallbackMessages}
-      >
-        {content}
-      </MarketingI18nShardLayer>
-    );
+    return content;
   } catch (err) {
     console.error("FINAL HOMEPAGE FAILSAFE:", err);
     return <MarketingHomeEmergencyFallback />;

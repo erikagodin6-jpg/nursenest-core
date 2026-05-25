@@ -79,8 +79,12 @@ function safeNowMs(): number {
   }
 }
 
-function shouldLayerMainPageShards() {
-  return true;
+function shouldLayerMainPageShards(pathname: string) {
+  // The homepage has its own bounded server-island message loading. Avoid
+  // pushing the large page-body shard through the client i18n context on `/`;
+  // in the hosted standalone runtime that stream has produced TransformStream
+  // failures after the page successfully renders.
+  return pathname !== "/";
 }
 
 function getMarketingDefaultLayoutSentryRuntimePromise() {
@@ -412,7 +416,7 @@ const MarketingDefaultLocaleLayout = traceLayout(
                     <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
                       <PremiumLayoutVersionMarker surface="marketing-default" />
                       <SiteHeaderServer serverHasStaffSession={staffSession != null} />
-                      {shouldLayerMainPageShards() ? (
+                      {shouldLayerMainPageShards(marketingRequestPath) ? (
                         <MarketingMainI18nShards
                           locale={resolvedLocale}
                           publicContentOverrides={publicContentOverrides}
