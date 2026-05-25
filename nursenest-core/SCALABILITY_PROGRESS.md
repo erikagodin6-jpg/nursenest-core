@@ -1,7 +1,7 @@
 # Scalability Hardening Progress
 
-**Last Updated:** 2026-05-25  
-**Status:** PHASE 1 COMPLETE ✅
+**Last Updated:** 2026-05-25 (3:32 PM)  
+**Status:** PHASES 1+2 COMPLETE ✅
 
 ---
 
@@ -9,9 +9,9 @@
 
 **Mission:** Transform platform from "high request-cost dynamic monolith" to "cache-efficient, horizontally scalable architecture"
 
-**Progress:** 12.25% reduction in force-dynamic declarations, 75% marketing route optimization
+**Progress:** 13.25% reduction in force-dynamic declarations, 81.5% marketing route optimization
 
-**Impact:** 15 routes now CDN-cacheable with ISR, estimated 35-45% origin compute reduction for converted routes
+**Impact:** 19 routes optimized (15 ISR + 4 static), estimated 35-45% origin compute reduction for converted routes
 
 ---
 
@@ -20,16 +20,16 @@
 ### Force-Dynamic Count
 | Metric | Baseline | Current | Target | Change |
 |--------|----------|---------|--------|--------|
-| **Total** | 400 | **351** | 150 | **-49 (-12.25%)** |
-| **Marketing** | 65 | **16** | <10 | **-49 (-75.4%)** ✅ |
+| **Total** | 400 | **347** | 150 | **-53 (-13.25%)** |
+| **Marketing** | 65 | **12** | <10 | **-53 (-81.5%)** ✅ |
 | **Admin** | 97 | 97 | ~97 | 0 (legitimate) |
 | **API** | 175 | 175 | ~175 | 0 (legitimate) |
 | **Learner** | 36 | 36 | ~36 | 0 (legitimate) |
 
 ### Route Categories
 - **✅ ISR-Optimized:** 15 routes (Batch A + C)
+- **✅ Static Auth:** 4 routes (Batch B) 
 - **⚠️ Session-Required:** 11 routes (keep force-dynamic)
-- **🔄 Auth Pages:** 4 routes (convert to client islands)
 - **📝 Homepage:** 1 route (needs review)
 - **✅ Legitimate:** 308 routes (admin/API/learner)
 

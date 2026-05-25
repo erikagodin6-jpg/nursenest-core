@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return buildStudyToolsActivityMetadata(deck?.title ?? "Flashcard deck");
 }
 
-export default async function FlashcardDeckDetailPage({ params, searchParams }: PageProps) {
+export default async function LearnerFlashcardDeckDetailPage({ params, searchParams }: PageProps) {
   const [{ deckId }, sp, session] = await Promise.all([
     params,
     searchParams,
@@ -50,7 +50,6 @@ export default async function FlashcardDeckDetailPage({ params, searchParams }: 
       description={deck.description ?? "Study this deck to build mastery. Your progress is saved after every card."}
       pathwayId={pathwayId ?? deck.pathwayId}
     >
-      {/* Back link */}
       <div>
         <Link
           href={backHref}
@@ -60,7 +59,6 @@ export default async function FlashcardDeckDetailPage({ params, searchParams }: 
         </Link>
       </div>
 
-      {/* Deck meta */}
       <div className="flex flex-wrap gap-2">
         <span className="rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-xs text-[var(--theme-body-text)]">
           {deck.cards.length} playable cards
@@ -73,7 +71,6 @@ export default async function FlashcardDeckDetailPage({ params, searchParams }: 
         </span>
       </div>
 
-      {/* Resume progress bar */}
       {activeSession ? (
         <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-4 py-3">
           <p className="text-xs font-semibold text-[var(--semantic-info)]">Session in progress</p>
@@ -95,7 +92,6 @@ export default async function FlashcardDeckDetailPage({ params, searchParams }: 
         </div>
       ) : null}
 
-      {/* Start / resume */}
       <FlashcardSessionStartButton
         deckId={deck.id}
         isResuming={activeSession !== null}
@@ -103,7 +99,6 @@ export default async function FlashcardDeckDetailPage({ params, searchParams }: 
         pathwayId={pathwayId ?? deck.pathwayId}
       />
 
-      {/* Card preview (first 3) */}
       {deck.cards.length > 0 ? (
         <section className="space-y-3">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-chart-3)]">

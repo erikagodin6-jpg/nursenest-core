@@ -8,10 +8,12 @@ export function FlashcardSessionStartButton({
   deckId,
   isResuming,
   cardCount,
+  pathwayId,
 }: {
   deckId: string;
   isResuming: boolean;
   cardCount: number;
+  pathwayId?: string | null;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -20,8 +22,9 @@ export function FlashcardSessionStartButton({
     startTransition(async () => {
       const result = await startOrResumeSessionAction(deckId);
       if (result.ok) {
+        const qs = pathwayId?.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : "";
         router.push(
-          `/app/study-tools/flashcards/decks/${encodeURIComponent(deckId)}/session/${encodeURIComponent(result.data.sessionId)}`,
+          `/app/flashcards/decks/${encodeURIComponent(deckId)}/session/${encodeURIComponent(result.data.sessionId)}${qs}`,
         );
       }
     });
