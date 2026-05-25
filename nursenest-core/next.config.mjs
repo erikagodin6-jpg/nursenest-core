@@ -127,6 +127,10 @@ class NextServerCommonJsBoundaryPlugin {
 
 const nextConfig = {
   output: "standalone",
+  // Cloudflare/DigitalOcean handle response compression at the edge. Keeping
+  // Next origin compression enabled adds a redundant TransformStream layer that
+  // has been unstable in the hosted standalone runtime.
+  compress: false,
 
   /** Legacy crawler bookmarks → single canonical sitemap (avoid duplicate sitemap index signals). */
   async redirects() {
