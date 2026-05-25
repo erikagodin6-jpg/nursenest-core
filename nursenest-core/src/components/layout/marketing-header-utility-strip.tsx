@@ -50,7 +50,8 @@ export function MarketingHeaderUtilityCluster({
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
   const router = useRouter();
-  const { data: session } = useSession();
+  const sessionState = useSession();
+  const session = sessionState?.data ?? null;
   const user = session?.user;
   const { region, setRegion } = useNursenestRegion();
   const [langOpen, setLangOpen] = useState(false);

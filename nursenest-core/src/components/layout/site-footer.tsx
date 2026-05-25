@@ -129,7 +129,8 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
     () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
     [pathname, searchParams, locale],
   );
-  const { data: session } = useSession();
+  const sessionState = useSession();
+  const session = sessionState?.data ?? null;
   const activeNav = useActiveNavContext();
   const { region } = useNursenestRegion();
   const marketingChromeCountry = useMarketingChromeCountry();

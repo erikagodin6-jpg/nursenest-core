@@ -296,7 +296,9 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
     () => isLightTheme || theme === "midnight",
     [isLightTheme, theme],
   );
-  const { data: session, status: sessionStatus } = useSession();
+  const sessionState = useSession();
+  const session = sessionState?.data ?? null;
+  const sessionStatus = sessionState?.status ?? "unauthenticated";
   const isSessionPending = sessionStatus === "loading";
   const user = session?.user;
   const { region, setRegion } = useNursenestRegion();

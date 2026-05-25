@@ -19,7 +19,7 @@ export type ActiveNavSessionInput = {
  * SiteHeader does not subscribe to NextAuth twice during hydration.
  */
 export function useActiveNavContext(existingSession?: ActiveNavSessionInput): ActiveContext {
-  const ownSession = useSession();
+  const ownSession = useSession() ?? { data: null, status: "unauthenticated" as const };
   const sessionSource = existingSession ?? ownSession;
   const { region } = useNursenestRegion();
   const globalRegion = useClientGlobalRegionCookie();
