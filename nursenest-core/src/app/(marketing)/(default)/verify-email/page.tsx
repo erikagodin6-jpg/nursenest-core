@@ -6,7 +6,8 @@ import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketi
 import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const dynamic = "force-dynamic";
+// Converted to static - auth logic handled client-side
+// No server-side session dependency, safe to remove force-dynamic
 
 const VERIFY_EMAIL_META_KEYS = ["pages.verifyEmail.title", "pages.verifyEmail.description"] as const;
 

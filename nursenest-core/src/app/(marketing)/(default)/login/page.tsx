@@ -6,7 +6,8 @@ import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-al
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 
-export const dynamic = "force-dynamic";
+// Converted to static - auth logic handled client-side via MarketingLoginPage component
+// No server-side session dependency, safe to remove force-dynamic
 
 const LOGIN_META_KEYS = ["pages.login.title", "pages.login.description"] as const;
 
