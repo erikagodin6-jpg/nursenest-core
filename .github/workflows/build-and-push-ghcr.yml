@@ -50,6 +50,21 @@ jobs:
       - name: Install deploy guard dependencies
         run: npm install --prefix /tmp/deploy-guard-deps --no-save --ignore-scripts --no-audit --no-fund js-yaml@4.1.1
 
+      - name: Verify source commit and NFT-safe i18n loader
+        run: |
+          echo "=== Building commit ==="
+          git rev-parse HEAD
+          echo ""
+          echo "=== i18n loader uses process.cwd() (NFT-opaque) ==="
+          grep -n "process\.cwd()" nursenest-core/src/lib/marketing-i18n/load-marketing-message-shards.ts
+          echo ""
+          echo "=== i18n loader must NOT use import.meta.url (exit 1 if found) ==="
+          if grep -qn "import\.meta\.url" nursenest-core/src/lib/marketing-i18n/load-marketing-message-shards.ts; then
+            echo "::error::import.meta.url found in shard loader — NFT trace explosion risk. Fix before building."
+            exit 1
+          fi
+          echo "  clean — no import.meta.url in shard loader"
+
       - name: "[deploy-guard] Dockerfile must not bake DATABASE_URL"
         run: node nursenest-core/scripts/verify-dockerfile-database-url.mjs
 
@@ -68,9 +83,10 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: false
-          load: true
-          tags: ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/nursenest:latest
           build-args: |
             NN_BUILD_COMMIT=${{ github.sha }}
             NN_BUILD_BRANCH=main
@@ -82,11 +98,13 @@ jobs:
           provenance: false
           sbom: false
 
-      - name: Inspect locally loaded image (diagnostic)
+      - name: Log pushed image (diagnostic)
         if: success()
         run: |
-          docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}" | head
-          docker history --no-trunc ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }} | head
+          echo "Pushed image tags:"
+          echo "  ghcr.io/${{ github.repository_owner }}/nursenest:sha-${{ github.sha }}"
+          echo "  ghcr.io/${{ github.repository_owner }}/nursenest:latest"
+          echo "Digest: ${{ steps.build.outputs.digest }}"
 
       - name: Build job summary (failure hints)
         if: failure() && steps.build.outcome == 'failure'
