@@ -525,9 +525,13 @@ for (const requiredCopy of [
   "COPY --from=builder /app/dist ./dist",
   "COPY --from=builder /app/scripts ./scripts",
   "COPY --from=builder /app/nursenest-core/scripts ./nursenest-core/scripts",
+  "COPY --from=builder /app/nursenest-core/.next/standalone ./nursenest-core/.next/standalone",
+  "COPY --from=builder /app/nursenest-core/.next/static ./nursenest-core/.next/static",
   "COPY --from=builder /app/package.json ./package.json",
   "COPY --from=builder /app/package-lock.json ./package-lock.json",
   "COPY --from=builder /app/nursenest-core/public ./public",
+  "COPY --from=builder /app/nursenest-core/public ./nursenest-core/public",
+  "COPY --from=builder /app/nursenest-core/package.json ./nursenest-core/package.json",
 ]) {
   assertIncludes(dockerfile, requiredCopy, "Dockerfile runner stage");
 }
@@ -542,6 +546,7 @@ for (const requiredSnippet of [
   "DIRECT_URL_present=",
   "AUTH_SECRET_present=",
   "NEXTAUTH_SECRET_present=",
+  "delegating to Next standalone",
   "require(dist/index.cjs)",
   "dist/index.cjs is missing.",
 ]) {

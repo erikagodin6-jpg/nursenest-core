@@ -90,9 +90,13 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/nursenest-core/scripts ./nursenest-core/scripts
+COPY --from=builder /app/nursenest-core/.next/standalone ./nursenest-core/.next/standalone
+COPY --from=builder /app/nursenest-core/.next/static ./nursenest-core/.next/static
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/package-lock.json ./package-lock.json
 COPY --from=builder /app/nursenest-core/public ./public
+COPY --from=builder /app/nursenest-core/public ./nursenest-core/public
+COPY --from=builder /app/nursenest-core/package.json ./nursenest-core/package.json
 
 EXPOSE 8080
 

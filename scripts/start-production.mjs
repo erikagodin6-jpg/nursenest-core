@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -43,6 +44,8 @@ function logWithTimestamp(method, ...args) {
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexAbs = path.join(root, "dist", "index.cjs");
+const nestedStandaloneStart = path.join(root, "nursenest-core", "scripts", "start-standalone.mjs");
+const nestedStandaloneServer = path.join(root, "nursenest-core", ".next", "standalone", "server.js");
 
 logWithTimestamp("log", "STARTING WEB PROCESS");
 logWithTimestamp("log", `NODE_ENV=${process.env.NODE_ENV ?? "(unset)"}`);
@@ -61,6 +64,33 @@ const runtimePresence = [
 ];
 logWithTimestamp("log", `[runtime_env] ${runtimePresence.join(" ")}`);
 
+if (fs.existsSync(nestedStandaloneServer) && fs.existsSync(nestedStandaloneStart)) {
+  logWithTimestamp(
+    "log",
+    `[STARTUP_VIS] start-production.mjs: delegating to Next standalone server=${nestedStandaloneServer}`,
+  );
+
+  const child = spawn(process.execPath, [nestedStandaloneStart], {
+    cwd: root,
+    env: process.env,
+    stdio: "inherit",
+  });
+
+  child.on("exit", (code, signal) => {
+    if (signal) {
+      logWithTimestamp("error", `[FATAL BOOT] Next standalone exited via signal ${signal}`);
+      process.kill(process.pid, signal);
+      return;
+    }
+    logWithTimestamp("error", `[FATAL BOOT] Next standalone exited with code ${code ?? 1}`);
+    process.exit(code ?? 1);
+  });
+
+  child.on("error", (error) => {
+    logWithTimestamp("error", `[FATAL BOOT] failed to start Next standalone: ${error.message}`);
+    process.exit(1);
+  });
+} else {
 if (!fs.existsSync(indexAbs)) {
   logWithTimestamp(
     "error",
@@ -98,3 +128,4 @@ logWithTimestamp(
   "log",
   "[start] server bundle evaluated; async boot continues until HTTP listen (see STARTING WEB SERVER / BOOT SUCCESS logs).",
 );
+}
