@@ -84,6 +84,24 @@ describe("resolveAuthJsRedirectUrl", () => {
       "/app/questions?pathwayId=us-rn-nclex-rn",
     );
   });
+
+  it("falls back to learner home for malformed study callbacks", () => {
+    assert.equal(
+      resolveAuthJsRedirectUrl("/app/flashcards", "https://www.nursenest.ca"),
+      "/app",
+    );
+    assert.equal(
+      resolveAuthJsRedirectUrl("https://www.nursenest.ca/app/flashcards", "https://www.nursenest.ca"),
+      "https://www.nursenest.ca/app",
+    );
+  });
+
+  it("preserves direct deck launch callbacks after sign-in", () => {
+    assert.equal(
+      resolveAuthJsRedirectUrl("/app/flashcards/cardiac-rhythm-basics?start=1&shuffle=1", "https://www.nursenest.ca"),
+      "/app/flashcards/cardiac-rhythm-basics?start=1&shuffle=1",
+    );
+  });
 });
 
 describe("wrapWithOnboardingIfNeeded", () => {

@@ -21,6 +21,10 @@ import {
   getRequiredPublicMetadataInterpolated,
   getRequiredPublicMetadataLine,
 } from "@/lib/marketing-i18n/marketing-metadata-strict";
+import {
+  publicFlashcardDeckLoginHref,
+  publicFlashcardsHubLoginHref,
+} from "@/lib/flashcards/public-flashcards-auth-callback";
 import { defaultFlashcardsMetaDescription } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -124,7 +128,10 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
   const flashcardsHub = withMarketingLocale(locale, "/flashcards");
   const lessons = withMarketingLocale(locale, "/lessons");
   const pathwayQuestions = withMarketingLocale(locale, rnQuestions(marketingRegion));
-  const login = withMarketingLocale(locale, "/login");
+  const login =
+    data.kind === "deck"
+      ? publicFlashcardDeckLoginHref(locale, data.slug)
+      : publicFlashcardsHubLoginHref(locale, marketingRegion);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

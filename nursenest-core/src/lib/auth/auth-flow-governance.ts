@@ -7,6 +7,7 @@ import {
 import {
   isLearnerDeepLinkPath,
   isStudyRoutePath,
+  isValidPathwayId,
   normalizeStudyCallback,
 } from "@/lib/auth/protected-study-routes";
 
@@ -46,6 +47,16 @@ function pathnameFromSafeCallback(safe: string): string {
     return new URL(safe, "http://localhost").pathname;
   } catch {
     return "";
+  }
+}
+
+function hasInvalidStudyPathwayId(raw: string): boolean {
+  try {
+    const url = new URL(raw, "http://localhost");
+    if (!isStudyRoutePath(url.pathname) || !url.searchParams.has("pathwayId")) return false;
+    return !isValidPathwayId(url.searchParams.get("pathwayId"));
+  } catch {
+    return false;
   }
 }
 
@@ -213,6 +224,9 @@ export function resolveMarketingAuthRedirectTarget(
   // land on the learner dashboard rather than the marketing home. Prevents authenticated users
   // from ending up on the marketing site after signing in from within the app.
   const rawTrimmed = raw?.trim() ?? "";
+  if (hasInvalidStudyPathwayId(rawTrimmed)) {
+    return postLoginMarketingHomePath(locale);
+  }
   if (rawTrimmed.startsWith("/app/") && !rawTrimmed.startsWith("/app/api/")) {
     return "/app";
   }
@@ -316,7 +330,9 @@ export function resolveAuthJsRedirectUrl(url: string, baseUrl: string): string {
   const fallback = `${baseUrl}/login`;
   try {
     if (url.startsWith("/")) {
-      const safe = safeCallbackPath(url) ?? resolveLearnerStudyCallbackPath(url);
+      if (url === "/app" || url.startsWith("/app?")) return "/app";
+      if (url.startsWith("/app/")) return resolveLearnerStudyCallbackPath(url) ?? "/app";
+      const safe = safeCallbackPath(url);
       if (safe) return safe;
       if (url === "/login" || url.startsWith("/login?")) return url;
       return fallback;
@@ -324,7 +340,13 @@ export function resolveAuthJsRedirectUrl(url: string, baseUrl: string): string {
     const target = new URL(url);
     const base = new URL(baseUrl);
     if (target.origin !== base.origin) return fallback;
-    const safe = safeCallbackPath(`${target.pathname}${target.search}${target.hash}`);
+    const path = `${target.pathname}${target.search}${target.hash}`;
+    if (target.pathname === "/app" || target.pathname.startsWith("/app/")) {
+      if (target.pathname === "/app") return `${base.origin}/app`;
+      const learner = resolveLearnerStudyCallbackPath(path);
+      return learner ? `${base.origin}${learner}` : `${base.origin}/app`;
+    }
+    const safe = safeCallbackPath(path);
     if (safe) return safe;
     return fallback;
   } catch {
