@@ -7,7 +7,8 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
-export const dynamic = "force-dynamic";
+// Converted to ISR - static tools hub with observability
+export const revalidate = 1800; // 30 minutes
 
 const toolsMarketingSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 

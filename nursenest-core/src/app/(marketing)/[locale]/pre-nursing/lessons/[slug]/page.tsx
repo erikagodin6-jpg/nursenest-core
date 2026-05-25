@@ -28,7 +28,8 @@ function getPreNursingStrings(): Record<string, string> {
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
-export const dynamic = "force-dynamic";
+// Converted to ISR - static marketing content tolerates stale data
+export const revalidate = 3600; // 1 hour
 export const dynamicParams = true;
 export const revalidate = 86400;
 

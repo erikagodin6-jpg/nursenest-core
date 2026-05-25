@@ -10,7 +10,8 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 
-export const dynamic = "force-dynamic";
+// Converted to ISR - static marketing content tolerates stale data
+export const revalidate = 3600; // 1 hour
 export const dynamicParams = true;
 
 type Props = { params: Promise<{ locale: string; topic: string }> };

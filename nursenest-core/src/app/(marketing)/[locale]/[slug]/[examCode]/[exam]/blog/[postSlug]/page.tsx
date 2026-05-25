@@ -42,10 +42,9 @@ type Props = {
   params: Promise<RawBlogPostParams>;
 };
 
-export const dynamic = "force-dynamic";
+// Converted to ISR - blog content already had revalidate, removed conflicting force-dynamic
 export const dynamicParams = true;
-
-export const revalidate = 3600;
+export const revalidate = 3600; // 1 hour
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, region, profession, exam, postSlug } = normalizeBlogPostParams(await params);
