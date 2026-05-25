@@ -101,5 +101,14 @@
     "**/src/content/pathway-lessons/generated-indexes": true,
     "**/build": true
   },
-  "vibecheck.watchMode": true
+  "vibecheck.watchMode": true,
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./apps",
+    "-p",
+    "*_test.py"
+  ],
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": true
 }
