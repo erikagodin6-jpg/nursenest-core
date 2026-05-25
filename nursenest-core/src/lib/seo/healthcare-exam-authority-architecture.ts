@@ -313,6 +313,7 @@ const ecosystemBlueprints: readonly Omit<HealthcareExamEcosystemPage, "id" | "pi
 ] as const;
 
 function ecosystemPathFor(pillar: HealthcareExamAuthorityPillar, intent: HealthcareExamSearchIntent): string {
+  if (pillar.id === "ca-rpn-rex-pn" && intent === "test-bank") return "/canada/rpn/rex-pn/test-bank";
   if (intent === "practice-questions") return `${pillar.canonicalPath}/questions`;
   if (intent === "cat-exam") return `${pillar.canonicalPath}/cat`;
   if (intent === "flashcards") return `${pillar.canonicalPath}/flashcards`;

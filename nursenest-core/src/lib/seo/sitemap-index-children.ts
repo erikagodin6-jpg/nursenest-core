@@ -150,7 +150,7 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
   "/canada/np/cnple/simulation",
   "/canada/np/cnple/flashcards",
   "/canada/np/cnple/report-card",
-  "/canada/pn/rex-pn/test-bank",
+  "/canada/rpn/rex-pn/test-bank",
 ] as const;
 
 /** Localized segment fallback when DB/registry collectors throw — representative tier-full locale slice. */

@@ -130,7 +130,7 @@ export const HEALTHCARE_TEST_BANK_PAGES = [
   {
     id: "ca-rpn-rex-pn-test-bank",
     pathwayId: "ca-rpn-rex-pn",
-    path: "/canada/pn/rex-pn/test-bank",
+    path: "/canada/rpn/rex-pn/test-bank",
     title: "REx-PN Test Bank — Canadian RPN Practice",
     description: "REx-PN test bank for Canadian RPN prep with client-needs questions, rationales, CAT practice, lessons, and flashcards.",
     h1: "REx-PN test bank for Canadian practical nurses",

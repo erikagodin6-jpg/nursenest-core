@@ -111,7 +111,7 @@ test("phase 1 healthcare test-bank rows are live and aliases remain planned-only
   const live = rows.filter((row) => row.status === "live").map((row) => row.canonicalPath).sort();
   assert.deepEqual(live, [
     "/canada/np/cnple/test-bank",
-    "/canada/pn/rex-pn/test-bank",
+    "/canada/rpn/rex-pn/test-bank",
     "/us/np/agpcnp/test-bank",
     "/us/np/fnp/test-bank",
     "/us/rn/nclex-rn/test-bank",
