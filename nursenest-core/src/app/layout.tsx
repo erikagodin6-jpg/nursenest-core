@@ -1,30 +1,33 @@
-import { Suspense } from 'react';
-import { StaticPlaceholder } from './StaticPlaceholder';
+import type { Metadata, Viewport } from "next";
+import { DM_Sans } from "next/font/google";
+import type { ReactNode } from "react";
 
-// Removed force-dynamic declaration
-// export const dynamic = "force-dynamic";
+import "./globals.css";
 
-// Added revalidate for static rendering
-export const revalidate = 1800;
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-dm-sans-next",
+});
 
-const Layout = ({ children }) => {
-  return (
-    <div>
-      <header>
-        {/* Removed headers() and cookies() usage in layout */}
-        {/* <header /> */}
-      </header>
-      <main>
-        <Suspense fallback={<StaticPlaceholder />}>
-          {children}
-        </Suspense>
-      </main>
-      <footer>
-        {/* Removed Prisma usage inside layout */}
-        {/* <Prisma /> */}
-      </footer>
-    </div>
-  );
+export const metadata: Metadata = {
+  metadataBase: new URL("https://nursenest.ca"),
+  applicationName: "NurseNest",
+  title: {
+    default: "NurseNest",
+    template: "%s | NurseNest",
+  },
 };
 
-export default Layout;
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning className={dmSans.variable}>
+      <body>{children}</body>
+    </html>
+  );
+}

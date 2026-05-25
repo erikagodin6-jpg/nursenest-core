@@ -28,7 +28,7 @@ describe("marketingTierHubStudyActionHref", () => {
     assert.equal(marketingTierHubStudyActionHref(usPn, "lessons"), "/us/pn/nclex-pn/lessons");
     assert.equal(marketingTierHubStudyActionHref(usPn, "practice_questions"), "/us/pn/nclex-pn/questions");
     assert.equal(marketingTierHubStudyActionHref(usPn, "exams"), "/app/practice-tests?pathwayId=us-lpn-nclex-pn");
-    assert.ok(marketingTierHubStudyActionHref(usPn, "flashcards").includes("pathwayId=us-lpn-nclex-pn"));
+    assert.equal(marketingTierHubStudyActionHref(usPn, "flashcards"), "/flashcards");
   });
 
   it("never returns empty or fragment-only paths for core actions", () => {

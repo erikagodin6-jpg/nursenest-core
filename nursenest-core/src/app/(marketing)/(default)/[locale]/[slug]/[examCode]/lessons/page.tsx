@@ -86,7 +86,7 @@ import {
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { buildSubscriberPublicLessonsHubHeroCta } from "@/lib/marketing/public-lessons-hub-hero-cta";
-import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import {
   alliedProfessionTrackChipLabel,
@@ -626,7 +626,7 @@ export default async function PathwayLessonsHubPage({
             : "Adaptive CAT unavailable",
         href: catHref,
       },
-      { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+      { label: "Flashcards", href: buildExamPathwayPath(pathway, "flashcards") },
       { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
       { label: "Exam Overview", href: overviewHref },
     ];
@@ -1116,7 +1116,7 @@ export default async function PathwayLessonsHubPage({
           : "Adaptive CAT unavailable",
       href: catHref,
     },
-    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+    { label: "Flashcards", href: buildExamPathwayPath(pathway, "flashcards") },
     { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
     { label: "Exam overview", href: overviewHref },
   ];

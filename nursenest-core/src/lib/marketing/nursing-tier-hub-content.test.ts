@@ -22,7 +22,7 @@ describe("buildNursingTierHubContent", () => {
       content.actions.map((action) => [action.id, action.label, action.href]),
       [
         ["lessons", "Lessons", "/us/rn/nclex-rn/lessons"],
-        ["flashcards", "Flashcards", "/app/flashcards?pathwayId=us-rn-nclex-rn"],
+        ["flashcards", "Flashcards", "/flashcards"],
         ["practice_questions", "Practice Questions", "/us/rn/nclex-rn/questions"],
         ["cat", "CAT", "/us/rn/nclex-rn/cat"],
       ],
@@ -79,7 +79,7 @@ describe("buildNursingTierHubContent", () => {
       content.actions.map((a) => a.href),
       [
         "/canada/rn/nclex-rn/lessons",
-        "/app/flashcards?pathwayId=ca-rn-nclex-rn",
+        "/flashcards",
         "/canada/rn/nclex-rn/questions",
         "/canada/rn/nclex-rn/cat",
       ],
@@ -89,7 +89,7 @@ describe("buildNursingTierHubContent", () => {
 });
 
 describe("resolveNursingTierHubStudyCardHref", () => {
-  it("guest RN: flashcards wrap with login callback; practice questions and CAT stay on marketing hubs", () => {
+  it("guest RN: flashcards, practice questions, and CAT stay on marketing hubs", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -98,15 +98,12 @@ describe("resolveNursingTierHubStudyCardHref", () => {
     const practice = byId.get("practice_questions")!;
     const cat = byId.get("cat")!;
     assert.equal(byId.has("exams"), false);
-    assert.equal(
-      resolveNursingTierHubStudyCardHref(pathway, flash, { viewerSignedIn: false }).startsWith("/login?callbackUrl="),
-      true,
-    );
+    assert.equal(resolveNursingTierHubStudyCardHref(pathway, flash, { viewerSignedIn: false }), "/flashcards");
     assert.equal(resolveNursingTierHubStudyCardHref(pathway, practice, { viewerSignedIn: false }), "/us/rn/nclex-rn/questions");
     assert.equal(resolveNursingTierHubStudyCardHref(pathway, cat, { viewerSignedIn: false }), "/us/rn/nclex-rn/cat");
   });
 
-  it("signed-in RN: flashcards and CAT launch use direct /app hrefs; practice questions stay on the marketing hub", () => {
+  it("signed-in RN: flashcards stays public, CAT launches app, and practice questions stay on the marketing hub", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -114,7 +111,7 @@ describe("resolveNursingTierHubStudyCardHref", () => {
     assert.equal(byId.has("exams"), false);
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, byId.get("flashcards")!, { viewerSignedIn: true }),
-      "/app/flashcards?pathwayId=us-rn-nclex-rn",
+      "/flashcards",
     );
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, byId.get("practice_questions")!, { viewerSignedIn: true }),

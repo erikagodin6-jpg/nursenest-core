@@ -27,7 +27,7 @@ function renderHub(
 }
 
 describe("NursingTierHubPage", () => {
-  it("Flashcards tile links to /app/flashcards with pathwayId when SSR guest but client authenticated", () => {
+  it("Flashcards tile links to the public flashcards hub when SSR guest but client authenticated", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -44,10 +44,10 @@ describe("NursingTierHubPage", () => {
     assert.ok(card);
     const link = card.closest("a");
     assert.ok(link);
-    assert.equal(link.getAttribute("href"), "/app/flashcards?pathwayId=us-rn-nclex-rn");
+    assert.equal(link.getAttribute("href"), "/flashcards");
   });
 
-  it("Flashcards tile uses login callback when guest on server and client", () => {
+  it("Flashcards tile stays public when guest on server and client", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -64,12 +64,10 @@ describe("NursingTierHubPage", () => {
     assert.ok(card);
     const link = card.closest("a");
     assert.ok(link);
-    const href = link.getAttribute("href") ?? "";
-    assert.match(href, /^\/login\?callbackUrl=/);
-    assert.ok(href.includes(encodeURIComponent("/app/flashcards?pathwayId=us-rn-nclex-rn")));
+    assert.equal(link.getAttribute("href"), "/flashcards");
   });
 
-  it("Canada RN hub Flashcards uses ca-rn-nclex-rn pathwayId when signed in", () => {
+  it("Canada RN hub Flashcards uses the public flashcards hub", () => {
     const pathway = getExamPathwayById("ca-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -86,7 +84,7 @@ describe("NursingTierHubPage", () => {
     assert.ok(card);
     const link = card.closest("a");
     assert.ok(link);
-    assert.equal(link.getAttribute("href"), "/app/flashcards?pathwayId=ca-rn-nclex-rn");
+    assert.equal(link.getAttribute("href"), "/flashcards");
   });
 
   it("New Grad transition hub renders guided study path strip", () => {

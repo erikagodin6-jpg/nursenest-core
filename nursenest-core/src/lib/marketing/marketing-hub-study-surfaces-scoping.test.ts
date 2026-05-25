@@ -36,7 +36,7 @@ describe("marketing hub study surfaces stay tier + country scoped", () => {
     });
   }
 
-  it("tier hub action cards: flashcards + practice tests + practice exam use in-app pathway id; CAT uses marketing /cat", () => {
+  it("tier hub action cards: flashcards stays public; practice tests use in-app pathway id; CAT uses marketing /cat", () => {
     const p = getExamPathwayById("ca-rpn-rex-pn");
     assert.ok(p);
     const content = buildNursingTierHubContent(p!);
@@ -44,8 +44,8 @@ describe("marketing hub study surfaces stay tier + country scoped", () => {
     assert.equal(byId.get("lessons")?.href, "/canada/pn/rex-pn/lessons");
     assert.equal(byId.get("practice_questions")?.href, "/canada/pn/rex-pn/questions");
     assert.equal(byId.get("cat")?.href, "/canada/pn/rex-pn/cat");
-    assert.equal(byId.get("exams")?.href, "/app/practice-tests?pathwayId=ca-rpn-rex-pn");
-    assert.equal(byId.get("flashcards")?.href, `/app/flashcards?pathwayId=${encodeURIComponent("ca-rpn-rex-pn")}`);
+    assert.equal(byId.has("exams"), false);
+    assert.equal(byId.get("flashcards")?.href, "/flashcards");
   });
 
   it("region-aware exam naming: US PN vs Canada PN", () => {

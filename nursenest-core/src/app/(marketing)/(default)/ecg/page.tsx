@@ -100,7 +100,7 @@ const CTA_ITEMS = [
   {
     key: "flashcards",
     label: "ECG Flashcards",
-    href: "/app/flashcards",
+    href: "/flashcards",
     description:
       "Spaced-repetition rhythm and interval review",
     icon: Brain,

@@ -9,9 +9,8 @@ import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-c
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { ECG_MODULE_ENTRY, pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import {
-  pathwayHubAppFlashcardsHref,
   pathwayHubAppPracticeTestsHref,
   pathwayHubAppQuestionsHref,
   pathwayHubAppQuestionsPathwayMixedHref,
@@ -98,7 +97,7 @@ export function NpPremiumHubWorkstation({
   const ecgHref = ECG_MODULE_ENTRY;
   const casesHref = withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathway.id);
   const osceHref = withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.osce, pathway.id);
-  const flashHref = pathwayHubAppFlashcardsHref(pathway.id);
+  const flashHref = HUB.flashcards;
   const practiceHref = pathwayHubAppPracticeTestsHref(pathway.id);
   const weakHref = pathwayHubAppWeakAreasFlashcardsHref(pathway.id);
   const progressHref = "/app/account/progress";
@@ -123,7 +122,7 @@ export function NpPremiumHubWorkstation({
     prefetch?: boolean;
   }[] = [
     { key: "lessons", label: t("components.examPathwayHub.premiumModules.hubLessonsTitle"), href: lessonsHref, icon: BookOpen },
-    { key: "flashcards", label: t("components.examPathwayHub.premiumModules.flashcardsTitle"), href: wrapApp(flashHref, viewerSignedIn), icon: Layers, prefetch: false },
+    { key: "flashcards", label: t("components.examPathwayHub.premiumModules.flashcardsTitle"), href: flashHref, icon: Layers },
     {
       key: "practice",
       label: t("components.examPathwayHub.premiumModules.practiceTestsTitle"),

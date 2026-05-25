@@ -9,8 +9,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { loginWithCallback, HUB } from "@/lib/marketing/marketing-entry-routes";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 
@@ -78,10 +77,6 @@ export default async function PathwayFlashcardsPage({ params }: Props) {
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, {
     hubBasePath: buildExamPathwayPath(pathway),
   });
-
-  const session = await getOptionalPublicSession({ pathname, surface: "marketing.pathway_flashcards" }).catch(() => null);
-  const isSignedIn = Boolean((session?.user as { id?: string } | undefined)?.id);
-  const flashcardAppHref = isSignedIn ? "/app/flashcards" : loginWithCallback("/app/flashcards");
 
   const hubHref = buildExamPathwayPath(pathway);
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
@@ -172,11 +167,11 @@ export default async function PathwayFlashcardsPage({ params }: Props) {
         ) : (
           <div className="mb-10 flex flex-col gap-3 sm:flex-row">
             <Link
-              href={flashcardAppHref}
+              href={HUB.flashcards}
               className="flex-1 rounded-2xl px-8 py-4 text-center text-[15px] font-bold shadow-sm transition-all"
               style={{ background: "var(--semantic-brand)", color: "#fff" }}
             >
-              {isSignedIn ? "Open Flashcards" : "Sign in to study flashcards"}
+              Browse public flashcard decks
             </Link>
             <Link
               href={HUB.flashcards}

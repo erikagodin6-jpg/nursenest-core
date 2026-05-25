@@ -8,7 +8,8 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 export const MARKETING_TIER_HUB_STUDY_ACTION_IDS = [
   "lessons",
@@ -58,7 +59,7 @@ export function marketingTierHubStudyActionHref(pathway: ExamPathwayDefinition, 
     case "lessons":
       return marketingPathwayLessonsIndexPath(pathway);
     case "flashcards":
-      return pathwayHubAppFlashcardsHref(pathway.id);
+      return HUB.flashcards;
     case "practice_questions":
       return buildExamPathwayPath(pathway, "questions");
     case "cat":
@@ -109,9 +110,10 @@ export function resolveMarketingTierHubStudyActionHref(
     if (actionId === "flashcards") {
       try {
         const u = new URL(raw, RESOLVE_URL_BASE);
-        if (u.pathname !== "/app/flashcards") return canonical;
-        if (u.searchParams.get("pathwayId") !== pathway.id) return canonical;
-        return raw;
+        if (u.pathname !== HUB.flashcards && !u.pathname.startsWith(`${HUB.flashcards}/`)) {
+          return canonical;
+        }
+        return `${u.pathname}${u.search}${u.hash}`;
       } catch {
         return canonical;
       }

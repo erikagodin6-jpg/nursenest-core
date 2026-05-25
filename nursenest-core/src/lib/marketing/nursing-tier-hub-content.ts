@@ -93,7 +93,7 @@ export function resolveNursingTierHubStudyCardHref(
     return opts.viewerSignedIn ? appPathwayCatSessionStartPath(pathway.id) : base;
   }
   if (action.id === "flashcards") {
-    return opts.viewerSignedIn ? base : loginWithCallback(base);
+    return base;
   }
   return base;
 }

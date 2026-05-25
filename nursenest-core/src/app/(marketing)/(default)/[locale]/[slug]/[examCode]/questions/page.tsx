@@ -9,7 +9,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
@@ -311,7 +311,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
           : "Adaptive CAT unavailable",
       href: catHrefWithProfession,
     },
-    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+    { label: "Flashcards", href: buildExamPathwayPath(pathway, "flashcards") },
     { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
     { label: "Exam overview", href: overviewHref },
   ];

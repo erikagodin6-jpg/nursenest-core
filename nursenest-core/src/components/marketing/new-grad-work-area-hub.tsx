@@ -21,9 +21,9 @@ import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-li
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { StudyCard } from "@/components/ui/study-card";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import type { PublicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { US_NEW_GRAD_TRANSITION_PATHWAY_ID } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { newGradMarketingHubBase, type NewGradMarketingShell } from "@/lib/navigation/new-grad-marketing-hub-paths";
@@ -61,7 +61,7 @@ export function NewGradWorkAreaHub({
   const lessonsHref = study.lessons;
   const questionsHref = study.questions;
   const catHref = study.cat;
-  const flashcardsHref = pathwayHubAppFlashcardsHref(transitionPathwayId);
+  const flashcardsHref = HUB.flashcards;
   const practiceTestsHref = pathwayHubAppPracticeTestsHref(transitionPathwayId);
   const scenariosHref =
     shell === "us"

@@ -70,8 +70,8 @@ export function InternationalRnHubSections({
         </h2>
         <ProseBlocks text={copy.flashcardsPreview} />
         <p className="mt-4">
-          <Link className="font-semibold text-primary underline-offset-4 hover:underline" href={`/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`}>
-            Open flashcards in the app
+          <Link className="font-semibold text-primary underline-offset-4 hover:underline" href={buildExamPathwayPath(pathway, "flashcards")}>
+            Open public flashcards for this pathway
           </Link>
         </p>
       </section>
