@@ -527,7 +527,7 @@ for (const requiredCopy of [
   "COPY --from=builder /app/nursenest-core/scripts ./nursenest-core/scripts",
   "COPY --from=builder /app/package.json ./package.json",
   "COPY --from=builder /app/package-lock.json ./package-lock.json",
-  "COPY --from=builder /app/public ./public",
+  "COPY --from=builder /app/nursenest-core/public ./public",
 ]) {
   assertIncludes(dockerfile, requiredCopy, "Dockerfile runner stage");
 }
