@@ -29,9 +29,8 @@ function getPreNursingStrings(): Record<string, string> {
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
 // Converted to ISR - static marketing content tolerates stale data
-export const revalidate = 3600; // 1 hour
+export const revalidate = 86400; // 24h ISR for pre-nursing modules
 export const dynamicParams = true;
-export const revalidate = 86400;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dict = getPreNursingStrings();

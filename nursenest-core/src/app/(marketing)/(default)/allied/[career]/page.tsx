@@ -22,9 +22,10 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
-export const revalidate = 1800; // 🧊 ISR: allied health lessons
-export const revalidate = 86400;
+export const revalidate = 86400; // 🧊 ISR: allied health lessons (24h)
 export const dynamicParams = true;
 
 type Props = { params: Promise<{ career: string }> };

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "23d7816d1a89b63e0a818e47344bbbe889b5bd08ce9b611d008f894e0c80fade",
-  "generatedAt": "2026-05-25T13:44:43.643Z",
+  "fingerprint": "02ad500cfccd95a28ff5a50a05a3605e02c02342d065457d9768ca27f43a448a",
+  "generatedAt": "2026-05-25T19:38:37.046Z",
   "inputs": [
     {
       "type": "file",
@@ -695,6 +695,14 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/flashcards/custom/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/decks/[deckId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/decks/page.tsx"
     },
     {
       "type": "file",
@@ -2130,6 +2138,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/signin/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/signup/page.tsx"
     },
     {
@@ -2411,6 +2423,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/[locale]/reset-password/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/[locale]/signin/page.tsx"
     },
     {
       "type": "file",
@@ -4018,19 +4034,11 @@
     },
     {
       "type": "file",
-      "path": "src/app/AuthStatusIsland.tsx"
-    },
-    {
-      "type": "file",
       "path": "src/app/error.tsx"
     },
     {
       "type": "file",
       "path": "src/app/feed.xml/route.ts"
-    },
-    {
-      "type": "file",
-      "path": "src/app/flashcards.tsx"
     },
     {
       "type": "file",
@@ -4046,15 +4054,7 @@
     },
     {
       "type": "file",
-      "path": "src/app/login.tsx"
-    },
-    {
-      "type": "file",
       "path": "src/app/not-found.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/reset-password.tsx"
     },
     {
       "type": "file",
@@ -4066,23 +4066,7 @@
     },
     {
       "type": "file",
-      "path": "src/app/routes/flashcards.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/routes/lessons.tsx"
-    },
-    {
-      "type": "file",
-      "path": "src/app/routes/pathway.tsx"
-    },
-    {
-      "type": "file",
       "path": "src/app/rss.xml/route.ts"
-    },
-    {
-      "type": "file",
-      "path": "src/app/signup.tsx"
     },
     {
       "type": "file",
@@ -4139,10 +4123,6 @@
     {
       "type": "file",
       "path": "src/app/sitemap.xml/route.ts"
-    },
-    {
-      "type": "file",
-      "path": "src/app/verify-email.tsx"
     },
     {
       "type": "file",
@@ -7157,6 +7137,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 39340
+    "durationMs": 36391
   }
 }

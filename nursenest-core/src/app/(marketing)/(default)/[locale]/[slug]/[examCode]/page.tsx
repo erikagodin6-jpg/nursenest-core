@@ -39,7 +39,7 @@ import {
 } from "@/lib/measurements/measurement-preference";
 
 export const dynamicParams = true;
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // 🧊 ISR: exam pathway hub pages
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
