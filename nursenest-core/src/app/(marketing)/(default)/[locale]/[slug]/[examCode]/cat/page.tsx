@@ -6,10 +6,7 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import {
-  assessCatEligibilityForSubscriberAndPathway,
-  assessMarketingCatSurfaceWithoutAuth,
-} from "@/lib/exam-pathways/cat-eligibility";
+import { assessMarketingCatSurfaceWithoutAuth } from "@/lib/exam-pathways/cat-eligibility";
 import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
@@ -27,9 +24,6 @@ import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -117,13 +111,6 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
     roleTrack,
   });
 
-  const session = await getOptionalPublicSession({
-    pathname: `${pathname}/cat`,
-    surface: "marketing.exam_hub.cat",
-  });
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const isSignedIn = Boolean(userId);
-
   const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
   const { crumbs, schemaItems } = pathwayCatPracticeBreadcrumbs(pathway);
   const overviewHref = hubBase;
@@ -137,43 +124,7 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
     alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : undefined,
   );
 
-  let assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
-
-  if (isSignedIn) {
-    const entitlement = await resolveEntitlementForPage(userId);
-    if (entitlement === "error") {
-      assessment = {
-        eligible: false,
-        reason: "internal_error",
-        nextAction: "retry",
-        marketingPrimaryCta: "none",
-        safeUserMessage:
-          "We could not verify your subscription right now. Try refreshing, or open the question bank while we sort this out.",
-        pathway,
-        pathwayId: pathway.id,
-        marketingCatPath,
-        appCatStartPath: appPathwayCatSessionStartPath(pathway.id),
-        logCode: "CAT_ENTITLEMENT_VERIFY_FAILED",
-      };
-      safeServerLog("cat_marketing", "CAT_ENTITLEMENT_VERIFY_FAILED", {
-        pathwayId: pathway.id,
-        userIdPrefix: userId.slice(0, 8),
-      });
-    } else {
-      assessment = await assessCatEligibilityForSubscriberAndPathway({
-        userId,
-        entitlement,
-        pathway,
-      });
-    }
-    if (!assessment.eligible && assessment.logCode !== "CAT_OK") {
-      safeServerLog("cat_marketing", assessment.logCode, {
-        pathwayId: pathway.id,
-        reason: assessment.reason,
-        userIdPrefix: userId.slice(0, 8),
-      });
-    }
-  }
+  const assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
 
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const catShort = catPathwayShortCatLabel(pathway);

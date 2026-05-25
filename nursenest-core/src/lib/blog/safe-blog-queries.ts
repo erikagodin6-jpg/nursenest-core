@@ -94,6 +94,10 @@ function shouldSkipBlogDbForProductionBuild(): boolean {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
 }
 
+function shouldUseStaticBlogIndexOnDbError(): boolean {
+  return process.env.BLOG_INDEX_STATIC_ON_DB_ERROR?.trim() !== "0";
+}
+
 function blogIndexPostsFromStaticCorpusOnly(
   safePage: number,
   safeSize: number,
@@ -644,7 +648,7 @@ export async function getPublishedBlogPostsPage(
     const staticOnFailure =
       isGlobalUnscopedBlogIndexScope(scope) &&
       (listStaticBlogPostsForIndex().length > 0 || listBlogStaticLongtailRecords().length > 0) &&
-      (process.env.NODE_ENV !== "production" || process.env.BLOG_INDEX_STATIC_ON_DB_ERROR === "1");
+      shouldUseStaticBlogIndexOnDbError();
     if (staticOnFailure) {
       const built = blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);
       const listLoad: BlogIndexListLoadMeta = {

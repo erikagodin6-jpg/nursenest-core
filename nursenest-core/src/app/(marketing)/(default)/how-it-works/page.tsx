@@ -10,7 +10,7 @@ import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-js
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const PAGE_TITLE = "How NurseNest Works — Adaptive Exam Prep System";
 const PAGE_DESCRIPTION =

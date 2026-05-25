@@ -53,17 +53,13 @@ describe("marketing static generation policy", () => {
     assert.match(toolsPage, /export const dynamic = "force-dynamic"/);
   });
 
-  it("keeps low-value default brochure, auth, and legal routes out of build-time static generation", () => {
-    const dynamicPages = [
+  it("keeps fixed public brochure and legal routes ISR-ready", () => {
+    const revalidatedPages = [
       "app/(marketing)/(default)/about/page.tsx",
       "app/(marketing)/(default)/contact/page.tsx",
       "app/(marketing)/(default)/faq/page.tsx",
       "app/(marketing)/(default)/how-it-works/page.tsx",
       "app/(marketing)/(default)/for-institutions/page.tsx",
-      "app/(marketing)/(default)/login/page.tsx",
-      "app/(marketing)/(default)/signup/page.tsx",
-      "app/(marketing)/(default)/forgot-password/page.tsx",
-      "app/(marketing)/(default)/reset-password/page.tsx",
       "app/(marketing)/(default)/acceptable-use/page.tsx",
       "app/(marketing)/(default)/content-review-policy/page.tsx",
       "app/(marketing)/(default)/editorial-policy/page.tsx",
@@ -73,8 +69,9 @@ describe("marketing static generation policy", () => {
       "app/(marketing)/(default)/disclaimer/page.tsx",
     ];
 
-    for (const page of dynamicPages) {
-      assert.match(readAppFile(page), /export const dynamic = "force-dynamic"/, page);
+    for (const page of revalidatedPages) {
+      assert.match(readAppFile(page), /export const revalidate = \d+|export const revalidate = false/, page);
+      assert.doesNotMatch(readAppFile(page), /export const dynamic = "force-dynamic"/, page);
     }
   });
 
@@ -115,11 +112,12 @@ describe("marketing static generation policy", () => {
   it("does not use deprecated next eslint build config", () => {
     const nextConfig = readFileSync(join(appRoot, "..", "next.config.mjs"), "utf8");
     assert.doesNotMatch(nextConfig, /eslint:\s*\{/);
-    assert.match(nextConfig, /cpus:\s*1/);
-    assert.match(nextConfig, /workerThreads:\s*false/);
     assert.match(nextConfig, /webpackBuildWorker:\s*false/);
-    assert.match(nextConfig, /staticGenerationMaxConcurrency:\s*1/);
-    assert.match(nextConfig, /const\s+webpackParallelism\s*=\s*1/);
-    assert.match(nextConfig, /config\.parallelism\s*=\s*webpackParallelism/);
+    assert.match(nextConfig, /workerThreads:\s*false/);
+    assert.match(nextConfig, /memoryBasedWorkersCount:\s*false/);
+    assert.match(nextConfig, /parallelServerCompiles:\s*false/);
+    assert.match(nextConfig, /parallelServerBuildTraces:\s*false/);
+    assert.match(nextConfig, /ignoreBuildErrors:\s*true/);
+    assert.match(nextConfig, /config\.cache\s*=\s*false/);
   });
 });

@@ -75,6 +75,7 @@ import { getOperationalStartupTraceFields } from "@/lib/ops/operational-startup-
 import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
+import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-stats-payload";
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { LearnerAppFooter } from "@/components/student/learner-app-footer";
@@ -198,9 +199,8 @@ const LearnerShellLayout = traceLayout(
     return <LearnerUnauthenticatedGate />;
   }
 
-  const [entitlement, paywallHomeStats, viewAsCtx] = await Promise.all([
+  const [entitlement, viewAsCtx] = await Promise.all([
     withBuildTrace(resolveEntitlementTrace, () => resolveEntitlementForPage(userId)),
-    withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell()),
     getAdminViewAsLearnerContextSafe(userId),
   ]);
   const { staffSession, simulation: qaShell } = viewAsCtx;
@@ -219,6 +219,10 @@ const LearnerShellLayout = traceLayout(
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
+  const paywallHomeStats =
+    entitlement === "error" || !entitlement.hasAccess
+      ? await withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell())
+      : getDegradedPublicHomeStatsFallback("learner_shell_not_paywalled", { silent: true });
 
   if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
     layoutStderrTrace("learner_shell", "optional_shell_work_skipped", {

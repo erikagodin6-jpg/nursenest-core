@@ -6,7 +6,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { SUPPORT_CONTACT_COPY } from "@/lib/support/support-policy";
 
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

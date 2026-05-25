@@ -18,11 +18,11 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
 
 | Rank | File | Lines | Bytes | use client | Risk |
 | --- | --- | ---: | ---: | --- | --- |
-| 1 | `src/components/student/practice-test-runner-client.tsx` | 3470 | 160864 | yes | medium |
+| 1 | `src/components/student/practice-test-runner-client.tsx` | 3682 | 169743 | yes | medium |
 | 2 | `src/components/admin/admin-blog-control-panel-client.tsx` | 2859 | 126714 | yes | medium |
-| 3 | `src/components/student/question-bank-practice-client.tsx` | 1941 | 88345 | yes | lower |
-| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1886 | 93053 | yes | lower |
-| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 421 | 21110 | no | lower |
+| 3 | `src/components/student/practice-tests-hub-client.tsx` | 2003 | 98223 | yes | lower |
+| 4 | `src/components/student/question-bank-practice-client.tsx` | 1941 | 89726 | yes | lower |
+| 5 | `src/app/(app)/app/(learner)/layout.tsx` | 532 | 26222 | no | lower |
 
 ## Static imports (first 12k chars)
 
@@ -41,7 +41,6 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/premium-protection/config`
   - `@/lib/practice-tests/types`
   - `@/components/student/cat-live-transparency-strip`
-  - `@/components/student/cat-results-coach-section`
   - `@/components/student/cat-study-feedback-panel`
   - `@/components/student/protected-premium-content`
   - `@/components/student/study-notes-panel`
@@ -71,6 +70,7 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/components/study/confidence-selector`
   - `@/components/study/confidence-analytics`
   - `@/components/study/smart-review-screen`
+  - `@/components/study/study-plan`
 
 ### `src/components/admin/admin-blog-control-panel-client.tsx`
 
@@ -97,6 +97,39 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/admin/parse-admin-json-response`
   - `@/lib/blog/blog-optional-slug`
   - `@/lib/datetime/datetime-local-input`
+
+### `src/components/student/practice-tests-hub-client.tsx`
+
+- Boundary: Client Component.
+
+- Imports:
+  - `next/link`
+  - `next/navigation`
+  - `react`
+  - `lucide-react`
+  - `@/lib/marketing-i18n`
+  - `@/lib/format/text-case`
+  - `@/components/learner-study-ui`
+  - `@/lib/learner-study-hub/body-system-data`
+  - `@/lib/learner-study-hub/pathway-lesson-study-materials`
+  - `@/lib/study/normalize-study-category`
+  - `@/components/ui/premium-empty-state`
+  - `@/lib/practice-tests/types`
+  - `@/lib/practice-tests/practice-test-cat-create-codes`
+  - `@/components/student/cat-ambiguity-pathway-picker`
+  - `@/lib/practice-tests/practice-tests-hub-cat-pathway`
+  - `@/lib/exam-context/exam-registry`
+  - `@/lib/student/interaction-priority`
+  - `@/lib/practice-tests/practice-exam-start-payload`
+  - `@/lib/exam-pathways/pathway-cat-flow`
+  - `@/components/student/practice-tests-hub-analytics`
+  - `@/components/student/practice-exam-cat-inline-launch`
+  - `@/components/exam/exam-study-theme-modal`
+  - `@/components/student/learner-study-live-sync-banner`
+  - `@/components/student/tracked-study-loop-cat-link`
+  - `@/lib/practice-tests/types`
+  - `@/lib/learner/app-study-internal-links`
+  - `@/components/lessons/pathway-lesson-link-practice`
 
 ### `src/components/student/question-bank-practice-client.tsx`
 
@@ -144,44 +177,14 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/learner/study-settings`
   - `@/components/exams/questions/bowtie-question-renderer`
 
-### `src/components/student/practice-tests-hub-client.tsx`
-
-- Boundary: Client Component.
-
-- Imports:
-  - `next/link`
-  - `next/navigation`
-  - `react`
-  - `lucide-react`
-  - `@/lib/marketing-i18n`
-  - `@/lib/format/text-case`
-  - `@/components/learner-study-ui`
-  - `@/lib/learner-study-hub/body-system-data`
-  - `@/lib/learner-study-hub/pathway-lesson-study-materials`
-  - `@/lib/study/normalize-study-category`
-  - `@/components/ui/premium-empty-state`
-  - `@/lib/practice-tests/types`
-  - `@/lib/practice-tests/practice-test-cat-create-codes`
-  - `@/components/student/cat-ambiguity-pathway-picker`
-  - `@/lib/practice-tests/practice-tests-hub-cat-pathway`
-  - `@/lib/exam-context/exam-registry`
-  - `@/lib/student/interaction-priority`
-  - `@/lib/practice-tests/practice-exam-start-payload`
-  - `@/components/exam/exam-study-theme-modal`
-  - `@/components/student/learner-study-live-sync-banner`
-  - `@/components/student/tracked-study-loop-cat-link`
-  - `@/lib/practice-tests/types`
-  - `@/lib/learner/app-study-internal-links`
-  - `@/components/lessons/pathway-lesson-link-practice`
-
-### `src/app/(student)/app/(learner)/layout.tsx`
+### `src/app/(app)/app/(learner)/layout.tsx`
 
 - Boundary: Server layout.
 
 - Imports:
   - `react`
   - `react`
-  - `next/headers`
+  - `@/build/tracing`
   - `@/components/i18n/marketing-i18n-provider`
   - `@/lib/i18n/marketing-locale-server`
   - `@/lib/i18n/marketing-locale-policy`
@@ -189,6 +192,7 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/marketing-i18n/marketing-i18n-shard-groups`
   - `@/lib/auth/protected-route-session`
   - `@/components/auth/learner-shell-user-bar`
+  - `@/components/auth/sign-out-button`
   - `@/components/student/learner-shell-language-control`
   - `@/components/student/checkout-success-banner`
   - `@/components/exam/learner-exam-chrome`
@@ -218,7 +222,6 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/observability/layout-stderr-trace`
   - `@/lib/ops/operational-startup-diagnostics`
   - `@/components/learner/learner-silent-section-boundary`
-  - `@/components/student/paywall-home-stats-context`
 
 
-*Generated 2026-05-11T16:30:22.858Z*
+*Generated 2026-05-25T11:44:32.651Z*

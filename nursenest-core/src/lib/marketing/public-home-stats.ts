@@ -29,6 +29,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 const publicHomeStatsSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 import { shouldBypassPublicHomeStatsDbAtStartup } from "@/lib/marketing/public-home-stats-startup";
 import { safePrismaCountTimeout, withPrismaReadFallbackTimeout } from "@/lib/prisma/safe-reads";
+import { isDurabilityDegradedMode } from "@/lib/durability/durability-flags";
 
 const HOME_STATS_SLOW_MS = 2500;
 const HOME_STATS_DB_DEADLINE_MS = 800;
@@ -120,7 +121,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
       attributes: { route: "/" },
     },
     async () => {
-      if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
+      if (!isDatabaseUrlConfigured() || isRuntimeSafeMode() || isDurabilityDegradedMode()) {
         return {
           totalLessons: 0,
           pathwayLessonsPublished: 0,
@@ -134,7 +135,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
           scenarioCount: 0,
           topicCategoryCount: 0,
           degraded: true,
-          runtimeSafeMode: isRuntimeSafeMode(),
+          runtimeSafeMode: isRuntimeSafeMode() || isDurabilityDegradedMode(),
           proofDisplay: "neutral",
         };
       }
@@ -169,6 +170,11 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
  */
 export async function getHomepagePublicHomeStats(): Promise<PublicHomeStatsPayload> {
   const nowMs = Date.now();
+  if (isDurabilityDegradedMode()) {
+    safeServerLog("marketing", "home_stats_fail_soft", { reason: "durability_degraded_mode" });
+    return getDegradedPublicHomeStatsFallback("durability_degraded_mode", { silent: true });
+  }
+
   const memorySnapshot = getHomeStatsMemoryState().snapshot;
   if (memorySnapshot) {
     const stale = !isHomeStatsSnapshotFresh(memorySnapshot.cachedAtMs, nowMs);

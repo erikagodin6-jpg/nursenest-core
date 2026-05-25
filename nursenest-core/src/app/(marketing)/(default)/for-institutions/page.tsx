@@ -7,7 +7,7 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const FOR_INSTITUTIONS_META_KEYS = [
   "pages.forInstitutions.forNursingSchoolsAndPrograms",

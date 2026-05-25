@@ -24,7 +24,7 @@ const TARGETS = [
   "src/components/student/practice-tests-hub-client.tsx",
   "src/components/student/question-bank-practice-client.tsx",
   "src/components/admin/admin-blog-control-panel-client.tsx",
-  "src/app/(student)/app/(learner)/layout.tsx",
+  "src/app/(app)/app/(learner)/layout.tsx",
 ];
 
 const CRITICAL_SCORE = 4500;

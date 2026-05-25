@@ -10,6 +10,11 @@ type AuthSessionProviderProps = {
   children: React.ReactNode;
   /** From `await auth()` in the root layout so `useSession()` is not stuck on `loading` for the first paint. */
   session?: Session | null;
+  /**
+   * `public` keeps next-auth context available for legacy public chrome without
+   * issuing client session refetches. Public marketing must stay up during auth outages.
+   */
+  runtimeBoundary?: "public" | "authenticated";
 };
 
 /**
@@ -46,17 +51,22 @@ function BfcacheSessionResync() {
   return null;
 }
 
-export function AuthSessionProvider({ children, session }: AuthSessionProviderProps) {
+export function AuthSessionProvider({
+  children,
+  session,
+  runtimeBoundary = "authenticated",
+}: AuthSessionProviderProps) {
+  const publicBoundary = runtimeBoundary === "public";
   return (
     <SessionProvider
       session={session}
       basePath={PINNED_AUTH_BASE_PATH}
-      refetchOnWindowFocus
+      refetchOnWindowFocus={!publicBoundary}
       refetchWhenOffline={false}
       /** JWT: periodic refetch keeps `useSession()` aligned with server after tab idle / odd navigation. */
-      refetchInterval={5 * 60}
+      refetchInterval={publicBoundary ? 0 : 5 * 60}
     >
-      <BfcacheSessionResync />
+      {publicBoundary ? null : <BfcacheSessionResync />}
       {children}
     </SessionProvider>
   );

@@ -4,10 +4,6 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { ExamPrepCourseProgramJsonLd, WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import {
@@ -17,8 +13,6 @@ import {
   shouldOmitRegionalHreflangForInternalAdmissionsPrep,
 } from "@/lib/exam-pathways/admissions-prep-internal-pathways";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { loadPathwayHubResumePayload, type PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
-import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import {
   fallbackAlliedPathwayHubOverview,
@@ -182,62 +176,9 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     });
   }
 
-  let hubResume: PathwayHubResumePayload | null = null;
-  let viewerSignedIn = false;
-  let viewerHasPathwayLessonAccess = false;
-
-  try {
-    const session = await getOptionalPublicSession({ pathname, surface: "marketing.exam_hub" });
-    const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
-    viewerSignedIn = Boolean(userId);
-
-    if (isAlliedHub && userId && isDatabaseUrlConfigured()) {
-      alliedMeasurementSync = true;
-      try {
-        const row = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { measurementPreference: true },
-        });
-        const fromDb = parseMeasurementPreference(row?.measurementPreference ?? null);
-        if (fromDb) alliedInitialMeasurement = fromDb;
-      } catch {
-        // ignore
-      }
-    }
-
-    if (userId && isDatabaseUrlConfigured()) {
-      const entitlement = await resolveEntitlementForPage(userId);
-      if (entitlement !== "error" && entitlement.hasAccess) {
-        let learnerPath: string | null = null;
-
-        try {
-          const u = await prisma.user.findUnique({
-            where: { id: userId },
-            select: { learnerPath: true },
-          });
-          learnerPath = u?.learnerPath ?? null;
-        } catch {}
-
-        viewerHasPathwayLessonAccess = canViewFullPathwayLesson(entitlement, pathway, learnerPath);
-
-        if (viewerHasPathwayLessonAccess) {
-          const resume = await loadPathwayHubResumePayload(
-            userId,
-            entitlement,
-            learnerPath,
-            pathway,
-            buildExamPathwayPath(pathway, "lessons"),
-          );
-
-          if (resume.lastTouched || resume.nextRecommended) {
-            hubResume = resume;
-          }
-        }
-      }
-    }
-  } catch {
-    // safe fallback
-  }
+  const hubResume = null;
+  const viewerSignedIn = false;
+  const viewerHasPathwayLessonAccess = false;
 
   return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
     const ecgModulePublicForHub = await resolveMarketingHubEcgModulePublic();

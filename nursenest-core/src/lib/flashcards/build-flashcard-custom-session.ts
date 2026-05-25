@@ -98,6 +98,10 @@ export type BuildFlashcardCustomSessionFailure = {
 
 export type BuildFlashcardCustomSessionResult = BuildFlashcardCustomSessionSuccess | BuildFlashcardCustomSessionFailure;
 
+const FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT = 800;
+const FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT = 800;
+const FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT = 80;
+
 const flashcardSelect = {
   id: true,
   front: true,
@@ -210,7 +214,7 @@ export async function buildFlashcardCustomSession(
       where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOptsResolved)),
       select: flashcardSelect,
       orderBy: { updatedAt: "desc" },
-      take: 5000,
+      take: FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT,
     });
 
     let lessonQuestionVirtuals: Awaited<ReturnType<typeof loadLessonLinkedFlashcardVirtuals>> = [];
@@ -332,7 +336,7 @@ export async function buildFlashcardCustomSession(
               poolScopeForBank,
               pathwayForBank,
               topicCode?.trim() || null,
-              Math.max(limit * 40, 600),
+              Math.max(limit * 10, 200),
             )
           : [];
       const takenExam = new Set(
@@ -466,7 +470,7 @@ export async function buildFlashcardCustomSession(
           flashcardId: { in: scopedIds },
         },
         select: { flashcardId: true, lastQuality: true, repetitions: true, lastReviewedAt: true },
-        take: takeForIdIn(scopedIds, 5000),
+        take: takeForIdIn(scopedIds, FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT),
       });
       const map = new Map(progress.map((p) => [p.flashcardId, p]));
       if (weakOnly) {
@@ -678,10 +682,10 @@ export function parseCustomSessionCategories(value: string | null | undefined): 
 }
 
 export function parseCustomSessionCardLimit(value: string | null | undefined): number {
-  if (!value || value === "all") return 500;
+  if (!value || value === "all") return FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT;
   const n = Number(value);
   if (!Number.isFinite(n) || n < 1) return 20;
-  return Math.min(500, Math.max(10, n));
+  return Math.min(FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT, Math.max(10, n));
 }
 
 export function parseCustomSessionStudyMode(value: string | null | undefined): CustomSessionStudyMode {

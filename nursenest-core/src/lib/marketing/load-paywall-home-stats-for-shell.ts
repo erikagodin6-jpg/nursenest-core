@@ -4,15 +4,20 @@ import {
   type PublicHomeStatsPayload,
 } from "@/lib/marketing/public-home-stats-payload";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 
 /** Caps wait so marketing cache work cannot block the learner shell under DB/cache pressure. */
-const PAYWALL_STATS_SHELL_TIMEOUT_MS = 2500;
+const PAYWALL_STATS_SHELL_TIMEOUT_MS = 750;
 
 /**
  * Server-only stats for the learner shell paywall — **no client fetch**.
  * Uses the same `unstable_cache` as `/api/public/home-stats` and the marketing homepage (`PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC`).
  */
 export async function loadPaywallHomeStatsForShell(): Promise<PublicHomeStatsPayload> {
+  if (shouldSkipNonCriticalLearnerWork()) {
+    return getDegradedPublicHomeStatsFallback("learner_shell_optional_work_skipped", { silent: true });
+  }
+
   try {
     const { getCachedPublicHomeStats } = await import("@/lib/marketing/public-home-stats");
     return await Promise.race([
