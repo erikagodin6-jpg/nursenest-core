@@ -7,7 +7,7 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // 🧊 ISR: static marketing content
 export const dynamicParams = true;
 
 type Props = { params: Promise<{ topic: string }> };

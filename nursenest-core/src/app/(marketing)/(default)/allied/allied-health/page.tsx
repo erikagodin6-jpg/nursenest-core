@@ -25,7 +25,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(

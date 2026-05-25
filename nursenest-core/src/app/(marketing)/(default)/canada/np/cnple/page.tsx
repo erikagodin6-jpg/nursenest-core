@@ -14,7 +14,7 @@ import HubPage, {
 } from "@/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page";
 
 // Must be declared here directly — Next.js segment config cannot be re-exported
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // 🧊 ISR: static marketing content
 export const dynamicParams = true;
 
 const CNPLE_PARAMS = Promise.resolve({

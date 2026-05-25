@@ -6,7 +6,7 @@ import {
 } from "@/lib/allied/allied-professions-registry";
 import { alliedHealthLessonDetailPath, marketingLessonSlugFromRouteParam } from "@/lib/lessons/lesson-routes";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 export const dynamicParams = true;
 
 type Props = { params: Promise<{ slug: string; lessonSlug: string }> };

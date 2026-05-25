@@ -6,7 +6,7 @@ import { alliedHealthLessonsIndexPath } from "@/lib/lessons/lesson-routes";
  * /allied/[career]/lessons → redirects to the canonical allied pathway lessons hub (`…/allied/allied-health/lessons?alliedProfession=…`).
  * Keeps the new /allied/[career]/ URL namespace working without duplicating lesson content.
  */
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 
 type Props = { params: Promise<{ career: string }> };
 

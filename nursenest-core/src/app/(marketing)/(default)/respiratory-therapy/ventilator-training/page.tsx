@@ -7,7 +7,7 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { isRtVentilatorMarketingSurfacesEnabled } from "@/lib/rt-ventilator/rt-ventilator-module-config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 
 const META_KEYS = [
   "pages.rtVentilatorLanding.metaTitle",

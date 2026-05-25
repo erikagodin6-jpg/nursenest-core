@@ -9,7 +9,7 @@ import HubPage, {
   generateMetadata as hubGenerateMetadata,
 } from "@/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // 🧊 ISR: static marketing content
 export const dynamicParams = true;
 
 const CA_RN_HUB_PARAMS = Promise.resolve({

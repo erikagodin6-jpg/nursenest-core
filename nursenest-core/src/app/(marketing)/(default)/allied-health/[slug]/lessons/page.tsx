@@ -9,7 +9,7 @@ import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loa
 import { PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-scale";
 import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 export const dynamicParams = true;
 
 type Props = {

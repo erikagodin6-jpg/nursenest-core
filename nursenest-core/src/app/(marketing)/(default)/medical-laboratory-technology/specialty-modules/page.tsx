@@ -8,7 +8,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { isMltSpecialtyMarketingSurfacesEnabled } from "@/lib/mlt/mlt-premium-module-config";
 import { MLT_PREMIUM_MODULE_DEFINITIONS } from "@/lib/mlt/mlt-premium-modules-registry";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 
 const META_KEYS = [
   "pages.mltSpecialtyModulesLanding.metaTitle",

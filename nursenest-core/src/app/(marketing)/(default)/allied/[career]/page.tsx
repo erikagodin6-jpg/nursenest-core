@@ -27,7 +27,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 export const revalidate = 86400;
 export const dynamicParams = true;
 

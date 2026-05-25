@@ -16,7 +16,7 @@ import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketi
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 export const revalidate = 86400;
 export const dynamicParams = true;
 

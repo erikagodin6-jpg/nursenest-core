@@ -5,7 +5,7 @@ import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-profes
 import { alliedMasteryModulesForProfession } from "@/lib/allied/allied-mastery-modules";
 import { getCurrentAlliedMasteryModuleAccess } from "@/lib/allied/allied-mastery-module-access.server";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // 🧊 ISR: allied health lessons
 
 type Props = { params: Promise<{ career: string }> };
 
