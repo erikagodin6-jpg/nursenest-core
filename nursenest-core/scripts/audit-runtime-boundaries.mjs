@@ -152,6 +152,11 @@ const guardrails = {
   appProviderStillAuthenticated:
     existsSync(`${root}/src/app/(app)/layout.tsx`) &&
     readFileSync(`${root}/src/app/(app)/layout.tsx`, "utf8").includes("<AuthSessionProvider session={session}>"),
+  defaultMarketingLayoutStaticSafe:
+    existsSync(`${root}/src/app/(marketing)/(default)/layout.tsx`) &&
+    !/next\/headers|headers\(\)|cookies\(\)|readOptionalMarketingRegionToggleForCountry|readOptionalGlobalRegionSlugFromCookie|getStaffSession|export const dynamic\s*=\s*["']force-dynamic["']/.test(
+      readFileSync(`${root}/src/app/(marketing)/(default)/layout.tsx`, "utf8"),
+    ),
 };
 
 const result = {
@@ -184,6 +189,7 @@ lines.push(`- Critical public files: ${criticalPublicFiles.length}`);
 lines.push(`- Blocking core public files: ${blockingCorePublicFiles.length}`);
 lines.push(`- Public marketing provider passive: ${guardrails.publicMarketingProviderIsPassive ? "yes" : "no"}`);
 lines.push(`- Learner app provider authenticated: ${guardrails.appProviderStillAuthenticated ? "yes" : "no"}`);
+lines.push(`- Default marketing layout static-safe: ${guardrails.defaultMarketingLayoutStaticSafe ? "yes" : "no"}`);
 lines.push("");
 lines.push("## Route Groups");
 lines.push("");
@@ -230,6 +236,7 @@ if (strict) {
   const failures = [];
   if (!guardrails.publicMarketingProviderIsPassive) failures.push("public marketing provider is not passive");
   if (!guardrails.appProviderStillAuthenticated) failures.push("learner app provider is not authenticated");
+  if (!guardrails.defaultMarketingLayoutStaticSafe) failures.push("default marketing layout is not static-safe");
   if (blockingCorePublicFiles.length > 0) {
     failures.push(`${blockingCorePublicFiles.length} core public files import protected runtime dependencies`);
   }

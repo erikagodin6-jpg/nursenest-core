@@ -224,4 +224,4 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/components/learner/learner-silent-section-boundary`
 
 
-*Generated 2026-05-25T11:44:32.651Z*
+*Generated 2026-05-25T11:53:24.970Z*

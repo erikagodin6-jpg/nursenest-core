@@ -14,15 +14,15 @@ Immediate production risks found:
 
 ## Route And Rendering Classification
 
-Current `force-dynamic` count by route area:
+Current `force-dynamic` count by route area after the latest hardening pass:
 
-- `src/app/(marketing)`: 76
+- `src/app/(marketing)`: 75
 - `src/app/(app)`: 36
 - `src/app/(admin)`: 97
 - `src/app/api`: 175
 - `src/app/(runtime)`: 6
 - Other App Router route files: 14
-- Total observed App Router `force-dynamic` exports after this pass: 404
+- Total observed App Router `force-dynamic` exports after this pass: 403
 
 Recommended route classification:
 
@@ -89,12 +89,24 @@ Each fixed public brochure/legal page now exports `revalidate = 3600`. This remo
    - Added `npm run qa:production-stability` for typecheck, runtime-boundary audit, hydration-risk audit, route integrity, blog fallback, auth middleware, and static-generation policy tests.
    - Added `npm run test:e2e:production-stability-smoke` covering `/pricing`, `/blog`, RN/NP/RPN hubs, login, flashcards, CAT launch, and practice exams.
 
+10. Default marketing layout static-safe split:
+   - `src/app/(marketing)/(default)/layout.tsx` no longer exports `force-dynamic`; it now exports `revalidate = 3600`.
+   - Removed layout-level `headers()`, cookie reads, staff-session reads, public-content override reads, and viewport hint reads from the default public shell.
+   - `SiteHeaderServer` accepts a static region and avoids cookie reads for the default shell.
+   - `MarketingMainI18nShards` no longer imports `next/headers`; dynamic breadcrumb fallback can be supplied by request-aware layouts via an explicit path prop.
+   - The runtime-boundary audit now blocks reintroducing request-bound APIs into the default marketing layout.
+
+11. Force-dynamic and concurrency gates:
+   - Added `scripts/audit-force-dynamic.mjs` plus `npm run audit:force-dynamic:strict`; it writes `reports/force-dynamic-audit.md/json` and blocks count growth above the current budget.
+   - Added `scripts/run-production-concurrency-probe.mjs` plus `npm run qa:concurrency-probe`; it probes public/auth/learner routes under configurable concurrency and writes `reports/production-concurrency-probe.md/json`.
+
 ## Provider And Layout Isolation
 
 Current state:
 
 - Public marketing, learner app, admin, and runtime routes are route-group separated.
 - Public marketing still imports legacy client chrome that reads auth context, but the marketing route-group provider is now passive and seeded as guest-only to avoid public auth refetch dependency.
+- The default marketing layout is now static-safe: no request headers, no cookies, no staff auth read, no direct DB-backed public edit override read.
 - Learner app has its own auth/session provider stack and learner error/loading boundaries.
 - Error/loading boundaries already exist for marketing, default marketing, blog, learner app, app segment, admin, and root.
 - Runtime-boundary audit currently reports 8 remaining non-core public files with blocked runtime imports; the strict deployment gate blocks regressions on core public stability routes first.
@@ -174,6 +186,7 @@ Runtime monitoring:
 - Alert on `db_timeout`, `blog_index_list_db_failed`, `home_stats_optional_read_failed`, and repeated `catalog-read` cold bursts.
 - Track TTFB for `/pricing`, `/blog`, `/canada/rn/nclex-rn`, `/canada/np/cnple`, `/app/flashcards`, `/app/practice-tests`, and `/app/questions`.
 - Post-deploy: run `npm run test:e2e:production-stability-smoke` against the production origin with `PLAYWRIGHT_SKIP_WEB_SERVER=1`.
+- Load probe: run `BASE_URL=https://nursenest.ca NN_PROBE_CONCURRENCY=16 NN_PROBE_ROUNDS=5 npm run qa:concurrency-probe:strict` after deploy or against a staging origin.
 
 ## Long-Term Scalability Plan
 

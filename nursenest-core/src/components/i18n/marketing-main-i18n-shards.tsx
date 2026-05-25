@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { headers } from "next/headers";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -40,14 +39,6 @@ function safeSyncLoad(locale: string): MarketingMessages {
     return loadMarketingMessageShardsSync(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
   } catch {
     return {};
-  }
-}
-
-async function readMarketingRequestPathname(): Promise<string> {
-  try {
-    return (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
-  } catch {
-    return "/";
   }
 }
 
@@ -110,24 +101,29 @@ export async function MarketingMainI18nShards({
   children,
   publicContentOverrides,
   trailingChrome,
+  requestPathname,
 }: {
   locale: string;
   children: ReactNode;
   publicContentOverrides?: Record<string, string>;
   /** e.g. `<SiteFooter />` — rendered only after shard load, after `{children}`. */
   trailingChrome?: ReactNode;
+  /**
+   * Optional request path for dynamic layouts. Static public layouts should omit
+   * this so page-body i18n shards do not pull `headers()` into the render graph.
+   */
+  requestPathname?: string | null;
 }) {
-  const [{ primary, fallback }, requestPathname] = await Promise.all([
-    loadPrimaryAndFallback(locale),
-    readMarketingRequestPathname(),
-  ]);
-  const emitLayoutBreadcrumbFallback = shouldEmitMarketingLayoutBreadcrumbFallback(requestPathname);
+  const { primary, fallback } = await loadPrimaryAndFallback(locale);
+  const safeRequestPathname = requestPathname?.trim() || "";
+  const emitLayoutBreadcrumbFallback =
+    safeRequestPathname.length > 0 && shouldEmitMarketingLayoutBreadcrumbFallback(safeRequestPathname);
   const breadcrumbItems = emitLayoutBreadcrumbFallback
-    ? buildMarketingRouteBreadcrumbItems(requestPathname)
+    ? buildMarketingRouteBreadcrumbItems(safeRequestPathname)
     : [];
   if (emitLayoutBreadcrumbFallback && breadcrumbItems.length > 0) {
     trackLayoutBreadcrumbFallback(
-      diagnoseLayoutBreadcrumbFallback(requestPathname, breadcrumbItems.length, {
+      diagnoseLayoutBreadcrumbFallback(safeRequestPathname, breadcrumbItems.length, {
         reason: "path_segment_only",
       }),
     );

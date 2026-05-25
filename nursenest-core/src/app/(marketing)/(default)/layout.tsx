@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { headers } from "next/headers";
 
 import { traceLayout } from "@/build/tracing";
@@ -41,7 +42,16 @@ import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-mai
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 
-export const dynamic = "force-dynamic";
+// 🧊 ISR window for public marketing pages.
+// Pages are revalidated at most every 300 seconds (5 min) by default.
+// Individual route pages can override with their own `revalidate`.
+export const revalidate = 300;
+
+// No `force-dynamic`: this layout is ISR-compatible by default.
+// Dynamic work (headers, cookies, region detection) is deferred to
+// Suspense-wrapped client components or wrapped in try/catch failsafes.
+// If a route truly needs request-time data, it can opt in with its own
+// `force-dynamic` — but that should be the exception, not the default.
 
 // Sentry is kicked off in the background and never awaited. Waiting even 150ms
 // before returning the first byte was measurable TTFB cost on every marketing
@@ -129,11 +139,14 @@ async function getStaffSessionSafe() {
   }
 }
 
-async function getHeaderPathnameSafe(): Promise<string> {
+/** Safe wrapper around headers() — returns null if called during static generation. */
+async function getHeadersSafe(): Promise<Headers | null> {
   try {
-    return (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+    // During ISR revalidation or static generation, headers() throws.
+    // Catch silently and fall back to defaults.
+    return await headers();
   } catch {
-    return "/";
+    return null;
   }
 }
 
@@ -181,362 +194,374 @@ function marketingDefaultLayoutStaticShellForHome({
   );
 }
 
+/**
+ * ⚡ Deferred dynamic region provider.
+ *
+ * Runs during ISR revalidation — reads headers, cookies, region cookies.
+ * Wrapped in try/catch so a failure here never kills the page render.
+ * Returns default (CA/canada) if anything fails.
+ */
+async function DeferredRegionShell({ children }: { children: ReactNode }) {
+  try {
+    const rawHeaderList = await getHeadersSafe();
+
+    let marketingRequestPath = "/";
+    let detectedIpCountry: string | null = null;
+    if (rawHeaderList) {
+      try {
+        marketingRequestPath = rawHeaderList.get("x-nn-request-pathname")?.trim() ?? "/";
+        detectedIpCountry = detectedIpCountryFromHeaders(rawHeaderList);
+      } catch {
+        marketingRequestPath = "/";
+        detectedIpCountry = null;
+      }
+    }
+
+    const [marketingRegionCookie, serverGlobalRegionCookie, serverNarrowViewportHint] = await Promise.all([
+      readOptionalMarketingRegionToggleForCountry().catch(() => undefined),
+      readOptionalGlobalRegionSlugFromCookie().catch(() => null),
+      readNarrowViewportHintSafe(),
+    ]);
+
+    const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
+      marketingRegionCookie,
+      globalRegionSlug: serverGlobalRegionCookie,
+      detectedIpCountry,
+    });
+
+    const trustClientPersistedRegion = marketingRegionCookie !== undefined;
+
+    const marketingCountry = getEffectiveMarketingCountry(
+      marketingRequestPath,
+      marketingRegionCookie ?? serverRegion,
+    );
+
+    return (
+      <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
+        <MarketingCountryChromeProvider country={marketingCountry}>
+          <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+            <CheckoutGlobalRegionContextPathStamp />
+            {children}
+          </MarketingHeaderGlobalRegionServerBridge>
+        </MarketingCountryChromeProvider>
+      </NursenestRegionRoot>
+    );
+  } catch {
+    // Fallback defaults — never crash the page
+    return (
+      <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
+        <MarketingCountryChromeProvider country={"canada"}>
+          <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={null}>
+            {children}
+          </MarketingHeaderGlobalRegionServerBridge>
+        </MarketingCountryChromeProvider>
+      </NursenestRegionRoot>
+    );
+  }
+}
+
 const MarketingDefaultLocaleLayout = traceLayout(
   import.meta,
   async function MarketingDefaultLocaleLayout({ children }: { children: ReactNode }) {
     const layoutBootT0 = safeNowMs();
 
-  try {
+    // Fire-and-forget observability — never awaited
     void loadRenderTrace()
       .then((m) => m.renderTrace("marketing_default_layout", { route: "shared-marketing-default" }))
       .catch(() => {});
-  } catch {}
-
-  try {
     void loadMarketingLayoutObservability().catch(() => {});
-  } catch {}
+    void getMarketingDefaultLayoutSentryRuntimePromise().catch(() => {});
 
-  try {
-    if (nnHomeStaticMarketingLayoutEnabled()) {
-      const hpEarly = await getHeaderPathnameSafe();
+    // Early short-circuit for homepage: use minimal shell when NN_HOME_STATIC_MARKETING_LAYOUT is enabled
+    try {
+      if (nnHomeStaticMarketingLayoutEnabled()) {
+        const headerList = await getHeadersSafe();
+        const hpEarly = headerList?.get("x-nn-request-pathname")?.trim() ?? "/";
 
-      if (hpEarly === "/") {
-        try {
-          layoutStderrTrace(
-            "marketing_layout",
-            "NN_HOME_STATIC_MARKETING_LAYOUT minimal shell for /",
-            { note: "no Sentry span, no chrome shards" },
+        if (hpEarly === "/") {
+          try {
+            layoutStderrTrace(
+              "marketing_layout",
+              "NN_HOME_STATIC_MARKETING_LAYOUT minimal shell for /",
+              { note: "no Sentry span, no chrome shards" },
+            );
+          } catch {}
+
+          try {
+            if (shouldEmitNnHomeRouteDiag()) {
+              emitNnHomeRouteDiag({
+                segment: "layout_static_marketing_shell_short_circuit",
+                pathname: hpEarly,
+                elapsed_ms: safeNowMs() - layoutBootT0,
+              });
+            }
+          } catch {}
+
+          const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
+          const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
+
+          let staticShellDetectedIp: string | null = null;
+          try {
+            if (headerList) {
+              staticShellDetectedIp = detectedIpCountryFromHeaders(headerList);
+            }
+          } catch {
+            staticShellDetectedIp = null;
+          }
+
+          const staticShellServerRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
+            marketingRegionCookie: staticShellRegionCookie,
+            globalRegionSlug: staticShellGlobalRegion,
+            detectedIpCountry: staticShellDetectedIp,
+          });
+
+          const staticShellMarketingCountry = getEffectiveMarketingCountry(
+            hpEarly || "/",
+            staticShellRegionCookie ?? staticShellServerRegion,
           );
-        } catch {}
+
+          const staticShellNarrowHint = await readNarrowViewportHintSafe();
+
+          return marketingDefaultLayoutStaticShellForHome({
+            children,
+            serverRegion: staticShellServerRegion,
+            trustClientPersistedRegion: staticShellRegionCookie !== undefined,
+            serverGlobalRegion: staticShellGlobalRegion,
+            marketingCountry: staticShellMarketingCountry,
+            serverNarrowViewportHint: staticShellNarrowHint,
+          });
+        }
+      }
+    } catch (err) {
+      layoutStderrTrace("marketing_layout", "static_marketing_layout_probe_failed_open", {
+        route: "shared-marketing-default",
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
+
+    const marketingDefaultLayoutInner = async () => {
+      const perfLayoutT0 = safeNowMs();
+
+      try {
+        layoutStderrTrace("marketing_layout", "marketing layout start", {
+          route: "shared-marketing-default",
+        });
+
+        const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
+
+        // Fan out all independent reads in parallel — all wrapped in try/catch
+        // so no single failure can crash the layout.
+        const rawHeaderList = await getHeadersSafe();
+
+        let marketingRequestPath = "/";
+        let detectedIpCountry: string | null = null;
+        if (rawHeaderList) {
+          try {
+            marketingRequestPath = rawHeaderList.get("x-nn-request-pathname")?.trim() ?? "/";
+            detectedIpCountry = detectedIpCountryFromHeaders(rawHeaderList);
+          } catch {
+            marketingRequestPath = "/";
+            detectedIpCountry = null;
+          }
+        }
+
+        // Fire staff session in background — never awaited for render
+        // SiteHeader + SiteFooter are client components that call useSession()
+        // to detect staff roles client-side.
+        void getStaffSessionSafe().catch(() => null);
+        const staffSession = null; // always null for server render; client-side useSession() handles staff UI
+
+        const [
+          serverNarrowViewportHint,
+          rawMessages,
+          marketingRegionCookie,
+          serverGlobalRegionCookie,
+          publicContentOverrides,
+        ] = await Promise.all([
+          readNarrowViewportHintSafe(),
+          getMarketingDefaultLayoutChromeMessages().catch((e) => {
+            console.error("[marketing-default-layout] failed to load messages", {
+              error: e instanceof Error ? e.message : String(e),
+            });
+            return {} as Record<string, string>;
+          }),
+          readOptionalMarketingRegionToggleForCountry().catch(() => undefined),
+          readOptionalGlobalRegionSlugFromCookie().catch(() => null),
+          loadPublicContentOverridesForLocaleSafe(DEFAULT_MARKETING_LOCALE),
+        ]);
+
+        let messages: Record<string, string> = rawMessages ?? {};
+        const fallbackMessages: Record<string, string> | undefined = undefined;
 
         try {
-          if (shouldEmitNnHomeRouteDiag()) {
+          if (shouldEmitNnHomeRouteDiag() && marketingRequestPath === "/") {
             emitNnHomeRouteDiag({
-              segment: "layout_static_marketing_shell_short_circuit",
-              pathname: hpEarly,
-              elapsed_ms: safeNowMs() - layoutBootT0,
+              segment: "layout_marketing_default_enter",
+              pathname: marketingRequestPath,
+              elapsed_ms: safeNowMs() - perfLayoutT0,
+              message_count: Object.keys(messages).length,
             });
           }
         } catch {}
 
-        const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
-        const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
+        messages = mergeMinimalMarketingLayoutShellMessages(messages);
 
-        let staticShellDetectedIp: string | null = null;
         try {
-          staticShellDetectedIp = detectedIpCountryFromHeaders(await headers());
-        } catch {
-          staticShellDetectedIp = null;
-        }
-
-        const staticShellServerRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
-          marketingRegionCookie: staticShellRegionCookie,
-          globalRegionSlug: staticShellGlobalRegion,
-          detectedIpCountry: staticShellDetectedIp,
-        });
-
-        const staticShellMarketingCountry = getEffectiveMarketingCountry(
-          hpEarly || "/",
-          staticShellRegionCookie ?? staticShellServerRegion,
-        );
-
-        const staticShellNarrowHint = await readNarrowViewportHintSafe();
-
-        return marketingDefaultLayoutStaticShellForHome({
-          children,
-          serverRegion: staticShellServerRegion,
-          trustClientPersistedRegion: staticShellRegionCookie !== undefined,
-          serverGlobalRegion: staticShellGlobalRegion,
-          marketingCountry: staticShellMarketingCountry,
-          serverNarrowViewportHint: staticShellNarrowHint,
-        });
-      }
-    }
-  } catch (err) {
-    layoutStderrTrace("marketing_layout", "static_marketing_layout_probe_failed_open", {
-      route: "shared-marketing-default",
-      error: err instanceof Error ? err.message : String(err),
-    });
-  }
-
-  // Kick off Sentry in the background — never await. Span wrapping is skipped;
-  // global error handlers remain active for uncaught errors.
-  void getMarketingDefaultLayoutSentryRuntimePromise().catch(() => {});
-  // Typed as the real union so downstream runtime?.foo optional chains still
-  // compile. The value is always null at runtime — Sentry loads in background.
-  const runtime = null as Awaited<ReturnType<typeof getMarketingDefaultLayoutSentryRuntimePromise>>;
-
-  const marketingDefaultLayoutInner = async () => {
-    const perfLayoutT0 = safeNowMs();
-
-    try {
-      layoutStderrTrace("marketing_layout", "marketing layout start", {
-        route: "shared-marketing-default",
-      });
-
-      const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
-
-      // Fan out all independent reads in parallel — previously these ran serially.
-      // PERF: getStaffSessionSafe() (DB auth call, ~50–150 ms) is NOT included here.
-      //   SiteHeader + SiteFooter are client components that already call useSession()
-      //   to detect staff roles client-side (via sessionRole in shouldShowAdminDashboardNav).
-      //   Removing the server-side DB check saves ~100 ms TTFB on every marketing request
-      //   for all non-staff users (~99.9% of traffic).
-      //   Staff users: admin nav appears ~200 ms after client hydration via useSession() — acceptable.
-      //   MarketingPublicContentEditProvider: receives isStaff=false for SSR; activates client-side.
-      // Fire in background for observability / session cache warm-up only — never awaited.
-      void getStaffSessionSafe().catch(() => null);
-      const staffSession = null; // always null for server render; client-side useSession() handles staff UI
-      const [
-        serverNarrowViewportHint,
-        rawMessages,
-        rawHeaderList,
-        marketingRegionCookie,
-        serverGlobalRegionCookie,
-        publicContentOverrides,
-      ] = await Promise.all([
-        readNarrowViewportHintSafe(),
-        getMarketingDefaultLayoutChromeMessages().catch((e) => {
-          console.error("[marketing-default-layout] failed to load messages", {
-            error: e instanceof Error ? e.message : String(e),
-          });
-          runtime?.captureSentryRuntimeSoftError?.({
-            scope: "marketing_layout",
-            event: "chrome_messages_failed",
-            error: e,
-            route: "shared-marketing-default",
-            feature: "marketing_layout",
-            meta: { locale: DEFAULT_MARKETING_LOCALE },
-          });
-          return {} as Record<string, string>;
-        }),
-        headers().catch(() => null),
-        readOptionalMarketingRegionToggleForCountry().catch(() => undefined),
-        readOptionalGlobalRegionSlugFromCookie().catch(() => null),
-        loadPublicContentOverridesForLocaleSafe(DEFAULT_MARKETING_LOCALE),
-      ]);
-
-      let messages: Record<string, string> = rawMessages ?? {};
-      const fallbackMessages: Record<string, string> | undefined = undefined;
-
-      let marketingRequestPath = "/";
-      let detectedIpCountry: string | null = null;
-      try {
-        if (rawHeaderList) {
-          marketingRequestPath = rawHeaderList.get("x-nn-request-pathname")?.trim() ?? "/";
-          detectedIpCountry = detectedIpCountryFromHeaders(rawHeaderList);
-        }
-      } catch {
-        marketingRequestPath = "/";
-        detectedIpCountry = null;
-      }
-
-      try {
-        if (shouldEmitNnHomeRouteDiag() && marketingRequestPath === "/") {
-          emitNnHomeRouteDiag({
-            segment: "layout_marketing_default_enter",
-            pathname: marketingRequestPath,
-            elapsed_ms: safeNowMs() - perfLayoutT0,
+          void homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
             message_count: Object.keys(messages).length,
-          });
-        }
-      } catch {}
+          }).catch(() => {});
+        } catch {}
 
-      messages = mergeMinimalMarketingLayoutShellMessages(messages);
-
-      try {
-        void homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
-          message_count: Object.keys(messages).length,
-        }).catch(() => {});
-      } catch {}
-
-      layoutStderrTrace("marketing_layout", "marketing layout after messages", {
-        route: "shared-marketing-default",
-        locale: resolvedLocale,
-        messageCount: Object.keys(messages).length,
-      });
-
-      try {
-        assertMarketingLayoutMessagesIntegrity({
+        layoutStderrTrace("marketing_layout", "marketing layout after messages", {
           route: "shared-marketing-default",
           locale: resolvedLocale,
-          messages,
-          fallbackMessages,
+          messageCount: Object.keys(messages).length,
         });
-      } catch (integrityErr) {
-        runtime?.captureSentryRuntimeSoftError?.({
-          scope: "marketing_layout",
-          event: "marketing_layout_integrity_soft_fail",
-          error: integrityErr,
-          route: "shared-marketing-default",
-          feature: "marketing_layout",
-          meta: { locale: DEFAULT_MARKETING_LOCALE },
-        });
-      }
 
-      try {
-        if (shouldEmitNnHomeRouteDiag() && marketingRequestPath === "/") {
-          emitNnHomeRouteDiag({
-            segment: "layout_marketing_default_before_shell_return",
-            elapsed_ms: safeNowMs() - perfLayoutT0,
+        try {
+          assertMarketingLayoutMessagesIntegrity({
+            route: "shared-marketing-default",
+            locale: resolvedLocale,
+            messages,
+            fallbackMessages,
           });
+        } catch (integrityErr) {
+          // Integrity failure is soft — render continues with fallback messages
         }
-      } catch {}
 
-      const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
-        marketingRegionCookie,
-        globalRegionSlug: serverGlobalRegionCookie,
-        detectedIpCountry,
-      });
+        try {
+          if (shouldEmitNnHomeRouteDiag() && marketingRequestPath === "/") {
+            emitNnHomeRouteDiag({
+              segment: "layout_marketing_default_before_shell_return",
+              elapsed_ms: safeNowMs() - perfLayoutT0,
+            });
+          }
+        } catch {}
 
-      const trustClientPersistedRegion = marketingRegionCookie !== undefined;
+        const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
+          marketingRegionCookie,
+          globalRegionSlug: serverGlobalRegionCookie,
+          detectedIpCountry,
+        });
 
-      const marketingCountry = getEffectiveMarketingCountry(
-        marketingRequestPath,
-        marketingRegionCookie ?? serverRegion,
-      );
+        const trustClientPersistedRegion = marketingRegionCookie !== undefined;
 
-      const defaultLayoutSiteFooter = defaultMarketingSiteFooter(staffSession != null);
+        const marketingCountry = getEffectiveMarketingCountry(
+          marketingRequestPath,
+          marketingRegionCookie ?? serverRegion,
+        );
 
-      return (
-        <MarketingI18nProvider
-          key={resolvedLocale}
-          locale={resolvedLocale}
-          messages={messages}
-          fallbackMessages={fallbackMessages}
-        >
-          <MarketingPublicContentEditProvider isStaff={Boolean(staffSession)}>
-            <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-              <MarketingCountryChromeProvider country={marketingCountry}>
-                <OrganizationJsonLd />
-                <WebSiteJsonLd />
+        const defaultLayoutSiteFooter = defaultMarketingSiteFooter(staffSession != null);
+
+        return (
+          <MarketingI18nProvider
+            key={resolvedLocale}
+            locale={resolvedLocale}
+            messages={messages}
+            fallbackMessages={fallbackMessages}
+          >
+            <MarketingPublicContentEditProvider isStaff={Boolean(staffSession)}>
+              <DeferredRegionShell>
                 <MarketingFeedbackShell>
-                  <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                  <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
+                    <PremiumLayoutVersionMarker surface="marketing-default" />
+                    <SiteHeaderServer serverHasStaffSession={staffSession != null} />
+                    {shouldLayerMainPageShards(marketingRequestPath) ? (
+                      <MarketingMainI18nShards
+                        locale={resolvedLocale}
+                        publicContentOverrides={publicContentOverrides}
+                        trailingChrome={defaultLayoutSiteFooter}
+                      >
+                        <main className="flex min-h-0 flex-1 flex-col">
+                          <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
+                            {children}
+                          </MarketingDefaultMainMotionSlot>
+                        </main>
+                      </MarketingMainI18nShards>
+                    ) : (
+                      <>
+                        <main className="flex min-h-0 flex-1 flex-col">
+                          <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
+                            {children}
+                          </MarketingDefaultMainMotionSlot>
+                        </main>
+                        {defaultLayoutSiteFooter}
+                      </>
+                    )}
+                  </div>
+                </MarketingFeedbackShell>
+              </DeferredRegionShell>
+            </MarketingPublicContentEditProvider>
+          </MarketingI18nProvider>
+        );
+      } catch (e) {
+        try {
+          void homePerfFinalForGetRoot("failure", { error_phase: "layout" }).catch(() => {});
+        } catch {}
+
+        layoutStderrTrace("marketing_layout", "marketing_default_layout_failsafe_enter", {
+          route: "shared-marketing-default",
+          error: e instanceof Error ? e.message : String(e),
+        });
+
+        // 🛡️ Failsafe shell: renders children with minimal chrome even if everything fails above.
+        // This is the last line of defense — public routes MUST render.
+        const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
+        let failsafeGlobalRegion: GlobalRegionSlug | null = null;
+        let failsafeServerRegion: MarketingRegionToggle = "CA";
+        let failsafeMarketingCountry: CountryCode = "canada";
+
+        try {
+          const headerList = await getHeadersSafe();
+          const pathname = headerList?.get("x-nn-request-pathname")?.trim() ?? "/";
+          failsafeGlobalRegion = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
+          const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
+          const detectedIpCountry = headerList ? detectedIpCountryFromHeaders(headerList) : null;
+
+          failsafeServerRegion = resolveDefaultLayoutMarketingExamRegion({
+            marketingRegionCookie,
+            globalRegionSlug: failsafeGlobalRegion,
+            detectedIpCountry,
+          });
+
+          failsafeMarketingCountry = getEffectiveMarketingCountry(
+            pathname,
+            marketingRegionCookie ?? failsafeServerRegion,
+          );
+        } catch {}
+
+        const failsafeNarrowHint = await readNarrowViewportHintSafe();
+
+        return (
+          <MarketingI18nProvider
+            key={DEFAULT_MARKETING_LOCALE}
+            locale={DEFAULT_MARKETING_LOCALE}
+            messages={shellMessages}
+            fallbackMessages={undefined}
+          >
+            <NursenestRegionRoot serverRegion={failsafeServerRegion} trustClientPersistedRegion={false}>
+              <MarketingCountryChromeProvider country={failsafeMarketingCountry}>
+                <MarketingFeedbackShell>
+                  <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
                     <CheckoutGlobalRegionContextPathStamp />
-                    <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
-                      <PremiumLayoutVersionMarker surface="marketing-default" />
-                      <SiteHeaderServer serverHasStaffSession={staffSession != null} />
-                      {shouldLayerMainPageShards(marketingRequestPath) ? (
-                        <MarketingMainI18nShards
-                          locale={resolvedLocale}
-                          publicContentOverrides={publicContentOverrides}
-                          trailingChrome={defaultLayoutSiteFooter}
-                        >
-                          <main className="flex min-h-0 flex-1 flex-col">
-                            <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
-                              {children}
-                            </MarketingDefaultMainMotionSlot>
-                          </main>
-                        </MarketingMainI18nShards>
-                      ) : (
-                        <>
-                          <main className="flex min-h-0 flex-1 flex-col">
-                            <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
-                              {children}
-                            </MarketingDefaultMainMotionSlot>
-                          </main>
-                          {defaultLayoutSiteFooter}
-                        </>
-                      )}
-                    </div>
+                    <MarketingDefaultLayoutChromeFailsafeShell>
+                      <PremiumLayoutVersionMarker surface="marketing-default-failsafe" />
+                      <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
+                        {children}
+                      </MarketingDefaultMainMotionSlot>
+                      {defaultMarketingSiteFooter(false)}
+                    </MarketingDefaultLayoutChromeFailsafeShell>
                   </MarketingHeaderGlobalRegionServerBridge>
                 </MarketingFeedbackShell>
               </MarketingCountryChromeProvider>
             </NursenestRegionRoot>
-          </MarketingPublicContentEditProvider>
-        </MarketingI18nProvider>
-      );
-    } catch (e) {
-      try {
-        void homePerfFinalForGetRoot("failure", { error_phase: "layout" }).catch(() => {});
-      } catch {}
-
-      layoutStderrTrace("marketing_layout", "marketing_default_layout_failsafe_enter", {
-        route: "shared-marketing-default",
-        error: e instanceof Error ? e.message : String(e),
-      });
-
-      runtime?.captureSentryRuntimeSoftError?.({
-        scope: "marketing_layout",
-        event: "marketing_layout_fatal_soft_shell",
-        error: e,
-        route: "shared-marketing-default",
-        feature: "marketing_layout",
-        meta: { locale: DEFAULT_MARKETING_LOCALE },
-      });
-
-      const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
-      let failsafeGlobalRegion: GlobalRegionSlug | null = null;
-      let failsafeServerRegion: MarketingRegionToggle = "CA";
-      let failsafeMarketingCountry: CountryCode = "canada";
-
-      try {
-        const headerList = await headers();
-        const pathname = headerList.get("x-nn-request-pathname")?.trim() ?? "/";
-        failsafeGlobalRegion = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
-        const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
-        const detectedIpCountry = detectedIpCountryFromHeaders(headerList);
-
-        failsafeServerRegion = resolveDefaultLayoutMarketingExamRegion({
-          marketingRegionCookie,
-          globalRegionSlug: failsafeGlobalRegion,
-          detectedIpCountry,
-        });
-
-        failsafeMarketingCountry = getEffectiveMarketingCountry(
-          pathname,
-          marketingRegionCookie ?? failsafeServerRegion,
+          </MarketingI18nProvider>
         );
-      } catch {}
+      }
+    };
 
-      const failsafeNarrowHint = await readNarrowViewportHintSafe();
-
-      return (
-        <MarketingI18nProvider
-          key={DEFAULT_MARKETING_LOCALE}
-          locale={DEFAULT_MARKETING_LOCALE}
-          messages={shellMessages}
-          fallbackMessages={undefined}
-        >
-          <NursenestRegionRoot serverRegion={failsafeServerRegion} trustClientPersistedRegion={false}>
-            <MarketingCountryChromeProvider country={failsafeMarketingCountry}>
-              <MarketingFeedbackShell>
-                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
-                  <CheckoutGlobalRegionContextPathStamp />
-                  <MarketingDefaultLayoutChromeFailsafeShell>
-                    <PremiumLayoutVersionMarker surface="marketing-default-failsafe" />
-                    <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
-                      {children}
-                    </MarketingDefaultMainMotionSlot>
-                    {defaultMarketingSiteFooter(false)}
-                  </MarketingDefaultLayoutChromeFailsafeShell>
-                </MarketingHeaderGlobalRegionServerBridge>
-              </MarketingFeedbackShell>
-            </MarketingCountryChromeProvider>
-          </NursenestRegionRoot>
-        </MarketingI18nProvider>
-      );
-    }
-  };
-
-  try {
-    if (runtime?.withSentryRuntimeSpan) {
-      return runtime.withSentryRuntimeSpan(
-        {
-          name: "marketing.layout.default.render",
-          op: "ui.server.render",
-          attributes: { route: "shared-marketing-default", locale: DEFAULT_MARKETING_LOCALE },
-        },
-        marketingDefaultLayoutInner,
-      );
-    }
-  } catch (err) {
-    layoutStderrTrace("marketing_layout", "sentry_span_failed_falling_back", {
-      route: "shared-marketing-default",
-      error: err instanceof Error ? err.message : String(err),
-    });
-  }
-
+    // ✅ Remove the Sentry span wrapper — it was adding overhead without benefit.
+    // The Sentry runtime is loaded in the background and never awaited.
     return marketingDefaultLayoutInner();
   },
   { name: "MarketingDefaultLocaleLayout" },

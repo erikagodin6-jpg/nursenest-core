@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-25T11:44:31.887Z",
+  "generatedAt": "2026-05-25T11:53:23.474Z",
   "root": "/root/nursenest-core/nursenest-core",
   "totals": {
     "filesWithRuntimeDependencies": 2773,
@@ -39,20 +39,20 @@
     },
     "public": {
       "files": 295,
-      "highBlastRadius": 78,
-      "publicAuthenticatedRuntimeDependencies": 7,
+      "highBlastRadius": 77,
+      "publicAuthenticatedRuntimeDependencies": 6,
       "dependencies": {
-        "force-dynamic": 76,
-        "cache-isr": 186,
+        "force-dynamic": 75,
+        "cache-isr": 187,
         "marketing-loader": 150,
         "provider": 11,
-        "request-api": 35,
+        "request-api": 34,
         "learner-loader": 5,
         "prisma": 4,
         "layout": 16,
         "entitlement": 5,
         "middleware": 4,
-        "auth-session-client": 2
+        "auth-session-client": 1
       }
     },
     "other": {
@@ -162,7 +162,8 @@
   },
   "guardrails": {
     "publicMarketingProviderIsPassive": true,
-    "appProviderStillAuthenticated": true
+    "appProviderStillAuthenticated": true,
+    "defaultMarketingLayoutStaticSafe": true
   },
   "criticalPublicFiles": [
     {
@@ -5163,15 +5164,13 @@
       "dependencies": [
         "layout",
         "provider",
-        "auth-session-client",
-        "request-api",
-        "force-dynamic",
+        "cache-isr",
         "marketing-loader"
       ],
       "blockedPublicRuntimeImports": [],
       "corePublicStabilityRoute": false,
-      "blastRadius": "high",
-      "publicAuthenticatedRuntimeDependency": true
+      "blastRadius": "low",
+      "publicAuthenticatedRuntimeDependency": false
     },
     {
       "path": "src/app/(marketing)/(default)/lessons/layout.tsx",

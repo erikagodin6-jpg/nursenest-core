@@ -1,6 +1,6 @@
 # Runtime Boundary Audit
 
-Generated: 2026-05-25T11:44:31.887Z
+Generated: 2026-05-25T11:53:23.474Z
 
 ## Summary
 
@@ -9,6 +9,7 @@ Generated: 2026-05-25T11:44:31.887Z
 - Blocking core public files: 0
 - Public marketing provider passive: yes
 - Learner app provider authenticated: yes
+- Default marketing layout static-safe: yes
 
 ## Route Groups
 
@@ -20,7 +21,7 @@ Generated: 2026-05-25T11:44:31.887Z
 | auth | 8 | 0 | 0 | middleware 7, prisma 5, auth-server 3, provider 2, force-dynamic 2, entitlement 1 |
 | learner | 132 | 0 | 0 | auth-server 70, learner-loader 62, entitlement 54, request-api 39, marketing-loader 38, force-dynamic 36 |
 | other | 25 | 0 | 0 | force-dynamic 14, request-api 6, cache-isr 3, layout 2, auth-server 2, provider 2 |
-| public | 295 | 78 | 7 | cache-isr 186, marketing-loader 150, force-dynamic 76, request-api 35, layout 16, provider 11 |
+| public | 295 | 77 | 6 | cache-isr 187, marketing-loader 150, force-dynamic 75, request-api 34, layout 16, provider 11 |
 | runtime | 6 | 0 | 0 | force-dynamic 6, layout 1 |
 | shared-component | 505 | 119 | 0 | marketing-loader 275, learner-loader 191, provider 105, entitlement 55, request-api 30, auth-session-client 23 |
 | shared-lib | 1343 | 698 | 0 | entitlement 432, provider 407, learner-loader 358, prisma 343, marketing-loader 184, request-api 47 |
@@ -82,7 +83,6 @@ Generated: 2026-05-25T11:44:31.887Z
 - `src/app/(marketing)/(default)/italy/[topic]/page.tsx` (public) — force-dynamic, marketing-loader
 - `src/app/(marketing)/(default)/japan/[topic]/page.tsx` (public) — force-dynamic, marketing-loader
 - `src/app/(marketing)/(default)/korea/[topic]/page.tsx` (public) — force-dynamic, marketing-loader
-- `src/app/(marketing)/(default)/layout.tsx` (public) — layout, provider, auth-session-client, request-api, force-dynamic, marketing-loader
 - `src/app/(marketing)/(default)/lessons/page.tsx` (public) — force-dynamic, cache-isr, marketing-loader
 - `src/app/(marketing)/(default)/login/page.tsx` (public) — provider, force-dynamic, marketing-loader
 - `src/app/(marketing)/(default)/medical-laboratory-technology/specialty-modules/page.tsx` (public) — force-dynamic, marketing-loader
@@ -118,4 +118,5 @@ Generated: 2026-05-25T11:44:31.887Z
 - `src/app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx` (public) — force-dynamic, cache-isr
 - `src/components/account/account-delete-danger-zone.tsx` (shared-component) — auth-session-client
 - `src/components/admin/admin-ai-assistant-client.test.tsx` (shared-component) — provider
+- `src/components/admin/admin-ai-generation-context.tsx` (shared-component) — provider
 

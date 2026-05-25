@@ -73,7 +73,8 @@ describe("SiteHeader bundle safety and server/client boundary", () => {
     const src = source(headerPath);
     assert.match(src, /SiteHeaderPrecomputedNav/, "SiteHeader must define SiteHeaderPrecomputedNav type");
     assert.match(src, /precomputedNavData/, "SiteHeader must accept precomputedNavData prop");
-    assert.match(src, /precomputedNavData\?\.moreLinks/, "SiteHeader must use precomputed more-links when provided");
+    assert.match(src, /precomputedNavData\?\.brandNavLinks/, "SiteHeader must use precomputed brand links when provided");
+    assert.match(src, /precomputedNavData\?\.pathwayNavLinks/, "SiteHeader must use precomputed pathway links when provided");
   });
 
   it("SiteHeaderServer builds precomputed nav data with all 6 static more-links", () => {
