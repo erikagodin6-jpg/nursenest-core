@@ -1,8 +1,8 @@
 /**
- * Request-time render trims build-time prerender volume for the default public exams family while
- * keeping page-level SEO metadata, canonicals, hreflang, and robots logic unchanged.
+ * ISR-compatible: This layout performs no dynamic work.
+ * Child routes can specify their own revalidate settings.
+ * Removing force-dynamic allows ISR caching for exam routes.
  */
-export const dynamic = "force-dynamic";
 
 import { traceLayout } from "@/build/tracing";
 

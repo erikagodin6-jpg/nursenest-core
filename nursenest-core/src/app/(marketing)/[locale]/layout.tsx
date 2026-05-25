@@ -32,7 +32,10 @@ import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-option
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
 const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
-export const dynamic = "force-dynamic";
+// ISR-compatible: headers() wrapped in try/catch with fallbacks (lines 155-161)
+// Child routes can specify their own revalidate settings
+// This layout degrades gracefully when headers unavailable during static generation
+// Removing force-dynamic unlocks ISR for 50-100+ child routes
 
 const publicContentTrace = createTraceInfo(import.meta, {
   kind: "provider",

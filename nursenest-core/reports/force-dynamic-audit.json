@@ -822,12 +822,6 @@
     "reason": "Use ISR with revalidate for cached public content"
   },
   {
-    "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/layout.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
-  },
-  {
     "route": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/[lessonSlug]/page.tsx",
     "classification": "convertToISR",
     "priority": "high",
@@ -954,12 +948,6 @@
     "reason": "Needs manual review for optimization strategy"
   },
   {
-    "route": "src/app/(marketing)/(default)/allied-health/page.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
-  },
-  {
     "route": "src/app/(marketing)/(default)/australia/[topic]/page.tsx",
     "classification": "unclassified",
     "priority": "high",
@@ -982,24 +970,6 @@
     "classification": "unclassified",
     "priority": "high",
     "reason": "Needs manual review for optimization strategy"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/exams/layout.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/flashcards/[slug]/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/flashcards/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
   },
   {
     "route": "src/app/(marketing)/(default)/france/[topic]/page.tsx",
@@ -1044,12 +1014,6 @@
     "reason": "Needs manual review for optimization strategy"
   },
   {
-    "route": "src/app/(marketing)/(default)/lessons/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
     "route": "src/app/(marketing)/(default)/login/page.tsx",
     "classification": "convertToClientIsland",
     "priority": "high",
@@ -1080,24 +1044,6 @@
     "reason": "Needs manual review for optimization strategy"
   },
   {
-    "route": "src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/pre-nursing/lessons/[slug]/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/pre-nursing/lessons/page.tsx",
-    "classification": "convertToISR",
-    "priority": "high",
-    "reason": "Use ISR with revalidate for cached public content"
-  },
-  {
     "route": "src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
     "classification": "convertToISR",
     "priority": "high",
@@ -1120,12 +1066,6 @@
     "classification": "convertToClientIsland",
     "priority": "high",
     "reason": "Move auth logic to client-side islands"
-  },
-  {
-    "route": "src/app/(marketing)/(default)/tools/[slug]/page.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
   },
   {
     "route": "src/app/(marketing)/(default)/tools/page.tsx",
@@ -1195,12 +1135,6 @@
   },
   {
     "route": "src/app/(marketing)/[locale]/korea/[topic]/page.tsx",
-    "classification": "unclassified",
-    "priority": "high",
-    "reason": "Needs manual review for optimization strategy"
-  },
-  {
-    "route": "src/app/(marketing)/[locale]/layout.tsx",
     "classification": "unclassified",
     "priority": "high",
     "reason": "Needs manual review for optimization strategy"
@@ -2328,7 +2262,31 @@
     "reason": "Needs manual review for optimization strategy"
   },
   {
+    "route": "src/app/layout.tsx",
+    "classification": "unclassified",
+    "priority": "medium",
+    "reason": "Needs manual review for optimization strategy"
+  },
+  {
     "route": "src/app/not-found.tsx",
+    "classification": "unclassified",
+    "priority": "medium",
+    "reason": "Needs manual review for optimization strategy"
+  },
+  {
+    "route": "src/app/routes/flashcards.tsx",
+    "classification": "unclassified",
+    "priority": "medium",
+    "reason": "Needs manual review for optimization strategy"
+  },
+  {
+    "route": "src/app/routes/lessons.tsx",
+    "classification": "unclassified",
+    "priority": "medium",
+    "reason": "Needs manual review for optimization strategy"
+  },
+  {
+    "route": "src/app/routes/pathway.tsx",
     "classification": "unclassified",
     "priority": "medium",
     "reason": "Needs manual review for optimization strategy"

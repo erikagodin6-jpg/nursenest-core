@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "284feb0a54ec0745781823bd693d8f040a9a45412ab352f1b92ba90b9d20a8d7",
-  "generatedAt": "2026-05-24T22:53:31.246Z",
+  "fingerprint": "23d7816d1a89b63e0a818e47344bbbe889b5bd08ce9b611d008f894e0c80fade",
+  "generatedAt": "2026-05-25T13:44:43.643Z",
   "inputs": [
     {
       "type": "file",
@@ -2186,6 +2186,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(public-static)/error.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(public-static)/layout.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx"
     },
     {
@@ -3302,6 +3310,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/cat-health/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/cat/np/analysis/route.ts"
     },
     {
@@ -3886,6 +3898,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/readiness-health/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/remediation-health/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/remediation/capture/route.ts"
     },
     {
@@ -3998,11 +4018,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/AuthStatusIsland.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/error.tsx"
     },
     {
       "type": "file",
       "path": "src/app/feed.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/flashcards.tsx"
     },
     {
       "type": "file",
@@ -4018,7 +4046,15 @@
     },
     {
       "type": "file",
+      "path": "src/app/login.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/not-found.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/reset-password.tsx"
     },
     {
       "type": "file",
@@ -4030,7 +4066,23 @@
     },
     {
       "type": "file",
+      "path": "src/app/routes/flashcards.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/routes/lessons.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/routes/pathway.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/rss.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/signup.tsx"
     },
     {
       "type": "file",
@@ -4087,6 +4139,10 @@
     {
       "type": "file",
       "path": "src/app/sitemap.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/verify-email.tsx"
     },
     {
       "type": "file",
@@ -7101,6 +7157,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 8486
+    "durationMs": 39340
   }
 }

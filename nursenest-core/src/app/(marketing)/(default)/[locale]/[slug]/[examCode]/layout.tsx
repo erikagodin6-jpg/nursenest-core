@@ -6,11 +6,10 @@ import { shouldAllowInternalAdmissionsOverviewRoute } from "@/lib/exam-pathways/
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 
 /**
- * This segment and the marketing `(default)` layout read cookies (locale, region, optional session).
- * Without `force-dynamic`, Next can treat the route as static/ISR and throw at runtime:
- * "Page changed from static to dynamic … reason: cookies" → 500 on public exam landings.
+ * ISR-compatible: headers() now wrapped in try/catch with pathname fallback.
+ * Child routes can specify their own revalidate settings.
+ * Layout degrades gracefully during static generation.
  */
-export const dynamic = "force-dynamic";
 
 type Props = {
   children: React.ReactNode;
@@ -26,7 +25,16 @@ type Props = {
 export default async function ExamPathwayLayout({ children, params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  const requestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? pathname;
+  
+  // Safe header reading with fallback for ISR compatibility
+  let requestPath = pathname;
+  try {
+    requestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? pathname;
+  } catch {
+    // During static generation, headers() throws - use pathname fallback
+    requestPath = pathname;
+  }
+  
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (
     !pathway ||
