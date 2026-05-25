@@ -459,7 +459,7 @@ export async function PathwayLessonDetailPageBody({
         title={lesson.title}
         eyebrow={pathway.shortName.trim() || pathway.displayName}
         pathwayTrack={pathway.roleTrack}
-        backLink={{ label: `${examName} lessons`, href: base }}
+        backLink={{ label: `${examName} Lessons`, href: base }}
       >
         <div
           className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom${usesReadingV2Layout ? " px-3 py-1 sm:px-5 sm:py-2" : " px-0 py-2 sm:px-6 sm:py-4"}${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
@@ -976,14 +976,14 @@ export async function PathwayLessonDetailPageBody({
                 href={pathwayFlashcardsHref}
                 className="font-medium text-primary hover:underline"
               >
-                {examName} flashcards
+                {examName} Flashcards
               </Link>
               {" · "}
               <Link
                 href={pathwayQuestionsHref}
                 className="font-medium text-primary hover:underline"
               >
-                {examName} practice questions
+                {examName} Practice Questions
               </Link>
               {" · "}
               <Link

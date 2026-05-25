@@ -181,9 +181,16 @@ export function normalizeStudyCallback(raw: string | null | undefined): string |
     if (hasSessionIdSegment(pathname)) return null;
 
     const pid = u.searchParams.get("pathwayId")?.trim() ?? null;
+    const isPracticeExamSetupHub =
+      pathname === "/app/practice-tests" &&
+      (u.searchParams.get("startMode") === "practice_exam" ||
+        u.searchParams.get("cat") === "1" ||
+        u.searchParams.get("cat") === "true");
 
     // Hub routes require pathwayId — prevents cross-tier silent fallbacks.
-    if (pathname === matchedPrefix && !isValidPathwayId(pid)) return null;
+    // Practice exam setup is the one safe hub-level exception: the authenticated hub
+    // resolves the learner's pathway server-side and renders an explicit picker.
+    if (pathname === matchedPrefix && !isValidPathwayId(pid) && !isPracticeExamSetupHub) return null;
 
     // Sub-routes: pathwayId optional (content-addressed by path), but must be valid if given.
     if (pid !== null && !isValidPathwayId(pid)) return null;

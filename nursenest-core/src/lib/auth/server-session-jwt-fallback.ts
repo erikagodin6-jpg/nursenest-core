@@ -30,7 +30,7 @@ function adminJwtReadDebug(): boolean {
 }
 
 /** Build a {@link NextRequest} for JWT reads from the current App Router request (headers + cookies). */
-export async function buildIncomingRequestForJwtRead(pathname: string): Promise<{
+export async function buildIncomingRequestForJwtRead(pathname?: string): Promise<{
   req: NextRequest;
   cookieMeta: { hadIncomingCookieHeader: boolean; synthesizedFromJar: boolean };
 }> {
@@ -58,7 +58,12 @@ export async function buildIncomingRequestForJwtRead(pathname: string): Promise<
       /* ignore */
     }
   }
-  const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const requestPathname =
+    pathname?.trim() ||
+    merged.get("x-nn-request-pathname")?.trim() ||
+    merged.get("next-url")?.trim() ||
+    "/app";
+  const path = requestPathname.startsWith("/") ? requestPathname : `/${requestPathname}`;
   const url = `${proto}://${host}${path}`;
   return { req: new NextRequest(url, { headers: merged }), cookieMeta };
 }
@@ -141,7 +146,7 @@ export const getAuthSessionWithJwtCookieFallback = cache(async (): Promise<Sessi
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   if (!secret?.trim()) return null;
   try {
-    const { req, cookieMeta } = await buildIncomingRequestForJwtRead("/admin");
+    const { req, cookieMeta } = await buildIncomingRequestForJwtRead();
     const token = await getAuthSessionJwtFromRequest(req, secret);
     const jwtIdentityOk = sessionJwtHasUserIdentity(token);
 

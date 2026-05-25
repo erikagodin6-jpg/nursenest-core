@@ -20,8 +20,20 @@ export default async function OnboardingPage({
   const session = await getProtectedRouteSession("(student).app.(learner).onboarding");
   const userId = (session?.user as { id?: string })?.id;
 
-  if (!userId || !isDatabaseUrlConfigured()) {
-    redirect("/login?callbackUrl=/app/onboarding");
+  if (!userId) {
+    return (
+      <div className="mx-auto max-w-2xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        We are checking your learner session. Refresh this page if onboarding does not load.
+      </div>
+    );
+  }
+
+  if (!isDatabaseUrlConfigured()) {
+    return (
+      <div className="mx-auto max-w-2xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        Onboarding is temporarily unavailable. Please try again shortly.
+      </div>
+    );
   }
 
   const user = await prisma.user.findUnique({
@@ -30,7 +42,11 @@ export default async function OnboardingPage({
   });
 
   if (!user) {
-    redirect("/login?callbackUrl=/app/onboarding");
+    return (
+      <div className="mx-auto max-w-2xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        We could not load your learner profile. Please refresh this page.
+      </div>
+    );
   }
 
   if (user.onboardingCompletedAt) {

@@ -201,7 +201,6 @@ export function MarketingPracticeQuestionsHubClient({
     const total = aggregates.reduce((s, a) => s + a.questionCount, 0);
     const unc = aggregates.find((a) => a.id === "uncategorized")?.questionCount ?? 0;
     const normalized = aggregates.filter((a) => a.questionCount > 0).map((a) => a.id);
-    // eslint-disable-next-line no-console -- dev-only practice hub diagnostics (spec)
     console.info("[nn-practice-questions-hub]", {
       pathwayId: pid,
       categoryRowCount: aggregates.length,
@@ -477,6 +476,29 @@ export function MarketingPracticeQuestionsHubClient({
               );
             })}
         </ul>
+
+        {aggregates.filter((a) => a.id !== "uncategorized").length === 0 ? (
+          <div
+            className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm shadow-sm"
+            data-testid="practice-body-system-empty-state"
+            role="status"
+          >
+            <p className="font-semibold text-[var(--theme-heading-text)]">
+              Question categories are still loading or unavailable.
+            </p>
+            <p className="mt-1 leading-relaxed text-[var(--theme-muted-text)]">
+              You can still continue through the connected study destinations while category counts refresh.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <Link href={lessonsHref} className="font-bold text-[var(--semantic-brand)] hover:underline">
+                Browse lessons
+              </Link>
+              <Link href={marketingCatHref} className="font-bold text-[var(--semantic-brand)] hover:underline">
+                CAT overview
+              </Link>
+            </div>
+          </div>
+        ) : null}
 
         {aggregates.some((a) => a.id === "uncategorized" && a.questionCount > 0) ? (
           <p className="mt-3 text-xs text-[var(--theme-muted-text)]">

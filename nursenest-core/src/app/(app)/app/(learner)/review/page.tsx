@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -50,7 +49,11 @@ export default async function ReviewQueuePage() {
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (!userId) {
-    redirect("/login?callbackUrl=/app/review");
+    return (
+      <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        We are checking your learner session. Refresh this page if the review queue does not load.
+      </div>
+    );
   }
 
   const entitlement = await resolveEntitlementForPage(userId);

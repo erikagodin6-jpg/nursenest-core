@@ -133,10 +133,10 @@ export default async function PracticeTestRunPage({
 
           <div className="mt-4">
             <Link
-              href="/login"
+              href="/app/practice-tests"
               className="nn-button nn-button-primary"
             >
-              Sign In Again
+              Return to Practice Exams
             </Link>
           </div>
         </div>

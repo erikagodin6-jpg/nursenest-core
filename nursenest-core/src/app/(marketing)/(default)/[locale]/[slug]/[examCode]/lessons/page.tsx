@@ -713,7 +713,7 @@ export default async function PathwayLessonsHubPage({
           eyebrow={pathway.shortName.trim() || pathway.displayName}
           pathwayTrack={pathway.roleTrack}
           toolbar={toolbar}
-          backLabel={`${examName} overview`}
+          backLabel={`${examName} Overview`}
           backHref={overviewHref}
           crumbs={crumbs}
           schemaItems={schemaItems}
@@ -725,7 +725,7 @@ export default async function PathwayLessonsHubPage({
           errorDetail={marketingLessonsHubLoadErrorDetail(lessonsPageLoad)}
           retryHref={`${base}${hubQuerySuffix}`}
           secondaryHref={overviewHref}
-          secondaryLabel="Back to exam overview"
+          secondaryLabel="Back to Exam Overview"
           supportHref={`/${countrySlug}/contact`}
           supportLabel="Contact support"
         />
@@ -1118,7 +1118,7 @@ export default async function PathwayLessonsHubPage({
     },
     { label: "Flashcards", href: buildExamPathwayPath(pathway, "flashcards") },
     { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-    { label: "Exam overview", href: overviewHref },
+    { label: "Exam Overview", href: overviewHref },
   ];
 
   const canadaHref =
@@ -1215,7 +1215,7 @@ export default async function PathwayLessonsHubPage({
             eyebrow={pathway.shortName.trim() || pathway.displayName}
             pathwayTrack={pathway.roleTrack}
             toolbar={toolbar}
-            backLabel={`${examName} overview`}
+            backLabel={`${examName} Overview`}
             backHref={overviewHref}
             crumbs={crumbs}
             schemaItems={schemaItems}
@@ -1227,7 +1227,7 @@ export default async function PathwayLessonsHubPage({
             errorDetail={collapse.userFacingDetail}
             retryHref={`${base}${hubQuerySuffix}`}
             secondaryHref={overviewHref}
-            secondaryLabel="Back to exam overview"
+            secondaryLabel="Back to Exam Overview"
             supportHref={`/${countrySlug}/contact`}
             supportLabel="Contact support"
           />
@@ -1289,7 +1289,7 @@ export default async function PathwayLessonsHubPage({
         eyebrow={pathway.shortName.trim() || pathway.displayName}
         pathwayTrack={pathway.roleTrack}
         toolbar={toolbar}
-        backLink={{ label: `${examName} overview`, href: overviewHref }}
+        backLink={{ label: `${examName} Overview`, href: overviewHref }}
       >
         <MarketingHubSmokeDiagnosticsJson
           payload={{
@@ -1418,7 +1418,7 @@ export default async function PathwayLessonsHubPage({
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
       heroPrimaryCta={subscriberHeroCta ?? anonymousHeroCta}
-      backLink={{ label: `${examName} overview`, href: overviewHref }}
+      backLink={{ label: `${examName} Overview`, href: overviewHref }}
     >
       <MarketingHubSmokeDiagnosticsJson
         payload={{
@@ -1589,7 +1589,7 @@ export default async function PathwayLessonsHubPage({
           { label: "Practice Questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
           { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-          { label: "Exam overview", href: overviewHref },
+          { label: "Exam Overview", href: overviewHref },
         ]}
       />
     </LessonsPageShell>

@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { MarketingLoginPage } from "@/components/marketing/marketing-login-page";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { resolveAuthReturnDestination } from "@/lib/auth/auth-flow-governance";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 
-// Converted to static - auth logic handled client-side via MarketingLoginPage component
-// No server-side session dependency, safe to remove force-dynamic
+export const dynamic = "force-dynamic";
+
+type LoginPageProps = {
+  searchParams: Promise<{ callbackUrl?: string | string[] | undefined }>;
+};
 
 const LOGIN_META_KEYS = ["pages.login.title", "pages.login.description"] as const;
 
@@ -32,10 +38,18 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   /**
    * Unprefixed marketing layout pins `MarketingI18nProvider` + `pages` shards to English (`DEFAULT_MARKETING_LOCALE`).
    * Using the locale cookie here caused SSR/client drift and missing keys vs `<main>` shard merges.
    */
+  const session = await getProtectedRouteSession("marketing.default.login");
+  const userId = (session?.user as { id?: string } | undefined)?.id?.trim() ?? "";
+  if (userId) {
+    const sp = await searchParams;
+    const rawCallback = Array.isArray(sp.callbackUrl) ? sp.callbackUrl[0] : sp.callbackUrl;
+    redirect(resolveAuthReturnDestination(rawCallback ?? null, { locale: DEFAULT_MARKETING_LOCALE }) ?? "/app");
+  }
+
   return <MarketingLoginPage localeMode="pinned-english" />;
 }

@@ -1,7 +1,5 @@
-import Link from "next/link";
 import { createTraceInfo, traceLayout, withBuildTrace } from "@/build/tracing";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { getLearnerShellMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import "@/app/learner-exam-shell.css";
 import "@/app/learner-exam-session-premium.css";
 import "@/app/learner-loft-simulation.css";
@@ -19,27 +17,15 @@ const examSessionTrace = createTraceInfo(import.meta, {
   phase: "layout",
 });
 
-const marketingBundleTrace = createTraceInfo(import.meta, {
-  kind: "provider",
-  name: "getLearnerShellMarketingBundle",
-  phase: "layout",
-});
-
 const ExamShellLayout = traceLayout(
   import.meta,
   async function ExamShellLayout({ children }: { children: React.ReactNode }) {
     let session = null;
-    let t: (key: string) => string = (key) => key;
 
     try {
-      const [sessionResult, bundle] = await Promise.all([
-        withBuildTrace(examSessionTrace, () => getProtectedRouteSession("(student).app.(learner).exams")),
-        withBuildTrace(marketingBundleTrace, () => getLearnerShellMarketingBundle()),
-      ]);
-      session = sessionResult;
-      t = bundle.t;
+      session = await withBuildTrace(examSessionTrace, () => getProtectedRouteSession("(student).app.(learner).exams"));
     } catch (e) {
-      console.error("[exam-shell-layout] failed to load session or i18n bundle", {
+      console.error("[exam-shell-layout] failed to load session", {
         error: e instanceof Error ? e.message : String(e),
       });
     }
@@ -50,10 +36,7 @@ const ExamShellLayout = traceLayout(
       return (
         <div className="nn-exam-surface mx-auto w-full max-w-4xl px-6 py-8">
           <p className="text-sm text-muted">
-            <Link className="font-medium text-primary underline" href="/login">
-              {t("learner.exams.shell.signIn")}
-            </Link>{" "}
-            {t("learner.exams.shell.signInToPractice")}
+            We are checking your learner session. Refresh this page if the exam does not load.
           </p>
         </div>
       );

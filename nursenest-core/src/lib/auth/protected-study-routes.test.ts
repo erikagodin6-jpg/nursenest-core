@@ -202,6 +202,16 @@ describe("normalizeStudyCallback — hub routes (require pathwayId)", () => {
     assert.equal(normalizeStudyCallback(u), u);
   });
 
+  it("allows practice exam setup callback without pathwayId", () => {
+    const u = "/app/practice-tests?startMode=practice_exam";
+    assert.equal(normalizeStudyCallback(u), u);
+  });
+
+  it("allows CAT setup callback without pathwayId", () => {
+    const u = "/app/practice-tests?cat=1";
+    assert.equal(normalizeStudyCallback(u), u);
+  });
+
   it("allows questions hub with pathwayId", () => {
     const u = `/app/questions?pathwayId=${PN}`;
     assert.equal(normalizeStudyCallback(u), u);

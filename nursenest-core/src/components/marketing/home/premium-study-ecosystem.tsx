@@ -93,7 +93,7 @@ export function PremiumStudyEcosystem() {
           </p>
         </div>
 
-        <div className="nn-premium-flow mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <div className="nn-premium-flow mx-auto mt-8 grid max-w-7xl justify-center gap-4 md:grid-cols-2 xl:grid-cols-5">
           {FLOW_STEPS.map((step, index) => {
             const Icon = step.icon;
             const href = hrefs[step.hrefKey];
@@ -103,7 +103,7 @@ export function PremiumStudyEcosystem() {
                 href={href}
                 event={PH.marketingHomeExploreHubClick}
                 eventProps={{ surface: "premium_study_ecosystem", step: step.title, region }}
-                className="nn-premium-flow-card group min-w-0 rounded-2xl border p-5"
+                className="nn-premium-flow-card group flex h-full min-w-0 flex-col rounded-2xl border p-5"
                 data-testid={`premium-study-flow-${step.key}`}
                 style={{ ["--premium-flow-accent" as string]: `var(--nn-premium-tone-${step.tone})` }}
               >
@@ -120,11 +120,8 @@ export function PremiumStudyEcosystem() {
                 <span className="nn-marketing-body-sm mt-3 block text-pretty text-[var(--palette-text-muted)]">
                   {tr(`pages.home.premium.studyEcosystem.steps.${step.key}.body`, step.body)}
                 </span>
-                <span className="mt-5 inline-flex items-center text-sm font-bold text-[var(--premium-flow-accent)]">
-                  {formatTitleCase(
-                    tr(`pages.home.premium.studyEcosystem.steps.${step.key}.cta`, `Open ${step.title}`),
-                    locale,
-                  )}
+                <span className="nn-premium-flow-card__cta mt-5 inline-flex items-center justify-center text-sm font-bold text-[var(--premium-flow-accent)]">
+                  {formatTitleCase("Start", locale)}
                   <ArrowRight className="ml-1.5 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
                 </span>
               </MarketingTrackedLink>

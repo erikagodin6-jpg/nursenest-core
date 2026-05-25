@@ -18,6 +18,8 @@ type Props = {
   accentStyle: CSSProperties;
   icon: ReactNode;
   progress?: ProgressSnapshot | null;
+  hideTitle?: boolean;
+  showBackLink?: boolean;
 };
 
 export function LessonsHubCategoryHeader({
@@ -28,19 +30,23 @@ export function LessonsHubCategoryHeader({
   accentStyle,
   icon,
   progress,
+  hideTitle = false,
+  showBackLink = true,
 }: Props) {
   return (
     <header
       className="nn-lessons-hub-category-header mb-6 border-b border-[var(--semantic-border-soft)] pb-6 sm:mb-8 sm:pb-8"
       style={accentStyle}
     >
-      <Link
-        href={hubHref}
-        className="mb-4 inline-flex min-h-[44px] items-center gap-1.5 text-xs font-semibold text-[var(--theme-muted-text)] transition hover:text-[var(--nn-hub-cat-accent)] sm:mb-5"
-      >
-        <ArrowLeft className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        All categories
-      </Link>
+      {showBackLink ? (
+        <Link
+          href={hubHref}
+          className="mb-4 inline-flex min-h-[44px] items-center gap-1.5 text-xs font-semibold text-[var(--theme-muted-text)] transition hover:text-[var(--nn-hub-cat-accent)] sm:mb-5"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          Lesson Areas
+        </Link>
+      ) : null}
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <div className="min-w-0 flex-1">
@@ -50,11 +56,21 @@ export function LessonsHubCategoryHeader({
               {icon}
             </span>
             <div className="min-w-0">
-              <h2 id="lesson-category-heading" className="nn-marketing-h3 text-[var(--theme-heading-text)]">
-                {title}
-              </h2>
+              {hideTitle ? (
+                <h2 id="lesson-category-heading" className="sr-only">
+                  {title}
+                </h2>
+              ) : (
+                <h2 id="lesson-category-heading" className="nn-marketing-h3 text-[var(--theme-heading-text)]">
+                  {title}
+                </h2>
+              )}
               {description ? (
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
+                <p
+                  className={`max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)] ${
+                    hideTitle ? "" : "mt-2"
+                  }`}
+                >
                   {description}
                 </p>
               ) : null}

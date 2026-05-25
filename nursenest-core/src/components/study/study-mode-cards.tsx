@@ -63,14 +63,14 @@ export function StudyModeCards({ heading = "Start studying", cards }: Props) {
       >
         {formatTitleCase(heading)}
       </h2>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-3">
         {cards.map((card) => {
           const styles = accentStyles[card.accent];
           const Icon = card.icon;
           return (
             <div
               key={card.title}
-              className={`nn-card-system nn-card-system-pad nn-card-system--interactive ${styles.border}`}
+              className={`nn-card-system nn-card-system-pad nn-card-system--interactive min-h-[15rem] ${styles.border}`}
             >
               <span
                 className={`nn-card-system__icon ${styles.iconBg}`}
@@ -83,9 +83,9 @@ export function StudyModeCards({ heading = "Start studying", cards }: Props) {
               <p className="nn-card-system__description">{formatSentenceCase(card.description)}</p>
               <Link
                 href={card.href}
-                className={`${styles.btn} nn-card-system__cta inline-flex min-h-[40px] justify-center rounded-full px-5 py-2 transition-opacity`}
+                className={`${styles.btn} nn-card-system__cta inline-flex justify-center rounded-full px-5 py-2 transition-opacity`}
               >
-                {formatTitleCase(card.cta)}
+                {formatTitleCase("Start")}
               </Link>
             </div>
           );

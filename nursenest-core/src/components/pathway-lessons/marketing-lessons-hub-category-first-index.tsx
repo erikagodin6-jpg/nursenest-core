@@ -10,6 +10,7 @@ import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-s
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonsHubCategoryTile } from "@/components/pathway-lessons/lessons-hub-category-tile";
 import { LessonsHubResumeCompact } from "@/components/pathway-lessons/lessons-hub-resume-compact";
+import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
@@ -34,7 +35,6 @@ import {
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
-import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
 
 type Props = {
@@ -73,6 +73,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   const catalog = getMarketingLessonsHubCatalogLessons(pathway.id);
   const hubCategories = pathwayMarketingHubCategories(pathway.id);
   const counts = countPathwayMarketingHubLessonsByCategoryForPathway(pathway.id);
+  const visibleCategories = hubCategories.filter((cat) => {
+    const categoryId = cat.id.trim().toLowerCase();
+    if (categoryId === "review_required" || cat.slug === "review-required") return false;
+    return (counts.get(cat.id) ?? 0) > 0;
+  });
+  const shouldFallbackToLessonCards = catalog.length > 0 && visibleCategories.length === 0;
 
   const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
     sessionPathname: routePathLessons,
@@ -99,10 +105,9 @@ export async function MarketingLessonsHubCategoryFirstIndex({
 
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = formatTitleCase(`${pathway.shortName.trim() || pathway.displayName} Lesson Library`);
-  const headerDescription = formatSentenceCase(
-    `High-yield lessons, clinical insights, and exam-focused content to help you pass the ${examName} with confidence.`,
-  );
+  const pathwayLabel = pathway.shortName.trim() || pathway.displayName;
+  const pageTitle = "Lesson Library";
+  const headerDescription = `${pathwayCountryLabel(pathway)} pathway · ${catalog.length.toLocaleString()}+ lessons`;
   const hubTrustBadges = ["Evidence-based content", "Exam-focused", "Created by nurses", "Updated regularly"];
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
@@ -149,17 +154,36 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     hubResume = subscriber.resume;
     showPaidProgressChrome = true;
   }
+  const categoryRows = showPaidProgressChrome
+    ? hubCategories.filter((cat) => {
+        const categoryId = cat.id.trim().toLowerCase();
+        return categoryId !== "review_required" && cat.slug !== "review-required";
+      })
+    : visibleCategories;
+
+  if (process.env.NODE_ENV === "development" || process.env.NN_MARKETING_HUB_PIPELINE_DIAGNOSTICS === "1") {
+    console.info("[nn-lessons-category-index]", {
+      pathwayId: pathway.id,
+      routePathname: routePathLessons,
+      catalogCount: catalog.length,
+      categoryCount: hubCategories.length,
+      visibleCategoryCount: visibleCategories.length,
+      countsCount: counts.size,
+      fallbackToLessonCards: shouldFallbackToLessonCards,
+    });
+  }
 
   if (catalog.length === 0) {
     return (
       <LessonsPageShell
         title={pageTitle}
         subtitle={headerDescription}
-        eyebrow={pathway.shortName.trim() || pathway.displayName}
+        eyebrow={pathwayLabel}
         pathwayTrack={pathway.roleTrack}
         toolbar={toolbar}
-        backLink={{ label: `${examName} overview`, href: overviewHref }}
+        backLink={{ label: `${examName} Overview`, href: overviewHref }}
         trustBadges={hubTrustBadges}
+        heroAlign="center"
       >
         <MarketingHubSmokeDiagnosticsJson
           payload={{
@@ -183,7 +207,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         </MarketingLessonsHubStickyStudyChrome>
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
-            No Lessons Are Indexed In The Bundled Catalog For This Pathway Yet.
+            No lessons are indexed for this pathway yet.
           </p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
             Explore practice questions and adaptive study below while the library expands.
@@ -193,7 +217,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
               href={questionsHref}
               className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
             >
-              Explore Available Questions
+              Practice Questions
             </Link>
           </div>
         </div>
@@ -205,12 +229,13 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     <LessonsPageShell
       title={pageTitle}
       subtitle={headerDescription}
-      eyebrow={pathway.shortName.trim() || pathway.displayName}
+      eyebrow={pathwayLabel}
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
-      backLink={{ label: `${examName} overview`, href: overviewHref }}
+      backLink={{ label: `${examName} Overview`, href: overviewHref }}
       statCard={{ value: `${catalog.length.toLocaleString()}+`, label: "High-yield lessons" }}
       trustBadges={hubTrustBadges}
+      heroAlign="center"
     >
       <MarketingHubSmokeDiagnosticsJson
         payload={{
@@ -220,6 +245,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           routePathname: routePathLessons,
           contentLocale: lessonContentLocale,
           catalogLen: catalog.length,
+          visibleCategoryCount: categoryRows.length,
+          fallbackToLessonCards: shouldFallbackToLessonCards,
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
@@ -273,15 +300,21 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           </span>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {hubCategories
-            .filter((cat) => {
-              const categoryId = cat.id.trim().toLowerCase();
-              if (categoryId === "review_required" || cat.slug === "review-required") return false;
-              const n = counts.get(cat.id) ?? 0;
-              return showPaidProgressChrome || n > 0;
-            })
-            .map((cat) => {
+        {shouldFallbackToLessonCards ? (
+          <div className="rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5">
+            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+              Lessons are available, but the category index is still syncing.
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+              Showing the full lesson library so this hub never renders as an empty shell.
+            </p>
+            <div className="mt-5">
+              <PathwayLessonsCurriculumHub lessons={catalog} lessonsBasePath={base} pathwayId={pathway.id} />
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            {categoryRows.map((cat) => {
               const n = counts.get(cat.id) ?? 0;
               const href = marketingPathwayLessonsCategoryPath(pathway, cat.slug);
               const visual = getLessonHubSystemVisual(cat.id);
@@ -317,7 +350,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                 />
               );
             })}
-        </div>
+          </div>
+        )}
       </section>
 
       <StudyBottomNav compact relatedLinks={lessonHubSurfaceChips} />

@@ -28,6 +28,8 @@ type Props = {
    * Keeps the premium hub shell + body card without duplicating the compact hero H1.
    */
   omitHeroBand?: boolean;
+  /** Category/list pages can opt into a centered hero without changing shell structure. */
+  heroAlign?: "left" | "center";
   children: ReactNode;
 };
 
@@ -63,8 +65,11 @@ export function LessonsPageShell({
   statCard,
   trustBadges,
   omitHeroBand = false,
+  heroAlign = "left",
   children,
 }: Props) {
+  const centerHero = heroAlign === "center";
+
   return (
     <div
       className="nn-premium-pathway-hub nn-premium-lessons-system"
@@ -91,10 +96,15 @@ export function LessonsPageShell({
           ) : null
         ) : (
         <section aria-labelledby="nn-lessons-hub-title">
-          <div className="nn-nursing-tier-hub-hero-band nn-premium-lessons-hub-hero" data-nn-premium-lessons-hero>
+          <div
+            className={`nn-nursing-tier-hub-hero-band nn-premium-lessons-hub-hero ${
+              centerHero ? "text-center" : ""
+            }`}
+            data-nn-premium-lessons-hero
+          >
 
             {/* Back + eyebrow + stat inline row */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <div className={`flex flex-wrap items-center gap-x-3 gap-y-1 ${centerHero ? "justify-center" : ""}`}>
               {backLink ? (
                 <Link
                   href={backLink.href}
@@ -122,20 +132,29 @@ export function LessonsPageShell({
 
             <h1
               id="nn-lessons-hub-title"
-              className="nn-marketing-h1 mt-2 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+              className={`nn-marketing-h1 mt-2 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)] ${
+                centerHero ? "mx-auto" : ""
+              }`}
             >
               {title}
             </h1>
 
             {subtitle ? (
-              <p className="nn-marketing-body mt-2 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
+              <p
+                className={`nn-marketing-body mt-2 max-w-2xl text-pretty text-[var(--palette-text-muted)] ${
+                  centerHero ? "mx-auto" : ""
+                }`}
+              >
                 {subtitle}
               </p>
             ) : null}
 
             {/* Trust badges — compact inline chips */}
             {trustBadges && trustBadges.length > 0 ? (
-              <div className="mt-2 flex flex-wrap gap-1.5" aria-label="Quality indicators">
+              <div
+                className={`mt-2 flex flex-wrap gap-1.5 ${centerHero ? "justify-center" : ""}`}
+                aria-label="Quality indicators"
+              >
                 {trustBadges.map((badge) => (
                   <span
                     key={badge}
@@ -150,7 +169,7 @@ export function LessonsPageShell({
             {toolbar ? <div className="mt-3 w-full">{toolbar}</div> : null}
 
             {heroPrimaryCta ? (
-              <div className="mt-4 flex w-full justify-start">
+              <div className={`mt-4 flex w-full ${centerHero ? "justify-center" : "justify-start"}`}>
                 <Link href={heroPrimaryCta.href} className={ctaClass("primary")}>
                   {heroPrimaryCta.label}
                 </Link>
@@ -158,7 +177,7 @@ export function LessonsPageShell({
             ) : null}
 
             {ctas && ctas.length > 0 ? (
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className={`mt-3 flex flex-wrap gap-2 ${centerHero ? "justify-center" : ""}`}>
                 {ctas.map((cta) => (
                   <Link key={cta.href + cta.label} href={cta.href} className={ctaClass(cta.variant)}>
                     {cta.label}

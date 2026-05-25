@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, BookOpen, ClipboardList, Layers } from "lucide-react";
+import { ArrowRight, BookOpen, Brain, ClipboardList, Layers } from "lucide-react";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -15,9 +15,10 @@ import {
 } from "@/lib/format/text-case";
 
 const PILLARS = [
-  { id: "cat", icon: Layers, hrefKey: "cat", label: "CAT" },
-  { id: "questions", icon: ClipboardList, hrefKey: "questions", label: "Questions" },
+  { id: "cat", icon: Layers, hrefKey: "cat", label: "NCLEX-RN CAT" },
+  { id: "questions", icon: ClipboardList, hrefKey: "questions", label: "Practice Questions" },
   { id: "lessons", icon: BookOpen, hrefKey: "lessons", label: "Lessons" },
+  { id: "flashcards", icon: Brain, hrefKey: "flashcards", label: "Flashcards" },
 ] as const;
 
 type PillarHrefKey = (typeof PILLARS)[number]["hrefKey"];
@@ -39,11 +40,13 @@ function pillarHref(loc: (path: string) => string, key: PillarHrefKey): string {
       return loc(HUB.questionBank);
     case "lessons":
       return loc(HUB.examLessons);
+    case "flashcards":
+      return loc(HUB.flashcards);
   }
 }
 
 /**
- * Three core product pillars — CAT/practice exams, question bank, lessons — with clear entry links.
+ * Core product pillars with clear entry links.
  */
 export function HomeProductPillarsSection() {
   const { t, locale } = useMarketingI18n();
@@ -77,7 +80,7 @@ export function HomeProductPillarsSection() {
           </p>
         </header>
 
-        <ul className="grid gap-5 md:grid-cols-3">
+        <ul className="mx-auto grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PILLARS.map((pillar) => {
             const Icon = pillar.icon;
             const href = pillarHref(loc, pillar.hrefKey);
@@ -129,11 +132,7 @@ export function HomeProductPillarsSection() {
 
                   <span className="nn-card-system__cta">
                     {formatTitleCase(
-                      safeT(
-                        t,
-                        `home.conversion.pillars.${pillar.id}Cta`,
-                        "Explore",
-                      ),
+                      "Start",
                       locale,
                     )}
                     <ArrowRight

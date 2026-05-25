@@ -34,7 +34,7 @@ import {
   pathwayLessonHasRenderableHubSlug,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
-import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
@@ -47,7 +47,7 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
-import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -117,8 +117,8 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     category.label,
     category.slug,
   );
-  const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = formatTitleCase(`${examName} · ${category.label} lessons`);
+  const categoryTitle = formatTitleCase(category.label);
+  const pageTitle = `${categoryTitle} Lessons`;
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
@@ -128,11 +128,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
   const lessonHubSurfaceChips = [
     { label: "Practice Questions", href: questionsHref },
     {
-      label: questionSnapshotLoadRejected
-        ? "Adaptive CAT — Status Unavailable"
-        : canStartCat
-          ? "Adaptive CAT"
-          : "Adaptive CAT Unavailable",
+      label: questionSnapshotLoadRejected ? "CAT Status Unavailable" : canStartCat ? "CAT" : "CAT Unavailable",
       href: catHref,
     },
     { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
@@ -182,16 +178,19 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
   const CategoryIcon = visual.icon;
   const accentStyle = { "--nn-hub-cat-accent": `var(${visual.accentVar})` } as CSSProperties;
 
-  const subtitle = formatSentenceCase(`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`);
+  const subtitle = `${pathwayCountryLabel(pathway)} pathway · ${filtered.length.toLocaleString()} ${
+    filtered.length === 1 ? "lesson" : "lessons"
+  }`;
 
   return (
     <LessonsPageShell
       title={pageTitle}
       subtitle={subtitle}
-      eyebrow={pathway.shortName.trim() || pathway.displayName}
+      eyebrow="Lesson Library"
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
-      backLink={{ label: "All Lesson Areas", href: base }}
+      backLink={{ label: "Lesson Areas", href: base }}
+      heroAlign="center"
     >
       <MarketingHubSmokeDiagnosticsJson
         payload={{
@@ -239,38 +238,40 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         aria-labelledby="lesson-category-heading"
       >
         <LessonsHubCategoryHeader
-          title={category.label}
+          title={categoryTitle}
           description={category.description}
           lessonCount={filtered.length}
           hubHref={base}
           accentStyle={accentStyle}
           icon={<CategoryIcon className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" aria-hidden />}
           progress={categoryProgressSnapshot}
+          hideTitle
+          showBackLink={false}
         />
 
         {filtered.length === 0 ? (
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-medium text-[var(--theme-heading-text)]">No Lessons In This Area Yet.</p>
+            <p className="font-medium text-[var(--theme-heading-text)]">No lessons in this area yet.</p>
             <p className="mt-2">
-              There are no catalog lessons mapped to <strong className="text-[var(--theme-heading-text)]">{category.label}</strong>{" "}
+              There are no catalog lessons mapped to <strong className="text-[var(--theme-heading-text)]">{categoryTitle}</strong>{" "}
               for this pathway. Try another clinical area or return to the lesson hub.
             </p>
             <p className="mt-3">
               <Link href={base} className="font-semibold text-primary hover:underline">
-                Back To Lesson Areas
+                Back to lesson areas
               </Link>
             </p>
           </div>
         ) : rows.length === 0 ? (
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-medium text-[var(--theme-heading-text)]">No Linkable Lessons On This Page.</p>
+            <p className="font-medium text-[var(--theme-heading-text)]">No linkable lessons on this page.</p>
             <p className="mt-2">
               Lessons in this area exist in the catalog, but none on this page passed public-link verification yet.
               Try another page or return to the hub.
             </p>
             <p className="mt-3">
               <Link href={base} className="font-semibold text-primary hover:underline">
-                Back To Lesson Areas
+                Back to lesson areas
               </Link>
             </p>
           </div>
@@ -322,7 +323,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         compact
         relatedLinks={[
           { label: "Practice Questions", href: questionsHref },
-          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT Unavailable", href: catHref },
+          { label: canStartCat ? "CAT" : "CAT Unavailable", href: catHref },
           { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
           { label: "Exam Overview", href: overviewHref },
         ]}

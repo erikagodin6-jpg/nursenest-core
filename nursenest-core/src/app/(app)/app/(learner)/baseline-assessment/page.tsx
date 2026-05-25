@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 
@@ -25,10 +24,7 @@ export default async function BaselineAssessmentPage() {
     return (
       <div>
         <p className="text-sm text-muted">
-          <Link href="/login" className="font-medium text-primary underline">
-            {t("learner.gate.signIn")}
-          </Link>{" "}
-          {t("learner.baseline.signInPromptAfter")}
+          We are checking your learner session. Refresh this page if the baseline assessment does not load.
         </p>
       </div>
     );

@@ -260,8 +260,10 @@ html[data-theme] {
 .nn-premium-pathway-card,
 .nn-premium-flow-card,
 .nn-premium-trust-card,
+.nn-card-system,
 .nn-marketing-card {
   border: 1px solid rgba(15, 23, 42, 0.06) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
 }
 
 /* Section dividers: barely visible */
@@ -299,13 +301,15 @@ html[data-theme] {
 /* Apply softer shadows to cards */
 .nn-card,
 .nn-premium-pathway-card,
-.nn-premium-flow-card {
+.nn-premium-flow-card,
+.nn-card-system {
   box-shadow: var(--shadow-card) !important;
 }
 
 .nn-card:hover,
 .nn-premium-pathway-card:hover,
-.nn-premium-flow-card:hover {
+.nn-premium-flow-card:hover,
+.nn-card-system:hover {
   box-shadow: var(--shadow-card-hover) !important;
 }
 
@@ -435,19 +439,45 @@ html[data-theme^="dark-"] .nn-chip[data-selected="true"] {
   padding-bottom: clamp(3rem, 6vh, 5rem) !important;
 }
 
+.nn-premium-home-section--ecosystem {
+  padding-top: clamp(2.25rem, 4.5vh, 3.75rem) !important;
+  padding-bottom: clamp(2.5rem, 5vh, 4rem) !important;
+}
+
 /* Card internal padding: more generous */
 .nn-card,
 .nn-premium-pathway-card,
-.nn-premium-flow-card {
+.nn-premium-flow-card,
+.nn-card-system {
   padding: 1.75rem !important;
 }
 
 @media (min-width: 640px) {
   .nn-card,
   .nn-premium-pathway-card,
-  .nn-premium-flow-card {
+  .nn-premium-flow-card,
+  .nn-card-system {
     padding: 2rem !important;
   }
+}
+
+.nn-card-system__cta,
+.nn-premium-flow-card__cta {
+  min-width: 160px !important;
+  height: 48px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  border-radius: 999px !important;
+  line-height: 1 !important;
+}
+
+.nn-premium-flow-card__cta {
+  width: fit-content;
+  margin-top: auto !important;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.72);
+  padding-inline: 1.25rem;
 }
 
 /* Heading to body spacing */
