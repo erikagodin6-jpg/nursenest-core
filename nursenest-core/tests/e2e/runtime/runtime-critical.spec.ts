@@ -164,11 +164,11 @@ test.describe("autonomous runtime critical gate", () => {
         for (const route of activityRoutesForPathway(account.pathwayId)) {
           await page.goto(route, { waitUntil: "domcontentloaded" });
           await expect(page.locator("body"), `${account.label} ${route}`).not.toBeEmpty({ timeout: 30_000 });
-          await expect(page.locator("main, body"), `${account.label} ${route}`).not.toContainText(
+          await expect(page.locator("body"), `${account.label} ${route}`).not.toContainText(
             /Unable to load this section|Your account and access remain intact/i,
             { timeout: 5_000 },
           );
-          await expect(page.locator("main, body"), `${account.label} ${route}`).not.toContainText(/Log in|Sign in/i, {
+          await expect(page.locator("body"), `${account.label} ${route}`).not.toContainText(/Log in|Sign in/i, {
             timeout: 5_000,
           });
         }

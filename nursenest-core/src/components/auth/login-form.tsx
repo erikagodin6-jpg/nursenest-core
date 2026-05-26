@@ -144,12 +144,13 @@ export function LoginForm({
         String(formData.get("rememberMe") ?? "") === "true";
       let result: Awaited<ReturnType<typeof signIn>> | undefined;
       try {
+        const authRedirectTo = new URL(redirectTarget, window.location.origin).href;
         result = await signIn("credentials", {
           email,
           password,
           rememberMe: rememberMe ? "true" : "false",
           redirect: false,
-          redirectTo: redirectTarget,
+          redirectTo: authRedirectTo,
         });
       } catch (e) {
         console.error("[login] signIn threw", e);

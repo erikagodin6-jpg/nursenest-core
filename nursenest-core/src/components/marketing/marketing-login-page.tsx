@@ -35,7 +35,6 @@ function LoginFormStreamFallback() {
       <div className="space-y-1.5">
         <div className="h-4 w-28 animate-pulse rounded bg-border/50" aria-hidden />
         <input
-          id="login-identifier"
           name="email"
           type="text"
           readOnly
@@ -49,7 +48,6 @@ function LoginFormStreamFallback() {
       <div className="space-y-1.5">
         <div className="h-4 w-24 animate-pulse rounded bg-border/50" aria-hidden />
         <input
-          id="login-password"
           name="password"
           type="password"
           readOnly
