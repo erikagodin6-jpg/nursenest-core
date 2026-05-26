@@ -109,7 +109,31 @@ test.describe("autonomous runtime critical gate", () => {
         enterLearnerApp: true,
       });
 
-      for (const route of ["/app/practice-tests", "/app/flashcards"] as const) {
+      await page.addInitScript(() => {
+        localStorage.setItem(
+          "flashcard-study-item-state:v1",
+          JSON.stringify({
+            good: { starred: true },
+            malformedNull: null,
+            malformedArray: ["bad"],
+          }),
+        );
+        localStorage.setItem(
+          "nn_flashcards_custom_checkpoint_v1",
+          JSON.stringify({
+            "ca-rn-nclex-rn": {
+              pathwayId: "ca-rn-nclex-rn",
+              queryString: null,
+              index: "not-a-number",
+              totalCards: 20,
+              systemsLabel: { bad: true },
+              updatedAt: null,
+            },
+          }),
+        );
+      });
+
+      for (const route of ["/app/practice-tests", "/app/flashcards?pathwayId=ca-rn-nclex-rn"] as const) {
         await page.goto(route, { waitUntil: "domcontentloaded" });
         await expect(page.locator("body")).not.toBeEmpty({ timeout: 30_000 });
         await expect(page.locator("main, body")).not.toContainText(/Unable to load this section/i, { timeout: 5_000 });

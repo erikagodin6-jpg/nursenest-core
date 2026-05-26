@@ -220,10 +220,27 @@ const LearnerShellLayout = traceLayout(
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
+  const shellFallbackStats = getDegradedPublicHomeStatsFallback("learner_shell_route_safe_fallback", { silent: true });
   const paywallHomeStats =
-    entitlement === "error" || !entitlement.hasAccess
-      ? await withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell())
-      : getDegradedPublicHomeStatsFallback("learner_shell_not_paywalled", { silent: true });
+    isStudyHubLanding
+      ? shellFallbackStats
+      : entitlement === "error" || !entitlement.hasAccess
+        ? await safeOptional(
+            () => withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell()),
+            shellFallbackStats,
+            {
+              label: "learner_shell_paywall_home_stats",
+              timeoutMs: 900,
+              onUsedFallback: (reason) => {
+                layoutStderrTrace("learner_shell", "fallback_used", {
+                  surface: "paywall_home_stats",
+                  route: normalizedLearnerPathname,
+                  reason,
+                });
+              },
+            },
+          )
+        : shellFallbackStats;
 
   if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
     layoutStderrTrace("learner_shell", "optional_shell_work_skipped", {

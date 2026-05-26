@@ -134,13 +134,38 @@ export type FlashcardsCustomSessionCheckpoint = {
 
 const CUSTOM_CK_KEY = "nn_flashcards_custom_checkpoint_v1";
 
+function isPlainRecord(v: unknown): v is Record<string, unknown> {
+  return v !== null && typeof v === "object" && !Array.isArray(v);
+}
+
+function normalizeCustomSessionCheckpoint(v: unknown): FlashcardsCustomSessionCheckpoint | null {
+  if (!isPlainRecord(v)) return null;
+  const pathwayId = typeof v.pathwayId === "string" ? v.pathwayId.trim() : "";
+  const queryString = typeof v.queryString === "string" ? v.queryString : "";
+  const systemsLabel = typeof v.systemsLabel === "string" && v.systemsLabel.trim() ? v.systemsLabel : "Flashcards";
+  const indexRaw = Number(v.index);
+  const totalRaw = Number(v.totalCards);
+  const updatedAt = typeof v.updatedAt === "string" ? v.updatedAt : new Date(0).toISOString();
+  if (!pathwayId || !Number.isFinite(indexRaw) || !Number.isFinite(totalRaw)) return null;
+  const index = Math.max(0, Math.floor(indexRaw));
+  const totalCards = Math.max(0, Math.floor(totalRaw));
+  if (totalCards <= 0 || index <= 0 || index >= totalCards - 1) return null;
+  return { pathwayId, queryString, index, totalCards, systemsLabel, updatedAt };
+}
+
 function readCustomCheckpoints(): Record<string, FlashcardsCustomSessionCheckpoint> {
   if (typeof window === "undefined") return {};
   try {
     const raw = localStorage.getItem(CUSTOM_CK_KEY);
     if (!raw) return {};
-    const parsed = JSON.parse(raw) as Record<string, FlashcardsCustomSessionCheckpoint>;
-    return parsed && typeof parsed === "object" ? parsed : {};
+    const parsed = JSON.parse(raw) as unknown;
+    if (!isPlainRecord(parsed)) return {};
+    const normalized: Record<string, FlashcardsCustomSessionCheckpoint> = {};
+    for (const [key, value] of Object.entries(parsed)) {
+      const ck = normalizeCustomSessionCheckpoint(value);
+      if (ck) normalized[key] = ck;
+    }
+    return normalized;
   } catch {
     return {};
   }
@@ -167,10 +192,7 @@ export function readFlashcardsCustomSessionCheckpoint(
 ): FlashcardsCustomSessionCheckpoint | null {
   const id = pathwayId.trim();
   if (!id) return null;
-  const ck = readCustomCheckpoints()[id];
-  if (!ck || ck.totalCards <= 0 || ck.index <= 0) return null;
-  if (ck.index >= ck.totalCards - 1) return null;
-  return ck;
+  return readCustomCheckpoints()[id] ?? null;
 }
 
 export function clearFlashcardsCustomSessionCheckpoint(pathwayId: string): void {

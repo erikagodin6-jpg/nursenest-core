@@ -78,12 +78,49 @@ export default async function FlashcardsPage(props: PageProps) {
   try {
     return await FlashcardsPageContent(props);
   } catch (e) {
+    let pathwayId = DEFAULT_FLASHCARDS_PATHWAY_ID;
+    try {
+      const sp = await props.searchParams;
+      const rawPid = sp.pathwayId;
+      pathwayId =
+        typeof rawPid === "string" && rawPid.trim().length > 2
+          ? rawPid.trim()
+          : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+            ? rawPid[0].trim()
+            : DEFAULT_FLASHCARDS_PATHWAY_ID;
+    } catch {
+      pathwayId = DEFAULT_FLASHCARDS_PATHWAY_ID;
+    }
     safeServerLog("learner_flashcards", "page_bootstrap_failed", {
       error_name: e instanceof Error ? e.name : "unknown",
+      error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      pathway_id: pathwayId,
+      loader_name: "FlashcardsPageContent",
       outcome: "error",
     });
-    return <FlashcardErrorBoundary />;
+    return <FlashcardsRouteRecovery pathwayId={pathwayId} reason="page_bootstrap_failed" />;
   }
+}
+
+function FlashcardsRouteRecovery({ pathwayId, reason }: { pathwayId: string; reason: string }) {
+  const href = `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId || DEFAULT_FLASHCARDS_PATHWAY_ID)}`;
+  return (
+    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6" data-nn-e2e-flashcards-recovery-shell>
+      <ContentEmptyState
+        variant="generic"
+        tone="default"
+        headline="Flashcards are recovering"
+        body="We could not finish loading the live flashcard workspace, but your account and progress are safe. You can retry this route directly without returning through the dashboard."
+        hint={process.env.NODE_ENV === "development" ? `reason=${reason}; pathwayId=${pathwayId}` : undefined}
+        primaryCta={{ label: "Retry flashcards", href }}
+        secondaryCtas={[
+          { label: "Open practice exams", href: `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}` },
+          { label: "Return to dashboard", href: "/app", variant: "ghost" },
+        ]}
+        showGrowthBadge={false}
+      />
+    </div>
+  );
 }
 
 async function FlashcardsPageContent({ searchParams }: PageProps) {

@@ -21,13 +21,36 @@ function canUseStorage(): boolean {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
 }
 
+function isPlainRecord(v: unknown): v is Record<string, unknown> {
+  return v !== null && typeof v === "object" && !Array.isArray(v);
+}
+
+function normalizeStudyItemState(v: unknown): StudyItemState | null {
+  if (!isPlainRecord(v)) return null;
+  const note = typeof v.note === "string" ? v.note : undefined;
+  const out: StudyItemState = {};
+  if (v.starred === true) out.starred = true;
+  if (v.saved === true) out.saved = true;
+  if (v.confusing === true) out.confusing = true;
+  if (v.highlighted === true) out.highlighted = true;
+  if (note?.trim()) out.note = note;
+  return out;
+}
+
 function readRawState(): Record<string, StudyItemState> {
   if (!canUseStorage()) return {};
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
-    const parsed = JSON.parse(raw) as Record<string, StudyItemState>;
-    return parsed && typeof parsed === "object" ? parsed : {};
+    const parsed = JSON.parse(raw) as unknown;
+    if (!isPlainRecord(parsed)) return {};
+    const normalized: Record<string, StudyItemState> = {};
+    for (const [cardId, value] of Object.entries(parsed)) {
+      if (!cardId.trim()) continue;
+      const state = normalizeStudyItemState(value);
+      if (state) normalized[cardId] = state;
+    }
+    return normalized;
   } catch {
     return {};
   }
