@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AnalyticsBreadcrumbTrail } from "@/components/navigation/analytics-breadcrumb-trail";
+import { fetchLearnerActivityJson } from "@/lib/runtime/learner-activity-fetch";
 
 type CatInsightRow = {
   id: string;
@@ -18,6 +19,7 @@ type CatInsightRow = {
 
 export default function CatInsightsPage() {
   const mountedRef = useRef(true);
+  const activeLoadRef = useRef<AbortController | null>(null);
 
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<CatInsightRow[]>([]);
@@ -41,51 +43,42 @@ export default function CatInsightsPage() {
       append: boolean,
     ) => {
       if (!mountedRef.current) return;
+      activeLoadRef.current?.abort();
+      const controller = new AbortController();
+      activeLoadRef.current = controller;
 
       setLoading(true);
       setError(null);
 
+      const result = await fetchLearnerActivityJson<{
+        items?: CatInsightRow[];
+        hasMore?: boolean;
+        error?: string;
+      }>(`/api/practice-tests/cat-insights?page=${nextPage}`, {
+        signal: controller.signal,
+        timeoutMs: 15_000,
+        diagnosticScope: "cat_insights",
+        diagnosticKey: String(nextPage),
+        diagnosticMeta: { page: nextPage, append },
+        init: { method: "GET" },
+      });
+
       try {
-        const controller = new AbortController();
-
-        const timeout = setTimeout(() => {
-          controller.abort();
-        }, 15000);
-
-        const res = await fetch(
-          `/api/practice-tests/cat-insights?page=${nextPage}`,
-          {
-            method: "GET",
-            credentials: "include",
-            cache: "no-store",
-            signal: controller.signal,
-          },
-        );
-
-        clearTimeout(timeout);
-
-        let data: {
-          items?: CatInsightRow[];
-          hasMore?: boolean;
-          error?: string;
-        } = {};
-
-        try {
-          data = (await res.json()) as typeof data;
-        } catch {
-          data = {};
-        }
-
-        if (!res.ok) {
+        if (!mountedRef.current || controller.signal.aborted) return;
+        if (!result.ok) {
           throw new Error(
-            data.error ??
-              `Request failed (${res.status})`,
+            result.response && "data" in result
+              ? "Could not load CAT history."
+              : result.error === "invalid_json"
+                ? "Session history returned invalid data."
+                : "Could not load CAT history.",
           );
         }
 
-        const next = data.items ?? [];
-
-        if (!mountedRef.current) return;
+        const data = result.data;
+        const next = Array.isArray(data.items)
+          ? data.items.filter((item): item is CatInsightRow => item != null && typeof item.id === "string" && item.id.length > 0)
+          : [];
 
         setItems((prev) =>
           append ? [...prev, ...next] : next,
@@ -95,21 +88,19 @@ export default function CatInsightsPage() {
 
         setPage(nextPage);
       } catch (e) {
-        if (!mountedRef.current) return;
+        if (!mountedRef.current || controller.signal.aborted) return;
 
         const message =
           e instanceof Error
             ? e.message
             : "Could not load CAT history.";
 
-        console.error(
-          "[cat-insights] load failed",
-          e,
-        );
-
         setError(message);
       } finally {
-        if (mountedRef.current) {
+        if (activeLoadRef.current === controller) {
+          activeLoadRef.current = null;
+        }
+        if (mountedRef.current && !controller.signal.aborted) {
           setLoading(false);
         }
       }
@@ -119,6 +110,9 @@ export default function CatInsightsPage() {
 
   useEffect(() => {
     void load(1, false);
+    return () => {
+      activeLoadRef.current?.abort();
+    };
   }, [load]);
 
   const outlooks = items

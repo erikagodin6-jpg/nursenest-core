@@ -11,7 +11,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -41,9 +40,9 @@ export default async function AccountQuestionBankPerformancePage() {
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.questionBankPerf.title")}
-          body={t("learner.profile.signedOutHint")}
-          hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/question-bank-performance"), variant: "primary" }}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

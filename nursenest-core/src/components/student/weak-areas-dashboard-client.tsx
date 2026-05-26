@@ -22,7 +22,10 @@ export function WeakAreasDashboardClient({ initial }: Props) {
     setLoading(true);
     setRefreshError(null);
     try {
-      const res = await fetch("/api/learner/weak-areas", { cache: "no-store" });
+      const res = await fetch("/api/learner/weak-areas", {
+        credentials: "include",
+        cache: "no-store",
+      });
       if (!res.ok) {
         let msg = "Could not refresh topic performance.";
         try {

@@ -9,7 +9,6 @@ import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { BillingSupportEmailNotice } from "@/components/student/billing-support-email-notice";
 
@@ -39,9 +38,9 @@ export default async function AccountBillingPage() {
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.billing.title")}
-          body={t("learner.profile.signedOutHint")}
-          hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/billing"), variant: "primary" }}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

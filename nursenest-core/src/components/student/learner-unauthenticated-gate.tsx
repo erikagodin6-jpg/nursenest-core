@@ -5,7 +5,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
 import { buildLearnerResumePathFromParts } from "@/lib/auth/auth-flow-governance";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 export function LearnerUnauthenticatedGate() {
@@ -13,7 +12,6 @@ export function LearnerUnauthenticatedGate() {
   const pathname = usePathname() ?? "/app";
   const searchParams = useSearchParams();
   const resume = buildLearnerResumePathFromParts(pathname, searchParams.toString() ? `?${searchParams.toString()}` : "", "");
-  const signInHref = loginWithCallback(resume);
 
   return (
     <div data-nn-learner-auth-gate className="mx-auto w-full max-w-6xl px-6 py-8">
@@ -24,10 +22,11 @@ export function LearnerUnauthenticatedGate() {
         <LearnerShellLanguageControl />
       </div>
       <p className="text-sm text-[var(--theme-muted-text)]">
-        <Link className="font-medium text-primary underline" href={signInHref}>
-          {t("learner.gate.signIn")}
-        </Link>{" "}
-        {t("learner.gate.toAccessApp")}
+        We are checking your learner session.{" "}
+        <Link className="font-medium text-primary underline" href={resume || "/app"}>
+          Return to NurseNest
+        </Link>
+        {" "}if this does not refresh.
       </p>
     </div>
   );

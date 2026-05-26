@@ -15,11 +15,11 @@
   --semantic-surface-elevated: #ffffff;
   --semantic-border-soft: #b0dcf3;
   --semantic-shadow-soft:
-    0 1px 0 rgba(17, 24, 39, 0.04),
-    0 12px 36px -18px rgba(6, 88, 140, 0.08);
-  --semantic-text-primary: #0f172a;
-  --semantic-text-secondary: #455569;
-  --semantic-text-muted: #647894;
+    0 1px 0 rgba(31, 41, 55, 0.035),
+    0 12px 36px -20px rgba(31, 41, 55, 0.08);
+  --semantic-text-primary: #1f2937;
+  --semantic-text-secondary: #374151;
+  --semantic-text-muted: #4b5563;
   --semantic-brand: #1aaee0;
   --semantic-brand-soft: #e6f6fc;
   --semantic-brand-contrast: #ffffff;

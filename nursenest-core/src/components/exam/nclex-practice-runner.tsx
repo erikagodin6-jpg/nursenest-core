@@ -81,8 +81,12 @@ function isBowtieQuestion(q: QRow): boolean {
   return fmt.includes("bowtie");
 }
 
-async function loadSession(testId: string) {
-  const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=full`, { method: "GET" });
+async function loadSession(testId: string, signal?: AbortSignal) {
+  const res = await fetchWithRetry(
+    `/api/practice-tests/${testId}?hydrate=full`,
+    { method: "GET", signal },
+    { attempts: 2, timeoutMs: 12_000 },
+  );
   if (!res.ok) throw new Error("Failed to load session");
   const j = await res.json() as {
     status?: string;
@@ -129,11 +133,12 @@ async function loadSession(testId: string) {
   };
 }
 
-async function fetchQuestion(testId: string, questionId: string): Promise<QRow | null> {
+async function fetchQuestion(testId: string, index: number, signal?: AbortSignal): Promise<QRow | null> {
   try {
     const res = await fetchWithRetry(
-      `/api/practice-tests/${testId}/question?questionId=${encodeURIComponent(questionId)}`,
-      { method: "GET" },
+      `/api/practice-tests/${testId}/question?index=${encodeURIComponent(String(index))}`,
+      { method: "GET", signal },
+      { attempts: 2, timeoutMs: 10_000 },
     );
     if (!res.ok) return null;
     const j = await res.json() as { question?: QRow };
@@ -226,6 +231,7 @@ export function NclexPracticeRunner({
   const [idx, setIdx] = useState(0);
   const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
+  const [crossedOut, setCrossedOut] = useState<Record<string, boolean>>({});
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [committedIds, setCommittedIds] = useState<Set<string>>(new Set());
   const [feedback, setFeedback] = useState<Record<string, LinearFeedback>>({});
@@ -278,9 +284,10 @@ export function NclexPracticeRunner({
   }, [answers]);
 
   useEffect(() => {
+    const controller = new AbortController();
     void (async () => {
       try {
-        const s = await loadSession(testId);
+        const s = await loadSession(testId, controller.signal);
         if (!mountedRef.current) return;
         if ((s.status === "COMPLETED" || s.status === "ABANDONED") && s.results) {
           setResults(s.results);
@@ -306,22 +313,34 @@ export function NclexPracticeRunner({
         }
         setPhase("ready");
       } catch {
+        if (controller.signal.aborted) return;
         if (mountedRef.current) { setError("Could not load session."); setPhase("error"); }
       }
     })();
+    return () => controller.abort();
   }, [testId]);
 
   useEffect(() => {
     if (phase !== "ready") return;
+    const controller = new AbortController();
     const ids = questionIds.slice(idx, idx + 2);
-    for (const id of ids) {
+    for (let offset = 0; offset < ids.length; offset += 1) {
+      const id = ids[offset]!;
       if (!questionCache[id]) {
-        void fetchQuestion(testId, id).then((q) => {
-          if (!mountedRef.current || !q) return;
+        void fetchQuestion(testId, idx + offset, controller.signal).then((q) => {
+          if (!mountedRef.current || controller.signal.aborted) return;
+          if (!q) {
+            if (questionIds[idx] === id) {
+              setError("Could not load this question. Return to practice tests and resume the session.");
+              setPhase("error");
+            }
+            return;
+          }
           setQuestionCache((prev) => ({ ...prev, [q.id]: q }));
         });
       }
     }
+    return () => controller.abort();
   }, [phase, idx, questionIds, questionCache, testId]);
 
   useEffect(() => {
@@ -358,6 +377,12 @@ export function NclexPracticeRunner({
       answersRef.current = next;
       return next;
     });
+  }
+
+  function toggleCrossOutForCurrent(canonical: string) {
+    if (!currentId || isCommitted || submitting) return;
+    const key = `${currentId}:${canonical}`;
+    setCrossedOut((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
   async function handleSubmit() {
@@ -595,6 +620,7 @@ export function NclexPracticeRunner({
       {optsCanonical.map((canonical, i) => {
         const display = resolveMeasureText(optsDisplay[i] ?? canonical);
         const state = getOptionState(canonical);
+        const optionCrossedOut = Boolean(crossedOut[`${currentId ?? ""}:${canonical}`]);
         if (isSata) {
           return (
             <NclexAnswerCard
@@ -604,7 +630,9 @@ export function NclexPracticeRunner({
               state={state}
               isCheckbox
               checked={Array.isArray(raw) && raw.includes(canonical)}
+              crossedOut={optionCrossedOut}
               disabled={isCommitted || submitting}
+              onToggleCrossOut={() => toggleCrossOutForCurrent(canonical)}
               onChange={(checked) => {
                 const prev = Array.isArray(raw) ? [...raw] : [];
                 setAnswerForCurrent(
@@ -620,7 +648,9 @@ export function NclexPracticeRunner({
             index={i}
             text={display}
             state={state}
+            crossedOut={optionCrossedOut}
             disabled={isCommitted || submitting}
+            onToggleCrossOut={() => toggleCrossOutForCurrent(canonical)}
             onClick={() => setAnswerForCurrent(canonical)}
           />
         );

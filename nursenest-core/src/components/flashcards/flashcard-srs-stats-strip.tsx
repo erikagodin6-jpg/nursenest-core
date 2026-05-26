@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Flame, BookOpen, AlertTriangle, Clock } from "lucide-react";
+import { fetchLearnerActivityJson } from "@/lib/runtime/learner-activity-fetch";
 
 export type FlashcardSrsStats = {
   dueToday: number;
@@ -31,37 +32,42 @@ function normalizeSrsStats(stats: Partial<FlashcardSrsStats> | null | undefined)
   };
 }
 
-async function fetchSrsStats(pathwayId: string | null): Promise<FlashcardSrsStats | null> {
-  try {
-    const qs = new URLSearchParams({ countsOnly: "1" });
-    if (pathwayId) qs.set("pathwayId", pathwayId);
-    const [queueRes, statsRes] = await Promise.all([
-      fetch(`/api/flashcards/study-queue?${qs}`, { credentials: "include" }),
-      fetch("/api/flashcards/stats", { credentials: "include" }),
-    ]);
-    const queue = queueRes.ok ? ((await queueRes.json()) as { counts: Partial<FlashcardSrsStats> }) : null;
-    const statsData = statsRes.ok
-      ? ((await statsRes.json()) as { currentStreak?: number; cardsReviewedTotal?: number })
-      : null;
+async function fetchSrsStats(pathwayId: string | null, signal: AbortSignal): Promise<FlashcardSrsStats | null> {
+  const qs = new URLSearchParams({ countsOnly: "1" });
+  if (pathwayId) qs.set("pathwayId", pathwayId);
+  const [queueResult, statsResult] = await Promise.all([
+    fetchLearnerActivityJson<{ counts: Partial<FlashcardSrsStats> }>(`/api/flashcards/study-queue?${qs}`, {
+      signal,
+      diagnosticScope: "flashcard_srs_stats",
+      diagnosticKey: pathwayId ?? "all",
+      diagnosticMeta: { pathwayId },
+    }),
+    fetchLearnerActivityJson<{ currentStreak?: number; cardsReviewedTotal?: number }>("/api/flashcards/stats", {
+      signal,
+      diagnosticScope: "flashcard_srs_stats",
+      diagnosticKey: `stats:${pathwayId ?? "all"}`,
+      diagnosticMeta: { pathwayId },
+    }),
+  ]);
+  if (!queueResult.ok && !statsResult.ok) return null;
+  const queue = queueResult.ok ? queueResult.data : null;
+  const statsData = statsResult.ok ? statsResult.data : null;
 
-    const counts = queue?.counts ?? {};
-    const streak = statsData?.currentStreak ?? 0;
-    const totalReviewed = (counts as { totalReviewed?: number }).totalReviewed ?? 0;
-    const newCards = (counts as { newCards?: number }).newCards ?? 0;
-    const totalAccessible = totalReviewed + newCards;
-    const masteryPct = totalAccessible > 0 ? Math.round((totalReviewed / totalAccessible) * 100) : 0;
+  const counts = queue?.counts ?? {};
+  const streak = statsData?.currentStreak ?? 0;
+  const totalReviewed = (counts as { totalReviewed?: number }).totalReviewed ?? 0;
+  const newCards = (counts as { newCards?: number }).newCards ?? 0;
+  const totalAccessible = totalReviewed + newCards;
+  const masteryPct = totalAccessible > 0 ? Math.round((totalReviewed / totalAccessible) * 100) : 0;
 
-    return {
-      dueToday: (counts as { dueToday?: number }).dueToday ?? 0,
-      overdue: (counts as { overdue?: number }).overdue ?? 0,
-      lapsingCards: (counts as { lapsingCards?: number }).lapsingCards ?? 0,
-      newCards,
-      streak,
-      masteryPct,
-    };
-  } catch {
-    return null;
-  }
+  return {
+    dueToday: (counts as { dueToday?: number }).dueToday ?? 0,
+    overdue: (counts as { overdue?: number }).overdue ?? 0,
+    lapsingCards: (counts as { lapsingCards?: number }).lapsingCards ?? 0,
+    newCards,
+    streak,
+    masteryPct,
+  };
 }
 
 export function FlashcardSrsStatsStrip({ pathwayId = null, stats: overrideStats, className = "" }: Props) {
@@ -69,9 +75,11 @@ export function FlashcardSrsStatsStrip({ pathwayId = null, stats: overrideStats,
 
   useEffect(() => {
     if (overrideStats) return;
-    void fetchSrsStats(pathwayId).then((s) => {
-      if (s) setStats(s);
+    const controller = new AbortController();
+    void fetchSrsStats(pathwayId, controller.signal).then((s) => {
+      if (!controller.signal.aborted && s) setStats(s);
     });
+    return () => controller.abort();
   }, [pathwayId, overrideStats]);
 
   if (!stats) return null;

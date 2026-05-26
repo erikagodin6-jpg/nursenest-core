@@ -21,7 +21,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { aggregateTopicsByCanonicalStudyCategory } from "@/lib/learner/learner-account-category-aggregate";
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function LearnerReportCardRouteBody({
@@ -51,9 +50,9 @@ export async function LearnerReportCardRouteBody({
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
-          body={t("learner.profile.signedOutHint")}
-          hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback(signInReturnPath), variant: "primary" }}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

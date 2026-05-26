@@ -21,7 +21,6 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadCoachPageData } from "@/lib/study/coach-page-data";
 import { AdaptiveCoachHero } from "@/components/study/adaptive-coach-hero";
@@ -35,7 +34,6 @@ import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   PRIMARY_CTA,
-  SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
 
@@ -59,10 +57,10 @@ export default async function CoachPage() {
         <LearnerBreadcrumbTrail kind="coach" pathname="/app/coach" />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
-          body="Sign in to access your personalized study coach."
+          body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
           primaryCta={{
-            label: SIGN_IN_CTA,
-            href: loginWithCallback("/app/coach"),
+            label: OPEN_STUDY_HUB_CTA,
+            href: "/app",
             variant: "primary",
           }}
           secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}

@@ -316,7 +316,7 @@ export function PracticeTestsHubClient({
 
       if (res.status === 401 || res.status === 403) {
         setSessionExpired(true);
-        throw new Error("We could not verify your session. Sign in again to continue from this setup.");
+        throw new Error("We could not verify your learner session. Retry from this page once your session finishes refreshing.");
       }
 
       if (!res.ok) {

@@ -91,7 +91,7 @@ function isBowtieQuestion(q: QRow): boolean {
 // content in one DB round-trip.  Without this flag the runner had to make two
 // serial requests (metadata → then individual question), showing a spinner for
 // the combined latency of both.
-async function loadSession(testId: string): Promise<{
+async function loadSession(testId: string, signal?: AbortSignal): Promise<{
   questionIds: string[];
   questions: Record<string, QRow>; // pre-hydrated question cache
   answers: Record<string, unknown>;
@@ -104,9 +104,11 @@ async function loadSession(testId: string): Promise<{
   pathwayLabel?: string | null;
   pathwayId?: string | null;
 }> {
-  const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=full`, {
-    method: "GET",
-  });
+  const res = await fetchWithRetry(
+    `/api/practice-tests/${testId}?hydrate=full`,
+    { method: "GET", signal },
+    { attempts: 2, timeoutMs: 12_000 },
+  );
   if (!res.ok) throw new Error("Failed to load session");
   const j = await res.json() as {
     id?: string;
@@ -156,11 +158,12 @@ async function loadSession(testId: string): Promise<{
 }
 
 // Fallback: fetch a single question if it was somehow not in the hydrated batch.
-async function fetchQuestion(testId: string, questionId: string): Promise<QRow | null> {
+async function fetchQuestion(testId: string, index: number, signal?: AbortSignal): Promise<QRow | null> {
   try {
     const res = await fetchWithRetry(
-      `/api/practice-tests/${testId}/question?questionId=${encodeURIComponent(questionId)}`,
-      { method: "GET" },
+      `/api/practice-tests/${testId}/question?index=${encodeURIComponent(String(index))}`,
+      { method: "GET", signal },
+      { attempts: 2, timeoutMs: 10_000 },
     );
     if (!res.ok) return null;
     const j = await res.json() as { question?: QRow };
@@ -228,6 +231,7 @@ export function NclexCatRunner({
   const [idx, setIdx] = useState(0);
   const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
+  const [crossedOut, setCrossedOut] = useState<Record<string, boolean>>({});
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [catUiPhase, setCatUiPhase] = useState<CatRunnerPhase>("answering");
   const [results, setResults] = useState<PracticeTestResultsJson | null>(null);
@@ -276,9 +280,10 @@ export function NclexCatRunner({
   // ── Load session ──────────────────────────────────────────────────────────
 
   useEffect(() => {
+    const controller = new AbortController();
     void (async () => {
       try {
-        const s = await loadSession(testId);
+        const s = await loadSession(testId, controller.signal);
         if (!mountedRef.current) return;
 
         if (s.status === "COMPLETED" && s.results) {
@@ -314,11 +319,13 @@ export function NclexCatRunner({
         sessionStartMsRef.current = Date.now();
         setPhase("ready");
       } catch {
+        if (controller.signal.aborted) return;
         if (!mountedRef.current) return;
         setError("Could not load exam session. Please refresh.");
         setPhase("error");
       }
     })();
+    return () => controller.abort();
   }, [testId]);
 
   // ── Fallback fetch: fire only when a question is missing from the hydrated cache ──
@@ -327,15 +334,25 @@ export function NclexCatRunner({
 
   useEffect(() => {
     if (phase !== "ready" || catUiPhase === "completed") return;
+    const controller = new AbortController();
     const ids = questionIds.slice(idx, idx + 2);
-    for (const id of ids) {
+    for (let offset = 0; offset < ids.length; offset += 1) {
+      const id = ids[offset]!;
       if (!questionCache[id]) {
-        void fetchQuestion(testId, id).then((q) => {
-          if (!mountedRef.current || !q) return;
+        void fetchQuestion(testId, idx + offset, controller.signal).then((q) => {
+          if (!mountedRef.current || controller.signal.aborted) return;
+          if (!q) {
+            if (questionIds[idx] === id) {
+              setError("Could not load this CAT question. Return to practice tests and resume the session.");
+              setPhase("error");
+            }
+            return;
+          }
           setQuestionCache((prev) => ({ ...prev, [q.id]: q }));
         });
       }
     }
+    return () => controller.abort();
   }, [phase, idx, questionIds, questionCache, testId, catUiPhase]);
 
   // ── Timer tick ────────────────────────────────────────────────────────────
@@ -380,6 +397,12 @@ export function NclexCatRunner({
   function setAnswerForCurrent(val: unknown) {
     if (!currentId || catUiPhase !== "answering" || !catExamCanChangeAnswer(catUiPhase)) return;
     setAnswers((prev) => ({ ...prev, [currentId]: val }));
+  }
+
+  function toggleCrossOutForCurrent(canonical: string) {
+    if (!currentId || catUiPhase !== "answering" || examPrimaryBusy) return;
+    const key = `${currentId}:${canonical}`;
+    setCrossedOut((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
   function toggleFlag() {
@@ -459,7 +482,7 @@ export function NclexCatRunner({
             // Eagerly cache the next question if it isn't already in the map
             const nextId = freshIds && freshIdx !== null ? freshIds[freshIdx] : null;
             if (nextId && !questionCache[nextId]) {
-              void fetchQuestion(testId, nextId).then((q) => {
+              void fetchQuestion(testId, freshIdx!).then((q) => {
                 if (!mountedRef.current || !q) return;
                 setQuestionCache((prev) => ({ ...prev, [q.id]: q }));
               });
@@ -593,6 +616,7 @@ export function NclexCatRunner({
           : raw === canonical;
 
         const state: NclexAnswerCardState = isSelected ? "selected" : "default";
+        const optionCrossedOut = Boolean(crossedOut[`${currentId ?? ""}:${canonical}`]);
 
         if (isSata) {
           return (
@@ -603,7 +627,9 @@ export function NclexCatRunner({
               state={state}
               isCheckbox
               checked={isSelected}
+              crossedOut={optionCrossedOut}
               disabled={optionsLocked || examPrimaryBusy}
+              onToggleCrossOut={() => toggleCrossOutForCurrent(canonical)}
               onChange={(checked) => {
                 const prev = Array.isArray(raw) ? [...raw] : [];
                 setAnswerForCurrent(
@@ -620,7 +646,9 @@ export function NclexCatRunner({
             index={i}
             text={display}
             state={state}
+            crossedOut={optionCrossedOut}
             disabled={optionsLocked || examPrimaryBusy}
+            onToggleCrossOut={() => toggleCrossOutForCurrent(canonical)}
             onClick={() => setAnswerForCurrent(canonical)}
           />
         );

@@ -8,6 +8,7 @@ import {
 } from "@/lib/exam-pathways/pathway-cat-flow";
 
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
@@ -86,34 +87,34 @@ export default async function CatDirectLaunchRedirectPage({
     ? sp.alliedProfession.trim()
     : null;
 
+  let nextPath: string;
   try {
-    const nextPath =
-      appPathwayCatSessionStartPath(
-        pathwayId,
-        {
-          alliedProfession: allied,
-        },
-      );
-
-    if (
-      typeof nextPath !== "string" ||
-      !nextPath.startsWith("/app/")
-    ) {
-      console.error(
-        "[cat-launch] invalid redirect target",
-        nextPath,
-      );
-
-      redirect("/app/practice-tests");
-    }
-
-    redirect(nextPath);
-  } catch (error) {
-    console.error(
-      "[cat-launch] failed to resolve CAT launch route",
-      error,
+    nextPath = appPathwayCatSessionStartPath(
+      pathwayId,
+      {
+        alliedProfession: allied,
+      },
     );
+  } catch (error) {
+    safeServerLog("learner_activity", "cat_launch_route_resolution_failed", {
+      pathwayIdPrefix: pathwayId.slice(0, 12),
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+    });
 
     redirect("/app/practice-tests");
   }
+
+  if (
+    typeof nextPath !== "string" ||
+    !nextPath.startsWith("/app/")
+  ) {
+    safeServerLog("learner_activity", "cat_launch_invalid_redirect_target", {
+      pathwayIdPrefix: pathwayId.slice(0, 12),
+      targetPrefix: String(nextPath).slice(0, 80),
+    });
+
+    redirect("/app/practice-tests");
+  }
+
+  redirect(nextPath);
 }

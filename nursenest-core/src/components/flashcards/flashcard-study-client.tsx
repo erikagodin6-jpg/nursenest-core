@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
@@ -18,6 +18,8 @@ import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-s
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { FlashcardSrsStatsStrip } from "@/components/flashcards/flashcard-srs-stats-strip";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
+import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
 type CardPayload = {
   id: string;
@@ -63,27 +65,54 @@ export function FlashcardStudyClient({
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
   const [queue, setQueue] = useState<CardPayload[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [resumeGateOpen, setResumeGateOpen] = useState(false);
   const [resumeInitial, setResumeInitial] = useState({ index: 0, revealed: false });
   const [sessionKey, setSessionKey] = useState(0);
+  const [retryNonce, setRetryNonce] = useState(0);
+  const safeDeckRef = useMemo(() => encodeURIComponent(deckRef), [deckRef]);
 
   // 🚀 fetch cards
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
 
     (async () => {
+      setLoading(true);
+      setLoadError(null);
       try {
-        const res = await fetch(`/api/flashcards/decks/${deckRef}/study`, {
+        const res = await fetchWithRetry(`/api/flashcards/decks/${safeDeckRef}/study`, {
           credentials: "include",
-        });
+          cache: "no-store",
+          signal: controller.signal,
+        }, { attempts: 2, timeoutMs: 12_000 });
+        if (!res.ok) {
+          throw new Error(`study_http_${res.status}`);
+        }
         const data = (await res.json()) as StudyResponse;
+        const cards = Array.isArray(data.cards)
+          ? data.cards.filter(
+              (card): card is CardPayload =>
+                card != null &&
+                typeof card.id === "string" &&
+                card.id.length > 0 &&
+                typeof card.front === "string" &&
+                typeof card.back === "string",
+            )
+          : [];
 
         if (!cancelled) {
-          setMode(data.mode);
-          setQueue(data.cards);
+          setMode(data.mode === "preview" ? "preview" : "subscriber");
+          setQueue(cards);
         }
-      } catch {
+      } catch (error) {
+        if (controller.signal.aborted || cancelled) return;
+        logDedupedClientDiagnostic("flashcard_deck_study", "load_failed", deckRef, {
+          deckRef,
+          message: error instanceof Error ? error.message : "unknown",
+        });
         setQueue([]);
+        setLoadError("We could not load this flashcard session. Retry from here or return to the hub.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -91,8 +120,9 @@ export function FlashcardStudyClient({
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, [deckRef]);
+  }, [deckRef, safeDeckRef, retryNonce]);
 
   // 🧠 resume logic
   useLayoutEffect(() => {
@@ -107,14 +137,37 @@ export function FlashcardStudyClient({
 
   // 🏷 title
   useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
     (async () => {
-      const res = await fetch(`/api/flashcards/decks/${deckRef}`);
-      const data = await res.json();
-      if (data?.deck?.title) {
-        setTitle(formatTitleCase(data.deck.title));
+      try {
+        const res = await fetchWithRetry(`/api/flashcards/decks/${safeDeckRef}`, {
+          credentials: "include",
+          cache: "no-store",
+          signal: controller.signal,
+        }, { attempts: 1, timeoutMs: 8_000 });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled && data?.deck?.title) {
+          setTitle(formatTitleCase(data.deck.title));
+        }
+      } catch (error) {
+        if (controller.signal.aborted || cancelled) return;
+        logDedupedClientDiagnostic("flashcard_deck_study", "title_load_failed", deckRef, {
+          deckRef,
+          message: error instanceof Error ? error.message : "unknown",
+        });
       }
     })();
-  }, [deckRef]);
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [deckRef, safeDeckRef]);
+
+  const retryLoad = useCallback(() => {
+    setRetryNonce((n) => n + 1);
+  }, []);
 
   const activeCards: ActiveStudyCard[] = useMemo(
     () =>
@@ -146,6 +199,26 @@ export function FlashcardStudyClient({
       <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
         <FlashcardStudySessionSkeleton withRouteAria={false} />
       </BrandedPageLoader>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="mx-auto max-w-lg space-y-4 px-4 py-16 text-center text-sm text-[var(--semantic-text-secondary)]">
+        <p>{loadError}</p>
+        <div className="flex flex-col justify-center gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={retryLoad}
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white"
+          >
+            Retry
+          </button>
+          <Link href="/app/flashcards" className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-brand)]">
+            Back to Flashcards
+          </Link>
+        </div>
+      </div>
     );
   }
 

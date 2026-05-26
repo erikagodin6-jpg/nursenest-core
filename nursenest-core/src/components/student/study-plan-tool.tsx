@@ -117,7 +117,10 @@ export function StudyPlanTool() {
   const [suggestedWeakAreas, setSuggestedWeakAreas] = useState<string[]>([]);
   async function loadWeakAreaSuggestions() {
     try {
-      const res = await fetch("/api/learner/weak-areas", { cache: "no-store" });
+      const res = await fetch("/api/learner/weak-areas", {
+        credentials: "include",
+        cache: "no-store",
+      });
       if (!res.ok) return;
       const data = (await res.json()) as { weakTopics?: Array<{ topic?: string }> };
       const topics = Array.isArray(data.weakTopics)

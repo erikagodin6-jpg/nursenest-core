@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -16,8 +15,7 @@ import {
   GuidedReviewLaterCard,
   GuidedRetestCard,
 } from "@/components/study/guided-study-stack";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { BROWSE_LESSONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
+import { BROWSE_LESSONS_CTA, OPEN_STUDY_HUB_CTA } from "@/lib/copy/cta-copy";
 
 export const dynamic = "force-dynamic";
 
@@ -37,21 +35,16 @@ export default async function GuidedStudyPage() {
   const session = await getProtectedRouteSession("(student).app.(learner).guided");
   const userId = (session?.user as { id?: string })?.id ?? "";
 
-  // ── Auth guard ──────────────────────────────────────────────────────────────
-  if (!userId) {
-    redirect(loginWithCallback("/app/guided"));
-  }
-
-  if (!isDatabaseUrlConfigured()) {
+  if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <div className="space-y-6">
         <LearnerBreadcrumbTrail kind="guided" pathname="/app/guided" />
         <PremiumEmptyState
           headline="Guided Study Mode"
-          body="Sign in to access your personalized study guide."
+          body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
           primaryCta={{
-            label: SIGN_IN_CTA,
-            href: loginWithCallback("/app/guided"),
+            label: OPEN_STUDY_HUB_CTA,
+            href: "/app",
             variant: "primary",
           }}
           secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}

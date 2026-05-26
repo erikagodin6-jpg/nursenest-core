@@ -42,10 +42,84 @@ describe("core API learning surfaces", () => {
     assert.match(src, /mergeQuestionApiPayload\([\s\S]*teachingExposure/s);
   });
 
+  it("practice test question route accepts index and questionId locators", () => {
+    const src = readFileSync(join(appRoot, "app/api/practice-tests/[id]/question/route.ts"), "utf8");
+    assert.match(src, /searchParams\.get\("index"\)/);
+    assert.match(src, /searchParams\.get\("questionId"\)/);
+    assert.match(src, /question_locator_required/);
+    assert.match(src, /question_not_in_session/);
+  });
+
+  it("NCLEX exam runners use the index locator for fallback question hydration", () => {
+    const practice = readFileSync(join(appRoot, "components/exam/nclex-practice-runner.tsx"), "utf8");
+    const cat = readFileSync(join(appRoot, "components/exam/nclex-cat-runner.tsx"), "utf8");
+    assert.match(practice, /\/question\?index=/);
+    assert.match(cat, /\/question\?index=/);
+    assert.doesNotMatch(practice, /\/question\?questionId=/);
+    assert.doesNotMatch(cat, /\/question\?questionId=/);
+  });
+
+  it("learner flashcard study clients bound fetches with abort, timeout, and retry states", () => {
+    const deck = readFileSync(join(appRoot, "components/flashcards/flashcard-study-client.tsx"), "utf8");
+    const custom = readFileSync(join(appRoot, "components/flashcards/flashcard-custom-study-client.tsx"), "utf8");
+    const page = readFileSync(join(appRoot, "app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx"), "utf8");
+    const helper = readFileSync(join(appRoot, "lib/runtime/learner-activity-fetch.ts"), "utf8");
+    assert.match(deck, /new AbortController\(\)/);
+    assert.match(deck, /timeoutMs:\s*12_000/);
+    assert.match(deck, /setRetryNonce/);
+    assert.match(custom, /new AbortController\(\)/);
+    assert.match(custom, /timeoutMs:\s*12_000/);
+    assert.match(custom, /setRetryNonce/);
+    assert.match(page, /loadLearnerActivityBootstrap/);
+    assert.match(page, /routeParams/);
+    assert.match(helper, /fetchLearnerActivityJson/);
+    assert.match(helper, /logDedupedClientDiagnostic/);
+    assert.doesNotMatch(deck, /console\./);
+    assert.doesNotMatch(custom, /console\./);
+  });
+
+  it("learner flashcard analytics and CAT insights use cancellable activity fetches", () => {
+    const srs = readFileSync(join(appRoot, "components/flashcards/flashcard-srs-stats-strip.tsx"), "utf8");
+    const readiness = readFileSync(join(appRoot, "components/flashcards/flashcards-hub-readiness-strip.tsx"), "utf8");
+    const analytics = readFileSync(join(appRoot, "components/flashcards/flashcards-hub-analytics.tsx"), "utf8");
+    const catInsights = readFileSync(join(appRoot, "app/(app)/app/(learner)/practice-tests/cat-insights/page.tsx"), "utf8");
+    for (const src of [srs, readiness, analytics, catInsights]) {
+      assert.match(src, /fetchLearnerActivityJson/);
+      assert.match(src, /AbortController/);
+      assert.doesNotMatch(src, /console\./);
+    }
+  });
+
+  it("core learner activity routes use the shared bootstrap lifecycle", () => {
+    const lifecycle = readFileSync(join(appRoot, "lib/learner/activity-lifecycle.ts"), "utf8");
+    const state = readFileSync(join(appRoot, "components/student/learner-activity-state.tsx"), "utf8");
+    const flashDeck = readFileSync(join(appRoot, "app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx"), "utf8");
+    const flashDeckDetail = readFileSync(join(appRoot, "app/(app)/app/(learner)/flashcards/decks/[deckId]/page.tsx"), "utf8");
+    const flashCustom = readFileSync(join(appRoot, "app/(app)/app/(learner)/flashcards/custom/page.tsx"), "utf8");
+    const flashWeak = readFileSync(join(appRoot, "app/(app)/app/(learner)/flashcards/weak-areas/page.tsx"), "utf8");
+    const practiceRun = readFileSync(join(appRoot, "app/(app)/app/(learner)/practice-tests/[id]/page.tsx"), "utf8");
+    const catStart = readFileSync(join(appRoot, "app/(app)/app/(learner)/practice-tests/start/page.tsx"), "utf8");
+    assert.match(lifecycle, /LearnerActivityPhase/);
+    assert.match(lifecycle, /auth-resolving/);
+    assert.match(lifecycle, /normalizeLearnerActivityRouteParams/);
+    assert.match(state, /LearnerActivityState/);
+    for (const src of [flashDeck, flashDeckDetail, flashCustom, flashWeak, practiceRun, catStart]) {
+      assert.match(src, /loadLearnerActivityBootstrap/);
+      assert.match(src, /LearnerActivityState/);
+    }
+    assert.doesNotMatch(flashDeck, /getProtectedRouteSession/);
+    assert.doesNotMatch(flashDeckDetail, /getProtectedRouteSession/);
+    assert.doesNotMatch(flashCustom, /getProtectedRouteSession/);
+    assert.doesNotMatch(flashWeak, /getProtectedRouteSession/);
+    assert.doesNotMatch(practiceRun, /getProtectedRouteSession/);
+    assert.doesNotMatch(catStart, /getProtectedRouteSession/);
+  });
+
   it("pathway question snapshot applies non-ECG pool filter", () => {
     const snap = readFileSync(join(appRoot, "lib/exam-pathways/pathway-question-bank-snapshot.server.ts"), "utf8");
     assert.match(snap, /NON_ECG_PRACTICE_EXAM_WHERE/);
-    assert.match(snap, /baseNonEcg/);
+    assert.match(snap, /pathwayExamQuestionMarketingHubInventoryWhere/);
+    assert.match(snap, /inventoryWhere/);
   });
 
   it("splitPromptLeadingImage ignores img with empty src", async () => {

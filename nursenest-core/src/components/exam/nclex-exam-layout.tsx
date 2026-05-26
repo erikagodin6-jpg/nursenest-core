@@ -14,7 +14,8 @@
  */
 
 import { useState } from "react";
-import type { ReactNode } from "react";
+import type { KeyboardEvent, MouseEvent, ReactNode } from "react";
+import { Ban } from "lucide-react";
 import { NclexCatTopBar, NclexPracticeTopBar, NclexEndTestModal } from "@/components/exam/nclex-cat-top-bar";
 import { NclexBottomBar, NclexPracticeBottomBar } from "@/components/exam/nclex-bottom-bar";
 import {
@@ -24,6 +25,7 @@ import {
 import type { CatExamUiPhase } from "@/lib/practice-tests/cat-exam-ui-state";
 import { NclexCalculatorModal } from "@/components/exam/nclex-calculator-modal";
 import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
+import { NclexLabReference } from "@/components/exam/nclex-lab-reference";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CAT EXAM LAYOUT
@@ -91,6 +93,7 @@ export function NclexCatExamLayout({
   const [showEndModal, setShowEndModal] = useState(false);
   const [showCalc, setShowCalc] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
+  const [showLabValues, setShowLabValues] = useState(false);
 
   const questionType = inferNclexQuestionType(questionFormat, isSata);
 
@@ -116,6 +119,7 @@ export function NclexCatExamLayout({
         onFlag={onFlag}
         onCalculator={() => setShowCalc(true)}
         onNotes={() => setShowNotes(true)}
+        onLabValues={() => setShowLabValues(true)}
         onEndTest={() => setShowEndModal(true)}
         disabled={disabled}
         unitsControl={unitsControl}
@@ -229,6 +233,7 @@ export function NclexCatExamLayout({
         />
       )}
       {showCalc && <NclexCalculatorModal onClose={() => setShowCalc(false)} />}
+      {showLabValues && <NclexLabReference onClose={() => setShowLabValues(false)} />}
       {showNotes && (
         <NclexNotesDrawer
           initialText={noteText}
@@ -315,6 +320,7 @@ export function NclexPracticeExamLayout({
   const [showEndModal, setShowEndModal] = useState(false);
   const [showCalc, setShowCalc] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
+  const [showLabValues, setShowLabValues] = useState(false);
 
   const questionType = inferNclexQuestionType(questionFormat, isSata);
   const loftPresentation = shellPresentation === "loft";
@@ -399,6 +405,7 @@ export function NclexPracticeExamLayout({
         onSubmit={onSubmit}
         onCalculator={() => setShowCalc(true)}
         onNotes={() => setShowNotes(true)}
+        onLabValues={() => setShowLabValues(true)}
         disabled={disabled}
         isLastQuestion={isLastQuestion}
       />
@@ -413,6 +420,7 @@ export function NclexPracticeExamLayout({
         />
       )}
       {showCalc && <NclexCalculatorModal onClose={() => setShowCalc(false)} />}
+      {showLabValues && <NclexLabReference onClose={() => setShowLabValues(false)} />}
       {showNotes && (
         <NclexNotesDrawer
           initialText={noteText}
@@ -446,18 +454,22 @@ export function NclexAnswerCard({
   state = "default",
   isCheckbox = false,
   checked = false,
+  crossedOut = false,
   disabled = false,
   onClick,
   onChange,
+  onToggleCrossOut,
 }: {
   index: number;
   text: string;
   state?: NclexAnswerCardState;
   isCheckbox?: boolean;
   checked?: boolean;
+  crossedOut?: boolean;
   disabled?: boolean;
   onClick?: () => void;
   onChange?: (checked: boolean) => void;
+  onToggleCrossOut?: () => void;
 }) {
   const letter = OPTION_LETTERS[index] ?? String(index + 1);
   const isLocked = disabled || state === "correct" || state === "incorrect" || state === "dim";
@@ -468,8 +480,27 @@ export function NclexAnswerCard({
     state === "correct"   ? "nn-nclex-answer-card--correct"   : "",
     state === "incorrect" ? "nn-nclex-answer-card--incorrect" : "",
     state === "dim"       ? "nn-nclex-answer-card--dim"       : "",
+    crossedOut            ? "nn-nclex-answer-card--crossed-out" : "",
     isLocked              ? "nn-nclex-answer-card--locked"    : "",
   ].filter(Boolean).join(" ");
+
+  const handleCrossOut = (event: MouseEvent | KeyboardEvent) => {
+    if (isLocked || !onToggleCrossOut) return;
+    event.preventDefault();
+    event.stopPropagation();
+    onToggleCrossOut();
+  };
+
+  const crossOutChip = onToggleCrossOut && !isLocked ? (
+    <span
+      className="nn-nclex-answer-card__crossout-chip"
+      aria-hidden="true"
+      title="Alt-click or right-click to cross out this answer"
+    >
+      <Ban size={13} />
+      {crossedOut ? "Restore" : "Cross Out"}
+    </span>
+  ) : null;
 
   /* Radio/checkbox control circle/square */
   const controlEl = isCheckbox ? (
@@ -524,7 +555,13 @@ export function NclexAnswerCard({
 
   if (isCheckbox) {
     return (
-      <label className={cardClass}>
+      <label
+        className={cardClass}
+        onClick={(event) => {
+          if (event.altKey && onToggleCrossOut) handleCrossOut(event);
+        }}
+        onContextMenu={(event) => handleCrossOut(event)}
+      >
         <input
           type="checkbox"
           checked={checked}
@@ -535,6 +572,7 @@ export function NclexAnswerCard({
         {controlEl}
         <span className="nn-nclex-answer-card__letter">{letter}</span>
         <span className="nn-nclex-answer-card__text">{text}</span>
+        {crossOutChip}
         {statusIcon}
         {state === "correct"   && <span className="sr-only">Correct answer</span>}
         {state === "incorrect" && <span className="sr-only">Incorrect</span>}
@@ -547,13 +585,30 @@ export function NclexAnswerCard({
       type="button"
       className={cardClass}
       disabled={isLocked}
-      onClick={onClick}
+      onClick={(event) => {
+        if (event.altKey && onToggleCrossOut) {
+          handleCrossOut(event);
+          return;
+        }
+        onClick?.();
+      }}
+      onContextMenu={(event) => handleCrossOut(event)}
+      onKeyDown={(event) => {
+        if ((event.key === "x" || event.key === "X") && onToggleCrossOut) handleCrossOut(event);
+      }}
       aria-pressed={state === "selected"}
+      aria-describedby={onToggleCrossOut ? `nn-nclex-crossout-help-${letter}` : undefined}
     >
       {controlEl}
       <span className="nn-nclex-answer-card__letter">{letter}</span>
       <span className="nn-nclex-answer-card__text">{text}</span>
+      {crossOutChip}
       {statusIcon}
+      {onToggleCrossOut ? (
+        <span id={`nn-nclex-crossout-help-${letter}`} className="sr-only">
+          Press X, right-click, or Alt-click to cross out this answer choice.
+        </span>
+      ) : null}
       {state === "correct"   && <span className="sr-only">Correct answer</span>}
       {state === "incorrect" && <span className="sr-only">Incorrect</span>}
     </button>

@@ -11,7 +11,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
@@ -39,7 +38,7 @@ export default async function StartStudyingPage() {
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (!userId || !isDatabaseUrlConfigured()) {
-    redirect(loginWithCallback("/app/start-studying"));
+    redirect("/app");
   }
 
   const user = await withDatabaseFallbackTimeout(

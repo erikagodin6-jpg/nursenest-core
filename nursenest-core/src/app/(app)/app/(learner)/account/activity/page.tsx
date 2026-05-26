@@ -9,7 +9,6 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,9 +36,9 @@ export default async function AccountActivityPage() {
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.activity.title")}
-          body={t("learner.profile.signedOutHint")}
-          hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/activity"), variant: "primary" }}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

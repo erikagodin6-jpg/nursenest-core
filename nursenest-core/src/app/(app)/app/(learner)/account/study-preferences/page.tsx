@@ -14,7 +14,6 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { parseMeasurementPreference } from "@/lib/measurements/measurement-preference";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -44,9 +43,9 @@ export default async function AccountStudyPreferencesPage() {
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
         <PremiumEmptyState
           headline={t("learner.account.studyPreferences.title")}
-          body={t("learner.profile.signedOutHint")}
-          hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/study-preferences"), variant: "primary" }}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

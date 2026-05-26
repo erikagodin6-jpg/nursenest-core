@@ -432,7 +432,7 @@ function buildPrintHtml({
     : "";
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Study notes</title>
 <style>
-body { font-family: system-ui, sans-serif; padding: 28px; max-width: 720px; margin: 0 auto; color: #111; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 28px; max-width: 720px; margin: 0 auto; color: #1f2937; font-weight: 400; line-height: 1.65; }
 h1 { font-size: 1rem; margin: 0 0 4px; }
 .meta { font-size: 12px; color: #555; margin-bottom: 16px; }
 .title { font-size: 14px; font-weight: 600; margin: 12px 0 8px; }

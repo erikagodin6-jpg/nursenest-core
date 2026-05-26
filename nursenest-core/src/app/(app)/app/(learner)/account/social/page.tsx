@@ -33,7 +33,7 @@ export default async function AccountSocialPage() {
         <LearnerAccountPageHero
           eyebrow={t("learner.account.shell.kicker")}
           title="Social study privacy"
-          description="Sign in to manage friends, group codes, and social stat visibility."
+          description="We are checking your learner session. Return to the study hub and try again if this does not refresh."
         />
       </LearnerAccountShell>
     );

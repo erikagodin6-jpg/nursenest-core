@@ -401,7 +401,10 @@ export function FlashcardsHubClient({
           alliedProfession: apForQuery || null,
           hubTopicSlug,
         });
-        const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
+        const res = await fetch(`/api/flashcards/custom-session?${qs}`, {
+          credentials: "include",
+          cache: "no-store",
+        });
         let json: unknown;
         try {
           json = await res.json();
@@ -454,7 +457,7 @@ export function FlashcardsHubClient({
       }
 
       const invUrl = `/api/flashcards/inventory?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
-      const res = await fetch(invUrl, { credentials: "include" });
+      const res = await fetch(invUrl, { credentials: "include", cache: "no-store" });
       let json: unknown;
       try {
         json = await res.json();

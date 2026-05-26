@@ -8,6 +8,7 @@ import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href"
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import { topicStrengthChipClass } from "@/lib/ui/learner-semantic-chips";
 import type { FlashcardSrsStats } from "@/components/flashcards/flashcard-srs-stats-strip";
+import { fetchLearnerActivityJson } from "@/lib/runtime/learner-activity-fetch";
 
 type DueSummary = {
   dueToday: number;
@@ -107,36 +108,41 @@ export function FlashcardsHubAnalytics({ pathwayId, srsStats: srsOverride }: Pro
   const [topics, setTopics] = useState<TopicPerformanceSnapshot | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (signal?: AbortSignal) => {
     setLoadError(null);
-    try {
-      const [statsRes, dueRes, weakRes] = await Promise.all([
-        fetch("/api/flashcards/stats", { credentials: "include" }),
-        fetch("/api/flashcards/due-summary", { credentials: "include" }),
-        fetch("/api/learner/weak-areas", { credentials: "include", cache: "no-store" }),
-      ]);
-      if (statsRes.ok) {
-        const j = (await statsRes.json()) as HubStats;
-        setStats(j);
-      }
-      if (dueRes.ok) {
-        const j = (await dueRes.json()) as DueSummary;
-        setDue(j);
-      }
-      if (weakRes.ok) {
-        const j = (await weakRes.json()) as TopicPerformanceSnapshot;
-        setTopics(j);
-      }
-      if (!statsRes.ok && !dueRes.ok && !weakRes.ok) {
-        setLoadError("Analytics will appear after your first study sessions.");
-      }
-    } catch {
+    const [statsResult, dueResult, weakResult] = await Promise.all([
+      fetchLearnerActivityJson<HubStats>("/api/flashcards/stats", {
+        signal,
+        diagnosticScope: "flashcards_hub_analytics",
+        diagnosticKey: `stats:${pathwayId}`,
+        diagnosticMeta: { pathwayId },
+      }),
+      fetchLearnerActivityJson<DueSummary>("/api/flashcards/due-summary", {
+        signal,
+        diagnosticScope: "flashcards_hub_analytics",
+        diagnosticKey: `due:${pathwayId}`,
+        diagnosticMeta: { pathwayId },
+      }),
+      fetchLearnerActivityJson<TopicPerformanceSnapshot>("/api/learner/weak-areas", {
+        signal,
+        diagnosticScope: "flashcards_hub_analytics",
+        diagnosticKey: `weak:${pathwayId}`,
+        diagnosticMeta: { pathwayId },
+      }),
+    ]);
+    if (signal?.aborted) return;
+    if (statsResult.ok) setStats(statsResult.data);
+    if (dueResult.ok) setDue(dueResult.data);
+    if (weakResult.ok) setTopics(weakResult.data);
+    if (!statsResult.ok && !dueResult.ok && !weakResult.ok) {
       setLoadError("Could not load performance insights. Try again later.");
     }
-  }, []);
+  }, [pathwayId]);
 
   useEffect(() => {
-    void refresh();
+    const controller = new AbortController();
+    void refresh(controller.signal);
+    return () => controller.abort();
   }, [refresh]);
 
   const masteryPct = srsOverride?.masteryPct ?? 0;

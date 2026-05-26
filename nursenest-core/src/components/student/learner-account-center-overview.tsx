@@ -10,7 +10,6 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { formatBillingTierLabel, loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
 const QUICK_LINKS: readonly { href: string; labelKey: string; descriptionKey: string }[] = [
   { href: "/app/account/billing", labelKey: "learner.account.nav.billing", descriptionKey: "learner.account.center.quick.billing" },
@@ -36,9 +35,9 @@ export async function LearnerAccountCenterOverview({
       <LearnerAccountShell className="py-2">
         <PremiumEmptyState
           headline={t("learner.account.center.title")}
-          body={t("learner.profile.signedOutHint")}
-          hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account"), variant: "primary" }}
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

@@ -1177,3 +1177,51 @@ html[data-theme="ocean"] .nn-practice-tests-hub-premium .nn-lesson-system-card[d
     grid-template-columns: 1fr;
   }
 }
+
+/* Modern typography pass: flashcards should read lighter, calmer, and less dense. */
+.nn-flashcards-hub-premium,
+.nn-flashcard-study-premium,
+.nn-active-flashcard-session {
+  font-family: var(--font-sans);
+  color: var(--semantic-text-secondary);
+}
+
+.nn-flashcards-hub-premium :where(h1, h2, h3, h4),
+.nn-flashcard-study-premium :where(h1, h2, h3, h4),
+.nn-active-flashcard-session :where(h1, h2, h3, h4),
+.nn-flashcard-study-stack-premium .nn-flashcard-hero-stem {
+  color: var(--semantic-text-primary);
+  font-weight: var(--nn-font-weight-heading);
+  letter-spacing: 0;
+}
+
+.nn-flashcards-hub-premium :where(p, li),
+.nn-flashcard-study-premium :where(p, li),
+.nn-active-flashcard-session :where(p, li),
+.nn-flashcard-reveal-stack--premium .nn-marketing-body-sm {
+  color: var(--semantic-text-secondary);
+  font-weight: var(--nn-font-weight-body);
+  line-height: 1.68;
+}
+
+.nn-flashcards-hub-premium :where(button, a, label, summary),
+.nn-flashcard-study-premium :where(button, a, label, summary),
+.nn-active-flashcard-session :where(button, a, label, summary) {
+  font-weight: var(--nn-font-weight-label);
+}
+
+.nn-active-flashcard-session .nn-premium-flashcard-session-header,
+.nn-flashcards-deck-library-surface,
+.nn-flashcards-deck-match-band,
+.nn-flashcards-recovery-filters,
+.nn-flashcard-reveal-stack--premium > div,
+.nn-flashcard-reveal-cta.nn-flashcard-reveal-cta--premium {
+  border-color: rgba(15, 23, 42, 0.06);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-flashcards-hub-premium :where([class*="__title"], [class*="-title"], [class*="__label"], [class*="-label"], [class*="__badge"], [class*="-badge"], [class*="__value"], [class*="-value"], [class*="stat"]),
+.nn-flashcard-study-premium :where([class*="__title"], [class*="-title"], [class*="__label"], [class*="-label"], [class*="__badge"], [class*="-badge"], [class*="__value"], [class*="-value"], [class*="stat"]),
+.nn-active-flashcard-session :where([class*="__title"], [class*="-title"], [class*="__label"], [class*="-label"], [class*="__badge"], [class*="-badge"], [class*="__value"], [class*="-value"], [class*="stat"]) {
+  font-weight: var(--nn-font-weight-label);
+}

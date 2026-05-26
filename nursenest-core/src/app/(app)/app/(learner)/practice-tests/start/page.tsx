@@ -3,9 +3,8 @@ import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcru
 import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { LearnerActivityState } from "@/components/student/learner-activity-state";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { appPathwayCatSessionStartPath, isForcedCatFullSetupReviewParam } from "@/lib/exam-pathways/pathway-cat-flow";
@@ -16,6 +15,7 @@ import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types"
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -39,27 +39,18 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   /** When set, show the full briefing UI (avoids redirect loop from cat-launch error “Full setup” link). */
   const forceFullSetup = isForcedCatFullSetupReviewParam(sp.review);
 
-  const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.start");
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
+  const bootstrap = await loadLearnerActivityBootstrap({
+    surface: "(student).app.(learner).practice-tests.start",
+    activityKind: "cat_exam",
+    homeHref: "/app/practice-tests",
+    homeLabel: "Return to Practice Exams",
+    requireSubscription: false,
+  });
 
-  if (entitlement === "error") {
-    return (
-      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
-        <div className="mb-1">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
-            {t("learner.practiceTests.title")}
-          </h1>
-          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
-            {t("learner.entitlement.verifyFailed")}
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} paywallContext="questions" />;
+
+  const userId = bootstrap.userId;
+  const entitlement = bootstrap.entitlement;
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;

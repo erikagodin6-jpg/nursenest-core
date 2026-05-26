@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { StudyToolsActivityShell } from "@/components/study-tools/study-tools-activity-shell";
 import { buildStudyToolsActivityMetadata } from "@/lib/study-tools/study-tools-metadata";
 import { getDeckWithMcqCards, getActiveSession } from "@/lib/flashcards/flashcard-session-dal.server";
 import { FlashcardSessionStartButton } from "@/components/flashcards/flashcard-session-start-button";
-import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { LearnerActivityState } from "@/components/student/learner-activity-state";
+import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 
 type PageProps = {
@@ -20,11 +20,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function LearnerFlashcardDeckDetailPage({ params, searchParams }: PageProps) {
-  const [{ deckId }, sp, session] = await Promise.all([
+  const [{ deckId }, sp] = await Promise.all([
     params,
     searchParams,
-    getProtectedRouteSession("flashcards.deck-detail"),
   ]);
+  const bootstrap = await loadLearnerActivityBootstrap({
+    surface: "flashcards.deck-detail",
+    activityKind: "flashcards",
+    homeHref: "/app/flashcards/decks",
+    homeLabel: "Back to Flashcard Decks",
+    routeParams: [{ name: "deckId", value: deckId, pattern: /^[a-zA-Z0-9_-]{3,120}$/, displayName: "flashcard deck" }],
+  });
+
+  if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} />;
 
   const raw = sp.pathwayId;
   const pathwayId =
@@ -32,15 +40,33 @@ export default async function LearnerFlashcardDeckDetailPage({ params, searchPar
     : Array.isArray(raw) && typeof raw[0] === "string" ? raw[0].trim()
     : null;
 
-  const userId = (session?.user as { id?: string })?.id ?? null;
-  if (!userId) notFound();
+  const userId = bootstrap.userId;
+  const deckIdParam = bootstrap.routeParams.deckId!;
 
   const [deck, activeSession] = await Promise.all([
-    getDeckWithMcqCards(deckId),
-    getActiveSession(userId, deckId),
+    getDeckWithMcqCards(deckIdParam),
+    getActiveSession(userId, deckIdParam),
   ]);
 
-  if (!deck) notFound();
+  if (!deck) {
+    return (
+      <LearnerActivityState
+        state={{
+          ok: false,
+          phase: "error",
+          surface: "flashcards.deck-detail",
+          activityKind: "flashcards",
+          reason: "invalid_route_params",
+          title: "Flashcard deck unavailable",
+          message: "This flashcard deck could not be found or is no longer assigned to your study plan.",
+          homeHref: "/app/flashcards/decks",
+          homeLabel: "Back to Flashcard Decks",
+          routeParams: bootstrap.routeParams,
+          invalidParam: "flashcard deck",
+        }}
+      />
+    );
+  }
 
   const backHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.flashcardsDecks, pathwayId);
 

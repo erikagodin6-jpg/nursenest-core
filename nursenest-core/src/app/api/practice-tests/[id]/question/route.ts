@@ -69,12 +69,16 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
   const { id } = parsedParams;
 
   const indexRaw = req.nextUrl.searchParams.get("index");
-  if (indexRaw === null) {
-    return NextResponse.json({ error: "index required" }, { status: 400 });
+  const questionIdRaw = req.nextUrl.searchParams.get("questionId")?.trim() || null;
+  if (indexRaw === null && !questionIdRaw) {
+    return NextResponse.json(
+      { error: "index or questionId required", code: "question_locator_required" },
+      { status: 400 },
+    );
   }
-  const index = Math.max(0, Number.parseInt(indexRaw, 10));
-  if (Number.isNaN(index)) {
-    return NextResponse.json({ error: "invalid index" }, { status: 400 });
+  const requestedIndex = indexRaw === null ? null : Number.parseInt(indexRaw, 10);
+  if (requestedIndex !== null && Number.isNaN(requestedIndex)) {
+    return NextResponse.json({ error: "invalid index", code: "invalid_index" }, { status: 400 });
   }
 
   setSentryServerContext({
@@ -110,8 +114,18 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
     if (ids.length === 0) {
       return NextResponse.json({ error: "No questions in session" }, { status: 404 });
     }
+    const index =
+      requestedIndex !== null
+        ? Math.max(0, requestedIndex)
+        : ids.indexOf(questionIdRaw!);
+    if (index < 0) {
+      return NextResponse.json(
+        { error: "Question not in session", code: "question_not_in_session" },
+        { status: 404 },
+      );
+    }
     if (index >= ids.length) {
-      return NextResponse.json({ error: "index out of range" }, { status: 400 });
+      return NextResponse.json({ error: "index out of range", code: "index_out_of_range" }, { status: 400 });
     }
 
     const qContract = assessPracticeTestSessionHydrateContract({

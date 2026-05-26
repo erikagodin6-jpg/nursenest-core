@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { QuickStartFlowClient } from "./quick-start-flow-client";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +25,7 @@ export default async function QuickStartPage({ searchParams }: Props) {
   const userId = (session?.user as { id?: string })?.id;
 
   if (!userId || !isDatabaseUrlConfigured()) {
-    redirect(loginWithCallback("/app/quick-start"));
+    redirect("/app");
   }
 
   const user = await withDatabaseFallbackTimeout(

@@ -51,18 +51,18 @@ export function AuthorityResourcePageView({ page }: { page: AuthorityResourcePag
 
       <article className="mx-auto max-w-5xl px-4 py-10 print:max-w-none print:px-0 print:py-0 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
-        <header className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] px-6 py-8 print:border-black print:bg-white sm:px-10">
-          <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)] print:text-black">{page.eyebrow}</p>
+        <header className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] px-6 py-8 print:border-[#1f2937] print:bg-white sm:px-10">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)] print:text-[#1f2937]">{page.eyebrow}</p>
           <h1 className="nn-marketing-h1 mt-3 text-balance">{page.h1}</h1>
-          <p className="nn-marketing-lead mt-4 max-w-3xl text-[var(--theme-muted-text)] print:text-black">{page.lead}</p>
-          <p className="mt-4 text-sm font-semibold text-[var(--theme-body-text)] print:text-black">
+          <p className="nn-marketing-lead mt-4 max-w-3xl text-[var(--theme-muted-text)] print:text-[#1f2937]">{page.lead}</p>
+          <p className="mt-4 text-sm font-semibold text-[var(--theme-body-text)] print:text-[#1f2937]">
             Print-friendly: use your browser print dialog to save this page as a PDF.
           </p>
         </header>
 
         <section className="mt-8 grid gap-4 md:grid-cols-3" aria-label="Printable sections">
           {page.sections.map((section) => (
-            <div key={section.heading} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 print:border-black">
+            <div key={section.heading} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 print:border-[#1f2937]">
               <h2 className="text-base font-bold text-[var(--theme-heading-text)]">{section.heading}</h2>
               <ul className="mt-3 space-y-2 text-sm leading-relaxed text-[var(--theme-body-text)]">
                 {section.items.map((item) => (
@@ -73,15 +73,15 @@ export function AuthorityResourcePageView({ page }: { page: AuthorityResourcePag
           ))}
         </section>
 
-        <div className="mt-10 overflow-x-auto rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] print:overflow-visible print:border-black">
+        <div className="mt-10 overflow-x-auto rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] print:overflow-visible print:border-[#1f2937]">
           <table className="w-full min-w-[42rem] border-collapse text-sm text-[var(--theme-body-text)] print:min-w-0">
-            <caption className="border-b border-[var(--semantic-border-soft)] px-4 py-3 text-left font-semibold text-[var(--theme-heading-text)] print:border-black">
+            <caption className="border-b border-[var(--semantic-border-soft)] px-4 py-3 text-left font-semibold text-[var(--theme-heading-text)] print:border-[#1f2937]">
               {page.table.caption}
             </caption>
             <thead>
               <tr>
                 {page.table.columns.map((column) => (
-                  <th key={column} scope="col" className="border-b border-[var(--semantic-border-soft)] px-4 py-3 text-left text-xs font-bold uppercase text-[var(--theme-muted-text)] print:border-black">
+                  <th key={column} scope="col" className="border-b border-[var(--semantic-border-soft)] px-4 py-3 text-left text-xs font-bold uppercase text-[var(--theme-muted-text)] print:border-[#1f2937]">
                     {column}
                   </th>
                 ))}
@@ -89,7 +89,7 @@ export function AuthorityResourcePageView({ page }: { page: AuthorityResourcePag
             </thead>
             <tbody>
               {page.table.rows.map((row) => (
-                <tr key={row.join(":")} className="border-t border-[var(--semantic-border-soft)] print:border-black">
+                <tr key={row.join(":")} className="border-t border-[var(--semantic-border-soft)] print:border-[#1f2937]">
                   {row.map((cell, index) => (
                     <td key={cell} className={`px-4 py-3 align-top ${index === 0 ? "font-semibold text-[var(--theme-heading-text)]" : ""}`}>
                       {cell}

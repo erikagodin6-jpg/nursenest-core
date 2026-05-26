@@ -30,7 +30,6 @@ import { inferContinueStudyFromActivity } from "@/lib/learner/infer-continue-stu
 import { buildLearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildDashboardModel } from "@/lib/learner/next-best-action";
 import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timeline";
@@ -408,10 +407,10 @@ async function LearnerDashboardDeferredContent({
     return (
       <LearnerDashboardPageShell t={t} heroHeading={t("learner.dashboard.title")}>
         <PremiumEmptyState
-          headline={t("learner.dashboard.signedOutTitle")}
-          body={t("learner.dashboard.signedOutHint")}
-          hint={t("learner.profile.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app"), variant: "primary" }}
+          headline="Learner Session"
+          body="We are checking your learner session."
+          hint="Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

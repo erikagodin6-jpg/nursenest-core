@@ -51,8 +51,8 @@ export function ThemeLogoMark({
         <text
           x="56"
           y="32"
-          fontFamily="var(--font-sans, 'DM Sans', system-ui, sans-serif)"
-          fontWeight="700"
+          fontFamily="var(--font-sans, Inter, system-ui, sans-serif)"
+          fontWeight="600"
           fontSize="26"
           letterSpacing="-0.02em"
           fill="var(--logo-text, currentColor)"

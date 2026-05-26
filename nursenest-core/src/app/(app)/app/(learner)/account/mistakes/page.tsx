@@ -8,12 +8,11 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { MistakeNotebookClient } from "@/components/mistakes/mistake-notebook-client";
 import { loadMistakeNotebookAction } from "./actions";
-import { BROWSE_QUESTIONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
+import { BROWSE_QUESTIONS_CTA } from "@/lib/copy/cta-copy";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
@@ -21,6 +20,7 @@ import {
   loadMarketingMessageShardsSync,
 } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { OPEN_STUDY_HUB_CTA } from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -44,10 +44,10 @@ export default async function MistakeNotebookPage() {
         <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Mistake Notebook" pathname="/app/account" />
         <PremiumEmptyState
           headline="Mistake Notebook"
-          body="Sign in to track your missed questions and learn from your errors more effectively."
+          body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
           primaryCta={{
-            label: SIGN_IN_CTA,
-            href: loginWithCallback("/app/account/mistakes"),
+            label: OPEN_STUDY_HUB_CTA,
+            href: "/app",
             variant: "primary",
           }}
           secondaryCtas={[{ label: BROWSE_QUESTIONS_CTA, href: "/app/questions", variant: "secondary" }]}

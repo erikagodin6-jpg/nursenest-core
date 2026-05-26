@@ -6,7 +6,6 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
 import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
@@ -17,7 +16,6 @@ import { loadMoreTrendData } from "./actions";
 import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
-  SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
@@ -43,10 +41,10 @@ export default async function AccountAnalyticsPage() {
         <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Analytics" pathname="/app/account" />
         <PremiumEmptyState
           headline="Analytics"
-          body="Sign in to access your performance analytics."
+          body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
           primaryCta={{
-            label: SIGN_IN_CTA,
-            href: loginWithCallback("/app/account/analytics"),
+            label: OPEN_STUDY_HUB_CTA,
+            href: "/app",
             variant: "primary",
           }}
           secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}

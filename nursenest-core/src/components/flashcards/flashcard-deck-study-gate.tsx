@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
+import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
 export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
   const { t } = useMarketingI18n();
@@ -15,12 +17,14 @@ export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
 
     void (async () => {
       try {
-        const res = await fetch(
+        const res = await fetchWithRetry(
           `/api/flashcards/decks/${encodeURIComponent(deckRef)}`,
-          { credentials: "include" }
+          { credentials: "include", cache: "no-store", signal: controller.signal },
+          { attempts: 1, timeoutMs: 8_000 },
         );
 
         if (!res.ok || cancelled) return;
@@ -30,8 +34,12 @@ export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
         if (!cancelled && m.deck?.title) {
           setTitle(formatTitleCase(String(m.deck.title)));
         }
-      } catch {
-        /* ignore */
+      } catch (error) {
+        if (controller.signal.aborted || cancelled) return;
+        logDedupedClientDiagnostic("flashcard_deck_gate", "deck_meta_failed", deckRef, {
+          deckRef,
+          message: error instanceof Error ? error.message : "unknown",
+        });
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -39,6 +47,7 @@ export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [deckRef]);
 

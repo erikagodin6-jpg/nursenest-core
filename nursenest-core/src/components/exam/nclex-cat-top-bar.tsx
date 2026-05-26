@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Calculator, Flag, FileText, X } from "lucide-react";
+import { Calculator, Flag, FileText, FlaskConical, X } from "lucide-react";
 
 export type NclexCatTopBarProps = {
   /** e.g. "NCLEX-RN" or "CNPLE" */
@@ -17,6 +17,7 @@ export type NclexCatTopBarProps = {
   onFlag: () => void;
   onCalculator: () => void;
   onNotes: () => void;
+  onLabValues?: () => void;
   onEndTest: () => void;
   disabled?: boolean;
   /** SI / conventional units control (CAT, practice shells). */
@@ -43,6 +44,7 @@ export function NclexCatTopBar({
   onFlag,
   onCalculator,
   onNotes,
+  onLabValues,
   onEndTest,
   disabled = false,
   unitsControl = null,
@@ -120,6 +122,21 @@ export function NclexCatTopBar({
       </div>
 
       <div className="nn-nclex-top-bar__spacer" />
+
+      {onLabValues ? (
+        <div className="nn-nclex-top-bar__section">
+          <button
+            type="button"
+            className="nn-nclex-top-bar__btn"
+            onClick={onLabValues}
+            disabled={disabled}
+            aria-label="Open lab values reference"
+          >
+            <FlaskConical aria-hidden size={14} />
+            Lab Values
+          </button>
+        </div>
+      ) : null}
 
       {/* Notes */}
       <div className="nn-nclex-top-bar__section">

@@ -25,6 +25,8 @@ import {
   clearFlashcardsCustomSessionCheckpoint,
   saveFlashcardsCustomSessionCheckpoint,
 } from "@/lib/flashcards/flashcards-hub-preferences";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
+import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
 type ApiCard = {
   id: string;
@@ -60,6 +62,7 @@ export function FlashcardCustomStudyClient() {
   const [error, setError] = useState<string | null>(null);
   const [cards, setCards] = useState<ApiCard[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
+  const [retryNonce, setRetryNonce] = useState(0);
 
   const searchParamString = sp.toString();
   const pathwayId = useMemo(() => {
@@ -121,22 +124,35 @@ export function FlashcardCustomStudyClient() {
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
     (async () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`/api/flashcards/custom-session?${queryString}`, { credentials: "include" });
+        const res = await fetchWithRetry(`/api/flashcards/custom-session?${queryString}`, {
+          credentials: "include",
+          cache: "no-store",
+          signal: controller.signal,
+        }, { attempts: 2, timeoutMs: 12_000 });
         let json: unknown;
         try {
           json = await res.json();
         } catch (jsonErr) {
-          console.error("[flashcard-session] json parse failed", { status: res.status, err: jsonErr });
+          logDedupedClientDiagnostic("flashcard_custom_session", "json_parse_failed", `${pathwayId}:${res.status}`, {
+            pathwayId,
+            httpStatus: res.status,
+            message: jsonErr instanceof Error ? jsonErr.message : "unknown",
+          });
           if (!cancelled) setError("Session returned invalid data. Please retry.");
           return;
         }
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         if (!parsed.ok) {
-          console.error("[flashcard-session] parse failed", { message: parsed.message, status: res.status });
+          logDedupedClientDiagnostic("flashcard_custom_session", "payload_parse_failed", `${pathwayId}:${res.status}`, {
+            pathwayId,
+            httpStatus: res.status,
+            message: parsed.message,
+          });
           if (!cancelled) setError(parsed.message);
           return;
         }
@@ -148,14 +164,6 @@ export function FlashcardCustomStudyClient() {
           (c) => c && typeof c.id === "string" && c.id.length > 0 &&
                  typeof c.front === "string" && typeof c.back === "string",
         );
-        if (process.env.NODE_ENV === "development") {
-          console.debug("[flashcard-session] cards ready", {
-            status: res.status,
-            raw: rawCards.length,
-            valid: validCards.length,
-            matching: parsed.summary?.matchingCards ?? 0,
-          });
-        }
         if (!cancelled) {
           setCards(validCards);
           setSummary(
@@ -171,7 +179,11 @@ export function FlashcardCustomStudyClient() {
           );
         }
       } catch (err) {
-        console.error("[flashcard-session] network error", err);
+        if (controller.signal.aborted || cancelled) return;
+        logDedupedClientDiagnostic("flashcard_custom_session", "network_error", pathwayId || "unknown", {
+          pathwayId,
+          message: err instanceof Error ? err.message : "unknown",
+        });
         if (!cancelled) setError("Could not load this session. Check your connection and try again.");
       } finally {
         if (!cancelled) setLoading(false);
@@ -179,8 +191,9 @@ export function FlashcardCustomStudyClient() {
     })();
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, [queryString]);
+  }, [queryString, pathwayId, retryNonce]);
 
   const activeCards: ActiveStudyCard[] = useMemo(
     () =>
@@ -291,9 +304,18 @@ export function FlashcardCustomStudyClient() {
     return (
       <div className="mx-auto max-w-3xl space-y-4 px-4 py-10 text-sm">
         <p className="text-destructive">{error}</p>
-        <Link href={exitHref} className="text-primary underline">
-          {t("flashcards.backToMyCards")}
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => setRetryNonce((n) => n + 1)}
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white"
+          >
+            Retry
+          </button>
+          <Link href={exitHref} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-brand)]">
+            {t("flashcards.backToMyCards")}
+          </Link>
+        </div>
       </div>
     );
   }

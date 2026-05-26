@@ -11,7 +11,6 @@ import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ topic: string }> };
@@ -42,9 +41,9 @@ export default async function AccountFocusAreaDetailPage({ params }: Props) {
     return (
       <div className="space-y-6">
         <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Focus areas" pathname={pathname} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
-        <Link href={loginWithCallback(pathname)} className="text-sm font-semibold text-primary underline">
-          {t("learner.gate.signIn")}
+        <p className="text-sm text-muted-foreground">We are checking your learner session.</p>
+        <Link href={"/app"} className="text-sm font-semibold text-primary underline">
+          {"Open Study Hub"}
         </Link>
       </div>
     );

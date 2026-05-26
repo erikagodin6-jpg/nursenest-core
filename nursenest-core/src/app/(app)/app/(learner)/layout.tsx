@@ -79,6 +79,7 @@ import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { LearnerAppFooter } from "@/components/student/learner-app-footer";
+import { NclexTargetDateModal } from "@/components/student/nclex-target-date-modal";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
@@ -373,6 +374,7 @@ const LearnerShellLayout = traceLayout(
               data-testid="learner-shell"
             >
               <PremiumLayoutVersionMarker surface="learner-app" />
+              <NclexTargetDateModal enabled={entitlement !== "error" && entitlement.hasAccess && !isFocusedExamShell} />
               <LearnerMainLandmarkAudit />
               <PathwayLessonProgressRefreshListener />
               <LearnerDegradedModeBanner

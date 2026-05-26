@@ -6,8 +6,16 @@
    ========================================================================= */
 
 :root {
-  --font-dm-sans: var(--font-dm-sans-next, "DM Sans"), system-ui, sans-serif;
-  --font-sans: var(--font-dm-sans);
+  --font-ui:
+    var(--font-sans-next),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --font-sans: var(--font-ui);
   --font-devanagari: "Noto Sans Devanagari", "Mangal", "Kohinoor Devanagari", "Nirmala UI", var(--font-sans);
   /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
   --radius: 0.8125rem;
@@ -73,11 +81,11 @@
   --nn-font-weight-body: 400;
   --nn-font-weight-ui: 500;
   /** Section titles + blog/lesson subheads (not the largest hero line) */
-  --nn-font-weight-heading: 700;
+  --nn-font-weight-heading: 600;
   /** Primary marketing hero / page title only — slightly stronger than section heads */
-  --nn-font-weight-hero: 700;
+  --nn-font-weight-hero: 600;
   /** Inline emphasis (e.g. lesson `<strong>`) without bumping all headings to 600 */
-  --nn-font-weight-emphasis: 600;
+  --nn-font-weight-emphasis: 550;
   --nn-leading-prose: 1.72;
   --nn-max-prose-ch: 65ch;
 
@@ -95,9 +103,9 @@
   --palette-background: #eef2f8;
   --palette-surface: #ffffff;
   --palette-surface-alt: #e4eaf3;
-  --palette-text: #445063;
-  --palette-text-muted: #5c6b7d;
-  --palette-heading: #111827;
+  --palette-text: #374151;
+  --palette-text-muted: #4b5563;
+  --palette-heading: #1f2937;
   --palette-border: #bfd7f0;
   --palette-ring: #2563eb;
   --palette-button-primary: #2563eb;

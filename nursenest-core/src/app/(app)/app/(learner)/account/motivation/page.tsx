@@ -7,7 +7,6 @@ import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadMotivationPayload } from "@/lib/study/motivation-data";
 import { StudyStreakCard } from "@/components/study/study-streak-card";
@@ -18,7 +17,6 @@ import { loadMoreTopicsAction } from "./actions";
 import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
-  SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
 
@@ -43,10 +41,10 @@ export default async function AccountMotivationPage() {
         <LearnerBreadcrumbTrail kind="account-leaf" leafLabel="Progress" pathname="/app/account" />
         <PremiumEmptyState
           headline="Progress & Motivation"
-          body="Sign in to see your study streak, topic progress, and readiness evolution."
+          body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
           primaryCta={{
-            label: SIGN_IN_CTA,
-            href: loginWithCallback("/app/account/motivation"),
+            label: OPEN_STUDY_HUB_CTA,
+            href: "/app",
             variant: "primary",
           }}
           secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}

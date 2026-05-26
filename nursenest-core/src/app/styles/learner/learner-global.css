@@ -7906,3 +7906,23 @@ html[data-theme="deep-twilight"] {
   box-shadow: none;
   padding: clamp(1.5rem, 2.4vw, 2.125rem);
 }
+.nn-learner-app {
+  color: var(--semantic-text-secondary);
+  font-family: var(--font-sans);
+  font-weight: var(--nn-font-weight-body);
+}
+
+.nn-learner-app :where(h1, h2, h3, h4, h5, h6, [class*="__title"], [class*="-title"], [class*="heading"]) {
+  color: var(--semantic-text-primary);
+  font-weight: var(--nn-font-weight-heading);
+  letter-spacing: 0;
+}
+
+.nn-learner-app :where(button, a, label, summary, [class*="__label"], [class*="-label"], [class*="badge"], [class*="chip"], [class*="pill"], [class*="stat"], [class*="value"]) {
+  font-weight: var(--nn-font-weight-label);
+}
+
+.nn-learner-app :where(p, li, dd, [class*="__body"], [class*="-body"], [class*="copy"], [class*="description"]) {
+  font-weight: var(--nn-font-weight-body);
+  line-height: var(--nn-leading-prose);
+}

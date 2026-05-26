@@ -4,34 +4,40 @@ import { useEffect, useState } from "react";
 import type { FlashcardSrsStats } from "@/components/flashcards/flashcard-srs-stats-strip";
 import { buildFlashcardsReadinessNarrative } from "@/lib/flashcards/flashcards-hub-readiness-narrative";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
+import { fetchLearnerActivityJson } from "@/lib/runtime/learner-activity-fetch";
 
-async function fetchSrsStats(pathwayId: string): Promise<FlashcardSrsStats | null> {
-  try {
-    const qs = new URLSearchParams({ countsOnly: "1", pathwayId });
-    const [queueRes, statsRes] = await Promise.all([
-      fetch(`/api/flashcards/study-queue?${qs}`, { credentials: "include" }),
-      fetch("/api/flashcards/stats", { credentials: "include" }),
-    ]);
-    const queue = queueRes.ok ? ((await queueRes.json()) as { counts: Partial<FlashcardSrsStats> }) : null;
-    const statsData = statsRes.ok
-      ? ((await statsRes.json()) as { currentStreak?: number })
-      : null;
-    const counts = queue?.counts ?? {};
-    const totalReviewed = (counts as { totalReviewed?: number }).totalReviewed ?? 0;
-    const newCards = (counts as { newCards?: number }).newCards ?? 0;
-    const totalAccessible = totalReviewed + newCards;
-    const masteryPct = totalAccessible > 0 ? Math.round((totalReviewed / totalAccessible) * 100) : 0;
-    return {
-      dueToday: (counts as { dueToday?: number }).dueToday ?? 0,
-      overdue: (counts as { overdue?: number }).overdue ?? 0,
-      lapsingCards: (counts as { lapsingCards?: number }).lapsingCards ?? 0,
-      newCards,
-      streak: statsData?.currentStreak ?? 0,
-      masteryPct,
-    };
-  } catch {
-    return null;
-  }
+async function fetchSrsStats(pathwayId: string, signal: AbortSignal): Promise<FlashcardSrsStats | null> {
+  const qs = new URLSearchParams({ countsOnly: "1", pathwayId });
+  const [queueResult, statsResult] = await Promise.all([
+    fetchLearnerActivityJson<{ counts: Partial<FlashcardSrsStats> }>(`/api/flashcards/study-queue?${qs}`, {
+      signal,
+      diagnosticScope: "flashcards_readiness",
+      diagnosticKey: pathwayId,
+      diagnosticMeta: { pathwayId },
+    }),
+    fetchLearnerActivityJson<{ currentStreak?: number }>("/api/flashcards/stats", {
+      signal,
+      diagnosticScope: "flashcards_readiness",
+      diagnosticKey: `stats:${pathwayId}`,
+      diagnosticMeta: { pathwayId },
+    }),
+  ]);
+  if (!queueResult.ok && !statsResult.ok) return null;
+  const queue = queueResult.ok ? queueResult.data : null;
+  const statsData = statsResult.ok ? statsResult.data : null;
+  const counts = queue?.counts ?? {};
+  const totalReviewed = (counts as { totalReviewed?: number }).totalReviewed ?? 0;
+  const newCards = (counts as { newCards?: number }).newCards ?? 0;
+  const totalAccessible = totalReviewed + newCards;
+  const masteryPct = totalAccessible > 0 ? Math.round((totalReviewed / totalAccessible) * 100) : 0;
+  return {
+    dueToday: (counts as { dueToday?: number }).dueToday ?? 0,
+    overdue: (counts as { overdue?: number }).overdue ?? 0,
+    lapsingCards: (counts as { lapsingCards?: number }).lapsingCards ?? 0,
+    newCards,
+    streak: statsData?.currentStreak ?? 0,
+    masteryPct,
+  };
 }
 
 const toneFillClass: Record<ReturnType<typeof buildFlashcardsReadinessNarrative>["tone"], string> = {
@@ -51,13 +57,11 @@ export function FlashcardsHubReadinessStrip({
   const [stats, setStats] = useState<FlashcardSrsStats | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-    void fetchSrsStats(pathwayId).then((s) => {
-      if (!cancelled && s) setStats(s);
+    const controller = new AbortController();
+    void fetchSrsStats(pathwayId, controller.signal).then((s) => {
+      if (!controller.signal.aborted && s) setStats(s);
     });
-    return () => {
-      cancelled = true;
-    };
+    return () => controller.abort();
   }, [pathwayId]);
 
   const narrative = buildFlashcardsReadinessNarrative(stats);

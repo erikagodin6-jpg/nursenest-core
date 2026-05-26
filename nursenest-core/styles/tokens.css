@@ -8,6 +8,16 @@
  */
 
 :root {
+  --font-ui:
+    var(--font-sans-next),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --font-sans: var(--font-ui);
   /* Warm-cool base: airy, editorial, long-session friendly (not flat gray) */
   --lv-bg-base: #f6f4f9;
   --lv-bg-surface: #fffcfe;
@@ -24,8 +34,8 @@
   --lv-accent-100: #f3eef9;
   --lv-accent-300: #c7b8e6;
 
-  --lv-text-primary: #17222a;
-  --lv-text-secondary: #55636c;
+  --lv-text-primary: #1f2937;
+  --lv-text-secondary: #4b5563;
 
   --lv-border-soft: #e2e6ee;
 
@@ -39,11 +49,11 @@
   --lv-radius-lg: 15px;
 
   --lv-shadow-soft:
-    0 1px 0 rgba(23, 34, 42, 0.04),
-    0 10px 28px -14px rgba(23, 34, 42, 0.07);
+    0 1px 0 rgba(31, 41, 55, 0.035),
+    0 10px 28px -16px rgba(31, 41, 55, 0.065);
   --lv-shadow-medium:
-    0 1px 0 rgba(23, 34, 42, 0.05),
-    0 14px 36px -16px rgba(23, 34, 42, 0.1);
+    0 1px 0 rgba(31, 41, 55, 0.045),
+    0 14px 36px -18px rgba(31, 41, 55, 0.085);
 
   --lv-motion: 160ms;
   --lv-motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);

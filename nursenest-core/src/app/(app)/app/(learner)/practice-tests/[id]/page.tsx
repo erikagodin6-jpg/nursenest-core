@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
@@ -7,12 +6,9 @@ import { PracticeTestRunnerClient } from "@/components/student/practice-test-run
 import { NclexCatRunner } from "@/components/exam/nclex-cat-runner";
 import { NclexPracticeRunner } from "@/components/exam/nclex-practice-runner";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { LearnerActivityState } from "@/components/student/learner-activity-state";
 
-import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
-import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
@@ -31,6 +27,8 @@ import {
   practiceTestConfigRecord,
   resolvePremiumNclexShellRoute,
 } from "@/lib/practice-tests/resolve-premium-nclex-shell-route";
+import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 
@@ -60,152 +58,35 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-function isSafeTestId(value: string): boolean {
-  return /^[a-zA-Z0-9_-]{8,}$/.test(value);
-}
-
 export default async function PracticeTestRunPage({
   params,
 }: Props) {
   const { id } = await params;
-
-  if (!isSafeTestId(id)) {
-    return (
-      <div className="p-6">
-        <div className="mb-4">
-          <LearnerBreadcrumbTrail
-            kind="practice-tests"
-            pathname="/app/practice-tests"
-          />
-        </div>
-
-        <div className="nn-card p-6">
-          <h1 className="text-lg font-semibold">
-            Invalid practice test
-          </h1>
-
-          <p className="mt-2 text-sm text-muted">
-            The requested practice test could not be loaded.
-          </p>
-
-          <div className="mt-4">
-            <Link
-              href="/app/practice-tests"
-              className="nn-button nn-button-primary"
-            >
-              Return to Practice Tests
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  let session = null;
-
-  try {
-    session = await getProtectedRouteSession(
-      "(student).app.(learner).practice-tests.[id]",
-    );
-  } catch (error) {
-    console.error(
-      "[practice-test-run] protected route session failed",
-      error,
-    );
-
-    return (
-      <div className="p-6">
-        <div className="mb-4">
-          <LearnerBreadcrumbTrail
-            kind="practice-tests"
-            pathname="/app/practice-tests"
-          />
-        </div>
-
-        <div className="nn-card p-6">
-          <h1 className="text-lg font-semibold">
-            Session unavailable
-          </h1>
-
-          <p className="mt-2 text-sm text-muted">
-            We could not verify your learner session.
-          </p>
-
-          <div className="mt-4">
-            <Link
-              href="/app/practice-tests"
-              className="nn-button nn-button-primary"
-            >
-              Return to Practice Exams
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const userId =
-    (session?.user as { id?: string })?.id ?? "";
-
-  const email =
-    (session?.user as { email?: string | null })?.email ??
-    null;
-
-  let entitlement:
-    | Awaited<ReturnType<typeof resolveEntitlementForPage>>
-    | "error" = "error";
-
-  try {
-    entitlement = await resolveEntitlementForPage(userId);
-  } catch (error) {
-    console.error(
-      "[practice-test-run] entitlement resolution failed",
-      error,
-    );
-  }
-
+  const bootstrap = await loadLearnerActivityBootstrap({
+    surface: "(student).app.(learner).practice-tests.[id]",
+    activityKind: "practice_exam",
+    homeHref: "/app/practice-tests",
+    homeLabel: "Return to Practice Exams",
+    requireSubscription: false,
+    routeParams: [{ name: "id", value: id, pattern: /^[a-zA-Z0-9_-]{8,}$/, displayName: "practice test" }],
+  });
   const { t } = await getLearnerMarketingBundle();
 
-  if (entitlement === "error") {
-    return (
-      <div className="p-6">
-        <div className="mb-4">
-          <LearnerBreadcrumbTrail
-            kind="practice-tests"
-            pathname="/app/practice-tests"
-          />
-        </div>
+  if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} paywallContext="questions" />;
 
-        <div className="nn-card p-6">
-          <h1 className="text-lg font-semibold">
-            Access verification unavailable
-          </h1>
-
-          <p className="mt-2 text-sm text-muted">
-            {t("learner.entitlement.verifyFailed")}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const protectionFlags =
-    getServerPremiumProtectionFlags();
-
-  const userLabel = maskUserLabelForWatermark(
-    email,
-    userId || "unknown",
-  );
+  const userId = bootstrap.userId;
+  const idParam = bootstrap.routeParams.id!;
+  const entitlement = bootstrap.entitlement;
 
   let studySettings = DEFAULT_STUDY_SETTINGS;
 
   try {
     studySettings = await loadStudySettings(userId);
   } catch (error) {
-    console.error(
-      "[practice-test-run] study settings failed",
-      error,
-    );
+    safeServerLog("learner_activity", "practice_test_study_settings_failed", {
+      userIdPrefix: userId.slice(0, 8),
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+    });
 
     studySettings = DEFAULT_STUDY_SETTINGS;
   }
@@ -229,7 +110,7 @@ export default async function PracticeTestRunPage({
     try {
       const row = await prisma.practiceTest.findFirst({
         where: {
-          id,
+          id: idParam,
           userId,
         },
 
@@ -279,10 +160,11 @@ export default async function PracticeTestRunPage({
         }
       }
     } catch (error) {
-      console.error(
-        "[practice-test-run] pathway preload failed",
-        error,
-      );
+      safeServerLog("learner_activity", "practice_test_pathway_preload_failed", {
+        userIdPrefix: userId.slice(0, 8),
+        testIdPrefix: idParam.slice(0, 12),
+        detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+      });
 
       initialPathwaySurface = null;
       nclexShellMode = null;
@@ -297,10 +179,11 @@ export default async function PracticeTestRunPage({
         ? await getFreemiumSnapshot(userId)
         : null;
     } catch (error) {
-      console.error(
-        "[practice-test-run] freemium snapshot failed",
-        error,
-      );
+      safeServerLog("learner_activity", "practice_test_freemium_snapshot_failed", {
+        userIdPrefix: userId.slice(0, 8),
+        testIdPrefix: idParam.slice(0, 12),
+        detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+      });
     }
 
     return (
@@ -340,7 +223,7 @@ export default async function PracticeTestRunPage({
     return (
       <ExamSessionErrorBoundary surface="practice_test">
         <NclexCatRunner
-          testId={id}
+          testId={idParam}
           userId={userId}
           pathwayLabel={pathwayLabelForShell}
         />
@@ -352,7 +235,7 @@ export default async function PracticeTestRunPage({
     return (
       <ExamSessionErrorBoundary surface="practice_test">
         <NclexPracticeRunner
-          testId={id}
+          testId={idParam}
           userId={userId}
           pathwayLabel={pathwayLabelForShell}
           shellPresentation={
@@ -367,10 +250,10 @@ export default async function PracticeTestRunPage({
     <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden lg:min-h-0">
       <ExamSessionErrorBoundary surface="practice_test">
         <PracticeTestRunnerClient
-          testId={id}
+          testId={idParam}
           userId={userId}
-          userLabel={userLabel}
-          protectionFlags={protectionFlags}
+          userLabel={bootstrap.userLabel}
+          protectionFlags={bootstrap.protectionFlags}
           studySettings={studySettings}
           initialPathwaySurface={
             initialPathwaySurface

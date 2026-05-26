@@ -1,10 +1,6 @@
 import { FlashcardDeckStudyShell } from "@/components/flashcards/flashcard-deck-study-shell";
-import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
-import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { LearnerActivityState } from "@/components/student/learner-activity-state";
+import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
 
 type Props = {
   params: Promise<{ deckRef: string }>;
@@ -16,32 +12,22 @@ export default async function FlashcardDeckStudyPage({ params, searchParams }: P
   const sp = await searchParams;
   const studyMode = sp.mode === "test" ? "test" : "learn";
   const startImmediately = sp.start === "1";
-  const session = await getProtectedRouteSession("(student).app.(learner).flashcards.[deckRef]");
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
-  const email = (session?.user as { email?: string | null })?.email ?? null;
-  const protectionFlags = getServerPremiumProtectionFlags();
-  const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
-  const { t } = await getLearnerMarketingBundle();
+  const bootstrap = await loadLearnerActivityBootstrap({
+    surface: "(student).app.(learner).flashcards.[deckRef]",
+    activityKind: "flashcards",
+    homeHref: "/app/flashcards",
+    homeLabel: "Back to Flashcards",
+    routeParams: [{ name: "deckRef", value: deckRef, pattern: /^[a-zA-Z0-9_-]{2,120}$/, displayName: "flashcard deck" }],
+  });
 
-  if (entitlement === "error") {
-    return <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailedShort")}</p>;
-  }
-  if (!entitlement.hasAccess) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">{t("learner.flashcards.study.heading")}</h1>
-        <SubscriptionPaywall context="dashboard" />
-      </div>
-    );
-  }
+  if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} />;
 
   return (
     <FlashcardDeckStudyShell
-      deckRef={deckRef}
-      userId={userId}
-      userLabel={userLabel}
-      protectionFlags={protectionFlags}
+      deckRef={bootstrap.routeParams.deckRef!}
+      userId={bootstrap.userId}
+      userLabel={bootstrap.userLabel}
+      protectionFlags={bootstrap.protectionFlags}
       shuffleInitially={sp.shuffle === "1"}
       studyMode={studyMode}
       startImmediately={startImmediately}

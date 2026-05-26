@@ -33,7 +33,6 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -58,7 +57,6 @@ import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
   PRIMARY_CTA,
-  SIGN_IN_CTA,
 } from "@/lib/copy/cta-copy";
 
 // ── Lazy client ───────────────────────────────────────────────────────────────
@@ -99,8 +97,8 @@ export default async function ExamPlanPage() {
         <LearnerBreadcrumbTrail kind="exam-plan" pathname="/app/exam-plan" />
         <PremiumEmptyState
           headline="My Exam Plan"
-          body="Sign in to access your personalized exam readiness dashboard."
-          primaryCta={{ label: SIGN_IN_CTA, href: loginWithCallback("/app/exam-plan"), variant: "primary" }}
+          body="We are checking your learner session. Return to the study hub and try again if this does not refresh."
+          primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
