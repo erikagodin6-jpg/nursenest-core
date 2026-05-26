@@ -30,6 +30,7 @@ import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/me
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { useFlashcardStudyTelemetry, deriveCardFlags } from "@/lib/flashcards/use-flashcard-study-telemetry";
 import type { CardEventMeta } from "@/lib/flashcards/use-flashcard-study-telemetry";
+import type { UnifiedExamWorkspaceMode } from "@/lib/exam-workspace/unified-exam-workspace";
 
 /* ================= TYPES ================= */
 
@@ -398,7 +399,12 @@ export function ActiveStudySession({
   const focusLabel = header.categoriesLabel?.trim() || formatTopicLine(current) || "Adaptive review";
 
   return (
-    <div className="nn-active-flashcard-session space-y-3" data-nn-premium-flashcard-active-session>
+    <div
+      className="nn-active-flashcard-session nn-unified-exam-workspace space-y-3"
+      data-nn-premium-flashcard-active-session
+      data-nn-unified-exam-workspace=""
+      data-nn-exam-workspace-mode={"flashcards" satisfies UnifiedExamWorkspaceMode}
+    >
       <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
         <div className="min-w-0">
           <p className="nn-flashcard-learning-topbar__mode">{header.modeLabel}</p>

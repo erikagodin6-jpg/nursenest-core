@@ -18,12 +18,29 @@
  */
 html:has([data-nclex-shell]),
 body:has([data-nclex-shell]),
+html:has([data-nn-unified-exam-workspace]),
+body:has([data-nn-unified-exam-workspace]),
 html:has(.nn-nclex-exam-page),
 body:has(.nn-nclex-exam-page) {
   overflow: hidden !important;
   height: 100% !important;
   max-height: 100% !important;
   overscroll-behavior: none !important;
+}
+
+#__next:has([data-nn-unified-exam-workspace]),
+.app-shell:has([data-nn-unified-exam-workspace]) {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.nn-unified-exam-workspace {
+  --nn-exam-workspace-bg: color-mix(in srgb, var(--semantic-panel-muted) 72%, var(--semantic-surface));
+  --nn-exam-workspace-surface: var(--semantic-surface);
+  --nn-exam-workspace-border: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand) 8%);
+  --nn-exam-workspace-ring: color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+  --nn-exam-workspace-shadow: 0 18px 48px -34px color-mix(in srgb, var(--semantic-text-primary) 34%, transparent);
+  --nn-exam-workspace-radius: 0.75rem;
 }
 
 /* ── 2. EXAM PAGE SHELL ──────────────────────────────────────────────────── */
@@ -47,6 +64,15 @@ body:has(.nn-nclex-exam-page) {
   /* Use dvh where supported; fall back to vh */
   height: 100dvh;
   height: 100vh; /* fallback */
+}
+
+.nn-nclex-exam-page.nn-unified-exam-workspace {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool)),
+      var(--nn-exam-workspace-bg)
+    );
 }
 
 /* ── 3. TOP BAR ─────────────────────────────────────────────────────────── */
