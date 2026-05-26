@@ -60,7 +60,6 @@ describe("testing-model canonical map", () => {
 
 describe("CNPLE CAT language regression (grep contracts)", () => {
   const CNpleLearnerFiles = [
-    "components/student/learner-np-exam-practice-pick-surface.tsx",
     "components/cases/cnple-longitudinal-case-shell.tsx",
     "lib/learner/premium-dashboard-launch-tiles.ts",
     "components/student/loft-simulation-session-copy.ts",

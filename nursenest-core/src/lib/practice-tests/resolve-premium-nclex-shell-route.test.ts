@@ -47,6 +47,21 @@ describe("resolvePremiumNclexShellRoute", () => {
     );
   });
 
+  it("routes linear learning mode to the same practice exam workspace", () => {
+    assert.equal(
+      resolvePremiumNclexShellRoute({
+        pathwayId: "us-rn-nclex-rn",
+        config: {
+          pathwayId: "us-rn-nclex-rn",
+          selectionMode: "random",
+          linearDeliveryMode: "practice",
+          linearRationaleVisibility: "after_each",
+        },
+      }),
+      "practice",
+    );
+  });
+
   it("keeps CAT study on legacy runner", () => {
     assert.equal(
       resolvePremiumNclexShellRoute({

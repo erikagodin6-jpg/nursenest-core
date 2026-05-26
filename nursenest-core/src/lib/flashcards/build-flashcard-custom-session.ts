@@ -210,6 +210,36 @@ export async function buildFlashcardCustomSession(
 
     const pathwayOptsResolved = flashcardPathwayAccessOptionsFromPathwayId(pathwayScopeId ?? pathwayId);
 
+    // Fire the exam-bank pool chain now so it overlaps with the sequential card queries below.
+    // Savings: ~2-4s when the pool path is taken (resolveAccess + loadExamRows run in parallel).
+    const _needsProgressFilter = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+    const _needsPersistenceFilter = starredOnly || savedOnly || notesOnly || revisitOnly;
+    const _canEagerPool =
+      Boolean(pathwayScopeId && !lessonId) &&
+      (sourceKind === "all" || sourceKind === "question") &&
+      allowLessonQuestionVirtuals &&
+      includeCards &&
+      !_needsProgressFilter &&
+      !_needsPersistenceFilter;
+    const _eagerPoolPathway = _canEagerPool && pathwayScopeId ? getExamPathwayById(pathwayScopeId) : null;
+    const _eagerPoolChain = _eagerPoolPathway != null
+      ? (async () => {
+          try {
+            const pw = _eagerPoolPathway;
+            const access = await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pw);
+            const scope = access?.scope ?? null;
+            const pool = scope != null
+              ? await loadExamQuestionRowsForFlashcardPool(
+                  scope, pw, topicCode?.trim() || null, Math.max(limit * 10, 200)
+                )
+              : ([] as Awaited<ReturnType<typeof loadExamQuestionRowsForFlashcardPool>>);
+            return { access, pool };
+          } catch {
+            return null;
+          }
+        })()
+      : null;
+
     const cards = await prisma.flashcard.findMany({
       where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOptsResolved)),
       select: flashcardSelect,
@@ -324,21 +354,10 @@ export async function buildFlashcardCustomSession(
       !persistenceFiltersEarly
     ) {
       const pid = pathwayScopeId;
-      const pathwayForBank = getExamPathwayById(pid);
-      const poolAccessForBank =
-        pathwayForBank != null
-          ? await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pathwayForBank)
-          : null;
-      const poolScopeForBank = poolAccessForBank?.scope ?? null;
-      const pool =
-        pathwayForBank != null && poolScopeForBank != null
-          ? await loadExamQuestionRowsForFlashcardPool(
-              poolScopeForBank,
-              pathwayForBank,
-              topicCode?.trim() || null,
-              Math.max(limit * 10, 200),
-            )
-          : [];
+      // Await the pre-fired pool chain (access resolution + exam rows loaded in parallel above).
+      const _eagerResult = _eagerPoolChain ? (await _eagerPoolChain) : null;
+      const poolScopeForBank = _eagerResult?.access?.scope ?? null;
+      const pool = _eagerResult?.pool ?? ([] as Awaited<ReturnType<typeof loadExamQuestionRowsForFlashcardPool>>);
       const takenExam = new Set(
         cardWithCategory
           .map((c) => c.examQuestionId)

@@ -660,6 +660,483 @@ body:has(.nn-nclex-exam-page) {
   white-space: nowrap;
 }
 
+/* ── NurseNest practice exam workspace: NursePrep/UWorld-style structure ── */
+.nn-nclex-practice-workspace {
+  display: flex;
+  flex-direction: column;
+  color: var(--semantic-text-primary);
+  background:
+    linear-gradient(180deg, var(--semantic-surface) 0%, color-mix(in srgb, var(--semantic-panel-muted) 72%, var(--semantic-surface)) 100%);
+}
+
+.nn-nclex-practice-workspace .nn-nclex-practice-top-bar {
+  height: 4rem;
+  min-height: 4rem;
+  padding-inline: clamp(1rem, 2.1vw, 2rem);
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  border-bottom-color: color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  box-shadow: none;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-top-bar__logo-mark {
+  background: color-mix(in srgb, var(--semantic-brand) 86%, var(--semantic-text-primary));
+  border-radius: 0.55rem;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-top-bar__logo-name {
+  color: var(--semantic-text-primary);
+  font-size: 1rem !important;
+  font-weight: 750;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-practice-mode-badge {
+  min-height: 2.15rem;
+  gap: 0.5rem;
+  border-color: color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-brand) 76%, var(--semantic-text-primary));
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-practice-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-inline: 1rem;
+  border-left: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, transparent);
+  color: var(--semantic-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.15;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-practice-progress span {
+  color: var(--semantic-text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-practice-progress strong {
+  color: var(--semantic-text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-top-bar__btn,
+.nn-nclex-practice-workspace .nn-nclex-top-bar__end-btn {
+  height: 2.35rem;
+  border-radius: 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+  background: var(--semantic-surface);
+  color: color-mix(in srgb, var(--semantic-brand) 74%, var(--semantic-text-primary));
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-top-bar__end-btn {
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+}
+
+.nn-nclex-practice-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.34fr);
+  gap: clamp(0.75rem, 1.2vw, 1rem);
+  padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(1rem, 2.1vw, 2rem);
+  overflow: hidden;
+}
+
+.nn-nclex-practice-main {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(0.75rem, 1.4vh, 1rem);
+  overflow: hidden;
+}
+
+.nn-nclex-practice-question-card {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  border-radius: 0.55rem;
+  background: var(--semantic-surface);
+  box-shadow: 0 18px 42px -36px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent);
+}
+
+.nn-nclex-practice-question-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem clamp(1rem, 2vw, 1.75rem);
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  background: var(--semantic-surface);
+}
+
+.nn-nclex-practice-question-card__number {
+  color: color-mix(in srgb, var(--semantic-brand) 76%, var(--semantic-text-primary));
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.nn-nclex-practice-question-card__content {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  overflow: hidden;
+}
+
+.nn-nclex-practice-question-card .nn-nclex-question-stem {
+  max-height: none;
+  color: var(--semantic-text-primary);
+  font-size: clamp(1.05rem, 1.1vw, 1.28rem);
+  line-height: 1.62;
+  font-weight: 500;
+}
+
+.nn-nclex-practice-question-card .nn-nclex-answer-list {
+  gap: clamp(0.55rem, 1.1vh, 0.8rem);
+}
+
+.nn-nclex-practice-question-card .nn-nclex-answer-card {
+  min-height: 3.65rem;
+  max-height: 4.75rem;
+  flex: 0 1 auto;
+  border-width: 1px;
+  border-radius: 0.48rem;
+  padding-inline: clamp(0.9rem, 1.5vw, 1.25rem);
+}
+
+.nn-nclex-practice-question-card .nn-nclex-answer-card__control {
+  display: none;
+}
+
+.nn-nclex-practice-question-card .nn-nclex-answer-card__letter {
+  width: 2.05rem;
+  height: 2.05rem;
+  background: var(--semantic-surface);
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-border-soft));
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.nn-nclex-practice-question-card .nn-nclex-answer-card__text {
+  color: var(--semantic-text-primary);
+  font-size: clamp(0.95rem, 1vw, 1.05rem);
+  line-height: 1.45;
+}
+
+.nn-nclex-exam-feedback-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-nclex-exam-feedback-row--correct {
+  border-color: color-mix(in srgb, var(--semantic-success) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+}
+
+.nn-nclex-exam-feedback-row--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 7%, var(--semantic-surface));
+}
+
+.nn-nclex-exam-feedback-row__icon {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
+.nn-nclex-exam-feedback-row--correct .nn-nclex-exam-feedback-row__icon,
+.nn-nclex-exam-feedback-row--correct .nn-nclex-exam-feedback-row__title {
+  color: var(--semantic-success);
+}
+
+.nn-nclex-exam-feedback-row--incorrect .nn-nclex-exam-feedback-row__icon,
+.nn-nclex-exam-feedback-row--incorrect .nn-nclex-exam-feedback-row__title {
+  color: var(--semantic-danger);
+}
+
+.nn-nclex-exam-feedback-row__title,
+.nn-nclex-exam-feedback-row__body {
+  margin: 0;
+}
+
+.nn-nclex-exam-feedback-row__title {
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.nn-nclex-exam-feedback-row__body {
+  margin-top: 0.15rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.nn-nclex-exam-feedback-row__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.35rem;
+  padding-inline: 0.95rem;
+  border-radius: 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: var(--semantic-surface);
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.nn-nclex-rationale-sidebar {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  border-radius: 0.55rem;
+  background: var(--semantic-surface);
+  box-shadow: 0 18px 42px -36px color-mix(in srgb, var(--semantic-text-primary) 20%, transparent);
+}
+
+.nn-nclex-rationale-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+}
+
+.nn-nclex-rationale-sidebar__header > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.98rem;
+  font-weight: 650;
+}
+
+.nn-nclex-rationale-sidebar__header svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+}
+
+.nn-nclex-rationale-sidebar__body {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.15rem;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--semantic-text-muted) 55%, transparent) transparent;
+}
+
+.nn-nclex-rationale-sidebar__section {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+}
+
+.nn-nclex-rationale-sidebar__section + .nn-nclex-rationale-sidebar__section,
+.nn-nclex-rationale-sidebar__references {
+  margin-top: 1rem;
+}
+
+.nn-nclex-rationale-sidebar__section h2 {
+  margin: 0 0 0.65rem;
+  color: color-mix(in srgb, var(--semantic-brand) 76%, var(--semantic-text-primary));
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.nn-nclex-rationale-sidebar__section p,
+.nn-nclex-rationale-sidebar__section li,
+.nn-nclex-rationale-sidebar__references p {
+  color: var(--semantic-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.nn-nclex-rationale-sidebar__section p {
+  margin: 0 0 0.85rem;
+}
+
+.nn-nclex-rationale-sidebar__section ul {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.nn-nclex-rationale-sidebar__section li + li {
+  margin-top: 0.45rem;
+}
+
+.nn-nclex-rationale-sidebar__references summary {
+  cursor: pointer;
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.nn-nclex-coach-strip {
+  min-height: 5.4rem;
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.65fr) minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1.15fr) minmax(12rem, 1fr);
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  border-radius: 0.55rem;
+  background: var(--semantic-surface);
+  box-shadow: 0 18px 42px -38px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent);
+}
+
+.nn-nclex-coach-strip__brand,
+.nn-nclex-coach-strip__item,
+.nn-nclex-confidence {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 1rem;
+}
+
+.nn-nclex-coach-strip__item,
+.nn-nclex-confidence {
+  border-left: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+}
+
+.nn-nclex-coach-strip svg {
+  width: 1.45rem;
+  height: 1.45rem;
+  flex: 0 0 auto;
+  color: color-mix(in srgb, var(--semantic-brand) 76%, var(--semantic-text-primary));
+}
+
+.nn-nclex-coach-strip__brand span,
+.nn-nclex-coach-strip__item p,
+.nn-nclex-confidence p {
+  margin: 0;
+  color: var(--semantic-text-primary);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.nn-nclex-coach-strip__item span,
+.nn-nclex-coach-strip__item a {
+  display: -webkit-box;
+  color: var(--semantic-text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-decoration: none;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.nn-nclex-coach-strip__item a {
+  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--semantic-text-primary));
+}
+
+.nn-nclex-confidence {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.nn-nclex-confidence__buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.nn-nclex-confidence__buttons button {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  background: var(--semantic-surface);
+  color: var(--semantic-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.nn-nclex-confidence__buttons button.is-active {
+  border-color: color-mix(in srgb, var(--semantic-success) 48%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 82%, var(--semantic-surface));
+  color: var(--semantic-brand-contrast, #fff);
+}
+
+.nn-nclex-practice-workspace .nn-nclex-bottom-bar {
+  height: 3.65rem;
+  min-height: 3.65rem;
+  padding-inline: clamp(1rem, 2vw, 2rem);
+  gap: 0.75rem;
+  border-top-color: color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  box-shadow: none;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-bottom-bar__btn {
+  height: 2.35rem;
+  border-width: 1px;
+  border-radius: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-bottom-bar__btn:not(.nn-nclex-bottom-bar__btn--next):nth-of-type(n + 2) {
+  border-color: transparent;
+}
+
+.nn-nclex-practice-workspace .nn-nclex-bottom-bar__btn--next {
+  background: color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary));
+  border-color: color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary));
+}
+
+@media (max-width: 1023px) {
+  .nn-nclex-practice-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .nn-nclex-practice-main {
+    min-height: 38rem;
+  }
+
+  .nn-nclex-rationale-sidebar {
+    min-height: 22rem;
+  }
+
+  .nn-nclex-coach-strip {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .nn-nclex-coach-strip__item,
+  .nn-nclex-confidence {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  }
+}
+
 /* ── 10. PRACTICE SPLIT LAYOUT ──────────────────────────────────────────── */
 /*
  * Question (left) + Rationale (right) — BOTH must be overflow:hidden.

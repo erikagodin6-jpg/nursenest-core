@@ -9,7 +9,8 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   LearnerCategorySelector,
   LearnerFilterBar,
-  LearnerStudyPageShell,
+  SharedStudySetupLayout,
+  SharedStudySetupSurface,
 } from "@/components/learner-study-ui";
 import {
   builderCategoryIdsForCanonicalSelection,
@@ -904,7 +905,8 @@ export function FlashcardsHubClient({
   const deckProgressFillClass = semanticFillClassForAccuracyPct(poolFillPct);
 
   return (
-    <LearnerStudyPageShell
+    <SharedStudySetupLayout
+      mode="flashcards"
       className="nn-flashcards-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-premium-flashcard-convergence
       data-nn-premium-full-platform-convergence=""
@@ -1049,8 +1051,8 @@ export function FlashcardsHubClient({
         )
       ) : null}
 
-      <section
-        className="nn-flashcards-deck-library-surface relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8"
+      <SharedStudySetupSurface
+        className="nn-flashcards-deck-library-surface"
         aria-labelledby="nn-flashcards-categories-heading"
         data-nn-e2e-flashcards-canonical-grid
       >
@@ -1093,7 +1095,7 @@ export function FlashcardsHubClient({
             <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems below to focus your deck</span>
           )}
         </div>
-      </section>
+      </SharedStudySetupSurface>
 
       {hubContextualNotice}
 
@@ -1382,6 +1384,6 @@ export function FlashcardsHubClient({
           <FlashcardsHubAnalytics pathwayId={scopedPathwayId} />
         </div>
       </details>
-    </LearnerStudyPageShell>
+    </SharedStudySetupLayout>
   );
 }

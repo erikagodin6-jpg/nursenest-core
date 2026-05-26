@@ -511,7 +511,7 @@ export function NursingTierHubPage({
           ) : null}
 
           <ul
-            className="mx-auto mt-6 grid w-full max-w-[76rem] list-none grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),16rem))] justify-center gap-5 p-0 lg:gap-6"
+            className="mx-auto mt-6 grid w-full max-w-[76rem] list-none grid-cols-1 items-stretch justify-center gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6"
             data-nn-hub-section="quick-actions"
           >
             {orderedActions.map((action) => {

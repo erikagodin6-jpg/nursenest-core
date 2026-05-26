@@ -36,13 +36,33 @@ async function fetchOneAttempt(
   timeoutMs: number,
 ): Promise<Response> {
   if (timeoutMs <= 0) return fetch(input, init);
-  /** Race avoids merging AbortSignals; timed-out fetch may still complete in background. */
-  return await Promise.race([
-    fetch(input, init),
-    new Promise<Response>((_, reject) => {
-      window.setTimeout(() => reject(new DOMException("The operation timed out.", "TimeoutError")), timeoutMs);
-    }),
-  ]);
+
+  // Internal controller so the timeout can cancel the underlying fetch (not just race-discard it).
+  const timeoutController = new AbortController();
+  const userSignal = (init?.signal ?? undefined) as AbortSignal | undefined;
+
+  let userAbortRelay: (() => void) | undefined;
+  if (userSignal) {
+    if (userSignal.aborted) throw new DOMException("Aborted", "AbortError");
+    userAbortRelay = () => timeoutController.abort(userSignal.reason);
+    userSignal.addEventListener("abort", userAbortRelay, { once: true });
+  }
+
+  let timerId: number | undefined;
+  try {
+    return await Promise.race([
+      fetch(input, { ...init, signal: timeoutController.signal }),
+      new Promise<never>((_, reject) => {
+        timerId = window.setTimeout(() => {
+          timeoutController.abort();
+          reject(new DOMException("The operation timed out.", "TimeoutError"));
+        }, timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timerId !== undefined) window.clearTimeout(timerId);
+    if (userSignal && userAbortRelay) userSignal.removeEventListener("abort", userAbortRelay);
+  }
 }
 
 /**

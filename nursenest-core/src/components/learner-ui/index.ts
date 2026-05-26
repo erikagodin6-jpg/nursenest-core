@@ -16,3 +16,12 @@ export { LearnerStudyRecommendationCard } from "@/components/learner-ui/learner-
 export { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-study-surface-section";
 export { LearnerSurface } from "@/components/learner-ui/learner-surface";
 export type { LearnerSurfaceTone } from "@/components/learner-ui/learner-surface-tone";
+export {
+  LearnerDashboardShell,
+  LearnerRecoveryCard,
+  LearnerSectionHeader,
+  LearnerSkeletonShell,
+  LearnerStudyShell,
+  LearnerWorkspaceSection,
+  LearnerWorkspaceShell,
+} from "@/components/learner-ui/learner-workspace";

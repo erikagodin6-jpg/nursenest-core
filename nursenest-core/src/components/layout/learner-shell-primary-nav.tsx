@@ -47,6 +47,24 @@ const STATUS_BADGE: Partial<Record<ClinicalModulesNavLink["status"], string>> = 
   locked: "LOCKED",
 };
 
+const LEARNER_INTENT_NAV_LABELS: Partial<Record<LearnerShellStudyNavRowId, string>> = {
+  lessons: "Continue Studying",
+  practice: "Recommended Session",
+  flashcards: "Review Queue",
+  reports: "Readiness",
+  profile: "Profile",
+  study_tools: "Study Tools",
+  clinical_modules: "Clinical Skills",
+  clinical_scenarios: "Scenarios",
+  osce: "OSCE",
+  printouts: "Printables",
+  ecg: "ECG",
+};
+
+function learnerIntentNavLabel(id: LearnerShellStudyNavRowId, fallback: string) {
+  return LEARNER_INTENT_NAV_LABELS[id] ?? fallback;
+}
+
 /**
  * Portal-based Clinical Modules flyout with full keyboard navigation, ARIA menu
  * semantics, Safari-safe outside-click detection, and reduced-motion compliance.
@@ -443,7 +461,7 @@ function useLearnerNavItems({
         id: row.key,
         href: row.href,
         matchPrefix: row.matchBase,
-        label,
+        label: learnerIntentNavLabel(row.key, label),
       };
     });
     const studyTools = buildOptionalStudyToolsShellNavItem(pathwayId);
@@ -455,7 +473,7 @@ function useLearnerNavItems({
         href: studyTools.href,
         matchPrefix: studyTools.matchPrefix,
         matchPrefixes: STUDY_TOOLS_ACTIVE_PREFIXES,
-        label,
+        label: learnerIntentNavLabel(studyTools.id, label),
       });
       insertAt += 1;
     }
@@ -466,7 +484,7 @@ function useLearnerNavItems({
         id: printables.id,
         href: printables.href,
         matchPrefix: printables.matchPrefix,
-        label,
+        label: learnerIntentNavLabel(printables.id, label),
       });
       insertAt += 1;
     }
@@ -476,7 +494,7 @@ function useLearnerNavItems({
         id: row.id,
         href: row.href,
         matchPrefix: row.matchPrefix,
-        label,
+        label: learnerIntentNavLabel(row.id, label),
       });
       insertAt += 1;
     }
@@ -487,7 +505,7 @@ function useLearnerNavItems({
         id: clinical.id,
         href: clinical.href,
         matchPrefix: clinical.matchPrefix,
-        label,
+        label: learnerIntentNavLabel(clinical.id, label),
       });
       insertAt += 1;
     }
@@ -498,7 +516,7 @@ function useLearnerNavItems({
         id: ecgItem.id,
         href: ecgItem.href,
         matchPrefix: ecgItem.matchPrefix,
-        label: formatTitleCase(t(ecgItem.labelKey) || "ECG", locale),
+        label: learnerIntentNavLabel(ecgItem.id, formatTitleCase(t(ecgItem.labelKey) || "ECG", locale)),
       });
       insertAt += 1;
     }
@@ -513,7 +531,7 @@ function useLearnerNavItems({
       id: clinicalModules.id,
       href: clinicalModules.href,
       matchPrefix: clinicalModules.matchPrefix,
-      label: clinicalModulesLabel,
+      label: learnerIntentNavLabel(clinicalModules.id, clinicalModulesLabel),
     });
     return rows;
   }, [pathwayId, examsLabel, printablesNavVisible, ecgNavEnabled, t, locale]);

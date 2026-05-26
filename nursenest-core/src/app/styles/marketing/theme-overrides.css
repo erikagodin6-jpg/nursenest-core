@@ -193,27 +193,11 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 60%);
 }
 
-/* Blossom — Figma nav v3.1: floating main pill (logo + Pricing…Tools) with pink / sky rim */
+/* Blossom — flat reference header: theme-aware colour only, no main-nav capsule. */
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-chart-1) 22%,
-    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft))
-  );
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--nn-header-primary-bg) 94%, #ffffff),
-      color-mix(
-        in srgb,
-        var(--semantic-chart-3) 10%,
-        color-mix(in srgb, var(--semantic-chart-1) 8%, var(--nn-header-primary-bg))
-      )
-    );
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--semantic-chart-3) 20%, transparent) inset,
-    0 18px 42px -28px color-mix(in srgb, var(--semantic-chart-1) 32%, transparent),
-    0 12px 32px -24px color-mix(in srgb, var(--semantic-chart-3) 24%, transparent);
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 /* =====================================================================
@@ -230,33 +214,19 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
 
 /* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-brand) 24%,
-    color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))
-  );
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-5) 9%,
-    color-mix(in srgb, var(--semantic-brand) 8%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  background: transparent;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-5) 11%,
-    color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg))
-  );
+  background: transparent;
+  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--nn-header-primary-fg));
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
-  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-info));
-  background: color-mix(
-    in srgb,
-    var(--semantic-brand) 12%,
-    color-mix(in srgb, var(--semantic-chart-5) 8%, var(--nn-header-primary-bg))
-  );
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--nn-header-primary-fg));
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
@@ -281,28 +251,17 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text:hover {
-  border-color: color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-chart-5));
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-5) 10%,
-    color-mix(in srgb, var(--semantic-info) 8%, transparent)
-  );
-  color: var(--nn-header-primary-fg);
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--nn-header-primary-fg));
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text[aria-current="page"] {
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-chart-5));
-  background: color-mix(
-    in srgb,
-    var(--semantic-chart-5) 15%,
-    color-mix(in srgb, var(--semantic-brand) 11%, var(--nn-header-primary-bg))
-  );
-  color: var(--nn-header-primary-fg);
-  font-weight: 650;
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 32%, transparent) inset,
-    0 6px 20px -12px color-mix(in srgb, var(--semantic-brand) 26%, transparent);
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--nn-header-primary-fg));
+  font-weight: 500;
+  box-shadow: none;
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
@@ -438,21 +397,13 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-
   .nn-header-desktop-grid
   > nav
   a.nn-marketing-nav-link--primary-text[aria-current="page"] {
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--semantic-info) 52%, var(--semantic-brand));
-  background: color-mix(
-    in srgb,
-    var(--semantic-info) 26%,
-    color-mix(in srgb, var(--semantic-brand) 11%, var(--nn-header-primary-bg))
-  );
+  border: 0;
+  background: transparent;
   color: var(--nn-header-primary-fg);
-  font-weight: 650;
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 48%, transparent) inset,
-    0 0 28px -10px color-mix(in srgb, var(--semantic-brand) 42%, transparent),
-    0 12px 32px -18px color-mix(in srgb, var(--semantic-info) 38%, transparent);
-  backdrop-filter: saturate(160%) blur(10px);
-  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  font-weight: 500;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,

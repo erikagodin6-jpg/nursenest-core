@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
+import { Bookmark, BookmarkCheck, Calculator, ChevronLeft, ChevronRight, FileText, FlaskConical } from "lucide-react";
 
 export type NclexBottomBarProps = {
   canGoPrev: boolean;
@@ -109,11 +109,9 @@ export function NclexPracticeBottomBar({
   canGoPrev,
   canGoNext,
   hasAnswer,
-  marked,
   isSubmitted,
   onPrev,
   onNext,
-  onMark,
   onSubmit,
   onCalculator,
   onNotes,
@@ -157,7 +155,8 @@ export function NclexPracticeBottomBar({
           disabled={disabled}
           aria-label="Calculator"
         >
-          Calc
+          <Calculator aria-hidden size={15} />
+          Calculator
         </button>
       )}
 
@@ -168,6 +167,7 @@ export function NclexPracticeBottomBar({
           onClick={onNotes}
           disabled={disabled}
         >
+          <FileText aria-hidden size={15} />
           Notes
         </button>
       )}
@@ -179,20 +179,10 @@ export function NclexPracticeBottomBar({
           onClick={onLabValues}
           disabled={disabled}
         >
+          <FlaskConical aria-hidden size={15} />
           Lab Values
         </button>
       )}
-
-      <button
-        type="button"
-        className={`nn-nclex-bottom-bar__btn nn-nclex-bottom-bar__btn--mark${marked ? " nn-nclex-bottom-bar__btn--mark-active" : ""}`}
-        onClick={onMark}
-        disabled={disabled}
-        aria-pressed={marked}
-      >
-        {marked ? <BookmarkCheck aria-hidden size={14} /> : <Bookmark aria-hidden size={14} />}
-        Mark
-      </button>
 
       <div className="nn-nclex-bottom-bar__spacer" />
 

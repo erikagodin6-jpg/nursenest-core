@@ -8,3 +8,4 @@ export { LearnerFilterBar } from "./learner-filter-bar";
 export { LearnerSessionStartPanel } from "./learner-session-start-panel";
 export { LearnerEmptyState } from "./learner-empty-state";
 export { LearnerRationalePanel } from "./learner-rationale-panel";
+export { SharedStudySetupLayout, SharedStudySetupSurface } from "./shared-study-setup-layout";

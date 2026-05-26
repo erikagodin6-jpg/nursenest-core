@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { BookOpen, Bot, CheckCircle2, ChevronRight, CircleHelp, Info, Lightbulb, XCircle } from "lucide-react";
 import {
   NclexAnswerList,
   NclexAnswerCard,
@@ -13,7 +14,6 @@ import { NclexPracticeBottomBar } from "@/components/exam/nclex-bottom-bar";
 import { NclexCalculatorModal } from "@/components/exam/nclex-calculator-modal";
 import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
 import { NclexLabReference } from "@/components/exam/nclex-lab-reference";
-import { NclexPracticeRationaleCompact } from "@/components/exam/nclex-practice-rationale-compact";
 import type { PracticeAdaptivePostMissPayload } from "@/components/student/practice-adaptive-post-miss-panel";
 import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
 import {
@@ -66,6 +66,15 @@ function hasMeaningfulAnswer(ans: unknown): boolean {
   if (typeof ans === "string") return ans.trim().length > 0;
   if (Array.isArray(ans)) return ans.length > 0;
   return false;
+}
+
+function cleanExamStem(stem: string): string {
+  return stem
+    .replace(/^\s*\([A-Z0-9_-]+(?:\s+[A-Z0-9_-]+)*\)\s*/u, "")
+    .replace(/^\s*\[[^\]]*(?:Q\d{2,}|QUESTION[_\s-]*ID|TAXONOMY|CATEGORY|TOPIC[_\s-]*ID)[^\]]*\]\s*/iu, "")
+    .replace(/\s*\((?:[A-Z]+(?:-[A-Z]+)*\s+)?Q\d{2,}\)\s*$/u, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function isSataQuestion(q: QRow): boolean {
@@ -233,7 +242,6 @@ export function NclexPracticeRunner({
   const [idx, setIdx] = useState(0);
   const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
-  const [crossedOut, setCrossedOut] = useState<Record<string, boolean>>({});
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [committedIds, setCommittedIds] = useState<Set<string>>(new Set());
   const [feedback, setFeedback] = useState<Record<string, LinearFeedback>>({});
@@ -380,6 +388,7 @@ export function NclexPracticeRunner({
 
   const currentId = questionIds[idx];
   const current = currentId ? questionCache[currentId] : null;
+  const cleanStem = current?.stem ? cleanExamStem(resolveMeasureText(current.stem)) : "";
   const raw = currentId ? answers[currentId] : undefined;
   const isSata = current ? isSataQuestion(current) : false;
   const isBowtie = current ? isBowtieQuestion(current) : false;
@@ -388,7 +397,7 @@ export function NclexPracticeRunner({
   const isCommitted = currentId ? committedIds.has(currentId) : false;
   const currentFeedback = currentId ? feedback[currentId] : undefined;
   const bowtiePayload = isBowtie && current
-    ? tryNormalizeBowtiePayload(current.questionFormat ?? current.questionType, current.stem, current.options)
+    ? tryNormalizeBowtiePayload(current.questionFormat ?? current.questionType, cleanStem, current.options)
     : null;
   const isBowtieComplete = isBowtie && bowtiePayload
     ? isBowtieAnswerComplete(coerceBowtieDraftAnswer(raw))
@@ -402,12 +411,6 @@ export function NclexPracticeRunner({
       answersRef.current = next;
       return next;
     });
-  }
-
-  function toggleCrossOutForCurrent(canonical: string) {
-    if (!currentId || isCommitted || submitting) return;
-    const key = `${currentId}:${canonical}`;
-    setCrossedOut((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
   async function handleSubmit() {
@@ -622,7 +625,6 @@ export function NclexPracticeRunner({
       {optsCanonical.map((canonical, i) => {
         const display = resolveMeasureText(optsDisplay[i] ?? canonical);
         const state = getOptionState(canonical);
-        const optionCrossedOut = Boolean(crossedOut[`${currentId ?? ""}:${canonical}`]);
         if (isSata) {
           return (
             <NclexAnswerCard
@@ -632,9 +634,7 @@ export function NclexPracticeRunner({
               state={state}
               isCheckbox
               checked={Array.isArray(raw) && raw.includes(canonical)}
-              crossedOut={optionCrossedOut}
               disabled={isCommitted || submitting}
-              onToggleCrossOut={() => toggleCrossOutForCurrent(canonical)}
               onChange={(checked) => {
                 const prev = Array.isArray(raw) ? [...raw] : [];
                 setAnswerForCurrent(
@@ -650,9 +650,7 @@ export function NclexPracticeRunner({
             index={i}
             text={display}
             state={state}
-            crossedOut={optionCrossedOut}
             disabled={isCommitted || submitting}
-            onToggleCrossOut={() => toggleCrossOutForCurrent(canonical)}
             onClick={() => setAnswerForCurrent(canonical)}
           />
         );
@@ -661,26 +659,36 @@ export function NclexPracticeRunner({
   );
 
   const disabled = submitting || transitioning;
+  const practiceElapsedSec =
+    timedMode && timeLimitSec != null && remainingSec != null
+      ? Math.max(0, timeLimitSec - remainingSec)
+      : null;
+  const correctAnswerText =
+    currentFeedback?.correctKeys
+      ?.map((key) => optDisplayMap[key])
+      .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
+      .join("; ") ?? "";
+  const feedbackCorrect = Boolean(isCommitted && currentFeedback?.isCorrect);
+  const relatedLesson = currentFeedback?.relatedLessons?.[0] ?? null;
+  const confidenceLevel = 3;
 
   return (
     <div
       ref={containerRef}
+      className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace"
       data-nclex-shell="practice"
+      data-nn-unified-exam-workspace=""
       style={{
         height: containerHeight,
-        display: "grid",
-        gridTemplateRows: "auto 1fr auto",
-        overflow: "hidden",
-        background: "var(--semantic-surface-page, #f1f5f9)",
       }}
     >
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <NclexPracticeTopBar
         questionNumber={idx + 1}
         totalQuestions={total}
-        remainingSec={timedMode ? remainingSec : null}
+        remainingSec={practiceElapsedSec}
         isPaused={isPaused}
-        onPause={timedMode ? () => setIsPaused((p) => !p) : undefined}
+        onPause={() => setIsPaused((p) => !p)}
         onFinish={() => setShowEndModal(true)}
         disabled={disabled}
         unitsControl={
@@ -692,44 +700,17 @@ export function NclexPracticeRunner({
         }
       />
 
-      {/* ── Split content area ───────────────────────────────────────────────── */}
-      <div style={{ display: "flex", minHeight: 0, overflow: "hidden" }}>
-
-        {/* Left: question panel */}
-        <div
-          className={[
-            "nn-nclex-question-area",
-            "nn-nclex-loading-overlay-parent",
-            !transitioning ? "nn-nclex-question-transition" : "",
-          ].filter(Boolean).join(" ")}
-          style={{
-            flex: isCommitted ? "0 0 60%" : "1 1 100%",
-            overflowY: "auto",
-            display: "flex",
-            flexDirection: "column",
-            borderRight: isCommitted ? "1px solid var(--semantic-border-soft, #e2e8f0)" : undefined,
-            transition: "flex-basis 200ms ease",
-          }}
-        >
+      <div className="nn-nclex-practice-body">
+        <main className="nn-nclex-practice-main" aria-label="Practice exam question">
           {transitioning && (
             <div className="nn-nclex-loading-overlay" aria-live="polite">
               <div className="nn-nclex-spinner" />
             </div>
           )}
 
-          {/* Question header */}
-          <div
-            className="flex items-center justify-between shrink-0"
-            style={{
-              padding: "0.875rem 1.5rem 0.5rem",
-              borderBottom: "1px solid var(--semantic-border-soft, #e2e8f0)",
-              background: "var(--semantic-surface, #fff)",
-              position: "sticky",
-              top: 0,
-              zIndex: 2,
-            }}
-          >
-            <span className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+          <section className="nn-nclex-practice-question-card">
+            <div className="nn-nclex-practice-question-card__header">
+              <span className="nn-nclex-practice-question-card__number">
               Question {idx + 1}
               {isSata ? <span className="ml-2 text-xs font-normal text-[var(--semantic-text-secondary)]">Select all that apply</span> : null}
             </span>
@@ -756,74 +737,137 @@ export function NclexPracticeRunner({
             >
               {flagged[currentId ?? ""] ? "★ Marked" : "☆ Mark"}
             </button>
-          </div>
+            </div>
 
-          {/* Question stem + answers */}
-          <div style={{ padding: "1.25rem 1.5rem", flex: 1 }}>
+            <div className="nn-nclex-practice-question-card__content">
             <NclexQuestionStem
-              stem={current?.stem ? resolveMeasureText(current.stem) : ""}
+              stem={cleanStem}
               instruction={null}
             />
             <div style={{ marginTop: "1.25rem" }}>
               {answerContent}
             </div>
-          </div>
-        </div>
-
-        {/* Right: rationale panel (visible when committed) */}
-        {isCommitted && (
-          <div
-            style={{
-              flex: "0 0 40%",
-              overflowY: "auto",
-              background: "var(--semantic-surface, #fff)",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {/* Rationale header */}
-            <div
-              style={{
-                padding: "0.875rem 1.5rem 0.5rem",
-                borderBottom: "1px solid var(--semantic-border-soft, #e2e8f0)",
-                position: "sticky",
-                top: 0,
-                background: "var(--semantic-surface, #fff)",
-                zIndex: 2,
-              }}
-            >
-              <span className="text-sm font-semibold text-[var(--semantic-text-primary)]">Rationale</span>
+            {isCommitted && currentFeedback ? (
+              <div className={`nn-nclex-exam-feedback-row ${feedbackCorrect ? "nn-nclex-exam-feedback-row--correct" : "nn-nclex-exam-feedback-row--incorrect"}`}>
+                {feedbackCorrect ? (
+                  <CheckCircle2 aria-hidden className="nn-nclex-exam-feedback-row__icon" />
+                ) : (
+                  <XCircle aria-hidden className="nn-nclex-exam-feedback-row__icon" />
+                )}
+                <div>
+                  <p className="nn-nclex-exam-feedback-row__title">
+                    {feedbackCorrect ? "Correct" : "Incorrect"}
+                  </p>
+                  <p className="nn-nclex-exam-feedback-row__body">
+                    {feedbackCorrect
+                      ? "This is the best answer."
+                      : correctAnswerText
+                        ? `Correct answer: ${correctAnswerText}`
+                        : "Review the rationale before moving forward."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="nn-nclex-exam-feedback-row__next"
+                  onClick={handleNext}
+                  disabled={disabled}
+                >
+                  {idx === total - 1 ? "Finish Exam" : "Next Question"}
+                  <ChevronRight aria-hidden size={16} />
+                </button>
+              </div>
+            ) : null}
             </div>
+          </section>
 
-            {/* Rationale content */}
-            <div style={{ padding: "1rem 1.5rem", flex: 1 }}>
-              <NclexPracticeRationaleCompact
-                status={rationaleStatus}
-                correctKeys={currentFeedback?.correctKeys ?? []}
-                optionDisplayMap={optDisplayMap}
-                correctAnswerExplanation={
-                  currentFeedback?.correctAnswerExplanation
-                    ? resolveMeasureText(currentFeedback.correctAnswerExplanation)
-                    : null
-                }
-                rationale={
-                  currentFeedback?.rationale ? resolveMeasureText(currentFeedback.rationale) : null
-                }
-                primaryDistractorText={primaryDistractorText}
-                keyTakeaway={
-                  currentFeedback?.keyTakeaway ? resolveMeasureText(currentFeedback.keyTakeaway) : null
-                }
-                relatedLessons={currentFeedback?.relatedLessons ?? []}
-                clinicalPearl={
-                  currentFeedback?.clinicalPearlDisplay
-                    ? resolveMeasureText(currentFeedback.clinicalPearlDisplay)
-                    : null
-                }
-                referenceSource={currentFeedback?.referenceSource ?? null}
-              />
+          <section className="nn-nclex-coach-strip" aria-label="Coach">
+            <div className="nn-nclex-coach-strip__brand">
+              <Bot aria-hidden />
+              <span>Coach</span>
+            </div>
+            <div className="nn-nclex-coach-strip__item">
+              <Lightbulb aria-hidden />
+              <div>
+                <p>Tutor Hint</p>
+                <span>{current?.topic ? `Think through ${current.topic} before choosing.` : "Identify the safest clinical priority."}</span>
+              </div>
+            </div>
+            <div className="nn-nclex-coach-strip__item">
+              <Info aria-hidden />
+              <div>
+                <p>Why This Matters</p>
+                <span>{currentFeedback?.clinicalPearlDisplay ? resolveMeasureText(currentFeedback.clinicalPearlDisplay) : "Clinical judgment depends on recognizing the highest-risk finding."}</span>
+              </div>
+            </div>
+            <div className="nn-nclex-coach-strip__item">
+              <BookOpen aria-hidden />
+              <div>
+                <p>Related Lesson</p>
+                {relatedLesson ? (
+                  <Link href={relatedLesson.href}>{relatedLesson.title}</Link>
+                ) : (
+                  <span>{current?.subtopic ?? current?.topic ?? "Core clinical judgment"}</span>
+                )}
+              </div>
+            </div>
+            <div className="nn-nclex-confidence">
+              <p>How confident are you?</p>
+              <div className="nn-nclex-confidence__buttons" aria-label="Confidence rating">
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <button
+                    key={rating}
+                    type="button"
+                    className={rating === confidenceLevel ? "is-active" : ""}
+                    aria-pressed={rating === confidenceLevel}
+                  >
+                    {rating}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <aside className="nn-nclex-rationale-sidebar" aria-label="Rationale">
+          <div className="nn-nclex-rationale-sidebar__header">
+            <div>
+              <CircleHelp aria-hidden />
+              <span>Rationale</span>
             </div>
           </div>
-        )}
+          <div className="nn-nclex-rationale-sidebar__body">
+            <section className="nn-nclex-rationale-sidebar__section">
+              <h2>Explanation</h2>
+              {isCommitted && currentFeedback ? (
+                <>
+                  {currentFeedback.correctAnswerExplanation ? (
+                    <p>{resolveMeasureText(currentFeedback.correctAnswerExplanation)}</p>
+                  ) : null}
+                  {currentFeedback.rationale ? (
+                    <p>{resolveMeasureText(currentFeedback.rationale)}</p>
+                  ) : null}
+                  {primaryDistractorText ? <p>{primaryDistractorText}</p> : null}
+                </>
+              ) : (
+                <p>Select an answer and submit to reveal the explanation.</p>
+              )}
+            </section>
+
+            <section className="nn-nclex-rationale-sidebar__section nn-nclex-rationale-sidebar__section--takeaways">
+              <h2>Key Takeaways</h2>
+              <ul>
+                <li>{currentFeedback?.keyTakeaway ? resolveMeasureText(currentFeedback.keyTakeaway) : "Focus on the option that best protects client safety."}</li>
+                {correctAnswerText ? <li>Best answer: {correctAnswerText}</li> : null}
+                {current?.topic ? <li>Review: {current.topic}</li> : null}
+              </ul>
+            </section>
+
+            <details className="nn-nclex-rationale-sidebar__references">
+              <summary>View References</summary>
+              <p>{currentFeedback?.referenceSource ?? "References will appear when available for this item."}</p>
+            </details>
+          </div>
+        </aside>
       </div>
 
       {/* ── Bottom bar ──────────────────────────────────────────────────────── */}

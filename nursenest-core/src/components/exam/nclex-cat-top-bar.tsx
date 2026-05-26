@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Calculator, Flag, FileText, FlaskConical, X } from "lucide-react";
+import { BookOpen, Calculator, Flag, FileText, FlaskConical, Pause, Play, X } from "lucide-react";
 
 export type NclexCatTopBarProps = {
   /** e.g. "NCLEX-RN" or "CNPLE" */
@@ -212,7 +212,10 @@ export function NclexPracticeTopBar({
         <span className="nn-nclex-top-bar__logo-name" style={{ fontSize: "0.875rem" }}>NurseNest</span>
       </div>
 
-      <span className="nn-nclex-practice-mode-badge">Practice Exam · Learning Mode</span>
+      <span className="nn-nclex-practice-mode-badge">
+        <BookOpen aria-hidden size={15} />
+        Practice Exam · Learning mode
+      </span>
 
       {unitsControl ? (
         <div style={{ marginLeft: "0.5rem" }} aria-label="Measurement units">
@@ -222,19 +225,19 @@ export function NclexPracticeTopBar({
 
       <div style={{ flex: 1 }} />
 
-      {timer && (
-        <span
-          className={`nn-nclex-practice-progress${
-            timer.tier === "critical" ? " nn-nclex-top-bar__stat-value--critical" : ""
-          }`}
-          aria-live="polite"
-        >
-          {timer.text}
-        </span>
-      )}
+      <span
+        className={`nn-nclex-practice-progress nn-nclex-practice-progress--timer${
+          timer?.tier === "critical" ? " nn-nclex-top-bar__stat-value--critical" : ""
+        }`}
+        aria-live="polite"
+      >
+        <span>Time elapsed</span>
+        <strong>{timer ? timer.text : "00:00"}</strong>
+      </span>
 
       <span className="nn-nclex-practice-progress" aria-live="polite">
-        {questionNumber} of {totalQuestions}
+        <span>Questions</span>
+        <strong>{questionNumber} of {totalQuestions}</strong>
       </span>
 
       {onPause && (
@@ -244,6 +247,7 @@ export function NclexPracticeTopBar({
           onClick={onPause}
           disabled={disabled}
         >
+          {isPaused ? <Play aria-hidden size={15} /> : <Pause aria-hidden size={15} />}
           {isPaused ? "Resume" : "Pause"}
         </button>
       )}

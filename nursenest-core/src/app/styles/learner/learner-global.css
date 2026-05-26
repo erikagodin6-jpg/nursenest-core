@@ -6743,6 +6743,219 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
   }
 }
 
+/* ==========================================================================
+ * Learner workspace convergence — clinical study workspace foundation.
+ * Keeps route behavior intact while making learner surfaces share one calm
+ * spacing, radius, typography, loading, and navigation rhythm.
+ * ========================================================================== */
+[data-nn-learner-workspace] {
+  --nn-workspace-space-1: 0.5rem;
+  --nn-workspace-space-2: 1rem;
+  --nn-workspace-space-3: 1.5rem;
+  --nn-workspace-radius: 0.75rem;
+  --nn-workspace-radius-lg: 0.875rem;
+  --nn-workspace-border: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-text-muted) 8%);
+  --nn-workspace-shadow: 0 16px 42px -38px color-mix(in srgb, var(--semantic-text-primary) 28%, transparent);
+  --nn-workspace-surface: var(--semantic-surface);
+  --nn-workspace-muted: color-mix(in srgb, var(--semantic-panel-muted) 46%, var(--semantic-surface));
+}
+
+[data-nn-learner-workspace] :is(.nn-card, .lv-card, .nn-ls-surface, .LearnerSurfaceCard),
+.nn-learner-workspace-section,
+.nn-learner-recovery-card {
+  border-radius: var(--nn-workspace-radius-lg);
+  border-color: var(--nn-workspace-border);
+  background: var(--nn-workspace-surface);
+  box-shadow: var(--nn-workspace-shadow);
+}
+
+[data-nn-learner-workspace] :is(.nn-learner-page-hero, .nn-dash-page-header, .nn-premium-practice-hub-hero, .nn-flashcards-hub-hero) {
+  border-radius: var(--nn-workspace-radius-lg) !important;
+  border-color: var(--nn-workspace-border) !important;
+  background: var(--nn-workspace-surface) !important;
+  box-shadow: var(--nn-workspace-shadow) !important;
+  padding: clamp(1rem, 2.2vw, 1.5rem) !important;
+}
+
+[data-nn-learner-workspace] :is(.nn-learner-page-hero, .nn-dash-page-header, .nn-premium-practice-hub-hero, .nn-flashcards-hub-hero)::before,
+[data-nn-learner-workspace] :is(.nn-learner-page-hero, .nn-dash-page-header, .nn-premium-practice-hub-hero, .nn-flashcards-hub-hero)::after {
+  opacity: 0.18;
+}
+
+[data-nn-learner-workspace] :is(h1, .nn-dash-page-header__title) {
+  font-size: clamp(1.45rem, 0.8vw + 1.2rem, 1.95rem) !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.16 !important;
+}
+
+[data-nn-learner-workspace] :is(h2, h3, .nn-marketing-h3) {
+  letter-spacing: 0 !important;
+}
+
+[data-nn-learner-workspace] :is(p, li, .nn-marketing-body-sm) {
+  line-height: 1.58;
+}
+
+[data-nn-learner-workspace] :is(.nn-dash-page-header__subtitle, .nn-learner-page-hero p):not(:first-child) {
+  max-width: 54rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.92rem;
+}
+
+[data-nn-learner-workspace] [data-nn-learner-main] > :is(div, section):not([data-nn-unified-exam-workspace]) {
+  min-width: 0;
+}
+
+.nn-learner-workspace-shell,
+.nn-learner-study-shell,
+.nn-learner-dashboard-shell,
+.nn-learner-skeleton-shell {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.nn-learner-workspace-shell,
+.nn-learner-dashboard-shell {
+  display: grid;
+  gap: var(--nn-workspace-space-3);
+}
+
+.nn-learner-study-shell,
+.nn-learner-skeleton-shell {
+  display: grid;
+  gap: var(--nn-workspace-space-2);
+}
+
+.nn-learner-workspace-section {
+  padding: clamp(1rem, 2vw, 1.25rem);
+}
+
+.nn-learner-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.nn-learner-section-header__eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--semantic-text-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-learner-section-header h2 {
+  margin: 0;
+  color: var(--semantic-text-primary);
+  font-size: clamp(1.05rem, 0.35vw + 1rem, 1.25rem);
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.nn-learner-section-header__description {
+  margin: 0.35rem 0 0;
+  max-width: 44rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.nn-learner-section-header__action {
+  flex-shrink: 0;
+}
+
+.nn-learner-recovery-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 28rem;
+  margin-inline: auto;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  text-align: center;
+}
+
+.nn-learner-recovery-card__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
+}
+
+.nn-learner-recovery-card h2 {
+  margin: 0;
+  color: var(--semantic-text-primary);
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.nn-learner-recovery-card p {
+  margin: 0.35rem 0 0;
+  color: var(--semantic-text-secondary);
+  font-size: 0.9rem;
+}
+
+.nn-learner-recovery-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+[data-nn-learner-workspace] .nn-learner-shell-sticky > div > :is(div) {
+  border-radius: var(--nn-workspace-radius);
+  box-shadow: none !important;
+}
+
+[data-nn-learner-workspace] .nn-learner-shell-nav-row {
+  padding: 0.35rem 0.5rem !important;
+}
+
+[data-nn-learner-workspace] [data-nn-learner-shell-study-nav] a,
+[data-nn-learner-workspace] [data-nn-learner-shell-study-nav] button {
+  min-height: 2.15rem !important;
+  border-radius: 0.6rem !important;
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.86rem !important;
+  font-weight: 500 !important;
+}
+
+[data-nn-learner-workspace] [data-nn-learner-shell-study-nav] a[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)) !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+[data-nn-learner-workspace] [data-nn-learner-shell-study-nav] a:not([aria-current="page"]) {
+  background: transparent !important;
+}
+
+[data-nn-learner-workspace] :is(.rounded-full, .rounded-2xl) {
+  border-radius: var(--nn-workspace-radius) !important;
+}
+
+[data-nn-learner-workspace] :is(.shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl) {
+  box-shadow: var(--nn-workspace-shadow) !important;
+}
+
+@media (max-width: 767px) {
+  [data-nn-learner-workspace] [data-nn-learner-shell-study-nav] a,
+  [data-nn-learner-workspace] [data-nn-learner-shell-study-nav] button {
+    min-height: 2.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .nn-learner-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 /* Shared surface card for learner hubs: consistent corner radius + shadow */
 .nn-learner-hub-card {
   border-radius: 1.25rem;

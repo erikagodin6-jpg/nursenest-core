@@ -2,9 +2,15 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Check, ClipboardList, LineChart, PlayCircle } from "lucide-react";
+import { LineChart, PlayCircle } from "lucide-react";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
-import { LearnerStudyPageShell } from "@/components/learner-study-ui";
+import {
+  LearnerCategorySelector,
+  LearnerFilterBar,
+  LearnerSessionStartPanel,
+  SharedStudySetupLayout,
+  SharedStudySetupSurface,
+} from "@/components/learner-study-ui";
 import {
   discoveryTopicsForCanonicalFilters,
   getQuestionCountsByBodySystem,
@@ -38,12 +44,6 @@ type PracticeTestsHubClientProps = {
   pathwayLessonPractice?: PathwayLessonPracticeHubSnapshot | null;
   initialCatMode?: boolean;
 };
-
-const CATEGORY_CARD_CLASS =
-  "group relative flex min-h-[104px] w-full flex-col items-center justify-center gap-2 rounded-[1.25rem] border p-4 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_42%,transparent)]";
-
-const SURFACE_CLASS =
-  "rounded-[1.25rem] border border-[rgba(15,23,42,0.06)] bg-[rgba(255,255,255,0.85)] shadow-[0_16px_40px_rgba(15,23,42,0.06)]";
 
 const PRACTICE_COUNTS = [25, 50, 75, 100] as const;
 const CAT_COUNTS = [25, 50, 75] as const;
@@ -95,6 +95,7 @@ export function PracticeTestsHubClient({
   const [focusMode, setFocusMode] = useState<FocusMode>("all");
   const [questionCount, setQuestionCount] = useState(50);
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<CanonicalBodySystemId[]>([]);
+  const [categorySearch, setCategorySearch] = useState("");
   const [topics, setTopics] = useState<TopicBucket[]>([]);
   const [discoveryTotal, setDiscoveryTotal] = useState<number | null>(null);
   const [discoveryReady, setDiscoveryReady] = useState(false);
@@ -221,6 +222,18 @@ export function PracticeTestsHubClient({
     }
     return `${selectedCanonicalIds.length} categories`;
   }, [selectedCanonicalIds]);
+
+  const metaBySystem = useMemo(
+    () =>
+      Object.fromEntries(
+        CANONICAL_STUDY_CATEGORIES.map((category) => {
+          const id = category.id as CanonicalBodySystemId;
+          const count = countsByCanonical[id] ?? 0;
+          return [id, count > 0 ? `${count} ${count === 1 ? "question" : "questions"} in pool` : "Syncing question pool"];
+        }),
+      ) as Partial<Record<CanonicalBodySystemId, string>>,
+    [countsByCanonical],
+  );
 
   const toggleCategory = useCallback((id: CanonicalBodySystemId) => {
     setSelectedCanonicalIds((current) => {
@@ -403,6 +416,7 @@ export function PracticeTestsHubClient({
     examSimulationEnabled,
     focusMode,
     pathwayId,
+    pathwayOptions,
     questionCount,
     router,
     selectedCanonicalIds,
@@ -414,9 +428,17 @@ export function PracticeTestsHubClient({
     errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pick_failed;
   const poolLikelyEmpty = discoveryReady && (discoveryTotal ?? 0) === 0 && topics.length === 0;
 
+  const startDisabled = creating || !pathwayId.trim() || (examMode === "cat" && !catAvailableForPathway);
+  const modeLabel = examMode === "cat" ? "CAT" : "Practice Exam";
+  const setupSummary =
+    discoveryReady && discoveryTotal !== null
+      ? `${questionCount} questions · ${categorySummary} · ${discoveryTotal} available`
+      : `${questionCount} questions · ${categorySummary}`;
+
   return (
-    <LearnerStudyPageShell
-      className="nn-practice-tests-hub-premium py-4 sm:py-6"
+    <SharedStudySetupLayout
+      mode={examMode === "cat" ? "cat" : "practice-exam"}
+      className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-e2e-practice-tests-hub
       data-nn-learner-area="practice-tests"
       data-nn-premium-full-platform-convergence=""
@@ -424,88 +446,119 @@ export function PracticeTestsHubClient({
       data-nn-premium-platform-module="practice-tests"
     >
       {hubBootstrapSource === "secondary" ? (
-        <div className="mx-auto max-w-4xl" data-nn-practice-hub-bootstrap-source="secondary">
+        <div data-nn-practice-hub-bootstrap-source="secondary">
           <LearnerStudyLiveSyncBanner />
         </div>
       ) : null}
 
-      <header className="mx-auto max-w-4xl text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(15,23,42,0.06)] bg-white/85 text-[var(--semantic-brand)] shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-          <ClipboardList className="h-6 w-6" aria-hidden strokeWidth={2} />
-        </div>
-        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
-          {formatPathwayLabel(selectedPathway, pathwayDisplayName)}
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-normal text-[var(--semantic-text-primary)] sm:text-4xl">
-          Practice Exam
-        </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[var(--semantic-text-secondary)] sm:text-base">
-          Select your categories, choose the exam type, and start a focused session.
-        </p>
-      </header>
+      <h1 className="sr-only">Practice Exam</h1>
 
-      <section className={`${SURFACE_CLASS} mx-auto max-w-5xl p-5 sm:p-6`} data-nn-e2e-practice-exams-builder>
-        <div className="flex flex-col gap-4 border-b border-[rgba(15,23,42,0.06)] pb-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">Categories</h2>
-            <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
-              {categorySummary}
-              {discoveryReady && discoveryTotal !== null ? ` · ${discoveryTotal} available questions` : ""}
+      <header
+        className="nn-flashcards-hub-workspace nn-premium-practice-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
+        data-nn-e2e-practice-compact-header
+      >
+        <div className="relative space-y-5">
+          <div className="max-w-3xl">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
+              {formatPathwayLabel(selectedPathway, pathwayDisplayName)}
+            </p>
+            <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
+              Build a {modeLabel} session
+            </h2>
+            <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
+              Choose content the same way you build flashcards, then launch the exam workspace.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={resetCategorySelection}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-[rgba(15,23,42,0.08)] bg-white/80 px-4 text-sm font-medium text-[var(--semantic-text-secondary)] transition hover:bg-white"
+          <div
+            className="border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
+            data-nn-e2e-practice-session-preview
           >
-            All Categories
-          </button>
+            <p className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {setupSummary}
+            </p>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <button
+                type="button"
+                onClick={createTest}
+                disabled={startDisabled}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+                data-nn-qa-practice-hub-start-test
+              >
+                {creating ? (
+                  <>
+                    <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                    Starting
+                  </>
+                ) : (
+                  <>
+                    <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                    Start
+                  </>
+                )}
+              </button>
+              <p className="text-xs text-[var(--semantic-text-muted)]">
+                {examMode === "cat" ? "Adaptive rules apply after launch." : "Rationales appear in the focused exam workspace."}
+              </p>
+            </div>
+          </div>
         </div>
+      </header>
 
+      <SharedStudySetupSurface
+        className="nn-premium-practice-hub-builder"
+        aria-labelledby="nn-practice-categories-heading"
+        data-nn-e2e-practice-exams-builder
+        data-nn-e2e-practice-canonical-grid
+      >
         {!discoveryReady ? (
-          <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-4" aria-label="Loading categories">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <div key={index} className="min-h-[104px] animate-pulse rounded-[1.25rem] bg-[rgba(15,23,42,0.045)]" />
-            ))}
+          <div className="space-y-4" aria-label="Loading categories">
+            <div className="h-7 w-64 animate-pulse rounded-lg bg-[rgba(15,23,42,0.06)]" />
+            <div className="h-10 w-full animate-pulse rounded-xl bg-[rgba(15,23,42,0.045)]" />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="min-h-[122px] animate-pulse rounded-2xl bg-[rgba(15,23,42,0.045)]" />
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" data-nn-e2e-practice-canonical-grid>
-            {CANONICAL_STUDY_CATEGORIES.map((category) => {
-              const id = category.id as CanonicalBodySystemId;
-              const active = selectedCanonicalIds.length === 0 || selectedCanonicalIds.includes(id);
-              const count = countsByCanonical[id] ?? 0;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => toggleCategory(id)}
-                  className={`${CATEGORY_CARD_CLASS} ${
-                    active
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,white)] shadow-[0_12px_30px_rgba(15,23,42,0.07)]"
-                      : "border-[rgba(15,23,42,0.06)] bg-white/80 hover:bg-white"
-                  }`}
-                >
-                  <span
-                    className={`absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full border ${
-                      active
-                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] bg-[var(--semantic-brand)] text-white"
-                        : "border-[rgba(15,23,42,0.12)] bg-white"
-                    }`}
-                    aria-hidden
-                  >
-                    {active ? <Check className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
+          <>
+            <LearnerCategorySelector
+              countsBySystem={countsByCanonical}
+              selectedCanonicalIds={selectedCanonicalIds}
+              onToggleCanonical={toggleCategory}
+              search={categorySearch}
+              onSearchChange={setCategorySearch}
+              heading="Exam categories & body systems"
+              headingId="nn-practice-categories-heading"
+              intro="Use the same body-system picker as flashcards. Empty selection starts from the full question pool."
+              searchPlaceholder="Search systems..."
+              metaBySystem={metaBySystem}
+            />
+
+            <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-4">
+              <button
+                type="button"
+                onClick={resetCategorySelection}
+                data-active={selectedCanonicalIds.length === 0}
+                aria-pressed={selectedCanonicalIds.length === 0}
+                className="nn-flashcards-all-systems-btn inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] sm:min-h-9 sm:text-xs"
+              >
+                All systems
+                {selectedCanonicalIds.length === 0 ? (
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] text-[10px]" aria-hidden>
+                    ✓
                   </span>
-                  <span className="max-w-[11rem] text-sm font-semibold leading-5 text-[var(--semantic-text-primary)]">
-                    {category.label}
-                  </span>
-                  <span className="text-xs font-medium text-[var(--semantic-text-secondary)]">
-                    {count > 0 ? `${count} questions` : "Included"}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                ) : null}
+              </button>
+              {selectedCanonicalIds.length > 0 ? (
+                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)]">
+                  {selectedCanonicalIds.length} system{selectedCanonicalIds.length === 1 ? "" : "s"} selected
+                </span>
+              ) : (
+                <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems below to focus your exam</span>
+              )}
+            </div>
+          </>
         )}
 
         {poolLikelyEmpty ? (
@@ -513,143 +566,148 @@ export function PracticeTestsHubClient({
             This pathway is still syncing question discovery. You can start an exam, and the server will validate the available pool.
           </div>
         ) : null}
-      </section>
+      </SharedStudySetupSurface>
 
-      <section className={`${SURFACE_CLASS} mx-auto max-w-5xl p-5 sm:p-6`}>
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(220px,280px)] lg:items-start">
-          <div className="space-y-5">
-            {pathwayOptions.length > 1 ? (
-              <div>
-                <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-                  Exam Pathway
-                </label>
-                <select
-                  id="practice-exam-pathway"
-                  value={pathwayId}
-                  onChange={(event) => setPathwayId(event.target.value)}
-                  className="mt-2 h-12 w-full rounded-2xl border border-[rgba(15,23,42,0.08)] bg-white px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,rgba(15,23,42,0.08))]"
-                >
-                  {pathwayOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : null}
-
+      <details
+        className="nn-flashcards-setup-panel nn-premium-practice-hub-builder nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
+        data-nn-e2e-practice-setup-panel
+        open
+      >
+        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
+          Fine-tune session length &amp; filters
+          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
+            Same setup pattern as flashcards; only the study mode changes
+          </span>
+        </summary>
+        <div className="space-y-6 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
+          {pathwayOptions.length > 1 ? (
             <div>
-              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Exam Mode</p>
-              <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                {(["practice", "cat"] as const).map((mode) => {
-                  const active = examMode === mode;
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setExamMode(mode)}
-                      disabled={mode === "cat" && catEligibleOptions.length === 0}
-                      className={`flex h-12 items-center justify-center rounded-full border px-5 text-sm font-semibold transition ${
-                        active
-                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_32%,rgba(15,23,42,0.06))] bg-[var(--semantic-brand)] text-white shadow-[0_12px_28px_rgba(15,23,42,0.12)]"
-                          : "border-[rgba(15,23,42,0.08)] bg-white/80 text-[var(--semantic-text-primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-45"
-                      }`}
-                    >
-                      {mode === "cat" ? "CAT" : "Practice Exam"}
-                    </button>
-                  );
-                })}
-              </div>
+              <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                Exam Pathway
+              </label>
+              <select
+                id="practice-exam-pathway"
+                value={pathwayId}
+                onChange={(event) => setPathwayId(event.target.value)}
+                className="mt-2 h-12 w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
+              >
+                {pathwayOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
+          ) : null}
 
-            <div>
-              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Study Focus</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {[
-                  ["all", "All Questions"],
-                  ["weak", "Weak Areas"],
-                  ["missed", "Incorrect"],
-                  ...(examMode === "practice" ? ([["unseen", "Unstudied"]] as const) : []),
-                ].map(([value, label]) => {
-                  const active = focusMode === value;
-                  return (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setFocusMode(value as FocusMode)}
-                      className={`h-10 rounded-full border px-4 text-sm font-medium transition ${
-                        active
-                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_32%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,white)] text-[var(--semantic-text-primary)]"
-                          : "border-[rgba(15,23,42,0.08)] bg-white/80 text-[var(--semantic-text-secondary)] hover:bg-white"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
+          <LearnerFilterBar title="Study mode" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
+            <div className="flex flex-wrap gap-2">
+              {(["practice", "cat"] as const).map((mode) => {
+                const active = examMode === mode;
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setExamMode(mode)}
+                    disabled={mode === "cat" && catEligibleOptions.length === 0}
+                    data-active={active}
+                    aria-pressed={active}
+                    className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9"
+                  >
+                    {mode === "cat" ? "CAT" : "Practice Exam"}
+                  </button>
+                );
+              })}
+            </div>
+          </LearnerFilterBar>
+
+          <LearnerFilterBar title="Study focus" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
+            <div className="flex flex-wrap gap-2">
+              {[
+                ["all", "All questions"],
+                ["weak", "Weak areas"],
+                ["missed", "Incorrect"],
+                ...(examMode === "practice" ? ([["unseen", "Unstudied"]] as const) : []),
+              ].map(([value, label]) => {
+                const active = focusMode === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setFocusMode(value as FocusMode)}
+                    data-active={active}
+                    aria-pressed={active}
+                    className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </LearnerFilterBar>
+
+          <div className="space-y-4" data-nn-e2e-practice-session-size>
+            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question count</p>
+            <div className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap" role="group" aria-label="Question count">
+              {availableCounts.map((count) => {
+                const active = questionCount === count;
+                return (
+                  <button
+                    key={count}
+                    type="button"
+                    data-active={active}
+                    aria-pressed={active}
+                    onClick={() => setQuestionCount(count)}
+                    className="nn-flashcards-session-segment min-h-12 flex-1 rounded-xl border border-[var(--semantic-border-soft)] px-4 py-3 text-sm font-bold text-[var(--semantic-text-secondary)] sm:min-w-[4.5rem] sm:flex-none"
+                  >
+                    {count}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
+              <label className="text-sm font-medium text-[var(--semantic-text-secondary)]" htmlFor="practice-exam-count">
+                Custom
+              </label>
+              <input
+                id="practice-exam-count"
+                data-nn-e2e-question-count
+                type="number"
+                min={examMode === "cat" ? 25 : 5}
+                max={examMode === "cat" ? 75 : 100}
+                value={questionCount}
+                onChange={(event) => setQuestionCount(Math.max(5, Math.min(100, Number(event.target.value) || 50)))}
+                className="nn-flashcards-custom-limit-input"
+              />
+              <span className="text-xs text-[var(--semantic-text-muted)]">
+                {examMode === "cat" ? "25-75 questions" : "5-100 questions"}
+              </span>
             </div>
           </div>
 
-          <div className="rounded-[1.25rem] border border-[rgba(15,23,42,0.06)] bg-white/70 p-4">
-            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question Count</p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {availableCounts.map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  onClick={() => setQuestionCount(count)}
-                  className={`h-11 rounded-full border text-sm font-semibold transition ${
-                    questionCount === count
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_32%,rgba(15,23,42,0.06))] bg-[var(--semantic-brand)] text-white"
-                      : "border-[rgba(15,23,42,0.08)] bg-white text-[var(--semantic-text-primary)] hover:bg-[rgba(255,255,255,0.92)]"
-                  }`}
-                >
-                  {count}
-                </button>
-              ))}
+          {examMode === "cat" && !catAvailableForPathway ? (
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
             </div>
-            <label htmlFor="practice-exam-count" className="sr-only">
-              Question count
-            </label>
-            <input
-              id="practice-exam-count"
-              data-nn-e2e-question-count
-              type="number"
-              min={examMode === "cat" ? 25 : 5}
-              max={examMode === "cat" ? 75 : 100}
-              value={questionCount}
-              onChange={(event) => setQuestionCount(Math.max(5, Math.min(100, Number(event.target.value) || 50)))}
-              className="mt-3 h-11 w-full rounded-full border border-[rgba(15,23,42,0.08)] bg-white px-4 text-center text-sm font-semibold text-[var(--semantic-text-primary)]"
-            />
-            <p className="mt-3 text-center text-xs text-[var(--semantic-text-secondary)]">
-              {questionCount} questions · {categorySummary}
-            </p>
-          </div>
+          ) : null}
+
+          {pathwayLessonPractice ? (
+            <div className="flex flex-wrap gap-2 text-xs font-medium text-[var(--semantic-text-secondary)]">
+              <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
+                {pathwayLessonPractice.practiceQuestionCount}
+                {pathwayLessonPractice.practiceTruncated ? "+" : ""} linked questions
+              </span>
+              <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
+                {pathwayLessonPractice.publishedLessonCount} lessons
+              </span>
+            </div>
+          ) : null}
         </div>
-
-        {examMode === "cat" && !catAvailableForPathway ? (
-          <div className="mt-5 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-            CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
-          </div>
-        ) : null}
-
-        {pathwayLessonPractice ? (
-          <div className="mt-5 flex flex-wrap justify-center gap-2 text-xs font-medium text-[var(--semantic-text-secondary)]">
-            <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
-              {pathwayLessonPractice.practiceQuestionCount}
-              {pathwayLessonPractice.practiceTruncated ? "+" : ""} linked questions
-            </span>
-            <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
-              {pathwayLessonPractice.publishedLessonCount} lessons
-            </span>
-          </div>
-        ) : null}
-      </section>
+      </details>
 
       {error ? (
         <div
-          className="mx-auto max-w-3xl rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-danger)_28%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,white)] px-5 py-4 text-center text-sm text-[var(--semantic-text-primary)]"
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
           role="alert"
         >
           <p>{showCatPoolWarning ? "This CAT pool is not ready for that setup yet. Try Practice Exam or broaden the categories." : error}</p>
@@ -665,27 +723,31 @@ export function PracticeTestsHubClient({
         </div>
       ) : null}
 
-      <div className="mx-auto flex max-w-5xl justify-center pb-3">
-        <button
-          type="button"
-          onClick={createTest}
-          disabled={creating || !pathwayId.trim() || (examMode === "cat" && !catAvailableForPathway)}
-          className="inline-flex h-12 min-w-[160px] items-center justify-center whitespace-nowrap rounded-full bg-[var(--semantic-brand)] px-7 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgba(15,23,42,0.16)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55"
-          data-nn-qa-practice-hub-start-test
-        >
-          {creating ? (
-            <>
-              <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-              Starting
-            </>
-          ) : (
-            <>
-              <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-              Start Exam
-            </>
-          )}
-        </button>
-      </div>
-    </LearnerStudyPageShell>
+      <LearnerSessionStartPanel
+        primary={
+          <button
+            type="button"
+            onClick={createTest}
+            disabled={startDisabled}
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+            data-nn-qa-practice-hub-start-test-bottom
+          >
+            {creating ? (
+              <>
+                <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                Starting
+              </>
+            ) : (
+              <>
+                <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                Start
+              </>
+            )}
+          </button>
+        }
+        secondary={<span className="text-xs text-[var(--semantic-text-muted)]">{setupSummary}</span>}
+        className="md:hidden"
+      />
+    </SharedStudySetupLayout>
   );
 }

@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { ExamFamily, TierCode } from "@prisma/client";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
-import { LearnerNpExamPracticePickSurface } from "@/components/student/learner-np-exam-practice-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
 import { PracticeActivitySkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
@@ -35,21 +34,26 @@ type PageProps = {
   searchParams: Promise<{
     pathwayId?: string | string[] | undefined;
     topic?: string | string[] | undefined;
+    /** Legacy inline CAT trigger from older links. */
     cat?: string | string[] | undefined;
+    /** Canonical CAT-launch param set by appPathwayCatSessionStartPath. */
+    catLaunch?: string | string[] | undefined;
   }>;
 };
+
+function isTruthyParam(v: string | string[] | undefined): boolean {
+  const s = Array.isArray(v) ? v[0] : v;
+  if (typeof s !== "string") return false;
+  const t = s.trim();
+  return t.length > 0 && t !== "0" && t !== "false";
+}
 
 export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   const rawPid = sp.pathwayId;
-  const rawCat = sp.cat;
-  const catRequested =
-    typeof rawCat === "string"
-      ? rawCat.trim().length > 0 && rawCat.trim() !== "0"
-      : Array.isArray(rawCat) && typeof rawCat[0] === "string"
-        ? rawCat[0].trim().length > 0 && rawCat[0].trim() !== "0"
-        : false;
+  // Accept both legacy `cat=1` and canonical `catLaunch=1` (sent by appPathwayCatSessionStartPath).
+  const catRequested = isTruthyParam(sp.catLaunch) || isTruthyParam(sp.cat);
   const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
@@ -259,24 +263,12 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
         <div className="mb-4">
           <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
         </div>
-        {entitlement.tier === TierCode.NP ? (
-          <LearnerNpExamPracticePickSurface
-            title={t("learner.practiceTests.title")}
-            subtitle="Choose your NP board track. Each exam uses its own question scope — CNPLE, FNP, PMHNP, and other specialties are not interchangeable."
-            pathways={pathwayOptions.map((p) => ({
-              id: p.id,
-              title: p.examCodeLabel?.trim() || p.label.split("—")[0]?.trim() || p.id,
-              subtitle: p.label.includes("—") ? p.label.split("—").slice(1).join("—").trim() : p.label,
-            }))}
-          />
-        ) : (
-          <FlashcardsPathwayPickSurface
-            baseAppPath="/app/practice-tests"
-            title={t("learner.practiceTests.title")}
-            subtitle="Choose an exam track for practice exams. Your selection opens this hub with the same pathway in the URL — no redirect loop."
-            pathways={pathwayOptions.map((p) => ({ id: p.id, label: p.label }))}
-          />
-        )}
+        <FlashcardsPathwayPickSurface
+          baseAppPath="/app/practice-tests"
+          title={t("learner.practiceTests.title")}
+          subtitle="Choose an exam track for practice exams. Your selection opens the shared study setup with that pathway selected."
+          pathways={pathwayOptions.map((p) => ({ id: p.id, label: p.label }))}
+        />
       </div>
     );
   }

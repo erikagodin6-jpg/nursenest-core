@@ -1,3 +1,5 @@
+import { pathwayUsesPremiumNclexExamShell } from "@/lib/practice-tests/premium-exam-shell-pathways";
+
 export type PremiumNclexShellRoute = "cat" | "practice";
 
 function readConfigString(cfg: Record<string, unknown>, key: string): string | null {
@@ -15,6 +17,7 @@ export function resolvePremiumNclexShellRoute(args: {
 }): PremiumNclexShellRoute | null {
   const cfg = args.config;
   if (!cfg) return null;
+  if (!pathwayUsesPremiumNclexExamShell(args.pathwayId)) return null;
 
   if (cfg.catPresentationMode === "exam_simulation") {
     return "cat";
@@ -28,8 +31,8 @@ export function resolvePremiumNclexShellRoute(args: {
     return null;
   }
 
-  // Hub "Practice Exams" and linear licensing simulations use linear exam delivery.
-  if (cfg.linearDeliveryMode === "exam") {
+  // Hub "Practice Exams" and learning-mode linear sessions share the dedicated exam workspace.
+  if (cfg.linearDeliveryMode === "exam" || cfg.linearDeliveryMode === "practice") {
     return "practice";
   }
 

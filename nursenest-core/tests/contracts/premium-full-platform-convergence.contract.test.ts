@@ -26,7 +26,6 @@ const REQUIRED_FRAME_GROUPS = [
 const REQUIRED_MODULE_FILES = [
   ["practice-tests", "src/components/student/practice-tests-hub-client.tsx"],
   ["practice-tests", "src/components/flashcards/flashcards-pathway-pick-surface.tsx"],
-  ["practice-tests", "src/components/student/learner-np-exam-practice-pick-surface.tsx"],
   ["cat", "src/components/student/pathway-cat-session-start-client.tsx"],
   ["lessons", "src/app/(student)/app/(learner)/lessons/page.tsx"],
   ["exam-session", "src/components/exam/exam-session-shell.tsx"],

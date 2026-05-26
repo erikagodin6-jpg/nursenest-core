@@ -138,12 +138,6 @@ export function FlashcardCustomStudyClient() {
         if (!cancelled) setLoadingStage("still");
       }, 4000),
     ];
-    const timeoutId = window.setTimeout(() => {
-      if (cancelled) return;
-      controller.abort();
-      setError("The session is taking longer than expected. Please retry when your connection is stable.");
-      setLoading(false);
-    }, 10_000);
     (async () => {
       setLoading(true);
       setError(null);
@@ -153,7 +147,7 @@ export function FlashcardCustomStudyClient() {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 1, timeoutMs: 10_000 });
+        }, { attempts: 2, timeoutMs: 20_000 });
         let json: unknown;
         try {
           json = await res.json();
@@ -223,14 +217,12 @@ export function FlashcardCustomStudyClient() {
         });
         if (!cancelled) setError("Could not load this session. Check your connection and try again.");
       } finally {
-        window.clearTimeout(timeoutId);
         stageTimers.forEach(window.clearTimeout);
         if (!cancelled) setLoading(false);
       }
     })();
     return () => {
       cancelled = true;
-      window.clearTimeout(timeoutId);
       stageTimers.forEach(window.clearTimeout);
       controller.abort();
     };
