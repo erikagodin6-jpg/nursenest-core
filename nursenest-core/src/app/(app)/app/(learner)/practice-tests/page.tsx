@@ -79,7 +79,16 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   }
 
   if (!entitlement.hasAccess) {
-    const snap = userId ? await getFreemiumSnapshot(userId) : null;
+    let snap = null;
+    try {
+      snap = userId ? await getFreemiumSnapshot(userId) : null;
+    } catch (error) {
+      safeServerLog("learner_practice_tests", "freemium_snapshot_failed", {
+        loader_name: "practice_tests_hub_page",
+        user_id_prefix: userId.slice(0, 8),
+        error_message: error instanceof Error ? error.message.slice(0, 400) : String(error).slice(0, 400),
+      });
+    }
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
@@ -264,12 +273,25 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     );
   }
 
-  const catHref = resolveStudyLoopCatHref({
-    authState: "signed_in",
-    pathwayId: defaultPathwayId,
-    availablePathwayIds: catEligiblePathwayIds,
-    intent: "start",
-  });
+  let catHref = "/app/practice-tests/start";
+  try {
+    catHref = resolveStudyLoopCatHref({
+      authState: "signed_in",
+      pathwayId: defaultPathwayId,
+      availablePathwayIds: catEligiblePathwayIds,
+      intent: "start",
+    });
+  } catch (error) {
+    const fallbackPathway = defaultPathwayId?.trim();
+    catHref = fallbackPathway
+      ? `/app/practice-tests/start?pathwayId=${encodeURIComponent(fallbackPathway)}`
+      : "/app/practice-tests/start";
+    safeServerLog("learner_practice_tests", "cat_href_resolve_failed", {
+      loader_name: "practice_tests_hub_page",
+      pathway_id: fallbackPathway ?? "",
+      error_message: error instanceof Error ? error.message.slice(0, 400) : String(error).slice(0, 400),
+    });
+  }
 
   let pathwayLessonPractice = null;
   try {

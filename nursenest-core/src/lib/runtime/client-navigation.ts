@@ -23,6 +23,7 @@ export function safeRouterReplace(
   opts: {
     context?: NavigationContext;
     fallbackDelayMs?: number;
+    hardFallbackDelayMs?: number;
     scroll?: boolean;
   } = {},
 ): void {
@@ -59,13 +60,27 @@ export function safeRouterReplace(
       });
       return;
     }
-    emitRuntimeEvent("route_transition_failure", {
+    emitRuntimeEvent("route_transition_pending", {
       ...context,
       target,
       current,
-      reason: "router_replace_not_committed",
+      reason: "router_replace_not_committed_yet",
       elapsedMs: Math.round(performance.now() - startedAt),
     });
-    window.location.assign(href);
   }, opts.fallbackDelayMs ?? 1500);
+
+  if (opts.hardFallbackDelayMs != null && Number.isFinite(opts.hardFallbackDelayMs) && opts.hardFallbackDelayMs > 0) {
+    window.setTimeout(() => {
+      const current = `${window.location.pathname}${window.location.search}`;
+      if (current === target) return;
+      emitRuntimeEvent("route_transition_failure", {
+        ...context,
+        target,
+        current,
+        reason: "router_replace_hard_fallback_timeout",
+        elapsedMs: Math.round(performance.now() - startedAt),
+      });
+      window.location.assign(href);
+    }, opts.hardFallbackDelayMs);
+  }
 }

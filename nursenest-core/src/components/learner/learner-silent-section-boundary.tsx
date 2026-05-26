@@ -2,6 +2,7 @@
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 type Props = { children: ReactNode; name?: string };
 
@@ -17,6 +18,12 @@ export class LearnerSilentSectionBoundary extends Component<Props, { error: Erro
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    emitRuntimeEvent("activity_route_body_boundary_failed", {
+      surfaceName: this.props.name ?? "section",
+      errorName: error.name,
+      errorMessage: error.message,
+      componentStack: errorInfo.componentStack.slice(0, 240),
+    });
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console
       console.warn("[LearnerSilentSectionBoundary]", this.props.name ?? "section", error.message, errorInfo.componentStack);

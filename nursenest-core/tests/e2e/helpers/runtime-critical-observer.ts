@@ -16,6 +16,7 @@ const BLOCKING_CONSOLE_PATTERNS = [
   /\[nn-runtime\]\s+route_transition_failure/i,
   /\[nn-runtime\]\s+cat_runtime_bootstrap_failed/i,
   /\[nn-runtime\]\s+activity_bootstrap_failure/i,
+  /\[nn-runtime\]\s+activity_route_body_boundary_failed/i,
   /\[nn-runtime\]\s+chunk_load_failed/i,
   /\[nn-runtime\]\s+malformed_session_detected/i,
   /ChunkLoadError|Loading chunk .* failed/i,

@@ -53,7 +53,17 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const entitlement = bootstrap.entitlement;
 
   if (!entitlement.hasAccess) {
-    const snap = userId ? await getFreemiumSnapshot(userId) : null;
+    let snap = null;
+    try {
+      snap = userId ? await getFreemiumSnapshot(userId) : null;
+    } catch (error) {
+      safeServerLog("cat_start_page", "freemium_snapshot_failed", {
+        loader_name: "cat_start_page",
+        user_id_prefix: userId.slice(0, 8),
+        pathway_id: requestedPathwayId ?? "",
+        error_message: error instanceof Error ? error.message.slice(0, 400) : String(error).slice(0, 400),
+      });
+    }
     return (
       <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="mb-1">
@@ -79,7 +89,18 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     );
   }
 
-  const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
+  let compatiblePathways: Awaited<ReturnType<typeof listPathwaysCompatibleWithSubscription>> = [];
+  try {
+    compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
+  } catch (error) {
+    safeServerLog("cat_start_page", "pathway_bootstrap_failed", {
+      loader_name: "cat_start_pathway_compatibility",
+      pathway_id: requestedPathwayId ?? "",
+      user_id_prefix: userId.slice(0, 8),
+      error_message: error instanceof Error ? error.message.slice(0, 500) : String(error).slice(0, 500),
+    });
+    return <CatStartRecovery pathwayId={requestedPathwayId} />;
+  }
   const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
   const waitlistOnlyPathways = compatiblePathways.filter((p) => !pathwayAllowsCatAdaptiveStart(p));
 
@@ -114,7 +135,19 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
 
   /** Pathway is known → go straight to session bridge unless learner explicitly opened the full briefing. */
   if (initialPathwayId && !forceFullSetup) {
-    redirect(appPathwayCatSessionStartPath(initialPathwayId));
+    let startHref = "/app/practice-tests";
+    try {
+      startHref = appPathwayCatSessionStartPath(initialPathwayId);
+    } catch (error) {
+      safeServerLog("cat_start_page", "start_path_resolve_failed", {
+        loader_name: "cat_start_route_resolver",
+        pathway_id: initialPathwayId,
+        user_id_prefix: userId.slice(0, 8),
+        error_message: error instanceof Error ? error.message.slice(0, 500) : String(error).slice(0, 500),
+      });
+      return <CatStartRecovery pathwayId={initialPathwayId} />;
+    }
+    redirect(startHref);
   }
 
   const pathwayOptions = catEligiblePathways.map((p) => ({
@@ -198,6 +231,31 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
           fallbackLessonsByPathway={lessonsByPathway}
         />
       </div>
+    </div>
+  );
+}
+
+function CatStartRecovery({ pathwayId }: { pathwayId: string | null }) {
+  const retryHref = pathwayId
+    ? `/app/practice-tests/start?pathwayId=${encodeURIComponent(pathwayId)}&review=1`
+    : "/app/practice-tests/start?review=1";
+  return (
+    <div className="mx-auto min-w-0 w-full max-w-3xl space-y-6 px-4 py-8 sm:px-6" data-nn-e2e-cat-start-loader-failure>
+      <div className="mb-4">
+        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
+      </div>
+      <PremiumEmptyState
+        headline="Adaptive exam setup could not verify this pathway"
+        body="We could not load the pathway configuration needed to start this CAT session. Your account, access, and saved progress remain intact."
+        tone="default"
+        primaryCta={{ label: "Retry CAT setup", href: retryHref, variant: "primary" }}
+        secondaryCtas={[
+          { label: "Open practice exams", href: "/app/practice-tests", variant: "secondary" },
+          { label: "Return to dashboard", href: "/app", variant: "ghost" },
+        ]}
+        visualLayout="stack"
+        ctaLayout="stack"
+      />
     </div>
   );
 }
