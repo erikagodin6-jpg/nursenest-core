@@ -142,6 +142,46 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
+  runtime-browser-gate:
+    name: Runtime Browser Gate
+    runs-on: ubuntu-latest
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run runtime critical browser gate
+        run: npm run test:e2e:runtime-critical
+        env:
+          CI: true
+          AI_ADMIN_GENERATION_ENABLED: "false"
+          OPENAI_API_KEY: "playwright-placeholder-openai"
+          AUTH_SECRET: "playwright-e2e-local-secret"
+          NEXTAUTH_SECRET: "playwright-e2e-local-secret"
+          DATABASE_URL: "postgresql://USER:PASSWORD@host:5432/DBNAME"
+
+      - name: Upload runtime Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-browser-gate-report
+          path: |
+            playwright-report/runtime-critical/
+            test-results/runtime-critical/
+            test-results/
+          retention-days: 30
+
   render-verification:
     name: Render Verification
     runs-on: ubuntu-latest
@@ -202,6 +242,7 @@ jobs:
       - unbounded-query-audit
       - lint
       - smoke-tests
+      - runtime-browser-gate
       - render-verification
       - architectural-regression-check
     if: always()
@@ -214,6 +255,7 @@ jobs:
              [ "${{ needs.unbounded-query-audit.result }}" != "success" ] || \
              [ "${{ needs.lint.result }}" != "success" ] || \
              [ "${{ needs.smoke-tests.result }}" != "success" ] || \
+             [ "${{ needs.runtime-browser-gate.result }}" != "success" ] || \
              [ "${{ needs.render-verification.result }}" != "success" ] || \
              [ "${{ needs.architectural-regression-check.result }}" != "success" ]; then
             echo "❌ Deployment gates FAILED"
