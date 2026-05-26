@@ -3,7 +3,7 @@
  *
  * **Browser serialization:** `waitForFunction` must mirror {@link isLearnerShell} inline — Playwright runs the callback in the browser context (no imports).
  */
-import type { Page, Response } from "@playwright/test";
+import { expect, type Locator, type Page, type Response } from "@playwright/test";
 import { parseCredentialsCallbackPayload } from "./auth-credentials-login";
 import { describeAuthFailureSurface, redactAuthDiagnosticsUrl } from "./auth-diagnostics";
 import { PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
@@ -58,6 +58,22 @@ function metaFromAuthCode(code: string | null, errorParam: string | null): RnFul
     operatorHint: humanReadableOperatorHint(primaryClassification),
     callbackHttpStatus: null,
   };
+}
+
+async function fillLoginInput(locator: Locator, value: string): Promise<void> {
+  await locator.fill(value);
+  try {
+    await expect(locator).toHaveValue(value, { timeout: 5_000 });
+    return;
+  } catch {
+    await locator.evaluate((input, nextValue) => {
+      const el = input as HTMLInputElement;
+      el.value = nextValue;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    }, value);
+    await expect(locator).toHaveValue(value, { timeout: 5_000 });
+  }
 }
 
 export type LoginWithCredentialsOptions = {
@@ -149,15 +165,16 @@ export async function loginWithCredentials(
     );
   }
 
-  await page.locator("#login-identifier").first().fill(email);
-  await page.locator("#login-password").first().fill(password);
+  const identifierInput = page.locator("#login-identifier").first();
+  const passwordInput = page.locator("#login-password").first();
+  await fillLoginInput(identifierInput, email);
+  await fillLoginInput(passwordInput, password);
 
-  const submit = page
+  const loginForm = page
     .locator("form")
     .filter({ has: page.locator("#login-identifier") })
-    .first()
-    .locator('button[type="submit"]')
     .first();
+  const submit = loginForm.locator('button[type="submit"]').first();
 
   /** Cold `next dev` can compile `/api/auth/providers` + CSRF before the credentials POST; allow extra budget. */
   const credentialsPostTimeoutMs = 120_000;
@@ -169,7 +186,18 @@ export async function loginWithCredentials(
 
   let authRes: Response;
   try {
-    authRes = await authPostPromise;
+    const initialPost = await Promise.race([
+      authPostPromise.then((response) => ({ response })),
+      page.waitForTimeout(3_000).then(() => null),
+    ]);
+    if (initialPost?.response) {
+      authRes = initialPost.response;
+    } else {
+      await loginForm.evaluate((form) => {
+        (form as HTMLFormElement).requestSubmit();
+      });
+      authRes = await authPostPromise;
+    }
   } catch {
     const at = redactAuthDiagnosticsUrl(page.url());
     const diag = await describeAuthFailureSurface(page).catch(() => "");
