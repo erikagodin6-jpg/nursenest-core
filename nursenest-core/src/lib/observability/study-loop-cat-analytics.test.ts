@@ -35,7 +35,7 @@ describe("study-loop-cat-analytics", () => {
 
   it("classifies public pathway CAT entries", () => {
     const props = buildStudyLoopCatClickProps({
-      href: "/ca/rpn/rex-pn/cat",
+      href: "/canada/pn/rex-pn/cat",
       sourceSurface: "lesson_study_loop_primary",
       pathwayId: "ca-rpn-rex-pn",
     });

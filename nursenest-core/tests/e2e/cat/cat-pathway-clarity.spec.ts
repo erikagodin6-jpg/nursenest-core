@@ -14,9 +14,9 @@ test.describe("CAT pathway pre-click clarity (marketing)", () => {
 
   test("REx-PN CAT landing shows exam in primary controls", async ({ page, context }) => {
     await context.addCookies([{ name: MARKETING_REGION_COOKIE, value: "CA", url: baseURL }]);
-    await page.goto(`${baseURL}/canada/rpn/rex-pn/cat`, { waitUntil: "domcontentloaded" });
+    await page.goto(`${baseURL}/canada/pn/rex-pn/cat`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: /REx-PN CAT/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Sign in for REx-PN CAT/i })).toBeVisible();
+    await expect(page.locator('a[href*="callbackUrl=%2Fcanada%2Fpn%2Frex-pn%2Fcat"]').first()).toBeVisible();
   });
 
   test("FNP hub CAT shortcut names the board track", async ({ page, context }) => {

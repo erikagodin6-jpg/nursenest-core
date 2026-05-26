@@ -9,7 +9,7 @@ const pages = [
   {
     path: "/canada/rpn/rex-pn/test-bank",
     h1: "REx-PN test bank for Canadian practical nurses",
-    required: ["/canada/rpn/rex-pn/questions", "/canada/rpn/rex-pn/cat", "/canada/rpn/rex-pn/flashcards", "/canada/rpn/rex-pn/lessons", "/canada/rpn/rex-pn/pricing"],
+    required: ["/canada/rpn/rex-pn/questions", "/canada/pn/rex-pn/cat", "/canada/rpn/rex-pn/flashcards", "/canada/rpn/rex-pn/lessons", "/canada/rpn/rex-pn/pricing"],
   },
   {
     path: "/canada/np/cnple/test-bank",

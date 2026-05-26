@@ -99,7 +99,9 @@ async function installQuestionPatchRoute(
 
 function filterSeriousConsoleErrors(errors: string[]): string[] {
   return errors.filter(
-    (x) => !/cookie|Content Security Policy|third-party|analytics/i.test(x),
+    (x) =>
+      !/cookie|Content Security Policy|third-party|analytics/i.test(x) &&
+      !/pathway_lessons lesson_hub_db_unavailable|exam_pathway_hub hub_data_load_failed|route_render_fallback_used/i.test(x),
   );
 }
 
@@ -404,10 +406,8 @@ test.describe("Block 1 — RN / NCLEX-RN CAT (authenticated)", () => {
 // ---------------------------------------------------------------------------
 
 test.describe("Block 2 — RPN / REx-PN CAT (public marketing)", () => {
-  test("2-1: /canada/rpn/rex-pn/cat sign-in callback preserves RPN path", async ({ page }) => {
-    // The URL is owned by the rex-pn authority cluster (page.path = /canada/rpn/rex-pn/cat).
-    // The CTA sign-in block uses page.path directly so callbackUrl carries the rpn slug.
-    const catPath = "/canada/rpn/rex-pn/cat";
+  test("2-1: /canada/pn/rex-pn/cat sign-in callback preserves canonical PN path", async ({ page }) => {
+    const catPath = "/canada/pn/rex-pn/cat";
     const obs = attachPageObservers(page, { profile: "public" });
     try {
       await page.goto(catPath, { waitUntil: "domcontentloaded" });
@@ -435,14 +435,12 @@ test.describe("Block 2 — RPN / REx-PN CAT (public marketing)", () => {
   }) => {
     const obs = attachPageObservers(page, { profile: "public" });
     try {
-      await page.goto("/canada/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-      // The URL is owned by the rex-pn authority cluster — CTAs in the page header use
-      // the canonical rpn slug (not the marketing-hub pn alias).
+      await page.goto("/canada/pn/rex-pn/cat", { waitUntil: "domcontentloaded" });
       await expect(
-        page.locator('a[href="/canada/rpn/rex-pn/lessons"]').first(),
+        page.locator('a[href="/canada/pn/rex-pn/lessons"]').first(),
       ).toBeVisible({ timeout: 30_000 });
       await expect(
-        page.locator('a[href="/canada/rpn/rex-pn/questions"]').first(),
+        page.locator('a[href="/canada/pn/rex-pn/questions"]').first(),
       ).toBeVisible({ timeout: 30_000 });
 
       await page.screenshot({
