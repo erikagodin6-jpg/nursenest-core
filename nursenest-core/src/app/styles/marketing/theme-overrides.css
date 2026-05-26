@@ -464,9 +464,18 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: var(--nn-rhythm-section-y, 4rem);
+  padding-block: var(--nn-space-section-gap, var(--nn-rhythm-section-y, 4rem));
   background: var(--page-bg, #ffffff);
   min-height: var(--nn-premium-home-section-min, 34rem);
+}
+
+.nn-premium-home-section.border-b,
+.nn-premium-home-section[class*="border-b"] {
+  padding-bottom: max(var(--nn-space-section-gap), var(--nn-space-section-landing));
+}
+
+.nn-premium-home-section + .nn-premium-home-section {
+  border-top-color: color-mix(in srgb, var(--border-subtle) 64%, transparent);
 }
 
 .nn-premium-home-section::before {

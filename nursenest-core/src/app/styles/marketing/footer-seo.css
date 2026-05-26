@@ -43,8 +43,8 @@
       var(--footer-bg)
     );
   background-color: color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--footer-bg));
-  padding-top: clamp(3rem, 6vw, 4.75rem);
-  padding-bottom: clamp(2.75rem, 5vw, 4rem);
+  padding-top: var(--nn-space-footer-landing, clamp(3.25rem, 6.5vw, 5.25rem));
+  padding-bottom: clamp(3rem, 5.5vw, 4.5rem);
 }
 
 [data-theme="midnight"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface,
@@ -95,8 +95,13 @@
     0 12px 32px -30px color-mix(in srgb, var(--footer-fg) 6%, transparent);
 }
 
+[data-nn-footer-layout="marketing"] .nn-footer-marketing-shell {
+  display: grid;
+  gap: var(--nn-footer-panel-gap);
+}
+
 [data-nn-footer-layout="marketing"] .nn-footer-panel + .nn-footer-panel {
-  margin-top: var(--nn-footer-panel-gap);
+  margin-top: 0;
 }
 
 [data-theme="midnight"] [data-nn-footer-layout="marketing"] .nn-footer-panel,

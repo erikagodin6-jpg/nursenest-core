@@ -160,10 +160,10 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
       data-nn-footer-layout="marketing"
       data-nn-footer-premium="1"
       data-nn-footer-root
-      className="nn-footer-premium-root nn-footer-marketing-chrome nn-footer-marketing-chrome--surface mt-auto border-t border-[var(--footer-border)] py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
+      className="nn-footer-premium-root nn-footer-marketing-chrome nn-footer-marketing-chrome--surface nn-footer-landing mt-auto border-t border-[var(--footer-border)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
     >
       <div className="nn-section-shell nn-footer-marketing-shell">
-        <div className="nn-footer-panel nn-footer-panel--main relative overflow-hidden px-5 py-6 sm:px-6 sm:py-7">
+        <div className="nn-footer-panel nn-footer-panel--main relative overflow-hidden px-5 py-7 sm:px-6 sm:py-8">
           <LeafWatermark
             className="inset-0 flex items-center justify-center"
             imageClassName="max-h-[min(48vw,18rem)] opacity-[0.055] sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
@@ -549,11 +549,11 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           </div>
         </div>
 
-        <div className="nn-footer-panel nn-footer-panel--email p-4 sm:p-5">
+        <div className="nn-footer-panel nn-footer-panel--email p-5 sm:p-6">
           <EmailSignupBanner className="rounded-xl border-0 bg-transparent p-0 shadow-none sm:p-0" />
         </div>
 
-        <div className="nn-footer-panel nn-footer-panel--legal nn-footer-panel--bottom-meta px-4 py-5 sm:px-5">
+        <div className="nn-footer-panel nn-footer-panel--legal nn-footer-panel--bottom-meta px-5 py-6 sm:px-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:flex-wrap lg:items-start lg:justify-between">
             <div className="min-w-0 text-center text-sm text-[var(--footer-muted)] lg:max-w-[min(100%,22rem)] lg:text-left">
               © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}

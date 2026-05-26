@@ -110,12 +110,32 @@
   display: grid;
   gap: var(--nn-space-card-stack, clamp(1.25rem, 2vw, 1.875rem));
 }
+.nn-card-stack--relaxed {
+  display: grid;
+  gap: var(--nn-space-card-stack-relaxed, clamp(1.75rem, 3vw, 2.75rem));
+}
 .nn-divider-breathing-room {
   margin-block: var(--nn-space-divider-offset, clamp(1.5rem, 3vw, 2.5rem));
+}
+.nn-divider-breathing-room--lg {
+  margin-block: var(--nn-space-divider-offset-lg, clamp(2.25rem, 4.25vw, 3.75rem));
 }
 .nn-section-with-divider {
   border-top: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
   padding-top: var(--nn-space-section-gap, clamp(3rem, 6vw, 5rem));
+}
+.nn-section-with-divider--relaxed {
+  border-top: 1px solid color-mix(in srgb, var(--border-subtle) 64%, transparent);
+  padding-top: var(--nn-space-section-gap-relaxed, clamp(4.25rem, 8vw, 7rem));
+}
+.nn-section-panel-clearance {
+  padding-block: var(--nn-space-section-landing, clamp(2.25rem, 4.5vw, 4rem));
+}
+.nn-rounded-surface-clearance {
+  margin-block: var(--nn-space-card-clearance, clamp(1rem, 1.8vw, 1.5rem));
+}
+.nn-rounded-surface-clearance--lg {
+  margin-block: var(--nn-space-surface-gap, clamp(1.75rem, 3vw, 2.75rem));
 }
 .nn-section-shell {
   margin-inline: auto;
