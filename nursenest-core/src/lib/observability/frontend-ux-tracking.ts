@@ -279,6 +279,27 @@ function recoverFromChunkLoadFailure(): void {
   }
 }
 
+async function invalidateStaleRuntimeCaches(reason: string): Promise<void> {
+  if (typeof window === "undefined") return;
+  try {
+    if ("serviceWorker" in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister().catch(() => false)));
+    }
+  } catch {
+    /* Safari may reject service worker calls in private/cross-site contexts. */
+  }
+  try {
+    if ("caches" in window) {
+      const names = await caches.keys();
+      await Promise.all(names.filter((name) => /next|nursenest|workbox|runtime/i.test(name)).map((name) => caches.delete(name).catch(() => false)));
+    }
+  } catch {
+    /* Cache API can be unavailable or blocked; stale-build telemetry is still useful. */
+  }
+  emitRuntimeEvent("runtime_cache_invalidated", { reason });
+}
+
 /** Window-level hints: hydration text, chunk / dynamic import failures during navigation. */
 export function mountGlobalUxListeners(): void {
   if (typeof window === "undefined" || uxGlobalsMounted) return;
@@ -311,6 +332,7 @@ export function mountGlobalUxListeners(): void {
           /* ignore */
         }
         recoverFromChunkLoadFailure();
+        void invalidateStaleRuntimeCaches("chunk_load_failed");
       }
     },
     true,
@@ -347,6 +369,7 @@ export function mountGlobalUxListeners(): void {
         },
       });
       recoverFromChunkLoadFailure();
+      void invalidateStaleRuntimeCaches("chunk_load_failed");
     }
   });
 }
@@ -380,6 +403,7 @@ async function checkForStaleClientBuild(): Promise<void> {
     publicCommit: publicCommit.slice(0, 12),
     runtimeCommit: runtimeCommit.slice(0, 12),
   });
+  void invalidateStaleRuntimeCaches("stale_client_build_detected");
   captureUxFailure({
     kind: "stale_client_build_detected",
     level: "warning",

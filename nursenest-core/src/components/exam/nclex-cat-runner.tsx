@@ -336,6 +336,13 @@ export function NclexCatRunner({
         if (!mountedRef.current) return;
         const code = e instanceof Error ? e.message : "hydrate_failed";
         emitRuntimeEvent("cat_runtime_bootstrap_failed", { sessionId: testId, errorCode: code });
+        if (code === "malformed_question_ids") {
+          emitRuntimeEvent("malformed_session_detected", {
+            sessionId: testId,
+            errorCode: code,
+            surface: "cat_runtime",
+          });
+        }
         setError(
           code === "malformed_question_ids"
             ? "This exam session has incomplete question data. Your account is safe, and you can retry or start a clean session."

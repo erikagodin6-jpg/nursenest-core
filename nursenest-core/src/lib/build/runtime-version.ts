@@ -139,8 +139,10 @@ export function buildRuntimeVersionPayload(
   return payload;
 }
 
-export function runtimeVersionHeaders() {
+export function runtimeVersionHeaders(env: NodeJS.ProcessEnv = process.env) {
+  const meta = buildRuntimeEnvMeta(env);
   return {
     "Cache-Control": "no-store",
+    ...(meta?.commit ? { "x-nn-build-sha": meta.commit } : {}),
   };
 }

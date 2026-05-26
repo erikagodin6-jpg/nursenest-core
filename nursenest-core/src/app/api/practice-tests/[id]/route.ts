@@ -405,6 +405,30 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   if (parsed.data.action === "save") {
+    if (parsed.data.cursorIndex != null && parsed.data.cursorIndex < row.cursorIndex) {
+      safeServerLog("practice_tests", "autosave_cursor_regression_blocked", {
+        event: "autosave_cursor_regression_blocked",
+        practiceTestId: id.slice(0, 16),
+        requestedCursorIndex: parsed.data.cursorIndex,
+        currentCursorIndex: row.cursorIndex,
+        selectionMode: cfg.selectionMode,
+      });
+      await practiceTestRouteDeps.updatePracticeTest({
+        where: { id },
+        data: {
+          answers: merged as object,
+          cursorIndex: row.cursorIndex,
+          ...(nextExamToolsAdaptiveState ? { adaptiveState: nextExamToolsAdaptiveState } : {}),
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        },
+      });
+      await invalidateHeavyReads();
+      return NextResponse.json({
+        ok: true,
+        conflict: "cursor_regression_blocked",
+        cursorIndex: row.cursorIndex,
+      });
+    }
     await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {

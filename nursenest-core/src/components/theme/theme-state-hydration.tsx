@@ -383,16 +383,25 @@ export function ThemeStateHydration() {
       normalized && ALLOWED_THEME_IDS.has(normalized) ? normalized : NURSENEST_DEFAULT_THEME;
     applyPaletteRoles(resolved);
     syncThemeCookie(resolved);
+    const fromDom = document.documentElement.getAttribute("data-theme") ?? "";
+    const fromStorage = (() => {
+      try {
+        return localStorage.getItem(THEME_STORAGE_KEY) ?? "";
+      } catch {
+        return "unavailable";
+      }
+    })();
+    if (fromStorage && fromStorage !== "unavailable" && normalizeStoredThemeId(fromStorage) !== resolved) {
+      emitRuntimeEvent("theme_storage_mismatch", {
+        theme: resolved,
+        fromStorage,
+        fromDom,
+      });
+    }
     emitRuntimeEvent("theme_hydration_complete", {
       theme: resolved,
-      fromDom: document.documentElement.getAttribute("data-theme") ?? "",
-      fromStorage: (() => {
-        try {
-          return localStorage.getItem(THEME_STORAGE_KEY) ?? "";
-        } catch {
-          return "unavailable";
-        }
-      })(),
+      fromDom,
+      fromStorage,
     });
   }, [theme]);
 
