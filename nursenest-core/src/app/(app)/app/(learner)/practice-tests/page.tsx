@@ -4,6 +4,7 @@ import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcru
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { LearnerNpExamPracticePickSurface } from "@/components/student/learner-np-exam-practice-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
+import { PracticeActivitySkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -335,7 +336,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPid;
 
   return (
-    <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
+    <Suspense fallback={<PracticeActivitySkeleton label={t("learner.loading.section")} />}>
       <PracticeTestsHubClient
         pathwayOptions={pathwayOptions}
         defaultPathwayId={defaultPathwayId}

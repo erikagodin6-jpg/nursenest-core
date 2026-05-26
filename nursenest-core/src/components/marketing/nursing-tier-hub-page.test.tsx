@@ -27,7 +27,7 @@ function renderHub(
 }
 
 describe("NursingTierHubPage", () => {
-  it("Flashcards tile links to the public flashcards hub when SSR guest but client authenticated", () => {
+  it("Flashcards tile starts an app session when SSR guest but client authenticated", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -44,7 +44,10 @@ describe("NursingTierHubPage", () => {
     assert.ok(card);
     const link = card.closest("a");
     assert.ok(link);
-    assert.equal(link.getAttribute("href"), "/flashcards");
+    assert.equal(
+      link.getAttribute("href"),
+      "/app/flashcards/custom?pathwayId=us-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20",
+    );
   });
 
   it("Flashcards tile stays public when guest on server and client", () => {
@@ -87,6 +90,45 @@ describe("NursingTierHubPage", () => {
     assert.equal(link.getAttribute("href"), "/flashcards");
   });
 
+  it("Canada RN hub renders a focused heading without the generated subtitle", () => {
+    const pathway = getExamPathwayById("ca-rn-nclex-rn");
+    assert.ok(pathway);
+    const content = buildNursingTierHubContent(pathway);
+    const { queryByText, getByRole } = renderHub(
+      <NursingTierHubPage pathway={pathway} hubPath="/canada/rn/nclex-rn" content={content} viewerSignedIn={false} />,
+      {
+        data: null,
+        status: "unauthenticated",
+        update: async () => {},
+      },
+    );
+
+    assert.ok(getByRole("heading", { name: "NCLEX-RN Practice Questions for Canada" }));
+    assert.equal(
+      queryByText("NCLEX-RN prep for Canada: choose lessons, flashcards, practice questions, or adaptive CAT-style practice next."),
+      null,
+    );
+  });
+
+  it("study tool cards use a neutral Start CTA", () => {
+    const pathway = getExamPathwayById("ca-rn-nclex-rn");
+    assert.ok(pathway);
+    const content = buildNursingTierHubContent(pathway);
+    const { container } = renderHub(
+      <NursingTierHubPage pathway={pathway} hubPath="/canada/rn/nclex-rn" content={content} viewerSignedIn={false} />,
+      {
+        data: null,
+        status: "unauthenticated",
+        update: async () => {},
+      },
+    );
+
+    const ctas = [...container.querySelectorAll('[data-nn-hub-section="quick-actions"] .nn-study-card-cta')].map(
+      (node) => node.textContent?.trim(),
+    );
+    assert.deepEqual(ctas, ["Start", "Start", "Start", "Start"]);
+  });
+
   it("New Grad transition hub renders guided study path strip", () => {
     const pathway = getExamPathwayById("us-rn-new-grad-transition");
     assert.ok(pathway);
@@ -102,7 +144,7 @@ describe("NursingTierHubPage", () => {
     assert.ok(container.querySelector('[data-nn-marketing-hub-guided-path="1"]'));
   });
 
-  it("Flashcards card is interactive link for signed-in SSR, not locked article", () => {
+  it("Flashcards card is interactive app-session link for signed-in SSR, not locked article", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -121,5 +163,9 @@ describe("NursingTierHubPage", () => {
     const link = card.closest("a");
     assert.ok(link);
     assert.equal(link.getAttribute("role"), null);
+    assert.equal(
+      link.getAttribute("href"),
+      "/app/flashcards/custom?pathwayId=us-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20",
+    );
   });
 });

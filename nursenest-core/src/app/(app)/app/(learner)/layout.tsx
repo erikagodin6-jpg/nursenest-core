@@ -73,6 +73,7 @@ import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import { getOperationalStartupTraceFields } from "@/lib/ops/operational-startup-diagnostics";
 import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
+import { LearnerNavigationFeedback } from "@/components/learner/learner-navigation-feedback";
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-stats-payload";
@@ -430,6 +431,7 @@ const LearnerShellLayout = traceLayout(
               data-testid="learner-shell"
             >
               <PremiumLayoutVersionMarker surface="learner-app" />
+              <LearnerNavigationFeedback />
               <NclexTargetDateModal
                 enabled={nclexTargetDateEnabled}
                 initialExamDateState={nclexTargetDateState}

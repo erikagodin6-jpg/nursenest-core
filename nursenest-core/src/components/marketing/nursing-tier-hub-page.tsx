@@ -31,7 +31,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { LearnerSurfaceCard } from "@/components/ui/learner-surface-card";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { formatTitleCase } from "@/lib/format/text-case";
 import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-convergence-pathways";
 import { NpPremiumHubWorkstation } from "@/components/marketing/np-premium-hub-workstation";
 
@@ -132,8 +132,6 @@ export function NursingTierHubPage({
 
   const rawTitle = content.title || pathway.shortName;
   const heading = formatTitleCase(rawTitle);
-  const introRaw = content.intro?.trim();
-  const intro = introRaw ? formatSentenceCase(introRaw) : "";
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : pathway.countrySlug === "us" ? "United States" : pathway.countrySlug;
   const eyebrow = countryLabel;
   const isNewGradHub = isNewGradTransitionPathway(pathway);
@@ -233,11 +231,7 @@ export function NursingTierHubPage({
                     {heading}
                   </h1>
                 }
-                intro={
-                  intro ? (
-                    <p className="nn-marketing-body max-w-3xl text-pretty text-[var(--palette-text-muted)]">{intro}</p>
-                  ) : null
-                }
+                intro={null}
               />
               <div
                 className="flex min-w-0 flex-col gap-4 sm:gap-5"
@@ -343,11 +337,7 @@ export function NursingTierHubPage({
                   {heading}
                 </h1>
               }
-              intro={
-                intro ? (
-                  <p className="nn-marketing-body max-w-3xl text-pretty text-[var(--palette-text-muted)]">{intro}</p>
-                ) : null
-              }
+              intro={null}
             />
             </div>
           )}
@@ -521,7 +511,7 @@ export function NursingTierHubPage({
           ) : null}
 
           <ul
-            className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:gap-5"
+            className="mx-auto mt-6 grid w-full max-w-[76rem] list-none grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),16rem))] justify-center gap-5 p-0 lg:gap-6"
             data-nn-hub-section="quick-actions"
           >
             {orderedActions.map((action) => {
@@ -541,7 +531,7 @@ export function NursingTierHubPage({
 
               const cardTitle =
                 action.id === "cat"
-                  ? t("components.examPathwayHub.studyModes.practiceCatTitle", { exam: catExamLabel })
+                  ? `${catExamLabel} CAT`
                   : action.label || "Open";
               const cardDescription =
                 action.id === "cat"
@@ -553,10 +543,10 @@ export function NursingTierHubPage({
                     : action.description || "";
               const cardCta =
                 action.id === "cat" && !locked
-                  ? t("components.examPathwayHub.studyModes.practiceCta", { exam: catExamLabel })
+                  ? "Start"
                   : locked
                     ? action.disabledNote || "Lessons Unavailable for This Pathway"
-                    : action.label || "Open";
+                    : "Start";
 
               return (
                 <li key={action.id}>
@@ -570,7 +560,7 @@ export function NursingTierHubPage({
                     className={cardClass}
                     icon={Icon}
                     title={cardTitle}
-                    description={cardDescription}
+                    description={locked ? cardDescription : undefined}
                     cta={cardCta}
                   />
                 </li>

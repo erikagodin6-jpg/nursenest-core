@@ -1085,6 +1085,54 @@ html[data-theme="aurora"] .nn-flashcard-study-premium {
   color: var(--semantic-text-muted);
 }
 
+.nn-flashcard-rating-dock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand) 8%);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  padding: 0.5rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-flashcard-rating-dock button {
+  min-height: 2.35rem;
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 0.55rem;
+  background: var(--semantic-surface);
+  color: var(--semantic-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.nn-flashcard-rating-dock button:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+}
+
+.nn-flashcard-rating-dock button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.nn-flashcard-rating-dock button[data-nn-flashcard-grade="again"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 28%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-rating-dock button[data-nn-flashcard-grade="hard"] {
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-rating-dock button[data-nn-flashcard-grade="good"],
+.nn-flashcard-rating-dock button[data-nn-flashcard-grade="easy"] {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+}
+
 .nn-flashcard-command-bar {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1810,4 +1858,523 @@ html[data-theme="ocean"] .nn-practice-tests-hub-premium .nn-lesson-system-card[d
 .nn-flashcard-study-premium :where([class*="__title"], [class*="-title"], [class*="__label"], [class*="-label"], [class*="__badge"], [class*="-badge"], [class*="__value"], [class*="-value"], [class*="stat"]),
 .nn-active-flashcard-session :where([class*="__title"], [class*="-title"], [class*="__label"], [class*="-label"], [class*="__badge"], [class*="-badge"], [class*="__value"], [class*="-value"], [class*="stat"]) {
   font-weight: var(--nn-font-weight-label);
+}
+
+/* ── Flashcards academic workspace refinement ───────────────────────────────
+   Scoped presentation pass: calmer study surfaces, compact controls, less
+   decorative color, and a structured session recovery state. */
+.nn-flashcards-hub-premium,
+.nn-flashcard-study-canvas,
+.nn-flashcard-study-premium,
+.nn-active-flashcard-session {
+  --nn-flashcard-radius-card: 0.875rem;
+  --nn-flashcard-radius-control: 0.625rem;
+  --nn-flashcard-academic-shadow: 0 18px 50px -44px color-mix(in srgb, var(--semantic-text-primary) 32%, transparent);
+  --nn-flashcard-academic-line: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-text-muted) 8%);
+}
+
+.nn-flashcards-hub-premium[data-nn-learner-study-page-shell] {
+  max-width: min(100%, 80rem);
+  margin-inline: auto;
+  padding-top: 0.25rem;
+  padding-bottom: 2rem;
+}
+
+.nn-flashcards-hub-premium[data-nn-premium-flashcard-convergence]::before,
+.nn-flashcards-hub-hero::before,
+.nn-flashcards-deck-library-surface::before,
+.nn-flashcards-deck-match-band::before,
+.nn-flashcards-recovery-filters::before {
+  display: none;
+}
+
+.nn-flashcards-hub-hero {
+  border-radius: 0.875rem !important;
+  border-color: var(--nn-flashcard-academic-line) !important;
+  background: color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted)) !important;
+  box-shadow: var(--nn-flashcard-academic-shadow);
+}
+
+.nn-flashcards-hub-workspace.nn-flashcards-hub-hero {
+  padding: clamp(1rem, 2.2vw, 1.5rem) !important;
+}
+
+.nn-flashcards-hub-premium h1,
+.nn-flashcards-hub-premium h2 {
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  font-weight: 650;
+  line-height: 1.14;
+}
+
+.nn-flashcards-hub-premium p,
+.nn-flashcards-hub-premium li {
+  font-size: 0.91rem;
+}
+
+.nn-flashcards-hub-premium :where(button, a, summary, label),
+.nn-flashcard-study-premium :where(button, a, summary, label),
+.nn-active-flashcard-session :where(button, a, summary, label) {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.nn-flashcards-hub-premium :where(.rounded-full, .rounded-2xl) {
+  border-radius: 0.625rem;
+}
+
+.nn-flashcards-hub-premium :where(.min-h-11, .min-h-12) {
+  min-height: 2.4rem;
+}
+
+.nn-flashcards-hub-premium :where(.font-bold, .font-extrabold, .font-semibold) {
+  font-weight: 550;
+}
+
+.nn-flashcards-readiness-strip--editorial,
+.nn-flashcards-hub-setup-panel,
+.nn-flashcards-deck-library-surface,
+.nn-flashcards-deck-match-band,
+.nn-flashcards-recovery-filters,
+.nn-flashcards-spaced-repetition-dock,
+.nn-flashcards-micro-practice-card {
+  border-radius: 0.875rem !important;
+  border-color: var(--nn-flashcard-academic-line) !important;
+  background: var(--semantic-surface) !important;
+  box-shadow: var(--nn-flashcard-academic-shadow);
+}
+
+.nn-flashcards-hub-setup-panel {
+  padding: clamp(0.95rem, 2vw, 1.2rem);
+}
+
+.nn-flashcards-session-segment,
+.nn-flashcards-all-systems-btn,
+.nn-flashcards-session-chip,
+.nn-flashcards-study-chip,
+.nn-flashcards-custom-limit-input,
+.nn-flashcards-hub-premium .nn-lesson-system-card {
+  min-height: 2.35rem !important;
+  border-radius: 0.625rem !important;
+  border-color: var(--nn-flashcard-academic-line) !important;
+  background: color-mix(in srgb, var(--semantic-surface) 98%, var(--semantic-panel-muted)) !important;
+  box-shadow: none !important;
+  color: var(--semantic-text-secondary) !important;
+  font-size: 0.86rem !important;
+  font-weight: 500 !important;
+}
+
+.nn-flashcards-hub-premium .nn-lesson-system-card[data-selected="true"],
+.nn-flashcards-hub-premium .nn-flashcards-all-systems-btn[data-active="true"],
+.nn-flashcards-hub-premium .nn-flashcards-session-chip[data-active="true"],
+.nn-flashcards-hub-premium .nn-flashcards-study-chip[data-active="true"],
+.nn-flashcards-session-segment[data-active="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)) !important;
+  color: var(--semantic-text-primary) !important;
+  transform: none !important;
+}
+
+.nn-flashcards-session-segment--full[data-active="true"] {
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)) !important;
+}
+
+.nn-flashcards-hero-action-row [data-nn-e2e-start-review],
+.nn-flashcards-resume-spotlight [data-nn-e2e-flashcards-resume-primary],
+.nn-flashcards-sticky-start [data-nn-e2e-flashcards-resume-bottom],
+.nn-flashcards-sticky-start [data-nn-e2e-start-review-bottom] {
+  min-height: 2.55rem !important;
+  border-radius: 0.65rem !important;
+  padding-inline: 1.25rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 550 !important;
+}
+
+.nn-flashcard-study-canvas {
+  max-width: min(100%, 80rem);
+  min-height: 100dvh;
+  padding: 0.75rem clamp(0.75rem, 2vw, 1rem);
+}
+
+.nn-flashcard-study-canvas > .mb-4 {
+  margin-bottom: 0.5rem;
+}
+
+.nn-flashcard-study-canvas > .mb-4 a {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  color: var(--semantic-text-muted);
+  font-size: 0.84rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nn-flashcard-study-canvas .nn-premium-flashcard-session-root {
+  border-radius: 0.875rem;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] {
+  gap: 0.65rem;
+  background: color-mix(in srgb, var(--semantic-background, var(--semantic-surface)) 86%, var(--semantic-panel-muted));
+  padding: clamp(0.55rem, 1.4vw, 0.9rem);
+}
+
+.nn-active-flashcard-session[data-nn-premium-flashcard-active-session]::before {
+  display: none;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid .nn-flashcard-hero-surface,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rationale-panel,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-command-bar {
+  border-radius: 0.75rem;
+  border-color: var(--nn-flashcard-academic-line);
+  background: var(--semantic-surface);
+  box-shadow: var(--nn-flashcard-academic-shadow);
+}
+
+.nn-flashcard-learning-topbar {
+  min-height: 3rem;
+  padding: 0.55rem 0.7rem;
+}
+
+.nn-flashcard-learning-topbar h1 {
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.nn-flashcard-learning-topbar__mode {
+  font-size: 0.66rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.nn-flashcard-learning-topbar__meta {
+  gap: 0.55rem;
+}
+
+.nn-flashcard-learning-topbar__meta > div {
+  min-width: 4.25rem;
+  padding-left: 0.6rem;
+}
+
+.nn-flashcard-learning-topbar__meta span {
+  font-size: 0.66rem;
+}
+
+.nn-flashcard-learning-topbar__meta strong,
+.nn-flashcard-shell-action,
+.nn-flashcard-mark-button,
+.nn-flashcard-next-inline,
+.nn-premium-flashcard-nav-btn,
+.nn-flashcard-command-bar__tools a,
+.nn-flashcard-command-bar__tools button {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.nn-flashcard-shell-action,
+.nn-flashcard-mark-button,
+.nn-flashcard-next-inline,
+.nn-premium-flashcard-nav-btn {
+  min-height: 2.25rem;
+  border-radius: 0.55rem;
+  box-shadow: none;
+}
+
+.nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  min-height: clamp(27rem, 55vh, 39rem);
+  max-height: clamp(27rem, 55vh, 39rem);
+  background: var(--semantic-surface);
+}
+
+.nn-flashcard-hero-surface {
+  transform: none !important;
+}
+
+.nn-flashcard-session-layout[data-nn-revealed="1"] .nn-flashcard-hero-surface {
+  transform: none !important;
+}
+
+.nn-flashcard-question-label,
+.nn-flashcard-rationale-panel__header > div,
+.nn-flashcard-answer-status .font-semibold {
+  font-weight: 600;
+}
+
+.nn-flashcard-rationale-panel__body {
+  scrollbar-color: color-mix(in srgb, var(--semantic-text-muted) 40%, transparent) transparent;
+}
+
+.nn-flashcard-reveal-cta.nn-flashcard-reveal-cta--premium {
+  min-height: 2.75rem;
+  min-width: min(100%, 14.5rem);
+  border-radius: 0.65rem !important;
+  background: var(--semantic-brand);
+  box-shadow: 0 14px 34px -26px color-mix(in srgb, var(--semantic-brand) 48%, transparent);
+}
+
+.nn-flashcard-answer-status {
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface));
+  padding: 0.8rem;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel {
+  min-height: 4.6rem;
+  max-height: 5.4rem;
+}
+
+.nn-flashcard-coach-panel__section,
+.nn-flashcard-confidence-scale {
+  padding: 0.7rem 0.85rem;
+}
+
+.nn-flashcard-coach-panel__section > span,
+.nn-flashcard-confidence-scale > span {
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.nn-flashcard-coach-panel__section p,
+.nn-flashcard-coach-panel__section a {
+  font-size: 0.78rem;
+}
+
+.nn-flashcard-confidence-scale button {
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.nn-flashcard-confidence-scale button:nth-child(3) {
+  background: color-mix(in srgb, var(--semantic-success) 78%, var(--semantic-text-primary));
+}
+
+.nn-flashcard-command-bar {
+  padding-top: 0.55rem;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-command-bar {
+  min-height: 3rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock {
+  min-height: 3rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock button {
+  min-height: 2.2rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.nn-premium-flashcard-nav-btn--primary {
+  background: var(--semantic-brand);
+  color: var(--semantic-on-brand, #fff);
+}
+
+.nn-flashcard-session-error-shell {
+  --nn-flashcard-academic-shadow: 0 18px 50px -44px color-mix(in srgb, var(--semantic-text-primary) 32%, transparent);
+  --nn-flashcard-academic-line: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-text-muted) 8%);
+  display: grid;
+  min-height: min(42rem, calc(100dvh - 8rem));
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.nn-flashcard-session-error-card {
+  display: flex;
+  width: min(100%, 28rem);
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--nn-flashcard-academic-line);
+  border-radius: 0.875rem;
+  background: var(--semantic-surface);
+  padding: clamp(1.25rem, 4vw, 1.75rem);
+  box-shadow: var(--nn-flashcard-academic-shadow);
+}
+
+.nn-flashcard-session-error-icon {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-danger, var(--semantic-brand)) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger, var(--semantic-brand)) 8%, var(--semantic-surface));
+  color: var(--semantic-danger, var(--semantic-brand));
+}
+
+.nn-flashcard-session-error-card h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 650;
+  color: var(--semantic-text-primary);
+}
+
+.nn-flashcard-session-error-card p {
+  margin: 0;
+  color: var(--semantic-text-secondary);
+  font-size: 0.91rem;
+  line-height: 1.55;
+}
+
+.nn-flashcard-session-error-detail {
+  color: var(--semantic-text-muted) !important;
+  font-size: 0.8rem !important;
+}
+
+.nn-flashcard-session-error-actions {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.nn-flashcard-session-error-primary,
+.nn-flashcard-session-error-secondary {
+  display: inline-flex;
+  min-height: 2.55rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 0.65rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.nn-flashcard-session-error-primary {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 48%, var(--semantic-border-soft));
+  background: var(--semantic-brand);
+  color: var(--semantic-on-brand, #fff);
+}
+
+.nn-flashcard-session-error-secondary {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-flashcard-session-error-secondary:hover {
+  color: var(--semantic-brand);
+}
+
+.nn-flashcard-loading-shell {
+  --nn-flashcard-academic-shadow: 0 18px 50px -44px color-mix(in srgb, var(--semantic-text-primary) 32%, transparent);
+  --nn-flashcard-academic-line: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-text-muted) 8%);
+  color: var(--semantic-text-secondary);
+}
+
+.nn-flashcard-loading-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--nn-flashcard-academic-line);
+  border-radius: 0.75rem;
+  background: var(--semantic-surface);
+  padding: 0.65rem 0.8rem;
+  box-shadow: var(--nn-flashcard-academic-shadow);
+}
+
+.nn-flashcard-loading-status > div {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.nn-flashcard-loading-status p {
+  margin: 0;
+  color: var(--semantic-text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.nn-flashcard-loading-status > span {
+  min-width: 0;
+  color: var(--semantic-text-muted);
+  font-size: 0.8rem;
+}
+
+.nn-flashcard-loading-status button {
+  flex-shrink: 0;
+  min-height: 2.1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-border-soft));
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  padding: 0.4rem 0.75rem;
+  color: var(--semantic-brand);
+  font-size: 0.82rem;
+  font-weight: 550;
+}
+
+.nn-flashcard-loading-spinner {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+  border-top-color: var(--semantic-brand);
+  animation: nn-flashcard-loading-spin 780ms linear infinite;
+}
+
+.nn-flashcard-loading-session,
+.nn-flashcard-loading-card,
+.nn-flashcard-loading-rationale {
+  border-radius: 0.75rem !important;
+  border-color: var(--nn-flashcard-academic-line) !important;
+  background: var(--semantic-surface) !important;
+  box-shadow: var(--nn-flashcard-academic-shadow);
+}
+
+@keyframes nn-flashcard-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1023px) {
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
+    overflow: hidden;
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar__meta {
+    overflow-x: auto;
+    padding-bottom: 0.1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-flashcards-hub-workspace.nn-flashcards-hub-hero {
+    padding: 1rem !important;
+  }
+
+  .nn-flashcard-learning-topbar__meta > div {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel {
+    max-height: 4.8rem;
+  }
+
+  .nn-flashcard-rating-dock {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nn-flashcard-loading-status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

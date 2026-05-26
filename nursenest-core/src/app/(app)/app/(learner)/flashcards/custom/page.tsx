@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { FlashcardCustomStudyClient } from "@/components/flashcards/flashcard-custom-study-client";
+import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { LearnerActivityState } from "@/components/student/learner-activity-state";
 import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
 
@@ -13,7 +14,14 @@ export default async function FlashcardCustomPage() {
   if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} />;
 
   return (
-    <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-10 text-sm text-muted-foreground">Loading session…</div>}>
+    <Suspense
+      fallback={
+        <FlashcardStudySessionSkeleton
+          message="Preparing your flashcards..."
+          detail="Opening the study workspace while your cards load."
+        />
+      }
+    >
       <FlashcardCustomStudyClient />
     </Suspense>
   );

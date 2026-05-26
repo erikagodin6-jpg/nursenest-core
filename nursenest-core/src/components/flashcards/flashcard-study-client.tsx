@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
-import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
@@ -196,9 +195,10 @@ export function FlashcardStudyClient({
 
   if (loading) {
     return (
-      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
-        <FlashcardStudySessionSkeleton withRouteAria={false} />
-      </BrandedPageLoader>
+      <FlashcardStudySessionSkeleton
+        message={t("learner.loading.flashcards")}
+        detail="Opening your deck and preparing due cards."
+      />
     );
   }
 

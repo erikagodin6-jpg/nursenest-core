@@ -761,6 +761,43 @@
     transparent 100%
   );
 }
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"] {
+  max-width: 58rem;
+  margin-inline: auto;
+  padding-block: clamp(2.4rem, 4vw, 3.8rem) clamp(1.1rem, 2vw, 1.6rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"]::before,
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"]::after {
+  content: none;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"] > [aria-hidden] {
+  display: none;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"] .nn-premium-home-eyebrow {
+  display: inline-flex;
+  justify-content: center;
+  margin-inline: auto;
+  padding: 0.38rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 15%, var(--semantic-border-soft));
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--theme-card-bg));
+  color: color-mix(in srgb, var(--semantic-brand) 74%, var(--semantic-text-primary));
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"] .nn-marketing-h1 {
+  margin-inline: auto;
+  font-size: clamp(2.35rem, 4.3vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
 /* Allied occupation hubs — subtle category tint on shared hero band (tokens only; not a sub-brand). */
 .nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="acute"] .nn-nursing-tier-hub-hero-band {
   border-color: color-mix(in srgb, var(--semantic-danger) 18%, var(--border-subtle));
@@ -782,23 +819,105 @@
   border-color: color-mix(in srgb, var(--semantic-chart-4) 14%, var(--border-subtle));
 }
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card {
+  min-height: 13.75rem;
+  align-items: center;
+  border-radius: 0.95rem;
+  padding: 1.45rem 1.25rem 1.25rem;
   border-color: color-mix(
     in srgb,
-    var(--semantic-info) 11%,
-    color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle))
+    var(--semantic-border-soft) 70%,
+    color-mix(in srgb, var(--semantic-brand) 8%, transparent)
   );
-  background: linear-gradient(
-    155deg,
-    color-mix(in srgb, var(--semantic-info) 6%, color-mix(in srgb, var(--theme-primary) 9%, var(--theme-card-bg))) 0%,
-    color-mix(in srgb, var(--theme-primary) 2.5%, color-mix(in srgb, var(--semantic-info) 4%, var(--theme-page-bg))) 52%,
-    var(--theme-card-bg) 100%
-  );
+  background: color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-surface));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 84%, transparent),
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] {
+  max-width: min(100%, 76rem);
+  margin-top: clamp(1rem, 2vw, 1.6rem);
+  padding: clamp(2rem, 3vw, 3rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-border-soft));
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(in srgb, var(--semantic-brand) 9%, transparent) 0%,
+      transparent 42%
+    ),
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--theme-page-bg));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent) inset,
+    0 24px 70px -54px color-mix(in srgb, var(--palette-heading) 20%, transparent);
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-marketing-h3 {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: clamp(1.08rem, 1rem + 0.2vw, 1.2rem);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-marketing-body-sm {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card__icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-inline: auto;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+  color: color-mix(in srgb, var(--semantic-brand) 74%, var(--semantic-text-primary));
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-study-card-cta {
+  min-height: 2.35rem;
+  width: min(100%, 9.5rem);
+  padding: 0.62rem 1rem;
+  margin-inline: auto;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--semantic-brand) 18%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card {
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    opacity 150ms ease;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card:active {
+  transform: translateY(1px) scale(0.995);
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card[data-nn-card-navigating="1"] {
+  cursor: wait;
+  opacity: 0.88;
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card[data-nn-card-navigating="1"] .nn-study-card-cta {
+  background: color-mix(in srgb, var(--semantic-brand) 24%, var(--theme-card-bg));
+}
+.nn-study-card-cta-spinner {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: nn-study-card-cta-spin 720ms linear infinite;
+}
+@keyframes nn-study-card-cta-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card:hover {
   border-color: color-mix(
     in srgb,
-    var(--semantic-info) 14%,
-    color-mix(in srgb, var(--theme-primary) 18%, var(--border-subtle))
+    var(--semantic-info) 12%,
+    color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle))
   );
 }
 /*
@@ -806,17 +925,8 @@
  * without requiring .nn-exam-hub-study-card--featured on the element.
  */
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--lessons {
-  border-color: color-mix(
-    in srgb,
-    var(--semantic-success) 18%,
-    color-mix(in srgb, var(--semantic-info) 12%, var(--border-subtle))
-  );
-  background: linear-gradient(
-    142deg,
-    color-mix(in srgb, var(--semantic-success) 9%, var(--theme-card-bg)) 0%,
-    color-mix(in srgb, var(--semantic-info) 7%, var(--theme-page-bg)) 50%,
-    var(--theme-card-bg) 100%
-  );
+  border-color: color-mix(in srgb, var(--semantic-brand) 9%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-surface));
 }
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--lessons:hover {
   border-color: color-mix(
@@ -830,17 +940,8 @@
     0 20px 44px -20px color-mix(in srgb, var(--semantic-info) 8%, transparent);
 }
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--featured {
-  border-color: color-mix(
-    in srgb,
-    var(--theme-primary) 22%,
-    color-mix(in srgb, var(--semantic-info) 14%, var(--border-subtle))
-  );
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--semantic-info) 7%, color-mix(in srgb, var(--theme-primary) 16%, var(--theme-card-bg))) 0%,
-    color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg)) 45%,
-    var(--theme-card-bg) 100%
-  );
+  border-color: color-mix(in srgb, var(--semantic-brand) 9%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-surface));
 }
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--featured:hover {
   box-shadow:
@@ -1062,6 +1163,28 @@
     var(--semantic-info) 16%,
     color-mix(in srgb, var(--theme-primary) 18%, var(--border-subtle))
   );
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, color-mix(in srgb, var(--semantic-brand) 10%, transparent));
+  background: color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-surface));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 84%, transparent),
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 88%, transparent),
+    0 22px 56px -36px color-mix(in srgb, var(--palette-heading) 20%, transparent);
+}
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card__icon,
+[data-nn-nursing-tier-hub="surface"]
+  [data-nn-hub-section="quick-actions"]
+  .nn-exam-hub-study-card--featured
+  .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+  color: color-mix(in srgb, var(--semantic-brand) 74%, var(--semantic-text-primary));
 }
 [data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-lesson-progress-track {
   background: color-mix(in srgb, var(--semantic-info) 14%, var(--theme-page-bg));

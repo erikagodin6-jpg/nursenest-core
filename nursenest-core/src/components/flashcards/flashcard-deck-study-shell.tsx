@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { FlashcardStudyClient } from "@/components/flashcards/flashcard-study-client";
 import { FlashcardDeckStudyGate } from "@/components/flashcards/flashcard-deck-study-gate";
-import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -46,9 +45,10 @@ export function FlashcardDeckStudyShell({
   // ⏳ Soft loading state (prevents blank flash)
   if (!ready) {
     return (
-      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
-        <FlashcardStudySessionSkeleton withRouteAria={false} />
-      </BrandedPageLoader>
+      <FlashcardStudySessionSkeleton
+        message={t("learner.loading.flashcards")}
+        detail="Opening your deck workspace."
+      />
     );
   }
 

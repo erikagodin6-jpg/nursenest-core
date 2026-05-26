@@ -103,7 +103,7 @@ describe("resolveNursingTierHubStudyCardHref", () => {
     assert.equal(resolveNursingTierHubStudyCardHref(pathway, cat, { viewerSignedIn: false }), "/us/rn/nclex-rn/cat");
   });
 
-  it("signed-in RN: flashcards stays public, CAT launches app, and practice questions stay on the marketing hub", () => {
+  it("signed-in RN: flashcards and CAT launch app sessions, and practice questions stay on the marketing hub", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -111,7 +111,7 @@ describe("resolveNursingTierHubStudyCardHref", () => {
     assert.equal(byId.has("exams"), false);
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, byId.get("flashcards")!, { viewerSignedIn: true }),
-      "/flashcards",
+      "/app/flashcards/custom?pathwayId=us-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20",
     );
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, byId.get("practice_questions")!, { viewerSignedIn: true }),

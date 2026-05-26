@@ -392,7 +392,7 @@ export function PremiumHomepageHero(props: {
       aria-labelledby="home-conversion-hero-heading"
       data-testid="hero-section"
     >
-      <div className="relative mx-auto max-w-6xl overflow-hidden px-4 py-[clamp(3.75rem,9vw,5.5rem)] sm:px-6 md:py-[clamp(5rem,9vw,7.25rem)] lg:px-8">
+      <div className="relative mx-auto max-w-6xl overflow-hidden px-4 py-[clamp(4.5rem,9vw,6.5rem)] sm:px-6 md:py-[clamp(6rem,10vw,8.5rem)] lg:px-8">
         <LeafWatermark
           className="-right-24 top-4 hidden h-[24rem] w-[24rem] items-center justify-center opacity-70 md:flex lg:-right-28 lg:top-0"
           imageClassName="max-h-[22rem] opacity-[0.035] lg:max-h-[24rem]"
@@ -406,7 +406,7 @@ export function PremiumHomepageHero(props: {
             <div className="nn-hero-headline-visual">
               <h1
                 id="home-conversion-hero-heading"
-                className="nn-marketing-h1 nn-hero-headline--premium mt-5 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
+                className="nn-marketing-h1 nn-hero-headline--premium mt-7 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
                 data-testid="text-hero-heading"
               >
                 {heroHeadlineEmphasis ? (
@@ -420,11 +420,11 @@ export function PremiumHomepageHero(props: {
               </h1>
             </div>
 
-            <p className="nn-marketing-body mt-[clamp(1rem,2vw,1.35rem)] max-w-[44ch] text-pretty text-[var(--palette-text-muted)]">
+            <p className="nn-marketing-body mt-[clamp(1.35rem,2.5vw,1.85rem)] max-w-[44ch] text-pretty text-[var(--palette-text-muted)]">
               {subheading}
             </p>
 
-            <div className="mt-[clamp(1.35rem,2.8vw,2rem)] flex flex-wrap gap-[clamp(0.75rem,1.6vw,1rem)]">
+            <div className="mt-[clamp(1.75rem,3vw,2.5rem)] flex flex-wrap gap-[clamp(0.75rem,1.6vw,1rem)]">
               <MarketingTrackedLink
                 href={safePath(locale, HUB.questionBank)}
                 event={PH.marketingHomeHeroPrimaryCta}
@@ -459,7 +459,7 @@ export function PremiumHomepageHero(props: {
             </div>
 
             <p
-              className="nn-marketing-body-sm mt-3 text-[var(--palette-text-muted)]"
+              className="nn-marketing-body-sm mt-4 text-[var(--palette-text-muted)]"
               data-testid="premium-hero-stats-line"
             >
               {statsLine}

@@ -19,7 +19,6 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
-import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
@@ -343,13 +342,22 @@ export function ActiveStudySession({
 
   if (loading) {
     return (
-      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
-        <FlashcardStudySessionSkeleton withRouteAria={false} />
-      </BrandedPageLoader>
+      <FlashcardStudySessionSkeleton
+        message={t("learner.loading.flashcards")}
+        detail="Preparing the card, rationale, and confidence controls."
+      />
     );
   }
 
-  if (!current || !isValidCard(current)) {
+  if (!current) {
+    return (
+      <div className="mx-auto max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
+        {t("flashcards.noCardsMatch")}
+      </div>
+    );
+  }
+
+  if (!isValidCard(current)) {
     return (
       <div className="mx-auto max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
         {t("flashcards.noCardsMatch")}
@@ -597,6 +605,25 @@ export function ActiveStudySession({
                 </div>
                 <p><span>Not confident</span><span>Very confident</span></p>
               </div>
+            </div>
+
+            <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
+              {([
+                ["again", "Again"],
+                ["hard", "Hard"],
+                ["good", "Good"],
+                ["easy", "Easy"],
+              ] as const).map(([rating, label]) => (
+                <button
+                  key={rating}
+                  type="button"
+                  data-nn-flashcard-grade={rating}
+                  onClick={() => void submitRating(rating)}
+                  disabled={!revealed || saving}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
             <div className="nn-flashcard-command-bar">

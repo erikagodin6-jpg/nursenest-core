@@ -22,7 +22,7 @@ export function CompactCountryTrigger({ region, onClick, className }: CompactCou
   const regionCfg = REGION_CONFIG[region];
 
   const defaultTriggerClass =
-    "flex items-center gap-1 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]";
+    "flex min-h-[32px] items-center gap-1 rounded-full bg-transparent px-3 py-1 text-[0.8125rem] font-medium tracking-normal text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]";
 
   return (
     <button

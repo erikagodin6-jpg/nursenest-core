@@ -26,7 +26,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { CheckCircle2, Lock } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -178,9 +178,9 @@ function appCardClass(variant: CardVariant): string {
 
 // CTA button classes
 const CTA_PRIMARY =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full nn-btn-primary px-5 py-3 text-sm font-semibold shadow-none transition group-hover:brightness-[1.03]";
+  "nn-study-card-cta mt-auto inline-flex w-full items-center justify-center rounded-full nn-btn-primary px-5 py-3 text-sm font-semibold shadow-none transition group-hover:brightness-[1.03]";
 const CTA_SECONDARY =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full border border-[var(--surface-bubble-border)] bg-[var(--surface-accent-soft)] px-5 py-3 text-sm font-semibold text-[var(--text-accent)] transition hover:bg-[var(--surface-bubble)] hover:border-[var(--surface-bubble-border)]";
+  "nn-study-card-cta mt-auto inline-flex w-full items-center justify-center rounded-full border border-[var(--surface-bubble-border)] bg-[var(--surface-accent-soft)] px-5 py-3 text-sm font-semibold text-[var(--text-accent)] transition hover:bg-[var(--surface-bubble)] hover:border-[var(--surface-bubble-border)]";
 
 // ---------------------------------------------------------------------------
 // StudyCard
@@ -243,6 +243,7 @@ function HubCard({
   ariaLabel,
 }: StudyCardProps) {
   const isLocked = variant === "locked";
+  const [isNavigating, setIsNavigating] = useState(false);
   const cardClass = [hubCardClass(variant), className].filter(Boolean).join(" ").trim();
   const ctaClass = ctaVariant === "primary" ? CTA_PRIMARY : CTA_SECONDARY;
   const resolvedLabel = ariaLabel ?? (typeof title === "string" ? title : undefined);
@@ -278,7 +279,10 @@ function HubCard({
               {cta}
             </span>
           ) : (
-            cta
+            <span className="inline-flex items-center gap-2">
+              {isNavigating ? <span className="nn-study-card-cta-spinner" aria-hidden /> : null}
+              {isNavigating ? "Loading Session..." : cta}
+            </span>
           )}
         </span>
       ) : null}
@@ -304,7 +308,17 @@ function HubCard({
       href={href}
       className={cardClass}
       aria-label={resolvedLabel}
-      onClick={onClick}
+      aria-busy={isNavigating ? "true" : undefined}
+      aria-disabled={isNavigating ? "true" : undefined}
+      data-nn-card-navigating={isNavigating ? "1" : undefined}
+      onClick={(event) => {
+        if (isNavigating) {
+          event.preventDefault();
+          return;
+        }
+        setIsNavigating(true);
+        onClick?.();
+      }}
       {...(prefetch === false ? { prefetch: false } : {})}
     >
       {inner}

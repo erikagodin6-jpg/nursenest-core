@@ -45,7 +45,7 @@ function FooterPremiumNavColumn({
   return (
     <div id={id} className={colClass}>
       <h3 className="nn-footer-col-heading hidden md:block">{title}</h3>
-      <details className="nn-footer-premium-accordion">
+      <details className="nn-footer-premium-accordion" open>
         <summary className="nn-footer-premium-accordion-summary md:hidden">
           <span className="nn-footer-premium-accordion-title">{title}</span>
           <span className="nn-footer-premium-accordion-icon" aria-hidden />

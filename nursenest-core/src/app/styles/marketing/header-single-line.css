@@ -11,7 +11,7 @@
     display: grid;
     grid-template-columns: minmax(10rem, auto) minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: clamp(0.75rem, 1.35vw, 1.35rem);
+    column-gap: clamp(1rem, 1.8vw, 2.5rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
@@ -19,7 +19,7 @@
     flex-wrap: nowrap;
     justify-content: center;
     overflow: hidden;
-    gap: clamp(0.18rem, 0.55vw, 0.5rem);
+    gap: clamp(0.8rem, 1.5vw, 2rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav a[href*="ecg-interpretation"],
@@ -34,7 +34,7 @@
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link {
     min-width: 0;
-    padding-inline: clamp(0.45rem, 0.68vw, 0.7rem);
+    padding-inline: 0.2rem;
     white-space: nowrap;
   }
 
@@ -48,8 +48,8 @@
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster :is(a, button),
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-auth-cluster :is(a, button) {
-    min-height: 2.75rem;
-    border-radius: 0.95rem;
+    min-height: 2.375rem;
+    border-radius: 9999px;
   }
 }
 
@@ -67,8 +67,8 @@
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link {
-    font-size: 0.82rem;
-    padding-inline: 0.35rem;
+    font-size: 0.8125rem;
+    padding-inline: 0.15rem;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster :is(a, button),
@@ -87,12 +87,12 @@
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav {
-    gap: clamp(0.5rem, 0.9vw, 0.95rem);
+    gap: clamp(1rem, 1.6vw, 2rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link {
-    padding-inline: clamp(0.62rem, 0.82vw, 0.95rem);
+    padding-inline: 0.2rem;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster,
@@ -113,11 +113,11 @@
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav {
-    gap: clamp(0.75rem, 1vw, 1.2rem);
+    gap: clamp(1.25rem, 1.9vw, 2.6rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link {
-    padding-inline: clamp(0.78rem, 0.9vw, 1.1rem);
+    padding-inline: 0.2rem;
   }
 }

@@ -113,9 +113,15 @@
   }
 }
 
+.nn-home-marketing-rich-hero .nn-marketing-h1 {
+  font-size: clamp(2.75rem, 5.5vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
 .nn-home-marketing-rich-hero #home-conversion-hero-heading.nn-hero-headline--premium {
   letter-spacing: -0.034em;
-  line-height: 1.04;
+  line-height: 1.1;
   text-wrap: balance;
 }
 
@@ -221,6 +227,12 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
     gap: clamp(3rem, 5.5vw, 4.75rem);
     min-height: 34rem;
   }
+}
+
+/* Homepage hero — larger, bolder headline + generous body text. */
+.nn-home-marketing-rich-hero .nn-marketing-body {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.72;
 }
 
 /* Hero CTAs — slightly tighter than global marketing hero defaults. */

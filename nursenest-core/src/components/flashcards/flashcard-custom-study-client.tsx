@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AlertCircle, ArrowLeft, RefreshCw } from "lucide-react";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
-import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import {
   ActiveStudySession,
   type ActiveStudyCard,
@@ -64,6 +64,7 @@ export function FlashcardCustomStudyClient() {
   const [cards, setCards] = useState<ApiCard[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
+  const [loadingStage, setLoadingStage] = useState<"preparing" | "due" | "building" | "still">("preparing");
 
   const searchParamString = sp.toString();
   const pathwayId = useMemo(() => {
@@ -126,15 +127,33 @@ export function FlashcardCustomStudyClient() {
   useEffect(() => {
     let cancelled = false;
     const controller = new AbortController();
+    const stageTimers = [
+      window.setTimeout(() => {
+        if (!cancelled) setLoadingStage("due");
+      }, 900),
+      window.setTimeout(() => {
+        if (!cancelled) setLoadingStage("building");
+      }, 2200),
+      window.setTimeout(() => {
+        if (!cancelled) setLoadingStage("still");
+      }, 4000),
+    ];
+    const timeoutId = window.setTimeout(() => {
+      if (cancelled) return;
+      controller.abort();
+      setError("The session is taking longer than expected. Please retry when your connection is stable.");
+      setLoading(false);
+    }, 10_000);
     (async () => {
       setLoading(true);
       setError(null);
+      setLoadingStage("preparing");
       try {
         const res = await fetchWithRetry(`/api/flashcards/custom-session?${queryString}`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 2, timeoutMs: 12_000 });
+        }, { attempts: 1, timeoutMs: 10_000 });
         let json: unknown;
         try {
           json = await res.json();
@@ -191,7 +210,8 @@ export function FlashcardCustomStudyClient() {
           });
         }
       } catch (err) {
-        if (controller.signal.aborted || cancelled) return;
+        if (cancelled) return;
+        if (controller.signal.aborted) return;
         emitRuntimeEvent("activity_bootstrap_failure", {
           activity: "flashcards",
           pathwayId,
@@ -203,14 +223,48 @@ export function FlashcardCustomStudyClient() {
         });
         if (!cancelled) setError("Could not load this session. Check your connection and try again.");
       } finally {
+        window.clearTimeout(timeoutId);
+        stageTimers.forEach(window.clearTimeout);
         if (!cancelled) setLoading(false);
       }
     })();
     return () => {
       cancelled = true;
+      window.clearTimeout(timeoutId);
+      stageTimers.forEach(window.clearTimeout);
       controller.abort();
     };
   }, [queryString, pathwayId, retryNonce]);
+
+  const loadingCopy = useMemo(() => {
+    switch (loadingStage) {
+      case "due":
+        return {
+          message: "Loading due cards...",
+          detail: "Checking saved progress, filters, and deck availability.",
+          showRetry: false,
+        };
+      case "building":
+        return {
+          message: "Building study session...",
+          detail: "Arranging the first card, rationale panel, and grading controls.",
+          showRetry: false,
+        };
+      case "still":
+        return {
+          message: "Still loading your session...",
+          detail: "This can take a moment on a slower connection. You can retry without losing your setup.",
+          showRetry: true,
+        };
+      case "preparing":
+      default:
+        return {
+          message: "Preparing your flashcards...",
+          detail: "Opening the study workspace while your cards load.",
+          showRetry: false,
+        };
+    }
+  }, [loadingStage]);
 
   const activeCards: ActiveStudyCard[] = useMemo(
     () =>
@@ -312,29 +366,43 @@ export function FlashcardCustomStudyClient() {
 
   if (loading) {
     return (
-      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
-        <FlashcardStudySessionSkeleton withRouteAria={false} />
-      </BrandedPageLoader>
+      <FlashcardStudySessionSkeleton
+        message={loadingCopy.message}
+        detail={loadingCopy.detail}
+        showRetry={loadingCopy.showRetry}
+        onRetry={() => setRetryNonce((n) => n + 1)}
+      />
     );
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4 px-4 py-10 text-sm">
-        <p className="text-destructive">{error}</p>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <button
-            type="button"
-            onClick={() => setRetryNonce((n) => n + 1)}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white"
-          >
-            Retry
-          </button>
-          <Link href={exitHref} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-brand)]">
-            {t("flashcards.backToMyCards")}
-          </Link>
+      <section className="nn-flashcard-session-error-shell" aria-labelledby="flashcard-session-error-title">
+        <div className="nn-flashcard-session-error-card">
+          <div className="nn-flashcard-session-error-icon" aria-hidden>
+            <AlertCircle className="h-5 w-5" />
+          </div>
+          <div className="space-y-2 text-center">
+            <h1 id="flashcard-session-error-title">Session could not load</h1>
+            <p>Please check your connection or try again.</p>
+            <p className="nn-flashcard-session-error-detail">{error}</p>
+          </div>
+          <div className="nn-flashcard-session-error-actions">
+            <button
+              type="button"
+              onClick={() => setRetryNonce((n) => n + 1)}
+              className="nn-flashcard-session-error-primary"
+            >
+              <RefreshCw className="h-4 w-4" aria-hidden />
+              Retry Session
+            </button>
+            <Link href={exitHref} className="nn-flashcard-session-error-secondary">
+              <ArrowLeft className="h-4 w-4" aria-hidden />
+              Back to Decks
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
     );
   }
 

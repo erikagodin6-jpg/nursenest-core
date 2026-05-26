@@ -128,7 +128,7 @@ export function MarketingHeaderUtilityCluster({
   );
 
   const triggerBase =
-    "inline-flex h-[26px] items-center rounded-lg border px-2.5 text-[11px] leading-tight tracking-tight";
+    "inline-flex h-[32px] items-center rounded-full border px-3 text-[0.8125rem] font-medium leading-tight tracking-normal";
   const darkMarketingTrigger =
     `${triggerBase} max-w-[11rem] gap-1 border-[color-mix(in_srgb,var(--nav-fg)_20%,transparent)] bg-[color-mix(in_srgb,var(--nav-fg)_8%,transparent)] font-normal text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[color-mix(in_srgb,var(--nav-fg)_14%,transparent)]`;
   const countryTriggerClass =
@@ -145,8 +145,8 @@ export function MarketingHeaderUtilityCluster({
         : `${triggerBase} gap-0.5 bg-white font-normal text-[var(--theme-heading-text)] transition-colors`;
   const themeWrapClass =
     chromeMode === "row4"
-      ? "nn-header-utility-theme-row4 text-[var(--nav-fg)] [&_button]:h-[26px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-medium [&_button]:shadow-none"
-      : "text-[var(--nav-fg)] [&_button]:h-[26px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:shadow-none";
+      ? "nn-header-utility-theme-row4 text-[var(--nav-fg)] [&_button]:h-[32px] [&_button]:min-h-0 [&_button]:rounded-full [&_button]:border [&_button]:px-3 [&_button]:py-1 [&_button]:text-[0.8125rem] [&_button]:font-medium [&_button]:shadow-none"
+      : "text-[var(--nav-fg)] [&_button]:h-[32px] [&_button]:min-h-0 [&_button]:rounded-full [&_button]:border [&_button]:px-3 [&_button]:py-1 [&_button]:text-[0.8125rem] [&_button]:shadow-none";
 
   return (
     <div
