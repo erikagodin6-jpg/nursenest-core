@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 import { marketingCatPathForPathwayId } from "../../../src/lib/exam-pathways/practice-exams-cat-start";
 import { loginWithCredentials } from "../helpers/learner-login";
-import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
+import { getPaidTestCredentials, getRuntimeTierAccounts, type RuntimeTierAccount } from "../helpers/paid-test-credentials";
 import { attachRuntimeCriticalObserver, expectRuntimeHealthy } from "../helpers/runtime-critical-observer";
 
 const pathwayIds = [
@@ -15,6 +15,31 @@ const pathwayIds = [
 ] as const;
 
 const themeRoutes = ["/login", "/practice-exams", "/us/rn/nclex-rn/cat"] as const;
+
+const fallbackPaidAccount = getPaidTestCredentials();
+const tierAccounts = getRuntimeTierAccounts();
+const authenticatedAccounts: RuntimeTierAccount[] =
+  tierAccounts.length > 0
+    ? tierAccounts
+    : fallbackPaidAccount
+      ? [
+          {
+            key: "RN",
+            label: "Generic paid learner — Canada RN fallback",
+            pathwayId: "ca-rn-nclex-rn",
+            email: fallbackPaidAccount.email,
+            password: fallbackPaidAccount.password,
+            source: "generic paid fallback",
+          },
+        ]
+      : [];
+
+const activityRoutesForPathway = (pathwayId: string) =>
+  [
+    `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}`,
+    `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`,
+    `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pathwayId)}`,
+  ] as const;
 
 test.describe("autonomous runtime critical gate", () => {
   test("CAT entrypoints stay pathway-scoped and do not trigger runtime failures", async ({ page }, testInfo) => {
@@ -98,50 +123,71 @@ test.describe("autonomous runtime critical gate", () => {
     }
   });
 
-  test("authenticated activity surfaces launch when paid credentials are configured", async ({ page, baseURL }, testInfo) => {
-    const creds = getPaidTestCredentials();
-    test.skip(!creds, "Set QA_PAID_EMAIL/QA_PAID_PASSWORD or E2E_PAID_EMAIL/E2E_PAID_PASSWORD for authenticated launch checks.");
-
-    const observer = await attachRuntimeCriticalObserver(page, testInfo);
-    try {
-      await loginWithCredentials(page, creds!.email, creds!.password, {
-        navigationOrigin: baseURL ?? undefined,
-        enterLearnerApp: true,
+  for (const account of authenticatedAccounts) {
+    test(`authenticated ${account.key} activity surfaces launch for ${account.pathwayId}`, async ({ page, baseURL }, testInfo) => {
+      testInfo.annotations.push({
+        type: "runtime-tier-account",
+        description: `${account.key} ${account.pathwayId} via ${account.source}`,
       });
 
-      await page.addInitScript(() => {
-        localStorage.setItem(
-          "flashcard-study-item-state:v1",
-          JSON.stringify({
-            good: { starred: true },
-            malformedNull: null,
-            malformedArray: ["bad"],
-          }),
-        );
-        localStorage.setItem(
-          "nn_flashcards_custom_checkpoint_v1",
-          JSON.stringify({
-            "ca-rn-nclex-rn": {
-              pathwayId: "ca-rn-nclex-rn",
-              queryString: null,
-              index: "not-a-number",
-              totalCards: 20,
-              systemsLabel: { bad: true },
-              updatedAt: null,
-            },
-          }),
-        );
-      });
+      const observer = await attachRuntimeCriticalObserver(page, testInfo);
+      try {
+        await loginWithCredentials(page, account.email, account.password, {
+          navigationOrigin: baseURL ?? undefined,
+          enterLearnerApp: true,
+        });
 
-      for (const route of ["/app/practice-tests", "/app/flashcards?pathwayId=ca-rn-nclex-rn"] as const) {
-        await page.goto(route, { waitUntil: "domcontentloaded" });
-        await expect(page.locator("body")).not.toBeEmpty({ timeout: 30_000 });
-        await expect(page.locator("main, body")).not.toContainText(/Unable to load this section/i, { timeout: 5_000 });
+        await page.evaluate((pathwayId) => {
+          localStorage.setItem(
+            "flashcard-study-item-state:v1",
+            JSON.stringify({
+              good: { starred: true },
+              malformedNull: null,
+              malformedArray: ["bad"],
+            }),
+          );
+          localStorage.setItem(
+            "nn_flashcards_custom_checkpoint_v1",
+            JSON.stringify({
+              [pathwayId]: {
+                pathwayId,
+                queryString: null,
+                index: "not-a-number",
+                totalCards: 20,
+                systemsLabel: { bad: true },
+                updatedAt: null,
+              },
+            }),
+          );
+        }, account.pathwayId);
+
+        for (const route of activityRoutesForPathway(account.pathwayId)) {
+          await page.goto(route, { waitUntil: "domcontentloaded" });
+          await expect(page.locator("body"), `${account.label} ${route}`).not.toBeEmpty({ timeout: 30_000 });
+          await expect(page.locator("main, body"), `${account.label} ${route}`).not.toContainText(
+            /Unable to load this section|Your account and access remain intact/i,
+            { timeout: 5_000 },
+          );
+          await expect(page.locator("main, body"), `${account.label} ${route}`).not.toContainText(/Log in|Sign in/i, {
+            timeout: 5_000,
+          });
+        }
+
+        await expectRuntimeHealthy(page, observer);
+      } finally {
+        observer.dispose();
       }
+    });
+  }
 
-      await expectRuntimeHealthy(page, observer);
-    } finally {
-      observer.dispose();
-    }
+  test("authenticated activity surfaces launch when paid credentials are configured", async () => {
+    test.skip(
+      authenticatedAccounts.length > 0,
+      "Covered by tier-scoped authenticated runtime checks.",
+    );
+    test.skip(
+      true,
+      "Set PLAYWRIGHT_RN_*, PLAYWRIGHT_PN_*, PLAYWRIGHT_NP_*, QA_PAID_*, E2E_PAID_*, or PLAYWRIGHT_TEST_* credentials.",
+    );
   });
 });

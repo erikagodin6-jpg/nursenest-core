@@ -24,6 +24,15 @@ if (fs.existsSync(LOCAL_ENV_PATH)) {
  */
 export type PaidTestCredentials = { email: string; password: string };
 
+export type RuntimeTierAccount = {
+  key: "RN" | "PN" | "NP";
+  label: string;
+  pathwayId: string;
+  email: string;
+  password: string;
+  source: string;
+};
+
 /** Which env pair `getPaidTestCredentials` resolved (no secret values). */
 export type PaidCredentialSource = "QA_PAID_*" | "E2E_PAID_*" | "PLAYWRIGHT_TEST_*" | "none";
 
@@ -98,4 +107,33 @@ export function getCaPaidTestCredentials(): PaidTestCredentials | null {
 
 export function hasCaPaidTestCredentials(): boolean {
   return getCaPaidTestCredentials() !== null;
+}
+
+function tierAccount(prefix: string, key: RuntimeTierAccount["key"], label: string, pathwayId: string): RuntimeTierAccount | null {
+  const email = process.env[`${prefix}_EMAIL`]?.trim();
+  const password = process.env[`${prefix}_PASSWORD`];
+  if (!email || password === undefined || String(password).length === 0) return null;
+  return {
+    key,
+    label,
+    pathwayId,
+    email,
+    password: String(password),
+    source: `${prefix}_*`,
+  };
+}
+
+/**
+ * Dedicated multi-tier runtime accounts used by the autonomous critical gate.
+ *
+ * These are intentionally separate from the generic `QA_PAID_*` fallback so the
+ * runtime suite can prove RN, PN/RPN, and NP launch paths without baking RN
+ * entitlement assumptions into every protected activity check.
+ */
+export function getRuntimeTierAccounts(): RuntimeTierAccount[] {
+  return [
+    tierAccount("PLAYWRIGHT_RN", "RN", "Canada RN — NCLEX-RN", "ca-rn-nclex-rn"),
+    tierAccount("PLAYWRIGHT_PN", "PN", "Canada PN/RPN — REx-PN", "ca-rpn-rex-pn"),
+    tierAccount("PLAYWRIGHT_NP", "NP", "Canada NP — CNPLE", "ca-np-cnple"),
+  ].filter((account): account is RuntimeTierAccount => account !== null);
 }
