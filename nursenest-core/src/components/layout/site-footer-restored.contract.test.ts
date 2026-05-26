@@ -10,16 +10,23 @@ function read(relPath: string): string {
   return readFileSync(join(ROOT, relPath), "utf8");
 }
 
-describe("restored global marketing footer", () => {
+describe("restored global marketing footer — clean minimal structure", () => {
   const footer = read("src/components/layout/site-footer.tsx");
   const footerNav = read("src/lib/navigation/footer-marketing-nav.ts");
   const marketingHubs = read("src/lib/marketing/marketing-entry-routes.ts");
   const footerSources = `${footer}\n${footerNav}\n${marketingHubs}`;
 
-  it("includes required professional footer sections", () => {
-    for (const label of ["Company", "Legal", "Platform", "Exams", "Resources", "Support"]) {
+  it("includes required clean footer sections (Company, Exams, Study Tools, Support, Legal)", () => {
+    for (const label of ["Company", "Exams", "Study Tools", "Support", "Legal"]) {
       assert.match(footer, new RegExp(label), `footer missing ${label} section`);
     }
+  });
+
+  it("no longer includes redundant sections (Platform, Resources)", () => {
+    const hasPlatform = /Platform/.test(footer);
+    assert.equal(hasPlatform, false, 'footer must not contain redundant "Platform" section');
+    const hasResources = /Resources/.test(footer);
+    assert.equal(hasResources, false, 'footer must not contain redundant "Resources" section (overlaps other sections)');
   });
 
   it("links required footer destinations to routable pages", () => {
@@ -30,18 +37,11 @@ describe("restored global marketing footer", () => {
       "/blog",
       "/privacy",
       "/terms",
-      "/cookie-policy",
       "/disclaimer",
-      "/pricing",
-      "/membership-tiers",
-      "/for-institutions",
-      "/enterprise-solutions",
-      "/features",
+      "/editorial-policy",
       "/faq",
       "/support",
-      "/providers/resources",
-      "/patients/find-care",
-      "/how-it-works",
+      "/new-grad",
     ];
 
     for (const route of expectedRoutes) {
@@ -49,19 +49,28 @@ describe("restored global marketing footer", () => {
     }
   });
 
-  it("has page files for newly restored footer routes", () => {
-    const newRouteFiles = [
+  it("no longer links bloated old footer routes", () => {
+    const removed = ["/cookie-policy", "/membership-tiers", "/enterprise-solutions", "/for-institutions", "/features", "/providers/resources", "/patients/find-care", "/how-it-works"];
+    for (const route of removed) {
+      const stillPresent = new RegExp(route.replace("/", "\\/")).test(footer);
+      assert.equal(stillPresent, false, `footer must not link removed route ${route}`);
+    }
+  });
+
+  it("has page files for all footer-linked routes", () => {
+    const routeFiles = [
       "src/app/(marketing)/(default)/careers/page.tsx",
-      "src/app/(marketing)/(default)/cookie-policy/page.tsx",
-      "src/app/(marketing)/(default)/membership-tiers/page.tsx",
-      "src/app/(marketing)/(default)/enterprise-solutions/page.tsx",
-      "src/app/(marketing)/(default)/features/page.tsx",
+      "src/app/(marketing)/(default)/about/page.tsx",
+      "src/app/(marketing)/(default)/blog/page.tsx",
+      "src/app/(marketing)/(default)/contact/page.tsx",
+      "src/app/(marketing)/(default)/privacy/page.tsx",
+      "src/app/(marketing)/(default)/terms/page.tsx",
+      "src/app/(marketing)/(default)/disclaimer/page.tsx",
+      "src/app/(marketing)/(default)/faq/page.tsx",
       "src/app/(marketing)/(default)/support/page.tsx",
-      "src/app/(marketing)/(default)/providers/resources/page.tsx",
-      "src/app/(marketing)/(default)/patients/find-care/page.tsx",
     ];
 
-    for (const relPath of newRouteFiles) {
+    for (const relPath of routeFiles) {
       assert.equal(existsSync(join(ROOT, relPath)), true, `${relPath} is missing`);
     }
   });

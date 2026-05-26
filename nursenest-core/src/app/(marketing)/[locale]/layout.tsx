@@ -202,7 +202,7 @@ const MarketingLocaleLayout = traceLayout(
                   <MarketingMainI18nShards
                     locale={locale}
                     publicContentOverrides={publicContentOverrides}
-                    trailingChrome={<SiteFooter serverHasStaffSession={staffSession != null} />}
+                    trailingChrome={<SiteFooter />}
                   >
                     <main className="flex min-h-0 flex-1 flex-col">
                       <MarketingMainErrorBoundary name="marketing_locale_main">

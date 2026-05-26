@@ -77,8 +77,8 @@ function MarketingDefaultMainMotionSlot({
   );
 }
 
-function defaultMarketingSiteFooter(serverHasStaffSession: boolean) {
-  return <SiteFooter serverHasStaffSession={serverHasStaffSession} />;
+function defaultMarketingSiteFooter() {
+  return <SiteFooter />;
 }
 
 function safeNowMs(): number {
@@ -184,7 +184,7 @@ function marketingDefaultLayoutStaticShellForHome({
                 <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                   {children}
                 </MarketingDefaultMainMotionSlot>
-                {defaultMarketingSiteFooter(false)}
+                {defaultMarketingSiteFooter()}
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
@@ -454,7 +454,7 @@ const MarketingDefaultLocaleLayout = traceLayout(
           marketingRegionCookie ?? serverRegion,
         );
 
-        const defaultLayoutSiteFooter = defaultMarketingSiteFooter(staffSession != null);
+        const defaultLayoutSiteFooter = defaultMarketingSiteFooter();
 
         return (
           <MarketingI18nProvider
@@ -552,7 +552,7 @@ const MarketingDefaultLocaleLayout = traceLayout(
                       <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
                         {children}
                       </MarketingDefaultMainMotionSlot>
-                      {defaultMarketingSiteFooter(false)}
+                      {defaultMarketingSiteFooter()}
                     </MarketingDefaultLayoutChromeFailsafeShell>
                   </MarketingHeaderGlobalRegionServerBridge>
                 </MarketingFeedbackShell>
