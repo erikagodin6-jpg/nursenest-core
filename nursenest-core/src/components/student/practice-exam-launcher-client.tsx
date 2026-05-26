@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
+import { safeRouterReplace } from "@/lib/runtime/client-navigation";
 
 const BODY_SYSTEMS = [
   "Cardiovascular",
@@ -90,10 +91,14 @@ export function PracticeExamLauncherClient({ pathwayId }: { pathwayId: string | 
       }
       if (data.id) {
         const target = `/app/practice-tests/${encodeURIComponent(data.id)}`;
-        router.replace(target);
-        window.setTimeout(() => {
-          if (window.location.pathname !== target) window.location.assign(target);
-        }, 1200);
+        safeRouterReplace(router, target, {
+          fallbackDelayMs: 1200,
+          context: {
+            feature: "practice_exam_launcher",
+            pathwayId: pathwayId ?? "",
+            sessionId: data.id,
+          },
+        });
       }
     } catch {
       setError("Could not start practice right now.");

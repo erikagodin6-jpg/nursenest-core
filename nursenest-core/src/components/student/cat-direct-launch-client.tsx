@@ -8,6 +8,8 @@ import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-tes
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { appPathwayCatFullSetupHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { runCatDirectLaunchSessionOnce } from "@/lib/practice-tests/cat-direct-launch-session";
+import { safeRouterReplace } from "@/lib/runtime/client-navigation";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 /**
  * Minimal bridge: verify pool readiness, POST session, redirect into the exam runner.
@@ -49,14 +51,25 @@ export function CatDirectLaunchClient({
 
   useEffect(() => {
     let cancelled = false;
+    emitRuntimeEvent("cat_start_clicked", { pathwayId, surface: "cat_direct_launch" });
     void runCatDirectLaunchSessionOnce(pathwayId, shellStable).then((result) => {
       if (cancelled) return;
       if (result.ok) {
+        emitRuntimeEvent("cat_session_create_result", {
+          pathwayId,
+          sessionId: result.practiceTestId,
+          ok: true,
+          surface: "cat_direct_launch",
+        });
         const target = `/app/practice-tests/${encodeURIComponent(result.practiceTestId)}`;
-        router.replace(target);
-        window.setTimeout(() => {
-          if (window.location.pathname !== target) window.location.assign(target);
-        }, 1200);
+        safeRouterReplace(router, target, {
+          fallbackDelayMs: 1200,
+          context: {
+            feature: "cat_direct_launch",
+            pathwayId,
+            sessionId: result.practiceTestId,
+          },
+        });
         return;
       }
       const learnerMessage =
@@ -72,6 +85,12 @@ export function CatDirectLaunchClient({
       setErrorCode(result.code);
       setMessage(result.message?.trim() ? result.message : learnerMessage);
       setPhase("error");
+      emitRuntimeEvent("cat_session_create_result", {
+        pathwayId,
+        ok: false,
+        errorCode: result.code ?? "",
+        surface: "cat_direct_launch",
+      });
       if (isDev) console.error("[CAT direct launch] failed", { pathwayId, result });
     });
     return () => {

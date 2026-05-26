@@ -20,6 +20,8 @@ import type {
   StudyLaunchPayload,
 } from "@/lib/practice-tests/types";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
+import { safeRouterReplace } from "@/lib/runtime/client-navigation";
 
 type ExamMode = "practice" | "cat";
 type FocusMode = "all" | "weak" | "missed" | "unseen";
@@ -238,6 +240,12 @@ export function PracticeTestsHubClient({
       if (examMode === "cat" && !catEligiblePathwayIds.includes(trimmedPathwayId)) {
         throw new Error("CAT is not available for this pathway yet. Choose Practice Exam or another pathway.");
       }
+      if (examMode === "cat") {
+        emitRuntimeEvent("cat_start_clicked", {
+          pathwayId: trimmedPathwayId,
+          surface: "practice_tests_hub",
+        });
+      }
 
       const selectedCategories =
         selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= allCanonicalIds.length
@@ -302,6 +310,7 @@ export function PracticeTestsHubClient({
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         credentials: "include",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
           "x-nn-study-launch-surface": "practice_exams",
@@ -321,13 +330,34 @@ export function PracticeTestsHubClient({
 
       if (!res.ok) {
         setErrorCode(typeof data.code === "string" ? data.code : null);
+        emitRuntimeEvent(examMode === "cat" ? "cat_session_create_result" : "practice_exam_session_create_result", {
+          pathwayId: trimmedPathwayId,
+          status: res.status,
+          ok: false,
+          errorCode: typeof data.code === "string" ? data.code : "",
+          surface: "practice_tests_hub",
+        });
         throw new Error(data.error ?? "We could not start this exam. Adjust your setup and try again.");
       }
       if (!data.id) {
         throw new Error("The exam was created without a session id. Please retry from this page.");
       }
 
-      router.push(`/app/practice-tests/${encodeURIComponent(data.id)}?pathwayId=${encodeURIComponent(trimmedPathwayId)}`);
+      emitRuntimeEvent(examMode === "cat" ? "cat_session_create_result" : "practice_exam_session_create_result", {
+        pathwayId: trimmedPathwayId,
+        sessionId: data.id,
+        status: res.status,
+        ok: true,
+        surface: "practice_tests_hub",
+      });
+      safeRouterReplace(router, `/app/practice-tests/${encodeURIComponent(data.id)}?pathwayId=${encodeURIComponent(trimmedPathwayId)}`, {
+        fallbackDelayMs: 1200,
+        context: {
+          feature: examMode === "cat" ? "cat_hub_launch" : "practice_tests_hub_launch",
+          pathwayId: trimmedPathwayId,
+          sessionId: data.id,
+        },
+      });
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "We could not start this exam. Please try again.");
     } finally {

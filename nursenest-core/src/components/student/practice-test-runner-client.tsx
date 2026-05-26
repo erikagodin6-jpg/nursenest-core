@@ -547,10 +547,14 @@ export function PracticeTestRunnerClient({
       if (catStudyAwaiting && data.status === "IN_PROGRESS") {
         void (async () => {
           try {
-            const fr = await fetchWithRetry(`/api/practice-tests/${testId}/cat-study-review`, undefined, {
-              attempts: 2,
-              timeoutMs: 20_000,
-            });
+            const fr = await fetchWithRetry(
+              `/api/practice-tests/${testId}/cat-study-review`,
+              { method: "GET", credentials: "include", cache: "no-store" },
+              {
+                attempts: 2,
+                timeoutMs: 20_000,
+              },
+            );
             const fd = (await fr.json()) as { studyFeedback?: CatStudyFeedbackPayload; error?: string };
             if (fr.ok && fd.studyFeedback) setCatStudyFeedback(fd.studyFeedback);
           } catch {
@@ -609,11 +613,15 @@ export function PracticeTestRunnerClient({
     setQLoading(true);
     void (async () => {
       try {
-        const res = await fetchWithRetry(`/api/practice-tests/${testId}/question?index=${idx}`, { signal: ac.signal }, {
-          attempts: 2,
-          baseDelayMs: 400,
-          timeoutMs: 25_000,
-        });
+        const res = await fetchWithRetry(
+          `/api/practice-tests/${testId}/question?index=${idx}`,
+          { method: "GET", signal: ac.signal, credentials: "include", cache: "no-store" },
+          {
+            attempts: 2,
+            baseDelayMs: 400,
+            timeoutMs: 25_000,
+          },
+        );
         const payload = (await res.json()) as { question?: QRow; error?: string };
         if (!res.ok) {
           if (!ac.signal.aborted) setError(payload.error ?? "Could not load question.");
@@ -1839,10 +1847,14 @@ export function PracticeTestRunnerClient({
   async function loadTeachingReview() {
     setTeachingReviewLoading(true);
     try {
-      const res = await fetchWithRetry(`/api/practice-tests/${testId}?teachingReview=1`, undefined, {
-        attempts: 2,
-        timeoutMs: 30_000,
-      });
+      const res = await fetchWithRetry(
+        `/api/practice-tests/${testId}?teachingReview=1`,
+        { method: "GET", credentials: "include", cache: "no-store" },
+        {
+          attempts: 2,
+          timeoutMs: 30_000,
+        },
+      );
       const data = (await res.json()) as { teachingReview?: { items: PracticeTestTeachingItem[] }; error?: string };
       if (!res.ok) {
         setError(data.error ?? "Could not load teaching review.");

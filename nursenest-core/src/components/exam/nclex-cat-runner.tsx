@@ -45,6 +45,7 @@ import { useMeasurementPreference } from "@/lib/measurements/use-measurement-pre
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
+import { safeRouterReplace } from "@/lib/runtime/client-navigation";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -613,9 +614,15 @@ export function NclexCatRunner({
         elapsedMs={elapsedMs}
         pathwayLabel={pathwayLabel}
         pathwayId={pathwayId}
-        onNewSession={() => router.replace("/app/practice-tests/cat-launch")}
+        onNewSession={() =>
+          safeRouterReplace(router, "/app/practice-tests/cat-launch", {
+            context: { feature: "cat_results_new_session", sessionId: testId },
+          })
+        }
         onReviewFlagged={() => {
-          router.replace(`/app/practice-tests/${testId}/results`);
+          safeRouterReplace(router, `/app/practice-tests/${testId}/results`, {
+            context: { feature: "cat_results_review_flagged", sessionId: testId },
+          });
         }}
         onExport={() => window.print()}
       />

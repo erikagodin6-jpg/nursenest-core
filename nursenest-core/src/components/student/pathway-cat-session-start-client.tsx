@@ -27,6 +27,7 @@ import {
   resolveCatStartUiState,
 } from "@/components/student/pathway-cat-start-payload";
 import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
+import { safeRouterReplace } from "@/lib/runtime/client-navigation";
 
 function sectionShell(children: ReactNode, className = "") {
   return <section className={`lv-shell nn-premium-cat-section ${className}`.trim()}>{children}</section>;
@@ -137,7 +138,8 @@ export function PathwayCatSessionStartClient({
       try {
         const res = await fetch(`/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(normalizedPathwayId)}`, {
           method: "GET",
-          credentials: "same-origin",
+          credentials: "include",
+          cache: "no-store",
           signal: ctl.signal,
         });
         if (!res.ok) {
@@ -268,12 +270,14 @@ export function PathwayCatSessionStartClient({
         sessionId: data.id,
         target,
       });
-      router.replace(target);
-      window.setTimeout(() => {
-        if (window.location.pathname !== target) {
-          window.location.assign(target);
-        }
-      }, 1200);
+      safeRouterReplace(router, target, {
+        fallbackDelayMs: 1200,
+        context: {
+          feature: "cat_start",
+          pathwayId: normalizedPathwayId,
+          sessionId: data.id,
+        },
+      });
     } catch (e) {
       const aborted = e instanceof DOMException && e.name === "AbortError";
       const message = aborted

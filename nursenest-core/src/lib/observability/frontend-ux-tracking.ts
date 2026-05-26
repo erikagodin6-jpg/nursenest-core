@@ -7,6 +7,7 @@
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 /** Structural scope surface used by ErrorBoundary `beforeCapture` — avoids static `@sentry/nextjs` type imports. */
 export type SentryScopeLike = {
@@ -213,6 +214,7 @@ function navDiagnostics(): NonNullable<NavDiagnosticsWindow["__nnNavDiagnostics"
 export function recordNavigationMounted(path: string): void {
   if (typeof document !== "undefined") delete document.documentElement.dataset.nnNavPending;
   if (typeof window === "undefined") return;
+  emitRuntimeEvent("route_transition_commit", { path });
   const d = navDiagnostics();
   if (!d) return;
   d.routeMounted.push({ t: performance.now(), path: path.slice(0, 240) });
@@ -264,6 +266,19 @@ export function touchUxNavigation(): void {
   lastNavigationAt = Date.now();
 }
 
+function recoverFromChunkLoadFailure(): void {
+  try {
+    const key = "nn:chunk-load-recovery-at";
+    const last = Number(window.sessionStorage.getItem(key) ?? "0");
+    const now = Date.now();
+    if (Number.isFinite(last) && now - last < 60_000) return;
+    window.sessionStorage.setItem(key, String(now));
+    window.setTimeout(() => window.location.reload(), 300);
+  } catch {
+    /* If storage is blocked, leave the recovery prompt to the browser/runtime fallback. */
+  }
+}
+
 /** Window-level hints: hydration text, chunk / dynamic import failures during navigation. */
 export function mountGlobalUxListeners(): void {
   if (typeof window === "undefined" || uxGlobalsMounted) return;
@@ -278,6 +293,25 @@ export function mountGlobalUxListeners(): void {
       if (/hydration|did not match|Hydration failed|hydrating/i.test(msg)) {
         captureHydrationUxHint(msg);
       }
+      if (/Loading chunk \d+ failed|Failed to fetch dynamically imported module|ChunkLoadError|Importing a module script failed|module script/i.test(msg)) {
+        document.documentElement.dataset.nnChunkLoadFailed = "true";
+        emitRuntimeEvent("chunk_load_failed", {
+          source: "window_error",
+          message: msg.slice(0, 220),
+          msSinceLastNavigation: Date.now() - lastNavigationAt,
+        });
+        emitRuntimeEvent("route_transition_failure", {
+          reason: "chunk_load_failed",
+          source: "window_error",
+          message: msg.slice(0, 220),
+        });
+        try {
+          window.dispatchEvent(new CustomEvent("nn:chunk-load-failed", { detail: { source: "window_error" } }));
+        } catch {
+          /* ignore */
+        }
+        recoverFromChunkLoadFailure();
+      }
     },
     true,
   );
@@ -286,6 +320,23 @@ export function mountGlobalUxListeners(): void {
     const r = ev.reason;
     const text = r instanceof Error ? r.message : String(r);
     if (/Loading chunk \d+ failed|Failed to fetch dynamically imported module|ChunkLoadError|Importing a module script failed/i.test(text)) {
+      document.documentElement.dataset.nnChunkLoadFailed = "true";
+      emitRuntimeEvent("chunk_load_failed", {
+        source: "unhandledrejection",
+        message: text.slice(0, 220),
+        msSinceLastNavigation: Date.now() - lastNavigationAt,
+      });
+      emitRuntimeEvent("route_transition_failure", {
+        reason: "dynamic_import_or_chunk",
+        source: "unhandledrejection",
+        message: text.slice(0, 220),
+        msSinceLastNavigation: Date.now() - lastNavigationAt,
+      });
+      try {
+        window.dispatchEvent(new CustomEvent("nn:chunk-load-failed", { detail: { source: "unhandledrejection" } }));
+      } catch {
+        /* ignore */
+      }
       captureUxFailure({
         kind: "route_transition_failed",
         level: "error",
@@ -295,6 +346,7 @@ export function mountGlobalUxListeners(): void {
           msSinceLastNavigation: Date.now() - lastNavigationAt,
         },
       });
+      recoverFromChunkLoadFailure();
     }
   });
 }
@@ -324,6 +376,10 @@ async function checkForStaleClientBuild(): Promise<void> {
   const runtimeCommit = typeof runtimeMeta?.commit === "string" ? runtimeMeta.commit : null;
   if (!publicCommit || !runtimeCommit || publicCommit === runtimeCommit) return;
   document.documentElement.dataset.nnStaleClientBuild = "true";
+  emitRuntimeEvent("stale_client_build_detected", {
+    publicCommit: publicCommit.slice(0, 12),
+    runtimeCommit: runtimeCommit.slice(0, 12),
+  });
   captureUxFailure({
     kind: "stale_client_build_detected",
     level: "warning",

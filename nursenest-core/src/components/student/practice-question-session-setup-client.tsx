@@ -21,6 +21,7 @@ import {
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
+import { safeRouterReplace } from "@/lib/runtime/client-navigation";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Body system definitions (topic strings match exam question `topic` labels)
@@ -222,6 +223,8 @@ export function PracticeQuestionSessionSetupClient({
     });
     const res = await fetch("/api/practice-tests", {
       method: "POST",
+      credentials: "include",
+      cache: "no-store",
       headers: {
         "Content-Type": "application/json",
         "x-nn-study-launch-surface": "practice_exams",
@@ -271,7 +274,14 @@ export function PracticeQuestionSessionSetupClient({
       const dest = effectivePathwayId
         ? `/app/practice-tests/${sessionId}?pathwayId=${encodeURIComponent(effectivePathwayId)}`
         : `/app/practice-tests/${sessionId}`;
-      router.push(dest);
+      safeRouterReplace(router, dest, {
+        fallbackDelayMs: 1200,
+        context: {
+          feature: "adaptive_practice_setup",
+          pathwayId: effectivePathwayId,
+          sessionId,
+        },
+      });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
       setStartError(

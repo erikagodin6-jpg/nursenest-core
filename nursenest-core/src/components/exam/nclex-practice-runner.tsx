@@ -84,7 +84,7 @@ function isBowtieQuestion(q: QRow): boolean {
 async function loadSession(testId: string, signal?: AbortSignal) {
   const res = await fetchWithRetry(
     `/api/practice-tests/${testId}?hydrate=full`,
-    { method: "GET", signal },
+    { method: "GET", signal, credentials: "include", cache: "no-store" },
     { attempts: 2, timeoutMs: 12_000 },
   );
   if (!res.ok) throw new Error("Failed to load session");
@@ -137,7 +137,7 @@ async function fetchQuestion(testId: string, index: number, signal?: AbortSignal
   try {
     const res = await fetchWithRetry(
       `/api/practice-tests/${testId}/question?index=${encodeURIComponent(String(index))}`,
-      { method: "GET", signal },
+      { method: "GET", signal, credentials: "include", cache: "no-store" },
       { attempts: 2, timeoutMs: 10_000 },
     );
     if (!res.ok) return null;
@@ -162,6 +162,8 @@ async function linearCommitApi(
 }> {
   const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
+    credentials: "include",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       action: "linear_commit",
@@ -193,6 +195,8 @@ async function saveSessionProgress(
 ): Promise<void> {
   await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
+    credentials: "include",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "save", answers, cursorIndex }),
   }).catch(() => { /* best-effort flag / cursor persistence */ });
@@ -204,6 +208,8 @@ async function submitTestApi(testId: string): Promise<{
 }> {
   const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
+    credentials: "include",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "complete" }),
   });
