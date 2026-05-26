@@ -12,6 +12,9 @@ import {
   withBuildTrace,
 } from "@/build/tracing";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
+import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 
 /** Subscriber app — not for public search indexing. */
@@ -99,14 +102,22 @@ async function getSessionSafe(): Promise<Session | null> {
 
 const AppProviders = traceProvider(
   import.meta,
-  function AppProviders({
+  async function AppProviders({
     session,
     children,
   }: {
     session: Awaited<ReturnType<typeof getSessionSafe>>;
     children: ReactNode;
   }) {
-    return <AuthSessionProvider session={session}>{children}</AuthSessionProvider>;
+    const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+    const serverRegion: MarketingRegionToggle = marketingRegionCookie ?? "CA";
+    const trustClientPersistedRegion = marketingRegionCookie !== undefined;
+
+    return (
+      <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
+        <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
+      </NursenestRegionRoot>
+    );
   },
   { name: "AppProviders" },
 );
