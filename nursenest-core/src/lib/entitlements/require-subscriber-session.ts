@@ -113,6 +113,9 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
       userIdPrefix: userId.slice(0, 8),
       tier: String(entitlement.tier ?? ""),
       country: String(entitlement.country ?? ""),
+      accessReason: userAccess.reason,
+      planStatus: userAccess.plan.status,
+      expiresAt: userAccess.plan.expiresAt?.toISOString() ?? "",
       correlation,
       severity: "expected_denial",
     });
@@ -126,6 +129,18 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
   if (block) {
     return { ok: false, response: block };
   }
+
+  safeServerLog("access", "subscriber_gate_allowed", {
+    surface: "subscriber_gate",
+    outcome: "premium_api_allowed",
+    userIdPrefix: userId.slice(0, 8),
+    tier: String(entitlement.tier ?? ""),
+    country: String(entitlement.country ?? ""),
+    accessReason: userAccess.reason,
+    planStatus: userAccess.plan.status,
+    expiresAt: userAccess.plan.expiresAt?.toISOString() ?? "",
+    correlation,
+  });
 
   return { ok: true, userId, entitlement, userAccess };
 }

@@ -120,6 +120,7 @@ export default async function LearnerFlashcardDeckDetailPage({ params, searchPar
 
       <FlashcardSessionStartButton
         deckId={deck.id}
+        deckRef={deck.slug || deck.id}
         isResuming={activeSession !== null}
         cardCount={deck.cards.length}
         pathwayId={pathwayId ?? deck.pathwayId}

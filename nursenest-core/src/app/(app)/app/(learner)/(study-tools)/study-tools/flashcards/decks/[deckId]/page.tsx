@@ -98,6 +98,7 @@ export default async function FlashcardDeckDetailPage({ params, searchParams }: 
       {/* Start / resume */}
       <FlashcardSessionStartButton
         deckId={deck.id}
+        deckRef={deck.slug || deck.id}
         isResuming={activeSession !== null}
         cardCount={deck.cards.length}
         pathwayId={pathwayId ?? deck.pathwayId}

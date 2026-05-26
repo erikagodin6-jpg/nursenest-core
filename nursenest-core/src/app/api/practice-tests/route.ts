@@ -214,6 +214,14 @@ export async function GET(req: NextRequest) {
     };
   });
 
+  safeServerLog("practice_tests", "list_query_result", {
+    loader_name: "practice_tests_list_api",
+    user_id_prefix: gate.userId.slice(0, 8),
+    tier: String(gate.entitlement.tier ?? ""),
+    country: String(gate.entitlement.country ?? ""),
+    returned_count: list.length,
+  });
+
   return NextResponse.json({ tests: list, source_used: "primary" as const });
   });
 }
@@ -275,6 +283,17 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
+  safeServerLog("practice_tests", "create_request_received", {
+    loader_name: "practice_tests_create_api",
+    user_id_prefix: gate.userId.slice(0, 8),
+    tier: String(gate.entitlement.tier ?? ""),
+    country: String(gate.entitlement.country ?? ""),
+    selectionMode: d.selectionMode,
+    pathwayId: d.pathwayId?.trim() ?? "",
+    questionCount: d.questionCount,
+    catPresentationMode: d.catPresentationMode,
+    catAdaptiveSessionType: d.catAdaptiveSessionType,
+  });
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   if (
     d.selectionMode === "cat" &&
@@ -323,6 +342,20 @@ export async function POST(req: Request) {
     const compatible = await listPathwaysCompatibleWithSubscription(gate.entitlement);
     const catEligible = compatible.filter(pathwayAllowsCatAdaptiveStart);
     const resolvedPathway = resolveCatPathwayIdForCatPost(d.pathwayId, catEligible);
+    safeServerLog("practice_tests", "cat_pathway_resolution", {
+      loader_name: "practice_tests_create_api",
+      user_id_prefix: gate.userId.slice(0, 8),
+      requested_pathway_id: d.pathwayId?.trim() ?? "",
+      tier: String(gate.entitlement.tier ?? ""),
+      country: String(gate.entitlement.country ?? ""),
+      compatible_count: compatible.length,
+      compatible_ids: compatible.map((p) => p.id).join(",").slice(0, 500),
+      cat_eligible_count: catEligible.length,
+      cat_eligible_ids: catEligible.map((p) => p.id).join(",").slice(0, 500),
+      resolution_ok: resolvedPathway.ok ? "1" : "0",
+      resolution_code: resolvedPathway.ok ? "" : resolvedPathway.code,
+      resolved_pathway_id: resolvedPathway.ok ? resolvedPathway.pathwayId : "",
+    });
     if (!resolvedPathway.ok) {
       if (resolvedPathway.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous) {
         safeServerLog("practice_tests", "CAT_PATHWAY_AMBIGUOUS", {
@@ -402,6 +435,13 @@ export async function POST(req: Request) {
       );
     }
     const catReadiness = await assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayIdForCat);
+    safeServerLog("practice_tests", "cat_readiness_result", {
+      loader_name: "practice_tests_create_api",
+      user_id_prefix: gate.userId.slice(0, 8),
+      pathway_id: pathwayIdForCat,
+      ok: catReadiness.ok ? "1" : "0",
+      code: catReadiness.ok ? "" : catReadiness.code,
+    });
     if (!catReadiness.ok) {
       const logKey =
         catReadiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid
@@ -598,6 +638,12 @@ export async function POST(req: Request) {
     );
 
     if (txOutcome.kind === "resume") {
+      safeServerLog("practice_tests", "cat_create_resume_existing", {
+        loader_name: "practice_tests_create_api",
+        user_id_prefix: gate.userId.slice(0, 8),
+        pathway_id: pathwayIdForCat,
+        practice_test_id: txOutcome.id,
+      });
       return NextResponse.json({ id: txOutcome.id, resumed: true as const }, { status: 200 });
     }
     if (txOutcome.kind === "reject") {
@@ -614,6 +660,15 @@ export async function POST(req: Request) {
     }
 
     const { row, cat } = txOutcome;
+    safeServerLog("practice_tests", "cat_create_success", {
+      loader_name: "practice_tests_create_api",
+      user_id_prefix: gate.userId.slice(0, 8),
+      pathway_id: pathwayIdForCat,
+      practice_test_id: row.id,
+      question_count: cat.questionIds.length,
+      catPresentationMode: d.catPresentationMode,
+      catAdaptiveSessionType: adaptiveSessionType,
+    });
 
     captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
       pathway_id: pathwayIdForCat,

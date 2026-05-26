@@ -12,6 +12,7 @@ import {
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { flashcardLearnerExamPoolWhereSql } from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
+import { getStudyLinkPathwayColumnExists } from "@/lib/flashcards/flashcard-exam-pool-column-guard";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import { foldExamQuestionTopicBodyGroupsIntoBuilderCounts } from "@/lib/flashcards/flashcards-exam-inventory-counts";
 import type { FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
@@ -167,7 +168,8 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
     };
   }
 
-  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway);
+  const hasStudyLinkCol = await getStudyLinkPathwayColumnExists();
+  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway, hasStudyLinkCol);
 
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathway.id);
   const statementTimeoutMs = flashcardsInventoryStatementTimeoutMs();

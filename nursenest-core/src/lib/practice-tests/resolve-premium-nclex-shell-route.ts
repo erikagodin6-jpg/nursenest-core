@@ -1,5 +1,3 @@
-import { pathwayUsesPremiumNclexExamShell } from "@/lib/practice-tests/premium-exam-shell-pathways";
-
 export type PremiumNclexShellRoute = "cat" | "practice";
 
 function readConfigString(cfg: Record<string, unknown>, key: string): string | null {
@@ -16,10 +14,7 @@ export function resolvePremiumNclexShellRoute(args: {
   pathwayId: string | null | undefined;
 }): PremiumNclexShellRoute | null {
   const cfg = args.config;
-  const pathwayId = args.pathwayId?.trim() ?? null;
-  if (!cfg || !pathwayId || !pathwayUsesPremiumNclexExamShell(pathwayId)) {
-    return null;
-  }
+  if (!cfg) return null;
 
   if (cfg.catPresentationMode === "exam_simulation") {
     return "cat";

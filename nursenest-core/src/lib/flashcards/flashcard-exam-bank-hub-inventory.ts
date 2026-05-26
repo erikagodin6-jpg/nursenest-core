@@ -5,6 +5,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { BankExamRowForFlashcard } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
 import { resolveBuilderCategoryId } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { flashcardLearnerExamPoolWhereSql } from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
+import { getStudyLinkPathwayColumnExists } from "@/lib/flashcards/flashcard-exam-pool-column-guard";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   DISCOVERY_STATEMENT_TIMEOUT_MS,
@@ -228,7 +229,8 @@ export async function loadExamQuestionRowsForFlashcardPool(
 
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
   const cap = Math.min(Math.max(Math.floor(take), 1), EXAM_FLASHCARD_SESSION_POOL_CAP);
-  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway);
+  const hasStudyLinkCol = await getStudyLinkPathwayColumnExists();
+  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway, hasStudyLinkCol);
 
   const rows = await prisma.$transaction(
     async (tx) => {

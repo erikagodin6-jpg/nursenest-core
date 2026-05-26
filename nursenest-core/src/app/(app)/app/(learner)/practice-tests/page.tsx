@@ -59,6 +59,15 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const session = await getProtectedRouteSession("(student).app.(learner).practice-tests");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  safeServerLog("learner_practice_tests", "server_bootstrap_auth_entitlement", {
+    loader_name: "practice_tests_page",
+    pathway_id_raw: pathwayQueryRaw ?? "",
+    user_id_prefix: userId.slice(0, 8),
+    has_session: session ? "1" : "0",
+    entitlement_state: entitlement === "error" ? "error" : entitlement.hasAccess ? "has_access" : "no_access",
+    tier: entitlement === "error" ? "" : String(entitlement.tier ?? ""),
+    country: entitlement === "error" ? "" : String(entitlement.country ?? ""),
+  });
 
   if (entitlement === "error") {
     return (
@@ -152,9 +161,25 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     if (pathwayResolution.state === "scoped") {
       defaultPathwayId = pathwayResolution.defaultPathwayId;
     }
+    safeServerLog("learner_practice_tests", "pathway_bootstrap_resolved", {
+      loader_name: "practice_tests_page",
+      user_id_prefix: userId.slice(0, 8),
+      requested_pathway_id: requestedPathwayId ?? "",
+      learner_path: learnerLp ?? "",
+      raw_compatible_count: rawCompatible.length,
+      compatible_count: compatiblePathways.length,
+      compatible_ids: compatiblePathways.map((p) => p.id).join(",").slice(0, 400),
+      cat_eligible_ids: catEligiblePathwayIds.join(",").slice(0, 400),
+      resolution_state: pathwayResolution.state,
+      default_pathway_id: defaultPathwayId ?? "",
+    });
   } catch (e) {
     safeServerLog("learner_practice_tests", "hub_bootstrap_primary_failed", {
       user_id_prefix: userId.slice(0, 8),
+      requested_pathway_id: requestedPathwayId ?? "",
+      tier: String(entitlement.tier ?? ""),
+      country: String(entitlement.country ?? ""),
+      error_name: e instanceof Error ? e.name : "unknown",
       error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
     });
     const tier = entitlement.tier != null ? String(entitlement.tier) : "";

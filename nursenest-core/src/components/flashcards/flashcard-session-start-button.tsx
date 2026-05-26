@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { startOrResumeSessionAction } from "@/app/actions/flashcards/session-actions";
 
 /**
  * Flashcard session start button for PROTECTED learner pages.
@@ -16,16 +15,18 @@ import { startOrResumeSessionAction } from "@/app/actions/flashcards/session-act
  * 
  * Architecture:
  * - Page: getProtectedRouteSession() → redirects if not authenticated
- * - Component: Trusts page-level auth, calls action directly
- * - Action: Validates auth again (defense in depth)
+ * - Component: Trusts page-level auth, opens the current learner flashcard shell
+ * - Study route/API: Validates auth and entitlement again (defense in depth)
  */
 export function FlashcardSessionStartButton({
   deckId,
+  deckRef,
   isResuming,
   cardCount,
   pathwayId,
 }: {
   deckId: string;
+  deckRef?: string | null;
   isResuming: boolean;
   cardCount: number;
   pathwayId?: string | null;
@@ -34,19 +35,11 @@ export function FlashcardSessionStartButton({
   const [isPending, startTransition] = useTransition();
 
   function handleStart() {
-    // No client-side auth check needed - page already verified server-side.
-    // If this component rendered, user IS authenticated.
-    startTransition(async () => {
-      const result = await startOrResumeSessionAction(deckId);
-      if (result.ok) {
-        const qs = pathwayId?.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : "";
-        router.push(
-          `/app/flashcards/decks/${encodeURIComponent(deckId)}/session/${encodeURIComponent(result.data.sessionId)}${qs}`,
-        );
-      } else {
-        // Action failed (should not happen if page auth worked)
-        console.error("Failed to start flashcard session:", result.error);
-      }
+    startTransition(() => {
+      const ref = deckRef?.trim() || deckId;
+      const params = new URLSearchParams({ start: "1", mode: "learn" });
+      if (pathwayId?.trim()) params.set("pathwayId", pathwayId.trim());
+      router.push(`/app/flashcards/${encodeURIComponent(ref)}?${params.toString()}`);
     });
   }
 

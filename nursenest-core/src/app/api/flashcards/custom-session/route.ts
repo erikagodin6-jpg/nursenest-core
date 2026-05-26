@@ -100,10 +100,19 @@ export async function GET(req: NextRequest) {
               ? `lessonId:${lessonId.slice(0, 12)}`
               : "all";
       safeServerLog("flashcards", "custom_session_query", {
+        loader_name: "flashcards_custom_session_api",
+        user_id_prefix: userId.slice(0, 8),
         pathwayId: pathwayId ?? "",
+        pathwayIdRaw: pathwayIdRaw ?? "",
+        tier: String(entitlement.tier ?? ""),
+        country: String(entitlement.country ?? ""),
         topicIds: topicIdsForLog.slice(0, 200),
         relaxation: "none",
         includeCards: includeCards ? "1" : "0",
+        sourceKind,
+        weakOnly: weakOnly ? "1" : "0",
+        incorrectOnly: incorrectOnly ? "1" : "0",
+        selectedCategoryCount: selectedCategories.length,
       });
 
       const built = await buildFlashcardCustomSession({
@@ -135,9 +144,14 @@ export async function GET(req: NextRequest) {
       if (!built.ok) {
         const kind = classifyDatabaseFallbackKind(new Error(built.reason));
         safeServerLog("flashcards", "custom_session_db_failed", {
+          loader_name: "flashcards_custom_session_api",
+          user_id_prefix: userId.slice(0, 8),
           kind,
           message: built.reason.slice(0, 400),
           pathwayId: pathwayId ?? "",
+          pathwayIdRaw: pathwayIdRaw ?? "",
+          tier: String(entitlement.tier ?? ""),
+          country: String(entitlement.country ?? ""),
         });
         const h = new Headers(headers);
         h.set("Retry-After", "3");
@@ -161,9 +175,15 @@ export async function GET(req: NextRequest) {
       }
 
       safeServerLog("flashcards", "custom_session_query", {
+        loader_name: "flashcards_custom_session_api",
+        user_id_prefix: userId.slice(0, 8),
         pathwayId: pathwayId ?? "",
+        pathwayIdRaw: pathwayIdRaw ?? "",
+        tier: String(entitlement.tier ?? ""),
+        country: String(entitlement.country ?? ""),
         topicIds: topicIdsForLog.slice(0, 200),
         rawCount: String(built.summary.matchingCards),
+        returnedCount: String(built.summary.returnedCards),
         relaxation: built.queryRelaxation,
         includeCards: includeCards ? "1" : "0",
       });

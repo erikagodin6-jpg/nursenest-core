@@ -28,6 +28,8 @@
  *   - `QA_PAID_TEST_COUNTRY` — `US` | `CA` (default: US)
  *   - `QA_PAID_TEST_TIER` — Prisma `TierCode` (default: RN)
  *   - `QA_PAID_TEST_ALLIED_CAREER` — when tier is ALLIED, stored on user + subscription
+ *   - `--runtime-tier-accounts` or `QA_PAID_TEST_RESET_RUNTIME_TIERS=1` — reset RN/PN/NP
+ *     Playwright fixture accounts together from `PLAYWRIGHT_RN_*`, `PLAYWRIGHT_PN_*`, `PLAYWRIGHT_NP_*`.
  *   - `--dry-run` — print actions only (no DB writes; does not require ALLOW_QA_PAID_TEST_RESET)
  *
  * Production / shared DB safety:
@@ -97,12 +99,26 @@ function examGoalSlugForTier(tier: TierCode): "rn" | "rpn" | "np" | "allied" {
 
 const prisma = new PrismaClient();
 
-function parseArgs(): { email?: string; dryRun: boolean } {
+type ParsedArgs = { email?: string; dryRun: boolean; runtimeTierAccounts: boolean };
+
+type QaAccountSpec = {
+  label: "RN" | "PN" | "NP" | "single";
+  email: string;
+  password: string | undefined;
+  name: string;
+  country: CountryCode;
+  tier: TierCode;
+  alliedCareer: string | null;
+};
+
+function parseArgs(): ParsedArgs {
   const argv = process.argv.slice(2);
   const dryRun = argv.includes("--dry-run");
+  const runtimeTierAccounts =
+    argv.includes("--runtime-tier-accounts") || process.env.QA_PAID_TEST_RESET_RUNTIME_TIERS === "1";
   const idx = argv.indexOf("--email");
   const email = idx >= 0 && argv[idx + 1] ? argv[idx + 1].trim().toLowerCase() : undefined;
-  return { email, dryRun };
+  return { email, dryRun, runtimeTierAccounts };
 }
 
 async function readPasswordFromStdin(): Promise<string> {
@@ -128,6 +144,30 @@ function parseTier(raw: string | undefined): TierCode {
   const allowed = Object.values(TierCode) as string[];
   if (u && allowed.includes(u)) return u as TierCode;
   return TierCode.RN;
+}
+
+function isQaFixtureEmail(email: string): boolean {
+  const lower = email.trim().toLowerCase();
+  const [local, domain] = lower.split("@");
+  return Boolean(local?.startsWith("qa_") && domain && /^(nursenest\.ca|nursenest\.com|example\.com)$/.test(domain));
+}
+
+function validateQaPasswordOrExit(email: string, plain: string): void {
+  const parsed = strongPasswordSchema.safeParse(plain);
+  if (parsed.success) return;
+
+  // QA-only bypass: production fixture credentials are fixed by Playwright/browser automation
+  // and must be reproducible during incidents. The reset script is already gated by
+  // ALLOW_QA_PAID_TEST_RESET=1; keep the bypass constrained to explicit qa_* fixture emails.
+  if (process.env.ALLOW_QA_PAID_TEST_RESET === "1" && isQaFixtureEmail(email)) {
+    console.warn(
+      `[qa-cli-env] password_policy_bypass: allowed for QA fixture ${email} because ALLOW_QA_PAID_TEST_RESET=1`,
+    );
+    return;
+  }
+
+  console.error(parsed.error.issues[0]?.message ?? "Invalid password");
+  process.exit(1);
 }
 
 function syntheticStripeSubscriptionId(userId: string): string {
@@ -158,9 +198,53 @@ function resolveResetPasswordFromEnv(): string | undefined {
   return undefined;
 }
 
-async function main(): Promise<void> {
-  const { email: emailArg, dryRun } = parseArgs();
-  const email = resolveResetEmail(emailArg);
+function runtimeTierAccountSpecs(): QaAccountSpec[] {
+  const specs: QaAccountSpec[] = [
+    {
+      label: "RN",
+      email: process.env.PLAYWRIGHT_RN_EMAIL?.trim().toLowerCase() ?? "",
+      password: process.env.PLAYWRIGHT_RN_PASSWORD?.trim(),
+      name: "QA RN Subscriber",
+      country: CountryCode.CA,
+      tier: TierCode.RN,
+      alliedCareer: null,
+    },
+    {
+      label: "PN",
+      email: process.env.PLAYWRIGHT_PN_EMAIL?.trim().toLowerCase() ?? "",
+      password: process.env.PLAYWRIGHT_PN_PASSWORD?.trim(),
+      name: "QA PN Subscriber",
+      country: CountryCode.CA,
+      tier: TierCode.RPN,
+      alliedCareer: null,
+    },
+    {
+      label: "NP",
+      email: process.env.PLAYWRIGHT_NP_EMAIL?.trim().toLowerCase() ?? "",
+      password: process.env.PLAYWRIGHT_NP_PASSWORD?.trim(),
+      name: "QA NP Subscriber",
+      country: CountryCode.CA,
+      tier: TierCode.NP,
+      alliedCareer: null,
+    },
+  ];
+
+  const missing = specs
+    .filter((s) => !s.email.includes("@") || !s.password)
+    .map((s) => `PLAYWRIGHT_${s.label}_EMAIL/PASSWORD`);
+  if (missing.length > 0) {
+    console.error(
+      `Missing runtime QA fixture credentials for ${missing.join(", ")}. ` +
+        "Set PLAYWRIGHT_RN_*, PLAYWRIGHT_PN_*, and PLAYWRIGHT_NP_*.",
+    );
+    process.exit(1);
+  }
+
+  return specs;
+}
+
+async function provisionQaAccount(spec: QaAccountSpec, dryRun: boolean): Promise<void> {
+  const { email, name, country, tier, alliedCareer } = spec;
   if (!email?.includes("@")) {
     console.error(
       "Usage: set QA_PAID_EMAIL + QA_PAID_PASSWORD (or E2E_* / PLAYWRIGHT_TEST_*), or QA_PAID_TEST_*, or pass --email. " +
@@ -174,25 +258,15 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  let plain = resolveResetPasswordFromEnv();
+  let plain = spec.password;
   if (!plain && !dryRun) plain = (await readPasswordFromStdin()).trim();
   if (!dryRun) {
     if (!plain) {
       console.error("Set QA_PAID_PASSWORD (or QA_PAID_TEST_PASSWORD / E2E_PAID_PASSWORD / PLAYWRIGHT_TEST_PASSWORD) or pipe one line on stdin.");
       process.exit(1);
     }
-    const parsed = strongPasswordSchema.safeParse(plain);
-    if (!parsed.success) {
-      console.error(parsed.error.issues[0]?.message ?? "Invalid password");
-      process.exit(1);
-    }
+    validateQaPasswordOrExit(email, plain);
   }
-
-  const name = process.env.QA_PAID_TEST_NAME?.trim() || "QA Paid E2E";
-  const country = parseCountry(process.env.QA_PAID_TEST_COUNTRY);
-  const tier = parseTier(process.env.QA_PAID_TEST_TIER);
-  const alliedCareerRaw = process.env.QA_PAID_TEST_ALLIED_CAREER?.trim();
-  const alliedCareer = tier === TierCode.ALLIED ? alliedCareerRaw || "paramedic" : null;
 
   const existing = await prisma.user.findFirst({
     where: { email: { equals: email, mode: "insensitive" } },
@@ -354,6 +428,41 @@ async function main(): Promise<void> {
   console.log(`Onboarding: completed; learnerPath=${learnerPathDefault} (matches /app dashboard + pathway hubs).`);
   console.log(
     "Sign in at /login with email + password; Playwright: QA_PAID_EMAIL / QA_PAID_PASSWORD (or E2E_* / PLAYWRIGHT_TEST_*).",
+  );
+}
+
+async function main(): Promise<void> {
+  const { email: emailArg, dryRun, runtimeTierAccounts } = parseArgs();
+
+  if (runtimeTierAccounts) {
+    if (!dryRun && process.env.ALLOW_QA_PAID_TEST_RESET !== "1") {
+      console.error("Refusing: set ALLOW_QA_PAID_TEST_RESET=1 for non-dry-run runs.");
+      process.exit(1);
+    }
+    for (const spec of runtimeTierAccountSpecs()) {
+      await provisionQaAccount(spec, dryRun);
+    }
+    console.log("OK — RN/PN/NP QA paid runtime fixture accounts are ready.");
+    return;
+  }
+
+  const email = resolveResetEmail(emailArg);
+  const name = process.env.QA_PAID_TEST_NAME?.trim() || "QA Paid E2E";
+  const country = parseCountry(process.env.QA_PAID_TEST_COUNTRY);
+  const tier = parseTier(process.env.QA_PAID_TEST_TIER);
+  const alliedCareerRaw = process.env.QA_PAID_TEST_ALLIED_CAREER?.trim();
+  const alliedCareer = tier === TierCode.ALLIED ? alliedCareerRaw || "paramedic" : null;
+  await provisionQaAccount(
+    {
+      label: "single",
+      email: email ?? "",
+      password: resolveResetPasswordFromEnv(),
+      name,
+      country,
+      tier,
+      alliedCareer,
+    },
+    dryRun,
   );
 }
 

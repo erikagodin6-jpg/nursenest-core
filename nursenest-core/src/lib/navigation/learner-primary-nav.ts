@@ -12,7 +12,7 @@ import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-featu
 
 export const CANONICAL_LEARNER_ROUTES = {
   lessons: "/app/lessons",
-  practice: "/app/questions",
+  practice: "/app/practice-tests",
   flashcards: "/app/flashcards",
   /** Gated by server + public nav flag; route 404s when the learner store is off. */
   printables: "/app/printables",
@@ -115,9 +115,8 @@ export function buildLearnerPrimaryNavItems(
 
   return [
     { key: "lessons", href: lessonsHref, matchBase: "/app/lessons" },
-    { key: "practice", href: practiceHref, matchBase: "/app/questions" },
+    { key: "practice", href: practiceHref, matchBase: "/app/practice-tests" },
     { key: "flashcards", href: flashHref, matchBase: "/app/flashcards" },
-    { key: "cat", href: catHref, matchBase: catMatch },
     { key: "reports", href: CANONICAL_LEARNER_ROUTES.reports, matchBase: "/app/account/progress" },
     { key: "profile", href: CANONICAL_LEARNER_ROUTES.profile, matchBase: "/app/profile" },
   ];

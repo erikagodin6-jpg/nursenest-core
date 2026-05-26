@@ -1,22 +1,18 @@
 "use client";
 
-/**
- * NclexPracticeRunner — NCLEX-style Practice Exam (learning mode).
- *
- * Same fixed-viewport shell as CAT (`NclexPracticeExamLayout` / `NclexCatExamLayout`).
- * Post-submit rationale via `PracticeRationaleFullPanel` + lesson links (`linear_commit`).
- */
-
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  NclexPracticeExamLayout,
   NclexAnswerList,
   NclexAnswerCard,
   NclexQuestionStem,
   type NclexAnswerCardState,
-  type NclexPracticeShellPresentation,
 } from "@/components/exam/nclex-exam-layout";
+import { NclexPracticeTopBar, NclexEndTestModal } from "@/components/exam/nclex-cat-top-bar";
+import { NclexPracticeBottomBar } from "@/components/exam/nclex-bottom-bar";
+import { NclexCalculatorModal } from "@/components/exam/nclex-calculator-modal";
+import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
+import { NclexLabReference } from "@/components/exam/nclex-lab-reference";
 import { NclexPracticeRationaleCompact } from "@/components/exam/nclex-practice-rationale-compact";
 import type { PracticeAdaptivePostMissPayload } from "@/components/student/practice-adaptive-post-miss-panel";
 import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
@@ -44,6 +40,7 @@ type QRow = {
   topic?: string | null;
   subtopic?: string | null;
   difficulty?: number | null;
+  images?: unknown;
 };
 
 type LinearFeedback = {
@@ -199,7 +196,7 @@ async function saveSessionProgress(
     cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "save", answers, cursorIndex }),
-  }).catch(() => { /* best-effort flag / cursor persistence */ });
+  }).catch(() => { /* best-effort */ });
 }
 
 async function submitTestApi(testId: string): Promise<{
@@ -223,12 +220,11 @@ export function NclexPracticeRunner({
   testId,
   userId,
   pathwayLabel: pathwayLabelProp,
-  shellPresentation = "standard",
 }: {
   testId: string;
   userId: string;
   pathwayLabel?: string | null;
-  shellPresentation?: NclexPracticeShellPresentation;
+  shellPresentation?: string;
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -276,6 +272,17 @@ export function NclexPracticeRunner({
   const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
 
+  // Tool/modal state
+  const [showEndModal, setShowEndModal] = useState(false);
+  const [showCalc, setShowCalc] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
+  const [showLabValues, setShowLabValues] = useState(false);
+  const [noteText, setNoteText] = useState("");
+
+  // Container height measurement to fill the viewport below the learner nav
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState("calc(100dvh - 96px)");
+
   const mountedRef = useRef(true);
   const inFlightRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
@@ -288,6 +295,18 @@ export function NclexPracticeRunner({
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
+
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    const measure = () => {
+      if (!containerRef.current) return;
+      const top = containerRef.current.getBoundingClientRect().top;
+      setContainerHeight(`${Math.max(300, window.innerHeight - top)}px`);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -482,7 +501,7 @@ export function NclexPracticeRunner({
 
   if (phase === "loading") {
     return (
-      <div className="nn-nclex-exam-page" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div ref={containerRef} className="flex items-center justify-center" style={{ height: containerHeight }}>
         <div className="nn-nclex-spinner" />
       </div>
     );
@@ -490,7 +509,7 @@ export function NclexPracticeRunner({
 
   if (phase === "error") {
     return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
+      <div ref={containerRef} style={{ padding: "2rem", textAlign: "center" }}>
         <p className="text-[var(--semantic-danger)]" style={{ marginBottom: "1rem" }}>{error}</p>
         <Link href="/app/practice-tests" className="font-semibold text-[var(--semantic-brand)]">
           Return to practice tests
@@ -501,28 +520,26 @@ export function NclexPracticeRunner({
 
   if (results) {
     return (
-      <div className="nn-nclex-exam-page" data-nclex-shell="practice" style={{ position: "fixed", inset: 0, overflow: "auto", zIndex: 200 }}>
-        <div style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}>
-          <h1 className="text-2xl font-extrabold text-[var(--semantic-text-primary)]" style={{ marginBottom: "1.5rem" }}>
-            Practice Exam Results
-          </h1>
-          <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
-            Score: {results.scoreCorrect} / {results.scoreTotal} ({Math.round(results.accuracyPct ?? 0)}%)
-          </p>
-          <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <Link
-              href={`/app/practice-tests/${testId}/results`}
-              className="inline-flex h-10 items-center rounded-lg bg-[var(--semantic-brand)] px-5 text-sm font-bold text-[var(--role-cta-foreground)] no-underline"
-            >
-              View detailed results
-            </Link>
-            <Link
-              href="/app/practice-tests"
-              className="inline-flex h-10 items-center rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-secondary)] no-underline"
-            >
-              Back to practice tests
-            </Link>
-          </div>
+      <div ref={containerRef} style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}>
+        <h1 className="text-2xl font-extrabold text-[var(--semantic-text-primary)]" style={{ marginBottom: "1.5rem" }}>
+          Practice Exam Results
+        </h1>
+        <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
+          Score: {results.scoreCorrect} / {results.scoreTotal} ({Math.round(results.accuracyPct ?? 0)}%)
+        </p>
+        <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <Link
+            href={`/app/practice-tests/${testId}/results`}
+            className="inline-flex h-10 items-center rounded-lg bg-[var(--semantic-brand)] px-5 text-sm font-bold text-[var(--role-cta-foreground)] no-underline"
+          >
+            View detailed results
+          </Link>
+          <Link
+            href="/app/practice-tests"
+            className="inline-flex h-10 items-center rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-secondary)] no-underline"
+          >
+            Back to practice tests
+          </Link>
         </div>
       </div>
     );
@@ -556,27 +573,6 @@ export function NclexPracticeRunner({
   const primaryDistractorText = primaryDistractorTextRaw
     ? resolveMeasureText(primaryDistractorTextRaw)
     : null;
-
-  const rationaleSlot = (
-    <NclexPracticeRationaleCompact
-      status={rationaleStatus}
-      correctKeys={currentFeedback?.correctKeys ?? []}
-      optionDisplayMap={optDisplayMap}
-      correctAnswerExplanation={
-        currentFeedback?.correctAnswerExplanation
-          ? resolveMeasureText(currentFeedback.correctAnswerExplanation)
-          : null
-      }
-      rationale={
-        currentFeedback?.rationale ? resolveMeasureText(currentFeedback.rationale) : null
-      }
-      primaryDistractorText={primaryDistractorText}
-      keyTakeaway={
-        currentFeedback?.keyTakeaway ? resolveMeasureText(currentFeedback.keyTakeaway) : null
-      }
-      relatedLessons={currentFeedback?.relatedLessons ?? []}
-    />
-  );
 
   function getOptionState(canonical: string): NclexAnswerCardState {
     if (!isCommitted || !currentFeedback) {
@@ -664,45 +660,209 @@ export function NclexPracticeRunner({
     </NclexAnswerList>
   );
 
+  const disabled = submitting || transitioning;
+
   return (
-    <NclexPracticeExamLayout
-      shellPresentation={shellPresentation}
-      questionNumber={idx + 1}
-      totalQuestions={total}
-      remainingSec={timedMode ? remainingSec : null}
-      flagged={flagged[currentId ?? ""] ?? false}
-      onFlag={toggleFlag}
-      onFinish={handleFinish}
-      onPrev={handlePrev}
-      onNext={handleNext}
-      onSubmit={() => void handleSubmit()}
-      canGoPrev={idx > 0}
-      canGoNext={true}
-      hasAnswer={hasAnswer}
-      isSubmitted={isCommitted}
-      isLastQuestion={idx === total - 1}
-      disabled={submitting || transitioning}
-      isPaused={isPaused}
-      onPause={timedMode ? () => setIsPaused((p) => !p) : undefined}
-      questionFormat={current?.questionFormat}
-      isSata={isSata}
-      showTypePanel={true}
-      rationaleSlot={rationaleSlot}
-      transitioning={transitioning}
-      unansweredCount={unanswered}
-      unitsControl={
-        <ExamMeasurementUnitToggle
-          fallbackSystem={fallbackMeasurementSystem}
-          syncToProfile={Boolean(userId)}
-          disabled={submitting || transitioning}
-        />
-      }
+    <div
+      ref={containerRef}
+      data-nclex-shell="practice"
+      style={{
+        height: containerHeight,
+        display: "grid",
+        gridTemplateRows: "auto 1fr auto",
+        overflow: "hidden",
+        background: "var(--semantic-surface-page, #f1f5f9)",
+      }}
     >
-      <NclexQuestionStem
-        stem={current?.stem ? resolveMeasureText(current.stem) : ""}
-        instruction={isSata ? "Select all that apply." : null}
+      {/* ── Top bar ─────────────────────────────────────────────────────────── */}
+      <NclexPracticeTopBar
+        questionNumber={idx + 1}
+        totalQuestions={total}
+        remainingSec={timedMode ? remainingSec : null}
+        isPaused={isPaused}
+        onPause={timedMode ? () => setIsPaused((p) => !p) : undefined}
+        onFinish={() => setShowEndModal(true)}
+        disabled={disabled}
+        unitsControl={
+          <ExamMeasurementUnitToggle
+            fallbackSystem={fallbackMeasurementSystem}
+            syncToProfile={Boolean(userId)}
+            disabled={disabled}
+          />
+        }
       />
-      {answerContent}
-    </NclexPracticeExamLayout>
+
+      {/* ── Split content area ───────────────────────────────────────────────── */}
+      <div style={{ display: "flex", minHeight: 0, overflow: "hidden" }}>
+
+        {/* Left: question panel */}
+        <div
+          className={[
+            "nn-nclex-question-area",
+            "nn-nclex-loading-overlay-parent",
+            !transitioning ? "nn-nclex-question-transition" : "",
+          ].filter(Boolean).join(" ")}
+          style={{
+            flex: isCommitted ? "0 0 60%" : "1 1 100%",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            borderRight: isCommitted ? "1px solid var(--semantic-border-soft, #e2e8f0)" : undefined,
+            transition: "flex-basis 200ms ease",
+          }}
+        >
+          {transitioning && (
+            <div className="nn-nclex-loading-overlay" aria-live="polite">
+              <div className="nn-nclex-spinner" />
+            </div>
+          )}
+
+          {/* Question header */}
+          <div
+            className="flex items-center justify-between shrink-0"
+            style={{
+              padding: "0.875rem 1.5rem 0.5rem",
+              borderBottom: "1px solid var(--semantic-border-soft, #e2e8f0)",
+              background: "var(--semantic-surface, #fff)",
+              position: "sticky",
+              top: 0,
+              zIndex: 2,
+            }}
+          >
+            <span className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+              Question {idx + 1}
+              {isSata ? <span className="ml-2 text-xs font-normal text-[var(--semantic-text-secondary)]">Select all that apply</span> : null}
+            </span>
+            <button
+              type="button"
+              onClick={toggleFlag}
+              aria-label={flagged[currentId ?? ""] ? "Remove mark" : "Mark for review"}
+              aria-pressed={flagged[currentId ?? ""] ?? false}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
+                padding: "0.25rem 0.625rem",
+                borderRadius: "0.375rem",
+                border: "1.5px solid",
+                borderColor: flagged[currentId ?? ""] ? "#f59e0b" : "var(--semantic-border-soft, #e2e8f0)",
+                background: flagged[currentId ?? ""] ? "#fffbeb" : "transparent",
+                color: flagged[currentId ?? ""] ? "#92400e" : "var(--semantic-text-muted, #64748b)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "background 110ms ease, border-color 110ms ease",
+              }}
+            >
+              {flagged[currentId ?? ""] ? "★ Marked" : "☆ Mark"}
+            </button>
+          </div>
+
+          {/* Question stem + answers */}
+          <div style={{ padding: "1.25rem 1.5rem", flex: 1 }}>
+            <NclexQuestionStem
+              stem={current?.stem ? resolveMeasureText(current.stem) : ""}
+              instruction={null}
+            />
+            <div style={{ marginTop: "1.25rem" }}>
+              {answerContent}
+            </div>
+          </div>
+        </div>
+
+        {/* Right: rationale panel (visible when committed) */}
+        {isCommitted && (
+          <div
+            style={{
+              flex: "0 0 40%",
+              overflowY: "auto",
+              background: "var(--semantic-surface, #fff)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Rationale header */}
+            <div
+              style={{
+                padding: "0.875rem 1.5rem 0.5rem",
+                borderBottom: "1px solid var(--semantic-border-soft, #e2e8f0)",
+                position: "sticky",
+                top: 0,
+                background: "var(--semantic-surface, #fff)",
+                zIndex: 2,
+              }}
+            >
+              <span className="text-sm font-semibold text-[var(--semantic-text-primary)]">Rationale</span>
+            </div>
+
+            {/* Rationale content */}
+            <div style={{ padding: "1rem 1.5rem", flex: 1 }}>
+              <NclexPracticeRationaleCompact
+                status={rationaleStatus}
+                correctKeys={currentFeedback?.correctKeys ?? []}
+                optionDisplayMap={optDisplayMap}
+                correctAnswerExplanation={
+                  currentFeedback?.correctAnswerExplanation
+                    ? resolveMeasureText(currentFeedback.correctAnswerExplanation)
+                    : null
+                }
+                rationale={
+                  currentFeedback?.rationale ? resolveMeasureText(currentFeedback.rationale) : null
+                }
+                primaryDistractorText={primaryDistractorText}
+                keyTakeaway={
+                  currentFeedback?.keyTakeaway ? resolveMeasureText(currentFeedback.keyTakeaway) : null
+                }
+                relatedLessons={currentFeedback?.relatedLessons ?? []}
+                clinicalPearl={
+                  currentFeedback?.clinicalPearlDisplay
+                    ? resolveMeasureText(currentFeedback.clinicalPearlDisplay)
+                    : null
+                }
+                referenceSource={currentFeedback?.referenceSource ?? null}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Bottom bar ──────────────────────────────────────────────────────── */}
+      <NclexPracticeBottomBar
+        canGoPrev={idx > 0}
+        canGoNext={true}
+        hasAnswer={hasAnswer}
+        marked={flagged[currentId ?? ""] ?? false}
+        isSubmitted={isCommitted}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onMark={toggleFlag}
+        onSubmit={() => void handleSubmit()}
+        onCalculator={() => setShowCalc(true)}
+        onNotes={() => setShowNotes(true)}
+        onLabValues={() => setShowLabValues(true)}
+        disabled={disabled}
+        isLastQuestion={idx === total - 1}
+      />
+
+      {/* ── Overlays ────────────────────────────────────────────────────────── */}
+      {showEndModal && (
+        <NclexEndTestModal
+          isCat={false}
+          unansweredCount={unanswered}
+          onConfirm={() => { setShowEndModal(false); void handleFinish(); }}
+          onCancel={() => setShowEndModal(false)}
+        />
+      )}
+      {showCalc && <NclexCalculatorModal onClose={() => setShowCalc(false)} />}
+      {showNotes && (
+        <NclexNotesDrawer
+          initialText={noteText}
+          onSave={(text) => { setNoteText(text); setShowNotes(false); }}
+          onClose={() => setShowNotes(false)}
+        />
+      )}
+      {showLabValues && <NclexLabReference onClose={() => setShowLabValues(false)} />}
+
+    </div>
   );
 }

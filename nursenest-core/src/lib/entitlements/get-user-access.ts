@@ -158,6 +158,12 @@ const getUserAccessCached = cache(async function getUserAccessCached(userId: str
       subscriptionRowsRead: telemetry.subscriptionRowsRead,
       subscriptionQueries: telemetry.subscriptionQueries,
       outcome: ua.reason,
+      hasPremium: ua.hasPremium ? 1 : 0,
+      tier: String(ua.allowedProfession.tier ?? ""),
+      country: String(ua.allowedRegion.country ?? ""),
+      pathwayId: ua.allowedExam.pathwayId ?? "",
+      planStatus: ua.plan.status,
+      expiresAt: ua.plan.expiresAt?.toISOString() ?? "",
     });
     return ua;
   } catch (e) {

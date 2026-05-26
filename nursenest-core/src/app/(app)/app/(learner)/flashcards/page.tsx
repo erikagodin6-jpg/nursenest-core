@@ -163,6 +163,15 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   const entitlement = await resolveEntitlementForPage(userId);
+  safeServerLog("learner_flashcards", "server_bootstrap_auth_entitlement", {
+    loader_name: "flashcards_page",
+    pathway_id_raw: pathwayQueryRaw,
+    user_id_prefix: userId.slice(0, 8),
+    has_session: session ? "1" : "0",
+    entitlement_state: entitlement === "error" ? "error" : entitlement.hasAccess ? "has_access" : "no_access",
+    tier: entitlement === "error" ? "" : String(entitlement.tier ?? ""),
+    country: entitlement === "error" ? "" : String(entitlement.country ?? ""),
+  });
 
   if (entitlement === "error") {
     return (
@@ -222,9 +231,25 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         id: p.id,
         label: p.displayName ?? p.shortName,
       }));
+      safeServerLog("learner_flashcards", "pathway_bootstrap_resolved", {
+        loader_name: "flashcards_page",
+        user_id_prefix: userId.slice(0, 8),
+        requested_pathway_id: requestedPathwayId ?? "",
+        learner_path: lp ?? "",
+        compatible_count: compatible.length,
+        compatible_ids: compatible.map((p) => p.id).join(",").slice(0, 400),
+        resolution_state: pathwayResolution.state,
+        default_pathway_id:
+          pathwayResolution.state === "scoped" ? pathwayResolution.defaultPathwayId : "",
+      });
     } catch (e) {
       safeServerLog("learner_flashcards", "pathway_bootstrap_primary_failed", {
         user_id: userId.slice(0, 8),
+        requested_pathway_id: requestedPathwayId ?? "",
+        tier: String(entitlement.tier ?? ""),
+        country: String(entitlement.country ?? ""),
+        error_name: e instanceof Error ? e.name : "unknown",
+        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
         outcome: "error",
       });
 
@@ -297,6 +322,12 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
 
   const scopedPathwayId = pathwayResolution.defaultPathwayId;
   if (!scopedPathwayId) {
+    safeServerLog("learner_flashcards", "scoped_pathway_missing", {
+      loader_name: "flashcards_page",
+      user_id_prefix: userId.slice(0, 8),
+      requested_pathway_id: requestedPathwayId ?? "",
+      resolution_state: pathwayResolution.state,
+    });
     return <FlashcardErrorBoundary />;
   }
 
@@ -313,6 +344,12 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
   };
 
   if (initialHub.categoryOptions.length === 0) {
+    safeServerLog("learner_flashcards", "category_options_empty", {
+      loader_name: "flashcards_page",
+      user_id_prefix: userId.slice(0, 8),
+      pathway_id: scopedPathwayId,
+      source: pathwayBootstrapSource,
+    });
     initialHub = {
       ...initialHub,
       categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),

@@ -3,19 +3,20 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import {
-  AlertCircle,
-  CheckCircle2,
+  Bookmark,
+  Calculator,
   ChevronLeft,
   ChevronRight,
+  FlaskConical,
   Home,
   Keyboard,
+  NotebookPen,
+  Pause,
+  Play,
   RefreshCw,
-  Star,
-  XCircle,
 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
-import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
@@ -159,13 +160,11 @@ export function ActiveStudySession({
   onExit,
   sessionMeta,
   layout = "split",
-  sessionMode = "learn",
   initialCardIndex = 0,
   initialRevealed = false,
   onStudyProgress,
   onSessionComplete,
   onSessionRestart,
-  enableLocalStudyPins = false,
 }: Props) {
   const { t } = useMarketingI18n();
   const [, bumpPins] = useReducer((x: number) => x + 1, 0);
@@ -200,11 +199,12 @@ export function ActiveStudySession({
   const [revealed, setRevealed] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [ratingTally, setRatingTally] = useState({ again: 0, hard: 0, good: 0, easy: 0 });
 
   const current = sessionCards[index] ?? null;
-  const pinState = current?.id && enableLocalStudyPins ? getStudyItemState(current.id) : {};
+  const pinState = current?.id ? getStudyItemState(current.id) : {};
 
   // Derive stable session-level pathwayId from the first card with one.
   // This avoids recreating telemetry callbacks on every card change.
@@ -220,6 +220,7 @@ export function ActiveStudySession({
     setIndex(initialCardIndex);
     setRevealed(initialRevealed);
     setCompleted(false);
+    setIsPaused(false);
     setElapsed(0);
     setRatingTally({ again: 0, hard: 0, good: 0, easy: 0 });
   }, [deduped, initialCardIndex, initialRevealed]);
@@ -237,13 +238,10 @@ export function ActiveStudySession({
   }, [index, onStudyProgress, revealed]);
 
   useEffect(() => {
-    if (sessionMode !== "test" || completed) return;
+    if (completed || isPaused) return;
     const id = setInterval(() => setElapsed((s) => s + 1), 1000);
     return () => clearInterval(id);
-  }, [sessionMode, completed]);
-
-  const progressPct =
-    sessionCards.length > 0 ? Math.min(100, Math.round(((index + 1) / sessionCards.length) * 100)) : 0;
+  }, [completed, isPaused]);
 
   const submitRating = useCallback(
     async (rating: "again" | "hard" | "good" | "easy") => {
@@ -267,6 +265,40 @@ export function ActiveStudySession({
       setSaving(false);
     },
     [index, onRate, onSessionComplete, sessionCards, telemetry],
+  );
+
+  const goPrevious = useCallback(() => {
+    setRevealed(false);
+    setIndex((i) => Math.max(0, i - 1));
+  }, []);
+
+  const goNext = useCallback(() => {
+    if (index >= sessionCards.length - 1) {
+      setCompleted(true);
+      onSessionComplete?.();
+      return;
+    }
+    setRevealed(false);
+    setIndex((i) => Math.min(sessionCards.length - 1, i + 1));
+  }, [index, onSessionComplete, sessionCards.length]);
+
+  const finishSession = useCallback(() => {
+    setCompleted(true);
+    onSessionComplete?.();
+  }, [onSessionComplete]);
+
+  const toggleMarked = useCallback(() => {
+    if (!current?.id) return;
+    setStudyItemState(current.id, { starred: !pinState.starred });
+    bumpPins();
+  }, [current?.id, pinState.starred]);
+
+  const rateConfidence = useCallback(
+    (score: 1 | 2 | 3 | 4 | 5) => {
+      const rating = score === 1 ? "again" : score === 2 ? "hard" : score === 3 ? "good" : "easy";
+      void submitRating(rating);
+    },
+    [submitRating],
   );
 
   // Keyboard shortcuts — declared unconditionally (Rules of Hooks).
@@ -363,75 +395,47 @@ export function ActiveStudySession({
 
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
   const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;
-  const readinessLabel = Math.min(100, progressPct);
   const focusLabel = header.categoriesLabel?.trim() || formatTopicLine(current) || "Adaptive review";
 
   return (
-    <div className="nn-active-flashcard-session space-y-4" data-nn-premium-flashcard-active-session>
-      <ExamSessionProgressStrip pct={progressPct} />
-
-      {/* HEADER */}
-      <div className="nn-premium-flashcard-session-header nn-exam-session-topbar flex flex-wrap items-start justify-between gap-3 p-3 sm:p-4">
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-base font-bold text-[var(--semantic-text-primary)] sm:text-lg">
-            {header.sessionTitle}
-          </h1>
-          <p className="mt-0.5 text-xs text-[var(--semantic-text-secondary)]">
-            {index + 1} / {sessionCards.length}
-            {sessionMeta?.returnedCount != null || sessionMeta?.totalAvailable != null ? (
-              <span className="ml-1.5 text-[var(--semantic-text-secondary)]">
-                · {sessionMeta.returnedCount ?? sessionCards.length} in session
-                {sessionMeta.totalAvailable != null ? ` · ${sessionMeta.totalAvailable} matched filters` : ""}
-                {sessionMeta.requestedCount != null ? ` · up to ${sessionMeta.requestedCount} requested` : ""}
-              </span>
-            ) : null}
-          </p>
+    <div className="nn-active-flashcard-session space-y-3" data-nn-premium-flashcard-active-session>
+      <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
+        <div className="min-w-0">
+          <p className="nn-flashcard-learning-topbar__mode">{header.modeLabel}</p>
+          <h1>{header.sessionTitle}</h1>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="nn-flashcard-learning-topbar__meta">
+          <div>
+            <span>Progress</span>
+            <strong>{index + 1} of {sessionCards.length}</strong>
+          </div>
+          <div className="max-sm:hidden">
+            <span>Focus</span>
+            <strong>{focusLabel}</strong>
+          </div>
+          <div>
+            <span>Time elapsed</span>
+            <strong className="font-mono">{formatElapsed(elapsed)}</strong>
+          </div>
+          <div>
+            <span>Questions</span>
+            <strong>{index + 1} of {sessionCards.length}</strong>
+          </div>
           <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} />
-          {sessionMode === "test" && (
-            <span
-              className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2 py-1 font-mono text-xs text-[var(--semantic-text-primary)]"
-              aria-live="polite"
-            >
-              {formatElapsed(elapsed)}
-            </span>
-          )}
-
-          <Link
-            href={header.exitHref}
-            onClick={onExit}
-            aria-label={t("flashcards.exitSession")}
-            className="rounded-lg p-2 text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_90%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+          <button
+            type="button"
+            className="nn-flashcard-shell-action"
+            onClick={() => setIsPaused((p) => !p)}
           >
-            <Home className="h-5 w-5" aria-hidden />
-          </Link>
+            {isPaused ? <Play className="h-4 w-4" aria-hidden /> : <Pause className="h-4 w-4" aria-hidden />}
+            {isPaused ? "Resume" : "Pause"}
+          </button>
+          <button type="button" className="nn-flashcard-shell-action nn-flashcard-shell-action--primary" onClick={finishSession}>
+            Finish
+          </button>
         </div>
       </div>
-
-      <section
-        className="nn-flashcard-study-micro-status"
-        aria-label="Flashcard study progress"
-        data-nn-flashcard-horizontal-status
-      >
-        <div>
-          <span className="nn-flashcard-study-micro-status__label">Micro-practice</span>
-          <strong>{index + 1} of {sessionCards.length}</strong>
-        </div>
-        <div>
-          <span className="nn-flashcard-study-micro-status__label">Focus</span>
-          <strong>{focusLabel}</strong>
-        </div>
-        <div>
-          <span className="nn-flashcard-study-micro-status__label">Confidence logged</span>
-          <strong>{ratedSession}</strong>
-        </div>
-        <div>
-          <span className="nn-flashcard-study-micro-status__label">Remaining</span>
-          <strong>{remainingCards}</strong>
-        </div>
-      </section>
 
       {/* MAIN CARD */}
       <FlashcardStudyQuestionStack
@@ -485,6 +489,10 @@ export function ActiveStudySession({
           takeawayHeading: t("pages.flashcards.pearl"),
           answerChoicesHeading: "Answer choices",
         }}
+        questionLabel={`Question ${index + 1}`}
+        marked={Boolean(pinState.starred)}
+        onToggleMark={toggleMarked}
+        onAdvance={goNext}
         revealLinksSection={
           revealed && (current.lessonHref || current.practiceTestsTopicHref || current.practiceTopicHref) ? (
             <div
@@ -530,9 +538,11 @@ export function ActiveStudySession({
           <>
             <div className="nn-flashcard-study-support-strip" data-nn-flashcard-support-strip>
               <div>
-                <span className="font-semibold text-[var(--semantic-text-primary)]">Spaced repetition</span>
+                <span className="font-semibold text-[var(--semantic-text-primary)]">Coach</span>
                 <span className="text-[var(--semantic-text-secondary)]">
-                  Rate confidence so weak concepts resurface without turning this into a dashboard.
+                  {revealed
+                    ? `${ratedSession} confidence rating${ratedSession === 1 ? "" : "s"} logged · ${remainingCards} remaining`
+                    : "Think: what finding changes risk fastest, and why would the wrong options distract you?"}
                 </span>
               </div>
               <div className="hidden items-center gap-2 text-[11px] text-[var(--semantic-text-muted)] sm:flex">
@@ -543,97 +553,77 @@ export function ActiveStudySession({
               </div>
             </div>
 
-            {revealed && enableLocalStudyPins && current?.id ? (
-              <div
-                className="nn-flashcard-bookmark-controls flex flex-wrap gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3"
-                data-nn-premium-flashcard-bookmarks
-              >
-                <button
-                  type="button"
-                  data-nn-flashcard-control="star"
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    pinState.starred
-                      ? "border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                      : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
-                  }`}
-                  onClick={() => {
-                    setStudyItemState(current.id, { starred: !pinState.starred });
-                    bumpPins();
-                  }}
-                >
-                  <Star className="h-3.5 w-3.5" aria-hidden />
-                  {pinState.starred ? "Starred" : "Star card"}
-                </button>
-                <button
-                  type="button"
-                  data-nn-flashcard-control="weak"
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    pinState.confusing
-                      ? "border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                      : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
-                  }`}
-                  onClick={() => {
-                    setStudyItemState(current.id, { confusing: !pinState.confusing });
-                    bumpPins();
-                  }}
-                >
-                  <AlertCircle className="h-3.5 w-3.5" aria-hidden />
-                  {pinState.confusing ? "Flagged weak" : "Flag weak"}
-                </button>
-                <span className="self-center text-[10px] text-[var(--semantic-text-secondary)]">
-                  Saved on this device for starred / weak filters on the hub.
-                </span>
+            <div className="nn-flashcard-coach-panel">
+              <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--coach">
+                <span>Coach</span>
               </div>
-            ) : null}
-
-            {revealed ? (
-              <div className="nn-flashcard-confidence-controls grid grid-cols-1 gap-2 sm:grid-cols-3" data-nn-premium-flashcard-confidence>
-                <button
-                  type="button"
-                  data-nn-flashcard-rating="again"
-                  aria-label="Need repetition — needs more review (key 1)"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-danger)_14%,var(--semantic-surface))]"
-                  onClick={() => submitRating("again")}
-                  disabled={saving}
-                >
-                  <XCircle className="h-4 w-4 shrink-0" aria-hidden /> Need repetition
-                </button>
-                <button
-                  type="button"
-                  data-nn-flashcard-rating="hard"
-                  aria-label="Unsure — struggled (key 2)"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
-                  onClick={() => submitRating("hard")}
-                  disabled={saving}
-                >
-                  <RefreshCw className="h-4 w-4 shrink-0" aria-hidden /> Unsure
-                </button>
-                <button
-                  type="button"
-                  data-nn-flashcard-rating="good"
-                  aria-label="Got it — recalled with effort (key 3)"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-surface))]"
-                  onClick={() => submitRating("good")}
-                  disabled={saving}
-                >
-                  <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden /> Got it
-                </button>
+              <div className="nn-flashcard-coach-panel__section">
+                <span>Tutor Hint</span>
+                <p>{formatTopicLine(current) ? `Connect this to ${formatTopicLine(current)}.` : "Look for the safest clinical priority before choosing."}</p>
               </div>
-            ) : null}
+              <div className="nn-flashcard-coach-panel__section">
+                <span>Why This Matters</span>
+                <p>{buildClinicalPearl(current, "This concept connects recall to clinical judgment.")}</p>
+              </div>
+              <div className="nn-flashcard-coach-panel__section">
+                <span>Related Lesson</span>
+                {current.lessonHref ? (
+                  <Link href={current.lessonHref}>{current.lessonTitle?.trim() || "Go to lesson"} <ChevronRight className="h-3.5 w-3.5" aria-hidden /></Link>
+                ) : (
+                  <p>{current.topic || "Review linked study from the flashcards hub."}</p>
+                )}
+              </div>
+              <div className="nn-flashcard-confidence-scale" data-nn-premium-flashcard-confidence>
+                <span>How confident are you?</span>
+                <div>
+                  {[1, 2, 3, 4, 5].map((score) => (
+                    <button
+                      key={score}
+                      type="button"
+                      aria-label={`Confidence ${score}`}
+                      data-nn-flashcard-rating={score}
+                      onClick={() => rateConfidence(score as 1 | 2 | 3 | 4 | 5)}
+                      disabled={!revealed || saving}
+                    >
+                      {score}
+                    </button>
+                  ))}
+                </div>
+                <p><span>Not confident</span><span>Very confident</span></p>
+              </div>
+            </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
+            <div className="nn-flashcard-command-bar">
               <button
                 type="button"
                 className="nn-premium-flashcard-nav-btn"
-                onClick={() => { setRevealed(false); setIndex((i) => Math.max(0, i - 1)); }}
+                onClick={goPrevious}
               >
                 <ChevronLeft className="h-4 w-4" aria-hidden />
                 {t("flashcards.previous")}
               </button>
+              <div className="nn-flashcard-command-bar__tools">
+                <Link href="/app/med-calculations">
+                  <Calculator className="h-4 w-4" aria-hidden />
+                  Calculator
+                </Link>
+                <Link href="/app/account/notes">
+                  <NotebookPen className="h-4 w-4" aria-hidden />
+                  Notes
+                </Link>
+                <Link href="/modules/lab-values">
+                  <FlaskConical className="h-4 w-4" aria-hidden />
+                  Lab Values
+                </Link>
+                <button type="button" onClick={toggleMarked} aria-pressed={Boolean(pinState.starred)}>
+                  <Bookmark className="h-4 w-4" aria-hidden />
+                  {pinState.starred ? "Marked" : "Mark"}
+                </button>
+              </div>
               <button
                 type="button"
-                className="nn-premium-flashcard-nav-btn"
-                onClick={() => { setRevealed(false); setIndex((i) => Math.min(sessionCards.length - 1, i + 1)); }}
+                className="nn-premium-flashcard-nav-btn nn-premium-flashcard-nav-btn--primary"
+                onClick={goNext}
                 disabled={!revealed}
               >
                 {t("flashcards.next")}

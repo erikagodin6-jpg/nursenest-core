@@ -612,6 +612,29 @@ export async function buildFlashcardCustomSession(
     // when in a card session (includeCards or filtered mode).
     const categoryCountsForOptions = useEffectiveTotalForSummary ? examInventoryCounts : categoryCounts;
     const categoryOptions = applyCountsToBuilderCategories(pathwayScopeId ?? pathwayId, categoryCountsForOptions);
+    if (matchingCardsForSummary === 0 || categoryOptions.length === 0) {
+      safeServerLog("flashcards", "custom_session_zero_inventory", {
+        loader_name: "build_flashcard_custom_session",
+        user_id_prefix: userId.slice(0, 8),
+        pathway_id: pathwayScopeId ?? pathwayId ?? "",
+        tier: String(entitlement.tier ?? ""),
+        country: String(entitlement.country ?? ""),
+        source_kind: sourceKind,
+        include_cards: includeCards ? "1" : "0",
+        published_db_flashcards: cards.length,
+        working_card_count: cardWithCategory.length,
+        scoped_count: scoped.length,
+        matching_cards: matchingCardsForSummary,
+        returned_cards: plannedCount,
+        category_options_count: categoryOptions.length,
+        canonical_inventory_total: examTotal,
+        canonical_inventory_buckets: Object.keys(examInventoryCounts).length,
+        selected_category_count: selectedCategories.length,
+        lesson_virtual_count: lessonQuestionVirtuals.length,
+        lesson_id: lessonId ?? "",
+        topic_code: topicCode ?? "",
+      });
+    }
     if (process.env.NODE_ENV === "development") {
       let cardsTaggedFromExamMeta = 0;
       let uncategorizedCardRows = 0;
@@ -665,6 +688,15 @@ export async function buildFlashcardCustomSession(
     };
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("flashcards", "custom_session_builder_threw", {
+      loader_name: "build_flashcard_custom_session",
+      user_id_prefix: userId.slice(0, 8),
+      pathway_id: pathwayId ?? "",
+      tier: String(entitlement.tier ?? ""),
+      country: String(entitlement.country ?? ""),
+      error_name: e instanceof Error ? e.name : "unknown",
+      error_message: message.slice(0, 500),
+    });
     return {
       ok: false,
       code: "database_error",

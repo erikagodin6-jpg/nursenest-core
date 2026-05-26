@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Lightbulb, X } from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
@@ -84,6 +84,10 @@ export function FlashcardStudyQuestionStack({
   onAnswerSubmitted,
   onSataReveal,
   onRationaleOpened,
+  questionLabel,
+  marked = false,
+  onToggleMark,
+  onAdvance,
 }: {
   sessionModeLabel: string;
   topicLine?: string | null;
@@ -108,6 +112,10 @@ export function FlashcardStudyQuestionStack({
   onSataReveal?: (selectedLetters: string[], correctLetters: string[]) => void;
   /** Fired once when the rationale panel first mounts for this card. */
   onRationaleOpened?: () => void;
+  questionLabel?: string;
+  marked?: boolean;
+  onToggleMark?: () => void;
+  onAdvance?: () => void;
 }) {
   const isSata = isSataPayload(examMicroQuestion);
   const exam = isSata ? null : (examMicroQuestion as ExamMicroQuestionPayload | null);
@@ -115,6 +123,7 @@ export function FlashcardStudyQuestionStack({
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
 
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
+  const [rationaleOpen, setRationaleOpen] = useState(true);
   // Study Pulse rail: hidden by default at tablet (< lg) so it doesn't crowd the card
   const [tabletRailOpen, setTabletRailOpen] = useState(false);
   // Tracks current SATA selections so the reveal button can report them before reveal fires.
@@ -122,8 +131,13 @@ export function FlashcardStudyQuestionStack({
 
   useEffect(() => {
     setPickedLetter(null);
+    setRationaleOpen(true);
     sataSelectionsRef.current = [];
   }, [exam?.questionStem, sata?.questionStem, prompt]);
+
+  useEffect(() => {
+    if (revealed) setRationaleOpen(true);
+  }, [revealed]);
 
   useEffect(() => {
     if (!pickedLetter || revealed || !tutorMcq || !exam) return;
@@ -142,7 +156,6 @@ export function FlashcardStudyQuestionStack({
   const promptBody = promptSplit.remainingPrompt || String(prompt ?? "");
 
   const showPlainRevealCta = !exam && !sata && !revealed && typeof onReveal === "function";
-
   return (
     <div className="nn-premium-flashcard-stack-outer nn-flashcard-study-stack-premium mx-auto flex w-full max-w-6xl flex-col gap-4">
       <div
@@ -151,157 +164,181 @@ export function FlashcardStudyQuestionStack({
         data-nn-premium-flashcard-study
       >
         <div className="nn-flashcard-session-main min-w-0">
-          <div className="nn-flashcard-layered-stack relative w-full">
-            <div className="nn-flashcard-layered-stack__underlay" aria-hidden />
+          <div className="nn-flashcard-learning-grid">
             <article className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] overflow-hidden p-5 sm:p-7 lg:p-8">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.55]" aria-hidden>
-            <div className="nn-flashcard-hero-surface__glow absolute -left-16 top-0 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-3)_22%,transparent)] blur-3xl" />
-            <div className="nn-flashcard-hero-surface__glow absolute -right-12 bottom-0 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-5)_18%,transparent)] blur-3xl" />
-          </div>
-
-          <div className="relative z-[1] flex flex-wrap items-center gap-2">
-            <span className="nn-flashcard-chip nn-flashcard-chip--mode">{sessionModeLabel}</span>
-            {topicLine ? (
-              <span className="nn-flashcard-chip nn-flashcard-chip--topic max-w-[min(100%,420px)] truncate">
-                {topicLine}
-              </span>
-            ) : null}
-            {itemKindCaption ? (
-              <span className="nn-flashcard-chip nn-flashcard-chip--kind">{itemKindCaption}</span>
-            ) : null}
-          </div>
-
-          {promptSplit.imageHtml ? (
-            <div
-              className="nn-flashcard-image-card relative z-[1] mb-5 mt-5 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-3 shadow-inner [&_img]:max-h-72 [&_img]:w-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img]:object-contain"
-              data-nn-flashcard-media="image"
-            >
-              <FlashcardRichContent text={promptSplit.imageHtml} />
-            </div>
-          ) : null}
-
-          {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
-            <div className="nn-flashcard-image-card relative z-[1] mb-5 mt-4" data-nn-flashcard-media="image">
-              <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                Clinical figure
-              </div>
-              <img
-                src={clinicalImageUrl}
-                alt=""
-                className="max-h-72 w-auto max-w-full rounded-xl border border-[var(--semantic-border-soft)] object-contain shadow-[var(--semantic-shadow-soft)]"
-                loading="lazy"
-              />
-            </div>
-          ) : null}
-
-          <div className="relative z-[1] nn-flashcard-hero-stem text-pretty text-lg font-semibold leading-snug tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
-            <FlashcardRichContent text={promptBody} />
-          </div>
-
-          {exam ? (
-            <div className="relative z-[1] mt-6">
-              {!revealed ? (
-                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                  Think before selecting →
-                </p>
-              ) : null}
-              <FlashcardExamMcqAnswerList
-                exam={exam}
-                revealed={revealed}
-                pickedLetter={pickedLetter}
-                tutorMcq={tutorMcq}
-                answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
-                revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
-                onPickLetter={commitPick}
-              />
-            </div>
-          ) : null}
-
-          {sata ? (
-            <div className="relative z-[1] mt-6">
-              {!revealed ? (
-                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                  Select all that apply →
-                </p>
-              ) : null}
-              <FlashcardSataAnswerList
-                options={sata.answerOptions}
-                correctLetters={sata.correctLetters}
-                rationaleByLetter={revealed ? sata.rationaleByLetter : []}
-                revealed={revealed}
-                answerChoicesHeading={labels?.answerChoicesHeading ?? "Select all that apply"}
-                revealHint={labels?.revealHint ?? "Choose all correct options, then reveal."}
-                onSelectionsChange={(letters) => { sataSelectionsRef.current = letters; }}
-              />
-              {!revealed && typeof onReveal === "function" ? (
-                <div className="mt-4 flex justify-center">
+              <div className="relative z-[1] flex flex-wrap items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] pb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  {questionLabel ? (
+                    <span className="nn-flashcard-question-label">{questionLabel}</span>
+                  ) : null}
+                  <span className="nn-flashcard-chip nn-flashcard-chip--mode">{sessionModeLabel}</span>
+                  {topicLine ? (
+                    <span className="nn-flashcard-chip nn-flashcard-chip--topic max-w-[min(100%,420px)] truncate">
+                      {topicLine}
+                    </span>
+                  ) : null}
+                  {itemKindCaption ? (
+                    <span className="nn-flashcard-chip nn-flashcard-chip--kind">{itemKindCaption}</span>
+                  ) : null}
+                </div>
+                {onToggleMark ? (
                   <button
                     type="button"
-                    onClick={() => {
-                      onSataReveal?.(sataSelectionsRef.current, sata.correctLetters);
-                      onReveal();
-                    }}
-                    data-testid="sata-reveal-btn"
+                    className="nn-flashcard-mark-button"
+                    aria-pressed={marked}
+                    onClick={onToggleMark}
+                  >
+                    <Bookmark className="h-4 w-4" aria-hidden />
+                    {marked ? "Marked" : "Mark"}
+                  </button>
+                ) : null}
+              </div>
+
+              {promptSplit.imageHtml ? (
+                <div
+                  className="nn-flashcard-image-card relative z-[1] mb-5 mt-5 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-3 shadow-inner [&_img]:max-h-72 [&_img]:w-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img]:object-contain"
+                  data-nn-flashcard-media="image"
+                >
+                  <FlashcardRichContent text={promptSplit.imageHtml} />
+                </div>
+              ) : null}
+
+              <div className="relative z-[1] nn-flashcard-hero-stem mt-6 text-pretty text-lg font-semibold leading-snug tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
+                <FlashcardRichContent text={promptBody} />
+              </div>
+
+              {exam ? (
+                <div className="relative z-[1] mt-6">
+                  <FlashcardExamMcqAnswerList
+                    exam={exam}
+                    revealed={revealed}
+                    pickedLetter={pickedLetter}
+                    tutorMcq={tutorMcq}
+                    answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
+                    revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
+                    onPickLetter={commitPick}
+                  />
+                </div>
+              ) : null}
+
+              {sata ? (
+                <div className="relative z-[1] mt-6">
+                  <FlashcardSataAnswerList
+                    options={sata.answerOptions}
+                    correctLetters={sata.correctLetters}
+                    rationaleByLetter={revealed ? sata.rationaleByLetter : []}
+                    revealed={revealed}
+                    answerChoicesHeading={labels?.answerChoicesHeading ?? "Select all that apply"}
+                    revealHint={labels?.revealHint ?? "Choose all correct options, then reveal."}
+                    onSelectionsChange={(letters) => { sataSelectionsRef.current = letters; }}
+                  />
+                  {!revealed && typeof onReveal === "function" ? (
+                    <div className="mt-4 flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSataReveal?.(sataSelectionsRef.current, sata.correctLetters);
+                          onReveal();
+                        }}
+                        data-testid="sata-reveal-btn"
+                        className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
+                      >
+                        Submit & Reveal
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {showPlainRevealCta ? (
+                <div className="relative z-[1] mt-6 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => onReveal?.()}
                     className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
                   >
-                    Submit & Reveal
+                    {labels?.revealHint ?? "Tap to reveal"}
                   </button>
                 </div>
               ) : null}
-            </div>
-          ) : null}
 
-          {showPlainRevealCta ? (
-            <div className="relative z-[1] mt-6 flex justify-center">
-              <button
-                type="button"
-                onClick={() => onReveal?.()}
-                className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
-              >
-                {labels?.revealHint ?? "Tap to reveal"}
-              </button>
-            </div>
-          ) : null}
-            </article>
-          </div>
-
-          {revealed ? (
-            <section
-              className="nn-flashcard-reveal-zone nn-premium-flashcard-reveal-panel relative overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
-              aria-label={labels?.answerHeading ?? "Answer and rationale"}
-              data-nn-premium-flashcard-reveal
-            >
-              <div className="pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden>
-                <div className="absolute -left-10 top-0 h-40 w-40 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_14%,transparent)] blur-3xl" />
-                <div className="absolute bottom-0 right-0 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-5)_12%,transparent)] blur-3xl" />
-              </div>
-              <div className="relative z-[1] mb-4 flex flex-wrap items-center gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pb-3">
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
-                  Answer & rationale
-                </span>
-              </div>
-              <div className="relative z-[1]">
-                <FlashcardStudyRevealPanels
-                  exam={exam}
-                  answer={answer}
-                  explanation={explanation}
-                  pearl={pearl}
-                  labels={{
-                    answerHeading: labels?.answerHeading,
-                    whyCorrectHeading: labels?.whyCorrectHeading,
-                    whyIncorrectHeading: labels?.whyIncorrectHeading,
-                    takeawayHeading: labels?.takeawayHeading,
-                  }}
-                  onRationaleOpened={onRationaleOpened}
-                />
-              </div>
-              {revealLinksSection ? (
-                <div className="relative z-[1] mt-3" data-testid="flashcard-reveal-links">
-                  {revealLinksSection}
+              {revealed ? (
+                <div className="nn-flashcard-answer-status">
+                  <div className="min-w-0">
+                    <div className="inline-flex items-center gap-2 font-semibold text-[var(--semantic-success)]">
+                      <CheckCircle2 className="h-5 w-5" aria-hidden />
+                      <span>Correct answer shown</span>
+                    </div>
+                    <p>Use the rationale panel to review why it works.</p>
+                  </div>
+                  {onAdvance ? (
+                    <button type="button" className="nn-flashcard-next-inline" onClick={onAdvance}>
+                      Next
+                      <ChevronRight className="h-4 w-4" aria-hidden />
+                    </button>
+                  ) : null}
                 </div>
               ) : null}
-            </section>
-          ) : null}
+            </article>
+
+            <aside
+              className="nn-flashcard-rationale-panel"
+              aria-label={labels?.answerHeading ?? "Answer and rationale"}
+              data-nn-premium-flashcard-reveal={revealed ? "" : undefined}
+            >
+              <div className="nn-flashcard-rationale-panel__header">
+                <div>
+                  <Lightbulb className="h-4 w-4" aria-hidden />
+                  <span>Rationale</span>
+                </div>
+                {revealed ? (
+                  <button
+                    type="button"
+                    className="nn-flashcard-rationale-panel__close"
+                    aria-label={rationaleOpen ? "Hide rationale" : "Show rationale"}
+                    aria-pressed={!rationaleOpen}
+                    onClick={() => setRationaleOpen((open) => !open)}
+                  >
+                    <X className="h-4 w-4" aria-hidden />
+                  </button>
+                ) : null}
+              </div>
+
+              {revealed && rationaleOpen ? (
+                <div className="nn-flashcard-rationale-panel__body">
+                  {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+                    <div className="nn-flashcard-rationale-image" data-nn-flashcard-media="image">
+                      <div>Clinical figure</div>
+                      <img src={clinicalImageUrl} alt="" loading="lazy" />
+                    </div>
+                  ) : null}
+                  <FlashcardStudyRevealPanels
+                    exam={exam}
+                    answer={answer}
+                    explanation={explanation}
+                    pearl={pearl}
+                    labels={{
+                      answerHeading: labels?.answerHeading,
+                      whyCorrectHeading: labels?.whyCorrectHeading,
+                      whyIncorrectHeading: labels?.whyIncorrectHeading,
+                      takeawayHeading: labels?.takeawayHeading,
+                    }}
+                    onRationaleOpened={onRationaleOpened}
+                  />
+                  {revealLinksSection ? (
+                    <div className="mt-3" data-testid="flashcard-reveal-links">
+                      {revealLinksSection}
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="nn-flashcard-rationale-panel__empty">
+                  <BookOpen className="h-5 w-5" aria-hidden />
+                  <p>{revealed ? "Rationale hidden. Use the close control again to reopen it." : "Answer first, then the explanation and key takeaways appear here."}</p>
+                </div>
+              )}
+            </aside>
+          </div>
 
           {mainFooter ? <div className="nn-flashcard-session-main-footer space-y-4">{mainFooter}</div> : null}
         </div>

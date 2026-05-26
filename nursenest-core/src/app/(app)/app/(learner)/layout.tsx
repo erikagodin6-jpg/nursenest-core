@@ -84,10 +84,14 @@ import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
-import { isFlashcardsHubLandingPath } from "@/lib/learner/flashcards-hub-focused-shell";
+import {
+  isFlashcardsFocusedStudyPath,
+  isFlashcardsHubLandingPath,
+} from "@/lib/learner/flashcards-hub-focused-shell";
 import { isPracticeTestsHubLandingPath } from "@/lib/learner/practice-tests-hub-focused-shell";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
+import { prisma } from "@/lib/db";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
@@ -139,6 +143,31 @@ const learnerMarketingShardTrace = createTraceInfo(import.meta, {
   phase: "layout",
 });
 
+type LearnerExamDateState = {
+  examDate: string | null;
+  examDatePlanType: "unsure" | "proposed" | "confirmed" | null;
+  examGoalSetAt: string | null;
+};
+
+async function loadLearnerExamDateState(userId: string): Promise<LearnerExamDateState | null> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      examDate: true,
+      examDatePlanType: true,
+      examGoalSetAt: true,
+    },
+  });
+  if (!user) return null;
+  return {
+    examDate: user.examDate?.toISOString() ?? null,
+    examDatePlanType: user.examDatePlanType
+      ? (user.examDatePlanType.toLowerCase() as LearnerExamDateState["examDatePlanType"])
+      : null,
+    examGoalSetAt: user.examGoalSetAt?.toISOString() ?? null,
+  };
+}
+
 const getAdminViewAsLearnerContextSafe = traceProvider(
   import.meta,
   async function getAdminViewAsLearnerContextSafe(userId: string): Promise<AdminViewAsLearnerContext> {
@@ -181,8 +210,10 @@ const LearnerShellLayout = traceLayout(
   const normalizedLearnerPathname = requestPathname.split("?")[0]?.replace(/\/+$/, "") || "/app";
   const isLearnerDashboardRoute = normalizedLearnerPathname === "/app";
   const isFlashcardsHubLanding = isFlashcardsHubLandingPath(normalizedLearnerPathname);
+  const isFlashcardsFocusedStudy = isFlashcardsFocusedStudyPath(normalizedLearnerPathname);
   const isPracticeTestsHubLanding = isPracticeTestsHubLandingPath(normalizedLearnerPathname);
   const isStudyHubLanding = isFlashcardsHubLanding || isPracticeTestsHubLanding;
+  const isFocusedStudySurface = isStudyHubLanding || isFlashcardsFocusedStudy;
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
   const session = await withBuildTrace(protectedSessionTrace, async () =>
     getProtectedRouteSession("(student).app.(learner)"),
@@ -222,11 +253,11 @@ const LearnerShellLayout = traceLayout(
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
   const shellFallbackStats = getDegradedPublicHomeStatsFallback("learner_shell_route_safe_fallback", { silent: true });
   const paywallHomeStats =
-    isStudyHubLanding
+    isFocusedStudySurface
       ? shellFallbackStats
       : entitlement === "error" || !entitlement.hasAccess
         ? await safeOptional(
-            () => withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell()),
+            async () => await withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell()),
             shellFallbackStats,
             {
               label: "learner_shell_paywall_home_stats",
@@ -333,6 +364,14 @@ const LearnerShellLayout = traceLayout(
     );
   }
 
+  const nclexTargetDateEnabled = entitlement !== "error" && entitlement.hasAccess && !isFocusedExamShell;
+  const nclexTargetDateState = nclexTargetDateEnabled
+    ? await safeOptional(() => loadLearnerExamDateState(userId), null, {
+        label: "learner_exam_date_state",
+        timeoutMs: 900,
+      })
+    : null;
+
   const tutorContext =
     !coreOnlyEmergency &&
     entitlement !== "error" &&
@@ -391,7 +430,10 @@ const LearnerShellLayout = traceLayout(
               data-testid="learner-shell"
             >
               <PremiumLayoutVersionMarker surface="learner-app" />
-              <NclexTargetDateModal enabled={entitlement !== "error" && entitlement.hasAccess && !isFocusedExamShell} />
+              <NclexTargetDateModal
+                enabled={nclexTargetDateEnabled}
+                initialExamDateState={nclexTargetDateState}
+              />
               <LearnerMainLandmarkAudit />
               <PathwayLessonProgressRefreshListener />
               <LearnerDegradedModeBanner
@@ -403,7 +445,7 @@ const LearnerShellLayout = traceLayout(
               entitlement.reason === "admin_override" &&
               !qaShell &&
               !entitlement.adminLearnerQaSimulation &&
-              !isStudyHubLanding ? (
+              !isFocusedStudySurface ? (
                 <div
                   role="region"
                   aria-label="Staff access override"
@@ -478,7 +520,7 @@ const LearnerShellLayout = traceLayout(
                       printablesNavVisible={printablesNavVisible}
                     />
                   </div>
-                  {!isStudyHubLanding ? <LearnerStudyPathStrip pathwayId={pathwayId} /> : null}
+                  {!isFocusedStudySurface ? <LearnerStudyPathStrip pathwayId={pathwayId} /> : null}
                 </div>
                 <LearnerShellMobileBottomNav
                   pathwayPillLabel={pathwayShortLabel}
@@ -488,7 +530,7 @@ const LearnerShellLayout = traceLayout(
                   printablesNavVisible={printablesNavVisible}
                 />
               </div>
-              {studyNextBlock && !isLearnerDashboardRoute && !isStudyHubLanding ? (
+              {studyNextBlock && !isLearnerDashboardRoute && !isFocusedStudySurface ? (
                 <LearnerSilentSectionBoundary name="study_next">
                   <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
                     <Suspense
@@ -534,7 +576,7 @@ const LearnerShellLayout = traceLayout(
                 )}
               >
                 <div className="nn-learner-exam-chrome-dim nn-learner-site-footer-bleed mt-10">
-                  <LearnerAppFooter serverHasStaffSession={staffSession != null} />
+                  <LearnerAppFooter />
                 </div>
               </MarketingCountryChromeProvider>
             </div>
