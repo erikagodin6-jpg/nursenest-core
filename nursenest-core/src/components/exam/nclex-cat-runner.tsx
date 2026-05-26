@@ -622,6 +622,48 @@ export function NclexCatRunner({
     );
   }
 
+  if (phase === "ready" && currentId && !current) {
+    return (
+      <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center">
+        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+            Exam recovery
+          </p>
+          <h1 className="mt-2 text-xl font-semibold text-[var(--semantic-text-primary)]">
+            This question is still loading
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            We have your session order, but this item did not arrive with the bootstrap payload. Retry the session load or return to Practice Exams.
+          </p>
+          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-text-on-brand)]"
+              onClick={() => {
+                emitRuntimeEvent("cat_runtime_bootstrap_failed", {
+                  sessionId: testId,
+                  errorCode: "missing_current_question_row",
+                  questionId: currentId,
+                  pathwayId,
+                });
+                setPhase("loading");
+                setRetryNonce((n) => n + 1);
+              }}
+            >
+              Retry session
+            </button>
+            <Link
+              href="/app/practice-tests"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 text-sm font-medium text-[var(--semantic-text-secondary)]"
+            >
+              Practice Exams
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ── Results ───────────────────────────────────────────────────────────────
 
   if (catUiPhase === "completed") {

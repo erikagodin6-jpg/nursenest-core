@@ -102,6 +102,7 @@ export function PracticeTestsHubClient({
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const createInFlightRef = useRef(false);
 
   const selectedPathway = useMemo(
     () => pathwayOptions.find((option) => option.id === pathwayId) ?? pathwayOptions[0],
@@ -234,11 +235,14 @@ export function PracticeTestsHubClient({
   }, []);
 
   const createTest = useCallback(async () => {
-    if (creating) return;
+    if (creating || createInFlightRef.current) return;
+    createInFlightRef.current = true;
     setCreating(true);
     setError(null);
     setErrorCode(null);
     setSessionExpired(false);
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 28_000);
 
     try {
       const trimmedPathwayId = pathwayId.trim();
@@ -325,6 +329,7 @@ export function PracticeTestsHubClient({
         method: "POST",
         credentials: "include",
         cache: "no-store",
+        signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
           "x-nn-study-launch-surface": "practice_exams",
@@ -379,9 +384,16 @@ export function PracticeTestsHubClient({
         },
       });
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "We could not start this exam. Please try again.");
+      const aborted = cause instanceof DOMException && cause.name === "AbortError";
+      setError(
+        aborted
+          ? "Starting this exam timed out. Your progress is safe; check your connection and try again."
+          : cause instanceof Error ? cause.message : "We could not start this exam. Please try again.",
+      );
     } finally {
+      window.clearTimeout(timeout);
       setCreating(false);
+      createInFlightRef.current = false;
     }
   }, [
     allCanonicalIds.length,

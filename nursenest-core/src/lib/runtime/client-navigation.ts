@@ -51,7 +51,14 @@ export function safeRouterReplace(
 
   window.setTimeout(() => {
     const current = `${window.location.pathname}${window.location.search}`;
-    if (current === target) return;
+    if (current === target) {
+      emitRuntimeEvent("route_transition_commit", {
+        ...context,
+        target,
+        elapsedMs: Math.round(performance.now() - startedAt),
+      });
+      return;
+    }
     emitRuntimeEvent("route_transition_failure", {
       ...context,
       target,
