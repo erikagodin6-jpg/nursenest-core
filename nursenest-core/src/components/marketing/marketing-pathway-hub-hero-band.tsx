@@ -21,7 +21,7 @@ export function MarketingPathwayHubHeroBand({
 }) {
   return (
     <div
-      className={`nn-gradient-safe nn-nursing-tier-hub-hero-band relative overflow-hidden px-6 pt-6 pb-5 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:pt-8 sm:pb-6 ${className}`.trim()}
+      className={`nn-gradient-safe nn-nursing-tier-hub-hero-band relative overflow-hidden px-6 pt-4 pb-4 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:pt-5 sm:pb-5 ${className}`.trim()}
       data-nn-hub-section="identity-hero"
     >
       <div
@@ -33,9 +33,9 @@ export function MarketingPathwayHubHeroBand({
         aria-hidden
       />
       <div className="relative">{eyebrow}</div>
-      <div className="relative mt-4">{title}</div>
-      {intro ? <div className="relative mt-4">{intro}</div> : null}
-      {children ? <div className="relative mt-7 min-w-0">{children}</div> : null}
+      <div className="relative mt-3">{title}</div>
+      {intro ? <div className="relative mt-3">{intro}</div> : null}
+      {children ? <div className="relative mt-5 min-w-0">{children}</div> : null}
     </div>
   );
 }

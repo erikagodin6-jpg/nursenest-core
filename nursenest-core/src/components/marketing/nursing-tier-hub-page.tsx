@@ -134,7 +134,8 @@ export function NursingTierHubPage({
   const heading = formatTitleCase(rawTitle);
   const introRaw = content.intro?.trim();
   const intro = introRaw ? formatSentenceCase(introRaw) : "";
-  const eyebrow = pathway.shortName.trim() || pathway.displayName;
+  const countryLabel = pathway.countrySlug === "canada" ? "Canada" : pathway.countrySlug === "us" ? "United States" : pathway.countrySlug;
+  const eyebrow = countryLabel;
   const isNewGradHub = isNewGradTransitionPathway(pathway);
   const npPremiumConvergence = isNpPremiumConvergencePathway(pathway);
   const lessonsAction = actionsById.get("lessons");
@@ -216,9 +217,14 @@ export function NursingTierHubPage({
         <section className="nn-hub-tier-study-band" aria-labelledby="nn-nursing-tier-hub-title">
           {pnHub ? (
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-stretch">
+              <div className="mb-1">
+                <Link href={hubPath} className="nn-text-xs nn-text-muted no-underline hover:underline">
+                  ← Back to Overview
+                </Link>
+              </div>
               <MarketingPathwayHubHeroBand
                 className="min-w-0 nn-pn-pathway-hero-premium"
-                eyebrow={<p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{eyebrow}</p>}
+                eyebrow={<p className="nn-premium-home-eyebrow max-w-full whitespace-normal text-[var(--semantic-text-muted)]">{eyebrow}</p>}
                 title={
                   <h1
                     id="nn-nursing-tier-hub-title"
@@ -320,9 +326,15 @@ export function NursingTierHubPage({
               </div>
             </div>
           ) : (
-            <MarketingPathwayHubHeroBand
-              className={`min-w-0${npPremiumConvergence ? " nn-np-pathway-hero-premium" : ""}`}
-              eyebrow={<p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{eyebrow}</p>}
+            <div className="nn-non-pn-hero-wrapper">
+              <div className="mb-1">
+                <Link href={hubPath} className="nn-text-xs nn-text-muted no-underline hover:underline">
+                  ← Back to Overview
+                </Link>
+              </div>
+              <MarketingPathwayHubHeroBand
+                className={`min-w-0${npPremiumConvergence ? " nn-np-pathway-hero-premium" : ""}`}
+                eyebrow={<p className="nn-premium-home-eyebrow max-w-full whitespace-normal text-[var(--semantic-text-muted)]">{eyebrow}</p>}
               title={
                 <h1
                   id="nn-nursing-tier-hub-title"
@@ -337,6 +349,7 @@ export function NursingTierHubPage({
                 ) : null
               }
             />
+            </div>
           )}
 
           {pnHub && !npPremiumConvergence ? (

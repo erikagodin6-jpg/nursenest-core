@@ -99,7 +99,7 @@ function examPathwaySurfacePrefix(
 
 const LESSONS_KEY = "breadcrumbs.lessons" as const;
 
-/** Exam pathway overview: Home → Country → Role track → Pathway hub (current). */
+/** Exam pathway overview: Home → Country → Exam hub (current). No redundant role track crumb. */
 export function pathwayOverviewBreadcrumbs(
   pathway: ExamPathwayDefinition,
   opts?: PathwayMarketingHubBreadcrumbOpts,
@@ -108,8 +108,8 @@ export function pathwayOverviewBreadcrumbs(
   schemaItems: BreadcrumbSchemaItem[];
 } {
   const p = examPathwaySurfacePrefix(pathway, opts);
-  const crumbs: BreadcrumbCrumb[] = [HOME, p.countryCrumb(true), p.roleCrumb(true), p.hubCrumb(false)];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, p.countrySchema(), p.roleSchema(), p.hubSchema()];
+  const crumbs: BreadcrumbCrumb[] = [HOME, p.countryCrumb(true), p.hubCrumb(false)];
+  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, p.countrySchema(), p.hubSchema()];
   return { crumbs, schemaItems };
 }
 
@@ -184,14 +184,12 @@ export function pathwayQuestionsHubBreadcrumbs(
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     p.countryCrumb(true),
-    p.roleCrumb(true),
     p.hubCrumb(true),
     { name: "Question bank", href: undefined, i18nKey: qbKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     p.countrySchema(),
-    p.roleSchema(),
     p.hubSchema(),
     { name: "Question bank", item: toAbsoluteSiteUrl(qPath), i18nKey: qbKey },
   ];
@@ -214,14 +212,12 @@ export function pathwayProgrammaticStudySeoBreadcrumbs(
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     p.countryCrumb(true),
-    p.roleCrumb(true),
     p.hubCrumb(true),
     { name: pageLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     p.countrySchema(),
-    p.roleSchema(),
     p.hubSchema(),
     { name: pageLabel, item: toAbsoluteSiteUrl(selfPath) },
   ];
@@ -244,14 +240,12 @@ export function pathwayStudyResourcesBodyBreadcrumbs(
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     p.countryCrumb(true),
-    p.roleCrumb(true),
     p.hubCrumb(true),
     { name: bodyDisplayLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     p.countrySchema(),
-    p.roleSchema(),
     p.hubSchema(),
     { name: bodyDisplayLabel, item: toAbsoluteSiteUrl(selfPath) },
   ];
@@ -272,14 +266,12 @@ export function pathwayCatPracticeBreadcrumbs(
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     p.countryCrumb(true),
-    p.roleCrumb(true),
     p.hubCrumb(true),
     { name: "CAT practice", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     p.countrySchema(),
-    p.roleSchema(),
     p.hubSchema(),
     { name: "CAT practice", item: toAbsoluteSiteUrl(catPath) },
   ];
@@ -301,14 +293,12 @@ export function pathwayPricingBreadcrumbs(
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     p.countryCrumb(true),
-    p.roleCrumb(true),
     p.hubCrumb(true),
     { name: "Pricing", href: undefined, i18nKey: pricingKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     p.countrySchema(),
-    p.roleSchema(),
     p.hubSchema(),
     { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath), i18nKey: pricingKey },
   ];
