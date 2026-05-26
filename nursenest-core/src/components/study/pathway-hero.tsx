@@ -28,7 +28,7 @@ type Props = {
  */
 export function PathwayHero({ eyebrow, title, subtitle, toolbar, ctas, backLink }: Props) {
   return (
-    <header className="relative overflow-hidden rounded-[2rem] border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm ring-1 ring-black/[0.015] sm:p-7 lg:p-8">
+    <header className="relative overflow-hidden rounded-[2rem] border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm ring-1 ring-black/[0.015] sm:p-6 lg:p-7">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--semantic-brand)] via-[var(--semantic-info)] to-[var(--semantic-success)] opacity-75" />
       <div className="relative max-w-4xl">
         {backLink ? (
@@ -42,14 +42,14 @@ export function PathwayHero({ eyebrow, title, subtitle, toolbar, ctas, backLink 
 
         {eyebrow ? <div className={backLink ? "mb-2" : "mb-3"}>{eyebrow}</div> : null}
 
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl lg:text-5xl">
+        <h1 className="text-3xl font-bold leading-[1.08] tracking-tight text-[var(--theme-heading-text)] sm:text-[2.35rem] lg:text-[2.85rem]">
           {title}
         </h1>
 
-        <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--theme-muted-text)] sm:text-lg">{subtitle}</p>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--theme-muted-text)] sm:text-base sm:leading-7">{subtitle}</p>
 
         {ctas && ctas.length > 0 ? (
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3">
             {ctas.map((cta) => (
               <Link key={cta.href + cta.label} href={cta.href} className={ctaClass(cta.variant)}>
                 {cta.label}

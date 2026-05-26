@@ -15,21 +15,21 @@ export function pathwayQuestionsMarketingHubH1(pathway: ExamPathwayDefinition): 
   const examName = pathwayRegionAwareExamName(pathway);
   const country = pathway.countrySlug === "canada" ? "CA" : pathway.countrySlug === "us" ? "US" : "US";
   if (pathway.examFamily === ExamFamily.GENERIC && pathway.roleTrack === "rn") {
-    return `${examName} practice questions · ${place}`;
+    return `${examName} Practice Questions · ${place}`;
   }
   switch (pathway.roleTrack) {
     case "rn":
-      return `${examName} practice questions for ${place}`;
+      return `${examName} Practice Questions for ${place}`;
     case "lpn":
-      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) practice questions for ${place}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) Practice Questions for ${place}`;
     case "rpn":
-      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) practice questions for ${place}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) Practice Questions for ${place}`;
     case "np":
-      return `${examName} exam prep questions for ${place}`;
+      return `${examName} Exam Prep Questions for ${place}`;
     case "allied":
-      return `Allied health practice questions for ${place}`;
+      return `Allied Health Practice Questions for ${place}`;
     default:
-      return `Practice questions for ${pathway.displayName}`;
+      return `Practice Questions for ${pathway.displayName}`;
   }
 }
 

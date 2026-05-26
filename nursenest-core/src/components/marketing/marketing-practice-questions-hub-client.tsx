@@ -58,13 +58,13 @@ export type MarketingPracticeQuestionsHubClientProps = {
 };
 
 const categoryCardBase =
-  "flex min-h-[4.25rem] flex-col justify-center rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition sm:min-h-[4.5rem]";
+  "group flex min-h-[9.5rem] h-full w-full flex-col rounded-[1.35rem] border px-4 py-4 text-left text-sm transition duration-200 sm:min-h-[10.25rem]";
 
 function cardSelected() {
-  return `${categoryCardBase} border-[color-mix(in_srgb,var(--semantic-brand)_52%,var(--semantic-border-soft))] bg-white text-[var(--semantic-text-primary)] shadow-sm ring-2 ring-[color-mix(in_srgb,var(--semantic-brand)_14%,transparent)]`;
+  return `${categoryCardBase} -translate-y-0.5 border-[color-mix(in_srgb,var(--semantic-brand)_48%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,white)] text-[var(--semantic-text-primary)] shadow-[0_16px_34px_-26px_color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_18%,transparent)]`;
 }
 
-const cardUnselected = `${categoryCardBase} border-[var(--semantic-border-soft)] bg-white text-[var(--semantic-text-secondary)] shadow-sm hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:shadow-md`;
+const cardUnselected = `${categoryCardBase} border-[var(--semantic-border-soft)] bg-white text-[var(--semantic-text-secondary)] shadow-sm hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_3%,white)] hover:shadow-[0_16px_34px_-28px_rgba(15,23,42,0.34)]`;
 
 function appQuestionsBase(pathwayId: string, qs: Record<string, string>, alliedProfession?: string) {
   const p = new URLSearchParams({ pathwayId });
@@ -301,7 +301,7 @@ export function MarketingPracticeQuestionsHubClient({
   const modeCardsAll = [
     {
       icon: LayoutGrid,
-      title: "Practice by category",
+      title: "Practice by Category",
       description: "Select body-system hubs below, then start a focused session.",
       href: "#practice-body-systems",
       accent: "success" as const,
@@ -311,7 +311,7 @@ export function MarketingPracticeQuestionsHubClient({
     },
     {
       icon: Shuffle,
-      title: "Mixed quiz",
+      title: "Mixed Quiz",
       description: "Random items across the full pathway scope.",
       href: startMixedHref,
       accent: "brand" as const,
@@ -321,7 +321,7 @@ export function MarketingPracticeQuestionsHubClient({
     },
     {
       icon: TrendingDown,
-      title: "Weak areas",
+      title: "Weak Areas",
       description: "Prioritize topics where accuracy is lowest after you have attempt data.",
       href: weakHref,
       accent: "info" as const,
@@ -331,7 +331,7 @@ export function MarketingPracticeQuestionsHubClient({
     },
     {
       icon: XCircle,
-      title: "Incorrect review",
+      title: "Incorrect Review",
       description: "Replay questions you answered incorrectly recently.",
       href: incorrectHref,
       accent: "warning" as const,
@@ -341,7 +341,7 @@ export function MarketingPracticeQuestionsHubClient({
     },
     {
       icon: EyeOff,
-      title: "Unseen questions",
+      title: "Unseen Questions",
       description: "Bias toward questions you have not opened yet.",
       href: unseenHref,
       accent: "chart" as const,
@@ -351,7 +351,7 @@ export function MarketingPracticeQuestionsHubClient({
     },
     {
       icon: LineChart,
-      title: "CAT exam",
+      title: "CAT Exam",
       description: "Computerized adaptive testing for this pathway.",
       href: catAppHref,
       accent: "purple" as const,
@@ -366,12 +366,12 @@ export function MarketingPracticeQuestionsHubClient({
   );
 
   return (
-    <div className="space-y-10" data-testid="marketing-practice-questions-hub">
+    <div className="space-y-8" data-testid="marketing-practice-questions-hub">
       <section aria-labelledby="practice-modes-heading" className="rounded-[2rem] border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm sm:p-6">
         <div className="mb-5 max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">Practice modes</p>
-          <h2 id="practice-modes-heading" className="mt-1 text-2xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
-            Choose how to study
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">Practice Modes</p>
+          <h2 id="practice-modes-heading" className="mt-1 text-[1.35rem] font-bold leading-tight tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">
+            Choose How to Study
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">
             Start broadly, focus by body system, or review weak areas once you have attempt history.
@@ -382,13 +382,13 @@ export function MarketingPracticeQuestionsHubClient({
             const Icon = m.icon;
             const accent = modeAccentClass[m.accent];
             return (
-              <li key={m.title} className="flex flex-col rounded-2xl border border-[var(--semantic-border-soft)] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+              <li key={m.title} className="flex min-h-[10.5rem] flex-col rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_24%,var(--semantic-border-soft))] hover:shadow-[0_16px_34px_-28px_rgba(15,23,42,0.34)]">
                 <div className="flex items-start gap-3">
                   <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${accent}`}>
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-[var(--theme-heading-text)]">{m.title}</p>
+                    <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{m.title}</p>
                     <p className="mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)]">{m.description}</p>
                   </div>
                 </div>
@@ -407,9 +407,9 @@ export function MarketingPracticeQuestionsHubClient({
       <section id="practice-body-systems" aria-labelledby="body-systems-heading" className="rounded-[2rem] border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm sm:p-6">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">Question categories</p>
-            <h2 id="body-systems-heading" className="mt-1 text-2xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
-              Body systems & categories
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">Question Categories</p>
+            <h2 id="body-systems-heading" className="mt-1 text-[1.35rem] font-bold leading-tight tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">
+              Body Systems & Categories
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">
               Select one or more hubs for {examDisplayName}. Counts reflect the published question bank for this pathway.
@@ -418,14 +418,14 @@ export function MarketingPracticeQuestionsHubClient({
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              className="rounded-full border border-[var(--semantic-border-soft)] bg-white px-3 py-1.5 text-xs font-bold text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,white)]"
+              className="min-h-[36px] rounded-full border border-[var(--semantic-border-soft)] bg-white px-3.5 py-1.5 text-xs font-semibold text-[var(--semantic-brand)] transition hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,white)]"
               onClick={selectAllFromAggregates}
             >
-              Select all
+              Select All
             </button>
             <button
               type="button"
-              className="rounded-full border border-[var(--semantic-border-soft)] bg-white px-3 py-1.5 text-xs font-bold text-[var(--theme-muted-text)] hover:bg-[var(--semantic-surface)]"
+              className="min-h-[36px] rounded-full border border-[var(--semantic-border-soft)] bg-white px-3.5 py-1.5 text-xs font-semibold text-[var(--theme-muted-text)] transition hover:-translate-y-0.5 hover:bg-[var(--semantic-surface)]"
               onClick={clearSelection}
             >
               Clear
@@ -444,10 +444,10 @@ export function MarketingPracticeQuestionsHubClient({
                 aria-pressed={on}
                 data-testid={`practice-hub-filter-${id}`}
                 onClick={() => setStudyFilter(id)}
-                className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition ${
+                className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition duration-200 ${
                   on
-                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_9%,white)] text-[var(--semantic-text-primary)]"
-                    : "border-[var(--semantic-border-soft)] bg-white text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-surface)]"
+                    ? "-translate-y-0.5 border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_9%,white)] text-[var(--semantic-text-primary)] shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]"
+                    : "border-[var(--semantic-border-soft)] bg-white text-[var(--semantic-text-secondary)] hover:-translate-y-0.5 hover:bg-[var(--semantic-surface)]"
                 }`}
               >
                 <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -457,20 +457,22 @@ export function MarketingPracticeQuestionsHubClient({
           })}
         </div>
 
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2" data-testid="practice-body-system-cards">
+        <ul className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3" data-testid="practice-body-system-cards">
           {aggregates
             .filter((a) => a.id !== "uncategorized")
             .map((row) => {
               const isOn = selected.has(row.id);
               return (
-                <li key={row.id}>
+                <li key={row.id} className="flex">
                   <button type="button" onClick={() => toggle(row.id)} className={isOn ? cardSelected() : cardUnselected} aria-pressed={isOn} data-testid={`practice-hub-card-${row.id}`}>
-                    <span className="flex items-center gap-2 text-[var(--semantic-text-primary)]">
-                      <Stethoscope className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
-                      {row.label}
+                    <span className="flex items-start gap-2.5 text-[var(--semantic-text-primary)]">
+                      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-brand)_8%,white)] text-[var(--semantic-brand)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]">
+                        <Stethoscope className="h-4 w-4" aria-hidden />
+                      </span>
+                      <span className="min-w-0 pt-1 text-sm font-semibold leading-snug">{row.label}</span>
                     </span>
-                    <span className="mt-1 text-xs font-normal leading-relaxed text-[var(--semantic-text-secondary)]">{row.description}</span>
-                    <span className="mt-2 text-xs font-bold text-[var(--semantic-brand)]">{row.questionCount} questions</span>
+                    <span className="mt-3 line-clamp-3 text-xs font-normal leading-relaxed text-[var(--semantic-text-secondary)]">{row.description}</span>
+                    <span className="mt-auto pt-3 text-xs font-semibold text-[var(--semantic-brand)]">{row.questionCount} questions</span>
                   </button>
                 </li>
               );
@@ -509,7 +511,7 @@ export function MarketingPracticeQuestionsHubClient({
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           {linearPracticePoolUsable ? (
             <div className="flex min-w-[8.5rem] flex-col gap-1.5">
-              <Link href={startPrimaryHref} className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-2.5 text-sm font-bold nn-text-on-solid-fill shadow-sm hover:opacity-90" data-testid="start-selected-systems-practice">
+              <Link href={startPrimaryHref} className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-2.5 text-sm font-semibold nn-text-on-solid-fill shadow-sm transition hover:opacity-90" data-testid="start-selected-systems-practice">
                 Start
               </Link>
               <p className="text-center text-[11px] leading-snug text-[var(--theme-muted-text)] sm:text-left">
@@ -521,18 +523,18 @@ export function MarketingPracticeQuestionsHubClient({
               </p>
             </div>
           ) : (
-            <Link href={lessonsHref} className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-bold nn-text-on-solid-fill shadow-sm hover:opacity-90" data-testid="start-selected-systems-practice">
-              Browse clinical lessons
+            <Link href={lessonsHref} className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-semibold nn-text-on-solid-fill shadow-sm transition hover:opacity-90" data-testid="start-selected-systems-practice">
+              Browse Clinical Lessons
             </Link>
           )}
           {catCompletePoolUsable ? (
-            <button type="button" disabled={startingAdaptive || authStatus === "loading"} onClick={() => void startAdaptivePractice()} className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white px-6 py-2.5 text-sm font-bold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-surface)] disabled:opacity-50" data-testid="start-adaptive-selected-systems">
+            <button type="button" disabled={startingAdaptive || authStatus === "loading"} onClick={() => void startAdaptivePractice()} className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-surface)] disabled:opacity-50" data-testid="start-adaptive-selected-systems">
               {startingAdaptive ? "Starting…" : authStatus === "loading" ? "Checking…" : "Start"}
             </button>
           ) : null}
           {catCompletePoolUsable ? (
-            <Link href={marketingCatHref} className="inline-flex min-h-[46px] items-center justify-center rounded-full px-4 py-2.5 text-sm font-bold text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,transparent)]" data-testid="marketing-cat-overview-link">
-              CAT overview
+            <Link href={marketingCatHref} className="inline-flex min-h-[44px] items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,transparent)]" data-testid="marketing-cat-overview-link">
+              CAT Overview
             </Link>
           ) : null}
         </div>
@@ -540,8 +542,8 @@ export function MarketingPracticeQuestionsHubClient({
 
         {topicClusters.length > 0 ? (
           <div className="mt-8 rounded-2xl border border-[var(--semantic-border-soft)] bg-white p-4 shadow-sm">
-            <button type="button" className="flex w-full items-center justify-between gap-2 text-left text-sm font-bold text-[var(--theme-heading-text)]" onClick={() => setAdvancedOpen((o) => !o)} aria-expanded={advancedOpen}>
-              <span>Advanced: refine by lesson topic</span>
+            <button type="button" className="flex w-full items-center justify-between gap-2 text-left text-sm font-semibold text-[var(--theme-heading-text)]" onClick={() => setAdvancedOpen((o) => !o)} aria-expanded={advancedOpen}>
+              <span>Advanced: Refine by Lesson Topic</span>
               {advancedOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
             {advancedOpen ? (
@@ -570,11 +572,11 @@ export function MarketingPracticeQuestionsHubClient({
       </section>
 
       <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-white p-4 shadow-sm" aria-label="Quick links">
-        <p className="text-sm font-bold text-[var(--theme-heading-text)]">Quick links</p>
-        <div className="mt-2 flex flex-wrap gap-4 text-sm font-bold">
-          <Link href={lessonsHref} className="text-[var(--semantic-brand)] hover:underline">Browse lessons</Link>
-          {catCompletePoolUsable ? <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline" data-testid="quick-cat-app-link">CAT app</Link> : null}
-          {linearPracticePoolUsable ? <Link href={startMixedHref} className="text-[var(--semantic-brand)] hover:underline">Mixed quiz</Link> : null}
+        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Quick Links</p>
+        <div className="mt-2 flex flex-wrap gap-4 text-sm font-semibold">
+          <Link href={lessonsHref} className="text-[var(--semantic-brand)] hover:underline">Browse Lessons</Link>
+          {catCompletePoolUsable ? <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline" data-testid="quick-cat-app-link">CAT App</Link> : null}
+          {linearPracticePoolUsable ? <Link href={startMixedHref} className="text-[var(--semantic-brand)] hover:underline">Mixed Quiz</Link> : null}
         </div>
       </section>
     </div>

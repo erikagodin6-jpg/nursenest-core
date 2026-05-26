@@ -85,6 +85,7 @@ if (shouldEmitBuildConfigDiagnostics()) {
 
 const experimental = {
   externalDir: true,
+  optimizePackageImports: ["lucide-react"],
   webpackBuildWorker: false,
 };
 

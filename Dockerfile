@@ -71,7 +71,18 @@ RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codeg
 RUN NODE_OPTIONS="--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3072}" \
   npm --prefix nursenest-core run build:production
 
-RUN npm run build
+# The Next standalone build above is the production runtime artifact. The legacy
+# root build repeats client/server packaging after `next build` has already
+# generated static pages, which can OOM or time out deploy builders during the
+# post-build phase. Keep only a deterministic fallback bundle for the startup
+# proxy if the standalone artifact is ever missing.
+RUN npm --prefix nursenest-core run verify:standalone-artifact \
+  && mkdir -p dist \
+  && printf '%s\n' \
+    '"use strict";' \
+    'console.error("[FATAL BOOT] Next standalone artifact is required for the production Docker image.");' \
+    'process.exit(1);' \
+    > dist/index.cjs
 
 RUN npm prune --omit=dev --no-fund --no-audit
 
