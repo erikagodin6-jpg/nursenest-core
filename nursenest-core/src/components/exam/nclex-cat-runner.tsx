@@ -321,7 +321,18 @@ export function NclexCatRunner({
         if (s.pathwayId) {
           setPathwayId(s.pathwayId);
           const pathway = getExamPathwayById(s.pathwayId);
-          if (pathway) setPathwayCountryCode(String(pathway.countryCode));
+          if (pathway) {
+            setPathwayCountryCode(String(pathway.countryCode));
+            emitRuntimeEvent("cat_runtime_bootstrap_complete", {
+              sessionId: testId,
+              pathwayId: pathway.id,
+              nursingTier: pathway.roleTrack,
+              examType: pathway.examCode,
+              examFamily: String(pathway.examFamily ?? ""),
+              runtimeMode: "cat",
+              bootstrapSurface: "cat_runtime",
+            });
+          }
         }
 
         if (s.timedMode && s.timeLimitSec) {

@@ -67,6 +67,14 @@ function formatPathwayLabel(option: PracticeTestPathwayOption | undefined, fallb
   return option.label.trim() || fallback.trim() || "Practice Exam";
 }
 
+function inferRuntimeNursingTier(pathwayId: string): string {
+  if (pathwayId.includes("-rn-")) return "rn";
+  if (pathwayId.includes("-lpn-") || pathwayId.includes("-rpn-")) return "pn";
+  if (pathwayId.includes("-np-")) return "np";
+  if (pathwayId.includes("allied")) return "allied";
+  return "";
+}
+
 export function PracticeTestsHubClient({
   examSimulationEnabled = false,
   pathwayOptions = [],
@@ -241,8 +249,14 @@ export function PracticeTestsHubClient({
         throw new Error("CAT is not available for this pathway yet. Choose Practice Exam or another pathway.");
       }
       if (examMode === "cat") {
+        const pathwayOption = pathwayOptions.find((option) => option.id === trimmedPathwayId);
         emitRuntimeEvent("cat_start_clicked", {
           pathwayId: trimmedPathwayId,
+          nursingTier: inferRuntimeNursingTier(trimmedPathwayId),
+          examType: pathwayOption?.examCodeLabel ?? "",
+          examFamily: pathwayOption?.examFamily ?? "",
+          runtimeMode: "cat",
+          bootstrapSurface: "practice_tests_hub",
           surface: "practice_tests_hub",
         });
       }
@@ -332,6 +346,9 @@ export function PracticeTestsHubClient({
         setErrorCode(typeof data.code === "string" ? data.code : null);
         emitRuntimeEvent(examMode === "cat" ? "cat_session_create_result" : "practice_exam_session_create_result", {
           pathwayId: trimmedPathwayId,
+          nursingTier: inferRuntimeNursingTier(trimmedPathwayId),
+          runtimeMode: examMode === "cat" ? "cat" : "practice_exam",
+          bootstrapSurface: "practice_tests_hub",
           status: res.status,
           ok: false,
           errorCode: typeof data.code === "string" ? data.code : "",
@@ -346,6 +363,9 @@ export function PracticeTestsHubClient({
       emitRuntimeEvent(examMode === "cat" ? "cat_session_create_result" : "practice_exam_session_create_result", {
         pathwayId: trimmedPathwayId,
         sessionId: data.id,
+        nursingTier: inferRuntimeNursingTier(trimmedPathwayId),
+        runtimeMode: examMode === "cat" ? "cat" : "practice_exam",
+        bootstrapSurface: "practice_tests_hub",
         status: res.status,
         ok: true,
         surface: "practice_tests_hub",

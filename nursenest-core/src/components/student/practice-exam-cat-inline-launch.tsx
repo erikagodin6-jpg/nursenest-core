@@ -14,6 +14,16 @@ import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 /**
  * Inline CAT launch on the practice-tests hub — same study surface, no separate launch page chrome.
  */
+function pathwayRuntimeTelemetry(pathway: PracticeTestPathwayClientShell) {
+  return {
+    nursingTier: pathway.roleTrack,
+    examType: pathway.examCode,
+    examFamily: String(pathway.examFamily ?? ""),
+    runtimeMode: "cat",
+    bootstrapSurface: "cat_inline_launch",
+  };
+}
+
 export function PracticeExamCatInlineLaunch({
   open,
   onClose,
@@ -60,13 +70,18 @@ export function PracticeExamCatInlineLaunch({
     setMessage(null);
     setErrorCode(null);
     let cancelled = false;
-    emitRuntimeEvent("cat_start_clicked", { pathwayId, surface: "cat_inline_launch" });
+    emitRuntimeEvent("cat_start_clicked", {
+      pathwayId,
+      ...pathwayRuntimeTelemetry(shellStable),
+      surface: "cat_inline_launch",
+    });
     void runCatDirectLaunchSessionOnce(pathwayId, shellStable).then((result) => {
       if (cancelled) return;
       if (result.ok) {
         emitRuntimeEvent("cat_session_create_result", {
           pathwayId,
           sessionId: result.practiceTestId,
+          ...pathwayRuntimeTelemetry(shellStable),
           ok: true,
           surface: "cat_inline_launch",
         });
@@ -96,6 +111,7 @@ export function PracticeExamCatInlineLaunch({
       setPhase("error");
       emitRuntimeEvent("cat_session_create_result", {
         pathwayId,
+        ...pathwayRuntimeTelemetry(shellStable),
         ok: false,
         errorCode: result.code ?? "",
         surface: "cat_inline_launch",

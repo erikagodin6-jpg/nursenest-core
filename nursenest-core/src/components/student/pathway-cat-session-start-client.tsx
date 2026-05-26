@@ -33,6 +33,17 @@ function sectionShell(children: ReactNode, className = "") {
   return <section className={`lv-shell nn-premium-cat-section ${className}`.trim()}>{children}</section>;
 }
 
+function pathwayRuntimeTelemetry(pathway: PracticeTestPathwayClientShell | undefined) {
+  if (!pathway) return {};
+  return {
+    nursingTier: pathway.roleTrack,
+    examType: pathway.examCode,
+    examFamily: String(pathway.examFamily ?? ""),
+    runtimeMode: "cat",
+    bootstrapSurface: "pathway_cat_start",
+  };
+}
+
 const CAT_START_ROOT_CLASS =
   "nn-cat-premium-convergence mx-auto max-w-6xl space-y-7 px-3 text-[var(--semantic-text-primary)] sm:px-4 lg:px-0";
 
@@ -220,7 +231,7 @@ export function PathwayCatSessionStartClient({
       const payload = buildCatExamSimulationCreatePayload(pathwayMeta);
       emitRuntimeEvent("cat_start_clicked", {
         pathwayId: normalizedPathwayId,
-        examFamily: String(pathwayMeta.examFamily ?? ""),
+        ...pathwayRuntimeTelemetry(pathwayMeta),
       });
       if (isDev) {
         console.info("[CAT start] attempt", {
@@ -250,6 +261,7 @@ export function PathwayCatSessionStartClient({
       }
       emitRuntimeEvent("cat_session_create_result", {
         pathwayId: normalizedPathwayId,
+        ...pathwayRuntimeTelemetry(pathwayMeta),
         status: res.status,
         ok: res.ok,
         errorCode: data.code ?? "",
@@ -268,6 +280,7 @@ export function PathwayCatSessionStartClient({
       emitRuntimeEvent("cat_start_navigation_attempt", {
         pathwayId: normalizedPathwayId,
         sessionId: data.id,
+        ...pathwayRuntimeTelemetry(pathwayMeta),
         target,
       });
       safeRouterReplace(router, target, {
@@ -285,6 +298,7 @@ export function PathwayCatSessionStartClient({
         : e instanceof Error ? e.message : "Could not start session.";
       emitRuntimeEvent("cat_session_create_result", {
         pathwayId: normalizedPathwayId,
+        ...pathwayRuntimeTelemetry(pathwayMeta),
         ok: false,
         errorCode: aborted ? "create_timeout" : errorCode ?? "create_failed",
         elapsedMs: Math.round(performance.now() - startAt),

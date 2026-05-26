@@ -15,6 +15,16 @@ import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
  * Minimal bridge: verify pool readiness, POST session, redirect into the exam runner.
  * No duplicate setup page — used from marketing CTAs and pathway-scoped app links.
  */
+function pathwayRuntimeTelemetry(pathway: PracticeTestPathwayClientShell) {
+  return {
+    nursingTier: pathway.roleTrack,
+    examType: pathway.examCode,
+    examFamily: String(pathway.examFamily ?? ""),
+    runtimeMode: "cat",
+    bootstrapSurface: "cat_direct_launch",
+  };
+}
+
 export function CatDirectLaunchClient({
   pathwayId,
   pathwayShell,
@@ -51,13 +61,18 @@ export function CatDirectLaunchClient({
 
   useEffect(() => {
     let cancelled = false;
-    emitRuntimeEvent("cat_start_clicked", { pathwayId, surface: "cat_direct_launch" });
+    emitRuntimeEvent("cat_start_clicked", {
+      pathwayId,
+      ...pathwayRuntimeTelemetry(shellStable),
+      surface: "cat_direct_launch",
+    });
     void runCatDirectLaunchSessionOnce(pathwayId, shellStable).then((result) => {
       if (cancelled) return;
       if (result.ok) {
         emitRuntimeEvent("cat_session_create_result", {
           pathwayId,
           sessionId: result.practiceTestId,
+          ...pathwayRuntimeTelemetry(shellStable),
           ok: true,
           surface: "cat_direct_launch",
         });
@@ -87,6 +102,7 @@ export function CatDirectLaunchClient({
       setPhase("error");
       emitRuntimeEvent("cat_session_create_result", {
         pathwayId,
+        ...pathwayRuntimeTelemetry(shellStable),
         ok: false,
         errorCode: result.code ?? "",
         surface: "cat_direct_launch",
