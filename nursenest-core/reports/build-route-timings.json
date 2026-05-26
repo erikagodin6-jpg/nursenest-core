@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-25T19:41:12.695Z",
+  "generatedAt": "2026-05-26T19:56:48.843Z",
   "events": [
     {
       "kind": "layout",
@@ -14,11 +14,11 @@
         ]
       },
       "id": "layout:1",
-      "startTimeMs": 12313.803711,
-      "memoryStartMB": 377.71,
-      "endTimeMs": 12315.335223,
-      "durationMs": 1.5315119999995659,
-      "memoryEndMB": 377.71
+      "startTimeMs": 12404.310592,
+      "memoryStartMB": 366.09,
+      "endTimeMs": 12405.340348,
+      "durationMs": 1.0297559999999066,
+      "memoryEndMB": 366.09
     },
     {
       "kind": "layout",
@@ -34,31 +34,11 @@
         ]
       },
       "id": "layout:2",
-      "startTimeMs": 12316.795546,
-      "memoryStartMB": 377.71,
-      "endTimeMs": 13176.72282,
-      "durationMs": 859.9272740000015,
-      "memoryEndMB": 408.73
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:3",
-      "startTimeMs": 12321.610873,
-      "memoryStartMB": 377.84,
-      "endTimeMs": 12322.30427,
-      "durationMs": 0.693397000000914,
-      "memoryEndMB": 377.84
+      "startTimeMs": 12409.519958,
+      "memoryStartMB": 366.21,
+      "endTimeMs": 13091.788719,
+      "durationMs": 682.2687609999994,
+      "memoryEndMB": 369.86
     },
     {
       "kind": "layout",
@@ -72,12 +52,12 @@
           "marketing"
         ]
       },
-      "id": "layout:4",
-      "startTimeMs": 12560.8279,
-      "memoryStartMB": 384.29,
-      "endTimeMs": 12561.426548,
-      "durationMs": 0.5986479999992298,
-      "memoryEndMB": 384.29
+      "id": "layout:3",
+      "startTimeMs": 12496.468358,
+      "memoryStartMB": 367.84,
+      "endTimeMs": 12497.02131,
+      "durationMs": 0.5529520000000048,
+      "memoryEndMB": 367.84
     },
     {
       "kind": "layout",
@@ -92,18 +72,37 @@
           "default"
         ]
       },
-      "id": "layout:5",
-      "startTimeMs": 12562.623389,
-      "memoryStartMB": 384.29,
-      "endTimeMs": 13177.170206,
-      "durationMs": 614.5468170000004,
-      "memoryEndMB": 408.73
+      "id": "layout:4",
+      "startTimeMs": 12501.496393,
+      "memoryStartMB": 367.84,
+      "endTimeMs": 13115.881417,
+      "durationMs": 614.3850240000011,
+      "memoryEndMB": 370.48
     },
     {
       "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:5",
+      "startTimeMs": 12715.014751,
+      "memoryStartMB": 372.46,
+      "endTimeMs": 12715.640437,
+      "durationMs": 0.6256859999994049,
+      "memoryEndMB": 372.46
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -113,11 +112,11 @@
         ]
       },
       "id": "layout:6",
-      "startTimeMs": 12563.446938,
-      "memoryStartMB": 384.29,
-      "endTimeMs": 12563.807737,
-      "durationMs": 0.3607990000000427,
-      "memoryEndMB": 384.29
+      "startTimeMs": 12723.305801,
+      "memoryStartMB": 372.46,
+      "endTimeMs": 13140.347714,
+      "durationMs": 417.0419129999991,
+      "memoryEndMB": 371.23
     },
     {
       "kind": "layout",
@@ -132,11 +131,11 @@
         ]
       },
       "id": "layout:7",
-      "startTimeMs": 12596.771559,
-      "memoryStartMB": 384.54,
-      "endTimeMs": 12597.271212,
-      "durationMs": 0.4996529999989434,
-      "memoryEndMB": 384.54
+      "startTimeMs": 12753.115712,
+      "memoryStartMB": 358.36,
+      "endTimeMs": 12755.410291,
+      "durationMs": 2.2945789999994304,
+      "memoryEndMB": 358.36
     },
     {
       "kind": "layout",
@@ -152,31 +151,11 @@
         ]
       },
       "id": "layout:8",
-      "startTimeMs": 12598.721446,
-      "memoryStartMB": 384.54,
-      "endTimeMs": 13177.371528,
-      "durationMs": 578.6500820000001,
-      "memoryEndMB": 408.73
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:9",
-      "startTimeMs": 12601.291393,
-      "memoryStartMB": 384.54,
-      "endTimeMs": 12601.580629,
-      "durationMs": 0.2892360000005283,
-      "memoryEndMB": 384.54
+      "startTimeMs": 12756.883397,
+      "memoryStartMB": 358.36,
+      "endTimeMs": 13154.960738,
+      "durationMs": 398.07734100000016,
+      "memoryEndMB": 371.98
     },
     {
       "kind": "layout",
@@ -190,12 +169,12 @@
           "marketing"
         ]
       },
-      "id": "layout:10",
-      "startTimeMs": 12624.031125,
-      "memoryStartMB": 388.91,
-      "endTimeMs": 12624.504708,
-      "durationMs": 0.47358300000087183,
-      "memoryEndMB": 388.91
+      "id": "layout:9",
+      "startTimeMs": 12770.3349,
+      "memoryStartMB": 358.36,
+      "endTimeMs": 12772.483472,
+      "durationMs": 2.1485720000000583,
+      "memoryEndMB": 358.36
     },
     {
       "kind": "layout",
@@ -210,18 +189,37 @@
           "default"
         ]
       },
-      "id": "layout:11",
-      "startTimeMs": 12625.652381,
-      "memoryStartMB": 389.29,
-      "endTimeMs": 13177.487338,
-      "durationMs": 551.8349570000009,
-      "memoryEndMB": 408.73
+      "id": "layout:10",
+      "startTimeMs": 12773.989594,
+      "memoryStartMB": 358.36,
+      "endTimeMs": 13167.966073,
+      "durationMs": 393.976478999999,
+      "memoryEndMB": 372.73
     },
     {
       "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:11",
+      "startTimeMs": 12790.459525,
+      "memoryStartMB": 358.36,
+      "endTimeMs": 12790.983665,
+      "durationMs": 0.5241399999995338,
+      "memoryEndMB": 358.36
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -231,11 +229,11 @@
         ]
       },
       "id": "layout:12",
-      "startTimeMs": 12627.345907,
-      "memoryStartMB": 389.29,
-      "endTimeMs": 12627.631334,
-      "durationMs": 0.2854269999988901,
-      "memoryEndMB": 389.29
+      "startTimeMs": 12792.333302,
+      "memoryStartMB": 358.36,
+      "endTimeMs": 13229.745102,
+      "durationMs": 437.4118000000017,
+      "memoryEndMB": 374.37
     },
     {
       "kind": "layout",
@@ -250,11 +248,11 @@
         ]
       },
       "id": "layout:13",
-      "startTimeMs": 12947.851639,
-      "memoryStartMB": 411.97,
-      "endTimeMs": 12949.525672,
-      "durationMs": 1.6740329999993264,
-      "memoryEndMB": 411.97
+      "startTimeMs": 12800.067125,
+      "memoryStartMB": 358.48,
+      "endTimeMs": 12800.490301,
+      "durationMs": 0.4231760000002396,
+      "memoryEndMB": 358.48
     },
     {
       "kind": "layout",
@@ -270,31 +268,11 @@
         ]
       },
       "id": "layout:14",
-      "startTimeMs": 12950.214679,
-      "memoryStartMB": 411.97,
-      "endTimeMs": 13177.621971,
-      "durationMs": 227.40729199999987,
-      "memoryEndMB": 408.73
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:15",
-      "startTimeMs": 12952.567913,
-      "memoryStartMB": 411.97,
-      "endTimeMs": 12952.810493,
-      "durationMs": 0.24258000000008906,
-      "memoryEndMB": 411.97
+      "startTimeMs": 12802.625746,
+      "memoryStartMB": 358.48,
+      "endTimeMs": 13243.043173,
+      "durationMs": 440.4174270000003,
+      "memoryEndMB": 374.99
     },
     {
       "kind": "layout",
@@ -308,12 +286,12 @@
           "marketing"
         ]
       },
-      "id": "layout:16",
-      "startTimeMs": 12973.997469,
-      "memoryStartMB": 411.97,
-      "endTimeMs": 12974.441751,
-      "durationMs": 0.44428200000038487,
-      "memoryEndMB": 411.97
+      "id": "layout:15",
+      "startTimeMs": 12821.583293,
+      "memoryStartMB": 358.48,
+      "endTimeMs": 12822.605792,
+      "durationMs": 1.0224990000006073,
+      "memoryEndMB": 358.48
     },
     {
       "kind": "layout",
@@ -328,18 +306,37 @@
           "default"
         ]
       },
-      "id": "layout:17",
-      "startTimeMs": 12975.086177,
-      "memoryStartMB": 411.97,
-      "endTimeMs": 13177.746389,
-      "durationMs": 202.66021200000068,
-      "memoryEndMB": 408.73
+      "id": "layout:16",
+      "startTimeMs": 12824.237964,
+      "memoryStartMB": 358.48,
+      "endTimeMs": 13255.712056,
+      "durationMs": 431.4740920000004,
+      "memoryEndMB": 375.74
     },
     {
       "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:17",
+      "startTimeMs": 14500.761986,
+      "memoryStartMB": 423.66,
+      "endTimeMs": 14501.288086,
+      "durationMs": 0.5261000000009517,
+      "memoryEndMB": 423.66
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -349,11 +346,11 @@
         ]
       },
       "id": "layout:18",
-      "startTimeMs": 12978.539265,
-      "memoryStartMB": 411.97,
-      "endTimeMs": 12981.395659,
-      "durationMs": 2.856394000000364,
-      "memoryEndMB": 411.97
+      "startTimeMs": 14502.135864,
+      "memoryStartMB": 423.66,
+      "endTimeMs": 14643.535724,
+      "durationMs": 141.39985999999953,
+      "memoryEndMB": 420.45
     },
     {
       "kind": "layout",
@@ -368,11 +365,11 @@
         ]
       },
       "id": "layout:19",
-      "startTimeMs": 13006.295216,
-      "memoryStartMB": 412.09,
-      "endTimeMs": 13007.017922,
-      "durationMs": 0.7227060000004712,
-      "memoryEndMB": 412.09
+      "startTimeMs": 14839.541868,
+      "memoryStartMB": 425.61,
+      "endTimeMs": 14840.012522,
+      "durationMs": 0.47065400000064983,
+      "memoryEndMB": 425.61
     },
     {
       "kind": "layout",
@@ -388,11 +385,11 @@
         ]
       },
       "id": "layout:20",
-      "startTimeMs": 13009.606898,
-      "memoryStartMB": 412.09,
-      "endTimeMs": 13181.275916,
-      "durationMs": 171.6690180000005,
-      "memoryEndMB": 408.73
+      "startTimeMs": 14840.827606,
+      "memoryStartMB": 425.61,
+      "endTimeMs": 14856.174334,
+      "durationMs": 15.34672799999862,
+      "memoryEndMB": 426.36
     },
     {
       "kind": "layout",
@@ -407,11 +404,11 @@
         ]
       },
       "id": "layout:21",
-      "startTimeMs": 13035.348859,
-      "memoryStartMB": 402.48,
-      "endTimeMs": 13035.760553,
-      "durationMs": 0.4116940000003524,
-      "memoryEndMB": 402.48
+      "startTimeMs": 14910.742798,
+      "memoryStartMB": 429.11,
+      "endTimeMs": 14911.224155,
+      "durationMs": 0.48135700000057113,
+      "memoryEndMB": 429.11
     },
     {
       "kind": "layout",
@@ -427,460 +424,440 @@
         ]
       },
       "id": "layout:22",
-      "startTimeMs": 13036.661128,
-      "memoryStartMB": 402.48,
-      "endTimeMs": 13181.681248,
-      "durationMs": 145.02012000000104,
-      "memoryEndMB": 408.73
+      "startTimeMs": 14912.227519,
+      "memoryStartMB": 429.11,
+      "endTimeMs": 14935.198805,
+      "durationMs": 22.971285999999964,
+      "memoryEndMB": 429.86
     },
     {
       "kind": "layout",
-      "name": "MarketingExamsLayout",
-      "path": "src/app/(marketing)/(default)/exams/layout.tsx",
-      "route": "/exams",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:23",
-      "startTimeMs": 13037.517873,
-      "memoryStartMB": 402.48,
-      "endTimeMs": 13037.762982,
-      "durationMs": 0.24510899999950198,
-      "memoryEndMB": 402.48
+      "startTimeMs": 15000.68472,
+      "memoryStartMB": 426.21,
+      "endTimeMs": 15001.151648,
+      "durationMs": 0.46692799999982526,
+      "memoryEndMB": 426.21
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:24",
-      "startTimeMs": 14834.241387,
-      "memoryStartMB": 447.51,
-      "endTimeMs": 14834.713597,
-      "durationMs": 0.47220999999990454,
-      "memoryEndMB": 447.51
+      "startTimeMs": 15002.589714,
+      "memoryStartMB": 426.21,
+      "endTimeMs": 15024.181512,
+      "durationMs": 21.59179799999947,
+      "memoryEndMB": 426.96
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:25",
-      "startTimeMs": 14835.215998,
-      "memoryStartMB": 447.51,
-      "endTimeMs": 14852.363666,
-      "durationMs": 17.147667999999612,
-      "memoryEndMB": 448.26
+      "startTimeMs": 15081.909287,
+      "memoryStartMB": 429.71,
+      "endTimeMs": 15082.405269,
+      "durationMs": 0.4959820000003674,
+      "memoryEndMB": 429.71
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:26",
-      "startTimeMs": 14900.385087,
-      "memoryStartMB": 450.88,
-      "endTimeMs": 14900.795563,
-      "durationMs": 0.41047599999910744,
-      "memoryEndMB": 450.88
+      "startTimeMs": 15083.26814,
+      "memoryStartMB": 429.71,
+      "endTimeMs": 15097.86158,
+      "durationMs": 14.593440000000555,
+      "memoryEndMB": 430.34
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:27",
-      "startTimeMs": 14901.311303,
-      "memoryStartMB": 450.88,
-      "endTimeMs": 14916.162906,
-      "durationMs": 14.851602999999159,
-      "memoryEndMB": 451.63
+      "startTimeMs": 15132.071875,
+      "memoryStartMB": 433.84,
+      "endTimeMs": 15132.545952,
+      "durationMs": 0.4740770000007615,
+      "memoryEndMB": 433.84
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:28",
-      "startTimeMs": 15004.825786,
-      "memoryStartMB": 450.5,
-      "endTimeMs": 15005.266809,
-      "durationMs": 0.4410230000012234,
-      "memoryEndMB": 450.5
+      "startTimeMs": 15133.281481,
+      "memoryStartMB": 433.84,
+      "endTimeMs": 15150.714948,
+      "durationMs": 17.433467000000746,
+      "memoryEndMB": 434.59
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:29",
-      "startTimeMs": 15005.755461,
-      "memoryStartMB": 450.5,
-      "endTimeMs": 15021.413573,
-      "durationMs": 15.658111999999164,
-      "memoryEndMB": 451.25
+      "startTimeMs": 15347.509537,
+      "memoryStartMB": 434.89,
+      "endTimeMs": 15347.915347,
+      "durationMs": 0.4058100000002014,
+      "memoryEndMB": 434.89
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:30",
-      "startTimeMs": 15086.281214,
-      "memoryStartMB": 456.38,
-      "endTimeMs": 15086.736379,
-      "durationMs": 0.45516499999939697,
-      "memoryEndMB": 456.38
+      "startTimeMs": 15348.599801,
+      "memoryStartMB": 434.89,
+      "endTimeMs": 15363.574764,
+      "durationMs": 14.974963000000571,
+      "memoryEndMB": 435.64
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:31",
-      "startTimeMs": 15087.228205,
-      "memoryStartMB": 456.38,
-      "endTimeMs": 15124.655286,
-      "durationMs": 37.427080999999816,
-      "memoryEndMB": 448.92
+      "startTimeMs": 15886.658884,
+      "memoryStartMB": 457.13,
+      "endTimeMs": 15887.058294,
+      "durationMs": 0.39940999999998894,
+      "memoryEndMB": 457.13
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:32",
-      "startTimeMs": 15171.372665,
-      "memoryStartMB": 451.67,
-      "endTimeMs": 15171.807326,
-      "durationMs": 0.4346609999993234,
-      "memoryEndMB": 451.67
+      "startTimeMs": 15887.825735,
+      "memoryStartMB": 457.13,
+      "endTimeMs": 15911.552006,
+      "durationMs": 23.726270999999542,
+      "memoryEndMB": 458.25
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:33",
-      "startTimeMs": 15172.289155,
-      "memoryStartMB": 451.67,
-      "endTimeMs": 15208.125131,
-      "durationMs": 35.8359760000003,
-      "memoryEndMB": 452.42
+      "startTimeMs": 15940.808857,
+      "memoryStartMB": 452.24,
+      "endTimeMs": 15941.301887,
+      "durationMs": 0.49302999999963504,
+      "memoryEndMB": 452.37
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:34",
-      "startTimeMs": 15268.80638,
-      "memoryStartMB": 455.05,
-      "endTimeMs": 15269.265603,
-      "durationMs": 0.45922299999983807,
-      "memoryEndMB": 455.05
+      "startTimeMs": 15942.185155,
+      "memoryStartMB": 452.37,
+      "endTimeMs": 15956.678086,
+      "durationMs": 14.49293100000068,
+      "memoryEndMB": 452.99
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:35",
-      "startTimeMs": 15269.853107,
-      "memoryStartMB": 455.05,
-      "endTimeMs": 15304.036197,
-      "durationMs": 34.18308999999863,
-      "memoryEndMB": 450.82
+      "startTimeMs": 15972.493776,
+      "memoryStartMB": 453.99,
+      "endTimeMs": 15972.991145,
+      "durationMs": 0.49736900000061723,
+      "memoryEndMB": 453.99
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:36",
-      "startTimeMs": 15396.163442,
-      "memoryStartMB": 453.82,
-      "endTimeMs": 15396.720182,
-      "durationMs": 0.5567399999999907,
-      "memoryEndMB": 453.82
+      "startTimeMs": 15974.441523,
+      "memoryStartMB": 453.99,
+      "endTimeMs": 15991.991655,
+      "durationMs": 17.550132000000303,
+      "memoryEndMB": 454.87
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:37",
-      "startTimeMs": 15397.538345,
-      "memoryStartMB": 453.82,
-      "endTimeMs": 15418.180847,
-      "durationMs": 20.642501999998785,
-      "memoryEndMB": 454.57
+      "startTimeMs": 16006.833193,
+      "memoryStartMB": 455.62,
+      "endTimeMs": 16007.235349,
+      "durationMs": 0.40215600000010454,
+      "memoryEndMB": 455.62
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:38",
-      "startTimeMs": 15463.72896,
-      "memoryStartMB": 457.19,
-      "endTimeMs": 15464.185653,
-      "durationMs": 0.4566930000000866,
-      "memoryEndMB": 457.19
+      "startTimeMs": 16008.091218,
+      "memoryStartMB": 455.62,
+      "endTimeMs": 16024.104824,
+      "durationMs": 16.013606000000436,
+      "memoryEndMB": 456.37
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:39",
-      "startTimeMs": 15464.641646,
-      "memoryStartMB": 457.32,
-      "endTimeMs": 15498.256091,
-      "durationMs": 33.61444499999925,
-      "memoryEndMB": 453.4
+      "startTimeMs": 16038.083405,
+      "memoryStartMB": 457.24,
+      "endTimeMs": 16038.572783,
+      "durationMs": 0.48937800000021525,
+      "memoryEndMB": 457.24
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:40",
-      "startTimeMs": 16097.85727,
-      "memoryStartMB": 480.3,
-      "endTimeMs": 16098.371353,
-      "durationMs": 0.5140830000000278,
-      "memoryEndMB": 480.3
+      "startTimeMs": 16039.449171,
+      "memoryStartMB": 457.24,
+      "endTimeMs": 16055.078091,
+      "durationMs": 15.628919999999198,
+      "memoryEndMB": 458.24
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:41",
-      "startTimeMs": 16099.275541,
-      "memoryStartMB": 480.3,
-      "endTimeMs": 16120.765208,
-      "durationMs": 21.489666999999827,
-      "memoryEndMB": 481.05
+      "startTimeMs": 16069.209957,
+      "memoryStartMB": 458.99,
+      "endTimeMs": 16069.658959,
+      "durationMs": 0.44900200000120094,
+      "memoryEndMB": 458.99
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:42",
-      "startTimeMs": 16234.639601,
-      "memoryStartMB": 479.26,
-      "endTimeMs": 16235.103131,
-      "durationMs": 0.46352999999908207,
-      "memoryEndMB": 479.26
+      "startTimeMs": 16070.293641,
+      "memoryStartMB": 458.99,
+      "endTimeMs": 16094.319035,
+      "durationMs": 24.025394000000233,
+      "memoryEndMB": 455.32
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:43",
-      "startTimeMs": 16235.82289,
-      "memoryStartMB": 479.26,
-      "endTimeMs": 16259.856136,
-      "durationMs": 24.033246000000872,
-      "memoryEndMB": 480.01
+      "startTimeMs": 16108.612056,
+      "memoryStartMB": 456.07,
+      "endTimeMs": 16108.996596,
+      "durationMs": 0.3845400000009249,
+      "memoryEndMB": 456.07
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:44",
-      "startTimeMs": 16315.262269,
-      "memoryStartMB": 482.76,
-      "endTimeMs": 16315.768508,
-      "durationMs": 0.5062389999984589,
-      "memoryEndMB": 482.76
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:45",
-      "startTimeMs": 16316.472519,
-      "memoryStartMB": 482.76,
-      "endTimeMs": 16355.907706,
-      "durationMs": 39.43518699999913,
-      "memoryEndMB": 476.68
+      "startTimeMs": 16109.792663,
+      "memoryStartMB": 456.07,
+      "endTimeMs": 16123.836329,
+      "durationMs": 14.043665999999575,
+      "memoryEndMB": 456.82
     },
     {
       "kind": "layout",
@@ -894,12 +871,12 @@
           "marketing"
         ]
       },
-      "id": "layout:46",
-      "startTimeMs": 16419.748147,
-      "memoryStartMB": 479.68,
-      "endTimeMs": 16420.259323,
-      "durationMs": 0.5111759999999776,
-      "memoryEndMB": 479.68
+      "id": "layout:45",
+      "startTimeMs": 16136.005635,
+      "memoryStartMB": 457.45,
+      "endTimeMs": 16136.414708,
+      "durationMs": 0.409073000000717,
+      "memoryEndMB": 457.45
     },
     {
       "kind": "layout",
@@ -914,18 +891,37 @@
           "default"
         ]
       },
-      "id": "layout:47",
-      "startTimeMs": 16420.962593,
-      "memoryStartMB": 479.68,
-      "endTimeMs": 16439.089347,
-      "durationMs": 18.1267540000008,
-      "memoryEndMB": 480.43
+      "id": "layout:46",
+      "startTimeMs": 16137.007916,
+      "memoryStartMB": 457.45,
+      "endTimeMs": 16151.317436,
+      "durationMs": 14.309519999998884,
+      "memoryEndMB": 458.2
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLessonsSegmentLayout",
-      "path": "src/app/(marketing)/(default)/lessons/layout.tsx",
-      "route": "/lessons",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:47",
+      "startTimeMs": 17318.220365,
+      "memoryStartMB": 504.98,
+      "endTimeMs": 17318.697523,
+      "durationMs": 0.47715799999787123,
+      "memoryEndMB": 505.11
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -935,11 +931,11 @@
         ]
       },
       "id": "layout:48",
-      "startTimeMs": 16422.241062,
-      "memoryStartMB": 479.68,
-      "endTimeMs": 16422.631427,
-      "durationMs": 0.3903649999992922,
-      "memoryEndMB": 479.68
+      "startTimeMs": 17319.460176,
+      "memoryStartMB": 505.11,
+      "endTimeMs": 17338.273573,
+      "durationMs": 18.813396999998076,
+      "memoryEndMB": 505.98
     },
     {
       "kind": "layout",
@@ -954,11 +950,11 @@
         ]
       },
       "id": "layout:49",
-      "startTimeMs": 16489.982747,
-      "memoryStartMB": 483.06,
-      "endTimeMs": 16490.503725,
-      "durationMs": 0.5209780000004685,
-      "memoryEndMB": 483.06
+      "startTimeMs": 17353.138391,
+      "memoryStartMB": 506.73,
+      "endTimeMs": 17353.559364,
+      "durationMs": 0.42097300000023097,
+      "memoryEndMB": 506.73
     },
     {
       "kind": "layout",
@@ -974,11 +970,11 @@
         ]
       },
       "id": "layout:50",
-      "startTimeMs": 16490.971007,
-      "memoryStartMB": 483.06,
-      "endTimeMs": 16747.63372,
-      "durationMs": 256.66271300000153,
-      "memoryEndMB": 490.65
+      "startTimeMs": 17354.506957,
+      "memoryStartMB": 506.73,
+      "endTimeMs": 17368.979115,
+      "durationMs": 14.472157999996853,
+      "memoryEndMB": 507.61
     },
     {
       "kind": "layout",
@@ -993,11 +989,11 @@
         ]
       },
       "id": "layout:51",
-      "startTimeMs": 16885.256066,
-      "memoryStartMB": 485.89,
-      "endTimeMs": 16888.97145,
-      "durationMs": 3.715383999999176,
-      "memoryEndMB": 485.89
+      "startTimeMs": 17383.394479,
+      "memoryStartMB": 508.23,
+      "endTimeMs": 17383.84258,
+      "durationMs": 0.44810100000177044,
+      "memoryEndMB": 508.36
     },
     {
       "kind": "layout",
@@ -1013,11 +1009,11 @@
         ]
       },
       "id": "layout:52",
-      "startTimeMs": 16889.831419,
-      "memoryStartMB": 485.89,
-      "endTimeMs": 16911.390546,
-      "durationMs": 21.559127000000444,
-      "memoryEndMB": 486.64
+      "startTimeMs": 17384.631711,
+      "memoryStartMB": 508.36,
+      "endTimeMs": 17399.126053,
+      "durationMs": 14.494341999998142,
+      "memoryEndMB": 509.11
     },
     {
       "kind": "layout",
@@ -1032,11 +1028,11 @@
         ]
       },
       "id": "layout:53",
-      "startTimeMs": 16983.237539,
-      "memoryStartMB": 489.27,
-      "endTimeMs": 16987.199359,
-      "durationMs": 3.9618199999968056,
-      "memoryEndMB": 489.27
+      "startTimeMs": 17414.639387,
+      "memoryStartMB": 509.98,
+      "endTimeMs": 17415.066948,
+      "durationMs": 0.4275610000004235,
+      "memoryEndMB": 509.98
     },
     {
       "kind": "layout",
@@ -1052,11 +1048,11 @@
         ]
       },
       "id": "layout:54",
-      "startTimeMs": 16990.168535,
-      "memoryStartMB": 489.27,
-      "endTimeMs": 17009.536613,
-      "durationMs": 19.368077999999514,
-      "memoryEndMB": 490.02
+      "startTimeMs": 17415.810544,
+      "memoryStartMB": 509.98,
+      "endTimeMs": 17438.294405,
+      "durationMs": 22.483861000000616,
+      "memoryEndMB": 498.89
     },
     {
       "kind": "layout",
@@ -1071,11 +1067,11 @@
         ]
       },
       "id": "layout:55",
-      "startTimeMs": 17067.989404,
-      "memoryStartMB": 487.02,
-      "endTimeMs": 17068.497661,
-      "durationMs": 0.508257000001322,
-      "memoryEndMB": 487.02
+      "startTimeMs": 17452.521426,
+      "memoryStartMB": 499.64,
+      "endTimeMs": 17452.873572,
+      "durationMs": 0.35214600000108476,
+      "memoryEndMB": 499.64
     },
     {
       "kind": "layout",
@@ -1091,11 +1087,11 @@
         ]
       },
       "id": "layout:56",
-      "startTimeMs": 17069.168284,
-      "memoryStartMB": 487.02,
-      "endTimeMs": 17086.471587,
-      "durationMs": 17.303303000000597,
-      "memoryEndMB": 487.89
+      "startTimeMs": 17453.611005,
+      "memoryStartMB": 499.64,
+      "endTimeMs": 17466.753049,
+      "durationMs": 13.142044000000169,
+      "memoryEndMB": 500.51
     },
     {
       "kind": "layout",
@@ -1110,11 +1106,11 @@
         ]
       },
       "id": "layout:57",
-      "startTimeMs": 17739.953955,
-      "memoryStartMB": 521.7,
-      "endTimeMs": 17740.406806,
-      "durationMs": 0.4528509999981907,
-      "memoryEndMB": 521.82
+      "startTimeMs": 17480.83578,
+      "memoryStartMB": 501.39,
+      "endTimeMs": 17481.249931,
+      "durationMs": 0.4141509999972186,
+      "memoryEndMB": 501.39
     },
     {
       "kind": "layout",
@@ -1130,11 +1126,11 @@
         ]
       },
       "id": "layout:58",
-      "startTimeMs": 17740.80758,
-      "memoryStartMB": 521.82,
-      "endTimeMs": 17755.321369,
-      "durationMs": 14.513789000000543,
-      "memoryEndMB": 522.45
+      "startTimeMs": 17482.046623,
+      "memoryStartMB": 501.39,
+      "endTimeMs": 17496.831988,
+      "durationMs": 14.785365000003367,
+      "memoryEndMB": 502.01
     },
     {
       "kind": "layout",
@@ -1149,11 +1145,11 @@
         ]
       },
       "id": "layout:59",
-      "startTimeMs": 17796.369424,
-      "memoryStartMB": 525.2,
-      "endTimeMs": 17796.804,
-      "durationMs": 0.4345759999996517,
-      "memoryEndMB": 525.2
+      "startTimeMs": 17509.423838,
+      "memoryStartMB": 502.76,
+      "endTimeMs": 17509.880141,
+      "durationMs": 0.4563030000026629,
+      "memoryEndMB": 502.76
     },
     {
       "kind": "layout",
@@ -1169,11 +1165,11 @@
         ]
       },
       "id": "layout:60",
-      "startTimeMs": 17797.221281,
-      "memoryStartMB": 525.2,
-      "endTimeMs": 17813.150734,
-      "durationMs": 15.929453000000649,
-      "memoryEndMB": 525.95
+      "startTimeMs": 17510.486603,
+      "memoryStartMB": 502.76,
+      "endTimeMs": 17524.047862,
+      "durationMs": 13.561258999998245,
+      "memoryEndMB": 503.51
     },
     {
       "kind": "layout",
@@ -1188,11 +1184,11 @@
         ]
       },
       "id": "layout:61",
-      "startTimeMs": 17869.849679,
-      "memoryStartMB": 519.23,
-      "endTimeMs": 17870.330118,
-      "durationMs": 0.4804390000026615,
-      "memoryEndMB": 519.23
+      "startTimeMs": 17547.527333,
+      "memoryStartMB": 499.87,
+      "endTimeMs": 17548.019729,
+      "durationMs": 0.49239599999782513,
+      "memoryEndMB": 499.87
     },
     {
       "kind": "layout",
@@ -1208,11 +1204,11 @@
         ]
       },
       "id": "layout:62",
-      "startTimeMs": 17870.952432,
-      "memoryStartMB": 519.23,
-      "endTimeMs": 17889.067752,
-      "durationMs": 18.115320000000793,
-      "memoryEndMB": 519.98
+      "startTimeMs": 17548.99246,
+      "memoryStartMB": 499.87,
+      "endTimeMs": 17564.753702,
+      "durationMs": 15.761242000000493,
+      "memoryEndMB": 500.75
     },
     {
       "kind": "layout",
@@ -1227,11 +1223,11 @@
         ]
       },
       "id": "layout:63",
-      "startTimeMs": 17941.475957,
-      "memoryStartMB": 522.61,
-      "endTimeMs": 17942.0066,
-      "durationMs": 0.5306430000018736,
-      "memoryEndMB": 522.61
+      "startTimeMs": 18744.591778,
+      "memoryStartMB": 548.86,
+      "endTimeMs": 18744.975807,
+      "durationMs": 0.38402899999709916,
+      "memoryEndMB": 548.86
     },
     {
       "kind": "layout",
@@ -1247,11 +1243,11 @@
         ]
       },
       "id": "layout:64",
-      "startTimeMs": 17942.658875,
-      "memoryStartMB": 522.61,
-      "endTimeMs": 17960.605934,
-      "durationMs": 17.947058999998262,
-      "memoryEndMB": 523.36
+      "startTimeMs": 18745.861313,
+      "memoryStartMB": 548.86,
+      "endTimeMs": 18760.825098,
+      "durationMs": 14.963784999999916,
+      "memoryEndMB": 549.61
     },
     {
       "kind": "layout",
@@ -1266,11 +1262,11 @@
         ]
       },
       "id": "layout:65",
-      "startTimeMs": 18062.294886,
-      "memoryStartMB": 524.63,
-      "endTimeMs": 18062.773469,
-      "durationMs": 0.4785830000000715,
-      "memoryEndMB": 524.63
+      "startTimeMs": 18776.264092,
+      "memoryStartMB": 550.24,
+      "endTimeMs": 18776.827646,
+      "durationMs": 0.5635540000002948,
+      "memoryEndMB": 550.24
     },
     {
       "kind": "layout",
@@ -1286,11 +1282,11 @@
         ]
       },
       "id": "layout:66",
-      "startTimeMs": 18063.372,
-      "memoryStartMB": 524.63,
-      "endTimeMs": 18081.180352,
-      "durationMs": 17.808352000000014,
-      "memoryEndMB": 525.38
+      "startTimeMs": 18777.786547,
+      "memoryStartMB": 550.24,
+      "endTimeMs": 18792.679647,
+      "durationMs": 14.89310000000114,
+      "memoryEndMB": 550.99
     },
     {
       "kind": "layout",
@@ -1305,11 +1301,11 @@
         ]
       },
       "id": "layout:67",
-      "startTimeMs": 18341.05127,
-      "memoryStartMB": 532.11,
-      "endTimeMs": 18341.473538,
-      "durationMs": 0.42226799999843934,
-      "memoryEndMB": 532.11
+      "startTimeMs": 18820.571686,
+      "memoryStartMB": 542.26,
+      "endTimeMs": 18821.09301,
+      "durationMs": 0.5213240000011865,
+      "memoryEndMB": 542.26
     },
     {
       "kind": "layout",
@@ -1325,11 +1321,11 @@
         ]
       },
       "id": "layout:68",
-      "startTimeMs": 18342.505584,
-      "memoryStartMB": 532.11,
-      "endTimeMs": 18376.46775,
-      "durationMs": 33.96216600000116,
-      "memoryEndMB": 532.86
+      "startTimeMs": 18822.165303,
+      "memoryStartMB": 542.26,
+      "endTimeMs": 18839.22337,
+      "durationMs": 17.05806699999812,
+      "memoryEndMB": 540.91
     },
     {
       "kind": "layout",
@@ -1344,11 +1340,11 @@
         ]
       },
       "id": "layout:69",
-      "startTimeMs": 18623.4502,
-      "memoryStartMB": 546.17,
-      "endTimeMs": 18623.879162,
-      "durationMs": 0.42896200000177487,
-      "memoryEndMB": 546.17
+      "startTimeMs": 18855.364593,
+      "memoryStartMB": 541.54,
+      "endTimeMs": 18855.762587,
+      "durationMs": 0.3979940000026545,
+      "memoryEndMB": 541.54
     },
     {
       "kind": "layout",
@@ -1364,11 +1360,11 @@
         ]
       },
       "id": "layout:70",
-      "startTimeMs": 18624.686661,
-      "memoryStartMB": 546.17,
-      "endTimeMs": 18645.067221,
-      "durationMs": 20.380560000001424,
-      "memoryEndMB": 546.92
+      "startTimeMs": 18861.122206,
+      "memoryStartMB": 541.54,
+      "endTimeMs": 18883.092747,
+      "durationMs": 21.970540999998775,
+      "memoryEndMB": 542.16
     },
     {
       "kind": "layout",
@@ -1383,11 +1379,11 @@
         ]
       },
       "id": "layout:71",
-      "startTimeMs": 18806.166813,
-      "memoryStartMB": 557.33,
-      "endTimeMs": 18806.754656,
-      "durationMs": 0.5878430000011576,
-      "memoryEndMB": 557.33
+      "startTimeMs": 18899.361375,
+      "memoryStartMB": 542.91,
+      "endTimeMs": 18900.561895,
+      "durationMs": 1.2005199999985052,
+      "memoryEndMB": 542.91
     },
     {
       "kind": "layout",
@@ -1403,11 +1399,11 @@
         ]
       },
       "id": "layout:72",
-      "startTimeMs": 18808.666333,
-      "memoryStartMB": 557.33,
-      "endTimeMs": 18835.221064,
-      "durationMs": 26.554731000000174,
-      "memoryEndMB": 558.08
+      "startTimeMs": 18902.049444,
+      "memoryStartMB": 542.91,
+      "endTimeMs": 18923.81093,
+      "durationMs": 21.761485999999422,
+      "memoryEndMB": 543.54
     },
     {
       "kind": "layout",
@@ -1422,11 +1418,11 @@
         ]
       },
       "id": "layout:73",
-      "startTimeMs": 18896.33751,
-      "memoryStartMB": 551.48,
-      "endTimeMs": 18896.938076,
-      "durationMs": 0.6005659999973432,
-      "memoryEndMB": 551.48
+      "startTimeMs": 18940.671622,
+      "memoryStartMB": 544.29,
+      "endTimeMs": 18941.169688,
+      "durationMs": 0.49806600000010803,
+      "memoryEndMB": 544.29
     },
     {
       "kind": "layout",
@@ -1442,11 +1438,11 @@
         ]
       },
       "id": "layout:74",
-      "startTimeMs": 18897.829068,
-      "memoryStartMB": 551.48,
-      "endTimeMs": 18918.261303,
-      "durationMs": 20.43223500000022,
-      "memoryEndMB": 552.23
+      "startTimeMs": 18942.466474,
+      "memoryStartMB": 544.29,
+      "endTimeMs": 18961.972229,
+      "durationMs": 19.505754999998317,
+      "memoryEndMB": 546.41
     },
     {
       "kind": "layout",
@@ -1461,11 +1457,11 @@
         ]
       },
       "id": "layout:75",
-      "startTimeMs": 18984.190013,
-      "memoryStartMB": 551.76,
-      "endTimeMs": 18984.719163,
-      "durationMs": 0.5291500000021188,
-      "memoryEndMB": 551.76
+      "startTimeMs": 18982.070851,
+      "memoryStartMB": 548.04,
+      "endTimeMs": 18982.6392,
+      "durationMs": 0.5683490000010352,
+      "memoryEndMB": 548.16
     },
     {
       "kind": "layout",
@@ -1481,11 +1477,11 @@
         ]
       },
       "id": "layout:76",
-      "startTimeMs": 18985.681128,
-      "memoryStartMB": 551.76,
-      "endTimeMs": 19005.978224,
-      "durationMs": 20.29709599999842,
-      "memoryEndMB": 552.51
+      "startTimeMs": 18983.793748,
+      "memoryStartMB": 548.16,
+      "endTimeMs": 19084.501731,
+      "durationMs": 100.70798300000024,
+      "memoryEndMB": 551.97
     },
     {
       "kind": "layout",
@@ -1500,11 +1496,11 @@
         ]
       },
       "id": "layout:77",
-      "startTimeMs": 19053.176295,
-      "memoryStartMB": 555.51,
-      "endTimeMs": 19053.581152,
-      "durationMs": 0.40485699999771896,
-      "memoryEndMB": 555.51
+      "startTimeMs": 19276.878854,
+      "memoryStartMB": 561.84,
+      "endTimeMs": 19277.242705,
+      "durationMs": 0.36385100000188686,
+      "memoryEndMB": 561.84
     },
     {
       "kind": "layout",
@@ -1520,11 +1516,11 @@
         ]
       },
       "id": "layout:78",
-      "startTimeMs": 19054.485247,
-      "memoryStartMB": 555.51,
-      "endTimeMs": 19077.188854,
-      "durationMs": 22.703606999999465,
-      "memoryEndMB": 556.26
+      "startTimeMs": 19277.809405,
+      "memoryStartMB": 561.84,
+      "endTimeMs": 19305.114898,
+      "durationMs": 27.305492999999842,
+      "memoryEndMB": 552.7
     },
     {
       "kind": "layout",
@@ -1539,11 +1535,11 @@
         ]
       },
       "id": "layout:79",
-      "startTimeMs": 19144.274091,
-      "memoryStartMB": 554.68,
-      "endTimeMs": 19144.737986,
-      "durationMs": 0.4638950000007753,
-      "memoryEndMB": 554.68
+      "startTimeMs": 20420.802639,
+      "memoryStartMB": 588.91,
+      "endTimeMs": 20421.26632,
+      "durationMs": 0.46368099999745027,
+      "memoryEndMB": 588.91
     },
     {
       "kind": "layout",
@@ -1559,11 +1555,11 @@
         ]
       },
       "id": "layout:80",
-      "startTimeMs": 19146.513962,
-      "memoryStartMB": 554.68,
-      "endTimeMs": 19169.084537,
-      "durationMs": 22.570574999997916,
-      "memoryEndMB": 555.43
+      "startTimeMs": 20422.123435,
+      "memoryStartMB": 588.91,
+      "endTimeMs": 20434.149349,
+      "durationMs": 12.02591399999801,
+      "memoryEndMB": 589.66
     },
     {
       "kind": "layout",
@@ -1578,11 +1574,11 @@
         ]
       },
       "id": "layout:81",
-      "startTimeMs": 19218.090541,
-      "memoryStartMB": 558.43,
-      "endTimeMs": 19218.506465,
-      "durationMs": 0.415923999997176,
-      "memoryEndMB": 558.43
+      "startTimeMs": 20504.672495,
+      "memoryStartMB": 594.79,
+      "endTimeMs": 20505.092769,
+      "durationMs": 0.4202740000000631,
+      "memoryEndMB": 594.79
     },
     {
       "kind": "layout",
@@ -1598,674 +1594,11 @@
         ]
       },
       "id": "layout:82",
-      "startTimeMs": 19219.238772,
-      "memoryStartMB": 558.43,
-      "endTimeMs": 19237.31029,
-      "durationMs": 18.07151800000065,
-      "memoryEndMB": 559.3
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:83",
-      "startTimeMs": 19287.778302,
-      "memoryStartMB": 562.55,
-      "endTimeMs": 19288.155308,
-      "durationMs": 0.37700600000243867,
-      "memoryEndMB": 562.55
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:84",
-      "startTimeMs": 19289.086245,
-      "memoryStartMB": 562.55,
-      "endTimeMs": 19320.415997,
-      "durationMs": 31.329752000001463,
-      "memoryEndMB": 559.16
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:85",
-      "startTimeMs": 19369.626837,
-      "memoryStartMB": 562.54,
-      "endTimeMs": 19370.107297,
-      "durationMs": 0.4804599999988568,
-      "memoryEndMB": 562.54
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:86",
-      "startTimeMs": 19370.910878,
-      "memoryStartMB": 562.54,
-      "endTimeMs": 19390.64184,
-      "durationMs": 19.730962000001455,
-      "memoryEndMB": 563.41
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:87",
-      "startTimeMs": 19946.391255,
-      "memoryStartMB": 587.92,
-      "endTimeMs": 19946.959629,
-      "durationMs": 0.5683740000022226,
-      "memoryEndMB": 587.92
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:88",
-      "startTimeMs": 19947.750678,
-      "memoryStartMB": 587.92,
-      "endTimeMs": 19969.588189,
-      "durationMs": 21.837510999997903,
-      "memoryEndMB": 588.67
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:89",
-      "startTimeMs": 20022.376229,
-      "memoryStartMB": 591.3,
-      "endTimeMs": 20022.858762,
-      "durationMs": 0.4825329999985115,
-      "memoryEndMB": 591.3
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:90",
-      "startTimeMs": 20023.666749,
-      "memoryStartMB": 591.3,
-      "endTimeMs": 20042.121793,
-      "durationMs": 18.455043999998452,
-      "memoryEndMB": 592.05
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:91",
-      "startTimeMs": 20123.449626,
-      "memoryStartMB": 590.87,
-      "endTimeMs": 20123.962573,
-      "durationMs": 0.512946999999258,
-      "memoryEndMB": 590.87
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:92",
-      "startTimeMs": 20124.717343,
-      "memoryStartMB": 590.87,
-      "endTimeMs": 20148.748657,
-      "durationMs": 24.03131399999984,
-      "memoryEndMB": 591.5
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:93",
-      "startTimeMs": 20227.944405,
-      "memoryStartMB": 594.12,
-      "endTimeMs": 20228.489978,
-      "durationMs": 0.5455730000030599,
-      "memoryEndMB": 594.12
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:94",
-      "startTimeMs": 20229.336339,
-      "memoryStartMB": 594.12,
-      "endTimeMs": 20249.438754,
-      "durationMs": 20.102414999997563,
-      "memoryEndMB": 594.87
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:95",
-      "startTimeMs": 20308.795068,
-      "memoryStartMB": 593.91,
-      "endTimeMs": 20309.296751,
-      "durationMs": 0.501683000002231,
-      "memoryEndMB": 593.91
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:96",
-      "startTimeMs": 20310.124077,
-      "memoryStartMB": 593.91,
-      "endTimeMs": 20331.230693,
-      "durationMs": 21.10661600000094,
-      "memoryEndMB": 594.66
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:97",
-      "startTimeMs": 20379.524286,
-      "memoryStartMB": 597.41,
-      "endTimeMs": 20380.055742,
-      "durationMs": 0.5314560000006168,
-      "memoryEndMB": 597.41
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:98",
-      "startTimeMs": 20380.848057,
-      "memoryStartMB": 597.41,
-      "endTimeMs": 20399.149335,
-      "durationMs": 18.301277999999,
-      "memoryEndMB": 598.16
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:99",
-      "startTimeMs": 20457.038783,
-      "memoryStartMB": 596.63,
-      "endTimeMs": 20457.478079,
-      "durationMs": 0.43929600000046776,
-      "memoryEndMB": 596.63
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:100",
-      "startTimeMs": 20458.396875,
-      "memoryStartMB": 596.63,
-      "endTimeMs": 20476.933712,
-      "durationMs": 18.53683699999965,
-      "memoryEndMB": 597.38
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:101",
-      "startTimeMs": 20524.48468,
-      "memoryStartMB": 600.75,
-      "endTimeMs": 20525.00894,
-      "durationMs": 0.5242599999983213,
-      "memoryEndMB": 600.75
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:102",
-      "startTimeMs": 20525.728087,
-      "memoryStartMB": 600.75,
-      "endTimeMs": 20544.197601,
-      "durationMs": 18.469514000000345,
-      "memoryEndMB": 601.63
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:103",
-      "startTimeMs": 21659.36898,
-      "memoryStartMB": 626.61,
-      "endTimeMs": 21659.896974,
-      "durationMs": 0.5279940000000352,
-      "memoryEndMB": 626.61
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:104",
-      "startTimeMs": 21660.911651,
-      "memoryStartMB": 626.74,
-      "endTimeMs": 21680.247439,
-      "durationMs": 19.33578800000032,
-      "memoryEndMB": 627.36
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:105",
-      "startTimeMs": 21739.037208,
-      "memoryStartMB": 630.11,
-      "endTimeMs": 21739.547057,
-      "durationMs": 0.5098489999982121,
-      "memoryEndMB": 630.11
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:106",
-      "startTimeMs": 21740.156271,
-      "memoryStartMB": 630.11,
-      "endTimeMs": 21755.58249,
-      "durationMs": 15.426219000000856,
-      "memoryEndMB": 630.86
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:107",
-      "startTimeMs": 21805.521928,
-      "memoryStartMB": 628.27,
-      "endTimeMs": 21806.060852,
-      "durationMs": 0.5389240000004065,
-      "memoryEndMB": 628.27
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:108",
-      "startTimeMs": 21806.808935,
-      "memoryStartMB": 628.27,
-      "endTimeMs": 21823.715077,
-      "durationMs": 16.906141999999818,
-      "memoryEndMB": 629.02
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:109",
-      "startTimeMs": 21867.574739,
-      "memoryStartMB": 631.77,
-      "endTimeMs": 21868.048539,
-      "durationMs": 0.47379999999975553,
-      "memoryEndMB": 631.77
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:110",
-      "startTimeMs": 21868.501827,
-      "memoryStartMB": 631.77,
-      "endTimeMs": 21886.960392,
-      "durationMs": 18.458565000000817,
-      "memoryEndMB": 632.52
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:111",
-      "startTimeMs": 21945.244265,
-      "memoryStartMB": 632.45,
-      "endTimeMs": 21945.67297,
-      "durationMs": 0.4287049999984447,
-      "memoryEndMB": 632.45
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:112",
-      "startTimeMs": 21946.044065,
-      "memoryStartMB": 632.45,
-      "endTimeMs": 21958.851093,
-      "durationMs": 12.807028000002902,
-      "memoryEndMB": 633.2
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:113",
-      "startTimeMs": 21997.03223,
-      "memoryStartMB": 636.2,
-      "endTimeMs": 21997.469134,
-      "durationMs": 0.4369039999983215,
-      "memoryEndMB": 636.2
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:114",
-      "startTimeMs": 21997.846793,
-      "memoryStartMB": 636.2,
-      "endTimeMs": 22014.782158,
-      "durationMs": 16.935365000001184,
-      "memoryEndMB": 636.95
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:115",
-      "startTimeMs": 22107.254772,
-      "memoryStartMB": 639.49,
-      "endTimeMs": 22107.756241,
-      "durationMs": 0.5014689999989059,
-      "memoryEndMB": 639.49
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:116",
-      "startTimeMs": 22108.417841,
-      "memoryStartMB": 639.49,
-      "endTimeMs": 27098.754932,
-      "durationMs": 4990.337091000001,
-      "memoryEndMB": 753.11
+      "startTimeMs": 20505.781927,
+      "memoryStartMB": 594.79,
+      "endTimeMs": 20525.816445,
+      "durationMs": 20.03451800000039,
+      "memoryEndMB": 595.54
     }
   ]
 }
