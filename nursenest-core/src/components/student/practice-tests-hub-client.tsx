@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Check, ClipboardList, LineChart, PlayCircle } from "lucide-react";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { LearnerStudyPageShell } from "@/components/learner-study-ui";
