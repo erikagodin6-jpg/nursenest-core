@@ -144,12 +144,19 @@ jobs:
 
           APP_ID="d6a4b825-4d70-4dd4-8d71-04b354d36f43"
           NEW_TAG="sha-${{ github.sha }}"
+          GHCR_REPOSITORY="${{ github.repository_owner }}/nursenest"
           export NEW_TAG
+          export GHCR_REPOSITORY
 
           # Fetch current live spec from DO (preserves encrypted secret values).
-          # Patch only the image tag for the web service, then PUT the modified spec back.
+          # Patch only the web image source, then PUT the modified spec back.
           # This prevents doctl --spec from clearing RUN_TIME secrets that have no
           # value field in the repo spec (type: SECRET with no value = spec-only declaration).
+          #
+          # Important: live spec can drift to a DOCR digest after an emergency manual deploy.
+          # In that state, changing only `image.tag` leaves registry/repository/digest fields
+          # incompatible and DigitalOcean rejects the PUT with 400. Re-normalize the whole
+          # image object back to the canonical GHCR tag and remove any stale digest.
           curl -fsSL \
             -H "Authorization: Bearer $DO_TOKEN" \
             "https://api.digitalocean.com/v2/apps/${APP_ID}" \
@@ -161,18 +168,40 @@ jobs:
               payload = json.load(f)
           spec = payload["app"]["spec"]
           tag = os.environ["NEW_TAG"]
+          repository = os.environ["GHCR_REPOSITORY"]
           for svc in spec.get("services", []):
               if svc.get("name") == "web" and svc.get("image"):
-                  svc["image"]["tag"] = tag
+                  image = svc["image"]
+                  image["registry_type"] = "GHCR"
+                  image["registry"] = "ghcr.io"
+                  image["repository"] = repository
+                  image["tag"] = tag
+                  image.pop("digest", None)
           print(json.dumps(spec))
           PY
           )
 
-          curl -fsSL -X PUT \
+          http_code=$(curl -sS -o /tmp/do-update-response.json -w "%{http_code}" -X PUT \
             -H "Authorization: Bearer $DO_TOKEN" \
             -H "Content-Type: application/json" \
             "https://api.digitalocean.com/v2/apps/${APP_ID}" \
-            -d "{\"spec\": $PATCHED_SPEC}" > /dev/null
+            -d "{\"spec\": $PATCHED_SPEC}")
+
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "::error::DigitalOcean app spec update failed with HTTP ${http_code}"
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("/tmp/do-update-response.json")
+          try:
+              payload = json.loads(p.read_text(encoding="utf-8"))
+          except Exception:
+              print(p.read_text(encoding="utf-8")[:2000])
+          else:
+              print(json.dumps(payload, indent=2)[:4000])
+          PY
+            exit 1
+          fi
 
           echo "DigitalOcean app spec updated to image tag ${NEW_TAG}."
           echo "Track at: https://cloud.digitalocean.com/apps/${APP_ID}"
