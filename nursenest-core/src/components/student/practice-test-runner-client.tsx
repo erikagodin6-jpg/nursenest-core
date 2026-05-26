@@ -2,6 +2,7 @@
 
 import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
@@ -235,6 +236,7 @@ export function PracticeTestRunnerClient({
   /** Server env `ADAPTIVE_LEARNING_ENABLED` — gates optional post-miss study wiring (linear practice only). */
   adaptiveLearningEnabled?: boolean;
 }) {
+  const router = useRouter();
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const { t } = useMarketingI18n();
   const tx = useCallback(
@@ -433,11 +435,15 @@ export function PracticeTestRunnerClient({
       timedCountdownEverPositiveRef.current = false;
       setCatTimerHydrateRecovery(false);
     try {
-      const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=minimal`, undefined, {
-        attempts: 3,
-        baseDelayMs: 500,
-        timeoutMs: 45_000,
-      });
+      const res = await fetchWithRetry(
+        `/api/practice-tests/${testId}?hydrate=minimal`,
+        { method: "GET", credentials: "include", cache: "no-store" },
+        {
+          attempts: 3,
+          baseDelayMs: 500,
+          timeoutMs: 45_000,
+        },
+      );
       const data = (await res.json()) as {
         error?: string;
         questionIds?: string[];
@@ -713,6 +719,8 @@ export function PracticeTestRunnerClient({
           sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
         const res = await fetch(`/api/practice-tests/${testId}`, {
           method: "PATCH",
+          credentials: "include",
+          cache: "no-store",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             action: "complete",
@@ -826,6 +834,8 @@ export function PracticeTestRunnerClient({
         sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "complete",
@@ -1144,6 +1154,8 @@ export function PracticeTestRunnerClient({
           sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
         const res = await fetch(`/api/practice-tests/${testId}`, {
           method: "PATCH",
+          credentials: "include",
+          cache: "no-store",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             action: "save",
@@ -1185,6 +1197,8 @@ export function PracticeTestRunnerClient({
         sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
       await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "abandon",
@@ -1194,7 +1208,7 @@ export function PracticeTestRunnerClient({
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
-      window.location.href = "/app/practice-tests";
+      router.replace("/app/practice-tests");
     } finally {
       abandonInFlightRef.current = false;
       setSaving(false);
@@ -1228,6 +1242,8 @@ export function PracticeTestRunnerClient({
         sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "linear_commit",
@@ -1382,6 +1398,8 @@ export function PracticeTestRunnerClient({
       const patchBodyWithTools = { ...patchBody, examTools: examToolsRef.current };
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
+        credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patchBodyWithTools),
       });

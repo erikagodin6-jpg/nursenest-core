@@ -27,6 +27,7 @@ import {
 } from "@/lib/flashcards/flashcards-hub-preferences";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 type ApiCard = {
   id: string;
@@ -148,6 +149,12 @@ export function FlashcardCustomStudyClient() {
         }
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         if (!parsed.ok) {
+          emitRuntimeEvent("activity_bootstrap_failure", {
+            activity: "flashcards",
+            pathwayId,
+            status: res.status,
+            errorCode: "flashcard_custom_session_payload_invalid",
+          });
           logDedupedClientDiagnostic("flashcard_custom_session", "payload_parse_failed", `${pathwayId}:${res.status}`, {
             pathwayId,
             httpStatus: res.status,
@@ -177,9 +184,19 @@ export function FlashcardCustomStudyClient() {
                 }
               : null,
           );
+          emitRuntimeEvent("flashcard_custom_session_bootstrap_complete", {
+            pathwayId,
+            cardCount: validCards.length,
+            status: res.status,
+          });
         }
       } catch (err) {
         if (controller.signal.aborted || cancelled) return;
+        emitRuntimeEvent("activity_bootstrap_failure", {
+          activity: "flashcards",
+          pathwayId,
+          errorCode: "flashcard_custom_session_network_error",
+        });
         logDedupedClientDiagnostic("flashcard_custom_session", "network_error", pathwayId || "unknown", {
           pathwayId,
           message: err instanceof Error ? err.message : "unknown",
@@ -262,6 +279,7 @@ export function FlashcardCustomStudyClient() {
       await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
         method: "POST",
         credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating }),
       });

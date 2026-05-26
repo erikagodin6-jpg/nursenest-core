@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 
+import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -32,7 +33,26 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
       className={plusJakartaSans.variable}
     >
-      <body>{children}</body>
+      <head>
+        <script
+          id="nn-theme-prehydrate"
+          dangerouslySetInnerHTML={{
+            __html: `
+try {
+  var key = "nursenest-theme";
+  var theme = localStorage.getItem(key) || document.cookie.replace(/(?:(?:^|.*;\\s*)nn-theme\\s*\\=\\s*([^;]*).*$)|^.*$/, "$1") || "ocean";
+  if (theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.colorScheme = /(midnight|dark|twilight|apex|storm|ink)/i.test(theme) ? "dark" : "light";
+  }
+} catch (_) {}
+`,
+          }}
+        />
+      </head>
+      <body>
+        <AppThemeProvider>{children}</AppThemeProvider>
+      </body>
     </html>
   );
 }

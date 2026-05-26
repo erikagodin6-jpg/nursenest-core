@@ -7,7 +7,7 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
  */
 export function FooterBrandLockup({ brandName }: { brandName: string }) {
   return (
-    <div className="nn-footer-brand-lockup flex flex-wrap items-center gap-x-3 gap-y-2 bg-transparent">
+    <div className="nn-footer-brand-lockup flex flex-wrap items-center gap-x-1.5 gap-y-2 bg-transparent">
       <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
       <span
         data-nn-footer-lockup="wordmark"

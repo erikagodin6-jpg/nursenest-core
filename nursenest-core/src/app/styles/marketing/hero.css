@@ -208,18 +208,18 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 22px;
+  gap: clamp(2rem, 5vw, 4.25rem);
   align-items: center;
   /* vw-based clamp: stable across all breakpoints — does not recalculate when
      the mobile URL bar shows/hides (unlike dvh). Locks above-fold geometry
      before hydration so the hero never collapses to 0 during React mount. */
-  min-height: clamp(18rem, 52vw, 30rem);
+  min-height: clamp(22rem, 56vw, 36rem);
 }
 @media (min-width: 1024px) {
   .nn-premium-hero-grid {
-    grid-template-columns: 1.05fr 1fr;
-    gap: 40px;
-    min-height: 28rem;
+    grid-template-columns: minmax(0, 1.04fr) minmax(24rem, 0.96fr);
+    gap: clamp(3rem, 5.5vw, 4.75rem);
+    min-height: 34rem;
   }
 }
 
@@ -265,7 +265,7 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
 /* ----- Right-column clinical dashboard panel ----- */
 .nn-premium-hero-panel {
   position: relative;
-  padding: 22px;
+  padding: clamp(1.5rem, 2.5vw, 2rem);
   border-radius: 28px;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--surface, #ffffff) 92%, transparent) 0%, color-mix(in srgb, var(--surface, #ffffff) 80%, transparent) 100%);
@@ -293,7 +293,7 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 .nn-premium-hero-panel__tag {
   padding: 4px 10px;
@@ -335,9 +335,9 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
     color-mix(in srgb, var(--semantic-chart-3, #3b82f6) 12%, #0f172a) 100%
   );
   color: var(--text-on-dark, #e2e8f0);
-  padding: 14px 16px;
+  padding: 16px 18px;
   border: 1px solid color-mix(in srgb, var(--semantic-chart-3, #60a5fa) 35%, transparent);
-  margin: 12px 0;
+  margin: 16px 0;
 }
 
 /* Dark palettes: rhythm strip background tracks ink surfaces (avoid muddy mixes). */
@@ -428,10 +428,10 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
 .nn-premium-hero-mini {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 .nn-premium-hero-mini__card {
-  padding: 12px;
+  padding: 14px;
   border-radius: 14px;
   background: var(--surface, #ffffff);
   border: 1px solid var(--border-subtle, #efe7f6);
@@ -465,7 +465,7 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
-  margin-top: 18px;
+  margin-top: clamp(1.25rem, 2.6vw, 1.85rem);
   font-size: 12px;
   color: var(--palette-text-muted, #475569);
 }

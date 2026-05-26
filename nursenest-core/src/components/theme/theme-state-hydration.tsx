@@ -14,6 +14,7 @@ import {
   getThemeSurfaceContrastTokens,
   PALETTE_ROLE_KEYS,
 } from "@/lib/theme/theme-palette-tokens";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 const ALLOWED_THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
@@ -175,6 +176,14 @@ function pickReadableText(background: string, darkText: string, lightText: strin
   return contrastRatio(background, lightText) >= contrastRatio(background, darkText)
     ? lightText
     : darkText;
+}
+
+function syncThemeCookie(themeId: string) {
+  try {
+    document.cookie = `nn-theme=${encodeURIComponent(themeId)}; Path=/; Max-Age=31536000; SameSite=Lax`;
+  } catch {
+    /* ignore */
+  }
 }
 
 /**
@@ -358,9 +367,11 @@ export function ThemeStateHydration() {
       const normalized = normalizeStoredThemeId(raw);
       const next = ALLOWED_THEME_IDS.has(normalized) ? normalized : NURSENEST_DEFAULT_THEME;
       applyPaletteRoles(next);
+      syncThemeCookie(next);
       setTheme(next);
     } catch {
       applyPaletteRoles(NURSENEST_DEFAULT_THEME);
+      syncThemeCookie(NURSENEST_DEFAULT_THEME);
       setTheme(NURSENEST_DEFAULT_THEME);
     }
     didSync.current = true;
@@ -371,6 +382,18 @@ export function ThemeStateHydration() {
     const resolved =
       normalized && ALLOWED_THEME_IDS.has(normalized) ? normalized : NURSENEST_DEFAULT_THEME;
     applyPaletteRoles(resolved);
+    syncThemeCookie(resolved);
+    emitRuntimeEvent("theme_hydration_complete", {
+      theme: resolved,
+      fromDom: document.documentElement.getAttribute("data-theme") ?? "",
+      fromStorage: (() => {
+        try {
+          return localStorage.getItem(THEME_STORAGE_KEY) ?? "";
+        } catch {
+          return "unavailable";
+        }
+      })(),
+    });
   }, [theme]);
 
   return null;

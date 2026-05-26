@@ -12,6 +12,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   NclexCatExamLayout,
   NclexAnswerList,
@@ -43,6 +44,7 @@ import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/me
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -106,10 +108,10 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
 }> {
   const res = await fetchWithRetry(
     `/api/practice-tests/${testId}?hydrate=full`,
-    { method: "GET", signal },
+    { method: "GET", signal, credentials: "include", cache: "no-store" },
     { attempts: 2, timeoutMs: 12_000 },
   );
-  if (!res.ok) throw new Error("Failed to load session");
+  if (!res.ok) throw new Error(`hydrate_http_${res.status}`);
   const j = await res.json() as {
     id?: string;
     status?: string;
@@ -126,6 +128,9 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
   };
 
   const rawIds = Array.isArray(j.questionIds) ? j.questionIds.map(String) : [];
+  if (rawIds.length === 0 && j.status !== "COMPLETED") {
+    throw new Error("malformed_question_ids");
+  }
 
   // Build question cache from the hydrated questions array
   const questionMap: Record<string, QRow> = {};
@@ -146,7 +151,7 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
     answers: (j.answers && typeof j.answers === "object" && !Array.isArray(j.answers))
       ? (j.answers as Record<string, unknown>)
       : {},
-    cursorIndex: j.cursorIndex ?? 0,
+    cursorIndex: Math.max(0, Math.min(rawIds.length > 0 ? rawIds.length - 1 : 0, j.cursorIndex ?? 0)),
     timedMode: j.timedMode ?? false,
     timeLimitSec: j.timeLimitSec ?? null,
     elapsedMs: j.elapsedMs ?? null,
@@ -162,7 +167,7 @@ async function fetchQuestion(testId: string, index: number, signal?: AbortSignal
   try {
     const res = await fetchWithRetry(
       `/api/practice-tests/${testId}/question?index=${encodeURIComponent(String(index))}`,
-      { method: "GET", signal },
+      { method: "GET", signal, credentials: "include", cache: "no-store" },
       { attempts: 2, timeoutMs: 10_000 },
     );
     if (!res.ok) return null;
@@ -192,6 +197,8 @@ async function catAdvanceApi(
   });
   const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
+    credentials: "include",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
@@ -207,6 +214,8 @@ async function catAdvanceApi(
 async function abandonTest(testId: string): Promise<void> {
   await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
+    credentials: "include",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "abandon" }),
   }).catch(() => { /* best-effort */ });
@@ -223,8 +232,10 @@ export function NclexCatRunner({
   userId: string;
   pathwayLabel?: string | null;
 }) {
+  const router = useRouter();
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
+  const [retryNonce, setRetryNonce] = useState(0);
 
   // Session state
   const [questionIds, setQuestionIds] = useState<string[]>([]);
@@ -282,6 +293,7 @@ export function NclexCatRunner({
   useEffect(() => {
     const controller = new AbortController();
     void (async () => {
+      emitRuntimeEvent("cat_runtime_bootstrap_start", { sessionId: testId });
       try {
         const s = await loadSession(testId, controller.signal);
         if (!mountedRef.current) return;
@@ -318,15 +330,21 @@ export function NclexCatRunner({
         savedElapsedMsRef.current = s.elapsedMs ?? 0;
         sessionStartMsRef.current = Date.now();
         setPhase("ready");
-      } catch {
+      } catch (e) {
         if (controller.signal.aborted) return;
         if (!mountedRef.current) return;
-        setError("Could not load exam session. Please refresh.");
+        const code = e instanceof Error ? e.message : "hydrate_failed";
+        emitRuntimeEvent("cat_runtime_bootstrap_failed", { sessionId: testId, errorCode: code });
+        setError(
+          code === "malformed_question_ids"
+            ? "This exam session has incomplete question data. Your account is safe, and you can retry or start a clean session."
+            : "Could not load this exam session. Your account and progress are safe.",
+        );
         setPhase("error");
       }
     })();
     return () => controller.abort();
-  }, [testId]);
+  }, [testId, retryNonce]);
 
   // ── Fallback fetch: fire only when a question is missing from the hydrated cache ──
   // Under normal conditions this never fires — all questions arrive with ?hydrate=full.
@@ -461,7 +479,7 @@ export function NclexCatRunner({
         try {
           const sessionRes = await fetchWithRetry(
             `/api/practice-tests/${testId}?hydrate=minimal`,
-            { method: "GET" },
+            { method: "GET", credentials: "include", cache: "no-store" },
           );
           if (!mountedRef.current) return;
           if (sessionRes.ok) {
@@ -510,7 +528,11 @@ export function NclexCatRunner({
     try {
       await abandonTest(testId);
       // Minimal reload just to get results — no question content needed here.
-      const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=minimal`, { method: "GET" });
+      const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=minimal`, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
       if (!mountedRef.current) return;
       if (res.ok) {
         const j = await res.json() as { results?: PracticeTestResultsJson | null; elapsedMs?: number | null };
@@ -539,12 +561,44 @@ export function NclexCatRunner({
   }
 
   if (phase === "error") {
+    const freshHref = pathwayId
+      ? `/app/practice-tests/start?pathwayId=${encodeURIComponent(pathwayId)}`
+      : "/app/practice-tests/start";
     return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p style={{ color: "#dc2626", marginBottom: "1rem" }}>{error}</p>
-        <Link href="/app/practice-tests" style={{ color: "#0f2d57", fontWeight: 600 }}>
-          Return to practice tests
-        </Link>
+      <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center">
+        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+            Exam recovery
+          </p>
+          <h1 className="mt-2 text-xl font-semibold text-[var(--semantic-text-primary)]">
+            We could not open this CAT session
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{error}</p>
+          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-text-on-brand)]"
+              onClick={() => {
+                setPhase("loading");
+                setRetryNonce((n) => n + 1);
+              }}
+            >
+              Retry session
+            </button>
+            <Link
+              href={freshHref}
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 text-sm font-medium text-[var(--semantic-text-primary)]"
+            >
+              Start fresh
+            </Link>
+            <Link
+              href="/app/practice-tests"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 text-sm font-medium text-[var(--semantic-text-secondary)]"
+            >
+              Practice Exams
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
@@ -559,10 +613,9 @@ export function NclexCatRunner({
         elapsedMs={elapsedMs}
         pathwayLabel={pathwayLabel}
         pathwayId={pathwayId}
-        onNewSession={() => window.location.assign("/app/practice-tests/cat-launch")}
+        onNewSession={() => router.replace("/app/practice-tests/cat-launch")}
         onReviewFlagged={() => {
-          // Navigate to review with flagged filter
-          window.location.assign(`/app/practice-tests/${testId}/results`);
+          router.replace(`/app/practice-tests/${testId}/results`);
         }}
         onExport={() => window.print()}
       />

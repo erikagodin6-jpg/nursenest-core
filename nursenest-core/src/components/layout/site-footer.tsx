@@ -163,7 +163,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
       className="nn-footer-premium-root nn-footer-marketing-chrome nn-footer-marketing-chrome--surface mt-auto border-t border-[var(--footer-border)] py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
     >
       <div className="nn-section-shell nn-footer-marketing-shell">
-        <div className="nn-footer-panel nn-footer-panel--main relative mb-6 overflow-hidden px-5 py-6 sm:px-6 sm:py-7">
+        <div className="nn-footer-panel nn-footer-panel--main relative overflow-hidden px-5 py-6 sm:px-6 sm:py-7">
           <LeafWatermark
             className="inset-0 flex items-center justify-center"
             imageClassName="max-h-[min(48vw,18rem)] opacity-[0.055] sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
@@ -223,6 +223,12 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <FLink href="/cookie-policy">Cookie Policy</FLink>
                     </li>
                     <li>
+                      <FLink href="/privacy#security">Security</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/privacy#health-privacy">Health Privacy</FLink>
+                    </li>
+                    <li>
                       <FLink href="/disclaimer">Disclaimer</FLink>
                     </li>
                   </ul>
@@ -247,6 +253,12 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     </li>
                     <li>
                       <FLink href={footerNav.platform.ecg}>ECG</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/clinical-modules">Clinical Tools</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/labs-interpretation">Lab Interpretation</FLink>
                     </li>
                     <li>
                       <FLink href={footerNav.platform.readinessAnalytics}>Readiness Analytics</FLink>
@@ -389,6 +401,12 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <FLink href={footerNav.resources.testTakingStrategies}>Test-Taking Strategies</FLink>
                     </li>
                     <li>
+                      <FLink href="/clinical-interpretation">Clinical References</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/question-bank">Question Bank</FLink>
+                    </li>
+                    <li>
                       <FLink href={footerNav.resources.faq}>FAQ</FLink>
                     </li>
                     <li>
@@ -410,6 +428,12 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     </li>
                     <li>
                       <FLink href={footerNav.support.accessibility}>Accessibility</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/support#system-status">System Status</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/support#contact">Contact Support</FLink>
                     </li>
                     <li>
                       <FLink href={footerNav.support.providerLinks}>Provider Links</FLink>
@@ -440,7 +464,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     <li className="w-full pt-1 sm:w-auto">
                       <Link
                         href={startPracticingHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
+                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-full px-4 py-2 text-sm font-medium sm:w-fit"
                       >
                         {formatTitleCase(PRIMARY_CTA, locale)}
                       </Link>
@@ -490,7 +514,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     <li className="w-full pt-1 sm:w-auto">
                       <Link
                         href={learnerContinueHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
+                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-full px-4 py-2 text-sm font-medium sm:w-fit"
                       >
                         {formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                       </Link>
@@ -513,7 +537,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     <li className="w-full pt-1 sm:w-auto">
                       <Link
                         href={startPracticingHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
+                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-full px-4 py-2 text-sm font-medium sm:w-fit"
                       >
                         {formatTitleCase(PRIMARY_CTA, locale)}
                       </Link>
@@ -525,7 +549,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           </div>
         </div>
 
-        <div className="nn-footer-panel nn-footer-panel--email mb-6 p-4 sm:mb-8 sm:p-5">
+        <div className="nn-footer-panel nn-footer-panel--email p-4 sm:p-5">
           <EmailSignupBanner className="rounded-xl border-0 bg-transparent p-0 shadow-none sm:p-0" />
         </div>
 

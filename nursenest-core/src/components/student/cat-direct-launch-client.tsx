@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
@@ -19,6 +20,7 @@ export function CatDirectLaunchClient({
   pathwayId: string;
   pathwayShell: PracticeTestPathwayClientShell;
 }) {
+  const router = useRouter();
   const isDev = process.env.NODE_ENV !== "production";
   const [phase, setPhase] = useState<"loading" | "error">("loading");
   const [message, setMessage] = useState<string | null>(null);
@@ -50,7 +52,11 @@ export function CatDirectLaunchClient({
     void runCatDirectLaunchSessionOnce(pathwayId, shellStable).then((result) => {
       if (cancelled) return;
       if (result.ok) {
-        window.location.replace(`/app/practice-tests/${result.practiceTestId}`);
+        const target = `/app/practice-tests/${encodeURIComponent(result.practiceTestId)}`;
+        router.replace(target);
+        window.setTimeout(() => {
+          if (window.location.pathname !== target) window.location.assign(target);
+        }, 1200);
         return;
       }
       const learnerMessage =
@@ -71,7 +77,7 @@ export function CatDirectLaunchClient({
     return () => {
       cancelled = true;
     };
-  }, [pathwayId, shellStable, isDev]);
+  }, [pathwayId, shellStable, isDev, router]);
 
   if (phase === "error") {
     return (

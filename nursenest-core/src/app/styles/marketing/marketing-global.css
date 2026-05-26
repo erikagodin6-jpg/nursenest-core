@@ -97,6 +97,26 @@
   padding-top: var(--nn-rhythm-section-y);
   padding-bottom: var(--nn-rhythm-section-y);
 }
+.nn-section-block + .nn-section-block,
+.nn-section-block + .nn-premium-home-section,
+.nn-premium-home-section + .nn-section-block {
+  border-color: color-mix(in srgb, var(--border-subtle) 72%, transparent);
+}
+.nn-surface-gap {
+  display: grid;
+  gap: var(--nn-space-surface-gap, clamp(1.5rem, 2.8vw, 2.5rem));
+}
+.nn-card-stack {
+  display: grid;
+  gap: var(--nn-space-card-stack, clamp(1.25rem, 2vw, 1.875rem));
+}
+.nn-divider-breathing-room {
+  margin-block: var(--nn-space-divider-offset, clamp(1.5rem, 3vw, 2.5rem));
+}
+.nn-section-with-divider {
+  border-top: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
+  padding-top: var(--nn-space-section-gap, clamp(3rem, 6vw, 5rem));
+}
 .nn-section-shell {
   margin-inline: auto;
   max-width: 72rem;

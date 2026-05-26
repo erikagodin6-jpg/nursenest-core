@@ -12,7 +12,6 @@ import {
   withBuildTrace,
 } from "@/build/tracing";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
-import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { isBuildPhase } from "@/lib/runtime/is-build-phase";
 
 /** Subscriber app — not for public search indexing. */
@@ -107,11 +106,7 @@ const AppProviders = traceProvider(
     session: Awaited<ReturnType<typeof getSessionSafe>>;
     children: ReactNode;
   }) {
-    return (
-      <AppThemeProvider>
-        <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
-      </AppThemeProvider>
-    );
+    return <AuthSessionProvider session={session}>{children}</AuthSessionProvider>;
   },
   { name: "AppProviders" },
 );

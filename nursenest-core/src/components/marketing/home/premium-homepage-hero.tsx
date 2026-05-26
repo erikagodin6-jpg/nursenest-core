@@ -388,11 +388,11 @@ export function PremiumHomepageHero(props: {
 
   return (
     <section
-      className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[var(--header-nav-border)]"
+      className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[color-mix(in_srgb,var(--header-nav-border)_58%,transparent)]"
       aria-labelledby="home-conversion-hero-heading"
       data-testid="hero-section"
     >
-      <div className="relative mx-auto max-w-6xl overflow-hidden px-4 py-[calc(var(--nn-rhythm-page-y)*0.9)] sm:px-6 md:py-[calc(var(--nn-rhythm-section-y)*0.92)] lg:px-8">
+      <div className="relative mx-auto max-w-6xl overflow-hidden px-4 py-[clamp(3.75rem,9vw,5.5rem)] sm:px-6 md:py-[clamp(5rem,9vw,7.25rem)] lg:px-8">
         <LeafWatermark
           className="-right-24 top-4 hidden h-[24rem] w-[24rem] items-center justify-center opacity-70 md:flex lg:-right-28 lg:top-0"
           imageClassName="max-h-[22rem] opacity-[0.035] lg:max-h-[24rem]"
@@ -400,13 +400,13 @@ export function PremiumHomepageHero(props: {
         />
         <div className="nn-premium-hero-grid relative z-[1]">
           {/* ── Copy column ───────────────────────────────────────── */}
-          <div>
+          <div className="max-w-[43rem]">
             <span className="nn-premium-hero-eyebrow">{eyebrow}</span>
 
             <div className="nn-hero-headline-visual">
               <h1
                 id="home-conversion-hero-heading"
-                className="nn-marketing-h1 nn-hero-headline--premium mt-3 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
+                className="nn-marketing-h1 nn-hero-headline--premium mt-5 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
                 data-testid="text-hero-heading"
               >
                 {heroHeadlineEmphasis ? (
@@ -420,16 +420,16 @@ export function PremiumHomepageHero(props: {
               </h1>
             </div>
 
-            <p className="nn-marketing-body mt-[var(--nn-rhythm-heading-sub)] max-w-[42ch] text-pretty text-[var(--palette-text-muted)]">
+            <p className="nn-marketing-body mt-[clamp(1rem,2vw,1.35rem)] max-w-[44ch] text-pretty text-[var(--palette-text-muted)]">
               {subheading}
             </p>
 
-            <div className="mt-[var(--nn-rhythm-text-to-cta)] flex flex-wrap gap-[var(--nn-rhythm-btn-group-gap)]">
+            <div className="mt-[clamp(1.35rem,2.8vw,2rem)] flex flex-wrap gap-[clamp(0.75rem,1.6vw,1rem)]">
               <MarketingTrackedLink
                 href={safePath(locale, HUB.questionBank)}
                 event={PH.marketingHomeHeroPrimaryCta}
                 eventProps={{ region }}
-                className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl`}
+                className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-full`}
               >
                 {primaryCtaLabel}
                 <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
@@ -439,7 +439,7 @@ export function PremiumHomepageHero(props: {
                 href={safePath(locale, HUB.examLessons)}
                 event={PH.marketingHomeHeroSecondaryCta}
                 eventProps={{ region }}
-                className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
+                className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-full`}
               >
                 {secondaryCtaLabel}
               </MarketingTrackedLink>

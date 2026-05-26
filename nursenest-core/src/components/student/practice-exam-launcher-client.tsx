@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 const BODY_SYSTEMS = [
   "Cardiovascular",
@@ -22,6 +24,7 @@ const QUESTION_COUNTS = [5, 10, 20, 50] as const;
  * contract as the legacy setup flow, without the extra builder surfaces.
  */
 export function PracticeExamLauncherClient({ pathwayId }: { pathwayId: string | null }) {
+  const router = useRouter();
   const [questionCount, setQuestionCount] = useState<(typeof QUESTION_COUNTS)[number]>(10);
   const [selectedSystems, setSelectedSystems] = useState<string[]>(() => [...BODY_SYSTEMS]);
   const [error, setError] = useState<string | null>(null);
@@ -67,19 +70,30 @@ export function PracticeExamLauncherClient({ pathwayId }: { pathwayId: string | 
 
       const res = await fetch("/api/practice-tests", {
         method: "POST",
+        credentials: "include",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
           "x-nn-study-launch-surface": "practice_exams",
         },
         body: JSON.stringify(payload),
       });
-      const data = (await res.json()) as { id?: string; error?: string };
+      const data = (await res.json().catch(() => ({ error: "Received an invalid practice exam response." }))) as { id?: string; error?: string };
+      emitRuntimeEvent("practice_exam_session_create_result", {
+        pathwayId: pathwayId ?? "",
+        status: res.status,
+        ok: res.ok,
+      });
       if (!res.ok) {
         setError(data.error ?? "Could not start practice right now.");
         return;
       }
       if (data.id) {
-        window.location.href = `/app/practice-tests/${data.id}`;
+        const target = `/app/practice-tests/${encodeURIComponent(data.id)}`;
+        router.replace(target);
+        window.setTimeout(() => {
+          if (window.location.pathname !== target) window.location.assign(target);
+        }, 1200);
       }
     } catch {
       setError("Could not start practice right now.");

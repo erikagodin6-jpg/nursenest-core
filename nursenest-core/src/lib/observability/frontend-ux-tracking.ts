@@ -176,6 +176,7 @@ export function captureHydrationUxHint(message: string): void {
 
 let uxGlobalsMounted = false;
 let navDiagnosticsMounted = false;
+let staleBuildCheckStarted = false;
 
 type NavDiagnosticsWindow = Window & {
   __nnNavDiagnostics?: {
@@ -268,6 +269,7 @@ export function mountGlobalUxListeners(): void {
   if (typeof window === "undefined" || uxGlobalsMounted) return;
   uxGlobalsMounted = true;
   mountNavigationDiagnostics();
+  void checkForStaleClientBuild();
 
   window.addEventListener(
     "error",
@@ -295,4 +297,50 @@ export function mountGlobalUxListeners(): void {
       });
     }
   });
+}
+
+async function readJson(url: string): Promise<Record<string, unknown> | null> {
+  try {
+    const res = await fetch(url, {
+      cache: "no-store",
+      credentials: "same-origin",
+      headers: { accept: "application/json" },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+async function checkForStaleClientBuild(): Promise<void> {
+  if (staleBuildCheckStarted || typeof window === "undefined") return;
+  staleBuildCheckStarted = true;
+  const [publicMeta, runtimeMeta] = await Promise.all([
+    readJson(`/nn-build-meta.json?clientCheck=${Date.now()}`),
+    readJson("/api/runtime/version"),
+  ]);
+  const publicCommit = typeof publicMeta?.commit === "string" ? publicMeta.commit : null;
+  const runtimeCommit = typeof runtimeMeta?.commit === "string" ? runtimeMeta.commit : null;
+  if (!publicCommit || !runtimeCommit || publicCommit === runtimeCommit) return;
+  document.documentElement.dataset.nnStaleClientBuild = "true";
+  captureUxFailure({
+    kind: "stale_client_build_detected",
+    level: "warning",
+    message: "Client build metadata differs from runtime build metadata.",
+    fallbackShown: false,
+    extra: {
+      publicCommit: publicCommit.slice(0, 12),
+      runtimeCommit: runtimeCommit.slice(0, 12),
+    },
+  });
+  try {
+    window.dispatchEvent(
+      new CustomEvent("nn:stale-client-build", {
+        detail: { publicCommit, runtimeCommit },
+      }),
+    );
+  } catch {
+    /* ignore */
+  }
 }

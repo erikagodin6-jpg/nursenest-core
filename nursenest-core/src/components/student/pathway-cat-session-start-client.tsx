@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
 import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "@/lib/practice-tests/types";
@@ -25,6 +26,7 @@ import {
   normalizePathwaySelection,
   resolveCatStartUiState,
 } from "@/components/student/pathway-cat-start-payload";
+import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 
 function sectionShell(children: ReactNode, className = "") {
   return <section className={`lv-shell nn-premium-cat-section ${className}`.trim()}>{children}</section>;
@@ -52,6 +54,7 @@ export function PathwayCatSessionStartClient({
   /** Per pathway: lesson links, empty list when truly none, or `null` when preview load failed (never fake-empty on error). */
   fallbackLessonsByPathway?: Record<string, Array<{ slug: string; title: string }> | null>;
 }) {
+  const router = useRouter();
   const isDev = process.env.NODE_ENV !== "production";
   const [pathwayId, setPathwayId] = useState(() => {
     if (initialPathwayId && pathwayOptions.some((p) => p.id === initialPathwayId)) return initialPathwayId;
@@ -68,6 +71,7 @@ export function PathwayCatSessionStartClient({
   const [readinessLoading, setReadinessLoading] = useState(false);
   const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
   const [readinessRefreshToken, setReadinessRefreshToken] = useState(0);
+  const createInFlightRef = useRef(false);
 
   const pathwayMeta = useMemo(
     () => (normalizedPathwayId ? pathwayShellById[normalizedPathwayId] : undefined),
@@ -204,11 +208,18 @@ export function PathwayCatSessionStartClient({
 
   const start = useCallback(async () => {
     if (!normalizedPathwayId || !pathwayMeta) return;
+    if (createInFlightRef.current) return;
+    createInFlightRef.current = true;
     setCreating(true);
     setError(null);
     setErrorCode(null);
+    const startAt = performance.now();
     try {
       const payload = buildCatExamSimulationCreatePayload(pathwayMeta);
+      emitRuntimeEvent("cat_start_clicked", {
+        pathwayId: normalizedPathwayId,
+        examFamily: String(pathwayMeta.examFamily ?? ""),
+      });
       if (isDev) {
         console.info("[CAT start] attempt", {
           pathwayId,
@@ -219,12 +230,29 @@ export function PathwayCatSessionStartClient({
           timeLimitSec: payload.timeLimitSec,
         });
       }
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 28_000);
       const res = await fetch("/api/practice-tests", {
         method: "POST",
+        credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "practice_exams" },
         body: JSON.stringify(payload),
+        signal: controller.signal,
+      }).finally(() => window.clearTimeout(timeoutId));
+      let data: { id?: string; error?: string; code?: string };
+      try {
+        data = (await res.json()) as { id?: string; error?: string; code?: string };
+      } catch {
+        data = { error: "Received an invalid response while starting the CAT session.", code: "create_bad_json" };
+      }
+      emitRuntimeEvent("cat_session_create_result", {
+        pathwayId: normalizedPathwayId,
+        status: res.status,
+        ok: res.ok,
+        errorCode: data.code ?? "",
+        elapsedMs: Math.round(performance.now() - startAt),
       });
-      const data = (await res.json()) as { id?: string; error?: string; code?: string };
       if (!res.ok) {
         if (isDev) console.error("[CAT start] rejected", { status: res.status, code: data.code ?? null, error: data.error ?? "Could not start session." });
         setErrorCode(typeof data.code === "string" ? data.code : null);
@@ -234,14 +262,35 @@ export function PathwayCatSessionStartClient({
         if (isDev) console.error("[CAT start] missing session id", { status: res.status });
         throw new Error("Session was created without an id. Please try again.");
       }
-      window.location.href = `/app/practice-tests/${data.id}`;
+      const target = `/app/practice-tests/${encodeURIComponent(data.id)}`;
+      emitRuntimeEvent("cat_start_navigation_attempt", {
+        pathwayId: normalizedPathwayId,
+        sessionId: data.id,
+        target,
+      });
+      router.replace(target);
+      window.setTimeout(() => {
+        if (window.location.pathname !== target) {
+          window.location.assign(target);
+        }
+      }, 1200);
     } catch (e) {
-      const message = e instanceof Error ? e.message : "Could not start session.";
+      const aborted = e instanceof DOMException && e.name === "AbortError";
+      const message = aborted
+        ? "Starting your CAT session timed out. Check your connection and try again."
+        : e instanceof Error ? e.message : "Could not start session.";
+      emitRuntimeEvent("cat_session_create_result", {
+        pathwayId: normalizedPathwayId,
+        ok: false,
+        errorCode: aborted ? "create_timeout" : errorCode ?? "create_failed",
+        elapsedMs: Math.round(performance.now() - startAt),
+      });
       setError(`Unable to start exam: ${message}`);
     } finally {
       setCreating(false);
+      createInFlightRef.current = false;
     }
-  }, [normalizedPathwayId, pathwayId, pathwayMeta, isDev]);
+  }, [normalizedPathwayId, pathwayId, pathwayMeta, isDev, router]);
 
   const stats = heroChips.length > 0 ? heroChips : [
     { id: "mode", label: "Mode", value: catShort ?? "CAT / LOFT" },

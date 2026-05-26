@@ -46,7 +46,7 @@ export function runCatDirectLaunchSessionOnce(
         resReady = await fetchWithTimeout(
           fetchImpl,
           `/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(pathwayId)}`,
-          { method: "GET", credentials: "same-origin" },
+          { method: "GET", credentials: "include", cache: "no-store" },
         );
       } catch {
         return {
@@ -95,6 +95,8 @@ export function runCatDirectLaunchSessionOnce(
       try {
         res = await fetchWithTimeout(fetchImpl, "/api/practice-tests", {
           method: "POST",
+          credentials: "include",
+          cache: "no-store",
           headers: {
             "Content-Type": "application/json",
             "x-nn-study-launch-surface": "practice_exams",

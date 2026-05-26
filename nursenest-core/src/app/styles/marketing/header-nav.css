@@ -77,10 +77,12 @@
    does not affect layout/paint on composited layers). background-color removed from transition:
    it is non-composited and was flagging 20+ nav elements in the PSI non-composited audit. */
 .nn-marketing-nav-link {
-  transition: color 160ms ease, transform 160ms ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 160ms ease, transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
 }
 .nn-marketing-nav-link:hover {
-  background-color: color-mix(in srgb, var(--nav-hover-bg, var(--nav-hover, #f3eef9)) 70%, transparent);
+  background-color: color-mix(in srgb, var(--nav-hover-bg, var(--nav-hover, #f3eef9)) 52%, transparent);
   transform: translateY(-1px);
 }
 
@@ -155,7 +157,7 @@
 [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
 [data-nn-header-layout="marketing-row4"] .nn-header-logo-row > .nn-header-nav-row {
   background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
-  border-top: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
+  border-top: 1px solid color-mix(in srgb, var(--semantic-info) 9%, transparent);
   color: var(--nn-header-primary-fg);
   --nav-fg: var(--nn-header-primary-fg);
   --nav-link: var(--nn-header-primary-fg);
@@ -185,7 +187,7 @@
     color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg))
   );
   color: var(--nn-header-primary-fg);
-  font-weight: 650;
+  font-weight: 600;
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
@@ -214,7 +216,7 @@
     var(--semantic-info) 18%,
     color-mix(in srgb, var(--semantic-brand) 8%, var(--nn-header-primary-bg))
   );
-  font-weight: 650;
+  font-weight: 600;
 }
 
 /*
