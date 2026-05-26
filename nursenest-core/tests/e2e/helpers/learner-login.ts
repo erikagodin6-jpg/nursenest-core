@@ -42,6 +42,10 @@ export class RnFullContentLoginError extends Error {
   }
 }
 
+type CredentialsCallbackCapture =
+  | { mode: "browser"; response: Response; status: number; payload?: never }
+  | { mode: "direct"; response?: never; status: number; payload: unknown };
+
 function isCredentialsPostResponse(res: Response): boolean {
   const m = res.request().method();
   if (m.toUpperCase() !== "POST") return false;
@@ -74,6 +78,41 @@ async function fillLoginInput(locator: Locator, value: string): Promise<void> {
     }, value);
     await expect(locator).toHaveValue(value, { timeout: 5_000 });
   }
+}
+
+async function postCredentialsDirectly(page: Page, email: string, password: string): Promise<CredentialsCallbackCapture> {
+  const direct = await page.evaluate(
+    async ({ loginEmail, loginPassword }) => {
+      const csrfRes = await fetch("/api/auth/csrf", {
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { accept: "application/json" },
+      });
+      const csrfPayload = (await csrfRes.json().catch(() => ({}))) as { csrfToken?: unknown };
+      const res = await fetch("/api/auth/callback/credentials", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Auth-Return-Redirect": "1",
+        },
+        body: new URLSearchParams({
+          email: loginEmail,
+          password: loginPassword,
+          rememberMe: "true",
+          csrfToken: typeof csrfPayload.csrfToken === "string" ? csrfPayload.csrfToken : "",
+          callbackUrl: new URL("/", window.location.origin).href,
+        }),
+      });
+      return {
+        status: res.status,
+        payload: await res.json().catch(() => ({})),
+      };
+    },
+    { loginEmail: email, loginPassword: password },
+  );
+  return { mode: "direct", status: direct.status, payload: direct.payload };
 }
 
 export type LoginWithCredentialsOptions = {
@@ -184,19 +223,25 @@ export async function loginWithCredentials(
 
   await submit.click();
 
-  let authRes: Response;
+  let authCapture: CredentialsCallbackCapture;
   try {
     const initialPost = await Promise.race([
       authPostPromise.then((response) => ({ response })),
       page.waitForTimeout(3_000).then(() => null),
     ]);
     if (initialPost?.response) {
-      authRes = initialPost.response;
+      authCapture = { mode: "browser", response: initialPost.response, status: initialPost.response.status() };
     } else {
       await loginForm.evaluate((form) => {
         (form as HTMLFormElement).requestSubmit();
       });
-      authRes = await authPostPromise;
+      const formPost = await Promise.race([
+        authPostPromise.then((response) => ({ response })),
+        page.waitForTimeout(5_000).then(() => null),
+      ]);
+      authCapture = formPost?.response
+        ? { mode: "browser", response: formPost.response, status: formPost.response.status() }
+        : await postCredentialsDirectly(page, email, password);
     }
   } catch {
     const at = redactAuthDiagnosticsUrl(page.url());
@@ -221,18 +266,18 @@ export async function loginWithCredentials(
 
   let payload: unknown;
   try {
-    payload = await authRes.json();
+    payload = authCapture.mode === "direct" ? authCapture.payload : await authCapture.response.json();
   } catch {
-    const text = await authRes.text().catch(() => "");
+    const text = authCapture.mode === "direct" ? "" : await authCapture.response.text().catch(() => "");
     const phase0: RnFullContentLoginPhase0Meta = {
       primaryClassification: "AUTH_CALLBACK_REJECTED",
       authCallbackCode: null,
       authErrorParam: null,
       operatorHint: humanReadableOperatorHint("AUTH_CALLBACK_REJECTED"),
-      callbackHttpStatus: authRes.status(),
+      callbackHttpStatus: authCapture.status,
     };
     throw new RnFullContentLoginError(
-      `Credentials POST returned non-JSON (status=${authRes.status()}). First bytes: ${text.slice(0, 240)} baseURL=${baseURL}`,
+      `Credentials POST returned non-JSON (status=${authCapture.status}). First bytes: ${text.slice(0, 240)} baseURL=${baseURL}`,
       phase0,
     );
   }
@@ -243,14 +288,14 @@ export async function loginWithCredentials(
     const baseMeta = metaFromAuthCode(parsed.credentialsCode, parsed.errorParam);
     const phase0: RnFullContentLoginPhase0Meta = {
       ...baseMeta,
-      callbackHttpStatus: authRes.status(),
+      callbackHttpStatus: authCapture.status,
     };
     throw new RnFullContentLoginError(
       [
         `Credentials sign-in rejected (Auth.js error=${parsed.errorParam ?? "unknown"}).`,
         `callbackPayloadUrl=${parsed.redirectUrl.slice(0, 500)}`,
         `credentialsCode=${parsed.credentialsCode ?? "n/a"}`,
-        `httpStatus=${authRes.status()}`,
+        `httpStatus=${authCapture.status}`,
         `baseURL=${baseURL}`,
         phase0.operatorHint,
         diag,
@@ -269,7 +314,7 @@ export async function loginWithCredentials(
       callbackRedirectRedacted = parsed.redirectUrl.slice(0, 200);
     }
     opts?.onCredentialsSuccess?.({
-      httpStatus: authRes.status(),
+      httpStatus: authCapture.status,
       callbackRedirectRedacted,
       pageUrlRedacted: redactAuthDiagnosticsUrl(page.url()),
     });
@@ -278,6 +323,12 @@ export async function loginWithCredentials(
   }
 
   try {
+    if (authCapture.mode === "direct" && /\/login|\/signup|\/sign-up/i.test(new URL(page.url()).pathname)) {
+      const redirectHref = parsed.redirectUrl.startsWith("http")
+        ? parsed.redirectUrl
+        : new URL(parsed.redirectUrl || "/", navOrigin || baseURL).href;
+      await page.goto(redirectHref, { waitUntil: "domcontentloaded" }).catch(() => undefined);
+    }
     await page.waitForFunction(
       () => {
         const path = window.location.pathname;
