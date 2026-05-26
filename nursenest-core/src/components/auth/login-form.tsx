@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getSession, signIn, useSession } from "next-auth/react";
+import { getCsrfToken, getSession, useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -14,6 +14,57 @@ import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-messag
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
+
+type CredentialSignInResult = {
+  error?: string;
+  code?: string;
+  status: number;
+  ok: boolean;
+  url: string | null;
+};
+
+async function signInWithCredentialsSafely(params: {
+  email: string;
+  password: string;
+  rememberMe: string;
+  redirectTo: string;
+}): Promise<CredentialSignInResult> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch("/api/auth/callback/credentials", {
+    method: "POST",
+    credentials: "same-origin",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Auth-Return-Redirect": "1",
+    },
+    body: new URLSearchParams({
+      email: params.email,
+      password: params.password,
+      rememberMe: params.rememberMe,
+      csrfToken: csrfToken ?? "",
+      callbackUrl: params.redirectTo,
+    }),
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as { url?: unknown };
+  const rawUrl = typeof payload.url === "string" ? payload.url : params.redirectTo;
+  const parsedUrl = new URL(rawUrl, window.location.origin);
+  const error = parsedUrl.searchParams.get("error") ?? undefined;
+  const code = parsedUrl.searchParams.get("code") ?? undefined;
+
+  if (response.ok) {
+    await getSession().catch(() => null);
+  }
+
+  return {
+    error,
+    code,
+    status: response.status,
+    ok: response.ok,
+    url: error ? null : parsedUrl.href,
+  };
+}
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
@@ -142,14 +193,13 @@ export function LoginForm({
       const rememberMe =
         formData.get("rememberMe") === "on" ||
         String(formData.get("rememberMe") ?? "") === "true";
-      let result: Awaited<ReturnType<typeof signIn>> | undefined;
+      let result: CredentialSignInResult | undefined;
       try {
         const authRedirectTo = new URL(redirectTarget, window.location.origin).href;
-        result = await signIn("credentials", {
+        result = await signInWithCredentialsSafely({
           email,
           password,
           rememberMe: rememberMe ? "true" : "false",
-          redirect: false,
           redirectTo: authRedirectTo,
         });
       } catch (e) {

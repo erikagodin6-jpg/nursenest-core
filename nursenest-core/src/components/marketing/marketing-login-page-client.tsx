@@ -17,7 +17,7 @@ function LoginRouteBody({ children }: { children: ReactNode }) {
  */
 export function MarketingLoginPageClient({ children }: { children: ReactNode }) {
   return (
-    <Suspense fallback={children}>
+    <Suspense fallback={null}>
       <LoginRouteBody>{children}</LoginRouteBody>
     </Suspense>
   );
