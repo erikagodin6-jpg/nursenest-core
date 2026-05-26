@@ -291,6 +291,8 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
     box-shadow var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease);
   scroll-margin-top: 5.5rem;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 /*
  * Role variants: each sets --lsc-* custom properties inherited by the chip inside.
@@ -453,10 +455,23 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
   box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
   border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--lsc-color) 22%);
 }
-.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="review"]:not(.nn-lesson-section-card--tier-callout),
-.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="application"],
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="review"]:not(.nn-lesson-section-card--tier-callout) {
+  background: color-mix(in srgb, var(--lesson-exam-tips, var(--semantic-panel-cool)) 18%, var(--bg-card) 82%);
+}
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="application"] {
+  background: color-mix(in srgb, var(--lesson-clinical-pearls, var(--semantic-panel-warm)) 20%, var(--bg-card) 80%);
+}
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="danger"] {
-  background: color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--bg-card) 88%);
+  background: color-mix(in srgb, var(--lesson-red-flags, var(--semantic-danger-soft)) 18%, var(--bg-card) 82%);
+}
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="warning"] {
+  background: color-mix(in srgb, var(--lesson-signs-symptoms, var(--semantic-warning-soft)) 18%, var(--bg-card) 82%);
+}
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="success"] {
+  background: color-mix(in srgb, var(--lesson-medications, var(--semantic-panel-positive)) 16%, var(--bg-card) 84%);
+}
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="diagnostic"] {
+  background: color-mix(in srgb, var(--lesson-diagnostics, var(--semantic-panel-cool)) 18%, var(--bg-card) 82%);
 }
 .nn-lesson-section-card.nn-lesson-section-card--tier-callout,
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--tier-callout {
@@ -490,6 +505,49 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
 .nn-lesson-section-card .nn-lesson-callout__body,
 .nn-lesson-section-card .lv-lesson-sparse-panel {
   max-width: 100%;
+}
+
+.nn-lesson-page--learner-app .nn-lesson-callout {
+  --lesson-callout-accent: var(--semantic-info);
+  --lesson-callout-soft: var(--semantic-info-soft);
+  border-color: color-mix(in srgb, var(--lesson-callout-accent) 26%, var(--semantic-border-soft));
+  border-left: 3px solid color-mix(in srgb, var(--lesson-callout-accent) 68%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lesson-callout-soft) 24%, var(--bg-card) 76%);
+  box-shadow: none;
+}
+.nn-lesson-page--learner-app .nn-lesson-callout--exam {
+  --lesson-callout-accent: var(--lesson-exam-focus-accent, var(--semantic-info));
+  --lesson-callout-soft: var(--lesson-exam-tips, var(--semantic-info-soft));
+}
+.nn-lesson-page--learner-app .nn-lesson-callout--clinical {
+  --lesson-callout-accent: var(--lesson-interventions-accent, var(--semantic-accent-turquoise));
+  --lesson-callout-soft: var(--lesson-interventions, var(--semantic-panel-aqua));
+}
+.nn-lesson-page--learner-app .nn-lesson-callout--pearl {
+  --lesson-callout-accent: var(--lesson-pearls-accent, var(--semantic-accent-lavender));
+  --lesson-callout-soft: var(--lesson-clinical-pearls, var(--semantic-panel-lavender));
+}
+.nn-lesson-page--learner-app .nn-lesson-callout--priority {
+  --lesson-callout-accent: var(--semantic-warning);
+  --lesson-callout-soft: var(--semantic-warning-soft);
+}
+.nn-lesson-page--learner-app .nn-lesson-callout--safety {
+  --lesson-callout-accent: var(--semantic-danger);
+  --lesson-callout-soft: var(--semantic-danger-soft);
+}
+.nn-lesson-page--learner-app .nn-lesson-callout--pharm {
+  --lesson-callout-accent: var(--lesson-medications-accent, var(--semantic-success));
+  --lesson-callout-soft: var(--lesson-medications, var(--semantic-panel-positive));
+}
+.nn-lesson-page--learner-app .nn-lesson-callout__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: color-mix(in srgb, var(--lesson-callout-accent) 84%, var(--semantic-text-secondary));
+}
+.nn-lesson-page--learner-app .nn-lesson-callout__icon {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .nn-lesson-section-card .nn-lesson-exam-focus-inline__card {
@@ -7466,7 +7524,10 @@ html[data-theme="deep-twilight"] {
 }
 
 .nn-lesson-retention-review-zone {
-  margin-top: clamp(4.5rem, 8vw, 7rem);
+  clear: both;
+  position: relative;
+  z-index: 0;
+  margin-top: clamp(1.75rem, 4vw, 3rem);
   border: 1px solid var(--nn-lesson-reading-border);
   border-radius: 1.65rem;
   background: color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--semantic-surface));
@@ -7507,13 +7568,15 @@ html[data-theme="deep-twilight"] {
 
 .nn-lesson-retention-review-zone__sections {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .nn-lesson-retention-review-zone .nn-lesson-section-card {
-  min-height: 100%;
+  min-width: 0;
+  min-height: 0;
   margin: 0;
   border-radius: 1rem;
   padding: 1.25rem;
@@ -7667,11 +7730,15 @@ html[data-theme="deep-twilight"] {
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: 0;
+  isolation: isolate;
 }
 
 .nn-lesson-reading-viewport__surface {
   min-width: 0;
+  max-width: 100%;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .nn-lesson-reading-viewport__surface .nn-lesson-main,
@@ -7719,7 +7786,7 @@ html[data-theme="deep-twilight"] {
 
 @media (min-width: 1024px) {
   .nn-lesson-reading-viewport {
-    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 13.75rem);
+    grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr) minmax(12rem, 13.75rem);
     gap: clamp(1rem, 1.5vw, 2rem);
   }
 
@@ -7744,9 +7811,11 @@ html[data-theme="deep-twilight"] {
     display: block;
     position: sticky;
     top: 1rem;
+    min-width: 0;
     max-height: calc(100dvh - 2rem);
     overflow: auto;
     overscroll-behavior: contain;
+    z-index: 2;
   }
 
   .nn-lesson-reading-viewport__left {
@@ -8062,6 +8131,8 @@ html[data-theme="deep-twilight"] {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .nn-lesson-clinical-pearls-rail__label {
@@ -8082,12 +8153,19 @@ html[data-theme="deep-twilight"] {
 }
 
 .nn-lesson-clinical-pearls-rail__box {
+  min-width: 0;
+  min-height: 0;
   border-radius: 0.625rem;
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
   padding: 0.625rem 0.6875rem;
   font-size: 0.71875rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.nn-lesson-clinical-pearls-rail__box:empty {
+  display: none;
 }
 
 .nn-lesson-clinical-pearls-rail__box b {
@@ -8107,7 +8185,7 @@ html[data-theme="deep-twilight"] {
 
 @media (min-width: 1024px) {
   .nn-lesson-reading-viewport[data-layout="rn-v2"] {
-    grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+    grid-template-columns: minmax(12rem, 14rem) minmax(0, 1fr);
     column-gap: clamp(1rem, 1.25vw, 1.25rem);
   }
 
@@ -8146,8 +8224,8 @@ html[data-theme="deep-twilight"] {
   .nn-lesson-page-shell--reading-v2
     .nn-lesson-reading-stack
     .nn-lesson-section-card.nn-lesson-section-card--under-left {
-    width: calc(100% + min(15rem, 240px) + clamp(1rem, 1.25vw, 1.25rem));
-    margin-left: calc(-1 * (min(15rem, 240px) + clamp(1rem, 1.25vw, 1.25rem)));
+    width: 100%;
+    margin-left: 0;
   }
 
   .nn-lesson-page-shell--reading-v2

@@ -525,7 +525,7 @@ export async function POST(req: Request) {
       alliedCareer: careerKey ?? undefined,
       planCode,
     }).catch(() => {});
-    return NextResponse.json({ url: checkoutUrl });
+    return NextResponse.json({ url: checkoutUrl, sessionId: checkoutSession.id });
   } catch (e) {
     console.error("[stripe_checkout] unhandled_checkout_error", e);
     auditCheckoutFailed({

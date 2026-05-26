@@ -386,7 +386,7 @@ function buildRetestRec(
         message:
           "Your performance is exam-ready. Schedule your exam or take one final full-length practice to confirm.",
         ctaLabel: "Schedule or retest",
-        href: "/app/practice-tests?startMode=practice_exam",
+        href: "/app/practice-tests",
         urgency: "ready",
       };
   }

@@ -84,13 +84,9 @@ import { NclexTargetDateModal } from "@/components/student/nclex-target-date-mod
 import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
-import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
-import {
-  isFlashcardsFocusedStudyPath,
-  isFlashcardsHubLandingPath,
-} from "@/lib/learner/flashcards-hub-focused-shell";
-import { isPracticeTestsHubLandingPath } from "@/lib/learner/practice-tests-hub-focused-shell";
+import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
+import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 import { prisma } from "@/lib/db";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
@@ -207,14 +203,11 @@ const LearnerShellLayout = traceLayout(
   import.meta,
   async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
   const requestPathname = await resolveLearnerRequestPathname();
-  const isFocusedExamShell = isFocusedPracticeTestSessionPath(requestPathname);
-  const normalizedLearnerPathname = requestPathname.split("?")[0]?.replace(/\/+$/, "") || "/app";
-  const isLearnerDashboardRoute = normalizedLearnerPathname === "/app";
-  const isFlashcardsHubLanding = isFlashcardsHubLandingPath(normalizedLearnerPathname);
-  const isFlashcardsFocusedStudy = isFlashcardsFocusedStudyPath(normalizedLearnerPathname);
-  const isPracticeTestsHubLanding = isPracticeTestsHubLandingPath(normalizedLearnerPathname);
-  const isStudyHubLanding = isFlashcardsHubLanding || isPracticeTestsHubLanding;
-  const isFocusedStudySurface = isStudyHubLanding || isFlashcardsFocusedStudy;
+  const shellFlags = learnerShellFlags(requestPathname);
+  const isFocusedExamShell = shellFlags.suppressFullChrome;
+  const isFocusedStudySurface = shellFlags.suppressStudyWidgets;
+  const isLearnerDashboardRoute = shellFlags.isDashboard;
+  const normalizedLearnerPathname = (requestPathname?.split("?")[0] ?? "").replace(/\/+$/, "") || "/app";
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
   const session = await withBuildTrace(protectedSessionTrace, async () =>
     getProtectedRouteSession("(student).app.(learner)"),
@@ -424,6 +417,7 @@ const LearnerShellLayout = traceLayout(
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
+            <LearnerShellDevDiagnostics />
             <div
               className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
               data-nn-learner-ds

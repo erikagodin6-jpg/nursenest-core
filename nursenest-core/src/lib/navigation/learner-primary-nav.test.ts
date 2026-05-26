@@ -30,15 +30,15 @@ test("buildLearnerPrimaryNavItems: primary key maps to canonical route", () => {
     assert.equal(primary!.matchBase, "/app/lessons");
   } else {
     assert.equal(primary!.href, CANONICAL_LEARNER_ROUTES.practice);
-    assert.equal(primary!.matchBase, "/app/questions");
+    assert.equal(primary!.matchBase, "/app/practice-tests");
   }
 });
 
 test("buildLearnerPrimaryNavItems: legacy Exams label still opens premium practice-tests surface", () => {
-  const cat = buildLearnerPrimaryNavItems("us-rn-nclex-rn", { examsLabel: "Exams" }).find((i) => i.key === "cat");
-  assert.ok(cat);
-  assert.equal(cat!.href, "/app/practice-tests?startMode=practice_exam&pathwayId=us-rn-nclex-rn");
-  assert.equal(cat!.matchBase, "/app/practice-tests");
+  const practice = buildLearnerPrimaryNavItems("us-rn-nclex-rn", { examsLabel: "Exams" }).find((i) => i.key === "practice");
+  assert.ok(practice);
+  assert.equal(practice!.href, "/app/practice-tests?pathwayId=us-rn-nclex-rn");
+  assert.equal(practice!.matchBase, "/app/practice-tests");
 });
 
 test("buildOptionalPrintablesShellNavItem: hidden when navVisible is false", () => {

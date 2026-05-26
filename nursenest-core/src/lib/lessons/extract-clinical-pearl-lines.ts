@@ -14,9 +14,13 @@ function stripMarkup(text: string): string {
 }
 
 function splitParagraphs(body: string): string[] {
-  const plain = body.replace(/<\/p>/gi, "\n\n").replace(/<br\s*\/?>/gi, "\n");
-  return stripMarkup(plain)
+  const plain = body
+    .replace(/<\/p>/gi, "\n\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/\r\n/g, "\n");
+  return plain
     .split(/\n{2,}|(?<=[.!?])\s+(?=[A-Z])/)
+    .map(stripMarkup)
     .map((part) => part.trim())
     .filter((part) => part.length >= 24);
 }
@@ -27,7 +31,13 @@ function splitListItems(body: string): string[] {
     .replace(/<li[^>]*>/gi, "\n")
     .split(/\r?\n/)
     .map((line) => stripMarkup(line))
-    .map((line) => line.replace(/^[-*•]\s+/, "").replace(/^\d+[.)]\s+/, "").trim())
+    .map((line) =>
+      line
+        .replace(/^[-*•]\s+/, "")
+        .replace(/^\d+[.)]\s+/, "")
+        .replace(/^(?:clinical\s+)?pearl\s*:?\s*/i, "")
+        .trim(),
+    )
     .filter(Boolean);
   return lines.filter((line) => line.length >= 20);
 }
@@ -35,7 +45,10 @@ function splitListItems(body: string): string[] {
 /**
  * Pull short pearl lines from a clinical_pearls section body for the left rail.
  */
-export function extractClinicalPearlLines(body: string, max = 5): ClinicalPearlLine[] {
+export function extractClinicalPearlLines(
+  body: string,
+  max = 5,
+): ClinicalPearlLine[] {
   const trimmed = body.trim();
   if (!trimmed) return [];
 

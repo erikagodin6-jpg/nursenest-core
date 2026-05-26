@@ -233,7 +233,7 @@ export function buildRecoveryRecommendations(args: {
       id: "near_low_readiness",
       title: "Pair review with timed practice",
       body: "Close to test day with readiness still building. Alternate short drills with one mock-style block so stamina and judgment both move.",
-      href: "/app/practice-tests?startMode=practice_exam",
+      href: "/app/practice-tests",
     });
   }
 
@@ -251,7 +251,7 @@ export function buildRecoveryRecommendations(args: {
       id: "low_mocks_near",
       title: "Add a full mock when you can",
       body: "At least one long timed attempt helps pacing feel familiar. Use results to trim what you review next.",
-      href: "/app/practice-tests?startMode=practice_exam",
+      href: "/app/practice-tests",
     });
   }
 
@@ -301,7 +301,7 @@ export function buildExamPlanMilestones(args: {
     title: "Complete your first mock",
     description: "A timed attempt shows pacing and stamina. Review rationales, not just the score.",
     complete: args.mockCount >= 1,
-    href: "/app/practice-tests?startMode=practice_exam",
+    href: "/app/practice-tests",
   });
 
   if (args.weakestTopic) {
@@ -351,7 +351,7 @@ export function retentionPromptHints(args: {
     return {
       title: "Match intensity with depth",
       body: "Intensive cadence pairs best with full explanations and mocks. Your subscription keeps those unlocked.",
-      ctaHref: "/app/practice-tests?startMode=practice_exam",
+      ctaHref: "/app/practice-tests",
       soft: true,
     };
   }

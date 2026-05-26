@@ -294,7 +294,7 @@ export function LearnerProgressPageContent({
           <div className="rounded-xl border border-border/50 bg-muted/10 p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-foreground">{t("learner.progressPage.mocksBlock")}</h3>
-              <Link href="/app/practice-tests?startMode=practice_exam" className="text-xs font-semibold text-primary hover:underline">
+              <Link href="/app/practice-tests" className="text-xs font-semibold text-primary hover:underline">
                 {t("learner.progressPage.examsCtaMocks")}
               </Link>
             </div>

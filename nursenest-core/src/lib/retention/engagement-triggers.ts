@@ -146,7 +146,7 @@ function buildNearExamNudge(
     priority: 1,
     headline: `${daysUntil} day${daysUntil === 1 ? "" : "s"} until your exam`,
     body: "Review weak topics and complete a practice exam to check readiness before test day.",
-    href: "/app/practice-tests?startMode=practice_exam",
+    href: "/app/practice-tests",
     ctaLabel: "Start practice exam",
     tone: "warning",
   };

@@ -203,7 +203,7 @@ describe("normalizeStudyCallback — hub routes (require pathwayId)", () => {
   });
 
   it("allows practice exam setup callback without pathwayId", () => {
-    const u = "/app/practice-tests?startMode=practice_exam";
+    const u = "/app/practice-tests";
     assert.equal(normalizeStudyCallback(u), u);
   });
 

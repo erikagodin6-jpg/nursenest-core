@@ -76,7 +76,7 @@ export function getTestingModelResultsProfile(
   const heroVariant = resolveResultsHeroVariant(pathwayId, sessionKind);
 
   const simulationHubHref =
-    model === "LOFT" ? "/app/cases/cnple" : "/app/practice-tests?startMode=practice_exam";
+    model === "LOFT" ? "/app/cases/cnple" : "/app/practice-tests";
 
   if (heroVariant === "loft_simulation") {
     return {

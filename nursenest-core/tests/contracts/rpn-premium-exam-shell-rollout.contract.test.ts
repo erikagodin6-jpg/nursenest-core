@@ -44,12 +44,12 @@ describe("RPN premium exam shell rollout", () => {
   }
 
   it("hub study tools preserve pathway when opening Practice Exams", () => {
-    assert.match(hubSrc, /startMode=practice_exam&pathwayId=/);
+    assert.match(hubSrc, /pathwayId=\$\{encodeURIComponent\(trimmedPathwayId\)\}/);
   });
 
   it("hub uses premium practice-exam convergence shell (pathway-agnostic)", () => {
-    assert.match(hubSrc, /data-nn-practice-exam-hub-convergence/);
-    assert.match(hubSrc, /nav\.practiceExams/);
-    assert.match(hubSrc, /linearDeliveryMode === "exam"/);
+    assert.match(hubSrc, /SharedStudySetupLayout/);
+    assert.match(hubSrc, /mode=\{examMode === "cat" \? "cat" : "practice-exam"\}/);
+    assert.match(hubSrc, /sessionMode: "exam"/);
   });
 });

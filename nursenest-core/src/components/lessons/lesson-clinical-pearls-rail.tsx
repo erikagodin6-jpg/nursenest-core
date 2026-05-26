@@ -7,7 +7,14 @@ export function LessonClinicalPearlsRail({
   pearls: ClinicalPearlLine[];
   collapsed?: boolean;
 }) {
-  if (collapsed || pearls.length === 0) return null;
+  const safePearls = pearls
+    .map((pearl) => ({
+      label: pearl.label.trim() || "Pearl",
+      text: pearl.text.trim(),
+    }))
+    .filter((pearl) => pearl.text.length > 0);
+
+  if (collapsed || safePearls.length === 0) return null;
 
   return (
     <div
@@ -17,7 +24,7 @@ export function LessonClinicalPearlsRail({
     >
       <p className="nn-lesson-clinical-pearls-rail__label">Clinical Pearls</p>
       <ul className="nn-lesson-clinical-pearls-rail__list">
-        {pearls.map((pearl, index) => (
+        {safePearls.map((pearl, index) => (
           <li key={`${pearl.text.slice(0, 24)}-${index}`}>
             <div className="nn-lesson-clinical-pearls-rail__box">
               <b>{pearl.label}</b>

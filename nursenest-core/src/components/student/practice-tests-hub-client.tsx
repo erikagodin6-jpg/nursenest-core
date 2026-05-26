@@ -129,9 +129,6 @@ export function PracticeTestsHubClient({
     if (qp.get("cat") === "1" || qp.get("cat") === "true") {
       setExamMode("cat");
     }
-    if (qp.get("startMode") === "practice_exam") {
-      setExamMode("practice");
-    }
     const focus = qp.get("focus");
     if (focus === "weak" || focus === "missed" || focus === "unseen") {
       setFocusMode(focus);

@@ -20,7 +20,7 @@ export function ExamHistory({ mocks, t, maxRows = 6 }: { mocks: RecentMock[]; t:
             <p className="text-xs text-[var(--semantic-text-secondary)]">{t("learner.dashboard.examHistory.subtitle")}</p>
           </div>
         </div>
-        <Link href="/app/practice-tests?startMode=practice_exam" className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline">
+        <Link href="/app/practice-tests" className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline">
           {t("learner.dashboard.insight.openMocksCta")}
         </Link>
       </div>
@@ -91,7 +91,7 @@ export function ExamHistory({ mocks, t, maxRows = 6 }: { mocks: RecentMock[]; t:
             headline={emptyStateCopy.noExamHistory.headline}
             body={t("learner.dashboard.insight.recentEmpty")}
             hint={emptyStateCopy.noExamHistory.body}
-            primaryCta={{ label: t("learner.dashboard.insight.openMocksCta"), href: "/app/practice-tests?startMode=practice_exam", variant: "primary" }}
+            primaryCta={{ label: t("learner.dashboard.insight.openMocksCta"), href: "/app/practice-tests", variant: "primary" }}
             className="border-[color-mix(in_srgb,var(--semantic-chart-1)_12%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_04%,var(--semantic-surface))]"
           />
         </div>

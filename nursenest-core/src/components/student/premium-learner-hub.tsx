@@ -452,7 +452,7 @@ export function PremiumLearnerHub({
             </p>
           )}
           <div className="mt-4 flex flex-wrap gap-4">
-            <Link href="/app/practice-tests?startMode=practice_exam" className="inline-flex text-sm font-semibold text-primary hover:underline">
+            <Link href="/app/practice-tests" className="inline-flex text-sm font-semibold text-primary hover:underline">
               Start
             </Link>
             <Link href="/app/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">

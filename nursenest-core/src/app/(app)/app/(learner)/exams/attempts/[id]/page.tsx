@@ -131,7 +131,7 @@ export default async function ExamAttemptReportPage({ params }: Props) {
       {data.studyNext ? <PostTestStudyNextCard bundle={data.studyNext} /> : null}
 
       <div className="flex flex-wrap gap-2">
-        <Link href="/app/practice-tests?startMode=practice_exam" className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80">
+        <Link href="/app/practice-tests" className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80">
           {t("examAttempt.backToExams")}
         </Link>
         <Link

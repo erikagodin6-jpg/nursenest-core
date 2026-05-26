@@ -30,7 +30,7 @@ const ACTIONS = [
   {
     id: "practice_exam",
     label: "Practice Exam",
-    href: "/app/practice-tests?startMode=practice_exam",
+    href: "/app/practice-tests",
     icon: <Layers className="h-4 w-4" />,
     color: "var(--semantic-chart-4)",
   },

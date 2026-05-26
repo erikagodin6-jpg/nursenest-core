@@ -168,7 +168,7 @@ export function resolveLearnerExamsNavHref(
   if (label === "CAT Exams" && pathwayId?.trim()) {
     return appPathwayCatSessionStartPath(pathwayId.trim());
   }
-  return "/app/practice-tests?startMode=practice_exam";
+  return "/app/practice-tests";
 }
 
 export type PathwaySimulationDisplayCopy = {

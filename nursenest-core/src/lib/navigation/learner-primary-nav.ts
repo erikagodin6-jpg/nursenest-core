@@ -87,7 +87,7 @@ function resolveLearnerExamsNavHref(
   if (examsLabel === "CAT Exams" && pathwayId?.trim()) {
     return appPathwayCatSessionStartPath(pathwayId.trim());
   }
-  return "/app/practice-tests?startMode=practice_exam";
+  return "/app/practice-tests";
 }
 
 /**
@@ -106,7 +106,7 @@ export function buildLearnerPrimaryNavItems(
     examsLabel === "LOFT Simulation"
       ? resolveLearnerExamsNavHref(pathwayId, examsLabel)
       : examsLabel === "Exams"
-        ? withPathwayQuery("/app/practice-tests?startMode=practice_exam", pathwayId)
+        ? withPathwayQuery("/app/practice-tests", pathwayId)
         : resolveStudySurfaceCatHref({
             pathwayId,
             availablePathwayIds: pathwayId ? [pathwayId] : [],

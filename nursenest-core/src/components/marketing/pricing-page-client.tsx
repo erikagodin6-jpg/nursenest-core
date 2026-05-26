@@ -2,7 +2,7 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Check } from "lucide-react";
@@ -170,6 +170,26 @@ const PLAN_CARD_BULLET_KEYS = [
   "pages.pricing.planCard.bullet3",
   "pages.pricing.planCard.bullet4",
 ] as const;
+
+const CHECKOUT_LOADING_LABEL = "Loading checkout...";
+
+function preventCheckoutDefault(event?: MouseEvent<HTMLElement>) {
+  event?.preventDefault();
+  event?.stopPropagation();
+}
+
+function validatedCheckoutRedirectUrl(rawUrl: unknown): string | null {
+  if (typeof rawUrl !== "string") return null;
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return null;
+  try {
+    const url = new URL(trimmed);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
 
 const PRICING_AUDIENCE_SEGMENTS = [
   {
@@ -397,6 +417,7 @@ export function PricingPageClient({
   const [showConsentPrompt, setShowConsentPrompt] = useState(false);
   const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
   const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
+  const checkoutInFlightRef = useRef(false);
   const [plansLoaded, setPlansLoaded] = useState(() => hasServerCatalogRef.current);
   /** Soft gate: partial global regions (cookie + signed explicit context) require NA billing acknowledgment before checkout. */
   const [naPathwayAcknowledged, setNaPathwayAcknowledged] = useState(false);
@@ -652,6 +673,7 @@ export function PricingPageClient({
 
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
+      if (checkoutInFlightRef.current) return;
       setCheckoutError(null);
       setCheckoutOpsHint(null);
       if (isAllied && !alliedProfessionCheckoutAck) {
@@ -663,9 +685,11 @@ export function PricingPageClient({
         return;
       }
       if (authStatus !== "authenticated") {
+        setCheckoutLoading(true);
         redirectGuestToLoginForCheckout(duration);
         return;
       }
+      checkoutInFlightRef.current = true;
       setCheckoutLoading(true);
       trackProductEvent(PH.checkoutStarted, {
         actor: "user",
@@ -681,7 +705,7 @@ export function PricingPageClient({
         pricing_checkout_soft_gate: pricingCheckoutSoftGate,
         na_pathway_acknowledged: naPathwayAcknowledged,
         global_market_slug: checkoutBodyGlobalSlug,
-        authoritative_region_slugs: authoritativeRegionSlugs.join(","),
+        authoritative_region_slugs: authoritativeRegionKey,
         ...(isAllied
           ? { allied_career: selectedAlliedCareer, allied_profession_acknowledged: alliedProfessionCheckoutAck }
           : {}),
@@ -765,11 +789,17 @@ export function PricingPageClient({
           throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
         }
 
-        const checkoutUrl = (parsedBody as { url?: unknown }).url;
-        if (typeof checkoutUrl !== "string" || checkoutUrl.trim().length === 0) {
+        const checkoutUrl = validatedCheckoutRedirectUrl((parsedBody as { url?: unknown }).url);
+        if (!checkoutUrl) {
+          console.error("[pricing_checkout] invalid_checkout_redirect_url", {
+            urlPresent: Boolean((parsedBody as { url?: unknown }).url),
+          });
           throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
         }
-        console.info("[pricing_checkout] redirect_url_received", { checkoutUrl });
+        console.info("[pricing_checkout] redirect_url_received", {
+          checkoutUrl,
+          sessionId: (parsedBody as { sessionId?: unknown }).sessionId ?? "",
+        });
         window.location.assign(checkoutUrl);
       } catch (error) {
         console.error("[pricing_checkout] start checkout failed", error);
@@ -801,6 +831,7 @@ export function PricingPageClient({
             setCheckoutError(raw);
           }
         }
+        checkoutInFlightRef.current = false;
         setCheckoutLoading(false);
       }
     },
@@ -825,7 +856,9 @@ export function PricingPageClient({
   );
 
   const requestCheckout = useCallback(
-    (duration: BillingDuration) => {
+    (duration: BillingDuration, event?: MouseEvent<HTMLElement>) => {
+      preventCheckoutDefault(event);
+      if (checkoutInFlightRef.current || checkoutLoading) return;
       setCheckoutError(null);
       setCheckoutOpsHint(null);
       if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
@@ -838,6 +871,7 @@ export function PricingPageClient({
       }
       if (authStatus === "loading") return;
       if (authStatus !== "authenticated") {
+        setCheckoutLoading(true);
         redirectGuestToLoginForCheckout(duration);
         return;
       }
@@ -851,26 +885,25 @@ export function PricingPageClient({
     [
       authStatus,
       isAllied,
-      localize,
-      pathname,
       policiesAccepted,
       pricingCheckoutSoftGate,
       naPathwayAcknowledged,
       redirectGuestToLoginForCheckout,
-      selectedAlliedCareer,
       startCheckout,
       t,
-      tier,
       alliedProfessionCheckoutAck,
+      checkoutLoading,
     ],
   );
 
   const startAdvancedEcgCheckout = useCallback(
     async (duration: BillingDuration) => {
+      if (checkoutInFlightRef.current) return;
       setCheckoutError(null);
       setCheckoutOpsHint(null);
       if (authStatus === "loading") return;
       if (authStatus !== "authenticated") {
+        setCheckoutLoading(true);
         redirectGuestToLoginForAdvancedEcgCheckout(duration);
         return;
       }
@@ -878,6 +911,7 @@ export function PricingPageClient({
         setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
         return;
       }
+      checkoutInFlightRef.current = true;
       setCheckoutLoading(true);
       try {
         const res = await fetch("/api/subscriptions/checkout/advanced-ecg", {
@@ -903,8 +937,8 @@ export function PricingPageClient({
           err.status = res.status;
           throw err;
         }
-        const checkoutUrl = (payload as { url?: unknown }).url;
-        if (typeof checkoutUrl !== "string" || checkoutUrl.trim().length === 0) {
+        const checkoutUrl = validatedCheckoutRedirectUrl((payload as { url?: unknown }).url);
+        if (!checkoutUrl) {
           throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
         }
         window.location.assign(checkoutUrl);
@@ -923,6 +957,7 @@ export function PricingPageClient({
         } else {
           setCheckoutError(error instanceof Error && error.message.trim().length > 0 ? error.message : t("pages.pricing.error.checkoutNetwork"));
         }
+        checkoutInFlightRef.current = false;
         setCheckoutLoading(false);
       }
     },
@@ -934,7 +969,9 @@ export function PricingPageClient({
     ],
   );
 
-  const confirmConsentAndCheckout = useCallback(() => {
+  const confirmConsentAndCheckout = useCallback((event?: MouseEvent<HTMLElement>) => {
+    preventCheckoutDefault(event);
+    if (checkoutInFlightRef.current || checkoutLoading) return;
     if (!pendingCheckoutDuration) return;
     if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
       setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
@@ -959,6 +996,7 @@ export function PricingPageClient({
     naPathwayAcknowledged,
     isAllied,
     alliedProfessionCheckoutAck,
+    checkoutLoading,
     startCheckout,
     t,
   ]);
@@ -1312,10 +1350,12 @@ export function PricingPageClient({
                         (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||
                         alliedCheckoutBlocked
                       }
-                      onClick={() => requestCheckout(duration)}
+                      onClick={(event) => requestCheckout(duration, event)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable ? paidPlanPrimaryCtaLabel : t("pages.pricing.checkout.comingSoon")}
+                      {checkoutLoading
+                        ? CHECKOUT_LOADING_LABEL
+                        : row.checkoutAvailable ? paidPlanPrimaryCtaLabel : t("pages.pricing.checkout.comingSoon")}
                     </button>
                     {row.checkoutAvailable ? (
                       <>
@@ -1457,7 +1497,7 @@ export function PricingPageClient({
                 <button
                   type="button"
                   className={MARKETING_PRIMARY_CTA_CLASS}
-                  onClick={confirmConsentAndCheckout}
+                  onClick={(event) => confirmConsentAndCheckout(event)}
                   disabled={
                     checkoutLoading ||
                     !policiesAccepted ||
@@ -1465,9 +1505,11 @@ export function PricingPageClient({
                     (isAllied && !alliedProfessionCheckoutAck)
                   }
                 >
-                  {pricingCheckoutSoftGate
-                    ? t("pages.pricing.checkout.continueToNorthAmericaCheckout")
-                    : t("pages.pricing.checkout.continueToSecureCheckout")}
+                  {checkoutLoading
+                    ? CHECKOUT_LOADING_LABEL
+                    : pricingCheckoutSoftGate
+                      ? t("pages.pricing.checkout.continueToNorthAmericaCheckout")
+                      : t("pages.pricing.checkout.continueToSecureCheckout")}
                 </button>
               </div>
             </div>

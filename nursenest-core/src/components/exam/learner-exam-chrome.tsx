@@ -4,19 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
-import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
+import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
 
 /**
  * Suppresses the main learner marketing-style header during active CAT / practice-test sessions
  * so the experience feels closer to a testing environment. Shows a minimal exit strip instead.
  *
- * Important: focus mode is **pathname-only** (`/app/practice-tests/:sessionId`). The legacy
- * `?examShell=1` flag must NOT hide chrome globally — it leaked onto account/settings when
- * present in the URL and removed the main nav site-wide via `data-learner-exam-chrome`.
+ * Mode is derived from `learnerShellFlags` — same resolver used by the server layout — so the
+ * client and server always agree on which routes enter focused exam mode.
  */
 export function LearnerExamChromeGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
-  const examFocus = useMemo(() => isFocusedPracticeTestSessionPath(pathname), [pathname]);
+  const examFocus = useMemo(() => learnerShellFlags(pathname).suppressFullChrome, [pathname]);
 
   useEffect(() => {
     if (examFocus) {

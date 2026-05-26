@@ -161,7 +161,7 @@ export function LearnerReportCardPremium({
                 {t("learner.reportCard.readiness.ctaQuestions")}
               </Link>
               <Link
-                href="/app/practice-tests?startMode=practice_exam"
+                href="/app/practice-tests"
                 className="inline-flex justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-panel-muted)]"
               >
                 {t("learner.reportCard.readiness.ctaMocks")}
@@ -676,7 +676,7 @@ export function LearnerReportCardPremium({
             <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.reportCard.next.catBody")}</p>
             <div className="mt-4 flex flex-col gap-2">
               <Link
-                href="/app/practice-tests?startMode=practice_exam"
+                href="/app/practice-tests"
                 className="inline-flex w-fit rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
               >
                 {t("learner.reportCard.next.catMocks")}
@@ -744,7 +744,7 @@ export function LearnerReportCardPremium({
 
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <Link
-          href="/app/practice-tests?startMode=practice_exam"
+          href="/app/practice-tests"
           className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
         >
           {t("learner.account.reportCard.ctaExams")}

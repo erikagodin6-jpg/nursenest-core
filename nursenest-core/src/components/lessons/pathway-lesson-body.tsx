@@ -8,7 +8,10 @@ import type {
   PathwayLessonSectionKind,
 } from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
-import { PathwayLessonCallout } from "@/components/lessons/pathway-lesson-callout";
+import {
+  LessonCallout,
+  type LessonCalloutVariant,
+} from "@/components/lessons/pathway-lesson-callout";
 import { resolveTierBlocksForViewer } from "@/lib/lessons/tier-block-content";
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
@@ -17,17 +20,40 @@ import { lessonBodyPresentationClass } from "@/lib/ui/lesson-body-presentation";
 /** Markdown-style internal links: `LESSON:slug` wiki or root-relative `/path`. */
 const MD_INTERNAL_LINK = /(\[[^\]]+\]\((?:LESSON:[^)]+|\/[^)]+)\))/g;
 
-/** Optional author prefixes — rendered as premium callouts (labels match `learner.lesson.callout.*` EN strings). */
-const LESSON_CALLOUT_EXAM = /^\s*\*{0,2}\s*Exam\s*Tip\s*:?\s*\*{0,2}\s*/i;
-const LESSON_CALLOUT_CLINICAL = /^\s*\*{0,2}\s*Clinical\s*Insight\s*:?\s*\*{0,2}\s*/i;
+/** Optional author prefixes — rendered as semantic callout blocks. Order matters: more specific patterns first. */
+const CALLOUT_PATTERNS: { re: RegExp; variant: LessonCalloutVariant }[] = [
+  {
+    re: /^\s*\*{0,2}\s*Safety(?:\s*Alert|\s*Priority|\s*Consideration)?\s*:?\s*\*{0,2}\s*/i,
+    variant: "safety",
+  },
+  {
+    re: /^\s*\*{0,2}\s*(?:Nursing\s*Priority|Priority(?:\s*Action|\s*Alert|\s*Nursing)?|First\s*Action)\s*:?\s*\*{0,2}\s*/i,
+    variant: "priority",
+  },
+  {
+    re: /^\s*\*{0,2}\s*(?:Clinical\s*Pearl|Pearl)\s*:?\s*\*{0,2}\s*/i,
+    variant: "pearl",
+  },
+  {
+    re: /^\s*\*{0,2}\s*(?:Pharm(?:acology)?\s*Note|Medication\s*Alert|Drug\s*Alert|Med\s*Alert)\s*:?\s*\*{0,2}\s*/i,
+    variant: "pharm",
+  },
+  { re: /^\s*\*{0,2}\s*Exam\s*Tip\s*:?\s*\*{0,2}\s*/i, variant: "exam" },
+  {
+    re: /^\s*\*{0,2}\s*Clinical\s*Insight\s*:?\s*\*{0,2}\s*/i,
+    variant: "clinical",
+  },
+];
 
-function lessonCalloutFromParagraph(raw: string): { kind: "exam" | "clinical"; body: string } | null {
+/** @internal Exported for contract tests only. */
+export function lessonCalloutFromParagraph(
+  raw: string,
+): { variant: LessonCalloutVariant; body: string } | null {
   const t = raw.trim();
-  if (LESSON_CALLOUT_EXAM.test(t)) {
-    return { kind: "exam", body: t.replace(LESSON_CALLOUT_EXAM, "").trim() };
-  }
-  if (LESSON_CALLOUT_CLINICAL.test(t)) {
-    return { kind: "clinical", body: t.replace(LESSON_CALLOUT_CLINICAL, "").trim() };
+  for (const { re, variant } of CALLOUT_PATTERNS) {
+    if (re.test(t)) {
+      return { variant, body: t.replace(re, "").trim() };
+    }
   }
   return null;
 }
@@ -100,21 +126,28 @@ export function pathwayLessonResolvedParagraphs(
   },
 ): string[] {
   const raw = typeof text === "string" ? text : "";
-  const tierMode = opts?.sectionKind === "tier_specific_relevance" ? "strict_single" : "ladder";
+  const tierMode =
+    opts?.sectionKind === "tier_specific_relevance"
+      ? "strict_single"
+      : "ladder";
   let safe = resolveTierBlocksForViewer(raw, opts?.viewerTier, tierMode);
   if (opts?.measurementSystem != null) {
-    safe = resolveMeasurementTokens(safe, opts.measurementSystem, { dual: opts.measurementDual === true });
+    safe = resolveMeasurementTokens(safe, opts.measurementSystem, {
+      dual: opts.measurementDual === true,
+    });
   }
   return safe.split(/\n\n/).filter((p) => p.trim().length > 0);
 }
 
 /** Exported for lesson-detail empty-section guards (matches PathwayLessonSectionContent). */
-export function pathwayLessonExamFocusHasStructured(examFocus?: PathwayLessonExamFocus | null): boolean {
+export function pathwayLessonExamFocusHasStructured(
+  examFocus?: PathwayLessonExamFocus | null,
+): boolean {
   return Boolean(
     examFocus &&
-      (examFocus.howTested?.trim() ||
-        examFocus.commonTraps?.trim() ||
-        examFocus.prioritizationCues?.trim()),
+    (examFocus.howTested?.trim() ||
+      examFocus.commonTraps?.trim() ||
+      examFocus.prioritizationCues?.trim()),
   );
 }
 
@@ -134,7 +167,12 @@ function PathwayLessonExamFocusInlineBlocks({
   measurementDual?: boolean;
 }) {
   type ExamFocusBlockKey = "how-tested" | "traps" | "priorities";
-  const blocks: { key: ExamFocusBlockKey; title: string; text: string; Icon: typeof ListOrdered }[] = [];
+  const blocks: {
+    key: ExamFocusBlockKey;
+    title: string;
+    text: string;
+    Icon: typeof ListOrdered;
+  }[] = [];
   if (examFocus.howTested?.trim()) {
     blocks.push({
       key: "how-tested",
@@ -161,7 +199,11 @@ function PathwayLessonExamFocusInlineBlocks({
   }
   if (blocks.length === 0) return null;
   return (
-    <div className="nn-lesson-exam-focus-inline" role="region" aria-label="Exam focus">
+    <div
+      className="nn-lesson-exam-focus-inline"
+      role="region"
+      aria-label="Exam focus"
+    >
       {blocks.map((b) => (
         <article
           key={b.key}
@@ -234,7 +276,11 @@ export function parseParagraphBlock(raw: string): ParagraphBlock {
   }
 
   // Labelled list: first line is a prose header; all remaining lines are bullets
-  if (lines.length >= 2 && !isBulletLine(lines[0]) && lines.slice(1).every(isBulletLine)) {
+  if (
+    lines.length >= 2 &&
+    !isBulletLine(lines[0]) &&
+    lines.slice(1).every(isBulletLine)
+  ) {
     return {
       kind: "headed-list",
       header: lines[0],
@@ -298,7 +344,11 @@ export function PathwayLessonBody({
             <ul key={idx}>
               {block.items.map((item, i) => (
                 <li key={i}>
-                  {renderParagraphWithLinks(item, lessonWikiBasePath, `para-${idx}-li-${i}`)}
+                  {renderParagraphWithLinks(
+                    item,
+                    lessonWikiBasePath,
+                    `para-${idx}-li-${i}`,
+                  )}
                 </li>
               ))}
             </ul>
@@ -310,7 +360,11 @@ export function PathwayLessonBody({
             <ol key={idx}>
               {block.items.map((item, i) => (
                 <li key={i}>
-                  {renderParagraphWithLinks(item, lessonWikiBasePath, `para-${idx}-oli-${i}`)}
+                  {renderParagraphWithLinks(
+                    item,
+                    lessonWikiBasePath,
+                    `para-${idx}-oli-${i}`,
+                  )}
                 </li>
               ))}
             </ol>
@@ -321,12 +375,20 @@ export function PathwayLessonBody({
           return (
             <div key={idx}>
               <p className="whitespace-pre-wrap nn-lesson-list-header">
-                {renderParagraphWithLinks(block.header, lessonWikiBasePath, `para-${idx}-h`)}
+                {renderParagraphWithLinks(
+                  block.header,
+                  lessonWikiBasePath,
+                  `para-${idx}-h`,
+                )}
               </p>
               <ul className="mt-2">
                 {block.items.map((item, i) => (
                   <li key={i}>
-                    {renderParagraphWithLinks(item, lessonWikiBasePath, `para-${idx}-li-${i}`)}
+                    {renderParagraphWithLinks(
+                      item,
+                      lessonWikiBasePath,
+                      `para-${idx}-li-${i}`,
+                    )}
                   </li>
                 ))}
               </ul>
@@ -337,18 +399,27 @@ export function PathwayLessonBody({
         const trimmed = p.trim();
         const callout = lessonCalloutFromParagraph(trimmed);
         if (callout) {
+          if (!callout.body) return null;
           return (
-            <PathwayLessonCallout key={idx} kind={callout.kind}>
+            <LessonCallout key={idx} variant={callout.variant}>
               <div className="whitespace-pre-wrap">
-                {renderParagraphWithLinks(callout.body, lessonWikiBasePath, `para-${idx}-callout`)}
+                {renderParagraphWithLinks(
+                  callout.body,
+                  lessonWikiBasePath,
+                  `para-${idx}-callout`,
+                )}
               </div>
-            </PathwayLessonCallout>
+            </LessonCallout>
           );
         }
 
         return (
           <p key={idx} className="whitespace-pre-wrap">
-            {renderParagraphWithLinks(trimmed, lessonWikiBasePath, `para-${idx}`)}
+            {renderParagraphWithLinks(
+              trimmed,
+              lessonWikiBasePath,
+              `para-${idx}`,
+            )}
           </p>
         );
       })}
@@ -393,6 +464,7 @@ export function PathwayLessonSectionContent({
   });
   const hasFigures = Boolean(figures && figures.length > 0);
   const hasExamBlocks = pathwayLessonExamFocusHasStructured(examFocus);
+  void emptyBodyMessage;
   const bodyEl =
     paragraphs.length > 0 ? (
       <PathwayLessonBody
@@ -413,18 +485,27 @@ export function PathwayLessonSectionContent({
         measurementDual={measurementDual}
       />
     ) : null;
-  const figuresEl = hasFigures ? <PathwayLessonFigures figures={figures!} /> : null;
+  const figuresEl = hasFigures ? (
+    <PathwayLessonFigures figures={figures!} />
+  ) : null;
 
   const showFiguresLead = !bodyEl && !examEl && hasFigures;
-  const showEmptyPanel = !bodyEl && !examEl && !hasFigures && !hasSectionLeadFigure;
+  const hasRenderableContent = Boolean(
+    bodyEl || examEl || figuresEl || showFiguresLead || hasSectionLeadFigure,
+  );
+
+  if (!hasRenderableContent) {
+    return null;
+  }
 
   return (
     <div className="w-full space-y-3">
       {bodyEl}
       {examEl}
-      {showFiguresLead ? <LearnerSparsePanel>{figuresVisualLeadMessage}</LearnerSparsePanel> : null}
+      {showFiguresLead ? (
+        <LearnerSparsePanel>{figuresVisualLeadMessage}</LearnerSparsePanel>
+      ) : null}
       {figuresEl}
-      {showEmptyPanel ? <LearnerSparsePanel>{emptyBodyMessage}</LearnerSparsePanel> : null}
     </div>
   );
 }

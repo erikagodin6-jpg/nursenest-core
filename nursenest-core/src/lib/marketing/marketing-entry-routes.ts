@@ -32,7 +32,7 @@ export const RN = {
   usQuestions: `${CANONICAL_PATHWAY_HUB.usRn}/questions`,
   caQuestions: `${CANONICAL_PATHWAY_HUB.caRn}/questions`,
   /** Subscriber app route (timed practice exams, history). Public entry: {@link HUB.practiceExams}. */
-  appExams: "/app/practice-tests?startMode=practice_exam",
+  appExams: "/app/practice-tests",
 } as const;
 
 /** LPN / RPN / PN */
