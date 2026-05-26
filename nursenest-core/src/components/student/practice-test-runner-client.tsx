@@ -165,6 +165,49 @@ const MAX_PRACTICE_QUESTION_CACHE = 32;
 
 const MCQ_OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
+type PracticeExamToolState = {
+  flagged: Record<string, boolean>;
+  confidence: Record<string, ConfidenceLevel>;
+  crossedOut: Record<string, boolean>;
+  notesOpen?: boolean;
+  updatedAt?: string;
+};
+
+function emptyPracticeExamToolState(): PracticeExamToolState {
+  return { flagged: {}, confidence: {}, crossedOut: {} };
+}
+
+function parsePracticeExamToolState(raw: unknown): PracticeExamToolState {
+  const empty = emptyPracticeExamToolState();
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return empty;
+  const source = raw as Record<string, unknown>;
+  const tools = source.examTools && typeof source.examTools === "object" && !Array.isArray(source.examTools)
+    ? (source.examTools as Record<string, unknown>)
+    : source;
+  const readBooleanRecord = (value: unknown) => {
+    const out: Record<string, boolean> = {};
+    if (!value || typeof value !== "object" || Array.isArray(value)) return out;
+    for (const [key, flag] of Object.entries(value as Record<string, unknown>)) {
+      if (typeof key === "string" && key.length > 0 && typeof flag === "boolean") out[key] = flag;
+    }
+    return out;
+  };
+  const confidence: Record<string, ConfidenceLevel> = {};
+  const rawConfidence = tools.confidence;
+  if (rawConfidence && typeof rawConfidence === "object" && !Array.isArray(rawConfidence)) {
+    for (const [key, level] of Object.entries(rawConfidence as Record<string, unknown>)) {
+      if (level === "low" || level === "medium" || level === "high") confidence[key] = level;
+    }
+  }
+  return {
+    flagged: readBooleanRecord(tools.flagged),
+    confidence,
+    crossedOut: readBooleanRecord(tools.crossedOut),
+    notesOpen: typeof tools.notesOpen === "boolean" ? tools.notesOpen : undefined,
+    updatedAt: typeof tools.updatedAt === "string" ? tools.updatedAt : undefined,
+  };
+}
+
 export function PracticeTestRunnerClient({
   testId,
   userId,
@@ -269,6 +312,7 @@ export function PracticeTestRunnerClient({
   const [questionFetchNonce, setQuestionFetchNonce] = useState(0);
   /** Session-local only — helps pacing habits; not sent to the server. */
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  const [crossedOut, setCrossedOut] = useState<Record<string, boolean>>({});
   /** Dismisses the “pool widened vs your filters” notice for this tab only; resets when `testId` changes. */
   const [dismissedPoolRelaxBanner, setDismissedPoolRelaxBanner] = useState(false);
   /** Linear exam engine: server-persisted committed items (`adaptiveState.linearEngine`). */
@@ -315,8 +359,13 @@ export function PracticeTestRunnerClient({
   const catExamNavigatorDialogRef = useRef<HTMLDialogElement>(null);
   const catExamNavigatorTriggerRef = useRef<HTMLButtonElement | null>(null);
   const persistInFlightRef = useRef(false);
-  const pendingPersistRef = useRef<{ answers: Record<string, unknown>; cursorIndex: number } | null>(null);
+  const pendingPersistRef = useRef<{
+    answers: Record<string, unknown>;
+    cursorIndex: number;
+    examTools: PracticeExamToolState;
+  } | null>(null);
   const answersRef = useRef<Record<string, unknown>>({});
+  const examToolsRef = useRef<PracticeExamToolState>(emptyPracticeExamToolState());
   const idxRef = useRef(0);
   const confidenceTrackingEnabled = studySettings.enableConfidenceTracking;
   const adaptivePlanEnabled = studySettings.enableAdaptivePlan;
@@ -324,6 +373,15 @@ export function PracticeTestRunnerClient({
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
+  useEffect(() => {
+    examToolsRef.current = {
+      flagged,
+      confidence,
+      crossedOut,
+      notesOpen: examToolsRef.current.notesOpen,
+      updatedAt: examToolsRef.current.updatedAt,
+    };
+  }, [flagged, confidence, crossedOut]);
   useEffect(() => {
     idxRef.current = idx;
   }, [idx]);
@@ -460,6 +518,7 @@ export function PracticeTestRunnerClient({
       setTeachingReviewItems(null);
       const ast = data.adaptiveState;
       const astObj = ast && typeof ast === "object" && !Array.isArray(ast) ? (ast as Record<string, unknown>) : null;
+      const hydratedTools = parsePracticeExamToolState(astObj);
       setAdaptiveTheta(typeof astObj?.theta === "number" ? astObj.theta : null);
       setAdaptiveSe(typeof astObj?.se === "number" ? astObj.se : null);
       const dhRaw = astObj?.difficultyHistory;
@@ -469,7 +528,10 @@ export function PracticeTestRunnerClient({
       setAdaptiveDifficultyHistory(dhParsed);
       setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
       setLinearPracticeFeedback({});
-      setConfidence({});
+      setFlagged(hydratedTools.flagged);
+      setConfidence(hydratedTools.confidence);
+      setCrossedOut(hydratedTools.crossedOut);
+      examToolsRef.current = hydratedTools;
       setCatFinalStudyFeedback(null);
       /** Mid-session rationale fetch is only for guided adaptive ("practice" session type), not licensing CAT. */
       const catStudyAwaiting =
@@ -656,6 +718,7 @@ export function PracticeTestRunnerClient({
             action: "complete",
             answers: answersRef.current,
             cursorIndex: idxRef.current,
+            examTools: examToolsRef.current,
             ...(elapsedMs !== undefined ? { elapsedMs } : {}),
           }),
         });
@@ -768,6 +831,7 @@ export function PracticeTestRunnerClient({
           action: "complete",
           answers: answersRef.current,
           cursorIndex: idxRef.current,
+          examTools: examToolsRef.current,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
@@ -1039,11 +1103,36 @@ export function PracticeTestRunnerClient({
   }, [isExamStyle, current, logSessionEvent]);
 
   function setConfidenceForQuestion(qid: string, level: ConfidenceLevel) {
-    setConfidence((c) => ({ ...c, [qid]: level }));
+    const next = { ...confidence, [qid]: level };
+    setConfidence(next);
+    examToolsRef.current = {
+      ...examToolsRef.current,
+      confidence: next,
+      updatedAt: new Date().toISOString(),
+    };
+    void persistSave(answersRef.current, idxRef.current);
+  }
+
+  function toggleFlagForQuestion(qid: string) {
+    const next = { ...flagged, [qid]: !flagged[qid] };
+    setFlagged(next);
+    examToolsRef.current = {
+      ...examToolsRef.current,
+      flagged: next,
+      updatedAt: new Date().toISOString(),
+    };
+    void persistSave(answersRef.current, idxRef.current);
   }
 
   async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
-    pendingPersistRef.current = { answers: nextAnswers, cursorIndex: nextIdx };
+    pendingPersistRef.current = {
+      answers: nextAnswers,
+      cursorIndex: nextIdx,
+      examTools: {
+        ...examToolsRef.current,
+        updatedAt: new Date().toISOString(),
+      },
+    };
     if (persistInFlightRef.current) return;
     persistInFlightRef.current = true;
     setSaving(true);
@@ -1060,6 +1149,7 @@ export function PracticeTestRunnerClient({
             action: "save",
             answers: payload.answers,
             cursorIndex: payload.cursorIndex,
+            examTools: payload.examTools,
             ...(elapsedMs !== undefined ? { elapsedMs } : {}),
           }),
         });
@@ -1100,6 +1190,7 @@ export function PracticeTestRunnerClient({
           action: "abandon",
           answers,
           cursorIndex: idx,
+          examTools: examToolsRef.current,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
@@ -1143,6 +1234,7 @@ export function PracticeTestRunnerClient({
           questionId: current.id,
           answers: answersRef.current,
           cursorIndex: idx,
+          examTools: examToolsRef.current,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
@@ -1287,10 +1379,11 @@ export function PracticeTestRunnerClient({
         examQuestionId: advanceQuestionId,
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       });
+      const patchBodyWithTools = { ...patchBody, examTools: examToolsRef.current };
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patchBody),
+        body: JSON.stringify(patchBodyWithTools),
       });
       let data: {
         results?: PracticeTestResultsJson;
@@ -2533,7 +2626,7 @@ export function PracticeTestRunnerClient({
                             titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
                             srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
                             srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
-                            onToggle={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                            onToggle={() => toggleFlagForQuestion(current.id)}
                           />
                         }
                         examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
@@ -2943,7 +3036,7 @@ export function PracticeTestRunnerClient({
         titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
         srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
         srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
-        onToggle={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+        onToggle={() => toggleFlagForQuestion(current.id)}
       />
     );
     const legacyQuestionCardInner = (
@@ -3388,7 +3481,7 @@ export function PracticeTestRunnerClient({
       titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
       srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
       srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
-      onToggle={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+      onToggle={() => toggleFlagForQuestion(current.id)}
     />
   );
 

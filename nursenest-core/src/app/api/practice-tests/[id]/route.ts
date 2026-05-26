@@ -258,7 +258,35 @@ const patchSchema = z.object({
   cursorIndex: z.number().int().min(0).optional(),
   elapsedMs: z.number().int().min(0).max(48 * 60 * 60 * 1000).optional(),
   questionId: z.string().min(8).max(80).optional(),
+  examTools: z
+    .object({
+      flagged: z.record(z.string(), z.boolean()).optional(),
+      confidence: z.record(z.string(), z.enum(["low", "medium", "high"])).optional(),
+      crossedOut: z.record(z.string(), z.boolean()).optional(),
+      notesOpen: z.boolean().optional(),
+      updatedAt: z.string().max(80).optional(),
+    })
+    .optional(),
 });
+
+function mergePracticeExamTools(adaptiveState: unknown, examTools: unknown): object | undefined {
+  if (!examTools || typeof examTools !== "object" || Array.isArray(examTools)) return undefined;
+  const base =
+    adaptiveState && typeof adaptiveState === "object" && !Array.isArray(adaptiveState)
+      ? { ...(adaptiveState as Record<string, unknown>) }
+      : {};
+  const prior =
+    base.examTools && typeof base.examTools === "object" && !Array.isArray(base.examTools)
+      ? (base.examTools as Record<string, unknown>)
+      : {};
+  return {
+    ...base,
+    examTools: {
+      ...prior,
+      ...(examTools as Record<string, unknown>),
+    },
+  };
+}
 
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   return runWithApiTelemetry(req, "PATCH /api/practice-tests/[id]", "content", async () => {
@@ -355,6 +383,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     practiceTestId: id,
     surface: "practice_test_api_patch",
   });
+  const nextExamToolsAdaptiveState = mergePracticeExamTools(row.adaptiveState, parsed.data.examTools);
   const invalidateHeavyReads = async () => invalidateLearnerPrivateReadCache(gate.userId);
 
   const prePatchContract = practicePatchSessionContract({
@@ -381,6 +410,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       data: {
         answers: merged as object,
         cursorIndex,
+        ...(nextExamToolsAdaptiveState ? { adaptiveState: nextExamToolsAdaptiveState } : {}),
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
     });
@@ -416,7 +446,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (already.includes(qid)) {
       return NextResponse.json({ error: "This question is already submitted" }, { status: 409 });
     }
-    const nextAdaptive = mergeLinearCommittedQuestionId(row.adaptiveState, qid);
+    const nextAdaptive = mergePracticeExamTools(
+      mergeLinearCommittedQuestionId(row.adaptiveState, qid),
+      parsed.data.examTools,
+    ) ?? mergeLinearCommittedQuestionId(row.adaptiveState, qid);
     const feedback = await buildLinearCommitFeedback(
       qid,
       userAns,
@@ -499,6 +532,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         status: PracticeTestStatus.ABANDONED,
         answers: merged as object,
         cursorIndex,
+        ...(nextExamToolsAdaptiveState ? { adaptiveState: nextExamToolsAdaptiveState } : {}),
         completedAt: new Date(),
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
@@ -540,12 +574,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     });
 
     if (adv.kind === "study_reveal") {
+      const revealAdaptiveState = mergePracticeExamTools(adv.adaptiveState, parsed.data.examTools) ?? adv.adaptiveState;
       const postReveal = practicePatchSessionContract({
         cfg,
         rowStatus: row.status,
         questionIds: ids,
         cursorIndex,
-        adaptiveState: adv.adaptiveState,
+        adaptiveState: revealAdaptiveState,
         results: row.results,
       });
       if (!postReveal.ok) {
@@ -556,7 +591,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         data: {
           answers: merged as object,
           cursorIndex,
-          adaptiveState: adv.adaptiveState as object,
+          adaptiveState: revealAdaptiveState as object,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
       });
@@ -571,11 +606,12 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (adv.kind === "completed") {
       const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
       const resultsWithMeta = withCatSessionResultMeta(adv.results, cfg, answeredCount);
+      const completedAdaptiveState = mergePracticeExamTools(adv.adaptiveState, parsed.data.examTools) ?? adv.adaptiveState;
       let resultsFinal = resultsWithMeta;
       try {
         resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
           resultsWithMeta,
-          adv.adaptiveState,
+          completedAdaptiveState,
           cfg,
           gate.entitlement,
           { practiceTestId: id },
@@ -592,7 +628,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         rowStatus: PracticeTestStatus.COMPLETED,
         questionIds: ids,
         cursorIndex,
-        adaptiveState: adv.adaptiveState,
+        adaptiveState: completedAdaptiveState,
         results: resultsFinal,
       });
       if (!postCatDone.ok) {
@@ -606,7 +642,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           cursorIndex,
           completedAt: new Date(),
           results: toJsonObject(resultsFinal),
-          adaptiveState: toJsonObject(adv.adaptiveState),
+          adaptiveState: toJsonObject(completedAdaptiveState),
           questionIds: ids as object,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
@@ -637,12 +673,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       });
     }
 
+    const continueAdaptiveState = mergePracticeExamTools(adv.adaptiveState, parsed.data.examTools) ?? adv.adaptiveState;
     const postCatContinue = practicePatchSessionContract({
       cfg,
       rowStatus: row.status,
       questionIds: adv.questionIds,
       cursorIndex: adv.cursorIndex,
-      adaptiveState: adv.adaptiveState,
+      adaptiveState: continueAdaptiveState,
       results: row.results,
     });
     if (!postCatContinue.ok) {
@@ -654,7 +691,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         answers: merged as object,
         cursorIndex: adv.cursorIndex,
         questionIds: adv.questionIds as object,
-        adaptiveState: adv.adaptiveState as object,
+        adaptiveState: continueAdaptiveState as object,
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
     });
@@ -725,11 +762,12 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         const fin = await practiceTestRouteDeps.finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
         const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
         const resultsWithMeta = withCatSessionResultMeta(fin.results, cfg, answeredCount);
+        const finalAdaptiveState = mergePracticeExamTools(fin.adaptiveState, parsed.data.examTools) ?? fin.adaptiveState;
         let resultsFinal = resultsWithMeta;
         try {
           resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
             resultsWithMeta,
-            fin.adaptiveState,
+            finalAdaptiveState,
             cfg,
             gate.entitlement,
             { practiceTestId: id },
@@ -746,7 +784,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           rowStatus: PracticeTestStatus.COMPLETED,
           questionIds: ids,
           cursorIndex,
-          adaptiveState: fin.adaptiveState,
+          adaptiveState: finalAdaptiveState,
           results: resultsFinal,
         });
         if (!postManualCatComplete.ok) {
@@ -760,7 +798,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
             cursorIndex,
             completedAt: new Date(),
             results: toJsonObject(resultsFinal),
-            adaptiveState: toJsonObject(fin.adaptiveState),
+            adaptiveState: toJsonObject(finalAdaptiveState),
             ...(elapsedMs !== undefined ? { elapsedMs } : {}),
           },
         });
@@ -814,6 +852,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         status: PracticeTestStatus.COMPLETED,
         answers: merged as object,
         cursorIndex,
+        ...(nextExamToolsAdaptiveState ? { adaptiveState: nextExamToolsAdaptiveState } : {}),
         completedAt: new Date(),
         results: results as object,
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
