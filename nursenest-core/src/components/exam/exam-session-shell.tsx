@@ -66,7 +66,7 @@ export function ExamSessionTopBar({
 }) {
   return (
     <div
-      className={`nn-exam-session-topbar border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 ${className}`.trim()}
+      className={`nn-exam-session-topbar border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 ${className}`.trim()}
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="nn-marketing-body-sm min-w-0 flex-1 leading-snug text-[var(--theme-body-text)]">{left}</div>
@@ -148,7 +148,7 @@ export function ExamProgressBar({
         : `Session progress ${current} of ${total}`;
   return (
     <div
-      className={`nn-exam-progress nn-exam-progress-premium border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5 ${className}`.trim()}
+      className={`nn-exam-progress nn-exam-progress-premium border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2 ${className}`.trim()}
     >
       <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         <span>{leftLabel}</span>

@@ -6,6 +6,13 @@ export const dynamic = "force-dynamic";
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
+/**
+ * @deprecated Replaced by the unified practice setup flow at `/app/practice-tests`.
+ *
+ * Compatibility-only alias. Keep as a redirect shim until route access logs and
+ * auth callback telemetry confirm this path has no meaningful direct usage.
+ * Do not add setup UI here.
+ */
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => ({
@@ -16,6 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
+/**
+ * @deprecated Replaced by `/app/practice-tests?catLaunch=1`.
+ * Candidate for removal only after verified zero/low traffic.
+ */
 export default async function PracticeTestsStartAliasPage({ searchParams }: Props) {
   const sp = await searchParams;
   const q = new URLSearchParams();

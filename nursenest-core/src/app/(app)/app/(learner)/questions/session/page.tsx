@@ -2,6 +2,13 @@ import { redirect } from "next/navigation";
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
+/**
+ * @deprecated Replaced by the unified practice setup flow at `/app/practice-tests`.
+ *
+ * Compatibility-only alias for older weak-area/question-session callbacks.
+ * Keep as a redirect shim until access logs confirm removal is safe. Do not add
+ * session setup UI here.
+ */
 export default async function PracticeQuestionSessionAliasPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const q = new URLSearchParams();

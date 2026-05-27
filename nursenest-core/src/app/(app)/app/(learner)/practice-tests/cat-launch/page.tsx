@@ -56,11 +56,16 @@ function isSafeAlliedProfession(
 }
 
 /**
+ * @deprecated Prefer `/app/practice-tests?catLaunch=1&pathwayId=...`.
+ *
  * Direct CAT launch compatibility route.
  *
  * Routes:
  * - CNPLE → LOFT cases
  * - all others → inline CAT launch flow
+ *
+ * Compatibility-only alias. Keep until route access logs confirm direct usage
+ * has ended; do not add CAT setup UI here.
  */
 export default async function CatDirectLaunchRedirectPage({
   searchParams,

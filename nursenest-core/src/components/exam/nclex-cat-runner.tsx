@@ -675,9 +675,15 @@ export function NclexCatRunner({
         pathwayLabel={pathwayLabel}
         pathwayId={pathwayId}
         onNewSession={() =>
-          safeRouterReplace(router, "/app/practice-tests/cat-launch", {
-            context: { feature: "cat_results_new_session", sessionId: testId },
-          })
+          safeRouterReplace(
+            router,
+            pathwayId
+              ? `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}&catLaunch=1`
+              : "/app/practice-tests?catLaunch=1",
+            {
+              context: { feature: "cat_results_new_session", sessionId: testId },
+            },
+          )
         }
         onReviewFlagged={() => {
           safeRouterReplace(router, `/app/practice-tests/${testId}/results`, {

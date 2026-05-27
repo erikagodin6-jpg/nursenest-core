@@ -220,7 +220,7 @@ export function RTClinicalDashboardHub() {
             </div>
 
             <Link
-              href="/app/practice-tests/start?pathway=us-allied-core&alliedProfession=respiratory"
+              href="/app/practice-tests?pathwayId=us-allied-core&alliedProfession=respiratory&catLaunch=1"
               className="rounded-2xl border border-cyan-800 bg-cyan-950/20 px-5 py-3 text-sm font-medium text-cyan-200 transition hover:bg-cyan-900/30"
             >
               Open Board Simulation

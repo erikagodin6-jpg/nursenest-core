@@ -776,7 +776,7 @@ body:has(.nn-nclex-exam-page) {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.7rem clamp(1rem, 2vw, 1.75rem);
+  padding: 0.5rem clamp(1rem, 2vw, 1.75rem);
   border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
   background: var(--semantic-surface);
 }
@@ -792,7 +792,7 @@ body:has(.nn-nclex-exam-page) {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: clamp(1rem, 2vw, 1.75rem);
+  padding: clamp(0.875rem, 1.75vw, 1.5rem);
   overflow: hidden;
 }
 
@@ -809,8 +809,8 @@ body:has(.nn-nclex-exam-page) {
 }
 
 .nn-nclex-practice-question-card .nn-nclex-answer-card {
-  min-height: 3.65rem;
-  max-height: 4.75rem;
+  min-height: 3rem;
+  max-height: 4.25rem;
   flex: 0 1 auto;
   border-width: 1px;
   border-radius: 0.48rem;
@@ -1086,8 +1086,8 @@ body:has(.nn-nclex-exam-page) {
 }
 
 .nn-nclex-practice-workspace .nn-nclex-bottom-bar {
-  height: 3.65rem;
-  min-height: 3.65rem;
+  height: 3rem;
+  min-height: 3rem;
   padding-inline: clamp(1rem, 2vw, 2rem);
   gap: 0.75rem;
   border-top-color: color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);

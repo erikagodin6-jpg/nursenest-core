@@ -19,7 +19,21 @@ This document is the current contract for NurseNest learner study routes after t
 - Practice exam setup does not use `startMode`; mode selection belongs to the shared setup client state.
 - CAT launch uses `catLaunch=1` when it must deep-link into the launch flow.
 - Alias routes preserve query params and redirect to `/app/practice-tests`; they do not import or mount practice setup UI.
+- Deprecated alias routes are compatibility shims only. They must not grow new UI, providers, or data loaders.
 - Hidden alternate setup directories such as `quiz-setup`, `adaptive-setup`, `exam-setup`, and `cat-setup` must not exist under the learner route group.
+
+## Deprecated Alias Inventory
+
+These routes remain temporarily for safe rollout and old callback/link compatibility. Remove navigation entry points first, verify access logs/telemetry, then delete in a later isolated cleanup.
+
+| Deprecated Route/System | Replacement | Current Status | Removal Gate |
+| --- | --- | --- | --- |
+| `/app/practice-tests/start` | `/app/practice-tests?catLaunch=1` | Redirect alias only; no setup UI. | Confirm zero/low direct traffic and no auth callback dependence. |
+| `/app/practice-tests/cat-launch` | `/app/practice-tests?catLaunch=1&pathwayId=...` or `/app/cases/cnple` for CNPLE | Redirect alias only; preserves CNPLE special case. | Confirm route access logs show no live non-CNPLE dependence. |
+| `/app/questions/session` | `/app/practice-tests` with preserved query params | Redirect alias only; no session UI. | Confirm weak-area/remediation callbacks have migrated. |
+| Legacy question-bank inline setup clients | Unified practice setup flow for exam sessions; `/app/questions` remains a bank surface | Active compatibility surface, not removal-ready. | Decide whether `/app/questions` remains a separate bank product before deprecating components. |
+
+Cleanup rule: never delete one of these entries in the same change that removes navigation links. Keep each removal reversible and backed by focused route tests.
 
 ## Provider And Shell Hierarchy
 

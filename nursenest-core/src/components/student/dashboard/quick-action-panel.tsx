@@ -25,7 +25,7 @@ export type QuickActionGuided = {
   weakAreasFlashcardsHref?: string | null;
   /** A completed mock/practice item in the recent window. */
   hasRecentCompletion?: boolean;
-  /** Pathway-specific CAT start href (e.g. `/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn`). Falls back to generic start page. */
+  /** Pathway-specific CAT start href (e.g. `/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1`). */
   catStartHref?: string | null;
   /** Whether the CAT CTA is pathway-scoped or still needs explicit pathway selection. */
   catDestinationKind?: "app_start" | "generic_chooser";

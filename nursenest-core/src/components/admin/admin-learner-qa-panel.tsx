@@ -400,7 +400,7 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
             </Link>
           </li>
           <li>
-            <Link className="text-primary underline" href="/app/practice-tests/cat-launch">
+            <Link className="text-primary underline" href="/app/practice-tests?catLaunch=1">
               CAT launch
             </Link>
           </li>
