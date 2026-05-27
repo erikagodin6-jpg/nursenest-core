@@ -1,5 +1,5 @@
 import { randomInt, randomUUID } from "node:crypto";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
