@@ -124,6 +124,7 @@ export function FlashcardStudyQuestionStack({
 
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
   const [rationaleOpen, setRationaleOpen] = useState(true);
+  const [submittedLetter, setSubmittedLetter] = useState<string | null>(null);
   // Study Pulse rail: hidden by default at tablet (< lg) so it doesn't crowd the card
   const [tabletRailOpen, setTabletRailOpen] = useState(false);
   // Tracks current SATA selections so the reveal button can report them before reveal fires.
@@ -131,6 +132,7 @@ export function FlashcardStudyQuestionStack({
 
   useEffect(() => {
     setPickedLetter(null);
+    setSubmittedLetter(null);
     setRationaleOpen(true);
     sataSelectionsRef.current = [];
   }, [exam?.questionStem, sata?.questionStem, prompt]);
@@ -139,17 +141,16 @@ export function FlashcardStudyQuestionStack({
     if (revealed) setRationaleOpen(true);
   }, [revealed]);
 
-  useEffect(() => {
-    if (!pickedLetter || revealed || !tutorMcq || !exam) return;
-
-    const id = requestAnimationFrame(() => onReveal?.());
-    return () => cancelAnimationFrame(id);
-  }, [pickedLetter, revealed, tutorMcq, exam, onReveal]);
-
   function commitPick(letter: string) {
     if (revealed || !exam || !tutorMcq) return;
     setPickedLetter(letter);
-    onAnswerSubmitted?.(letter, letter === exam.correctLetter);
+  }
+
+  function submitMcqAnswer() {
+    if (!pickedLetter || revealed || !exam || !tutorMcq) return;
+    setSubmittedLetter(pickedLetter);
+    onAnswerSubmitted?.(pickedLetter, pickedLetter === exam.correctLetter);
+    onReveal?.();
   }
 
   const promptSplit = splitPromptLeadingImage(prompt);
@@ -215,8 +216,9 @@ export function FlashcardStudyQuestionStack({
                     pickedLetter={pickedLetter}
                     tutorMcq={tutorMcq}
                     answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
-                    revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
+                    revealHint={labels?.revealHint ?? "Select an answer, then submit to see the rationale."}
                     onPickLetter={commitPick}
+                    onSubmitAnswer={submitMcqAnswer}
                   />
                 </div>
               ) : null}
@@ -243,7 +245,7 @@ export function FlashcardStudyQuestionStack({
                         data-testid="sata-reveal-btn"
                         className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
                       >
-                        Submit & Reveal
+                        Submit Answer
                       </button>
                     </div>
                   ) : null}
@@ -265,11 +267,21 @@ export function FlashcardStudyQuestionStack({
               {revealed ? (
                 <div className="nn-flashcard-answer-status">
                   <div className="min-w-0">
-                    <div className="inline-flex items-center gap-2 font-semibold text-[var(--semantic-success)]">
+                    <div className={`inline-flex items-center gap-2 font-semibold ${
+                      exam && submittedLetter && submittedLetter !== exam.correctLetter
+                        ? "text-[var(--semantic-danger)]"
+                        : "text-[var(--semantic-success)]"
+                    }`}>
                       <CheckCircle2 className="h-5 w-5" aria-hidden />
-                      <span>Correct answer shown</span>
+                      <span>
+                        {exam && submittedLetter
+                          ? submittedLetter === exam.correctLetter
+                            ? "Correct"
+                            : "Incorrect"
+                          : "Answer shown"}
+                      </span>
                     </div>
-                    <p>Use the rationale panel to review why it works.</p>
+                    <p>Use the rationale panel to review the clinical reasoning.</p>
                   </div>
                   {onAdvance ? (
                     <button type="button" className="nn-flashcard-next-inline" onClick={onAdvance}>

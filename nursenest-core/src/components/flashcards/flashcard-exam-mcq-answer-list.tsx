@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
+import { useEffect } from "react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import {
   flashcardExamMcqOptionClass,
@@ -17,6 +18,7 @@ export type FlashcardExamMcqAnswerListProps = {
   answerChoicesHeading: string;
   revealHint?: string | null;
   onPickLetter?: (letter: string) => void;
+  onSubmitAnswer?: () => void;
 };
 
 export function FlashcardExamMcqAnswerList({
@@ -27,9 +29,26 @@ export function FlashcardExamMcqAnswerList({
   answerChoicesHeading,
   revealHint,
   onPickLetter,
+  onSubmitAnswer,
 }: FlashcardExamMcqAnswerListProps) {
-  if (!exam?.answerOptions || exam.answerOptions.length === 0) {
-    return null;
+  const hasOptions = Array.isArray(exam?.answerOptions) && exam.answerOptions.length >= 2;
+
+  useEffect(() => {
+    if (hasOptions) return;
+    console.error("[flashcard-mcq] exam payload missing answer options", {
+      itemKind: exam?.itemKind ?? null,
+      hasStem: Boolean(exam?.questionStem?.trim()),
+      optionCount: Array.isArray(exam?.answerOptions) ? exam.answerOptions.length : null,
+    });
+  }, [exam?.answerOptions, exam?.itemKind, exam?.questionStem, hasOptions]);
+
+  if (!hasOptions) {
+    return (
+      <div className="nn-flashcard-mcq-config-error" role="alert">
+        <p>Question options could not load</p>
+        <span>This item is configured as a multiple-choice question, but its answer choices are missing.</span>
+      </div>
+    );
   }
 
   return (
@@ -115,6 +134,17 @@ export function FlashcardExamMcqAnswerList({
           );
         })}
       </ul>
+
+      {!revealed ? (
+        <button
+          type="button"
+          className="nn-flashcard-submit-answer"
+          onClick={onSubmitAnswer}
+          disabled={!pickedLetter}
+        >
+          Submit Answer
+        </button>
+      ) : null}
 
       {/* Hint */}
       {tutorMcq && !revealed && revealHint ? (

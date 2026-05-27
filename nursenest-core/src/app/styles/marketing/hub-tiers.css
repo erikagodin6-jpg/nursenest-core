@@ -419,11 +419,10 @@ html[data-theme="blossom"] .nn-pricing-plan-card[data-highlight="popular"] {
   )[data-nn-nursing-tier-hub="surface"]
   .nn-exam-hub-study-card {
   border-color: color-mix(in srgb, var(--semantic-info) 7%, var(--nn-rn-hub-border));
-  background:
-    linear-gradient(150deg, color-mix(in srgb, var(--semantic-info) 2%, var(--nn-rn-hub-card)) 0%, transparent 56%),
-    var(--nn-rn-hub-card);
+  background: var(--semantic-surface);
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-surface) 78%, transparent),
+    0 4px 12px -4px color-mix(in srgb, var(--palette-heading) 10%, transparent),
     0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
 }
 

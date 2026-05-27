@@ -762,6 +762,15 @@
   );
 }
 
+/* Allied health hub study-mode cards — white surface lift matching nursing tier hub cards. */
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"] .nn-exam-hub-study-card {
+  background: var(--semantic-surface);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 84%, transparent),
+    0 4px 12px -4px color-mix(in srgb, var(--palette-heading) 10%, transparent),
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+
 [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="identity-hero"] {
   max-width: 58rem;
   margin-inline: auto;
@@ -828,9 +837,10 @@
     var(--semantic-border-soft) 70%,
     color-mix(in srgb, var(--semantic-brand) 8%, transparent)
   );
-  background: color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-surface));
+  background: var(--semantic-surface);
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-surface) 84%, transparent),
+    0 4px 12px -4px color-mix(in srgb, var(--palette-heading) 10%, transparent),
     0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
 }
 [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] {
@@ -842,10 +852,10 @@
   background:
     radial-gradient(
       circle at 50% 0%,
-      color-mix(in srgb, var(--semantic-brand) 9%, transparent) 0%,
-      transparent 42%
+      color-mix(in srgb, var(--semantic-brand) 7%, transparent) 0%,
+      transparent 38%
     ),
-    color-mix(in srgb, var(--semantic-brand) 4%, var(--theme-page-bg));
+    var(--semantic-panel-muted);
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent) inset,
     0 24px 70px -54px color-mix(in srgb, var(--palette-heading) 20%, transparent);

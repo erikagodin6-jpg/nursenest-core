@@ -202,6 +202,7 @@ export function ActiveStudySession({
   const [isPaused, setIsPaused] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [ratingTally, setRatingTally] = useState({ again: 0, hard: 0, good: 0, easy: 0 });
+  const [hintOpen, setHintOpen] = useState(false);
 
   const current = sessionCards[index] ?? null;
   const pinState = current?.id ? getStudyItemState(current.id) : {};
@@ -218,7 +219,8 @@ export function ActiveStudySession({
   useEffect(() => {
     setSessionCards(deduped);
     setIndex(initialCardIndex);
-    setRevealed(initialRevealed);
+    const initialCard = deduped[initialCardIndex] ?? null;
+    setRevealed(Boolean(initialRevealed && !initialCard?.examMicroQuestion));
     setCompleted(false);
     setIsPaused(false);
     setElapsed(0);
@@ -236,6 +238,10 @@ export function ActiveStudySession({
   useEffect(() => {
     onStudyProgress?.({ index, revealed });
   }, [index, onStudyProgress, revealed]);
+
+  useEffect(() => {
+    setHintOpen(false);
+  }, [currentId]);
 
   useEffect(() => {
     if (completed || isPaused) return;
@@ -405,6 +411,7 @@ export function ActiveStudySession({
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
   const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;
   const focusLabel = header.categoriesLabel?.trim() || formatTopicLine(current) || "Adaptive review";
+  const currentIsExamQuestion = Boolean(current.examMicroQuestion);
 
   return (
     <div
@@ -496,7 +503,7 @@ export function ActiveStudySession({
           });
         }}
         labels={{
-          revealHint: t("flashcards.tapToReveal"),
+          revealHint: currentIsExamQuestion ? "Select an answer, then submit to see the rationale." : t("flashcards.tapToReveal"),
           answerHeading: t("flashcards.answer"),
           whyCorrectHeading: t("flashcards.rationale"),
           whyIncorrectHeading: t("pages.flashcards.whyOtherOptionsAreIncorrect"),
@@ -572,8 +579,14 @@ export function ActiveStudySession({
                 <span>Coach</span>
               </div>
               <div className="nn-flashcard-coach-panel__section">
-                <span>Tutor Hint</span>
-                <p>{formatTopicLine(current) ? `Connect this to ${formatTopicLine(current)}.` : "Look for the safest clinical priority before choosing."}</p>
+                <span>Hint</span>
+                {hintOpen ? (
+                  <p>{formatTopicLine(current) ? `Connect this to ${formatTopicLine(current)}.` : "Look for the safest clinical priority before choosing."}</p>
+                ) : (
+                  <button type="button" className="nn-flashcard-hint-reveal" onClick={() => setHintOpen(true)}>
+                    Reveal hint
+                  </button>
+                )}
               </div>
               <div className="nn-flashcard-coach-panel__section">
                 <span>Why This Matters</span>
@@ -607,24 +620,26 @@ export function ActiveStudySession({
               </div>
             </div>
 
-            <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
-              {([
-                ["again", "Again"],
-                ["hard", "Hard"],
-                ["good", "Good"],
-                ["easy", "Easy"],
-              ] as const).map(([rating, label]) => (
-                <button
-                  key={rating}
-                  type="button"
-                  data-nn-flashcard-grade={rating}
-                  onClick={() => void submitRating(rating)}
-                  disabled={!revealed || saving}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+            {!currentIsExamQuestion ? (
+              <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
+                {([
+                  ["again", "Again"],
+                  ["hard", "Hard"],
+                  ["good", "Good"],
+                  ["easy", "Easy"],
+                ] as const).map(([rating, label]) => (
+                  <button
+                    key={rating}
+                    type="button"
+                    data-nn-flashcard-grade={rating}
+                    onClick={() => void submitRating(rating)}
+                    disabled={!revealed || saving}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
 
             <div className="nn-flashcard-command-bar">
               <button

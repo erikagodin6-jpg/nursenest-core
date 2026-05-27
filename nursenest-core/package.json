@@ -81,6 +81,7 @@
     "test:e2e:runtime-critical:webkit": "npx playwright test -c playwright.runtime-critical.config.ts --project=runtime-webkit",
     "test:e2e:runtime-visual": "npx playwright test -c playwright.runtime-visual.config.ts",
     "test:e2e:runtime-visual:update": "npx playwright test -c playwright.runtime-visual.config.ts --update-snapshots",
+    "test:e2e:learner-journeys": "npx playwright test -c playwright.learner-journeys.config.ts",
     "codex:runtime-gate": "node scripts/qa/run-runtime-e2e.mjs",
     "test:e2e:cat-entrypoints": "npx playwright test -c playwright.config.ts tests/e2e/cat/cat-entrypoints.spec.ts --project=chromium",
     "test:e2e:cat-question-types": "npx playwright test -c playwright.cat-question-types.config.ts --project=chromium-cat-question-types",
