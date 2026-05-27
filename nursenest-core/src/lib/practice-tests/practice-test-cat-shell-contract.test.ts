@@ -6,6 +6,7 @@ import { describe, it } from "node:test";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const runnerPath = join(__dirname, "../../components/student/practice-test-runner-client.tsx");
+const nclexCatRunnerPath = join(__dirname, "../../components/exam/nclex-cat-runner.tsx");
 
 describe("Practice test runner — CAT shell contract", () => {
   const src = readFileSync(runnerPath, "utf8");
@@ -73,5 +74,32 @@ describe("Practice test runner — CAT shell contract", () => {
 
     const tailFromLinear = src.slice(linearStart);
     assert.equal(tailFromLinear.includes("nn-question-session"), false);
+  });
+});
+
+describe("NCLEX CAT exam runner — exam-only contract", () => {
+  const src = readFileSync(nclexCatRunnerPath, "utf8");
+
+  it("does not mount tutor, hint, rationale, related lesson, or confidence study surfaces", () => {
+    for (const forbidden of [
+      "PracticeExamRationalePanel",
+      "PracticeExamRationaleMobileDock",
+      "PracticeRationaleFullPanel",
+      "PracticeTestPerItemRationale",
+      "ConfidenceSelector",
+      "Tutor Hint",
+      "Why This Matters",
+      "Related Lesson",
+      "rationalePanelMode",
+      "showRationale",
+    ]) {
+      assert.equal(src.includes(forbidden), false, `${forbidden} must not appear in CAT exam delivery`);
+    }
+  });
+
+  it("keeps the CAT runner on the compact exam layout", () => {
+    assert.equal(src.includes("NclexCatExamLayout"), true);
+    assert.equal(src.includes("showTypePanel={false}"), true);
+    assert.equal(src.includes("NclexQuestionStem"), true);
   });
 });

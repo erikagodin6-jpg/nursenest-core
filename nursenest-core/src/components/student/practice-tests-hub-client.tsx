@@ -17,6 +17,7 @@ import {
   type CanonicalBodySystemId,
 } from "@/lib/learner-study-hub/body-system-data";
 import type { PathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
+import { buildCatExamStartPayload } from "@/lib/practice-tests/cat-exam-start-payload";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type {
@@ -51,8 +52,6 @@ const PRACTICE_COUNT_MIN = 5;
 const PRACTICE_COUNT_MAX = 100;
 const CAT_COUNT_MIN = 25;
 const CAT_COUNT_MAX = 75;
-const CAT_EXAM_QUESTION_COUNT = 85;
-const CAT_EXAM_TIME_LIMIT_SEC = 300 * 60;
 const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
 
 function focusToSelectionMode(focusMode: FocusMode): Exclude<PracticeTestSelectionMode, "cat" | "targeted" | "starred"> {
@@ -347,21 +346,11 @@ export function PracticeTestsHubClient({
 
       const payload =
         examMode === "cat"
-          ? {
-              title: "CAT Exam Simulation",
-              questionCount: CAT_EXAM_QUESTION_COUNT,
-              topicNames: [],
-              difficultyMin: null,
-              difficultyMax: null,
-              selectionMode: "cat" as const,
-              catSelectionBasis: focusToCatBasis(focusMode),
-              catPresentationMode: "exam_simulation" as const,
-              catExamFeedbackMode: "test" as const,
+          ? buildCatExamStartPayload({
               pathwayId: trimmedPathwayId,
-              timedMode: true,
-              timeLimitSec: CAT_EXAM_TIME_LIMIT_SEC,
+              catSelectionBasis: focusToCatBasis(focusMode),
               studyLaunchPayload,
-            }
+            })
           : {
               ...buildPracticeExamStartPayload({
                 questionCount,
@@ -684,7 +673,7 @@ export function PracticeTestsHubClient({
                   <span className="text-[var(--semantic-info)]">exam feel familiar.</span>
                 </h1>
                 <p className="mt-6 max-w-prose text-base leading-8 text-[var(--semantic-text-secondary)] sm:text-lg">
-                  NurseNest mirrors NCLEX-style adaptive delivery: answer, submit, and move forward in a focused exam interface without mid-exam rationales.
+                  NurseNest mirrors NCLEX-style adaptive delivery: answer, submit, and move forward in a focused exam interface without study hints or teaching panels.
                 </p>
                 <button
                   type="button"
@@ -758,7 +747,7 @@ export function PracticeTestsHubClient({
                   ))}
                 </div>
                 <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4 text-xs font-medium text-[var(--semantic-text-muted)]">
-                  No rationales during the exam · Next item adapts after you submit
+                  Exam-only session · Next item adapts after you submit
                 </div>
               </div>
             </div>
