@@ -257,7 +257,7 @@ export function FlashcardStudyQuestionStack({
               ) : null}
 
               {sata ? (
-                <div className="relative z-[1] mt-6">
+                <div className="relative z-[1] mt-6" {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}>
                   <FlashcardSataAnswerList
                     options={sata.answerOptions}
                     correctLetters={sata.correctLetters}
@@ -291,7 +291,7 @@ export function FlashcardStudyQuestionStack({
                 </div>
               ) : null}
 
-              {revealed ? (
+              {revealed && (exam || sata) ? (
                 <div className="nn-flashcard-answer-status">
                   <div className="min-w-0">
                     <div className={`inline-flex items-center gap-2 font-semibold ${
@@ -305,7 +305,7 @@ export function FlashcardStudyQuestionStack({
                           ? submittedLetter === exam.correctLetter
                             ? "Correct"
                             : "Incorrect"
-                          : "Answer shown"}
+                          : "Answer submitted"}
                       </span>
                     </div>
                     <p>Review the rationale, then choose how this card should return.</p>
@@ -320,7 +320,7 @@ export function FlashcardStudyQuestionStack({
               ) : null}
             </article>
 
-            {revealed && !exam ? (
+            {revealed && !exam && !sata ? (
               <aside
                 className="nn-flashcard-rationale-panel"
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}

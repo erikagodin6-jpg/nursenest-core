@@ -21,6 +21,7 @@ import {
   serializeFlashcardForCustomSession,
   type FlashcardStudySelectRow,
 } from "@/lib/flashcards/flashcard-study-serialize";
+import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 import type {
   FlashcardCustomSessionQueryRelaxation,
   FlashcardCustomSessionSummary,
@@ -101,6 +102,20 @@ export type BuildFlashcardCustomSessionResult = BuildFlashcardCustomSessionSucce
 const FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT = 800;
 const FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT = 80;
+
+function serializedHasUsableMcq(card: CustomSessionSerializedCard): boolean {
+  const exam = card.examMicroQuestion;
+  if (!exam || isSataPayload(exam)) return false;
+  return Boolean(
+    typeof exam.questionStem === "string" &&
+      exam.questionStem.trim().length >= 10 &&
+      Array.isArray(exam.answerOptions) &&
+      exam.answerOptions.length === 4 &&
+      exam.answerOptions.every((option) => option.text.trim().length > 0) &&
+      typeof exam.correctLetter === "string" &&
+      exam.correctLetter.trim().length > 0,
+  );
+}
 
 const flashcardSelect = {
   id: true,
@@ -248,7 +263,7 @@ export async function buildFlashcardCustomSession(
     });
 
     let lessonQuestionVirtuals: Awaited<ReturnType<typeof loadLessonLinkedFlashcardVirtuals>> = [];
-    if (pathwayScopeId && allowLessonQuestionVirtuals) {
+    if (pathwayScopeId && allowLessonQuestionVirtuals && !includeCards) {
       const existingExamQ = new Set(
         cards
           .map((c) => c.examQuestionId)
@@ -313,7 +328,7 @@ export async function buildFlashcardCustomSession(
       cardWithCategory.push({ ...card, builderCategoryId: categoryId });
     }
 
-    if (pathwayScopeId && allowLessonQuestionVirtuals) {
+    if (pathwayScopeId && allowLessonQuestionVirtuals && !includeCards) {
       for (const v of lessonQuestionVirtuals) {
         const qm = examTopicMetaById.get(v.examQuestionId);
         const categoryId = resolveBuilderCategoryId({
@@ -402,7 +417,7 @@ export async function buildFlashcardCustomSession(
     }
 
     let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
-    if (pathwayScopeId && allowLessonQuestionVirtuals) {
+    if (pathwayScopeId && allowLessonQuestionVirtuals && !includeCards) {
       const pid = pathwayScopeId;
       const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
         collectMergedLessonVirtualFlashcardsForPathway(pid);
@@ -565,30 +580,33 @@ export async function buildFlashcardCustomSession(
     const selectedRows = shuffle ? shuffled(scoped, orderingSeed) : scoped;
     const limited = selectedRows.slice(0, limit);
 
-    const cardsForSession: CustomSessionSerializedCard[] = includeCards
-      ? limited.map((card, index) => {
-          const mixedSwap = mode === "mixed" && index % 2 === 1;
-          const swap = mode === "definition_to_term" || mixedSwap;
-          const topic = builderCategoryTitleForId(pathwayScopeId ?? pathwayId, card.builderCategoryId);
-          const {
-            builderCategoryId: _bc,
-            lessonMeta,
-            linkedExamQuestionId: _lq,
-            lessonId: _lid,
-            examQuestionId: _eqid,
-            ...dbRow
-          } = card;
-          void _bc;
-          void _lq;
-          void _lid;
-          void _eqid;
+    const cardsForSession: CustomSessionSerializedCard[] = [];
+    if (includeCards) {
+      for (const [index, card] of selectedRows.entries()) {
+        if (cardsForSession.length >= limit) break;
+        const mixedSwap = mode === "mixed" && index % 2 === 1;
+        const swap = mode === "definition_to_term" || mixedSwap;
+        const topic = builderCategoryTitleForId(pathwayScopeId ?? pathwayId, card.builderCategoryId);
+        const {
+          builderCategoryId: _bc,
+          lessonMeta,
+          linkedExamQuestionId: _lq,
+          lessonId: _lid,
+          examQuestionId: _eqid,
+          ...dbRow
+        } = card;
+        void _bc;
+        void _lq;
+        void _lid;
+        void _eqid;
+        try {
           const base = serializeFlashcardForCustomSession(dbRow as FlashcardStudySelectRow, {
             swapFrontBack: swap,
             topic,
             pathwayId: card.deck?.pathwayId ?? pathwayScopeId,
             examOptionShuffleSalt: sessionShuffleSalt,
           });
-          return lessonMeta
+          const serialized = lessonMeta
             ? {
                 ...base,
                 lessonHref: lessonMeta.href,
@@ -596,10 +614,15 @@ export async function buildFlashcardCustomSession(
                 lessonSlug: lessonMeta.slug,
               }
             : base;
-        })
-      : [];
+          if (serializedHasUsableMcq(serialized)) cardsForSession.push(serialized);
+        } catch {
+          // Invalid legacy/passive flashcards are skipped; study mode is MCQ-only.
+          continue;
+        }
+      }
+    }
 
-    const plannedCount = limited.length;
+    const plannedCount = includeCards ? cardsForSession.length : limited.length;
 
     const summary: FlashcardCustomSessionSummary = {
       pathwayId: pathwayScopeId ?? pathwayId,

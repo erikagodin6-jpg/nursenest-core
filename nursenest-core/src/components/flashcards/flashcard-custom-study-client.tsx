@@ -13,7 +13,7 @@ import {
 } from "@/components/study/active-study-session";
 import { isSyntheticFlashcardStudyId } from "@/lib/flashcards/flashcard-access";
 import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
-import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { isSataPayload, type ExamMicroQuestionPayload, type SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
@@ -38,7 +38,7 @@ type ApiCard = {
   sourceKey?: string | null;
   pathwayId?: string | null;
   explanation?: string;
-  examMicroQuestion?: ExamMicroQuestionPayload;
+  examMicroQuestion?: ExamMicroQuestionPayload | SataQuestionPayload;
   lessonHref?: string;
   lessonTitle?: string;
   /** Same as {@link lessonHref} when serialized from `serializeFlashcardForCustomSession` cross-link. */
@@ -46,6 +46,10 @@ type ApiCard = {
   lessonStudyTitle?: string;
   lessonSlug?: string;
   clinicalImageUrl?: string | null;
+};
+
+type McqApiCard = ApiCard & {
+  examMicroQuestion: ExamMicroQuestionPayload;
 };
 
 type SessionSummary = {
@@ -56,12 +60,37 @@ type SessionSummary = {
   selectedCategories: string[];
 };
 
+function isPlaceholderFlashcardStem(stem: string): boolean {
+  const normalized = stem.trim().toLowerCase();
+  return (
+    normalized.startsWith("clinical recall") ||
+    normalized.includes("tap to reveal") ||
+    normalized.includes("which finding or action best reflects the clinical principle") ||
+    /\b([a-z]+) - \1\b/.test(normalized)
+  );
+}
+
+function hasUsableExamQuestion(card: ApiCard): card is McqApiCard {
+  const exam = card.examMicroQuestion;
+  if (!exam || isSataPayload(exam)) return false;
+  const stem = exam.questionStem?.trim() ?? "";
+  return Boolean(
+    stem.length >= 10 &&
+      !isPlaceholderFlashcardStem(stem) &&
+      Array.isArray(exam.answerOptions) &&
+      exam.answerOptions.length === 4 &&
+      exam.answerOptions.every((option) => option.text.trim().length > 0) &&
+      typeof exam.correctLetter === "string" &&
+      exam.correctLetter.trim().length > 0,
+  );
+}
+
 export function FlashcardCustomStudyClient() {
   const sp = useSearchParams();
   const { t } = useMarketingI18n();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cards, setCards] = useState<ApiCard[]>([]);
+  const [cards, setCards] = useState<McqApiCard[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
   const [loadingStage, setLoadingStage] = useState<"preparing" | "due" | "building" | "still">("preparing");
@@ -183,7 +212,7 @@ export function FlashcardCustomStudyClient() {
         const validCards = rawCards.filter(
           (c) => c && typeof c.id === "string" && c.id.length > 0 &&
                  typeof c.front === "string" && typeof c.back === "string",
-        );
+        ).filter(hasUsableExamQuestion);
         if (!cancelled) {
           setCards(validCards);
           setSummary(
@@ -440,9 +469,7 @@ export function FlashcardCustomStudyClient() {
       <section className={emptyStateClass}>
         <h2 className={emptyHeadingClass}>No cards for this pathway yet</h2>
         <p>
-          {summary && summary.matchingCards === 0
-            ? "There are no published flashcards or bank-linked lesson questions for this filter. Try the hub with All cards, study a lesson with checkpoints (we synthesize recall cards from the catalog when the bank is empty), or pick another body system."
-            : t("flashcards.noCardsMatch")}
+          There are no published NCLEX multiple-choice cards for this filter. Try All cards or pick another body system.
         </p>
         <Link href={exitHref} className={emptyLinkClass}>
           {t("flashcards.backToMyCards")}
