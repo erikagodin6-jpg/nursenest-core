@@ -60,6 +60,12 @@ describe("learner practice alias routes — redirect to canonical /app/practice-
         false,
         `${relPath} must not directly import or mount PracticeTestsPage — it is a redirect alias`,
       );
+      if (relPath.endsWith("/cat/page.tsx")) {
+        assert.ok(
+          src.includes("catLaunch") && src.includes(`q.set("catLaunch", "1")`),
+          `${relPath} must open the canonical hub in CAT mode`,
+        );
+      }
     });
   }
 });

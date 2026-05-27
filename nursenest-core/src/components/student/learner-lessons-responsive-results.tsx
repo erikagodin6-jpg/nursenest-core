@@ -150,9 +150,12 @@ export function LearnerLessonsResponsiveResults({
   const prefetchControllersRef = useRef(new Set<AbortController>());
 
   const summaryLine = useMemo(() => {
-    if (loading) return "Loading lessons...";
     if (error) return error;
-    if (payload.rows.length > 0) return `Showing ${payload.rows.length} of ${payload.total} lessons`;
+    if (payload.rows.length > 0) {
+      const base = `Showing ${payload.rows.length} of ${payload.total} lessons`;
+      return loading ? `${base} — updating…` : base;
+    }
+    if (loading) return "Loading lessons...";
     return initialListSummaryLine;
   }, [error, initialListSummaryLine, loading, payload.rows.length, payload.total]);
 
@@ -338,18 +341,27 @@ export function LearnerLessonsResponsiveResults({
       ) : null}
 
       <div className="nn-premium-lessons-app-list" data-nn-premium-lessons-hub-body="">
-        {loading ? (
-          <LessonsListSkeleton count={payload.rows.length || initialPageSize} />
+        {loading && payload.rows.length === 0 ? (
+          <LessonsListSkeleton count={initialPageSize} />
         ) : (
-          <LearnerLessonsVirtualList
-            lessons={payload.rows}
-            progressByRowId={payload.progressByRowId}
-            openLessonCta={openLessonCta}
-            activeTopic={filters.topic}
-            activeTopicSlug={filters.topicSlug}
-            onTopicSelect={selectTopic}
-            onTopicPrefetch={prefetchTopic}
-          />
+          <div
+            className={
+              loading
+                ? "pointer-events-none opacity-50 transition-opacity duration-150"
+                : "transition-opacity duration-150"
+            }
+            aria-hidden={loading}
+          >
+            <LearnerLessonsVirtualList
+              lessons={payload.rows}
+              progressByRowId={payload.progressByRowId}
+              openLessonCta={openLessonCta}
+              activeTopic={filters.topic}
+              activeTopicSlug={filters.topicSlug}
+              onTopicSelect={selectTopic}
+              onTopicPrefetch={prefetchTopic}
+            />
+          </div>
         )}
       </div>
 

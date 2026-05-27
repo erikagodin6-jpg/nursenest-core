@@ -121,7 +121,9 @@ export function PracticeTestsHubClient({
   const [topics, setTopics] = useState<TopicBucket[]>([]);
   const [discoveryTotal, setDiscoveryTotal] = useState<number | null>(null);
   const [discoveryReady, setDiscoveryReady] = useState(false);
+  const [discoveryLoading, setDiscoveryLoading] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [launchingHref, setLaunchingHref] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -199,11 +201,12 @@ export function PracticeTestsHubClient({
   useEffect(() => {
     let cancelled = false;
     const pid = pathwayId.trim();
-    setDiscoveryReady(false);
-    setTopics([]);
-    setDiscoveryTotal(null);
+    setDiscoveryLoading(true);
     if (!pid) {
+      setTopics([]);
+      setDiscoveryTotal(null);
       setDiscoveryReady(true);
+      setDiscoveryLoading(false);
       return;
     }
 
@@ -217,6 +220,7 @@ export function PracticeTestsHubClient({
         if (!res.ok) {
           if (!cancelled) {
             setDiscoveryReady(true);
+            setDiscoveryLoading(false);
           }
           return;
         }
@@ -225,9 +229,13 @@ export function PracticeTestsHubClient({
           setTopics(Array.isArray(data.buckets) ? data.buckets : []);
           setDiscoveryTotal(typeof data.total === "number" ? data.total : null);
           setDiscoveryReady(true);
+          setDiscoveryLoading(false);
         }
       } catch {
-        if (!cancelled) setDiscoveryReady(true);
+        if (!cancelled) {
+          setDiscoveryReady(true);
+          setDiscoveryLoading(false);
+        }
       }
     })();
 
@@ -291,11 +299,13 @@ export function PracticeTestsHubClient({
     if (creating || createInFlightRef.current) return;
     createInFlightRef.current = true;
     setCreating(true);
+    setLaunchingHref(null);
     setError(null);
     setErrorCode(null);
     setSessionExpired(false);
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 28_000);
+    let navigationStarted = false;
 
     try {
       const trimmedPathwayId = pathwayId.trim();
@@ -429,6 +439,8 @@ export function PracticeTestsHubClient({
         surface: "practice_tests_hub",
       });
       const destination = `/app/practice-tests/${encodeURIComponent(data.id)}?pathwayId=${encodeURIComponent(trimmedPathwayId)}`;
+      navigationStarted = true;
+      setLaunchingHref(destination);
       try {
         window.localStorage.setItem(
           PRACTICE_RESUME_STORAGE_KEY,
@@ -448,6 +460,7 @@ export function PracticeTestsHubClient({
       }
       safeRouterReplace(router, destination, {
         fallbackDelayMs: 1200,
+        hardFallbackDelayMs: 5000,
         context: {
           feature: examMode === "cat" ? "cat_hub_launch" : "practice_tests_hub_launch",
           pathwayId: trimmedPathwayId,
@@ -455,6 +468,7 @@ export function PracticeTestsHubClient({
         },
       });
     } catch (cause) {
+      setLaunchingHref(null);
       const aborted = cause instanceof DOMException && cause.name === "AbortError";
       setError(
         aborted
@@ -463,8 +477,10 @@ export function PracticeTestsHubClient({
       );
     } finally {
       window.clearTimeout(timeout);
-      setCreating(false);
-      createInFlightRef.current = false;
+      if (!navigationStarted) {
+        setCreating(false);
+        createInFlightRef.current = false;
+      }
     }
   }, [
     allCanonicalIds.length,
@@ -484,9 +500,10 @@ export function PracticeTestsHubClient({
   const showCatPoolWarning =
     errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid ||
     errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pick_failed;
-  const poolLikelyEmpty = discoveryReady && (discoveryTotal ?? 0) === 0 && topics.length === 0;
+  const poolLikelyEmpty = discoveryReady && !discoveryLoading && (discoveryTotal ?? 0) === 0 && topics.length === 0;
 
-  const startDisabled = creating || !pathwayId.trim() || (examMode === "cat" && !catAvailableForPathway);
+  const isLaunching = Boolean(launchingHref);
+  const startDisabled = creating || isLaunching || !pathwayId.trim() || (examMode === "cat" && !catAvailableForPathway);
   const modeLabel = examMode === "cat" ? "CAT" : "Practice Exam";
   const setupSummary =
     discoveryReady && discoveryTotal !== null
@@ -585,7 +602,7 @@ export function PracticeTestsHubClient({
         data-nn-e2e-practice-canonical-grid
       >
         {!discoveryReady ? (
-          <div className="space-y-4" aria-label="Loading categories">
+          <div className="space-y-4" aria-label="Loading categories" aria-busy="true">
             <div className="h-7 w-64 animate-pulse rounded-lg bg-[rgba(15,23,42,0.06)]" />
             <div className="h-10 w-full animate-pulse rounded-xl bg-[rgba(15,23,42,0.045)]" />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
@@ -595,7 +612,14 @@ export function PracticeTestsHubClient({
             </div>
           </div>
         ) : (
-          <>
+          <div
+            className={
+              discoveryLoading
+                ? "pointer-events-none opacity-50 transition-opacity duration-200"
+                : "transition-opacity duration-200"
+            }
+            aria-busy={discoveryLoading}
+          >
             <div className="mb-4">
               <h2
                 id="nn-practice-categories-heading"
@@ -638,7 +662,7 @@ export function PracticeTestsHubClient({
                 <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems to focus your session</span>
               )}
             </div>
-          </>
+          </div>
         )}
 
         {poolLikelyEmpty ? (
@@ -792,7 +816,12 @@ export function PracticeTestsHubClient({
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-sm font-bold text-white shadow-[0_10px_22px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
               data-nn-qa-practice-hub-start-test
             >
-              {creating ? (
+              {isLaunching ? (
+                <>
+                  <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                  Opening {modeLabel}…
+                </>
+              ) : creating ? (
                 <>
                   <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
                   Starting…

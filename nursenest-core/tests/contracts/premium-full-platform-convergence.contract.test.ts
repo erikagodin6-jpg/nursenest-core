@@ -17,6 +17,12 @@ const SCREENSHOT_DIR = path.resolve(ROOT, "docs/screenshots/premium-full-platfor
 const PRACTICE_HUB_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/page.tsx");
 const FLASHCARDS_HUB_CLIENT_PATH = path.resolve(ROOT, "src/components/flashcards/flashcards-hub-client.tsx");
 const PRACTICE_HUB_CLIENT_PATH = path.resolve(ROOT, "src/components/student/practice-tests-hub-client.tsx");
+const CAT_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/cat/page.tsx");
+const CAT_START_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/start/page.tsx");
+const CAT_LAUNCH_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx");
+const PRACTICE_RUN_LOADER_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/[id]/practice-test-runner-loader.tsx");
+const PRACTICE_SHELL_BOOTSTRAP_PATH = path.resolve(ROOT, "src/lib/practice-tests/load-practice-test-shell-bootstrap.ts");
+const PREMIUM_SHELL_RESOLVER_PATH = path.resolve(ROOT, "src/lib/practice-tests/resolve-premium-nclex-shell-route.ts");
 const FOCUSED_EXAM_HELPER_PATH = path.resolve(ROOT, "src/lib/learner/focused-exam-shell.ts");
 const EXAM_SESSION_SHELL_PATH = path.resolve(ROOT, "src/components/exam/exam-session-shell.tsx");
 
@@ -137,6 +143,8 @@ describe("premium full platform convergence", () => {
       /requireExplicitRequestedPathwayId:\s*true/,
       "practice hub must not force an extra pathway-pick landing page when a pathway can be inferred",
     );
+    assert.match(practiceClient, /launchingHref/, "practice/CAT starts must keep visible launching feedback after session creation");
+    assert.match(practiceClient, /hardFallbackDelayMs:\s*5000/, "practice/CAT starts need a bounded navigation fallback instead of a stalled CTA");
     assert.equal(
       (practiceClient.match(/data-nn-qa-practice-hub-start-test/g) ?? []).length,
       1,
@@ -159,6 +167,25 @@ describe("premium full platform convergence", () => {
       assert.doesNotMatch(source, /PracticeTestsHubClient|PracticeTestsPage/, `${relPath} must not mount duplicate setup UI`);
       assert.doesNotMatch(source, /startMode/, `${relPath} must not inject legacy startMode`);
     }
+  });
+
+  it("keeps active CAT route tree on unified setup → bootstrap → exam runner", () => {
+    const catAlias = read(CAT_ALIAS_PATH);
+    const startAlias = read(CAT_START_ALIAS_PATH);
+    const launchAlias = read(CAT_LAUNCH_ALIAS_PATH);
+    const practiceClient = read(PRACTICE_HUB_CLIENT_PATH);
+    const bootstrap = read(PRACTICE_SHELL_BOOTSTRAP_PATH);
+    const resolver = read(PREMIUM_SHELL_RESOLVER_PATH);
+    const runnerLoader = read(PRACTICE_RUN_LOADER_PATH);
+
+    assert.match(catAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/cat must open the canonical practice hub in CAT mode");
+    assert.match(startAlias, /redirect\(`\/app\/practice-tests\?\$\{q\.toString\(\)\}`\)/, "/app/practice-tests/start must be a redirect alias only");
+    assert.match(launchAlias, /appPathwayCatSessionStartPath/, "/app/practice-tests/cat-launch must redirect into the hub CAT query");
+    assert.doesNotMatch(startAlias + launchAlias, /PathwayCatSessionStartClient/, "active aliases must not mount the legacy CAT start client");
+    assert.match(practiceClient, /selectionMode:\s*"cat"/, "unified setup must create CAT sessions from the shared setup client");
+    assert.match(bootstrap, /resolvePremiumNclexShellRoute/, "session page must resolve the exam shell from persisted session config");
+    assert.match(resolver, /cfg\.selectionMode\s*===\s*"cat"[\s\S]*return "cat"/, "CAT sessions must resolve to the unified CAT exam runner");
+    assert.match(runnerLoader, /DynamicNclexCatRunner/, "runner loader must mount the unified CAT runner");
   });
 
   it("keeps focused exam sessions isolated from learner dashboard chrome", () => {

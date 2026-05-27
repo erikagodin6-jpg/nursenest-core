@@ -41,9 +41,10 @@ export function LearnerLessonsVirtualList({
         {lessons.map((lesson) => {
           const topic = lesson.topic?.trim() || "";
           const topicSlug = lesson.topicSlug?.trim() || "";
-          const topicActive =
+          const topicActive = Boolean(
             (topicSlug && activeTopicSlug === topicSlug.toLowerCase()) ||
-            (!topicSlug && topic && activeTopic?.toLowerCase() === topic.toLowerCase());
+            (!topicSlug && topic && activeTopic?.toLowerCase() === topic.toLowerCase()),
+          );
           const chips =
             topic || lesson.bodySystem?.trim() ? (
               <>

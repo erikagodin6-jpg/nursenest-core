@@ -78,12 +78,13 @@ test("next.config.mjs avoids async-module and optional static Sentry load during
   assert.doesNotMatch(nextConfig, /await\s+import\(["']@sentry\/nextjs["']\)/);
   assert.doesNotMatch(nextConfig, eagerImportPattern("@sentry/nextjs"));
   assert.doesNotMatch(nextConfig, /\beslint\s*:\s*\{/);
-  assert.match(nextConfig, /cpus:\s*1/);
-  assert.match(nextConfig, /workerThreads:\s*false/);
+  // Turbopack is now the primary build engine — these env vars must be set to prevent
+  // webpack from spawning unconstrained parallel workers on memory-tight builders.
+  assert.match(nextConfig, /process\.env\.TURBOPACK\s*=\s*["']1["']/);
+  assert.match(nextConfig, /process\.env\.NEXT_TURBOPACK\s*=\s*["']1["']/);
+  // webpackBuildWorker must stay false so any explicit --webpack fallback path stays single-worker.
   assert.match(nextConfig, /webpackBuildWorker:\s*false/);
-  assert.match(nextConfig, /staticGenerationMaxConcurrency:\s*1/);
-  assert.match(nextConfig, /const\s+webpackParallelism\s*=\s*1/);
-  assert.match(nextConfig, /config\.parallelism\s*=\s*webpackParallelism/);
+  assert.match(nextConfig, /workerThreads:\s*false/);
 });
 
 test("staff-session defers heavy auth and role-source imports", () => {

@@ -215,18 +215,21 @@ export default async function LessonsPage({ searchParams }: Props) {
   const lessonSlugFilter =
     typeof sp.lessonSlug === "string" && sp.lessonSlug.trim().length > 0 ? sp.lessonSlug.trim() : null;
 
-  const learnerPathRow = await withDatabaseFallbackTimeout(
-    async () =>
-      userId
-        ? prisma.user.findUnique({
-            where: { id: userId },
-            select: { learnerPath: true, alliedProfessionKey: true, tier: true },
-          })
-        : null,
-    null,
-    LESSONS_PAGE_DB_TIMEOUT_MS,
-    { scope: "page_lessons", label: "learner_path" },
-  );
+  const [learnerPathRow, marketingLocale] = await Promise.all([
+    withDatabaseFallbackTimeout(
+      async () =>
+        userId
+          ? prisma.user.findUnique({
+              where: { id: userId },
+              select: { learnerPath: true, alliedProfessionKey: true, tier: true },
+            })
+          : null,
+      null,
+      LESSONS_PAGE_DB_TIMEOUT_MS,
+      { scope: "page_lessons", label: "learner_path" },
+    ),
+    getMarketingLocaleForDefaultRoute(),
+  ]);
 
   const learnerPath = learnerPathRow?.learnerPath ?? null;
   const effectivePathwayForAlliedScope = (pathwayIdFilter ?? learnerPath ?? "").trim();
@@ -237,7 +240,6 @@ export default async function LessonsPage({ searchParams }: Props) {
     isAlliedMarketingCorePathwayId(effectivePathwayForAlliedScope)
       ? learnerPathRow.alliedProfessionKey.trim().toLowerCase()
       : null;
-  const marketingLocale = await getMarketingLocaleForDefaultRoute();
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
 
   if (
@@ -605,17 +607,18 @@ export default async function LessonsPage({ searchParams }: Props) {
       byPathway.set(pm.pathwayId, list);
     }
 
-    for (const [pathwayId, slugs] of byPathway) {
-      const unique = [...new Set(slugs)];
-      const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
-
-      for (const row of resolvedRenderableLessons) {
-        const pm = row.pathwayMeta;
-        if (pm && pm.pathwayId === pathwayId && pm.slug) {
-          progressByRowId[row.id] = map[pm.slug] ?? "not_started";
+    await Promise.all(
+      Array.from(byPathway.entries()).map(async ([pathwayId, slugs]) => {
+        const unique = [...new Set(slugs)];
+        const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
+        for (const row of resolvedRenderableLessons) {
+          const pm = row.pathwayMeta;
+          if (pm && pm.pathwayId === pathwayId && pm.slug) {
+            progressByRowId[row.id] = map[pm.slug] ?? "not_started";
+          }
         }
-      }
-    }
+      }),
+    );
     lessonsPerfMark("personalization_end", { route: "app_lessons_hub" });
   }
 

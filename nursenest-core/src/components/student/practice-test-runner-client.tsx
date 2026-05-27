@@ -2314,10 +2314,15 @@ export function PracticeTestRunnerClient({
             }
           />
           {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
-          <div className="nn-question-session space-y-4">
+          <div className="nn-question-session min-h-[18rem] space-y-4">
             <div className="h-4 w-[75%] animate-pulse rounded-md bg-muted/60" />
             <div className="h-4 w-full animate-pulse rounded-md bg-muted/60" />
             <div className="h-4 w-[83%] animate-pulse rounded-md bg-muted/60" />
+            <div className="mt-4 space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-12 animate-pulse rounded-xl bg-muted/40" />
+              ))}
+            </div>
             <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
               {tx("learner.practiceTests.run.loadingQuestion", "Loading question...")}
             </p>
