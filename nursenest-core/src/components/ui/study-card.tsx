@@ -250,29 +250,33 @@ function HubCard({
 
   const inner = (
     <>
-      {Icon ? (
-        <div className="nn-exam-hub-study-card__icon" aria-hidden>
-          <Icon className="h-5 w-5" strokeWidth={1.65} />
-        </div>
-      ) : null}
+      {/* Top content — structured gap replaces scattered mt-* margins */}
+      <div className="flex flex-col gap-3">
+        {Icon ? (
+          <div className="nn-exam-hub-study-card__icon" aria-hidden>
+            <Icon className="h-5 w-5" strokeWidth={1.65} />
+          </div>
+        ) : null}
 
-      <div className="mt-4 flex items-start justify-between gap-2">
-        <span className="nn-marketing-h3 leading-snug">{title}</span>
-        {status ? <StatusBadge status={status} size="xs" className="shrink-0" /> : null}
+        <div className="flex items-start gap-2">
+          <span className="nn-marketing-h3 flex-1 leading-snug">{title}</span>
+          {status ? <StatusBadge status={status} size="xs" className="mt-0.5 shrink-0" /> : null}
+        </div>
+
+        {meta && meta.length > 0 ? <MetaRow items={meta} /> : null}
+
+        {description ? (
+          <span className="nn-marketing-body-sm text-muted-foreground">{description}</span>
+        ) : null}
       </div>
 
-      {meta && meta.length > 0 ? (
-        <MetaRow items={meta} className="mt-2" />
-      ) : null}
-
-      {description ? (
-        <span className="nn-marketing-body-sm mt-2 flex-1 text-muted-foreground">{description}</span>
-      ) : null}
+      {/* Flexible spacer — distributes remaining height before CTA */}
+      <div className="flex-1" aria-hidden />
 
       {footer ?? null}
 
       {cta ? (
-        <span className={`${ctaClass} pointer-events-none mt-4`} aria-hidden>
+        <span className={`${ctaClass} pointer-events-none`} aria-hidden>
           {isLocked ? (
             <span className="flex items-center gap-1.5">
               <Lock className="h-3.5 w-3.5" aria-hidden />

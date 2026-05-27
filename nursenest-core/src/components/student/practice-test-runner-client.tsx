@@ -152,6 +152,25 @@ function parseOptions(raw: unknown): string[] {
   return [];
 }
 
+function pruneQuestionCache(
+  cache: Record<string, QRow>,
+  questionIds: string[],
+  centerIndex: number,
+): Record<string, QRow> {
+  if (Object.keys(cache).length <= MAX_PRACTICE_QUESTION_CACHE) return cache;
+  const half = Math.floor(MAX_PRACTICE_QUESTION_CACHE / 2);
+  const lo = Math.max(0, centerIndex - half);
+  const hi = Math.min(questionIds.length - 1, centerIndex + half);
+  const keep = new Set<string>();
+  for (let i = lo; i <= hi; i++) {
+    const id = questionIds[i];
+    if (id && cache[id]) keep.add(id);
+  }
+  const trimmed: Record<string, QRow> = {};
+  for (const id of keep) trimmed[id] = cache[id]!;
+  return trimmed;
+}
+
 type ExamChromeVariant = "nclex" | "rex" | "np" | "default";
 
 function examChromeVariantFromSurface(pathway: PracticeTestPathwayClientShell | null): ExamChromeVariant {
@@ -361,6 +380,7 @@ export function PracticeTestRunnerClient({
   const catExamNavigatorDialogRef = useRef<HTMLDialogElement>(null);
   const catExamNavigatorTriggerRef = useRef<HTMLButtonElement | null>(null);
   const persistInFlightRef = useRef(false);
+  const questionPrefetchInFlightRef = useRef<Set<number>>(new Set());
   const pendingPersistRef = useRef<{
     answers: Record<string, unknown>;
     cursorIndex: number;
@@ -631,37 +651,8 @@ export function PracticeTestRunnerClient({
           const q = payload.question;
           setQuestionCache((c) => {
             const next = { ...c, [q.id]: q };
-            if (Object.keys(next).length <= MAX_PRACTICE_QUESTION_CACHE) return next;
-            const half = Math.floor(MAX_PRACTICE_QUESTION_CACHE / 2);
-            const lo = Math.max(0, idx - half);
-            const hi = Math.min(questionIds.length - 1, idx + half);
-            const keep = new Set<string>();
-            for (let i = lo; i <= hi; i++) {
-              const id = questionIds[i];
-              if (id && next[id]) keep.add(id);
-            }
-            const trimmed: Record<string, QRow> = {};
-            for (const id of keep) trimmed[id] = next[id]!;
-            return trimmed;
+            return pruneQuestionCache(next, questionIds, idx);
           });
-
-          // Background prefetch of the next question — no await, failures are silent.
-          const nextIdx = idx + 1;
-          const nextId = questionIds[nextIdx];
-          if (nextId && !cacheRef.current[nextId]) {
-            void fetch(`/api/practice-tests/${testId}/question?index=${nextIdx}`, {
-              method: "GET",
-              credentials: "include",
-              cache: "no-store",
-            })
-              .then((r) => (r.ok ? r.json() : null))
-              .then((p: { question?: QRow } | null) => {
-                if (p?.question) {
-                  setQuestionCache((c) => ({ ...c, [p.question!.id]: p.question! }));
-                }
-              })
-              .catch(() => { /* prefetch is speculative — ignore errors */ });
-          }
         }
       } catch {
         if (!ac.signal.aborted) {
@@ -675,6 +666,43 @@ export function PracticeTestRunnerClient({
 
     return () => ac.abort();
   }, [phase, status, testId, idx, questionIds, questionFetchNonce]);
+
+  const prefetchQuestionAtIndex = useCallback(
+    (targetIndex: number) => {
+      const id = questionIds[targetIndex];
+      if (!id || cacheRef.current[id] || questionPrefetchInFlightRef.current.has(targetIndex)) return;
+      questionPrefetchInFlightRef.current.add(targetIndex);
+      void fetchWithRetry(
+        `/api/practice-tests/${testId}/question?index=${targetIndex}`,
+        { method: "GET", credentials: "include", cache: "no-store" },
+        {
+          attempts: 1,
+          timeoutMs: 8_000,
+        },
+      )
+        .then((res) => (res.ok ? res.json() : null))
+        .then((payload: { question?: QRow } | null) => {
+          if (!payload?.question || !runnerMountedRef.current) return;
+          setQuestionCache((current) => {
+            const next = { ...current, [payload.question!.id]: payload.question! };
+            return pruneQuestionCache(next, questionIdsRef.current, idxRef.current);
+          });
+        })
+        .catch(() => {
+          /* Speculative only; the foreground loader owns visible errors. */
+        })
+        .finally(() => {
+          questionPrefetchInFlightRef.current.delete(targetIndex);
+        });
+    },
+    [testId, questionIds],
+  );
+
+  useEffect(() => {
+    if (phase !== "ready" || status !== "IN_PROGRESS" || qLoading) return;
+    prefetchQuestionAtIndex(idx + 1);
+    prefetchQuestionAtIndex(idx + 2);
+  }, [idx, phase, prefetchQuestionAtIndex, qLoading, status]);
 
   useEffect(() => {
     if (phase !== "ready" || !timedMode || status !== "IN_PROGRESS") return;

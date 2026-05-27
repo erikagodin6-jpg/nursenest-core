@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
-import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
-import { NclexCatRunner } from "@/components/exam/nclex-cat-runner";
-import { NclexPracticeRunner } from "@/components/exam/nclex-practice-runner";
+import { PracticeTestRunnerLoader } from "./practice-test-runner-loader";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LearnerActivityState } from "@/components/student/learner-activity-state";
 
@@ -14,23 +12,9 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
-
-import { prisma } from "@/lib/db";
-
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-
-import {
-  pathwayUsesLoftNclexExamPresentation,
-} from "@/lib/practice-tests/premium-exam-shell-pathways";
-
-import {
-  practiceTestConfigRecord,
-  resolvePremiumNclexShellRoute,
-} from "@/lib/practice-tests/resolve-premium-nclex-shell-route";
 import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-
-import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
+import { loadPracticeTestShellBootstrap } from "@/lib/practice-tests/load-practice-test-shell-bootstrap";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -70,7 +54,6 @@ export default async function PracticeTestRunPage({
     requireSubscription: false,
     routeParams: [{ name: "id", value: id, pattern: /^[a-zA-Z0-9_-]{8,}$/, displayName: "practice test" }],
   });
-  const { t } = await getLearnerMarketingBundle();
 
   if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} paywallContext="questions" />;
 
@@ -78,113 +61,20 @@ export default async function PracticeTestRunPage({
   const idParam = bootstrap.routeParams.id!;
   const entitlement = bootstrap.entitlement;
 
-  let studySettings = DEFAULT_STUDY_SETTINGS;
-
-  try {
-    studySettings = await loadStudySettings(userId);
-  } catch (error) {
-    safeServerLog("learner_activity", "practice_test_study_settings_failed", {
-      userIdPrefix: userId.slice(0, 8),
-      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
-    });
-
-    studySettings = DEFAULT_STUDY_SETTINGS;
-  }
-
-  let initialPathwaySurface:
-    | PracticeTestPathwayClientShell
-    | null = null;
-
-  let nclexShellMode:
-    | "cat"
-    | "practice"
-    | null = null;
-
-  let nclexShellPresentation:
-    | "standard"
-    | "loft" = "standard";
-
-  let pathwayLabelForShell: string | null = null;
-
-  if (userId) {
-    try {
-      const row = await prisma.practiceTest.findFirst({
-        where: {
-          id: idParam,
-          userId,
-        },
-
-        select: {
-          config: true,
-        },
-      });
-
-      const parsed = practiceTestConfigRecord(
-        row?.config,
-      );
-
-      const pathwayId = parsed?.pathwayId ?? "";
-
-      if (parsed) {
-        nclexShellMode =
-          resolvePremiumNclexShellRoute({
-            config: parsed.config,
-            pathwayId,
-          });
-
-        if (
-          nclexShellMode &&
-          pathwayUsesLoftNclexExamPresentation(
-            pathwayId,
-          )
-        ) {
-          nclexShellPresentation = "loft";
-        }
-      }
-
-      if (pathwayId) {
-        const pathway = getExamPathwayById(pathwayId);
-
-        if (pathway) {
-          pathwayLabelForShell =
-            pathway.shortName ?? null;
-
-          initialPathwaySurface = {
-            id: pathway.id,
-            countrySlug: pathway.countrySlug,
-            roleTrack: pathway.roleTrack,
-            examCode: pathway.examCode,
-            shortName: pathway.shortName,
-            examFamily: pathway.examFamily,
-          };
-        }
-      }
-    } catch (error) {
-      safeServerLog("learner_activity", "practice_test_pathway_preload_failed", {
-        userIdPrefix: userId.slice(0, 8),
-        testIdPrefix: idParam.slice(0, 12),
-        detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
-      });
-
-      initialPathwaySurface = null;
-      nclexShellMode = null;
-    }
-  }
-
   if (!entitlement.hasAccess) {
-    let snap = null;
-
-    try {
-      snap = userId
-        ? await getFreemiumSnapshot(userId)
-        : null;
-    } catch (error) {
-      safeServerLog("learner_activity", "practice_test_freemium_snapshot_failed", {
-        userIdPrefix: userId.slice(0, 8),
-        testIdPrefix: idParam.slice(0, 12),
-        detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
-      });
-    }
+    const [{ t }, snap] = await Promise.all([
+      getLearnerMarketingBundle(),
+      userId
+        ? getFreemiumSnapshot(userId).catch((error) => {
+            safeServerLog("learner_activity", "practice_test_freemium_snapshot_failed", {
+              userIdPrefix: userId.slice(0, 8),
+              testIdPrefix: idParam.slice(0, 12),
+              detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+            });
+            return null;
+          })
+        : Promise.resolve(null),
+    ]);
 
     return (
       <div className="p-6">
@@ -219,46 +109,42 @@ export default async function PracticeTestRunPage({
     );
   }
 
-  if (nclexShellMode === "cat") {
-    return (
-      <ExamSessionErrorBoundary surface="practice_test">
-        <NclexCatRunner
-          testId={idParam}
-          userId={userId}
-          pathwayLabel={pathwayLabelForShell}
-        />
-      </ExamSessionErrorBoundary>
-    );
-  }
+  const [studySettings, shellBootstrap] = await Promise.all([
+    loadStudySettings(userId).catch((error) => {
+      safeServerLog("learner_activity", "practice_test_study_settings_failed", {
+        userIdPrefix: userId.slice(0, 8),
+        detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+      });
 
-  if (nclexShellMode === "practice") {
-    return (
-      <ExamSessionErrorBoundary surface="practice_test">
-        <NclexPracticeRunner
-          testId={idParam}
-          userId={userId}
-          pathwayLabel={pathwayLabelForShell}
-          shellPresentation={
-            nclexShellPresentation
-          }
-        />
-      </ExamSessionErrorBoundary>
-    );
-  }
+      return DEFAULT_STUDY_SETTINGS;
+    }),
+    loadPracticeTestShellBootstrap({ userId, testId: idParam }),
+  ]);
+
+  const {
+    initialPathwaySurface,
+    nclexShellMode,
+    nclexShellPresentation,
+    pathwayLabelForShell,
+  } = shellBootstrap;
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden lg:min-h-0">
       <ExamSessionErrorBoundary surface="practice_test">
-        <PracticeTestRunnerClient
+        <PracticeTestRunnerLoader
+          mode={nclexShellMode ?? "standard"}
           testId={idParam}
           userId={userId}
           userLabel={bootstrap.userLabel}
           protectionFlags={bootstrap.protectionFlags}
           studySettings={studySettings}
+          isEntitled={entitlement.hasAccess}
           initialPathwaySurface={
             initialPathwaySurface
           }
           adaptiveLearningEnabled={isAdaptiveLearningEnabled()}
+          pathwayLabelForShell={pathwayLabelForShell}
+          shellPresentation={nclexShellPresentation}
         />
       </ExamSessionErrorBoundary>
     </div>
