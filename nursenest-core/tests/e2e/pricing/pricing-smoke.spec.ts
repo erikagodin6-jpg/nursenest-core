@@ -67,8 +67,8 @@ test.describe("Pricing page", () => {
     }
     await modal.getByRole("button", { name: /Continue to secure checkout|Continue to North America Checkout/i }).click();
     await page.waitForURL(/\/login\?/);
-    await expect(page).toHaveURL(/checkoutIntent=1/);
-    await expect(page).toHaveURL(/checkoutTier=RN/);
+    await expect(page).toHaveURL(/callbackUrl=.*checkoutIntent%3D1/);
+    await expect(page).toHaveURL(/callbackUrl=.*checkoutTier%3DRN/);
 
     await expect(page.locator('[data-testid="pricing-marketing-hero"] a[href="#pricing-plans-heading"]').first()).toBeVisible();
     await page.screenshot({ path: "preview-screenshots/pricing-desktop.png", fullPage: true });
