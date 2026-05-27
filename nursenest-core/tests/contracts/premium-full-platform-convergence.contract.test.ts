@@ -21,6 +21,7 @@ const CAT_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/cat/page.
 const CAT_START_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/start/page.tsx");
 const CAT_LAUNCH_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx");
 const PRACTICE_RUN_LOADER_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/[id]/practice-test-runner-loader.tsx");
+const PRACTICE_RUN_CLIENT_PATH = path.resolve(ROOT, "src/components/student/practice-test-runner-client.tsx");
 const PRACTICE_SHELL_BOOTSTRAP_PATH = path.resolve(ROOT, "src/lib/practice-tests/load-practice-test-shell-bootstrap.ts");
 const PREMIUM_SHELL_RESOLVER_PATH = path.resolve(ROOT, "src/lib/practice-tests/resolve-premium-nclex-shell-route.ts");
 const FOCUSED_EXAM_HELPER_PATH = path.resolve(ROOT, "src/lib/learner/focused-exam-shell.ts");
@@ -136,8 +137,15 @@ describe("premium full platform convergence", () => {
     assert.match(practiceHub, /PracticeTestsHubClient/, "practice hub must render the canonical setup client");
     assert.doesNotMatch(practiceHub, /startMode/, "practice hub must not revive legacy startMode branching");
     assert.doesNotMatch(practiceHub, /\bcat\?:/, "practice hub must not accept legacy cat query aliases");
+    assert.doesNotMatch(practiceHub, /FlashcardsPathwayPickSurface/, "practice hub must not route through an extra pathway-pick setup screen");
+    assert.doesNotMatch(practiceHub, /<Suspense/, "practice hub must not add a second loading shell around the setup client");
     assert.match(practiceClient, /SharedStudySetupLayout/, "practice must reuse shared setup layout");
     assert.match(practiceClient, /SharedStudySetupSurface/, "practice must reuse shared setup surface");
+    assert.match(practiceClient, /nn-flashcards-hub-hero/, "practice hub landing must use the same hero shell as flashcards");
+    assert.match(practiceClient, /nn-flashcards-deck-library-surface/, "practice hub category surface must mirror flashcards");
+    assert.match(practiceClient, /nn-flashcards-setup-panel/, "practice hub fine-tune panel must mirror flashcards");
+    assert.match(practiceClient, /nn-flashcards-sticky-start/, "practice hub mobile CTA must mirror flashcards");
+    assert.doesNotMatch(practiceClient, /Configure session/, "practice hub must not keep a separate visible configure-session landing block");
     assert.doesNotMatch(
       practiceHub,
       /requireExplicitRequestedPathwayId:\s*true/,
@@ -145,6 +153,7 @@ describe("premium full platform convergence", () => {
     );
     assert.match(practiceClient, /launchingHref/, "practice/CAT starts must keep visible launching feedback after session creation");
     assert.match(practiceClient, /hardFallbackDelayMs:\s*5000/, "practice/CAT starts need a bounded navigation fallback instead of a stalled CTA");
+    assert.match(practiceClient, /setLaunchingHref\(resumeHref\)/, "resume launches must keep the same visible transition state as fresh starts");
     assert.equal(
       (practiceClient.match(/data-nn-qa-practice-hub-start-test/g) ?? []).length,
       1,
@@ -185,7 +194,17 @@ describe("premium full platform convergence", () => {
     assert.match(practiceClient, /selectionMode:\s*"cat"/, "unified setup must create CAT sessions from the shared setup client");
     assert.match(bootstrap, /resolvePremiumNclexShellRoute/, "session page must resolve the exam shell from persisted session config");
     assert.match(resolver, /cfg\.selectionMode\s*===\s*"cat"[\s\S]*return "cat"/, "CAT sessions must resolve to the unified CAT exam runner");
-    assert.match(runnerLoader, /DynamicNclexCatRunner/, "runner loader must mount the unified CAT runner");
+    assert.match(runnerLoader, /NclexCatRunner/, "runner loader must mount the unified CAT runner");
+    assert.match(runnerLoader, /NclexPracticeRunner/, "runner loader must mount the unified practice runner");
+    assert.doesNotMatch(runnerLoader, /PracticeTestRunPageSkeleton/, "runner loader must not add a second loading shell after the route fallback");
+  });
+
+  it("keeps practice session continuity local state bounded to active sessions", () => {
+    const runnerClient = read(PRACTICE_RUN_CLIENT_PATH);
+
+    assert.match(runnerClient, /PRACTICE_RESUME_STORAGE_KEY/, "runner must know the hub resume key");
+    assert.match(runnerClient, /clearStoredPracticeResume\(testId\)/, "runner must clear stale local resume pointers after terminal states");
+    assert.match(runnerClient, /status === "COMPLETED" \|\| status === "ABANDONED"/, "resume cleanup must be tied to terminal session states");
   });
 
   it("keeps focused exam sessions isolated from learner dashboard chrome", () => {

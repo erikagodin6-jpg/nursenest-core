@@ -131,6 +131,8 @@ import {
 } from "@/lib/questions/practice-runner-question-support";
 import { ChevronLeft, ChevronRight, Flag, LayoutGrid, Send, Shield } from "lucide-react";
 
+const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
+
 type QRow = {
   id: string;
   stem: string;
@@ -150,6 +152,20 @@ type QRow = {
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
   return [];
+}
+
+function clearStoredPracticeResume(testId: string) {
+  try {
+    const raw = window.localStorage.getItem(PRACTICE_RESUME_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as { href?: unknown };
+    const href = typeof parsed.href === "string" ? parsed.href : "";
+    if (href.startsWith(`/app/practice-tests/${encodeURIComponent(testId)}`)) {
+      window.localStorage.removeItem(PRACTICE_RESUME_STORAGE_KEY);
+    }
+  } catch {
+    /* Local resume continuity is best-effort only. */
+  }
 }
 
 function pruneQuestionCache(
@@ -283,6 +299,12 @@ export function PracticeTestRunnerClient({
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
   const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
   const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
+
+  useEffect(() => {
+    if (status === "COMPLETED" || status === "ABANDONED") {
+      clearStoredPracticeResume(testId);
+    }
+  }, [status, testId]);
   const [catMode, setCatMode] = useState(false);
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
@@ -1262,6 +1284,7 @@ export function PracticeTestRunnerClient({
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
+      clearStoredPracticeResume(testId);
       router.replace("/app/practice-tests");
     } finally {
       abandonInFlightRef.current = false;

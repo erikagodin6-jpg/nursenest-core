@@ -1,9 +1,6 @@
-import { Suspense } from "react";
 import { ExamFamily, TierCode } from "@prisma/client";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
-import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
-import { PracticeActivitySkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -253,22 +250,13 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   }
 
   if (pathwayResolution?.state === "no_pathway_context") {
-    return (
-      <div className="space-y-4">
-        <div className="mb-4">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <FlashcardsPathwayPickSurface
-          baseAppPath="/app/practice-tests"
-          title={t("learner.practiceTests.title")}
-          subtitle="Choose an exam track for practice exams. Your selection opens the shared study setup with that pathway selected."
-          pathways={pathwayOptions.map((p) => ({ id: p.id, label: p.label }))}
-        />
-      </div>
-    );
+    defaultPathwayId =
+      (catRequested ? catEligiblePathwayIds[0] : null) ??
+      pathwayOptions[0]?.id ??
+      null;
   }
 
-  if (pathwayResolution?.state !== "scoped") {
+  if (pathwayResolution?.state !== "scoped" && !defaultPathwayId) {
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6">
         <div className="mb-1">
@@ -323,18 +311,16 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPid;
 
   return (
-    <Suspense fallback={<PracticeActivitySkeleton label={t("learner.loading.section")} />}>
-      <PracticeTestsHubClient
-        pathwayOptions={pathwayOptions}
-        defaultPathwayId={defaultPathwayId}
-        pathwayDisplayName={pathwayDisplayName}
-        catEligiblePathwayIds={catEligiblePathwayIds}
-        examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
-        hubBootstrapSource={hubBootstrapSource}
-        catHref={catHref}
-        pathwayLessonPractice={pathwayLessonPractice}
-        initialCatMode={catRequested}
-      />
-    </Suspense>
+    <PracticeTestsHubClient
+      pathwayOptions={pathwayOptions}
+      defaultPathwayId={defaultPathwayId}
+      pathwayDisplayName={pathwayDisplayName}
+      catEligiblePathwayIds={catEligiblePathwayIds}
+      examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
+      hubBootstrapSource={hubBootstrapSource}
+      catHref={catHref}
+      pathwayLessonPractice={pathwayLessonPractice}
+      initialCatMode={catRequested}
+    />
   );
 }
