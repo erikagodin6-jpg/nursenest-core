@@ -128,74 +128,6 @@ function formatTopicLine(card: ActiveStudyCard): string | null {
   return null;
 }
 
-function stripStudyPromptNoise(value: string | null | undefined): string {
-  return String(value ?? "")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .replace(/^\s*(?:question\s*)?\d+[\).:\-\s]+/i, "")
-    .replace(/^\s*(?:clinical\s+recall|recall|prompt|front)[:\-\s]+/i, "")
-    .trim();
-}
-
-function shortClinicalText(value: string | null | undefined, fallback: string): string {
-  const clean = stripStudyPromptNoise(value)
-    .replace(/^correct\s*:\s*[A-D]\)?\s*/i, "")
-    .replace(/^answer\s*:\s*/i, "")
-    .trim();
-  if (!clean) return fallback;
-  return clean.length > 190 ? `${clean.slice(0, 187).trim()}...` : clean;
-}
-
-function hashCardId(id: string): number {
-  let h = 0;
-  for (let i = 0; i < id.length; i += 1) h = (h * 31 + id.charCodeAt(i)) | 0;
-  return Math.abs(h);
-}
-
-function buildNclexFallbackExam(card: ActiveStudyCard): ExamMicroQuestionPayload {
-  const topic = formatTopicLine(card) || "this clinical concept";
-  const prompt = stripStudyPromptNoise(card.prompt);
-  const isQuestion = /\?\s*$/.test(prompt) && prompt.length <= 220;
-  const questionStem = isQuestion
-    ? prompt
-    : `A client is being assessed for ${topic}. Which finding or action best reflects the clinical principle being reviewed?`;
-  const correctText = shortClinicalText(
-    card.answer,
-    "Apply the highest-priority assessment or intervention supported by the clinical finding.",
-  );
-  const distractors = [
-    "Delay intervention until the client develops additional unrelated symptoms.",
-    "Document the finding without reassessing risk or updating the plan of care.",
-    "Prioritize routine comfort measures before addressing the underlying clinical issue.",
-  ];
-  const correctIndex = hashCardId(card.id) % 4;
-  const allOptions = [...distractors];
-  allOptions.splice(correctIndex, 0, correctText);
-  const correctLetter = String.fromCharCode("A".charCodeAt(0) + correctIndex);
-  const rationaleCorrect = shortClinicalText(
-    card.explanation || card.answer,
-    "This option best connects the concept to safe nursing judgment and prioritization.",
-  );
-
-  return {
-    itemKind: "CLINICAL" as ExamMicroQuestionPayload["itemKind"],
-    questionStem,
-    answerOptions: allOptions.map((text, idx) => ({
-      letter: String.fromCharCode("A".charCodeAt(0) + idx),
-      text,
-    })),
-    correctLetter,
-    rationaleCorrect,
-    rationaleIncorrect: allOptions
-      .map((_, idx) => String.fromCharCode("A".charCodeAt(0) + idx))
-      .filter((letter) => letter !== correctLetter)
-      .map((letter) => ({
-        letter,
-        rationale: "This choice is less safe because it does not address the primary clinical mechanism, risk, or priority.",
-      })),
-  };
-}
-
 function buildCardMeta(card: ActiveStudyCard): CardEventMeta {
   const exam = card.examMicroQuestion;
   const sata = isSataPayload(exam);
@@ -477,10 +409,10 @@ export function ActiveStudySession({
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
   const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;
   const focusLabel = header.categoriesLabel?.trim() || formatTopicLine(current) || "Adaptive review";
-  const displayExam = current.examMicroQuestion ?? buildNclexFallbackExam(current);
-  const displayPrompt = resolveMeasurementTokens(displayExam.questionStem, measurementSystem);
+  const displayExam = current.examMicroQuestion ?? null;
+  const displayPrompt = resolveMeasurementTokens(displayExam?.questionStem ?? current.prompt, measurementSystem);
   const displayExplanation = resolveMeasurementTokens(
-    current.explanation ?? displayExam.rationaleCorrect ?? "",
+    current.explanation ?? displayExam?.rationaleCorrect ?? "",
     measurementSystem,
   );
 

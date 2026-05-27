@@ -2,7 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LineChart, PlayCircle } from "lucide-react";
+import { ClipboardCheck, LineChart, PlayCircle, Shuffle, Target } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import {
   LearnerCategorySelector,
@@ -114,9 +115,9 @@ export function PracticeTestsHubClient({
 
   const fallbackPathwayId = defaultPathwayId ?? pathwayOptions[0]?.id ?? "";
   const [pathwayId, setPathwayId] = useState(fallbackPathwayId);
-  const [examMode, setExamMode] = useState<ExamMode>("practice");
+  const [examMode, setExamMode] = useState<ExamMode>(() => (initialCatMode ? "cat" : "practice"));
   const [focusMode, setFocusMode] = useState<FocusMode>("all");
-  const [questionCount, setQuestionCount] = useState(50);
+  const [questionCount, setQuestionCount] = useState(() => (initialCatMode ? CAT_COUNTS[0] : 50));
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<CanonicalBodySystemId[]>([]);
   const [categorySearch, setCategorySearch] = useState("");
   const [topics, setTopics] = useState<TopicBucket[]>([]);
@@ -163,11 +164,16 @@ export function PracticeTestsHubClient({
 
   useEffect(() => {
     const qp = new URLSearchParams(searchParamString);
+    const catLaunch = qp.get("catLaunch")?.trim().toLowerCase();
+    if (catLaunch === "1" || catLaunch === "true") {
+      setExamMode("cat");
+      setQuestionCount((current) => (CAT_COUNTS as readonly number[]).includes(current) ? current : CAT_COUNTS[0]);
+    }
     const urlPathwayId = qp.get("pathwayId")?.trim();
     if (urlPathwayId && pathwayOptions.some((option) => option.id === urlPathwayId)) {
       setPathwayId(urlPathwayId);
     }
-    const incomingCount = clampQuestionCount(qp.get("count"), "practice");
+    const incomingCount = clampQuestionCount(qp.get("count"), catLaunch === "1" || catLaunch === "true" ? "cat" : "practice");
     if (incomingCount != null) {
       setQuestionCount(incomingCount);
     }
@@ -330,7 +336,7 @@ export function PracticeTestsHubClient({
 
       const studyLaunchPayload: StudyLaunchPayload = {
         pathwayId: trimmedPathwayId,
-        mode: "practice_exam",
+        mode: examMode === "cat" ? "cat_exam" : "practice_exam",
         selectedCategories,
         filters: {
           hubFilter: filterLabel,
@@ -339,22 +345,39 @@ export function PracticeTestsHubClient({
         shuffle: true,
       };
 
-      const payload = {
-        ...buildPracticeExamStartPayload({
-          questionCount,
-          selectionMode: focusToSelectionMode(focusMode),
-          topicNames: selectedTopicNames,
-          pathwayId: trimmedPathwayId,
-          timedMode: false,
-          timeLimitSec: null,
-          difficultyMin: null,
-          difficultyMax: null,
-          sessionMode: "tutor",
-          rationaleVisibilityMode: "immediate",
-          linearAllowReviewNavigation: true,
-        }),
-        studyLaunchPayload,
-      };
+      const payload =
+        examMode === "cat"
+          ? {
+              title: "CAT Exam Simulation",
+              questionCount: CAT_EXAM_QUESTION_COUNT,
+              topicNames: [],
+              difficultyMin: null,
+              difficultyMax: null,
+              selectionMode: "cat" as const,
+              catSelectionBasis: focusToCatBasis(focusMode),
+              catPresentationMode: "exam_simulation" as const,
+              catExamFeedbackMode: "test" as const,
+              pathwayId: trimmedPathwayId,
+              timedMode: true,
+              timeLimitSec: CAT_EXAM_TIME_LIMIT_SEC,
+              studyLaunchPayload,
+            }
+          : {
+              ...buildPracticeExamStartPayload({
+                questionCount,
+                selectionMode: focusToSelectionMode(focusMode),
+                topicNames: selectedTopicNames,
+                pathwayId: trimmedPathwayId,
+                timedMode: false,
+                timeLimitSec: null,
+                difficultyMin: null,
+                difficultyMax: null,
+                sessionMode: "tutor",
+                rationaleVisibilityMode: "immediate",
+                linearAllowReviewNavigation: true,
+              }),
+              studyLaunchPayload,
+            };
 
       const res = await fetch("/api/practice-tests", {
         method: "POST",
@@ -452,12 +475,10 @@ export function PracticeTestsHubClient({
     }
   }, [
     allCanonicalIds.length,
-    catEligiblePathwayIds,
     creating,
     examMode,
     focusMode,
     pathwayId,
-    pathwayOptions,
     questionCount,
     router,
     selectedCanonicalIds,
@@ -488,6 +509,23 @@ export function PracticeTestsHubClient({
     discoveryReady && discoveryTotal !== null
       ? `${categorySummary} · ${discoveryTotal} available questions`
       : `${categorySummary} · pathway pool syncing`;
+  const catLandingFeatures: Array<{ icon: LucideIcon; title: string; body: string }> = [
+    {
+      icon: Shuffle,
+      title: "Real adaptive logic",
+      body: "Correct answers raise difficulty. Misses recalibrate the next item.",
+    },
+    {
+      icon: ClipboardCheck,
+      title: "NGN formats",
+      body: "Modern item types appear in the same focused exam workspace.",
+    },
+    {
+      icon: Target,
+      title: "Domain tracking",
+      body: "Results summarize readiness across NCLEX client-needs categories.",
+    },
+  ];
   const resumeSession = useCallback(() => {
     if (!resumeHref) return;
     setCreating(true);
@@ -505,7 +543,7 @@ export function PracticeTestsHubClient({
     });
   }, [pathwayId, resumeHref, router]);
 
-  return (
+  if (examMode !== "cat") return (
     <SharedStudySetupLayout
       mode="practice-exam"
       className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
@@ -630,22 +668,23 @@ export function PracticeTestsHubClient({
           </div>
         ) : null}
 
-        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]">
+        <section className="overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] shadow-[0_24px_80px_color-mix(in_srgb,var(--semantic-info)_10%,transparent)]">
           <div className="grid min-h-[34rem] lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)]">
-            <div className="relative flex min-h-[30rem] items-center overflow-hidden bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] px-6 py-12 sm:px-10 lg:px-14">
+            <div className="relative flex min-h-[30rem] items-center overflow-hidden bg-[color-mix(in_srgb,var(--semantic-info)_13%,var(--semantic-surface))] px-6 py-12 sm:px-10 lg:px-14">
               <div
                 className="pointer-events-none absolute inset-y-0 right-[-12%] hidden w-[22%] skew-x-[-4deg] bg-[var(--semantic-surface)] lg:block"
                 aria-hidden
               />
               <div className="relative max-w-xl">
-                <p className="inline-flex rounded-full bg-[var(--semantic-surface)] px-4 py-2 text-xs font-bold uppercase text-[var(--semantic-info)] shadow-sm">
+                <p className="inline-flex rounded-full bg-[var(--semantic-surface)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--semantic-info)] shadow-sm">
                   NCLEX · CAT exam prep
                 </p>
                 <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] text-[var(--semantic-text-primary)] sm:text-5xl">
-                  Adaptive questions that make the real exam feel familiar.
+                  Adaptive questions that make the real{" "}
+                  <span className="text-[var(--semantic-info)]">exam feel familiar.</span>
                 </h1>
                 <p className="mt-6 max-w-prose text-base leading-8 text-[var(--semantic-text-secondary)] sm:text-lg">
-                  NurseNest mirrors NCLEX-style adaptive delivery: answer, lock in, and move forward without mid-exam rationales.
+                  NurseNest mirrors NCLEX-style adaptive delivery: answer, submit, and move forward in a focused exam interface without mid-exam rationales.
                 </p>
                 <button
                   type="button"
@@ -657,7 +696,7 @@ export function PracticeTestsHubClient({
                   {isLaunching ? (
                     <>
                       <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Opening CAT exam…
+                      Opening…
                     </>
                   ) : creating ? (
                     <>
@@ -671,7 +710,7 @@ export function PracticeTestsHubClient({
                     </>
                   )}
                 </button>
-                {examMode === "cat" && !catAvailableForPathway ? (
+                {!catAvailableForPathway ? (
                   <p className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
                     CAT is not available for this pathway yet.
                   </p>
@@ -719,7 +758,7 @@ export function PracticeTestsHubClient({
                   ))}
                 </div>
                 <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4 text-xs font-medium text-[var(--semantic-text-muted)]">
-                  No answer explanations during the exam · Next item adapts after you submit
+                  No rationales during the exam · Next item adapts after you submit
                 </div>
               </div>
             </div>
@@ -738,6 +777,21 @@ export function PracticeTestsHubClient({
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="grid gap-4 bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] px-0 py-8 md:grid-cols-3">
+          {catLandingFeatures.map(({ icon: Icon, title, body }) => (
+            <article
+              key={String(title)}
+              className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-6 shadow-sm"
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] text-[var(--semantic-info)]">
+                <Icon className="h-5 w-5" aria-hidden />
+              </span>
+              <h2 className="mt-4 text-base font-bold text-[var(--semantic-text-primary)]">{title}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{body}</p>
+            </article>
+          ))}
         </section>
 
         {error ? (
@@ -795,41 +849,6 @@ export function PracticeTestsHubClient({
             </div>
           </div>
 
-          {resumeHref ? (
-            <div
-              className="nn-flashcards-resume-spotlight flex flex-col gap-4 border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] pt-5 sm:flex-row sm:items-center sm:justify-between"
-              data-nn-e2e-practice-resume
-            >
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">
-                  Active session
-                </p>
-                <p className="mt-1 text-lg font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
-                  Continue where you left off
-                </p>
-                <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
-                  {modeLabel}
-                  {" · "}
-                  {questionCount} question{questionCount === 1 ? "" : "s"}
-                  {selectedCanonicalIds.length > 0
-                    ? ` · ${selectedCanonicalIds.length} system${selectedCanonicalIds.length > 1 ? "s" : ""}`
-                    : ""}
-                </p>
-              </div>
-              <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[12rem]">
-                <button
-                  type="button"
-                  onClick={resumeSession}
-                  disabled={creating || isLaunching}
-                  data-nn-e2e-practice-resume-session
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_88%,var(--semantic-text-primary))] px-8 text-sm font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
-                >
-                  {isLaunching ? `Opening ${modeLabel}...` : "Resume session"}
-                </button>
-              </div>
-            </div>
-          ) : null}
-
           <div
             className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
             data-nn-e2e-practice-exam-band
@@ -842,44 +861,36 @@ export function PracticeTestsHubClient({
             </p>
             <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0 flex-1">
-                {resumeHref ? (
-                  <p className="text-xs text-[var(--semantic-text-muted)]" data-nn-e2e-practice-cta-subline>
-                    {ctaSubline}
-                  </p>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      onClick={createTest}
-                      disabled={startDisabled}
-                      className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                      data-nn-qa-practice-hub-start-test
-                    >
-                      {isLaunching ? (
-                        <>
-                          <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                          Opening {modeLabel}…
-                        </>
-                      ) : creating ? (
-                        <>
-                          <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                          Starting…
-                        </>
-                      ) : (
-                        <>
-                          <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                          Start {modeLabel}
-                        </>
-                      )}
-                    </button>
-                    <p
-                      className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
-                      data-nn-e2e-practice-cta-subline
-                    >
-                      {ctaSubline}
-                    </p>
-                  </>
-                )}
+                <button
+                  type="button"
+                  onClick={createTest}
+                  disabled={startDisabled}
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+                  data-nn-qa-practice-hub-start-test
+                >
+                  {isLaunching ? (
+                    <>
+                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                      Opening {modeLabel}…
+                    </>
+                  ) : creating ? (
+                    <>
+                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                      Starting…
+                    </>
+                  ) : (
+                    <>
+                      <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                      Start
+                    </>
+                  )}
+                </button>
+                <p
+                  className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
+                  data-nn-e2e-practice-cta-subline
+                >
+                  {ctaSubline}
+                </p>
               </div>
               <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
                 <span>

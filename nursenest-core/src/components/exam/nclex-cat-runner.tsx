@@ -785,7 +785,7 @@ export function NclexCatRunner({
   return (
     <NclexCatExamLayout
       questionNumber={questionNumber}
-      totalQuestions={null}
+      totalQuestions={questionIds.length > 0 ? questionIds.length : null}
       remainingSec={timedMode ? remainingSec : null}
       examLabel={pathwayLabel}
       flagged={flagged[currentId ?? ""] ?? false}
@@ -805,7 +805,7 @@ export function NclexCatRunner({
       disabled={examPrimaryBusy || isTransitioning}
       questionFormat={current?.questionFormat}
       isSata={isSata}
-      showTypePanel={true}
+      showTypePanel={false}
       transitioning={isTransitioning}
       unitsControl={
         <ExamMeasurementUnitToggle

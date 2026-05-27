@@ -110,6 +110,27 @@ function resolveExamPayload(
   return { payload: null, source: null };
 }
 
+function isExamBackedCard(card: FlashcardStudySelectRow): boolean {
+  return Boolean(
+    card.examItemKind ||
+      card.questionStem?.trim() ||
+      card.answerOptions != null ||
+      card.correctAnswer?.trim() ||
+      card.sourceKey?.startsWith("exam_q:"),
+  );
+}
+
+function assertValidExamBackedPayload(
+  card: FlashcardStudySelectRow,
+  exam: ExamMicroQuestionPayload | SataQuestionPayload | null,
+): void {
+  if (!isExamBackedCard(card)) return;
+  const stem = exam?.questionStem?.trim() || card.questionStem?.trim() || "";
+  const optionCount = Array.isArray(exam?.answerOptions) ? exam.answerOptions.length : 0;
+  if (stem.length >= 10 && optionCount >= 3) return;
+  throw new Error(`flashcard_exam_payload_invalid:${card.id}`);
+}
+
 export function serializeFlashcardForDeckStudy(
   card: FlashcardStudySelectRow,
   opts: {
@@ -121,6 +142,7 @@ export function serializeFlashcardForDeckStudy(
   },
 ): FlashcardStudyApiCard {
   const { payload: exam, source: optionSource } = resolveExamPayload(card, opts.examOptionShuffleSalt);
+  assertValidExamBackedPayload(card, exam);
   const loc = applyFlashcardCardOverlay(
     { id: card.id, front: card.front, back: card.back },
     opts.educationalLocale,
@@ -167,6 +189,7 @@ export function serializeFlashcardForCustomSession(
   },
 ): Omit<FlashcardStudyApiCard, "fullBackAvailable"> & { rawTopic: string } {
   const { payload: exam, source: optionSource } = resolveExamPayload(card, opts.examOptionShuffleSalt);
+  assertValidExamBackedPayload(card, exam);
   const isMcq = exam && "correctLetter" in exam;
   let front = opts.swapFrontBack ? card.back : card.front;
   let back = opts.swapFrontBack ? card.front : card.back;

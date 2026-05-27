@@ -47,6 +47,25 @@ type StudyResponse = {
   };
 };
 
+function hasUsableExamQuestion(card: CardPayload): boolean {
+  const exam = card.examMicroQuestion;
+  return Boolean(
+    exam?.questionStem?.trim() &&
+      Array.isArray(exam.answerOptions) &&
+      exam.answerOptions.length >= 3,
+  );
+}
+
+function isExamBackedCard(card: CardPayload): boolean {
+  return Boolean(card.sourceKey?.startsWith("exam_q:") || card.examMicroQuestion);
+}
+
+function isRnStudyCard(card: CardPayload, deckRef: string): boolean {
+  const pathway = card.pathwayId?.toLowerCase() ?? "";
+  const ref = deckRef.toLowerCase();
+  return pathway.includes("rn") || pathway.includes("nclex") || ref.includes("rn") || ref.includes("nclex");
+}
+
 export function FlashcardStudyClient({
   deckRef,
   shuffleInitially = false,
@@ -90,7 +109,7 @@ export function FlashcardStudyClient({
           throw new Error(`study_http_${res.status}`);
         }
         const data = (await res.json()) as StudyResponse;
-        const cards = Array.isArray(data.cards)
+        const cardsRaw = Array.isArray(data.cards)
           ? data.cards.filter(
               (card): card is CardPayload =>
                 card != null &&
@@ -100,6 +119,10 @@ export function FlashcardStudyClient({
                 typeof card.back === "string",
             )
           : [];
+        const cards = cardsRaw.filter((card) => {
+          if (isRnStudyCard(card, deckRef)) return hasUsableExamQuestion(card);
+          return !isExamBackedCard(card) || hasUsableExamQuestion(card);
+        });
 
         if (!cancelled) {
           setMode(data.mode === "preview" ? "preview" : "subscriber");

@@ -61,9 +61,9 @@ body:has(.nn-nclex-exam-page) {
   -webkit-overflow-scrolling: auto;
   overscroll-behavior: none;
 
-  /* Use dvh where supported; fall back to vh */
+  /* Fall back to vh, then use dvh where supported for Safari laptop/iPad chrome. */
+  height: 100vh;
   height: 100dvh;
-  height: 100vh; /* fallback */
 }
 
 .nn-nclex-exam-page.nn-unified-exam-workspace {
@@ -73,6 +73,64 @@ body:has(.nn-nclex-exam-page) {
       color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool)),
       var(--nn-exam-workspace-bg)
     );
+}
+
+.nn-cat-adaptive-exam-session {
+  background: var(--nn-exam-workspace-bg, color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool)));
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-top-bar,
+.nn-cat-adaptive-exam-session .nn-nclex-bottom-bar {
+  background: var(--semantic-surface);
+  border-color: var(--semantic-border-soft);
+  color: var(--semantic-text-primary);
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-exam-body {
+  justify-content: center;
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-question-area {
+  flex: 0 1 min(100%, 62rem);
+  max-width: 62rem;
+  margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-padding-bottom: 1rem;
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-question-inner {
+  min-height: min-content;
+  overflow: visible;
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-question-stem {
+  max-height: none;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-answer-list {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-answer-card {
+  flex: 0 0 auto;
+  max-height: none;
+  min-height: 2.85rem;
+  padding-block: 0.65rem;
+  background: var(--semantic-surface);
+  border-color: var(--semantic-border-soft);
+}
+
+.nn-cat-adaptive-exam-session .nn-nclex-answer-card__text {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  color: var(--semantic-text-primary);
 }
 
 /* ── 3. TOP BAR ─────────────────────────────────────────────────────────── */
