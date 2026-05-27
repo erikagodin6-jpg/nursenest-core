@@ -395,7 +395,7 @@
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
-  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 48%, transparent);
+  border-top: 0;
   background: color-mix(in srgb, var(--nn-header-primary-bg) 96%, transparent);
 }
 
