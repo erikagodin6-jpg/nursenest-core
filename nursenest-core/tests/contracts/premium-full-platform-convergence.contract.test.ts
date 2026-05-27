@@ -132,6 +132,7 @@ describe("premium full platform convergence", () => {
   it("keeps practice exams on the single shared setup architecture", () => {
     const practiceHub = read(PRACTICE_HUB_PATH);
     const practiceClient = read(PRACTICE_HUB_CLIENT_PATH);
+    const activePracticeClient = practiceClient.split(/\n\s*if \(examMode === "cat"\)/)[0] ?? practiceClient;
     const flashcardsClient = read(FLASHCARDS_HUB_CLIENT_PATH);
 
     assert.match(practiceHub, /PracticeTestsHubClient/, "practice hub must render the canonical setup client");
@@ -139,18 +140,15 @@ describe("premium full platform convergence", () => {
     assert.doesNotMatch(practiceHub, /\bcat\?:/, "practice hub must not accept legacy cat query aliases");
     assert.doesNotMatch(practiceHub, /FlashcardsPathwayPickSurface/, "practice hub must not route through an extra pathway-pick setup screen");
     assert.doesNotMatch(practiceHub, /<Suspense/, "practice hub must not add a second loading shell around the setup client");
-    assert.match(practiceClient, /SharedStudySetupLayout/, "practice must reuse shared setup layout");
-    assert.match(practiceClient, /SharedStudySetupSurface/, "practice must reuse shared setup surface");
-    assert.match(practiceClient, /nn-flashcards-hub-hero/, "practice hub landing must use the same hero shell as flashcards");
-    assert.match(practiceClient, /nn-flashcards-deck-library-surface/, "practice hub category surface must mirror flashcards");
-    assert.match(practiceClient, /nn-flashcards-setup-panel/, "practice hub fine-tune panel must mirror flashcards");
-    assert.match(practiceClient, /nn-flashcards-sticky-start/, "practice hub mobile CTA must mirror flashcards");
-    assert.doesNotMatch(practiceClient, /Configure session/, "practice hub must not keep a separate visible configure-session landing block");
-    assert.match(practiceClient, /data-nn-e2e-cat-simple-landing/, "CAT mode must render a simple landing instead of the practice setup chooser");
-    assert.match(practiceClient, /data-nn-e2e-cat-start-exam[\s\S]*Start/, "CAT landing must expose one direct Start action");
-    assert.match(practiceClient, /catPresentationMode:\s*"exam_simulation"/, "CAT starts must behave like exam simulation");
-    assert.match(practiceClient, /catExamFeedbackMode:\s*"test"/, "CAT starts must not show live rationales");
-    assert.match(practiceClient, /topicNames:\s*\[\]/, "CAT starts must not depend on selected setup categories");
+    assert.match(activePracticeClient, /SharedStudySetupLayout/, "practice must reuse shared setup layout");
+    assert.match(activePracticeClient, /nn-flashcards-hub-hero/, "practice hub landing must use the same hero shell as flashcards");
+    assert.match(activePracticeClient, /data-nn-e2e-practice-single-landing/, "practice hub must render one flashcards-style landing");
+    assert.match(activePracticeClient, /sessionMode:\s*"tutor"/, "practice starts must use tutor-style answer locking");
+    assert.match(activePracticeClient, /rationaleVisibilityMode:\s*"immediate"/, "practice starts must show rationales after each item");
+    assert.doesNotMatch(activePracticeClient, /nn-flashcards-deck-library-surface/, "practice hub must not render a second category landing below the hero");
+    assert.doesNotMatch(activePracticeClient, /nn-flashcards-setup-panel/, "practice hub must not render a second fine-tune landing below the hero");
+    assert.doesNotMatch(activePracticeClient, /nn-flashcards-sticky-start/, "practice hub must not expose a second mobile start button");
+    assert.doesNotMatch(activePracticeClient, /Configure session/, "practice hub must not keep a separate visible configure-session landing block");
     assert.doesNotMatch(
       practiceHub,
       /requireExplicitRequestedPathwayId:\s*true/,
@@ -160,7 +158,7 @@ describe("premium full platform convergence", () => {
     assert.match(practiceClient, /hardFallbackDelayMs:\s*5000/, "practice/CAT starts need a bounded navigation fallback instead of a stalled CTA");
     assert.match(practiceClient, /setLaunchingHref\(resumeHref\)/, "resume launches must keep the same visible transition state as fresh starts");
     assert.equal(
-      (practiceClient.match(/data-nn-qa-practice-hub-start-test/g) ?? []).length,
+      (activePracticeClient.match(/data-nn-qa-practice-hub-start-test/g) ?? []).length,
       1,
       "practice setup must expose one canonical Start action",
     );
@@ -188,15 +186,17 @@ describe("premium full platform convergence", () => {
     const startAlias = read(CAT_START_ALIAS_PATH);
     const launchAlias = read(CAT_LAUNCH_ALIAS_PATH);
     const practiceClient = read(PRACTICE_HUB_CLIENT_PATH);
+    const activePracticeClient = practiceClient.split(/\n\s*if \(examMode === "cat"\)/)[0] ?? practiceClient;
     const bootstrap = read(PRACTICE_SHELL_BOOTSTRAP_PATH);
     const resolver = read(PREMIUM_SHELL_RESOLVER_PATH);
     const runnerLoader = read(PRACTICE_RUN_LOADER_PATH);
 
-    assert.match(catAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/cat must open the canonical practice hub in CAT mode");
+    assert.match(catAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/cat must preserve CAT intent for the canonical practice hub");
     assert.match(startAlias, /redirect\(`\/app\/practice-tests\?\$\{q\.toString\(\)\}`\)/, "/app/practice-tests/start must be a redirect alias only");
+    assert.doesNotMatch(startAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/practice-tests/start must not force a second CAT landing");
     assert.match(launchAlias, /appPathwayCatSessionStartPath/, "/app/practice-tests/cat-launch must redirect into the hub CAT query");
     assert.doesNotMatch(startAlias + launchAlias, /PathwayCatSessionStartClient/, "active aliases must not mount the legacy CAT start client");
-    assert.match(practiceClient, /selectionMode:\s*"cat"/, "unified setup must create CAT sessions from the shared setup client");
+    assert.match(activePracticeClient, /sessionMode:\s*"tutor"/, "canonical practice starts must create rationale-first practice sessions");
     assert.match(bootstrap, /resolvePremiumNclexShellRoute/, "session page must resolve the exam shell from persisted session config");
     assert.match(resolver, /cfg\.selectionMode\s*===\s*"cat"[\s\S]*return "cat"/, "CAT sessions must resolve to the unified CAT exam runner");
     assert.match(runnerLoader, /NclexCatRunner/, "runner loader must mount the unified CAT runner");

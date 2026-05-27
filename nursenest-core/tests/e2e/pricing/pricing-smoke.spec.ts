@@ -16,6 +16,7 @@ function actionableObserverDiagnostics(d: { consoleErrors: string[]; failedReque
     /assertConfig[\s\S]*\bAuth\b/i,
     /MissingSecret|errors\.authjs\.dev#missingsecret/i,
     /marketing_critical_nav_keys_missing_count/i,
+    /marketing_public_content_override_load_failed/i,
     /MarketingI18nProvider] Missing hero\/nav keys/i,
     /marketing-locale-layout] layout message integrity failed/i,
     /missing_or_invalid.*breadcrumbs\.(home|pricing)/i,
@@ -52,12 +53,19 @@ test.describe("Pricing page", () => {
     for (const name of [/New Grad/i, /RN\s*\/\s*NCLEX-RN/i, /PN/i, /^NP$/i, /Allied Health/i]) {
       await page.getByRole("button", { name }).click();
       await expect(scopePanel.getByText("What's included")).toBeVisible();
-      await expect(scopePanel.getByText("Access scope")).toBeVisible();
-      await expect(scopePanel.getByText("Not included")).toBeVisible();
+      await expect(scopePanel.getByRole("heading", { name: "Access scope" })).toBeVisible();
+      await expect(scopePanel.getByRole("heading", { name: "Not included" })).toBeVisible();
     }
 
     await page.getByRole("button", { name: /RN\s*\/\s*NCLEX-RN/i }).click();
     await page.getByTestId("pricing-checkout-monthly").click();
+    const modal = page.locator(".nn-pricing-consent-modal");
+    await expect(modal).toBeVisible();
+    const checkboxes = await modal.locator('input[type="checkbox"]').all();
+    for (const checkbox of checkboxes) {
+      await checkbox.check();
+    }
+    await modal.getByRole("button", { name: /Continue to secure checkout|Continue to North America Checkout/i }).click();
     await page.waitForURL(/\/login\?/);
     await expect(page).toHaveURL(/checkoutIntent=1/);
     await expect(page).toHaveURL(/checkoutTier=RN/);

@@ -172,6 +172,7 @@ const PLAN_CARD_BULLET_KEYS = [
 ] as const;
 
 const CHECKOUT_LOADING_LABEL = "Loading checkout...";
+const CHECKOUT_INTENT_STORAGE_KEY = "nn_pricing_checkout_intent";
 
 function preventCheckoutDefault(event?: MouseEvent<HTMLElement>) {
   event?.preventDefault();
@@ -647,6 +648,18 @@ export function PricingPageClient({
       callbackParams.set("checkoutDuration", duration);
       if (isAllied) callbackParams.set("checkoutAlliedCareer", selectedAlliedCareer);
       else callbackParams.delete("checkoutAlliedCareer");
+      try {
+        window.sessionStorage.setItem(
+          CHECKOUT_INTENT_STORAGE_KEY,
+          JSON.stringify({
+            tier,
+            duration,
+            alliedCareer: isAllied ? selectedAlliedCareer : null,
+          }),
+        );
+      } catch {
+        // Query params remain the primary persistence path; storage is only a same-origin backup.
+      }
       const callbackPath = `${pathname}?${callbackParams.toString()}`;
       const loginPath = localize("/login");
       window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
@@ -682,11 +695,6 @@ export function PricingPageClient({
       }
       if (isFreeStripeBillingNursingTier(tier)) {
         window.location.assign(localize("/pre-nursing"));
-        return;
-      }
-      if (authStatus !== "authenticated") {
-        setCheckoutLoading(true);
-        redirectGuestToLoginForCheckout(duration);
         return;
       }
       checkoutInFlightRef.current = true;
@@ -869,12 +877,6 @@ export function PricingPageClient({
         setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
         return;
       }
-      if (authStatus === "loading") return;
-      if (authStatus !== "authenticated") {
-        setCheckoutLoading(true);
-        redirectGuestToLoginForCheckout(duration);
-        return;
-      }
       if (policiesAccepted) {
         void startCheckout(duration);
         return;
@@ -1006,6 +1008,20 @@ export function PricingPageClient({
   useEffect(() => {
     if (checkoutIntentHandled || authStatus !== "authenticated") return;
     const sp = new URLSearchParams(initialSearchParamsString);
+    if (sp.get("checkoutIntent") !== "1") {
+      try {
+        const stored = window.sessionStorage.getItem(CHECKOUT_INTENT_STORAGE_KEY);
+        const parsed = stored ? JSON.parse(stored) as { tier?: unknown; duration?: unknown; alliedCareer?: unknown } : null;
+        if (typeof parsed?.tier === "string" && typeof parsed.duration === "string") {
+          sp.set("checkoutIntent", "1");
+          sp.set("checkoutTier", parsed.tier);
+          sp.set("checkoutDuration", parsed.duration);
+          if (typeof parsed.alliedCareer === "string") sp.set("checkoutAlliedCareer", parsed.alliedCareer);
+        }
+      } catch {
+        // Ignore corrupted client storage and fall back to explicit URL intent only.
+      }
+    }
     if (sp.get("checkoutIntent") !== "1") return;
     const checkoutModule = sp.get("checkoutModule");
     const checkoutDuration = sp.get("checkoutDuration");
@@ -1044,6 +1060,9 @@ export function PricingPageClient({
       const cleanUrlEarly =
         cleanParamsEarly.size > 0 ? `${pathname}?${cleanParamsEarly.toString()}` : pathname;
       window.history.replaceState({}, "", cleanUrlEarly);
+      try {
+        window.sessionStorage.removeItem(CHECKOUT_INTENT_STORAGE_KEY);
+      } catch {}
       window.location.assign(localize("/pre-nursing"));
       return;
     }
@@ -1074,6 +1093,9 @@ export function PricingPageClient({
     cleanParams.delete("checkoutAlliedCareer");
     const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
     window.history.replaceState({}, "", cleanUrl);
+    try {
+      window.sessionStorage.removeItem(CHECKOUT_INTENT_STORAGE_KEY);
+    } catch {}
   }, [authStatus, checkoutIntentHandled, initialSearchParamsString, localize, pathname, policiesAccepted, region, startAdvancedEcgCheckout, t]);
 
   return (
@@ -1259,6 +1281,7 @@ export function PricingPageClient({
             const isBest = Boolean(row?.isBestValue);
             const isPop = Boolean(row?.isMostPopular);
             const isHighlighted = Boolean(row) && !slotUnavailable && !rowDataInvalid && (isBest || isPop);
+            const canAttemptCheckout = Boolean(row) && !slotUnavailable && !rowDataInvalid;
 
             return (
               <article
@@ -1346,7 +1369,6 @@ export function PricingPageClient({
                       disabled={
                         checkoutLoading ||
                         authStatus === "loading" ||
-                        !row.checkoutAvailable ||
                         (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||
                         alliedCheckoutBlocked
                       }
@@ -1355,9 +1377,9 @@ export function PricingPageClient({
                     >
                       {checkoutLoading
                         ? CHECKOUT_LOADING_LABEL
-                        : row.checkoutAvailable ? paidPlanPrimaryCtaLabel : t("pages.pricing.checkout.comingSoon")}
+                        : canAttemptCheckout ? paidPlanPrimaryCtaLabel : t("pages.pricing.checkout.comingSoon")}
                     </button>
-                    {row.checkoutAvailable ? (
+                    {canAttemptCheckout ? (
                       <>
                         {pricingCheckoutSoftGate ? (
                           <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">

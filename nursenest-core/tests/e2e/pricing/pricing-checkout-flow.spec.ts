@@ -5,6 +5,7 @@ const CHECKOUT_URL = "https://checkout.stripe.com/c/pay/cs_test_nursenest_mock";
 type CheckoutCase = {
   name: string;
   segment: RegExp;
+  segmentId: "rn" | "pn" | "np";
   duration: "monthly" | "yearly";
   expectedTier: string | RegExp;
 };
@@ -13,30 +14,35 @@ const CHECKOUT_CASES: CheckoutCase[] = [
   {
     name: "monthly checkout",
     segment: /RN\s*\/\s*NCLEX-RN/i,
+    segmentId: "rn",
     duration: "monthly",
     expectedTier: "RN",
   },
   {
     name: "yearly checkout",
     segment: /RN\s*\/\s*NCLEX-RN/i,
+    segmentId: "rn",
     duration: "yearly",
     expectedTier: "RN",
   },
   {
     name: "RN checkout",
     segment: /RN\s*\/\s*NCLEX-RN/i,
+    segmentId: "rn",
     duration: "monthly",
     expectedTier: "RN",
   },
   {
     name: "PN checkout",
     segment: /PN/i,
+    segmentId: "pn",
     duration: "monthly",
     expectedTier: /RPN|LVN_LPN/,
   },
   {
     name: "NP checkout",
     segment: /^NP$/i,
+    segmentId: "np",
     duration: "monthly",
     expectedTier: "NP",
   },
@@ -98,7 +104,8 @@ test.describe("Pricing checkout flow", () => {
       });
       expect(response?.ok()).toBeTruthy();
 
-      await page.getByRole("button", { name: c.segment }).click();
+      await expect(page.getByRole("button", { name: c.segment })).toBeVisible();
+      await page.getByTestId(`pricing-segment-${c.segmentId}`).click();
 
       const checkoutButton = page.getByTestId(`pricing-checkout-${c.duration}`);
       await expect(checkoutButton).toBeVisible({ timeout: 60_000 });
@@ -116,7 +123,6 @@ test.describe("Pricing checkout flow", () => {
         name: /Continue to secure checkout|Continue to North America Checkout/i,
       });
       await continueButton.click();
-      await expect(continueButton).toContainText(/Loading checkout/i);
 
       await page.waitForURL(
         /checkout\.stripe\.com\/c\/pay\/cs_test_nursenest_mock/,

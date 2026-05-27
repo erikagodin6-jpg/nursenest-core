@@ -24,13 +24,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * @deprecated Replaced by `/app/practice-tests?catLaunch=1`.
+ * @deprecated Replaced by `/app/practice-tests`.
  * Candidate for removal only after verified zero/low traffic.
  */
 export default async function PracticeTestsStartAliasPage({ searchParams }: Props) {
   const sp = await searchParams;
   const q = new URLSearchParams();
-  q.set("catLaunch", "1");
   for (const [key, value] of Object.entries(sp)) {
     if (value === undefined || key === "review") continue;
     if (Array.isArray(value)) {
