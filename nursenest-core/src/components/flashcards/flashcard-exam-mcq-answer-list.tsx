@@ -10,6 +10,14 @@ import {
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
 
+function compactFeedbackText(text: string): string {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (normalized.length <= 150) return normalized;
+  const firstSentence = normalized.match(/^(.+?[.!?])\s/)?.[1];
+  if (firstSentence && firstSentence.length <= 150) return firstSentence;
+  return `${normalized.slice(0, 147).trim()}...`;
+}
+
 export type FlashcardExamMcqAnswerListProps = {
   exam: ExamMicroQuestionPayload;
   revealed: boolean;
@@ -65,7 +73,7 @@ export function FlashcardExamMcqAnswerList({
           const isPicked = pickedLetter === option.letter;
           const incorrectRationale =
             exam.rationaleIncorrect.find((row) => row.letter === option.letter)?.rationale.trim() ?? "";
-          const feedbackText = isCorrect ? exam.rationaleCorrect.trim() : incorrectRationale;
+          const feedbackText = isCorrect ? "" : compactFeedbackText(incorrectRationale);
 
           const visualArgs = {
             letter: option.letter,
@@ -127,16 +135,18 @@ export function FlashcardExamMcqAnswerList({
                 </div>
               )}
 
-              {revealed && feedbackText ? (
-                isCorrect || isPicked ? (
+              {revealed && isCorrect ? (
+                <div className="nn-flashcard-answer-feedback nn-flashcard-answer-feedback--correct-compact">
+                  <span>Correct answer</span>
+                </div>
+              ) : null}
+
+              {revealed && !isCorrect && feedbackText ? (
+                isPicked ? (
                   <div
-                    className={`nn-flashcard-answer-feedback ${
-                      isCorrect
-                        ? "nn-flashcard-answer-feedback--correct"
-                        : "nn-flashcard-answer-feedback--picked-wrong"
-                    }`}
+                    className="nn-flashcard-answer-feedback nn-flashcard-answer-feedback--picked-wrong"
                   >
-                    <span>{isCorrect ? "Correct" : "Your answer"}</span>
+                    <span>Your answer</span>
                     <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
                   </div>
                 ) : (

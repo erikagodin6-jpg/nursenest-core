@@ -142,6 +142,24 @@ describe("FlashcardStudyQuestionStack — SATA rationale gating", () => {
   });
 });
 
+describe("FlashcardStudyQuestionStack — MCQ rationale placement", () => {
+  it("keeps the full correct-answer rationale in the right panel only", () => {
+    const html = renderToStaticMarkup(
+      <FlashcardStudyQuestionStack
+        {...BASE_PROPS}
+        prompt="A patient is hypoxic. Priority action?"
+        answer="A"
+        examMicroQuestion={MCQ}
+        revealed={true}
+        onReveal={() => {}}
+      />,
+    );
+
+    assert.equal(html.match(/Oxygen directly addresses hypoxia/g)?.length, 1);
+    assert.match(html, /Correct answer/);
+  });
+});
+
 describe("FlashcardStudyQuestionStack — data-nn-revealed attribute", () => {
   it("data-nn-revealed is '0' when not revealed", () => {
     const html = renderToStaticMarkup(
