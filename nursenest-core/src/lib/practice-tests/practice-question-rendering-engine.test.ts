@@ -18,8 +18,16 @@ test("normalizes CAT and Next Gen question type aliases", () => {
   assert.equal(normalizePracticeQuestionType("dropdown"), "cloze");
   assert.equal(normalizePracticeQuestionType("image_selection"), "hotspot");
   assert.equal(normalizePracticeQuestionType("case-study"), "case-study");
+  assert.equal(normalizePracticeQuestionType("chart-review"), "chart-review");
   assert.equal(normalizePracticeQuestionType("select-in-passage"), "highlight");
   assert.equal(normalizePracticeQuestionType("trend-chart"), "trend");
+  assert.equal(normalizePracticeQuestionType("extended matching"), "extended-matching");
+  assert.equal(normalizePracticeQuestionType("multimedia"), "multimedia");
+  assert.equal(normalizePracticeQuestionType("decision-tree"), "decision-tree");
+  assert.equal(normalizePracticeQuestionType("delegation"), "delegation");
+  assert.equal(normalizePracticeQuestionType("triage"), "triage");
+  assert.equal(normalizePracticeQuestionType("medication safety"), "medication-safety");
+  assert.equal(normalizePracticeQuestionType("communication"), "communication-documentation");
   assert.equal(normalizePracticeQuestionType("priority_ranking"), "ranking");
   assert.equal(normalizePracticeQuestionType("clinical judgment"), "clinical-judgment");
 });
@@ -47,5 +55,5 @@ test("documents entry-level RN question scope for practice exam content", () => 
 test("defers case-study rationale until the multipart interaction is complete", () => {
   assert.equal(practiceQuestionSupportsImmediateRationale("single"), true);
   assert.equal(practiceQuestionSupportsImmediateRationale("case-study"), false);
+  assert.equal(practiceQuestionSupportsImmediateRationale("decision-tree"), false);
 });
-

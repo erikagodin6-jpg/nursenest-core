@@ -1,3 +1,12 @@
+import type { TierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
+import type { AdaptiveDifficultyDescriptor } from "@/lib/questions/adaptive-difficulty-standards";
+import type { CaseStudyExpansionStandard } from "@/lib/questions/case-study-expansion-standards";
+import type { DistractorOptimizationStandard } from "@/lib/questions/distractor-optimization-standards";
+import type { EducationalReadabilityStandard } from "@/lib/questions/educational-readability-standards";
+import type { InteractiveQuestionTypeStandard } from "@/lib/questions/interactive-question-type-standards";
+import type { LicensingExamStyleStandard } from "@/lib/questions/licensing-exam-style-standards";
+import type { PremiumContentDepthStandard } from "@/lib/questions/premium-content-depth-standards";
+
 export type PracticeQuestionType =
   | "single"
   | "multiple"
@@ -7,14 +16,31 @@ export type PracticeQuestionType =
   | "cloze"
   | "hotspot"
   | "case-study"
+  | "chart-review"
   | "highlight"
   | "trend"
+  | "extended-matching"
+  | "multimedia"
+  | "decision-tree"
+  | "delegation"
+  | "triage"
+  | "medication-safety"
+  | "communication-documentation"
   | "ranking"
   | "clinical-judgment";
 
 export type PracticeQuestionLayoutMode = "exam-single-pane" | "flashcard-split-study";
 
-export type PracticeQuestionScoringRule = "exact" | "partial-credit" | "ordered" | "matrix" | "hotspot";
+export type PracticeQuestionScoringRule =
+  | "exact"
+  | "partial-credit"
+  | "ordered"
+  | "matrix"
+  | "hotspot"
+  | "matching"
+  | "decision-tree"
+  | "classification"
+  | "multi-part";
 
 export interface PracticeQuestionRenderDefinition {
   id: string;
@@ -33,6 +59,14 @@ export interface PracticeQuestionRenderDefinition {
   };
   relatedLesson?: { title: string; href: string } | null;
   confidenceTracking: boolean;
+  tierPedagogy: TierPedagogyProfile;
+  adaptiveDifficulty?: AdaptiveDifficultyDescriptor;
+  caseStudyStandard?: CaseStudyExpansionStandard;
+  distractorStandard?: DistractorOptimizationStandard;
+  educationalReadability?: EducationalReadabilityStandard;
+  interactiveQuestionType?: InteractiveQuestionTypeStandard;
+  licensingExamStyle?: LicensingExamStyleStandard;
+  premiumContentDepth?: PremiumContentDepthStandard;
 }
 
 const QUESTION_TYPE_ALIASES: Array<{
@@ -46,8 +80,16 @@ const QUESTION_TYPE_ALIASES: Array<{
   { match: /^(cloze|drop[-_\s]?down|dropdown|fill[-_\s]?in)$/i, type: "cloze" },
   { match: /^(hotspot|image[-_\s]?selection|image)$/i, type: "hotspot" },
   { match: /^(case[-_\s]?study|case)$/i, type: "case-study" },
+  { match: /^(chart[-_\s]?review|ehr|ehr[-_\s]?simulation|mar[-_\s]?review)$/i, type: "chart-review" },
   { match: /^(highlight|select[-_\s]?in[-_\s]?passage|passage[-_\s]?select)$/i, type: "highlight" },
   { match: /^(trend|chart|trend[-_\s]?chart)$/i, type: "trend" },
+  { match: /^(extended[-_\s]?matching|matching|option[-_\s]?bank)$/i, type: "extended-matching" },
+  { match: /^(multimedia|ecg|audio|image[-_\s]?based|sound|imaging|wound[-_\s]?photo)$/i, type: "multimedia" },
+  { match: /^(simulation|decision[-_\s]?tree|branching[-_\s]?scenario|branching)$/i, type: "decision-tree" },
+  { match: /^(delegation|assignment|workload[-_\s]?assignment)$/i, type: "delegation" },
+  { match: /^(triage|first[-_\s]?to[-_\s]?see|prioritization[-_\s]?set)$/i, type: "triage" },
+  { match: /^(medication[-_\s]?safety|med[-_\s]?safety|dosage[-_\s]?verification|high[-_\s]?alert)$/i, type: "medication-safety" },
+  { match: /^(communication|documentation|sbar|handoff|therapeutic[-_\s]?communication|legal[-_\s]?charting)$/i, type: "communication-documentation" },
   { match: /^(priority[-_\s]?ranking|ranking|rank[-_\s]?order|priority)$/i, type: "ranking" },
   { match: /^(clinical[-_\s]?judgment|layered[-_\s]?clinical[-_\s]?judgment)$/i, type: "clinical-judgment" },
   { match: /^(mcq|multiple[-_\s]?choice|single[-_\s]?best|single)$/i, type: "single" },
@@ -100,5 +142,5 @@ export function resolvePracticeQuestionLayoutMode(args: {
 }
 
 export function practiceQuestionSupportsImmediateRationale(type: PracticeQuestionType): boolean {
-  return type !== "case-study";
+  return type !== "case-study" && type !== "decision-tree";
 }

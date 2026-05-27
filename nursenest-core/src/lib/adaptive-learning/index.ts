@@ -4,7 +4,9 @@
  * keep marketing routes free of learner analytics DTOs.
  */
 export type * from "@/lib/adaptive-learning/adaptive-learning-types";
+export * from "@/lib/adaptive-learning/adaptive-ecosystem-architecture";
 export * from "@/lib/adaptive-learning/adaptive-recommendation-engine";
+export * from "@/lib/adaptive-learning/clinical-adaptive-engine";
 export * from "@/lib/adaptive-learning/post-miss-orchestration";
 export * from "@/lib/adaptive-learning/learner-analytics-summary";
 export type * from "@/lib/adaptive-learning/clinical-scenario-contracts";
