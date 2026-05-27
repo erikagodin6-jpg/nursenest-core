@@ -28,7 +28,7 @@ describe("isStudyRoutePath", () => {
     assert.ok(isStudyRoutePath("/app/flashcards/custom"));
     assert.ok(isStudyRoutePath("/app/flashcards/weak-areas"));
     assert.ok(isStudyRoutePath("/app/flashcards/nclex-rn-fundamentals"));
-    assert.ok(isStudyRoutePath("/app/practice-tests/start"));
+    assert.ok(isStudyRoutePath("/app/practice-tests"));
     assert.ok(isStudyRoutePath("/app/practice-tests/cat-launch"));
     assert.ok(isStudyRoutePath("/app/questions/bank"));
     assert.ok(isStudyRoutePath("/app/questions/session"));
@@ -231,8 +231,8 @@ describe("normalizeStudyCallback — hub routes (require pathwayId)", () => {
     assert.equal(normalizeStudyCallback("/app/flashcards"), null);
   });
 
-  it("rejects practice-tests hub without pathwayId", () => {
-    assert.equal(normalizeStudyCallback("/app/practice-tests"), null);
+  it("allows unified practice setup without pathwayId", () => {
+    assert.equal(normalizeStudyCallback("/app/practice-tests"), "/app/practice-tests");
   });
 
   it("rejects questions hub without pathwayId", () => {
@@ -260,8 +260,8 @@ describe("normalizeStudyCallback — named sub-routes (pathwayId optional)", () 
     assert.equal(normalizeStudyCallback(u), u);
   });
 
-  it("allows question session with pathwayId", () => {
-    const u = `/app/questions/session?pathwayId=${PN}&source=mixed_review&count=20`;
+  it("allows unified practice setup with pathwayId", () => {
+    const u = `/app/practice-tests?pathwayId=${PN}&source=mixed_review&count=20`;
     assert.equal(normalizeStudyCallback(u), u);
   });
 
@@ -270,15 +270,15 @@ describe("normalizeStudyCallback — named sub-routes (pathwayId optional)", () 
     assert.equal(normalizeStudyCallback(u), u);
   });
 
-  it("allows practice-tests start with pathwayId", () => {
-    const u = `/app/practice-tests/start?pathwayId=${PN}`;
+  it("allows CAT launch intent on unified practice setup with pathwayId", () => {
+    const u = `/app/practice-tests?pathwayId=${PN}&catLaunch=1`;
     assert.equal(normalizeStudyCallback(u), u);
   });
 
   it("allows named sub-routes WITHOUT pathwayId (content-addressed)", () => {
     assert.equal(normalizeStudyCallback("/app/flashcards/custom"), "/app/flashcards/custom");
     assert.equal(normalizeStudyCallback("/app/questions/bank"), "/app/questions/bank");
-    assert.equal(normalizeStudyCallback("/app/practice-tests/start"), "/app/practice-tests/start");
+    assert.equal(normalizeStudyCallback("/app/practice-tests"), "/app/practice-tests");
   });
 
   it("rejects sub-routes with a malformed pathwayId", () => {

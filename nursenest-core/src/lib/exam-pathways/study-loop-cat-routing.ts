@@ -107,7 +107,7 @@ export function resolveStudyLoopCatDestination(
   }
 
   if (args.allowGenericChooser === false) {
-    const fallbackHref = args.authState === "signed_in" ? "/app/practice-tests/start" : HUB.practiceExams;
+    const fallbackHref = args.authState === "signed_in" ? "/app/practice-tests?catLaunch=1" : HUB.practiceExams;
     return {
       kind: "generic_chooser",
       href: fallbackHref,
@@ -120,7 +120,7 @@ export function resolveStudyLoopCatDestination(
 
   return {
     kind: "generic_chooser",
-    href: args.authState === "signed_in" ? "/app/practice-tests/start" : HUB.practiceExams,
+    href: args.authState === "signed_in" ? "/app/practice-tests?catLaunch=1" : HUB.practiceExams,
     pathwayId: null,
     isPathwayScoped: false,
     authState: args.authState,

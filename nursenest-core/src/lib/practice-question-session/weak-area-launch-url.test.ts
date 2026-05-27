@@ -11,7 +11,7 @@ describe("weakAreaLaunchUrl", () => {
       count: 20,
     });
 
-    assert.ok(href.startsWith("/app/questions/session?"));
+    assert.ok(href.startsWith("/app/practice-tests?"));
 
     const qs = new URLSearchParams(href.split("?")[1] ?? "");
 

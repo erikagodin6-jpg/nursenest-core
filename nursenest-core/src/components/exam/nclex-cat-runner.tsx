@@ -581,8 +581,8 @@ export function NclexCatRunner({
 
   if (phase === "error") {
     const freshHref = pathwayId
-      ? `/app/practice-tests/start?pathwayId=${encodeURIComponent(pathwayId)}`
-      : "/app/practice-tests/start";
+      ? `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}&catLaunch=1`
+      : "/app/practice-tests?catLaunch=1";
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center">
         <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)]">

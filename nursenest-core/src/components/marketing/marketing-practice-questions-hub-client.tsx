@@ -87,7 +87,7 @@ function appQuestionsSession(pathwayId: string, qs: Record<string, string>, alli
   }
   const ap = alliedProfession?.trim().toLowerCase();
   if (ap) p.set("alliedProfession", ap);
-  return loginWithCallback(`/app/questions/session?${p.toString()}`);
+  return loginWithCallback(`/app/practice-tests?${p.toString()}`);
 }
 
 function catBasisFromStudyFilter(sf: PracticeSessionStudyFilter): PracticeAdaptiveSelectionBasis {

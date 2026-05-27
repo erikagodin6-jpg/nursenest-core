@@ -48,11 +48,10 @@ export function appPathwayCatLaunchLegacyRedirectPath(
 }
 
 /**
- * Full CAT briefing/setup (escape hatch from cat-launch). Uses `review=1` so `/start` never auto-redirects back to cat-launch.
+ * Full CAT setup now lives on the unified practice setup surface.
  */
 export function appPathwayCatFullSetupHref(pathwayId: string): string {
-  const q = new URLSearchParams({ pathwayId: pathwayId.trim(), review: "1" });
-  return `/app/practice-tests/start?${q.toString()}`;
+  return appPathwayCatSessionStartPath(pathwayId);
 }
 
 /** Only `review=1` and case-insensitive `true` force the full setup page; other values are ignored (no redirect loop). */
@@ -105,5 +104,5 @@ export function resolveStudySurfaceCatHref({
   if (preferWeakFocus) {
     return appCatWeakFocusPath(resolvedPathwayId, topic);
   }
-  return resolvedPathwayId ? appPathwayCatSessionStartPath(resolvedPathwayId) : "/app/practice-tests/start";
+  return resolvedPathwayId ? appPathwayCatSessionStartPath(resolvedPathwayId) : "/app/practice-tests?catLaunch=1";
 }

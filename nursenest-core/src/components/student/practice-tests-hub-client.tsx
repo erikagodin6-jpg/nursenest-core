@@ -7,7 +7,6 @@ import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-l
 import {
   LearnerCategorySelector,
   LearnerFilterBar,
-  LearnerSessionStartPanel,
   SharedStudySetupLayout,
   SharedStudySetupSurface,
 } from "@/components/learner-study-ui";
@@ -45,12 +44,63 @@ type PracticeTestsHubClientProps = {
   initialCatMode?: boolean;
 };
 
-const PRACTICE_COUNTS = [25, 50, 75, 100] as const;
+const PRACTICE_COUNTS = [10, 25, 50, 75, 100] as const;
 const CAT_COUNTS = [25, 50, 75] as const;
 const PRACTICE_COUNT_MIN = 5;
 const PRACTICE_COUNT_MAX = 100;
 const CAT_COUNT_MIN = 25;
 const CAT_COUNT_MAX = 75;
+const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
+
+const SESSION_PRESETS: ReadonlyArray<{
+  id: string;
+  label: string;
+  description: string;
+  mode: ExamMode;
+  focus: FocusMode;
+  count: number;
+}> = [
+  {
+    id: "quick-review",
+    label: "Quick Review",
+    description: "10 mixed questions",
+    mode: "practice",
+    focus: "all",
+    count: 10,
+  },
+  {
+    id: "simulation-50",
+    label: "50 Question Simulation",
+    description: "Exam-style practice",
+    mode: "practice",
+    focus: "all",
+    count: 50,
+  },
+  {
+    id: "weak-areas",
+    label: "Weak Areas",
+    description: "Prioritize gaps",
+    mode: "practice",
+    focus: "weak",
+    count: 25,
+  },
+  {
+    id: "recently-missed",
+    label: "Recently Missed",
+    description: "Review incorrects",
+    mode: "practice",
+    focus: "missed",
+    count: 25,
+  },
+  {
+    id: "rapid-review",
+    label: "Rapid Review",
+    description: "Fast 10-question set",
+    mode: "practice",
+    focus: "unseen",
+    count: 10,
+  },
+];
 
 function focusToSelectionMode(focusMode: FocusMode): Exclude<PracticeTestSelectionMode, "cat" | "targeted" | "starred"> {
   if (focusMode === "weak") return "weak";
@@ -126,6 +176,7 @@ export function PracticeTestsHubClient({
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [resumeHref, setResumeHref] = useState<string | null>(null);
   const createInFlightRef = useRef(false);
 
   const selectedPathway = useMemo(
@@ -142,6 +193,21 @@ export function PracticeTestsHubClient({
     () => CANONICAL_STUDY_CATEGORIES.map((category) => category.id as CanonicalBodySystemId),
     [],
   );
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(PRACTICE_RESUME_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as { href?: unknown; pathwayId?: unknown };
+      const href = typeof parsed.href === "string" ? parsed.href.trim() : "";
+      const storedPathwayId = typeof parsed.pathwayId === "string" ? parsed.pathwayId.trim() : "";
+      if (href.startsWith("/app/practice-tests/") && (!storedPathwayId || storedPathwayId === pathwayId)) {
+        setResumeHref(href);
+      }
+    } catch {
+      setResumeHref(null);
+    }
+  }, [pathwayId]);
 
   useEffect(() => {
     const qp = new URLSearchParams(searchParamString);
@@ -271,6 +337,22 @@ export function PracticeTestsHubClient({
   const resetCategorySelection = useCallback(() => {
     setSelectedCanonicalIds([]);
   }, []);
+
+  const applyPreset = useCallback(
+    (preset: (typeof SESSION_PRESETS)[number]) => {
+      setExamMode(preset.mode);
+      setFocusMode(preset.mode === "cat" && preset.focus === "unseen" ? "all" : preset.focus);
+      setQuestionCount(preset.count);
+      setSelectedCanonicalIds([]);
+      setError(null);
+      setErrorCode(null);
+      if (preset.mode === "cat" && !catAvailableForPathway) {
+        const firstCatPathway = catEligibleOptions[0]?.id;
+        if (firstCatPathway) setPathwayId(firstCatPathway);
+      }
+    },
+    [catAvailableForPathway, catEligibleOptions],
+  );
 
   const createTest = useCallback(async () => {
     if (creating || createInFlightRef.current) return;
@@ -413,7 +495,25 @@ export function PracticeTestsHubClient({
         ok: true,
         surface: "practice_tests_hub",
       });
-      safeRouterReplace(router, `/app/practice-tests/${encodeURIComponent(data.id)}?pathwayId=${encodeURIComponent(trimmedPathwayId)}`, {
+      const destination = `/app/practice-tests/${encodeURIComponent(data.id)}?pathwayId=${encodeURIComponent(trimmedPathwayId)}`;
+      try {
+        window.localStorage.setItem(
+          PRACTICE_RESUME_STORAGE_KEY,
+          JSON.stringify({
+            href: destination,
+            pathwayId: trimmedPathwayId,
+            mode: examMode,
+            focusMode,
+            questionCount,
+            categoryIds: selectedCanonicalIds,
+            savedAt: Date.now(),
+          }),
+        );
+        setResumeHref(destination);
+      } catch {
+        /* local continuity is best-effort; the server session remains canonical. */
+      }
+      safeRouterReplace(router, destination, {
         fallbackDelayMs: 1200,
         context: {
           feature: examMode === "cat" ? "cat_hub_launch" : "practice_tests_hub_launch",
@@ -459,6 +559,16 @@ export function PracticeTestsHubClient({
     discoveryReady && discoveryTotal !== null
       ? `${questionCount} questions · ${categorySummary} · ${discoveryTotal} available`
       : `${questionCount} questions · ${categorySummary}`;
+  const resumeSession = useCallback(() => {
+    if (!resumeHref) return;
+    safeRouterReplace(router, resumeHref, {
+      fallbackDelayMs: 800,
+      context: {
+        feature: "practice_tests_resume",
+        pathwayId,
+      },
+    });
+  }, [pathwayId, resumeHref, router]);
 
   return (
     <SharedStudySetupLayout
@@ -482,49 +592,110 @@ export function PracticeTestsHubClient({
         className="nn-flashcards-hub-workspace nn-premium-practice-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
         data-nn-e2e-practice-compact-header
       >
-        <div className="relative space-y-5">
+        <div
+          className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,transparent)] blur-3xl"
+          aria-hidden
+        />
+        <div className="relative space-y-6 sm:space-y-7">
+
+          {/* Eyebrow / title / subtitle */}
           <div className="max-w-3xl">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
               {formatPathwayLabel(selectedPathway, pathwayDisplayName)}
             </p>
             <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
-              Build a {modeLabel} session
+              {modeLabel} session
             </h2>
             <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
-              Choose content the same way you build flashcards, then launch the exam workspace.
+              Pick body systems, configure your session, then start.
             </p>
           </div>
+
+          {/* Resume spotlight */}
+          {resumeHref ? (
+            <div
+              className="nn-flashcards-resume-spotlight flex flex-col gap-4 border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] pt-5 sm:flex-row sm:items-center sm:justify-between"
+              data-nn-e2e-practice-resume
+            >
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">In progress</p>
+                <p className="mt-1 text-lg font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
+                  Continue where you left off
+                </p>
+                <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
+                  Your answers and progress are saved.
+                </p>
+              </div>
+              <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[12rem]">
+                <button
+                  type="button"
+                  onClick={resumeSession}
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-info)] px-8 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] transition hover:brightness-[1.03] sm:w-auto"
+                  data-nn-e2e-practice-resume-session
+                >
+                  Resume session
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          {/* Session preview + primary CTA + pool count */}
           <div
-            className="border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
+            className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
             data-nn-e2e-practice-session-preview
           >
             <p className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               {setupSummary}
             </p>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <button
-                type="button"
-                onClick={createTest}
-                disabled={startDisabled}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                data-nn-qa-practice-hub-start-test
-              >
-                {creating ? (
-                  <>
-                    <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                    Starting
-                  </>
+            <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="min-w-0 flex-1">
+                {resumeHref ? (
+                  <p className="text-xs text-[var(--semantic-text-muted)]">Or start a fresh session with the settings below.</p>
                 ) : (
                   <>
-                    <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                    Start
+                    <button
+                      type="button"
+                      onClick={createTest}
+                      disabled={startDisabled}
+                      className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+                      data-nn-qa-practice-hub-start-test
+                    >
+                      {creating ? (
+                        <>
+                          <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                          Starting…
+                        </>
+                      ) : (
+                        <>
+                          <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                          Start {modeLabel}
+                        </>
+                      )}
+                    </button>
+                    <p className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left">
+                      {examMode === "cat" ? "Adaptive scoring begins after launch." : "Rationales visible after each answer."}
+                    </p>
                   </>
                 )}
-              </button>
-              <p className="text-xs text-[var(--semantic-text-muted)]">
-                {examMode === "cat" ? "Adaptive rules apply after launch." : "Rationales appear in the focused exam workspace."}
-              </p>
+              </div>
+              {discoveryReady && discoveryTotal !== null ? (
+                <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
+                  <span>
+                    <span className="font-semibold text-[var(--semantic-text-primary)]">Pool </span>
+                    <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">{discoveryTotal}</span>
+                    <span className="ml-1">questions available</span>
+                  </span>
+                </div>
+              ) : null}
             </div>
+            {discoveryReady && discoveryTotal !== null && discoveryTotal > 0 ? (
+              <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-3 h-1.5 max-w-xl overflow-hidden rounded-full bg-[var(--semantic-progress-track)]">
+                <div
+                  className="h-full rounded-full bg-[var(--semantic-brand)] transition-[width] duration-300 ease-out"
+                  style={{ width: `${Math.min(100, Math.round((questionCount / discoveryTotal) * 100))}%` }}
+                />
+              </div>
+            ) : null}
           </div>
         </div>
       </header>
@@ -547,21 +718,19 @@ export function PracticeTestsHubClient({
           </div>
         ) : (
           <>
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
-                  Step 1
-                </p>
-                <h2 id="nn-practice-categories-heading" className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
-                  Select categories
-                </h2>
-                <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
-                  Empty selection starts from the full question pool.
-                </p>
-              </div>
-              <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-muted)]">
-                {categorySummary}
-              </span>
+            <div className="mb-4">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+                Body systems
+              </p>
+              <h2
+                id="nn-practice-categories-heading"
+                className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl"
+              >
+                Select categories
+              </h2>
+              <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
+                Leave empty to draw from the full pool, or pick systems to narrow your session.
+              </p>
             </div>
             <LearnerCategorySelector
               countsBySystem={countsByCanonical}
@@ -570,7 +739,7 @@ export function PracticeTestsHubClient({
               search={categorySearch}
               onSearchChange={setCategorySearch}
               heading=""
-              searchPlaceholder="Search systems..."
+              searchPlaceholder="Search systems…"
               metaBySystem={metaBySystem}
             />
 
@@ -594,7 +763,7 @@ export function PracticeTestsHubClient({
                   {selectedCanonicalIds.length} system{selectedCanonicalIds.length === 1 ? "" : "s"} selected
                 </span>
               ) : (
-                <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems below to focus your exam</span>
+                <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems to focus your session</span>
               )}
             </div>
           </>
@@ -607,71 +776,89 @@ export function PracticeTestsHubClient({
         ) : null}
       </SharedStudySetupSurface>
 
-      <SharedStudySetupSurface
-        className="nn-premium-practice-hub-builder"
-        aria-label="Practice exam configuration"
+      {/* ── Configure session (collapsed) ────────────────────────── */}
+      <details
+        className="nn-flashcards-setup-panel nn-premium-practice-hub-builder nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
         data-nn-e2e-practice-setup-panel
       >
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <LearnerFilterBar title="Step 2 — Select study mode" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
-            <div className="flex flex-wrap gap-2">
-              {(["practice", "cat"] as const).map((mode) => {
-                const active = examMode === mode;
-                return (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => setExamMode(mode)}
-                    disabled={mode === "cat" && catEligibleOptions.length === 0}
-                    data-active={active}
-                    aria-pressed={active}
-                    className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9"
-                  >
-                    {mode === "cat" ? "CAT" : "Practice Exam"}
-                  </button>
-                );
-              })}
-            </div>
-          </LearnerFilterBar>
-
-          <LearnerFilterBar title="Step 3 — Select focus" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
-            <div className="flex flex-wrap gap-2">
-              {[
-                ["all", "All questions"],
-                ["weak", "Weak areas"],
-                ["missed", "Incorrect"],
-                ...(examMode === "practice" ? ([["unseen", "Unstudied"]] as const) : []),
-              ].map(([value, label]) => {
-                const active = focusMode === value;
-                return (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setFocusMode(value as FocusMode)}
-                    data-active={active}
-                    aria-pressed={active}
-                    className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-          </LearnerFilterBar>
-
-          <div className="space-y-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5 lg:col-span-2" data-nn-e2e-practice-session-size>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Step 4 — Select question count</p>
-                <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
-                  Pick a preset and start, or open advanced options for a custom count.
-                </p>
+        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
+          Configure session
+          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
+            Exam mode, focus filter, question count — most learners start with defaults
+          </span>
+        </summary>
+        <div className="space-y-5 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <LearnerFilterBar
+              title="Exam mode"
+              className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5"
+            >
+              <div className="flex flex-wrap gap-2">
+                {(["practice", "cat"] as const).map((mode) => {
+                  const active = examMode === mode;
+                  return (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setExamMode(mode)}
+                      disabled={mode === "cat" && catEligibleOptions.length === 0}
+                      data-active={active}
+                      aria-pressed={active}
+                      className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-9"
+                    >
+                      {mode === "cat" ? "CAT Adaptive" : "Practice Exam"}
+                    </button>
+                  );
+                })}
               </div>
+            </LearnerFilterBar>
+
+            <LearnerFilterBar
+              title="Focus"
+              className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5"
+            >
+              <div className="flex flex-wrap gap-2">
+                {(
+                  [
+                    ["all", "All questions"],
+                    ["weak", "Weak areas"],
+                    ["missed", "Incorrect"],
+                    ...(examMode === "practice" ? ([["unseen", "Unstudied"]] as const) : []),
+                  ] as const
+                ).map(([value, label]) => {
+                  const active = focusMode === value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setFocusMode(value as FocusMode)}
+                      data-active={active}
+                      aria-pressed={active}
+                      className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </LearnerFilterBar>
+          </div>
+
+          <div
+            className="space-y-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5"
+            data-nn-e2e-practice-session-size
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question count</p>
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)]">
                 {questionCount} questions
               </span>
             </div>
-            <div className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap" role="group" aria-label="Question count">
+            <div
+              className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap"
+              role="group"
+              aria-label="Question count"
+            >
               {availableCounts.map((count) => {
                 const active = questionCount === count;
                 return (
@@ -688,50 +875,9 @@ export function PracticeTestsHubClient({
                 );
               })}
             </div>
-          </div>
-
-          {examMode === "cat" && !catAvailableForPathway ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)] lg:col-span-2">
-              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
-            </div>
-          ) : null}
-        </div>
-      </SharedStudySetupSurface>
-
-      <details
-        className="nn-flashcards-setup-panel nn-premium-practice-hub-builder nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
-        data-nn-e2e-practice-advanced-options
-      >
-        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
-          Advanced options
-          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
-            Change exam track or enter a custom question count.
-          </span>
-        </summary>
-        <div className="space-y-5 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
-          {pathwayOptions.length > 1 ? (
-            <div>
-              <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-                Exam Pathway
-              </label>
-              <select
-                id="practice-exam-pathway"
-                value={pathwayId}
-                onChange={(event) => setPathwayId(event.target.value)}
-                className="mt-2 h-12 w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
-              >
-                {pathwayOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : null}
-
-          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
               <label className="text-sm font-medium text-[var(--semantic-text-secondary)]" htmlFor="practice-exam-count">
-                Custom question count
+                Custom
               </label>
               <input
                 id="practice-exam-count"
@@ -751,30 +897,30 @@ export function PracticeTestsHubClient({
                 className="nn-flashcards-custom-limit-input"
               />
               <span className="text-xs text-[var(--semantic-text-muted)]">
-                {examMode === "cat" ? `${CAT_COUNT_MIN}-${CAT_COUNT_MAX} questions` : `${PRACTICE_COUNT_MIN}-${PRACTICE_COUNT_MAX} questions`}
+                {examMode === "cat" ? `${CAT_COUNT_MIN}–${CAT_COUNT_MAX} questions` : `${PRACTICE_COUNT_MIN}–${PRACTICE_COUNT_MAX} questions`}
               </span>
             </div>
+          </div>
 
-          {pathwayLessonPractice ? (
-            <div className="flex flex-wrap gap-2 text-xs font-medium text-[var(--semantic-text-secondary)]">
-              <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
-                {pathwayLessonPractice.practiceQuestionCount}
-                {pathwayLessonPractice.practiceTruncated ? "+" : ""} linked questions
-              </span>
-              <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
-                {pathwayLessonPractice.publishedLessonCount} lessons
-              </span>
+          {examMode === "cat" && !catAvailableForPathway ? (
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
             </div>
           ) : null}
         </div>
       </details>
 
+      {/* Error display */}
       {error ? (
         <div
           className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
           role="alert"
         >
-          <p>{showCatPoolWarning ? "This CAT pool is not ready for that setup yet. Try Practice Exam or broaden the categories." : error}</p>
+          <p>
+            {showCatPoolWarning
+              ? "This CAT pool is not ready for that setup yet. Try Practice Exam or broaden the categories."
+              : error}
+          </p>
           {sessionExpired ? (
             <button
               type="button"
@@ -787,31 +933,77 @@ export function PracticeTestsHubClient({
         </div>
       ) : null}
 
-      <LearnerSessionStartPanel
-        primary={
-          <button
-            type="button"
-            onClick={createTest}
-            disabled={startDisabled}
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-            data-nn-qa-practice-hub-start-test-bottom
-          >
-            {creating ? (
-              <>
-                <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                Starting
-              </>
-            ) : (
-              <>
-                <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                Start
-              </>
-            )}
-          </button>
-        }
-        secondary={<span className="text-xs text-[var(--semantic-text-muted)]">{setupSummary}</span>}
-        className="md:hidden"
-      />
+      {/* ── Advanced options (low-prominence, collapsed) ─────────── */}
+      {pathwayOptions.length > 1 || pathwayLessonPractice ? (
+        <details
+          className="nn-flashcards-recovery-filters nn-flashcards-collapsed-panel rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-transparent px-1 py-1"
+          data-nn-e2e-practice-advanced-options
+        >
+          <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)]">
+            Advanced options
+          </summary>
+          <div className="space-y-5 border-t border-[var(--semantic-border-soft)] px-3 pb-4 pt-4">
+            {pathwayOptions.length > 1 ? (
+              <div>
+                <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  Exam pathway
+                </label>
+                <select
+                  id="practice-exam-pathway"
+                  value={pathwayId}
+                  onChange={(event) => setPathwayId(event.target.value)}
+                  className="mt-2 h-12 w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
+                >
+                  {pathwayOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+            {pathwayLessonPractice ? (
+              <div className="flex flex-wrap gap-2 text-xs font-medium text-[var(--semantic-text-secondary)]">
+                <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
+                  {pathwayLessonPractice.practiceQuestionCount}
+                  {pathwayLessonPractice.practiceTruncated ? "+" : ""} linked questions
+                </span>
+                <span className="rounded-full border border-[rgba(15,23,42,0.06)] bg-white/70 px-3 py-1.5">
+                  {pathwayLessonPractice.publishedLessonCount} lessons
+                </span>
+              </div>
+            ) : null}
+          </div>
+        </details>
+      ) : null}
+
+      {/* ── CSS sticky start bar (mobile) ────────────────────────── */}
+      <div
+        className="nn-flashcards-sticky-start hidden fixed inset-x-0 bottom-0 z-20 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 py-3 shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_85%,transparent)] sm:px-6 md:hidden"
+        data-nn-e2e-practice-sticky-cta
+        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
+      >
+        <p className="mb-2 line-clamp-2 text-center text-[11px] text-[var(--semantic-text-muted)]">{setupSummary}</p>
+        <button
+          type="button"
+          onClick={createTest}
+          disabled={startDisabled}
+          className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-base font-bold text-white disabled:cursor-not-allowed disabled:opacity-55"
+          data-nn-qa-practice-hub-start-test-bottom
+        >
+          {creating ? (
+            <>
+              <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+              Starting…
+            </>
+          ) : (
+            <>
+              <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+              Start {modeLabel}
+            </>
+          )}
+        </button>
+      </div>
     </SharedStudySetupLayout>
   );
 }

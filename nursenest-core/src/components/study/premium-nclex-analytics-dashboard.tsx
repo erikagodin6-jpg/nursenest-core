@@ -411,7 +411,7 @@ export function PremiumNclexAnalyticsDashboard({
             impact="+5 pts"
             time="45 min"
             confidence="+8%"
-            href="/app/practice-tests/start"
+            href="/app/practice-tests?catLaunch=1"
           />
           <RecommendationCard
             priority="Clinical reasoning"

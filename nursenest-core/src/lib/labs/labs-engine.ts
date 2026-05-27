@@ -1287,7 +1287,7 @@ export function buildLabsStudyLinks(pathwayId: string | null, topicCode: string 
   const lessonsHubHref = trimmedPathway
     ? `/app/lessons?pathwayId=${encodeURIComponent(trimmedPathway)}${topic ? `&topicSlug=${encodeURIComponent(topic)}` : ""}`
     : "/app/lessons";
-  const catLaunchHref = trimmedPathway ? appPathwayCatSessionStartPath(trimmedPathway) : "/app/practice-tests/start";
+  const catLaunchHref = trimmedPathway ? appPathwayCatSessionStartPath(trimmedPathway) : "/app/practice-tests?catLaunch=1";
   const catHref = resolveStudySurfaceCatHref({
     pathwayId: trimmedPathway,
     availablePathwayIds: trimmedPathway ? [trimmedPathway] : [],

@@ -11,8 +11,8 @@ import {
 
 const FLOWS = [
   { label: "flashcards", path: "/app/flashcards?pathwayId=us-rn-nclex-rn" },
-  { label: "CAT launch", path: "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn" },
-  { label: "questions session", path: "/app/questions/session?pathwayId=us-rn-nclex-rn&count=20" },
+  { label: "CAT launch", path: "/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1" },
+  { label: "practice setup", path: "/app/practice-tests?pathwayId=us-rn-nclex-rn&count=20" },
   { label: "analytics", path: "/app/account/analytics?pathwayId=us-rn-nclex-rn" },
   { label: "lessons", path: "/app/lessons?pathwayId=ca-rn-nclex-rn" },
 ] as const;

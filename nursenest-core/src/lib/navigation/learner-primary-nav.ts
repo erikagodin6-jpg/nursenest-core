@@ -19,7 +19,7 @@ export const CANONICAL_LEARNER_ROUTES = {
   osce: SCENARIO_LEARNER_ROUTES.osce,
   clinicalScenarios: SCENARIO_LEARNER_ROUTES.clinicalScenarios,
   /** CAT adaptive entry */
-  cat: "/app/practice-tests/start",
+  cat: "/app/practice-tests?catLaunch=1",
   catBuilder: "/app/practice-tests",
   reports: "/app/account/progress",
   profile: "/app/profile",

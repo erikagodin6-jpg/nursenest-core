@@ -63,7 +63,7 @@ test("study links wire into flashcards, questions, CAT, and lab drills", () => {
 test("study links fall back safely when pathway is unknown", () => {
   const links = buildLabsStudyLinks(null, null);
   assert.equal(links.lessonsHubHref, "/app/lessons");
-  assert.equal(links.catLaunchHref, "/app/practice-tests/start");
+  assert.equal(links.catLaunchHref, "/app/practice-tests?catLaunch=1");
 });
 
 test("inventory counts remain non-empty so paid labs does not surface empty states", () => {

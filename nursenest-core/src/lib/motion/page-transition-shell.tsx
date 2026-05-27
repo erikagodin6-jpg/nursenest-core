@@ -90,6 +90,7 @@ export function learnerShellShouldDisablePageTransition(pathname: string): boole
   if (pathname === "/app") return true;
   if (pathname === "/app/questions" || pathname === "/app/questions/bank" || pathname === "/app/questions/session")
     return true;
+  if (pathname === "/app/practice-tests") return true;
   if (pathname.startsWith("/app/baseline-assessment")) return true;
   if (isPracticeTestRunnerPath(pathname)) return true;
   if (isStrategySessionPath(pathname)) return true;

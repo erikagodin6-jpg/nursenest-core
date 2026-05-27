@@ -197,7 +197,7 @@ export async function loadUserPerformanceSummary(userId: string): Promise<UserPe
     },
     recentQuestionTagCoverage: tagCov,
     integration: {
-      questionBankSessionPath: "/app/questions/session",
+      questionBankSessionPath: "/app/practice-tests",
       customQuizParams: {
         preset: "topic_drill",
         topic: "topic",

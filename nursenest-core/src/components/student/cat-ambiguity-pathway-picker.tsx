@@ -64,8 +64,8 @@ export function CatAmbiguityPathwayPicker({
         className="mt-2 text-xs text-[var(--semantic-text-secondary)]"
       >
         Your account has multiple exam tracks but none could be loaded here.{" "}
-        <Link href="/app/practice-tests/start" className="font-medium text-[var(--semantic-brand)] underline underline-offset-2">
-          Open the CAT start page
+        <Link href="/app/practice-tests?catLaunch=1" className="font-medium text-[var(--semantic-brand)] underline underline-offset-2">
+          Open the practice setup
         </Link>{" "}
         to choose.
       </p>

@@ -162,7 +162,7 @@ export function PracticeQuestionSessionSetupClient({
   const effectivePathwayId = pathwayId ?? defaultPathwayId;
 
   const catFullSetupHref = useMemo(
-    () => (effectivePathwayId ? appPathwayCatFullSetupHref(effectivePathwayId) : "/app/practice-tests/start"),
+    () => (effectivePathwayId ? appPathwayCatFullSetupHref(effectivePathwayId) : "/app/practice-tests?catLaunch=1"),
     [effectivePathwayId],
   );
 

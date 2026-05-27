@@ -40,16 +40,16 @@ test("resolveStudySurfaceCatHref keeps the explicit chooser when multiple pathwa
     resolveStudySurfaceCatHref({
       availablePathwayIds: ["us-rn-nclex-rn", "us-np-fnp"],
     }),
-    "/app/practice-tests/start",
+    "/app/practice-tests?catLaunch=1",
   );
 });
 
-test("appPathwayCatFullSetupHref includes pathwayId and review=1 for full setup escape hatch", () => {
+test("appPathwayCatFullSetupHref uses the unified practice setup surface", () => {
   const href = appPathwayCatFullSetupHref("us-rn-nclex-rn");
-  assert.ok(href.startsWith("/app/practice-tests/start?"));
-  const q = new URLSearchParams(href.slice("/app/practice-tests/start?".length));
+  assert.ok(href.startsWith("/app/practice-tests?"));
+  const q = new URLSearchParams(href.slice("/app/practice-tests?".length));
   assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
-  assert.equal(q.get("review"), "1");
+  assert.equal(q.get("catLaunch"), "1");
 });
 
 test("isForcedCatFullSetupReviewParam: only 1 and true (trimmed, case-insensitive)", () => {
