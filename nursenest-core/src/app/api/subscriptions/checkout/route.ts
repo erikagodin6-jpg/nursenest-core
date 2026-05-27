@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
@@ -81,6 +80,33 @@ function sessionUserId(session: { user?: unknown } | null): string | undefined {
   return undefined;
 }
 
+function hasConfiguredAuthSecret(): boolean {
+  return Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+}
+
+async function loadCheckoutSession(): Promise<{ user?: unknown } | null> {
+  if (!hasConfiguredAuthSecret()) {
+    safeServerLog("stripe_checkout", "checkout_auth_skipped_missing_secret", {
+      route: "/api/subscriptions/checkout",
+    });
+    return null;
+  }
+
+  try {
+    const { auth } = await import("@/lib/auth");
+    return (await auth()) ?? null;
+  } catch (error) {
+    safeServerLog("stripe_checkout", "checkout_auth_failed", {
+      route: "/api/subscriptions/checkout",
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+    });
+    return null;
+  }
+}
+
 function auditCheckoutFailed(args: {
   correlation: string | undefined;
   reason: string;
@@ -108,7 +134,7 @@ export async function POST(req: Request) {
     });
     safeServerLog("stripe_checkout", "checkout_route_entered", { route: "/api/subscriptions/checkout" });
 
-    const session = await auth();
+    const session = await loadCheckoutSession();
     const userId = sessionUserId(session);
     safeServerLog("stripe_checkout", "checkout_session_state", {
       sessionExists: session ? 1 : 0,

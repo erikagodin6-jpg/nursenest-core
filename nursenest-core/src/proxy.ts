@@ -22,7 +22,21 @@ let authProxyDepsPromise: Promise<{ runAuthMiddleware: NextMiddleware }> | null 
 const PUBLIC_ASSET_EXTENSION_RE =
   /\.(?:avif|bmp|css|gif|ico|jpe?g|js|json|map|mp4|ogg|otf|pdf|png|svg|ttf|txt|webm|webmanifest|webp|woff2?)$/i;
 
+function hasConfiguredAuthSecret(): boolean {
+  return Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+}
+
 function loadAuthProxyDeps() {
+  if (!hasConfiguredAuthSecret()) {
+    return Promise.resolve({
+      runAuthMiddleware: ((req: NextRequest) =>
+        NextResponse.next({ request: { headers: req.headers } })) as NextMiddleware,
+    });
+  }
+
   if (!authProxyDepsPromise) {
     authProxyDepsPromise = import("@/lib/auth-middleware")
       .then(({ middlewareAuth }) => ({

@@ -37,6 +37,11 @@ test("flashcards-study: active deck session routes", () => {
   assert.equal(resolveLearnerShellMode("/app/flashcards/rncore-2025"), "flashcards-study");
   // query strings on a deck route
   assert.equal(resolveLearnerShellMode("/app/flashcards/rncore?start=1"), "flashcards-study");
+  // study-tools session player route
+  assert.equal(
+    resolveLearnerShellMode("/app/study-tools/flashcards/decks/deck_abc123/session/sess_xyz"),
+    "flashcards-study",
+  );
 });
 
 test("NOT flashcards-study: flashcards/decks sub-path is standard", () => {
@@ -83,10 +88,10 @@ test("exam-focused flags: chrome suppressed, widgets suppressed, not dashboard",
   assert.equal(f.isDashboard, false);
 });
 
-test("flashcards-study flags: chrome visible, widgets suppressed, not dashboard", () => {
+test("flashcards-study flags: chrome suppressed, widgets suppressed, not dashboard", () => {
   const f = learnerShellFlags("/app/flashcards/my-deck");
   assert.equal(f.mode, "flashcards-study");
-  assert.equal(f.suppressFullChrome, false);
+  assert.equal(f.suppressFullChrome, true);
   assert.equal(f.suppressStudyWidgets, true);
   assert.equal(f.isDashboard, false);
 });

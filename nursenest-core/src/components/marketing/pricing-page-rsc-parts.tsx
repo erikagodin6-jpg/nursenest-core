@@ -109,34 +109,44 @@ export async function PricingMarketingPlansRscLocalized({
 
 /** SEO + FAQ JSON-LD + breadcrumbs for default-locale `/pricing` (deferred behind plans). */
 export async function PricingDeferredSeoDefault() {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const m =
-    (await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {};
-  const mLocale =
-    locale === DEFAULT_MARKETING_LOCALE ? m : await loadMarketingLayoutShardsOverlay(locale);
-  const { schemaItems } = marketingPricingBreadcrumbs();
-  const pricingFaqJsonLd = buildPricingFaqJsonLdItems(mLocale);
-  return (
-    <>
-      <BreadcrumbJsonLd items={schemaItems} />
-      <FaqJsonLd items={pricingFaqJsonLd} />
-    </>
-  );
+  try {
+    const locale = await getMarketingLocaleForDefaultRoute();
+    const m =
+      (await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {};
+    const mLocale =
+      locale === DEFAULT_MARKETING_LOCALE ? m : await loadMarketingLayoutShardsOverlay(locale);
+    const { schemaItems } = marketingPricingBreadcrumbs();
+    const pricingFaqJsonLd = buildPricingFaqJsonLdItems(mLocale);
+    return (
+      <>
+        <BreadcrumbJsonLd items={schemaItems} />
+        <FaqJsonLd items={pricingFaqJsonLd} />
+      </>
+    );
+  } catch (error) {
+    logPricingRscFailure("default_seo", error);
+    return null;
+  }
 }
 
 /** SEO + FAQ JSON-LD + breadcrumbs for `/{locale}/pricing` (deferred behind plans). */
 export async function PricingDeferredSeoLocalized({ locale }: { locale: string }) {
-  const raw = marketingPricingBreadcrumbs();
-  const messages = await loadMarketingLayoutShardsOverlay(locale);
-  const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
-  const pricingFaqJsonLd = buildPricingFaqJsonLdItems(messages);
-  return (
-    <>
-      <BreadcrumbJsonLd items={schemaItems} />
-      <FaqJsonLd items={pricingFaqJsonLd} />
-      <div className="mx-auto max-w-6xl px-4 pb-1 pt-1 sm:px-6 sm:pb-2 sm:pt-2 lg:px-8">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
-    </>
-  );
+  try {
+    const raw = marketingPricingBreadcrumbs();
+    const messages = await loadMarketingLayoutShardsOverlay(locale);
+    const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
+    const pricingFaqJsonLd = buildPricingFaqJsonLdItems(messages);
+    return (
+      <>
+        <BreadcrumbJsonLd items={schemaItems} />
+        <FaqJsonLd items={pricingFaqJsonLd} />
+        <div className="mx-auto max-w-6xl px-4 pb-1 pt-1 sm:px-6 sm:pb-2 sm:pt-2 lg:px-8">
+          <BreadcrumbTrail items={crumbs} />
+        </div>
+      </>
+    );
+  } catch (error) {
+    logPricingRscFailure("localized_seo", error);
+    return null;
+  }
 }

@@ -22,6 +22,13 @@ function adminAccessDebug(): boolean {
   return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
 }
 
+function hasConfiguredAuthSecret(): boolean {
+  return Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+}
+
 const STAFF_SESSION_ROLE_TIMEOUT_MS = 5500;
 
 /**
@@ -30,6 +37,11 @@ const STAFF_SESSION_ROLE_TIMEOUT_MS = 5500;
  */
 async function loadStaffSession(): Promise<StaffSession | null> {
   renderTrace("staff session start", { route: "shared-root-layout" });
+  if (!hasConfiguredAuthSecret()) {
+    renderTrace("staff session fallback", { route: "shared-root-layout", reason: "missing_auth_secret" });
+    return null;
+  }
+
   let session: Session | null = null;
   try {
     const { auth } = await import("@/lib/auth");

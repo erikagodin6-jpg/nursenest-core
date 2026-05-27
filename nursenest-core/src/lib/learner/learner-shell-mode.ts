@@ -57,7 +57,7 @@ export function learnerShellFlags(pathname: string | null | undefined): LearnerS
   const mode = resolveLearnerShellMode(pathname);
   return {
     mode,
-    suppressFullChrome: mode === "exam-focused",
+    suppressFullChrome: mode === "exam-focused" || mode === "flashcards-study",
     suppressStudyWidgets: mode === "exam-focused" || mode === "flashcards-study" || mode === "study-hub",
     isDashboard: mode === "dashboard",
   };

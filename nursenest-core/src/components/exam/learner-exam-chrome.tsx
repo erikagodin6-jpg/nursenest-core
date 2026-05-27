@@ -3,15 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
 
 /**
- * Suppresses the main learner marketing-style header during active CAT / practice-test sessions
- * so the experience feels closer to a testing environment. Shows a minimal exit strip instead.
- *
- * Mode is derived from `learnerShellFlags` — same resolver used by the server layout — so the
- * client and server always agree on which routes enter focused exam mode.
+ * Suppresses the main learner chrome during active exam and flashcard study sessions,
+ * replacing it with a single "← Return to RN Hub" action. Mode is derived from
+ * `learnerShellFlags` — same resolver as the server layout — so client and server agree.
  */
 export function LearnerExamChromeGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
@@ -30,36 +27,24 @@ export function LearnerExamChromeGate({ children }: { children: React.ReactNode 
     return <>{children}</>;
   }
 
-  /**
-   * Laptop+: lock the focused practice-test column to the dynamic viewport so inner
-   * `nn-practice-session` can use flex-1 instead of fragile `calc(100dvh - …)` totals
-   * (minimal nav + shell padding + page wrappers must not exceed one viewport height).
-   */
   return (
-    <div className="nn-learner-exam-focus-column flex min-h-0 flex-col lg:h-[100dvh] lg:max-h-[100dvh] lg:overflow-hidden">
+    <div className="nn-learner-exam-focus-column flex min-h-0 flex-col h-[100dvh] max-h-[100dvh] overflow-hidden">
       <div
-        className="nn-exam-minimal-nav z-50 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] border-l-[3px] border-l-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,transparent)] px-3 py-1.5 text-xs text-[var(--semantic-text-muted)] shadow-sm backdrop-blur-sm lg:sticky lg:top-0"
+        className="nn-exam-minimal-nav z-50 flex shrink-0 items-center gap-3 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm"
         data-nn-cat-minimal-brand-shell=""
       >
         <Link
           href="/app"
-          className="inline-flex min-h-10 min-w-0 items-center gap-2 overflow-visible bg-transparent text-[var(--semantic-text-primary)] hover:opacity-90"
-          aria-label="Exit focused exam mode to NurseNest dashboard"
+          className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-bg-base)] px-3 py-1.5 text-[11px] font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_72%,var(--semantic-surface))]"
+          aria-label="Return to RN Hub"
         >
-          <SiteBrandLogoMark variant="learner" />
-          <span className="font-semibold tracking-tight">NurseNest</span>
+          ← Return to RN Hub
         </Link>
-        <span className="hidden max-w-xl sm:inline sm:text-[11px] sm:leading-snug sm:text-muted-foreground">
-          Licensing-style practice mode. Distractions reduced; practice only.
+        <span className="hidden text-[11px] text-[var(--semantic-text-muted)] sm:block">
+          Focused study mode — distractions reduced
         </span>
-        <Link
-          href="/app"
-          className="shrink-0 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-bg-base)] px-3 py-1.5 text-[11px] font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-surface-alt)]"
-        >
-          Exit
-        </Link>
       </div>
-      <div className="nn-learner-exam-focus-body min-h-0 flex flex-1 flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden">
+      <div className="nn-learner-exam-focus-body min-h-0 flex flex-1 flex-col overflow-hidden">
         {children}
       </div>
     </div>

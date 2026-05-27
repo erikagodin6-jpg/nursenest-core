@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-27T03:21:17.341Z",
+  "generatedAt": "2026-05-27T06:59:12.710Z",
   "events": [
     {
       "kind": "layout",
@@ -14,11 +14,11 @@
         ]
       },
       "id": "layout:1",
-      "startTimeMs": 11841.699203,
-      "memoryStartMB": 402,
-      "endTimeMs": 11842.975259,
-      "durationMs": 1.276056000000608,
-      "memoryEndMB": 402
+      "startTimeMs": 10592.553266,
+      "memoryStartMB": 398.43,
+      "endTimeMs": 10594.020142,
+      "durationMs": 1.4668759999985923,
+      "memoryEndMB": 398.43
     },
     {
       "kind": "layout",
@@ -34,11 +34,11 @@
         ]
       },
       "id": "layout:2",
-      "startTimeMs": 11845.702168,
-      "memoryStartMB": 402,
-      "endTimeMs": 12034.198283,
-      "durationMs": 188.49611499999992,
-      "memoryEndMB": 404.5
+      "startTimeMs": 10598.467686,
+      "memoryStartMB": 398.43,
+      "endTimeMs": 11165.345375,
+      "durationMs": 566.8776890000008,
+      "memoryEndMB": 419.05
     },
     {
       "kind": "layout",
@@ -53,11 +53,11 @@
         ]
       },
       "id": "layout:3",
-      "startTimeMs": 11896.740497,
-      "memoryStartMB": 403.25,
-      "endTimeMs": 11897.444369,
-      "durationMs": 0.7038720000000467,
-      "memoryEndMB": 403.25
+      "startTimeMs": 10825.888704,
+      "memoryStartMB": 405.49,
+      "endTimeMs": 10826.411797,
+      "durationMs": 0.5230929999997898,
+      "memoryEndMB": 405.49
     },
     {
       "kind": "layout",
@@ -73,11 +73,11 @@
         ]
       },
       "id": "layout:4",
-      "startTimeMs": 11899.28807,
-      "memoryStartMB": 403.25,
-      "endTimeMs": 12116.002972,
-      "durationMs": 216.7149019999997,
-      "memoryEndMB": 408.75
+      "startTimeMs": 10827.805246,
+      "memoryStartMB": 405.49,
+      "endTimeMs": 11189.362838,
+      "durationMs": 361.5575919999992,
+      "memoryEndMB": 420.43
     },
     {
       "kind": "layout",
@@ -92,11 +92,11 @@
         ]
       },
       "id": "layout:5",
-      "startTimeMs": 11916.989881,
-      "memoryStartMB": 403.38,
-      "endTimeMs": 11917.754924,
-      "durationMs": 0.765043000001242,
-      "memoryEndMB": 403.38
+      "startTimeMs": 10868.878633,
+      "memoryStartMB": 412.12,
+      "endTimeMs": 10869.45227,
+      "durationMs": 0.5736369999995077,
+      "memoryEndMB": 412.12
     },
     {
       "kind": "layout",
@@ -112,11 +112,11 @@
         ]
       },
       "id": "layout:6",
-      "startTimeMs": 11919.310377,
-      "memoryStartMB": 403.38,
-      "endTimeMs": 12095.515437,
-      "durationMs": 176.20506000000023,
-      "memoryEndMB": 408
+      "startTimeMs": 10870.871776,
+      "memoryStartMB": 412.12,
+      "endTimeMs": 11144.785519,
+      "durationMs": 273.91374299999916,
+      "memoryEndMB": 419.49
     },
     {
       "kind": "layout",
@@ -131,11 +131,11 @@
         ]
       },
       "id": "layout:7",
-      "startTimeMs": 11964.384384,
-      "memoryStartMB": 403.5,
-      "endTimeMs": 11965.102608,
-      "durationMs": 0.7182239999983722,
-      "memoryEndMB": 403.5
+      "startTimeMs": 10890.056503,
+      "memoryStartMB": 412.37,
+      "endTimeMs": 10890.681454,
+      "durationMs": 0.6249509999997827,
+      "memoryEndMB": 412.37
     },
     {
       "kind": "layout",
@@ -151,11 +151,11 @@
         ]
       },
       "id": "layout:8",
-      "startTimeMs": 11967.324525,
-      "memoryStartMB": 403.63,
-      "endTimeMs": 12160.642491,
-      "durationMs": 193.31796600000052,
-      "memoryEndMB": 409.38
+      "startTimeMs": 10892.083558,
+      "memoryStartMB": 412.37,
+      "endTimeMs": 11116.530779,
+      "durationMs": 224.44722100000035,
+      "memoryEndMB": 418.12
     },
     {
       "kind": "layout",
@@ -170,11 +170,11 @@
         ]
       },
       "id": "layout:9",
-      "startTimeMs": 11989.485563,
-      "memoryStartMB": 403.63,
-      "endTimeMs": 11990.039263,
-      "durationMs": 0.55370000000039,
-      "memoryEndMB": 403.63
+      "startTimeMs": 10904.619611,
+      "memoryStartMB": 412.49,
+      "endTimeMs": 10905.183222,
+      "durationMs": 0.5636109999995824,
+      "memoryEndMB": 412.49
     },
     {
       "kind": "layout",
@@ -190,11 +190,11 @@
         ]
       },
       "id": "layout:10",
-      "startTimeMs": 11994.911593,
-      "memoryStartMB": 403.63,
-      "endTimeMs": 12186.25242,
-      "durationMs": 191.340827,
-      "memoryEndMB": 410.13
+      "startTimeMs": 10906.533711,
+      "memoryStartMB": 412.49,
+      "endTimeMs": 11131.986672,
+      "durationMs": 225.45296100000087,
+      "memoryEndMB": 418.87
     },
     {
       "kind": "layout",
@@ -209,11 +209,11 @@
         ]
       },
       "id": "layout:11",
-      "startTimeMs": 13689.537296,
-      "memoryStartMB": 433.93,
-      "endTimeMs": 13691.641733,
-      "durationMs": 2.1044369999999617,
-      "memoryEndMB": 433.93
+      "startTimeMs": 10927.851033,
+      "memoryStartMB": 412.74,
+      "endTimeMs": 10928.542884,
+      "durationMs": 0.6918509999995877,
+      "memoryEndMB": 412.74
     },
     {
       "kind": "layout",
@@ -229,11 +229,11 @@
         ]
       },
       "id": "layout:12",
-      "startTimeMs": 13693.265982,
-      "memoryStartMB": 433.93,
-      "endTimeMs": 13741.301387,
-      "durationMs": 48.03540499999872,
-      "memoryEndMB": 409.95
+      "startTimeMs": 10929.849874,
+      "memoryStartMB": 412.74,
+      "endTimeMs": 11177.90275,
+      "durationMs": 248.05287599999974,
+      "memoryEndMB": 419.8
     },
     {
       "kind": "layout",
@@ -248,11 +248,11 @@
         ]
       },
       "id": "layout:13",
-      "startTimeMs": 13823.186664,
-      "memoryStartMB": 412.57,
-      "endTimeMs": 13823.752359,
-      "durationMs": 0.565694999999323,
-      "memoryEndMB": 412.57
+      "startTimeMs": 10941.446185,
+      "memoryStartMB": 412.99,
+      "endTimeMs": 10941.918871,
+      "durationMs": 0.4726859999991575,
+      "memoryEndMB": 412.99
     },
     {
       "kind": "layout",
@@ -268,11 +268,11 @@
         ]
       },
       "id": "layout:14",
-      "startTimeMs": 13824.783877,
-      "memoryStartMB": 412.57,
-      "endTimeMs": 13851.861111,
-      "durationMs": 27.077234000000317,
-      "memoryEndMB": 413.32
+      "startTimeMs": 10942.869475,
+      "memoryStartMB": 412.99,
+      "endTimeMs": 11201.184482,
+      "durationMs": 258.31500700000106,
+      "memoryEndMB": 421.18
     },
     {
       "kind": "layout",
@@ -287,11 +287,11 @@
         ]
       },
       "id": "layout:15",
-      "startTimeMs": 13951.060297,
-      "memoryStartMB": 411.35,
-      "endTimeMs": 13953.037995,
-      "durationMs": 1.9776980000006006,
-      "memoryEndMB": 411.35
+      "startTimeMs": 10953.161978,
+      "memoryStartMB": 412.99,
+      "endTimeMs": 10953.732106,
+      "durationMs": 0.5701279999993858,
+      "memoryEndMB": 412.99
     },
     {
       "kind": "layout",
@@ -307,11 +307,11 @@
         ]
       },
       "id": "layout:16",
-      "startTimeMs": 13954.293078,
-      "memoryStartMB": 411.35,
-      "endTimeMs": 13995.666235,
-      "durationMs": 41.37315699999999,
-      "memoryEndMB": 412.1
+      "startTimeMs": 10955.210795,
+      "memoryStartMB": 413.12,
+      "endTimeMs": 11258.909419,
+      "durationMs": 303.69862399999874,
+      "memoryEndMB": 427.05
     },
     {
       "kind": "layout",
@@ -326,11 +326,11 @@
         ]
       },
       "id": "layout:17",
-      "startTimeMs": 14055.995499,
-      "memoryStartMB": 414.72,
-      "endTimeMs": 14056.512401,
-      "durationMs": 0.5169019999993907,
-      "memoryEndMB": 414.72
+      "startTimeMs": 12956.190789,
+      "memoryStartMB": 448.05,
+      "endTimeMs": 12956.840052,
+      "durationMs": 0.6492629999993369,
+      "memoryEndMB": 448.05
     },
     {
       "kind": "layout",
@@ -346,11 +346,11 @@
         ]
       },
       "id": "layout:18",
-      "startTimeMs": 14058.244971,
-      "memoryStartMB": 414.72,
-      "endTimeMs": 14082.084068,
-      "durationMs": 23.839097000000038,
-      "memoryEndMB": 415.47
+      "startTimeMs": 12958.137758,
+      "memoryStartMB": 448.05,
+      "endTimeMs": 12990.802199,
+      "durationMs": 32.66444099999899,
+      "memoryEndMB": 448.8
     },
     {
       "kind": "layout",
@@ -365,11 +365,11 @@
         ]
       },
       "id": "layout:19",
-      "startTimeMs": 14195.44014,
-      "memoryStartMB": 412.31,
-      "endTimeMs": 14196.233508,
-      "durationMs": 0.7933679999987362,
-      "memoryEndMB": 412.31
+      "startTimeMs": 13122.415203,
+      "memoryStartMB": 437.21,
+      "endTimeMs": 13122.983753,
+      "durationMs": 0.5685499999999593,
+      "memoryEndMB": 437.33
     },
     {
       "kind": "layout",
@@ -385,11 +385,11 @@
         ]
       },
       "id": "layout:20",
-      "startTimeMs": 14199.468524,
-      "memoryStartMB": 412.31,
-      "endTimeMs": 14230.690944,
-      "durationMs": 31.222420000000056,
-      "memoryEndMB": 413.06
+      "startTimeMs": 13123.97187,
+      "memoryStartMB": 437.46,
+      "endTimeMs": 13147.443566,
+      "durationMs": 23.47169600000052,
+      "memoryEndMB": 438.33
     },
     {
       "kind": "layout",
@@ -404,11 +404,11 @@
         ]
       },
       "id": "layout:21",
-      "startTimeMs": 14305.129378,
-      "memoryStartMB": 415.69,
-      "endTimeMs": 14305.797776,
-      "durationMs": 0.6683979999997973,
-      "memoryEndMB": 415.69
+      "startTimeMs": 13227.462503,
+      "memoryStartMB": 445.58,
+      "endTimeMs": 13228.816024,
+      "durationMs": 1.3535209999990911,
+      "memoryEndMB": 445.58
     },
     {
       "kind": "layout",
@@ -424,11 +424,11 @@
         ]
       },
       "id": "layout:22",
-      "startTimeMs": 14306.829107,
-      "memoryStartMB": 415.69,
-      "endTimeMs": 14325.3626,
-      "durationMs": 18.533493000000817,
-      "memoryEndMB": 416.44
+      "startTimeMs": 13230.312634,
+      "memoryStartMB": 445.58,
+      "endTimeMs": 13255.883836,
+      "durationMs": 25.571202000000994,
+      "memoryEndMB": 447.96
     },
     {
       "kind": "layout",
@@ -443,11 +443,11 @@
         ]
       },
       "id": "layout:23",
-      "startTimeMs": 14435.650289,
-      "memoryStartMB": 413.15,
-      "endTimeMs": 14436.104611,
-      "durationMs": 0.45432200000141165,
-      "memoryEndMB": 413.15
+      "startTimeMs": 13321.31818,
+      "memoryStartMB": 445.28,
+      "endTimeMs": 13322.102936,
+      "durationMs": 0.7847559999991063,
+      "memoryEndMB": 445.28
     },
     {
       "kind": "layout",
@@ -463,11 +463,11 @@
         ]
       },
       "id": "layout:24",
-      "startTimeMs": 14436.888702,
-      "memoryStartMB": 413.15,
-      "endTimeMs": 14481.988247,
-      "durationMs": 45.099544999999125,
-      "memoryEndMB": 413.9
+      "startTimeMs": 13324.501177,
+      "memoryStartMB": 445.28,
+      "endTimeMs": 13348.644397,
+      "durationMs": 24.14321999999993,
+      "memoryEndMB": 446.03
     },
     {
       "kind": "layout",
@@ -482,11 +482,11 @@
         ]
       },
       "id": "layout:25",
-      "startTimeMs": 14580.155137,
-      "memoryStartMB": 421.15,
-      "endTimeMs": 14580.713211,
-      "durationMs": 0.558074000000488,
-      "memoryEndMB": 421.15
+      "startTimeMs": 13401.063826,
+      "memoryStartMB": 448.66,
+      "endTimeMs": 13401.549287,
+      "durationMs": 0.48546100000021397,
+      "memoryEndMB": 448.66
     },
     {
       "kind": "layout",
@@ -502,11 +502,11 @@
         ]
       },
       "id": "layout:26",
-      "startTimeMs": 14581.840652,
-      "memoryStartMB": 421.15,
-      "endTimeMs": 14610.396759,
-      "durationMs": 28.55610699999852,
-      "memoryEndMB": 421.9
+      "startTimeMs": 13402.505545,
+      "memoryStartMB": 448.66,
+      "endTimeMs": 13438.391298,
+      "durationMs": 35.88575300000048,
+      "memoryEndMB": 444.32
     },
     {
       "kind": "layout",
@@ -521,11 +521,11 @@
         ]
       },
       "id": "layout:27",
-      "startTimeMs": 15435.378244,
-      "memoryStartMB": 440.54,
-      "endTimeMs": 15436.018998,
-      "durationMs": 0.6407540000000154,
-      "memoryEndMB": 440.54
+      "startTimeMs": 13484.788717,
+      "memoryStartMB": 446.94,
+      "endTimeMs": 13485.25358,
+      "durationMs": 0.46486300000105985,
+      "memoryEndMB": 446.94
     },
     {
       "kind": "layout",
@@ -541,11 +541,11 @@
         ]
       },
       "id": "layout:28",
-      "startTimeMs": 15437.257393,
-      "memoryStartMB": 440.54,
-      "endTimeMs": 15460.237903,
-      "durationMs": 22.980509999999413,
-      "memoryEndMB": 441.29
+      "startTimeMs": 13486.244991,
+      "memoryStartMB": 446.94,
+      "endTimeMs": 13506.660607,
+      "durationMs": 20.415616000000227,
+      "memoryEndMB": 447.69
     },
     {
       "kind": "layout",
@@ -560,11 +560,11 @@
         ]
       },
       "id": "layout:29",
-      "startTimeMs": 15519.497704,
-      "memoryStartMB": 443.91,
-      "endTimeMs": 15520.18014,
-      "durationMs": 0.6824360000009619,
-      "memoryEndMB": 443.91
+      "startTimeMs": 13564.217433,
+      "memoryStartMB": 450.32,
+      "endTimeMs": 13564.626317,
+      "durationMs": 0.4088840000003984,
+      "memoryEndMB": 450.32
     },
     {
       "kind": "layout",
@@ -580,11 +580,11 @@
         ]
       },
       "id": "layout:30",
-      "startTimeMs": 15521.418904,
-      "memoryStartMB": 443.91,
-      "endTimeMs": 15573.8102,
-      "durationMs": 52.391295999999784,
-      "memoryEndMB": 434.53
+      "startTimeMs": 13565.449031,
+      "memoryStartMB": 450.32,
+      "endTimeMs": 13603.311518,
+      "durationMs": 37.86248700000033,
+      "memoryEndMB": 444.9
     },
     {
       "kind": "layout",
@@ -599,11 +599,11 @@
         ]
       },
       "id": "layout:31",
-      "startTimeMs": 15640.535291,
-      "memoryStartMB": 437.28,
-      "endTimeMs": 15642.529338,
-      "durationMs": 1.994047000000137,
-      "memoryEndMB": 437.28
+      "startTimeMs": 13658.214552,
+      "memoryStartMB": 447.53,
+      "endTimeMs": 13658.654669,
+      "durationMs": 0.44011700000010023,
+      "memoryEndMB": 447.53
     },
     {
       "kind": "layout",
@@ -619,11 +619,11 @@
         ]
       },
       "id": "layout:32",
-      "startTimeMs": 15644.514676,
-      "memoryStartMB": 437.28,
-      "endTimeMs": 15746.385465,
-      "durationMs": 101.8707889999987,
-      "memoryEndMB": 438.66
+      "startTimeMs": 13659.545079,
+      "memoryStartMB": 447.53,
+      "endTimeMs": 13680.075964,
+      "durationMs": 20.530885000000126,
+      "memoryEndMB": 448.28
     },
     {
       "kind": "layout",
@@ -638,11 +638,11 @@
         ]
       },
       "id": "layout:33",
-      "startTimeMs": 15871.601164,
-      "memoryStartMB": 439.15,
-      "endTimeMs": 15872.134895,
-      "durationMs": 0.5337309999995341,
-      "memoryEndMB": 439.15
+      "startTimeMs": 14310.564925,
+      "memoryStartMB": 468.93,
+      "endTimeMs": 14310.981172,
+      "durationMs": 0.41624699999920267,
+      "memoryEndMB": 468.93
     },
     {
       "kind": "layout",
@@ -658,11 +658,11 @@
         ]
       },
       "id": "layout:34",
-      "startTimeMs": 15873.226088,
-      "memoryStartMB": 439.15,
-      "endTimeMs": 15894.60608,
-      "durationMs": 21.37999200000013,
-      "memoryEndMB": 439.9
+      "startTimeMs": 14311.666309,
+      "memoryStartMB": 468.93,
+      "endTimeMs": 14330.762961,
+      "durationMs": 19.096652000000176,
+      "memoryEndMB": 469.8
     },
     {
       "kind": "layout",
@@ -677,11 +677,11 @@
         ]
       },
       "id": "layout:35",
-      "startTimeMs": 15960.844214,
-      "memoryStartMB": 442.65,
-      "endTimeMs": 15961.515603,
-      "durationMs": 0.6713889999991807,
-      "memoryEndMB": 442.65
+      "startTimeMs": 14390.770841,
+      "memoryStartMB": 472.43,
+      "endTimeMs": 14391.253074,
+      "durationMs": 0.4822330000006332,
+      "memoryEndMB": 472.43
     },
     {
       "kind": "layout",
@@ -697,31 +697,11 @@
         ]
       },
       "id": "layout:36",
-      "startTimeMs": 15962.522912,
-      "memoryStartMB": 442.65,
-      "endTimeMs": 15992.948762,
-      "durationMs": 30.425849999999627,
-      "memoryEndMB": 444.15
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:37",
-      "startTimeMs": 15963.233433,
-      "memoryStartMB": 442.65,
-      "endTimeMs": 15966.494631,
-      "durationMs": 3.2611980000001495,
-      "memoryEndMB": 442.65
+      "startTimeMs": 14392.332973,
+      "memoryStartMB": 472.43,
+      "endTimeMs": 14410.466807,
+      "durationMs": 18.133834000000206,
+      "memoryEndMB": 473.18
     },
     {
       "kind": "layout",
@@ -735,12 +715,12 @@
           "marketing"
         ]
       },
-      "id": "layout:38",
-      "startTimeMs": 16260.723492,
-      "memoryStartMB": 449.22,
-      "endTimeMs": 16261.474922,
-      "durationMs": 0.751430000000255,
-      "memoryEndMB": 449.22
+      "id": "layout:37",
+      "startTimeMs": 14474.439718,
+      "memoryStartMB": 471.14,
+      "endTimeMs": 14474.862895,
+      "durationMs": 0.4231770000005781,
+      "memoryEndMB": 471.14
     },
     {
       "kind": "layout",
@@ -755,18 +735,37 @@
           "default"
         ]
       },
-      "id": "layout:39",
-      "startTimeMs": 16262.598848,
-      "memoryStartMB": 449.22,
-      "endTimeMs": 16329.340418,
-      "durationMs": 66.74157000000014,
-      "memoryEndMB": 447.41
+      "id": "layout:38",
+      "startTimeMs": 14475.828919,
+      "memoryStartMB": 471.14,
+      "endTimeMs": 14497.713381,
+      "durationMs": 21.884461999999985,
+      "memoryEndMB": 472.01
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:39",
+      "startTimeMs": 14516.647755,
+      "memoryStartMB": 472.64,
+      "endTimeMs": 14517.088227,
+      "durationMs": 0.4404720000002271,
+      "memoryEndMB": 472.64
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -776,11 +775,11 @@
         ]
       },
       "id": "layout:40",
-      "startTimeMs": 16263.296144,
-      "memoryStartMB": 449.22,
-      "endTimeMs": 16265.719235,
-      "durationMs": 2.423091000000568,
-      "memoryEndMB": 449.22
+      "startTimeMs": 14518.306989,
+      "memoryStartMB": 472.64,
+      "endTimeMs": 14538.416578,
+      "durationMs": 20.109588999999687,
+      "memoryEndMB": 473.51
     },
     {
       "kind": "layout",
@@ -795,11 +794,11 @@
         ]
       },
       "id": "layout:41",
-      "startTimeMs": 16696.809889,
-      "memoryStartMB": 458.9,
-      "endTimeMs": 16697.398761,
-      "durationMs": 0.588872000000265,
-      "memoryEndMB": 458.9
+      "startTimeMs": 14591.263378,
+      "memoryStartMB": 476.14,
+      "endTimeMs": 14591.707068,
+      "durationMs": 0.44369000000006054,
+      "memoryEndMB": 476.14
     },
     {
       "kind": "layout",
@@ -815,31 +814,11 @@
         ]
       },
       "id": "layout:42",
-      "startTimeMs": 16699.253061,
-      "memoryStartMB": 458.9,
-      "endTimeMs": 16731.891556,
-      "durationMs": 32.63849499999924,
-      "memoryEndMB": 460.28
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:43",
-      "startTimeMs": 16700.10445,
-      "memoryStartMB": 458.9,
-      "endTimeMs": 16701.477064,
-      "durationMs": 1.372613999999885,
-      "memoryEndMB": 458.9
+      "startTimeMs": 14592.552185,
+      "memoryStartMB": 476.14,
+      "endTimeMs": 14624.831683,
+      "durationMs": 32.279497999999876,
+      "memoryEndMB": 474.37
     },
     {
       "kind": "layout",
@@ -853,12 +832,12 @@
           "marketing"
         ]
       },
-      "id": "layout:44",
-      "startTimeMs": 16861.116598,
-      "memoryStartMB": 462.27,
-      "endTimeMs": 16861.806014,
-      "durationMs": 0.6894160000010743,
-      "memoryEndMB": 462.27
+      "id": "layout:43",
+      "startTimeMs": 14680.46842,
+      "memoryStartMB": 477.12,
+      "endTimeMs": 14680.946455,
+      "durationMs": 0.4780350000000908,
+      "memoryEndMB": 477.12
     },
     {
       "kind": "layout",
@@ -873,18 +852,37 @@
           "default"
         ]
       },
-      "id": "layout:45",
-      "startTimeMs": 16863.07189,
-      "memoryStartMB": 462.27,
-      "endTimeMs": 16905.789126,
-      "durationMs": 42.71723600000041,
-      "memoryEndMB": 463.64
+      "id": "layout:44",
+      "startTimeMs": 14681.894324,
+      "memoryStartMB": 477.12,
+      "endTimeMs": 14700.165006,
+      "durationMs": 18.270681999998487,
+      "memoryEndMB": 477.87
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:45",
+      "startTimeMs": 14758.267966,
+      "memoryStartMB": 480.62,
+      "endTimeMs": 14758.951499,
+      "durationMs": 0.6835330000012618,
+      "memoryEndMB": 480.62
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -894,11 +892,11 @@
         ]
       },
       "id": "layout:46",
-      "startTimeMs": 16863.812335,
-      "memoryStartMB": 462.27,
-      "endTimeMs": 16865.296271,
-      "durationMs": 1.48393600000054,
-      "memoryEndMB": 462.27
+      "startTimeMs": 14760.109804,
+      "memoryStartMB": 480.62,
+      "endTimeMs": 14779.731945,
+      "durationMs": 19.62214099999983,
+      "memoryEndMB": 481.37
     },
     {
       "kind": "layout",
@@ -913,11 +911,11 @@
         ]
       },
       "id": "layout:47",
-      "startTimeMs": 17286.076067,
-      "memoryStartMB": 477.37,
-      "endTimeMs": 17286.697139,
-      "durationMs": 0.6210719999980938,
-      "memoryEndMB": 477.37
+      "startTimeMs": 14857.196755,
+      "memoryStartMB": 482.91,
+      "endTimeMs": 14857.633892,
+      "durationMs": 0.4371369999989838,
+      "memoryEndMB": 482.91
     },
     {
       "kind": "layout",
@@ -933,31 +931,11 @@
         ]
       },
       "id": "layout:48",
-      "startTimeMs": 17287.6773,
-      "memoryStartMB": 477.37,
-      "endTimeMs": 17319.279049,
-      "durationMs": 31.60174900000129,
-      "memoryEndMB": 478.74
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:49",
-      "startTimeMs": 17288.19913,
-      "memoryStartMB": 477.37,
-      "endTimeMs": 17289.325637,
-      "durationMs": 1.1265070000008564,
-      "memoryEndMB": 477.37
+      "startTimeMs": 14858.334058,
+      "memoryStartMB": 482.91,
+      "endTimeMs": 14873.242154,
+      "durationMs": 14.908095999999205,
+      "memoryEndMB": 483.66
     },
     {
       "kind": "layout",
@@ -971,12 +949,12 @@
           "marketing"
         ]
       },
-      "id": "layout:50",
-      "startTimeMs": 17402.419569,
-      "memoryStartMB": 484.24,
-      "endTimeMs": 17403.006386,
-      "durationMs": 0.5868169999994279,
-      "memoryEndMB": 484.24
+      "id": "layout:49",
+      "startTimeMs": 15512.420431,
+      "memoryStartMB": 507.09,
+      "endTimeMs": 15513.023703,
+      "durationMs": 0.6032720000002882,
+      "memoryEndMB": 507.09
     },
     {
       "kind": "layout",
@@ -991,18 +969,37 @@
           "default"
         ]
       },
-      "id": "layout:51",
-      "startTimeMs": 17404.001414,
-      "memoryStartMB": 484.24,
-      "endTimeMs": 17443.756701,
-      "durationMs": 39.75528699999995,
-      "memoryEndMB": 485.62
+      "id": "layout:50",
+      "startTimeMs": 15514.295151,
+      "memoryStartMB": 507.09,
+      "endTimeMs": 15529.07265,
+      "durationMs": 14.777498999999807,
+      "memoryEndMB": 507.84
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:51",
+      "startTimeMs": 15559.469642,
+      "memoryStartMB": 508.71,
+      "endTimeMs": 15559.876392,
+      "durationMs": 0.40675000000010186,
+      "memoryEndMB": 508.71
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -1012,11 +1009,11 @@
         ]
       },
       "id": "layout:52",
-      "startTimeMs": 17404.733031,
-      "memoryStartMB": 484.24,
-      "endTimeMs": 17406.161471,
-      "durationMs": 1.4284399999996822,
-      "memoryEndMB": 484.24
+      "startTimeMs": 15560.665429,
+      "memoryStartMB": 508.71,
+      "endTimeMs": 15578.478533,
+      "durationMs": 17.81310399999893,
+      "memoryEndMB": 509.46
     },
     {
       "kind": "layout",
@@ -1031,11 +1028,11 @@
         ]
       },
       "id": "layout:53",
-      "startTimeMs": 17541.225025,
-      "memoryStartMB": 483.93,
-      "endTimeMs": 17544.972572,
-      "durationMs": 3.747546999999031,
-      "memoryEndMB": 483.93
+      "startTimeMs": 15629.668632,
+      "memoryStartMB": 512.09,
+      "endTimeMs": 15630.030724,
+      "durationMs": 0.362091999999393,
+      "memoryEndMB": 512.09
     },
     {
       "kind": "layout",
@@ -1051,31 +1048,11 @@
         ]
       },
       "id": "layout:54",
-      "startTimeMs": 17546.290875,
-      "memoryStartMB": 483.93,
-      "endTimeMs": 17577.876432,
-      "durationMs": 31.585557000002154,
-      "memoryEndMB": 485.43
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:55",
-      "startTimeMs": 17547.212069,
-      "memoryStartMB": 483.93,
-      "endTimeMs": 17548.79592,
-      "durationMs": 1.583850999999413,
-      "memoryEndMB": 483.93
+      "startTimeMs": 15630.875282,
+      "memoryStartMB": 512.09,
+      "endTimeMs": 15648.367053,
+      "durationMs": 17.491770999999062,
+      "memoryEndMB": 512.84
     },
     {
       "kind": "layout",
@@ -1089,12 +1066,12 @@
           "marketing"
         ]
       },
-      "id": "layout:56",
-      "startTimeMs": 17691.860332,
-      "memoryStartMB": 487.21,
-      "endTimeMs": 17692.387546,
-      "durationMs": 0.5272140000015497,
-      "memoryEndMB": 487.21
+      "id": "layout:55",
+      "startTimeMs": 15794.868051,
+      "memoryStartMB": 513.41,
+      "endTimeMs": 15795.314741,
+      "durationMs": 0.4466900000006717,
+      "memoryEndMB": 513.41
     },
     {
       "kind": "layout",
@@ -1109,18 +1086,37 @@
           "default"
         ]
       },
-      "id": "layout:57",
-      "startTimeMs": 17692.971701,
-      "memoryStartMB": 487.21,
-      "endTimeMs": 17719.729107,
-      "durationMs": 26.75740600000063,
-      "memoryEndMB": 488.84
+      "id": "layout:56",
+      "startTimeMs": 15796.14464,
+      "memoryStartMB": 513.41,
+      "endTimeMs": 15815.565965,
+      "durationMs": 19.421324999999342,
+      "memoryEndMB": 514.16
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:57",
+      "startTimeMs": 15879.847644,
+      "memoryStartMB": 514.04,
+      "endTimeMs": 15880.542918,
+      "durationMs": 0.6952739999996993,
+      "memoryEndMB": 514.04
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -1130,11 +1126,11 @@
         ]
       },
       "id": "layout:58",
-      "startTimeMs": 17693.412629,
-      "memoryStartMB": 487.21,
-      "endTimeMs": 17694.229741,
-      "durationMs": 0.817112000000634,
-      "memoryEndMB": 487.21
+      "startTimeMs": 15881.435953,
+      "memoryStartMB": 514.04,
+      "endTimeMs": 15906.528148,
+      "durationMs": 25.092194999999265,
+      "memoryEndMB": 514.79
     },
     {
       "kind": "layout",
@@ -1149,11 +1145,11 @@
         ]
       },
       "id": "layout:59",
-      "startTimeMs": 17838.74718,
-      "memoryStartMB": 488.87,
-      "endTimeMs": 17839.435205,
-      "durationMs": 0.6880250000031083,
-      "memoryEndMB": 488.87
+      "startTimeMs": 15992.71064,
+      "memoryStartMB": 517.89,
+      "endTimeMs": 15993.177876,
+      "durationMs": 0.4672360000004119,
+      "memoryEndMB": 517.89
     },
     {
       "kind": "layout",
@@ -1169,31 +1165,11 @@
         ]
       },
       "id": "layout:60",
-      "startTimeMs": 17840.48162,
-      "memoryStartMB": 488.87,
-      "endTimeMs": 17864.89593,
-      "durationMs": 24.414310000000114,
-      "memoryEndMB": 490.5
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:61",
-      "startTimeMs": 17841.162641,
-      "memoryStartMB": 488.87,
-      "endTimeMs": 17842.991755,
-      "durationMs": 1.8291140000001178,
-      "memoryEndMB": 488.87
+      "startTimeMs": 15994.202595,
+      "memoryStartMB": 517.89,
+      "endTimeMs": 16012.707142,
+      "durationMs": 18.504546999998638,
+      "memoryEndMB": 518.76
     },
     {
       "kind": "layout",
@@ -1207,12 +1183,12 @@
           "marketing"
         ]
       },
-      "id": "layout:62",
-      "startTimeMs": 17949.403635,
-      "memoryStartMB": 496.87,
-      "endTimeMs": 17949.990817,
-      "durationMs": 0.5871820000029402,
-      "memoryEndMB": 496.87
+      "id": "layout:61",
+      "startTimeMs": 16064.494948,
+      "memoryStartMB": 521.89,
+      "endTimeMs": 16064.982133,
+      "durationMs": 0.487184999999954,
+      "memoryEndMB": 521.89
     },
     {
       "kind": "layout",
@@ -1227,18 +1203,37 @@
           "default"
         ]
       },
-      "id": "layout:63",
-      "startTimeMs": 17950.949796,
-      "memoryStartMB": 496.87,
-      "endTimeMs": 18014.063461,
-      "durationMs": 63.113665000000765,
-      "memoryEndMB": 491.22
+      "id": "layout:62",
+      "startTimeMs": 16065.757123,
+      "memoryStartMB": 521.89,
+      "endTimeMs": 16082.528587,
+      "durationMs": 16.771464000001288,
+      "memoryEndMB": 523.39
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:63",
+      "startTimeMs": 16143.466119,
+      "memoryStartMB": 522.84,
+      "endTimeMs": 16143.890676,
+      "durationMs": 0.4245570000002772,
+      "memoryEndMB": 522.84
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -1248,11 +1243,11 @@
         ]
       },
       "id": "layout:64",
-      "startTimeMs": 17951.626862,
-      "memoryStartMB": 496.87,
-      "endTimeMs": 17952.831085,
-      "durationMs": 1.2042230000006384,
-      "memoryEndMB": 496.87
+      "startTimeMs": 16144.664395,
+      "memoryStartMB": 522.84,
+      "endTimeMs": 16160.130323,
+      "durationMs": 15.465927999999622,
+      "memoryEndMB": 523.59
     },
     {
       "kind": "layout",
@@ -1267,11 +1262,11 @@
         ]
       },
       "id": "layout:65",
-      "startTimeMs": 18111.339946,
-      "memoryStartMB": 497.72,
-      "endTimeMs": 18112.477287,
-      "durationMs": 1.13734100000147,
-      "memoryEndMB": 497.72
+      "startTimeMs": 16641.041938,
+      "memoryStartMB": 553.38,
+      "endTimeMs": 16641.53762,
+      "durationMs": 0.4956820000006701,
+      "memoryEndMB": 553.38
     },
     {
       "kind": "layout",
@@ -1287,31 +1282,11 @@
         ]
       },
       "id": "layout:66",
-      "startTimeMs": 18113.53669,
-      "memoryStartMB": 497.72,
-      "endTimeMs": 18148.506179,
-      "durationMs": 34.96948899999916,
-      "memoryEndMB": 499.34
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:67",
-      "startTimeMs": 18115.269878,
-      "memoryStartMB": 497.72,
-      "endTimeMs": 18116.873851,
-      "durationMs": 1.6039730000011332,
-      "memoryEndMB": 497.72
+      "startTimeMs": 16642.344076,
+      "memoryStartMB": 553.38,
+      "endTimeMs": 16660.203086,
+      "durationMs": 17.859010000000126,
+      "memoryEndMB": 554.13
     },
     {
       "kind": "layout",
@@ -1325,12 +1300,12 @@
           "marketing"
         ]
       },
-      "id": "layout:68",
-      "startTimeMs": 18242.908003,
-      "memoryStartMB": 498.7,
-      "endTimeMs": 18243.501164,
-      "durationMs": 0.5931610000006913,
-      "memoryEndMB": 498.7
+      "id": "layout:67",
+      "startTimeMs": 16719.248434,
+      "memoryStartMB": 557.51,
+      "endTimeMs": 16719.726881,
+      "durationMs": 0.47844699999768636,
+      "memoryEndMB": 557.51
     },
     {
       "kind": "layout",
@@ -1345,18 +1320,37 @@
           "default"
         ]
       },
-      "id": "layout:69",
-      "startTimeMs": 18244.295627,
-      "memoryStartMB": 498.7,
-      "endTimeMs": 18277.139441,
-      "durationMs": 32.84381399999984,
-      "memoryEndMB": 500.45
+      "id": "layout:68",
+      "startTimeMs": 16720.483487,
+      "memoryStartMB": 557.51,
+      "endTimeMs": 16738.343769,
+      "durationMs": 17.860281999997824,
+      "memoryEndMB": 558.26
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:69",
+      "startTimeMs": 16796.959226,
+      "memoryStartMB": 553.52,
+      "endTimeMs": 16797.453324,
+      "durationMs": 0.49409799999921233,
+      "memoryEndMB": 553.52
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -1366,11 +1360,11 @@
         ]
       },
       "id": "layout:70",
-      "startTimeMs": 18244.840695,
-      "memoryStartMB": 498.7,
-      "endTimeMs": 18245.9418,
-      "durationMs": 1.101105000001553,
-      "memoryEndMB": 498.7
+      "startTimeMs": 16798.168649,
+      "memoryStartMB": 553.52,
+      "endTimeMs": 16815.633512,
+      "durationMs": 17.46486300000106,
+      "memoryEndMB": 554.27
     },
     {
       "kind": "layout",
@@ -1385,11 +1379,11 @@
         ]
       },
       "id": "layout:71",
-      "startTimeMs": 19324.948205,
-      "memoryStartMB": 537.99,
-      "endTimeMs": 19326.204993,
-      "durationMs": 1.256787999998778,
-      "memoryEndMB": 537.99
+      "startTimeMs": 16864.921631,
+      "memoryStartMB": 556.89,
+      "endTimeMs": 16865.458625,
+      "durationMs": 0.5369939999982307,
+      "memoryEndMB": 556.89
     },
     {
       "kind": "layout",
@@ -1405,11 +1399,11 @@
         ]
       },
       "id": "layout:72",
-      "startTimeMs": 19327.345742,
-      "memoryStartMB": 537.99,
-      "endTimeMs": 19365.797257,
-      "durationMs": 38.451514999997016,
-      "memoryEndMB": 544.24
+      "startTimeMs": 16866.17639,
+      "memoryStartMB": 556.89,
+      "endTimeMs": 16882.97338,
+      "durationMs": 16.796989999998914,
+      "memoryEndMB": 557.64
     },
     {
       "kind": "layout",
@@ -1424,11 +1418,11 @@
         ]
       },
       "id": "layout:73",
-      "startTimeMs": 19403.577587,
-      "memoryStartMB": 545.24,
-      "endTimeMs": 19405.290138,
-      "durationMs": 1.7125510000005306,
-      "memoryEndMB": 545.24
+      "startTimeMs": 16941.471644,
+      "memoryStartMB": 556.5,
+      "endTimeMs": 16941.889529,
+      "durationMs": 0.41788499999893247,
+      "memoryEndMB": 556.5
     },
     {
       "kind": "layout",
@@ -1444,11 +1438,11 @@
         ]
       },
       "id": "layout:74",
-      "startTimeMs": 19407.382648,
-      "memoryStartMB": 545.37,
-      "endTimeMs": 19456.290237,
-      "durationMs": 48.90758900000219,
-      "memoryEndMB": 546.74
+      "startTimeMs": 16942.669203,
+      "memoryStartMB": 556.5,
+      "endTimeMs": 16958.083005,
+      "durationMs": 15.413801999999123,
+      "memoryEndMB": 557.25
     },
     {
       "kind": "layout",
@@ -1463,11 +1457,11 @@
         ]
       },
       "id": "layout:75",
-      "startTimeMs": 19512.617658,
-      "memoryStartMB": 549.87,
-      "endTimeMs": 19513.467006,
-      "durationMs": 0.8493479999997362,
-      "memoryEndMB": 549.87
+      "startTimeMs": 17008.573454,
+      "memoryStartMB": 560.38,
+      "endTimeMs": 17009.142063,
+      "durationMs": 0.568608999998105,
+      "memoryEndMB": 560.38
     },
     {
       "kind": "layout",
@@ -1483,31 +1477,11 @@
         ]
       },
       "id": "layout:76",
-      "startTimeMs": 19514.780505,
-      "memoryStartMB": 549.87,
-      "endTimeMs": 19557.748442,
-      "durationMs": 42.96793700000126,
-      "memoryEndMB": 552.62
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:77",
-      "startTimeMs": 19515.739236,
-      "memoryStartMB": 549.87,
-      "endTimeMs": 19517.65261,
-      "durationMs": 1.9133739999997488,
-      "memoryEndMB": 549.87
+      "startTimeMs": 17010.287271,
+      "memoryStartMB": 560.38,
+      "endTimeMs": 17028.734315,
+      "durationMs": 18.44704400000046,
+      "memoryEndMB": 562.13
     },
     {
       "kind": "layout",
@@ -1521,12 +1495,12 @@
           "marketing"
         ]
       },
-      "id": "layout:78",
-      "startTimeMs": 19676.324386,
-      "memoryStartMB": 552.18,
-      "endTimeMs": 19676.831556,
-      "durationMs": 0.5071700000007695,
-      "memoryEndMB": 552.18
+      "id": "layout:77",
+      "startTimeMs": 17086.061323,
+      "memoryStartMB": 563,
+      "endTimeMs": 17086.579778,
+      "durationMs": 0.5184549999976298,
+      "memoryEndMB": 563
     },
     {
       "kind": "layout",
@@ -1541,18 +1515,37 @@
           "default"
         ]
       },
-      "id": "layout:79",
-      "startTimeMs": 19677.716372,
-      "memoryStartMB": 552.18,
-      "endTimeMs": 19709.28467,
-      "durationMs": 31.56829800000196,
-      "memoryEndMB": 553.56
+      "id": "layout:78",
+      "startTimeMs": 17089.361063,
+      "memoryStartMB": 563,
+      "endTimeMs": 17106.910942,
+      "durationMs": 17.549878999998327,
+      "memoryEndMB": 563.75
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:79",
+      "startTimeMs": 17149.211091,
+      "memoryStartMB": 567.88,
+      "endTimeMs": 17149.636527,
+      "durationMs": 0.42543599999771686,
+      "memoryEndMB": 567.88
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -1562,11 +1555,11 @@
         ]
       },
       "id": "layout:80",
-      "startTimeMs": 19678.378042,
-      "memoryStartMB": 552.18,
-      "endTimeMs": 19680.137351,
-      "durationMs": 1.7593090000009397,
-      "memoryEndMB": 552.18
+      "startTimeMs": 17150.345609,
+      "memoryStartMB": 567.88,
+      "endTimeMs": 17171.72045,
+      "durationMs": 21.374841000000742,
+      "memoryEndMB": 570.63
     },
     {
       "kind": "layout",
@@ -1581,11 +1574,11 @@
         ]
       },
       "id": "layout:81",
-      "startTimeMs": 19815.084473,
-      "memoryStartMB": 552.91,
-      "endTimeMs": 19816.315609,
-      "durationMs": 1.2311360000021523,
-      "memoryEndMB": 552.91
+      "startTimeMs": 17760.001159,
+      "memoryStartMB": 612.42,
+      "endTimeMs": 17760.476205,
+      "durationMs": 0.47504599999956554,
+      "memoryEndMB": 612.42
     },
     {
       "kind": "layout",
@@ -1601,31 +1594,11 @@
         ]
       },
       "id": "layout:82",
-      "startTimeMs": 19817.110757,
-      "memoryStartMB": 552.91,
-      "endTimeMs": 19839.749642,
-      "durationMs": 22.6388850000003,
-      "memoryEndMB": 554.29
-    },
-    {
-      "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:83",
-      "startTimeMs": 19817.744118,
-      "memoryStartMB": 552.91,
-      "endTimeMs": 19818.831693,
-      "durationMs": 1.0875750000013795,
-      "memoryEndMB": 552.91
+      "startTimeMs": 17761.287713,
+      "memoryStartMB": 612.42,
+      "endTimeMs": 17779.179731,
+      "durationMs": 17.892017999998643,
+      "memoryEndMB": 613.17
     },
     {
       "kind": "layout",
@@ -1639,12 +1612,12 @@
           "marketing"
         ]
       },
-      "id": "layout:84",
-      "startTimeMs": 20002.341224,
-      "memoryStartMB": 557.52,
-      "endTimeMs": 20003.033915,
-      "durationMs": 0.6926910000001953,
-      "memoryEndMB": 557.52
+      "id": "layout:83",
+      "startTimeMs": 17827.901446,
+      "memoryStartMB": 603.84,
+      "endTimeMs": 17828.388119,
+      "durationMs": 0.4866729999994277,
+      "memoryEndMB": 603.84
     },
     {
       "kind": "layout",
@@ -1659,18 +1632,37 @@
           "default"
         ]
       },
-      "id": "layout:85",
-      "startTimeMs": 20004.182235,
-      "memoryStartMB": 557.52,
-      "endTimeMs": 20048.875356,
-      "durationMs": 44.69312100000025,
-      "memoryEndMB": 559.02
+      "id": "layout:84",
+      "startTimeMs": 17829.408835,
+      "memoryStartMB": 603.84,
+      "endTimeMs": 17846.722136,
+      "durationMs": 17.313301000001957,
+      "memoryEndMB": 604.59
     },
     {
       "kind": "layout",
-      "name": "AlliedHealthI18nLayout",
-      "path": "src/app/(marketing)/(default)/allied-health/layout.tsx",
-      "route": "/allied-health",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing"
+        ]
+      },
+      "id": "layout:85",
+      "startTimeMs": 17891.427067,
+      "memoryStartMB": 607.71,
+      "endTimeMs": 17891.974254,
+      "durationMs": 0.5471870000001218,
+      "memoryEndMB": 607.71
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
@@ -1680,11 +1672,11 @@
         ]
       },
       "id": "layout:86",
-      "startTimeMs": 20005.301376,
-      "memoryStartMB": 557.52,
-      "endTimeMs": 20009.229852,
-      "durationMs": 3.9284760000009555,
-      "memoryEndMB": 557.52
+      "startTimeMs": 17892.660768,
+      "memoryStartMB": 607.71,
+      "endTimeMs": 17909.431639,
+      "durationMs": 16.770870999996987,
+      "memoryEndMB": 608.46
     },
     {
       "kind": "layout",
@@ -1699,11 +1691,11 @@
         ]
       },
       "id": "layout:87",
-      "startTimeMs": 20711.255219,
-      "memoryStartMB": 592.95,
-      "endTimeMs": 20711.803691,
-      "durationMs": 0.5484720000022207,
-      "memoryEndMB": 592.95
+      "startTimeMs": 17963.516074,
+      "memoryStartMB": 606.49,
+      "endTimeMs": 17964.012201,
+      "durationMs": 0.49612700000216137,
+      "memoryEndMB": 606.49
     },
     {
       "kind": "layout",
@@ -1719,11 +1711,11 @@
         ]
       },
       "id": "layout:88",
-      "startTimeMs": 20712.686228,
-      "memoryStartMB": 592.95,
-      "endTimeMs": 20728.045476,
-      "durationMs": 15.359248000000662,
-      "memoryEndMB": 593.7
+      "startTimeMs": 17964.778259,
+      "memoryStartMB": 606.49,
+      "endTimeMs": 17979.889342,
+      "durationMs": 15.11108299999978,
+      "memoryEndMB": 607.24
     },
     {
       "kind": "layout",
@@ -1738,11 +1730,11 @@
         ]
       },
       "id": "layout:89",
-      "startTimeMs": 20803.306946,
-      "memoryStartMB": 581.51,
-      "endTimeMs": 20803.860581,
-      "durationMs": 0.553635000000213,
-      "memoryEndMB": 581.51
+      "startTimeMs": 18022.153073,
+      "memoryStartMB": 610.11,
+      "endTimeMs": 18022.63648,
+      "durationMs": 0.4834069999997155,
+      "memoryEndMB": 610.11
     },
     {
       "kind": "layout",
@@ -1758,11 +1750,11 @@
         ]
       },
       "id": "layout:90",
-      "startTimeMs": 20804.774763,
-      "memoryStartMB": 581.51,
-      "endTimeMs": 20825.346491,
-      "durationMs": 20.571727999998984,
-      "memoryEndMB": 582.39
+      "startTimeMs": 18023.447311,
+      "memoryStartMB": 610.11,
+      "endTimeMs": 18041.817796,
+      "durationMs": 18.370484999999462,
+      "memoryEndMB": 610.86
     },
     {
       "kind": "layout",
@@ -1777,11 +1769,11 @@
         ]
       },
       "id": "layout:91",
-      "startTimeMs": 21491.304296,
-      "memoryStartMB": 591.68,
-      "endTimeMs": 21491.815278,
-      "durationMs": 0.5109819999997853,
-      "memoryEndMB": 591.68
+      "startTimeMs": 18097.551112,
+      "memoryStartMB": 608.42,
+      "endTimeMs": 18098.004541,
+      "durationMs": 0.4534289999974135,
+      "memoryEndMB": 608.42
     },
     {
       "kind": "layout",
@@ -1797,11 +1789,11 @@
         ]
       },
       "id": "layout:92",
-      "startTimeMs": 21492.594179,
-      "memoryStartMB": 591.68,
-      "endTimeMs": 21507.697394,
-      "durationMs": 15.103214999999182,
-      "memoryEndMB": 592.43
+      "startTimeMs": 18098.786985,
+      "memoryStartMB": 608.42,
+      "endTimeMs": 18112.483644,
+      "durationMs": 13.696659000001091,
+      "memoryEndMB": 609.17
     },
     {
       "kind": "layout",
@@ -1816,11 +1808,11 @@
         ]
       },
       "id": "layout:93",
-      "startTimeMs": 21580.005917,
-      "memoryStartMB": 596.05,
-      "endTimeMs": 21580.496078,
-      "durationMs": 0.4901610000015353,
-      "memoryEndMB": 596.05
+      "startTimeMs": 18153.673542,
+      "memoryStartMB": 612.42,
+      "endTimeMs": 18154.126542,
+      "durationMs": 0.4530000000013388,
+      "memoryEndMB": 612.42
     },
     {
       "kind": "layout",
@@ -1836,11 +1828,11 @@
         ]
       },
       "id": "layout:94",
-      "startTimeMs": 21581.107612,
-      "memoryStartMB": 596.05,
-      "endTimeMs": 21602.387289,
-      "durationMs": 21.279676999998628,
-      "memoryEndMB": 596.8
+      "startTimeMs": 18154.9665,
+      "memoryStartMB": 612.42,
+      "endTimeMs": 18172.954799,
+      "durationMs": 17.988299000000552,
+      "memoryEndMB": 613.17
     },
     {
       "kind": "layout",
@@ -1855,11 +1847,11 @@
         ]
       },
       "id": "layout:95",
-      "startTimeMs": 21672.83076,
-      "memoryStartMB": 599.3,
-      "endTimeMs": 21673.409509,
-      "durationMs": 0.5787490000002435,
-      "memoryEndMB": 599.3
+      "startTimeMs": 18257.236317,
+      "memoryStartMB": 615.65,
+      "endTimeMs": 18257.701623,
+      "durationMs": 0.46530600000187405,
+      "memoryEndMB": 615.65
     },
     {
       "kind": "layout",
@@ -1875,11 +1867,11 @@
         ]
       },
       "id": "layout:96",
-      "startTimeMs": 21674.34232,
-      "memoryStartMB": 599.3,
-      "endTimeMs": 21740.604566,
-      "durationMs": 66.26224600000205,
-      "memoryEndMB": 594.33
+      "startTimeMs": 18258.385685,
+      "memoryStartMB": 615.65,
+      "endTimeMs": 18273.9752,
+      "durationMs": 15.589514999999665,
+      "memoryEndMB": 616.4
     },
     {
       "kind": "layout",
@@ -1894,11 +1886,11 @@
         ]
       },
       "id": "layout:97",
-      "startTimeMs": 21798.052568,
-      "memoryStartMB": 597.08,
-      "endTimeMs": 21798.494091,
-      "durationMs": 0.44152300000132527,
-      "memoryEndMB": 597.08
+      "startTimeMs": 18838.905709,
+      "memoryStartMB": 649.15,
+      "endTimeMs": 18839.397768,
+      "durationMs": 0.4920590000001539,
+      "memoryEndMB": 649.15
     },
     {
       "kind": "layout",
@@ -1914,11 +1906,11 @@
         ]
       },
       "id": "layout:98",
-      "startTimeMs": 21800.979123,
-      "memoryStartMB": 597.08,
-      "endTimeMs": 21846.447807,
-      "durationMs": 45.468683999999485,
-      "memoryEndMB": 597.83
+      "startTimeMs": 18840.091762,
+      "memoryStartMB": 649.15,
+      "endTimeMs": 18854.378119,
+      "durationMs": 14.286357000000862,
+      "memoryEndMB": 649.9
     },
     {
       "kind": "layout",
@@ -1933,11 +1925,11 @@
         ]
       },
       "id": "layout:99",
-      "startTimeMs": 21935.890313,
-      "memoryStartMB": 601.21,
-      "endTimeMs": 21936.414484,
-      "durationMs": 0.5241710000009334,
-      "memoryEndMB": 601.21
+      "startTimeMs": 18901.068919,
+      "memoryStartMB": 652.52,
+      "endTimeMs": 18901.735794,
+      "durationMs": 0.6668749999989814,
+      "memoryEndMB": 652.52
     },
     {
       "kind": "layout",
@@ -1953,11 +1945,11 @@
         ]
       },
       "id": "layout:100",
-      "startTimeMs": 21937.253754,
-      "memoryStartMB": 601.21,
-      "endTimeMs": 21979.946219,
-      "durationMs": 42.692465000000084,
-      "memoryEndMB": 598.41
+      "startTimeMs": 18902.640298,
+      "memoryStartMB": 652.52,
+      "endTimeMs": 18924.084328,
+      "durationMs": 21.444030000002385,
+      "memoryEndMB": 653.27
     },
     {
       "kind": "layout",
@@ -1972,11 +1964,11 @@
         ]
       },
       "id": "layout:101",
-      "startTimeMs": 22055.532104,
-      "memoryStartMB": 601.79,
-      "endTimeMs": 22056.096148,
-      "durationMs": 0.5640439999988303,
-      "memoryEndMB": 601.79
+      "startTimeMs": 18970.692802,
+      "memoryStartMB": 655.9,
+      "endTimeMs": 18971.160538,
+      "durationMs": 0.46773599999869475,
+      "memoryEndMB": 655.9
     },
     {
       "kind": "layout",
@@ -1992,11 +1984,11 @@
         ]
       },
       "id": "layout:102",
-      "startTimeMs": 22057.260496,
-      "memoryStartMB": 601.79,
-      "endTimeMs": 22078.129608,
-      "durationMs": 20.869112000000314,
-      "memoryEndMB": 602.54
+      "startTimeMs": 18971.978223,
+      "memoryStartMB": 655.9,
+      "endTimeMs": 19006.908502,
+      "durationMs": 34.930279000000155,
+      "memoryEndMB": 651.73
     },
     {
       "kind": "layout",
@@ -2011,11 +2003,11 @@
         ]
       },
       "id": "layout:103",
-      "startTimeMs": 22118.497926,
-      "memoryStartMB": 605.79,
-      "endTimeMs": 22119.080777,
-      "durationMs": 0.5828509999992093,
-      "memoryEndMB": 605.79
+      "startTimeMs": 19059.498214,
+      "memoryStartMB": 654.36,
+      "endTimeMs": 19060.015938,
+      "durationMs": 0.5177240000011807,
+      "memoryEndMB": 654.36
     },
     {
       "kind": "layout",
@@ -2031,11 +2023,11 @@
         ]
       },
       "id": "layout:104",
-      "startTimeMs": 22119.699036,
-      "memoryStartMB": 605.79,
-      "endTimeMs": 22135.143717,
-      "durationMs": 15.444680999997217,
-      "memoryEndMB": 606.54
+      "startTimeMs": 19060.895952,
+      "memoryStartMB": 654.36,
+      "endTimeMs": 19076.531949,
+      "durationMs": 15.635997000001225,
+      "memoryEndMB": 655.11
     },
     {
       "kind": "layout",
@@ -2050,11 +2042,11 @@
         ]
       },
       "id": "layout:105",
-      "startTimeMs": 22204.914252,
-      "memoryStartMB": 603.57,
-      "endTimeMs": 22205.481409,
-      "durationMs": 0.5671570000013162,
-      "memoryEndMB": 603.57
+      "startTimeMs": 19124.019411,
+      "memoryStartMB": 657.73,
+      "endTimeMs": 19124.478678,
+      "durationMs": 0.45926699999836273,
+      "memoryEndMB": 657.73
     },
     {
       "kind": "layout",
@@ -2070,11 +2062,11 @@
         ]
       },
       "id": "layout:106",
-      "startTimeMs": 22206.432725,
-      "memoryStartMB": 603.57,
-      "endTimeMs": 22224.539389,
-      "durationMs": 18.106664000002638,
-      "memoryEndMB": 604.19
+      "startTimeMs": 19125.263028,
+      "memoryStartMB": 657.73,
+      "endTimeMs": 19140.099173,
+      "durationMs": 14.836144999997487,
+      "memoryEndMB": 658.48
     },
     {
       "kind": "layout",
@@ -2089,11 +2081,11 @@
         ]
       },
       "id": "layout:107",
-      "startTimeMs": 22899.815068,
-      "memoryStartMB": 633.2,
-      "endTimeMs": 22900.402151,
-      "durationMs": 0.587082999998529,
-      "memoryEndMB": 633.2
+      "startTimeMs": 19225.606109,
+      "memoryStartMB": 660.39,
+      "endTimeMs": 19226.156635,
+      "durationMs": 0.5505259999990813,
+      "memoryEndMB": 660.39
     },
     {
       "kind": "layout",
@@ -2109,11 +2101,11 @@
         ]
       },
       "id": "layout:108",
-      "startTimeMs": 22901.501396,
-      "memoryStartMB": 633.2,
-      "endTimeMs": 22918.311969,
-      "durationMs": 16.81057299999884,
-      "memoryEndMB": 633.95
+      "startTimeMs": 19227.092456,
+      "memoryStartMB": 660.39,
+      "endTimeMs": 19244.281985,
+      "durationMs": 17.18952900000295,
+      "memoryEndMB": 661.14
     },
     {
       "kind": "layout",
@@ -2128,11 +2120,11 @@
         ]
       },
       "id": "layout:109",
-      "startTimeMs": 22973.142112,
-      "memoryStartMB": 636.57,
-      "endTimeMs": 22973.680376,
-      "durationMs": 0.5382639999988896,
-      "memoryEndMB": 636.57
+      "startTimeMs": 19294.391586,
+      "memoryStartMB": 664.39,
+      "endTimeMs": 19294.890393,
+      "durationMs": 0.4988069999999425,
+      "memoryEndMB": 664.39
     },
     {
       "kind": "layout",
@@ -2148,11 +2140,11 @@
         ]
       },
       "id": "layout:110",
-      "startTimeMs": 22974.598572,
-      "memoryStartMB": 636.57,
-      "endTimeMs": 22994.679469,
-      "durationMs": 20.080896999999823,
-      "memoryEndMB": 637.32
+      "startTimeMs": 19295.849088,
+      "memoryStartMB": 664.39,
+      "endTimeMs": 19310.48721,
+      "durationMs": 14.638122000000294,
+      "memoryEndMB": 665.14
     },
     {
       "kind": "layout",
@@ -2167,11 +2159,11 @@
         ]
       },
       "id": "layout:111",
-      "startTimeMs": 23062.147223,
-      "memoryStartMB": 631.78,
-      "endTimeMs": 23062.862884,
-      "durationMs": 0.715660999998363,
-      "memoryEndMB": 631.78
+      "startTimeMs": 19373.058669,
+      "memoryStartMB": 663,
+      "endTimeMs": 19373.574532,
+      "durationMs": 0.515863000000536,
+      "memoryEndMB": 663
     },
     {
       "kind": "layout",
@@ -2187,11 +2179,11 @@
         ]
       },
       "id": "layout:112",
-      "startTimeMs": 23063.80823,
-      "memoryStartMB": 631.78,
-      "endTimeMs": 23087.760348,
-      "durationMs": 23.952118000001065,
-      "memoryEndMB": 632.53
+      "startTimeMs": 19374.389438,
+      "memoryStartMB": 663,
+      "endTimeMs": 19396.027526,
+      "durationMs": 21.638088000003336,
+      "memoryEndMB": 664
     },
     {
       "kind": "layout",
@@ -2206,11 +2198,11 @@
         ]
       },
       "id": "layout:113",
-      "startTimeMs": 23104.483801,
-      "memoryStartMB": 633.53,
-      "endTimeMs": 23105.033443,
-      "durationMs": 0.5496420000017679,
-      "memoryEndMB": 633.53
+      "startTimeMs": 19963.384106,
+      "memoryStartMB": 704.05,
+      "endTimeMs": 19963.874552,
+      "durationMs": 0.49044599999979255,
+      "memoryEndMB": 704.05
     },
     {
       "kind": "layout",
@@ -2226,11 +2218,11 @@
         ]
       },
       "id": "layout:114",
-      "startTimeMs": 23105.757038,
-      "memoryStartMB": 633.53,
-      "endTimeMs": 23119.365281,
-      "durationMs": 13.608242999998765,
-      "memoryEndMB": 634.28
+      "startTimeMs": 19964.590304,
+      "memoryStartMB": 704.05,
+      "endTimeMs": 19983.997378,
+      "durationMs": 19.40707399999883,
+      "memoryEndMB": 704.8
     },
     {
       "kind": "layout",
@@ -2245,11 +2237,11 @@
         ]
       },
       "id": "layout:115",
-      "startTimeMs": 23187.822989,
-      "memoryStartMB": 636.65,
-      "endTimeMs": 23188.363625,
-      "durationMs": 0.5406360000015411,
-      "memoryEndMB": 636.65
+      "startTimeMs": 20034.716682,
+      "memoryStartMB": 707.42,
+      "endTimeMs": 20035.152644,
+      "durationMs": 0.43596200000320096,
+      "memoryEndMB": 707.42
     },
     {
       "kind": "layout",
@@ -2265,11 +2257,11 @@
         ]
       },
       "id": "layout:116",
-      "startTimeMs": 23190.830646,
-      "memoryStartMB": 636.65,
-      "endTimeMs": 23213.737207,
-      "durationMs": 22.906560999999783,
-      "memoryEndMB": 637.4
+      "startTimeMs": 20041.88137,
+      "memoryStartMB": 703.12,
+      "endTimeMs": 20058.649846,
+      "durationMs": 16.7684760000011,
+      "memoryEndMB": 697.43
     },
     {
       "kind": "layout",
@@ -2284,11 +2276,11 @@
         ]
       },
       "id": "layout:117",
-      "startTimeMs": 23253.907191,
-      "memoryStartMB": 638.4,
-      "endTimeMs": 23255.027396,
-      "durationMs": 1.1202050000028976,
-      "memoryEndMB": 638.4
+      "startTimeMs": 20103.843207,
+      "memoryStartMB": 700.05,
+      "endTimeMs": 20104.372274,
+      "durationMs": 0.5290669999994861,
+      "memoryEndMB": 700.05
     },
     {
       "kind": "layout",
@@ -2304,11 +2296,11 @@
         ]
       },
       "id": "layout:118",
-      "startTimeMs": 23256.716144,
-      "memoryStartMB": 638.4,
-      "endTimeMs": 23298.441521,
-      "durationMs": 41.72537699999884,
-      "memoryEndMB": 639.15
+      "startTimeMs": 20107.80372,
+      "memoryStartMB": 700.05,
+      "endTimeMs": 20124.601921,
+      "durationMs": 16.798201000001427,
+      "memoryEndMB": 700.8
     },
     {
       "kind": "layout",
@@ -2323,11 +2315,11 @@
         ]
       },
       "id": "layout:119",
-      "startTimeMs": 23342.440631,
-      "memoryStartMB": 640.15,
-      "endTimeMs": 23343.006561,
-      "durationMs": 0.5659299999970244,
-      "memoryEndMB": 640.15
+      "startTimeMs": 20165.121551,
+      "memoryStartMB": 703.55,
+      "endTimeMs": 20165.589815,
+      "durationMs": 0.46826399999918067,
+      "memoryEndMB": 703.55
     },
     {
       "kind": "layout",
@@ -2343,11 +2335,11 @@
         ]
       },
       "id": "layout:120",
-      "startTimeMs": 23350.540206,
-      "memoryStartMB": 640.15,
-      "endTimeMs": 23460.815382,
-      "durationMs": 110.27517599999919,
-      "memoryEndMB": 637.43
+      "startTimeMs": 20166.286739,
+      "memoryStartMB": 703.55,
+      "endTimeMs": 20187.611916,
+      "durationMs": 21.32517700000244,
+      "memoryEndMB": 701.07
     },
     {
       "kind": "layout",
@@ -2362,11 +2354,11 @@
         ]
       },
       "id": "layout:121",
-      "startTimeMs": 23495.701145,
-      "memoryStartMB": 637.93,
-      "endTimeMs": 23496.258808,
-      "durationMs": 0.557662999999593,
-      "memoryEndMB": 637.93
+      "startTimeMs": 20232.574196,
+      "memoryStartMB": 703.7,
+      "endTimeMs": 20233.046504,
+      "durationMs": 0.47230800000033923,
+      "memoryEndMB": 703.7
     },
     {
       "kind": "layout",
@@ -2382,11 +2374,11 @@
         ]
       },
       "id": "layout:122",
-      "startTimeMs": 23500.096563,
-      "memoryStartMB": 630.43,
-      "endTimeMs": 23558.218358,
-      "durationMs": 58.12179499999911,
-      "memoryEndMB": 522.39
+      "startTimeMs": 20233.785166,
+      "memoryStartMB": 703.7,
+      "endTimeMs": 20248.61878,
+      "durationMs": 14.833613999999216,
+      "memoryEndMB": 704.45
     },
     {
       "kind": "layout",
@@ -2401,11 +2393,11 @@
         ]
       },
       "id": "layout:123",
-      "startTimeMs": 24708.895345,
-      "memoryStartMB": 544.05,
-      "endTimeMs": 24709.380887,
-      "durationMs": 0.48554199999853154,
-      "memoryEndMB": 544.05
+      "startTimeMs": 20291.317414,
+      "memoryStartMB": 707.45,
+      "endTimeMs": 20291.752168,
+      "durationMs": 0.4347539999980654,
+      "memoryEndMB": 707.45
     },
     {
       "kind": "layout",
@@ -2421,11 +2413,11 @@
         ]
       },
       "id": "layout:124",
-      "startTimeMs": 24710.315637,
-      "memoryStartMB": 544.05,
-      "endTimeMs": 24725.579432,
-      "durationMs": 15.263794999998936,
-      "memoryEndMB": 544.8
+      "startTimeMs": 20292.35587,
+      "memoryStartMB": 707.45,
+      "endTimeMs": 20306.049451,
+      "durationMs": 13.69358099999954,
+      "memoryEndMB": 708.2
     },
     {
       "kind": "layout",
@@ -2440,11 +2432,11 @@
         ]
       },
       "id": "layout:125",
-      "startTimeMs": 24740.272637,
-      "memoryStartMB": 545.43,
-      "endTimeMs": 24740.886138,
-      "durationMs": 0.6135010000034526,
-      "memoryEndMB": 545.43
+      "startTimeMs": 20392.098455,
+      "memoryStartMB": 710.09,
+      "endTimeMs": 20392.706342,
+      "durationMs": 0.6078870000019378,
+      "memoryEndMB": 710.09
     },
     {
       "kind": "layout",
@@ -2460,11 +2452,11 @@
         ]
       },
       "id": "layout:126",
-      "startTimeMs": 24741.742904,
-      "memoryStartMB": 545.43,
-      "endTimeMs": 24760.063006,
-      "durationMs": 18.320102000001498,
-      "memoryEndMB": 546.18
+      "startTimeMs": 20393.935474,
+      "memoryStartMB": 710.09,
+      "endTimeMs": 20417.11961,
+      "durationMs": 23.184135999999853,
+      "memoryEndMB": 712.97
     },
     {
       "kind": "layout",
@@ -2479,11 +2471,11 @@
         ]
       },
       "id": "layout:127",
-      "startTimeMs": 24780.7984,
-      "memoryStartMB": 546.8,
-      "endTimeMs": 24781.447217,
-      "durationMs": 0.6488170000011451,
-      "memoryEndMB": 546.8
+      "startTimeMs": 20482.439593,
+      "memoryStartMB": 716.34,
+      "endTimeMs": 20482.846603,
+      "durationMs": 0.40701000000262866,
+      "memoryEndMB": 716.34
     },
     {
       "kind": "layout",
@@ -2499,11 +2491,11 @@
         ]
       },
       "id": "layout:128",
-      "startTimeMs": 24784.003942,
-      "memoryStartMB": 546.8,
-      "endTimeMs": 24803.112462,
-      "durationMs": 19.10852000000159,
-      "memoryEndMB": 547.55
+      "startTimeMs": 20508.019256,
+      "memoryStartMB": 716.05,
+      "endTimeMs": 20524.246641,
+      "durationMs": 16.22738500000196,
+      "memoryEndMB": 716.68
     },
     {
       "kind": "layout",
@@ -2518,11 +2510,11 @@
         ]
       },
       "id": "layout:129",
-      "startTimeMs": 24820.913814,
-      "memoryStartMB": 548.3,
-      "endTimeMs": 24821.499329,
-      "durationMs": 0.5855149999988498,
-      "memoryEndMB": 548.3
+      "startTimeMs": 21116.532964,
+      "memoryStartMB": 592.99,
+      "endTimeMs": 21117.049495,
+      "durationMs": 0.5165309999974852,
+      "memoryEndMB": 592.99
     },
     {
       "kind": "layout",
@@ -2538,11 +2530,11 @@
         ]
       },
       "id": "layout:130",
-      "startTimeMs": 24822.205699,
-      "memoryStartMB": 548.3,
-      "endTimeMs": 24848.67272,
-      "durationMs": 26.467021000000386,
-      "memoryEndMB": 537
+      "startTimeMs": 21118.728092,
+      "memoryStartMB": 592.99,
+      "endTimeMs": 21133.835338,
+      "durationMs": 15.107245999999577,
+      "memoryEndMB": 593.74
     },
     {
       "kind": "layout",
@@ -2557,11 +2549,11 @@
         ]
       },
       "id": "layout:131",
-      "startTimeMs": 24863.669042,
-      "memoryStartMB": 537.75,
-      "endTimeMs": 24864.21808,
-      "durationMs": 0.5490379999973811,
-      "memoryEndMB": 537.75
+      "startTimeMs": 21182.674641,
+      "memoryStartMB": 596.24,
+      "endTimeMs": 21183.196825,
+      "durationMs": 0.522183999997651,
+      "memoryEndMB": 596.24
     },
     {
       "kind": "layout",
@@ -2577,11 +2569,11 @@
         ]
       },
       "id": "layout:132",
-      "startTimeMs": 24865.466948,
-      "memoryStartMB": 537.75,
-      "endTimeMs": 24880.964384,
-      "durationMs": 15.497435999997833,
-      "memoryEndMB": 538.62
+      "startTimeMs": 21184.025464,
+      "memoryStartMB": 596.24,
+      "endTimeMs": 21199.093398,
+      "durationMs": 15.067934000002424,
+      "memoryEndMB": 596.99
     },
     {
       "kind": "layout",
@@ -2596,11 +2588,11 @@
         ]
       },
       "id": "layout:133",
-      "startTimeMs": 24895.135435,
-      "memoryStartMB": 539.25,
-      "endTimeMs": 24895.590575,
-      "durationMs": 0.45513999999820953,
-      "memoryEndMB": 539.25
+      "startTimeMs": 21246.952791,
+      "memoryStartMB": 590.57,
+      "endTimeMs": 21247.404902,
+      "durationMs": 0.45211099999869475,
+      "memoryEndMB": 590.57
     },
     {
       "kind": "layout",
@@ -2616,11 +2608,11 @@
         ]
       },
       "id": "layout:134",
-      "startTimeMs": 24896.416043,
-      "memoryStartMB": 539.25,
-      "endTimeMs": 24915.891493,
-      "durationMs": 19.47544999999809,
-      "memoryEndMB": 541.25
+      "startTimeMs": 21248.192566,
+      "memoryStartMB": 590.57,
+      "endTimeMs": 21261.86648,
+      "durationMs": 13.673913999999058,
+      "memoryEndMB": 591.32
     },
     {
       "kind": "layout",
@@ -2635,11 +2627,11 @@
         ]
       },
       "id": "layout:135",
-      "startTimeMs": 24932.111884,
-      "memoryStartMB": 541.87,
-      "endTimeMs": 24933.066434,
-      "durationMs": 0.9545499999985623,
-      "memoryEndMB": 541.87
+      "startTimeMs": 21321.063924,
+      "memoryStartMB": 590.64,
+      "endTimeMs": 21321.565005,
+      "durationMs": 0.5010810000021593,
+      "memoryEndMB": 590.64
     },
     {
       "kind": "layout",
@@ -2655,11 +2647,11 @@
         ]
       },
       "id": "layout:136",
-      "startTimeMs": 24934.744808,
-      "memoryStartMB": 541.87,
-      "endTimeMs": 24951.268571,
-      "durationMs": 16.523763000001054,
-      "memoryEndMB": 543
+      "startTimeMs": 21322.203004,
+      "memoryStartMB": 590.64,
+      "endTimeMs": 21334.659002,
+      "durationMs": 12.455998000001273,
+      "memoryEndMB": 591.27
     },
     {
       "kind": "layout",
@@ -2674,11 +2666,11 @@
         ]
       },
       "id": "layout:137",
-      "startTimeMs": 24969.912313,
-      "memoryStartMB": 544.37,
-      "endTimeMs": 24970.476196,
-      "durationMs": 0.5638829999988957,
-      "memoryEndMB": 544.37
+      "startTimeMs": 21376.958516,
+      "memoryStartMB": 593.89,
+      "endTimeMs": 21377.390444,
+      "durationMs": 0.43192800000178977,
+      "memoryEndMB": 593.89
     },
     {
       "kind": "layout",
@@ -2694,11 +2686,11 @@
         ]
       },
       "id": "layout:138",
-      "startTimeMs": 24971.381249,
-      "memoryStartMB": 544.5,
-      "endTimeMs": 25006.50495,
-      "durationMs": 35.12370100000044,
-      "memoryEndMB": 546.5
+      "startTimeMs": 21378.05787,
+      "memoryStartMB": 593.89,
+      "endTimeMs": 21392.753173,
+      "durationMs": 14.695303000000422,
+      "memoryEndMB": 594.64
     },
     {
       "kind": "layout",
@@ -2713,11 +2705,11 @@
         ]
       },
       "id": "layout:139",
-      "startTimeMs": 26299.000148,
-      "memoryStartMB": 569.04,
-      "endTimeMs": 26299.574166,
-      "durationMs": 0.5740179999993416,
-      "memoryEndMB": 569.04
+      "startTimeMs": 21434.60647,
+      "memoryStartMB": 597.27,
+      "endTimeMs": 21435.03163,
+      "durationMs": 0.4251600000025064,
+      "memoryEndMB": 597.27
     },
     {
       "kind": "layout",
@@ -2733,17 +2725,11 @@
         ]
       },
       "id": "layout:140",
-      "startTimeMs": 26300.681244,
-      "memoryStartMB": 569.04,
-      "endTimeMs": 26317.426138,
-      "durationMs": 16.744893999999476,
-      "memoryEndMB": 569.79
-    }
-  ]
-}B": 711.52,
-      "endTimeMs": 28723.889064,
-      "durationMs": 15.260995999997249,
-      "memoryEndMB": 712.27
+      "startTimeMs": 21435.834788,
+      "memoryStartMB": 597.27,
+      "endTimeMs": 21459.947674,
+      "durationMs": 24.11288599999898,
+      "memoryEndMB": 591.71
     },
     {
       "kind": "layout",
@@ -2755,190 +2741,112 @@
         "moduleType": "layout",
         "segmentGroups": [
           "marketing"
+        ]
+      },
+      "id": "layout:141",
+      "startTimeMs": 21506.924548,
+      "memoryStartMB": 594.34,
+      "endTimeMs": 21507.426436,
+      "durationMs": 0.5018880000025092,
+      "memoryEndMB": 594.34
+    },
+    {
+      "kind": "layout",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "route": "/",
+      "phase": "layout",
+      "meta": {
+        "moduleType": "layout",
+        "segmentGroups": [
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:142",
-      "startTimeMs": 28779.061651,
-      "memoryStartMB": 706.71,
-      "endTimeMs": 28779.580128,
-      "durationMs": 0.5184770000014396,
-      "memoryEndMB": 706.71
+      "startTimeMs": 21508.206822,
+      "memoryStartMB": 594.34,
+      "endTimeMs": 21524.005121,
+      "durationMs": 15.798298999998224,
+      "memoryEndMB": 595.09
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:143",
-      "startTimeMs": 28780.434445,
-      "memoryStartMB": 706.71,
-      "endTimeMs": 28799.034506,
-      "durationMs": 18.600061000001006,
-      "memoryEndMB": 707.34
+      "startTimeMs": 21569.983218,
+      "memoryStartMB": 597.59,
+      "endTimeMs": 21570.487313,
+      "durationMs": 0.504095000000234,
+      "memoryEndMB": 597.59
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:144",
-      "startTimeMs": 28850.673947,
-      "memoryStartMB": 709.96,
-      "endTimeMs": 28851.198202,
-      "durationMs": 0.5242550000002666,
-      "memoryEndMB": 709.96
+      "startTimeMs": 21571.153946,
+      "memoryStartMB": 597.59,
+      "endTimeMs": 21586.90638,
+      "durationMs": 15.752434000001813,
+      "memoryEndMB": 598.34
     },
     {
       "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
+      "name": "MarketingGroupLayout",
+      "path": "src/app/(marketing)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing",
-          "default"
+          "marketing"
         ]
       },
       "id": "layout:145",
-      "startTimeMs": 28852.098872,
-      "memoryStartMB": 709.96,
-      "endTimeMs": 28866.611774,
-      "durationMs": 14.512902000002214,
-      "memoryEndMB": 710.71
+      "startTimeMs": 22064.822352,
+      "memoryStartMB": 608.67,
+      "endTimeMs": 22065.373609,
+      "durationMs": 0.5512569999991683,
+      "memoryEndMB": 608.67
     },
     {
       "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
+      "name": "MarketingDefaultLocaleLayout",
+      "path": "src/app/(marketing)/(default)/layout.tsx",
       "route": "/",
       "phase": "layout",
       "meta": {
         "moduleType": "layout",
         "segmentGroups": [
-          "marketing"
+          "marketing",
+          "default"
         ]
       },
       "id": "layout:146",
-      "startTimeMs": 28914.804765,
-      "memoryStartMB": 713.96,
-      "endTimeMs": 28915.245313,
-      "durationMs": 0.440547999998671,
-      "memoryEndMB": 713.96
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:147",
-      "startTimeMs": 28915.970671,
-      "memoryStartMB": 713.96,
-      "endTimeMs": 28939.83214,
-      "durationMs": 23.861468999999488,
-      "memoryEndMB": 707.4
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:148",
-      "startTimeMs": 29036.012806,
-      "memoryStartMB": 716.02,
-      "endTimeMs": 29036.610401,
-      "durationMs": 0.5975950000029115,
-      "memoryEndMB": 716.02
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:149",
-      "startTimeMs": 29037.429634,
-      "memoryStartMB": 716.02,
-      "endTimeMs": 29051.700425,
-      "durationMs": 14.270790999999008,
-      "memoryEndMB": 716.65
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingGroupLayout",
-      "path": "src/app/(marketing)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing"
-        ]
-      },
-      "id": "layout:150",
-      "startTimeMs": 29532.027703,
-      "memoryStartMB": 733.03,
-      "endTimeMs": 29532.558343,
-      "durationMs": 0.530640000000858,
-      "memoryEndMB": 733.03
-    },
-    {
-      "kind": "layout",
-      "name": "MarketingDefaultLocaleLayout",
-      "path": "src/app/(marketing)/(default)/layout.tsx",
-      "route": "/",
-      "phase": "layout",
-      "meta": {
-        "moduleType": "layout",
-        "segmentGroups": [
-          "marketing",
-          "default"
-        ]
-      },
-      "id": "layout:151",
-      "startTimeMs": 29533.291699,
-      "memoryStartMB": 733.03,
-      "endTimeMs": 29547.29158,
-      "durationMs": 13.999880999999732,
-      "memoryEndMB": 733.78
+      "startTimeMs": 22066.244762,
+      "memoryStartMB": 608.67,
+      "endTimeMs": 22083.297597,
+      "durationMs": 17.052835000002233,
+      "memoryEndMB": 609.42
     }
   ]
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Bot, CheckCircle2, ChevronRight, CircleHelp, Info, Lightbulb, XCircle } from "lucide-react";
+import { CheckCircle2, ChevronRight, CircleHelp, XCircle } from "lucide-react";
 import {
   NclexAnswerList,
   NclexAnswerCard,
@@ -287,10 +287,6 @@ export function NclexPracticeRunner({
   const [showLabValues, setShowLabValues] = useState(false);
   const [noteText, setNoteText] = useState("");
 
-  // Container height measurement to fill the viewport below the learner nav
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState("calc(100dvh - 96px)");
-
   const mountedRef = useRef(true);
   const inFlightRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
@@ -303,18 +299,6 @@ export function NclexPracticeRunner({
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
-
-  useLayoutEffect(() => {
-    if (!containerRef.current) return;
-    const measure = () => {
-      if (!containerRef.current) return;
-      const top = containerRef.current.getBoundingClientRect().top;
-      setContainerHeight(`${Math.max(300, window.innerHeight - top)}px`);
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -504,7 +488,7 @@ export function NclexPracticeRunner({
 
   if (phase === "loading") {
     return (
-      <div ref={containerRef} className="flex items-center justify-center" style={{ height: containerHeight }}>
+      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace flex items-center justify-center" data-nclex-shell="practice">
         <div className="nn-nclex-spinner" />
       </div>
     );
@@ -512,7 +496,7 @@ export function NclexPracticeRunner({
 
   if (phase === "error") {
     return (
-      <div ref={containerRef} style={{ padding: "2rem", textAlign: "center" }}>
+      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace" data-nclex-shell="practice" style={{ padding: "2rem", textAlign: "center" }}>
         <p className="text-[var(--semantic-danger)]" style={{ marginBottom: "1rem" }}>{error}</p>
         <Link href="/app/practice-tests" className="font-semibold text-[var(--semantic-brand)]">
           Return to practice tests
@@ -523,7 +507,7 @@ export function NclexPracticeRunner({
 
   if (results) {
     return (
-      <div ref={containerRef} style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}>
+      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace" data-nclex-shell="practice" style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}>
         <h1 className="text-2xl font-extrabold text-[var(--semantic-text-primary)]" style={{ marginBottom: "1.5rem" }}>
           Practice Exam Results
         </h1>
@@ -556,12 +540,6 @@ export function NclexPracticeRunner({
     optDisplayMap[k] = resolveMeasureText(optsDisplay[i] ?? k);
   });
 
-  const rationaleStatus = !isCommitted || !currentFeedback
-    ? ("waiting" as const)
-    : currentFeedback.isCorrect
-      ? ("correct" as const)
-      : ("incorrect" as const);
-
   const wrongKey = currentFeedback && !currentFeedback.isCorrect && raw
     ? (isSata && Array.isArray(raw)
         ? raw.find((k) => !currentFeedback.correctKeys.includes(String(k)))
@@ -576,6 +554,32 @@ export function NclexPracticeRunner({
   const primaryDistractorText = primaryDistractorTextRaw
     ? resolveMeasureText(primaryDistractorTextRaw)
     : null;
+
+  // Guard: reject visibly malformed questions before rendering them.
+  // Only fires when the question is loaded (current !== null) and is clearly invalid.
+  if (current && !isBowtie && !cleanStem.trim()) {
+    return (
+      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace" data-nclex-shell="practice" style={{ padding: "2rem", textAlign: "center" }}>
+        <p className="text-sm text-[var(--semantic-text-secondary)]" style={{ marginBottom: "1rem" }}>
+          This question could not be rendered. Skip to the next question or return to practice tests.
+        </p>
+        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
+          {idx < questionIds.length - 1 && (
+            <button
+              type="button"
+              className="inline-flex h-9 items-center rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)]"
+              onClick={handleNext}
+            >
+              Skip question
+            </button>
+          )}
+          <Link href="/app/practice-tests" className="inline-flex h-9 items-center rounded-lg bg-[var(--semantic-brand)] px-4 text-sm font-bold text-[var(--role-cta-foreground)] no-underline">
+            Return to practice tests
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   function getOptionState(canonical: string): NclexAnswerCardState {
     if (!isCommitted || !currentFeedback) {
@@ -669,18 +673,12 @@ export function NclexPracticeRunner({
       .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
       .join("; ") ?? "";
   const feedbackCorrect = Boolean(isCommitted && currentFeedback?.isCorrect);
-  const relatedLesson = currentFeedback?.relatedLessons?.[0] ?? null;
-  const confidenceLevel = 3;
 
   return (
     <div
-      ref={containerRef}
       className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace"
       data-nclex-shell="practice"
       data-nn-unified-exam-workspace=""
-      style={{
-        height: containerHeight,
-      }}
     >
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <NclexPracticeTopBar
@@ -780,52 +778,6 @@ export function NclexPracticeRunner({
             </div>
           </section>
 
-          <section className="nn-nclex-coach-strip" aria-label="Coach">
-            <div className="nn-nclex-coach-strip__brand">
-              <Bot aria-hidden />
-              <span>Coach</span>
-            </div>
-            <div className="nn-nclex-coach-strip__item">
-              <Lightbulb aria-hidden />
-              <div>
-                <p>Tutor Hint</p>
-                <span>{current?.topic ? `Think through ${current.topic} before choosing.` : "Identify the safest clinical priority."}</span>
-              </div>
-            </div>
-            <div className="nn-nclex-coach-strip__item">
-              <Info aria-hidden />
-              <div>
-                <p>Why This Matters</p>
-                <span>{currentFeedback?.clinicalPearlDisplay ? resolveMeasureText(currentFeedback.clinicalPearlDisplay) : "Clinical judgment depends on recognizing the highest-risk finding."}</span>
-              </div>
-            </div>
-            <div className="nn-nclex-coach-strip__item">
-              <BookOpen aria-hidden />
-              <div>
-                <p>Related Lesson</p>
-                {relatedLesson ? (
-                  <Link href={relatedLesson.href}>{relatedLesson.title}</Link>
-                ) : (
-                  <span>{current?.subtopic ?? current?.topic ?? "Core clinical judgment"}</span>
-                )}
-              </div>
-            </div>
-            <div className="nn-nclex-confidence">
-              <p>How confident are you?</p>
-              <div className="nn-nclex-confidence__buttons" aria-label="Confidence rating">
-                {[1, 2, 3, 4, 5].map((rating) => (
-                  <button
-                    key={rating}
-                    type="button"
-                    className={rating === confidenceLevel ? "is-active" : ""}
-                    aria-pressed={rating === confidenceLevel}
-                  >
-                    {rating}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </section>
         </main>
 
         <aside className="nn-nclex-rationale-sidebar" aria-label="Rationale">

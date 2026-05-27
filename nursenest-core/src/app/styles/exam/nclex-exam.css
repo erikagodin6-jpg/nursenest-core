@@ -1176,22 +1176,17 @@ body:has(.nn-nclex-exam-page) {
   }
 
   .nn-nclex-practice-main {
-    min-height: 38rem;
+    min-height: 24rem;
+    overflow: visible;
+    grid-template-rows: auto auto;
+  }
+
+  .nn-nclex-practice-question-card {
+    overflow: visible;
   }
 
   .nn-nclex-rationale-sidebar {
-    min-height: 22rem;
-  }
-
-  .nn-nclex-coach-strip {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-
-  .nn-nclex-coach-strip__item,
-  .nn-nclex-confidence {
-    border-left: 0;
-    border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+    min-height: 10rem;
   }
 }
 

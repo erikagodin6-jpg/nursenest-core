@@ -13,8 +13,16 @@ import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import {
+  MARKETING_PRICING_CONVERSION_H1_FALLBACK,
+  MARKETING_PRICING_CONVERSION_LEAD_FALLBACK,
+} from "@/lib/marketing-i18n/marketing-safe-fallbacks";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
+const PRICING_TITLE_FALLBACK = "Pricing | NurseNest";
+const PRICING_DESCRIPTION_FALLBACK =
+  "NurseNest plans by exam pathway, with practice questions, clinical lessons, flashcards, and mock exams.";
 
 // 🧊 ISR window: pricing content changes infrequently.
 // Revalidates at most every hour. Individual plan data can be stale up to 1h.
@@ -45,6 +53,24 @@ type PricingPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
+async function loadPricingPageMetadataMessagesSafe(): Promise<Record<(typeof PRICING_META_KEYS)[number], string>> {
+  try {
+    const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...PRICING_META_KEYS]);
+    return {
+      "pages.pricing.title": m["pages.pricing.title"] ?? PRICING_TITLE_FALLBACK,
+      "pages.pricing.description": m["pages.pricing.description"] ?? PRICING_DESCRIPTION_FALLBACK,
+    };
+  } catch (error) {
+    safeServerLog("billing", "pricing_page_metadata_messages_fallback", {
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 300),
+    });
+    return {
+      "pages.pricing.title": MARKETING_PRICING_CONVERSION_H1_FALLBACK || PRICING_TITLE_FALLBACK,
+      "pages.pricing.description": MARKETING_PRICING_CONVERSION_LEAD_FALLBACK || PRICING_DESCRIPTION_FALLBACK,
+    };
+  }
+}
+
 /**
  * Resolves quickly (searchParams only) so `loading.tsx` does not block on FAQ / i18n shards.
  * Plan cards stream in the first Suspense branch; JSON-LD + FAQ follow in parallel.
@@ -55,7 +81,7 @@ export default async function PricingPage({ searchParams }: PricingPageProps) {
   const resolvedSearch = searchParams ? await searchParams : {};
   const initialSearchParamsString = serializeMarketingPageSearchParams(resolvedSearch);
   const { crumbs } = marketingPricingBreadcrumbs();
-  const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...PRICING_META_KEYS]);
+  const m = await loadPricingPageMetadataMessagesSafe();
 
   return (
     <>

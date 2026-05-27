@@ -10,6 +10,11 @@ import { serializeMarketingPageSearchParams } from "@/lib/marketing/serialize-ma
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import {
+  MARKETING_PRICING_CONVERSION_H1_FALLBACK,
+  MARKETING_PRICING_CONVERSION_LEAD_FALLBACK,
+} from "@/lib/marketing-i18n/marketing-safe-fallbacks";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -17,6 +22,30 @@ type Props = {
 };
 
 const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
+const PRICING_TITLE_FALLBACK = "Pricing | NurseNest";
+const PRICING_DESCRIPTION_FALLBACK =
+  "NurseNest plans by exam pathway, with practice questions, clinical lessons, flashcards, and mock exams.";
+
+async function loadPricingPageMetadataMessagesSafe(
+  locale: string,
+): Promise<Record<(typeof PRICING_META_KEYS)[number], string>> {
+  try {
+    const m = await loadMarketingMetadataMessages(locale, [...PRICING_META_KEYS]);
+    return {
+      "pages.pricing.title": m["pages.pricing.title"] ?? PRICING_TITLE_FALLBACK,
+      "pages.pricing.description": m["pages.pricing.description"] ?? PRICING_DESCRIPTION_FALLBACK,
+    };
+  } catch (error) {
+    safeServerLog("billing", "localized_pricing_page_metadata_messages_fallback", {
+      locale,
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 300),
+    });
+    return {
+      "pages.pricing.title": MARKETING_PRICING_CONVERSION_H1_FALLBACK || PRICING_TITLE_FALLBACK,
+      "pages.pricing.description": MARKETING_PRICING_CONVERSION_LEAD_FALLBACK || PRICING_DESCRIPTION_FALLBACK,
+    };
+  }
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -45,7 +74,7 @@ export default async function LocalizedPricingPage({ params, searchParams }: Pro
   const { locale } = await params;
   const resolvedSearch = searchParams ? await searchParams : {};
   const initialSearchParamsString = serializeMarketingPageSearchParams(resolvedSearch);
-  const m = await loadMarketingMetadataMessages(locale, [...PRICING_META_KEYS]);
+  const m = await loadPricingPageMetadataMessagesSafe(locale);
 
   return (
     <>
