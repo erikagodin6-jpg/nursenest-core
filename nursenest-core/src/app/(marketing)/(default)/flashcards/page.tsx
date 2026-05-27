@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { absoluteUrl } from "@/lib/seo/site-origin";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -18,6 +16,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { AUTH_CALLBACK_PARAM } from "@/lib/auth/auth-flow-governance";
 import { defaultPublicFlashcardsPathwayId } from "@/lib/flashcards/public-flashcards-auth-callback";
 import { PublicFlashcardsStudyLauncher } from "@/components/flashcards/public-flashcards-study-launcher";
+import { PublicStudyLandingLayout } from "@/components/marketing/public-study-landing-layout";
 
 // Public educational landing surface; the launcher itself routes into the protected study app.
 export const revalidate = 1800;
@@ -69,32 +68,23 @@ export default async function PublicFlashcardsHubPage() {
   const loginBaseHref = withMarketingLocale(locale, "/login");
   const pathwayId = defaultPublicFlashcardsPathwayId(marketingRegion);
 
+  const flashcardsLabel = t("nav.flashcards");
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-      <BreadcrumbJsonLd
-        items={[
-          { name: t("nav.home"), path: "/" },
-          { name: t("nav.flashcards"), path: "/flashcards" },
-        ]}
-      />
-
-      <nav className="mb-6 nn-marketing-caption" aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-          <li>
-            <Link href={home} className="text-[var(--semantic-brand)] hover:underline">
-              {t("nav.home")}
-            </Link>
-          </li>
-          <li aria-hidden className="text-[var(--theme-muted-text)]">/</li>
-          <li className="font-medium text-[var(--theme-heading-text)]">{t("nav.flashcards")}</li>
-        </ol>
-      </nav>
-
+    <PublicStudyLandingLayout
+      breadcrumbs={[
+        { name: t("nav.home"), href: home },
+        { name: flashcardsLabel },
+      ]}
+      schemaItems={[
+        { name: t("nav.home"), path: "/" },
+        { name: flashcardsLabel, path: "/flashcards" },
+      ]}
+    >
       <PublicFlashcardsStudyLauncher
         pathwayId={pathwayId}
         loginBaseHref={loginBaseHref}
         callbackParam={AUTH_CALLBACK_PARAM}
       />
-    </main>
+    </PublicStudyLandingLayout>
   );
 }

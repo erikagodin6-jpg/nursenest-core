@@ -8,6 +8,12 @@ import {
   parseExamMicroQuestionFromDbFields,
 } from "@/lib/flashcards/flashcard-exam-style";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
+import {
+  buildSimpleCorrectRationale,
+  buildSimpleDistractorRationale,
+  hasSimpleRationaleTeachingShape,
+  isGenericRationaleText,
+} from "@/lib/questions/rationale-quality";
 
 /** Extra bank fields used to build NCLEX-style micro questions for flashcard study. */
 export type BankExamRowForFlashcard = ExamQuestionMcqRow & {
@@ -51,8 +57,13 @@ export function bankExamQuestionRowToFlashcardStudySelectRow(row: BankExamRowFor
         distractorRows.find((d) => d.label === letter) ??
         distractorRows.find((d) => d.label === optText);
       const rationale =
-        hit?.whyWrong?.trim() ||
-        "This option does not address the priority assessment or intervention implied by the stem.";
+        hit?.whyWrong?.trim() && !isGenericRationaleText(hit.whyWrong)
+          ? hit.whyWrong.trim()
+          : buildSimpleDistractorRationale({
+              stem: item.question,
+              optionText: optText,
+              correctOptionText,
+            });
       return { letter, rationale };
     });
 
@@ -60,9 +71,15 @@ export function bankExamQuestionRowToFlashcardStudySelectRow(row: BankExamRowFor
     .map((x) => (typeof x === "string" ? x.trim() : ""))
     .find((x) => x.length >= 8);
   const rationaleCorrect =
-    rationaleCorrectRaw && rationaleCorrectRaw.length >= 8
+    rationaleCorrectRaw &&
+    rationaleCorrectRaw.length >= 8 &&
+    !isGenericRationaleText(rationaleCorrectRaw) &&
+    hasSimpleRationaleTeachingShape(rationaleCorrectRaw)
       ? rationaleCorrectRaw
-      : "Review client assessment findings, safety risks, and the highest-priority nursing action before selecting an option.";
+      : buildSimpleCorrectRationale({
+          stem: item.question,
+          correctOptionText,
+        });
 
   const exam = parseExamMicroQuestionFromDbFields({
     examItemKind: FlashcardItemKind.CLINICAL,

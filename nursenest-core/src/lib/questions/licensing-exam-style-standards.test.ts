@@ -92,7 +92,51 @@ test("guards RN scope while preserving realistic bedside language", () => {
   });
 
   assert.ok(result.issues.some((issue) => issue.code === "TIER_SCOPE_MISMATCH"));
+  assert.ok(result.issues.some((issue) => issue.code === "SPECIALTY_COMPLEXITY_DRIFT"));
   assert.equal(result.pass, false);
+});
+
+test("rejects provider-level treatment decisions for NCLEX-style RN items", () => {
+  const result = evaluateLicensingExamStyle({
+    tier: "RN",
+    stem:
+      "A client reports chest pressure radiating to the jaw with diaphoresis. Which medication regimen should the nurse prescribe first?",
+    options: [
+      "Prescribe aspirin and nitroglycerin",
+      "Order a CT angiogram",
+      "Assess vital signs, apply oxygen if indicated, obtain ECG per protocol, and notify the provider",
+      "Schedule outpatient follow-up",
+    ],
+    rationale:
+      "The NCLEX should test safe nursing recognition and escalation, not prescribing or ordering decisions.",
+    clinicalReasoning:
+      "The entry-level RN role is to recognize instability, initiate nursing protocols, and escalate.",
+  });
+
+  assert.ok(result.issues.some((issue) => issue.code === "PROVIDER_DECISION_DRIFT"));
+  assert.equal(result.pass, false);
+});
+
+test("passes broad entry-level NCLEX safety and prioritization tone", () => {
+  const result = evaluateLicensingExamStyle({
+    tier: "RN",
+    cognitiveLevel: "application",
+    stem:
+      "A nurse is caring for four clients. Which client should the nurse assess first?",
+    options: [
+      "A client with heart failure who gained 0.5 kg in one week",
+      "A client with pneumonia who is newly confused and has an oxygen saturation of 86%",
+      "A client with diabetes requesting help choosing a snack",
+      "A client awaiting discharge teaching after cataract surgery",
+    ],
+    rationale:
+      "New confusion with hypoxemia is an acute breathing and safety concern. The other clients have needs, but they are more stable or less urgent.",
+    clinicalReasoning:
+      "This item tests unstable versus stable, ABCs, prioritization, and safe entry-level RN judgment.",
+  });
+
+  assert.equal(result.pass, true);
+  assert.equal(result.issues.filter((issue) => issue.severity === "error").length, 0);
 });
 
 test("passes Allied Health licensing style when workflow and scope drive the decision", () => {

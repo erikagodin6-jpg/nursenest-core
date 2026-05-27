@@ -45,6 +45,71 @@ export type ProgressLite = {
   repetitions: number;
 };
 
+export type AdaptiveProgressLite = ProgressLite & {
+  lastReviewedAt?: Date | null;
+  lastQuality?: number | null;
+  lapses?: number | null;
+};
+
+function seededTie(salt: string, id: string): number {
+  let h = 2166136261;
+  const seed = `${salt}\0${id}`;
+  for (let i = 0; i < seed.length; i += 1) h = Math.imul(h ^ seed.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+
+/**
+ * Fresh custom-session ordering:
+ * - unseen cards first
+ * - due / weak cards next
+ * - recently reviewed cards cooled down unless explicitly filtered elsewhere
+ * - mastered/not-due cards remain in rotation, but later
+ */
+export function orderFlashcardsForAdaptiveSession<T extends { id: string }>(
+  rows: readonly T[],
+  progressByCardId: Map<string, AdaptiveProgressLite>,
+  now: Date,
+  salt: string,
+): T[] {
+  if (rows.length <= 1) return [...rows];
+  const nowMs = now.getTime();
+  const dayMs = 86_400_000;
+  const stableSalt = salt.trim().length >= 8 ? salt.trim() : "flashcard-adaptive-order";
+
+  return [...rows]
+    .map((row) => {
+      const p = progressByCardId.get(row.id);
+      const nextMs = p?.nextReviewAt?.getTime() ?? null;
+      const reviewedMs = p?.lastReviewedAt?.getTime() ?? null;
+      const daysSinceReview = reviewedMs == null ? 1_000 : Math.max(0, (nowMs - reviewedMs) / dayMs);
+      const due = nextMs == null || nextMs <= nowMs;
+      const unseen = !p || p.repetitions <= 0 || reviewedMs == null;
+      const weak = (p?.lastQuality ?? 5) <= 2 || (p?.lapses ?? 0) > 0;
+      const recentlyReviewedPenalty =
+        reviewedMs == null
+          ? 0
+          : daysSinceReview < 1
+            ? 900_000
+            : daysSinceReview < 3
+              ? 450_000
+              : daysSinceReview < 7
+                ? 140_000
+                : 0;
+
+      const score =
+        (unseen ? 1_250_000 : 0) +
+        (due ? 650_000 : -180_000) +
+        (weak ? 520_000 : 0) +
+        Math.min(180_000, daysSinceReview * 18_000) -
+        recentlyReviewedPenalty +
+        (seededTie(stableSalt, row.id) % 10_000);
+
+      return { row, score, tie: seededTie(`${stableSalt}:tie`, row.id) };
+    })
+    .sort((a, b) => b.score - a.score || a.tie - b.tie || a.row.id.localeCompare(b.row.id))
+    .map((entry) => entry.row);
+}
+
 /**
  * Due cards first (earliest next review), then new cards, then not-due by deck order.
  */

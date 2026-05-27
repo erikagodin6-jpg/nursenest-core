@@ -219,6 +219,9 @@ const TRANSFERABLE_JUDGMENT_PATTERNS = [
 
 const GENERIC_PATTERNS = [
   /\b(because it is correct|this is the best answer|review the material|study this topic|important to know|basic concept)\b/i,
+  /\b(this option does not address the priority assessment or intervention implied by the stem)\b/i,
+  /\b(this option does not address the priority|this is incorrect|not the best answer|this is not correct)\b/i,
+  /\b(no separate rationale is available|rationale unavailable|answer shown)\b/i,
 ] as const;
 
 const TEXTBOOK_PATTERNS = [

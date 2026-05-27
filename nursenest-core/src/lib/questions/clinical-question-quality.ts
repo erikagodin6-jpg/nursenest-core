@@ -9,6 +9,7 @@
  *
  * Goal: prevent short-answer-bank style content from being treated as premium clinical teaching.
  */
+import { isGenericRationaleText } from "@/lib/questions/rationale-quality";
 
 export const CLINICAL_QUESTION_QUALITY_THRESHOLDS = {
   minStemChars: 60,
@@ -43,8 +44,10 @@ export type ClinicalQuestionQualityIssueCode =
   | "OPTIONS_TOO_FEW"
   | "CORRECT_ANSWER_MISSING"
   | "RATIONALE_TOO_SHORT"
+  | "GENERIC_RATIONALE"
   | "DISTRACTOR_RATIONALES_MISSING"
   | "DISTRACTOR_RATIONALES_TOO_THIN"
+  | "GENERIC_DISTRACTOR_RATIONALE"
   | "CLINICAL_REASONING_MISSING"
   | "EXAM_STRATEGY_MISSING"
   | "TRAP_OR_TAKEAWAY_MISSING"
@@ -195,9 +198,22 @@ export function evaluateClinicalQuestionQuality(
       remediation: "Explain why the answer is correct, why alternatives are unsafe/less correct, and what cue in the stem matters most.",
     });
   }
+  if (isGenericRationaleText(input.rationale)) {
+    addIssue(issues, {
+      code: "GENERIC_RATIONALE",
+      severity: "error",
+      field: "rationale",
+      message: "Rationale is generic or placeholder-like instead of teaching the exam thought process.",
+      remediation:
+        "Explain the correct answer, the clinical cue that makes it a priority, why alternatives are unsafe or lower priority, and the transferable nursing principle.",
+    });
+  }
 
   if (expectsDistractors) {
     const adequate = countAdequateDistractorRationales(input);
+    const genericDistractors = Object.values(parseObjectish(input.distractorRationales)).filter((value) =>
+      isGenericRationaleText(typeof value === "string" ? value : JSON.stringify(value)),
+    ).length;
     if (adequate === 0) {
       addIssue(issues, {
         code: "DISTRACTOR_RATIONALES_MISSING",
@@ -213,6 +229,16 @@ export function evaluateClinicalQuestionQuality(
         field: "distractorRationales",
         message: "Some distractors lack adequate teaching rationale.",
         remediation: "Make each distractor rationale at least 35 characters and clinically specific.",
+      });
+    }
+    if (genericDistractors > 0) {
+      addIssue(issues, {
+        code: "GENERIC_DISTRACTOR_RATIONALE",
+        severity: "error",
+        field: "distractorRationales",
+        message: "One or more distractor rationales use vague placeholder wording.",
+        remediation:
+          "Rewrite each wrong-answer rationale to name the misconception, the risk of choosing it first, and the priority framework that rules it out.",
       });
     }
   }

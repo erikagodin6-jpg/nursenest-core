@@ -35,6 +35,8 @@ export type LicensingExamStyleIssueCode =
   | "MISSING_PATIENT_OUTCOME_OR_SAFETY"
   | "MISSING_MULTI_CONCEPT_INTEGRATION"
   | "NON_BEDSIDE_LANGUAGE"
+  | "SPECIALTY_COMPLEXITY_DRIFT"
+  | "PROVIDER_DECISION_DRIFT"
   | "TIER_SCOPE_MISMATCH";
 
 export type LicensingExamStyleIssue = {
@@ -114,8 +116,10 @@ export const LICENSING_EXAM_STYLE_STANDARDS: Record<
       "highly specialized ICU management",
       "advanced ventilator management",
       "physician-level diagnosis or prescribing",
+      "selecting medical diagnoses or treatment plans instead of nursing actions",
       "respiratory therapist-specific interventions",
       "rare specialty procedures",
+      "obscure memorization used as difficulty",
     ],
     scopeGuardrails: [
       "Keep items entry-level RN: safety, prioritization, delegation, trends, education, and deterioration recognition.",
@@ -240,6 +244,18 @@ const NON_BEDSIDE_PATTERNS = [
   /\b(according to the textbook|in general theory|purely conceptual|memorization only|academic definition)\b/i,
 ] as const;
 
+const SPECIALTY_COMPLEXITY_PATTERNS = [
+  /\b(mechanically ventilated|ventilator mode|ventilator settings?|tidal volume|plateau pressure|peep adjustment)\b/i,
+  /\b(arterial line|central venous pressure|swan-ganz|pulmonary artery catheter|wedge pressure)\b/i,
+  /\b(vasopressor titration|titrate norepinephrine|titrated vasopressor|intra-aortic balloon|ecmo|crrt)\b/i,
+  /\b(intracranial pressure monitoring|icp monitoring|advanced hemodynamic)\b/i,
+] as const;
+
+const PROVIDER_DECISION_PATTERNS = [
+  /\b(which diagnosis should be made|diagnose the client|prescribe|write an order|order a ct|order an mri)\b/i,
+  /\b(select the antibiotic regimen|choose the surgical procedure|determine medical treatment plan)\b/i,
+] as const;
+
 const SCOPE_MISMATCH_PATTERNS: Record<HealthcareProgramTier, readonly RegExp[]> = {
   RPN: [/\bdiagnose|prescribe|intubate|vasopressor|central line|adjust ventilator\b/i],
   RN: [/\bprescribe\b|diagnose\b|intubate|adjust ventilator settings|insert central line|perform surgery\b/i],
@@ -336,6 +352,26 @@ export function evaluateLicensingExamStyle(
       severity: "warning",
       message: "Question uses academic or generic language instead of realistic bedside/workflow language.",
       remediation: "Use natural patient-care language and profession-specific workflow details.",
+    });
+  }
+
+  if ((input.tier === "RN" || input.tier === "RPN") && countMatches(combined, SPECIALTY_COMPLEXITY_PATTERNS) > 0) {
+    addIssue(issues, {
+      code: "SPECIALTY_COMPLEXITY_DRIFT",
+      severity: "error",
+      message: "Question drifts into specialty/ICU complexity instead of entry-level licensing judgment.",
+      remediation:
+        "Reframe around recognition of deterioration, basic nursing safety actions, escalation, delegation, or patient teaching.",
+    });
+  }
+
+  if ((input.tier === "RN" || input.tier === "RPN") && countMatches(combined, PROVIDER_DECISION_PATTERNS) > 0) {
+    addIssue(issues, {
+      code: "PROVIDER_DECISION_DRIFT",
+      severity: "error",
+      message: "Question asks for provider-level diagnosis, prescribing, ordering, or treatment-plan decisions.",
+      remediation:
+        "Ask what the nurse should assess, do first, teach, delegate, hold/question, report, or evaluate.",
     });
   }
 

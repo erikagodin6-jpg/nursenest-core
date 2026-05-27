@@ -36,12 +36,27 @@ describe("question difficulty/scope filtering", () => {
       classifyQuestionDifficultyScope({ difficulty: 3, tags: ["icu"] }),
       classifyQuestionDifficultyScope({ difficulty: 3, stem: "A mechanically ventilated client has a high-pressure alarm." }),
       classifyQuestionDifficultyScope({ difficulty: 3, subtopic: "invasive hemodynamic monitoring" }),
+      classifyQuestionDifficultyScope({ difficulty: 3, stem: "The nurse is asked to titrate norepinephrine based on arterial line readings." }),
+      classifyQuestionDifficultyScope({ difficulty: 3, stem: "A client receiving CRRT and ECMO has a sudden circuit alarm." }),
     ];
 
     for (const item of advanced) {
       assert.equal(item.difficultyTier, "tier3_advanced");
       assert.notEqual(item.audience, "standard_exam_prep");
     }
+  });
+
+  it("keeps broad entry-level NCLEX safety items in standard prep", () => {
+    const standard = classifyQuestionDifficultyScope({
+      difficulty: 3,
+      topic: "Respiratory distress",
+      stem:
+        "A client with pneumonia has new confusion and an oxygen saturation of 86%. Which action should the nurse take first?",
+      tags: ["prioritization", "safety"],
+    });
+
+    assert.equal(standard.audience, "standard_exam_prep");
+    assert.equal(standard.scope, "nclex");
   });
 
   it("defaults unknown scope params to standard exam prep", () => {

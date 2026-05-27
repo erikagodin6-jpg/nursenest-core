@@ -1,4 +1,5 @@
 import type { FlashcardItemKind, TierCode } from "@prisma/client";
+import { hasSimpleRationaleTeachingShape, isGenericRationaleText } from "@/lib/questions/rationale-quality";
 
 export type FlashcardCreationGuardrailExamSlice = {
   itemKind: FlashcardItemKind;
@@ -141,6 +142,14 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
       error: "RN/NP flashcards must include a substantive correct rationale (at least ~50 characters teaching the decision).",
     };
   }
+  if (isGenericRationaleText(exam.rationaleCorrect) || !hasSimpleRationaleTeachingShape(exam.rationaleCorrect)) {
+    return {
+      ok: false,
+      code: "flashcard_guardrail_rn_np_rationale_quality",
+      error:
+        "RN/NP flashcards need a clear rationale that explains the correct answer, clinical reasoning, safety priority, and transferable nursing principle.",
+    };
+  }
   if (!EXAM_RATIONALE_TEACHING.test(exam.rationaleCorrect)) {
     return {
       ok: false,
@@ -149,12 +158,20 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
         "RN/NP exam-style cards must include teaching rationale language in the correct-option explanation (e.g. because, therefore, risk/priority framing, or why the option is safest or most urgent).",
     };
   }
-  const shortDistractor = exam.rationaleIncorrect.find((d) => d.rationale.trim().length < 24);
+  const shortDistractor = exam.rationaleIncorrect.find((d) => d.rationale.trim().length < 55);
   if (shortDistractor) {
     return {
       ok: false,
       code: "flashcard_guardrail_rn_np_distractor_rationale",
-      error: "RN/NP exam-style cards need a short teaching rationale for each distractor (unsafe or less-correct option).",
+      error: "RN/NP exam-style cards need a concise teaching rationale for each distractor (unsafe, delayed, or lower-priority option).",
+    };
+  }
+  const genericDistractor = exam.rationaleIncorrect.find((d) => isGenericRationaleText(d.rationale));
+  if (genericDistractor) {
+    return {
+      ok: false,
+      code: "flashcard_guardrail_rn_np_distractor_rationale_quality",
+      error: `Distractor rationale for option ${genericDistractor.letter} is vague or placeholder-like. Explain why it is unsafe, delayed, or lower priority.`,
     };
   }
   return { ok: true };
@@ -269,6 +286,12 @@ function universalViolations(input: FlashcardCreationGuardrailInput): { code: st
         error: "Correct rationale contains placeholder text. Provide a substantive clinical explanation.",
       };
     }
+    if (isGenericRationaleText(input.exam.rationaleCorrect)) {
+      return {
+        code: "flashcard_guardrail_generic_rationale",
+        error: "Correct rationale is generic or placeholder-like. Provide a simple explanation of the exam thought process.",
+      };
+    }
     const shortDistractorRationale = input.exam.rationaleIncorrect.find((d) => d.rationale.trim().length < 16);
     if (shortDistractorRationale) {
       return {
@@ -281,6 +304,13 @@ function universalViolations(input: FlashcardCreationGuardrailInput): { code: st
       return {
         code: "flashcard_guardrail_distractor_placeholder",
         error: `Distractor rationale for option ${placeholderDistractor.letter} contains placeholder text.`,
+      };
+    }
+    const genericDistractor = input.exam.rationaleIncorrect.find((d) => isGenericRationaleText(d.rationale));
+    if (genericDistractor) {
+      return {
+        code: "flashcard_guardrail_generic_distractor_rationale",
+        error: `Distractor rationale for option ${genericDistractor.letter} is generic or placeholder-like.`,
       };
     }
   }
@@ -349,11 +379,15 @@ export function auditPublishedCard(card: {
   if (card.examItemKind) {
     if (!card.questionStem || card.questionStem.trim().length < 8) issues.push("missing_question_stem");
     if (!card.rationaleCorrect || card.rationaleCorrect.trim().length < 8) issues.push("missing_correct_rationale");
+    if (isGenericRationaleText(card.rationaleCorrect)) issues.push("generic_correct_rationale");
     const inc = Array.isArray(card.rationaleIncorrect) ? card.rationaleIncorrect : [];
     if (inc.length === 0) issues.push("missing_distractor_rationales");
     for (const d of inc as Array<{ letter?: string; rationale?: string }>) {
       if ((d.rationale ?? "").trim().length < 8) {
         issues.push(`short_distractor_rationale_${d.letter ?? "?"}`);
+      }
+      if (isGenericRationaleText(d.rationale)) {
+        issues.push(`generic_distractor_rationale_${d.letter ?? "?"}`);
       }
     }
   }

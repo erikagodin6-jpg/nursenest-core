@@ -46,6 +46,10 @@ import {
   loadFlashcardsExamInventoryForPathway,
   resolveAccessScopeForPathwayExamQuestionPool,
 } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
+import {
+  orderFlashcardsForAdaptiveSession,
+  type AdaptiveProgressLite,
+} from "@/lib/flashcards/study-queue";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -133,20 +137,6 @@ const flashcardSelect = {
   category: { select: { name: true, topicCode: true } },
   deck: { select: { pathwayId: true, title: true } },
 } as const;
-
-function shuffled<T>(rows: T[], seed: string): T[] {
-  let h = 2166136261;
-  for (let i = 0; i < seed.length; i += 1) h = (h ^ seed.charCodeAt(i)) * 16777619;
-  const out = [...rows];
-  for (let i = out.length - 1; i > 0; i -= 1) {
-    h ^= h << 13;
-    h ^= h >>> 17;
-    h ^= h << 5;
-    const j = Math.abs(h) % (i + 1);
-    [out[i], out[j]] = [out[j], out[i]];
-  }
-  return out;
-}
 
 function describeCustomSessionFilterMode(flags: {
   weakOnly: boolean;
@@ -496,6 +486,7 @@ export async function buildFlashcardCustomSession(
     }
 
     const needsProgress = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+    let progressByScopedId = new Map<string, AdaptiveProgressLite>();
     if (needsProgress) {
       const scopedIds = scoped.map((c) => c.id);
       const progress = await prisma.flashcardProgress.findMany({
@@ -503,10 +494,29 @@ export async function buildFlashcardCustomSession(
           userId,
           flashcardId: { in: scopedIds },
         },
-        select: { flashcardId: true, lastQuality: true, repetitions: true, lastReviewedAt: true },
+        select: {
+          flashcardId: true,
+          lastQuality: true,
+          repetitions: true,
+          lastReviewedAt: true,
+          nextReviewAt: true,
+          lapses: true,
+        },
         take: takeForIdIn(scopedIds, FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT),
       });
       const map = new Map(progress.map((p) => [p.flashcardId, p]));
+      progressByScopedId = new Map(
+        progress.map((p) => [
+          p.flashcardId,
+          {
+            nextReviewAt: p.nextReviewAt,
+            repetitions: p.repetitions,
+            lastReviewedAt: p.lastReviewedAt,
+            lastQuality: p.lastQuality,
+            lapses: p.lapses,
+          },
+        ]),
+      );
       if (weakOnly) {
         scoped = scoped.filter((c) => {
           const p = map.get(c.id);
@@ -526,6 +536,39 @@ export async function buildFlashcardCustomSession(
           recentWindowMs: recentDays * 86_400_000,
           nowMs: Date.now(),
         });
+      }
+    }
+
+    if (!needsProgress && scoped.length > 0) {
+      const scopedIds = scoped.map((c) => c.id).filter((id) => !id.startsWith("exam_bank:"));
+      if (scopedIds.length > 0) {
+        const progress = await prisma.flashcardProgress.findMany({
+          where: {
+            userId,
+            flashcardId: { in: scopedIds },
+          },
+          select: {
+            flashcardId: true,
+            lastQuality: true,
+            repetitions: true,
+            lastReviewedAt: true,
+            nextReviewAt: true,
+            lapses: true,
+          },
+          take: takeForIdIn(scopedIds, FLASHCARD_CUSTOM_SESSION_PROGRESS_SCAN_LIMIT),
+        });
+        progressByScopedId = new Map(
+          progress.map((p) => [
+            p.flashcardId,
+            {
+              nextReviewAt: p.nextReviewAt,
+              repetitions: p.repetitions,
+              lastReviewedAt: p.lastReviewedAt,
+              lastQuality: p.lastQuality,
+              lapses: p.lapses,
+            },
+          ]),
+        );
       }
     }
 
@@ -577,7 +620,9 @@ export async function buildFlashcardCustomSession(
     const orderingSeed = shuffle
       ? sessionSeed?.trim() || `${userId}:${sessionShuffleSalt}:${selectedCategories.join(",")}:${mode}`
       : `${sessionShuffleSalt}:ordered`;
-    const selectedRows = shuffle ? shuffled(scoped, orderingSeed) : scoped;
+    const selectedRows = shuffle
+      ? orderFlashcardsForAdaptiveSession(scoped, progressByScopedId, new Date(), orderingSeed)
+      : scoped;
     const limited = selectedRows.slice(0, limit);
 
     const cardsForSession: CustomSessionSerializedCard[] = [];
