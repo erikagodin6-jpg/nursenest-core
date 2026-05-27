@@ -3393,3 +3393,148 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
     position: static;
   }
 }
+
+/* Focused readability pass: denser top rhythm, compact chips, stable question + scrollable rationale. */
+.nn-flashcard-study-canvas {
+  padding-top: 0.35rem !important;
+}
+
+.nn-flashcard-study-canvas > .mb-4,
+.nn-flashcard-study-canvas .nn-flashcard-study-breadcrumb-row {
+  margin-bottom: 0.2rem !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-unified-exam-workspace] {
+  gap: 0.3rem !important;
+  padding-top: 0.35rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid {
+  gap: clamp(0.75rem, 1.4vw, 1.1rem) !important;
+  padding-top: 0.35rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+  grid-template-columns: minmax(34rem, 1.36fr) minmax(20rem, 0.64fr) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  flex-shrink: 0 !important;
+  padding: clamp(1rem, 1.8vw, 1.45rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-premium-flashcard-prompt-panel > div:first-child {
+  padding-bottom: 0.62rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-hero-stem {
+  margin-top: 1rem !important;
+  font-size: clamp(1.25rem, 1.85vw, 1.68rem) !important;
+  line-height: 1.24 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-chip,
+.nn-flashcard-study-premium .nn-flashcard-question-label {
+  min-height: 1.35rem !important;
+  border-radius: 999px !important;
+  padding: 0.16rem 0.48rem !important;
+  font-size: 0.58rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium {
+  margin-top: 0.85rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium > p:first-child {
+  margin-bottom: 0.35rem !important;
+  font-size: 0.6rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium ul {
+  gap: 0.5rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium button,
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium li > div {
+  min-height: 2.9rem !important;
+  padding: 0.58rem 0.78rem !important;
+}
+
+.nn-flashcard-answer-feedback {
+  margin: 0.35rem 0 0.1rem 2.9rem;
+  border-left: 3px solid color-mix(in srgb, var(--semantic-border-soft) 80%, transparent);
+  padding: 0.32rem 0.55rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.nn-flashcard-answer-feedback > span {
+  display: block;
+  margin-bottom: 0.08rem;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nn-flashcard-answer-feedback--correct {
+  border-left-color: var(--semantic-success);
+  background: color-mix(in srgb, var(--semantic-success) 6%, transparent);
+}
+
+.nn-flashcard-answer-feedback--correct > span {
+  color: var(--semantic-success);
+}
+
+.nn-flashcard-answer-feedback--picked-wrong {
+  border-left-color: var(--semantic-danger);
+  background: color-mix(in srgb, var(--semantic-danger) 5%, transparent);
+}
+
+.nn-flashcard-answer-feedback--picked-wrong > span {
+  color: var(--semantic-danger);
+}
+
+.nn-flashcard-answer-feedback--incorrect > span {
+  color: var(--semantic-text-muted);
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: calc(100dvh - 7rem) !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__header {
+  flex-shrink: 0 !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  padding: 0.95rem 1rem 1rem !important;
+}
+
+@media (max-width: 1180px) {
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+    grid-template-columns: minmax(0, min(100%, 850px)) !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-rationale-panel__body {
+    overflow: visible !important;
+  }
+}

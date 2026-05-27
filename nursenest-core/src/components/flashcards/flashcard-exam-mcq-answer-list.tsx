@@ -63,6 +63,9 @@ export function FlashcardExamMcqAnswerList({
           const interactive = tutorMcq && !revealed && Boolean(onPickLetter);
           const isCorrect = option.letter === exam.correctLetter;
           const isPicked = pickedLetter === option.letter;
+          const incorrectRationale =
+            exam.rationaleIncorrect.find((row) => row.letter === option.letter)?.rationale.trim() ?? "";
+          const feedbackText = isCorrect ? exam.rationaleCorrect.trim() : incorrectRationale;
 
           const visualArgs = {
             letter: option.letter,
@@ -124,12 +127,20 @@ export function FlashcardExamMcqAnswerList({
                 </div>
               )}
 
-              {/* Inline feedback (subtle UX boost) */}
-              {revealed && isPicked && !isCorrect && (
-                <p className="mt-1 text-xs text-[var(--semantic-danger)]">
-                  Incorrect — review rationale →
-                </p>
-              )}
+              {revealed && feedbackText ? (
+                <div
+                  className={`nn-flashcard-answer-feedback ${
+                    isCorrect
+                      ? "nn-flashcard-answer-feedback--correct"
+                      : isPicked
+                        ? "nn-flashcard-answer-feedback--picked-wrong"
+                        : "nn-flashcard-answer-feedback--incorrect"
+                  }`}
+                >
+                  <span>{isCorrect ? "Correct" : isPicked ? "Your answer" : "Why not"}</span>
+                  <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
+                </div>
+              ) : null}
             </li>
           );
         })}
