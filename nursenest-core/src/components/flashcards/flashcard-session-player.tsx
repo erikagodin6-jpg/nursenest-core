@@ -2,7 +2,6 @@
 
 import { useReducer, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { BookmarkIcon, CheckCircle2, XCircle } from "lucide-react";
 import {
   sessionRuntimeReducer,
@@ -12,7 +11,7 @@ import {
   completeSessionAction,
 } from "@/app/actions/flashcards/session-actions";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
-import { flashcardDeckHref, STUDY_TOOL_ROUTES } from "@/lib/study-tools/study-tool-routes";
+import { flashcardDeckHref, STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 import type { HydratedSession, SessionCardPayload } from "@/lib/flashcards/session-runtime-types";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import type { FlashcardItemKind } from "@prisma/client";
@@ -37,10 +36,17 @@ type Props = {
   deckId: string;
 };
 
+function hubHrefForPathway(pathwayId: string | null): string {
+  const id = pathwayId?.trim().toLowerCase() ?? "";
+  if (id.includes("pn") || id.includes("rpn") || id.includes("lpn")) {
+    return "/canada/pn/nclex-pn";
+  }
+  return "/canada/rn/nclex-rn";
+}
+
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function FlashcardSessionPlayer({ session, deckId }: Props) {
-  const router = useRouter();
   const [runtime, dispatch] = useReducer(sessionRuntimeReducer, session.runtime);
   const recordedRef = useRef(new Set<string>());
 
@@ -105,6 +111,9 @@ export function FlashcardSessionPlayer({ session, deckId }: Props) {
   if (runtime.completed) {
     const { correct, incorrect } = runtime.metrics;
     const pct = runtime.totalCards > 0 ? Math.round((correct / runtime.totalCards) * 100) : 0;
+    const flashcardsHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.flashcardsHub, session.deck.pathwayId);
+    const hubHref = hubHrefForPathway(session.deck.pathwayId);
+    const hubLabel = hubHref.includes("/pn/") ? "Back to PN Hub" : "Back to RN Hub";
 
     return (
       <div
@@ -112,12 +121,13 @@ export function FlashcardSessionPlayer({ session, deckId }: Props) {
         className="mx-auto max-w-lg px-4 py-12 text-center"
       >
         <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-8 shadow-sm">
-          <h2 className="text-xl font-bold text-[var(--semantic-text-primary)]">
-            Session complete
+          <h2 className="text-xl font-semibold text-[var(--semantic-text-primary)]">
+            Session Complete
           </h2>
-          <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
-            {session.deck.title}
+          <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Great work — review another deck or return to the {hubLabel.replace("Back to ", "")}.
           </p>
+          <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{session.deck.title}</p>
 
           <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
             <div className="rounded-xl bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] border border-[color-mix(in_srgb,var(--semantic-success)_20%,var(--semantic-border-soft))] p-3">
@@ -132,20 +142,19 @@ export function FlashcardSessionPlayer({ session, deckId }: Props) {
 
           <p className="mt-3 text-2xl font-bold text-[var(--semantic-text-primary)]">{pct}%</p>
 
-          <div className="mt-6 flex flex-col gap-2">
-            <button
-              type="button"
-              className="w-full rounded-xl px-4 py-2.5 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-95"
-              style={{ background: "var(--role-cta, var(--semantic-brand))" }}
-              onClick={() => router.push(flashcardDeckHref(deckId))}
-            >
-              Back to deck
-            </button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link
-              href={STUDY_TOOL_ROUTES.flashcardsDecks}
-              className="w-full rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-center text-[var(--semantic-text-primary)] hover:border-[var(--semantic-brand)]"
+              href={flashcardsHref}
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-95"
+              style={{ background: "var(--role-cta, var(--semantic-brand))" }}
             >
-              All decks
+              Back to Flashcards
+            </Link>
+            <Link
+              href={hubHref}
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))]"
+            >
+              {hubLabel}
             </Link>
           </div>
         </div>

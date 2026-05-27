@@ -2,9 +2,12 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   ENTRY_LEVEL_RN_QUESTION_SCOPE,
+  PRACTICE_QUESTION_INTERACTION_PROFILES,
   normalizePracticeQuestionType,
   practiceQuestionSupportsImmediateRationale,
+  resolvePracticeQuestionInteractionProfile,
   resolvePracticeQuestionLayoutMode,
+  type PracticeQuestionType,
 } from "@/lib/practice-tests/practice-question-rendering-engine";
 
 test("normalizes CAT and Next Gen question type aliases", () => {
@@ -56,4 +59,36 @@ test("defers case-study rationale until the multipart interaction is complete", 
   assert.equal(practiceQuestionSupportsImmediateRationale("single"), true);
   assert.equal(practiceQuestionSupportsImmediateRationale("case-study"), false);
   assert.equal(practiceQuestionSupportsImmediateRationale("decision-tree"), false);
+});
+
+test("defines extensible interaction profiles for every practice question type", () => {
+  const expectedTypes: PracticeQuestionType[] = [
+    "single",
+    "multiple",
+    "ordered",
+    "matrix",
+    "bowtie",
+    "cloze",
+    "hotspot",
+    "case-study",
+    "chart-review",
+    "highlight",
+    "trend",
+    "extended-matching",
+    "multimedia",
+    "decision-tree",
+    "delegation",
+    "triage",
+    "medication-safety",
+    "communication-documentation",
+    "ranking",
+    "clinical-judgment",
+  ];
+
+  assert.deepEqual(Object.keys(PRACTICE_QUESTION_INTERACTION_PROFILES).sort(), [...expectedTypes].sort());
+  assert.equal(resolvePracticeQuestionInteractionProfile("single").scoringRule, "exact");
+  assert.equal(resolvePracticeQuestionInteractionProfile("multiple").partialCredit, true);
+  assert.equal(resolvePracticeQuestionInteractionProfile("bowtie").scoringRule, "multi-part");
+  assert.equal(resolvePracticeQuestionInteractionProfile("hotspot").scoringRule, "hotspot");
+  assert.equal(resolvePracticeQuestionInteractionProfile("case-study").supportsSplitRationale, false);
 });

@@ -77,6 +77,7 @@ import {
   Crown,
   Zap,
   Lightbulb,
+  ChevronDown,
   X,
   GraduationCap,
   Target,
@@ -1688,6 +1689,7 @@ type ExamFlashcard = {
   distractorRationales: Record<string, string> | null;
   clinicalTakeaway: string | null;
   examPearl: string | null;
+  hints: { level: 1 | 2 | 3; text: string }[] | null;
   rationaleMedia: { imageUrl: string; imageAlt: string; imageCaption: string; imageDescription: string; sortOrder: number }[];
   lessonLinks: { lessonTitle: string; lessonUrl: string; relevanceNote: string }[];
   bodySystem: string | null;
@@ -1917,6 +1919,7 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
   const [examStudyIndex, setExamStudyIndex] = useState(0);
   const [examSelectedOption, setExamSelectedOption] = useState<number | null>(null);
   const [examShowRationale, setExamShowRationale] = useState(false);
+  const [revealedExamHintLevel, setRevealedExamHintLevel] = useState(0);
   const [examSessionResults, setExamSessionResults] = useState<{ id: string; correct: boolean }[]>([]);
   const [examBookmarks, setExamBookmarks] = useState<string[]>(() => JSON.parse(localStorage.getItem("nursenest-exam-bookmarks") || "[]"));
   const [examMastered, setExamMastered] = useState<string[]>(() => JSON.parse(localStorage.getItem("nursenest-exam-mastered") || "[]"));
@@ -5841,6 +5844,7 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
         setExamStudyIndex(nextIdx);
         setExamSelectedOption(null);
         setExamShowRationale(false);
+        setRevealedExamHintLevel(0);
         saveExamSession(nextIdx, examSessionResults, examFlashcards.length);
       } else {
         clearExamSession();
@@ -6121,6 +6125,37 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
                         );
                       })}
                     </div>
+
+                    {examCard.hints && examCard.hints.length > 0 && (
+                      <div className="mt-5 space-y-2" data-testid="section-exam-hints">
+                        {[...examCard.hints].sort((a, b) => a.level - b.level).map((hint, idx) => {
+                          const isRevealed = idx < revealedExamHintLevel;
+                          const isNext = idx === revealedExamHintLevel;
+                          const hintLabel = idx === 0 ? "Hint 1 — Broad Concept" : idx === 1 ? "Hint 2 — Clinical Focus" : "Hint 3 — Near Answer";
+                          if (!isRevealed && !isNext) return null;
+                          return (
+                            <div key={hint.level}>
+                              {isRevealed ? (
+                                <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200/70" data-testid={`hint-revealed-${idx}`}>
+                                  <p className="text-xs font-semibold text-amber-700 mb-1">{hintLabel}</p>
+                                  <p className="text-sm text-amber-800 leading-relaxed">{hint.text}</p>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => setRevealedExamHintLevel(idx + 1)}
+                                  className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl border border-amber-200/60 bg-amber-50/40 hover:bg-amber-50/80 text-amber-700 text-sm font-medium transition-colors"
+                                  data-testid={`hint-button-${idx}`}
+                                >
+                                  <Lightbulb className="w-4 h-4 shrink-0" />
+                                  <span>Need a hint? Reveal {hintLabel}</span>
+                                  <ChevronDown className="w-4 h-4 ml-auto shrink-0" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </Card>
               )}

@@ -38,7 +38,7 @@ export function PracticeExamRationaleMobileDock({
 
   if (isDocked) {
     return (
-      <div className="nn-practice-exam-rationale-desktop flex min-h-0 min-w-0 flex-[0_1_32%] xl:max-w-[min(30vw,22rem)] 2xl:max-w-[min(28vw,24rem)]">
+      <div className="nn-practice-exam-rationale-desktop flex min-h-0 min-w-0 flex-[0_0_clamp(20rem,24vw,24rem)] xl:max-w-[24rem]">
         {children}
       </div>
     );

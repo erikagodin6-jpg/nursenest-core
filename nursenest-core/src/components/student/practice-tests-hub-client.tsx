@@ -537,6 +537,7 @@ export function PracticeTestsHubClient({
       mode="practice-exam"
       className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-e2e-practice-tests-hub
+      data-nn-practice-exam-hub-convergence=""
       data-nn-e2e-practice-single-landing
       data-nn-learner-area="practice-tests"
       data-nn-premium-full-platform-convergence=""
@@ -645,6 +646,7 @@ export function PracticeTestsHubClient({
         mode="cat"
         className="nn-practice-tests-hub-premium space-y-0 py-0 pb-0"
         data-nn-e2e-practice-tests-hub
+        data-nn-practice-exam-hub-convergence=""
         data-nn-e2e-cat-simple-landing
         data-nn-learner-area="practice-tests"
         data-nn-premium-full-platform-convergence=""
@@ -802,6 +804,7 @@ export function PracticeTestsHubClient({
       mode="practice-exam"
       className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-e2e-practice-tests-hub
+      data-nn-practice-exam-hub-convergence=""
       data-nn-learner-area="practice-tests"
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"

@@ -36,6 +36,7 @@ export type DistractorOptimizationInput = {
   options?: unknown;
   correctAnswer?: unknown;
   distractorRationales?: unknown;
+  minimumDistractors?: number;
 };
 
 export type DistractorOptimizationResult = {
@@ -276,21 +277,22 @@ export function evaluateDistractorOptimization(
     });
   }
 
-  if (correctOptions.length !== 1) {
+  if (correctOptions.length < 1) {
     addIssue(issues, {
       code: "MISSING_CORRECT_ANSWER",
       severity: "error",
-      message: "The item must identify exactly one correct answer for single-best-answer MCQ scoring.",
-      remediation: "Mark exactly one canonical correct option and align it with the option id/text.",
+      message: "The item must identify at least one correct answer for scoring.",
+      remediation: "Mark the canonical correct option(s) and align them with the option id/text.",
     });
   }
 
-  if (distractors.length < 3) {
+  const minimumDistractors = input.minimumDistractors ?? 3;
+  if (distractors.length < minimumDistractors) {
     addIssue(issues, {
       code: "TOO_FEW_DISTRACTORS",
       severity: "error",
-      message: "The item has fewer than three distractors.",
-      remediation: "Create three incorrect options that each test a different clinical misconception.",
+      message: `The item has fewer than ${minimumDistractors} distractor(s).`,
+      remediation: "Create incorrect options that each test a different clinical misconception.",
     });
   }
 

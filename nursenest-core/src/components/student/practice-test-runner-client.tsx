@@ -57,6 +57,7 @@ import {
 import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
 import {
   normalizePracticeQuestionType,
+  resolvePracticeQuestionInteractionProfile,
   resolvePracticeQuestionLayoutMode,
   type PracticeQuestionType,
 } from "@/lib/practice-tests/practice-question-rendering-engine";
@@ -1040,6 +1041,10 @@ export function PracticeTestRunnerClient({
   const practiceQuestionType = useMemo<PracticeQuestionType>(
     () => normalizePracticeQuestionType(current?.questionType, isBowtie),
     [current?.questionType, isBowtie],
+  );
+  const practiceQuestionInteractionProfile = useMemo(
+    () => resolvePracticeQuestionInteractionProfile(practiceQuestionType),
+    [practiceQuestionType],
   );
   const raw = current ? answers[current.id] : undefined;
 
@@ -2421,6 +2426,27 @@ export function PracticeTestRunnerClient({
   const optionDisplayMap = Object.fromEntries(
     optsOrderCanonical.map((k, i) => [k, optsOrderDisplayResolved[i] ?? k]),
   );
+  const linearInlineOptionTeachingMap = useMemo(() => {
+    if (!linearPracticeSplitReview || !currentCommitted || !linearFeedback?.distractorRationalesMap) {
+      return null;
+    }
+
+    const correctSet = new Set(linearFeedback.correctKeys);
+    const selectedWrongEntries = optsOrderCanonical.flatMap((canonical) => {
+      if (correctSet.has(canonical) || !mcqAnswerSelectsCanonical(raw, canonical)) return [];
+      const teaching = linearFeedback.distractorRationalesMap?.[canonical]?.trim();
+      return teaching ? ([[canonical, teaching]] as const) : [];
+    });
+
+    return selectedWrongEntries.length > 0 ? Object.fromEntries(selectedWrongEntries) : null;
+  }, [
+    currentCommitted,
+    linearFeedback?.correctKeys,
+    linearFeedback?.distractorRationalesMap,
+    linearPracticeSplitReview,
+    optsOrderCanonical,
+    raw,
+  ]);
 
   /** Shared empty state for CAT / linear / legacy MCQ lists (same copy + surfaces). */
   const mcqNoChoicesFallback = (
@@ -3443,6 +3469,9 @@ export function PracticeTestRunnerClient({
         disabled={optionsInteractionLocked}
         ariaLabel={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
         onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
+        optionTeachingMap={linearInlineOptionTeachingMap}
+        showOptionTeaching={Boolean(linearInlineOptionTeachingMap)}
+        teachingLabel={tx("learner.practiceTests.run.rationaleWhyNotShort", "Why not")}
       />
     );
 
@@ -3750,6 +3779,11 @@ export function PracticeTestRunnerClient({
         data-nn-pedagogy-tier={tierPedagogyProfile.tier}
         data-nn-practice-question-layout={practiceQuestionLayoutMode}
         data-nn-practice-question-type={practiceQuestionType}
+        data-nn-practice-scoring-rule={practiceQuestionInteractionProfile.scoringRule}
+        data-nn-practice-partial-credit={practiceQuestionInteractionProfile.partialCredit ? "" : undefined}
+        data-nn-practice-structured-payload={
+          practiceQuestionInteractionProfile.requiresStructuredPayload ? "" : undefined
+        }
       >
         <ExamSessionShell
           neutralPalette

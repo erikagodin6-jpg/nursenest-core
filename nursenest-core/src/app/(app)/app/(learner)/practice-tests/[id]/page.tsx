@@ -51,7 +51,7 @@ export default async function PracticeTestRunPage({
     activityKind: "practice_exam",
     homeHref: "/app/practice-tests",
     homeLabel: "Return to Practice Exams",
-    requireSubscription: false,
+    requireSubscription: true,
     routeParams: [{ name: "id", value: id, pattern: /^[a-zA-Z0-9_-]{8,}$/, displayName: "practice test" }],
   });
 

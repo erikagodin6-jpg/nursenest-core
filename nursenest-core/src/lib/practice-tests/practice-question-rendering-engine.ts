@@ -42,6 +42,15 @@ export type PracticeQuestionScoringRule =
   | "classification"
   | "multi-part";
 
+export interface PracticeQuestionInteractionProfile {
+  type: PracticeQuestionType;
+  scoringRule: PracticeQuestionScoringRule;
+  partialCredit: boolean;
+  requiresStructuredPayload: boolean;
+  supportsSplitRationale: boolean;
+  confidenceTracking: boolean;
+}
+
 export interface PracticeQuestionRenderDefinition {
   id: string;
   questionType: PracticeQuestionType;
@@ -143,4 +152,176 @@ export function resolvePracticeQuestionLayoutMode(args: {
 
 export function practiceQuestionSupportsImmediateRationale(type: PracticeQuestionType): boolean {
   return type !== "case-study" && type !== "decision-tree";
+}
+
+export const PRACTICE_QUESTION_INTERACTION_PROFILES: Record<
+  PracticeQuestionType,
+  PracticeQuestionInteractionProfile
+> = {
+  single: {
+    type: "single",
+    scoringRule: "exact",
+    partialCredit: false,
+    requiresStructuredPayload: false,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  multiple: {
+    type: "multiple",
+    scoringRule: "partial-credit",
+    partialCredit: true,
+    requiresStructuredPayload: false,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  ordered: {
+    type: "ordered",
+    scoringRule: "ordered",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  matrix: {
+    type: "matrix",
+    scoringRule: "matrix",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  bowtie: {
+    type: "bowtie",
+    scoringRule: "multi-part",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  cloze: {
+    type: "cloze",
+    scoringRule: "exact",
+    partialCredit: false,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  hotspot: {
+    type: "hotspot",
+    scoringRule: "hotspot",
+    partialCredit: false,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  "case-study": {
+    type: "case-study",
+    scoringRule: "multi-part",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: false,
+    confidenceTracking: true,
+  },
+  "chart-review": {
+    type: "chart-review",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  highlight: {
+    type: "highlight",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  trend: {
+    type: "trend",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  "extended-matching": {
+    type: "extended-matching",
+    scoringRule: "matching",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  multimedia: {
+    type: "multimedia",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  "decision-tree": {
+    type: "decision-tree",
+    scoringRule: "decision-tree",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: false,
+    confidenceTracking: true,
+  },
+  delegation: {
+    type: "delegation",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: false,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  triage: {
+    type: "triage",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: false,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  "medication-safety": {
+    type: "medication-safety",
+    scoringRule: "exact",
+    partialCredit: false,
+    requiresStructuredPayload: false,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  "communication-documentation": {
+    type: "communication-documentation",
+    scoringRule: "classification",
+    partialCredit: true,
+    requiresStructuredPayload: false,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  ranking: {
+    type: "ranking",
+    scoringRule: "ordered",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+  "clinical-judgment": {
+    type: "clinical-judgment",
+    scoringRule: "multi-part",
+    partialCredit: true,
+    requiresStructuredPayload: true,
+    supportsSplitRationale: true,
+    confidenceTracking: true,
+  },
+};
+
+export function resolvePracticeQuestionInteractionProfile(
+  type: PracticeQuestionType,
+): PracticeQuestionInteractionProfile {
+  return PRACTICE_QUESTION_INTERACTION_PROFILES[type];
 }

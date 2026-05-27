@@ -17312,8 +17312,8 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
 
       const { rows: questions } = await pool.query(
         `SELECT id, tier, stem, options, correct_answer, rationale, body_system, topic, subtopic,
-                difficulty, question_type, clinical_pearl, exam_strategy, distractor_rationales,
-                region_scope, career_type, tags, status
+                difficulty, question_type, clinical_pearl, exam_strategy, memory_hook,
+                distractor_rationales, hints, region_scope, career_type, tags, status
          FROM exam_questions WHERE id = ANY($1)`,
         [questionIds]
       );
@@ -17374,6 +17374,7 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
           distractorRationales,
           clinicalTakeaway: q.clinical_pearl || null,
           examPearl: q.exam_strategy || null,
+          hints: q.hints || null,
           difficulty: q.difficulty,
           bodySystem: q.body_system,
           topic: q.topic,
@@ -17393,15 +17394,16 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
               `INSERT INTO flashcard_bank (
                 tier, front, back, content_hash, status, source_type, source_question_id,
                 question_type, options, correct_answer, rationale_correct, distractor_rationales,
-                clinical_takeaway, exam_pearl, difficulty, body_system, topic, subtopic,
+                clinical_takeaway, exam_pearl, hints, difficulty, body_system, topic, subtopic,
                 region_scope, flashcard_enabled, category, career_type
-              ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)`,
+              ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)`,
               [
                 converted.tier, converted.front, converted.back, converted.contentHash,
                 "draft", "cat_exam", q.id,
                 converted.questionType, JSON.stringify(converted.options), JSON.stringify(converted.correctAnswer),
                 converted.rationaleCorrect, JSON.stringify(converted.distractorRationales),
                 converted.clinicalTakeaway, converted.examPearl,
+                converted.hints ? JSON.stringify(converted.hints) : null,
                 converted.difficulty, converted.bodySystem, converted.topic, converted.subtopic,
                 converted.regionScope, true, converted.category, converted.careerType
               ]
@@ -18083,7 +18085,7 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
                 question_type, options, correct_answer, rationale_correct,
                 distractor_rationales, clinical_takeaway, exam_pearl,
                 rationale_media, lesson_links, body_system, topic, subtopic,
-                region_scope, flashcard_enabled, source_question_id
+                region_scope, flashcard_enabled, source_question_id, hints
          FROM flashcard_bank WHERE ${where}
          ORDER BY RANDOM()
          LIMIT $${paramIdx++} OFFSET $${paramIdx++}`,

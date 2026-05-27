@@ -1673,6 +1673,7 @@ export const flashcardBank = pgTable("flashcard_bank", {
   qualityFeedback: jsonb("quality_feedback"),
   qualityScore: integer("quality_score"),
   sourceVersion: integer("source_version").default(1).notNull(),
+  hints: jsonb("hints"),
 });
 
 export const insertFlashcardBankSchema = createInsertSchema(flashcardBank).omit({ id: true, createdAt: true });

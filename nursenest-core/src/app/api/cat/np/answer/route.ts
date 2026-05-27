@@ -31,7 +31,7 @@ import { z } from "zod";
 import { JSON_BODY_LEARNER_CAT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { requireNpCatSubscriberSession } from "@/lib/entitlements/require-np-cat-subscriber-session";
 import {
   CAT_QUESTION_SELECT,
   dbRowsToCatQuestions,
@@ -63,7 +63,7 @@ const bodySchema = z.object({
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const session = await requireSubscriberSession();
+  const session = await requireNpCatSubscriberSession("np_cat_answer_api");
   if (!session.ok) return session.response;
   const { userId } = session;
 

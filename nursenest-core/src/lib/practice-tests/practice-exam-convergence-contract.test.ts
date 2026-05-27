@@ -29,6 +29,8 @@ describe("Practice exam — premium convergence hooks", () => {
     assert.equal(runnerSrc.includes("data-nn-practice-exam-convergence"), true);
     assert.equal(runnerSrc.includes("nn-practice-exam-convergence--tutor-split"), true);
     assert.equal(runnerSrc.includes("data-nn-qa-practice-exam-results-root"), true);
+    assert.equal(runnerSrc.includes("data-nn-practice-scoring-rule"), true);
+    assert.equal(runnerSrc.includes("data-nn-practice-partial-credit"), true);
   });
 
   it("tags the practice hub builder for convergence / screenshots", () => {

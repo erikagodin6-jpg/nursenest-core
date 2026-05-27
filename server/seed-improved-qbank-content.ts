@@ -212,7 +212,7 @@ async function run() {
         }
 
         // Full insert for new question
-        await pool.query(
+        const insertResult = await pool.query(
           `INSERT INTO exam_questions (
             tier, exam, question_type, status, published_at, stem, options,
             correct_answer, rationale, distractor_rationales,
@@ -225,7 +225,7 @@ async function run() {
             $9, $10, $11, $12,
             $13, $14, $15, $16,
             $17, $18, $19
-          )`,
+          ) RETURNING id`,
           [
             p.tier, p.exam, p.questionType, p.stem, p.options,
             p.correctAnswer, p.rationale, p.distractorRationales,
@@ -235,8 +235,53 @@ async function run() {
           ]
         );
 
+        const newId = insertResult.rows[0]?.id;
         console.log(`  [INSERT] Q${i + 1}: "${p.stem.slice(0, 70)}..."  tier=${p.tier}`);
         totalInserted++;
+
+        // Mirror into flashcard_bank so hints appear in the flashcard study mode
+        if (newId) {
+          const contentHash = require("crypto")
+            .createHash("sha256")
+            .update(`cat-exam:${p.tier}:${p.stem}`)
+            .digest("hex")
+            .slice(0, 32);
+          const options = JSON.parse(p.options);
+          const correctIdx = JSON.parse(p.correctAnswer)[0];
+          const correctOption = options[correctIdx] || "";
+          const back = [
+            `Correct Answer: ${correctOption}`,
+            `Rationale: ${p.rationale}`,
+            p.clinicalPearl ? `Clinical Pearl: ${p.clinicalPearl}` : null,
+          ].filter(Boolean).join("\n");
+
+          await pool.query(
+            `INSERT INTO flashcard_bank (
+              tier, front, back, content_hash, status, source_type, source_question_id,
+              question_type, options, correct_answer, rationale_correct, distractor_rationales,
+              clinical_takeaway, exam_pearl, hints, difficulty, body_system, topic, subtopic,
+              region_scope, flashcard_enabled, category, career_type
+            ) VALUES ($1,$2,$3,$4,'published','cat_exam',$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,true,$15,$19)
+            ON CONFLICT (content_hash) DO UPDATE
+              SET rationale_correct    = EXCLUDED.rationale_correct,
+                  distractor_rationales = EXCLUDED.distractor_rationales,
+                  clinical_takeaway    = EXCLUDED.clinical_takeaway,
+                  exam_pearl           = EXCLUDED.exam_pearl,
+                  hints                = EXCLUDED.hints,
+                  status               = 'published',
+                  updated_at           = NOW()`,
+            [
+              p.tier, p.stem, back, contentHash, newId,
+              p.questionType, p.options, p.correctAnswer,
+              p.rationale, p.distractorRationales,
+              p.clinicalPearl, p.examStrategy, p.hints,
+              p.difficulty, p.bodySystem, p.topic, p.subtopic,
+              p.regionScope, p.careerType,
+            ]
+          ).catch((fbErr: any) => {
+            console.warn(`  [WARN] flashcard_bank mirror failed for Q${i + 1}: ${fbErr.message}`);
+          });
+        }
       } catch (err: any) {
         console.error(`  [ERROR] Q${i + 1}: ${err.message}`);
         totalErrors++;

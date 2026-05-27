@@ -18,14 +18,14 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { requireNpCatSubscriberSession } from "@/lib/entitlements/require-np-cat-subscriber-session";
 import { loadNpCatAnalysis } from "@/lib/cat/session-persistence";
 import { readinessBand } from "@/lib/cat/readiness-scorer";
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const session = await requireSubscriberSession();
+  const session = await requireNpCatSubscriberSession("np_cat_analysis_api");
   if (!session.ok) return session.response;
   const { userId } = session;
 
@@ -88,7 +88,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
  */
 export async function HEAD(req: NextRequest): Promise<NextResponse> {
   // Used by the client to cheaply check if a session is complete
-  const session = await requireSubscriberSession();
+  const session = await requireNpCatSubscriberSession("np_cat_analysis_head");
   if (!session.ok) return session.response;
   const { userId } = session;
 

@@ -418,7 +418,14 @@ function makePrioritization(s: ScenarioTemplate): CnplePracticalQuestion {
       { id: "A", text: s.priorityAction, correct: true, rationale: wrong.A },
       { id: "B", text: s.unsafeAction, correct: false, rationale: wrong.B },
       { id: "C", text: "Complete routine charting before reassessing because documentation is required.", correct: false, rationale: wrong.C },
-      { id: "D", text: "Independently change the medication or treatment plan without notifying the regulated team member.", correct: false, rationale: wrong.D },
+      {
+        id: "D",
+        text:
+          "Request a new treatment order before completing focused assessment findings or reporting the current change.",
+        correct: false,
+        rationale:
+          "Seeking orders may eventually be needed, but skipping focused assessment and timely team communication weakens escalation.",
+      },
     ],
     correctAnswer: "A",
     rationale: baseRationale(s, wrong),
@@ -454,7 +461,14 @@ function makeSata(s: ScenarioTemplate): CnplePracticalQuestion {
       { id: "C", text: s.priorityAction, correct: true, rationale: wrong.C },
       { id: "D", text: s.unsafeAction, correct: false, rationale: wrong.D },
       { id: "E", text: "Finish routine documentation before notifying anyone because charting is legally required.", correct: false, rationale: wrong.E },
-      { id: "F", text: "Initiate a new prescription-level treatment plan independently.", correct: false, rationale: wrong.F },
+      {
+        id: "F",
+        text:
+          "Ask the prescriber for new treatment orders before giving the RN/charge nurse a focused update.",
+        correct: false,
+        rationale:
+          "A prescriber update may follow, but the practical nurse first gathers focused cues and escalates through the appropriate team pathway.",
+      },
     ],
     correctAnswer: ["A", "B", "C"],
     rationale: baseRationale(s, wrong),

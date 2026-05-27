@@ -562,14 +562,19 @@ html[data-theme="apex"] .nn-practice-exam-convergence .nn-practice-exam-progress
   width: 100%;
 }
 
+[data-nn-practice-question-layout="flashcard-split-study"] .nn-cat-exam-board-frame {
+  background: color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted));
+}
+
 @media (min-width: 1280px) {
   [data-nn-practice-question-layout="flashcard-split-study"] .nn-practice-exam-split__primary {
     flex: 1 1 0;
+    min-width: 0;
   }
 
   [data-nn-practice-question-layout="flashcard-split-study"] .nn-practice-exam-rationale-desktop {
-    flex: 0 0 clamp(20rem, 25vw, 24rem);
-    max-width: clamp(20rem, 25vw, 24rem);
+    flex: 0 0 clamp(20rem, 24vw, 24rem);
+    max-width: clamp(20rem, 24vw, 24rem);
   }
 
   [data-nn-practice-question-layout="flashcard-split-study"] .nn-practice-exam-rationale-panel,
@@ -596,6 +601,27 @@ html[data-theme="apex"] .nn-practice-exam-convergence .nn-practice-exam-progress
 .nn-practice-exam-rationale-premium .nn-practice-rationale-full__scroll {
   padding-inline: 0.7rem;
   padding-block: 0.45rem 0.65rem;
+}
+
+[data-nn-practice-question-layout="flashcard-split-study"] .nn-practice-rationale-full {
+  min-height: 0;
+  max-height: none;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+[data-nn-practice-question-layout="flashcard-split-study"] .nn-practice-option-rationale-list {
+  gap: 0.34rem;
+}
+
+[data-nn-practice-question-layout="flashcard-split-study"] [data-nn-practice-option-rationale] {
+  flex-basis: min(32%, 20rem);
+  padding: 0.48rem 0.62rem;
+  font-size: 0.76rem;
+  line-height: 1.38;
 }
 
 .nn-practice-exam-rationale-premium .nn-practice-rsection__body {

@@ -12,6 +12,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -203,7 +204,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
   if (missedIds?.length && isDatabaseUrlConfigured()) {
     try {
       const rows = await prisma.examQuestion.findMany({
-        where: { id: { in: missedIds } },
+        where: { AND: [{ id: { in: missedIds } }, questionAccessWhere(entitlement)] },
         select: { id: true, stem: true, topic: true },
       });
       const byId = new Map(rows.map((r) => [r.id, r]));
