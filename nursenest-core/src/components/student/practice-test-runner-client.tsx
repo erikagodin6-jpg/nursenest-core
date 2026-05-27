@@ -27,6 +27,7 @@ import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-p
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import { PracticeExamProgressHeader } from "@/components/student/practice-exam/practice-exam-progress-header";
+import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { PracticeExamRemediationLinks } from "@/components/student/practice-exam/practice-exam-remediation-links";
 import { PracticeExamRationalePanel } from "@/components/student/practice-exam/practice-exam-rationale-panel";
 import { PracticeExamRationaleMobileDock } from "@/components/student/practice-exam/practice-exam-rationale-mobile-dock";
@@ -35,6 +36,7 @@ import { PracticeRationaleFullPanel } from "@/components/study/practice-rational
 import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice-rationale-full-panel.types";
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
+import type { QuestionBankPeerStatsClient } from "@/lib/questions/question-bank-client-types";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import {
   assertCatExamPhaseTransition,
@@ -394,6 +396,7 @@ export function PracticeTestRunnerClient({
       relatedLessons?: { title: string; href: string }[];
       clinicalPearlDisplay?: string | null;
       referenceSource?: string | null;
+      peerStats?: QuestionBankPeerStatsClient | null;
     }>
   >({});
   const [practiceAdaptivePostMiss, setPracticeAdaptivePostMiss] = useState<{
@@ -1379,6 +1382,7 @@ export function PracticeTestRunnerClient({
           relatedLessons?: { title: string; href: string }[];
           clinicalPearlDisplay?: string | null;
           referenceSource?: string | null;
+          peerStats?: QuestionBankPeerStatsClient | null;
         };
       };
       if (!res.ok) throw new Error(data.error ?? "Could not submit answer.");
@@ -1399,6 +1403,7 @@ export function PracticeTestRunnerClient({
             relatedLessons: data.feedback!.relatedLessons ?? [],
             clinicalPearlDisplay: data.feedback!.clinicalPearlDisplay ?? null,
             referenceSource: data.feedback!.referenceSource ?? null,
+            peerStats: data.feedback!.peerStats ?? null,
           },
         }));
       }
@@ -3604,6 +3609,15 @@ export function PracticeTestRunnerClient({
         />
       )}
       {linearCatOptions}
+      {linearFeedback?.peerStats ? (
+        <div className="mt-3">
+          <QuestionBankPeerPerformancePanel
+            peerStats={linearFeedback.peerStats}
+            optionCanonicals={optsOrderCanonical}
+            optionDisplays={optsOrderDisplayResolved}
+          />
+        </div>
+      ) : null}
       {confidenceTrackingEnabled ? (
         <div className="mt-4">
           <ConfidenceSelector

@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
-import { PracticeTestStatus } from "@prisma/client";
+import { PracticeQuestionAnswerMode, PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
 import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { prisma } from "@/lib/db";
@@ -45,6 +45,7 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { recordQuestionPeerAnalyticsAndBuildPayload } from "@/lib/questions/question-peer-analytics";
 import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import { practiceTestRouteDeps } from "./route-deps";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
@@ -512,6 +513,25 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     const committedQuestionIds = getLinearCommittedQuestionIds(nextAdaptive);
     if (cfg.linearDeliveryMode === "practice") {
       let adaptivePostMiss: Awaited<ReturnType<typeof buildPracticeAdaptivePostMissPayload>> = null;
+      let peerStats: Awaited<ReturnType<typeof recordQuestionPeerAnalyticsAndBuildPayload>> = null;
+      try {
+        peerStats = await recordQuestionPeerAnalyticsAndBuildPayload(prisma, {
+          userId: gate.userId,
+          questionId: qid,
+          questionType: feedback.questionType,
+          pathwayId: cfg.pathwayId ?? null,
+          answer: userAns,
+          isCorrect: feedback.isCorrect,
+          correctKeys: feedback.correctKeys,
+          attemptMode: PracticeQuestionAnswerMode.practice,
+        });
+      } catch (e) {
+        safeServerLog("practice_tests", "linear_peer_analytics_failed", {
+          practiceTestId: id.slice(0, 16),
+          questionId: qid.slice(0, 12),
+          message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+        });
+      }
       if (isAdaptiveLearningEnabled() && !feedback.isCorrect) {
         const pid = typeof cfg.pathwayId === "string" ? cfg.pathwayId.trim() : "";
         if (pid) {
@@ -540,6 +560,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
             relatedLessons: feedback.relatedLessons,
             clinicalPearlDisplay: feedback.clinicalPearlDisplay,
             referenceSource: feedback.referenceSource,
+            ...(peerStats ? { peerStats } : {}),
           },
           ...(adaptivePostMiss ? { adaptivePostMiss } : {}),
         },

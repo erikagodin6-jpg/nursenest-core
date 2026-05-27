@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { loadAdminUserSupportDetail } from "@/lib/admin/load-admin-user-support-detail";
 import { loadAdaptiveLearnerAdminSummary } from "@/lib/admin/adaptive-learner-summary.server";
 import { AdminAdaptiveLearnerOverview } from "@/components/admin/admin-adaptive-learner-overview";
+import { AdminUserProtectionPanel } from "@/components/admin/admin-user-protection-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -57,6 +58,8 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
       </ul>
 
       <AdminAdaptiveLearnerOverview data={adaptiveSummary} />
+
+      <AdminUserProtectionPanel userId={u.id} evidence={d.activityEvidence} />
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="nn-card p-5">

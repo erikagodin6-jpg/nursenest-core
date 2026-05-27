@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
+import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
@@ -26,6 +27,7 @@ import {
 } from "@/lib/practice-question-session/constants";
 import { parsePracticeSessionSearchParams } from "@/lib/practice-question-session/parse-session-search-params";
 import type { PracticeSessionMode, PracticeSessionSource } from "@/lib/practice-question-session/constants";
+import type { QuestionBankPeerStatsClient } from "@/lib/questions/question-bank-client-types";
 
 type QFull = {
   id: string;
@@ -45,6 +47,7 @@ type GradedRow = {
   rationale?: string | null;
   clinicalPearl?: string | null;
   rationaleSections?: Array<{ heading: string; body: string }> | null;
+  peerStats?: QuestionBankPeerStatsClient | null;
 };
 
 type QuestionListResponse = {
@@ -273,6 +276,7 @@ export function PracticeQuestionSessionClient({
         rationale?: string | null;
         clinicalPearl?: string | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
+        peerStats?: QuestionBankPeerStatsClient | null;
         error?: string;
       };
       if (!res.ok) {
@@ -287,6 +291,7 @@ export function PracticeQuestionSessionClient({
         rationale: data.rationale ?? null,
         clinicalPearl: data.clinicalPearl ?? null,
         rationaleSections: data.rationaleSections ?? null,
+        peerStats: data.peerStats ?? null,
       };
       setGraded((prev) => ({ ...prev, [current.id]: row }));
       examRationaleRef.current[current.id] = row;
@@ -581,6 +586,13 @@ export function PracticeQuestionSessionClient({
                       );
                     })}
                   </ul>
+                ) : null}
+                {g?.peerStats ? (
+                  <QuestionBankPeerPerformancePanel
+                    peerStats={g.peerStats}
+                    optionCanonicals={optsCanonical}
+                    optionDisplays={optsClinical}
+                  />
                 ) : null}
                 {g && showRationaleNow && rationaleText ? (
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-surface))] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">

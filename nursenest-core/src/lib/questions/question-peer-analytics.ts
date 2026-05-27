@@ -3,16 +3,17 @@ import "server-only";
 import type { PrismaClient } from "@prisma/client";
 import { PracticeQuestionAnswerMode } from "@prisma/client";
 
-/** Server flag — default off. No peer stats recorded or returned when unset/false. */
+/** Server flag — default on; set QUESTION_PEER_ANALYTICS_ENABLED=false to disable recording/return. */
 export function isQuestionPeerAnalyticsEnabled(): boolean {
   const v = process.env.QUESTION_PEER_ANALYTICS_ENABLED?.trim().toLowerCase();
+  if (!v) return true;
   return v === "true" || v === "1" || v === "yes";
 }
 
-const MIN_SAMPLE = 10;
+export const QUESTION_PEER_ANALYTICS_MIN_SAMPLE = 50;
 
 const INSUFFICIENT_MSG =
-  "Not enough attempts yet to show reliable class performance.";
+  "Answer analytics will appear once enough learners have completed this question.";
 
 export type QuestionPeerStatsPayload = {
   totalAttempts: number;
@@ -124,7 +125,7 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
     });
 
     const total = perf?.totalAttempts ?? 0;
-    const insufficient = total < MIN_SAMPLE;
+    const insufficient = total < QUESTION_PEER_ANALYTICS_MIN_SAMPLE;
     const correctPct =
       !insufficient && total > 0 && perf
         ? roundPct((100 * perf.correctAttempts) / total)

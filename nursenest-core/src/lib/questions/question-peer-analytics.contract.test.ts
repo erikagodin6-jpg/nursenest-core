@@ -25,6 +25,13 @@ describe("question peer analytics (contract)", () => {
     assert.match(src, /QUESTION_PEER_ANALYTICS_ENABLED/);
   });
 
+  it("peer analytics stays enabled by default and waits for a stable sample", () => {
+    const src = read("lib/questions/question-peer-analytics.ts");
+    assert.match(src, /if\s*\(!v\)\s*return true/);
+    assert.match(src, /QUESTION_PEER_ANALYTICS_MIN_SAMPLE\s*=\s*50/);
+    assert.match(src, /Answer analytics will appear once enough learners have completed this question/);
+  });
+
   it("question bank client sends practice attemptMode and can store peerStats", () => {
     const src = read("components/student/question-bank-practice-client.tsx");
     assert.match(src, /attemptMode:\s*"practice"/);

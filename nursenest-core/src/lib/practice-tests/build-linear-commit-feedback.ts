@@ -11,6 +11,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type LinearCommitFeedbackJson = {
   isCorrect: boolean;
+  questionType: string;
   /** Bank topic label — used by adaptive post-miss wiring (no extra question read). */
   topic: string | null;
   rationale: string | null;
@@ -176,6 +177,7 @@ export async function buildLinearCommitFeedback(
 
   return {
     isCorrect,
+    questionType: q.questionType,
     topic: typeof q.topic === "string" && q.topic.trim().length > 0 ? q.topic.trim() : null,
     rationale,
     correctKeys,

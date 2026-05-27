@@ -8,6 +8,7 @@ import { resolveEntitlement, type AccessScope } from "@/lib/entitlements/resolve
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isAccountSharingMonitorEnabled } from "@/lib/security/account-sharing-env";
+import { buildAccountActivityEvidence, type AccountActivityEvidence } from "@/lib/admin/account-activity-evidence";
 
 function maskStripeRef(id: string | null | undefined): string | null {
   if (!id?.trim()) return null;
@@ -89,6 +90,7 @@ export type AdminUserSupportDetail =
           dismissedAt: string | null;
         }>;
       };
+      activityEvidence: AccountActivityEvidence | null;
       usage: {
         examAttempts: number;
         examSessions: number;
@@ -221,6 +223,7 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
         sharingDeviceGroups,
         sharingLastActivity,
         sharingAbuseReviews,
+        activityEvidence,
       ] = await Promise.all([
         prisma.subscription.findMany({
           where: { userId: user.id },
@@ -347,6 +350,7 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
           take: 8,
           select: { createdAt: true, reason: true, score: true, dismissedAt: true },
         }),
+        buildAccountActivityEvidence(user.id),
       ]);
 
       let completedProgress = 0;
@@ -362,8 +366,8 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
       });
 
       const supportNotes: string[] = [
-        "Read-only view. Destructive account actions belong in controlled tools or Stripe — not here.",
-        "Stripe IDs are masked. Open Stripe Dashboard with the customer id from billing tools when needed.",
+        "Account operations on this page require explicit dry-run/confirm intent and are logged through admin API gates.",
+        "Stripe IDs are masked. Local access revocation does not replace Stripe-side billing cancellation.",
       ];
       if (user.role === UserRole.ADMIN || user.role === UserRole.SUPER_ADMIN) {
         supportNotes.push("This account has full admin role — treat changes with extra care.");
@@ -435,6 +439,7 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
             dismissedAt: r.dismissedAt?.toISOString() ?? null,
           })),
         },
+        activityEvidence,
         usage: {
           examAttempts: examAttemptsCount,
           examSessions: examSessionsCount,

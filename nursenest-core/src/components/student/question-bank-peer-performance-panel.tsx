@@ -49,6 +49,9 @@ export function QuestionBankPeerPerformancePanel({
       <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
         <span className="font-semibold">{t("learner.qbank.peer.correctAnswer")}</span> {correctSummary}
       </p>
+      <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+        Based on {peerStats.totalAttempts.toLocaleString()} learner responses.
+      </p>
       {peerStats.insufficientSampleMessage ? (
         <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]" role="status">
           {peerStats.insufficientSampleMessage}

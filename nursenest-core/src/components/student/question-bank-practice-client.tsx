@@ -1640,6 +1640,13 @@ export function QuestionBankPracticeClient({
                 </ul>
               )}
             </div>
+            {g?.peerStats ? (
+              <QuestionBankPeerPerformancePanel
+                peerStats={g.peerStats}
+                optionCanonicals={optsCanonical}
+                optionDisplays={optsDisplayClinical}
+              />
+            ) : null}
 
             {!g ? (
               <div className="space-y-4">
@@ -1838,13 +1845,6 @@ export function QuestionBankPracticeClient({
                       recommendationsSlot={learningLoopRecommendations}
                     />
                   )}
-                  {rationaleVisible && g.peerStats ? (
-                    <QuestionBankPeerPerformancePanel
-                      peerStats={g.peerStats}
-                      optionCanonicals={optsCanonical}
-                      optionDisplays={optsDisplayClinical}
-                    />
-                  ) : null}
                   {rationaleVisible && g.clinicalPearl ? (
                     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-4 py-3 sm:px-5">
                       <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">

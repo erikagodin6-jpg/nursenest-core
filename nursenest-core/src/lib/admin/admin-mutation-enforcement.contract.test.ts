@@ -39,6 +39,13 @@ describe("admin mutation intent enforcement (contract)", () => {
     const src = read("app/api/admin/blog/generation-jobs/[id]/tick/route.ts");
     assert.match(src, /parseAdminJsonMutationIntent/);
   });
+
+  it("requires mutation intent and super-admin guard for user account operations", () => {
+    const src = read("app/api/admin/users/[userId]/ops/route.ts");
+    assert.match(src, /parseAdminJsonMutationIntent/);
+    assert.match(src, /requireSuperAdmin/);
+    assert.match(src, /credentialVersion:\s*\{\s*increment:\s*1\s*\}/);
+  });
 });
 
 describe("admin user analytics demo exclusion (contract)", () => {
