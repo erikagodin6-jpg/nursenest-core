@@ -2448,3 +2448,377 @@ html[data-theme="ocean"] .nn-practice-tests-hub-premium .nn-lesson-system-card[d
     flex-direction: column;
   }
 }
+
+/* NCLEX study-room refinement: white, focused, exam-like card surface. */
+.nn-flashcard-study-premium.nn-premium-flashcard-session-root,
+.nn-flashcard-study-premium {
+  background:
+    radial-gradient(900px 420px at 50% -18%, color-mix(in srgb, var(--semantic-brand) 7%, transparent), transparent 62%),
+    #f8fafc;
+}
+
+html[data-theme="midnight"] .nn-flashcard-study-premium,
+html[data-theme="midnight-indigo"] .nn-flashcard-study-premium {
+  background:
+    radial-gradient(900px 420px at 50% -18%, color-mix(in srgb, var(--semantic-brand) 18%, transparent), transparent 62%),
+    color-mix(in srgb, var(--semantic-background) 88%, #f8fafc 12%);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] {
+  max-width: 96rem;
+  margin-inline: auto;
+  gap: clamp(1rem, 2vw, 1.45rem);
+  background: transparent;
+  padding: clamp(1rem, 2.5vw, 2rem);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid .nn-flashcard-hero-surface,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rationale-panel,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock {
+  border-radius: 1.5rem;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, white 22%);
+  background: color-mix(in srgb, var(--semantic-surface) 98%, white 2%);
+  box-shadow: 0 24px 70px -52px color-mix(in srgb, var(--semantic-text-primary) 40%, transparent);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+  min-height: 6.8rem;
+  align-items: center;
+  padding: 1.35rem 1.45rem;
+}
+
+.nn-flashcard-learning-topbar h1 {
+  font-size: clamp(1.55rem, 2vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.nn-flashcard-learning-topbar__mode {
+  color: color-mix(in srgb, var(--semantic-text-primary) 92%, var(--semantic-brand));
+}
+
+.nn-flashcard-learning-topbar__meta {
+  gap: clamp(0.8rem, 1.8vw, 1.35rem);
+}
+
+.nn-flashcard-learning-topbar__meta > div {
+  min-width: 6.6rem;
+  border-left-color: color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+  padding-left: 1rem;
+}
+
+.nn-flashcard-learning-topbar__meta span {
+  font-size: 0.82rem;
+}
+
+.nn-flashcard-learning-topbar__meta strong {
+  max-width: 13rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.nn-flashcard-learning-topbar__meta i {
+  display: block;
+  width: 5.2rem;
+  height: 0.28rem;
+  margin-top: 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-surface));
+}
+
+.nn-flashcard-learning-topbar__meta i > b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--semantic-brand);
+}
+
+.nn-flashcard-shell-action {
+  min-height: 3.05rem;
+  border-radius: 0.9rem;
+  padding-inline: 1.05rem;
+  background: color-mix(in srgb, var(--semantic-surface) 98%, white 2%);
+}
+
+.nn-flashcard-learning-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(23rem, 0.58fr);
+  gap: 1.15rem;
+}
+
+.nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel)) {
+  max-width: 60rem;
+  margin-inline: auto;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
+  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr) minmax(23rem, 0.58fr);
+  gap: 1.15rem;
+  overflow: visible;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel)) {
+  max-width: 60rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  min-height: clamp(34rem, 64vh, 48rem);
+  overflow: visible;
+  padding: clamp(1.6rem, 3vw, 3rem);
+}
+
+.nn-flashcard-chip--mode,
+.nn-flashcard-question-label {
+  display: none;
+}
+
+.nn-flashcard-chip--topic {
+  min-height: 2rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, white);
+  padding-inline: 0.9rem;
+  color: var(--semantic-brand);
+  font-size: 0.78rem;
+}
+
+.nn-flashcard-mark-button {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--semantic-brand);
+  font-weight: 700;
+}
+
+.nn-flashcard-hero-stem {
+  max-width: 52rem;
+  font-size: clamp(1.7rem, 3.1vw, 2.55rem) !important;
+  font-weight: 650 !important;
+  line-height: 1.18 !important;
+  color: color-mix(in srgb, var(--semantic-text-primary) 96%, #0f172a);
+}
+
+.nn-flashcard-exam-mcq-premium {
+  margin-top: clamp(1.7rem, 3vw, 2.4rem) !important;
+}
+
+.nn-flashcard-exam-mcq-premium > p:first-child {
+  display: none;
+}
+
+.nn-flashcard-exam-mcq-premium ul {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.nn-flashcard-exam-mcq-premium button,
+.nn-flashcard-exam-mcq-premium li > div {
+  min-height: 4.4rem;
+  border-radius: 1rem !important;
+  padding: 1rem 1.1rem !important;
+  font-size: 1rem !important;
+  box-shadow: none;
+}
+
+.nn-flashcard-exam-mcq-premium button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px -28px color-mix(in srgb, var(--semantic-text-primary) 40%, transparent);
+}
+
+.nn-flashcard-submit-answer {
+  margin-top: 1rem;
+  min-height: 3.35rem;
+  border-radius: 999px;
+}
+
+.nn-flashcard-rationale-panel {
+  animation: nn-flashcard-rationale-in 220ms ease-out both;
+}
+
+@keyframes nn-flashcard-rationale-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nn-flashcard-rationale-panel__header {
+  padding: 1.5rem 1.65rem;
+  font-size: 1.15rem;
+}
+
+.nn-flashcard-rationale-panel__body {
+  padding: 1.45rem 1.65rem;
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
+.nn-flashcard-rationale-panel .nn-flashcard-reveal-stack--premium section,
+.nn-flashcard-rationale-panel .nn-flashcard-reveal-stack--premium details {
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--semantic-surface) 98%, white 2%);
+}
+
+.nn-flashcard-rationale-panel .nn-flashcard-reveal-stack--premium section:first-child {
+  display: inline-flex;
+  width: auto;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+}
+
+.nn-flashcard-rationale-panel .nn-flashcard-reveal-stack--premium section:first-child .mb-1 {
+  display: none;
+}
+
+.nn-flashcard-rationale-panel .nn-flashcard-reveal-stack--premium section:first-child span:last-child {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-height: 7.4rem;
+  max-height: none;
+}
+
+.nn-flashcard-coach-panel__section--coach {
+  display: none;
+}
+
+.nn-flashcard-coach-panel__section,
+.nn-flashcard-confidence-scale {
+  border-left: 1px solid var(--semantic-border-soft);
+  padding: 1.15rem 1.35rem;
+}
+
+.nn-flashcard-coach-panel__section:nth-child(2) {
+  border-left: 0;
+}
+
+.nn-flashcard-coach-panel__section > span,
+.nn-flashcard-confidence-scale > span {
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.nn-flashcard-coach-panel__section p,
+.nn-flashcard-coach-panel__section a {
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.nn-flashcard-confidence-scale button {
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.nn-flashcard-confidence-scale button:hover:not(:disabled),
+.nn-flashcard-confidence-scale button[aria-pressed="true"] {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--semantic-success) 55%, var(--semantic-border-soft));
+  background: var(--semantic-success);
+  color: white;
+}
+
+.nn-flashcard-confidence-scale button:nth-child(3):not([aria-pressed="true"]) {
+  border-color: var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  color: var(--semantic-text-secondary);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock {
+  min-height: 4.3rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock button {
+  min-height: 3.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-surface) 98%, white 2%);
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 16px 40px -34px color-mix(in srgb, var(--semantic-text-primary) 38%, transparent);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+}
+
+@media (max-width: 1024px) {
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid,
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel)) {
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] {
+    padding: 0.8rem;
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+    min-height: auto;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nn-flashcard-learning-topbar__meta {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .nn-flashcard-learning-topbar__meta > div {
+    min-width: calc(50% - 0.5rem);
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+    min-height: auto;
+    padding: 1.25rem;
+  }
+
+  .nn-flashcard-hero-stem {
+    font-size: 1.55rem !important;
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel,
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-flashcard-coach-panel__section,
+  .nn-flashcard-confidence-scale {
+    border-left: 0;
+    border-top: 1px solid var(--semantic-border-soft);
+  }
+
+  .nn-flashcard-coach-panel__section:nth-child(2) {
+    border-top: 0;
+  }
+}

@@ -146,6 +146,11 @@ describe("premium full platform convergence", () => {
     assert.match(practiceClient, /nn-flashcards-setup-panel/, "practice hub fine-tune panel must mirror flashcards");
     assert.match(practiceClient, /nn-flashcards-sticky-start/, "practice hub mobile CTA must mirror flashcards");
     assert.doesNotMatch(practiceClient, /Configure session/, "practice hub must not keep a separate visible configure-session landing block");
+    assert.match(practiceClient, /data-nn-e2e-cat-simple-landing/, "CAT mode must render a simple landing instead of the practice setup chooser");
+    assert.match(practiceClient, /data-nn-e2e-cat-start-exam[\s\S]*Start/, "CAT landing must expose one direct Start action");
+    assert.match(practiceClient, /catPresentationMode:\s*"exam_simulation"/, "CAT starts must behave like exam simulation");
+    assert.match(practiceClient, /catExamFeedbackMode:\s*"test"/, "CAT starts must not show live rationales");
+    assert.match(practiceClient, /topicNames:\s*\[\]/, "CAT starts must not depend on selected setup categories");
     assert.doesNotMatch(
       practiceHub,
       /requireExplicitRequestedPathwayId:\s*true/,

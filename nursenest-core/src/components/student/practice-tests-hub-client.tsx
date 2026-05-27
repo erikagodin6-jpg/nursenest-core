@@ -50,6 +50,8 @@ const PRACTICE_COUNT_MIN = 5;
 const PRACTICE_COUNT_MAX = 100;
 const CAT_COUNT_MIN = 25;
 const CAT_COUNT_MAX = 75;
+const CAT_EXAM_QUESTION_COUNT = 85;
+const CAT_EXAM_TIME_LIMIT_SEC = 300 * 60;
 const PRACTICE_RESUME_STORAGE_KEY = "nursenest.practiceTests.resume.v1";
 
 function focusToSelectionMode(focusMode: FocusMode): Exclude<PracticeTestSelectionMode, "cat" | "targeted" | "starred"> {
@@ -99,7 +101,6 @@ function inferRuntimeNursingTier(pathwayId: string): string {
 }
 
 export function PracticeTestsHubClient({
-  examSimulationEnabled = false,
   pathwayOptions = [],
   defaultPathwayId = null,
   pathwayDisplayName = "",
@@ -329,11 +330,15 @@ export function PracticeTestsHubClient({
       }
 
       const selectedCategories =
-        selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= allCanonicalIds.length
+        examMode === "cat" ||
+        selectedCanonicalIds.length === 0 ||
+        selectedCanonicalIds.length >= allCanonicalIds.length
           ? []
           : selectedCanonicalIds;
       const filterLabel =
-        focusMode === "weak"
+        examMode === "cat"
+          ? "all"
+          : focusMode === "weak"
           ? "weak"
           : focusMode === "missed"
             ? "incorrect"
@@ -349,27 +354,27 @@ export function PracticeTestsHubClient({
         selectedCategories,
         filters: {
           hubFilter: filterLabel,
-          ...(examMode === "cat" ? { catSelectionBasis: focusToCatBasis(focusMode) } : {}),
+          ...(examMode === "cat" ? { catSelectionBasis: "random" as const } : {}),
         },
-        count: questionCount,
+        count: examMode === "cat" ? CAT_EXAM_QUESTION_COUNT : questionCount,
         shuffle: true,
       };
 
       const payload =
         examMode === "cat"
           ? {
-              questionCount,
-              topicNames: selectedTopicNames,
+              questionCount: CAT_EXAM_QUESTION_COUNT,
+              topicNames: [],
               difficultyMin: null,
               difficultyMax: null,
               selectionMode: "cat" satisfies PracticeTestSelectionMode,
-              catSelectionBasis: focusToCatBasis(focusMode),
-              catPresentationMode: examSimulationEnabled ? "exam_simulation" : "practice",
-              catExamFeedbackMode: examSimulationEnabled ? "test" : "study",
+              catSelectionBasis: "random" as const,
+              catPresentationMode: "exam_simulation",
+              catExamFeedbackMode: "test",
               catAdaptiveSessionType: "cat",
               pathwayId: trimmedPathwayId,
-              timedMode: examSimulationEnabled,
-              timeLimitSec: examSimulationEnabled ? Math.round(300 * 60) : null,
+              timedMode: true,
+              timeLimitSec: CAT_EXAM_TIME_LIMIT_SEC,
               studyLaunchPayload,
             }
           : {
@@ -487,7 +492,6 @@ export function PracticeTestsHubClient({
     catEligiblePathwayIds,
     creating,
     examMode,
-    examSimulationEnabled,
     focusMode,
     pathwayId,
     pathwayOptions,
@@ -538,9 +542,151 @@ export function PracticeTestsHubClient({
     });
   }, [pathwayId, resumeHref, router]);
 
+  if (examMode === "cat") {
+    return (
+      <SharedStudySetupLayout
+        mode="cat"
+        className="nn-practice-tests-hub-premium space-y-0 py-0 pb-0"
+        data-nn-e2e-practice-tests-hub
+        data-nn-e2e-cat-simple-landing
+        data-nn-learner-area="practice-tests"
+        data-nn-premium-full-platform-convergence=""
+        data-nn-premium-platform-family="exam-study"
+        data-nn-premium-platform-module="practice-tests"
+      >
+        {hubBootstrapSource === "secondary" ? (
+          <div className="mb-4" data-nn-practice-hub-bootstrap-source="secondary">
+            <LearnerStudyLiveSyncBanner />
+          </div>
+        ) : null}
+
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]">
+          <div className="grid min-h-[34rem] lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)]">
+            <div className="relative flex min-h-[30rem] items-center overflow-hidden bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] px-6 py-12 sm:px-10 lg:px-14">
+              <div
+                className="pointer-events-none absolute inset-y-0 right-[-12%] hidden w-[22%] skew-x-[-4deg] bg-[var(--semantic-surface)] lg:block"
+                aria-hidden
+              />
+              <div className="relative max-w-xl">
+                <p className="inline-flex rounded-full bg-[var(--semantic-surface)] px-4 py-2 text-xs font-bold uppercase text-[var(--semantic-info)] shadow-sm">
+                  NCLEX · CAT exam prep
+                </p>
+                <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] text-[var(--semantic-text-primary)] sm:text-5xl">
+                  Adaptive questions that make the real exam feel familiar.
+                </h1>
+                <p className="mt-6 max-w-prose text-base leading-8 text-[var(--semantic-text-secondary)] sm:text-lg">
+                  NurseNest mirrors NCLEX-style adaptive delivery: answer, lock in, and move forward without mid-exam rationales.
+                </p>
+                <button
+                  type="button"
+                  onClick={createTest}
+                  disabled={startDisabled}
+                  className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_24%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+                  data-nn-e2e-cat-start-exam
+                >
+                  {isLaunching ? (
+                    <>
+                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                      Opening CAT exam…
+                    </>
+                  ) : creating ? (
+                    <>
+                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                      Starting…
+                    </>
+                  ) : (
+                    <>
+                      <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                      Start
+                    </>
+                  )}
+                </button>
+                {examMode === "cat" && !catAvailableForPathway ? (
+                  <p className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+                    CAT is not available for this pathway yet.
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center bg-[var(--semantic-surface)] px-6 py-12 sm:px-10 lg:px-14">
+              <div className="w-full max-w-lg rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-6 shadow-[0_24px_70px_color-mix(in_srgb,var(--semantic-info)_13%,transparent)]">
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] px-3 py-1.5 text-xs font-bold uppercase text-[var(--semantic-info)]">
+                    Basic care & comfort
+                  </span>
+                  <span className="text-xs font-medium text-[var(--semantic-text-muted)]">Adaptive item</span>
+                </div>
+                <p className="text-base font-semibold leading-7 text-[var(--semantic-text-primary)]">
+                  A nurse is caring for a client who is 1 day postpartum and breastfeeding. Which instruction does the nurse give first?
+                </p>
+                <div className="mt-5 space-y-3">
+                  {[
+                    ["A", "Apply lanolin cream after each feeding", false],
+                    ["B", "Assess latch position and technique with the next feeding", true],
+                    ["C", "Alternate breast and formula feeding to rest nipples", false],
+                    ["D", "Apply warm compresses for 10 minutes before feeding", false],
+                  ].map(([letter, text, selected]) => (
+                    <div
+                      key={String(letter)}
+                      className={
+                        selected
+                          ? "flex min-h-11 items-center gap-3 rounded-xl border border-[var(--semantic-success)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] px-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
+                          : "flex min-h-11 items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-secondary)]"
+                      }
+                    >
+                      <span
+                        className={
+                          selected
+                            ? "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[var(--semantic-success)] text-xs font-bold text-white"
+                            : "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))] text-xs font-bold text-[var(--semantic-text-muted)]"
+                        }
+                      >
+                        {letter}
+                      </span>
+                      <span>{text}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4 text-xs font-medium text-[var(--semantic-text-muted)]">
+                  No answer explanations during the exam · Next item adapts after you submit
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-center sm:grid-cols-4">
+            {[
+              ["2,400+", "Questions"],
+              ["CAT", "Adaptive engine"],
+              ["NGN", "Formats"],
+              [heroEyebrow, "Current pathway"],
+            ].map(([value, label]) => (
+              <div key={`${value}-${label}`} className="border-b border-[var(--semantic-border-soft)] px-4 py-6 sm:border-b-0 sm:border-r last:border-r-0">
+                <p className="text-3xl font-extrabold text-[var(--semantic-text-primary)]">{value}</p>
+                <p className="mt-1 text-xs font-medium text-[var(--semantic-text-muted)]">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {error ? (
+          <div
+            className="mt-5 rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
+            role="alert"
+          >
+            {showCatPoolWarning
+              ? "This CAT pool is not ready yet. Try again shortly."
+              : error}
+          </div>
+        ) : null}
+      </SharedStudySetupLayout>
+    );
+  }
+
   return (
     <SharedStudySetupLayout
-      mode={examMode === "cat" ? "cat" : "practice-exam"}
+      mode="practice-exam"
       className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-e2e-practice-tests-hub
       data-nn-learner-area="practice-tests"
@@ -857,30 +1003,24 @@ export function PracticeTestsHubClient({
                 id="practice-exam-count"
                 data-nn-e2e-question-count
                 type="number"
-                min={examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN}
-                max={examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX}
+                min={PRACTICE_COUNT_MIN}
+                max={PRACTICE_COUNT_MAX}
                 value={questionCount}
                 onChange={(event) =>
                   setQuestionCount(
                     Math.max(
-                      examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN,
-                      Math.min(examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX, Number(event.target.value) || 50),
+                      PRACTICE_COUNT_MIN,
+                      Math.min(PRACTICE_COUNT_MAX, Number(event.target.value) || 50),
                     ),
                   )
                 }
                 className="nn-flashcards-custom-limit-input h-9 w-24 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
               />
               <span>
-                {examMode === "cat" ? `${CAT_COUNT_MIN}-${CAT_COUNT_MAX}` : `${PRACTICE_COUNT_MIN}-${PRACTICE_COUNT_MAX}`} allowed
+                {PRACTICE_COUNT_MIN}-{PRACTICE_COUNT_MAX} allowed
               </span>
             </div>
           </div>
-
-          {examMode === "cat" && !catAvailableForPathway ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
-            </div>
-          ) : null}
         </div>
       </details>
 

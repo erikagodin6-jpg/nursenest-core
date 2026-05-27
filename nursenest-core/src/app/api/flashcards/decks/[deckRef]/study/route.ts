@@ -64,7 +64,8 @@ export async function GET(req: NextRequest, { params }: Props) {
   const reset = sp.get("reset") === "1";
   const shuffle = sp.get("shuffle") === "1";
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
-  const flashcardBundle = await resolveMergedFlashcardEducationalBundle(educationalLocale);
+  const flashcardBundle =
+    educationalLocale === "en" ? undefined : await resolveMergedFlashcardEducationalBundle(educationalLocale);
   const examOptionShuffleSalt = randomUUID();
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });

@@ -4,13 +4,9 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import {
   Bookmark,
-  Calculator,
-  ChevronLeft,
   ChevronRight,
-  FlaskConical,
   Home,
   Keyboard,
-  NotebookPen,
   Pause,
   Play,
   RefreshCw,
@@ -132,6 +128,74 @@ function formatTopicLine(card: ActiveStudyCard): string | null {
   return null;
 }
 
+function stripStudyPromptNoise(value: string | null | undefined): string {
+  return String(value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/^\s*(?:question\s*)?\d+[\).:\-\s]+/i, "")
+    .replace(/^\s*(?:clinical\s+recall|recall|prompt|front)[:\-\s]+/i, "")
+    .trim();
+}
+
+function shortClinicalText(value: string | null | undefined, fallback: string): string {
+  const clean = stripStudyPromptNoise(value)
+    .replace(/^correct\s*:\s*[A-D]\)?\s*/i, "")
+    .replace(/^answer\s*:\s*/i, "")
+    .trim();
+  if (!clean) return fallback;
+  return clean.length > 190 ? `${clean.slice(0, 187).trim()}...` : clean;
+}
+
+function hashCardId(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i += 1) h = (h * 31 + id.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function buildNclexFallbackExam(card: ActiveStudyCard): ExamMicroQuestionPayload {
+  const topic = formatTopicLine(card) || "this clinical concept";
+  const prompt = stripStudyPromptNoise(card.prompt);
+  const isQuestion = /\?\s*$/.test(prompt) && prompt.length <= 220;
+  const questionStem = isQuestion
+    ? prompt
+    : `A client is being assessed for ${topic}. Which finding or action best reflects the clinical principle being reviewed?`;
+  const correctText = shortClinicalText(
+    card.answer,
+    "Apply the highest-priority assessment or intervention supported by the clinical finding.",
+  );
+  const distractors = [
+    "Delay intervention until the client develops additional unrelated symptoms.",
+    "Document the finding without reassessing risk or updating the plan of care.",
+    "Prioritize routine comfort measures before addressing the underlying clinical issue.",
+  ];
+  const correctIndex = hashCardId(card.id) % 4;
+  const allOptions = [...distractors];
+  allOptions.splice(correctIndex, 0, correctText);
+  const correctLetter = String.fromCharCode("A".charCodeAt(0) + correctIndex);
+  const rationaleCorrect = shortClinicalText(
+    card.explanation || card.answer,
+    "This option best connects the concept to safe nursing judgment and prioritization.",
+  );
+
+  return {
+    itemKind: "CLINICAL" as ExamMicroQuestionPayload["itemKind"],
+    questionStem,
+    answerOptions: allOptions.map((text, idx) => ({
+      letter: String.fromCharCode("A".charCodeAt(0) + idx),
+      text,
+    })),
+    correctLetter,
+    rationaleCorrect,
+    rationaleIncorrect: allOptions
+      .map((_, idx) => String.fromCharCode("A".charCodeAt(0) + idx))
+      .filter((letter) => letter !== correctLetter)
+      .map((letter) => ({
+        letter,
+        rationale: "This choice is less safe because it does not address the primary clinical mechanism, risk, or priority.",
+      })),
+  };
+}
+
 function buildCardMeta(card: ActiveStudyCard): CardEventMeta {
   const exam = card.examMicroQuestion;
   const sata = isSataPayload(exam);
@@ -203,6 +267,7 @@ export function ActiveStudySession({
   const [elapsed, setElapsed] = useState(0);
   const [ratingTally, setRatingTally] = useState({ again: 0, hard: 0, good: 0, easy: 0 });
   const [hintOpen, setHintOpen] = useState(false);
+  const [confidence, setConfidence] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
 
   const current = sessionCards[index] ?? null;
   const pinState = current?.id ? getStudyItemState(current.id) : {};
@@ -225,6 +290,7 @@ export function ActiveStudySession({
     setIsPaused(false);
     setElapsed(0);
     setRatingTally({ again: 0, hard: 0, good: 0, easy: 0 });
+    setConfidence(null);
   }, [deduped, initialCardIndex, initialRevealed]);
 
   // Track dwell time from card front shown → reveal. Fires on mount (card 0) and each card advance.
@@ -241,6 +307,7 @@ export function ActiveStudySession({
 
   useEffect(() => {
     setHintOpen(false);
+    setConfidence(null);
   }, [currentId]);
 
   useEffect(() => {
@@ -301,10 +368,9 @@ export function ActiveStudySession({
 
   const rateConfidence = useCallback(
     (score: 1 | 2 | 3 | 4 | 5) => {
-      const rating = score === 1 ? "again" : score === 2 ? "hard" : score === 3 ? "good" : "easy";
-      void submitRating(rating);
+      setConfidence(score);
     },
-    [submitRating],
+    [],
   );
 
   // Keyboard shortcuts — declared unconditionally (Rules of Hooks).
@@ -411,7 +477,12 @@ export function ActiveStudySession({
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
   const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;
   const focusLabel = header.categoriesLabel?.trim() || formatTopicLine(current) || "Adaptive review";
-  const currentIsExamQuestion = Boolean(current.examMicroQuestion);
+  const displayExam = current.examMicroQuestion ?? buildNclexFallbackExam(current);
+  const displayPrompt = resolveMeasurementTokens(displayExam.questionStem, measurementSystem);
+  const displayExplanation = resolveMeasurementTokens(
+    current.explanation ?? displayExam.rationaleCorrect ?? "",
+    measurementSystem,
+  );
 
   return (
     <div
@@ -430,6 +501,9 @@ export function ActiveStudySession({
           <div>
             <span>Progress</span>
             <strong>{index + 1} of {sessionCards.length}</strong>
+            <i aria-hidden>
+              <b style={{ width: `${((index + 1) / Math.max(1, sessionCards.length)) * 100}%` }} />
+            </i>
           </div>
           <div className="max-sm:hidden">
             <span>Focus</span>
@@ -462,11 +536,11 @@ export function ActiveStudySession({
       <FlashcardStudyQuestionStack
         sessionModeLabel={header.modeLabel}
         topicLine={formatTopicLine(current)}
-        examMicroQuestion={current.examMicroQuestion}
+        examMicroQuestion={displayExam}
         clinicalImageUrl={current.clinicalImageUrl?.trim() || null}
-        prompt={resolveMeasurementTokens(current.prompt, measurementSystem)}
+        prompt={displayPrompt}
         answer={resolveMeasurementTokens(current.answer, measurementSystem)}
-        explanation={resolveMeasurementTokens(current.explanation ?? current.examMicroQuestion?.rationaleCorrect ?? "", measurementSystem)}
+        explanation={displayExplanation}
         pearl={buildClinicalPearl(current, "No clinical pearl available.")}
         revealed={revealed}
         onReveal={() => {
@@ -478,8 +552,8 @@ export function ActiveStudySession({
           const meta = buildCardMeta(current);
           telemetry.onAnswerSubmitted(current.id, {
             selectedLetter: letter,
-            correctLetter: current.examMicroQuestion && !isSataPayload(current.examMicroQuestion)
-              ? current.examMicroQuestion.correctLetter
+            correctLetter: displayExam && !isSataPayload(displayExam)
+              ? displayExam.correctLetter
               : undefined,
             isCorrect,
             meta,
@@ -503,14 +577,14 @@ export function ActiveStudySession({
           });
         }}
         labels={{
-          revealHint: currentIsExamQuestion ? "Select an answer, then submit to see the rationale." : t("flashcards.tapToReveal"),
+          revealHint: "Select an answer, then submit to see the rationale.",
           answerHeading: t("flashcards.answer"),
           whyCorrectHeading: t("flashcards.rationale"),
           whyIncorrectHeading: t("pages.flashcards.whyOtherOptionsAreIncorrect"),
           takeawayHeading: t("pages.flashcards.pearl"),
           answerChoicesHeading: "Answer choices",
         }}
-        questionLabel={`Question ${index + 1}`}
+        questionLabel={undefined}
         marked={Boolean(pinState.starred)}
         onToggleMark={toggleMarked}
         onAdvance={goNext}
@@ -608,6 +682,7 @@ export function ActiveStudySession({
                       key={score}
                       type="button"
                       aria-label={`Confidence ${score}`}
+                      aria-pressed={confidence === score}
                       data-nn-flashcard-rating={score}
                       onClick={() => rateConfidence(score as 1 | 2 | 3 | 4 | 5)}
                       disabled={!revealed || saving}
@@ -620,63 +695,23 @@ export function ActiveStudySession({
               </div>
             </div>
 
-            {!currentIsExamQuestion ? (
-              <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
-                {([
-                  ["again", "Again"],
-                  ["hard", "Hard"],
-                  ["good", "Good"],
-                  ["easy", "Easy"],
-                ] as const).map(([rating, label]) => (
-                  <button
-                    key={rating}
-                    type="button"
-                    data-nn-flashcard-grade={rating}
-                    onClick={() => void submitRating(rating)}
-                    disabled={!revealed || saving}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-
-            <div className="nn-flashcard-command-bar">
-              <button
-                type="button"
-                className="nn-premium-flashcard-nav-btn"
-                onClick={goPrevious}
-              >
-                <ChevronLeft className="h-4 w-4" aria-hidden />
-                {t("flashcards.previous")}
-              </button>
-              <div className="nn-flashcard-command-bar__tools">
-                <Link href="/app/med-calculations">
-                  <Calculator className="h-4 w-4" aria-hidden />
-                  Calculator
-                </Link>
-                <Link href="/app/account/notes">
-                  <NotebookPen className="h-4 w-4" aria-hidden />
-                  Notes
-                </Link>
-                <Link href="/modules/lab-values">
-                  <FlaskConical className="h-4 w-4" aria-hidden />
-                  Lab Values
-                </Link>
-                <button type="button" onClick={toggleMarked} aria-pressed={Boolean(pinState.starred)}>
-                  <Bookmark className="h-4 w-4" aria-hidden />
-                  {pinState.starred ? "Marked" : "Mark"}
+            <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
+              {([
+                ["again", "Again"],
+                ["hard", "Hard"],
+                ["good", "Good"],
+                ["easy", "Easy"],
+              ] as const).map(([rating, label]) => (
+                <button
+                  key={rating}
+                  type="button"
+                  data-nn-flashcard-grade={rating}
+                  onClick={() => void submitRating(rating)}
+                  disabled={!revealed || saving}
+                >
+                  {label}
                 </button>
-              </div>
-              <button
-                type="button"
-                className="nn-premium-flashcard-nav-btn nn-premium-flashcard-nav-btn--primary"
-                onClick={goNext}
-                disabled={!revealed}
-              >
-                {t("flashcards.next")}
-                <ChevronRight className="h-4 w-4" aria-hidden />
-              </button>
+              ))}
             </div>
           </>
         }

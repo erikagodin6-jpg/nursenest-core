@@ -293,17 +293,17 @@ export function FlashcardStudyQuestionStack({
               ) : null}
             </article>
 
-            <aside
-              className="nn-flashcard-rationale-panel"
-              aria-label={labels?.answerHeading ?? "Answer and rationale"}
-              data-nn-premium-flashcard-reveal={revealed ? "" : undefined}
-            >
-              <div className="nn-flashcard-rationale-panel__header">
-                <div>
-                  <Lightbulb className="h-4 w-4" aria-hidden />
-                  <span>Rationale</span>
-                </div>
-                {revealed ? (
+            {revealed ? (
+              <aside
+                className="nn-flashcard-rationale-panel"
+                aria-label={labels?.answerHeading ?? "Answer and rationale"}
+                data-nn-premium-flashcard-reveal=""
+              >
+                <div className="nn-flashcard-rationale-panel__header">
+                  <div>
+                    <Lightbulb className="h-4 w-4" aria-hidden />
+                    <span>Rationale</span>
+                  </div>
                   <button
                     type="button"
                     className="nn-flashcard-rationale-panel__close"
@@ -313,43 +313,43 @@ export function FlashcardStudyQuestionStack({
                   >
                     <X className="h-4 w-4" aria-hidden />
                   </button>
-                ) : null}
-              </div>
+                </div>
 
-              {revealed && rationaleOpen ? (
-                <div className="nn-flashcard-rationale-panel__body">
-                  {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
-                    <div className="nn-flashcard-rationale-image" data-nn-flashcard-media="image">
-                      <div>Clinical figure</div>
-                      <img src={clinicalImageUrl} alt="" loading="lazy" />
-                    </div>
-                  ) : null}
-                  <FlashcardStudyRevealPanels
-                    exam={exam}
-                    answer={answer}
-                    explanation={explanation}
-                    pearl={pearl}
-                    labels={{
-                      answerHeading: labels?.answerHeading,
-                      whyCorrectHeading: labels?.whyCorrectHeading,
-                      whyIncorrectHeading: labels?.whyIncorrectHeading,
-                      takeawayHeading: labels?.takeawayHeading,
-                    }}
-                    onRationaleOpened={onRationaleOpened}
-                  />
-                  {revealLinksSection ? (
-                    <div className="mt-3" data-testid="flashcard-reveal-links">
-                      {revealLinksSection}
-                    </div>
-                  ) : null}
-                </div>
-              ) : (
-                <div className="nn-flashcard-rationale-panel__empty">
-                  <BookOpen className="h-5 w-5" aria-hidden />
-                  <p>{revealed ? "Rationale hidden. Use the close control again to reopen it." : "Answer first, then the explanation and key takeaways appear here."}</p>
-                </div>
-              )}
-            </aside>
+                {rationaleOpen ? (
+                  <div className="nn-flashcard-rationale-panel__body">
+                    {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+                      <div className="nn-flashcard-rationale-image" data-nn-flashcard-media="image">
+                        <div>Clinical figure</div>
+                        <img src={clinicalImageUrl} alt="" loading="lazy" />
+                      </div>
+                    ) : null}
+                    <FlashcardStudyRevealPanels
+                      exam={exam}
+                      answer={answer}
+                      explanation={explanation}
+                      pearl={pearl}
+                      labels={{
+                        answerHeading: labels?.answerHeading,
+                        whyCorrectHeading: labels?.whyCorrectHeading,
+                        whyIncorrectHeading: labels?.whyIncorrectHeading,
+                        takeawayHeading: labels?.takeawayHeading,
+                      }}
+                      onRationaleOpened={onRationaleOpened}
+                    />
+                    {revealLinksSection ? (
+                      <div className="mt-3" data-testid="flashcard-reveal-links">
+                        {revealLinksSection}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="nn-flashcard-rationale-panel__empty">
+                    <BookOpen className="h-5 w-5" aria-hidden />
+                    <p>Rationale hidden. Use the close control again to reopen it.</p>
+                  </div>
+                )}
+              </aside>
+            ) : null}
           </div>
 
           {mainFooter ? <div className="nn-flashcard-session-main-footer space-y-4">{mainFooter}</div> : null}
