@@ -55,6 +55,11 @@ import {
   hydratePayloadHasBlockingSessionContractError,
 } from "@/lib/practice-tests/practice-session-contract";
 import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
+import {
+  normalizePracticeQuestionType,
+  resolvePracticeQuestionLayoutMode,
+  type PracticeQuestionType,
+} from "@/lib/practice-tests/practice-question-rendering-engine";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import {
   PracticeTestBowtieChoicesInstruction,
@@ -1017,6 +1022,10 @@ export function PracticeTestRunnerClient({
     [current],
   );
   const isBowtie = Boolean(bowtiePayload);
+  const practiceQuestionType = useMemo<PracticeQuestionType>(
+    () => normalizePracticeQuestionType(current?.questionType, isBowtie),
+    [current?.questionType, isBowtie],
+  );
   const raw = current ? answers[current.id] : undefined;
 
   const needsUnsupportedQuestionUi = useMemo(
@@ -1087,6 +1096,10 @@ export function PracticeTestRunnerClient({
     isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each";
   /** Linear practice exams (tutor / study-forward) — visually distinct from licensing CAT shells. */
   const linearPracticeExamConvergence = Boolean(isLinearEngine && linearDelivery === "practice");
+  const practiceQuestionLayoutMode = resolvePracticeQuestionLayoutMode({
+    splitRationale: Boolean(linearPracticeSplitReview || guidedPracticeCat || catFeedbackStudy),
+    examStyle: Boolean(isExamStyle || linearCatShellPresentation),
+  });
   /** Visual mode for `ExamSessionShell` — one shell, token-driven surfaces (not layout forks). */
   const learnerExamShellMode = useMemo((): LearnerExamShellMode => {
     if (status !== "IN_PROGRESS") return "review";
@@ -2596,6 +2609,8 @@ export function PracticeTestRunnerClient({
       >
         <PracticeSessionLayout
           className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          data-nn-practice-question-layout={practiceQuestionLayoutMode}
+          data-nn-practice-question-type={practiceQuestionType}
           {...(isExamStyle
             ? {
                 "data-cat-exam-root": true,
@@ -3250,7 +3265,11 @@ export function PracticeTestRunnerClient({
         flags={protectionFlags}
         telemetrySurface="practice_test"
       >
-        <PracticeSessionLayout className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}>
+        <PracticeSessionLayout
+          className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          data-nn-practice-question-layout={practiceQuestionLayoutMode}
+          data-nn-practice-question-type={practiceQuestionType}
+        >
           <ExamSessionShell
             neutralPalette
             immersive
@@ -3711,6 +3730,8 @@ export function PracticeTestRunnerClient({
         className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence-layout" : ""}`}
         {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
         {...(linearPracticeExamConvergence ? { "data-nn-practice-exam-convergence": "" } : {})}
+        data-nn-practice-question-layout={practiceQuestionLayoutMode}
+        data-nn-practice-question-type={practiceQuestionType}
       >
         <ExamSessionShell
           neutralPalette
