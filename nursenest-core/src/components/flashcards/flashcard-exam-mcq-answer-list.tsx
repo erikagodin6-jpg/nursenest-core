@@ -128,18 +128,23 @@ export function FlashcardExamMcqAnswerList({
               )}
 
               {revealed && feedbackText ? (
-                <div
-                  className={`nn-flashcard-answer-feedback ${
-                    isCorrect
-                      ? "nn-flashcard-answer-feedback--correct"
-                      : isPicked
-                        ? "nn-flashcard-answer-feedback--picked-wrong"
-                        : "nn-flashcard-answer-feedback--incorrect"
-                  }`}
-                >
-                  <span>{isCorrect ? "Correct" : isPicked ? "Your answer" : "Why not"}</span>
-                  <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
-                </div>
+                isCorrect || isPicked ? (
+                  <div
+                    className={`nn-flashcard-answer-feedback ${
+                      isCorrect
+                        ? "nn-flashcard-answer-feedback--correct"
+                        : "nn-flashcard-answer-feedback--picked-wrong"
+                    }`}
+                  >
+                    <span>{isCorrect ? "Correct" : "Your answer"}</span>
+                    <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
+                  </div>
+                ) : (
+                  <details className="nn-flashcard-answer-feedback nn-flashcard-answer-feedback--incorrect">
+                    <summary>Why not</summary>
+                    <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
+                  </details>
+                )
               ) : null}
             </li>
           );
