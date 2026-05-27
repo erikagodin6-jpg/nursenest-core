@@ -3888,3 +3888,183 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
     line-height: 1.26 !important;
   }
 }
+
+/* Hard viewport budget inside the learner shell so the bottom dock is never cropped. */
+.nn-flashcard-study-canvas {
+  --nn-flashcard-shell-budget: calc(100dvh - 7.25rem);
+  height: var(--nn-flashcard-shell-budget) !important;
+  max-height: var(--nn-flashcard-shell-budget) !important;
+  min-height: 34rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0.35rem !important;
+}
+
+.nn-flashcard-study-canvas > .mb-4 {
+  display: none !important;
+}
+
+.nn-flashcard-study-canvas .nn-premium-flashcard-session-root {
+  height: 100% !important;
+  max-height: 100% !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-unified-exam-workspace] {
+  gap: 0.2rem !important;
+  padding: 0.22rem !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+  min-height: 2.55rem !important;
+  max-height: 2.9rem !important;
+  padding: 0.28rem 0.48rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid {
+  padding-top: 0.12rem !important;
+  padding-bottom: 0.18rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+  grid-template-columns: minmax(0, 1.72fr) 360px !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  padding: 0.78rem 0.92rem !important;
+}
+
+.nn-flashcard-study-premium .nn-premium-flashcard-prompt-panel > div:first-child {
+  align-items: center !important;
+  padding-bottom: 0.34rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-chip,
+.nn-flashcard-study-premium .nn-flashcard-question-label {
+  min-height: 1.1rem !important;
+  padding: 0.1rem 0.34rem !important;
+  font-size: 0.49rem !important;
+  letter-spacing: 0.06em !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-mark-button {
+  min-height: 1.55rem !important;
+  padding: 0.14rem 0.42rem !important;
+  font-size: 0.68rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-hero-stem {
+  margin-top: 0.48rem !important;
+  font-size: clamp(0.98rem, 1.18vw, 1.16rem) !important;
+  line-height: 1.2 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium {
+  margin-top: 0.42rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium > p:first-child {
+  display: none !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium ul {
+  gap: 0.3rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium button,
+.nn-flashcard-study-premium .nn-flashcard-exam-mcq-premium li > div {
+  min-height: 2.08rem !important;
+  padding: 0.3rem 0.54rem !important;
+  font-size: 0.8rem !important;
+  line-height: 1.22 !important;
+}
+
+.nn-flashcard-answer-feedback {
+  margin: 0.16rem 0 0 2.25rem !important;
+  padding: 0.16rem 0.35rem !important;
+  font-size: 0.62rem !important;
+  line-height: 1.22 !important;
+}
+
+.nn-flashcard-answer-feedback--incorrect:not([open]) {
+  background: transparent !important;
+  border-left-color: transparent !important;
+  padding-block: 0.06rem !important;
+}
+
+.nn-flashcard-answer-feedback > summary {
+  display: inline-flex !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+  height: 100% !important;
+  max-height: 100% !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__header {
+  min-height: 2.35rem !important;
+  padding: 0.48rem 0.66rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__body {
+  padding: 0.58rem 0.66rem 0.7rem !important;
+  font-size: 0.78rem !important;
+  line-height: 1.38 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-session-main-footer {
+  flex-shrink: 0 !important;
+  gap: 0.24rem !important;
+  max-height: 5.35rem !important;
+  min-height: 5.35rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-coach-panel {
+  max-height: 2.35rem !important;
+  min-height: 2.35rem !important;
+  overflow: hidden !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-coach-panel__section,
+.nn-flashcard-study-premium .nn-flashcard-confidence-scale {
+  padding: 0.2rem 0.34rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-coach-panel__section p,
+.nn-flashcard-study-premium .nn-flashcard-coach-panel__section a {
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-confidence-scale div {
+  margin-top: 0.12rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-confidence-scale button {
+  width: 1.35rem !important;
+  height: 1.35rem !important;
+  min-height: 1.35rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rating-dock {
+  min-height: 2rem !important;
+  padding: 0.22rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rating-dock button {
+  min-height: 1.56rem !important;
+}
+
+@media (max-width: 1180px) {
+  .nn-flashcard-study-canvas {
+    --nn-flashcard-shell-budget: calc(100dvh - 6.5rem);
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+    max-height: 7rem !important;
+  }
+}
