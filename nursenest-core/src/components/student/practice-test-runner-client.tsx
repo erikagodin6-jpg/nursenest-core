@@ -3531,7 +3531,7 @@ export function PracticeTestRunnerClient({
     ),
     missingDistractorFallback: tx(
       "learner.practiceTests.run.rationaleMissingDistractorFallback",
-      "No separate rationale is available for this option.",
+      "This choice may look plausible, but it is lower priority than the correct answer. Use the stem cues to choose the option that protects safety, addresses the most urgent change, or gives the nurse the assessment data needed before acting.",
     ),
   };
 

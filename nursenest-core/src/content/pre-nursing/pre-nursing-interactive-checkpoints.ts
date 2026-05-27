@@ -191,7 +191,7 @@ export const PRE_NURSING_FOUNDATION_CHECKPOINTS: Record<string, PreNursingCheckp
         id: "d",
         label: "Bicarbonate",
         rationale:
-          "Bicarbonate is important in acid-base balance. It is not the best answer for cardiac conduction risk compared with potassium.",
+          "Bicarbonate helps regulate acid-base balance, but potassium has the more direct connection to cardiac electrical conduction. In safety questions, connect the lab value to the body system most at risk.",
       },
     ],
     clinicalRelevance:

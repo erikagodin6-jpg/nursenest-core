@@ -161,6 +161,39 @@ test("universal: rejects exam card with placeholder distractor rationale", () =>
   if (!r.ok) assert.match(r.code, /placeholder/);
 });
 
+test("universal: rejects generic exam rationale fallback wording", () => {
+  const r = validateFlashcardCreationGuardrails({
+    tier: TierCode.RN,
+    front: "",
+    back: "",
+    exam: {
+      itemKind: FlashcardItemKind.CLINICAL,
+      questionStem: "A client with pneumonia has increasing shortness of breath and oxygen saturation of 86%. Which action is the priority?",
+      answerOptions: [
+        { letter: "A", text: "Document the finding in the chart" },
+        { letter: "B", text: "Assist the client to an upright position and assess breath sounds" },
+        { letter: "C", text: "Offer warm oral fluids" },
+      ],
+      rationaleCorrect:
+        "This option does not address the priority assessment or intervention implied by the stem.",
+      rationaleIncorrect: [
+        {
+          letter: "A",
+          rationale:
+            "Documenting is needed later, but it is lower priority than intervening for acute oxygenation risk.",
+        },
+        {
+          letter: "C",
+          rationale:
+            "Fluids may support comfort, but choosing them first delays assessment and breathing support for hypoxemia.",
+        },
+      ],
+    },
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.match(r.code, /generic_rationale/);
+});
+
 test("universal: rejects exam card with distractor rationale shorter than 16 chars", () => {
   const r = validateFlashcardCreationGuardrails({
     tier: TierCode.RN,

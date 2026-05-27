@@ -34,5 +34,6 @@ export const PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS: PracticeRationaleFullP
   keyTakeawayHeading: "Key Takeaway",
   referencesSource: "References / Source",
   relatedLessonsSection: "Related Lessons",
-  missingDistractorFallback: "No separate rationale is available for this option.",
+  missingDistractorFallback:
+    "This choice may look plausible, but it is lower priority than the correct answer. In exam questions, use the stem cues to choose the option that protects safety, addresses the most urgent change, or gives the nurse the assessment data needed before acting.",
 };

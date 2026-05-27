@@ -200,7 +200,7 @@ export function buildNclexDistractors(
   correctKeys: string[],
   optionDisplayMap: Record<string, string>,
   distractorRationalesMap: Record<string, string> | null | undefined,
-  missingFallback = "No separate rationale is available for this option.",
+  missingFallback = "This choice may be plausible, but it is lower priority than the correct answer. Use the stem cues to choose the option that protects safety, addresses the most urgent change, or gives the nurse the assessment data needed before acting.",
 ): NclexRationaleDistractor[] {
   const correctSet = new Set(correctKeys);
   const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];

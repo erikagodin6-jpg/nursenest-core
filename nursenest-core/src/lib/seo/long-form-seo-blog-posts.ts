@@ -175,7 +175,7 @@ The distinction between assessment (RN only) and data collection (can be delegat
       {
         heading: "Common Delegation Mistakes Filipino Nurses Make",
         body: `**Mistake 1: Choosing "the nurse will do it" for every question.**
-If the task is routine and the patient is stable, the NCLEX expects you to delegate appropriately. Doing everything yourself is not the best answer — it suggests poor time management and leadership.
+	If the task is routine and the patient is stable, the NCLEX expects you to delegate appropriately. Doing everything yourself is lower priority than safe delegation because the RN must preserve time for assessment, teaching, and unstable patients.
 
 **Mistake 2: Confusing assessment with data collection.**
 An RN cannot delegate assessment — the professional analysis of patient data. But an RN can delegate data collection — taking vital signs, measuring intake and output, recording weights. Filipino nurses often select answers that restrict even data collection to the RN, which is incorrect.

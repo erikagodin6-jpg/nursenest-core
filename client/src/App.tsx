@@ -65,6 +65,7 @@ const AdaptiveStudyPage = lazy(() => import("@/pages/adaptive-study-page"));
 const TestBank = lazy(() => import("@/pages/test-bank"));
 const UpgradePage = lazy(() => import("@/pages/upgrade"));
 const Reports = lazy(() => import("@/pages/reports"));
+const ReadinessReport = lazy(() => import("@/pages/readiness-report"));
 const LoginPage = lazy(() => import("@/pages/login"));
 const ResetPasswordPage = lazy(() => import("@/pages/reset-password"));
 const ProfilePage = lazy(() => import("@/pages/profile"));
@@ -1030,6 +1031,7 @@ function AppRoutes() {
         <Route path="/upgrade">{() => <ProtectedRoute contentType="general"><UpgradePage /></ProtectedRoute>}</Route>
         <Route path="/upgrade/success">{() => <ProtectedRoute contentType="general"><UpgradePage /></ProtectedRoute>}</Route>
         <Route path="/reports" component={Reports} />
+        <Route path="/readiness-report">{() => <ProtectedRoute contentType="general"><ReadinessReport /></ProtectedRoute>}</Route>
         <Route path="/login">{() => <ProtectedRoute contentType="general"><LoginPage /></ProtectedRoute>}</Route>
         <Route path="/reset-password" component={ResetPasswordPage} />
         <Route path="/profile">{() => <PlatformErrorBoundary fallbackPath="/en/dashboard"><ProfilePage /></PlatformErrorBoundary>}</Route>
