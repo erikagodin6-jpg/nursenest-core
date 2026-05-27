@@ -321,6 +321,19 @@ export function FlashcardStudyQuestionStack({
                   <div className="nn-flashcard-inline-rationale__body mt-3">
                     <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
                   </div>
+                  {exam.rationaleIncorrect.length > 0 ? (
+                    <div className="nn-flashcard-rationale-panel__incorrect">
+                      <h3>Why the other options are not priority</h3>
+                      <ul>
+                        {exam.rationaleIncorrect.map((row) => (
+                          <li key={row.letter}>
+                            <span>{row.letter}</span>
+                            <FlashcardRichContent text={row.rationale} className="[&_p]:mb-0" />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                   {revealLinksSection ? (
                     <div className="mt-3" data-testid="flashcard-reveal-links">
                       {revealLinksSection}

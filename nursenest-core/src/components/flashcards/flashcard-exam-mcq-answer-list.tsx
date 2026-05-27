@@ -143,12 +143,7 @@ export function FlashcardExamMcqAnswerList({
                     <span>Your answer</span>
                     <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
                   </div>
-                ) : (
-                  <details className="nn-flashcard-answer-feedback nn-flashcard-answer-feedback--incorrect">
-                    <summary>Why not</summary>
-                    <FlashcardRichContent text={feedbackText} className="[&_p]:mb-0" />
-                  </details>
-                )
+                ) : null
               ) : null}
             </li>
           );

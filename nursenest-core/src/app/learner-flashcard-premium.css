@@ -4194,20 +4194,6 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
   line-height: 1.16 !important;
 }
 
-.nn-flashcard-answer-feedback--correct-compact {
-  display: inline-flex !important;
-  align-items: center !important;
-  width: auto !important;
-  border-left-color: transparent !important;
-  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface)) !important;
-  color: var(--semantic-success) !important;
-}
-
-.nn-flashcard-answer-feedback--correct-compact span {
-  margin: 0 !important;
-  font-size: 0.54rem !important;
-}
-
 .nn-flashcard-answer-feedback--picked-wrong .nn-question-stem,
 .nn-flashcard-answer-feedback--incorrect .nn-question-stem {
   display: -webkit-box !important;
@@ -4270,6 +4256,54 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
   margin-top: 0.42rem !important;
   font-size: 0.72rem !important;
   line-height: 1.32 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect {
+  margin-top: 0.62rem !important;
+  border-top: 1px solid var(--semantic-border-soft) !important;
+  padding-top: 0.5rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect h3 {
+  margin: 0 0 0.35rem !important;
+  font-size: 0.64rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: var(--semantic-text-muted) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect ul {
+  display: grid !important;
+  gap: 0.38rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect li {
+  display: grid !important;
+  grid-template-columns: 1.25rem minmax(0, 1fr) !important;
+  gap: 0.34rem !important;
+  align-items: start !important;
+  border-radius: 0.56rem !important;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 45%, var(--semantic-surface)) !important;
+  padding: 0.35rem 0.42rem !important;
+  font-size: 0.68rem !important;
+  line-height: 1.25 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect li > span {
+  display: inline-flex !important;
+  width: 1.2rem !important;
+  height: 1.2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface)) !important;
+  color: var(--semantic-text-secondary) !important;
+  font-size: 0.58rem !important;
+  font-weight: 750 !important;
 }
 
 .nn-flashcard-study-premium .nn-flashcard-session-main-footer {
