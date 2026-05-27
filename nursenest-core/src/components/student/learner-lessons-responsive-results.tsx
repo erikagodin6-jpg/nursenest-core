@@ -147,6 +147,7 @@ export function LearnerLessonsResponsiveResults({
   const latestKeyRef = useRef(filterKey({ ...initialFilters, page: initialPage, limit: initialPageSize }));
   const cacheRef = useRef(new Map<string, LessonsPayload>([[latestKeyRef.current, payload]]));
   const prefetchingKeysRef = useRef(new Set<string>());
+  const prefetchControllersRef = useRef(new Set<AbortController>());
 
   const summaryLine = useMemo(() => {
     if (loading) return "Loading lessons...";
@@ -229,10 +230,13 @@ export function LearnerLessonsResponsiveResults({
       const key = filterKey(nextFilters);
       if (cacheRef.current.has(key) || prefetchingKeysRef.current.has(key)) return;
       prefetchingKeysRef.current.add(key);
+      const controller = new AbortController();
+      prefetchControllersRef.current.add(controller);
       try {
         const res = await fetch(apiUrlForFilters(nextFilters), {
           credentials: "include",
           cache: "no-store",
+          signal: controller.signal,
         });
         if (!res.ok) return;
         const data = (await res.json().catch(() => ({}))) as {
@@ -252,7 +256,10 @@ export function LearnerLessonsResponsiveResults({
           pageCount: typeof data.pageCount === "number" ? data.pageCount : 1,
           pageSize: typeof data.pageSize === "number" ? data.pageSize : nextFilters.limit,
         });
+      } catch (cause) {
+        if (cause instanceof DOMException && cause.name === "AbortError") return;
       } finally {
+        prefetchControllersRef.current.delete(controller);
         prefetchingKeysRef.current.delete(key);
       }
     },
@@ -260,7 +267,14 @@ export function LearnerLessonsResponsiveResults({
   );
 
   useEffect(() => {
-    return () => abortRef.current?.abort();
+    return () => {
+      abortRef.current?.abort();
+      for (const controller of prefetchControllersRef.current) {
+        controller.abort();
+      }
+      prefetchControllersRef.current.clear();
+      prefetchingKeysRef.current.clear();
+    };
   }, []);
 
   useEffect(() => {

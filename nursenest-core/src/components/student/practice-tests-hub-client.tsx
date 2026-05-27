@@ -540,27 +540,6 @@ export function PracticeTestsHubClient({
               </h2>
               <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{setupSummary}</p>
             </div>
-            {!resumeHref ? (
-              <button
-                type="button"
-                onClick={createTest}
-                disabled={startDisabled}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-sm font-bold text-white shadow-[0_10px_22px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                data-nn-qa-practice-hub-start-test
-              >
-                {creating ? (
-                  <>
-                    <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                    Starting…
-                  </>
-                ) : (
-                  <>
-                    <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                    Start {modeLabel}
-                  </>
-                )}
-              </button>
-            ) : null}
           </div>
 
           {resumeHref ? (
@@ -592,15 +571,6 @@ export function PracticeTestsHubClient({
                   className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_88%,var(--semantic-text-primary))] px-8 text-sm font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] transition hover:brightness-[1.03] sm:w-auto"
                 >
                   Resume session
-                </button>
-                <button
-                  type="button"
-                  onClick={createTest}
-                  disabled={startDisabled}
-                  data-nn-qa-practice-hub-start-test
-                  className="inline-flex min-h-10 w-full items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-secondary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] disabled:opacity-55 sm:w-auto"
-                >
-                  {creating ? "Starting…" : "Start fresh"}
                 </button>
               </div>
             </div>
@@ -812,6 +782,29 @@ export function PracticeTestsHubClient({
               CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
             </div>
           ) : null}
+
+          <div className="flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-[var(--semantic-text-secondary)]">{setupSummary}</p>
+            <button
+              type="button"
+              onClick={createTest}
+              disabled={startDisabled}
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-sm font-bold text-white shadow-[0_10px_22px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+              data-nn-qa-practice-hub-start-test
+            >
+              {creating ? (
+                <>
+                  <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                  Starting…
+                </>
+              ) : (
+                <>
+                  <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                  Start {modeLabel}
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </SharedStudySetupSurface>
 

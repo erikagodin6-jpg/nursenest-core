@@ -13,6 +13,9 @@ test("app lesson results keep the shell stable during category/search loading", 
   assert.match(source, /LessonsListSkeleton/);
   assert.match(source, /prefetchFilters/);
   assert.match(source, /prefetchingKeysRef/);
+  assert.match(source, /prefetchControllersRef/);
+  assert.match(source, /signal: controller\.signal/);
+  assert.match(source, /controller\.abort\(\)/);
   assert.match(source, /onTopicPrefetch=\{prefetchTopic\}/);
   assert.match(source, /aria-busy=\{loading\}/);
   assert.match(source, /window\.history\.pushState/);

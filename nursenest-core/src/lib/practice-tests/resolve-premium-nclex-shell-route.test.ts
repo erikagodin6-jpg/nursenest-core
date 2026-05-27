@@ -62,7 +62,22 @@ describe("resolvePremiumNclexShellRoute", () => {
     );
   });
 
-  it("keeps CAT study on legacy runner", () => {
+  it("routes unified setup CAT launches to cat shell", () => {
+    assert.equal(
+      resolvePremiumNclexShellRoute({
+        pathwayId: "us-rn-nclex-rn",
+        config: {
+          pathwayId: "us-rn-nclex-rn",
+          selectionMode: "cat",
+          catAdaptiveSessionType: "cat",
+          catPresentationMode: "practice",
+        },
+      }),
+      "cat",
+    );
+  });
+
+  it("keeps guided CAT study on legacy runner", () => {
     assert.equal(
       resolvePremiumNclexShellRoute({
         pathwayId: "us-rn-nclex-rn",

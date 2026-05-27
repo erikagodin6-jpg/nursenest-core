@@ -4,7 +4,7 @@
  * Enforces that:
  * 1. Practice/CAT alias routes redirect to the single canonical hub (`/app/practice-tests`).
  * 2. The canonical hub page is not itself a redirect.
- * 3. No duplicate setup pages exist alongside the canonical `practice-tests/start` and `cat-launch`.
+ * 3. Deprecated setup aliases redirect back to the canonical `/app/practice-tests` flow.
  * 4. The learner shell layout is the only shell mounted inside `(app)/app/(learner)/`.
  * 5. The `LearnerRenderTraceBanner` is production-gated (never renders in NODE_ENV=production).
  */
@@ -85,13 +85,13 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
     );
   });
 
-  it("practice-tests/start exists as the single CAT briefing entry", () => {
+  it("practice-tests/start redirects to hub inline CAT launch", () => {
     const startPath = "src/app/(app)/app/(learner)/practice-tests/start/page.tsx";
-    assert.ok(exists(startPath), `missing canonical CAT briefing: ${startPath}`);
+    assert.ok(exists(startPath), `missing CAT launch alias: ${startPath}`);
     const src = read(startPath);
     assert.ok(
-      src.includes("PathwayCatSessionStartClient") || src.includes("cat-session-start"),
-      `practice-tests/start must render the CAT session start UI`,
+      src.includes("redirect(") && src.includes("/app/practice-tests") && src.includes("catLaunch"),
+      `practice-tests/start must redirect to the canonical hub inline CAT launch`,
     );
   });
 

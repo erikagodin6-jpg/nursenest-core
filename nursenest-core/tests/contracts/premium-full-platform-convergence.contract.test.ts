@@ -132,6 +132,16 @@ describe("premium full platform convergence", () => {
     assert.doesNotMatch(practiceHub, /\bcat\?:/, "practice hub must not accept legacy cat query aliases");
     assert.match(practiceClient, /SharedStudySetupLayout/, "practice must reuse shared setup layout");
     assert.match(practiceClient, /SharedStudySetupSurface/, "practice must reuse shared setup surface");
+    assert.doesNotMatch(
+      practiceHub,
+      /requireExplicitRequestedPathwayId:\s*true/,
+      "practice hub must not force an extra pathway-pick landing page when a pathway can be inferred",
+    );
+    assert.equal(
+      (practiceClient.match(/data-nn-qa-practice-hub-start-test/g) ?? []).length,
+      1,
+      "practice setup must expose one canonical Start action",
+    );
     assert.match(flashcardsClient, /SharedStudySetupLayout/, "flashcards must remain on shared setup layout");
     assert.match(flashcardsClient, /SharedStudySetupSurface/, "flashcards must remain on shared setup surface");
   });

@@ -158,7 +158,6 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       requestedPathwayId,
       compatible: compatiblePathways.map((p) => ({ id: p.id, shortName: p.shortName })),
       learnerPath: learnerLp,
-      requireExplicitRequestedPathwayId: true,
     });
     if (pathwayResolution.state === "scoped") {
       defaultPathwayId = pathwayResolution.defaultPathwayId;
@@ -204,7 +203,6 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
         requestedPathwayId,
         compatible: pathwayOptions.map((p) => ({ id: p.id, shortName: p.examCodeLabel?.trim() || p.id })),
         learnerPath: null,
-        requireExplicitRequestedPathwayId: true,
       });
       if (pathwayResolution.state === "scoped") {
         defaultPathwayId = pathwayResolution.defaultPathwayId;

@@ -38,6 +38,10 @@ const STICKY_DOCK_PATH = path.resolve(
   ROOT,
   "src/components/lessons/lesson-sticky-review-dock.tsx",
 );
+const LESSON_ASSESSMENT_FLOW_PATH = path.resolve(
+  ROOT,
+  "src/components/lessons/lesson-assessment-flow.tsx",
+);
 const RETENTION_HELPER_PATH = path.resolve(
   ROOT,
   "src/lib/lessons/lesson-retention-section.ts",
@@ -80,6 +84,7 @@ describe("premium lesson reading architecture v2", () => {
   const progressRail = read(PROGRESS_RAIL_PATH);
   const sectionCard = read(SECTION_CARD_PATH);
   const stickyDock = read(STICKY_DOCK_PATH);
+  const lessonAssessmentFlow = read(LESSON_ASSESSMENT_FLOW_PATH);
   const retentionHelper = read(RETENTION_HELPER_PATH);
   const marketingCss = read(MARKETING_CSS_PATH);
   const learnerCss = read(LEARNER_CSS_PATH);
@@ -202,6 +207,17 @@ describe("premium lesson reading architecture v2", () => {
     assert.match(retentionHelper, /clinical_pearls/);
     assert.match(retentionHelper, /red_flags/);
     assert.match(retentionHelper, /exam_tips/);
+  });
+
+  it("auto-populates existing lesson quizzes without adding setup friction", () => {
+    assert.match(lessonAssessmentFlow, /<LessonPreAssessmentCard[\s\S]*autoStart/);
+    assert.match(lessonAssessmentFlow, /<LessonPostAssessmentCard[\s\S]*autoStart/);
+    assert.match(lessonAssessmentFlow, /<AssessmentToggle/);
+    assert.equal(
+      lessonAssessmentFlow.includes("Start a lesson quiz setup"),
+      false,
+      "lesson quizzes must not add a separate setup step",
+    );
   });
 
   it("uses a reading-first viewport with constrained side rails", () => {

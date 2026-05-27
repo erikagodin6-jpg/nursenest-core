@@ -25,6 +25,7 @@ import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-li
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
+import { getAuthSessionWithJwtCookieFallback } from "@/lib/auth/server-session-jwt-fallback";
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -123,6 +124,8 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
     pathway.id,
     alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : undefined,
   );
+  const viewerSession = await getAuthSessionWithJwtCookieFallback().catch(() => null);
+  const viewerSignedIn = Boolean((viewerSession?.user as { id?: string } | undefined)?.id);
 
   const assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
 
@@ -259,13 +262,15 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={
-                  assessment.marketingPrimaryCta === "sign_in_to_cat"
+                  assessment.marketingPrimaryCta === "sign_in_to_cat" && !viewerSignedIn
                     ? signInReturnHref
                     : marketingAppCatLaunchHref
                 }
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
               >
-                {assessment.marketingPrimaryCta === "sign_in_to_cat" ? "Sign In to Start Exam Simulation" : "Start Exam Simulation"}
+                {assessment.marketingPrimaryCta === "sign_in_to_cat" && !viewerSignedIn
+                  ? "Sign In to Start Exam Simulation"
+                  : "Start Exam Simulation"}
               </Link>
               <Link
                 href={questionsHrefWithProfession}

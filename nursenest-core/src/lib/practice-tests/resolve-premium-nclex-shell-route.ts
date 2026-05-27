@@ -9,7 +9,7 @@ function readConfigString(cfg: Record<string, unknown>, key: string): string | n
 
 /**
  * Selects the dedicated NCLEX exam shell for in-progress practice tests.
- * Returns null when the session should use `PracticeTestRunnerClient` (CAT study, legacy linear, etc.).
+ * Returns null when the session should use `PracticeTestRunnerClient` (legacy linear, guided CAT study, etc.).
  */
 export function resolvePremiumNclexShellRoute(args: {
   config: Record<string, unknown> | null | undefined;
@@ -23,12 +23,14 @@ export function resolvePremiumNclexShellRoute(args: {
     return "cat";
   }
 
-  // CAT guided practice — legacy runner handles cat_advance + study reveal.
   if (cfg.catAdaptiveSessionType === "practice") {
     return null;
   }
+
+  // Unified setup CAT launches use the dedicated fixed-viewport exam shell even
+  // when the feature flag leaves presentationMode as "practice".
   if (cfg.selectionMode === "cat") {
-    return null;
+    return "cat";
   }
 
   // Hub "Practice Exams" and learning-mode linear sessions share the dedicated exam workspace.

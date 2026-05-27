@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -179,4 +179,29 @@ test("shared app layouts defer admin palette and learner bundle loaders", () => 
 
   assertHasDynamicImport(adminLayout, "@/components/admin/admin-global-command-palette");
   assertHasDynamicImport(adminLayout, "@/lib/marketing-i18n/load-marketing-message-shards");
+});
+
+test("no src file uses Prisma runtime values (DbNull/JsonNull/sql/join) without a value import", () => {
+  // Prevents `ReferenceError: Prisma is not defined` at build time / route evaluation.
+  // `import type { Prisma }` is erased by TypeScript — runtime value members need `import { Prisma }`.
+  const runtimeValuePattern = /\bPrisma\.(DbNull|JsonNull|AnyNull|sql|join|Decimal|validator)\b/;
+  const valueImportPattern = /^import\s+\{[^}]*\bPrisma\b[^}]*\}\s+from\s+["']@prisma\/client["']/m;
+
+  function walkSrc(dir: string, problems: string[]): void {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "node_modules" && entry.name !== ".git") walkSrc(fullPath, problems);
+      } else if ((entry.name.endsWith(".ts") || entry.name.endsWith(".tsx")) && !entry.name.endsWith(".test.ts")) {
+        const src = readFileSync(fullPath, "utf8");
+        if (runtimeValuePattern.test(src) && !valueImportPattern.test(src)) {
+          problems.push(fullPath.slice(root.length + 1));
+        }
+      }
+    }
+  }
+
+  const problems: string[] = [];
+  walkSrc(join(root, "src"), problems);
+  assert.deepEqual(problems, [], `Files using Prisma runtime values without value import:\n  ${problems.join("\n  ")}`);
 });
