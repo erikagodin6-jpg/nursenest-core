@@ -35,7 +35,10 @@ import {
   BookOpen,
   AlertTriangle,
   LogIn,
+  ArrowRight,
+  Activity,
 } from "lucide-react";
+import { LocaleLink } from "@/lib/LocaleLink";
 
 const BODY_SYSTEM_MAP: Record<string, { lessons: string[]; icon: any; color: string }> = {
   "Cardiovascular": {
@@ -303,7 +306,7 @@ export default function Reports() {
       <Navigation />
 
       <main className="max-w-6xl mx-auto px-4 py-12 w-full">
-        <div className="mb-10">
+        <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2" data-testid="text-page-title">
             Performance Analytics
           </h1>
@@ -311,6 +314,23 @@ export default function Reports() {
             Track your proficiency across all body systems
           </p>
         </div>
+
+        <LocaleLink href="/readiness-report" className="block mb-8 group">
+          <div className="themed-hero-gradient leaf-watermark-bg rounded-2xl px-6 py-5 flex items-center justify-between gap-4 border border-[var(--theme-primary)]/20 transition-all duration-200 hover:border-[var(--theme-primary)]/40 hover:shadow-md">
+            <div className="flex items-center gap-4">
+              <div className="themed-icon-container shrink-0">
+                <Activity className="w-5 h-5 text-[var(--theme-primary)]" />
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">NCLEX Readiness Report</p>
+                <p className="text-xs text-gray-500 mt-0.5">Pass probability · Domain breakdown · Exam countdown · Personalized recommendations</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 text-[var(--theme-primary)] text-sm font-medium shrink-0 group-hover:gap-2.5 transition-all">
+              View Report <ArrowRight className="w-4 h-4" />
+            </div>
+          </div>
+        </LocaleLink>
 
         {!hasReportsAccess && !entitlementLoading ? (
           <FeatureLockedPreview feature="reports" />

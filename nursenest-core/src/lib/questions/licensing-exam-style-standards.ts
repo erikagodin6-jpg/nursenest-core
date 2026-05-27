@@ -1,4 +1,5 @@
 import type { HealthcareProgramTier } from "@/lib/nursing-tiers/tier-pedagogy-profile";
+import { evaluateClinicalAuthenticity } from "@/lib/questions/clinical-authenticity-standards";
 
 export type LicensingExamStyle =
   | "NCLEX-RN"
@@ -35,6 +36,7 @@ export type LicensingExamStyleIssueCode =
   | "MISSING_PATIENT_OUTCOME_OR_SAFETY"
   | "MISSING_MULTI_CONCEPT_INTEGRATION"
   | "NON_BEDSIDE_LANGUAGE"
+  | "CLINICAL_AUTHENTICITY_GAP"
   | "SPECIALTY_COMPLEXITY_DRIFT"
   | "PROVIDER_DECISION_DRIFT"
   | "TIER_SCOPE_MISMATCH";
@@ -279,6 +281,13 @@ export function evaluateLicensingExamStyle(
   const options = parseArrayish(input.options).map(optionText).filter(Boolean);
   const combined = [stem, rationale, reasoning, ...options].join(" ");
   const issues: LicensingExamStyleIssue[] = [];
+  const authenticity = evaluateClinicalAuthenticity({
+    tier: input.tier,
+    stem,
+    options,
+    rationale,
+    clinicalReasoning: reasoning,
+  });
 
   if (countMatches(stem, RECALL_PATTERNS) > 0 && countMatches(stem, PATIENT_SCENARIO_PATTERNS) === 0) {
     addIssue(issues, {
@@ -352,6 +361,17 @@ export function evaluateLicensingExamStyle(
       severity: "warning",
       message: "Question uses academic or generic language instead of realistic bedside/workflow language.",
       remediation: "Use natural patient-care language and profession-specific workflow details.",
+    });
+  }
+
+  const authenticityBlockingIssue = authenticity.issues.find((issue) => issue.severity === "error");
+  if (authenticityBlockingIssue) {
+    addIssue(issues, {
+      code: "CLINICAL_AUTHENTICITY_GAP",
+      severity: "error",
+      message: "Question does not sound clinically authentic or professionally realistic.",
+      remediation:
+        "Rewrite with believable bedside/charting language, realistic patient cues, and natural nurse decision-making.",
     });
   }
 

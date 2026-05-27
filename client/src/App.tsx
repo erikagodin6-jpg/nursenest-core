@@ -33,6 +33,7 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { SafeExamFallback, SafeFlashcardFallback, SafeLessonFallback, SafeDownloadFallback } from "@/components/safe-mode-fallbacks";
 import { ProtectedAccessBoundary, type ProtectedRouteContext, type ContentCategory } from "@/components/protected-access-recovery";
 const IncidentBanner = lazy(() => import("@/components/incident-banner").then(m => ({ default: m.IncidentBanner })));
+const LearnerInsightsDrawer = lazy(() => import("@/components/learner-insights-drawer").then(m => ({ default: m.LearnerInsightsDrawer })));
 
 function PreviewBanner() {
   const { previewTier, setPreviewTier, isAdmin } = useAuth();
@@ -1503,6 +1504,7 @@ function DeferredShellComponents() {
       <ReportProblemButton />
       <IncidentBanner />
       <StickyCtaBar />
+      <LearnerInsightsDrawer />
     </Suspense>
   );
 }

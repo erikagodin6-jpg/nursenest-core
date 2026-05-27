@@ -1,4 +1,5 @@
 import type { HealthcareProgramTier } from "@/lib/nursing-tiers/tier-pedagogy-profile";
+import { evaluateNursingContentVariation } from "@/lib/questions/content-variation-standards";
 
 export type PremiumContentDepthStandard = {
   tier: HealthcareProgramTier;
@@ -348,7 +349,25 @@ export function evaluatePremiumContentDepth(input: PremiumContentDepthInput): Pr
 
   const repeatedBecause = (teachingText.match(/\bbecause\b/gi) ?? []).length;
   const repeatedCorrect = (teachingText.match(/\bcorrect answer\b/gi) ?? []).length;
-  if (repeatedBecause >= 5 || repeatedCorrect >= 3) {
+  const variation = evaluateNursingContentVariation([
+    { id: "rationale", kind: "rationale", text: rationale },
+    { id: "clinicalReasoning", kind: "rationale", text: clinicalReasoning },
+    { id: "hint", kind: "hint", text: hint },
+    { id: "keyTakeaway", kind: "rationale", text: keyTakeaway },
+    { id: "clinicalTrap", kind: "rationale", text: clinicalTrap },
+    ...distractorRationales.map((value, index) => ({
+      id: `distractor-${index + 1}`,
+      kind: "distractor-rationale" as const,
+      text: value,
+    })),
+  ]);
+  if (
+    repeatedBecause >= 5 ||
+    repeatedCorrect >= 3 ||
+    variation.issues.some((issue) =>
+      ["REPEATED_OPENING_PATTERN", "REPEATED_SENTENCE_FRAME", "LOW_STRUCTURAL_VARIATION"].includes(issue.code),
+    )
+  ) {
     addIssue(issues, {
       code: "REPETITIVE_RATIONALE_WORDING",
       severity: "warning",

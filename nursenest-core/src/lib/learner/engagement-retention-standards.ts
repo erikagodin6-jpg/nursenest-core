@@ -84,6 +84,7 @@ const SHARED_PROFESSIONAL_TONE_RULES = [
   "Avoid arcade language, jokes, gambling metaphors, or shaming copy.",
   "Frame streaks as consistency support, not punishment.",
   "Keep patient safety serious and clinically meaningful.",
+  "Reinforce professional nursing identity: safe judgment, patient advocacy, calm under pressure, and bedside responsibility.",
 ] as const;
 
 const SHARED_SAFETY_GUARDRAILS = [

@@ -526,6 +526,10 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" data-testid="text-dashboard-title">{t("dashboard.pageTitle")}</h1>
             <p className="text-muted-foreground mt-1 text-sm">{t("dashboard.pageSubtitle")}</p>
+            <LocaleLink href="/readiness-report" className="inline-flex items-center gap-1.5 text-xs text-[var(--theme-primary)] font-medium mt-2 hover:underline">
+              <Activity className="w-3.5 h-3.5" />
+              View Readiness Report <ArrowRight className="w-3 h-3" />
+            </LocaleLink>
           </div>
           <div className="flex gap-2 flex-shrink-0">
             {editing ? (
