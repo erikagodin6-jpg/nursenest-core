@@ -54,6 +54,111 @@ services:
       - key: NEXT_PUBLIC_APP_URL
         scope: RUN_AND_BUILD_TIME
         value: https://nursenest.ca
+      - key: AUTH_URL
+        scope: RUN_TIME
+        value: https://nursenest.ca
+      - key: NEXTAUTH_URL
+        scope: RUN_TIME
+        value: https://nursenest.ca
+      - key: STRIPE_SECRET_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        scope: RUN_AND_BUILD_TIME
+        value: pk_live_51T2oasFbgp0Ub5P7qfFyhoofaFnln6ITvX7SCrwi7OGFdO06Lqur3D2ncauISLQD0r8fJOrrDfc1tBOhWfQD5GeY00RsH4tkRd
+      - key: ENABLE_ECG_MODULE
+        scope: RUN_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ENABLE_ADVANCED_ECG_MODULE
+        scope: RUN_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ADVANCED_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ALLOW_ECG_EARLY_ACCESS_CHECKOUT
+        scope: RUN_TIME
+        value: "true"
+      - key: STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME
+        scope: RUN_TIME
+        value: price_1TVo8vFbgp0Ub5P7aTySWrbU
+      - key: STRIPE_PRICE_ADVANCED_ECG
+        scope: RUN_TIME
+        value: price_1TVo8vFbgp0Ub5P7aTySWrbU
+      - key: STRIPE_PRICE_NEW_GRAD_YEARLY
+        scope: RUN_TIME
+        value: price_1TLnHkFbgp0Ub5P7baczDA2H
+      - key: STRIPE_PRICE_NEW_GRAD_6MONTH
+        scope: RUN_TIME
+        value: price_1TLnHJFbgp0Ub5P7QmMOs84F
+      - key: STRIPE_PRICE_NEW_GRAD_MONTHLY
+        scope: RUN_TIME
+        value: price_1TLnGhFbgp0Ub5P7FHBxwfu5
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY
+        scope: RUN_TIME
+        value: price_1TAxF7Fbgp0Ub5P731jFKbBY
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAxEaFbgp0Ub5P7FEOyr7ZN
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS
+        scope: RUN_TIME
+        value: price_1TAxDbFbgp0Ub5P75l3KCWEs
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY
+        scope: RUN_TIME
+        value: price_1TAxCeFbgp0Ub5P7ocyarmgy
+      - key: STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuKUFbgp0Ub5P7iEkkFK6U
+      - key: STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuK8Fbgp0Ub5P7skiOC7II
+      - key: STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuJiFbgp0Ub5P7XIK12Ehi
+      - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuJ7Fbgp0Ub5P79Kd4k3Lh
+      - key: STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuIkFbgp0Ub5P70KbakVqE
+      - key: STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuIJFbgp0Ub5P7usPDQcUI
+      - key: STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuHiFbgp0Ub5P7Hotw3mXB
+      - key: STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuH6Fbgp0Ub5P7DNYL5O29
+      - key: STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuGVFbgp0Ub5P7jVg3Mb4m
+      - key: STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuFJFbgp0Ub5P7AaESIas9
+      - key: STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuErFbgp0Ub5P7cdM8iw5E
+      - key: STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuEQFbgp0Ub5P7RAwQFwAk
+      - key: STRIPE_PRICE_LVN_LPN_YEARLY
+        scope: RUN_TIME
+        value: price_1TAuGVFbgp0Ub5P7jVg3Mb4m
+      - key: STRIPE_PRICE_LVN_LPN_6MONTH
+        scope: RUN_TIME
+        value: price_1TAuFJFbgp0Ub5P7AaESIas9
+      - key: STRIPE_PRICE_LVN_LPN_3MONTH
+        scope: RUN_TIME
+        value: price_1TAuErFbgp0Ub5P7cdM8iw5E
+      - key: STRIPE_PRICE_LVN_LPN_MONTHLY
+        scope: RUN_TIME
+        value: price_1TAuEQFbgp0Ub5P7RAwQFwAk
       - key: DATABASE_URL
         scope: RUN_TIME
         type: SECRET
@@ -64,6 +169,15 @@ services:
         scope: RUN_TIME
         type: SECRET
       - key: NEXTAUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: CRON_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: SPACES_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: SPACES_SECRET
         scope: RUN_TIME
         type: SECRET
       - key: AI_ADMIN_GENERATION_ENABLED

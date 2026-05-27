@@ -85,6 +85,7 @@ import type { CountryCode } from "@/lib/marketing/countries/types";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
+import { getSessionHubLabel } from "@/lib/learner/session-hub-label";
 import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-request-pathname";
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
@@ -243,6 +244,14 @@ const LearnerShellLayout = traceLayout(
   const AdminLearnerQaPosthogSuppressor = adminQaModules?.[0].AdminLearnerQaPosthogSuppressor ?? null;
   const AdminLearnerQaAppToolbar = adminQaModules?.[1].AdminLearnerQaAppToolbar ?? null;
 
+  // Tier for hub label and pathway fallback — compute once, reuse everywhere.
+  const learnerTier = (
+    qaShell && adminQaSimulationHelpers
+      ? adminQaSimulationHelpers.learnerQaChromeTierFallbackString(qaShell.track)
+      : ((session?.user as { tier?: string | null })?.tier ?? "")
+  ).toUpperCase();
+  const sessionHubLabel = getSessionHubLabel(learnerTier);
+
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
   const shellFallbackStats = getDegradedPublicHomeStatsFallback("learner_shell_route_safe_fallback", { silent: true });
@@ -305,15 +314,10 @@ const LearnerShellLayout = traceLayout(
   let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
 
   if (!pathwayHubHref) {
-    const tier = (
-      qaShell && adminQaSimulationHelpers
-        ? adminQaSimulationHelpers.learnerQaChromeTierFallbackString(qaShell.track)
-        : ((session?.user as { tier?: string | null })?.tier ?? "")
-    ).toUpperCase();
-    const tierHub = await learnerPathwayHubChromeHrefForTierFallback(tier);
+    const tierHub = await learnerPathwayHubChromeHrefForTierFallback(learnerTier);
     if (tierHub) {
       pathwayHubHref = tierHub;
-      if (tier === "RN" || tier === "RPN" || tier === "LVN_LPN" || tier === "NP") examsLabel = "CAT Exams";
+      if (learnerTier === "RN" || learnerTier === "RPN" || learnerTier === "LVN_LPN" || learnerTier === "NP") examsLabel = "CAT Exams";
     }
   }
 
@@ -324,21 +328,16 @@ const LearnerShellLayout = traceLayout(
       if (pathwayVisibleForLearnerChrome(p)) pathwayContextBar = formatPathwayContextBar(p);
     }
     if (!pathwayContextBar && pathwayHubHref) {
-      const tier = (
-        qaShell && adminQaSimulationHelpers
-          ? adminQaSimulationHelpers.learnerQaChromeTierFallbackString(qaShell.track)
-          : ((session?.user as { tier?: string | null })?.tier ?? "")
-      ).toUpperCase();
       const fallbackPathwayId =
-        tier === "RN"
+        learnerTier === "RN"
           ? "us-rn-nclex-rn"
-          : tier === "RPN"
+          : learnerTier === "RPN"
             ? "ca-rpn-rex-pn"
-            : tier === "LVN_LPN"
+            : learnerTier === "LVN_LPN"
               ? "us-lpn-nclex-pn"
-              : tier === "NP"
+              : learnerTier === "NP"
                 ? "us-np-fnp"
-                : tier === "ALLIED"
+                : learnerTier === "ALLIED"
                   ? "us-allied-core"
                   : null;
       if (fallbackPathwayId) {
@@ -416,7 +415,7 @@ const LearnerShellLayout = traceLayout(
       ) : null}
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
-          <LearnerExamChromeGate>
+          <LearnerExamChromeGate hubLabel={sessionHubLabel}>
             <LearnerShellDevDiagnostics />
             <div
               className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"

@@ -3,7 +3,7 @@
 import { useReducer, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, XCircle } from "lucide-react";
+import { BookmarkIcon, CheckCircle2, XCircle } from "lucide-react";
 import {
   sessionRuntimeReducer,
 } from "@/lib/flashcards/session-runtime-reducer";
@@ -86,9 +86,9 @@ export function FlashcardSessionPlayer({ session, deckId }: Props) {
         flashcardId: currentCard.cardId,
         selectedKey: currentCard.selectedAnswerId ?? null,
         isCorrect: currentCard.attempt.correct,
-        guessed: false,
-        confidence: null,
-        bookmarked: false,
+        guessed: currentCard.attempt.guessed ?? false,
+        confidence: currentCard.attempt.confidence ?? null,
+        bookmarked: currentCard.attempt.bookmarked ?? false,
       });
     }
 
@@ -260,6 +260,66 @@ export function FlashcardSessionPlayer({ session, deckId }: Props) {
                   <p className="text-[var(--semantic-text-secondary)] leading-relaxed">
                     {currentPayload.rationaleCorrect}
                   </p>
+                </div>
+
+                {/* Confidence */}
+                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
+                  <p className="mb-2 text-xs font-semibold text-[var(--semantic-text-muted)]">How confident are you?</p>
+                  <div className="flex items-center gap-1.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <button
+                        key={n}
+                        type="button"
+                        onClick={() =>
+                          dispatch({
+                            type: "SET_CONFIDENCE",
+                            cardId: currentCard.cardId,
+                            confidence: n,
+                          })
+                        }
+                        className={`h-7 w-7 rounded-full text-xs font-semibold transition ${
+                          attempt?.confidence === n
+                            ? "bg-[var(--semantic-brand)] nn-text-on-solid-fill"
+                            : "border border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:border-[var(--semantic-brand)]"
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bookmark + Guessed */}
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => dispatch({ type: "TOGGLE_BOOKMARK", cardId: currentCard.cardId })}
+                    className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
+                      attempt?.bookmarked
+                        ? "border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-brand)]"
+                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:border-[var(--semantic-brand)]"
+                    }`}
+                  >
+                    <BookmarkIcon className="h-3.5 w-3.5" />
+                    {attempt?.bookmarked ? "Bookmarked" : "Bookmark"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_GUESSED",
+                        cardId: currentCard.cardId,
+                        guessed: !(attempt?.guessed ?? false),
+                      })
+                    }
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
+                      attempt?.guessed
+                        ? "border-[var(--semantic-warning)] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] text-[var(--semantic-warning)]"
+                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:border-[var(--semantic-warning)]"
+                    }`}
+                  >
+                    {attempt?.guessed ? "Guessed ✓" : "I guessed"}
+                  </button>
                 </div>
 
                 <button

@@ -1188,6 +1188,17 @@ body:has(.nn-nclex-exam-page) {
   .nn-nclex-rationale-sidebar {
     min-height: 10rem;
   }
+
+  .nn-nclex-coach-strip {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .nn-nclex-coach-strip__item,
+  .nn-nclex-confidence {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  }
 }
 
 /* ── 10. PRACTICE SPLIT LAYOUT ──────────────────────────────────────────── */

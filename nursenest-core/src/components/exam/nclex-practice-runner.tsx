@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, ChevronRight, CircleHelp, XCircle } from "lucide-react";
+import { BookOpen, Bot, CheckCircle2, ChevronRight, CircleHelp, Info, Lightbulb, XCircle } from "lucide-react";
 import {
   NclexAnswerList,
   NclexAnswerCard,
@@ -673,6 +673,8 @@ export function NclexPracticeRunner({
       .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
       .join("; ") ?? "";
   const feedbackCorrect = Boolean(isCommitted && currentFeedback?.isCorrect);
+  const relatedLesson = currentFeedback?.relatedLessons?.[0] ?? null;
+  const confidenceLevel = 3;
 
   return (
     <div
@@ -778,6 +780,52 @@ export function NclexPracticeRunner({
             </div>
           </section>
 
+          <section className="nn-nclex-coach-strip" aria-label="Coach">
+            <div className="nn-nclex-coach-strip__brand">
+              <Bot aria-hidden />
+              <span>Coach</span>
+            </div>
+            <div className="nn-nclex-coach-strip__item">
+              <Lightbulb aria-hidden />
+              <div>
+                <p>Tutor Hint</p>
+                <span>{current?.topic ? `Think through ${current.topic} before choosing.` : "Identify the safest clinical priority."}</span>
+              </div>
+            </div>
+            <div className="nn-nclex-coach-strip__item">
+              <Info aria-hidden />
+              <div>
+                <p>Why This Matters</p>
+                <span>{currentFeedback?.clinicalPearlDisplay ? resolveMeasureText(currentFeedback.clinicalPearlDisplay) : "Clinical judgment depends on recognizing the highest-risk finding."}</span>
+              </div>
+            </div>
+            <div className="nn-nclex-coach-strip__item">
+              <BookOpen aria-hidden />
+              <div>
+                <p>Related Lesson</p>
+                {relatedLesson ? (
+                  <Link href={relatedLesson.href}>{relatedLesson.title}</Link>
+                ) : (
+                  <span>{current?.subtopic ?? current?.topic ?? "Core clinical judgment"}</span>
+                )}
+              </div>
+            </div>
+            <div className="nn-nclex-confidence">
+              <p>How confident are you?</p>
+              <div className="nn-nclex-confidence__buttons" aria-label="Confidence rating">
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <button
+                    key={rating}
+                    type="button"
+                    className={rating === confidenceLevel ? "is-active" : ""}
+                    aria-pressed={rating === confidenceLevel}
+                  >
+                    {rating}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
         </main>
 
         <aside className="nn-nclex-rationale-sidebar" aria-label="Rationale">

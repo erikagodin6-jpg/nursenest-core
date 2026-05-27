@@ -7,10 +7,17 @@ import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
 
 /**
  * Suppresses the main learner chrome during active exam and flashcard study sessions,
- * replacing it with a single "← Return to RN Hub" action. Mode is derived from
- * `learnerShellFlags` — same resolver as the server layout — so client and server agree.
+ * replacing it with a single "← Return to [Tier] Hub" action. The `hubLabel` prop
+ * comes from the server layout (derived via `getSessionHubLabel`) so the label is
+ * always tier-accurate without client-side fetching.
  */
-export function LearnerExamChromeGate({ children }: { children: React.ReactNode }) {
+export function LearnerExamChromeGate({
+  children,
+  hubLabel = "Hub",
+}: {
+  children: React.ReactNode;
+  hubLabel?: string;
+}) {
   const pathname = usePathname() ?? "";
   const examFocus = useMemo(() => learnerShellFlags(pathname).suppressFullChrome, [pathname]);
 
@@ -36,9 +43,9 @@ export function LearnerExamChromeGate({ children }: { children: React.ReactNode 
         <Link
           href="/app"
           className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-bg-base)] px-3 py-1.5 text-[11px] font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_72%,var(--semantic-surface))]"
-          aria-label="Return to RN Hub"
+          aria-label={`Return to ${hubLabel}`}
         >
-          ← Return to RN Hub
+          ← Return to {hubLabel}
         </Link>
         <span className="hidden text-[11px] text-[var(--semantic-text-muted)] sm:block">
           Focused study mode — distractions reduced
