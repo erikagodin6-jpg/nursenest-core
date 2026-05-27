@@ -171,7 +171,7 @@ export function FlashcardStudyQuestionStack({
   const promptSplit = splitPromptLeadingImage(prompt);
   const promptBody = promptSplit.remainingPrompt || String(prompt ?? "");
 
-  const showPlainRevealCta = !exam && !sata && !revealed && typeof onReveal === "function";
+  const showUnsupportedCardAlert = !exam && !sata;
   return (
     <div className="nn-premium-flashcard-stack-outer nn-flashcard-study-stack-premium mx-auto flex w-full max-w-6xl flex-col gap-4">
       <div
@@ -285,15 +285,9 @@ export function FlashcardStudyQuestionStack({
                 </div>
               ) : null}
 
-              {showPlainRevealCta ? (
-                <div className="relative z-[1] mt-6 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() => onReveal?.()}
-                    className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
-                  >
-                    {labels?.revealHint ?? "Tap to reveal"}
-                  </button>
+              {showUnsupportedCardAlert ? (
+                <div className="relative z-[1] mt-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_7%,var(--semantic-surface))] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]" role="alert">
+                  This study item is missing the NCLEX multiple-choice payload. Return to the hub and start a bank-backed set.
                 </div>
               ) : null}
 
