@@ -46,7 +46,7 @@ export function GET() {
           profileKeysPresent:
             "byLayer" in profile || "bySystem" in profile || typeof profile === "object",
           readinessScoreStructure: score.confidence === "low" && score.score === 0,
-          emptyPoolSelectDone: selectResult.done === true,
+          emptyPoolSelectDone: selectResult.question === null,
           emptySessionIsComplete: typeof complete === "boolean",
         },
         checkedAt: new Date().toISOString(),

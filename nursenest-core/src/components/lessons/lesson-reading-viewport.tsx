@@ -82,7 +82,7 @@ export function LessonReadingViewport({
           <ListTree className="h-5 w-5 shrink-0" aria-hidden />
           <span>{t("learner.lessons.nav.contentsLabel")}</span>
         </button>
-        {rnLayout && clinicalPearls.length > 0 ? (
+        {clinicalPearls.length > 0 ? (
           <LessonClinicalPearlsRail pearls={clinicalPearls} />
         ) : null}
       </div>
@@ -116,7 +116,7 @@ export function LessonReadingViewport({
             progress={progress}
             progressVisible={progressVisible}
           />
-          {rnLayout ? (
+          {clinicalPearls.length > 0 ? (
             <LessonClinicalPearlsRail
               pearls={clinicalPearls}
               collapsed={leftCollapsed}
@@ -179,7 +179,7 @@ export function LessonReadingViewport({
               progressVisible={progressVisible}
               onNavigate={closeMobileDrawer}
             />
-            {rnLayout && clinicalPearls.length > 0 ? (
+            {clinicalPearls.length > 0 ? (
               <LessonClinicalPearlsRail pearls={clinicalPearls} />
             ) : null}
           </div>

@@ -79,7 +79,7 @@ export {
 export {
   applyOntologyLifecycleToEnvelope,
 } from "@/lib/educational-cognition/ontology-lifecycle-governance";
-export { replayCognitionEnvelopeHydration } from "@/lib/educational-cognition/cognition-replay-runtime";
+export { replayCognitionEnvelope } from "@/lib/educational-cognition/cognition-replay-runtime";
 export {
   buildCognitionExplainability,
   serializeExplainabilityForPublic,

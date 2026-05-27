@@ -3,11 +3,9 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ContentStatus, TierCode } from "@prisma/client";
 import { EcgAuthorityLinkBlock } from "@/components/ecg-module/ecg-authority-link-block";
-import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -27,8 +25,7 @@ import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-p
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT } from "@/lib/lessons/pathway-lesson-scale";
-import { LearnerLessonsVirtualList } from "@/components/student/learner-lessons-virtual-list";
-import { LearnerLessonsSearchToolbar } from "@/components/student/learner-lessons-search-toolbar";
+import { LearnerLessonsResponsiveResults } from "@/components/student/learner-lessons-responsive-results";
 import {
   loadPathwayLessonProgressMap,
   type PathwayLessonProgressStatus,
@@ -62,6 +59,7 @@ type AppLessonListRow = {
   title: string;
   summary: string | null;
   topic?: string | null;
+  topicSlug?: string | null;
   bodySystem?: string | null;
   pathwayMeta?: { pathwayId: string; slug: string };
 };
@@ -377,6 +375,7 @@ export default async function LessonsPage({ searchParams }: Props) {
           title: r.title,
           summary: pathwayLessonCardSummary(r),
           topic: r.topic,
+          topicSlug: r.topicSlug,
           bodySystem: r.bodySystem,
           pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
         }));
@@ -652,38 +651,22 @@ export default async function LessonsPage({ searchParams }: Props) {
 
       {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
 
-      <Suspense
-        fallback={<div className="nn-skeleton-block nn-skeleton-block--toolbar w-full max-w-6xl" aria-hidden />}
-      >
-        <LearnerLessonsSearchToolbar initialQ={qEffective ?? ""} label="Search lessons" placeholder="Search by title, topic, or keyword" />
-      </Suspense>
-
-      {listSummaryLine ? (
-        <p className="text-sm font-medium text-[var(--semantic-text-secondary)]" data-testid="lessons-hub-list-summary">
-          {listSummaryLine}
-        </p>
-      ) : null}
-
-      <div className="nn-premium-lessons-app-list" data-nn-premium-lessons-hub-body="">
-        <LearnerLessonsVirtualList
-          lessons={resolvedRenderableLessons}
-          progressByRowId={progressByRowId}
-          openLessonCta={t("learner.lessons.list.openLessonCta")}
-        />
-      </div>
-
-      <PathwayLessonPagination
-        basePath="/app/lessons"
-        page={lessonsBlock.page}
-        pageCount={lessonsBlock.pageCount}
-        total={lessonsHub.catalogMatchTotal}
-        pageSize={limitParsed}
-        lessonsOnPage={resolvedRenderableLessons.length}
-        topic={topicFilter ?? undefined}
-        topicSlug={topicSlugFilter ?? undefined}
-        pathwayId={pathwayIdFilter ?? undefined}
-        limit={limitParsed}
-        q={qEffective ?? undefined}
+      <LearnerLessonsResponsiveResults
+        initialRows={resolvedRenderableLessons}
+        initialProgressByRowId={progressByRowId}
+        initialTotal={lessonsHub.catalogMatchTotal}
+        initialPage={lessonsBlock.page}
+        initialPageCount={lessonsBlock.pageCount}
+        initialPageSize={limitParsed}
+        initialFilters={{
+          q: qEffective ?? "",
+          topic: topicFilter,
+          topicSlug: topicSlugFilter,
+          pathwayId: pathwayIdFilter,
+        }}
+        openLessonCta={t("learner.lessons.list.openLessonCta")}
+        initialListSummaryLine={listSummaryLine}
+        clientFilteringEnabled={lessonsBlock.source === "pathway_lessons"}
       />
 
       {/* ECG authority links — surfaced for RN/NP tiers only.

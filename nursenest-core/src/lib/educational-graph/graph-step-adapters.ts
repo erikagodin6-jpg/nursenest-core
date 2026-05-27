@@ -1,10 +1,10 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type {
   CoachingRecommendation,
-  CoachingSessionKind,
   CompetencyGraphStep,
   RemediationStepKind,
 } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
+import type { CoachingSessionKind } from "@/lib/learner/rn-coaching-intelligence/remediation-planner-v3";
 import type { EduGraphStep, EduGraphStepKind, GraphSourceSurface } from "@/lib/educational-graph/graph-step-contract";
 import { normalizeGraphTopicSlug } from "@/lib/educational-graph/graph-href-builders";
 import type { RemediationLadderStep } from "@/lib/educational-graph/remediation-ladder-v2";

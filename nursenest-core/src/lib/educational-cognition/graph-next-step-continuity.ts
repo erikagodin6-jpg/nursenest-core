@@ -16,8 +16,8 @@ export function graphNextStepsFromSteps(steps: EduGraphStep[]): GraphNextStepPre
   return steps.map((s) => ({
     title: s.title,
     href: s.href,
-    kind: s.kind,
-    reason: s.reason,
+    kind: s.stepKind,
+    reason: s.learnerStateReason ?? undefined,
   }));
 }
 

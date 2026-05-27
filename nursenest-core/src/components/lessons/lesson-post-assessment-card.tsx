@@ -325,6 +325,7 @@ type PostPhase = "locked" | "idle" | "running" | "complete";
 export function LessonPostAssessmentCard({
   items,
   lessonComplete,
+  autoStart = false,
   preScore,
   priorPostScore,
   topic,
@@ -332,12 +333,15 @@ export function LessonPostAssessmentCard({
 }: {
   items: PathwayLessonQuizItem[];
   lessonComplete: boolean;
+  autoStart?: boolean;
   preScore: LessonAssessmentScore | null;
   priorPostScore: LessonAssessmentScore | null;
   topic: string;
   onScoreRecorded: (score: number, total: number) => void;
 }) {
-  const [phase, setPhase] = useState<PostPhase>(lessonComplete ? "idle" : "locked");
+  const [phase, setPhase] = useState<PostPhase>(
+    lessonComplete ? (autoStart ? "running" : "idle") : "locked",
+  );
   const [finalScore, setFinalScore] = useState<{ score: number; total: number } | null>(null);
   const [postTestMode, setPostTestMode] = useState<"practice" | "exam">("practice");
   const completionOnceRef = useRef(false);
@@ -348,9 +352,9 @@ export function LessonPostAssessmentCard({
       if (phase === "running" || phase === "complete") return phase;
       return "locked";
     }
-    if (phase === "locked") return "idle";
+    if (phase === "locked") return autoStart ? "running" : "idle";
     return phase;
-  }, [lessonComplete, phase]);
+  }, [autoStart, lessonComplete, phase]);
 
   if (!items.length) return null;
 

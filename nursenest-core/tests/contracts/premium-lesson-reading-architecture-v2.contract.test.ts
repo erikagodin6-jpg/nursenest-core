@@ -212,6 +212,21 @@ describe("premium lesson reading architecture v2", () => {
     assert.match(readingViewport, /LessonClinicalPearlsRail/);
     assert.match(readingViewport, /LessonReadingProgressStrip/);
     assert.match(readingViewport, /layout="rail"/);
+    assert.match(
+      learnerDetail,
+      /pathwayLessonPremiumSectionBodyText\(\s*clinicalPearlsSection/s,
+      "learner clinical pearls rail must use the rendered premium section body",
+    );
+    assert.doesNotMatch(
+      readingViewport,
+      /rnLayout && clinicalPearls\.length > 0/,
+      "clinical pearls rail must not be hidden behind RN-only layout checks",
+    );
+    assert.match(
+      readingViewport,
+      /clinicalPearls\.length > 0 \? \(\s*<LessonClinicalPearlsRail/s,
+      "clinical pearls rail should render whenever lesson data provides pearls",
+    );
     assert.match(sectionNav, /data-nn-premium-horizontal-lesson-nav/);
     assert.match(sectionNav, /nn-lesson-section-nav--horizontal/);
     assert.match(sectionNav, /nn-lesson-section-nav--rail/);

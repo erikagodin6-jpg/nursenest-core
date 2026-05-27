@@ -22,7 +22,7 @@ export function mergeCoachingPropsWithGraphLineage(
   if (!GRAPH_AUTHORITATIVE_EVENTS.has(event) || !lineage) return props;
   const merged = { ...props, ...graphLineageTelemetryProps(lineage) };
   merged.graph_authoritative = true;
-  return merged;
+  return merged as Record<string, string | number | boolean | null>;
 }
 
 export function isGraphAuthoritativeCoachingEvent(event: CoachingTelemetryEvent): boolean {

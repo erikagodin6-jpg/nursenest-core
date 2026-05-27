@@ -191,7 +191,7 @@ export function PracticeTestsHubClient({
   }, [catAvailableForPathway, catEligibleOptions, examMode, focusMode]);
 
   useEffect(() => {
-    if (!availableCounts.includes(questionCount as (typeof availableCounts)[number])) {
+    if (!(availableCounts as readonly number[]).includes(questionCount)) {
       setQuestionCount(availableCounts[0]);
     }
   }, [availableCounts, questionCount]);

@@ -202,12 +202,14 @@ type PreAssessmentPhase = "idle" | "running" | "complete" | "skipped";
 export function LessonPreAssessmentCard({
   items,
   priorScore,
+  autoStart = false,
   onScoreRecorded,
   onSkip,
   onDismiss,
 }: {
   items: PathwayLessonQuizItem[];
   priorScore: LessonAssessmentScore | null;
+  autoStart?: boolean;
   /**
    * Called once the quiz is complete. The parent is responsible for
    * calling POST /api/learner/lesson-assessment.
@@ -217,7 +219,9 @@ export function LessonPreAssessmentCard({
   /** Called when the learner skips or continues into the lesson body. */
   onDismiss?: () => void;
 }) {
-  const [phase, setPhase] = useState<PreAssessmentPhase>("idle");
+  const [phase, setPhase] = useState<PreAssessmentPhase>(
+    autoStart ? "running" : "idle",
+  );
   const [finalScore, setFinalScore] = useState<{ score: number; total: number } | null>(null);
   const completionOnceRef = useRef(false);
 

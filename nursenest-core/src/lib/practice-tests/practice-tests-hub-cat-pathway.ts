@@ -4,14 +4,7 @@ import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "
 export function practiceTestPathwayClientShellFromOption(
   option: PracticeTestPathwayOption,
 ): PracticeTestPathwayClientShell {
-  return {
-    id: option.id,
-    countrySlug: option.countrySlug,
-    roleTrack: option.roleTrack,
-    examCode: option.examCode,
-    shortName: option.shortName,
-    examFamily: option.examFamily,
-  };
+  return option as unknown as PracticeTestPathwayClientShell;
 }
 
 /** CAT dropdown options: only pathways that allow adaptive start. */

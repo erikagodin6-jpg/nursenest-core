@@ -35,6 +35,7 @@ export function GET() {
       priorMistakeCount: 1,
       confidence: "low",
       catDifficultyHint: 3,
+      topic: null,
     });
 
     const reviewDays = spacedReviewDays(3);

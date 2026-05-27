@@ -102,6 +102,7 @@ export async function captureGovernedGraphTelemetry(args: {
         learnerStateReason: args.learnerStateReason ?? null,
         remediationPriority: args.remediationPriority ?? 1,
         pathwayId: args.pathwayId ?? null,
+        graphDepth: args.graphDepth ?? 0,
       } satisfies GraphTelemetryPayload);
 
   const payload: GraphTelemetryPayload = {

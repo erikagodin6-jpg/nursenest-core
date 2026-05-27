@@ -117,7 +117,7 @@ export function emitCognitionTelemetryV5(
   const merged = filterCognitionTelemetryProps({
     ...lineage.props,
     ...mergeCoachingPropsWithGraphLineage(event, lineage.props, graphLineage),
-  });
+  } as Record<string, string | number | boolean | undefined>);
   recordCoachingTelemetry(event, merged);
 }
 

@@ -621,16 +621,22 @@ async function LessonDetailPageInner({ params }: Props) {
       examFamily: pathway?.examFamily ?? null,
       roleTrack: pathway?.roleTrack ?? null,
     });
-    const clinicalPearlsSection = retentionSections.find(
-      (section) => section.kind === "clinical_pearls",
-    );
-    const rnClinicalPearlLines = usesReadingV2Layout
-      ? extractClinicalPearlLines(
-          typeof clinicalPearlsSection?.body === "string"
-            ? clinicalPearlsSection.body
-            : "",
-        )
-      : [];
+    const clinicalPearlsSection =
+      retentionSections.find((section) => section.kind === "clinical_pearls") ??
+      displaySections.find((section) => section.kind === "clinical_pearls") ??
+      visible.find((section) => section.kind === "clinical_pearls");
+    const clinicalPearlsBody = clinicalPearlsSection
+      ? pathway != null
+        ? pathwayLessonPremiumSectionBodyText(
+            clinicalPearlsSection,
+            pathway.id,
+            pathway.countryCode,
+          )
+        : typeof clinicalPearlsSection.body === "string"
+          ? clinicalPearlsSection.body
+          : ""
+      : "";
+    const clinicalPearlLines = extractClinicalPearlLines(clinicalPearlsBody);
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
       let editorialRhythmCounter = 0;
@@ -1252,7 +1258,7 @@ async function LessonDetailPageInner({ params }: Props) {
             progress={initialProgress}
             progressVisible={Boolean(userId) && entitlement.hasAccess}
             layout={usesReadingV2Layout ? "rn-v2" : "default"}
-            clinicalPearls={rnClinicalPearlLines}
+            clinicalPearls={clinicalPearlLines}
           >
             <div
               className="nn-lesson-main min-w-0"

@@ -8,6 +8,7 @@ export type LearnerLessonVirtualRow = {
   title: string;
   summary: string | null;
   topic?: string | null;
+  topicSlug?: string | null;
   bodySystem?: string | null;
   pathwayMeta?: { pathwayId: string; slug: string };
 };
@@ -16,10 +17,18 @@ export function LearnerLessonsVirtualList({
   lessons,
   progressByRowId,
   openLessonCta,
+  activeTopic,
+  activeTopicSlug,
+  onTopicSelect,
+  onTopicPrefetch,
 }: {
   lessons: LearnerLessonVirtualRow[];
   progressByRowId: Record<string, PathwayLessonProgressStatus>;
   openLessonCta: string;
+  activeTopic?: string | null;
+  activeTopicSlug?: string | null;
+  onTopicSelect?: (topic: { topic: string; topicSlug?: string | null }) => void;
+  onTopicPrefetch?: (topic: { topic: string; topicSlug?: string | null }) => void;
 }) {
   if (lessons.length === 0) return null;
 
@@ -30,11 +39,35 @@ export function LearnerLessonsVirtualList({
     >
       <div className="grid gap-4 sm:gap-[1.125rem]">
         {lessons.map((lesson) => {
+          const topic = lesson.topic?.trim() || "";
+          const topicSlug = lesson.topicSlug?.trim() || "";
+          const topicActive =
+            (topicSlug && activeTopicSlug === topicSlug.toLowerCase()) ||
+            (!topicSlug && topic && activeTopic?.toLowerCase() === topic.toLowerCase());
           const chips =
-            lesson.topic?.trim() || lesson.bodySystem?.trim() ? (
+            topic || lesson.bodySystem?.trim() ? (
               <>
-                {lesson.topic?.trim() ? (
-                  <LessonCardChip variant="category">{lesson.topic.trim()}</LessonCardChip>
+                {topic ? (
+                  onTopicSelect ? (
+                    <button
+                      type="button"
+                      onClick={() => onTopicSelect({ topic, topicSlug: topicSlug || null })}
+                      onFocus={() => onTopicPrefetch?.({ topic, topicSlug: topicSlug || null })}
+                      onMouseEnter={() => onTopicPrefetch?.({ topic, topicSlug: topicSlug || null })}
+                      aria-pressed={topicActive}
+                      data-active={topicActive}
+                      className="max-w-full rounded-full text-left transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_30%,transparent)]"
+                    >
+                      <LessonCardChip
+                        variant="category"
+                        className={topicActive ? "ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_45%,transparent)]" : ""}
+                      >
+                        {topic}
+                      </LessonCardChip>
+                    </button>
+                  ) : (
+                    <LessonCardChip variant="category">{topic}</LessonCardChip>
+                  )
                 ) : null}
                 {lesson.bodySystem?.trim() ? (
                   <LessonCardChip variant="body">{lesson.bodySystem.trim()}</LessonCardChip>

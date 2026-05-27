@@ -300,7 +300,7 @@ export function LessonAssessmentFlow({
     : priorScores?.pre ?? null;
 
   return (
-    <div className="space-y-5">
+    <div className="nn-lesson-assessment-flow space-y-6">
       {/* ── Assessment toggle ────────────────────────────────────────────── */}
       {assessmentsEnabled ? (
         <AssessmentToggle
@@ -330,6 +330,7 @@ export function LessonAssessmentFlow({
           <LessonPreAssessmentCard
             items={preTest!}
             priorScore={priorScores?.pre ?? null}
+            autoStart
             onScoreRecorded={handlePreComplete}
             onSkip={() => setPreCleared(true)}
             onDismiss={() => setPreCleared(true)}
@@ -348,6 +349,7 @@ export function LessonAssessmentFlow({
           <LessonPostAssessmentCard
             items={postTest!}
             lessonComplete={lessonComplete}
+            autoStart
             preScore={effectivePreScore}
             priorPostScore={priorScores?.post ?? null}
             topic={topic}

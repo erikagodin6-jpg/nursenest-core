@@ -98,7 +98,7 @@ export function resolveLearnerCognitionSubstrate(
   });
 
   const dashboard = composeDashboardOrchestrationFromContext(ctx);
-  const aiTutor = buildAiTutorContextFromCognition(ctx, traversal.steps);
+  const aiTutor = buildAiTutorContextFromCognition(ctx, [...traversal.steps]);
   const timingSignals = deriveTimingCognitionSignals({ learnerState: ctx.learnerState });
 
   if (input.persistLearnerState && input.userId) {
@@ -109,7 +109,7 @@ export function resolveLearnerCognitionSubstrate(
       prior?.graphContinuity,
       buildGraphContinuityFromTraversal({
         topicSlug,
-        steps: traversal.steps,
+        steps: [...traversal.steps],
         ctx,
         prior: prior?.graphContinuity,
         dashboardPrimaryHref: dashCard?.href ?? null,
@@ -128,7 +128,7 @@ export function resolveLearnerCognitionSubstrate(
     ctx,
     studyPlan,
     dashboard,
-    graphSteps: traversal.steps,
+    graphSteps: [...traversal.steps],
     aiTutor,
     timingRiskBand: timingSignals.riskBand,
     studyPlanDensity: studyPlanDensityFromTiming(timingSignals),

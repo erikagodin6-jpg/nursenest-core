@@ -125,9 +125,9 @@ export function resolveEducationalCognitionFromSession(
   });
   const aiTutorEnvelope = buildAiTutorContextFromCognition(
     { ...base, learnerState: coachingReport.learnerState, coachingReport },
-    traversal.steps,
+    [...traversal.steps],
   );
-  const postMeasurementInput = resolveMeasurementCognitionInput({
+  const postMeasurementInput = governMeasurementCognitionInput({
     learnerState: coachingReport.learnerState,
   });
   const measurementSlice = buildMeasurementCognitionSlice(

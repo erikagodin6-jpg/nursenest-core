@@ -25,11 +25,11 @@ import {
 import { countRemediationExposures } from "@/lib/learner/rn-coaching-intelligence/remediation-exposure";
 import { recordCoachingTelemetry } from "@/lib/learner/rn-coaching-intelligence/coaching-telemetry";
 import type {
-  CoachingSessionKind,
   QuestionOutcome,
   ReadinessBand,
   RnCoachingIntelligenceReport,
 } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
+import type { CoachingSessionKind } from "@/lib/learner/rn-coaching-intelligence/remediation-planner-v3";
 
 export function getReadinessBandFromScore(score: number): ReadinessBand {
   if (score >= 75) return "exam_ready";

@@ -77,14 +77,14 @@ export async function generatePathwayCatalogSnapshot(
   return {
     pathway,
     generatedAt: new Date().toISOString(),
-    totalItems: categories.reduce((sum, cat) => sum + cat._count.lessons, 0),
-    categories: categories.map(cat => ({
+    totalItems: categories.reduce((sum: number, cat: { _count: { lessons: number } }) => sum + cat._count.lessons, 0),
+    categories: categories.map((cat: { id: string; name: string; slug: string; _count: { lessons: number } }) => ({
       id: cat.id,
       name: cat.name,
       slug: cat.slug,
       itemCount: cat._count.lessons
     })),
-    recentItems: recentItems.map(item => ({
+    recentItems: recentItems.map((item: { id: string; title: string; slug: string; category: { name: string }; difficulty: string | null; estimatedMinutes: number | null }) => ({
       id: item.id,
       title: item.title,
       slug: item.slug,

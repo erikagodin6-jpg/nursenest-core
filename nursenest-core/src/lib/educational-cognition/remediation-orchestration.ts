@@ -2,7 +2,8 @@
  * Remediation orchestration layer — graph-aware sequencing with fatigue governance.
  */
 import { planRemediationV3 } from "@/lib/learner/rn-coaching-intelligence/remediation-planner-v3";
-import type { CoachingRecommendation, CoachingSessionKind } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
+import type { CoachingRecommendation } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
+import type { CoachingSessionKind } from "@/lib/learner/rn-coaching-intelligence/remediation-planner-v3";
 import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intelligence/learner-state-types";
 import type {

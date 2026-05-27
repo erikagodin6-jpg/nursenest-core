@@ -22,7 +22,7 @@ export class LearnerSilentSectionBoundary extends Component<Props, { error: Erro
       surfaceName: this.props.name ?? "section",
       errorName: error.name,
       errorMessage: error.message,
-      componentStack: errorInfo.componentStack.slice(0, 240),
+      componentStack: (errorInfo.componentStack ?? "").slice(0, 240),
     });
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console
