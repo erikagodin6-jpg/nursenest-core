@@ -415,7 +415,7 @@ const LearnerShellLayout = traceLayout(
       ) : null}
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
-          <LearnerExamChromeGate hubLabel={sessionHubLabel}>
+          <LearnerExamChromeGate hubLabel={sessionHubLabel} hubHref={pathwayHubHref || "/app"}>
             <LearnerShellDevDiagnostics />
             <div
               className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"

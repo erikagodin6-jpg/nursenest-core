@@ -17,8 +17,8 @@ export async function learnerPathwayHubChromeHrefForTierFallback(tier: string): 
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const t = tier.toUpperCase();
   if (t === "RN") {
-    const p = getExamPathwayById("us-rn-nclex-rn");
-    return p ? learnerPathwayHubChromeHref(p) : "/us/rn/nclex-rn";
+    const p = getExamPathwayById("ca-rn-nclex-rn");
+    return p ? learnerPathwayHubChromeHref(p) : "/canada/rn/nclex-rn";
   }
   if (t === "RPN") {
     const p = getExamPathwayById("ca-rpn-rex-pn");

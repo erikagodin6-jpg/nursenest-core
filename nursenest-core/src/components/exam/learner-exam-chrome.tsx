@@ -14,9 +14,11 @@ import { learnerShellFlags } from "@/lib/learner/learner-shell-mode";
 export function LearnerExamChromeGate({
   children,
   hubLabel = "Hub",
+  hubHref = "/app",
 }: {
   children: React.ReactNode;
   hubLabel?: string;
+  hubHref?: string;
 }) {
   const pathname = usePathname() ?? "";
   const examFocus = useMemo(() => learnerShellFlags(pathname).suppressFullChrome, [pathname]);
@@ -41,7 +43,7 @@ export function LearnerExamChromeGate({
         data-nn-cat-minimal-brand-shell=""
       >
         <Link
-          href="/app"
+          href={hubHref}
           className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-bg-base)] px-3 py-1.5 text-[11px] font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_72%,var(--semantic-surface))]"
           aria-label={`Return to ${hubLabel}`}
         >

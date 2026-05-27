@@ -1829,6 +1829,13 @@ html[data-theme="ocean"] .nn-practice-tests-hub-premium .nn-lesson-system-card[d
   border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-panel-cool));
 }
 
+/* Practice Exam landing should match the flashcards hub: one clear Start CTA, no legacy setup grid. */
+.nn-practice-tests-hub-premium [data-nn-e2e-practice-exams-builder],
+.nn-practice-tests-hub-premium [data-nn-e2e-practice-setup-panel],
+.nn-practice-tests-hub-premium [data-nn-e2e-practice-sticky-cta] {
+  display: none !important;
+}
+
 /* Short hub action labels — compact copy, balanced tap targets */
 .nn-flashcards-hub-hero-action-row [data-nn-e2e-start-review],
 .nn-flashcards-resume-spotlight [data-nn-e2e-flashcards-resume-primary],
