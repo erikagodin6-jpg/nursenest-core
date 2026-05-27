@@ -509,7 +509,7 @@ export function ActiveStudySession({
           });
         }}
         labels={{
-          revealHint: "Select an answer, then submit to see the rationale.",
+          revealHint: undefined,
           answerHeading: t("flashcards.answer"),
           whyCorrectHeading: t("flashcards.rationale"),
           whyIncorrectHeading: t("pages.flashcards.whyOtherOptionsAreIncorrect"),
@@ -561,7 +561,7 @@ export function ActiveStudySession({
             </div>
           ) : null
         }
-        mainFooter={
+        mainFooter={revealed ? (
           <>
             <div className="nn-flashcard-study-support-strip" data-nn-flashcard-support-strip>
               <div>
@@ -646,7 +646,7 @@ export function ActiveStudySession({
               ))}
             </div>
           </>
-        }
+        ) : null}
       />
     </div>
   );

@@ -555,7 +555,7 @@ const LearnerShellLayout = traceLayout(
                 <main
                   id="nn-learner-main"
                   data-nn-learner-main=""
-                  className="min-w-0 outline-none"
+                  className="min-h-[40vh] min-w-0 outline-none"
                   tabIndex={-1}
                 >
                   {paywalledRouteBody}

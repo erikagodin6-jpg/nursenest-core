@@ -55,6 +55,11 @@ export function firstTeachingLine(text: string | null | undefined): string {
   return sentenceMatch?.[1]?.trim() ?? raw;
 }
 
+function correctAnswerSummary(exam: ExamMicroQuestionPayload): string {
+  const correctText = exam.answerOptions.find((option) => option.letter === exam.correctLetter)?.text.trim() ?? "";
+  return correctText ? `${exam.correctLetter}. ${correctText}` : exam.correctLetter;
+}
+
 type StackLabels = {
   revealHint?: string;
   answerHeading?: string;
@@ -129,17 +134,27 @@ export function FlashcardStudyQuestionStack({
   const [tabletRailOpen, setTabletRailOpen] = useState(false);
   // Tracks current SATA selections so the reveal button can report them before reveal fires.
   const sataSelectionsRef = useRef<string[]>([]);
+  const openedRationaleKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     setPickedLetter(null);
     setSubmittedLetter(null);
     setRationaleOpen(true);
     sataSelectionsRef.current = [];
+    openedRationaleKeyRef.current = null;
   }, [exam?.questionStem, sata?.questionStem, prompt]);
 
   useEffect(() => {
     if (revealed) setRationaleOpen(true);
   }, [revealed]);
+
+  useEffect(() => {
+    if (!revealed || !exam) return;
+    const key = exam.questionStem;
+    if (openedRationaleKeyRef.current === key) return;
+    openedRationaleKeyRef.current = key;
+    onRationaleOpened?.();
+  }, [exam, onRationaleOpened, revealed]);
 
   function commitPick(letter: string) {
     if (revealed || !exam || !tutorMcq) return;
@@ -216,11 +231,29 @@ export function FlashcardStudyQuestionStack({
                     pickedLetter={pickedLetter}
                     tutorMcq={tutorMcq}
                     answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
-                    revealHint={labels?.revealHint ?? "Select an answer, then submit to see the rationale."}
+                    revealHint={null}
                     onPickLetter={commitPick}
                     onSubmitAnswer={submitMcqAnswer}
                   />
                 </div>
+              ) : null}
+
+              {revealed && exam ? (
+                <section
+                  className="nn-flashcard-inline-rationale"
+                  aria-label={labels?.answerHeading ?? "Answer and rationale"}
+                  data-nn-premium-flashcard-reveal=""
+                >
+                  <div className="nn-flashcard-inline-rationale__answer">
+                    Correct Answer: {correctAnswerSummary(exam)}
+                  </div>
+                  <div>
+                    <h2>Rationale</h2>
+                    <div className="nn-flashcard-inline-rationale__body">
+                      <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
+                    </div>
+                  </div>
+                </section>
               ) : null}
 
               {sata ? (
@@ -281,7 +314,7 @@ export function FlashcardStudyQuestionStack({
                           : "Answer shown"}
                       </span>
                     </div>
-                    <p>Use the rationale panel to review the clinical reasoning.</p>
+                    <p>Review the rationale, then choose how this card should return.</p>
                   </div>
                   {onAdvance ? (
                     <button type="button" className="nn-flashcard-next-inline" onClick={onAdvance}>
@@ -293,7 +326,7 @@ export function FlashcardStudyQuestionStack({
               ) : null}
             </article>
 
-            {revealed ? (
+            {revealed && !exam ? (
               <aside
                 className="nn-flashcard-rationale-panel"
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}

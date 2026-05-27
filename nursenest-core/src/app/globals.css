@@ -2868,7 +2868,8 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   /* Page root (practice test run) → error boundary children → protected shell */

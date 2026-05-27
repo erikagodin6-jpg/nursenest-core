@@ -35,7 +35,7 @@ export function LearnerExamChromeGate({
   }
 
   return (
-    <div className="nn-learner-exam-focus-column flex min-h-0 flex-col h-[100dvh] max-h-[100dvh] overflow-hidden">
+    <div className="nn-learner-exam-focus-column flex min-h-[100dvh] flex-col">
       <div
         className="nn-exam-minimal-nav z-50 flex shrink-0 items-center gap-3 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm"
         data-nn-cat-minimal-brand-shell=""
@@ -51,7 +51,7 @@ export function LearnerExamChromeGate({
           Focused study mode — distractions reduced
         </span>
       </div>
-      <div className="nn-learner-exam-focus-body min-h-0 flex flex-1 flex-col overflow-hidden">
+      <div className="nn-learner-exam-focus-body min-h-0 flex flex-1 flex-col">
         {children}
       </div>
     </div>

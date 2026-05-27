@@ -22,16 +22,17 @@ export function flashcardExamMcqOptionClass(args: McqVisualStateArgs): string {
 
     if (selected) {
       return `${ROW_BASE}
-        border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))]
-        bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))]
-        shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_18%,transparent)]`;
+        border-[color-mix(in_srgb,#E88CAB_48%,var(--semantic-border-soft))]
+        bg-[color-mix(in_srgb,#E88CAB_12%,var(--semantic-surface))]
+        shadow-[inset_0_0_0_1px_color-mix(in_srgb,#E88CAB_22%,transparent)]`;
     }
 
     if (interactive) {
       return `${ROW_BASE}
         border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))]
         bg-[var(--semantic-surface)]
-        hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_45%,var(--semantic-surface))]
+        hover:border-[color-mix(in_srgb,#E88CAB_34%,var(--semantic-border-soft))]
+        hover:bg-[color-mix(in_srgb,#E88CAB_7%,var(--semantic-surface))]
         cursor-pointer`;
     }
 
@@ -71,8 +72,8 @@ export function optionLetterCircleClass(args: McqVisualStateArgs): string {
 
     if (selected) {
       return `${LETTER_BASE}
-        border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))]
-        bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))]
+        border-[color-mix(in_srgb,#E88CAB_52%,var(--semantic-border-soft))]
+        bg-[color-mix(in_srgb,#E88CAB_18%,var(--semantic-surface))]
         text-[var(--semantic-text-primary)]`;
     }
 

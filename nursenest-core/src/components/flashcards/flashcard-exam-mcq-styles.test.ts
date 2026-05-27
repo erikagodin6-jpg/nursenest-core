@@ -35,7 +35,7 @@ describe("flashcardExamMcqOptionClass", () => {
     assert.ok(!c.includes("semantic-success") && !c.includes("semantic-danger"));
   });
 
-  it("selected-before-reveal uses brand tint, not success/danger", () => {
+  it("selected-before-reveal uses study accent tint, not success/danger", () => {
     const c = flashcardExamMcqOptionClass({
       letter: "C",
       exam,
@@ -43,7 +43,7 @@ describe("flashcardExamMcqOptionClass", () => {
       pickedLetter: "C",
       interactive: true,
     });
-    assert.match(c, /semantic-brand/);
+    assert.match(c, /#E88CAB/);
     assert.ok(!c.includes("semantic-success") && !c.includes("semantic-danger"));
   });
 
@@ -71,7 +71,7 @@ describe("flashcardExamMcqOptionClass", () => {
 });
 
 describe("optionLetterCircleClass", () => {
-  it("stays aligned with row: selected-before-reveal uses brand", () => {
+  it("stays aligned with row: selected-before-reveal uses study accent", () => {
     const c = optionLetterCircleClass({
       letter: "D",
       exam,
@@ -79,6 +79,6 @@ describe("optionLetterCircleClass", () => {
       pickedLetter: "D",
       interactive: true,
     });
-    assert.match(c, /semantic-brand/);
+    assert.match(c, /#E88CAB/);
   });
 });

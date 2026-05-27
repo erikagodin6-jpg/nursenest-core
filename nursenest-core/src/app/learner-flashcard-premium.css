@@ -3033,3 +3033,163 @@ html[data-theme="midnight-indigo"] .nn-flashcard-study-premium {
     padding-block: 0.5rem !important;
   }
 }
+
+/* NCLEX flashcard study refinement: bank-style MCQ, quieter chrome, focused white card. */
+.nn-flashcard-study-canvas,
+.nn-flashcard-study-premium {
+  --nn-flashcard-accent: #E88CAB;
+}
+
+.nn-flashcard-study-canvas {
+  background:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--nn-flashcard-accent) 10%, transparent), transparent 26rem),
+    color-mix(in srgb, #f8fafc 86%, var(--semantic-background));
+}
+
+html[data-theme="midnight"] .nn-flashcard-study-canvas,
+html[data-theme="midnight-indigo"] .nn-flashcard-study-canvas,
+html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
+  background:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--nn-flashcard-accent) 12%, transparent), transparent 26rem),
+    var(--semantic-background);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+  min-height: 4.25rem;
+  max-height: 5rem;
+  border-radius: 1.15rem;
+  padding: 0.75rem 1rem;
+}
+
+.nn-flashcard-learning-topbar h1 {
+  max-width: 22rem;
+  font-size: clamp(1.35rem, 1.8vw, 2rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.05;
+}
+
+.nn-flashcard-learning-topbar__mode {
+  color: color-mix(in srgb, var(--nn-flashcard-accent) 72%, var(--semantic-text-primary)) !important;
+}
+
+.nn-flashcard-learning-topbar__meta {
+  gap: 0.7rem;
+}
+
+.nn-flashcard-learning-topbar__meta > div {
+  min-width: 5rem;
+  padding-left: 0.75rem;
+}
+
+.nn-flashcard-learning-topbar__meta span {
+  font-size: 0.72rem;
+}
+
+.nn-flashcard-learning-topbar__meta strong {
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
+  grid-template-columns: minmax(0, min(100%, 850px));
+  justify-content: center;
+  background: transparent;
+  padding: clamp(0.65rem, 1.8vw, 1.25rem);
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--semantic-surface) 98%, white 2%);
+  padding: clamp(1.35rem, 2.6vw, 2rem);
+  box-shadow: 0 24px 70px -54px color-mix(in srgb, var(--semantic-text-primary) 42%, transparent);
+}
+
+.nn-flashcard-hero-stem {
+  max-width: 48rem;
+  font-size: clamp(1.5rem, 2.2vw, 2rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.22 !important;
+}
+
+.nn-flashcard-chip--mode,
+.nn-flashcard-chip--topic,
+.nn-flashcard-chip--kind,
+.nn-flashcard-question-label {
+  border-color: color-mix(in srgb, var(--nn-flashcard-accent) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-flashcard-accent) 12%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--nn-flashcard-accent) 68%, var(--semantic-text-primary));
+}
+
+.nn-flashcard-exam-mcq-premium {
+  margin-top: 1.15rem !important;
+}
+
+.nn-flashcard-exam-mcq-premium ul {
+  gap: 0.65rem;
+}
+
+.nn-flashcard-exam-mcq-premium button,
+.nn-flashcard-exam-mcq-premium li > div {
+  min-height: 3.35rem;
+  border-radius: 0.95rem !important;
+  padding: 0.78rem 0.95rem !important;
+  font-size: 0.96rem !important;
+}
+
+.nn-flashcard-submit-answer {
+  min-height: 2.75rem;
+  border-color: color-mix(in srgb, var(--nn-flashcard-accent) 58%, var(--semantic-border-soft));
+  background: var(--nn-flashcard-accent);
+  font-weight: 700;
+}
+
+.nn-flashcard-inline-rationale {
+  margin-top: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface));
+  padding: 1rem;
+  animation: nn-flashcard-rationale-in 150ms ease-out both;
+}
+
+.nn-flashcard-inline-rationale__answer {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-success) 13%, var(--semantic-surface));
+  padding: 0.35rem 0.7rem;
+  color: var(--semantic-success);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.nn-flashcard-inline-rationale h2 {
+  margin: 0.85rem 0 0.35rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.nn-flashcard-inline-rationale__body {
+  color: var(--semantic-text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.nn-flashcard-answer-status {
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 720px) {
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+    max-height: none;
+  }
+
+  .nn-flashcard-learning-topbar h1 {
+    font-size: 1.45rem !important;
+  }
+
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
+    padding-inline: 0.25rem;
+  }
+}

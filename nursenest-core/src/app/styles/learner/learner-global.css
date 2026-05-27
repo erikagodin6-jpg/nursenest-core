@@ -182,7 +182,8 @@ html[data-learner-exam-chrome="hidden"] body {
 html[data-learner-exam-chrome="hidden"] .nn-learner-app main,
 .nn-learner-app[data-learner-exam-chrome="hidden"] main {
   min-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 /* Practice session: safe-area-aware bottom padding so answer choices stay clear of mobile chrome. */
 html[data-learner-exam-chrome="hidden"] .nn-practice-session {

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
@@ -19,6 +20,7 @@ import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-ques
 import { FlashcardSrsStatsStrip } from "@/components/flashcards/flashcard-srs-stats-strip";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 type CardPayload = {
   id: string;
@@ -52,7 +54,9 @@ function hasUsableExamQuestion(card: CardPayload): boolean {
   return Boolean(
     exam?.questionStem?.trim() &&
       Array.isArray(exam.answerOptions) &&
-      exam.answerOptions.length >= 3,
+      exam.answerOptions.length === 4 &&
+      !isSataPayload(exam) &&
+      !isPlaceholderFlashcardStem(exam.questionStem),
   );
 }
 
@@ -64,6 +68,36 @@ function isRnStudyCard(card: CardPayload, deckRef: string): boolean {
   const pathway = card.pathwayId?.toLowerCase() ?? "";
   const ref = deckRef.toLowerCase();
   return pathway.includes("rn") || pathway.includes("nclex") || ref.includes("rn") || ref.includes("nclex");
+}
+
+function isClinicalExamPathway(card: CardPayload, deckRef: string): boolean {
+  const pathway = card.pathwayId?.toLowerCase() ?? "";
+  const ref = deckRef.toLowerCase();
+  return /\b(rn|rpn|lpn|pn|np)\b/.test(`${pathway} ${ref}`) ||
+    pathway.includes("nclex") ||
+    pathway.includes("rex-pn") ||
+    pathway.includes("cnple") ||
+    ref.includes("nclex") ||
+    ref.includes("rex-pn") ||
+    ref.includes("cnple");
+}
+
+function isPlaceholderFlashcardStem(stem: string | null | undefined): boolean {
+  const normalized = String(stem ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+  return (
+    normalized.length < 20 ||
+    normalized.includes("which finding or action best reflects the clinical principle being reviewed") ||
+    /\b([a-z]+)\s*-\s*\1\b/.test(normalized)
+  );
+}
+
+function resolveProgramHub(cards: readonly CardPayload[], deckRef: string): { label: string; href: string } {
+  const raw = `${cards.find((card) => card.pathwayId)?.pathwayId ?? ""} ${deckRef}`.toLowerCase();
+  if (raw.includes("np") || raw.includes("cnple")) return { label: "NP", href: "/canada/np/cnple" };
+  if (raw.includes("pn") || raw.includes("rpn") || raw.includes("lpn") || raw.includes("rex-pn")) {
+    return { label: "PN", href: "/canada/pn/nclex-pn" };
+  }
+  return { label: "RN", href: "/canada/rn/nclex-rn" };
 }
 
 export function FlashcardStudyClient({
@@ -79,6 +113,7 @@ export function FlashcardStudyClient({
   studyMode?: "learn" | "test";
 }) {
   const { t } = useMarketingI18n();
+  const router = useRouter();
 
   const [title, setTitle] = useState("");
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
@@ -120,7 +155,7 @@ export function FlashcardStudyClient({
             )
           : [];
         const cards = cardsRaw.filter((card) => {
-          if (isRnStudyCard(card, deckRef)) return hasUsableExamQuestion(card);
+          if (isClinicalExamPathway(card, deckRef) || isRnStudyCard(card, deckRef)) return hasUsableExamQuestion(card);
           return !isExamBackedCard(card) || hasUsableExamQuestion(card);
         });
 
@@ -187,6 +222,7 @@ export function FlashcardStudyClient({
       }),
     [queue],
   );
+  const programHub = useMemo(() => resolveProgramHub(queue, deckRef), [deckRef, queue]);
 
   if (loading) {
     return (
@@ -275,12 +311,13 @@ export function FlashcardStudyClient({
     <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6">
       {/* header */}
       <div className="nn-flashcard-study-breadcrumb-row mb-5 flex flex-wrap items-center justify-between gap-3">
-        <Link
-          href="/app/flashcards"
+        <button
+          type="button"
+          onClick={() => router.push(programHub.href)}
           className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
         >
-          ← {t("learner.flashcards.hub.title")}
-        </Link>
+          ← Back to {programHub.label} Hub
+        </button>
 
         <div className="flex flex-wrap items-center gap-3">
           <FlashcardSrsStatsStrip className="hidden sm:flex" />
@@ -302,7 +339,7 @@ export function FlashcardStudyClient({
             sessionTitle: title || "Flashcards",
             modeLabel: studyMode === "test" ? "Test" : "Learn",
             categoriesLabel: "",
-            exitHref: "/app/flashcards",
+            exitHref: programHub.href,
           } satisfies ActiveStudyHeader}
           layout="split"
           sessionMode={studyMode}
