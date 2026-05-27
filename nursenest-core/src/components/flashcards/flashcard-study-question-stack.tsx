@@ -238,24 +238,6 @@ export function FlashcardStudyQuestionStack({
                 </div>
               ) : null}
 
-              {revealed && exam ? (
-                <section
-                  className="nn-flashcard-inline-rationale"
-                  aria-label={labels?.answerHeading ?? "Answer and rationale"}
-                  data-nn-premium-flashcard-reveal=""
-                >
-                  <div className="nn-flashcard-inline-rationale__answer">
-                    Correct Answer: {correctAnswerSummary(exam)}
-                  </div>
-                  <div>
-                    <h2>Rationale</h2>
-                    <div className="nn-flashcard-inline-rationale__body">
-                      <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
-                    </div>
-                  </div>
-                </section>
-              ) : null}
-
               {sata ? (
                 <div className="relative z-[1] mt-6" {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}>
                   <FlashcardSataAnswerList
@@ -319,6 +301,34 @@ export function FlashcardStudyQuestionStack({
                 </div>
               ) : null}
             </article>
+
+            {revealed && exam ? (
+              <aside
+                className="nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq"
+                aria-label={labels?.answerHeading ?? "Answer and rationale"}
+                data-nn-premium-flashcard-reveal=""
+              >
+                <div className="nn-flashcard-rationale-panel__header">
+                  <div>
+                    <Lightbulb className="h-4 w-4" aria-hidden />
+                    <span>Rationale</span>
+                  </div>
+                </div>
+                <div className="nn-flashcard-rationale-panel__body">
+                  <div className="nn-flashcard-inline-rationale__answer">
+                    Correct Answer: {correctAnswerSummary(exam)}
+                  </div>
+                  <div className="nn-flashcard-inline-rationale__body mt-3">
+                    <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
+                  </div>
+                  {revealLinksSection ? (
+                    <div className="mt-3" data-testid="flashcard-reveal-links">
+                      {revealLinksSection}
+                    </div>
+                  ) : null}
+                </div>
+              </aside>
+            ) : null}
 
             {revealed && !exam && !sata ? (
               <aside
