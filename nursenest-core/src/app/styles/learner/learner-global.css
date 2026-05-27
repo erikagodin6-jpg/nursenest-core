@@ -193,6 +193,26 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
   padding-bottom: max(0.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));
 }
 /*
+ * Flashcard study sessions need natural page scroll — NOT the locked-viewport that exams use.
+ * :has([data-nn-flashcard-study-session]) targets only flashcard session routes and undoes the
+ * height:100dvh + overflow:hidden chain without touching the practice/CAT exam paths.
+ */
+html:has([data-nn-flashcard-study-session]) body {
+  overflow: auto !important;
+}
+html:has([data-nn-flashcard-study-session]) .nn-learner-app,
+html:has([data-nn-flashcard-study-session]) .nn-learner-app[data-learner-exam-chrome="hidden"] {
+  height: auto !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+}
+html:has([data-nn-flashcard-study-session]) .nn-learner-app main,
+html:has([data-nn-flashcard-study-session]) .nn-learner-app[data-learner-exam-chrome="hidden"] main {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  min-height: 0 !important;
+}
+/*
  * Study flow cards (pathway hubs, lessons, bank panels): one radius + shadow recipe.
  * Prefer over ad-hoc `border-2 shadow-sm` stacks.
  * Soft clinical: theme-tinted border, calm shadow — premium without harsh contrast.

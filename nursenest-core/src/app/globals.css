@@ -2921,6 +2921,30 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
 }
 
+/* Flashcard sessions: undo the locked-viewport flex cascade for lg+ viewports. */
+@media (min-width: 1024px) {
+  html:has([data-nn-flashcard-study-session]) .nn-learner-exam-focus-body .nn-learner-app,
+  html:has([data-nn-flashcard-study-session]) .nn-learner-exam-focus-body .nn-learner-app[data-learner-exam-chrome="hidden"] {
+    flex: 0 0 auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+  html:has([data-nn-flashcard-study-session]) .nn-learner-app > main#nn-learner-main,
+  html:has([data-nn-flashcard-study-session]) .nn-learner-app[data-learner-exam-chrome="hidden"] > main#nn-learner-main {
+    flex: initial !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+  html:has([data-nn-flashcard-study-session]) main#nn-learner-main > div:first-child {
+    flex: initial !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+}
+
 /* Lesson hub rows: white card with subtle primary-hued border */
 .nn-lesson-list-card {
   border-color: color-mix(
