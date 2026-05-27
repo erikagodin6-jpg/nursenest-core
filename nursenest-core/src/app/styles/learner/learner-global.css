@@ -170,15 +170,26 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim,
 /* Live practice-test session: strip default learner shell rhythm so CAT/exam fits the viewport. */
 html[data-learner-exam-chrome="hidden"] .nn-learner-app,
 .nn-learner-app[data-learner-exam-chrome="hidden"] {
-  padding-top: max(0.35rem, env(safe-area-inset-top, 0px));
-  padding-bottom: max(0.35rem, calc(0.35rem + env(safe-area-inset-bottom, 0px)));
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  padding-top: max(0.15rem, env(safe-area-inset-top, 0px));
+  padding-bottom: max(0.15rem, calc(0.15rem + env(safe-area-inset-bottom, 0px)));
+}
+html[data-learner-exam-chrome="hidden"] body {
+  overflow: hidden;
+}
+html[data-learner-exam-chrome="hidden"] .nn-learner-app main,
+.nn-learner-app[data-learner-exam-chrome="hidden"] main {
+  min-height: 0;
+  overflow: hidden;
 }
 /* Practice session: safe-area-aware bottom padding so answer choices stay clear of mobile chrome. */
 html[data-learner-exam-chrome="hidden"] .nn-practice-session {
-  padding-bottom: max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)));
+  padding-bottom: max(0.35rem, calc(0.35rem + env(safe-area-inset-bottom, 0px)));
 }
 html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
-  padding-bottom: max(1.75rem, calc(1.75rem + env(safe-area-inset-bottom, 0px)));
+  padding-bottom: max(0.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));
 }
 /*
  * Study flow cards (pathway hubs, lessons, bank panels): one radius + shadow recipe.
@@ -2198,6 +2209,180 @@ html[data-learner-exam-chrome="hidden"] .nn-practice-session-grid {
 .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
   line-height: 1.62;
   letter-spacing: -0.012em;
+}
+
+/* Viewport-first exam shell: one fixed-height app frame, one scrolling question body, sticky actions. */
+html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-chrome) {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - max(0.3rem, env(safe-area-inset-top, 0px)) - max(0.3rem, env(safe-area-inset-bottom, 0px)));
+  max-height: calc(100dvh - max(0.3rem, env(safe-area-inset-top, 0px)) - max(0.3rem, env(safe-area-inset-bottom, 0px)));
+  max-width: none;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 0.5rem max(0.25rem, env(safe-area-inset-bottom, 0px));
+}
+html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-chrome) > * {
+  min-height: 0;
+}
+.nn-cat-exam-chrome {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+.nn-cat-exam-board-top,
+.nn-practice-exam-progress {
+  flex-shrink: 0;
+}
+.nn-cat-exam-board-top {
+  min-height: 2.75rem;
+  max-height: 3.15rem;
+  overflow: hidden;
+}
+.nn-cat-exam-board-top > div,
+.nn-practice-exam-progress > div:first-child {
+  gap: 0.45rem;
+}
+.nn-cat-exam-board-frame,
+.nn-cat-session,
+.nn-cat-exam-content-well,
+.nn-question-session {
+  min-height: 0;
+}
+.nn-cat-exam-board-frame {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+.nn-cat-exam-content-well {
+  overflow: hidden;
+}
+.nn-cat-question-card--exam-detached {
+  min-height: 0;
+}
+.nn-cat-question-card__exam-scroll--detached {
+  scroll-padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+.nn-cat-question-card__exam-scroll--partitioned {
+  display: block;
+}
+.nn-cat-question-card__exam-scroll--partitioned .nn-cat-exam-stem-scroll {
+  max-height: none;
+  overflow: visible;
+}
+.nn-cat-exam-board-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  flex-shrink: 0;
+}
+.nn-cat-exam-board-footer > div {
+  min-height: 3.125rem;
+}
+.nn-cat-exam-board-footer button {
+  min-height: 2.375rem;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+}
+.nn-practice-exam-split--premium .nn-practice-exam-split__primary {
+  min-height: 0;
+}
+
+@media (min-width: 768px) and (max-height: 900px) {
+  html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-exam-chrome) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .nn-cat-exam-board-top,
+  .nn-cat-exam-board-top--adaptive {
+    min-height: 2.55rem !important;
+    max-height: 2.9rem;
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+  }
+
+  .nn-cat-exam-board-top .nn-exam-timer-readout,
+  .nn-practice-exam-progress .nn-exam-timer-readout {
+    padding-top: 0.1rem !important;
+    padding-bottom: 0.1rem !important;
+  }
+
+  .nn-cat-exam-board-top .nn-marketing-caption,
+  .nn-practice-exam-progress .nn-marketing-caption {
+    font-size: 0.62rem;
+    line-height: 1;
+  }
+
+  .nn-cat-exam-board-top > div {
+    flex-wrap: nowrap;
+  }
+
+  .nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive,
+  .nn-practice-exam-progress {
+    padding-top: 0.18rem !important;
+    padding-bottom: 0.18rem !important;
+  }
+
+  .nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive > div:first-child,
+  .nn-practice-exam-progress .nn-practice-exam-progress__track {
+    margin-bottom: 0.08rem;
+    margin-top: 0.08rem;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-exam-col {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .nn-cat-question-card.nn-cat-question-card--exam-stack {
+    padding: 0.4rem 0.5rem 0;
+  }
+
+  .nn-cat-question-card--exam-stack .nn-cat-exam-item-head {
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .nn-cat-question-card--exam-stack .nn-cat-question-stem,
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+    margin-bottom: 0.35rem;
+    line-height: 1.45;
+  }
+
+  .nn-cat-exam-post-stem {
+    padding-top: 0.5rem !important;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+  .nn-cat-question-card--exam-stack .nn-cat-opt-list {
+    gap: 0.38rem;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+  .nn-cat-question-card--exam-stack .nn-cat-opt {
+    min-height: 2.35rem;
+    padding: 0.42rem 0.6rem;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt__text,
+  .nn-cat-question-card--exam-stack .nn-cat-opt__text {
+    font-size: 0.9rem;
+    line-height: 1.36;
+  }
+
+  .nn-cat-exam-board-footer > div {
+    min-height: 2.85rem;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .nn-cat-exam-board-footer button {
+    min-height: 2.2rem !important;
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
 }
 .nn-cat-question-card {
   border-radius: 1.25rem;

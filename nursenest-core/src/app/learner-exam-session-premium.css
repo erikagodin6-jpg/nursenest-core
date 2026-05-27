@@ -79,7 +79,7 @@ html[data-theme="deep-twilight"] .nn-exam-session-premium.nn-learner-exam-shell[
 }
 
 .nn-practice-exam-split--premium .nn-practice-exam-split__primary {
-  min-height: min(70dvh, 44rem);
+  min-height: 0;
 }
 
 /* ── Practice progress header ─────────────────────────────────────────────── */
@@ -1062,7 +1062,8 @@ html[data-theme="midnight"] .nn-exam-session-premium.nn-learner-exam-shell[data-
 /* ── Top bar: premium depth (exam-chrome context only) ── */
 .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top,
 .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top--adaptive {
-  min-height: 52px;
+  min-height: 44px;
+  max-height: 50px;
   background: var(--semantic-surface);
   border-bottom-color: var(--semantic-border-soft);
   box-shadow:

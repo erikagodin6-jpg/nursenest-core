@@ -175,13 +175,13 @@ export function QuestionCard({
         <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]">
           <div
             id="nn-cat-exam-scroll-region"
-            className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-5 pb-5 pt-5 sm:px-8 sm:pb-6 sm:pt-6"
+            className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4"
           >
             {meta}
-            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 shrink-0 overflow-y-auto overflow-x-hidden overscroll-y-contain">
+            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 shrink-0 overflow-visible">
               {stemBlock}
             </div>
-            <div className="nn-cat-exam-post-stem shrink-0 pt-5 sm:pt-6">{children}</div>
+            <div className="nn-cat-exam-post-stem shrink-0 pt-3 sm:pt-4">{children}</div>
           </div>
         </div>
       );
@@ -190,11 +190,11 @@ export function QuestionCard({
       <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]">
         <div
           id="nn-cat-exam-scroll-region"
-          className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-6 pb-8 pt-6 sm:px-8 sm:pb-10 sm:pt-7"
+          className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-5 pt-3 sm:px-5 sm:pb-6 sm:pt-4"
         >
           {meta}
           {stemBlock}
-          <div className="mt-6">{children}</div>
+          <div className="mt-4">{children}</div>
         </div>
       </div>
     );
@@ -205,7 +205,7 @@ export function QuestionCard({
       <div className="nn-cat-question-card nn-cat-question-card--exam-stack flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]">
         <div
           id="nn-cat-exam-scroll-region"
-          className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-5 py-5 sm:px-6 sm:py-6"
+          className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 sm:px-5 sm:py-5"
           style={{
             ...(examFooterMeasured && examScrollPadBottomPx > 0
               ? { paddingBottom: `${examScrollPadBottomPx}px` }
@@ -214,7 +214,7 @@ export function QuestionCard({
         >
           {meta}
           {stemBlock}
-          <div className="mt-6">{children}</div>
+          <div className="mt-4">{children}</div>
         </div>
         <div
           ref={footerRef}
