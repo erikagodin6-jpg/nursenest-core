@@ -385,7 +385,7 @@ export function setupQBankRoutes(app: Express) {
         return res.status(400).json({ error: "questionId and selectedOption required" });
       }
 
-      let query = `SELECT id, tier, stem, options, correct_answer, rationale, body_system, correct_answer_explanation, distractor_rationales, clinical_pearl FROM exam_questions WHERE id = $1 AND status = 'published'`;
+      let query = `SELECT id, tier, stem, options, correct_answer, rationale, body_system, correct_answer_explanation, distractor_rationales, clinical_pearl, exam_strategy, memory_hook, clinical_trap, hints FROM exam_questions WHERE id = $1 AND status = 'published'`;
       const params: any[] = [questionId];
       let paramIdx = 2;
 
@@ -454,6 +454,11 @@ export function setupQBankRoutes(app: Express) {
         try { parsedDistractorRationales = JSON.parse(parsedDistractorRationales); } catch { parsedDistractorRationales = null; }
       }
 
+      let parsedHints = question.hints;
+      if (typeof parsedHints === "string") {
+        try { parsedHints = JSON.parse(parsedHints); } catch { parsedHints = null; }
+      }
+
       res.json({
         correct: isCorrect,
         correctAnswer,
@@ -461,6 +466,10 @@ export function setupQBankRoutes(app: Express) {
         correctAnswerExplanation: question.correct_answer_explanation || null,
         distractorRationales: parsedDistractorRationales || null,
         clinicalPearl: question.clinical_pearl || null,
+        examStrategy: question.exam_strategy || null,
+        memoryHook: question.memory_hook || null,
+        clinicalTrap: question.clinical_trap || null,
+        hints: parsedHints || null,
         bodySystem: question.body_system,
       });
     } catch (e: any) {
@@ -599,10 +608,12 @@ export function setupQBankRoutes(app: Express) {
       const difficultyFilter = req.query.difficulty as string;
       const topicFilter = req.query.topic as string;
       const regionFilter = req.query.region as string;
-      const includeRationale = userTier === "admin";
+      // Practice mode reveals answers immediately after selection; exam mode hides until submission.
+      const isPracticeMode = mode === "practice";
+      const includeRationale = userTier === "admin" || isPracticeMode;
 
-      const rationaleColumns = includeRationale ? ", rationale, correct_answer_explanation, distractor_rationales" : "";
-      let query = `SELECT id, tier, exam, question_type, stem, options, correct_answer${rationaleColumns}, body_system, topic, subtopic, difficulty, region_scope, scenario, clinical_pearl, exam_strategy, memory_hook, framework_used, clinical_trap
+      const rationaleColumns = includeRationale ? ", rationale, correct_answer_explanation, distractor_rationales, hints" : "";
+      let query = `SELECT id, tier, exam, question_type, stem, options, correct_answer${rationaleColumns}, body_system, topic, subtopic, difficulty, region_scope, scenario, clinical_pearl, exam_strategy, memory_hook, framework_used, clinical_trap, hints
                    FROM exam_questions
                    WHERE tier = $1 AND status = 'published'`;
       const params: any[] = [queryTier];
@@ -745,20 +756,26 @@ export function setupQBankRoutes(app: Express) {
             regionScope: row.region_scope,
           };
 
-          if (includeRationale || userTier === "admin") {
+          // Always include educational fields when rationale is permitted (practice mode or admin)
+          if (includeRationale) {
             base.correctAnswer = parsedCorrect;
+            base.rationale = row.rationale;
+            base.correctAnswerExplanation = row.correct_answer_explanation || null;
+            base.distractorRationales = parsedDistractorRationales;
             base.scenario = row.scenario;
             base.clinicalPearl = row.clinical_pearl;
             base.examStrategy = row.exam_strategy;
             base.memoryHook = row.memory_hook;
             base.frameworkUsed = row.framework_used;
             base.clinicalTrap = row.clinical_trap;
-          }
-
-          if (includeRationale) {
-            base.rationale = row.rationale;
-            base.correctAnswerExplanation = row.correct_answer_explanation || null;
-            base.distractorRationales = parsedDistractorRationales;
+            // Deliver progressive hints only in practice/tutor mode (not exam mode)
+            if (isPracticeMode || userTier === "admin") {
+              let parsedHints = row.hints;
+              if (typeof parsedHints === "string") {
+                try { parsedHints = JSON.parse(parsedHints); } catch { parsedHints = null; }
+              }
+              base.hints = parsedHints || null;
+            }
           }
 
           return base;

@@ -60,6 +60,7 @@ import {
   resolvePracticeQuestionLayoutMode,
   type PracticeQuestionType,
 } from "@/lib/practice-tests/practice-question-rendering-engine";
+import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import {
   PracticeTestBowtieChoicesInstruction,
@@ -329,6 +330,20 @@ export function PracticeTestRunnerClient({
   const [saving, setSaving] = useState(false);
 
   const activePathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? initialPathwaySurface?.id ?? null;
+  const activePathwayDefinition = activePathwayId ? getExamPathwayById(activePathwayId) : undefined;
+  const tierPedagogyProfile = useMemo(
+    () =>
+      resolveTierPedagogyProfile({
+        roleTrack: pathwaySurface?.roleTrack ?? initialPathwaySurface?.roleTrack ?? activePathwayDefinition?.roleTrack,
+        stripeTier: activePathwayDefinition?.stripeTier,
+      }),
+    [
+      activePathwayDefinition?.roleTrack,
+      activePathwayDefinition?.stripeTier,
+      initialPathwaySurface?.roleTrack,
+      pathwaySurface?.roleTrack,
+    ],
+  );
   const pathwayCountryByPathwayId = useMemo(() => {
     const map: Record<string, string> = {};
     for (const surf of [pathwaySurface, initialPathwaySurface]) {
@@ -2609,6 +2624,7 @@ export function PracticeTestRunnerClient({
       >
         <PracticeSessionLayout
           className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          data-nn-pedagogy-tier={tierPedagogyProfile.tier}
           data-nn-practice-question-layout={practiceQuestionLayoutMode}
           data-nn-practice-question-type={practiceQuestionType}
           {...(isExamStyle
@@ -3267,6 +3283,7 @@ export function PracticeTestRunnerClient({
       >
         <PracticeSessionLayout
           className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          data-nn-pedagogy-tier={tierPedagogyProfile.tier}
           data-nn-practice-question-layout={practiceQuestionLayoutMode}
           data-nn-practice-question-type={practiceQuestionType}
         >
@@ -3730,6 +3747,7 @@ export function PracticeTestRunnerClient({
         className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence-layout" : ""}`}
         {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
         {...(linearPracticeExamConvergence ? { "data-nn-practice-exam-convergence": "" } : {})}
+        data-nn-pedagogy-tier={tierPedagogyProfile.tier}
         data-nn-practice-question-layout={practiceQuestionLayoutMode}
         data-nn-practice-question-type={practiceQuestionType}
       >

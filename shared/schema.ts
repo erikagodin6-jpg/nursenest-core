@@ -1063,6 +1063,8 @@ export const examQuestions = pgTable("exam_questions", {
   images: jsonb("images"),
   scenarioId: varchar("scenario_id"),
   blueprintWeight: doublePrecision("blueprint_weight"),
+  /** Progressive learning hints: [{level:1|2|3, text:string}]. Level 1=broad concept, Level 2=clinical focus, Level 3=near-answer. */
+  hints: jsonb("hints"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   publishedAt: timestamp("published_at"),

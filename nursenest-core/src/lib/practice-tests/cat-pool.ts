@@ -19,6 +19,7 @@ import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
+import { standardExamPrepQuestionScopeWhere } from "@/lib/questions/difficulty-scope-filter";
 import {
   isCompleteCatQuestionRow,
   NON_ECG_PRACTICE_EXAM_WHERE,
@@ -312,6 +313,7 @@ export async function fetchCatPracticePoolReadiness(
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       rtVentilatorPremiumBankGateWhere(entitlement),
+      standardExamPrepQuestionScopeWhere(),
       ...secondaryStrict,
     ],
   };
@@ -332,6 +334,7 @@ export async function fetchCatPracticePoolReadiness(
         NON_ECG_PRACTICE_EXAM_WHERE,
         generalStudyBankModuleSurfaceWhere(),
         rtVentilatorPremiumBankGateWhere(entitlement),
+        standardExamPrepQuestionScopeWhere(),
         ...secondaryRelaxed,
       ],
     };
@@ -353,6 +356,7 @@ export async function fetchCatPracticePoolReadiness(
               NON_ECG_PRACTICE_EXAM_WHERE,
               generalStudyBankModuleSurfaceWhere(),
               rtVentilatorPremiumBankGateWhere(entitlement),
+              standardExamPrepQuestionScopeWhere(),
               ...secondaryStrict,
             ],
           })) - rawStrictCount,
@@ -458,6 +462,7 @@ export async function fetchCatPracticePool(
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       rtVentilatorPremiumBankGateWhere(entitlement),
+      standardExamPrepQuestionScopeWhere(),
       ...secondaryStrict,
     ],
   };
@@ -473,6 +478,7 @@ export async function fetchCatPracticePool(
         NON_ECG_PRACTICE_EXAM_WHERE,
         generalStudyBankModuleSurfaceWhere(),
         rtVentilatorPremiumBankGateWhere(entitlement),
+        standardExamPrepQuestionScopeWhere(),
         ...secondaryRelaxed,
       ],
     };

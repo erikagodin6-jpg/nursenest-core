@@ -1,3 +1,8 @@
+export interface QuestionHint {
+  level: 1 | 2 | 3;
+  text: string;
+}
+
 export interface ServerQuestion {
   id: string;
   tier: string;
@@ -19,6 +24,7 @@ export interface ServerQuestion {
   frameworkUsed?: string;
   clinicalTrap?: string;
   distractorRationales?: Record<string, string>;
+  hints?: QuestionHint[] | null;
 }
 
 export interface QBankResponse {
@@ -111,6 +117,7 @@ export async function fetchExamSet(params: {
   difficulty?: string;
   topic?: string;
   region?: string;
+  mode?: "practice" | "exam";
 }): Promise<ExamSetResponse> {
   const query = new URLSearchParams();
   if (params.count) query.set("count", String(params.count));
@@ -122,6 +129,7 @@ export async function fetchExamSet(params: {
   if (params.difficulty) query.set("difficulty", params.difficulty);
   if (params.topic) query.set("topic", params.topic);
   if (params.region) query.set("region", params.region);
+  if (params.mode) query.set("mode", params.mode);
 
   const res = await fetch(`/api/qbank/exam-set?${query.toString()}`, {
     headers: getAuthHeaders(),

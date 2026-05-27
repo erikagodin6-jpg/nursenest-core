@@ -12,7 +12,7 @@ import { getExamQuestions, type PooledQuestion } from "@/lib/question-pool";
 import {
   ArrowRight, CheckCircle2, XCircle, BookOpen, Target,
   ChevronRight, RotateCcw, Heart, Brain, Wind, Stethoscope,
-  Activity, Pill, Baby, Droplets, Shield, Layers,
+  Activity, Pill, Baby, Droplets, Shield, Layers, Lightbulb, ChevronDown,
 } from "lucide-react";
 import { LocaleLink } from "@/lib/LocaleLink";
 import { InlineConfidenceRating } from "@/components/study-momentum";
@@ -233,6 +233,7 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(0);
   const [completed, setCompleted] = useState(false);
+  const [revealedHintLevel, setRevealedHintLevel] = useState(0);
 
   const current = questions[currentIndex];
   const tierLabel = TIER_LABELS[tier] || tier.toUpperCase();
@@ -243,6 +244,7 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
     if (showRationale) return;
     setSelectedAnswer(optionIndex);
     setShowRationale(true);
+    setRevealedHintLevel(0);
     setAnswered((a) => a + 1);
     if (optionIndex === current.correct) {
       setScore((s) => s + 1);
@@ -254,6 +256,7 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
       setCurrentIndex((i) => i + 1);
       setSelectedAnswer(null);
       setShowRationale(false);
+      setRevealedHintLevel(0);
     } else {
       setCompleted(true);
     }
@@ -413,6 +416,40 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
                   </div>
                 </div>
 
+                {/* Progressive hints — shown before the answer is selected */}
+                {!showRationale && current.hints && current.hints.length > 0 && (
+                  <div className="mt-4 space-y-2" data-testid="section-hints">
+                    {current.hints
+                      .sort((a, b) => a.level - b.level)
+                      .map((hint, idx) => {
+                        const isRevealed = idx < revealedHintLevel;
+                        const isNext = idx === revealedHintLevel;
+                        const hintLabel = idx === 0 ? "Hint 1 — Broad Concept" : idx === 1 ? "Hint 2 — Clinical Focus" : "Hint 3 — Near Answer";
+                        if (!isRevealed && !isNext) return null;
+                        return (
+                          <div key={hint.level}>
+                            {isRevealed ? (
+                              <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200/70">
+                                <p className="text-xs font-semibold text-amber-700 mb-1">{hintLabel}</p>
+                                <p className="text-sm text-amber-800 leading-relaxed">{hint.text}</p>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => setRevealedHintLevel(idx + 1)}
+                                className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl border border-amber-200 bg-amber-50/50 hover:bg-amber-50 text-amber-700 text-sm font-medium transition-colors"
+                                data-testid={`button-hint-${hint.level}`}
+                              >
+                                <Lightbulb className="w-3.5 h-3.5 shrink-0" />
+                                Need a hint? Reveal {hintLabel}
+                                <ChevronDown className="w-3.5 h-3.5 ml-auto" />
+                              </button>
+                            )}
+                          </div>
+                        );
+                    })}
+                  </div>
+                )}
+
                 {showRationale && (
                   <div className="mt-5 bg-white rounded-2xl shadow-sm border border-slate-200/60" data-testid="section-rationale">
                     <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-2">
@@ -454,6 +491,20 @@ function QuizSession({ tier, systemSlug }: { tier: string; systemSlug: string })
                       <div className="mx-6 sm:mx-8 mb-4 p-4 bg-amber-50/80 rounded-xl border border-amber-200/60">
                         <p className="text-sm font-semibold text-amber-800 mb-1">{t("pages.practiceQuestions.clinicalPearl")}</p>
                         <p className="text-sm text-amber-700 leading-relaxed">{current.clinicalPearl}</p>
+                      </div>
+                    )}
+
+                    {current.examStrategy && (
+                      <div className="mx-6 sm:mx-8 mb-3 p-4 bg-blue-50/70 rounded-xl border border-blue-200/60">
+                        <p className="text-sm font-semibold text-blue-800 mb-1">Exam Strategy</p>
+                        <p className="text-sm text-blue-700 leading-relaxed">{current.examStrategy}</p>
+                      </div>
+                    )}
+
+                    {current.memoryHook && (
+                      <div className="mx-6 sm:mx-8 mb-3 p-4 bg-violet-50/70 rounded-xl border border-violet-200/60">
+                        <p className="text-sm font-semibold text-violet-800 mb-1">Memory Hook</p>
+                        <p className="text-sm text-violet-700 leading-relaxed">{current.memoryHook}</p>
                       </div>
                     )}
 

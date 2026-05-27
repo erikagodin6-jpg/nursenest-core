@@ -47,6 +47,12 @@ import { logDurabilityEvent } from "@/lib/durability/durability-log";
 import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-cache";
 import { subscriberQuestionsListStaleKey } from "@/lib/durability/questions-list-stale-key";
 import {
+  parseQuestionDifficultyScopeMode,
+  questionDifficultyScopeSqlForMode,
+  questionDifficultyScopeWhereForMode,
+  standardExamPrepQuestionScopeSql,
+} from "@/lib/questions/difficulty-scope-filter";
+import {
   difficultyBoundsSql,
   examEqualsFilterSql,
   examQuestionAccessWhereSql,
@@ -199,6 +205,7 @@ export async function GET(req: NextRequest) {
   const examFilter = examFilterRaw.length > 0 && examFilterRaw.length <= 64 ? examFilterRaw : null;
   const difficultyMin = parseDifficultyBound(searchParams.get("difficultyMin"));
   const difficultyMax = parseDifficultyBound(searchParams.get("difficultyMax"));
+  const difficultyScopeMode = parseQuestionDifficultyScopeMode(searchParams.get("difficultyScope"));
   if (difficultyMin != null && difficultyMax != null && difficultyMin > difficultyMax) {
     return NextResponse.json(
       { error: "difficultyMin must be less than or equal to difficultyMax.", code: "invalid_difficulty_range" },
@@ -397,6 +404,7 @@ export async function GET(req: NextRequest) {
       }
 
       const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
+      const difficultyScopeWhere = questionDifficultyScopeWhereForMode(difficultyScopeMode);
 
       const studyModeFilters: Prisma.ExamQuestionWhereInput[] = [];
       if (studyMode === "high_yield") {
@@ -412,6 +420,9 @@ export async function GET(req: NextRequest) {
 
       const buildWhereParts = (includeTopic: boolean): Prisma.ExamQuestionWhereInput => {
         const parts: Prisma.ExamQuestionWhereInput[] = [baseWhere, ...studyModeFilters];
+        if (difficultyScopeWhere) {
+          parts.push(difficultyScopeWhere);
+        }
         if (alliedProfessionExamWhere) {
           parts.push(alliedProfessionExamWhere);
         }
@@ -446,6 +457,7 @@ export async function GET(req: NextRequest) {
       const focusPoolSql = includeQuestionIdsSql(focusIds);
       const examExtraSql = examFilter ? examEqualsFilterSql(examFilter) : Prisma.empty;
       const difficultySqlFrag = difficultyBoundsSql(difficultyMin, difficultyMax);
+      const difficultyScopeSql = questionDifficultyScopeSqlForMode(difficultyScopeMode);
       const subtopicSql =
         topicCodeFilter && topicCodeFilter.length > 0
           ? Prisma.sql` AND subtopic = ${topicCodeFilter}`
@@ -480,7 +492,7 @@ export async function GET(req: NextRequest) {
           let idRows = await withRetry(() =>
             prisma.$queryRaw<{ id: string }[]>`
             SELECT id FROM exam_questions
-            WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${focusPoolSql} ${exSql}
+            WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${difficultyScopeSql} ${focusPoolSql} ${exSql}
             ORDER BY random()
             LIMIT ${effectivePageSize}
           `,
@@ -494,7 +506,7 @@ export async function GET(req: NextRequest) {
             idRows = await withRetry(() =>
               prisma.$queryRaw<{ id: string }[]>`
               SELECT id FROM exam_questions
-              WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${focusPoolSql} ${exSql}
+              WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${difficultyScopeSql} ${focusPoolSql} ${exSql}
               ORDER BY random()
               LIMIT ${effectivePageSize}
             `,
@@ -591,6 +603,7 @@ export async function GET(req: NextRequest) {
         topicRequested: topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
         topicCodeRequested: topicCodeFilter ?? null,
         topicRelaxed,
+        difficultyScope: difficultyScopeMode,
         ...(educationalLocale !== DEFAULT_MARKETING_LOCALE
           ? { educationalContentLocale: educationalLocale }
           : {}),
@@ -692,6 +705,7 @@ export async function GET(req: NextRequest) {
     const country = user.country as CountryCode;
     const tier = user.tier as TierCode;
     const freeSql = freemiumExamQuestionWhereSql(country, tier);
+    const freeDifficultyScopeSql = standardExamPrepQuestionScopeSql();
 
     const previewFreemiumSelect = {
       id: true,
@@ -708,7 +722,7 @@ export async function GET(req: NextRequest) {
     const idRows = await withRetry(() =>
       prisma.$queryRaw<{ id: string }[]>`
         SELECT id FROM exam_questions
-        WHERE ${freeSql} ${exSql}
+        WHERE ${freeSql} ${freeDifficultyScopeSql} ${exSql}
         ORDER BY random()
         LIMIT ${take}
       `,

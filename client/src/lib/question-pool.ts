@@ -1,4 +1,4 @@
-import { fetchExamSet, fetchBodySystems, fetchQBankStats, type ServerQuestion } from "./qbank-api";
+import { fetchExamSet, fetchBodySystems, fetchQBankStats, type ServerQuestion, type QuestionHint } from "./qbank-api";
 import { normalizeQuestionType } from "./question-type-safety";
 
 export interface PooledQuestion {
@@ -19,6 +19,7 @@ export interface PooledQuestion {
   frameworkUsed?: string;
   clinicalTrap?: string;
   distractorRationales?: Record<string, string>;
+  hints?: QuestionHint[] | null;
   topic?: string;
   subtopic?: string;
   difficulty?: number;
@@ -46,6 +47,7 @@ function serverToPooled(sq: ServerQuestion): PooledQuestion {
     frameworkUsed: sq.frameworkUsed,
     clinicalTrap: sq.clinicalTrap,
     distractorRationales: sq.distractorRationales,
+    hints: sq.hints ?? null,
     topic: sq.topic,
     subtopic: sq.subtopic,
     difficulty: sq.difficulty ?? undefined,
@@ -67,7 +69,7 @@ export async function getExamQuestions(
   tier: string,
   count: number,
   bodySystems?: string[],
-  filters?: { exam?: string; difficulty?: string; topic?: string; region?: string }
+  filters?: { exam?: string; difficulty?: string; topic?: string; region?: string; mode?: "practice" | "exam" }
 ): Promise<PooledQuestion[]> {
   const result = await fetchExamSet({
     count,
@@ -77,6 +79,7 @@ export async function getExamQuestions(
     difficulty: filters?.difficulty,
     topic: filters?.topic,
     region: filters?.region,
+    mode: filters?.mode ?? "practice",
   });
   const questions = result.questions.map(serverToPooled);
   if (questions.length === 0) {

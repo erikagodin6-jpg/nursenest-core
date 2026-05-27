@@ -35,6 +35,7 @@ import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-wo
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
+import { standardExamPrepQuestionScopeWhere } from "@/lib/questions/difficulty-scope-filter";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
@@ -271,6 +272,7 @@ export async function POST(req: NextRequest) {
                       : questionTag
                         ? { AND: [baseWhere, { tags: { has: questionTag } }] }
                         : baseWhere;
+    const scopedPresetWhere = { AND: [presetWhere, standardExamPrepQuestionScopeWhere()] };
     const isFull75Preset =
       questionTag === EXAM_PRESET_US_RN_FULL_2026_TAG ||
       questionTag === EXAM_PRESET_CA_RN_FULL_2026_TAG ||
@@ -290,7 +292,7 @@ export async function POST(req: NextRequest) {
 
     const questionPoolRaw = await withRetry(() =>
       prisma.examQuestion.findMany({
-        where: presetWhere,
+        where: scopedPresetWhere,
         select: { id: true, stem: true, options: true, questionType: true, difficulty: true },
         take: questionTag ? TAG_POOL_FETCH : poolLimit,
       }),

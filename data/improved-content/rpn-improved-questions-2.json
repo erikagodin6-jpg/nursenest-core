@@ -1,0 +1,282 @@
+[
+  {
+    "question": "An RPN is caring for a client who is receiving oxygen via simple face mask at 8 L/min following a COPD exacerbation. The client's oxygen saturation has improved to 99%. The client appears drowsy and the respiratory rate has decreased from 22 to 10 breaths per minute. Which action should the RPN take first?",
+    "option_a": "Encourage the client to take deep breaths and cough",
+    "option_b": "Reduce the oxygen flow rate and notify the physician",
+    "option_c": "Reposition the client to the high-Fowler's position",
+    "option_d": "Document the findings and continue to monitor",
+    "correct_answer": "B",
+    "rationale": "Clients with COPD rely on a hypoxic drive to breathe — their stimulus to breathe is low oxygen rather than elevated CO2 (as in healthy individuals). Administering high-flow oxygen (>4–6 L/min via face mask) removes the hypoxic drive, causing CO2 retention (hypercapnia) and CO2 narcosis. Signs of CO2 narcosis include drowsiness, decreased respiratory rate, and high SpO2. The priority action is to immediately reduce the oxygen flow rate to restore hypoxic drive and notify the physician. Target SpO2 for COPD is 88–92%, not 99%.",
+    "distractor_rationales": {
+      "A": "Deep breathing and coughing would not address the underlying cause. The problem is CO2 retention from excessive oxygen delivery — encouraging deep breaths does not correct this and delays the necessary intervention of reducing oxygen.",
+      "C": "Repositioning to high-Fowler's improves ventilation mechanics in respiratory distress but does not address the immediate cause here, which is oxygen-induced hypercapnia. This is a secondary measure, not the first action.",
+      "D": "Documentation and continued monitoring without intervention is unsafe. The client is showing signs of CO2 narcosis, which can progress to respiratory failure. Immediate action is required."
+    },
+    "clinical_pearl": "Target SpO2 for COPD is 88–92% — higher saturations may suppress the hypoxic drive and cause CO2 narcosis. Always know your patient's baseline and titrate oxygen accordingly.",
+    "exam_strategy": "Any time you see a COPD patient with very high SpO2 becoming drowsy or having a decreased respiratory rate, think CO2 narcosis from excessive oxygen. The intervention is reduce O2, not increase it.",
+    "memory_hook": "COPD + High O2 + Drowsy + RR drop = CO2 narcosis. Low and slow is your goal for SpO2 (88-92%).",
+    "hints": [
+      { "level": 1, "text": "Consider how COPD changes the way the body regulates the drive to breathe — what happens when that mechanism is affected by oxygen therapy?" },
+      { "level": 2, "text": "In COPD, the normal CO2-based drive to breathe is blunted. What drives breathing instead — and what happens when you remove that stimulus with high-flow O2?" },
+      { "level": 3, "text": "The client's decreasing respiratory rate and drowsiness at SpO2 99% signals CO2 narcosis from excess oxygen. The fix is to reduce the O2 flow rate and notify the physician — not to encourage breathing." }
+    ],
+    "difficulty": "hard",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Respiratory",
+    "client_needs": "Physiological Integrity",
+    "topic": "Oxygen Therapy in COPD / CO2 Narcosis"
+  },
+  {
+    "question": "An RPN is reviewing a medication administration record and notes that a client with severe renal impairment (eGFR 12 mL/min) has been ordered metformin 500 mg twice daily for Type 2 diabetes. Which action should the RPN take?",
+    "option_a": "Administer the medication as ordered and document the dose given",
+    "option_b": "Hold the dose and contact the prescriber to clarify the order",
+    "option_c": "Administer half the ordered dose and record the change",
+    "option_d": "Ask the client if they have taken metformin before and proceed accordingly",
+    "correct_answer": "B",
+    "rationale": "Metformin is contraindicated in severe renal impairment (eGFR <30 mL/min) due to the risk of fatal lactic acidosis. The kidneys are responsible for eliminating metformin; in renal failure, the drug accumulates and causes lactic acid to build up — a potentially fatal complication. The RPN must hold the dose and contact the prescriber immediately to clarify or change the order. RPNs do not have the authority to adjust doses unilaterally — they must act within their scope and escalate unsafe orders.",
+    "distractor_rationales": {
+      "A": "Administering a contraindicated medication is outside the RPN's scope of safe practice. The eGFR of 12 is a critical value indicating severe renal failure — metformin would accumulate and cause lactic acidosis. Administering this order is unsafe regardless of what the MAR states.",
+      "C": "Adjusting the dose is outside the RPN's scope. Changing a medication dose without a physician's order is not within the RPN's authority. The order must be clarified with the prescriber before any dose is given.",
+      "D": "Whether the client has taken metformin before is irrelevant to the clinical contraindication. Metformin is contraindicated based on the current eGFR of 12, not on prior use history. This response delays appropriate action."
+    },
+    "clinical_pearl": "Metformin is contraindicated when eGFR <30 mL/min and should be held when eGFR <45 mL/min in many Canadian guidelines. Lactic acidosis from metformin accumulation in renal failure has a high mortality rate.",
+    "exam_strategy": "When you see a contraindicated drug about to be given, the answer is always HOLD and CLARIFY — never administer and document, never adjust the dose yourself. Scope of practice: recognize the problem, withhold the drug, escalate.",
+    "memory_hook": "Metformin + Bad Kidneys = Lactic Acidosis. eGFR <30 = NO METFORMIN. Hold, call, clarify.",
+    "hints": [
+      { "level": 1, "text": "Think about which organ eliminates metformin and what happens when that organ isn't working properly." },
+      { "level": 2, "text": "Metformin is renally cleared — in severe kidney impairment it accumulates. What dangerous metabolic complication does this cause, and what is the RPN's responsibility when recognizing a contraindicated order?" },
+      { "level": 3, "text": "Metformin is contraindicated with eGFR <30 (risk of lactic acidosis). The RPN must hold the dose and contact the prescriber — adjusting the dose independently is outside RPN scope." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Pharmacology",
+    "client_needs": "Safe and Effective Care Environment",
+    "topic": "Medication Safety — Renal Contraindications"
+  },
+  {
+    "question": "An RPN is providing morning care for a client who had an above-the-knee amputation 3 days ago. During the assessment, the RPN notices the residual limb has been placed in a dependent position for the past 2 hours. What is the priority nursing action?",
+    "option_a": "Apply an elastic bandage in a figure-8 pattern from distal to proximal",
+    "option_b": "Elevate the residual limb on two pillows to reduce oedema",
+    "option_c": "Reposition the residual limb to avoid hip flexion contracture",
+    "option_d": "Notify the physiotherapist for early mobilization guidance",
+    "correct_answer": "C",
+    "rationale": "After a lower limb amputation, preventing contractures is the priority positioning concern. Hip flexion contractures develop quickly (within days) when the residual limb is maintained in a flexed position. Once formed, flexion contractures make prosthetic fitting and ambulation extremely difficult or impossible. The residual limb should be kept flat (not on pillows) and the client should spend time in the prone position daily. Elevating the residual limb on pillows causes hip flexion and promotes contracture — this is a common nursing error. Oedema management with elastic bandaging is important but secondary to contracture prevention.",
+    "distractor_rationales": {
+      "A": "Elastic bandaging (figure-8, distal to proximal) is correct technique for stump shaping and oedema control after amputation — but this is not the priority action in this scenario. The immediate concern is the limb position, which will cause a flexion contracture if not corrected.",
+      "B": "Elevating on pillows is CONTRAINDICATED after above-the-knee amputation. Pillows under the residual limb flex the hip, promoting flexion contracture. Many nursing students choose this because elevation normally reduces oedema — but here it causes harm. After BKA, pillows may be used for the first 24 hours only.",
+      "D": "Physiotherapy referral is appropriate and important but is not the immediate priority. The nurse must act on the positioning problem now — waiting for physio guidance allows the contracture risk to continue."
+    },
+    "clinical_pearl": "NO PILLOWS under an AKA stump beyond the first 24 hours — it flexes the hip and causes permanent contracture. Prone positioning 3-4 times/day is the gold standard. This is one of the most commonly tested post-amputation nursing errors.",
+    "exam_strategy": "Amputation positioning questions almost always hinge on contracture prevention. Remember: AKA = keep hip extended (no pillow elevation), BKA = keep knee extended. Elevation on pillows looks like a correct oedema management answer but is actually the wrong answer.",
+    "memory_hook": "AKA: Keep it FLAT to avoid contracture. Pillows = flexion = contracture = no prosthesis fitting. Prone time daily.",
+    "hints": [
+      { "level": 1, "text": "Think about what complication develops when a joint is held in a flexed position for extended periods — and which complication has the greatest long-term impact on this client's rehabilitation." },
+      { "level": 2, "text": "Hip flexion contractures develop rapidly after above-the-knee amputation if the residual limb is elevated on pillows. What position should the limb be in, and why does this trump oedema management?" },
+      { "level": 3, "text": "The priority is contracture prevention — keep the residual limb flat (no pillows), not elevated. Pillow elevation flexes the hip and rapidly causes contracture that prevents prosthetic fitting. Reposition the limb immediately." }
+    ],
+    "difficulty": "hard",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Musculoskeletal",
+    "client_needs": "Physiological Integrity",
+    "topic": "Post-Amputation Positioning / Contracture Prevention"
+  },
+  {
+    "question": "An RPN is caring for a 4-year-old child admitted for croup. At 0200h the child becomes suddenly agitated, is sitting upright leaning forward, is drooling, and refuses to swallow. The child's temperature is 39.8°C. Which action should the RPN take first?",
+    "option_a": "Administer the prescribed nebulized epinephrine immediately",
+    "option_b": "Obtain a throat culture using a tongue depressor and throat swab",
+    "option_c": "Notify the charge nurse immediately and prepare for emergency airway management",
+    "option_d": "Apply cool mist humidified oxygen via face mask and reassess in 15 minutes",
+    "correct_answer": "C",
+    "rationale": "The clinical picture — sudden agitation, tripod positioning (leaning forward on hands), drooling, inability to swallow, and high fever in a child admitted for croup — is classic for epiglottitis, not croup. Epiglottitis is a life-threatening emergency causing rapid supraglottic airway obstruction. The nurse must immediately call for emergency airway support (charge nurse, physician, anesthesia if available). Nothing should be placed in the mouth (no tongue depressors, no throat swabs, no examination) as this can precipitate complete airway obstruction. This child needs emergency intubation, not a nebulizer.",
+    "distractor_rationales": {
+      "A": "Nebulized epinephrine is the treatment for croup (subglottic, barky cough, stridor), not epiglottitis. The presentation has changed: the drooling, tripod position, high fever, and sudden agitation represent epiglottitis. Administering a nebulizer delays emergency airway management.",
+      "B": "NEVER use a tongue depressor in a suspected epiglottitis. Stimulating the oropharynx with a tongue blade can trigger laryngospasm and complete airway obstruction. This answer is actively dangerous.",
+      "D": "Cool mist and reassessment in 15 minutes is an appropriate initial intervention for mild-moderate croup — not for this presentation. A child in tripod position with drooling and high fever requires immediate escalation, not watchful waiting."
+    },
+    "clinical_pearl": "The triad of drooling + tripod position + dysphagia = epiglottitis until proven otherwise. This is an airway emergency. NEVER examine the throat or use a tongue depressor. Call for help immediately.",
+    "exam_strategy": "Anytime a question changes the presentation mid-scenario (a croup patient who suddenly looks very different), reassess the diagnosis entirely. Classic croup does NOT cause drooling or tripod position. That clinical pivot is the key test point.",
+    "memory_hook": "3 Ds of Epiglottitis: Drooling + Dysphagia + Distress (tripod) = Danger. No tongue blades. Call for help.",
+    "hints": [
+      { "level": 1, "text": "The child was admitted for croup, but the current presentation is different. What condition has similar symptoms to croup but is a true airway emergency requiring a completely different response?" },
+      { "level": 2, "text": "Drooling, tripod positioning, and inability to swallow with high fever in a child is the classic presentation of epiglottitis — a supraglottic airway emergency. What must never be done in suspected epiglottitis?" },
+      { "level": 3, "text": "This is epiglottitis. Never use a tongue blade (can cause complete obstruction). The priority is immediate escalation — notify the charge nurse and prepare for emergency airway management." }
+    ],
+    "difficulty": "hard",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Pediatrics",
+    "client_needs": "Safe and Effective Care Environment",
+    "topic": "Croup vs Epiglottitis / Pediatric Airway Emergency"
+  },
+  {
+    "question": "An RPN is performing a dressing change for a client with a wound that is healing by secondary intention. The wound has pink-red, irregular tissue with a bumpy texture. There is minimal serous drainage and no odour. Which documentation best describes this wound tissue?",
+    "option_a": "Slough: yellow fibrinous tissue consistent with devitalized wound bed requiring debridement",
+    "option_b": "Granulation tissue: healthy vascular connective tissue indicating active wound healing",
+    "option_c": "Eschar: black necrotic tissue requiring urgent surgical debridement",
+    "option_d": "Epithelialization: new skin coverage progressing from wound edges inward",
+    "correct_answer": "B",
+    "rationale": "The description — pink-red, irregular, bumpy (cobblestone) texture, minimal serous drainage, no odour — is the hallmark of healthy granulation tissue. Granulation tissue forms as new blood vessels and connective tissue grow into a wound healing by secondary intention. It is the desired tissue type in an open wound and indicates active, healthy wound healing. The nurse should protect it (avoid trauma, keep moist) and continue the current wound care plan. Accurate wound tissue documentation guides ongoing care decisions.",
+    "distractor_rationales": {
+      "A": "Slough is yellow, tan, or grey soft/stringy tissue made of fibrin, dead cells, and wound exudate. It covers viable wound bed tissue and requires removal to promote healing. The pink-red bumpy tissue in this scenario does not match slough.",
+      "C": "Eschar is hard, black or brown leathery necrotic tissue. It may be stable (leave intact over heels) or require debridement. The tissue described here is pink-red and moist — not consistent with eschar.",
+      "D": "Epithelialization appears as shiny, light pink, flat new skin growing from wound margins inward. It occurs in the late proliferative/remodeling phase of healing and is fragile. The bumpy, vascular texture described is granulation tissue, not new epithelium."
+    },
+    "clinical_pearl": "Wound tissue types to know: Granulation = pink-red, bumpy, moist (healthy). Slough = yellow, soft, stringy (requires debridement). Eschar = black/brown, hard, dry (stable or debride). Epithelialization = shiny pink flat new skin at edges.",
+    "exam_strategy": "Wound tissue identification questions test whether you can match colour and texture descriptors to tissue type. Pink-red + bumpy = granulation. Yellow/tan + soft = slough. Black/brown + hard = eschar. Shiny pink at edges = epithelialization.",
+    "memory_hook": "GRANTIE: Granulation = pinkRed bumpy. Slough = Yellow soft. Eschar = blacK hard. Epithelialization = sHiny pInk Edges.",
+    "hints": [
+      { "level": 1, "text": "Think about the stages of wound healing — what tissue type forms first in an open wound healing by secondary intention, and what does it look like?" },
+      { "level": 2, "text": "The wound is described as pink-red with a bumpy, cobblestone texture and minimal serous drainage — these are the classic visual characteristics of one specific wound tissue type. Which type signals healthy healing?" },
+      { "level": 3, "text": "This is granulation tissue — the pink-red, bumpy vascular tissue of a healthy wound bed healing by secondary intention. Document it as such; it indicates active healing and the wound care plan is working." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Wound Care",
+    "client_needs": "Physiological Integrity",
+    "topic": "Wound Tissue Types / Granulation vs Slough vs Eschar"
+  },
+  {
+    "question": "An RPN is caring for a client with a nasogastric (NG) tube for intermittent feeding. Before administering the next bolus feed, the RPN aspirates 280 mL of gastric residual. The facility policy states hold feeding if residual exceeds 250 mL. Which action should the RPN take?",
+    "option_a": "Discard the residual, flush the tube with 30 mL water, and administer the feed as scheduled",
+    "option_b": "Reinfuse the residual via the NG tube, hold the feed, and notify the prescriber",
+    "option_c": "Discard the residual, hold the feeding, and document the finding for the next shift",
+    "option_d": "Administer half the scheduled feeding volume and reassess residual in one hour",
+    "correct_answer": "B",
+    "rationale": "Gastric residual of 280 mL exceeds the policy threshold of 250 mL, so the feeding should be held. Gastric residual should be reinfused — not discarded — to prevent fluid and electrolyte loss (gastric secretions contain significant amounts of sodium, potassium, hydrochloric acid, and digestive enzymes). After reinfusing the residual, the nurse holds the feed and notifies the prescriber, who will reassess the clinical situation and potentially modify the feeding regimen. Documenting and waiting until the next shift delays necessary intervention.",
+    "distractor_rationales": {
+      "A": "Discarding the gastric residual wastes important electrolytes and fluid. Always reinfuse aspirate unless it is bile-coloured, bloody, or the facility has a specific protocol against it. Additionally, this option continues the feed despite exceeding the hold threshold — unsafe.",
+      "C": "Discarding the residual is incorrect (same reason as A). Documenting for the next shift is not adequate — the prescriber needs to be notified in a timely manner so feeding orders can be adjusted. This delays care unnecessarily.",
+      "D": "Administering a partial dose is not within the RPN's scope without a new order. Facility policy is to hold the feed when residual exceeds 250 mL — modifying the volume without consulting the prescriber is outside the RPN's independent authority."
+    },
+    "clinical_pearl": "NG tube residual: always REINFUSE, never discard (prevents electrolyte loss). High residual = delayed gastric emptying. Common causes: opioid medications, gastroparesis, positioning. Hold feed per policy threshold and notify provider.",
+    "exam_strategy": "Two testable points: (1) Reinfuse residual, don't discard. (2) Know when to hold feeds and escalate. The combination of REINFUSE + HOLD + NOTIFY is the correct sequence that eliminates all three distractors.",
+    "memory_hook": "Residual Rule: REINFUSE it (electrolytes!), then HOLD if over threshold, then NOTIFY prescriber. Never discard, never just document, never adjust dose yourself.",
+    "hints": [
+      { "level": 1, "text": "Think about what gastric aspirate contains and why you should be careful about discarding it — and what the facility policy says to do when the threshold is exceeded." },
+      { "level": 2, "text": "Gastric residual contains electrolytes and should always be reinfused to prevent fluid/electrolyte loss. The residual of 280 mL exceeds the 250 mL hold threshold — what are the next two steps?" },
+      { "level": 3, "text": "Reinfuse the 280 mL (don't discard — electrolyte loss), hold the feed (policy threshold exceeded), and notify the prescriber. This three-step sequence is the correct response." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Nutrition / Enteral Feeding",
+    "client_needs": "Physiological Integrity",
+    "topic": "Nasogastric Tube Feeding / Gastric Residual Management"
+  },
+  {
+    "question": "An RPN is caring for a client in the post-anaesthesia care unit (PACU) following a laparoscopic cholecystectomy. The client reports 8/10 nausea and vomits 300 mL of gastric contents. The client is diaphoretic, BP 88/54 mmHg, HR 126 bpm, SpO2 91% on 2 L/min nasal cannula. Which action should the RPN take first?",
+    "option_a": "Administer the prescribed ondansetron 4 mg IV for nausea and vomiting",
+    "option_b": "Increase the oxygen flow rate and reposition the client to lateral position",
+    "option_c": "Notify the anaesthesiologist and request an urgent reassessment",
+    "option_d": "Insert a peripheral IV and prepare to administer a fluid bolus",
+    "correct_answer": "C",
+    "rationale": "The client's vital signs indicate haemodynamic instability and early shock: BP 88/54 (hypotension), HR 126 (tachycardia), SpO2 91% (hypoxia), diaphoresis, and significant vomiting with 300 mL emesis. This picture — immediately post-laparoscopic cholecystectomy — raises concern for haemorrhage, aspiration, or anaesthetic complication. In the PACU, the anaesthesiologist is the primary responsible physician and must be notified immediately for urgent reassessment. This is a deteriorating patient requiring immediate physician involvement — the RPN's priority is to escalate. Symptomatic treatment of nausea alone does not address the underlying instability.",
+    "distractor_rationales": {
+      "A": "Treating nausea with ondansetron addresses only a symptom while ignoring haemodynamic collapse. The patient's BP, HR, SpO2 and diaphoresis indicate acute deterioration that requires urgent physician assessment, not symptom management.",
+      "B": "Increasing O2 and repositioning may be helpful adjuncts but do not address the underlying cause of the BP 88/54. These are supportive measures — the priority is immediately notifying the anaesthesiologist so the cause of haemodynamic instability can be identified and treated.",
+      "D": "Preparing a fluid bolus may be needed, but fluid cannot be given without a physician order in this context. More importantly, fluids alone do not address the cause of the instability. Notification comes before fluid administration so treatment is directed by the anaesthesiologist."
+    },
+    "clinical_pearl": "In the PACU, always think: is this patient's deterioration from haemorrhage, respiratory compromise, anaesthetic reaction, or something else? The first response to any haemodynamic instability post-surgery is NOTIFY the surgeon/anaesthesiologist — everything else is secondary.",
+    "exam_strategy": "PACU questions test priority setting when a stable post-op patient suddenly deteriorates. Nausea alone would get ondansetron. But nausea + BP 88/54 + HR 126 + SpO2 91% = emergency escalation first. When the patient's entire picture is unstable, your first action is notification, not symptom treatment.",
+    "memory_hook": "PACU deterioration: assess ABCDE, then CALL before treating symptoms. Haemodynamic instability = anaesthesiologist STAT.",
+    "hints": [
+      { "level": 1, "text": "Look at the entire clinical picture, not just the nausea. Are the vital signs within normal limits for a post-op patient? What does the combination of these findings suggest?" },
+      { "level": 2, "text": "BP 88/54, HR 126, SpO2 91%, diaphoresis after surgery = haemodynamic instability. This is beyond treating nausea with ondansetron. Who in the PACU is responsible for this patient's medical management?" },
+      { "level": 3, "text": "This patient is in shock post-laparoscopic cholecystectomy — possible haemorrhage or aspiration. Priority is to notify the anaesthesiologist immediately for urgent reassessment. Symptom management comes after escalation." }
+    ],
+    "difficulty": "hard",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Perioperative Nursing",
+    "client_needs": "Physiological Integrity",
+    "topic": "PACU Monitoring / Post-Operative Haemodynamic Instability"
+  },
+  {
+    "question": "An RPN is preparing to administer insulin to a client before breakfast. The client's blood glucose is 3.2 mmol/L. The prescribed insulin is NPH 18 units subcutaneously. Which action should the RPN take?",
+    "option_a": "Administer the insulin as ordered and provide the client's breakfast tray immediately",
+    "option_b": "Hold the insulin, treat the hypoglycaemia, and reassess blood glucose in 15 minutes",
+    "option_c": "Administer half the prescribed insulin dose and monitor the client closely",
+    "option_d": "Contact the prescriber to request a dose reduction before administering",
+    "correct_answer": "B",
+    "rationale": "A blood glucose of 3.2 mmol/L is below the threshold for safe insulin administration — this is hypoglycaemia (normal fasting glucose: 3.9–7.8 mmol/L fasting, threshold for hypoglycaemia <4.0 mmol/L). Administering insulin to a hypoglycaemic patient risks severe or fatal hypoglycaemia. The RPN must hold the insulin, treat the hypoglycaemia using the 15-15 rule (15 g fast-acting carbohydrate, recheck in 15 minutes), then reassess the blood glucose before making any decision about insulin administration. After normalization, the prescriber should be notified to determine whether insulin should be given and if the dose requires adjustment.",
+    "distractor_rationales": {
+      "A": "Providing breakfast with insulin is dangerously incorrect. Even with food, administering NPH to a patient with BG 3.2 can worsen hypoglycaemia. Breakfast carbohydrates act more slowly than the insulin onset. The hypoglycaemia must be treated first.",
+      "C": "Adjusting the insulin dose is outside the RPN's scope of independent practice. Additionally, any dose of insulin given to a hypoglycaemic patient is potentially harmful. The correct action is to hold the insulin entirely and treat the hypoglycaemia.",
+      "D": "Contacting the prescriber before treating hypoglycaemia delays treatment. Hypoglycaemia at 3.2 mmol/L should be treated immediately by the nurse — this falls within the RPN's scope and does not require a prescription. Notify the prescriber after treating, or if glucose does not respond to treatment."
+    },
+    "clinical_pearl": "NEVER administer insulin to a hypoglycaemic patient. Canadian threshold: BG <4.0 mmol/L = hypoglycaemia. 15-15 Rule: 15g fast-acting carbs (4 glucose tabs, 125 mL juice) → recheck in 15 min → repeat if still <4.0. Notify prescriber and document.",
+    "exam_strategy": "Pre-insulin blood glucose check questions always test the same principle: hold insulin if BG is low, treat hypoglycaemia first. Never modify the dose yourself. The 15-15 rule is the standard of care for mild-moderate hypoglycaemia in conscious patients.",
+    "memory_hook": "Low Sugar + Insulin = Danger. BG <4.0 → HOLD insulin → 15g carbs → Wait 15 min → Recheck → Notify MD.",
+    "hints": [
+      { "level": 1, "text": "Before giving insulin, the nurse checks the blood glucose. What does a BG of 3.2 mmol/L mean, and is it safe to administer insulin at this level?" },
+      { "level": 2, "text": "3.2 mmol/L is below the hypoglycaemia threshold of 4.0 mmol/L. Giving insulin now could be fatal. What is the standardized treatment protocol for hypoglycaemia in a conscious patient?" },
+      { "level": 3, "text": "Hold the insulin — never give insulin to a hypoglycaemic patient. Treat with the 15-15 rule (15g fast-acting carbs, recheck in 15 min). Notify the prescriber after treating, not before." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Pharmacology",
+    "client_needs": "Physiological Integrity",
+    "topic": "Insulin Safety / Pre-Administration Blood Glucose Check"
+  },
+  {
+    "question": "An RPN is providing discharge teaching to a client following a total hip arthroplasty (THA). Which instruction is most important to include to prevent post-operative complications?",
+    "option_a": "Avoid crossing your legs at the knees or ankles and do not bend your hip past 90 degrees",
+    "option_b": "Apply ice to the hip for 20 minutes every 2 hours for the first 48 hours",
+    "option_c": "Ensure you use a raised toilet seat and do not sit in low chairs",
+    "option_d": "Use a pillow between your legs when lying on your side or back",
+    "correct_answer": "A",
+    "rationale": "The most dangerous complication of total hip arthroplasty is prosthetic hip dislocation. Hip dislocation occurs most commonly when the hip is adducted (legs crossed), internally rotated, or flexed past 90 degrees — all of which move the femoral head out of the acetabular cup before the surrounding muscles fully stabilize the new joint. The three cardinal hip precautions after THA are: (1) no hip flexion >90°, (2) no leg crossing (adduction), (3) no internal rotation. Teaching these precautions is the most critical discharge instruction as violation directly causes the most serious complication.",
+    "distractor_rationales": {
+      "B": "Ice application is a comfort and oedema-reduction measure, not a dislocation prevention strategy. While ice therapy has some benefit in the immediate post-operative period, it is not the most important discharge teaching.",
+      "C": "Using a raised toilet seat and avoiding low chairs ARE important hip precautions (they prevent hip flexion >90°) — but option A is more comprehensive. Option A covers all three major precautions (no crossing, no >90° flexion, no internal rotation) whereas option C addresses only chair height. Option A is the better single answer.",
+      "D": "A pillow between legs prevents adduction and is part of standard hip precautions — but this is most important while in bed, not the overarching priority. Option A encompasses the critical movement restrictions that prevent dislocation in all daily activities."
+    },
+    "clinical_pearl": "THA hip precautions prevent dislocation: No crossing legs (adduction), no flexion >90°, no internal rotation. These apply in all positions — lying, sitting, standing. These precautions are typically maintained for 6–12 weeks post-op.",
+    "exam_strategy": "Discharge teaching questions for THA always centre on dislocation prevention. Look for the most comprehensive answer that covers the critical movement restrictions. Option A covers all three precautions — it's the umbrella answer that includes the others.",
+    "memory_hook": "THA = No AIR: No Adduction (legs crossed), No Internal Rotation, no flexion past 90° (Right angle max). Violate AIR = Dislocation.",
+    "hints": [
+      { "level": 1, "text": "Think about what the most serious complication of total hip replacement is, and which movements or positions cause it." },
+      { "level": 2, "text": "Hip prosthesis dislocation occurs with hip flexion >90°, crossing legs (adduction), or internal rotation. Which teaching option addresses the most critical movement restrictions that prevent this complication?" },
+      { "level": 3, "text": "Hip precautions to prevent dislocation: no crossing legs, no hip flexion past 90°, no internal rotation. Option A covers all three critical restrictions — it's the most important and comprehensive discharge instruction." }
+    ],
+    "difficulty": "moderate",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Musculoskeletal",
+    "client_needs": "Health Promotion and Maintenance",
+    "topic": "Total Hip Arthroplasty Discharge Teaching / Hip Precautions"
+  },
+  {
+    "question": "An RPN is caring for a client diagnosed with a pulmonary embolism (PE) who is receiving a continuous IV heparin infusion. The client suddenly becomes cyanotic, has absent breath sounds on the right side, is severely dyspnoeic, and has a tracheal deviation toward the left. Which action should the RPN take first?",
+    "option_a": "Increase the heparin infusion rate per the weight-based nomogram",
+    "option_b": "Apply high-flow oxygen via non-rebreather mask",
+    "option_c": "Call a code and stay with the client",
+    "option_d": "Prepare the client for immediate needle decompression",
+    "correct_answer": "C",
+    "rationale": "The clinical picture — sudden severe dyspnoea, absent breath sounds on one side, cyanosis, and tracheal deviation away from the affected side in a patient on heparin — is a tension pneumothorax, not a worsening PE. Tension pneumothorax is a life-threatening emergency that requires immediate emergency response. Heparin anticoagulation in a patient with PE can cause a haemothorax or haematoma that leads to tension pneumothorax. The RPN's first action must be to call for emergency help (code team) and stay with the client — this is beyond RPN scope to manage independently, and the patient requires immediate physician intervention (needle decompression). Calling the code immediately mobilizes the right team.",
+    "distractor_rationales": {
+      "A": "Increasing heparin is contraindicated and dangerous. The new presentation is not a PE — it is a tension pneumothorax (possibly from heparin-related haemothorax). Increasing anticoagulation worsens the underlying bleeding risk and is completely wrong.",
+      "B": "High-flow oxygen is a supportive measure that should be applied, but applying oxygen before calling for emergency help loses critical time in a life-threatening tension pneumothorax. The code call mobilizes resources needed for the definitive intervention (needle decompression).",
+      "D": "Needle decompression is the definitive treatment for tension pneumothorax, but this procedure is not within the RPN scope of practice. This option describes what the physician/NP will do — not what the RPN does first. The RPN calls for help so that the person who can perform this procedure arrives."
+    },
+    "clinical_pearl": "Tension pneumothorax triad: absent unilateral breath sounds + tracheal deviation AWAY from affected side + severe respiratory distress + haemodynamic collapse (late sign). Immediate emergency response. RPN scope = call code, high-flow O2, IV access. Physician scope = needle decompression → chest tube.",
+    "exam_strategy": "When a question presents a new, life-threatening complication mid-scenario, re-diagnose the problem first. Tension pneumothorax has a signature set of signs: tracheal deviation, absent breath sounds on one side, severe dyspnoea. The RPN's first action for any emergency beyond their scope is always to escalate/call for help, not perform the procedure.",
+    "memory_hook": "Trachea goes AWAY from the tension side. Absent breath sounds + cyanosis + deviated trachea = Tension PTX. RPN = Call Code + O2 + Stay. MD = Needle in 2nd intercostal space, midclavicular line.",
+    "hints": [
+      { "level": 1, "text": "Look at the new symptoms carefully — are these consistent with the existing diagnosis of PE, or do they suggest a new and more immediately dangerous problem?" },
+      { "level": 2, "text": "Absent breath sounds + tracheal deviation away from the affected side + cyanosis = tension pneumothorax, not PE. This is a life-threatening emergency requiring an immediate response beyond RPN scope. What is the first action?" },
+      { "level": 3, "text": "This is a tension pneumothorax (possibly heparin-related haemothorax). First action: call a code and stay with the client — mobilize the emergency team needed for needle decompression. Do not increase heparin." }
+    ],
+    "difficulty": "hard",
+    "exam": "REx-PN",
+    "country": "Canada",
+    "category": "Respiratory / Emergency",
+    "client_needs": "Physiological Integrity",
+    "topic": "Tension Pneumothorax Recognition / Emergency Response"
+  }
+]

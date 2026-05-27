@@ -1,0 +1,205 @@
+[
+  {
+    "question": "A 52-year-old male presents to the NP clinic with a 3-week history of progressive exertional dyspnoea, orthopnoea, and bilateral lower extremity oedema. He has a history of hypertension and Type 2 diabetes managed with metformin. On examination: BP 158/96 mmHg, HR 102 bpm and irregular, RR 20/min, O2 saturation 91% on room air. Cardiovascular exam reveals an irregularly irregular rhythm, JVP elevated at 5 cm above the sternal angle, S3 gallop, and bibasilar crackles. Bilateral pitting oedema is 2+ to the knees. ECG shows no P waves and irregular QRS complexes. Which diagnosis BEST explains this clinical presentation?",
+    "option_a": "Acute decompensated heart failure secondary to new-onset atrial fibrillation",
+    "option_b": "Hypertensive urgency with hypertensive heart disease",
+    "option_c": "COPD exacerbation with cor pulmonale",
+    "option_d": "Pulmonary embolism with right ventricular strain",
+    "correct_answer": "A",
+    "rationale": "This presentation is pathognomonic of acute decompensated heart failure (HFrEF or HFpEF) precipitated by new-onset atrial fibrillation. The clinical triad of volume overload (bibasilar crackles, bilateral pitting oedema, elevated JVP), reduced cardiac output (exertional dyspnoea, orthopnoea, tachycardia), and structural cardiac changes (S3 gallop — indicating rapid ventricular filling from elevated preload) establishes heart failure. The ECG findings (no P waves + irregularly irregular rhythm) confirm atrial fibrillation, which precipitates decompensation by: (1) loss of atrial kick (20-30% reduction in cardiac output), (2) rapid ventricular rate reducing diastolic filling time, and (3) tachycardia-mediated cardiomyopathy over time. Hypertensive urgency alone would not cause this constellation of findings. COPD cor pulmonale causes RV failure (JVP elevation, peripheral oedema, RV heave) but not bibasilar crackles and S3 from LV dysfunction. Pulmonary embolism causes acute right heart strain and pleuritic chest pain but not this gradual picture with bilateral crackles from pulmonary oedema.",
+    "distractor_rationales": {
+      "B": "Hypertensive urgency (BP elevation without acute end-organ damage) would not alone explain S3 gallop, bibasilar crackles, bilateral oedema, elevated JVP, and irregularly irregular rhythm. The BP of 158/96 is elevated but the constellation of findings indicates a primary cardiac syndrome — likely longstanding hypertensive heart disease with new AF precipitating decompensation. Hypertensive urgency is a contributing factor, not the primary diagnosis here.",
+      "C": "COPD with cor pulmonale causes RIGHT heart failure: JVP elevation and peripheral oedema from RV dysfunction. However, bibasilar crackles and S3 gallop reflect LEFT ventricular dysfunction. COPD exacerbation would also present with wheezing, prolonged expiration, barrel chest, and hyperinflation on CXR — none of which are described here. The ECG in cor pulmonale typically shows RAD, RV hypertrophy, P pulmonale — not AF.",
+      "D": "Pulmonary embolism typically presents acutely with sudden-onset dyspnoea, pleuritic chest pain, haemoptysis, tachycardia, and hypoxaemia. It causes acute right heart strain, not chronic oedema and orthopnoea. The 3-week history of progressive symptoms argues strongly against PE as the primary diagnosis. PE could cause or worsen AF but would not explain this gradually developing bilateral oedema and crackle pattern."
+    },
+    "clinical_pearl": "New-onset AF precipitating HF decompensation is a classic high-yield NP scenario. Key indicators: (1) Irregularly irregular rhythm on ECG (no P waves) = AF; (2) S3 gallop = elevated filling pressures (HF marker); (3) Bibasilar crackles = pulmonary oedema (LV failure); (4) JVP elevation + bilateral oedema = elevated right-sided pressures (right HF component or biventricular). Management priorities: Rate control (metoprolol or digoxin for HFrEF), anticoagulation (CHA2DS2-VASc ≥2 = anticoagulate with NOAC or warfarin), and diuresis (furosemide). Canadian Cardiovascular Society (CCS) guidelines apply.",
+    "exam_strategy": "For NP differential diagnosis questions: synthesize all findings — history, physical exam, and diagnostics — into the most coherent diagnosis. Don't let one abnormal value mislead you. Here: gradual onset + bilateral crackles (LV) + irregular rhythm (AF) + S3 + elevated JVP + oedema = HF with AF. Rule out each distractor by identifying what it CAN'T explain.",
+    "memory_hook": "AF + HF = 'The Decompensation Duo.' AF reduces cardiac output (loss of atrial kick + fast rate) → triggers HF decompensation. Recognize: No P waves + irregularly irregular on ECG = AF. S3 + crackles + JVP + oedema = HF. Together = acute decompensated HF from new AF.",
+    "hints": [
+      { "level": 1, "text": "Synthesize the examination findings systematically: cardiac auscultation (S3, irregular rhythm), lung findings (bibasilar crackles), venous findings (elevated JVP, bilateral oedema), and ECG (no P waves, irregular QRS). What cardiac syndrome do these collectively represent?" },
+      { "level": 2, "text": "The ECG with no P waves and irregularly irregular QRS = atrial fibrillation. S3 + bibasilar crackles + elevated JVP + bilateral oedema = heart failure (left and right components). How does AF precipitate heart failure decompensation?" },
+      { "level": 3, "text": "New-onset AF precipitates heart failure decompensation through loss of atrial kick (20-30% CO reduction) and rapid ventricular rate reducing filling time. The correct diagnosis integrates both: acute decompensated HF secondary to new-onset AF. COPD/PE/hypertensive urgency cannot explain bibasilar crackles + S3 + bilateral oedema + new AF together." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Cardiovascular",
+    "client_needs": "Physiological Adaptation / Advanced Assessment",
+    "topic": "Heart Failure / Atrial Fibrillation — Differential Diagnosis",
+    "question_type": "standard"
+  },
+  {
+    "question": "A 34-year-old female presents with a 6-month history of fatigue, cold intolerance, constipation, weight gain of 7 kg, and dry skin. She reports irregular menstrual cycles. Her BMI is 27. Examination reveals a firm, non-tender, diffusely enlarged thyroid gland without nodules. Thyroid function tests show: TSH 18.2 mIU/L (normal 0.4-4.0), Free T4 0.6 ng/dL (normal 0.9-1.8), Free T3 2.1 pg/mL (normal 2.3-4.2). Anti-thyroid peroxidase (anti-TPO) antibodies: 890 IU/mL (normal <35). Which diagnosis and management plan is MOST appropriate?",
+    "option_a": "Subclinical hypothyroidism; monitor TSH every 6 months without treatment",
+    "option_b": "Hashimoto thyroiditis with overt hypothyroidism; initiate levothyroxine with dose titration targeting TSH 1.0-2.5 mIU/L",
+    "option_c": "Hashimoto thyroiditis with overt hypothyroidism; initiate liothyronine (T3) monotherapy to rapidly reverse symptoms",
+    "option_d": "Thyroid lymphoma; urgent referral to endocrinology for biopsy",
+    "correct_answer": "B",
+    "rationale": "This presentation is classic Hashimoto thyroiditis (chronic autoimmune hypothyroidism) with overt hypothyroidism, confirmed by: (1) Markedly elevated TSH (18.2 mIU/L — far above normal), (2) Low Free T4 (0.6 ng/dL) and Free T3 (2.1 pg/mL) — confirming primary hypothyroidism, (3) Highly elevated anti-TPO antibodies (890 IU/mL — the hallmark autoimmune marker of Hashimoto), (4) Diffusely enlarged firm thyroid (goitre), and (5) Classic hypothyroid symptoms (fatigue, cold intolerance, weight gain, constipation, dry skin, irregular menses). Management: Levothyroxine (T4) monotherapy is the Canadian Thyroid Association (CTA) and ATA first-line treatment. Start at 1.6 mcg/kg/day (full replacement dose) in otherwise healthy adults, or lower doses (25-50 mcg/day) in elderly or cardiac patients. The TSH target is 1.0-2.5 mIU/L for most patients. Subclinical hypothyroidism (elevated TSH + NORMAL T4) does not apply here since T4 and T3 are both low. Liothyronine (T3) monotherapy is NOT recommended — T4 is converted to T3 peripherally, and T3 has a short half-life requiring multiple daily doses with less stable levels.",
+    "distractor_rationales": {
+      "A": "Subclinical hypothyroidism is defined as elevated TSH with NORMAL Free T4 — indicating early thyroid gland failure before clinical manifestations develop. This client has BOTH elevated TSH AND low Free T4, plus overt clinical symptoms — this is overt hypothyroidism requiring treatment, not watchful monitoring.",
+      "C": "Liothyronine (T3) monotherapy is NOT recommended for hypothyroidism management. T4 (levothyroxine) is the preferred treatment because: it has a longer half-life (stable serum levels), peripheral conversion to T3 provides physiological distribution, and clinical guidelines (ATA, CTA) do not support T3 monotherapy. Some centres use T4/T3 combination in select refractory patients.",
+      "D": "Thyroid lymphoma typically presents as a rapidly growing painful thyroid mass with compressive symptoms (dysphagia, hoarseness, stridor) — often in elderly patients with pre-existing Hashimoto thyroiditis. This client's presentation is gradual, non-painful, and without compressive symptoms. The diffusely enlarged gland with autoimmune markers is consistent with Hashimoto disease, not lymphoma."
+    },
+    "clinical_pearl": "Hashimoto thyroiditis (chronic autoimmune thyroiditis): Most common cause of hypothyroidism in iodine-sufficient countries. High-yield NP pearls: (1) Anti-TPO antibodies are the key diagnostic marker; (2) Levothyroxine is the ONLY evidence-based first-line treatment; (3) Adjust dose every 6-8 weeks until TSH is therapeutic; (4) Monitor TSH annually once stable; (5) Increased risk of thyroid lymphoma over time — monitor for rapidly growing or painful nodules; (6) Associated with other autoimmune conditions (T1D, RA, celiac disease, vitiligo).",
+    "exam_strategy": "Thyroid function test interpretation: TSH ↑ + Free T4 ↓ = PRIMARY hypothyroidism (thyroid failing). TSH ↑ + Free T4 NORMAL = SUBCLINICAL hypothyroidism. TSH ↓ + Free T4 ↑ = PRIMARY hyperthyroidism (Graves, toxic nodule). When anti-TPO is markedly elevated with hypothyroidism = Hashimoto. Treatment = levothyroxine, NOT liothyronine.",
+    "memory_hook": "TSH UP + T4 DOWN = Thyroid Struggling Harder (TSH) because T4 is Deficient. Anti-TPO high = autoimmune attack (Hashimoto). Treat with LevoTHYROXINE (T4), not T3. Target TSH 1-2.5. 'THYROXINE for Thyroid Trouble — TPO High = Hashimoto.'",
+    "hints": [
+      { "level": 1, "text": "Interpret the thyroid function tests systematically: TSH elevated + Free T4 low + Free T3 low = what type of thyroid disorder? Then consider the clinical presentation and the anti-TPO antibody result. What underlying condition is indicated?" },
+      { "level": 2, "text": "TSH markedly elevated + T4/T3 both low = overt PRIMARY hypothyroidism (not subclinical, which has normal T4). Anti-TPO antibodies 890 IU/mL = Hashimoto thyroiditis. What is the evidence-based first-line treatment and TSH target?" },
+      { "level": 3, "text": "Hashimoto thyroiditis with overt hypothyroidism (TSH >4.0 + low T4) = levothyroxine monotherapy, 1.6 mcg/kg/day. Target TSH 1.0-2.5 mIU/L. Never use T3 monotherapy (short half-life, unstable levels). Subclinical hypothyroidism means normal T4 — not this clinical picture." }
+    ],
+    "difficulty": "moderate",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Endocrine",
+    "client_needs": "Physiological Adaptation / Prescribing / Advanced Assessment",
+    "topic": "Hashimoto Thyroiditis / Hypothyroidism Management",
+    "question_type": "standard"
+  },
+  {
+    "question": "A 67-year-old male with a 40 pack-year smoking history presents with a 3-month history of haemoptysis, 8 kg unintentional weight loss, progressive dyspnoea, and right-sided chest pain. He also reports increasing hoarseness over the past month. Chest X-ray shows a 4.2 cm right upper lobe mass with right hilar lymphadenopathy and ipsilateral pleural effusion. On physical examination, the right pupil is 1 mm smaller than the left, with mild ptosis and anhidrosis on the right side of the face. Which of the following BEST explains the combination of the chest mass and the eye findings?",
+    "option_a": "Paraneoplastic syndrome causing cranial nerve III palsy",
+    "option_b": "Pancoast tumour with right-sided Horner syndrome from invasion of the cervical sympathetic chain",
+    "option_c": "Metastatic lung cancer with leptomeningeal spread causing pupillary asymmetry",
+    "option_d": "Superior vena cava syndrome causing venous congestion affecting the orbit",
+    "correct_answer": "B",
+    "rationale": "This presentation is classic Pancoast tumour (superior sulcus tumour) with Horner syndrome. A Pancoast tumour is a lung cancer (most commonly squamous cell) arising in the superior sulcus of the lung — the apex region adjacent to thoracic inlet structures. The tumour invades locally into critical structures: the cervical sympathetic chain (Horner syndrome), brachial plexus (C8-T2 distribution pain/weakness), subclavian vessels, and adjacent ribs/vertebrae. Horner syndrome: unilateral miosis (small pupil), ptosis (drooping eyelid), and anhidrosis (no sweating) — caused by interruption of the ipsilateral sympathetic chain. The classic triad here — apical lung mass + Horner syndrome — is the defining presentation of a Pancoast tumour. The hoarseness is from involvement of the recurrent laryngeal nerve. The pleural effusion and hilar lymphadenopathy indicate local-regional spread. The pupillary asymmetry (right pupil 1 mm smaller) is miosis, not mydriasis — ruling out CN III palsy (which causes mydriasis and ptosis from parasympathetic involvement, not sympathetic).",
+    "distractor_rationales": {
+      "A": "Paraneoplastic syndrome involving cranial nerve III would cause MYDRIASIS (dilated pupil) + ptosis + ophthalmoplegia from loss of parasympathetic innervation — not the MIOSIS (constricted pupil) seen here. CN III palsy causes a different pupillary pattern and does not produce the triad of miosis + ptosis + anhidrosis that characterizes Horner syndrome.",
+      "C": "Leptomeningeal metastases typically present with headache, cranial nerve palsies, radiculopathy, and altered mentation — a more diffuse neurological syndrome. While they can affect the sympathetic nervous system, this does not explain a localized apical lung mass directly adjacent to the cervical sympathetic chain. The clinical picture points to a direct local invasion rather than hematogenous spread to the meninges.",
+      "D": "Superior vena cava (SVC) syndrome causes facial oedema, JVD, dilated chest wall veins, arm oedema, and headache from venous congestion — not the sympathetic triad of Horner syndrome. SVC syndrome is caused by mediastinal masses, but it would not produce miosis, ptosis, and anhidrosis."
+    },
+    "clinical_pearl": "Pancoast Tumour High-Yield Pearls: (1) Location: superior sulcus/apex of lung; (2) Horner syndrome triad: Miosis + Ptosis + Anhidrosis (unilateral) = sympathetic chain invasion; (3) Brachial plexopathy: C8-T2 distribution pain/weakness (ulnar side of arm/hand); (4) Rib/vertebral erosion; (5) Hoarseness: recurrent laryngeal nerve invasion; (6) Histology: squamous cell carcinoma most common; (7) Treatment: concurrent chemoradiation followed by surgery if resectable (Pancoast Protocol). NP board exam: recognize the triad.",
+    "exam_strategy": "For NP oncology questions with neurological findings: identify the anatomical relationship between the tumour and the neural structure affected. Pancoast = apex → cervical sympathetic chain → Horner. The KEY differentiator: Horner = MIOSIS (small pupil, sympathetic loss) vs. CN III palsy = MYDRIASIS (big pupil, parasympathetic loss). Remember: sympathetic dilates, loss = constriction.",
+    "memory_hook": "PANCOAST + HORNER: Pupils And Nose Causes Anhidrosis, Ocular Seam (ptosis), Tiny pupil. 'At the top of the lung, the sympathetic chain gets strangled — small pupil, droopy lid, dry face.' Miosis = small = sympathetic LOSS.",
+    "hints": [
+      { "level": 1, "text": "The combination of an apical lung mass and unilateral eye findings is the key diagnostic clue. The eye findings are: small pupil (miosis), ptosis, and anhidrosis on the same side. What is the name of this triad, and what causes it?" },
+      { "level": 2, "text": "Miosis + ptosis + anhidrosis = Horner syndrome — caused by disruption of the sympathetic pathway. The sympathetic chain runs through the cervical region adjacent to the lung apex. What type of apical lung tumour directly invades the cervical sympathetic chain?" },
+      { "level": 3, "text": "Pancoast tumour (superior sulcus tumour) invades the cervical sympathetic chain, causing ipsilateral Horner syndrome. Differentiate: Horner = miosis (sympathetic loss — sympathetics dilate the pupil). CN III palsy = mydriasis (parasympathetic loss — parasympathetics constrict the pupil). The finding here is MIOSIS = Horner = Pancoast." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Respiratory / Oncology",
+    "client_needs": "Physiological Adaptation / Advanced Assessment / Differential Diagnosis",
+    "topic": "Pancoast Tumour / Horner Syndrome — Lung Cancer",
+    "question_type": "standard"
+  },
+  {
+    "question": "A 28-year-old female presents to the NP clinic with a 2-year history of recurrent painful oral ulcers (≥3 episodes/year), a current painful genital ulcer, and bilateral inflammatory eye pain with photophobia. She also reports migratory joint pain in her knees and wrists over the past 6 months. Her CBC shows mild normocytic anaemia, ESR 68 mm/hr, CRP 42 mg/L. ANA, anti-dsDNA, and ANCA are all negative. Which diagnosis is MOST likely?",
+    "option_a": "Systemic lupus erythematosus (SLE)",
+    "option_b": "Behçet disease",
+    "option_c": "Reactive arthritis (formerly Reiter syndrome)",
+    "option_d": "Herpes simplex virus (HSV) with secondary joint involvement",
+    "correct_answer": "B",
+    "rationale": "Behçet disease is a systemic vasculitis characterized by the classic triad of recurrent oral aphthous ulcers + genital ulcers + uveitis (eye inflammation). The International Study Group criteria for Behçet disease requires recurrent oral ulceration (≥3 episodes/year) PLUS at least 2 of: recurrent genital ulceration, eye lesions (uveitis, retinal vasculitis), skin lesions (pseudofolliculitis, erythema nodosum), or positive pathergy test. This patient has all three classic manifestations plus seronegative inflammatory arthritis — a perfect fit. Critically: Behçet disease is SERONEGATIVE (ANA, anti-dsDNA, ANCA are negative), distinguishing it from SLE. SLE would typically have positive ANA and target organs (kidneys, CNS, photosensitive rash). Reactive arthritis (formerly Reiter) follows a genitourinary or GI infection and presents with the triad of urethritis + conjunctivitis + arthritis — without the recurrent mucosal ulcer pattern. HSV causes oral and genital lesions but not uveitis or inflammatory arthritis.",
+    "distractor_rationales": {
+      "A": "SLE presents with multisystem involvement but typically has POSITIVE ANA (sensitivity >95%), positive anti-dsDNA (specific for lupus), and features including malar rash, photosensitivity, renal involvement, serositis, and haematological abnormalities. This patient's negative ANA, anti-dsDNA, and ANCA make SLE unlikely. Oral ulcers occur in SLE but are typically painless (this patient's ulcers are painful), and genital ulcers with uveitis together are not a lupus pattern.",
+      "C": "Reactive arthritis (formerly Reiter syndrome) presents with the TRIAD of urethritis (or cervicitis), conjunctivitis, and arthritis — triggered by preceding infection (Chlamydia, Salmonella, Shigella, Yersinia, Campylobacter). It does not characteristically cause recurrent ORAL aphthous ulcers or uveitis. The joint pattern is typically asymmetric oligoarthritis in large lower extremity joints, often with sausage digits.",
+      "D": "HSV (oral and genital) could explain the mucosal ulcers, but does NOT cause uveitis or inflammatory arthritis. HSV-associated eye involvement typically causes keratitis (corneal inflammation), not uveitis. The pattern of recurrent oral AND genital ulcers WITH inflammatory eye disease (uveitis) and seronegative inflammatory arthritis is not consistent with HSV."
+    },
+    "clinical_pearl": "Behçet Disease: High-yield NP board points: (1) Classic triad = oral + genital ulcers + uveitis; (2) Seronegative vasculitis — all autoimmune antibodies negative; (3) More common in people of Middle Eastern, Turkish, East Asian descent (Silk Road distribution); (4) Pathergy test: skin hyperreactivity to minor trauma (sterile papule/pustule at needle prick site); (5) Most feared complication: posterior uveitis → blindness; (6) Treatment: colchicine for mucosal disease, systemic immunosuppression (azathioprine, anti-TNF) for severe organ involvement.",
+    "exam_strategy": "For NP seronegative rheumatologic conditions: When you see negative ANA + recurrent ulcers (oral AND genital) + uveitis = think Behçet. Distinguish by: Behçet = oral + genital + eye; Reactive arthritis = urethritis + conjunctivitis + arthritis (post-infection); SLE = ANA positive (>95% sensitivity).",
+    "memory_hook": "BEHÇET = 'Both Ends plus Eyes.' Ulcers at BOTH ends (oral + genital) + Eye inflammation = Behçet disease. Seronegative (ANA negative). Silk Road distribution. 'Behçet bites twice — top and bottom — and sees red.'",
+    "hints": [
+      { "level": 1, "text": "The diagnostic triad in this case involves three anatomical regions: the mouth, the genitalia, and the eyes. All three are simultaneously affected. What systemic vasculitis is classically defined by recurrent oral ulcers + genital ulcers + uveitis, and is notably SERONEGATIVE?" },
+      { "level": 2, "text": "The negative ANA and anti-dsDNA rule out SLE. The pattern (oral + genital ulcers + uveitis) does not fit reactive arthritis (which requires post-infectious urethritis + conjunctivitis + arthritis). What rare seronegative vasculitis has oral and genital ulcers plus uveitis as its defining features?" },
+      { "level": 3, "text": "Behçet disease: oral aphthous ulcers (≥3/year) + genital ulcers + uveitis = classic triad. It is SERONEGATIVE (ANA/dsDNA/ANCA all negative), which is the key differentiator from SLE. Inflammatory arthritis is a common additional feature. Associated with the 'Silk Road' geographic distribution (Middle East, Turkey, East Asia)." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Musculoskeletal / Rheumatology",
+    "client_needs": "Physiological Adaptation / Differential Diagnosis",
+    "topic": "Behçet Disease / Seronegative Vasculitis",
+    "question_type": "standard"
+  },
+  {
+    "question": "A 71-year-old male with a history of BPH presents with a 10-day course of urosepsis treated with IV ciprofloxacin in hospital. He is now being discharged on oral ciprofloxacin 500 mg PO BID for 14 days. His current medications include: warfarin 5 mg daily (INR 2.4, therapeutic for AF), metoprolol succinate 50 mg daily, and amlodipine 5 mg daily. As the NP completing discharge, which medication interaction is the MOST critical to address before the patient leaves?",
+    "option_a": "Ciprofloxacin may reduce the absorption of amlodipine, requiring dose adjustment",
+    "option_b": "Ciprofloxacin inhibits CYP1A2 and potentiates warfarin, significantly increasing INR and bleeding risk",
+    "option_c": "Ciprofloxacin and metoprolol both lower heart rate, increasing the risk of bradycardia",
+    "option_d": "Ciprofloxacin may cause rebound hypertension when taken with amlodipine",
+    "correct_answer": "B",
+    "rationale": "Ciprofloxacin is a potent inhibitor of CYP1A2 (and to a lesser extent CYP3A4), which significantly impairs the hepatic metabolism of warfarin (particularly the S-warfarin enantiomer metabolized by CYP2C9, but the interaction also occurs through other pathways). The result is supratherapeutic anticoagulation — the INR can increase dramatically, potentially to values above 4-5, leading to life-threatening haemorrhage (intracranial, GI, retroperitoneal). This is a HIGH-RISK, WELL-DOCUMENTED drug interaction. The NP MUST: (1) Warn the patient of increased bleeding risk signs (easy bruising, blood in urine/stool, prolonged bleeding), (2) Reduce the warfarin dose prophylactically (typically 25-50% reduction during and for a few days after antibiotic course), and (3) Arrange urgent INR check in 3-5 days. The other interactions listed are either minor, incorrect, or not clinically significant at standard doses.",
+    "distractor_rationales": {
+      "A": "Ciprofloxacin does not reduce amlodipine absorption through a clinically significant mechanism. Amlodipine is metabolized by CYP3A4 — ciprofloxacin has minimal effect on this pathway. There is no clinically significant dose adjustment required for amlodipine with ciprofloxacin.",
+      "C": "Ciprofloxacin does not significantly lower heart rate and has no direct pharmacodynamic interaction with metoprolol causing additive bradycardia. Metoprolol (beta-1 selective) lowers HR through beta-adrenergic blockade; ciprofloxacin has no meaningful effect on HR at standard doses. This interaction is clinically insignificant.",
+      "D": "This is a fabricated interaction. Ciprofloxacin does not cause rebound hypertension and does not have a clinically relevant interaction with amlodipine related to blood pressure. This distractor is designed to test whether the learner can identify an invented interaction."
+    },
+    "clinical_pearl": "Fluoroquinolone-warfarin interaction: HIGH-RISK interaction. Fluoroquinolones (ciprofloxacin, levofloxacin, moxifloxacin) inhibit CYP1A2 and can displace protein-bound warfarin, both increasing free warfarin levels. INR can increase by 50-100%+ during concurrent therapy. Management: Check INR within 3-5 days of starting antibiotic, reduce warfarin dose by 25-50%, counsel patient on bleeding signs. Also watch: Warfarin + metronidazole (strong CYP2C9 inhibitor), warfarin + amiodarone, warfarin + azole antifungals (all potentiate anticoagulant effect).",
+    "exam_strategy": "For NP drug interaction questions: know the high-risk pairs: (1) Any antibiotic + warfarin (almost all antibiotics potentiate warfarin by varying degrees), (2) Azoles + statins (myopathy), (3) SSRIs + triptans (serotonin syndrome), (4) QTc-prolonging drugs combined (arrhythmia). When warfarin is in the medication list, ALWAYS examine for interactions.",
+    "memory_hook": "WIPE: Warfarin Interactions Potentiate Everything. Fluoroquinolones + warfarin = INR spike + bleeding. 'CIP-ro with WAR-farin = watch your INR VERY carefully.' Plan: check INR in 3-5 days, reduce warfarin dose 25-50%.",
+    "hints": [
+      { "level": 1, "text": "The patient is being discharged on ciprofloxacin with an existing medication list that includes warfarin. Fluoroquinolones are known enzyme inhibitors. What metabolic pathway does ciprofloxacin affect, and which of the patient's medications depends on hepatic enzyme metabolism?" },
+      { "level": 2, "text": "Ciprofloxacin inhibits CYP1A2 (and partially CYP2C9/3A4), impairing warfarin's hepatic clearance. As a result, warfarin levels rise and the INR increases beyond the therapeutic range. What is the clinical consequence of a supratherapeutic INR in a patient on anticoagulation?" },
+      { "level": 3, "text": "Ciprofloxacin + warfarin = significantly elevated INR → major haemorrhage risk. The NP must: warn the patient about bleeding signs, reduce the warfarin dose by 25-50% during antibiotic therapy, and arrange INR check in 3-5 days. This is the most dangerous discharge drug interaction to address." }
+    ],
+    "difficulty": "moderate",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Pharmacology",
+    "client_needs": "Prescribing / Reduction of Risk / Pharmacological Therapies",
+    "topic": "Drug-Drug Interactions — Fluoroquinolones and Warfarin",
+    "question_type": "standard"
+  },
+  {
+    "question": "A 45-year-old female presents for follow-up of newly diagnosed hypertension. She has no other medical conditions and is otherwise healthy. Today's BP is 156/94 mmHg confirmed on two readings. She reports no headache, chest pain, or shortness of breath. Urine dipstick: negative for protein, glucose, and blood. Basic metabolic panel: normal. ECG: normal sinus rhythm without LVH. She does not want to take medication and would like to try lifestyle modifications first. After counselling her on lifestyle changes, she asks what the most effective single modification would be. Which response by the NP is MOST accurate?",
+    "option_a": "Reducing dietary sodium intake to less than 2,300 mg per day typically reduces systolic BP by 2-8 mmHg",
+    "option_b": "Aerobic exercise 30 minutes on most days of the week reduces systolic BP by 4-9 mmHg",
+    "option_c": "Reducing alcohol to 2 drinks or fewer per day reduces systolic BP by 2-4 mmHg",
+    "option_d": "The DASH diet (Dietary Approaches to Stop Hypertension) alone can reduce systolic BP by 8-14 mmHg, making it the single most effective lifestyle modification",
+    "correct_answer": "D",
+    "rationale": "The DASH diet is consistently identified in hypertension guidelines (Canadian Hypertension Education Program — CHEP; ACC/AHA; JNC 8) as the SINGLE MOST EFFECTIVE non-pharmacological intervention for reducing blood pressure, with documented systolic BP reductions of 8-14 mmHg. The DASH diet emphasizes: increased fruits, vegetables, low-fat dairy, whole grains, legumes, nuts, seeds; reduced saturated fat, sodium, and red meat. The combination of increased potassium, magnesium, calcium, and fibre alongside reduced sodium creates its powerful antihypertensive effect. This exceeds the effect of sodium restriction alone (2-8 mmHg), aerobic exercise alone (4-9 mmHg), or alcohol reduction alone (2-4 mmHg). While all lifestyle modifications are additive and the combination can reduce BP by 20-30 mmHg total, the DASH diet provides the greatest single-intervention benefit.",
+    "distractor_rationales": {
+      "A": "Sodium restriction to <2,300 mg/day is an important recommendation that reduces SBP by 2-8 mmHg — this is accurate data, but it represents a LOWER magnitude reduction compared to the DASH diet. Sodium restriction IS part of the DASH diet but is less effective when implemented alone without the full dietary pattern.",
+      "B": "Aerobic exercise (30 minutes, most days) reducing SBP by 4-9 mmHg is accurate. Exercise is a highly effective recommendation, but it produces a lower magnitude of BP reduction compared to the DASH diet's 8-14 mmHg. Both should be recommended, but exercise alone is not the MOST effective single intervention.",
+      "C": "Alcohol reduction to ≤2 drinks/day for men (≤1 for women) reducing SBP by 2-4 mmHg is accurate. This is an important recommendation but produces the smallest BP reduction among the four options listed, and is therefore not the most effective single intervention."
+    },
+    "clinical_pearl": "CHEP Lifestyle Modification BP Reductions (Hypertension Canada 2023): DASH diet: 8-14 mmHg; Aerobic exercise (30 min, 5-7 days/week): 4-9 mmHg; Sodium restriction (<2,300 mg/day): 2-8 mmHg; Weight loss (10 kg): 5-20 mmHg; Alcohol reduction: 2-4 mmHg. Combination of all: up to 20-30 mmHg reduction. For Stage 1 hypertension (SBP 130-139 or DBP 80-89): lifestyle modifications first for low-risk patients. For Stage 2 (≥140/90): consider pharmacotherapy alongside lifestyle.",
+    "exam_strategy": "For NP lifestyle modification questions: memorize the BP reduction magnitude for each intervention. DASH diet = largest single-modification effect (8-14 mmHg). Comparison: exercise = 4-9; sodium restriction = 2-8; alcohol reduction = 2-4. If asked 'most effective single modification' = DASH diet.",
+    "memory_hook": "DASH = Drop About Systolic High. 8-14 mmHg reduction = highest single-intervention benefit for hypertension. Remember: DASH diet reduces BP MORE than exercise, sodium restriction, or alcohol reduction alone. 'DASH first, then combine the rest.'",
+    "hints": [
+      { "level": 1, "text": "The question asks for the MOST effective SINGLE lifestyle modification for blood pressure reduction. Recall the evidence-based data from Canadian hypertension guidelines — which single intervention produces the largest magnitude of systolic BP reduction?" },
+      { "level": 2, "text": "Compare the BP reductions: DASH diet provides 8-14 mmHg SBP reduction; aerobic exercise 4-9 mmHg; sodium restriction 2-8 mmHg; alcohol reduction 2-4 mmHg. Based on this evidence, which intervention has the highest ceiling for BP reduction as a single modification?" },
+      { "level": 3, "text": "The DASH diet reduces systolic BP by 8-14 mmHg — the largest reduction achievable from any single lifestyle modification. It outperforms exercise (4-9 mmHg), sodium restriction (2-8 mmHg), and alcohol reduction (2-4 mmHg). Recommend the DASH diet as the highest-yield single recommendation." }
+    ],
+    "difficulty": "moderate",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Cardiovascular",
+    "client_needs": "Health Promotion / Patient Education / Prescribing",
+    "topic": "Hypertension — Lifestyle Modifications / Evidence-Based Management",
+    "question_type": "standard"
+  },
+  {
+    "question": "A 58-year-old male presents for an annual physical with Type 2 diabetes diagnosed 8 years ago. His current A1C is 8.4%, BP 144/88 mmHg, eGFR 42 mL/min/1.73m² (CKD stage G3b), urine ACR 180 mg/g (moderately increased). Current medications: metformin 1,000 mg PO BID, sitagliptin 100 mg daily, atorvastatin 40 mg daily, and ramipril 10 mg daily. On review, the NP identifies a treatment gap. Which medication change would MOST benefit this patient's cardiorenal outcomes based on current evidence-based guidelines?",
+    "option_a": "Discontinue metformin given CKD stage G3b and switch to gliclazide",
+    "option_b": "Add an SGLT2 inhibitor (such as empagliflozin) to the regimen",
+    "option_c": "Replace ramipril with a combination of ramipril and sacubitril/valsartan (Entresto)",
+    "option_d": "Increase atorvastatin to 80 mg daily to reduce cardiovascular risk",
+    "correct_answer": "B",
+    "rationale": "SGLT2 inhibitors (empagliflozin, dapagliflozin, canagliflozin) have become the evidence-based standard of care for Type 2 diabetes patients with CKD, regardless of glycemic control needs. Multiple landmark trials (EMPA-REG OUTCOME, CREDENCE, DAPA-CKD) demonstrate that SGLT2 inhibitors significantly reduce: (1) Progression of diabetic nephropathy and decline in eGFR, (2) Hospitalization for heart failure, (3) Major adverse cardiovascular events (MACE) in high-risk patients. Diabetes Canada (2024) and Kidney Disease Improving Global Outcomes (KDIGO) guidelines specifically recommend SGLT2 inhibitors for patients with T2DM + CKD (ACR >3 mg/mmol or eGFR 20-60 mL/min/1.73m²) as a standard addition to ACE inhibitor/ARB therapy. This patient with ACR 180 mg/g (moderately elevated) and eGFR 42 mL/min/1.73m² is precisely the target population. Metformin is SAFE and recommended to continue at this eGFR (can continue at eGFR ≥30 mL/min/1.73m²). Maximum atorvastatin dose is appropriate for primary prevention but does not address the cardiorenal gap. Sacubitril/valsartan is indicated for HFrEF with EF ≤40%, not CKD/DM without heart failure.",
+    "distractor_rationales": {
+      "A": "Metformin should NOT be discontinued at eGFR 42 mL/min/1.73m². Current guidelines (Diabetes Canada 2024) indicate metformin can be CONTINUED at eGFR ≥30 mL/min/1.73m² with appropriate dose reduction (the patient is already on 1,000 mg BID — this may need downward titration at eGFR 30-45, but discontinuation is not indicated). Gliclazide (a sulfonylurea) would worsen the glycemic picture without the cardiorenal benefits of SGLT2 inhibitors.",
+      "C": "Sacubitril/valsartan (Entresto) is indicated for heart failure with reduced ejection fraction (HFrEF, EF ≤40%) — it is NOT approved or guideline-recommended for diabetic nephropathy management or CKD protection without concurrent HFrEF. This patient has no documented heart failure. Adding sacubitril/valsartan to an ACE inhibitor would also create a dual RAAS blockade risk and is contraindicated.",
+      "D": "While maximizing statin therapy for cardiovascular risk reduction is important in T2DM, this patient's most critical treatment gap is the absence of an SGLT2 inhibitor — which provides proven cardiorenal protection beyond what statin dose optimization achieves. Increasing atorvastatin from 40 to 80 mg addresses lipid risk but misses the primary cardiorenal protection opportunity."
+    },
+    "clinical_pearl": "SGLT2 inhibitor indications in T2DM (Diabetes Canada 2024 / KDIGO 2024): Add SGLT2 inhibitor when: eGFR 20-60 mL/min + ACR >3 mg/mmol; or T2DM + established CVD (ASCVD); or T2DM + HFrEF. Benefits: renoprotective (reduces hyperfiltration via tubuloglomerular feedback), reduces CV events, reduces HF hospitalization. Key contraindication: eGFR <20 mL/min (not effective), recurrent UTIs, DKA risk. Mechanism: glucosuria by blocking SGLT2 in proximal tubule → glucose + Na+ excretion → afferent arteriolar constriction → reduced GFR hyperfiltration.",
+    "exam_strategy": "For NP diabetes management questions involving CKD: When you see T2DM + CKD (eGFR 20-60) + proteinuria on ACE/ARB = ADD SGLT2 inhibitor. This is the current standard of care gap question. Remember: metformin is safe at eGFR ≥30, SGLT2 inhibitors are safe at eGFR ≥20.",
+    "memory_hook": "SGLT2 = Safeguards Glomeruli, Lowers T2DM events, Two-for-one. In CKD + T2DM: if ACE/ARB is on board and SGLT2 is NOT → that's the gap to fill. eGFR 20-60 + proteinuria = SGLT2 indication. 'When the kidney AND heart are at risk, SGLT2 benefits both.'",
+    "hints": [
+      { "level": 1, "text": "This patient has T2DM + CKD G3b + proteinuria (ACR 180) + hypertension on an ACE inhibitor. The question asks for the treatment gap. Review current cardiorenal guidelines: which drug class has the strongest evidence for slowing CKD progression AND reducing cardiovascular events in T2DM patients with CKD?" },
+      { "level": 2, "text": "SGLT2 inhibitors (empagliflozin, dapagliflozin) have landmark trial evidence (CREDENCE, DAPA-CKD) showing renoprotective and cardiovascular benefits in T2DM + CKD. The patient is on an ACE inhibitor but NOT on an SGLT2 inhibitor. What is the eGFR threshold for SGLT2 initiation, and does this patient qualify?" },
+      { "level": 3, "text": "eGFR 42 mL/min and ACR 180 mg/g: this patient qualifies for SGLT2 inhibitor addition per Diabetes Canada/KDIGO 2024 guidelines (eGFR 20-60 + proteinuria). Metformin is safe to continue at eGFR ≥30 (not a gap). Sacubitril/valsartan is for HFrEF without concurrent ACE inhibitor. The treatment gap = missing SGLT2 inhibitor." }
+    ],
+    "difficulty": "hard",
+    "exam": "AANP",
+    "country": "Canada",
+    "category": "Endocrine / Renal",
+    "client_needs": "Prescribing / Pharmacological Therapies / Evidence-Based Practice",
+    "topic": "Type 2 Diabetes with CKD — SGLT2 Inhibitors / Cardiorenal Protection",
+    "question_type": "standard"
+  }
+]

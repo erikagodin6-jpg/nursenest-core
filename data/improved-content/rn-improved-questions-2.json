@@ -1,0 +1,226 @@
+[
+  {
+    "question": "A nurse is caring for a client with chronic kidney disease (CKD) Stage 4 who is admitted for a hypertensive emergency with BP 218/134 mmHg. The client is ordered IV labetalol. Twenty minutes after the first dose, the BP is 170/104 mmHg. The client reports mild headache. Which assessment finding would require the nurse to hold the next dose and contact the prescriber?",
+    "option_a": "Heart rate decreasing from 88 to 72 bpm",
+    "option_b": "Blood pressure 168/100 mmHg with persistent headache",
+    "option_c": "Heart rate 48 bpm with the client reporting light-headedness",
+    "option_d": "Blood pressure 152/94 mmHg with SpO2 96% on room air",
+    "correct_answer": "C",
+    "rationale": "Labetalol is a combined alpha/beta blocker used in hypertensive emergencies. A heart rate of 48 bpm (bradycardia) with symptomatic light-headedness is a toxic adverse effect of labetalol's beta-1 blockade. Symptomatic bradycardia (HR <50 with symptoms) requires the drug to be held and the prescriber notified immediately. Beta-blockers in general are contraindicated in symptomatic bradycardia. BP reduction to 152–170 mmHg over 20–30 minutes is expected and appropriate — a controlled, gradual reduction of 20–25% from baseline over the first hour is the goal in hypertensive emergencies to prevent cerebral ischaemia.",
+    "distractor_rationales": {
+      "A": "A heart rate decrease from 88 to 72 bpm is expected and therapeutic with labetalol (beta-blockade). This is a normal pharmacological response, not a reason to hold the medication.",
+      "B": "A BP of 168/100 mmHg with persistent mild headache is still elevated but represents appropriate, controlled gradual reduction. Headache is common in hypertensive emergency. Rapidly dropping BP to normal in the first hour risks watershed cerebral ischaemia — continued gradual reduction is expected and correct.",
+      "D": "BP of 152/94 mmHg with SpO2 96% is a continued appropriate controlled reduction. SpO2 96% is within acceptable range. There is no indication to hold the medication — this represents successful treatment."
+    },
+    "clinical_pearl": "In hypertensive emergency: reduce BP by 20–25% of MAP in the first hour, then slowly toward 160/100 over 2–6 hours. Aggressive reduction causes cerebral ischaemia. Labetalol's key adverse effects: bradycardia, bronchospasm (avoid in asthma/COPD), hypotension.",
+    "exam_strategy": "Hypertensive emergency medication monitoring questions test two things: (1) what is a normal/expected response vs. a dangerous adverse effect; and (2) when to hold a medication. The trigger here is symptomatic bradycardia (HR 48 + light-headedness) — the drug-specific red flag for labetalol.",
+    "memory_hook": "Labetalol: controls HBP but CAN KILL HR. HR <50 + symptoms = HOLD + CALL. BP trending down slowly = EXPECTED (don't panic).",
+    "hints": [
+      { "level": 1, "text": "Review labetalol's mechanism of action — which part of its pharmacological effect (alpha vs. beta blockade) would cause bradycardia, and at what heart rate does this become clinically dangerous?" },
+      { "level": 2, "text": "Labetalol causes beta-blockade which can lower heart rate. A HR of 48 bpm is bradycardia — but is it the number alone that matters, or the combination with symptoms? What do the symptoms of light-headedness tell you about cardiac output?" },
+      { "level": 3, "text": "HR 48 + light-headedness = symptomatic bradycardia — a dangerous labetalol side effect. Hold the next dose and contact the prescriber. The BP reductions in the other options are appropriate gradual reductions — expected and safe." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Cardiovascular / Pharmacology",
+    "client_needs": "Pharmacological and Parenteral Therapies",
+    "topic": "Hypertensive Emergency / Labetalol Monitoring"
+  },
+  {
+    "question": "A nurse is caring for a client post-craniotomy for a supratentorial tumour resection. The client is drowsy but arousable (GCS 13, previously 15). The nurse notes the following assessment: BP 178/58 mmHg (widened pulse pressure), HR 46 bpm, and irregular respirations. Which action is the priority?",
+    "option_a": "Administer the prescribed PRN acetaminophen 650 mg for pain",
+    "option_b": "Reposition the head of bed to 30 degrees and dim the lights",
+    "option_c": "Notify the neurosurgeon immediately and prepare for urgent intervention",
+    "option_d": "Increase the IV maintenance fluid rate to improve cerebral perfusion pressure",
+    "correct_answer": "C",
+    "rationale": "The triad of widened pulse pressure (HTN + bradycardia), irregular breathing, and decreased level of consciousness is Cushing's triad — the classic late sign of significantly raised intracranial pressure (ICP) with impending transtentorial herniation. This is a neurosurgical emergency. The neurosurgeon must be notified immediately as the client requires emergent intervention (mannitol, hyperventilation, possibly return to OR for haematoma evacuation). Cushing's triad (HTN + bradycardia + irregular respirations) represents the brainstem's last compensatory attempt to maintain CPP before herniation and is a critical warning sign. This is the most dangerous progression post-craniotomy.",
+    "distractor_rationales": {
+      "A": "Administering acetaminophen for pain management is inappropriate here — the altered LOC, BP pattern, bradycardia, and irregular respirations are not pain findings. This represents critical neurological deterioration requiring emergency escalation, not analgesics.",
+      "B": "Elevating the HOB to 30 degrees and reducing stimulation are standard ICP precautions but are supportive measures — not the priority action in the face of Cushing's triad with active herniation. These don't address the acute emergency and should not delay calling the neurosurgeon.",
+      "D": "Increasing IV fluids in a client with elevated ICP is harmful — fluid loading increases cerebral oedema and worsens herniation. This is the opposite of appropriate management. Fluids are restricted in post-craniotomy patients with elevated ICP."
+    },
+    "clinical_pearl": "Cushing's Triad = Widened Pulse Pressure (HTN + bradycardia) + Irregular Respirations + Decreased LOC. This is a NEUROSURGICAL EMERGENCY — brainstem herniation is imminent. Call the neurosurgeon STAT.",
+    "exam_strategy": "Cushing's triad is one of the most commonly tested neurosurgical emergency presentations. Recognize the three components and know that it requires immediate physician notification. Nursing comfort measures (HOB, lights) are never the answer when herniation is occurring.",
+    "memory_hook": "CUSHINGS: (C)ushing's triad = HTN (U)p + HR (S)low + (H)erratic breathing + (I)ncreasing LOC down = Call neurosurgeon (N)ow + Get (S)urgery ready.",
+    "hints": [
+      { "level": 1, "text": "You're seeing three abnormal vital sign findings together in a post-craniotomy patient. Is there a named triad that describes this exact combination, and what does it indicate?" },
+      { "level": 2, "text": "Widened pulse pressure (hypertension + bradycardia) + irregular respirations + deteriorating GCS = Cushing's triad — a late sign of critically elevated ICP with impending brainstem herniation. What is the immediate priority action?" },
+      { "level": 3, "text": "This is Cushing's triad, a neurosurgical emergency. Notify the neurosurgeon immediately and prepare for urgent intervention. Do not delay with comfort measures — herniation is imminent." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Neurological",
+    "client_needs": "Physiological Integrity",
+    "topic": "Increased ICP / Cushing's Triad Recognition"
+  },
+  {
+    "question": "A nurse is caring for a client with liver cirrhosis who develops sudden onset haematemesis. The client vomits 800 mL of bright red blood. BP is 82/50 mmHg, HR 134 bpm, and skin is cold and clammy. Which sequence of nursing actions is most appropriate?",
+    "option_a": "Administer oxygen → obtain large-bore IV access → call the rapid response team",
+    "option_b": "Call the rapid response team → position client supine with legs elevated → obtain IV access",
+    "option_c": "Administer prescribed octreotide IV → large-bore IV × 2 → type and crossmatch blood",
+    "option_d": "Position client in left lateral decubitus → suction airway → call rapid response team",
+    "correct_answer": "D",
+    "rationale": "The client is actively vomiting massive amounts of blood and is in haemorrhagic shock. The immediate airway threat is aspiration of blood — 800 mL of haematemesis with ongoing active bleeding is a critical aspiration risk. The left lateral (recovery) position allows blood to pool in the oral cavity where it can be suctioned and prevents aspiration into the lungs. Airway protection via positioning and suctioning is the immediate priority (Airway in ABCDE) before other interventions. Calling the rapid response team follows as the second priority to mobilize emergency support for this unstable patient.",
+    "distractor_rationales": {
+      "A": "While oxygen and IV access are needed, this sequence does not address airway protection first. A supine or semi-upright patient actively vomiting 800 mL of blood has a high risk of aspiration. Airway comes before breathing support.",
+      "B": "Positioning supine with legs elevated (shock position) is dangerous in active haematemesis — it promotes blood pooling in the oropharynx and aspirated blood into the lungs. This is contraindicated in active haematemesis.",
+      "C": "Octreotide (splanchnic vasoconstrictor for variceal haemorrhage) is an appropriate medication for cirrhosis-related variceal bleeding — but administering medications before securing the airway is incorrect prioritization. Airway first, then medication orders."
+    },
+    "clinical_pearl": "Active haematemesis: immediately lateral decubitus position to protect airway + suction. In cirrhosis, massive haematemesis usually means ruptured oesophageal varices — highest mortality GI bleed. Requires: octreotide, emergent endoscopy (banding/sclerotherapy), blood products, ICU.",
+    "exam_strategy": "Haematemesis questions test ABCDE prioritization. The airway is always first, and in active vomiting of large volumes, the lateral position is the airway-protecting position. Supine + legs elevated (shock position) is wrong when the patient is actively vomiting blood.",
+    "memory_hook": "Big haematemesis = LATERAL position (airway) + SUCTION + CALL for help. Never supine with legs up when blood is actively vomiting. A before B before C.",
+    "hints": [
+      { "level": 1, "text": "This client is actively vomiting 800 mL of blood. Using the ABCDE framework, what is the immediate threat to this client's survival, and which position addresses it?" },
+      { "level": 2, "text": "Airway is the first priority — 800 mL of active haematemesis is a critical aspiration risk. Which position protects the airway from aspiration during active vomiting, and what follows immediately after?" },
+      { "level": 3, "text": "Left lateral (recovery) position allows blood to drain from the oral cavity rather than be aspirated — this is the first action. Then suction the airway and immediately call the rapid response team. Never position supine with active haematemesis." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Gastrointestinal",
+    "client_needs": "Physiological Integrity",
+    "topic": "Haematemesis / Oesophageal Varices — Airway Priority"
+  },
+  {
+    "question": "A nurse is caring for a client with type 1 diabetes who is admitted with diabetic ketoacidosis (DKA). After 4 hours of IV insulin and normal saline resuscitation, the client's blood glucose is 14.2 mmol/L, pH 7.31, bicarbonate 18 mmol/L, potassium 2.9 mEq/L, and urine output 65 mL/hour. The physician orders to continue the insulin infusion. Which assessment finding would require the nurse to contact the prescriber before continuing?",
+    "option_a": "Blood glucose of 14.2 mmol/L with urine output 65 mL/hour",
+    "option_b": "pH 7.31 with bicarbonate 18 mmol/L",
+    "option_c": "Serum potassium 2.9 mEq/L",
+    "option_d": "Heart rate increasing from 106 to 118 bpm",
+    "correct_answer": "C",
+    "rationale": "A serum potassium of 2.9 mEq/L (hypokalaemia) is the critical laboratory value that requires immediate contact with the prescriber before continuing insulin. Insulin therapy drives potassium into cells (along with glucose), rapidly worsening hypokalaemia. A potassium below 3.5 mEq/L should trigger potassium replacement before continuing insulin, and below 3.0 mEq/L requires urgent potassium replacement with a consideration of briefly pausing insulin. Severe hypokalaemia causes fatal cardiac arrhythmias (ventricular fibrillation). The DKA protocol standard is: if K+ <3.5, replace potassium before giving insulin.",
+    "distractor_rationales": {
+      "A": "Blood glucose 14.2 mmol/L with adequate urine output (65 mL/hour) is appropriate for the current stage of DKA management. Glucose of 11–14 mmol/L is often the target at which IV fluid is changed from NS to D5NS to prevent hypoglycaemia. This is expected progress, not an emergency.",
+      "B": "pH 7.31 and bicarbonate 18 mmol/L indicate ongoing acidosis, which is expected at 4 hours of DKA treatment. This takes longer to correct than glucose does. Continued insulin therapy is appropriate to continue resolving ketoacidosis — no need to contact prescriber for this.",
+      "D": "A heart rate increase from 106 to 118 may reflect the ongoing effects of fluid resuscitation, acidosis, or dehydration in DKA. By itself, without other signs of deterioration, it is not the most critical finding requiring prescriber contact compared to the K+ of 2.9."
+    },
+    "clinical_pearl": "DKA potassium rule: Insulin drives K+ into cells — always check K+ before giving insulin. K+ <3.5 = replace first. K+ <3.0 = replace and consider holding insulin temporarily. K+ >5.0 = insulin safe to give, hold K+ supplementation. Hypokalaemia in DKA kills by VF.",
+    "exam_strategy": "DKA management questions frequently test the critical potassium threshold. Despite what the glucose, pH, and urine output look like, a K+ of 2.9 is a pharmacological contraindication to continuing insulin without addressing the hypokalaemia first. This is the classic 'know your critical lab value' question.",
+    "memory_hook": "DKA + Insulin = K+ drops fast. K+ 2.9 = HOLD insulin + REPLACE potassium + CALL MD. Insulin pushes K+ into cells — without enough K+ you get fatal arrhythmias.",
+    "hints": [
+      { "level": 1, "text": "Insulin therapy in DKA does more than lower blood glucose — what happens to potassium when insulin is given, and why does the current potassium level matter?" },
+      { "level": 2, "text": "Insulin drives potassium into cells, lowering serum K+. With a K+ already at 2.9 mEq/L (below 3.0 threshold), continuing insulin risks fatal hypokalaemia and cardiac arrhythmias. What should the nurse do before continuing?" },
+      { "level": 3, "text": "K+ 2.9 mEq/L is critically low — continuing insulin will drive it lower and risk VF. Contact the prescriber for potassium replacement orders before continuing the insulin infusion. This is the most critical finding." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Endocrine",
+    "client_needs": "Pharmacological and Parenteral Therapies",
+    "topic": "DKA Management / Insulin and Potassium Monitoring"
+  },
+  {
+    "question": "A nurse is caring for a client at 28 weeks gestation who presents with sudden onset severe headache rated 9/10, visual disturbances ('floaters' and blurry vision), BP 162/110 mmHg, and 3+ pitting oedema of the hands and face. The urine dipstick shows 4+ protein. Which action should the nurse take first?",
+    "option_a": "Administer the prescribed betamethasone 12 mg IM and notify the obstetrician",
+    "option_b": "Draw blood for a CBC, LFTs, creatinine, and uric acid panel",
+    "option_c": "Initiate seizure precautions and notify the obstetrician immediately",
+    "option_d": "Insert a Foley catheter to monitor urine output and restrict the client's fluid intake",
+    "correct_answer": "C",
+    "rationale": "The clinical picture is severe pre-eclampsia with features of impending eclampsia: BP ≥160/110 mmHg, 4+ proteinuria, severe headache, and visual disturbances. The immediate nursing priorities are: (1) initiate seizure precautions (lower side rails, padded bed rails, oxygen and suction at bedside, dim environment, no unnecessary stimulation); and (2) notify the obstetrician immediately so that IV magnesium sulfate (seizure prophylaxis) and antihypertensive therapy can be ordered. Eclamptic seizures can cause maternal and fetal death. Seizure precautions and immediate physician notification are the first nursing actions — lab work and medications follow.",
+    "distractor_rationales": {
+      "A": "Betamethasone is given to accelerate fetal lung maturity at <34 weeks gestation — this would be ordered and given, but it is not the FIRST priority action. Seizure precautions must be initiated before administering medications because the client's neurological status is critical right now.",
+      "B": "Lab work is important to confirm HELLP syndrome (haemolysis, elevated liver enzymes, low platelets) which can complicate severe pre-eclampsia — but blood draws are not the first nursing action. Preventing a seizure and notifying the obstetrician come first.",
+      "D": "Foley catheter insertion for urine output monitoring is appropriate in severe pre-eclampsia management but is not the first priority. Fluid restriction without a physician order is inappropriate. The immediate threat is impending eclamptic seizure — prevention is the priority."
+    },
+    "clinical_pearl": "Severe pre-eclampsia with headache + visual changes = impending eclampsia. Action sequence: Seizure precautions → notify OB → IV Mag Sulfate → antihypertensives (labetalol/hydralazine) → labs. Target BP <155/105 mmHg. Mag sulfate is seizure PROPHYLAXIS — not treatment of seizure once it occurs.",
+    "exam_strategy": "Obstetric emergencies follow the same ABCDEs but the fetus is also a patient. Severe pre-eclampsia questions test the sequence: protect the client first (seizure precautions) then call for help. Betamethasone and labs come after the immediate safety measures.",
+    "memory_hook": "Severe Pre-E = Impending Seizure: FIRST → Rails up, pad bed, lights low, suction ready. THEN → Call OB. THEN → Mag Sulfate + Anti-HTN. The headache + floaters = SEIZURE coming.",
+    "hints": [
+      { "level": 1, "text": "This client's blood pressure, protein, headache, and visual symptoms together form a recognizable syndrome in pregnancy. What is the most life-threatening complication of this condition, and what can the nurse do immediately to prevent it?" },
+      { "level": 2, "text": "This is severe pre-eclampsia with impending eclampsia — the severe headache and visual disturbances are warning signs of an imminent seizure. What are the two immediate nursing actions to protect this client?" },
+      { "level": 3, "text": "Initiate seizure precautions (padded rails, suction/O2 at bedside, dim environment) and immediately notify the obstetrician. Lab work and betamethasone come after the immediate safety and notification steps." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Obstetrics",
+    "client_needs": "Physiological Integrity",
+    "topic": "Severe Pre-eclampsia / Impending Eclampsia Recognition"
+  },
+  {
+    "question": "A nurse is reviewing new laboratory results for a client with heart failure who is prescribed furosemide 80 mg IV twice daily and digoxin 0.125 mg daily. Which laboratory result is most critical to report to the prescriber before the next medication dose?",
+    "option_a": "Serum sodium 132 mEq/L",
+    "option_b": "Serum potassium 2.8 mEq/L",
+    "option_c": "Serum creatinine 152 μmol/L (baseline 110 μmol/L)",
+    "option_d": "BNP 680 pg/mL (previous 420 pg/mL)",
+    "correct_answer": "B",
+    "rationale": "A serum potassium of 2.8 mEq/L is the most critical finding to report in this clinical context because of the dangerous drug interaction between hypokalaemia and digoxin toxicity. Furosemide (loop diuretic) causes potassium wasting, and hypokalaemia potentiates digoxin toxicity by increasing digoxin binding to myocardial Na/K-ATPase. At a K+ of 2.8, even a therapeutic digoxin level can cause life-threatening arrhythmias (heart block, VF). The prescriber must be notified for potassium replacement before the next digoxin dose, and the digoxin level should be drawn.",
+    "distractor_rationales": {
+      "A": "Sodium 132 mEq/L is mild hyponatraemia and common in heart failure with furosemide use. It warrants monitoring and fluid restriction review but is not the most critical finding given the digoxin-hypokalaemia interaction risk in option B.",
+      "C": "Creatinine 152 μmol/L (up from 110) represents a 38% increase — this could indicate pre-renal acute kidney injury from aggressive diuresis and warrants prescriber notification. However, compared to the immediate arrhythmia risk from K+ 2.8 + digoxin, it is the second most urgent finding.",
+      "D": "BNP 680 pg/mL (up from 420) indicates worsening heart failure and requires clinical assessment, but BNP elevation is expected in decompensated HF. It is not the most critical lab result requiring immediate reporting before the next medication dose."
+    },
+    "clinical_pearl": "Digoxin + Furosemide = Hypokalaemia + Digoxin Toxicity risk. Signs of digoxin toxicity: bradycardia, heart block, yellow-green visual halos, nausea/vomiting, new arrhythmias. Always check K+ before giving digoxin. Therapeutic digoxin level = 0.5–2.0 nmol/L.",
+    "exam_strategy": "Multi-lab questions with digoxin test the pharmacological synergy between diuretic-induced hypokalaemia and digoxin toxicity. The question is asking for the most CRITICAL finding — and criticality is determined by which result poses the most immediate life threat. K+ 2.8 + digoxin = imminent arrhythmia = most critical.",
+    "memory_hook": "Furosemide drains K+. Low K+ + Digoxin = Deadly arrhythmia. K+ 2.8 = HOLD digoxin, REPLACE K+, CALL MD. The trio: Dig + Low K + Low Mag = Tox.",
+    "hints": [
+      { "level": 1, "text": "Think about the relationship between the two medications this client is taking and a specific electrolyte — which electrolyte does furosemide deplete, and why is that dangerous with digoxin?" },
+      { "level": 2, "text": "Furosemide causes potassium wasting. Hypokalaemia sensitizes the heart to digoxin toxicity — even normal digoxin levels become toxic when K+ is low. With K+ at 2.8, what must happen before the next digoxin dose?" },
+      { "level": 3, "text": "K+ 2.8 is critically dangerous with digoxin — hypokalaemia potentiates digoxin toxicity and fatal arrhythmias. Report this immediately: digoxin should be held, K+ replacement ordered, digoxin level drawn." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Cardiovascular / Pharmacology",
+    "client_needs": "Pharmacological and Parenteral Therapies",
+    "topic": "Digoxin Toxicity Risk / Furosemide-Induced Hypokalaemia"
+  },
+  {
+    "question": "A nurse is preparing a client with end-stage COPD for discharge with a new prescription for home oxygen at 2 L/min continuously. The client's daughter states, 'My mother smokes half a pack per day. Should I hide her cigarettes?' What is the nurse's best response?",
+    "option_a": "\"Smoking with home oxygen is extremely dangerous — it can cause fires and explosions. Your mother must not smoke near the equipment.\"",
+    "option_b": "\"It is ultimately your mother's decision, but we can provide nicotine replacement therapy if she chooses to quit.\"",
+    "option_c": "\"Hiding cigarettes would not address the underlying addiction. Connecting her with cessation support would be more effective.\"",
+    "option_d": "\"Home oxygen with active smoking is a fire hazard — we cannot discharge her with home oxygen unless she commits to not smoking near the equipment.\"",
+    "correct_answer": "A",
+    "rationale": "Home oxygen creates an immediate fire and explosion hazard when used near smoking materials or open flames. Oxygen is an accelerant — it dramatically increases the rate of combustion. Home oxygen-related fires are a major cause of severe burn injuries and deaths among COPD patients. The nurse's priority response addresses the most critical safety information: the combination of smoking and home oxygen is life-threatening. This is a patient safety and public safety issue — the information must be communicated clearly and directly. While autonomy and cessation support are important, the safety information is the most critical content to address in this moment.",
+    "distractor_rationales": {
+      "B": "Respecting autonomy and offering cessation therapy are important nursing values, but this response completely fails to address the immediate fire safety hazard. A client going home on O2 who smokes is at risk of severe burns or death — this critical safety information must be communicated before discharge.",
+      "C": "Cessation support is important long-term management — addressing addiction is clinically appropriate, but this response sidesteps the immediate life-threatening fire safety issue. The question's scenario is focused on discharge safety — the daughter deserves the direct safety information.",
+      "D": "While home oxygen + smoking is a serious fire risk, withholding home oxygen from an end-stage COPD patient is not an appropriate ultimatum. The nurse's role is to educate about safety precautions, not to withhold needed medical equipment based on a lifestyle behaviour. This response is paternalistic and clinically inappropriate."
+    },
+    "clinical_pearl": "Home O2 fire safety rules: No smoking within 3 metres (10 feet) of equipment. No open flames. Keep away from heat sources. O2 tubing can accumulate oxygen — cigarette spark + O2-saturated tubing = flash fire. Severe facial burns are disproportionate in home O2 fires.",
+    "exam_strategy": "When a scenario involves an immediate safety threat (fire hazard, medication contraindication, fall risk), the nurse's communication priority is the safety information — not the empathetic counselling or autonomy-respecting response. Safety education comes before lifestyle counselling.",
+    "memory_hook": "O2 + Smoking = Fire. Always warn about fire safety FIRST in home O2 discharge teaching. No open flames within 3 metres. Not optional — not about autonomy.",
+    "hints": [
+      { "level": 1, "text": "Think about what home oxygen does to the environment around it — is there a physical safety hazard that needs to be communicated before any discussion about smoking cessation or patient autonomy?" },
+      { "level": 2, "text": "Oxygen accelerates combustion — home oxygen and smoking creates a serious fire and explosion hazard. Severe burns and deaths occur in patients who smoke near home O2 equipment. What is the nurse's priority communication?" },
+      { "level": 3, "text": "The priority is communicating the fire safety hazard: smoking near home oxygen can cause fires and explosions. This is the most critical discharge teaching point — it must be addressed directly before any cessation counselling." }
+    ],
+    "difficulty": "moderate",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Respiratory",
+    "client_needs": "Safe and Effective Care Environment",
+    "topic": "Home Oxygen Safety / Fire Hazard Education"
+  },
+  {
+    "question": "A nurse is caring for a client who is 6 hours post-operative following a Whipple procedure (pancreaticoduodenectomy). The client develops sudden-onset severe upper abdominal pain, rigidity, and guarding. Temperature is 38.9°C, BP 94/60 mmHg, HR 128 bpm. The nasogastric tube output over the last hour was 450 mL of bright red blood. Which nursing action is the priority?",
+    "option_a": "Administer the prescribed morphine 4 mg IV and reassess pain in 30 minutes",
+    "option_b": "Increase the IV fluid rate to 200 mL/hour and draw a STAT CBC and coagulation panel",
+    "option_c": "Notify the surgeon immediately and prepare the client for emergent return to the operating room",
+    "option_d": "Apply pressure to the abdominal wound and call for the rapid response team",
+    "correct_answer": "C",
+    "rationale": "Sudden bright red NG output of 450 mL in one hour with haemodynamic instability (hypotension, tachycardia) and peritoneal signs (rigidity, guarding, severe pain) in a post-Whipple patient represents a post-operative haemorrhage — a surgical emergency. After Whipple procedure, post-pancreatectomy haemorrhage (PPH) is a high-mortality complication requiring emergent surgical exploration. The surgeon must be notified immediately and the OR must be prepared. Fluid resuscitation is a supportive concurrent measure, but definitive management is surgical — and the surgeon notification must happen first.",
+    "distractor_rationales": {
+      "A": "Pain management is not the priority when the patient has 450 mL/hour of bright red NG drainage and haemodynamic collapse. Morphine in a haemodynamically unstable patient can cause dangerous vasodilation. This option delays critical emergency surgical notification.",
+      "B": "IV fluid resuscitation and urgent lab work are appropriate supporting measures but are not the priority action. Blood products and surgical control of haemorrhage are what will save this patient's life — the surgeon must be notified first so that OR preparation can begin immediately.",
+      "D": "Applying pressure to the abdominal wound would be appropriate for an external wound bleed. However, this is an internal post-operative haemorrhage (evidence: NG output of bright red blood from an anastomosis or vessel). External pressure does not address the internal bleed. Calling rapid response (not the surgeon) also delays the correct escalation path."
+    },
+    "clinical_pearl": "After major abdominal surgery, the combination of haemodynamic instability + peritoneal signs + high NG output of bright red blood = post-operative haemorrhage = surgical emergency. These patients often require return to OR within minutes. Notify the surgeon before administering pain medication or adjusting fluids.",
+    "exam_strategy": "Post-operative complications questions test pattern recognition. After major abdominal surgery, peritoneal signs + haemodynamic instability + significant NG blood output = hemorrhage = OR emergency. Surgeon notification always precedes symptomatic management in surgical emergencies.",
+    "memory_hook": "Post-op blood from NG tube + rigidity + haemodynamic collapse = post-op haemorrhage. First action = CALL SURGEON (not RRT, not pain meds). Internal bleeding requires surgical control — O2 and fluids buy minutes, surgery saves lives.",
+    "hints": [
+      { "level": 1, "text": "This is a fresh post-operative patient with both haemodynamic instability AND peritoneal signs AND significant bright red NG output. What type of complication does this combination suggest, and who needs to be notified first?" },
+      { "level": 2, "text": "450 mL/hour of bright red NG drainage + BP 94/60 + HR 128 + peritoneal signs after Whipple procedure = post-operative haemorrhage. This is a surgical emergency. What must the nurse do before any symptomatic management?" },
+      { "level": 3, "text": "Notify the surgeon immediately and prepare for emergency return to OR — this is surgical haemorrhage requiring operative control. Fluids and labs are concurrent, not first. Do not delay with pain management or rapid response escalation." }
+    ],
+    "difficulty": "hard",
+    "exam": "NCLEX-RN",
+    "country": "Canada",
+    "category": "Perioperative / Gastrointestinal",
+    "client_needs": "Physiological Integrity",
+    "topic": "Post-Operative Haemorrhage / Whipple Procedure Complications"
+  }
+]
