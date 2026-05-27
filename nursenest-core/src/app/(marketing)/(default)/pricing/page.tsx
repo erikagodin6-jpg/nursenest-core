@@ -18,6 +18,7 @@ import {
   MARKETING_PRICING_CONVERSION_LEAD_FALLBACK,
 } from "@/lib/marketing-i18n/marketing-safe-fallbacks";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import PricingLoading from "./loading";
 
 const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
 const PRICING_TITLE_FALLBACK = "Pricing | NurseNest";
@@ -96,7 +97,7 @@ export default async function PricingPage({ searchParams }: PricingPageProps) {
       <div className="mx-auto max-w-6xl nn-marketing-x pb-1 pt-1 sm:pb-2 sm:pt-2">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <Suspense fallback={null}>
+      <Suspense fallback={<PricingLoading />}>
         <PricingMarketingPlansRscDefault initialSearchParamsString={initialSearchParamsString} />
       </Suspense>
       <Suspense fallback={null}>

@@ -34,7 +34,13 @@ import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale
 import {
   serializeFlashcardForDeckStudy,
   type FlashcardStudySelectRow,
+  type FlashcardStudyApiCard,
 } from "@/lib/flashcards/flashcard-study-serialize";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { bankExamQuestionRowToFlashcardStudySelectRow } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
+import { loadExamQuestionRowsForFlashcardPool } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
+import { resolveAccessScopeForPathwayExamQuestionPool } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
+import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -50,6 +56,63 @@ const MAX_BATCH = 40;
 type Props = { params: Promise<{ deckRef: string }> };
 
 export const dynamic = "force-dynamic";
+
+function isUsableMcqStudyCard(card: FlashcardStudyApiCard): boolean {
+  const exam = card.examMicroQuestion;
+  return Boolean(
+    exam &&
+      !isSataPayload(exam) &&
+      exam.questionStem?.trim() &&
+      Array.isArray(exam.answerOptions) &&
+      exam.answerOptions.length === 4,
+  );
+}
+
+async function loadBankBackedStudyCards(args: {
+  userId: string;
+  entitlement: AccessScope;
+  pathwayId: string | null | undefined;
+  take: number;
+  educationalLocale: string;
+  flashcardBundle: Awaited<ReturnType<typeof resolveMergedFlashcardEducationalBundle>> | undefined;
+  examOptionShuffleSalt: string;
+  existingExamQuestionIds: Set<string>;
+}): Promise<FlashcardStudyApiCard[]> {
+  const pid = args.pathwayId?.trim();
+  if (!pid || args.take <= 0) return [];
+  const pathway = getExamPathwayById(pid);
+  if (!pathway) return [];
+  const access = await resolveAccessScopeForPathwayExamQuestionPool(args.userId, args.entitlement, pathway);
+  const scope = access.scope;
+  if (!scope) return [];
+  const rows = await loadExamQuestionRowsForFlashcardPool(scope, pathway, null, Math.max(args.take * 4, 24));
+  const out: FlashcardStudyApiCard[] = [];
+  for (const row of rows) {
+    if (out.length >= args.take) break;
+    if (args.existingExamQuestionIds.has(row.id)) continue;
+    const base = bankExamQuestionRowToFlashcardStudySelectRow(row);
+    if (!base) continue;
+    const studyRow: FlashcardStudySelectRow = {
+      ...base,
+      id: `exam_bank:${row.id}`,
+      sourceKey: `exam_q:${row.id}`,
+      category: { name: row.bodySystem?.trim() || row.topic?.trim() || "NCLEX practice", topicCode: row.topic ?? null },
+      deck: { pathwayId: pid, title: "NCLEX question bank" },
+      clinicalPearl: row.clinicalPearl ?? null,
+      keyTakeaway: row.keyTakeaway ?? null,
+    };
+    const serialized = serializeFlashcardForDeckStudy(studyRow, {
+      educationalLocale: args.educationalLocale,
+      flashcardBundle: args.flashcardBundle,
+      fullBackAvailable: true,
+      examOptionShuffleSalt: args.examOptionShuffleSalt,
+    });
+    if (!isUsableMcqStudyCard(serialized)) continue;
+    args.existingExamQuestionIds.add(row.id);
+    out.push(serialized);
+  }
+  return out;
+}
 
 export async function GET(req: NextRequest, { params }: Props) {
   return runWithApiTelemetry(req, "GET /api/flashcards/decks/[deckRef]/study", "content", async () => {
@@ -143,11 +206,8 @@ export async function GET(req: NextRequest, { params }: Props) {
         }),
       );
 
-      const body = {
-        mode: "preview" as const,
-        deckId: deck.id,
-        slug: deck.slug,
-        cards: cards.map((c) => {
+      const serializedCards = cards
+        .map((c) => {
           const row = serializeFlashcardForDeckStudy(c, {
             educationalLocale,
             flashcardBundle,
@@ -158,13 +218,19 @@ export async function GET(req: NextRequest, { params }: Props) {
             ...row,
             back: truncateForPreview(row.back),
           };
-        }),
+        })
+        .filter(isUsableMcqStudyCard);
+      const body = {
+        mode: "preview" as const,
+        deckId: deck.id,
+        slug: deck.slug,
+        cards: serializedCards,
         session: null,
         sessionMeta: {
           requestedCount,
-          returnedCount: cards.length,
+          returnedCount: serializedCards.length,
           totalAvailable: totalPreviewAvailable,
-          hasMore: cards.length < totalPreviewAvailable,
+          hasMore: serializedCards.length < totalPreviewAvailable,
         },
       };
       const approx = estimateJsonUtf8Bytes(body);
@@ -309,28 +375,50 @@ export async function GET(req: NextRequest, { params }: Props) {
     const byId = new Map(cardPayload.map((c) => [c.id, c]));
     const ordered = sliceIds.map((id) => byId.get(id)).filter(Boolean) as FlashcardStudySelectRow[];
 
-    const body = {
-      mode: "subscriber" as const,
-      deckId: deck.id,
-      slug: deck.slug,
-      title: deck.title,
-      cards: ordered.map((c) =>
+    const existingExamQuestionIds = new Set(
+      ordered
+        .map((card) => card.sourceKey?.startsWith("exam_q:") ? card.sourceKey.slice("exam_q:".length) : null)
+        .filter((id): id is string => Boolean(id)),
+    );
+    const serializedDeckCards = ordered
+      .map((c) =>
         serializeFlashcardForDeckStudy(c, {
           educationalLocale,
           flashcardBundle,
           fullBackAvailable: true,
           examOptionShuffleSalt,
         }),
-      ),
+      )
+      .filter(isUsableMcqStudyCard);
+    const bankCards = serializedDeckCards.length < limit
+      ? await loadBankBackedStudyCards({
+          userId,
+          entitlement,
+          pathwayId: deck.pathwayId,
+          take: limit - serializedDeckCards.length,
+          educationalLocale,
+          flashcardBundle,
+          examOptionShuffleSalt,
+          existingExamQuestionIds,
+        })
+      : [];
+    const studyCards = [...serializedDeckCards, ...bankCards].slice(0, limit);
+
+    const body = {
+      mode: "subscriber" as const,
+      deckId: deck.id,
+      slug: deck.slug,
+      title: deck.title,
+      cards: studyCards,
       session: {
         cursor,
         queueLength: storedQueue.length,
         done: cursor >= storedQueue.length,
-        batchSize: ordered.length,
+        batchSize: studyCards.length,
       },
       sessionMeta: {
         requestedCount,
-        returnedCount: ordered.length,
+        returnedCount: studyCards.length,
         totalAvailable: storedQueue.length,
         hasMore: cursor + ordered.length < storedQueue.length,
       },

@@ -3185,11 +3185,25 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
     max-height: none;
   }
 
-  .nn-flashcard-learning-topbar h1 {
-    font-size: 1.45rem !important;
+.nn-flashcard-learning-topbar h1 {
+  font-size: 1.45rem !important;
   }
 
   .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
     padding-inline: 0.25rem;
+  }
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar h1,
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar h1 {
+  font-size: clamp(1.25rem, 1.5vw, 1.75rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 720px) {
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar h1,
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar h1 {
+    font-size: 1.35rem !important;
   }
 }

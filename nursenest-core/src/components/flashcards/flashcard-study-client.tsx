@@ -60,28 +60,6 @@ function hasUsableExamQuestion(card: CardPayload): boolean {
   );
 }
 
-function isExamBackedCard(card: CardPayload): boolean {
-  return Boolean(card.sourceKey?.startsWith("exam_q:") || card.examMicroQuestion);
-}
-
-function isRnStudyCard(card: CardPayload, deckRef: string): boolean {
-  const pathway = card.pathwayId?.toLowerCase() ?? "";
-  const ref = deckRef.toLowerCase();
-  return pathway.includes("rn") || pathway.includes("nclex") || ref.includes("rn") || ref.includes("nclex");
-}
-
-function isClinicalExamPathway(card: CardPayload, deckRef: string): boolean {
-  const pathway = card.pathwayId?.toLowerCase() ?? "";
-  const ref = deckRef.toLowerCase();
-  return /\b(rn|rpn|lpn|pn|np)\b/.test(`${pathway} ${ref}`) ||
-    pathway.includes("nclex") ||
-    pathway.includes("rex-pn") ||
-    pathway.includes("cnple") ||
-    ref.includes("nclex") ||
-    ref.includes("rex-pn") ||
-    ref.includes("cnple");
-}
-
 function isPlaceholderFlashcardStem(stem: string | null | undefined): boolean {
   const normalized = String(stem ?? "").replace(/\s+/g, " ").trim().toLowerCase();
   return (
@@ -154,10 +132,7 @@ export function FlashcardStudyClient({
                 typeof card.back === "string",
             )
           : [];
-        const cards = cardsRaw.filter((card) => {
-          if (isClinicalExamPathway(card, deckRef) || isRnStudyCard(card, deckRef)) return hasUsableExamQuestion(card);
-          return !isExamBackedCard(card) || hasUsableExamQuestion(card);
-        });
+        const cards = cardsRaw.filter(hasUsableExamQuestion);
 
         if (!cancelled) {
           setMode(data.mode === "preview" ? "preview" : "subscriber");
@@ -256,7 +231,7 @@ export function FlashcardStudyClient({
   if (queue.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--semantic-text-secondary)]">
-        {t("flashcards.noCardsMatch")}
+        No NCLEX multiple-choice study cards are available for this deck yet. Return to the hub and start a bank-backed RN/PN/NP set.
       </div>
     );
   }
