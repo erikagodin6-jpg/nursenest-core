@@ -302,11 +302,11 @@ export function FlashcardStudyQuestionStack({
               ) : null}
             </article>
 
-            {revealed && exam ? (
+            {exam ? (
               <aside
-                className="nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq"
+                className={`nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq${revealed ? "" : " nn-flashcard-rationale-panel--reserved"}`}
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
-                data-nn-premium-flashcard-reveal=""
+                {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}
               >
                 <div className="nn-flashcard-rationale-panel__header">
                   <div>
@@ -314,32 +314,36 @@ export function FlashcardStudyQuestionStack({
                     <span>Rationale</span>
                   </div>
                 </div>
-                <div className="nn-flashcard-rationale-panel__body">
-                  <div className="nn-flashcard-inline-rationale__answer">
-                    Correct Answer: {correctAnswerSummary(exam)}
-                  </div>
-                  <div className="nn-flashcard-inline-rationale__body mt-3">
-                    <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
-                  </div>
-                  {exam.rationaleIncorrect.length > 0 ? (
-                    <div className="nn-flashcard-rationale-panel__incorrect">
-                      <h3>Why the other options are not priority</h3>
-                      <ul>
-                        {exam.rationaleIncorrect.map((row) => (
-                          <li key={row.letter}>
-                            <span>{row.letter}</span>
-                            <FlashcardRichContent text={row.rationale} className="[&_p]:mb-0" />
-                          </li>
-                        ))}
-                      </ul>
+                {revealed ? (
+                  <div className="nn-flashcard-rationale-panel__body">
+                    <div className="nn-flashcard-inline-rationale__answer">
+                      Correct Answer: {correctAnswerSummary(exam)}
                     </div>
-                  ) : null}
-                  {revealLinksSection ? (
-                    <div className="mt-3" data-testid="flashcard-reveal-links">
-                      {revealLinksSection}
+                    <div className="nn-flashcard-inline-rationale__body mt-3">
+                      <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
                     </div>
-                  ) : null}
-                </div>
+                    {exam.rationaleIncorrect.length > 0 ? (
+                      <div className="nn-flashcard-rationale-panel__incorrect">
+                        <h3>Why the other options are not priority</h3>
+                        <ul>
+                          {exam.rationaleIncorrect.map((row) => (
+                            <li key={row.letter}>
+                              <span>{row.letter}</span>
+                              <FlashcardRichContent text={row.rationale} className="[&_p]:mb-0" />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                    {revealLinksSection ? (
+                      <div className="mt-3" data-testid="flashcard-reveal-links">
+                        {revealLinksSection}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="nn-flashcard-rationale-panel__body nn-flashcard-rationale-panel__body--reserved" aria-hidden="true" />
+                )}
               </aside>
             ) : null}
 

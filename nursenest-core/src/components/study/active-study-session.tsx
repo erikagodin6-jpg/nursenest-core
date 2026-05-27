@@ -570,7 +570,7 @@ export function ActiveStudySession({
             </div>
           ) : null
         }
-        mainFooter={revealed ? (
+        mainFooter={(
           <>
             <div className="nn-flashcard-study-support-strip" data-nn-flashcard-support-strip>
               <div>
@@ -591,7 +591,7 @@ export function ActiveStudySession({
 
             <div className="nn-flashcard-coach-panel">
               <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--coach">
-                <span>Coach</span>
+                <span>Tutor</span>
               </div>
               <div className="nn-flashcard-coach-panel__section">
                 <span>Hint</span>
@@ -655,7 +655,7 @@ export function ActiveStudySession({
               ))}
             </div>
           </>
-        ) : null}
+        )}
       />
     </div>
   );

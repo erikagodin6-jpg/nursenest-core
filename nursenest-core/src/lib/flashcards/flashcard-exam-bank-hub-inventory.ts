@@ -12,6 +12,7 @@ import {
   discoveryExamContextScopeForFlashcardFallback,
   examQuestionsDiscoveryWhereSql,
 } from "@/lib/questions/subscriber-discovery-aggregates";
+import { standardExamPrepQuestionScopeSql } from "@/lib/questions/difficulty-scope-filter";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { GENERAL_STUDY_BANK_MODULE_SCOPE_SQL } from "@/lib/study-question-pool/study-question-pool-gates";
 
@@ -33,6 +34,7 @@ const FLASHCARD_USABILITY_SQL = Prisma.sql`
   AND NOT ('ecg-video' = ANY(tags))
   AND coalesce(trim(stem), '') <> ''
   AND correct_answer IS NOT NULL
+  ${standardExamPrepQuestionScopeSql()}
   ${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}
 `;
 
