@@ -401,6 +401,14 @@ export function PricingPageClient({
   const hasServerCatalogRef = useRef(marketingPricingPayloadHasRenderablePlans(initialPricingOptions));
   const [segment, setSegment] = useState<Segment>("rn");
   const [selectedAlliedCareer, setSelectedAlliedCareer] = useState<AlliedCareerKey>("paramedic");
+  const checkoutSegmentRef = useRef<Segment>("rn");
+  const checkoutAlliedCareerRef = useRef<AlliedCareerKey>("paramedic");
+  useEffect(() => {
+    checkoutSegmentRef.current = segment;
+  }, [segment]);
+  useEffect(() => {
+    checkoutAlliedCareerRef.current = selectedAlliedCareer;
+  }, [selectedAlliedCareer]);
   const [nursingPlans, setNursingPlans] = useState<NursingPlanRow[]>(() =>
     Array.isArray(initialPricingOptions.plans) ? (initialPricingOptions.plans as NursingPlanRow[]) : [],
   );
@@ -414,6 +422,7 @@ export function PricingPageClient({
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutOpsHint, setCheckoutOpsHint] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [clientReady, setClientReady] = useState(false);
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const [showConsentPrompt, setShowConsentPrompt] = useState(false);
   const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
@@ -425,6 +434,9 @@ export function PricingPageClient({
   /** Allied Health only — explicit acknowledgement before any paid checkout (persists until segment/career changes). */
   const [alliedProfessionCheckoutAck, setAlliedProfessionCheckoutAck] = useState(false);
   const { locale, t } = useMarketingI18n();
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
   /** `t` is recreated when marketing shards merge — do not use it as a fetch effect dep (can starve in-flight loads). */
   const tRef = useRef(t);
   tRef.current = t;
@@ -638,23 +650,27 @@ export function PricingPageClient({
   /** Guest → `/login?callbackUrl=…` with checkout intent on the pricing URL (same contract as {@link requestCheckout}). */
   const redirectGuestToLoginForCheckout = useCallback(
     (duration: BillingDuration) => {
+      const checkoutSegment = checkoutSegmentRef.current;
+      const checkoutTier = segmentToTier(checkoutSegment, region === "US");
+      const checkoutIsAllied = checkoutSegment === "allied";
+      const checkoutAlliedCareer = checkoutAlliedCareerRef.current;
       const qs =
         typeof window !== "undefined" && window.location.search.length > 1
           ? window.location.search.slice(1)
           : initialSearchParamsString;
       const callbackParams = new URLSearchParams(qs);
       callbackParams.set("checkoutIntent", "1");
-      callbackParams.set("checkoutTier", tier);
+      callbackParams.set("checkoutTier", checkoutTier);
       callbackParams.set("checkoutDuration", duration);
-      if (isAllied) callbackParams.set("checkoutAlliedCareer", selectedAlliedCareer);
+      if (checkoutIsAllied) callbackParams.set("checkoutAlliedCareer", checkoutAlliedCareer);
       else callbackParams.delete("checkoutAlliedCareer");
       try {
         window.sessionStorage.setItem(
           CHECKOUT_INTENT_STORAGE_KEY,
           JSON.stringify({
-            tier,
+            tier: checkoutTier,
             duration,
-            alliedCareer: isAllied ? selectedAlliedCareer : null,
+            alliedCareer: checkoutIsAllied ? checkoutAlliedCareer : null,
           }),
         );
       } catch {
@@ -664,7 +680,7 @@ export function PricingPageClient({
       const loginPath = localize("/login");
       window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
     },
-    [isAllied, localize, pathname, initialSearchParamsString, selectedAlliedCareer, tier],
+    [localize, pathname, initialSearchParamsString, region],
   );
 
   const redirectGuestToLoginForAdvancedEcgCheckout = useCallback(
@@ -687,13 +703,17 @@ export function PricingPageClient({
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
       if (checkoutInFlightRef.current) return;
+      const checkoutSegment = checkoutSegmentRef.current;
+      const checkoutTier = segmentToTier(checkoutSegment, region === "US");
+      const checkoutIsAllied = checkoutSegment === "allied";
+      const checkoutAlliedCareer = checkoutAlliedCareerRef.current;
       setCheckoutError(null);
       setCheckoutOpsHint(null);
-      if (isAllied && !alliedProfessionCheckoutAck) {
+      if (checkoutIsAllied && !alliedProfessionCheckoutAck) {
         setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
         return;
       }
-      if (isFreeStripeBillingNursingTier(tier)) {
+      if (isFreeStripeBillingNursingTier(checkoutTier)) {
         window.location.assign(localize("/pre-nursing"));
         return;
       }
@@ -702,33 +722,33 @@ export function PricingPageClient({
       trackProductEvent(PH.checkoutStarted, {
         actor: "user",
         funnel_step: "checkout_initiated",
-        stripe_tier: String(tier),
-        tier: String(tier),
+        stripe_tier: String(checkoutTier),
+        tier: String(checkoutTier),
         duration: String(duration),
         has_trial: trialDays > 0,
         trial_days: trialDays,
         marketing_locale: locale,
         marketing_region: region,
-        pricing_segment: segment,
+        pricing_segment: checkoutSegment,
         pricing_checkout_soft_gate: pricingCheckoutSoftGate,
         na_pathway_acknowledged: naPathwayAcknowledged,
         global_market_slug: checkoutBodyGlobalSlug,
         authoritative_region_slugs: authoritativeRegionKey,
-        ...(isAllied
-          ? { allied_career: selectedAlliedCareer, allied_profession_acknowledged: alliedProfessionCheckoutAck }
+        ...(checkoutIsAllied
+          ? { allied_career: checkoutAlliedCareer, allied_profession_acknowledged: alliedProfessionCheckoutAck }
           : {}),
       });
       try {
         const body: Record<string, unknown> = {
-          tier,
+          tier: checkoutTier,
           duration,
           acceptPolicies: true,
           policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
           region: checkoutBodyGlobalSlug,
           ...(pricingCheckoutSoftGate && naPathwayAcknowledged ? { naBillingScopeAcknowledged: true as const } : {}),
         };
-        if (isAllied) {
-          body.alliedCareer = selectedAlliedCareer;
+        if (checkoutIsAllied) {
+          body.alliedCareer = checkoutAlliedCareer;
         }
         console.info("[pricing_checkout] request_payload", body);
 
@@ -747,7 +767,7 @@ export function PricingPageClient({
         const responseText = await res.text();
         const contentType = res.headers.get("content-type") ?? "";
 
-        if (!res.ok) {
+        if (!res.ok && res.status !== 401) {
           console.error("[pricing_checkout] checkout API error response", {
             status: res.status,
             contentType,
@@ -772,12 +792,12 @@ export function PricingPageClient({
 
         if (!res.ok) {
           const parsed = parseCheckoutApiErrorBody(parsedBody);
-          console.error("[pricing_checkout] parsed_error_body", parsed);
           if (parsed.code === CHECKOUT_UNAUTHORIZED_CODE || res.status === 401) {
             setCheckoutLoading(false);
             redirectGuestToLoginForCheckout(duration);
             return;
           }
+          console.error("[pricing_checkout] parsed_error_body", parsed);
           const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
           err.parsed = parsed;
           err.status = res.status;
@@ -866,6 +886,7 @@ export function PricingPageClient({
   const requestCheckout = useCallback(
     (duration: BillingDuration, event?: MouseEvent<HTMLElement>) => {
       preventCheckoutDefault(event);
+      if (!clientReady) return;
       if (checkoutInFlightRef.current || checkoutLoading) return;
       setCheckoutError(null);
       setCheckoutOpsHint(null);
@@ -895,6 +916,7 @@ export function PricingPageClient({
       t,
       alliedProfessionCheckoutAck,
       checkoutLoading,
+      clientReady,
     ],
   );
 
@@ -1161,7 +1183,9 @@ export function PricingPageClient({
                 key={id}
                 type="button"
                 data-testid={`pricing-segment-${id}`}
+                disabled={!clientReady || checkoutLoading}
                 onClick={() => {
+                  checkoutSegmentRef.current = id;
                   setSegment(id);
                   trackProductEvent("tier_selected", {
                     segment: id,
@@ -1170,7 +1194,7 @@ export function PricingPageClient({
                     marketing_region: region,
                   });
                 }}
-                className="nn-pricing-pill-control px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out"
+                className="nn-pricing-pill-control px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out disabled:pointer-events-none disabled:opacity-60"
                 data-active={segment === id ? "true" : "false"}
               >
                 {segmentLabels[id]}
@@ -1191,6 +1215,7 @@ export function PricingPageClient({
                   key={career}
                   type="button"
                   onClick={() => {
+                    checkoutAlliedCareerRef.current = career;
                     setSelectedAlliedCareer(career);
                     trackProductEvent("allied_career_selected", {
                       career,
@@ -1367,6 +1392,7 @@ export function PricingPageClient({
                       type="button"
                       data-testid={`pricing-checkout-${duration}`}
                       disabled={
+                        !clientReady ||
                         checkoutLoading ||
                         authStatus === "loading" ||
                         (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||

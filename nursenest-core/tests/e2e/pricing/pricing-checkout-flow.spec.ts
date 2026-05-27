@@ -105,7 +105,10 @@ test.describe("Pricing checkout flow", () => {
       expect(response?.ok()).toBeTruthy();
 
       await expect(page.getByRole("button", { name: c.segment })).toBeVisible();
-      await page.getByTestId(`pricing-segment-${c.segmentId}`).click();
+      const segmentButton = page.getByTestId(`pricing-segment-${c.segmentId}`);
+      await expect(segmentButton).toBeEnabled();
+      await segmentButton.click();
+      await expect(segmentButton).toHaveAttribute("data-active", "true");
 
       const checkoutButton = page.getByTestId(`pricing-checkout-${c.duration}`);
       await expect(checkoutButton).toBeVisible({ timeout: 60_000 });
