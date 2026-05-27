@@ -59,12 +59,14 @@ export function LearnerCategorySelector({
   return (
     <section className="space-y-3 sm:space-y-4" data-nn-learner-category-selector>
       <div>
-        <h3
-          id={headingId}
-          className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl"
-        >
-          {heading}
-        </h3>
+        {heading.trim().length > 0 ? (
+          <h3
+            id={headingId}
+            className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl"
+          >
+            {heading}
+          </h3>
+        ) : null}
         {intro ? <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{intro}</p> : null}
       </div>
       <input

@@ -30,19 +30,45 @@ import { catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
 export { CAT_MIN_COMPLETE_POOL, catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
 export { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE, type CatQuestionCompletenessFields };
 
-const MAX_POOL = 4000;
-/** Batched CAT readiness scans — avoids loading thousands of stems/rationales when only a minimum pool proof is needed. */
+const MAX_POOL = 600;
+/** Batched CAT readiness scans — metadata-only rows so we can scan larger ranges cheaply. */
 const READINESS_SCAN_BATCH = 280;
 const READINESS_SCAN_CAP = 8000;
+
+/**
+ * DB-level pre-filter that guarantees a question has the required content fields before we touch it.
+ * Using this in WHERE lets us remove stem/options/rationale/correctAnswer from the SELECT entirely,
+ * which is the primary source of the 60–90 s load times (those fields are large text blobs).
+ */
+const CAT_DB_COMPLETENESS_WHERE: Prisma.ExamQuestionWhereInput = {
+  stem: { not: "" },
+  rationale: { not: "" },
+  options: { not: Prisma.DbNull },
+  correctAnswer: { not: Prisma.DbNull },
+};
 
 /** Soft practice widens filters when the strict slice is too thin for {@link validatePracticeCatPool}. */
 const CAT_SOFT_MIN_COMPLETE_ROWS = 8;
 
-/** Row shape from {@link queryShuffledCompletePool} `select` after completeness filter. */
+/**
+ * Exported for backwards-compat; external callers that imported this type still compile.
+ * Internally `queryShuffledCompletePool` now returns the lighter `CatPoolMetaRow` — the
+ * large content fields (stem/options/rationale/correctAnswer) are no longer fetched.
+ */
 export type CompleteCatQuestionRow = CatQuestionCompletenessFields & {
   id: string;
   difficulty: number | null;
-  /** Present on pool selects; required so filtered rows match Prisma row typing. */
+  questionType: string;
+  bodySystem: string | null;
+  topic: string | null;
+  nclexClientNeedsCategory: string | null;
+  nclexClientNeedsSubcategory: string | null;
+};
+
+/** Internal lightweight row returned by the optimized pool query. */
+type CatPoolMetaRow = {
+  id: string;
+  difficulty: number | null;
   questionType: string;
   bodySystem: string | null;
   topic: string | null;
@@ -121,8 +147,12 @@ async function buildSecondaryFilterParts(
 async function queryShuffledCompletePool(
   where: Prisma.ExamQuestionWhereInput,
   input: PickQuestionsInput,
-): Promise<CompleteCatQuestionRow[]> {
-  const total = await prisma.examQuestion.count({ where });
+): Promise<CatPoolMetaRow[]> {
+  // Merge DB-level completeness gate into the caller's WHERE so the DB only
+  // transfers rows that are known-complete — stem/options/rationale/correctAnswer
+  // are no longer fetched (they are large text blobs and were the main load-time bottleneck).
+  const completeWhere: Prisma.ExamQuestionWhereInput = { AND: [where, CAT_DB_COMPLETENESS_WHERE] };
+  const total = await prisma.examQuestion.count({ where: completeWhere });
   const takeN = Math.min(MAX_POOL, Math.max(1, total));
   let skip = 0;
   if (total > takeN) {
@@ -135,17 +165,13 @@ async function queryShuffledCompletePool(
   }
 
   const rows = await prisma.examQuestion.findMany({
-    where,
+    where: completeWhere,
     select: {
       id: true,
       difficulty: true,
       questionType: true,
       bodySystem: true,
       topic: true,
-      stem: true,
-      options: true,
-      correctAnswer: true,
-      rationale: true,
       nclexClientNeedsCategory: true,
       nclexClientNeedsSubcategory: true,
     },
@@ -154,17 +180,19 @@ async function queryShuffledCompletePool(
     take: takeN,
   });
 
-  const completeRows = rows.filter((r): r is CompleteCatQuestionRow => isCompleteCatQuestionRow(r));
+  // DB filter already guarantees completeness; no JS-side content validation required.
   const salt = input.sessionPickSalt?.trim();
   return salt && salt.length >= 8
-    ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`)
-    : shuffleSeeded(completeRows, `ephemeral-cat-pool:${randomUUID()}`);
+    ? shuffleSeeded(rows, `${salt}:cat-pool-row-order-v1`)
+    : shuffleSeeded(rows, `ephemeral-cat-pool:${randomUUID()}`);
 }
 
 async function accumulateCompleteCatPoolForReadiness(
   where: Prisma.ExamQuestionWhereInput,
   minCompleteRequired: number,
 ): Promise<{ pool: CatPoolRow[]; scannedDbRows: number; completeRowCount: number }> {
+  // DB-level completeness gate — no content fields needed, no JS-side validation loop.
+  const completeWhere: Prisma.ExamQuestionWhereInput = { AND: [where, CAT_DB_COMPLETENESS_WHERE] };
   const pool: CatPoolRow[] = [];
   let scannedDbRows = 0;
   let completeRowCount = 0;
@@ -172,17 +200,13 @@ async function accumulateCompleteCatPoolForReadiness(
   const maxHeld = Math.min(512, Math.max(minCompleteRequired + 120, 200));
   while (skip < READINESS_SCAN_CAP) {
     const batch = await prisma.examQuestion.findMany({
-      where,
+      where: completeWhere,
       select: {
         id: true,
         difficulty: true,
         questionType: true,
         bodySystem: true,
         topic: true,
-        stem: true,
-        options: true,
-        correctAnswer: true,
-        rationale: true,
         nclexClientNeedsCategory: true,
         nclexClientNeedsSubcategory: true,
       },
@@ -193,7 +217,6 @@ async function accumulateCompleteCatPoolForReadiness(
     if (batch.length === 0) break;
     scannedDbRows += batch.length;
     for (const r of batch) {
-      if (!isCompleteCatQuestionRow(r)) continue;
       completeRowCount += 1;
       if (pool.length >= maxHeld) pool.shift();
       pool.push({

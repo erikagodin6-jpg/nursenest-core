@@ -644,6 +644,24 @@ export function PracticeTestRunnerClient({
             for (const id of keep) trimmed[id] = next[id]!;
             return trimmed;
           });
+
+          // Background prefetch of the next question — no await, failures are silent.
+          const nextIdx = idx + 1;
+          const nextId = questionIds[nextIdx];
+          if (nextId && !cacheRef.current[nextId]) {
+            void fetch(`/api/practice-tests/${testId}/question?index=${nextIdx}`, {
+              method: "GET",
+              credentials: "include",
+              cache: "no-store",
+            })
+              .then((r) => (r.ok ? r.json() : null))
+              .then((p: { question?: QRow } | null) => {
+                if (p?.question) {
+                  setQuestionCache((c) => ({ ...c, [p.question!.id]: p.question! }));
+                }
+              })
+              .catch(() => { /* prefetch is speculative — ignore errors */ });
+          }
         }
       } catch {
         if (!ac.signal.aborted) {

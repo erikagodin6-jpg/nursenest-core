@@ -47,6 +47,10 @@ type PracticeTestsHubClientProps = {
 
 const PRACTICE_COUNTS = [25, 50, 75, 100] as const;
 const CAT_COUNTS = [25, 50, 75] as const;
+const PRACTICE_COUNT_MIN = 5;
+const PRACTICE_COUNT_MAX = 100;
+const CAT_COUNT_MIN = 25;
+const CAT_COUNT_MAX = 75;
 
 function focusToSelectionMode(focusMode: FocusMode): Exclude<PracticeTestSelectionMode, "cat" | "targeted" | "starred"> {
   if (focusMode === "weak") return "weak";
@@ -59,6 +63,25 @@ function focusToCatBasis(focusMode: FocusMode): CatSelectionBasis {
   if (focusMode === "weak") return "weak";
   if (focusMode === "missed") return "missed";
   return "random";
+}
+
+function clampQuestionCount(raw: string | null, mode: ExamMode): number | null {
+  const parsed = Number(raw);
+  if (!Number.isInteger(parsed)) return null;
+  const min = mode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN;
+  const max = mode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX;
+  return Math.max(min, Math.min(max, parsed));
+}
+
+function focusModeFromQuery(qp: URLSearchParams): FocusMode | null {
+  const focus = qp.get("focus")?.trim().toLowerCase() || qp.get("studyFilter")?.trim().toLowerCase() || "";
+  const source = qp.get("source")?.trim().toLowerCase() || "";
+  const mode = qp.get("mode")?.trim().toLowerCase() || qp.get("studyMode")?.trim().toLowerCase() || "";
+  if (focus === "weak" || source === "weak_areas" || mode === "weak" || mode === "weak_area") return "weak";
+  if (focus === "missed" || focus === "incorrect" || source === "previously_incorrect") return "missed";
+  if (focus === "unseen" || source === "not_studied") return "unseen";
+  if (focus === "all") return "all";
+  return null;
 }
 
 function formatPathwayLabel(option: PracticeTestPathwayOption | undefined, fallback: string): string {
@@ -129,11 +152,16 @@ export function PracticeTestsHubClient({
     if (qp.get("catLaunch") === "1" || qp.get("catLaunch") === "true") {
       setExamMode("cat");
     }
-    const focus = qp.get("focus");
-    if (focus === "weak" || focus === "missed" || focus === "unseen") {
-      setFocusMode(focus);
+    const nextMode = qp.get("catLaunch") === "1" || qp.get("catLaunch") === "true" ? "cat" : examMode;
+    const incomingCount = clampQuestionCount(qp.get("count"), nextMode);
+    if (incomingCount != null) {
+      setQuestionCount(incomingCount);
     }
-  }, [pathwayOptions, searchParamString]);
+    const incomingFocus = focusModeFromQuery(qp);
+    if (incomingFocus && (nextMode === "practice" || incomingFocus !== "unseen")) {
+      setFocusMode(incomingFocus);
+    }
+  }, [examMode, pathwayOptions, searchParamString]);
 
   useEffect(() => {
     if (examMode !== "cat") return;
@@ -519,15 +547,29 @@ export function PracticeTestsHubClient({
           </div>
         ) : (
           <>
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+                  Step 1
+                </p>
+                <h2 id="nn-practice-categories-heading" className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
+                  Select categories
+                </h2>
+                <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
+                  Empty selection starts from the full question pool.
+                </p>
+              </div>
+              <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-muted)]">
+                {categorySummary}
+              </span>
+            </div>
             <LearnerCategorySelector
               countsBySystem={countsByCanonical}
               selectedCanonicalIds={selectedCanonicalIds}
               onToggleCanonical={toggleCategory}
               search={categorySearch}
               onSearchChange={setCategorySearch}
-              heading="Exam categories & body systems"
-              headingId="nn-practice-categories-heading"
-              intro="Use the same body-system picker as flashcards. Empty selection starts from the full question pool."
+              heading=""
               searchPlaceholder="Search systems..."
               metaBySystem={metaBySystem}
             />
@@ -565,39 +607,13 @@ export function PracticeTestsHubClient({
         ) : null}
       </SharedStudySetupSurface>
 
-      <details
-        className="nn-flashcards-setup-panel nn-premium-practice-hub-builder nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
+      <SharedStudySetupSurface
+        className="nn-premium-practice-hub-builder"
+        aria-label="Practice exam configuration"
         data-nn-e2e-practice-setup-panel
-        open
       >
-        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
-          Fine-tune session length &amp; filters
-          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
-            Same setup pattern as flashcards; only the study mode changes
-          </span>
-        </summary>
-        <div className="space-y-6 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
-          {pathwayOptions.length > 1 ? (
-            <div>
-              <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-                Exam Pathway
-              </label>
-              <select
-                id="practice-exam-pathway"
-                value={pathwayId}
-                onChange={(event) => setPathwayId(event.target.value)}
-                className="mt-2 h-12 w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
-              >
-                {pathwayOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : null}
-
-          <LearnerFilterBar title="Study mode" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <LearnerFilterBar title="Step 2 — Select study mode" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
             <div className="flex flex-wrap gap-2">
               {(["practice", "cat"] as const).map((mode) => {
                 const active = examMode === mode;
@@ -618,7 +634,7 @@ export function PracticeTestsHubClient({
             </div>
           </LearnerFilterBar>
 
-          <LearnerFilterBar title="Study focus" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
+          <LearnerFilterBar title="Step 3 — Select focus" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5">
             <div className="flex flex-wrap gap-2">
               {[
                 ["all", "All questions"],
@@ -643,8 +659,18 @@ export function PracticeTestsHubClient({
             </div>
           </LearnerFilterBar>
 
-          <div className="space-y-4" data-nn-e2e-practice-session-size>
-            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question count</p>
+          <div className="space-y-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-none sm:p-5 lg:col-span-2" data-nn-e2e-practice-session-size>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Step 4 — Select question count</p>
+                <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+                  Pick a preset and start, or open advanced options for a custom count.
+                </p>
+              </div>
+              <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+                {questionCount} questions
+              </span>
+            </div>
             <div className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap" role="group" aria-label="Question count">
               {availableCounts.map((count) => {
                 const active = questionCount === count;
@@ -662,31 +688,72 @@ export function PracticeTestsHubClient({
                 );
               })}
             </div>
-            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
+          </div>
+
+          {examMode === "cat" && !catAvailableForPathway ? (
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)] lg:col-span-2">
+              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
+            </div>
+          ) : null}
+        </div>
+      </SharedStudySetupSurface>
+
+      <details
+        className="nn-flashcards-setup-panel nn-premium-practice-hub-builder nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
+        data-nn-e2e-practice-advanced-options
+      >
+        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
+          Advanced options
+          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
+            Change exam track or enter a custom question count.
+          </span>
+        </summary>
+        <div className="space-y-5 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
+          {pathwayOptions.length > 1 ? (
+            <div>
+              <label htmlFor="practice-exam-pathway" className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                Exam Pathway
+              </label>
+              <select
+                id="practice-exam-pathway"
+                value={pathwayId}
+                onChange={(event) => setPathwayId(event.target.value)}
+                className="mt-2 h-12 w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-medium text-[var(--semantic-text-primary)] shadow-sm outline-none focus:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
+              >
+                {pathwayOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
+
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
               <label className="text-sm font-medium text-[var(--semantic-text-secondary)]" htmlFor="practice-exam-count">
-                Custom
+                Custom question count
               </label>
               <input
                 id="practice-exam-count"
                 data-nn-e2e-question-count
                 type="number"
-                min={examMode === "cat" ? 25 : 5}
-                max={examMode === "cat" ? 75 : 100}
+                min={examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN}
+                max={examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX}
                 value={questionCount}
-                onChange={(event) => setQuestionCount(Math.max(5, Math.min(100, Number(event.target.value) || 50)))}
+                onChange={(event) =>
+                  setQuestionCount(
+                    Math.max(
+                      examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN,
+                      Math.min(examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX, Number(event.target.value) || 50),
+                    ),
+                  )
+                }
                 className="nn-flashcards-custom-limit-input"
               />
               <span className="text-xs text-[var(--semantic-text-muted)]">
-                {examMode === "cat" ? "25-75 questions" : "5-100 questions"}
+                {examMode === "cat" ? `${CAT_COUNT_MIN}-${CAT_COUNT_MAX} questions` : `${PRACTICE_COUNT_MIN}-${PRACTICE_COUNT_MAX} questions`}
               </span>
             </div>
-          </div>
-
-          {examMode === "cat" && !catAvailableForPathway ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
-            </div>
-          ) : null}
 
           {pathwayLessonPractice ? (
             <div className="flex flex-wrap gap-2 text-xs font-medium text-[var(--semantic-text-secondary)]">

@@ -3,26 +3,26 @@
 import React, { useCallback, useEffect, useId, useState, useSyncExternalStore } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
 
-function subscribeMinLg(onStoreChange: () => void) {
-  const mq = window.matchMedia("(min-width: 1024px)");
+function subscribeMinDocked(onStoreChange: () => void) {
+  const mq = window.matchMedia("(min-width: 1280px)");
   mq.addEventListener("change", onStoreChange);
   return () => mq.removeEventListener("change", onStoreChange);
 }
 
-function getMinLgSnapshot() {
-  return window.matchMedia("(min-width: 1024px)").matches;
+function getMinDockedSnapshot() {
+  return window.matchMedia("(min-width: 1280px)").matches;
 }
 
-function getMinLgServerSnapshot() {
+function getMinDockedServerSnapshot() {
   return false;
 }
 
-function useIsMinLg() {
-  return useSyncExternalStore(subscribeMinLg, getMinLgSnapshot, getMinLgServerSnapshot);
+function useIsDockedRationaleViewport() {
+  return useSyncExternalStore(subscribeMinDocked, getMinDockedSnapshot, getMinDockedServerSnapshot);
 }
 
 /**
- * Desktop: rationale column as usual. Mobile (&lt;lg): single-column question + FAB toggles bottom sheet
+ * Wide desktop: rationale column as usual. Tablet/small laptop: single-column question + FAB toggles bottom sheet
  * (no duplicate rationale trees — breakpoint chooses mount location).
  */
 export function PracticeExamRationaleMobileDock({
@@ -34,11 +34,11 @@ export function PracticeExamRationaleMobileDock({
   openLabel: string;
   sheetTitle: string;
 }) {
-  const isLg = useIsMinLg();
+  const isDocked = useIsDockedRationaleViewport();
 
-  if (isLg) {
+  if (isDocked) {
     return (
-      <div className="nn-practice-exam-rationale-desktop flex min-h-0 min-w-0 flex-[0_1_42%] lg:max-w-[min(40vw,26rem)] xl:max-w-[min(36vw,28rem)]">
+      <div className="nn-practice-exam-rationale-desktop flex min-h-0 min-w-0 flex-[0_1_32%] xl:max-w-[min(30vw,22rem)] 2xl:max-w-[min(28vw,24rem)]">
         {children}
       </div>
     );
@@ -80,7 +80,7 @@ function MobileBottomSheet({
       {open ? (
         <button
           type="button"
-          className="fixed inset-0 z-[37] bg-[color-mix(in_srgb,var(--semantic-text-primary)_45%,transparent)] lg:hidden"
+          className="fixed inset-0 z-[37] bg-[color-mix(in_srgb,var(--semantic-text-primary)_45%,transparent)] xl:hidden"
           aria-label="Dismiss rationale overlay"
           onClick={close}
         />
@@ -88,7 +88,7 @@ function MobileBottomSheet({
 
       <div
         id={dialogId}
-        className={`fixed inset-x-0 bottom-0 z-[38] flex max-h-[min(82dvh,36rem)] flex-col lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-[38] flex max-h-[min(82dvh,36rem)] flex-col xl:hidden ${
           open ? "pointer-events-auto" : "pointer-events-none"
         }`}
         aria-hidden={!open}
@@ -121,7 +121,7 @@ function MobileBottomSheet({
         </div>
       </div>
 
-      <div className="pointer-events-none fixed bottom-0 left-0 right-0 z-[39] flex justify-center pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden">
+      <div className="pointer-events-none fixed bottom-[3.35rem] left-0 right-0 z-[39] flex justify-center pb-[max(0.35rem,env(safe-area-inset-bottom))] xl:hidden">
         <button
           type="button"
           className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--semantic-surface))] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] backdrop-blur-sm"

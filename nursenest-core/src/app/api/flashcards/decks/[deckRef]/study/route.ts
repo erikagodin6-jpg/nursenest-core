@@ -203,6 +203,7 @@ export async function GET(req: NextRequest, { params }: Props) {
         mode: "subscriber" as const,
         deckId: deck.id,
         slug: deck.slug,
+        title: deck.title,
         cards: [],
         session: { cursor: 0, queueLength: 0, done: true },
         sessionMeta: {
@@ -215,17 +216,24 @@ export async function GET(req: NextRequest, { params }: Props) {
     }
 
     const deckIdList = deckCards.map((c) => c.id);
-    const progressRows = await withRetry(() =>
-      prisma.flashcardProgress.findMany({
-        where: { userId, flashcardId: { in: deckIdList } },
-        select: {
-          flashcardId: true,
-          nextReviewAt: true,
-          repetitions: true,
-        },
-        take: takeForIdIn(deckIdList, PRISMA_FLASHCARD_DECK_INDEX_MAX),
-      }),
-    );
+    const [progressRows, sessionRow0] = await Promise.all([
+      withRetry(() =>
+        prisma.flashcardProgress.findMany({
+          where: { userId, flashcardId: { in: deckIdList } },
+          select: {
+            flashcardId: true,
+            nextReviewAt: true,
+            repetitions: true,
+          },
+          take: takeForIdIn(deckIdList, PRISMA_FLASHCARD_DECK_INDEX_MAX),
+        }),
+      ),
+      withRetry(() =>
+        prisma.flashcardStudySession.findUnique({
+          where: { userId_deckId: { userId, deckId: deck.id } },
+        }),
+      ),
+    ]);
 
     const progressMap = new Map(
       progressRows.map((p) => [
@@ -237,11 +245,7 @@ export async function GET(req: NextRequest, { params }: Props) {
     const now = new Date();
     let queueIds = buildStudyQueueIds(deckCards, progressMap, now);
 
-    let sessionRow = await withRetry(() =>
-      prisma.flashcardStudySession.findUnique({
-        where: { userId_deckId: { userId, deckId: deck.id } },
-      }),
-    );
+    let sessionRow = sessionRow0;
 
     if (!sessionRow || reset) {
       if (shuffle) {
@@ -308,6 +312,7 @@ export async function GET(req: NextRequest, { params }: Props) {
       mode: "subscriber" as const,
       deckId: deck.id,
       slug: deck.slug,
+      title: deck.title,
       cards: ordered.map((c) =>
         serializeFlashcardForDeckStudy(c, {
           educationalLocale,

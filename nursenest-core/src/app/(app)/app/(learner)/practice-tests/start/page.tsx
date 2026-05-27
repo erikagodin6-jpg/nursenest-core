@@ -1,261 +1,32 @@
 import { redirect } from "next/navigation";
-import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
-import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
-import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
-import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { LearnerActivityState } from "@/components/student/learner-activity-state";
-import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
-import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
-import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
-import { appPathwayCatSessionStartPath, isForcedCatFullSetupReviewParam } from "@/lib/exam-pathways/pathway-cat-flow";
-import { catLaunchPathwayIdForLearnerStartPage } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
-import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
-import { loadLearnerActivityBootstrap } from "@/lib/learner/activity-lifecycle";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
+
+type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => ({
       robots: { index: false, follow: false },
-      title: "Adaptive exam simulation | NurseNest",
+      title: "Practice exam setup | NurseNest",
     }),
     { pathname: "/app/practice-tests/start", routeGroup: "student.learner.practice_test_start" },
   );
 }
 
-type Props = { searchParams: Promise<{ pathwayId?: string; review?: string }> };
-
-export default async function PathwayCatStartPage({ searchParams }: Props) {
-  const { t } = await getLearnerMarketingBundle();
+export default async function PracticeTestsStartAliasPage({ searchParams }: Props) {
   const sp = await searchParams;
-  const requestedPathwayId = typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 2 ? sp.pathwayId.trim() : null;
-  /** When set, show the full briefing UI (avoids redirect loop from cat-launch error “Full setup” link). */
-  const forceFullSetup = isForcedCatFullSetupReviewParam(sp.review);
-
-  const bootstrap = await loadLearnerActivityBootstrap({
-    surface: "(student).app.(learner).practice-tests.start",
-    activityKind: "cat_exam",
-    homeHref: "/app/practice-tests",
-    homeLabel: "Return to Practice Exams",
-    requireSubscription: false,
-  });
-
-  if (!bootstrap.ok) return <LearnerActivityState state={bootstrap} paywallContext="questions" />;
-
-  const userId = bootstrap.userId;
-  const entitlement = bootstrap.entitlement;
-
-  if (!entitlement.hasAccess) {
-    let snap = null;
-    try {
-      snap = userId ? await getFreemiumSnapshot(userId) : null;
-    } catch (error) {
-      safeServerLog("cat_start_page", "freemium_snapshot_failed", {
-        loader_name: "cat_start_page",
-        user_id_prefix: userId.slice(0, 8),
-        pathway_id: requestedPathwayId ?? "",
-        error_message: error instanceof Error ? error.message.slice(0, 400) : String(error).slice(0, 400),
-      });
+  const q = new URLSearchParams();
+  q.set("catLaunch", "1");
+  for (const [key, value] of Object.entries(sp)) {
+    if (value === undefined || key === "review") continue;
+    if (Array.isArray(value)) {
+      for (const item of value) q.append(key, String(item));
+    } else {
+      q.set(key, String(value));
     }
-    return (
-      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
-        <div className="mb-1">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
-            {t("learner.practiceTests.title")}
-          </h1>
-          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
-            {t("learner.practiceTests.subtitle.locked")}
-          </p>
-        </div>
-        <div>
-          <SubscriptionPaywall
-            context="questions"
-            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
-            freemiumRemainingLessons={snap != null ? snap.lessonRemaining : undefined}
-          />
-        </div>
-        <FreemiumPreviewExhaustedSurface kind="cat" />
-      </div>
-    );
   }
-
-  let compatiblePathways: Awaited<ReturnType<typeof listPathwaysCompatibleWithSubscription>> = [];
-  try {
-    compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
-  } catch (error) {
-    safeServerLog("cat_start_page", "pathway_bootstrap_failed", {
-      loader_name: "cat_start_pathway_compatibility",
-      pathway_id: requestedPathwayId ?? "",
-      user_id_prefix: userId.slice(0, 8),
-      error_message: error instanceof Error ? error.message.slice(0, 500) : String(error).slice(0, 500),
-    });
-    return <CatStartRecovery pathwayId={requestedPathwayId} />;
-  }
-  const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
-  const waitlistOnlyPathways = compatiblePathways.filter((p) => !pathwayAllowsCatAdaptiveStart(p));
-
-  if (
-    requestedPathwayId &&
-    !catEligiblePathways.some((p) => p.id === requestedPathwayId)
-  ) {
-    return (
-      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
-        <div className="mb-1">
-          <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-        </div>
-        <PremiumEmptyState
-          headline="Adaptive CAT"
-          body="This exam track is not available for adaptive sessions on your current plan, or CAT is not enabled for that track yet. Open practice questions from your pathway hub, or pick an eligible track in study preferences."
-          tone="default"
-          primaryCta={{
-            label: t("learner.dashboard.openAccountHub"),
-            href: "/app/account/study-preferences",
-            variant: "primary",
-          }}
-          secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
-      </div>
-    );
-  }
-
-  /** When several CAT-eligible tracks exist, require an explicit choice (URL or dropdown) — no silent default. */
-  const initialPathwayId = catLaunchPathwayIdForLearnerStartPage(requestedPathwayId, catEligiblePathways);
-
-  /** Pathway is known → go straight to session bridge unless learner explicitly opened the full briefing. */
-  if (initialPathwayId && !forceFullSetup) {
-    let startHref = "/app/practice-tests";
-    try {
-      startHref = appPathwayCatSessionStartPath(initialPathwayId);
-    } catch (error) {
-      safeServerLog("cat_start_page", "start_path_resolve_failed", {
-        loader_name: "cat_start_route_resolver",
-        pathway_id: initialPathwayId,
-        user_id_prefix: userId.slice(0, 8),
-        error_message: error instanceof Error ? error.message.slice(0, 500) : String(error).slice(0, 500),
-      });
-      return <CatStartRecovery pathwayId={initialPathwayId} />;
-    }
-    redirect(startHref);
-  }
-
-  const pathwayOptions = catEligiblePathways.map((p) => ({
-    id: p.id,
-    label: `${p.shortName} — ${p.displayName}`,
-    examFamily: String(p.examFamily),
-    examCodeLabel: p.shortName.trim(),
-  }));
-  const pathwayShellById: Record<string, PracticeTestPathwayClientShell> = Object.fromEntries(
-    catEligiblePathways.map((p) => {
-      const shell: PracticeTestPathwayClientShell = {
-        id: p.id,
-        countrySlug: p.countrySlug,
-        roleTrack: p.roleTrack,
-        examCode: p.examCode,
-        shortName: p.shortName,
-        examFamily: p.examFamily,
-      };
-      return [p.id, shell] as const;
-    }),
-  );
-  const lessonPreviewSettled = await Promise.allSettled(
-    catEligiblePathways.map((pathway) => getPathwayLessonsPage(pathway.id, 1, 5)),
-  );
-  const lessonsByPathway: Record<string, Array<{ slug: string; title: string }> | null> = Object.fromEntries(
-    catEligiblePathways.map((pathway, i) => {
-      const r = lessonPreviewSettled[i]!;
-      if (r.status === "fulfilled") {
-        return [
-          pathway.id,
-          r.value.items.map((item) => ({
-            slug: item.slug,
-            title: item.title,
-          })),
-        ] as const;
-      }
-      const msg = r.reason instanceof Error ? r.reason.message.slice(0, 400) : String(r.reason).slice(0, 400);
-      safeServerLog("cat_start_page", "lesson_preview_segment_failed", {
-        operation: "cat_start_lesson_preview",
-        feature_surface: "practice_tests_cat_start",
-        pathway_id_prefix: pathway.id.slice(0, 12),
-        outcome: "error",
-        reason: msg,
-      });
-      return [pathway.id, null] as const;
-    }),
-  );
-
-  return (
-    <div className="mx-auto min-w-0 w-full max-w-6xl space-y-4 px-4 pb-6 sm:px-6">
-      <div className="mb-1">
-        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-      </div>
-      <p className="mt-2 max-w-3xl text-sm text-[var(--semantic-text-secondary)]">
-        Select your exam pathway, review conditions, then start. Timing, navigation, and min/max item rules follow the pathway
-        configuration below — not generic quiz defaults.
-      </p>
-      {catEligiblePathways.length > 1 ? (
-        <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
-          Your plan includes more than one adaptive exam track —{" "}
-          <span className="font-medium text-[var(--semantic-text-primary)]">pick which pathway this CAT session is for</span>{" "}
-          before starting so items stay exam-scoped.
-        </p>
-      ) : null}
-      {waitlistOnlyPathways.length > 0 && catEligiblePathways.length === 0 ? (
-        <aside className="nn-card mt-6 border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-text-primary)]">
-          <p className="font-semibold">Adaptive (CAT) is not open for your current pathway yet</p>
-          <p className="mt-1 text-[var(--semantic-text-secondary)]">
-            Your plan matches one or more tracks that are still on waitlist or ramp-up. Use{" "}
-            <strong>lessons</strong> and the <strong>question bank</strong> from each pathway hub, join a waitlist from
-            marketing pages if available, or switch to an active exam track (e.g. US RN/PN) if your subscription includes
-            it.
-          </p>
-        </aside>
-      ) : null}
-      <div className="mt-6">
-        <PathwayCatSessionStartClient
-          initialPathwayId={initialPathwayId}
-          pathwayOptions={pathwayOptions}
-          pathwayShellById={pathwayShellById}
-          fallbackLessonsByPathway={lessonsByPathway}
-        />
-      </div>
-    </div>
-  );
-}
-
-function CatStartRecovery({ pathwayId }: { pathwayId: string | null }) {
-  const retryHref = pathwayId
-    ? `/app/practice-tests/start?pathwayId=${encodeURIComponent(pathwayId)}&review=1`
-    : "/app/practice-tests/start?review=1";
-  return (
-    <div className="mx-auto min-w-0 w-full max-w-3xl space-y-6 px-4 py-8 sm:px-6" data-nn-e2e-cat-start-loader-failure>
-      <div className="mb-4">
-        <LearnerBreadcrumbTrail kind="practice-tests" pathname="/app/practice-tests" />
-      </div>
-      <PremiumEmptyState
-        headline="Adaptive exam setup could not verify this pathway"
-        body="We could not load the pathway configuration needed to start this CAT session. Your account, access, and saved progress remain intact."
-        tone="default"
-        primaryCta={{ label: "Retry CAT setup", href: retryHref, variant: "primary" }}
-        secondaryCtas={[
-          { label: "Open practice exams", href: "/app/practice-tests", variant: "secondary" },
-          { label: "Return to dashboard", href: "/app", variant: "ghost" },
-        ]}
-        visualLayout="stack"
-        ctaLayout="stack"
-      />
-    </div>
-  );
+  redirect(`/app/practice-tests?${q.toString()}`);
 }

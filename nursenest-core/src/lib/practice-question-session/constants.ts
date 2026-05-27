@@ -1,4 +1,4 @@
-/** Practice Questions setup + `/app/questions/session` URL contract (query params). */
+/** Practice Questions setup query contract. Canonical learner entry is `/app/practice-tests`. */
 
 export const PRACTICE_SESSION_SOURCES = [
   "body_systems",

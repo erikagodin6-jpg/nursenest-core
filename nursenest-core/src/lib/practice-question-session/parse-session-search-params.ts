@@ -97,5 +97,5 @@ export function practiceSessionUrl(args: {
   }
   const sf = args.studyFilter ?? "all";
   if (sf !== "all") qs.set("studyFilter", sf);
-  return `/app/questions/session?${qs.toString()}`;
+  return `/app/practice-tests?${qs.toString()}`;
 }

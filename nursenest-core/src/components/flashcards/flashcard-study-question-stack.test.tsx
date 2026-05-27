@@ -48,8 +48,8 @@ const BASE_PROPS = {
   answer: "A, C, D",
 };
 
-describe("FlashcardStudyQuestionStack — SATA reveal button", () => {
-  it("renders Submit & Reveal button for SATA when not revealed and onReveal provided", () => {
+describe("FlashcardStudyQuestionStack — SATA submit button", () => {
+  it("renders Submit Answer button for SATA when not revealed and onReveal provided", () => {
     const html = renderToStaticMarkup(
       <FlashcardStudyQuestionStack
         {...BASE_PROPS}
@@ -59,10 +59,10 @@ describe("FlashcardStudyQuestionStack — SATA reveal button", () => {
       />,
     );
     assert.match(html, /data-testid="sata-reveal-btn"/);
-    assert.match(html, /Submit.*Reveal/);
+    assert.match(html, /Submit Answer/);
   });
 
-  it("does not render Submit & Reveal button when already revealed", () => {
+  it("does not render Submit Answer button when already revealed", () => {
     const html = renderToStaticMarkup(
       <FlashcardStudyQuestionStack
         {...BASE_PROPS}
@@ -74,7 +74,7 @@ describe("FlashcardStudyQuestionStack — SATA reveal button", () => {
     assert.doesNotMatch(html, /data-testid="sata-reveal-btn"/);
   });
 
-  it("does not render Submit & Reveal button when onReveal is absent (non-interactive)", () => {
+  it("does not render Submit Answer button when onReveal is absent (non-interactive)", () => {
     const html = renderToStaticMarkup(
       <FlashcardStudyQuestionStack
         {...BASE_PROPS}

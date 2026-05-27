@@ -37,6 +37,7 @@ type CardPayload = {
 
 type StudyResponse = {
   mode: "preview" | "subscriber";
+  title?: string;
   cards: CardPayload[];
   sessionMeta?: {
     requestedCount?: number;
@@ -103,6 +104,7 @@ export function FlashcardStudyClient({
         if (!cancelled) {
           setMode(data.mode === "preview" ? "preview" : "subscriber");
           setQueue(cards);
+          if (data.title) setTitle(formatTitleCase(data.title));
         }
       } catch (error) {
         if (controller.signal.aborted || cancelled) return;
@@ -133,36 +135,6 @@ export function FlashcardStudyClient({
     setResumeGateOpen(true);
     setResumeInitial({ index: ck.index, revealed: ck.revealed });
   }, [loading, queue.length, deckRef]);
-
-  // 🏷 title
-  useEffect(() => {
-    let cancelled = false;
-    const controller = new AbortController();
-    (async () => {
-      try {
-        const res = await fetchWithRetry(`/api/flashcards/decks/${safeDeckRef}`, {
-          credentials: "include",
-          cache: "no-store",
-          signal: controller.signal,
-        }, { attempts: 1, timeoutMs: 8_000 });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled && data?.deck?.title) {
-          setTitle(formatTitleCase(data.deck.title));
-        }
-      } catch (error) {
-        if (controller.signal.aborted || cancelled) return;
-        logDedupedClientDiagnostic("flashcard_deck_study", "title_load_failed", deckRef, {
-          deckRef,
-          message: error instanceof Error ? error.message : "unknown",
-        });
-      }
-    })();
-    return () => {
-      cancelled = true;
-      controller.abort();
-    };
-  }, [deckRef, safeDeckRef]);
 
   const retryLoad = useCallback(() => {
     setRetryNonce((n) => n + 1);

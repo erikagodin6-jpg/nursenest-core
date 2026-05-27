@@ -75,7 +75,7 @@ describe("parsePracticeSessionSearchParams", () => {
 });
 
 describe("practiceSessionUrl", () => {
-  it("builds /app/questions/session with expected keys", () => {
+  it("builds /app/practice-tests with expected keys", () => {
     const href = practiceSessionUrl({
       pathwayId: "us-rn-nclex-rn",
       source: "mixed_review",
@@ -84,7 +84,7 @@ describe("practiceSessionUrl", () => {
       mode: "tutor",
       shuffle: true,
     });
-    assert.ok(href.startsWith("/app/questions/session?"));
+    assert.ok(href.startsWith("/app/practice-tests?"));
     const q = new URLSearchParams(href.split("?")[1] ?? "");
     assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
     assert.equal(q.get("source"), "mixed_review");
