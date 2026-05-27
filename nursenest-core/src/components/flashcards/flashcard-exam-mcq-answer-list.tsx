@@ -135,12 +135,6 @@ export function FlashcardExamMcqAnswerList({
                 </div>
               )}
 
-              {revealed && isCorrect ? (
-                <div className="nn-flashcard-answer-feedback nn-flashcard-answer-feedback--correct-compact">
-                  <span>Correct answer</span>
-                </div>
-              ) : null}
-
               {revealed && !isCorrect && feedbackText ? (
                 isPicked ? (
                   <div

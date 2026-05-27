@@ -156,7 +156,7 @@ describe("FlashcardStudyQuestionStack — MCQ rationale placement", () => {
     );
 
     assert.equal(html.match(/Oxygen directly addresses hypoxia/g)?.length, 1);
-    assert.match(html, /Correct answer/);
+    assert.doesNotMatch(html, /Correct answer<\/span>/);
   });
 });
 
