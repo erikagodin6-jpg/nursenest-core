@@ -18,7 +18,7 @@ describe("printable store (contract)", () => {
   });
 
   it("learner printables page notFound when store disabled", () => {
-    const src = read("app/(student)/app/(learner)/printables/page.tsx");
+    const src = read("app/(app)/app/(learner)/printables/page.tsx");
     assert.match(src, /isPrintableStoreEnabledForLearners/);
     assert.match(src, /notFound/);
   });

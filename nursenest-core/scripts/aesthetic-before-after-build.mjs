@@ -170,7 +170,7 @@ function inferredRowFromPng(beforePath) {
     implementationRisk: "medium",
     likelyAffectedFiles: marketing
       ? ["nursenest-core/src/app/(marketing)/**", "nursenest-core/src/app/semantic-status-tokens.css"]
-      : ["nursenest-core/src/app/(student)/app/(learner)/**", "nursenest-core/src/app/semantic-status-tokens.css"],
+      : ["nursenest-core/src/app/(app)/app/(learner)/**", "nursenest-core/src/app/semantic-status-tokens.css"],
     notes: "Inferred from filename — manifest row missing; metadata may be incomplete.",
     contrastHint: null,
     docOverflowPx: 0,

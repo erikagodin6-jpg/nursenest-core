@@ -6,7 +6,7 @@ import { describe, it } from "node:test";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const shellPath = join(__dirname, "../../components/student/learner-dashboard-page-shell.tsx");
-const reportPath = join(__dirname, "../../app/(student)/app/(learner)/account/_lib/learner-report-card-route.tsx");
+const reportPath = join(__dirname, "../../app/(app)/app/(learner)/account/_lib/learner-report-card-route.tsx");
 const nursingAnalyticsPath = join(__dirname, "../../components/student/dashboard/learner-premium-nursing-analytics.tsx");
 
 describe("Learner dashboard + report card — premium convergence hooks", () => {

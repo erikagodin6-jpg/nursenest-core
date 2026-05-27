@@ -164,7 +164,7 @@ test("canonical destinations avoid eager learner nav imports in public marketing
 });
 
 test("shared app layouts defer admin palette and learner bundle loaders", () => {
-  const appLayout = read("src/app/(student)/app/layout.tsx");
+  const appLayout = read("src/app/(app)/app/layout.tsx");
 
   assertNoEagerImport(appLayout, "@/components/admin/admin-global-command-palette");
   assertNoEagerImport(appLayout, "@/lib/learner/learner-marketing-server");

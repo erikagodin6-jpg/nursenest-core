@@ -112,7 +112,7 @@ const eslintConfig = defineConfig([
         "error",
         {
           patterns: [
-            { group: ["@/app/(student)/**"], message: "Marketing layer must not import student-layer modules." },
+            { group: ["@/app/(app)/**"], message: "Marketing layer must not import app-layer modules." },
             { group: ["@/app/(admin)/**"], message: "Marketing layer must not import admin-layer modules." },
             { group: ["@/app/app/**"], message: "Marketing layer must not import legacy student route modules." },
             { group: ["@/app/admin/**"], message: "Marketing layer must not import legacy admin route modules." },
@@ -124,7 +124,7 @@ const eslintConfig = defineConfig([
 
   // ── Layer isolation: student layer ──
   {
-    files: ["src/app/(student)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
+    files: ["src/app/(app)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -162,7 +162,7 @@ const eslintConfig = defineConfig([
         {
           patterns: [
             { group: ["@/app/(marketing)/**"], message: "Admin layer must not import marketing-layer route modules." },
-            { group: ["@/app/(student)/**"], message: "Admin layer must not import student-layer route modules." },
+            { group: ["@/app/(app)/**"], message: "Admin layer must not import app-layer route modules." },
             { group: ["@/app/app/**"], message: "Admin layer must not import legacy student route modules." },
             { group: ["@/app/page"], message: "Admin layer must not import marketing route modules." },
             { group: ["@/app/login/**", "@/app/signup/**", "@/app/pricing/**"], message: "Admin layer must not import marketing route modules." },

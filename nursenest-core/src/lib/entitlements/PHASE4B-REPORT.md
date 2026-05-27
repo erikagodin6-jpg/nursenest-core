@@ -21,7 +21,7 @@ Same **NextAuth** session and **Postgres** `User` + `Subscription` rows. Entitle
 
 - **Command:** `npm run audit:entitlement-surfaces` → `scripts/audit-entitlement-surfaces.mts`
 - **Exit 1:** only if a **critical** `src/app/api/learner/**/route.ts` file lacks `requireSubscriberSession`, `resolveEntitlement`, `getUserAccess`, `loadCanonicalLearnerAccessForUserId`, or `toCanonicalLearnerAccess`.
-- **Exit 0 + JSON warnings:** soft-allowlisted learner routes (baseline, reset-progress, hub stats, study settings, pre-nursing), heuristic client `hasAccess` usage under `src/app/(student)/app`, and `RN` tier string equality checks under the learner app tree.
+- **Exit 0 + JSON warnings:** soft-allowlisted learner routes (baseline, reset-progress, hub stats, study settings, pre-nursing), heuristic client `hasAccess` usage under `src/app/(app)/app`, and `RN` tier string equality checks under the learner app tree.
 
 ## ECG / adaptive / labs / allied
 

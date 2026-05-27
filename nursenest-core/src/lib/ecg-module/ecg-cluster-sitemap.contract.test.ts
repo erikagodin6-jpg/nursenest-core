@@ -346,7 +346,7 @@ describe("Learner lessons hub — ECG authority block integrated", () => {
   test("lessons/page.tsx imports EcgAuthorityLinkBlock", () => {
     const { readFileSync } = require("node:fs");
     const src = readFileSync(
-      join(ROOT, "src/app/(student)/app/(learner)/lessons/page.tsx"),
+      join(ROOT, "src/app/(app)/app/(learner)/lessons/page.tsx"),
       "utf-8",
     );
     assert.match(
@@ -360,7 +360,7 @@ describe("Learner lessons hub — ECG authority block integrated", () => {
   test("lessons/page.tsx ECG block is gated to RN/NP tier only", () => {
     const { readFileSync } = require("node:fs");
     const src = readFileSync(
-      join(ROOT, "src/app/(student)/app/(learner)/lessons/page.tsx"),
+      join(ROOT, "src/app/(app)/app/(learner)/lessons/page.tsx"),
       "utf-8",
     );
     // The ECG block must be inside a tier check

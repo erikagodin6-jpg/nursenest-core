@@ -4,7 +4,7 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
 const repoRoot = path.resolve(process.cwd());
-const learnerLayoutPath = path.join(repoRoot, "src/app/(student)/app/(learner)/layout.tsx");
+const learnerLayoutPath = path.join(repoRoot, "src/app/(app)/app/(learner)/layout.tsx");
 const marketingIndexPath = path.join(repoRoot, "src/app/styles/marketing/index.css");
 const premiumRedesignPath = path.join(repoRoot, "src/app/premium-redesign-2026.css");
 const marketingReadabilityCssPath = path.join(repoRoot, "src/app/styles/marketing/lesson-readability-hotfix.css");

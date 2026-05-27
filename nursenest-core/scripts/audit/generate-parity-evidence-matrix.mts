@@ -599,7 +599,7 @@ async function main() {
       },
       tier2_user_study: {
         focus: ["Dashboard", "practice flows", "weak areas", "CAT insights"],
-        evidenceFiles: ["user-surface-parity.json", "src/app/(student)/**"],
+        evidenceFiles: ["user-surface-parity.json", "src/app/(app)/**"],
       },
       tier3_admin_editorial: {
         focus: ["Admin lessons/questions/blog", "E-E-A-T editorial", "imports"],

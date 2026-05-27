@@ -205,7 +205,7 @@ export const KNOWN_ANCHORS = [
     currentSourcePaths: [
       "nursenest-core/src/lib/scenarios/osce-stations-resolve.server.ts",
       "nursenest-core/src/lib/scenarios/legacy-osce-stations-runtime.ts",
-      "nursenest-core/src/app/(student)/app/(learner)/osce",
+      "nursenest-core/src/app/(app)/app/(learner)/osce",
     ],
     legacyRoutes: ["/osce-skills", "/simulators (legacy)"],
     currentPublicRoutes: ["/{locale}/.../osce"],

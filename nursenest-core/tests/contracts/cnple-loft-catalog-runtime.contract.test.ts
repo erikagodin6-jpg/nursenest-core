@@ -22,8 +22,8 @@ import { CNPLE_SUPPLEMENTAL_LOFT_CASES } from "../../src/content/cases/cnple-sup
 const ROOT = process.cwd();
 
 const LIVE_RUNTIME_FILES = [
-  "src/app/(student)/app/(learner)/cases/cnple/page.tsx",
-  "src/app/(student)/app/(learner)/cases/cnple/[caseId]/page.tsx",
+  "src/app/(app)/app/(learner)/cases/cnple/page.tsx",
+  "src/app/(app)/app/(learner)/cases/cnple/[caseId]/page.tsx",
   "src/app/api/cases/cnple/session/route.ts",
   "src/app/api/cases/cnple/[sessionId]/advance/route.ts",
   "src/app/api/cases/cnple/[sessionId]/review/route.ts",

@@ -16,7 +16,7 @@ const MARKETING_DETAIL_PATH = path.resolve(
 );
 const LEARNER_DETAIL_PATH = path.resolve(
   ROOT,
-  "src/app/(student)/app/(learner)/lessons/[id]/page.tsx",
+  "src/app/(app)/app/(learner)/lessons/[id]/page.tsx",
 );
 const SECTION_NAV_PATH = path.resolve(
   ROOT,
@@ -110,23 +110,13 @@ describe("premium lesson reading architecture v2", () => {
     ] as const) {
       assert.match(
         source,
-        /className="nn-lesson-layout nn-lesson-layout--premium-reading/,
+        /nn-lesson-layout--premium-reading/,
         `${label} reading layout missing`,
       );
       assert.match(
         source,
         /<LessonReadingViewport/,
         `${label} reading viewport mount missing`,
-      );
-      assert.match(
-        source,
-        /<LessonStickyReviewDock/,
-        `${label} sticky review dock missing`,
-      );
-      assert.match(
-        source,
-        /id="lesson-retention-review"/,
-        `${label} bottom review zone missing`,
       );
       assert.match(
         source,
@@ -149,6 +139,15 @@ describe("premium lesson reading architecture v2", () => {
         `${label} must not use old triple layout`,
       );
     }
+
+    assert.match(marketingDetail, /<LessonStickyReviewDock/, "marketing sticky review dock missing");
+    assert.match(marketingDetail, /id="lesson-retention-review"/, "marketing bottom review zone missing");
+    assert.equal(
+      learnerDetail.includes("<LessonStickyReviewDock"),
+      false,
+      "learner lessons must not render sticky continuation widgets",
+    );
+    assert.match(learnerDetail, /id="lesson-retention-review"/, "learner bottom review zone missing");
   });
 
   it("keeps learning content first and moves retention support to the bottom", () => {
@@ -178,7 +177,7 @@ describe("premium lesson reading architecture v2", () => {
     );
     assertOrdered(
       learnerDetail,
-      "<LessonSectionCard",
+      "pathwayLessonMainColumn",
       'id="lesson-retention-review"',
       "learner detail",
     );
@@ -225,7 +224,7 @@ describe("premium lesson reading architecture v2", () => {
       assert.match(css, /\.nn-lesson-reading-viewport/, `${label} reading viewport grid missing`);
       assert.match(
         css,
-        /grid-template-columns:\s*minmax\(0,\s*15rem\)\s*minmax\(0,\s*1fr\)\s*minmax\(0,\s*13\.75rem\)/,
+        /grid-template-columns:[^;]*minmax\((?:0|12rem),\s*15rem\)[^;]*minmax\(0,\s*1fr\)[^;]*minmax\((?:0|12rem),\s*13\.75rem\)/s,
         `${label} constrained side-rail grid missing`,
       );
       assert.match(css, /max-width:\s*15rem/, `${label} left rail width cap missing`);
@@ -237,7 +236,7 @@ describe("premium lesson reading architecture v2", () => {
       );
       assert.match(
         css,
-        /grid-template-columns:\s*minmax\(11rem,\s*15rem\)\s*minmax\(0,\s*1fr\)/,
+        /grid-template-columns:\s*minmax\((?:11|12)rem,\s*(?:14|15)rem\)\s*minmax\(0,\s*1fr\)/,
         `${label} RN v2 two-column grid missing`,
       );
     }

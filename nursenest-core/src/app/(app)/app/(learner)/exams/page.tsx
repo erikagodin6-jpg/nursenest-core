@@ -14,6 +14,6 @@ export default async function ExamsPage({ searchParams }: PageProps) {
       qs.set(key, value);
     }
   }
-  if (!qs.has("startMode")) qs.set("startMode", "practice_exam");
-  redirect(`/app/practice-tests?${qs.toString()}`);
+  const query = qs.toString();
+  redirect(query ? `/app/practice-tests?${query}` : "/app/practice-tests");
 }

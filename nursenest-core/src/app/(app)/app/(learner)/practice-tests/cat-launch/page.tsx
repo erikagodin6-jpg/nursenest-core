@@ -56,9 +56,9 @@ function isSafeAlliedProfession(
 }
 
 /**
- * Legacy deep link.
+ * Direct CAT launch compatibility route.
  *
- * Redirects:
+ * Routes:
  * - CNPLE → LOFT cases
  * - all others → inline CAT launch flow
  */

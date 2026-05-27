@@ -184,9 +184,9 @@ function likelyFiles(pageId: string, marketing: boolean): string[] {
     }
     return ["nursenest-core/src/app/(marketing)/**"];
   }
-  const base = ["nursenest-core/src/app/(student)/app/(learner)/**", "nursenest-core/src/app/semantic-status-tokens.css"];
+  const base = ["nursenest-core/src/app/(app)/app/(learner)/**", "nursenest-core/src/app/semantic-status-tokens.css"];
   if (pageId === "lesson-detail") return [...base, "nursenest-core/src/components/lessons/**"];
-  if (pageId === "account-settings") return [...base, "nursenest-core/src/app/(student)/app/(learner)/account/**"];
+  if (pageId === "account-settings") return [...base, "nursenest-core/src/app/(app)/app/(learner)/account/**"];
   return base;
 }
 

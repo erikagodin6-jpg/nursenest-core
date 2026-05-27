@@ -35,7 +35,7 @@ describe("automatic internal links — lesson ↔ blog automation", () => {
   });
 
   it("app lesson page surfaces related reading strip", () => {
-    const src = read("src/app/(student)/app/(learner)/lessons/[id]/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/lessons/[id]/page.tsx");
     assert.match(src, /AppLessonRelatedReading/);
   });
 

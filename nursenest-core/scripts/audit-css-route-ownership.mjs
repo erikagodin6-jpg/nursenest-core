@@ -36,7 +36,7 @@ const CSS_FILES_TO_AUDIT = [
 
 const ROUTE_DIRS = {
   marketing: ["src/app/(marketing)", "src/components/marketing"],
-  learner:   ["src/app/(student)", "src/components/study", "src/components/student",
+  learner:   ["src/app/(app)", "src/components/study", "src/components/student",
               "src/components/exam", "src/components/learner"],
   admin:     ["src/app/(admin)", "src/components/admin"],
   layout:    ["src/components/layout"],

@@ -28,9 +28,9 @@ const SCOPED_FILES = [
   "src/components/student/practice-tests-hub-client.tsx",
   "src/app/api/questions/grade/route.ts",
   "src/lib/learner/app-study-internal-links.ts",
-  "src/app/(student)/app/(learner)/flashcards/page.tsx",
-  "src/app/(student)/app/(learner)/lessons/page.tsx",
-  "src/app/(student)/app/(learner)/practice-tests/page.tsx",
+  "src/app/(app)/app/(learner)/flashcards/page.tsx",
+  "src/app/(app)/app/(learner)/lessons/page.tsx",
+  "src/app/(app)/app/(learner)/practice-tests/page.tsx",
 ];
 
 function shouldValidateLiteral(href: string): boolean {

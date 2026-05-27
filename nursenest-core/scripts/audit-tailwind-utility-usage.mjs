@@ -129,7 +129,7 @@ const FAMILY_DIRS = {
     join(ROOT, "src/lib/marketing"),
   ],
   learner: [
-    join(ROOT, "src/app/(student)"),
+    join(ROOT, "src/app/(app)"),
     join(ROOT, "src/components/learner"),
     join(ROOT, "src/lib/learner"),
   ],

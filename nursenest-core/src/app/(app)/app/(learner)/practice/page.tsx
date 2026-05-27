@@ -4,7 +4,7 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
 
 /**
  * `/app/practice` is not a separate product surface — learner practice exams and CAT live under
- * {@link import("@/app/(student)/app/(learner)/practice-tests/page") `/app/practice-tests`}.
+ * {@link import("@/app/(app)/app/(learner)/practice-tests/page") `/app/practice-tests`}.
  * Dev render trace: `NN_RENDER_TRACE: practice live route` is emitted from the practice-tests hub
  * (`LearnerRenderTraceBanner`), not this redirect-only route.
  */

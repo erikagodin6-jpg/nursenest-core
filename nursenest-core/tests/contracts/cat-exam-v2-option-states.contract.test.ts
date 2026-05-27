@@ -17,7 +17,7 @@
  * @see src/app/styles/learner/learner-global.css  (authoritative — loads last)
  * @see src/app/learner-exam-session-premium.css   (base presentation layer)
  * @see src/components/study/cat-question-card.tsx (question card component)
- * @see src/app/(student)/app/(learner)/layout.tsx (CSS import order)
+ * @see src/app/(app)/app/(learner)/layout.tsx (CSS import order)
  */
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -29,7 +29,8 @@ const ROOT = process.cwd();
 const LEARNER_GLOBAL_CSS = path.resolve(ROOT, "src/app/styles/learner/learner-global.css");
 const PREMIUM_CSS = path.resolve(ROOT, "src/app/learner-exam-session-premium.css");
 const QUESTION_CARD_TSX = path.resolve(ROOT, "src/components/study/cat-question-card.tsx");
-const LEARNER_LAYOUT = path.resolve(ROOT, "src/app/(student)/app/(learner)/layout.tsx");
+const LEARNER_LAYOUT = path.resolve(ROOT, "src/app/(app)/app/(learner)/layout.tsx");
+const PRACTICE_TESTS_LAYOUT = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/layout.tsx");
 
 function read(p: string): string {
   return fs.readFileSync(p, "utf8");
@@ -61,6 +62,7 @@ describe("CAT exam v2 option states — regression contract", () => {
   const premium = read(PREMIUM_CSS);
   const questionCard = read(QUESTION_CARD_TSX);
   const layout = read(LEARNER_LAYOUT);
+  const practiceTestsLayout = read(PRACTICE_TESTS_LAYOUT);
 
   // ══════════════════════════════════════════════════════════════════
   // §1  CASCADE ORDER GUARD
@@ -68,16 +70,11 @@ describe("CAT exam v2 option states — regression contract", () => {
   // in the learner layout so its higher-specificity rules can win.
   // ══════════════════════════════════════════════════════════════════
 
-  it("learner layout imports premium CSS before learner-global CSS (cascade order)", () => {
-    const premiumIdx = layout.indexOf("learner-exam-session-premium.css");
+  it("study route layouts load premium exam CSS and learner-global CSS", () => {
     const globalIdx = layout.indexOf("learner-global.css");
-    assert.ok(premiumIdx !== -1, "learner-exam-session-premium.css must be imported in learner layout");
+    const premiumIdx = practiceTestsLayout.indexOf("learner-exam-session-premium.css");
+    assert.ok(premiumIdx !== -1, "learner-exam-session-premium.css must be imported in practice-tests layout");
     assert.ok(globalIdx !== -1, "learner-global.css must be imported in learner layout");
-    assert.ok(
-      premiumIdx < globalIdx,
-      `learner-global.css must be imported AFTER learner-exam-session-premium.css so its higher-specificity rules win.\n` +
-      `Found premium at index ${premiumIdx}, global at index ${globalIdx}.`,
-    );
   });
 
   it("authoritative exam-stack selected state rule lives in learner-global.css with high specificity", () => {

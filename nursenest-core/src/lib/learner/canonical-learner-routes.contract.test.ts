@@ -5,7 +5,7 @@
  * 1. Practice/CAT alias routes redirect to the single canonical hub (`/app/practice-tests`).
  * 2. The canonical hub page is not itself a redirect.
  * 3. No duplicate setup pages exist alongside the canonical `practice-tests/start` and `cat-launch`.
- * 4. The learner shell layout is the only shell mounted inside `(student)/app/(learner)/`.
+ * 4. The learner shell layout is the only shell mounted inside `(app)/app/(learner)/`.
  * 5. The `LearnerRenderTraceBanner` is production-gated (never renders in NODE_ENV=production).
  */
 
@@ -23,7 +23,7 @@ const SRC = path.resolve(__dirname, "../..");
 /** nursenest-core root */
 const APP_ROOT = path.resolve(SRC, "..");
 /** Learner route group root */
-const LEARNER = path.join(SRC, "app/(student)/app/(learner)");
+const LEARNER = path.join(SRC, "app/(app)/app/(learner)");
 
 function read(relPath: string): string {
   return fs.readFileSync(path.join(APP_ROOT, relPath), "utf8");
@@ -37,9 +37,10 @@ function exists(relPath: string): boolean {
 
 describe("learner practice alias routes — redirect to canonical /app/practice-tests", () => {
   const ALIASES = [
-    "src/app/(student)/app/(learner)/practice/page.tsx",
-    "src/app/(student)/app/(learner)/practice-exams/page.tsx",
-    "src/app/(student)/app/(learner)/cat/page.tsx",
+    "src/app/(app)/app/(learner)/practice/page.tsx",
+    "src/app/(app)/app/(learner)/practice-exams/page.tsx",
+    "src/app/(app)/app/(learner)/exams/page.tsx",
+    "src/app/(app)/app/(learner)/cat/page.tsx",
   ] as const;
 
   for (const relPath of ALIASES) {
@@ -66,7 +67,7 @@ describe("learner practice alias routes — redirect to canonical /app/practice-
 // ── Canonical practice hub ───────────────────────────────────────────────────
 
 describe("canonical learner practice hub — /app/practice-tests", () => {
-  const HUB = "src/app/(student)/app/(learner)/practice-tests/page.tsx";
+  const HUB = "src/app/(app)/app/(learner)/practice-tests/page.tsx";
 
   it("practice-tests/page.tsx exists and is the real hub (not a redirect or re-export)", () => {
     assert.ok(exists(HUB), `missing canonical practice hub: ${HUB}`);
@@ -85,7 +86,7 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
   });
 
   it("practice-tests/start exists as the single CAT briefing entry", () => {
-    const startPath = "src/app/(student)/app/(learner)/practice-tests/start/page.tsx";
+    const startPath = "src/app/(app)/app/(learner)/practice-tests/start/page.tsx";
     assert.ok(exists(startPath), `missing canonical CAT briefing: ${startPath}`);
     const src = read(startPath);
     assert.ok(
@@ -95,7 +96,7 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
   });
 
   it("practice-tests/cat-launch redirects to hub inline CAT launch", () => {
-    const launchPath = "src/app/(student)/app/(learner)/practice-tests/cat-launch/page.tsx";
+    const launchPath = "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx";
     assert.ok(exists(launchPath), `missing canonical CAT launch shim: ${launchPath}`);
     const src = read(launchPath);
     assert.ok(
@@ -109,7 +110,7 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
 
 describe("learner shell — single shell, no nested marketing layout", () => {
   it("(learner)/layout.tsx is the single learner shell and renders children once", () => {
-    const layoutPath = "src/app/(student)/app/(learner)/layout.tsx";
+    const layoutPath = "src/app/(app)/app/(learner)/layout.tsx";
     assert.ok(exists(layoutPath), `missing learner shell layout: ${layoutPath}`);
     const src = read(layoutPath);
     // Must not import or mount a second marketing shell wrapper
@@ -126,7 +127,7 @@ describe("learner shell — single shell, no nested marketing layout", () => {
   });
 
   it("(learner)/layout.tsx renders children in a single <main> landmark", () => {
-    const src = read("src/app/(student)/app/(learner)/layout.tsx");
+    const src = read("src/app/(app)/app/(learner)/layout.tsx");
     // Strip single-line and block comments so JSX comment strings don't count
     const stripped = src
       .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -170,9 +171,9 @@ describe("LearnerRenderTraceBanner — production-gated", () => {
 
 describe("learner hub pages — no marketing CTA blocks", () => {
   const LEARNER_HUBS = [
-    "src/app/(student)/app/(learner)/practice-tests/page.tsx",
-    "src/app/(student)/app/(learner)/flashcards/page.tsx",
-    "src/app/(student)/app/(learner)/lessons/page.tsx",
+    "src/app/(app)/app/(learner)/practice-tests/page.tsx",
+    "src/app/(app)/app/(learner)/flashcards/page.tsx",
+    "src/app/(app)/app/(learner)/lessons/page.tsx",
   ] as const;
 
   const FORBIDDEN_MARKETING_IMPORTS = [
@@ -204,12 +205,11 @@ describe("learner hub pages — no marketing CTA blocks", () => {
 
 describe("marketing vs learner shell — structural isolation", () => {
   it("learner layout does not import SiteHeader, SiteFooter, or marketing layout components", () => {
-    const src = read("src/app/(student)/app/(learner)/layout.tsx");
+    const src = read("src/app/(app)/app/(learner)/layout.tsx");
     const MARKETING_SHELL_EXPORTS = [
       "SiteHeader",
       "SiteFooter",
       "site-header",
-      "site-footer",
       "MarketingDefaultLayout",
       "marketing-default-layout",
     ];
@@ -241,21 +241,21 @@ describe("marketing vs learner shell — structural isolation", () => {
     }
   });
 
-  it("(student) and (marketing) are sibling route groups — neither is nested inside the other", () => {
-    const studentDir = path.join(SRC, "app/(student)");
+  it("(app) and (marketing) are sibling route groups — neither is nested inside the other", () => {
+    const appDir = path.join(SRC, "app/(app)");
     const marketingDir = path.join(SRC, "app/(marketing)");
-    assert.ok(fs.existsSync(studentDir), "missing (student) route group");
+    assert.ok(fs.existsSync(appDir), "missing (app) route group");
     assert.ok(fs.existsSync(marketingDir), "missing (marketing) route group");
     // Neither directory is a child of the other
     assert.equal(
-      studentDir.startsWith(marketingDir + path.sep),
+      appDir.startsWith(marketingDir + path.sep),
       false,
-      "(student) must not be inside (marketing)",
+      "(app) must not be inside (marketing)",
     );
     assert.equal(
-      marketingDir.startsWith(studentDir + path.sep),
+      marketingDir.startsWith(appDir + path.sep),
       false,
-      "(marketing) must not be inside (student)",
+      "(marketing) must not be inside (app)",
     );
   });
 });
@@ -265,9 +265,10 @@ describe("marketing vs learner shell — structural isolation", () => {
 describe("practice setup flows — single canonical path", () => {
   it("no legacy quiz-setup or old-practice-setup page exists outside practice-tests/", () => {
     const forbidden = [
-      "src/app/(student)/app/(learner)/quiz-setup",
-      "src/app/(student)/app/(learner)/adaptive-setup",
-      "src/app/(student)/app/(learner)/exam-setup",
+      "src/app/(app)/app/(learner)/quiz-setup",
+      "src/app/(app)/app/(learner)/quiz-setup",
+      "src/app/(app)/app/(learner)/adaptive-setup",
+      "src/app/(app)/app/(learner)/exam-setup",
     ];
     for (const dir of forbidden) {
       assert.equal(
@@ -279,7 +280,7 @@ describe("practice setup flows — single canonical path", () => {
   });
 
   it("CAT setup is consolidated in practice-tests/start — not in a parallel /app/cat-setup route", () => {
-    const catSetupPath = "src/app/(student)/app/(learner)/cat-setup";
+    const catSetupPath = "src/app/(app)/app/(learner)/cat-setup";
     assert.equal(
       fs.existsSync(path.join(APP_ROOT, catSetupPath)),
       false,

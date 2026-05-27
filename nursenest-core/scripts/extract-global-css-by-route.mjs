@@ -150,7 +150,7 @@ for (let i = 0; i < totalLines; i++) {
 const learnerHeader = `/* =========================================================================
    learner-global.css
    Learner-route-specific CSS extracted from globals.css.
-   Imported by: src/app/(student)/app/(learner)/layout.tsx
+   Imported by: src/app/(app)/app/(learner)/layout.tsx
    DO NOT import this file from marketing or admin layouts.
 
    Contains: CAT exam, practice session, lesson detail, dashboard,

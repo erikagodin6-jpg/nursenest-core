@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { listCnpleSampleCases } from "@/content/cases/cnple-sample-cases";
+import { listCnpleLoftCases } from "@/content/cases/cnple-case-catalog";
 import { ScenarioStudyShell } from "@/components/scenarios/ScenarioStudyShell";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default async function CnpleCaseCatalogPage() {
   const entitlement = userId ? await resolveEntitlementForPage(userId) : "error";
   const _premiumUnlocked = entitlement !== "error" && entitlement.hasAccess;
 
-  const cases = listCnpleSampleCases();
+  const cases = listCnpleLoftCases();
 
   return (
     <ScenarioStudyShell

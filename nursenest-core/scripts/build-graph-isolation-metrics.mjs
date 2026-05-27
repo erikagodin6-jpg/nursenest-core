@@ -86,8 +86,8 @@ export function collectBuildGraphIsolationSnapshot({ packageRoot }) {
   const sharedLayoutFiles = [
     "src/app/(marketing)/[locale]/layout.tsx",
     "src/app/(marketing)/(default)/layout.tsx",
-    "src/app/(student)/app/layout.tsx",
-    "src/app/(student)/app/(learner)/layout.tsx",
+    "src/app/(app)/app/layout.tsx",
+    "src/app/(app)/app/(learner)/layout.tsx",
   ];
 
   const sharedLayoutOffenders = sharedLayoutFiles.map((relativePath) => {

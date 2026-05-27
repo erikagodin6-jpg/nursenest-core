@@ -17,7 +17,7 @@ const layout = readFileSync(
   "utf-8",
 );
 const runPage = readFileSync(
-  join(root, "src/app/(student)/app/(learner)/practice-tests/[id]/page.tsx"),
+  join(root, "src/app/(app)/app/(learner)/practice-tests/[id]/page.tsx"),
   "utf-8",
 );
 
@@ -25,7 +25,7 @@ describe("NCLEX practice exam shell", () => {
   it("submits via linear_commit with full rationale panel + lesson links", () => {
     assert.ok(practiceRunner.includes('action: "linear_commit"'));
     assert.ok(!practiceRunner.includes('action: "commit_answer"'));
-    assert.ok(practiceRunner.includes("NclexPracticeRationaleCompact"));
+    assert.ok(practiceRunner.includes("nn-nclex-rationale-sidebar"));
     assert.ok(practiceRunner.includes("relatedLessons"));
     assert.ok(layout.includes("nn-nclex-practice-rationale-band"));
   });

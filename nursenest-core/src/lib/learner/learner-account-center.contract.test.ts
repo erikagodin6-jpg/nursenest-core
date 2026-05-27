@@ -6,7 +6,7 @@ import test from "node:test";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, "..", "..");
-const accountDir = join(appRoot, "app", "(student)", "app", "(learner)", "account");
+const accountDir = join(appRoot, "app", "(app)", "app", "(learner)", "account");
 
 const pages = [
   "page.tsx",

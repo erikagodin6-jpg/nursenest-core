@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
 /**
- * Legacy/marketing `/app/cat` — CAT and adaptive flows live under `/app/practice-tests`
+ * `/app/cat` is a redirect alias. CAT and adaptive flows live under `/app/practice-tests`
  * (e.g. `cat-launch`, `start`). Preserve query params so `pathwayId` deep links keep working.
  */
 export default async function CatAliasPage({ searchParams }: PageProps) {

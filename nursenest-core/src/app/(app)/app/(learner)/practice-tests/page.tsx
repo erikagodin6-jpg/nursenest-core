@@ -34,8 +34,6 @@ type PageProps = {
   searchParams: Promise<{
     pathwayId?: string | string[] | undefined;
     topic?: string | string[] | undefined;
-    /** Legacy inline CAT trigger from older links. */
-    cat?: string | string[] | undefined;
     /** Canonical CAT-launch param set by appPathwayCatSessionStartPath. */
     catLaunch?: string | string[] | undefined;
   }>;
@@ -52,8 +50,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   const rawPid = sp.pathwayId;
-  // Accept both legacy `cat=1` and canonical `catLaunch=1` (sent by appPathwayCatSessionStartPath).
-  const catRequested = isTruthyParam(sp.catLaunch) || isTruthyParam(sp.cat);
+  const catRequested = isTruthyParam(sp.catLaunch);
   const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()

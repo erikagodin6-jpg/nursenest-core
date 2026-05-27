@@ -1,7 +1,7 @@
 /**
  * Phase 3 — learner hubs keep QA render trace in a separate client chunk (next/dynamic).
  *
- * Run with: `node --import tsx --test src/app/(student)/app/(learner)/learner-hub-trace-import.contract.test.ts`
+ * Run with: `node --import tsx --test src/app/(app)/app/(learner)/learner-hub-trace-import.contract.test.ts`
  */
 import assert from "node:assert/strict";
 import fs from "node:fs";

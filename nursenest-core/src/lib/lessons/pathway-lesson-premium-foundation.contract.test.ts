@@ -13,7 +13,7 @@ const MARKETING_DETAIL_PATH = join(
 );
 const LEARNER_DETAIL_PATH = join(
   coreRoot,
-  "app/(student)/app/(learner)/lessons/[id]/page.tsx",
+  "app/(app)/app/(learner)/lessons/[id]/page.tsx",
 );
 
 function read(path: string) {

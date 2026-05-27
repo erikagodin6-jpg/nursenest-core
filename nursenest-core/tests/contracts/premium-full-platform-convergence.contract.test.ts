@@ -14,6 +14,11 @@ const CSS_PATH = path.resolve(ROOT, "src/app/full-platform-convergence.css");
 const GLOBALS_PATH = path.resolve(ROOT, "src/app/globals.css");
 const REPORT_PATH = path.resolve(ROOT, "docs/reports/premium-full-platform-convergence.md");
 const SCREENSHOT_DIR = path.resolve(ROOT, "docs/screenshots/premium-full-platform-convergence");
+const PRACTICE_HUB_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/page.tsx");
+const FLASHCARDS_HUB_CLIENT_PATH = path.resolve(ROOT, "src/components/flashcards/flashcards-hub-client.tsx");
+const PRACTICE_HUB_CLIENT_PATH = path.resolve(ROOT, "src/components/student/practice-tests-hub-client.tsx");
+const FOCUSED_EXAM_HELPER_PATH = path.resolve(ROOT, "src/lib/learner/focused-exam-shell.ts");
+const EXAM_SESSION_SHELL_PATH = path.resolve(ROOT, "src/components/exam/exam-session-shell.tsx");
 
 const REQUIRED_THEMES = ["ocean", "blossom", "midnight", "sunset", "aurora"] as const;
 const REQUIRED_FRAME_GROUPS = [
@@ -27,7 +32,7 @@ const REQUIRED_MODULE_FILES = [
   ["practice-tests", "src/components/student/practice-tests-hub-client.tsx"],
   ["practice-tests", "src/components/flashcards/flashcards-pathway-pick-surface.tsx"],
   ["cat", "src/components/student/pathway-cat-session-start-client.tsx"],
-  ["lessons", "src/app/(student)/app/(learner)/lessons/page.tsx"],
+  ["lessons", "src/app/(app)/app/(learner)/lessons/page.tsx"],
   ["exam-session", "src/components/exam/exam-session-shell.tsx"],
   ["practice-session", "src/components/study/practice-session-layout.tsx"],
   ["flashcards", "src/components/flashcards/flashcards-hub-client.tsx"],
@@ -115,5 +120,45 @@ describe("premium full platform convergence", () => {
     ]) {
       assert.match(report, new RegExp(phrase), `${phrase} missing from report`);
     }
+  });
+
+  it("keeps practice exams on the single shared setup architecture", () => {
+    const practiceHub = read(PRACTICE_HUB_PATH);
+    const practiceClient = read(PRACTICE_HUB_CLIENT_PATH);
+    const flashcardsClient = read(FLASHCARDS_HUB_CLIENT_PATH);
+
+    assert.match(practiceHub, /PracticeTestsHubClient/, "practice hub must render the canonical setup client");
+    assert.doesNotMatch(practiceHub, /startMode/, "practice hub must not revive legacy startMode branching");
+    assert.doesNotMatch(practiceHub, /\bcat\?:/, "practice hub must not accept legacy cat query aliases");
+    assert.match(practiceClient, /SharedStudySetupLayout/, "practice must reuse shared setup layout");
+    assert.match(practiceClient, /SharedStudySetupSurface/, "practice must reuse shared setup surface");
+    assert.match(flashcardsClient, /SharedStudySetupLayout/, "flashcards must remain on shared setup layout");
+    assert.match(flashcardsClient, /SharedStudySetupSurface/, "flashcards must remain on shared setup surface");
+  });
+
+  it("keeps practice aliases as redirects without duplicate setup screens", () => {
+    for (const relPath of [
+      "src/app/(app)/app/(learner)/practice/page.tsx",
+      "src/app/(app)/app/(learner)/practice-exams/page.tsx",
+      "src/app/(app)/app/(learner)/exams/page.tsx",
+      "src/app/(app)/app/(learner)/cat/page.tsx",
+    ]) {
+      const source = read(path.resolve(ROOT, relPath));
+      assert.match(source, /redirect\(/, `${relPath} must redirect to canonical practice-tests`);
+      assert.match(source, /\/app\/practice-tests/, `${relPath} must target /app/practice-tests`);
+      assert.doesNotMatch(source, /PracticeTestsHubClient|PracticeTestsPage/, `${relPath} must not mount duplicate setup UI`);
+      assert.doesNotMatch(source, /startMode/, `${relPath} must not inject legacy startMode`);
+    }
+  });
+
+  it("keeps focused exam sessions isolated from learner dashboard chrome", () => {
+    const helper = read(FOCUSED_EXAM_HELPER_PATH);
+    const examShell = read(EXAM_SESSION_SHELL_PATH);
+
+    assert.match(helper, /PRACTICE_TEST_SESSION_PREFIX\s*=\s*"\/app\/practice-tests\/"/);
+    assert.match(helper, /"start"/);
+    assert.match(helper, /"cat-insights"/);
+    assert.match(helper, /"results"/);
+    assert.doesNotMatch(examShell, /<footer|SiteFooter|LearnerStudyNextBlock|Recommendation/i);
   });
 });

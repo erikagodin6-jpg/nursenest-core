@@ -259,7 +259,7 @@ describe("implementation wiring (static)", () => {
 
 describe("CNPLE second-pass isolation (routing + UI + telemetry)", () => {
   it("cat-launch redirects CNPLE to LOFT case hub", () => {
-    const content = src("app/(student)/app/(learner)/practice-tests/cat-launch/page.tsx");
+    const content = src("app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx");
     assert.match(content, /isCnplePathway/);
     assert.match(content, /redirect\("\/app\/cases\/cnple"\)/);
   });

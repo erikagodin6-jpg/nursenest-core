@@ -2,7 +2,7 @@
 
 import { useState, useCallback, use } from "react";
 import { useRouter } from "next/navigation";
-import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
+import { findCnpleLoftCase } from "@/content/cases/cnple-case-catalog";
 import { CnpleLongitudinalCaseShell } from "@/components/cases/cnple-longitudinal-case-shell";
 import { CnpleCaseCompletion } from "@/components/cases/cnple-case-completion";
 import type { CaseStepPayload, CaseStepAdvanceResult } from "@/lib/cases/longitudinal-case-types";
@@ -13,7 +13,7 @@ export default function CnpleCaseSessionPage({ params }: PageProps) {
   const { caseId } = use(params);
   const router = useRouter();
 
-  const patientCase = CNPLE_SAMPLE_CASES.find((c) => c.id === decodeURIComponent(caseId));
+  const patientCase = findCnpleLoftCase(decodeURIComponent(caseId));
 
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [firstStep, setFirstStep] = useState<CaseStepPayload | null>(null);

@@ -4,6 +4,8 @@
 
 Implemented the Premium Shell Architecture Convergence Plan without editing the plan file. This pass focused on shell ownership, CAT focus-mode stabilization, learner recommendation hierarchy, navigation deduplication, study rail consolidation, module-shell convergence, tests, screenshots, and validation.
 
+Truthpack Constraint: convergence assertions document shell ownership and route topology only; they do not introduce compatibility shims for deprecated learner route groups or duplicate practice setup flows.
+
 ## Changed Shell Systems
 
 - Added shared focused-exam route helper: `src/lib/learner/focused-exam-shell.ts`.
@@ -25,6 +27,16 @@ Implemented the Premium Shell Architecture Convergence Plan without editing the 
 - Focused exam shell: active CAT/practice-test sessions with minimal NurseNest identity.
 - Module shell: ECG/labs/specialty module URLs with stable routing plus premium educational chrome.
 - Internal shell: operational staff/admin surfaces with distinct internal branding.
+
+## Module Audit Matrix
+
+| Module Area | Canonical Route | Owner | Shell Boundary | Convergence Contract |
+| --- | --- | --- | --- | --- |
+| Exam / Study Systems | `/app/practice-tests`, `/app/flashcards` | Shared study setup flow | Learner shell for setup; focused exam shell for active sessions | Practice and flashcards both use `SharedStudySetupLayout` / `SharedStudySetupSurface`; aliases redirect to `/app/practice-tests` without `startMode`. |
+| Learner Cockpit And Account Platform | `/app`, `/app/account/*` | Learner dashboard and account center | Learner shell | Dashboard owns recommendations; account routes remain isolated from marketing shell imports. |
+| Lessons | `/app/lessons`, `/app/lessons/[id]` | Lesson reader | Lesson shell inside learner route group | Lesson content owns navigation, semantic callouts, and reading viewport; bottom continuation widgets are not part of learner lesson detail. |
+| Clinical Modules | `/app/labs`, `/app/med-calculations`, `/app/clinical-skills`, `/app/cases/cnple` | Clinical module pages | Learner/module educational shell | Module pages inherit shared learner navigation while keeping specialized clinical content boundaries. |
+| Admin And Preview Cohesion | `/admin/*`, preview routes | Internal shell | Admin/preview shell | Admin and preview surfaces do not inherit learner study chrome. |
 
 ## Duplicate-System Remediation
 
@@ -66,6 +78,11 @@ New screenshot helpers standardize names as `{surface}--{viewport}--{theme}.png`
 - Paid-user Playwright coverage and authenticated PNG export require `E2E_PAID_EMAIL`/`E2E_PAID_PASSWORD`, `QA_PAID_*`, or `PLAYWRIGHT_TEST_*` credentials.
 - Full build validation was already running in another terminal and had not completed at report time; no build pass is claimed here.
 - A direct ad-hoc `tsc` invocation on individual test files is not representative of the repo tsconfig and produced unrelated helper/module-resolution errors, so validation relied on `typecheck:critical`, node contract tests, IDE lints, and targeted Playwright theme checks.
+
+## Unresolved Issues
+
+- Authenticated screenshot export remains credential-dependent.
+- Full browser matrix coverage should run against a deployed or credentialed learner environment before a visual sign-off.
 
 ## Remaining App Store Risks
 

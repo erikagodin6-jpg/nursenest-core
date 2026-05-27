@@ -221,7 +221,7 @@
     "report:mobile-route-payloads": "npx tsx scripts/report-mobile-route-payloads.mts",
     "audit:core-apis": "npx tsx scripts/audit-core-apis.mts",
     "audit:large-client-components": "node scripts/report-large-client-components.mjs",
-    "test:learner-shell-imports": "node --import tsx --test \"src/app/(student)/app/(learner)/learner-shell-import-guardrail.contract.test.ts\"",
+    "test:learner-shell-imports": "node --import tsx --test \"src/app/(app)/app/(learner)/learner-shell-import-guardrail.contract.test.ts\"",
     "report:hydration-risk-routes": "node scripts/report-hydration-risk-routes.mjs",
     "test:e2e:production-stability-smoke": "npx playwright test -c playwright.config.ts tests/e2e/production-stability-smoke.spec.ts --project=chromium",
     "qa:production-stability": "npm run typecheck:critical && npm run audit:runtime-boundaries:strict && npm run audit:force-dynamic:strict && npm run report:hydration-risk-routes && node --import tsx --test src/lib/blog/safe-blog-queries.build-phase.test.mts src/lib/blog/safe-blog-queries.list-load.test.mts src/lib/marketing/marketing-route-integrity.test.ts src/lib/exam-pathways/exam-hub-marketing-route-safety.test.ts src/lib/auth/auth-middleware-app-jwt.contract.test.ts src/lib/marketing/static-generation-policy.test.ts",

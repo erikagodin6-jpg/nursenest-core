@@ -10,7 +10,7 @@ import { pageOwnsBreadcrumbSchema } from "@/lib/breadcrumbs/schema-ownership";
 import { auditPageStructuredDataEmissions } from "@/lib/breadcrumbs/structured-data-governance";
 
 const MARKETING_DEFAULT = join(process.cwd(), "src/app/(marketing)/(default)");
-const LEARNER_APP = join(process.cwd(), "src/app/(student)/app/(learner)");
+const LEARNER_APP = join(process.cwd(), "src/app/(app)/app/(learner)");
 
 function walkPages(dir: string, acc: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
@@ -30,7 +30,7 @@ function countNestedGraphBreadcrumbList(src: string): number {
 }
 
 function isLearnerPage(path: string): boolean {
-  return path.includes("(student)/app/(learner)");
+  return path.includes("(app)/app/(learner)");
 }
 
 function isEcgOrAcademyPage(path: string): boolean {

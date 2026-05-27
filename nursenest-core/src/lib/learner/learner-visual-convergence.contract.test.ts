@@ -126,7 +126,7 @@ describe("question bank — visual convergence", () => {
 
 describe("lessons hub — visual convergence", () => {
   it("container uses space-y-8 sm:space-y-10 (not tight space-y-6)", () => {
-    const src = read("src/app/(student)/app/(learner)/lessons/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/lessons/page.tsx");
     assert.ok(src.includes("space-y-8 sm:space-y-10"), "lessons hub must use space-y-8 sm:space-y-10");
     assert.equal(
       src.includes("space-y-6 sm:space-y-8"),
@@ -136,7 +136,7 @@ describe("lessons hub — visual convergence", () => {
   });
 
   it("list body wrapper has no redundant mt-4", () => {
-    const src = read("src/app/(student)/app/(learner)/lessons/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/lessons/page.tsx");
     assert.equal(
       src.includes('className="mt-4" data-nn-premium-lessons-hub-body'),
       false,

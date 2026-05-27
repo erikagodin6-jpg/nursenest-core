@@ -40,7 +40,7 @@ function walkPages(dir: string, acc: string[] = []): string[] {
 export function computeSemanticRouteCoverage(repoRoot = REPO_ROOT): SemanticRouteCoverageReport {
   const issues: string[] = [];
   const marketing = join(repoRoot, "src/app/(marketing)/(default)");
-  const learner = join(repoRoot, "src/app/(student)/app/(learner)");
+  const learner = join(repoRoot, "src/app/(app)/app/(learner)");
 
   let governedAcademy = 0;
   let shadowAuthorityCount = 0;

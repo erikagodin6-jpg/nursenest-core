@@ -325,7 +325,7 @@ function classifyByRules(selector) {
 // Route search directories
 const SEARCH_DIRS = {
   marketing: ["src/app/(marketing)", "src/components/marketing", "src/lib/marketing"],
-  learner:   ["src/app/(student)", "src/components/learner", "src/lib/learner"],
+  learner:   ["src/app/(app)", "src/components/learner", "src/lib/learner"],
   admin:     ["src/app/(admin)", "src/components/admin", "src/lib/admin"],
   shared:    ["src/components", "src/lib", "styles"],
 };

@@ -106,7 +106,7 @@ describe("content source-of-truth registry", () => {
   });
 
   it("OSCE learner hub page does not import merged legacy JSON directly (must use resolve server)", () => {
-    const src = readFileSync(join(appRoot, "src/app/(student)/app/(learner)/osce/page.tsx"), "utf8");
+    const src = readFileSync(join(appRoot, "src/app/(app)/app/(learner)/osce/page.tsx"), "utf8");
     assert.equal(src.includes("getMergedLegacyOsceSkillStations"), false);
     assert.match(src, /getOsceHubListItemsResolved/);
   });

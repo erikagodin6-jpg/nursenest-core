@@ -10,8 +10,8 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 /** `src/` — same layout as {@link import("../seo/sitemap-merged-route.test.js") sitemap-merged-route.test.ts}. */
 const srcRoot = join(here, "..", "..");
-const pagePath = join(srcRoot, "app", "(student)", "app", "(learner)", "practice", "page.tsx");
-const examsPagePath = join(srcRoot, "app", "(student)", "app", "(learner)", "exams", "page.tsx");
+const pagePath = join(srcRoot, "app", "(app)", "app", "(learner)", "practice", "page.tsx");
+const examsPagePath = join(srcRoot, "app", "(app)", "app", "(learner)", "exams", "page.tsx");
 
 test("practice alias page redirects to practice-tests preserving search string construction", () => {
   const src = readFileSync(pagePath, "utf8");
@@ -25,5 +25,5 @@ test("exams alias page redirects to premium practice-tests preserving query para
   assert.match(src, /redirect\(/);
   assert.match(src, /\/app\/practice-tests/);
   assert.ok(src.includes("URLSearchParams"), "must forward query params");
-  assert.ok(src.includes("startMode"), "must preserve practice-exam intent for legacy /app/exams visits");
+  assert.equal(src.includes("startMode"), false, "must not inject legacy startMode query semantics");
 });

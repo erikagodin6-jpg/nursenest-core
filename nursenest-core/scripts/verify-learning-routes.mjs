@@ -14,9 +14,9 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 
-const LIVE_FLASHCARDS_PAGE = "src/app/(student)/app/(learner)/flashcards/page.tsx";
-const LIVE_PRACTICE_PAGE = "src/app/(student)/app/(learner)/practice-tests/page.tsx";
-const PRACTICE_EXAMS_ALIAS = "src/app/(student)/app/(learner)/practice-exams/page.tsx";
+const LIVE_FLASHCARDS_PAGE = "src/app/(app)/app/(learner)/flashcards/page.tsx";
+const LIVE_PRACTICE_PAGE = "src/app/(app)/app/(learner)/practice-tests/page.tsx";
+const PRACTICE_EXAMS_ALIAS = "src/app/(app)/app/(learner)/practice-exams/page.tsx";
 const PRIMARY_FLASHCARDS_CLIENT = "src/components/flashcards/flashcards-hub-client.tsx";
 const PRIMARY_PRACTICE_CLIENT = "src/components/student/practice-tests-hub-client.tsx";
 
@@ -45,7 +45,7 @@ console.log(`  ${marketingPractice}`);
 const dupCandidates = [
   "src/components/flashcards/flashcards-hub-client.tsx",
   "src/app/(marketing)/(default)/flashcards/page.tsx",
-  "src/app/(student)/app/(learner)/flashcards/custom/page.tsx",
+  "src/app/(app)/app/(learner)/flashcards/custom/page.tsx",
 ];
 console.log("\nDuplicate / alternate flashcard entry surfaces (confirm imports before deleting):");
 for (const f of dupCandidates) {

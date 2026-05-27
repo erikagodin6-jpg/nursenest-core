@@ -102,7 +102,7 @@ test.describe("visual convergence — source assertions (no server needed)", () 
   });
 
   test("lessons hub uses increased section spacing", () => {
-    const src = readSrc("app/(student)/app/(learner)/lessons/page.tsx");
+    const src = readSrc("app/(app)/app/(learner)/lessons/page.tsx");
     expect(src.includes("space-y-8 sm:space-y-10"), "lessons hub must use space-y-8 sm:space-y-10").toBe(true);
     expect(src.includes("space-y-6 sm:space-y-8"), "old tight lessons spacing must be gone").toBe(false);
   });

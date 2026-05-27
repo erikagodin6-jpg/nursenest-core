@@ -216,7 +216,7 @@ test("exam selector gate stays lazy-loaded when mounted (no eager server path)",
 });
 
 test("learner shell defers optional study-next and tutor chrome until the request needs them", () => {
-  const learnerShellLayout = readAppFile("app/(student)/app/(learner)/layout.tsx");
+  const learnerShellLayout = readAppFile("app/(app)/app/(learner)/layout.tsx");
 
   assert.doesNotMatch(learnerShellLayout, /from ["']@\/components\/student\/learner-study-next-block["']/);
   assert.doesNotMatch(learnerShellLayout, /from ["']@\/components\/learner-tutor["']/);

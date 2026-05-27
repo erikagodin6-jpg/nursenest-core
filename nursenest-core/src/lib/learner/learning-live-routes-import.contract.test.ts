@@ -14,7 +14,7 @@ function read(rel: string): string {
 
 describe("learner live study routes import contract", () => {
   it("flashcards page wires FlashcardsHubClient (live /app/flashcards)", () => {
-    const src = read("src/app/(student)/app/(learner)/flashcards/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/flashcards/page.tsx");
     assert.match(src, /FlashcardsHubClient/);
     assert.match(src, /from "@\/components\/flashcards\/flashcards-hub-client"/);
     assert.match(src, /normalizeLearnerFlashcardsPathwayQueryId/);
@@ -24,27 +24,27 @@ describe("learner live study routes import contract", () => {
   });
 
   it("practice-tests page wires PracticeTestsHubClient (live /app/practice-tests)", () => {
-    const src = read("src/app/(student)/app/(learner)/practice-tests/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/practice-tests/page.tsx");
     assert.match(src, /PracticeTestsHubClient/);
     assert.match(src, /from "@\/components\/student\/practice-tests-hub-client"/);
     assert.match(src, /pathwayLessonPractice/);
   });
 
-  it("practice-exams route renders the live practice-tests hub without redirecting away", () => {
-    const src = read("src/app/(student)/app/(learner)/practice-exams/page.tsx");
-    assert.match(src, /import PracticeTestsPage from "\.\.\/practice-tests\/page"/);
-    assert.doesNotMatch(src, /redirect\(/);
-    assert.match(src, /<PracticeTestsPage searchParams=\{props\.searchParams\} \/>/);
+  it("practice-exams route redirects to the canonical practice-tests hub", () => {
+    const src = read("src/app/(app)/app/(learner)/practice-exams/page.tsx");
+    assert.match(src, /redirect\(/);
+    assert.match(src, /\/app\/practice-tests/);
+    assert.doesNotMatch(src, /PracticeTestsPage|PracticeTestsHubClient/);
   });
 
   it("practice alias redirects to practice-tests hub", () => {
-    const src = read("src/app/(student)/app/(learner)/practice/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/practice/page.tsx");
     assert.match(src, /redirect\(/);
     assert.match(src, /\/app\/practice-tests/);
   });
 
   it("practice-tests hub page uses pathway picker surface (no silent default when context missing)", () => {
-    const src = read("src/app/(student)/app/(learner)/practice-tests/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/practice-tests/page.tsx");
     assert.match(src, /FlashcardsPathwayPickSurface/);
     assert.match(src, /baseAppPath=\"\/app\/practice-tests\"/);
     assert.match(src, /resolveSubscribedQuestionBankPathways/);
@@ -54,7 +54,7 @@ describe("learner live study routes import contract", () => {
   });
 
   it("question bank gated entry normalizes pathwayId like flashcards hub", () => {
-    const src = read("src/app/(student)/app/(learner)/questions/question-bank-gated-server.tsx");
+    const src = read("src/app/(app)/app/(learner)/questions/question-bank-gated-server.tsx");
     assert.match(src, /normalizeLearnerFlashcardsPathwayQueryId/);
     assert.match(src, /pathwayQueryRaw/);
   });
@@ -65,7 +65,7 @@ describe("learner live study routes import contract", () => {
   });
 
   it("/app/cat alias redirects to practice-tests hub", () => {
-    const src = read("src/app/(student)/app/(learner)/cat/page.tsx");
+    const src = read("src/app/(app)/app/(learner)/cat/page.tsx");
     assert.match(src, /redirect\(/);
     assert.match(src, /\/app\/practice-tests/);
   });
@@ -73,11 +73,13 @@ describe("learner live study routes import contract", () => {
   it("practice-tests hub client stabilizes URL sync (avoids searchParams identity churn)", () => {
     const src = read("src/components/student/practice-tests-hub-client.tsx");
     assert.match(src, /searchParamString/);
-    assert.match(src, /\[searchParamString, pathwayOptions\]/);
+    assert.match(src, /\[pathwayOptions,\s*searchParamString\]/);
+    assert.doesNotMatch(src, /qp\.get\("cat"\)/);
+    assert.match(src, /qp\.get\("catLaunch"\)/);
     assert.doesNotMatch(src, /router\.replace\(/);
     assert.doesNotMatch(src, /router\.push\(/);
     assert.match(src, /data-nn-e2e-practice-exams-builder/);
-    assert.match(src, /data-nn-e2e-practice-pool-presets/);
-    assert.match(src, /learner\.practiceTests\.hub\.startPracticeQuestions/);
+    assert.match(src, /data-nn-e2e-practice-session-size/);
+    assert.match(src, /data-nn-qa-practice-hub-start-test-bottom/);
   });
 });

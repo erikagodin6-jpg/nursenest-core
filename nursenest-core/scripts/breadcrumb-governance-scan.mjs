@@ -7,7 +7,7 @@ import { join, relative } from "node:path";
 
 const ROOT = new URL("../", import.meta.url).pathname.replace(/\/$/, "");
 const APP_MARKETING = join(ROOT, "src/app/(marketing)");
-const APP_STUDENT = join(ROOT, "src/app/(student)/app/(learner)");
+const APP_STUDENT = join(ROOT, "src/app/(app)/app/(learner)");
 const BREADCRUMBS_LIB = join(ROOT, "src/lib/breadcrumbs");
 
 const issues = [];
@@ -25,7 +25,7 @@ function walk(dir, acc = []) {
 function scanFile(path) {
   const rel = relative(ROOT, path);
   const text = readFileSync(path, "utf8");
-  const isLearner = rel.includes("(student)/app/(learner)");
+  const isLearner = rel.includes("(app)/app/(learner)");
   const isEcg =
     rel.includes("/ecg/") ||
     rel.includes("/advanced-ecg-nursing/") ||

@@ -253,7 +253,7 @@ async function main() {
   };
 
   const learnerSurfaces = {
-    evidence: "glob src/app/(student)/**/*.tsx + marketing study routes",
+    evidence: "glob src/app/(app)/**/*.tsx + marketing study routes",
     samplePaths: [
       "/app",
       "/us/rn/nclex-rn/lessons",

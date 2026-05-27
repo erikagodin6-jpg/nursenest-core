@@ -130,7 +130,7 @@ function buildGapMapMarkdown(p) {
     "",
     "## Paid learner feature gaps",
     "",
-    "- Legacy-only flows under `client/` with no `nursenest-core/src/app/(student)` equivalent.",
+    "- Legacy-only flows under `client/` with no `nursenest-core/src/app/(app)` equivalent.",
     "- Admin edit surfaces without matching `CONTENT_REGISTRY` verification (see content-source-of-truth).",
     "",
     "## SEO opportunities",

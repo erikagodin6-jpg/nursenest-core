@@ -105,7 +105,7 @@ export const MEASUREMENT_CONSUMER_REGISTRY: MeasurementConsumerSurface[] = [
   {
     id: "lesson_learner_app",
     domain: "lessons",
-    path: "src/app/(student)/app/(learner)/lessons/[id]/page.tsx",
+    path: "src/app/(app)/app/(learner)/lessons/[id]/page.tsx",
     status: "governed",
     usesResolveTokens: true,
     usesPathwayContext: true,

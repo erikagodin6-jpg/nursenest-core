@@ -81,7 +81,7 @@ const repoFiles = [
   "src/components/marketing/home/premium-homepage-hero.tsx",
   "src/components/student/learner-dashboard-page-shell.tsx",
   "src/components/student/learner-study-home.tsx",
-  "src/app/(student)/app/(learner)/account/_lib/learner-report-card-route.tsx",
+  "src/app/(app)/app/(learner)/account/_lib/learner-report-card-route.tsx",
   "src/components/student/learner-report-card-premium.tsx",
   "src/components/student/practice-tests-hub-client.tsx",
   "src/components/flashcards/flashcards-hub-client.tsx",

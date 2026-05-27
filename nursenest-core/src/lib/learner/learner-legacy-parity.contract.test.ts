@@ -46,19 +46,19 @@ describe("legacy marketing href map — learner-adjacent paths stay on Core or e
 
 describe("Core route modules exist (guards dead lesson/profile/marketing entry)", () => {
   it("learner lessons + detail", () => {
-    assertPageExists("app/(student)/app/(learner)/lessons/page.tsx");
-    assertPageExists("app/(student)/app/(learner)/lessons/[id]/page.tsx");
+    assertPageExists("app/(app)/app/(learner)/lessons/page.tsx");
+    assertPageExists("app/(app)/app/(learner)/lessons/[id]/page.tsx");
   });
 
   it("learner profile redirect + account hub", () => {
-    assertPageExists("app/(student)/app/(learner)/profile/page.tsx");
-    assertPageExists("app/(student)/app/(learner)/account/page.tsx");
-    assertPageExists("app/(student)/app/(learner)/account/overview/page.tsx");
-    assertPageExists("app/(student)/app/(learner)/account/layout.tsx");
-    const accountIdx = join(appRoot, "app", "(student)", "app", "(learner)", "account", "page.tsx");
+    assertPageExists("app/(app)/app/(learner)/profile/page.tsx");
+    assertPageExists("app/(app)/app/(learner)/account/page.tsx");
+    assertPageExists("app/(app)/app/(learner)/account/overview/page.tsx");
+    assertPageExists("app/(app)/app/(learner)/account/layout.tsx");
+    const accountIdx = join(appRoot, "app", "(app)", "app", "(learner)", "account", "page.tsx");
     const hubSrc = readFileSync(accountIdx, "utf8");
     assert.match(hubSrc, /LearnerAccountCenterOverview/, "account landing should render Account Center overview");
-    const profileIdx = join(appRoot, "app", "(student)", "app", "(learner)", "profile", "page.tsx");
+    const profileIdx = join(appRoot, "app", "(app)", "app", "(learner)", "profile", "page.tsx");
     assert.match(readFileSync(profileIdx, "utf8"), /redirect\("\/app\/account"\)/, "profile short URL should land on account hub");
   });
 

@@ -11,7 +11,7 @@ import { resolvePremiumNclexShellRoute } from "@/lib/practice-tests/resolve-prem
 
 const root = process.cwd();
 const runPage = readFileSync(
-  join(root, "src/app/(student)/app/(learner)/practice-tests/[id]/page.tsx"),
+  join(root, "src/app/(app)/app/(learner)/practice-tests/[id]/page.tsx"),
   "utf-8",
 );
 const layout = readFileSync(join(root, "src/components/exam/nclex-exam-layout.tsx"), "utf-8");

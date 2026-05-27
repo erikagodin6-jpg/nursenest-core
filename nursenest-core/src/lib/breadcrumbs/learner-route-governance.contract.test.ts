@@ -6,7 +6,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
-const LEARNER_APP_ROOT = join(process.cwd(), "src/app/(student)/app/(learner)");
+const LEARNER_APP_ROOT = join(process.cwd(), "src/app/(app)/app/(learner)");
 
 function walkTsx(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {

@@ -106,7 +106,7 @@ if (!/version:\s*1/.test(stateTypes)) {
 
 // ── Fifth-pass: study-plan uses cognition integration ─────────────────────────
 const studyPlanPage = fs.readFileSync(
-  path.join(ROOT, "src/app/(student)/app/(learner)/study-plan/page.tsx"),
+  path.join(ROOT, "src/app/(app)/app/(learner)/study-plan/page.tsx"),
   "utf8",
 );
 if (!/buildCognitionIntegratedStudyPlan/.test(studyPlanPage)) {

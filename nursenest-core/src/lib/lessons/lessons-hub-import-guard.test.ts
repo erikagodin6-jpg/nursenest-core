@@ -118,7 +118,7 @@ describe("marketing hub page.tsx must not import heavy modules", () => {
 
 describe("learner hub page.tsx must not import heavy modules", () => {
   const learnerSrc = readRoute(
-    "src/app/(student)/app/(learner)/lessons/page.tsx",
+    "src/app/(app)/app/(learner)/lessons/page.tsx",
   );
 
   it("does not import full lesson-library JSON", () => {

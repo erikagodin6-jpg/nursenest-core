@@ -89,7 +89,7 @@ import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-req
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 import { prisma } from "@/lib/db";
-/** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
+/** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(app)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
 function marketingChromeCountryFromSession(country: string | null | undefined): CountryCode {

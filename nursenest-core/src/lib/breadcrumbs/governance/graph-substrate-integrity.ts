@@ -62,7 +62,7 @@ export function auditGraphSubstrateIntegrity(repoRoot = process.cwd()): GraphSub
   const libDir = join(repoRoot, "src/lib");
   scanDir(libDir, parallelRegistryViolations, shadowAuthorityViolations, adaptiveHeuristicViolations, repoRoot);
 
-  const appLearner = join(repoRoot, "src/app/(student)/app/(learner)");
+  const appLearner = join(repoRoot, "src/app/(app)/app/(learner)");
   scanDir(appLearner, parallelRegistryViolations, shadowAuthorityViolations, adaptiveHeuristicViolations, repoRoot);
 
   return {

@@ -36,7 +36,7 @@ describe("Server telemetry lineage contract", () => {
 
   it("learner dashboard RSC emits server graph telemetry", () => {
     const page = fs.readFileSync(
-      path.join(root, "src/app/(student)/app/(learner)/page.tsx"),
+      path.join(root, "src/app/(app)/app/(learner)/page.tsx"),
       "utf8",
     );
     assert.match(page, /emitLearnerDashboardGraphTelemetry/);

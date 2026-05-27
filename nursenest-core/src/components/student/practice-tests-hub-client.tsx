@@ -126,7 +126,7 @@ export function PracticeTestsHubClient({
     if (urlPathwayId && pathwayOptions.some((option) => option.id === urlPathwayId)) {
       setPathwayId(urlPathwayId);
     }
-    if (qp.get("cat") === "1" || qp.get("cat") === "true") {
+    if (qp.get("catLaunch") === "1" || qp.get("catLaunch") === "true") {
       setExamMode("cat");
     }
     const focus = qp.get("focus");
