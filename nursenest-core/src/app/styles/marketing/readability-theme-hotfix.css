@@ -15,8 +15,8 @@
 .nn-home-marketing-rich-hero {
   --hero-headline-solid: color-mix(
     in srgb,
-    var(--hero-headline-accent, var(--semantic-brand, var(--theme-primary))) 88%,
-    var(--palette-heading, #0f172a)
+    var(--hero-headline-accent, var(--semantic-brand, var(--theme-primary))) 66%,
+    var(--palette-heading, #0f172a) 34%
   );
 }
 
@@ -30,6 +30,8 @@
   text-shadow: none !important;
   filter: none !important;
   will-change: auto !important;
+  font-weight: 680;
+  opacity: 1 !important;
 }
 
 html[data-theme="ocean"] .nn-home-marketing-rich-hero {
@@ -37,7 +39,7 @@ html[data-theme="ocean"] .nn-home-marketing-rich-hero {
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
-  --hero-headline-solid: color-mix(in srgb, var(--semantic-chart-1) 82%, var(--palette-heading));
+  --hero-headline-solid: color-mix(in srgb, #a92f64 74%, var(--palette-heading) 26%);
 }
 
 html[data-theme="aurora"] .nn-home-marketing-rich-hero {
@@ -71,4 +73,12 @@ html[data-theme="aurora"] .nn-home-marketing-rich-hero {
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-header-logo-link :where(span, strong, b) {
   color: var(--logo-primary, var(--semantic-brand, var(--theme-primary))) !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background: var(--nn-header-primary-bg) !important;
+  box-shadow: none !important;
 }

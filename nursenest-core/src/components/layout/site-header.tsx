@@ -1005,10 +1005,10 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
           data-nn-header-row="class-pathway"
           data-testid="marketing-header-unified-nav"
         >
-          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[36px] items-center gap-x-2 gap-y-0 overflow-x-auto py-1.5 scrollbar-none md:min-h-[40px] md:py-2">
+          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[36px] items-center justify-center gap-x-2 gap-y-2 overflow-visible px-4 py-1.5 scrollbar-none md:min-h-[40px] md:py-2">
             <nav
               aria-label={t("nav.marketingPathways")}
-              className="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-2 xl:gap-x-3"
+              className="mx-auto flex w-fit max-w-full min-w-0 flex-wrap items-center justify-center gap-x-2 gap-y-2 xl:gap-x-3"
             >
               {/* Tier hub chips: RN / RPN / NP / New Grad / Allied */}
               {tierHubMenus.map((menu) => (

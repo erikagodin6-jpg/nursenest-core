@@ -396,20 +396,31 @@
 
 [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
   border-top: 0;
-  background: color-mix(in srgb, var(--nn-header-primary-bg) 96%, transparent);
+  border-bottom: 0;
+  background: var(--nn-header-primary-bg);
+  box-shadow: none;
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
-  width: 100%;
+  width: min(100%, 76rem);
   min-height: 3rem;
   margin-inline: auto;
   justify-content: center;
   border: none;
   border-radius: 0;
   background: transparent;
-  overflow-x: auto;
+  overflow: visible;
   scrollbar-width: none;
   gap: clamp(0.55rem, 0.9vw, 1rem);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner > nav {
+  flex: 0 1 auto;
+  width: fit-content;
+  max-width: min(100%, 58rem);
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 0.5rem;
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
