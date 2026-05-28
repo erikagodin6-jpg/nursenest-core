@@ -15,6 +15,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     env:
+      # Prisma validates env("DATABASE_URL") and env("DIRECT_URL") even when CI only
+      # needs schema/build checks, so use inert placeholders instead of requiring secrets.
+      DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+      DIRECT_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
       # Align with production compile: heavy multi-locale merge audits run in dedicated i18n jobs.
       SKIP_I18N_PREBUILD: "1"
       # `npm run typecheck` runs before `next build` in `ci:verify`; skip duplicate integrated TS pass
