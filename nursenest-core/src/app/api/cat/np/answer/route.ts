@@ -158,7 +158,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       lessonCatalog: [],
     });
 
-    await completeNpCatSession(prisma, practiceTestId, userId, state, analysis);
+    const persisted = await completeNpCatSession(prisma, practiceTestId, userId, state, analysis);
+    if (!persisted) {
+      return NextResponse.json(
+        {
+          error: "Could not persist CAT completion. Please retry your final answer.",
+          code: "cat_completion_persist_failed",
+        },
+        { status: 503 },
+      );
+    }
 
     return NextResponse.json({
       nextQuestion: null,
@@ -173,7 +182,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // ── Save state and select next question ──────────────────────────────────
 
-  await saveNpCatSession(prisma, practiceTestId, userId, state);
+  const saved = await saveNpCatSession(prisma, practiceTestId, userId, state);
+  if (!saved) {
+    return NextResponse.json(
+      {
+        error: "CAT session changed before this answer could be saved. Reload the session and try again.",
+        code: "cat_session_save_conflict",
+      },
+      { status: 409 },
+    );
+  }
 
   const { question: nextQ, terminationReason, selectionDiagnostics } = selectNextQuestion(state, catConfig);
 
@@ -182,7 +200,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const historicalAnswers = await loadAnswerHistory(prisma, userId);
     const allAnswers = mergeAnswerHistory(historicalAnswers, state.sessionAnswers);
     const analysis = analyseSession({ sessionState: state, allAnswers, questionPool: pool, lessonCatalog: [] });
-    await completeNpCatSession(prisma, practiceTestId, userId, state, analysis);
+    const persisted = await completeNpCatSession(prisma, practiceTestId, userId, state, analysis);
+    if (!persisted) {
+      return NextResponse.json(
+        {
+          error: "Could not persist CAT completion. Please retry your final answer.",
+          code: "cat_completion_persist_failed",
+        },
+        { status: 503 },
+      );
+    }
 
     return NextResponse.json({
       nextQuestion: null,

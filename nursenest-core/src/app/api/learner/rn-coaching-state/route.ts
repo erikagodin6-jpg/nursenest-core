@@ -70,6 +70,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "snapshot required (version 1)" }, { status: 400 });
     }
 
+    // Prime DB-backed state before merging the client snapshot; serverless cold starts
+    // otherwise only see the empty process cache and can drop longitudinal metadata.
+    await loadDurableLearnerCognitionEnvelope(gate.userId);
     const envelope = saveDurableLearnerCognition(gate.userId, snapshot);
     if (envelope.stateFingerprint !== fingerprintLearnerState(snapshot)) {
       /* drift ok — accept newer client state */

@@ -30,7 +30,7 @@ import type { PrismaClient } from "@prisma/client";
 import type { AnswerRecord, CatSessionState, SessionAnalysis } from "./types";
 import { emptyPerformanceProfile } from "./performance-tracker";
 import { readinessBand } from "./readiness-scorer";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 // ─── Compact snapshot ─────────────────────────────────────────────────────────
 
@@ -334,13 +334,13 @@ export async function saveNpCatSession(
   practiceTestId: string,
   userId: string,
   state: CatSessionState,
-): Promise<void> {
+): Promise<boolean> {
   const answers: Record<string, { correct: boolean }> = {};
   for (const a of state.sessionAnswers) {
     answers[a.questionId] = { correct: a.correct };
   }
 
-  await prisma.practiceTest.updateMany({
+  const result = await prisma.practiceTest.updateMany({
     where: { id: practiceTestId, userId, status: "IN_PROGRESS" },
     data: {
       adaptiveState: asJson(serialise(state)),
@@ -349,6 +349,16 @@ export async function saveNpCatSession(
       updatedAt: new Date(),
     },
   });
+  if (result.count !== 1) {
+    safeServerLog("cat_np", "cat_session_save_no_rows_updated", {
+      practice_test_id: practiceTestId.slice(0, 24),
+      user_id_prefix: userId.slice(0, 8),
+      answered: state.answeredIds.length,
+      updated_count: result.count,
+    });
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -363,8 +373,8 @@ export async function saveNpCatSession(
  * If `state.sessionAnswers` is empty we short-circuit with a warning rather
  * than persisting a zero-answer completed session.
  *
- * Never throws — any DB error is swallowed after logging (a completion failure
- * must not crash the answer route mid-flight; the client will retry on reload).
+ * Never throws — DB failures are reported to the caller so the API can return a
+ * retryable response instead of claiming completion before durable persistence.
  */
 export async function completeNpCatSession(
   prisma: PrismaClient,
@@ -372,10 +382,10 @@ export async function completeNpCatSession(
   userId: string,
   state: CatSessionState,
   analysis: SessionAnalysis,
-): Promise<void> {
+): Promise<boolean> {
   if (state.sessionAnswers.length === 0) {
     // Refuse to complete a session with no answers — likely a race condition.
-    return;
+    return false;
   }
 
   const answers: Record<string, { correct: boolean }> = {};
@@ -387,7 +397,7 @@ export async function completeNpCatSession(
   const adaptiveStateWithSnapshot = serialise(state, snapshot);
 
   try {
-    await prisma.practiceTest.updateMany({
+    const result = await prisma.practiceTest.updateMany({
       where: { id: practiceTestId, userId },
       data: {
         status: "COMPLETED",
@@ -399,8 +409,28 @@ export async function completeNpCatSession(
         updatedAt: new Date(),
       },
     });
-  } catch {
-    // Intentionally non-throwing — caller must handle gracefully.
+    if (result.count !== 1) {
+      safeServerLogCritical("cat_np", "cat_session_completion_no_rows_updated", {
+        practice_test_id: practiceTestId.slice(0, 24),
+        user_id_prefix: userId.slice(0, 8),
+        answered: state.answeredIds.length,
+        updated_count: result.count,
+      });
+      return false;
+    }
+    return true;
+  } catch (error) {
+    safeServerLogCritical(
+      "cat_np",
+      "cat_session_completion_persist_failed",
+      {
+        practice_test_id: practiceTestId.slice(0, 24),
+        user_id_prefix: userId.slice(0, 8),
+        answered: state.answeredIds.length,
+      },
+      error,
+    );
+    return false;
   }
 }
 

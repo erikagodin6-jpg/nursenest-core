@@ -38,12 +38,15 @@ import {
 
 import {
   buildCompletionSnapshot,
+  completeNpCatSession,
   extractSnapshotFromAdaptiveState,
+  saveNpCatSession,
   type NpCatAdaptiveState,
   type NpCatCompletionSnapshot,
 } from "./session-persistence";
 
 import type { DbQuestionRow } from "./db-adapter";
+import type { CatSessionState, SessionAnalysis } from "./types";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -364,6 +367,118 @@ describe("buildCompletionSnapshot", () => {
     assert.deepEqual(snap.weakSystems, []);
     assert.deepEqual(snap.weakRiskCategories, []);
     assert.deepEqual(snap.nextFocusAreas, []);
+  });
+});
+
+// ─── CAT persistence failure contracts ────────────────────────────────────────
+
+function makePersistableCatState(): CatSessionState {
+  const emptyDimension = {
+    attempted: 0,
+    correct: 0,
+    accuracy: 0,
+    recentAccuracy: 0,
+    weightedAccuracy: 0,
+    uniqueQuestionsSeen: 0,
+  };
+  const correctDimension = {
+    attempted: 1,
+    correct: 1,
+    accuracy: 1,
+    recentAccuracy: 1,
+    weightedAccuracy: 1,
+    uniqueQuestionsSeen: 1,
+  };
+  return {
+    sessionId: "session-1",
+    startedAt: Date.now(),
+    abilityEstimate: 0.4,
+    answeredIds: ["q1"],
+    recentlySeenIds: new Set(["q1"]),
+    sessionAnswers: [
+      {
+        questionId: "q1",
+        correct: true,
+        answeredAt: Date.now(),
+        responseTimeMs: 1000,
+        cognitiveLayer: "L2",
+        riskLevel: "moderate",
+        systemTag: "cardiovascular",
+        topicSlug: "cardiovascular",
+      },
+    ],
+    correctStreak: 1,
+    incorrectStreak: 0,
+    performance: {
+      overall: correctDimension,
+      byLayer: { L1: emptyDimension, L2: correctDimension, L3: emptyDimension },
+      byRisk: { low: emptyDimension, moderate: correctDimension, high: emptyDimension },
+      bySystem: { cardiovascular: correctDimension },
+      byTopic: {},
+    },
+  };
+}
+
+function makeCompletionAnalysis(): SessionAnalysis {
+  return {
+    summary: {
+      readinessScore: { score: 72, band: "approaching" },
+      totalAnswered: 1,
+      totalCorrect: 1,
+      sessionAccuracy: 1,
+      scoreDelta: null,
+    },
+    weakAreas: [],
+    strengths: [],
+    recommendations: [],
+    performanceSnapshot: {
+      overall: { attempted: 1, correct: 1, accuracy: 1 },
+      byLayer: { L1: { attempted: 0, correct: 0, accuracy: 0 }, L2: { attempted: 1, correct: 1, accuracy: 1 }, L3: { attempted: 0, correct: 0, accuracy: 0 } },
+      byRisk: {},
+      bySystem: {},
+      byTopic: {},
+    },
+  } as unknown as SessionAnalysis;
+}
+
+describe("CAT session persistence contracts", () => {
+  it("reports a failed in-progress save when no row is updated", async () => {
+    const prisma = {
+      practiceTest: { updateMany: async () => ({ count: 0 }) },
+    } as unknown as Parameters<typeof saveNpCatSession>[0];
+
+    const ok = await saveNpCatSession(prisma, "pt-1", "user-1", makePersistableCatState());
+    assert.equal(ok, false);
+  });
+
+  it("reports failed completion persistence instead of silently succeeding", async () => {
+    const prisma = {
+      practiceTest: { updateMany: async () => ({ count: 0 }) },
+    } as unknown as Parameters<typeof completeNpCatSession>[0];
+
+    const ok = await completeNpCatSession(
+      prisma,
+      "pt-1",
+      "user-1",
+      makePersistableCatState(),
+      makeCompletionAnalysis(),
+    );
+    assert.equal(ok, false);
+  });
+
+  it("returns success when completion updates exactly one row", async () => {
+    const prisma = {
+      practiceTest: { updateMany: async () => ({ count: 1 }) },
+    } as unknown as Parameters<typeof completeNpCatSession>[0];
+
+    const ok = await completeNpCatSession(
+      prisma,
+      "pt-1",
+      "user-1",
+      makePersistableCatState(),
+      makeCompletionAnalysis(),
+    );
+    assert.equal(ok, true);
   });
 });
 
