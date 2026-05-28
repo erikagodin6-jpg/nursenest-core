@@ -91,6 +91,7 @@ import {
 } from "@/lib/blog/blog-content-quality-gate";
 import { validateBlogPublishQuality } from "@/lib/blog/blog-publish-quality-validator";
 import { parseEditorialPlanJsonFromModel } from "@/lib/blog/blog-editorial-plan-json-repair";
+import { createBlogPostWithIntegrity } from "@/lib/blog/blog-persistence-integrity";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type ControlPanelGenerateInput = {
@@ -904,7 +905,14 @@ export async function persistControlPanelDraft(
     }
 
     const post = await prisma.$transaction(async (tx) => {
-      const created = await tx.blogPost.create({
+      const created = await createBlogPostWithIntegrity({
+        client: tx,
+        context: {
+          operation: "BLOG_CONTROL_PANEL_AI_DRAFT_CREATE",
+          correlationId: null,
+          slug,
+          title: pageTitle,
+        },
         data: {
           slug,
           title: pageTitle,

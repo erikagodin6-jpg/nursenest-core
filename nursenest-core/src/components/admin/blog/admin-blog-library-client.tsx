@@ -25,6 +25,39 @@ type ListResponse = {
   page: number;
   pageSize: number;
   counts: Record<string, number>;
+  diagnostics?: {
+    ok: boolean;
+    error?: string;
+    persisted: {
+      totalPosts: number;
+      visiblePublicPosts: number;
+      postStatus: Record<string, number>;
+      workflowStatus: Record<string, number>;
+    };
+    generated: {
+      articleJobs: Record<string, number>;
+      draftBatchItems: Record<string, number>;
+      scheduleItems: Record<string, number>;
+    };
+    reconciliation: {
+      articleJobsWithPersistedRows: number;
+      articleJobsMissingRows: number;
+      publishedJobs: number;
+      failedJobs: number;
+      queuedJobs: number;
+      draftBatchCompleted: number;
+      draftBatchFailed: number;
+      schedulePublished: number;
+      scheduleFailed: number;
+    };
+    database: {
+      nodeEnv: string | null;
+      connectedDatabase: string | null;
+      latestMigration: { migrationName: string | null; finishedAt: string | null; error?: string };
+    };
+    latestSuccessfulWrite: string | null;
+    checkedAt: string;
+  } | null;
 };
 
 function statusChipClass(s: BlogPostStatus) {
@@ -86,6 +119,7 @@ export function AdminBlogLibraryClient() {
     const sp = new URLSearchParams();
     sp.set("page", String(page));
     sp.set("pageSize", "40");
+    sp.set("diagnostics", "1");
     if (status) sp.set("status", status);
     if (exam.trim()) sp.set("exam", exam.trim());
     if (country) sp.set("country", country);
@@ -263,6 +297,57 @@ export function AdminBlogLibraryClient() {
           </p>
         ) : null}
       </div>
+
+      {data?.diagnostics ? (
+        <section className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-4 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Persistence diagnostics</p>
+              <h3 className="mt-1 text-base font-semibold text-[var(--theme-heading-text)]">
+                {data.diagnostics.ok ? "Blog database reconciliation healthy" : "Blog reconciliation needs review"}
+              </h3>
+              <p className="mt-1 max-w-3xl text-xs text-muted-foreground">
+                {data.diagnostics.error
+                  ? data.diagnostics.error
+                  : "Metrics below are derived from confirmed database rows, not optimistic generation counters."}
+              </p>
+            </div>
+            <a
+              href="/api/admin/blog/diagnostics"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted/60"
+            >
+              JSON diagnostics
+            </a>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl border border-border/70 bg-background/60 p-3">
+              <p className="text-[11px] font-medium text-muted-foreground">Total persisted posts</p>
+              <p className="mt-1 text-xl font-semibold">{data.diagnostics.persisted.totalPosts}</p>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-background/60 p-3">
+              <p className="text-[11px] font-medium text-muted-foreground">Visible public posts</p>
+              <p className="mt-1 text-xl font-semibold">{data.diagnostics.persisted.visiblePublicPosts}</p>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-background/60 p-3">
+              <p className="text-[11px] font-medium text-muted-foreground">Published generation jobs</p>
+              <p className="mt-1 text-xl font-semibold">{data.diagnostics.reconciliation.publishedJobs}</p>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-background/60 p-3">
+              <p className="text-[11px] font-medium text-muted-foreground">Published jobs missing rows</p>
+              <p className={`mt-1 text-xl font-semibold ${data.diagnostics.reconciliation.articleJobsMissingRows ? "text-rose-700" : "text-emerald-700"}`}>
+                {data.diagnostics.reconciliation.articleJobsMissingRows}
+              </p>
+            </div>
+          </div>
+          <p className="mt-3 text-[11px] text-muted-foreground">
+            DB: {data.diagnostics.database.connectedDatabase ?? "unavailable"} · Env: {data.diagnostics.database.nodeEnv ?? "unknown"} ·
+            Migration: {data.diagnostics.database.latestMigration.migrationName ?? "unknown"} · Last write:{" "}
+            {data.diagnostics.latestSuccessfulWrite ? new Date(data.diagnostics.latestSuccessfulWrite).toLocaleString() : "none"}
+          </p>
+        </section>
+      ) : null}
 
       <div className="overflow-hidden rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 px-4 py-3">

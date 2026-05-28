@@ -17,6 +17,11 @@ import {
 } from "@/lib/blog/blog-post-published-state";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  buildBlogPersistenceDiagnosticsFailure,
+  createBlogPostWithIntegrity,
+  getBlogPersistenceDiagnostics,
+} from "@/lib/blog/blog-persistence-integrity";
 import { prisma } from "@/lib/db";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
@@ -123,7 +128,8 @@ export async function GET(req: NextRequest) {
     page = parsed.page;
   }
 
-  const [posts, total] = await Promise.all([
+  const includeDiagnostics = sp.get("diagnostics") === "1";
+  const [posts, total, diagnostics] = await Promise.all([
     prisma.blogPost.findMany({
       where,
       orderBy: legacyMode ? [{ publishAt: "asc" }, { updatedAt: "desc" }] : { updatedAt: "desc" },
@@ -132,6 +138,9 @@ export async function GET(req: NextRequest) {
       select: adminBlogListSelect,
     }),
     prisma.blogPost.count({ where }),
+    includeDiagnostics
+      ? getBlogPersistenceDiagnostics().catch((error) => buildBlogPersistenceDiagnosticsFailure(error))
+      : Promise.resolve(null),
   ]);
 
   const [draftCount, needsReviewCount, approvedCount, scheduledCount, publishedCount, failedCount, nextScheduled] =
@@ -234,6 +243,7 @@ export async function GET(req: NextRequest) {
     nextScheduled,
     warnings,
     cannibalization,
+    diagnostics,
   });
 }
 
@@ -346,7 +356,12 @@ export async function POST(req: Request) {
     }
   }
 
-  const post = await prisma.blogPost.create({
+  const post = await createBlogPostWithIntegrity({
+    context: {
+      operation: "ADMIN_BLOG_MANUAL_CREATE",
+      slug: finalSlug,
+      title: d.title,
+    },
     data: {
       slug: finalSlug,
       title: d.title,

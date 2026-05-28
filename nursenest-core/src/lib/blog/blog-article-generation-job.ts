@@ -25,6 +25,7 @@ import {
   logControlPanelPipelineFailure,
   logControlPanelPipelineSuccess,
 } from "@/lib/admin/blog-content-automation-log";
+import { assertBlogPostPersisted } from "@/lib/blog/blog-persistence-integrity";
 
 export type BlogArticleGenerationJobStage =
   | "queued"
@@ -86,7 +87,7 @@ export async function createBlogArticleGenerationJob(params: {
   input: ControlPanelGenerateInput;
 }): Promise<BlogArticleGenerationJob> {
   const payload: BlogArticleJobStoredRequest = { v: REQUEST_V, input: params.input };
-  return prisma.blogArticleGenerationJob.create({
+  const job = await prisma.blogArticleGenerationJob.create({
     data: {
       createdById: params.createdById ?? null,
       stage: "queued",
@@ -94,6 +95,10 @@ export async function createBlogArticleGenerationJob(params: {
       repairable: false,
     },
   });
+  if (!job.id) {
+    throw new Error("BlogArticleGenerationJob persistence failed: create returned no id");
+  }
+  return job;
 }
 
 async function logJobStage(jobId: string, stage: string, extra?: Record<string, unknown>) {
@@ -237,6 +242,12 @@ export async function runClaimedBlogArticleGenerationJob(jobId: string): Promise
     }
 
     const p = result.persist.post;
+    await assertBlogPostPersisted({
+      postId: p.id,
+      operation: "BLOG_ARTICLE_GENERATION_JOB_COMPLETE",
+      correlationId: jobId,
+      expectedSlug: p.slug,
+    });
     await logJobStage(jobId, "published");
     await prisma.blogArticleGenerationJob.update({
       where: { id: jobId },
@@ -471,6 +482,12 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
   }
 
   const p = result.persist.post;
+  await assertBlogPostPersisted({
+    postId: p.id,
+    operation: "BLOG_ARTICLE_GENERATION_JOB_RETRY_COMPLETE",
+    correlationId: jobId,
+    expectedSlug: p.slug,
+  });
   await logJobStage(jobId, "published");
   await prisma.blogArticleGenerationJob.update({
     where: { id: jobId },
