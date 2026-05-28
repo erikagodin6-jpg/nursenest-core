@@ -261,7 +261,7 @@ export function NclexPracticeRunner({
     () => resolveMeasurementSystemForLearnerPathway(pathwayId, pathwayCountryByPathwayId),
     [pathwayId, pathwayCountryByPathwayId],
   );
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
   const resolveMeasureText = useCallback(
     (text: string) =>
       governMeasurementSurfaceCopy(text, {
@@ -696,6 +696,7 @@ export function NclexPracticeRunner({
             fallbackSystem={fallbackMeasurementSystem}
             syncToProfile={Boolean(userId)}
             disabled={disabled}
+            locked
           />
         }
       />

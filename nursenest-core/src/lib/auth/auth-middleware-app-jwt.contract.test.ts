@@ -10,9 +10,9 @@ const dir = dirname(fileURLToPath(import.meta.url));
  * Regression: `/app/*` must honor readable session JWTs when Edge `auth` is empty,
  * matching admin/internal — otherwise signed-in learners get redirected to `/login`.
  */
-test("auth-middleware: app paths use JWT fallback when signedInFromAuth is false", () => {
+test("auth-middleware: protected learner paths use JWT fallback when signedInFromAuth is false", () => {
   const src = readFileSync(join(dir, "..", "auth-middleware.ts"), "utf8");
-  assert.match(src, /if \(isAppPath\(pathname\)\)/);
+  assert.match(src, /isProtectedLearnerAuthPath/);
   assert.match(src, /if \(signedInFromAuth\) return true/);
   assert.match(src, /return hasReadableSessionJwt\(request as NextRequest\)/);
 });

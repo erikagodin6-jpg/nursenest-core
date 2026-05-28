@@ -22,14 +22,21 @@ import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-but
 import { AuthFormLayout } from "@/components/auth/auth-experience/auth-form-layout";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
+import { isPlaceholderAuthCopy } from "@/lib/ui/is-placeholder-auth-copy";
 
 const TIER_LABEL: Record<SignupTierValue, string> = {
   RN: "RN",
   RPN: "RPN",
   LVN_LPN: "LPN",
   NP: "NP",
-  ALLIED: "Allied",
+  ALLIED: "Allied Health",
 };
+
+function safeAuthCopy(value: string | null | undefined, key: string, fallback: string): string {
+  const trimmed = value?.trim();
+  if (!trimmed || isPlaceholderAuthCopy(trimmed, key)) return fallback;
+  return trimmed;
+}
 
 export function SignupForm({
   tier,
@@ -98,6 +105,16 @@ export function SignupForm({
   }, [tier, examFocus, examOptions]);
   const firstNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderFirstName"), "First name");
   const lastNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderLastName"), "Last name");
+  const createAccountLabel = safeAuthCopy(
+    t("pages.signup.createAccount"),
+    "pages.signup.createAccount",
+    "Create Account",
+  );
+  const alreadyHaveAccountLabel = safeAuthCopy(
+    t("pages.signup.alreadyHaveAccount"),
+    "pages.signup.alreadyHaveAccount",
+    "Already have an account? Sign in",
+  );
 
   useEffect(() => {
     setClientReady(true);
@@ -395,7 +412,7 @@ export function SignupForm({
           disabled={pending || !clientReady || (turnstileGateActive && !captchaToken?.trim())}
           aria-busy={pending}
         >
-          {pending ? t("pages.signup.creatingAccount") : "Continue"}
+          {pending ? t("pages.signup.creatingAccount") : createAccountLabel}
         </button>
         <p className="nn-premium-auth-signup-cta__subtext" aria-live="polite">
           {continueSubtext}
@@ -403,7 +420,7 @@ export function SignupForm({
       </div>
       <p className="text-center text-sm text-muted-foreground">
         <Link href={loginAfterSignupHref} className="font-semibold text-primary underline-offset-2 hover:underline">
-          {t("pages.signup.alreadyHaveAccount")}
+          {alreadyHaveAccountLabel}
         </Link>
       </p>
     </AuthFormLayout>

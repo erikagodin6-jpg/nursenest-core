@@ -1,4 +1,14 @@
 import type { HealthcareProgramTier } from "@/lib/nursing-tiers/tier-pedagogy-profile";
+import {
+  clinicalIntuitionRiskForAttempt,
+  clinicalIntuitionSignalForCandidate,
+  type ClinicalIntuitionDomain,
+  type ClinicalIntuitionSkill,
+} from "@/lib/adaptive-learning/clinical-intuition-training";
+import {
+  detectAdaptiveAntiAnxietySupport,
+  type AdaptiveAntiAnxietySupportPlan,
+} from "@/lib/adaptive-learning/anti-anxiety-study-support";
 
 export type AdaptiveDifficultyLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -25,6 +35,8 @@ export type AdaptiveQuestionMetadata = {
   caseBased: boolean;
   misconceptionTags: readonly string[];
   examBlueprintCategory: string;
+  clinicalIntuitionDomains?: readonly ClinicalIntuitionDomain[];
+  clinicalIntuitionSkills?: readonly ClinicalIntuitionSkill[];
 };
 
 export type AdaptiveAttemptSignal = {
@@ -99,11 +111,17 @@ export type AdaptiveNextStep = {
   remediation: AdaptiveRemediationPlan;
   flashcardReviewIntervalDays: number;
   safetyOverride: boolean;
+  antiAnxietySupport: AdaptiveAntiAnxietySupportPlan;
 };
 
 export const SAFETY_CRITICAL_DOMAINS = [
   "sepsis",
   "respiratory distress",
+  "silent hypoxia",
+  "subtle respiratory decline",
+  "worsening neuro status",
+  "unstable vital trend",
+  "hidden safety risk",
   "stroke",
   "acs",
   "medication safety",
@@ -174,6 +192,7 @@ export function safetyRiskForAttempt(attempt: AdaptiveAttemptSignal): number {
   if (classifyConfidenceCalibration(attempt) === "dangerous_misconception") risk += 22;
   if (attempt.metadata.prioritizationLevel >= 4) risk += 8;
   if (attempt.metadata.pharmacologyComplexity >= 4) risk += 8;
+  risk += clinicalIntuitionRiskForAttempt(attempt);
   return clampScore(risk);
 }
 
@@ -197,6 +216,11 @@ export function recommendDifficultyLevel(args: {
   const hintAverage = recent.reduce((sum, attempt) => sum + attempt.hintsUsed, 0) / recent.length;
   const unsafe = recent.some((attempt) => safetyRiskForAttempt(attempt) >= 70);
   const slowOrChanged = recent.filter((attempt) => attempt.timeToAnswerMs > 90000 || attempt.answerChanges > 1).length;
+  const anxietySupport = detectAdaptiveAntiAnxietySupport(recent);
+
+  if (anxietySupport.difficultyAdjustment < 0) {
+    return clampDifficulty(args.currentLevel + anxietySupport.difficultyAdjustment);
+  }
 
   if (unsafe || accuracy < 0.55 || hintAverage >= 2 || slowOrChanged >= 3) {
     return clampDifficulty(args.currentLevel - 1);
@@ -313,6 +337,11 @@ export function rankAdaptiveQuestionCandidates(args: {
         score += 18;
         reasons.push("safety_critical");
       }
+      const intuition = clinicalIntuitionSignalForCandidate(candidate);
+      if (intuition.trainingScore > 0) {
+        score += intuition.trainingScore;
+        for (const reason of intuition.reasons) reasons.push(reason);
+      }
       const difficultyDistance = Math.abs(candidate.metadata.difficulty - requiredDifficulty);
       score += Math.max(0, 16 - difficultyDistance * 5);
       if (candidate.metadata.caseBased) score += 5;
@@ -334,6 +363,7 @@ export function buildAdaptiveNextStep(args: {
   const recent = args.recentAttempts;
   const lastAttempt = recent.at(-1);
   const safetyOverride = shouldTriggerSafetyOverride(recent);
+  const antiAnxietySupport = detectAdaptiveAntiAnxietySupport(recent);
   const difficulty = safetyOverride
     ? clampDifficulty(args.profile.overallLevel - 1)
     : recommendDifficultyLevel({ currentLevel: args.profile.overallLevel, recentAttempts: recent });
@@ -356,5 +386,6 @@ export function buildAdaptiveNextStep(args: {
     remediation,
     flashcardReviewIntervalDays,
     safetyOverride,
+    antiAnxietySupport,
   };
 }

@@ -15,6 +15,7 @@ import {
   examCodeToTier,
 } from "./pipeline-hashes";
 import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
+import { CLINICAL_INTUITION_GENERATION_GUIDANCE } from "@/lib/adaptive-learning/clinical-intuition-training";
 
 // ---------------------------------------------------------------------------
 // AI output schema
@@ -77,7 +78,8 @@ Rules:
 - cognitiveLevel: Bloom's level — "remember" (recall), "understand" (explain/compare), "apply" (use knowledge in new situation), "analyze" (break down, prioritize, evaluate).
 - SATA: include 2–4 correct answers. Never make all options correct.
 - No invented drug doses or laboratory reference ranges outside accepted textbook ranges.
-- No PHI, no specific patient identifiers.`.trim();
+- No PHI, no specific patient identifiers.
+- ${CLINICAL_INTUITION_GENERATION_GUIDANCE}`.trim();
 
 // ---------------------------------------------------------------------------
 // Prompt builder

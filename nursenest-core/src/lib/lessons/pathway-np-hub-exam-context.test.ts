@@ -1,5 +1,5 @@
 /**
- * NP marketing hubs must accept CNPLE / NCLEX-family authoring tags on rows published under `*-np-*` pathways.
+ * NP marketing hubs must accept NP-family authoring tags and reject RN/PN stamps.
  *
  * Run: `npx tsx --test src/lib/lessons/pathway-np-hub-exam-context.test.ts`
  */
@@ -40,17 +40,19 @@ describe("NP / CNPLE pathway lesson inventory (exam metadata contract)", () => {
     assert.equal(pathwayLessonMatchesMarketingPathwayContext("ca-np-cnple", rec), true);
   });
 
-  it("matches ca-np-cnple hub when only NCLEX_RN stamps exist on the row (legacy shared authoring)", () => {
+  it("rejects ca-np-cnple hub rows when only NCLEX_RN stamps exist on the row", () => {
     const raw = baseRaw({
       slug: `np-nclex-rn-stamp-${Date.now()}`,
       exams: ["NCLEX_RN"],
       examMeta: [{ exam: "NCLEX_RN", yieldLevel: "common" }],
     });
     const rec = normalizeLesson(raw, "ca-np-cnple");
-    assert.equal(pathwayLessonMatchesMarketingPathwayContext("ca-np-cnple", rec), true);
+    assert.equal(pathwayLessonMatchesMarketingPathwayContext("ca-np-cnple", rec), false);
+    assert.equal(rec.examSpecificMetadata?.nursingRole, "NP");
+    assert.equal(rec.examSpecificMetadata?.clinicalJudgmentLevel, "advanced_diagnostic");
   });
 
-  it("does not treat NP hub rules as matching US RN pathway (wrong pathway id)", () => {
+  it("keeps US RN pathway rows out of NP context", () => {
     const raw = baseRaw({
       slug: `np-wrong-pathway-${Date.now()}`,
       exams: ["NCLEX_RN"],
@@ -64,8 +66,8 @@ describe("NP / CNPLE pathway lesson inventory (exam metadata contract)", () => {
   it("survives the same marketing hub list filter as other pathways (publicComplete + context)", () => {
     const raw = baseRaw({
       slug: `np-hub-list-filter-${Date.now()}`,
-      exams: ["NCLEX_RN"],
-      examMeta: [{ exam: "NCLEX_RN", yieldLevel: "common" }],
+      exams: ["NP"],
+      examMeta: [{ exam: "NP", yieldLevel: "common" }],
     });
     const rec = normalizeLesson(raw, "ca-np-cnple");
     assert.equal(rec.structuralQuality?.publicComplete, true);

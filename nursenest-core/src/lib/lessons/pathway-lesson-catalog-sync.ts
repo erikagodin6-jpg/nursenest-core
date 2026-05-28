@@ -120,6 +120,7 @@ import {
   computePathwayLessonLinkedLearningSignals,
   deriveCanonicalStudyTopicSlug,
 } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
+import { getPathwayLessonExamMetadata } from "@/lib/lessons/pathway-lesson-exam-metadata";
 
 type CatalogShape = {
   version: number;
@@ -758,10 +759,13 @@ export function hasTrustedGeneratedMarketingLessonIndex(pathwayId: string): bool
  * Must pass the same marketing pathway context filter as the live catalog path.
  */
 function hubPathwayLessonRecordFromTrustedSummary(
+  pathwayId: string,
   row: PathwayLessonSummaryIndexJsonRow,
   displayTitle: string,
 ): PathwayLessonRecord {
   const topicSlug = lessonCategoryToSlug(row.category);
+  const context = resolveLessonContextForPathwayId(pathwayId);
+  const runtimeMetadata = getPathwayLessonExamMetadata(pathwayId);
   return {
     slug: row.slug,
     title: displayTitle,
@@ -780,9 +784,10 @@ function hubPathwayLessonRecordFromTrustedSummary(
       warnings: [],
       internalStudyLinkCount: 0,
     },
-    exams: [],
-    countries: [],
-    examMeta: [],
+    exams: [context.exam],
+    countries: [context.country],
+    examMeta: [{ exam: context.exam, yieldLevel: "common" }],
+    ...(runtimeMetadata ? { examSpecificMetadata: runtimeMetadata } : {}),
   };
 }
 
@@ -1108,33 +1113,25 @@ function mergeLessonAudienceMetadata(
   pathwayId?: string,
 ): Pick<
   PathwayLessonRecord,
-  "audienceTiers" | "countryScope" | "examRelevance" | "exams" | "countries" | "priority" | "examMeta"
+  | "audienceTiers"
+  | "countryScope"
+  | "examRelevance"
+  | "exams"
+  | "countries"
+  | "priority"
+  | "examMeta"
+  | "examSpecificMetadata"
 > {
   const explicit = lessonMetadataFields(raw);
   if (!pathwayId) return explicit;
   const inferred = inferExamAudienceFromPathwayId(pathwayId);
   const context = resolveLessonContextForPathwayId(pathwayId);
+  const runtimeMetadata = getPathwayLessonExamMetadata(pathwayId);
   const audienceTiers = explicit.audienceTiers?.length ? explicit.audienceTiers : inferred.audienceTiers;
   const countryScope = explicit.countryScope ?? inferred.countryScope;
   const priority = explicit.priority ?? "medium";
   const exams = explicit.exams?.length ? explicit.exams : [context.exam];
-  /**
-   * Hub + detail filtering use {@link matchesLessonContext} against the pathway implied by `pathwayId`.
-   * Rows are always published under a concrete `pathwayId`; that membership is the authoritative scope.
-   * Legacy imports often stamp `countries: ["US"]` on shared NCLEX bodies attached to `ca-*` pathways,
-   * which would incorrectly hide them on Canada hubs. Union the pathway's implied country whenever
-   * metadata is region-specific but not explicitly global. (Explicit `GLOBAL` remains worldwide-only.)
-   */
-  let countries: PathwayLessonRuntimeCountry[];
-  if (!explicit.countries?.length) {
-    countries = [context.country];
-  } else {
-    const unique = new Set<PathwayLessonRuntimeCountry>(explicit.countries);
-    if (!unique.has("GLOBAL")) {
-      unique.add(context.country);
-    }
-    countries = [...unique];
-  }
+  const countries = explicit.countries?.length ? explicit.countries : [context.country];
   const examMeta = explicit.examMeta?.length
     ? explicit.examMeta
     : [
@@ -1151,6 +1148,7 @@ function mergeLessonAudienceMetadata(
     countries,
     priority,
     examMeta,
+    ...(runtimeMetadata ? { examSpecificMetadata: runtimeMetadata } : {}),
   };
 }
 
@@ -1268,45 +1266,8 @@ function isNursingCoreRuntimeExam(exam: PathwayLessonRuntimeExam): boolean {
   return exam === "NCLEX" || exam === "NCLEX_RN" || exam === "NCLEX_PN";
 }
 
-/**
- * NP marketing hubs (`*-np-*`) often ship lessons authored with NCLEX-RN/PN tags only; `pathway_id` is the
- * canonical publish scope — treat core nursing exam tags as compatible with NP **only** when the hub context is NP.
- */
-function npHubContextMatchesLegacyNursingExamTags(
-  context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
-  exams: PathwayLessonRuntimeExam[],
-  examMeta: PathwayLessonExamMeta[],
-): boolean {
-  if (context.exam !== "NP") return false;
-  const metaAllows =
-    examMeta.length === 0 ||
-    examMeta.some((e) => e.exam === "NP" || isNursingCoreRuntimeExam(e.exam));
-  const examsAllow =
-    exams.length === 0 ||
-    exams.includes("NP") ||
-    exams.some((e) => isNursingCoreRuntimeExam(e));
-  return metaAllows && examsAllow;
-}
-
-/**
- * NCLEX-RN items are often authored with a single US or CA stamp even when `pathway_id` already scopes the row
- * to the sibling North American hub — treat mutually visible US/CA/GLOBAL-only tags as pathway-safe for RN.
- *
- * **Restricted to canonical RN NCLEX-RN pathway ids** (`*-rn-nclex-rn`): do not relax country matching for
- * PN/Rex-PN, NP, new-grad transition, or other hubs that still need strict stamps.
- */
-function nclexRnNorthAmericaPeerCountryAllow(
-  pathwayId: string,
-  context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
-  countries: PathwayLessonRuntimeCountry[],
-): boolean {
-  if (!pathwayId.includes("-rn-nclex-rn")) return false;
-  if (context.exam !== "NCLEX_RN" || countries.length === 0) return false;
-  return countries.every((c) => c === "US" || c === "CA" || c === "GLOBAL");
-}
-
 function matchesLessonContext(
-  pathwayId: string,
+  _pathwayId: string,
   lesson: PathwayLessonRecord,
   context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
 ): boolean {
@@ -1318,20 +1279,17 @@ function matchesLessonContext(
     examMeta.some(
       (entry) =>
         entry.exam === context.exam ||
-        (entry.exam === "NCLEX" && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")) ||
-        (context.exam === "NP" && isNursingCoreRuntimeExam(entry.exam)),
+        (entry.exam === "NCLEX" && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")),
     );
   const examMatch =
-    (examMetaMatch &&
-      (exams.length === 0 ||
-        exams.includes(context.exam) ||
-        (exams.includes("NCLEX") && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")))) ||
-    npHubContextMatchesLegacyNursingExamTags(context, exams, examMeta);
+    examMetaMatch &&
+    (exams.length === 0 ||
+      exams.includes(context.exam) ||
+      (exams.includes("NCLEX") && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")));
   const countryMatch =
     countries.length === 0 ||
     countries.includes(context.country) ||
-    countries.includes("GLOBAL") ||
-    nclexRnNorthAmericaPeerCountryAllow(pathwayId, context, countries);
+    countries.includes("GLOBAL");
   return examMatch && countryMatch;
 }
 
@@ -2041,7 +1999,11 @@ export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): Pat
   const trusted = tryTrustedGeneratedLessonIndex(key);
   if (trusted) {
     const synthetic = trusted.summaries.map((row) =>
-      hubPathwayLessonRecordFromTrustedSummary(row, trusted.slugToDisplayTitle[row.slug]?.trim() || row.title),
+      hubPathwayLessonRecordFromTrustedSummary(
+        key,
+        row,
+        trusted.slugToDisplayTitle[row.slug]?.trim() || row.title,
+      ),
     );
     const trustedBuilt = sortAndFilterLessonsForPathwayContext(key, synthetic).map(stripPathwayLessonToHubListShape);
     if (trustedBuilt.length > 0) {

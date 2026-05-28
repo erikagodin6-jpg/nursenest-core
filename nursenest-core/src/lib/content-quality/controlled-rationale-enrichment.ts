@@ -27,6 +27,11 @@ export const HIGH_YIELD_RATIONALE_BATCHES = [
     examTip: "Early recognition and rapid bundle actions matter more than waiting for complete diagnostics.",
   },
   {
+    id: "deterioration_intuition",
+    patterns: [/\bdeteriorat|silent hypoxia|new confusion|change from baseline|subtle|restless|accessory muscle|urine output|vital sign trend|something feels wrong\b/i],
+    examTip: "Cluster subtle changes from baseline; experienced nurses escalate emerging instability before collapse.",
+  },
+  {
     id: "neuro_emergencies",
     patterns: [/\bstroke|cva|icp|intracranial|neuro|seizure|herniat|cushing\b/i],
     examTip: "Watch for acute neuro deterioration and protect airway while escalating time-critical care.",

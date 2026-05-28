@@ -3,6 +3,17 @@
  * @see exam-registry.ts — expands without assuming only US/Canada exist.
  */
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  buildExamPathwayRuntimeMetadata,
+  type AcuityLevel,
+  type ClinicalJudgmentLevel,
+  type ExamType,
+  type ExamUnitSystem,
+  type NursingRole,
+  type ScopeLevel,
+} from "@/lib/exam-context/exam-pathway-metadata";
+import type { QuestionDifficultyTier } from "@/lib/questions/difficulty-scope-filter";
 
 /** ISO 3166-1 alpha-2 country code (extend as markets open: GB, AU, IN, …). */
 export type ExamCountryCode = string;
@@ -50,6 +61,16 @@ export type GlobalExamContext = {
   blueprintId: string;
   /** Labs/vitals formatting: US vs SI (derived from country; UK/AU → SI). */
   measurementSystem: ExamMeasurementSystem;
+  /** Strict exam product type used for routing and content separation. */
+  examType: ExamType;
+  nursingRole: NursingRole;
+  scopeLevel: ScopeLevel;
+  /** Pathway-native unit system: conventional for US NCLEX, SI for Canadian pathways. */
+  unitSystem: ExamUnitSystem;
+  specialty: string | null;
+  difficultyTier: QuestionDifficultyTier;
+  clinicalJudgmentLevel: ClinicalJudgmentLevel;
+  acuityLevel: AcuityLevel;
 };
 
 export class ExamContextError extends Error {
@@ -74,9 +95,19 @@ export function requireGlobalExamContext(
     ctx.measurementSystem === "US" || ctx.measurementSystem === "SI"
       ? ctx.measurementSystem
       : getMeasurementSystemForCountry(ctx.country);
+  const pathway = ctx.pathwayId ? getExamPathwayById(ctx.pathwayId) ?? null : null;
+  const runtime = pathway ? buildExamPathwayRuntimeMetadata(pathway) : null;
   const merged: GlobalExamContext = {
     ...(ctx as GlobalExamContext),
     measurementSystem,
+    examType: (ctx as Partial<GlobalExamContext>).examType ?? runtime?.examType ?? "GENERIC",
+    nursingRole: (ctx as Partial<GlobalExamContext>).nursingRole ?? runtime?.nursingRole ?? "RN",
+    scopeLevel: (ctx as Partial<GlobalExamContext>).scopeLevel ?? runtime?.scopeLevel ?? "entry_level",
+    unitSystem: (ctx as Partial<GlobalExamContext>).unitSystem ?? runtime?.unitSystem ?? (measurementSystem === "US" ? "CON" : "SI"),
+    specialty: (ctx as Partial<GlobalExamContext>).specialty ?? runtime?.specialty ?? null,
+    difficultyTier: (ctx as Partial<GlobalExamContext>).difficultyTier ?? runtime?.difficultyTier ?? "tier2_clinical_judgment",
+    clinicalJudgmentLevel: (ctx as Partial<GlobalExamContext>).clinicalJudgmentLevel ?? runtime?.clinicalJudgmentLevel ?? "clinical_judgment",
+    acuityLevel: (ctx as Partial<GlobalExamContext>).acuityLevel ?? runtime?.acuityLevel ?? "moderate",
   };
   const { country, exam, tier, language, pathwayId, registryKey, terminologyProfile, blueprintId } = merged;
   if (!country?.trim()) throw new ExamContextError(`${label}.country is required`);
@@ -110,5 +141,13 @@ export function examContextAnalyticsProps(
     exam_registry_key: ctx.registryKey,
     terminology_profile: ctx.terminologyProfile,
     measurement_system: ms,
+    exam_type: ctx.examType,
+    nursing_role: ctx.nursingRole,
+    scope_level: ctx.scopeLevel,
+    unit_system: ctx.unitSystem,
+    specialty: ctx.specialty ?? undefined,
+    difficulty_tier: ctx.difficultyTier,
+    clinical_judgment_level: ctx.clinicalJudgmentLevel,
+    acuity_level: ctx.acuityLevel,
   };
 }

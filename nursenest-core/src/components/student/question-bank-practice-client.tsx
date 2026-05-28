@@ -308,7 +308,8 @@ export function QuestionBankPracticeClient({
     () => resolveMeasurementSystemForLearnerPathway(pathwayIdFilter ?? defaultPathwayId, pathwayCountryByPathwayId),
     [pathwayIdFilter, defaultPathwayId, pathwayCountryByPathwayId],
   );
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
+  const activeMeasurementPathwayId = pathwayIdFilter ?? defaultPathwayId ?? null;
 
   const current = questions[idx];
   const total = questions.length;
@@ -758,12 +759,22 @@ export function QuestionBankPracticeClient({
   }, [current, optsCanonical]);
 
   const stemDisplay = useMemo(
-    () => (current ? resolveMeasurementTokens(current.stem, measurementSystem) : ""),
-    [current, measurementSystem],
+    () =>
+      current
+        ? resolveMeasurementTokens(current.stem, measurementSystem, {
+            pathwayId: activeMeasurementPathwayId,
+          })
+        : "",
+    [activeMeasurementPathwayId, current, measurementSystem],
   );
   const optsDisplayClinical = useMemo(
-    () => optsDisplay.map((o) => resolveMeasurementTokens(String(o), measurementSystem)),
-    [optsDisplay, measurementSystem],
+    () =>
+      optsDisplay.map((o) =>
+        resolveMeasurementTokens(String(o), measurementSystem, {
+          pathwayId: activeMeasurementPathwayId,
+        }),
+      ),
+    [activeMeasurementPathwayId, optsDisplay, measurementSystem],
   );
 
   const g = current ? graded[current.id] : undefined;
@@ -772,16 +783,24 @@ export function QuestionBankPracticeClient({
   const gradedRationaleForPanel = useMemo(() => {
     if (!g) return null;
     return {
-      rationale: g.rationale ? resolveMeasurementTokens(g.rationale, measurementSystem) : null,
+      rationale: g.rationale
+        ? resolveMeasurementTokens(g.rationale, measurementSystem, {
+            pathwayId: activeMeasurementPathwayId,
+          })
+        : null,
       rationaleSections: g.rationaleSections
         ? g.rationaleSections.map((s) => ({
             ...s,
-            heading: resolveMeasurementTokens(s.heading, measurementSystem),
-            body: resolveMeasurementTokens(s.body, measurementSystem),
+            heading: resolveMeasurementTokens(s.heading, measurementSystem, {
+              pathwayId: activeMeasurementPathwayId,
+            }),
+            body: resolveMeasurementTokens(s.body, measurementSystem, {
+              pathwayId: activeMeasurementPathwayId,
+            }),
           }))
         : null,
     };
-  }, [g, measurementSystem]);
+  }, [activeMeasurementPathwayId, g, measurementSystem]);
   const rationaleLessonLinksMerged = useMemo(
     () => mergeRationaleLessonLinksWithTopicFallback(g?.rationaleLessonLinks, current?.topic ?? null, pathwayIdFilter),
     [g?.rationaleLessonLinks, current?.topic, pathwayIdFilter],

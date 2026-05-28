@@ -1,9 +1,10 @@
 import type { CountryCode } from "@prisma/client";
 import { ExamFamily } from "@prisma/client";
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { ExamRegistryKey, GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { buildExamPathwayRuntimeMetadata } from "@/lib/exam-context/exam-pathway-metadata";
 
 /** Maps pathway → terminology pack — extend for UK_NMC, AU_NMBA, etc. */
 export type TerminologyProfileId =
@@ -106,6 +107,9 @@ export function getExamRegistryEntryByRegistryKey(key: ExamRegistryKey): ExamReg
 export function buildGlobalExamContext(pathwayId: string | null | undefined, language: string = "en"): GlobalExamContext | null {
   const row = getExamRegistryEntryByPathwayId(pathwayId);
   if (!row) return null;
+  const pathway = getExamPathwayById(row.pathwayId);
+  if (!pathway) return null;
+  const runtime = buildExamPathwayRuntimeMetadata(pathway);
   const lang = language.trim() || "en";
   return {
     country: row.country,
@@ -116,6 +120,14 @@ export function buildGlobalExamContext(pathwayId: string | null | undefined, lan
     registryKey: row.registryKey,
     terminologyProfile: row.terminologyProfile,
     blueprintId: row.blueprintId,
-    measurementSystem: getMeasurementSystemForCountry(row.country),
+    measurementSystem: runtime.unitSystem === "CON" ? "US" : getMeasurementSystemForCountry(row.country),
+    examType: runtime.examType,
+    nursingRole: runtime.nursingRole,
+    scopeLevel: runtime.scopeLevel,
+    unitSystem: runtime.unitSystem,
+    specialty: runtime.specialty,
+    difficultyTier: runtime.difficultyTier,
+    clinicalJudgmentLevel: runtime.clinicalJudgmentLevel,
+    acuityLevel: runtime.acuityLevel,
   };
 }

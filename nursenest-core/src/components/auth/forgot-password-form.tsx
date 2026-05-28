@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
+import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 
 type Props = {
   backToLoginHref: string;
@@ -124,7 +126,7 @@ export function ForgotPasswordForm({
       }}
     >
       <input
-        className="nn-premium-auth-input w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
         type="text"
         name="email"
         inputMode="email"
@@ -133,8 +135,19 @@ export function ForgotPasswordForm({
         autoComplete="email"
         disabled={loading}
       />
-      {error ? <p className="nn-premium-auth-alert rounded-xl px-3 py-2 text-sm text-[var(--semantic-text-primary)]">{error}</p> : null}
-      <button className="nn-premium-auth-primary-button w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
+      {error ? (
+        <AuthMessageBanner
+          tone={authTransitionMessageTone("authentication-error")}
+          stateId="validation-error"
+          title={error}
+        />
+      ) : null}
+      <button
+        className="nn-premium-auth-primary-button w-full rounded-xl px-4 py-2 font-semibold disabled:pointer-events-none disabled:opacity-60"
+        type="submit"
+        disabled={loading}
+        aria-busy={loading}
+      >
         {loading ? sendingLabel : submitLabel}
       </button>
       <Link className="block text-center text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>

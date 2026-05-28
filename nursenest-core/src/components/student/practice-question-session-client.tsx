@@ -114,7 +114,7 @@ export function PracticeQuestionSessionClient({
     () => resolveMeasurementSystemForLearnerPathway(pathwayId, pathwayCountryByPathwayId),
     [pathwayId, pathwayCountryByPathwayId],
   );
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
 
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error" | "summary">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -223,12 +223,12 @@ export function PracticeQuestionSessionClient({
   }, [current, optsCanonical]);
 
   const stemDisplay = useMemo(
-    () => (current ? resolveMeasurementTokens(current.stem, measurementSystem) : ""),
-    [current, measurementSystem],
+    () => (current ? resolveMeasurementTokens(current.stem, measurementSystem, { pathwayId }) : ""),
+    [current, measurementSystem, pathwayId],
   );
   const optsClinical = useMemo(
-    () => optsDisplay.map((o) => resolveMeasurementTokens(String(o), measurementSystem)),
-    [optsDisplay, measurementSystem],
+    () => optsDisplay.map((o) => resolveMeasurementTokens(String(o), measurementSystem, { pathwayId })),
+    [optsDisplay, measurementSystem, pathwayId],
   );
 
   const g = current ? graded[current.id] : undefined;
@@ -443,9 +443,9 @@ export function PracticeQuestionSessionClient({
             return (
               <li key={q.id} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
                 <p className="text-xs font-semibold uppercase text-[var(--semantic-text-muted)]">{q.topic ?? "Question"}</p>
-                <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">{resolveMeasurementTokens(q.stem, measurementSystem)}</p>
+                <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">{resolveMeasurementTokens(q.stem, measurementSystem, { pathwayId })}</p>
                 {gr.rationale ? (
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{resolveMeasurementTokens(gr.rationale, measurementSystem)}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{resolveMeasurementTokens(gr.rationale, measurementSystem, { pathwayId })}</p>
                 ) : null}
                 {gr.clinicalPearl ? (
                   <p className="mt-2 text-sm font-medium text-[var(--semantic-text-primary)]">Key takeaway: {gr.clinicalPearl}</p>
@@ -463,8 +463,8 @@ export function PracticeQuestionSessionClient({
 
   if (!current) return null;
 
-  const rationaleText = g?.rationale ? resolveMeasurementTokens(g.rationale, measurementSystem) : "";
-  const pearl = g?.clinicalPearl ? resolveMeasurementTokens(g.clinicalPearl, measurementSystem) : "";
+  const rationaleText = g?.rationale ? resolveMeasurementTokens(g.rationale, measurementSystem, { pathwayId }) : "";
+  const pearl = g?.clinicalPearl ? resolveMeasurementTokens(g.clinicalPearl, measurementSystem, { pathwayId }) : "";
   const elapsedLabel = `${String(Math.floor(sessionElapsedSec / 60)).padStart(2, "0")}:${String(sessionElapsedSec % 60).padStart(2, "0")}`;
 
   return (
@@ -610,7 +610,7 @@ export function PracticeQuestionSessionClient({
                   ? g.rationaleSections.map((s) => (
                       <div key={s.heading} className="rounded-xl border border-[var(--semantic-border-soft)] p-4 text-sm">
                         <p className="text-xs font-semibold uppercase text-[var(--semantic-text-muted)]">{s.heading}</p>
-                        <p className="mt-2 text-[var(--semantic-text-secondary)]">{resolveMeasurementTokens(s.body, measurementSystem)}</p>
+                        <p className="mt-2 text-[var(--semantic-text-secondary)]">{resolveMeasurementTokens(s.body, measurementSystem, { pathwayId })}</p>
                       </div>
                     ))
                   : null}

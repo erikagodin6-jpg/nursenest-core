@@ -1,4 +1,5 @@
 import type { CountryCode, TierCode } from "@prisma/client";
+import type { ExamPathwayRuntimeMetadata } from "@/lib/exam-context/exam-pathway-metadata";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingLessonDetailHref, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 import type { RecallPrompt, CheckpointQuestion, KeyRecallFact } from "@/lib/lessons/lesson-recall-types";
@@ -326,6 +327,11 @@ export type PathwayLessonRecord = {
   examMeta?: PathwayLessonExamMeta[];
   /** Runtime-selected metadata for the current exam context. */
   activeExamMeta?: PathwayLessonExamMeta;
+  /**
+   * Strict pathway runtime metadata used for lesson routing and curriculum separation.
+   * Derived from the canonical exam pathway registry, not mutable lesson copy.
+   */
+  examSpecificMetadata?: ExamPathwayRuntimeMetadata;
   /**
    * Optional URL for pre-generated lesson-level audio (TTS or studio narration).
    * When present, the LessonAudioCard renders a play control above the lesson article.

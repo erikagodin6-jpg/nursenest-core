@@ -5,6 +5,18 @@
 
 export type PathwayLessonProgressStatus = "not_started" | "in_progress" | "completed";
 
+export type MobilePathwayLessonExamSpecificMetadata = {
+  readonly examType: string;
+  readonly nursingRole: string;
+  readonly country: string;
+  readonly scopeLevel: string;
+  readonly unitSystem: string;
+  readonly specialty: string | null;
+  readonly difficultyTier: string;
+  readonly acuityLevel: string;
+  readonly clinicalJudgmentLevel: string;
+};
+
 export type MobilePathwayLessonListRow = {
   readonly id: string;
   readonly title: string;
@@ -13,6 +25,7 @@ export type MobilePathwayLessonListRow = {
   readonly bodySystem: string | null;
   readonly topicSlug?: string | null;
   readonly pathwayMeta: { readonly pathwayId: string; readonly slug: string };
+  readonly examSpecificMetadata?: MobilePathwayLessonExamSpecificMetadata | null;
 };
 
 export type MobilePathwayLessonsListResponse = {
@@ -62,6 +75,7 @@ export type MobilePathwayLessonRecord = {
   readonly memoryAnchor?: string;
   readonly exams?: readonly string[];
   readonly activeExamMeta?: { readonly exam?: string; readonly yieldLevel?: string };
+  readonly examSpecificMetadata?: MobilePathwayLessonExamSpecificMetadata | null;
 };
 
 export type MobilePathwayLessonDetailResponse = {

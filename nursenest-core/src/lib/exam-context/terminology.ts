@@ -1,5 +1,7 @@
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayRuntimeMetadata } from "@/lib/exam-context/exam-pathway-metadata";
 import type { TerminologyProfileId } from "@/lib/exam-context/exam-registry";
 import { getExamRegistryEntryByPathwayId } from "@/lib/exam-context/exam-registry";
 
@@ -73,6 +75,9 @@ export function getTerminology(key: TerminologyKey, ctx: GlobalExamContext): str
 export function getTerminologyForPathway(key: TerminologyKey, pathwayId: string | null | undefined, language = "en"): string {
   const row = getExamRegistryEntryByPathwayId(pathwayId);
   if (!row) return key;
+  const pathway = getExamPathwayById(row.pathwayId);
+  if (!pathway) return key;
+  const runtime = buildExamPathwayRuntimeMetadata(pathway);
   const ctx: GlobalExamContext = {
     country: row.country,
     exam: row.examKey,
@@ -82,7 +87,15 @@ export function getTerminologyForPathway(key: TerminologyKey, pathwayId: string 
     registryKey: row.registryKey,
     terminologyProfile: row.terminologyProfile,
     blueprintId: row.blueprintId,
-    measurementSystem: getMeasurementSystemForCountry(row.country),
+    measurementSystem: runtime.unitSystem === "CON" ? "US" : getMeasurementSystemForCountry(row.country),
+    examType: runtime.examType,
+    nursingRole: runtime.nursingRole,
+    scopeLevel: runtime.scopeLevel,
+    unitSystem: runtime.unitSystem,
+    specialty: runtime.specialty,
+    difficultyTier: runtime.difficultyTier,
+    clinicalJudgmentLevel: runtime.clinicalJudgmentLevel,
+    acuityLevel: runtime.acuityLevel,
   };
   return getTerminology(key, ctx);
 }

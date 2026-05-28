@@ -1,6 +1,8 @@
 "use client";
 
+import { Suspense } from "react";
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { AuthStateSurface } from "@/components/auth/auth-experience/auth-state-surface";
 import { PremiumAuthShell } from "@/components/auth/premium-auth-shell";
 import { AuthIncidentNotice } from "@/components/marketing/auth-incident-notice";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -28,6 +30,11 @@ export function MarketingForgotPasswordPage() {
       termsHref={withMarketingLocale(locale, "/terms")}
       privacyHref={withMarketingLocale(locale, "/privacy")}
       contactHref={contactHref}
+      stateSurface={
+        <Suspense>
+          <AuthStateSurface />
+        </Suspense>
+      }
     >
       <AuthIncidentNotice contactHref={contactHref} />
       <ForgotPasswordForm

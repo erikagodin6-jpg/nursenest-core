@@ -11,6 +11,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { pathwayLessonAppHubSafetyPrismaWhere } from "@/lib/lessons/app-lessons-hub-pathway-safety-where";
 import { paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver } from "@/lib/lessons/app-lessons-hub-row-renderability";
 import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
+import { getPathwayLessonExamMetadata } from "@/lib/lessons/pathway-lesson-exam-metadata";
 import {
   pathwayLessonsAppListWhereWithTopicFilter,
   visiblePathwayIdsForAppLessons,
@@ -228,6 +229,7 @@ export async function GET(req: Request) {
       bodySystem: r.bodySystem,
       topicSlug: r.topicSlug,
       pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
+      examSpecificMetadata: getPathwayLessonExamMetadata(r.pathwayId),
     }));
 
     let progressByPathwaySlug: Record<string, "not_started" | "in_progress" | "completed"> | null = null;

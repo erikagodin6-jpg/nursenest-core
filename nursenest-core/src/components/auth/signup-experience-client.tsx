@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { AuthSignupPathwayPanel } from "@/components/auth/auth-experience/auth-signup-pathway-panel";
 import { AuthExperienceShell } from "@/components/auth/auth-experience/auth-experience-shell";
+import { AuthStateSurface } from "@/components/auth/auth-experience/auth-state-surface";
 import { SignupForm } from "@/components/auth/signup-form";
 import type { SignupTierValue } from "@/lib/marketing/signup-exam-focus-options";
 
@@ -42,6 +43,11 @@ export function SignupExperienceClient({
       privacyHref={privacyHref}
       contactHref={contactHref}
       mobileEyebrow={mobileEyebrow}
+      stateSurface={
+        <Suspense>
+          <AuthStateSurface />
+        </Suspense>
+      }
       visualPanel={<AuthSignupPathwayPanel tier={tier} onTierSelect={setTier} />}
     >
       <Suspense fallback={<div className="mt-6 h-64 animate-pulse rounded-xl bg-muted/40" aria-hidden />}>

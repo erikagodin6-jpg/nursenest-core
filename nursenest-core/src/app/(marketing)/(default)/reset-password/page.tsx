@@ -7,8 +7,7 @@ import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-al
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 
-// Converted to static - auth logic handled client-side
-// No server-side session dependency, safe to remove force-dynamic
+export const dynamic = "force-dynamic";
 
 const RESET_PASSWORD_META_KEYS = ["pages.resetPassword.metaTitle", "pages.resetPassword.metaDescription"] as const;
 

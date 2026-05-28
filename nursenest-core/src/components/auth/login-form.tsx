@@ -14,6 +14,7 @@ import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-messag
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
 import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
+import { isPlaceholderAuthCopy } from "@/lib/ui/is-placeholder-auth-copy";
 
 type CredentialSignInResult = {
   error?: string;
@@ -273,6 +274,9 @@ export function LoginForm({
   }
 
   const alreadySignedIn = status === "authenticated";
+  const signUpLabel = isPlaceholderAuthCopy(t("pages.login.signUpCta"), "pages.login.signUpCta")
+    ? "Create account"
+    : t("pages.login.signUpCta");
 
   return (
     <form
@@ -401,7 +405,7 @@ export function LoginForm({
           <p className="text-center text-sm text-muted-foreground">
             {t("pages.login.signUpPrompt")}{" "}
             <Link href={signupHrefWithResume} className="font-semibold text-primary underline-offset-4 hover:underline">
-              {t("pages.login.signUpCta")}
+              {signUpLabel}
             </Link>
           </p>
         </>

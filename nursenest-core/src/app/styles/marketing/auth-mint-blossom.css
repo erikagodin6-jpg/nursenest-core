@@ -6,7 +6,7 @@
    ========================================================================== */
 
 html[data-theme="mint-blossom"] .nn-premium-auth-system {
-  --nn-auth-accent-primary: var(--theme-brand-strong, #ff8fb8);
+  --nn-auth-accent-primary: var(--theme-brand-strong, #e88cab);
   --nn-auth-accent-secondary: var(--theme-accent-foreground, #5eb8f0);
   --nn-auth-accent-warm: var(--theme-brand-accent, #b7efd1);
   --nn-auth-accent-success: #6ec9a0;
@@ -53,7 +53,7 @@ html[data-theme="mint-blossom"] .nn-premium-auth-theme-pill {
 }
 
 html[data-theme="mint-blossom"] .nn-premium-auth-eyebrow {
-  color: color-mix(in srgb, #6ec9a0 72%, #ff8fb8);
+  color: color-mix(in srgb, #6ec9a0 72%, #e88cab);
 }
 
 html[data-theme="mint-blossom"] .nn-premium-auth-ecosystem-grid > span:nth-child(3n + 1) {
@@ -74,7 +74,7 @@ html[data-theme="mint-blossom"] .nn-premium-auth-ecosystem-grid > span:nth-child
 html[data-theme="mint-blossom"] .nn-premium-auth-pathway-rail > span:first-child {
   border-color: color-mix(in srgb, #ffb7d5 38%, var(--semantic-border-soft));
   background: color-mix(in srgb, #ffc7de 35%, var(--semantic-surface));
-  box-shadow: 0 0 0 1px color-mix(in srgb, #ff8fb8 22%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, #e88cab 22%, transparent);
 }
 
 html[data-theme="mint-blossom"] .nn-premium-auth-pathway-rail > span:nth-child(2) {
@@ -93,25 +93,25 @@ html[data-theme="mint-blossom"] .nn-premium-auth-input {
 }
 
 html[data-theme="mint-blossom"] .nn-premium-auth-input:focus-visible {
-  outline-color: color-mix(in srgb, #5eb8f0 38%, #ff8fb8);
+  outline-color: color-mix(in srgb, #5eb8f0 38%, #e88cab);
 }
 
 html[data-theme="mint-blossom"] .nn-premium-auth-primary-button {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, #ffb7d5 92%, #ffffff),
-    color-mix(in srgb, #ff8fb8 88%, #ffb7d5)
+    color-mix(in srgb, #e88cab 88%, #ffb7d5)
   ) !important;
   color: var(--theme-heading-text) !important;
   border: 1px solid color-mix(in srgb, #ffb7d5 35%, transparent);
   box-shadow:
-    0 16px 34px -22px color-mix(in srgb, #ff8fb8 45%, transparent),
+    0 16px 34px -22px color-mix(in srgb, #e88cab 45%, transparent),
     0 8px 24px -16px color-mix(in srgb, #b7efd1 22%, transparent);
 }
 
 html[data-theme="mint-blossom"] .nn-premium-auth-primary-button:not(:disabled):hover {
   box-shadow:
-    0 20px 38px -20px color-mix(in srgb, #ff8fb8 52%, transparent),
+    0 20px 38px -20px color-mix(in srgb, #e88cab 52%, transparent),
     0 10px 28px -14px color-mix(in srgb, #5eb8f0 18%, transparent);
 }
 
@@ -286,7 +286,7 @@ html[data-theme="mint-blossom"] [data-nn-footer-layout="marketing"] .nn-footer-p
   place-items: center;
   font-size: 0.78rem;
   font-weight: 800;
-  color: color-mix(in srgb, #ff8fb8 88%, #3a3142);
+  color: color-mix(in srgb, #e88cab 88%, #3a3142);
   background: color-mix(in srgb, #ffc7de 35%, #ffffff);
 }
 

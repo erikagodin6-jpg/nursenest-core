@@ -17,6 +17,7 @@ import {
   getAuthSessionJwtFromRequest,
   sessionJwtHasUserIdentity,
 } from "@/lib/auth/nextauth-request-jwt";
+import { isProtectedLearnerAuthPath } from "@/lib/auth/protected-learner-surfaces";
 
 const edgeAuthSigningSecret = resolveAuthSecretFromEnv().secret ?? undefined;
 
@@ -66,10 +67,6 @@ async function hasReadableSessionJwt(request: NextRequest): Promise<boolean> {
   } catch {
     return false;
   }
-}
-
-function isAppPath(pathname: string): boolean {
-  return pathname === "/app" || pathname.startsWith("/app/");
 }
 
 function isAdminPath(pathname: string): boolean {
@@ -123,7 +120,7 @@ export const { auth: middlewareAuth } = NextAuth({
       const pathname = request.nextUrl.pathname;
       const signedInFromAuth = hasSignedInUser(auth);
 
-      if (isAppPath(pathname)) {
+      if (isProtectedLearnerAuthPath(pathname)) {
         if (signedInFromAuth) return true;
         // Match admin/internal: honor a readable session JWT when Edge `auth` is empty (cookie/header parity).
         return hasReadableSessionJwt(request as NextRequest);

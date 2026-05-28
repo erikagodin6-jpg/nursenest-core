@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { AuthStateSurface } from "@/components/auth/auth-experience/auth-state-surface";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { PremiumAuthShell } from "@/components/auth/premium-auth-shell";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -22,6 +24,11 @@ export async function MarketingResetPasswordPage({
       termsHref={withMarketingLocale(locale, "/terms")}
       privacyHref={withMarketingLocale(locale, "/privacy")}
       contactHref={withMarketingLocale(locale, "/contact")}
+      stateSurface={
+        <Suspense>
+          <AuthStateSurface />
+        </Suspense>
+      }
     >
       <ResetPasswordForm
         token={token}

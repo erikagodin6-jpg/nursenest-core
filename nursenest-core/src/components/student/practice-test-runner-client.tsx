@@ -360,16 +360,17 @@ export function PracticeTestRunnerClient({
     () => resolveMeasurementSystemForLearnerPathway(activePathwayId, pathwayCountryByPathwayId),
     [activePathwayId, pathwayCountryByPathwayId],
   );
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
   const resolveMeasureText = useCallback(
-    (text: string) => resolveMeasurementTokens(text, measurementSystem),
-    [measurementSystem],
+    (text: string) => resolveMeasurementTokens(text, measurementSystem, { pathwayId: activePathwayId }),
+    [activePathwayId, measurementSystem],
   );
   const examUnitsToggle = (
     <ExamMeasurementUnitToggle
       fallbackSystem={fallbackMeasurementSystem}
       syncToProfile={Boolean(userId)}
       disabled={saving || qLoading}
+      locked
     />
   );
   const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);

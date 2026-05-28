@@ -9,6 +9,8 @@ type Props = {
   searchParams: Promise<{ token?: string }>;
 };
 
+export const dynamic = "force-dynamic";
+
 const RESET_PASSWORD_META_KEYS = ["pages.resetPassword.metaTitle", "pages.resetPassword.metaDescription"] as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

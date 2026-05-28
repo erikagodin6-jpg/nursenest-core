@@ -196,7 +196,7 @@ export function ActiveStudySession({
       stripeTier: pathway?.stripeTier,
     });
   }, [sessionPathwayIdEarly]);
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
 
   const [sessionCards, setSessionCards] = useState(deduped);
   const [index, setIndex] = useState(0);
@@ -458,7 +458,7 @@ export function ActiveStudySession({
             <span>Questions</span>
             <strong>{index + 1} of {sessionCards.length}</strong>
           </div>
-          <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} />
+          <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} locked />
           <button
             type="button"
             className="nn-flashcard-shell-action"

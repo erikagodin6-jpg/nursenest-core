@@ -257,12 +257,13 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.doesNotMatch(homeClient, /dynamic\([^)]*premium-homepage-trust/);
   });
 
-  it("SiteHeader shows guest CTAs immediately without a session-loading skeleton", () => {
+  it("SiteHeader reserves auth chrome while session hydrates instead of painting guest CTAs", () => {
     const header = source("src/components/layout/site-header.tsx");
 
-    // The skeleton pulse placeholders must be absent — they caused CLS when session resolved.
-    // Verified fix: guest buttons (Log In / Start Free) render on first paint for Lighthouse.
-    assert.doesNotMatch(header, /isSessionPending\s*\?\s*\(/);
+    // Auth correctness wins over guest-CTA first paint: logged-in learners must not see
+    // logged-out navigation while the marketing SessionProvider validates cookies.
+    assert.match(header, /isSessionPending\s*\?\s*\(/);
+    assert.match(header, /Checking account status/);
     // ThemePicker and MarketingLanguagePreferenceList must be dynamically imported (mobile-drawer
     // only — keeping their code out of the initial JS bundle reduces TBT).
     assert.match(header, /ThemePickerLazy/);

@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
+import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 
 type Props = {
   token: string;
@@ -90,9 +92,18 @@ export function ResetPasswordForm({
   }
 
   return (
-    <form action={onSubmit} className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-form="reset-password">
+    <form
+      className="nn-premium-auth-form mt-6 space-y-4"
+      data-nn-premium-auth-form="reset-password"
+      method="post"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (loading) return;
+        void onSubmit(new FormData(e.currentTarget));
+      }}
+    >
       <input
-        className="nn-premium-auth-input w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
         type="password"
         name="password"
         placeholder={passwordLabel}
@@ -102,7 +113,7 @@ export function ResetPasswordForm({
         disabled={loading}
       />
       <input
-        className="nn-premium-auth-input w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
         type="password"
         name="confirm"
         placeholder={confirmLabel}
@@ -111,8 +122,19 @@ export function ResetPasswordForm({
         autoComplete="new-password"
         disabled={loading}
       />
-      {error ? <p className="nn-premium-auth-alert rounded-xl px-3 py-2 text-sm text-[var(--semantic-text-primary)]">{error}</p> : null}
-      <button className="nn-premium-auth-primary-button w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
+      {error ? (
+        <AuthMessageBanner
+          tone={authTransitionMessageTone("authentication-error")}
+          stateId="validation-error"
+          title={error}
+        />
+      ) : null}
+      <button
+        className="nn-premium-auth-primary-button w-full rounded-xl px-4 py-2 font-semibold disabled:pointer-events-none disabled:opacity-60"
+        type="submit"
+        disabled={loading}
+        aria-busy={loading}
+      >
         {loading ? savingLabel : submitLabel}
       </button>
     </form>

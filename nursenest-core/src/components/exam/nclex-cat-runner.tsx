@@ -261,7 +261,7 @@ export function NclexCatRunner({
     () => resolveMeasurementSystemForLearnerPathway(pathwayId, pathwayCountryByPathwayId),
     [pathwayId, pathwayCountryByPathwayId],
   );
-  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem, null, { locked: true });
   const governExamCopy = useCallback(
     (text: string) =>
       governMeasurementSurfaceCopy(text, {
@@ -812,6 +812,7 @@ export function NclexCatRunner({
           fallbackSystem={fallbackMeasurementSystem}
           syncToProfile={Boolean(userId)}
           disabled={examPrimaryBusy || isTransitioning}
+          locked
         />
       }
     >

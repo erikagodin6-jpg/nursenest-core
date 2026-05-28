@@ -8,7 +8,24 @@ import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { getNavChrome, getNavChromeVars } from "@/lib/theme/nav-chrome";
-import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
+import {
+  BarChart3,
+  Bell,
+  BookOpenCheck,
+  Bookmark,
+  ChevronDown,
+  CreditCard,
+  HelpCircle,
+  History,
+  LayoutDashboard,
+  LineChart,
+  MapPin,
+  Menu,
+  Palette,
+  Settings,
+  User,
+  X,
+} from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
@@ -82,6 +99,15 @@ const HEADER_DESKTOP_LOGIN_OUTLINE_CLASS =
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
+type AccountMenuItem = {
+  label: string;
+  href: string;
+  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+};
+type AccountMenuSection = {
+  label: string;
+  items: AccountMenuItem[];
+};
 
 type EngagementNudgePayload = {
   kind?: string;
@@ -126,6 +152,307 @@ function HeaderNavAnchor({ href, onClick, ...props }: HeaderNavAnchorProps) {
         onClick?.(event);
       }}
     />
+  );
+}
+
+function accountDisplayName(user: { name?: string | null; email?: string | null } | null | undefined): string {
+  const rawName = user?.name?.trim();
+  if (rawName) return rawName;
+  const emailName = user?.email?.split("@")[0]?.replace(/[._-]+/g, " ")?.trim();
+  return emailName || "NurseNest learner";
+}
+
+function accountFirstName(user: { name?: string | null; email?: string | null } | null | undefined): string {
+  return accountDisplayName(user).split(/\s+/)[0] || "Account";
+}
+
+function accountInitials(user: { name?: string | null; email?: string | null } | null | undefined): string {
+  const display = accountDisplayName(user);
+  const parts = display.split(/\s+/).filter(Boolean);
+  const initials = parts.length >= 2 ? `${parts[0][0]}${parts[1][0]}` : display.slice(0, 2);
+  return initials.toUpperCase();
+}
+
+function AccountAvatar({ user, className = "" }: { user: { name?: string | null; email?: string | null; image?: string | null } | null | undefined; className?: string }) {
+  const initials = accountInitials(user);
+  const image = user?.image?.trim();
+  if (image) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={image} alt="" className={`h-8 w-8 rounded-full object-cover ${className}`} />;
+  }
+  return (
+    <span
+      className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_18%,white)] text-xs font-semibold text-[var(--semantic-brand)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_20%,transparent)] ${className}`}
+      aria-hidden
+    >
+      {initials}
+    </span>
+  );
+}
+
+function buildAccountMenuSections(): AccountMenuSection[] {
+  return [
+    {
+      label: "Account",
+      items: [
+        { label: "Profile", href: "/app/account/personal", icon: User },
+        { label: "Settings", href: "/app/account/settings", icon: Settings },
+        { label: "Notifications", href: "/app/account/motivation", icon: Bell },
+        { label: "Appearance", href: "/app/account/study-preferences", icon: Palette },
+      ],
+    },
+    {
+      label: "Learning",
+      items: [
+        { label: "Dashboard", href: "/app", icon: LayoutDashboard },
+        { label: "Study Analytics", href: "/app/account/analytics", icon: BarChart3 },
+        { label: "Progress Report Card", href: "/app/account/report-card", icon: LineChart },
+        { label: "Study History", href: "/app/account/study-history", icon: History },
+        { label: "Saved Flashcards", href: "/app/account/review-queue", icon: BookOpenCheck },
+        { label: "Bookmarks", href: "/app/account/notes", icon: Bookmark },
+      ],
+    },
+    {
+      label: "Subscription",
+      items: [
+        { label: "Billing", href: "/app/account/billing", icon: CreditCard },
+        { label: "Subscription Plan", href: "/app/account/billing", icon: CreditCard },
+        { label: "Manage Membership", href: "/app/account/billing", icon: CreditCard },
+        { label: "Upgrade / Premium", href: "/pricing", icon: CreditCard },
+      ],
+    },
+    {
+      label: "Support",
+      items: [
+        { label: "Help Center", href: "/faq", icon: HelpCircle },
+        { label: "Contact Support", href: "/app/account/support", icon: HelpCircle },
+        { label: "Report a Problem", href: "/app/account/support", icon: HelpCircle },
+      ],
+    },
+  ];
+}
+
+function UserAccountMenu({
+  user,
+  open,
+  onOpenChange,
+  sections,
+  displayName,
+  firstName,
+  subscriptionLabel,
+  learnerExamBadge,
+  locale,
+  localizeHref,
+  onNavigate,
+}: {
+  user: { name?: string | null; email?: string | null; image?: string | null } | null | undefined;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  sections: AccountMenuSection[];
+  displayName: string;
+  firstName: string;
+  subscriptionLabel: string;
+  learnerExamBadge: string | null;
+  locale: string;
+  localizeHref: (href: string) => string;
+  onNavigate: () => void;
+}) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const menuId = "nn-user-account-menu";
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: MouseEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) return;
+      onOpenChange(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onOpenChange(false);
+    };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onOpenChange, open]);
+
+  return (
+    <div ref={rootRef} className="relative shrink-0">
+      <button
+        type="button"
+        className="nn-header-account-trigger gap-2 px-2.5 pr-2 sm:px-3"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={open ? menuId : undefined}
+        onClick={() => onOpenChange(!open)}
+      >
+        <AccountAvatar user={user} />
+        <span className="hidden max-w-[8.5rem] truncate text-sm font-semibold md:inline 2xl:max-w-[10rem]">
+          {firstName}
+        </span>
+        <ChevronDown className={`h-4 w-4 opacity-70 transition-transform duration-150 ${open ? "rotate-180" : ""}`} aria-hidden />
+      </button>
+      {open ? (
+        <div
+          id={menuId}
+          role="menu"
+          aria-label="Account menu"
+          className="absolute right-0 top-[calc(100%+0.6rem)] z-[180] w-[min(22rem,calc(100vw-1.5rem))] origin-top-right overflow-hidden rounded-2xl border border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[0_24px_70px_-35px_rgba(15,23,42,0.45)] ring-1 ring-black/5 animate-[nn-mega-panel-enter_0.16s_ease-out]"
+        >
+          <div className="border-b border-[var(--header-border)] bg-[color-mix(in_srgb,var(--nav-hover)_70%,transparent)] p-3.5">
+            <div className="flex items-center gap-3">
+              <AccountAvatar user={user} className="h-10 w-10 text-sm" />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold">{displayName}</p>
+                {user?.email ? <p className="truncate text-xs text-[var(--nav-muted)]">{user.email}</p> : null}
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              <span className="rounded-full border border-[var(--nav-border)] bg-[var(--nav-bg)] px-2 py-1 text-[11px] font-semibold text-[var(--nav-fg)]">
+                {subscriptionLabel}
+              </span>
+              {learnerExamBadge ? (
+                <span className="rounded-full border border-[var(--nav-border)] bg-[var(--nav-bg)] px-2 py-1 text-[11px] font-semibold text-[var(--nav-muted)]">
+                  {learnerExamBadge}
+                </span>
+              ) : null}
+            </div>
+          </div>
+          <div className="max-h-[min(72vh,36rem)] overflow-y-auto p-2">
+            {sections.map((section) => (
+              <div key={section.label} className="py-1.5">
+                <p className="px-2.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--nav-muted)]">
+                  {section.label}
+                </p>
+                <div className="grid gap-0.5">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={`${section.label}-${item.label}`}
+                        href={localizeHref(item.href)}
+                        role="menuitem"
+                        className="flex min-h-9 items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                        onClick={() => {
+                          onNavigate();
+                          onOpenChange(false);
+                        }}
+                      >
+                        <Icon className="h-4 w-4 shrink-0 text-[var(--nav-muted)]" aria-hidden />
+                        <span className="truncate">{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-[var(--header-border)] p-2">
+            <SignOutButton
+              role="menuitem"
+              className="flex min-h-10 w-full items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-semibold text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+              onBeforeSignOut={() => {
+                onNavigate();
+                onOpenChange(false);
+              }}
+              redirectTo={withMarketingLocale(locale, "/login")}
+            />
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function MobileUserAccountSection({
+  user,
+  sections,
+  displayName,
+  subscriptionLabel,
+  learnerExamBadge,
+  locale,
+  localizeHref,
+  onNavigate,
+  includeAdminLink,
+}: {
+  user: { name?: string | null; email?: string | null; image?: string | null } | null | undefined;
+  sections: AccountMenuSection[];
+  displayName: string;
+  subscriptionLabel: string;
+  learnerExamBadge: string | null;
+  locale: string;
+  localizeHref: (href: string) => string;
+  onNavigate: () => void;
+  includeAdminLink?: boolean;
+}) {
+  return (
+    <div className="rounded-2xl border border-[var(--nav-border)] bg-[color-mix(in_srgb,var(--nav-hover)_52%,transparent)] p-2.5">
+      <div className="mb-2.5 flex items-center gap-3 px-1">
+        <AccountAvatar user={user} className="h-11 w-11 text-sm" />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold">{displayName}</p>
+          {user?.email ? <p className="truncate text-xs text-[var(--nav-muted)]">{user.email}</p> : null}
+          <div className="mt-1 flex flex-wrap gap-1">
+            <span className="rounded-full bg-[var(--nav-bg)] px-2 py-0.5 text-[10px] font-semibold text-[var(--nav-muted)]">
+              {subscriptionLabel}
+            </span>
+            {learnerExamBadge ? (
+              <span className="rounded-full bg-[var(--nav-bg)] px-2 py-0.5 text-[10px] font-semibold text-[var(--nav-muted)]">
+                {learnerExamBadge}
+              </span>
+            ) : null}
+          </div>
+        </div>
+      </div>
+      {includeAdminLink ? (
+        <Link
+          href={ADMIN_DASHBOARD_HREF}
+          prefetch={false}
+          className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 inline-flex min-h-[48px] w-full items-center justify-center rounded-full px-4 py-3 text-sm font-medium`}
+          onClick={(event) => {
+            onNavigate();
+            navigateAdminDashboardHard(event);
+          }}
+          data-nn-mobile-utility-link
+        >
+          Admin
+        </Link>
+      ) : null}
+      <div className="grid gap-2">
+        {sections.map((section) => (
+          <div key={section.label} className="rounded-xl bg-[var(--nav-bg)] p-2">
+            <p className="px-1 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--nav-muted)]">
+              {section.label}
+            </p>
+            <div className="grid gap-1">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={`${section.label}-${item.label}`}
+                    href={localizeHref(item.href)}
+                    className="flex min-h-[44px] items-center gap-2.5 rounded-lg px-2 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                    onClick={onNavigate}
+                    data-nn-mobile-utility-link
+                  >
+                    <Icon className="h-4 w-4 shrink-0 text-[var(--nav-muted)]" aria-hidden />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      <SignOutButton
+        className="nav-item mt-2 w-full min-h-[48px] rounded-full border border-[var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+        onBeforeSignOut={onNavigate}
+        redirectTo={withMarketingLocale(locale, "/login")}
+      />
+    </div>
   );
 }
 
@@ -309,6 +636,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [MobileContextDrawerMod, setMobileContextDrawerMod] = useState<ComponentType<
     MobileContextDrawerProps
   > | null>(null);
@@ -432,6 +760,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
   useEffect(() => {
     queueMicrotask(() => {
       setMobileLangOpen(false);
+      setAccountMenuOpen(false);
     });
   }, [pathname, locale, region]);
 
@@ -520,6 +849,14 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
     isMarketingEntitledLearner && user
       ? examIndicatorLabelSync(t, user.country, user.tier as LearnerTier, alliedProfessionAbbrev)
       : null;
+  const accountMenuSections = useMemo(() => buildAccountMenuSections(), []);
+  const accountName = accountDisplayName(user);
+  const accountFirst = accountFirstName(user);
+  const subscriptionLabel = isAdminAuthenticated
+    ? "Staff account"
+    : activeNav.entitlement === "entitled"
+      ? "Premium Student"
+      : "Free account";
   const activeProfession: string = isLearnerRole && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
     : "rn";
@@ -716,15 +1053,20 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   </span>
                 ) : null}
               </div>
-              {/* Guests: keep logo + auth CTAs adjacent; settings/hamburger stay trailing (justify-between).
-                  CLS guard: show guest buttons immediately (including during session load) — the SSR and
-                  initial client render both have isAuthenticated=false (session is "loading" on first render),
-                  so the DOM matches without a loading→guest layout shift. Authenticated users see a brief
-                  guest→authenticated swap after useSession resolves, which is a one-time visual update, not CLS. */}
-              {!isAuthenticated ? (
+              {/* Keep auth chrome reserved while the session hydrates. Never paint guest CTAs while
+                  `useSession()` is still validating an existing cookie. */}
+              {isSessionPending ? (
                 <div
                   className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2"
-                  aria-busy={isSessionPending || undefined}
+                  aria-busy="true"
+                  aria-label="Checking account status"
+                >
+                  <span className="inline-flex min-h-[44px] flex-1 rounded-full border border-[var(--nav-border)] bg-[var(--nav-hover)] opacity-40 sm:w-20 sm:flex-none" />
+                  <span className="inline-flex min-h-[44px] flex-1 rounded-full border border-[var(--nav-border)] bg-[var(--nav-hover)] opacity-40 sm:w-24 sm:flex-none" />
+                </div>
+              ) : !isAuthenticated ? (
+                <div
+                  className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2"
                 >
                   <HeaderNavAnchor
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
@@ -913,9 +1255,17 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   />
                 </div>
               ) : null}
-              {/* CLS guard: show guest buttons immediately during session load. */}
-              {!isAuthenticated ? (
-                <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
+              {isSessionPending ? (
+                <div
+                  className="flex shrink-0 items-center gap-2"
+                  aria-busy="true"
+                  aria-label="Checking account status"
+                >
+                  <span className="inline-flex h-[38px] w-[74px] rounded-full border border-[var(--nav-border)] bg-[var(--nav-hover)] opacity-40" />
+                  <span className="inline-flex h-[42px] w-[96px] rounded-full border border-[var(--nav-border)] bg-[var(--nav-hover)] opacity-40" />
+                </div>
+              ) : !isAuthenticated ? (
+                <div className="flex shrink-0 items-center gap-2">
                   <HeaderNavAnchor
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                     className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
@@ -947,9 +1297,18 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
+                  <UserAccountMenu
+                    user={user}
+                    open={accountMenuOpen}
+                    onOpenChange={setAccountMenuOpen}
+                    sections={accountMenuSections}
+                    displayName={accountName}
+                    firstName={accountFirst}
+                    subscriptionLabel={subscriptionLabel}
+                    learnerExamBadge={learnerExamBadge}
+                    locale={locale}
+                    localizeHref={localizeHref}
+                    onNavigate={closeMegaBeforeAuthNav}
                   />
                 </div>
               ) : isMarketingEntitledLearner ? (
@@ -960,17 +1319,18 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
-                  <Link
-                    href="/app/account/overview"
-                    className="nn-header-account-trigger gap-1.5 px-2.5 sm:px-3"
-                    aria-label={formatTitleCase(t("nav.account"), locale)}
-                  >
-                    <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
-                    <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
-                  </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
+                  <UserAccountMenu
+                    user={user}
+                    open={accountMenuOpen}
+                    onOpenChange={setAccountMenuOpen}
+                    sections={accountMenuSections}
+                    displayName={accountName}
+                    firstName={accountFirst}
+                    subscriptionLabel={subscriptionLabel}
+                    learnerExamBadge={learnerExamBadge}
+                    locale={locale}
+                    localizeHref={localizeHref}
+                    onNavigate={closeMegaBeforeAuthNav}
                   />
                 </div>
               ) : (
@@ -985,9 +1345,18 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
+                  <UserAccountMenu
+                    user={user}
+                    open={accountMenuOpen}
+                    onOpenChange={setAccountMenuOpen}
+                    sections={accountMenuSections}
+                    displayName={accountName}
+                    firstName={accountFirst}
+                    subscriptionLabel={subscriptionLabel}
+                    learnerExamBadge={learnerExamBadge}
+                    locale={locale}
+                    localizeHref={localizeHref}
+                    onNavigate={closeMegaBeforeAuthNav}
                   />
                 </div>
               )}
@@ -1137,7 +1506,16 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
 
               {/* ── Section 1: Account / Utility ── */}
               <div className="flex flex-col gap-2" data-nn-mobile-section="account">
-                {!isAuthenticated ? (
+                {isSessionPending ? (
+                  <div
+                    className="grid gap-2"
+                    aria-busy="true"
+                    aria-label="Checking account status"
+                  >
+                    <span className="inline-flex min-h-[48px] rounded-full border border-[var(--nav-border)] bg-[var(--nav-hover)] opacity-40" />
+                    <span className="inline-flex min-h-[46px] rounded-full border border-[var(--nav-border)] bg-[var(--nav-hover)] opacity-40" />
+                  </div>
+                ) : !isAuthenticated ? (
                   <>
                     <HeaderNavAnchor
                       href={guestMarketingSignupHref}
@@ -1160,28 +1538,20 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     </HeaderNavAnchor>
                   </>
                 ) : isAdminAuthenticated ? (
-                  <>
-                    <Link
-                      href={ADMIN_DASHBOARD_HREF}
-                      prefetch={false}
-                      className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-full px-4 py-3 text-sm font-medium`}
-                      onClick={(e) => { closeMegaBeforeAuthNav(); scheduleMobileDrawerClose(); navigateAdminDashboardHard(e); }}
-                      data-nn-mobile-utility-link
-                    >
-                      {formatTitleCase(t("nav.admin"), locale)}
-                    </Link>
-                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
-                      {formatTitleCase(t("nav.account"), locale)}
-                    </Link>
-                    <SignOutButton
-                      className="nav-item mt-1 w-full min-h-[48px] rounded-full border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={scheduleMobileDrawerClose}
-                      redirectTo={withMarketingLocale(locale, "/login")}
-                    />
-                  </>
+                  <MobileUserAccountSection
+                    user={user}
+                    sections={accountMenuSections}
+                    displayName={accountName}
+                    subscriptionLabel={subscriptionLabel}
+                    learnerExamBadge={learnerExamBadge}
+                    locale={locale}
+                    localizeHref={localizeHref}
+                    onNavigate={() => {
+                      closeMegaBeforeAuthNav();
+                      scheduleMobileDrawerClose();
+                    }}
+                    includeAdminLink
+                  />
                 ) : isMarketingEntitledLearner ? (
                   <>
                     {learnerExamBadge ? (
@@ -1197,16 +1567,18 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     >
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                     </Link>
-                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
-                      {formatTitleCase(t("nav.account"), locale)}
-                    </Link>
-                    <SignOutButton
-                      className="nav-item mt-1 w-full min-h-[48px] rounded-full border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={scheduleMobileDrawerClose}
-                      redirectTo={withMarketingLocale(locale, "/login")}
+                    <MobileUserAccountSection
+                      user={user}
+                      sections={accountMenuSections}
+                      displayName={accountName}
+                      subscriptionLabel={subscriptionLabel}
+                      learnerExamBadge={learnerExamBadge}
+                      locale={locale}
+                      localizeHref={localizeHref}
+                      onNavigate={() => {
+                        closeMegaBeforeAuthNav();
+                        scheduleMobileDrawerClose();
+                      }}
                     />
                   </>
                 ) : (
@@ -1219,16 +1591,18 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     >
                       {formatTitleCase(t("nav.pricing"), locale)}
                     </Link>
-                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
-                      {formatTitleCase(t("nav.account"), locale)}
-                    </Link>
-                    <SignOutButton
-                      className="nav-item mt-1 w-full min-h-[48px] rounded-full border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={scheduleMobileDrawerClose}
-                      redirectTo={withMarketingLocale(locale, "/login")}
+                    <MobileUserAccountSection
+                      user={user}
+                      sections={accountMenuSections}
+                      displayName={accountName}
+                      subscriptionLabel={subscriptionLabel}
+                      learnerExamBadge={learnerExamBadge}
+                      locale={locale}
+                      localizeHref={localizeHref}
+                      onNavigate={() => {
+                        closeMegaBeforeAuthNav();
+                        scheduleMobileDrawerClose();
+                      }}
                     />
                   </>
                 )}

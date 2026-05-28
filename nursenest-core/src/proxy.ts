@@ -10,6 +10,10 @@ import {
   sessionJwtHasUserIdentity,
   type SessionJwtPayload,
 } from "@/lib/auth/nextauth-request-jwt";
+import {
+  isProtectedLearnerApiPath,
+  isProtectedLearnerAuthPath,
+} from "@/lib/auth/protected-learner-surfaces";
 
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import {
@@ -47,6 +51,55 @@ function loadAuthProxyDeps() {
       }));
   }
   return authProxyDepsPromise;
+}
+
+function loginRedirectForProtectedPath(request: NextRequest): NextResponse {
+  const url = request.nextUrl.clone();
+  const callbackUrl = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+  url.pathname = "/login";
+  url.search = "";
+  url.searchParams.set("callbackUrl", callbackUrl);
+  return NextResponse.redirect(url);
+}
+
+function unauthorizedApiResponse(): NextResponse {
+  return NextResponse.json(
+    { error: "Unauthorized", code: "unauthorized" },
+    {
+      status: 401,
+      headers: {
+        "Cache-Control": "private, no-store, max-age=0",
+      },
+    },
+  );
+}
+
+async function hasReadableProxySessionJwt(request: NextRequest): Promise<boolean> {
+  const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+  if (!secret) return false;
+
+  try {
+    const { token } = await readAuthSessionJwtWithMeta(request, secret);
+    return sessionJwtHasUserIdentity(
+      token && typeof token === "object" ? (token as SessionJwtPayload) : null,
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function failClosedProtectedLearnerRequest(request: NextRequest): Promise<NextResponse | null> {
+  const pathname = request.nextUrl.pathname;
+  if (!isProtectedLearnerAuthPath(pathname)) return null;
+
+  const hasSession = await hasReadableProxySessionJwt(request);
+  if (hasSession) return null;
+
+  if (isProtectedLearnerApiPath(pathname)) {
+    return unauthorizedApiResponse();
+  }
+
+  return loginRedirectForProtectedPath(request);
 }
 
 function ensureCorrelationId(request: NextRequest): NextRequest {
@@ -181,6 +234,11 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 
     const forwarded = new NextRequest(req.url, { headers });
 
+    if (!hasConfiguredAuthSecret()) {
+      const protectedDeny = await failClosedProtectedLearnerRequest(forwarded);
+      if (protectedDeny) return protectedDeny;
+    }
+
     const { runAuthMiddleware } = await loadAuthProxyDeps();
 
     let res: Response | null = null;
@@ -194,6 +252,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const correlationId = headers.get(NN_CORRELATION_HEADER) ?? randomUUID();
 
     if (!res) {
+      const protectedDeny = await failClosedProtectedLearnerRequest(forwarded);
+      if (protectedDeny) return protectedDeny;
+
       const adminRedirect = await enforceAdmin(forwarded);
       if (adminRedirect) return adminRedirect;
 
@@ -210,6 +271,12 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     }
 
     if (res.status >= 300 && res.status < 400) {
+      if (isProtectedLearnerApiPath(pathname)) {
+        const unauthorized = unauthorizedApiResponse();
+        unauthorized.headers.set(NN_CORRELATION_HEADER, correlationId);
+        return unauthorized;
+      }
+
       const { maybeEnhanceSessionExpiredLoginRedirect } = await import(
         "@/lib/auth/session-expired-redirect"
       );

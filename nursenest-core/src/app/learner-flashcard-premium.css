@@ -4908,3 +4908,122 @@ html:has([data-nn-flashcard-study-session]) .nn-learner-app main {
     max-height: min(38dvh, 22rem) !important;
   }
 }
+
+/* Flashcard header alignment hardening: polish only, no card/panel geometry changes. */
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar {
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta {
+  align-items: center !important;
+  column-gap: clamp(0.38rem, 0.7vw, 0.66rem) !important;
+  row-gap: 0 !important;
+  overflow: hidden !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div {
+  display: grid !important;
+  grid-template-rows: 0.72rem 0.96rem 0.12rem !important;
+  align-items: center !important;
+  align-content: center !important;
+  justify-content: start !important;
+  min-width: 3.8rem !important;
+  max-width: 8rem !important;
+  gap: 0.05rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div:nth-child(2) {
+  min-width: clamp(5.5rem, 10vw, 8rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta span,
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta strong {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  letter-spacing: 0 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta span {
+  font-size: 0.58rem !important;
+  line-height: 0.72rem !important;
+  font-weight: 650 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta strong {
+  font-size: 0.72rem !important;
+  line-height: 0.96rem !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta strong.font-mono {
+  min-width: 3.15rem !important;
+  text-align: left !important;
+  font-feature-settings: "tnum" 1, "zero" 1 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta i {
+  display: block !important;
+  width: 100% !important;
+  min-width: 2.75rem !important;
+  height: 0.12rem !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  align-self: end !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta [role="group"][aria-label="Measurement units"] {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.12rem !important;
+  width: auto !important;
+  min-width: 4.55rem !important;
+  height: 1.72rem !important;
+  min-height: 1.72rem !important;
+  padding: 0.16rem !important;
+  overflow: hidden !important;
+  border-radius: 999px !important;
+  line-height: 1 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta [role="group"][aria-label="Measurement units"] button {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  height: 1.34rem !important;
+  min-height: 1.34rem !important;
+  padding: 0 0.42rem !important;
+  border-radius: 999px !important;
+  font-size: 0.56rem !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.035em !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 1320px) {
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta {
+    column-gap: 0.34rem !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div {
+    min-width: 3.45rem !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div:nth-child(2) {
+    max-width: 5.75rem !important;
+  }
+}

@@ -22,6 +22,7 @@ export function ExamMeasurementUnitToggle({
   disabled = false,
   pathwayId = null,
   analyticsSurface,
+  locked = false,
 }: {
   fallbackSystem: MeasurementSystem;
   initialPreference?: MeasurementPreference | null;
@@ -30,10 +31,12 @@ export function ExamMeasurementUnitToggle({
   disabled?: boolean;
   pathwayId?: string | null;
   analyticsSurface?: string;
+  locked?: boolean;
 }) {
-  const { preference, setPreference } = useMeasurementPreference(fallbackSystem, initialPreference);
+  const { preference, setPreference } = useMeasurementPreference(fallbackSystem, initialPreference, { locked });
 
   function update(next: MeasurementPreference) {
+    if (locked) return;
     setPreference(next);
     if (syncToProfile) {
       void commitMeasurementPreferenceToProfile(next);
@@ -56,10 +59,11 @@ export function ExamMeasurementUnitToggle({
       className={`inline-flex items-center gap-1 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-0.5 ${className}`.trim()}
       role="group"
       aria-label="Measurement units"
+      aria-disabled={locked || disabled}
     >
       <button
         type="button"
-        disabled={disabled}
+        disabled={locked || disabled}
         onClick={() => update("metric")}
         className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide transition ${
           preference === "metric"
@@ -72,7 +76,7 @@ export function ExamMeasurementUnitToggle({
       </button>
       <button
         type="button"
-        disabled={disabled}
+        disabled={locked || disabled}
         onClick={() => update("imperial")}
         className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide transition ${
           preference === "imperial"

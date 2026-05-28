@@ -42,8 +42,8 @@ html[data-theme="mint-blossom"] .nn-premium-auth-system {
     color-mix(in srgb, #fffefe 92%, #ffffff)
   );
   --auth-input-border: color-mix(in srgb, #b7efd1 22%, var(--semantic-border-soft));
-  --auth-primary: var(--theme-brand-strong, #ff8fb8);
-  --auth-focus: color-mix(in srgb, #5eb8f0 38%, #ff8fb8);
+  --auth-primary: var(--theme-brand-strong, #e88cab);
+  --auth-focus: color-mix(in srgb, #5eb8f0 38%, #e88cab);
 }
 
 .nn-premium-auth-input {
@@ -495,11 +495,17 @@ html[data-theme="mint-blossom"] .nn-premium-auth-system {
   border-radius: 1rem;
   border: 1px solid var(--auth-border-soft);
   background: var(--auth-surface-elevated);
+  color: inherit;
   text-align: left;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.2s ease;
+}
+
+.nn-premium-auth-signup-pathway-card:hover {
+  border-color: color-mix(in srgb, var(--auth-primary) 28%, var(--auth-border-soft));
+  transform: translateY(-1px);
 }
 
 .nn-premium-auth-signup-pathway-card strong {
@@ -515,6 +521,14 @@ html[data-theme="mint-blossom"] .nn-premium-auth-system {
 .nn-premium-auth-signup-pathway-card.is-selected {
   border-color: color-mix(in srgb, var(--auth-primary) 42%, var(--auth-border-soft));
   box-shadow: 0 8px 22px -14px color-mix(in srgb, var(--auth-primary) 35%, transparent);
+}
+
+.nn-premium-auth-signup-story__supporting {
+  margin-top: 0.7rem;
+  max-width: 31rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--auth-subtext);
 }
 
 .nn-premium-auth-signup-pathway-card:focus-visible {

@@ -31,10 +31,15 @@ function persistClientPreference(preference: MeasurementPreference): void {
 export function useMeasurementPreference(
   fallbackSystem: MeasurementSystem,
   initialPreference?: MeasurementPreference | null,
+  options?: { locked?: boolean },
 ) {
   const [preference, setPreferenceState] = useState<MeasurementPreference>(() => initialPreference ?? measurementSystemToPreference(fallbackSystem));
 
   useEffect(() => {
+    if (options?.locked) {
+      setPreferenceState(measurementSystemToPreference(fallbackSystem));
+      return;
+    }
     const clientPreference = readClientPreference();
     if (clientPreference) {
       setPreferenceState(clientPreference);
@@ -43,15 +48,16 @@ export function useMeasurementPreference(
     if (initialPreference) {
       persistClientPreference(initialPreference);
     }
-  }, [initialPreference]);
+  }, [fallbackSystem, initialPreference, options?.locked]);
 
   const measurementSystem = useMemo(
-    () => resolveMeasurementSystemPreference(fallbackSystem, preference),
-    [fallbackSystem, preference],
+    () => options?.locked ? fallbackSystem : resolveMeasurementSystemPreference(fallbackSystem, preference),
+    [fallbackSystem, preference, options?.locked],
   );
 
   function setPreference(next: MeasurementPreference) {
     setPreferenceState(next);
+    if (options?.locked) return;
     persistClientPreference(next);
   }
 

@@ -7,6 +7,8 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const FORGOT_PASSWORD_META_KEYS = ["pages.forgotPassword.metaTitle", "pages.forgotPassword.metaDescription"] as const;
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {

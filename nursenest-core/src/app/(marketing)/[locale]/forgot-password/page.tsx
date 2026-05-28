@@ -6,6 +6,8 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
+export const dynamic = "force-dynamic";
+
 const FORGOT_PASSWORD_META_KEYS = ["pages.forgotPassword.metaTitle", "pages.forgotPassword.metaDescription"] as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
