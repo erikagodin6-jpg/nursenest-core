@@ -1069,6 +1069,58 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   ensureResilienceTables().catch((e) => console.error("[BackendResilience] Init error:", e?.message));
   registerBackendResilienceRoutes(app);
 
+  // Phase 5 — Subscription Resilience (72h grace cache)
+  const { ensureEntitlementGraceTables } = await import("./entitlement-grace-cache");
+  ensureEntitlementGraceTables().catch((e) => console.error("[EntitlementGrace] Init error:", e?.message));
+
+  // Phase 6 — Checkout Resilience
+  const { ensureCheckoutIntentTables, registerCheckoutIntentRoutes } = await import("./checkout-intent-capture");
+  ensureCheckoutIntentTables().catch((e) => console.error("[CheckoutIntent] Init error:", e?.message));
+  registerCheckoutIntentRoutes(app);
+
+  // Phase 2 — Progress Sync API
+  const { registerProgressSyncRoutes } = await import("./progress-sync-api");
+  registerProgressSyncRoutes(app);
+
+  // Phase 3 — Adaptive Snapshot Engine
+  const { ensureAdaptiveSnapshotTables } = await import("./adaptive-snapshot-engine");
+  ensureAdaptiveSnapshotTables().catch((e) => console.error("[AdaptiveSnapshot] Init error:", e?.message));
+
+  // Phase 4 — CAT Resilience Extension (new_grad + all tiers)
+  const { ensureCATResilienceExtensionTables, registerCATResilienceExtensionRoutes, ensureNewGradResilienceBank } = await import("./cat-resilience-extension");
+  ensureCATResilienceExtensionTables().catch((e) => console.error("[CATResilienceExt] Init error:", e?.message));
+  registerCATResilienceExtensionRoutes(app);
+  ensureNewGradResilienceBank().catch((e) => console.error("[CATResilienceExt] New grad bank error:", e?.message));
+
+  // Phase 7 — Daily Question Queue
+  const { ensureDailyQuestionQueueTables, registerDailyQuestionRoutes } = await import("./daily-question-queue");
+  ensureDailyQuestionQueueTables().catch((e) => console.error("[DailyQuestionQueue] Init error:", e?.message));
+  registerDailyQuestionRoutes(app);
+
+  // Phase 11 — Search Snapshot Index
+  const { registerSearchSnapshotRoutes, buildSearchSnapshotIndex } = await import("./search-snapshot-index");
+  registerSearchSnapshotRoutes(app);
+  buildSearchSnapshotIndex().catch((e) => console.error("[SearchSnapshot] Initial build error:", e?.message));
+
+  // Phase 13 — Admin Action Queue
+  const { ensureAdminActionQueueTables, registerAdminActionQueueRoutes } = await import("./admin-action-queue");
+  ensureAdminActionQueueTables().catch((e) => console.error("[AdminActionQueue] Init error:", e?.message));
+  registerAdminActionQueueRoutes(app);
+
+  // Phase 14 — Email Dead Letter Queue
+  const { ensureEmailQueueTables, registerEmailQueueRoutes } = await import("./email-dead-letter-queue");
+  ensureEmailQueueTables().catch((e) => console.error("[EmailDLQ] Init error:", e?.message));
+  registerEmailQueueRoutes(app);
+
+  // Phase 15 — Analytics Snapshot Engine
+  const { ensureAnalyticsSnapshotTables, registerAnalyticsSnapshotRoutes } = await import("./analytics-snapshot-engine");
+  ensureAnalyticsSnapshotTables().catch((e) => console.error("[AnalyticsSnapshot] Init error:", e?.message));
+  registerAnalyticsSnapshotRoutes(app);
+
+  // Phase 17 — Resilience Observability Dashboard
+  const { registerResilienceDashboardRoutes } = await import("./resilience-dashboard-api");
+  registerResilienceDashboardRoutes(app);
+
   let opsRoutesPromise: Promise<void> | null = null;
   async function ensureOpsRoutes() {
     if (opsRoutesPromise) return opsRoutesPromise;
@@ -16403,7 +16455,7 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
       checks.push({ check: "flashcards_published", pass: (fcQ.rows[0]?.count || 0) > 0, detail: `${fcQ.rows[0]?.count || 0} flashcards` });
 
       const sampleQ = await pool.query(
-        `SELECT id, stem, options, correct_answer, rationale, question_format FROM exam_questions WHERE tier = $1 AND status = 'published' ORDER BY RANDOM() LIMIT 3`, [tier]
+        `SELECT id, stem, options, correct_answer, rationale, question_format FROM exam_questions WHERE tier = $1 AND status = 'published' ORDER BY id LIMIT 3`, [tier]
       );
       const sampleChecks = sampleQ.rows.map((q: any) => {
         const opts = typeof q.options === "string" ? JSON.parse(q.options) : q.options;
@@ -17601,7 +17653,7 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
                 high_yield, is_foundational, question_type, blueprint_category
          FROM flashcard_bank
          WHERE tier = $1 AND status = 'published' AND flashcard_enabled = true
-         ORDER BY RANDOM()
+         ORDER BY id
          LIMIT $2`,
         [tier, limit]
       );
@@ -21182,13 +21234,13 @@ Return ONLY valid JSON with this exact structure:
       const exam = examTarget || "rex-pn";
       const EXAM_Q_COLS = "id, tier, exam, question_type, status, stem, options, correct_answer, rationale, difficulty, body_system, topic, subtopic, region_scope, career_type";
       const publishedQs = await pool.query(
-        `SELECT ${EXAM_Q_COLS} FROM exam_questions WHERE status = 'published' AND exam = $1 ORDER BY random() LIMIT 30`,
+        `SELECT ${EXAM_Q_COLS} FROM exam_questions WHERE status = 'published' AND exam = $1 ORDER BY id LIMIT 30`,
         [exam === "rex-pn" ? "rex-pn" : "nclex-rn"]
       );
       let questions = publishedQs.rows;
       if (questions.length < 30) {
         const fallbackQs = await pool.query(
-          `SELECT ${EXAM_Q_COLS} FROM exam_questions WHERE status = 'published' ORDER BY random() LIMIT 30`
+          `SELECT ${EXAM_Q_COLS} FROM exam_questions WHERE status = 'published' ORDER BY id LIMIT 30`
         );
         questions = fallbackQs.rows;
       }
@@ -23590,7 +23642,7 @@ Return ONLY valid JSON with this exact structure:
           `SELECT id, stem, options, correct_answer, rationale, body_system, topic, difficulty
            FROM exam_questions
            WHERE tier = $1 AND body_system = ANY($2) AND status = 'published'
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT 7`,
           [tier, weakSystems]
         );
@@ -23602,7 +23654,7 @@ Return ONLY valid JSON with this exact structure:
           `SELECT id, stem, options, correct_answer, rationale, body_system, topic, difficulty
            FROM exam_questions
            WHERE tier = $1 AND status = 'published'
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT $2`,
           [tier, 7 - questions.length]
         );
@@ -23703,7 +23755,7 @@ Return ONLY valid JSON with this exact structure:
            WHERE tier = $1 AND status = 'published' AND career_type = 'nursing'
              AND body_system = ANY($2)
              ${excludeIds.length > 0 ? `AND id != ALL($4)` : ""}
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT $3`,
           excludeIds.length > 0 ? [tier, weakSystems, needed, excludeIds] : [tier, weakSystems, needed]
         );
@@ -25083,7 +25135,7 @@ Return ONLY valid JSON with this exact structure:
           }
         }
 
-        query += ` ORDER BY RANDOM() LIMIT $${paramIdx}`;
+        query += ` ORDER BY id LIMIT $${paramIdx}`;
         params.push(count);
 
         const result = await pool.query(query, params);
@@ -25190,7 +25242,7 @@ Return ONLY valid JSON with this exact structure:
                 rationale_media, lesson_links, body_system as category,
                 topic, subtopic, difficulty, question_type, region_scope
          FROM flashcard_bank WHERE ${where}
-         ORDER BY RANDOM() LIMIT $${paramIdx}`,
+         ORDER BY id LIMIT $${paramIdx}`,
         [...params, count]
       );
 

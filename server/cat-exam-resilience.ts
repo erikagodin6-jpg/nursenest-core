@@ -160,7 +160,7 @@ export async function fetchQuestionsFromPrimaryDb(
     `SELECT id, stem, options, correct_answer, body_system, topic, difficulty, question_type, tier, status, region_scope, language, is_adaptive_eligible
      FROM exam_questions
      WHERE tier = $1 AND status = 'published'
-     ORDER BY RANDOM()
+     ORDER BY id
      LIMIT $2`,
     [tier, limit]
   );
@@ -236,7 +236,7 @@ export async function refreshEmergencyBanks(): Promise<{ tier: string; count: nu
         `SELECT id, stem, options, correct_answer, body_system, topic, difficulty, question_type, tier
          FROM exam_questions
          WHERE tier = $1 AND status = 'published'
-         ORDER BY RANDOM()
+         ORDER BY id
          LIMIT 50`,
         [tier]
       );
@@ -303,7 +303,7 @@ export async function attemptFallbackChain(
             `SELECT id, stem, options, correct_answer, body_system, topic, difficulty, question_type
              FROM exam_questions
              WHERE tier = $1 AND status = 'published'
-             ORDER BY RANDOM()
+             ORDER BY id
              LIMIT $2`,
             [tier, maxQuestions]
           );
@@ -362,7 +362,7 @@ export async function attemptFallbackChain(
               `SELECT id, stem, options, correct_answer, body_system, topic, difficulty, question_type
                FROM exam_questions
                WHERE tier = $1 AND status = 'published'
-               ORDER BY RANDOM()
+               ORDER BY id
                LIMIT $2`,
               [tier, PRACTICE_BLOCK_SIZE]
             );

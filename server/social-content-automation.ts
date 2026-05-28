@@ -338,7 +338,7 @@ export async function generateFromLessonsAndBlogs(): Promise<{ generated: number
     `SELECT id, title, body FROM content_items
      WHERE type IN ('lesson', 'page', 'blog', 'blog-post', 'article')
      AND title IS NOT NULL AND body IS NOT NULL
-     ORDER BY RANDOM() LIMIT 5`
+     ORDER BY id LIMIT 5`
   ).catch(() => ({ rows: [] }));
 
   for (const lesson of lessons.rows) {
@@ -383,7 +383,7 @@ export async function generateFromLessonsAndBlogs(): Promise<{ generated: number
     `SELECT id, title, content FROM publishing_queue
      WHERE content_type IN ('blog', 'article') AND status IN ('published', 'pending_review')
      AND title IS NOT NULL
-     ORDER BY RANDOM() LIMIT 3`
+     ORDER BY id LIMIT 3`
   ).catch(() => ({ rows: [] }));
 
   for (const blog of blogs.rows) {

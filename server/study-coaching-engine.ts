@@ -631,7 +631,7 @@ export async function generateCustomPracticeSession(
       `SELECT id, stem, options, correct_answer, topic, subtopic, difficulty, body_system
        FROM exam_questions
        WHERE topic = $1 AND status = 'published'
-       ORDER BY RANDOM() LIMIT 1`,
+       ORDER BY id LIMIT 1`,
       [topic]
     );
     if (q.rows.length > 0) {
@@ -646,7 +646,7 @@ export async function generateCustomPracticeSession(
       `SELECT id, stem, options, correct_answer, topic, subtopic, difficulty, body_system
        FROM exam_questions
        WHERE status = 'published' ${existingIds.length > 0 ? `AND id != ALL($2)` : ""}
-       ORDER BY RANDOM() LIMIT $1`,
+       ORDER BY id LIMIT $1`,
       existingIds.length > 0 ? [remaining, existingIds] : [remaining]
     );
     questions = questions.concat(filler.rows);

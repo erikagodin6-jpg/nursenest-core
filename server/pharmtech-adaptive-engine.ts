@@ -88,7 +88,7 @@ export async function getAdaptiveQuestion(
     idx++;
   }
 
-  query += ` ORDER BY RANDOM() LIMIT 1`;
+  query += ` ORDER BY id LIMIT 1`;
 
   let result = await pool.query(query, params);
 
@@ -109,7 +109,7 @@ export async function getAdaptiveQuestion(
       fIdx++;
     }
 
-    fallbackQuery += ` ORDER BY RANDOM() LIMIT 1`;
+    fallbackQuery += ` ORDER BY id LIMIT 1`;
     result = await pool.query(fallbackQuery, fallbackParams);
   }
 

@@ -403,11 +403,11 @@ export async function bulkGenerateFromContent(
     sourceQuery = `SELECT id, stem as content, rationale as extra, topic, subtopic, body_system, difficulty
                    FROM exam_questions WHERE tier = $1 AND status = 'published'
                    AND id NOT IN (SELECT source_question_id FROM flashcard_bank WHERE source_question_id IS NOT NULL)
-                   ORDER BY RANDOM() LIMIT $2`;
+                   ORDER BY id LIMIT $2`;
   } else {
     sourceQuery = `SELECT id, title as content, description as extra, topic_tag as topic, NULL as subtopic, NULL as body_system, 3 as difficulty
                    FROM content_items WHERE tier = $1 AND status = 'published'
-                   ORDER BY RANDOM() LIMIT $2`;
+                   ORDER BY id LIMIT $2`;
   }
 
   const sources = await pool.query(sourceQuery, [tier, limit]);

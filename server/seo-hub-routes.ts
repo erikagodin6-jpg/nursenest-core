@@ -97,7 +97,7 @@ async function getRelatedPages(page: any) {
          FROM seo_hub_pages
          WHERE tier=$1 AND slug != $2 AND status='published'
          AND slug != ALL($3)
-         ORDER BY RANDOM()
+         ORDER BY id
          LIMIT $4`,
         [page.tier, page.slug, exclude.length ? exclude : [""], 6 - out.length]
       );

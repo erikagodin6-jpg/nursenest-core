@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "02ad500cfccd95a28ff5a50a05a3605e02c02342d065457d9768ca27f43a448a",
-  "generatedAt": "2026-05-25T19:38:37.046Z",
+  "fingerprint": "1772bedc60d35ec7704cb947c5a6f2d2a835bfbe9ec3c12932f64aad237d3b72",
+  "generatedAt": "2026-05-28T19:52:15.365Z",
   "inputs": [
     {
       "type": "file",
@@ -43,6 +43,10 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/analytics/content/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/analytics/educator/page.tsx"
     },
     {
       "type": "file",
@@ -494,6 +498,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/analytics/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/account/analytics/page.tsx"
     },
     {
@@ -558,11 +566,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/progress/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/account/progress/page.tsx"
     },
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/account/question-bank-performance/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/readiness/loading.tsx"
     },
     {
       "type": "file",
@@ -626,11 +642,23 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-scenarios/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/clinical-scenarios/page.tsx"
     },
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/clinical-skills/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-skills/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/clinical-skills/loading.tsx"
     },
     {
       "type": "file",
@@ -643,6 +671,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/command-center/command-center-redirect.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/command-center/loading.tsx"
     },
     {
       "type": "file",
@@ -686,11 +718,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/explore/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/flashcards/[deckRef]/loading.tsx"
     },
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/flashcards/custom/loading.tsx"
     },
     {
       "type": "file",
@@ -738,6 +778,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/labs/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/labs/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/labs/page.tsx"
     },
     {
@@ -778,6 +826,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/lessons/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/lessons/page.tsx"
     },
     {
@@ -787,6 +839,14 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/med-calculations/[category]/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/med-calculations/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/med-calculations/loading.tsx"
     },
     {
       "type": "file",
@@ -806,11 +866,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/osce/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/osce/page.tsx"
     },
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/pharmacology/page.tsx"
     },
     {
       "type": "file",
@@ -830,6 +898,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/[id]/practice-test-runner-loader.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/practice-tests/[id]/results/page.tsx"
     },
     {
@@ -843,6 +915,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/practice-tests/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/practice-tests/loading.tsx"
     },
     {
       "type": "file",
@@ -866,6 +942,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/prioritization-delegation/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/profile/page.tsx"
     },
     {
@@ -878,6 +958,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/questions/page.tsx"
     },
     {
@@ -886,7 +970,15 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/session/loading.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/questions/session/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/questions/start/page.tsx"
     },
     {
       "type": "file",
@@ -899,6 +991,10 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/review/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/review/loading.tsx"
     },
     {
       "type": "file",
@@ -1518,6 +1614,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/cat/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/canada/np/cnple/loft-exam/page.tsx"
     },
     {
@@ -1527,6 +1627,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/canada/np/cnple/provisional-registration/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/simulation/page.tsx"
     },
     {
       "type": "file",
@@ -2138,6 +2242,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/sign-up/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/signin/page.tsx"
     },
     {
@@ -2426,6 +2534,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/[locale]/sign-up/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/[locale]/signin/page.tsx"
     },
     {
@@ -2474,6 +2586,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(preview)/preview/auth-login-live/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(preview)/preview/auth-signup-live/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(preview)/preview/figma-navigation/a/page.tsx"
     },
     {
@@ -2491,6 +2611,10 @@
     {
       "type": "file",
       "path": "src/app/(preview)/preview/flashcard-session-live/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(preview)/preview/homepage-live/page.tsx"
     },
     {
       "type": "file",
@@ -2746,6 +2870,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/blog/diagnostics/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/blog/draft-batch/[id]/process/route.ts"
     },
     {
@@ -2859,6 +2987,10 @@
     {
       "type": "file",
       "path": "src/app/api/admin/diagnostics/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/educator/remediation-assignments/route.ts"
     },
     {
       "type": "file",
@@ -3230,7 +3362,15 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/users/[userId]/activity-evidence/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/users/[userId]/adaptive-summary/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/users/[userId]/ops/route.ts"
     },
     {
       "type": "file",
@@ -3306,6 +3446,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/billing/reactivate-subscription/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/blog/import/route.ts"
     },
     {
@@ -3343,6 +3487,10 @@
     {
       "type": "file",
       "path": "src/app/api/cat/np/session/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/clinical-skills/progress/route.ts"
     },
     {
       "type": "file",
@@ -3539,6 +3687,10 @@
     {
       "type": "file",
       "path": "src/app/api/internal/runtime-env-health/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/labs/progress/route.ts"
     },
     {
       "type": "file",
@@ -3775,6 +3927,10 @@
     {
       "type": "file",
       "path": "src/app/api/marketing/stamp-checkout-global-region-context/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/med-calculations/progress/route.ts"
     },
     {
       "type": "file",
@@ -4486,6 +4642,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/blog/blog-persistence-integrity.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/blog/blog-persistence-integrity.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/blog/blog-pipeline-duplicate-guard.contract.test.ts"
     },
     {
@@ -5070,6 +5234,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/app-lessons-responsive-results.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/app-pathway-lesson-list-scope.ts"
     },
     {
@@ -5278,6 +5446,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-educational-quality-standards.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-educational-quality-standards.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-exam-domain.ts"
     },
     {
@@ -5423,6 +5599,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lesson-section-page-layout.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-section-presentability.test.ts"
     },
     {
       "type": "file",
@@ -5731,6 +5911,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/pathway-lesson-detail-redirect.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-exam-metadata.ts"
     },
     {
       "type": "file",
@@ -7137,6 +7321,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 36391
+    "durationMs": 19221
   }
 }

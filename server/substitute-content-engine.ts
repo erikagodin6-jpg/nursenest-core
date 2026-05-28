@@ -240,7 +240,7 @@ async function findCandidatesByType(
           `SELECT id, category, tier, exam_type, body_system, body_system as domain, career_type as profession, NULL as region, NULL as language, 'exam' as content_type
            FROM exam_questions 
            WHERE id != $1 AND status = 'published'
-           ORDER BY RANDOM() LIMIT $2`,
+           ORDER BY id LIMIT $2`,
           [original.id, limit * 3],
         );
         return result.rows;
@@ -250,7 +250,7 @@ async function findCandidatesByType(
           `SELECT id, topic as category, tier, blueprint_category as domain, body_system, question as title, 'flashcard' as content_type, NULL as profession, NULL as region, NULL as language
            FROM flashcard_bank 
            WHERE id != $1 AND status = 'published' AND flashcard_enabled = true
-           ORDER BY RANDOM() LIMIT $2`,
+           ORDER BY id LIMIT $2`,
           [original.id, limit * 3],
         );
         return result.rows;
@@ -260,7 +260,7 @@ async function findCandidatesByType(
           `SELECT id, category, tier, NULL as domain, NULL as body_system, title, 'lesson' as content_type, NULL as profession, NULL as region, NULL as language
            FROM lessons 
            WHERE id != $1 AND status = 'published'
-           ORDER BY RANDOM() LIMIT $2`,
+           ORDER BY id LIMIT $2`,
           [original.id, limit * 3],
         );
         return result.rows;
@@ -270,7 +270,7 @@ async function findCandidatesByType(
           `SELECT id, category, tier, body_system as domain, body_system, title, type as content_type, NULL as profession, region_scope as region, NULL as language
            FROM content_items 
            WHERE id != $1 AND status = 'published' AND type = $2
-           ORDER BY RANDOM() LIMIT $3`,
+           ORDER BY id LIMIT $3`,
           [original.id, contentType, limit * 3],
         );
         return result.rows;
@@ -398,7 +398,7 @@ async function basicSubstitute(
          WHERE id != $1 AND status = 'published' 
          AND ($2::text IS NULL OR category = $2) 
          AND ($3::text IS NULL OR tier = $3)
-         ORDER BY RANDOM() LIMIT 1`,
+         ORDER BY id LIMIT 1`,
         [contentId, category, tier],
       );
       result = r.rows[0];
@@ -409,7 +409,7 @@ async function basicSubstitute(
          WHERE id != $1 AND status = 'published' AND flashcard_enabled = true
          AND ($2::text IS NULL OR topic = $2)
          AND ($3::text IS NULL OR tier = $3)
-         ORDER BY RANDOM() LIMIT 1`,
+         ORDER BY id LIMIT 1`,
         [contentId, category, tier],
       );
       result = r.rows[0];
@@ -420,7 +420,7 @@ async function basicSubstitute(
          WHERE id != $1 AND status = 'published'
          AND ($2::text IS NULL OR category = $2)
          AND ($3::text IS NULL OR tier = $3)
-         ORDER BY RANDOM() LIMIT 1`,
+         ORDER BY id LIMIT 1`,
         [contentId, category, tier],
       );
       result = r.rows[0];

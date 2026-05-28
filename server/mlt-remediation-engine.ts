@@ -254,7 +254,7 @@ export async function findRemediationContent(
       `SELECT id, blueprint_category, subtopic, difficulty, stem
        FROM allied_questions
        WHERE career_type ILIKE '%mlt%' AND status = 'active' AND id != $1
-       ORDER BY RANDOM() LIMIT 200`,
+       ORDER BY id LIMIT 200`,
       [questionId]
     ),
   ]);

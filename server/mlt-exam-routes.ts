@@ -79,7 +79,7 @@ async function getSessionQuestions(country: string, filters: { topics?: string[]
     idx++;
   }
 
-  query += ` ORDER BY RANDOM()`;
+  query += ` ORDER BY id`;
 
   if (filters.limit) {
     query += ` LIMIT $${idx}`;
@@ -101,7 +101,7 @@ async function getCandidateQuestions(country: string, usedIds: string[]): Promis
     idx++;
   }
 
-  query += ` ORDER BY RANDOM() LIMIT 200`;
+  query += ` ORDER BY id LIMIT 200`;
   const result = await pool.query(query, params);
 
   return result.rows.map((r: any) => ({
@@ -756,7 +756,7 @@ export function registerMltExamRoutes(app: Express) {
       }
 
       const qResult = await pool.query(
-        `SELECT id, blueprint_category as category, difficulty, subtopic as topic FROM allied_questions WHERE career_type ILIKE '%mlt%' AND status = 'active' ORDER BY RANDOM() LIMIT 500`
+        `SELECT id, blueprint_category as category, difficulty, subtopic as topic FROM allied_questions WHERE career_type ILIKE '%mlt%' AND status = 'active' ORDER BY id LIMIT 500`
       );
 
       const questions: QuestionCandidate[] = qResult.rows.map((r: any) => ({

@@ -246,14 +246,14 @@ async function computeRelatedContentForPage(pageId: string): Promise<number> {
   const related = await pool.query(
     `SELECT id, title, slug, page_type, career_track FROM programmatic_pages
      WHERE career_track = $1 AND id != $2 AND status = 'published'
-     ORDER BY RANDOM() LIMIT 6`,
+     ORDER BY id LIMIT 6`,
     [page.career_track, pageId]
   );
 
   const crossCareer = await pool.query(
     `SELECT id, title, slug, page_type, career_track FROM programmatic_pages
      WHERE career_track != $1 AND page_type = $2 AND status = 'published'
-     ORDER BY RANDOM() LIMIT 3`,
+     ORDER BY id LIMIT 3`,
     [page.career_track, page.page_type]
   );
 

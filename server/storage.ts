@@ -2680,7 +2680,7 @@ export class DatabaseStorage implements IStorage {
     }
     if (lesson.category) {
       const r = await pool.query(
-        "SELECT id, slug, title, category, tier, summary, image_url FROM lessons WHERE category = $1 AND slug != $2 AND status = 'published' ORDER BY RANDOM() LIMIT $3",
+        "SELECT id, slug, title, category, tier, summary, image_url FROM lessons WHERE category = $1 AND slug != $2 AND status = 'published' ORDER BY id LIMIT $3",
         [lesson.category, slug, limit]
       );
       return r.rows.map(snakeToCamel);

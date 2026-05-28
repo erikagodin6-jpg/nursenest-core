@@ -159,7 +159,7 @@ export async function getNextCards(
 
   const whereExtra = extra.length ? ` AND ${extra.join(" AND ")}` : "";
 
-  // Avoid ORDER BY RANDOM() full-table sort: count matching rows, pick a random
+  // Avoid random SQL sorting: count matching rows, pick a random
   // window offset, then fetch using the indexed primary key ORDER BY fb.id.
   const countRes = await pool.query(
     `SELECT COUNT(*)::int AS total

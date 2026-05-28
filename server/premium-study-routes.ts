@@ -522,7 +522,7 @@ export function registerPremiumStudyRoutes(app: Express) {
           candidateQuery += ` AND id != ALL($${idx++})`;
           params.push(usedQuestionIds);
         }
-        candidateQuery += ` ORDER BY RANDOM() LIMIT 200`;
+        candidateQuery += ` ORDER BY id LIMIT 200`;
       } else {
         candidateQuery = `SELECT id, blueprint_category, difficulty, subtopic FROM allied_questions WHERE status = 'active'`;
         candidateQuery += ` AND career_type ILIKE $${idx++}`;
@@ -531,7 +531,7 @@ export function registerPremiumStudyRoutes(app: Express) {
           candidateQuery += ` AND id != ALL($${idx++})`;
           params.push(usedQuestionIds);
         }
-        candidateQuery += ` ORDER BY RANDOM() LIMIT 200`;
+        candidateQuery += ` ORDER BY id LIMIT 200`;
       }
 
       const candidateResult = await pool.query(candidateQuery, params);
@@ -1059,7 +1059,7 @@ async function buildQuestionQuery(
     params.push(filters.userId);
   }
 
-  query += ` ORDER BY RANDOM() LIMIT $${idx++}`;
+  query += ` ORDER BY id LIMIT $${idx++}`;
   params.push(filters.limit || 40);
 
   const result = await pool.query(query, params);

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "7e89d1acabf1dd6e50c7bed6c49025102f2fa58378e046ccc519af25ae89f07f",
-  "generatedAt": "2026-05-24T12:21:45.419Z",
+  "fingerprint": "335df5e6e9f71df06e342372f864ab63f57817645d5ad38a8e50a757c87c8ef0",
+  "generatedAt": "2026-05-28T19:51:55.689Z",
   "inputs": [
     {
       "type": "file",
@@ -446,6 +446,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/app-lessons-responsive-results.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/app-pathway-lesson-list-scope.ts"
     },
     {
@@ -654,6 +658,14 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/lesson-educational-quality-standards.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-educational-quality-standards.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/lesson-exam-domain.ts"
     },
     {
@@ -799,6 +811,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/lesson-section-page-layout.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-section-presentability.test.ts"
     },
     {
       "type": "file",
@@ -1107,6 +1123,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/pathway-lesson-detail-redirect.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-exam-metadata.ts"
     },
     {
       "type": "file",
@@ -1779,7 +1799,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 119879,
-    "verifyLessonIndexesMs": 122693
+    "buildLessonIndexesMs": 136674,
+    "verifyLessonIndexesMs": 136278
   }
 }

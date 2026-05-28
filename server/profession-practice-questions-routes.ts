@@ -305,7 +305,7 @@ async function fetchQuestionsForProfession(config: ProfessionConfig, limit: numb
           `SELECT id, stem, options, correct_answer, rationale_long, blueprint_category, subtopic, difficulty, cognitive_level, question_type, clinical_pearls, distractor_rationales
            FROM allied_questions
            WHERE career_type = $1 AND status IN ('approved', 'published')
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT $2`,
           [config.careerType, limit]
         );
@@ -317,7 +317,7 @@ async function fetchQuestionsForProfession(config: ProfessionConfig, limit: numb
             `SELECT id, stem, options, correct_answer, rationale, topic, body_system, difficulty, question_type, clinical_pearl
              FROM exam_questions
              WHERE career_type = $1 AND status = 'published'
-             ORDER BY RANDOM()
+             ORDER BY id
              LIMIT $2`,
             [config.examCareerType, limit]
           );
@@ -330,7 +330,7 @@ async function fetchQuestionsForProfession(config: ProfessionConfig, limit: numb
           `SELECT id, stem, options, correct_answer, rationale_long, blueprint_category, subtopic, difficulty, cognitive_level, question_type, clinical_pearls, distractor_rationales
            FROM allied_questions
            WHERE career_type = 'mlt' AND status IN ('approved', 'published')
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT $1`,
           [limit]
         );
@@ -352,7 +352,7 @@ async function fetchQuestionsForProfession(config: ProfessionConfig, limit: numb
         result = await pool.query(
           `SELECT id, question, option_a, option_b, option_c, option_d, correct_answer, rationale, category, body_part, modality, difficulty
            FROM imaging_questions
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT $1`,
           [limit]
         );

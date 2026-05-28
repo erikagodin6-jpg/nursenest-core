@@ -815,7 +815,7 @@ export function registerAccessDeliveryRoutes(app: Express) {
           `SELECT id, stem AS question, options, correct_answer AS correct, rationale, body_system, difficulty, question_type AS "questionType"
            FROM questions
            WHERE tier = $1 AND active = true
-           ORDER BY RANDOM()
+           ORDER BY id
            LIMIT $2`,
           [targetTier, count]
         );

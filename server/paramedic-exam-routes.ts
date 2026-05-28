@@ -80,7 +80,7 @@ async function selectBlueprintQuestions(
       `SELECT id FROM allied_questions
        WHERE career_type = 'paramedic' AND blueprint_category = $1
          AND status = 'published' AND id != ALL($2::text[])
-       ORDER BY RANDOM() LIMIT $3`,
+       ORDER BY id LIMIT $3`,
       [category, [...excludeIds, ...selectedIds], targetCount]
     );
     selectedIds.push(...result.rows.map((r: any) => r.id));
@@ -91,7 +91,7 @@ async function selectBlueprintQuestions(
       `SELECT id FROM allied_questions
        WHERE career_type = 'paramedic' AND status = 'published'
          AND id != ALL($1::text[])
-       ORDER BY RANDOM() LIMIT $2`,
+       ORDER BY id LIMIT $2`,
       [selectedIds, totalQuestions - selectedIds.length]
     );
     selectedIds.push(...fill.rows.map((r: any) => r.id));
@@ -113,7 +113,7 @@ async function selectDrillQuestions(
     `SELECT id FROM allied_questions
      WHERE career_type = 'paramedic' AND blueprint_category = $1
        AND status = 'published'
-     ORDER BY RANDOM() LIMIT $2`,
+     ORDER BY id LIMIT $2`,
     [topic, totalQuestions]
   );
   return result.rows.map((r: any) => r.id);

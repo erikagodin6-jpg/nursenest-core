@@ -28,7 +28,7 @@ export async function runPostPublishIntegrityAudit(): Promise<AuditResult> {
     const questions = await pool.query(
       `SELECT id, stem, options, correct_answer as "correctAnswer", rationale, tier, body_system as "bodySystem",
               topic, tags, question_type as "questionType", ngn_payload as "ngnPayload", difficulty, status
-       FROM exam_questions WHERE status = 'published' ORDER BY RANDOM() LIMIT 200`
+       FROM exam_questions WHERE status = 'published' ORDER BY id LIMIT 200`
     ).catch(() => ({ rows: [] }));
 
     for (const q of questions.rows) {
@@ -54,7 +54,7 @@ export async function runPostPublishIntegrityAudit(): Promise<AuditResult> {
   try {
     const contentItems = await pool.query(
       `SELECT id, title, slug, type, tier, summary, content, status, category, seo_title as "seoTitle", seo_description as "seoDescription"
-       FROM content_items WHERE status = 'published' ORDER BY RANDOM() LIMIT 100`
+       FROM content_items WHERE status = 'published' ORDER BY id LIMIT 100`
     ).catch(() => ({ rows: [] }));
 
     for (const item of contentItems.rows) {
@@ -81,7 +81,7 @@ export async function runPostPublishIntegrityAudit(): Promise<AuditResult> {
   try {
     const flashcards = await pool.query(
       `SELECT id, front, back, tier, status, tags_json as tags
-       FROM flashcard_bank WHERE status = 'published' ORDER BY RANDOM() LIMIT 100`
+       FROM flashcard_bank WHERE status = 'published' ORDER BY id LIMIT 100`
     ).catch(() => ({ rows: [] }));
 
     for (const fc of flashcards.rows) {

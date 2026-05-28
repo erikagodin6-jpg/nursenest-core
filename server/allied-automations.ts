@@ -216,7 +216,7 @@ async function handleMockExamBuilder(automation: any, runId: string): Promise<Au
     const newPortion = examSize - existingPortion;
 
     const existingQs = await pool.query(
-      "SELECT id, stem, blueprint_category, difficulty FROM allied_questions WHERE career_type = $1 AND status = 'approved' ORDER BY RANDOM() LIMIT $2",
+      "SELECT id, stem, blueprint_category, difficulty FROM allied_questions WHERE career_type = $1 AND status = 'approved' ORDER BY id LIMIT $2",
       [careerType, existingPortion]
     );
 

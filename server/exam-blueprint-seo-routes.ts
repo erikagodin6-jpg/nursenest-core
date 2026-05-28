@@ -87,7 +87,7 @@ export function registerExamBlueprintSeoRoutes(app: Express) {
          FROM exam_questions 
          WHERE tier = $1 AND status = 'published'
            AND (${conditions})
-         ORDER BY RANDOM()
+         ORDER BY id
          LIMIT 5`,
         params
       );

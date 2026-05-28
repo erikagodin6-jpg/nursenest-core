@@ -69,7 +69,7 @@ export function registerNursingContentHubRoutes(app: Express): void {
           AND language_code = 'en'
           AND page_type IN ('certification', 'specialty', 'study-pathway', 'program-landing', 'topic-hub', 'long-form-guide', 'long-tail')
           AND slug != $1
-        ORDER BY RANDOM()
+        ORDER BY id
         LIMIT 6
       `;
       const relatedResult = await pool.query(relatedQuery, [slug]);
