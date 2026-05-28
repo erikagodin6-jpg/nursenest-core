@@ -7,7 +7,7 @@ function getPostHog(): PostHog | null {
   if (!key) return null;
   if (!posthogSingleton) {
     const host = process.env.POSTHOG_HOST?.trim() || "https://us.i.posthog.com";
-    posthogSingleton = new PostHog(key, { host, flushAt: 1, flushInterval: 0 });
+    posthogSingleton = new PostHog(key, { host, flushAt: 1, flushInterval: 0, enableExceptionAutocapture: true });
   }
   return posthogSingleton;
 }

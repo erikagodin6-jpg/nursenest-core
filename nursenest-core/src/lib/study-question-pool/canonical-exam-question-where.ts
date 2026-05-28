@@ -8,6 +8,10 @@ import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-cont
 import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
+import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 
 /**
  * Lightweight shape for inventory / category counting from ExamQuestion.
@@ -28,16 +32,19 @@ export type ExamQuestionLite = {
  * - questionAccessWhere: enforces entitlement tier / country scoping
  * - NON_ECG_PRACTICE_EXAM_WHERE: excludes ECG / video question formats
  * - generalStudyBankModuleSurfaceWhere: excludes lab-drills / med-calc only rows
+ * - standardExamPrepQuestionScopeWhere: excludes ICU/RT/provider-level leakage
  */
 export function getCanonicalExamQuestionWhere(
   entitlement: AccessScope,
 ): Prisma.ExamQuestionWhereInput {
+  const scopeGate = entitlement.tier === "NP" ? npProviderQuestionScopeWhere() : standardExamPrepQuestionScopeWhere();
   return {
     AND: [
       questionAccessWhere(entitlement),
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       rtVentilatorPremiumBankGateWhere(entitlement),
+      scopeGate,
     ],
   };
 }
@@ -51,12 +58,14 @@ export function getCanonicalExamQuestionWhereForPathway(
   entitlement: AccessScope,
   pathway: ExamPathwayDefinition,
 ): Prisma.ExamQuestionWhereInput {
+  const scopeGate = pathway.roleTrack === "np" ? npProviderQuestionScopeWhere() : standardExamPrepQuestionScopeWhere();
   return {
     AND: [
       questionAccessWhereWithPathway(entitlement, pathway),
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       rtVentilatorPremiumBankGateWhere(entitlement),
+      scopeGate,
     ],
   };
 }

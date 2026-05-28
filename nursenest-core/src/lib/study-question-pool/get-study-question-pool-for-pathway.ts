@@ -6,6 +6,10 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
+import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
 import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
@@ -40,6 +44,7 @@ export async function getStudyQuestionPoolForPathway(args: {
     pathway ? "pathway_exam_keys+tier" : "tier_region_only",
     "non_ecg_general_bank",
     "module_surface_gate",
+    "blueprint_scope_governance",
   ];
 
   const bankWhere = pathway
@@ -49,6 +54,7 @@ export async function getStudyQuestionPoolForPathway(args: {
           NON_ECG_PRACTICE_EXAM_WHERE,
           generalStudyBankModuleSurfaceWhere(),
           rtVentilatorPremiumBankGateWhere(args.entitlement),
+          pathway.roleTrack === "np" ? npProviderQuestionScopeWhere() : standardExamPrepQuestionScopeWhere(),
         ],
       }
     : null;

@@ -678,6 +678,53 @@ html[data-theme="aurora"] {
   --semantic-panel-gold: color-mix(in srgb, #b8e986 12%, var(--bg-card));
 }
 
+/* Marketing homepage layered surfaces (semantic aliases — color-only; no layout). */
+html[data-theme="ocean"] {
+  --nn-marketing-surface-secondary: var(--semantic-panel-cool);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-mint);
+  --nn-marketing-gradient-hero: linear-gradient(
+    94deg,
+    color-mix(in srgb, var(--semantic-chart-2) 95%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-border-soft)) 44%,
+    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-border-soft)) 100%
+  );
+  --nn-marketing-gradient-ocean: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-aqua) 40%, var(--semantic-surface)) 0%,
+    var(--semantic-bg-base) 42%,
+    color-mix(in srgb, var(--semantic-panel-mint) 25%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="blossom"],
+html[data-theme="mint-blossom"] {
+  --nn-marketing-surface-secondary: var(--semantic-panel-mint);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-lavender);
+  --nn-marketing-gradient-hero: linear-gradient(
+    92deg,
+    color-mix(in srgb, var(--semantic-chart-1) 96%, transparent) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 94%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-3) 95%, transparent) 100%
+  );
+  --nn-marketing-gradient-blossom: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-1) 8%, var(--semantic-bg-base)) 0%,
+    var(--semantic-bg-base) 45%,
+    color-mix(in srgb, var(--semantic-chart-4) 8%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="aurora"] {
+  --nn-marketing-surface-secondary: var(--semantic-panel-cool);
+  --nn-marketing-surface-tertiary: var(--semantic-panel-warm);
+  --nn-marketing-gradient-hero: linear-gradient(
+    94deg,
+    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 90%, var(--semantic-border-soft)) 46%,
+    color-mix(in srgb, var(--semantic-brand) 91%, var(--semantic-border-soft)) 100%
+  );
+}
+
 html[data-theme="sunset"] {
   --semantic-chart-1: #df704a;
   --semantic-chart-2: #c75f78;

@@ -1,4 +1,5 @@
 import "@/app/learner-cockpit-premium.css";
+import "@/app/learner-dashboard-report.css";
 import "@/app/learner-surface-primitives.css";
 import "../../../../../styles/tokens.css";
 import "../../../../../styles/learner-ds.css";

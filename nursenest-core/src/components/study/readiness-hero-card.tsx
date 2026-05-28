@@ -304,8 +304,9 @@ export function ReadinessHeroCard({
 
   return (
     <div
-      className="overflow-hidden rounded-2xl"
+      className="nn-premium-readiness-page-hero nn-readiness-hero-premium overflow-hidden rounded-2xl min-w-0"
       style={{
+        ["--readiness-hero-accent" as string]: accent,
         background: surface,
         border: `1px solid color-mix(in srgb, ${accent} 22%, var(--border-subtle, var(--theme-border)))`,
       }}
@@ -323,7 +324,7 @@ export function ReadinessHeroCard({
         </p>
 
         {/* Main row: gauge + score block */}
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex min-w-0 flex-wrap items-center gap-6">
           {/* Animated gauge */}
           <StudyReadinessGauge
             score={score}
@@ -361,7 +362,7 @@ export function ReadinessHeroCard({
                 </span>
               </div>
               <p
-                className="mt-2 max-w-md text-sm leading-relaxed"
+                className="nn-dash-report-copy mt-2 text-sm leading-relaxed"
                 style={{ color: "var(--semantic-text-secondary, var(--muted-foreground))" }}
               >
                 {summary}
@@ -397,7 +398,7 @@ export function ReadinessHeroCard({
 
       {/* Stat strip */}
       <div
-        className="flex flex-wrap items-center gap-6 border-t px-6 py-4 sm:px-7"
+        className="nn-readiness-hero-stat-strip border-t px-6 py-4 sm:px-7"
         style={{
           borderColor: `color-mix(in srgb, ${accent} 14%, var(--border-subtle, var(--theme-border)))`,
           background: `color-mix(in srgb, ${accent} 4%, var(--bg-card))`,

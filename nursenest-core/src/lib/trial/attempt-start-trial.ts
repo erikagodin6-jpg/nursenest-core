@@ -8,6 +8,7 @@ import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/pos
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { expireStaleTrialForUser } from "@/lib/trial/expire-stale-trial";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import { recordPremiumProtectionAbuseFromLog } from "@/lib/premium-protection/telemetry-db";
 
 export type StartTrialResult =
   | { ok: true; trialEndsAt: string }
@@ -31,6 +32,14 @@ async function stripeEmailHasSubscriptionHistory(email: string): Promise<boolean
     safeServerLog("trial", "stripe_email_probe_failed", { detail: e instanceof Error ? e.message.slice(0, 120) : "unknown" });
   }
   return false;
+}
+
+function recordTrialBlock(userId: string, reason: string): void {
+  void recordPremiumProtectionAbuseFromLog({
+    kind: `trial_block_${reason}`,
+    route: "trial_start",
+    userId,
+  }).catch(() => {});
 }
 
 /**
@@ -68,6 +77,7 @@ export async function attemptStartTrial(args: {
   if (existingBinding && existingBinding.userId !== userId) {
     captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "device_already_trialed" }).catch(() => {});
     captureServerEvent(analyticsDistinctId(userId), "duplicate_account_detected", { signal: "device_fingerprint" }).catch(() => {});
+    recordTrialBlock(userId, "device_already_trialed");
     return {
       ok: false,
       code: "device_already_trialed",
@@ -95,6 +105,7 @@ export async function attemptStartTrial(args: {
 
   if (user.isDemoUser) {
     captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "demo_user" }).catch(() => {});
+    recordTrialBlock(userId, "demo_user");
     return {
       ok: false,
       code: "demo_user",
@@ -105,6 +116,7 @@ export async function attemptStartTrial(args: {
 
   if (!user.emailVerified) {
     captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "email_not_verified" }).catch(() => {});
+    recordTrialBlock(userId, "email_not_verified");
     return {
       ok: false,
       code: "email_not_verified",
@@ -115,6 +127,7 @@ export async function attemptStartTrial(args: {
 
   if (user._count.subscriptions > 0) {
     captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "has_subscription_history" }).catch(() => {});
+    recordTrialBlock(userId, "has_subscription_history");
     return {
       ok: false,
       code: "has_subscription_history",
@@ -125,6 +138,7 @@ export async function attemptStartTrial(args: {
 
   if (user.trialUsedAt != null || user.trialStatus === TrialStatus.EXHAUSTED) {
     captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "trial_already_used" }).catch(() => {});
+    recordTrialBlock(userId, "trial_already_used");
     return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
   }
 
@@ -136,10 +150,12 @@ export async function attemptStartTrial(args: {
   }
 
   if (user.trialUsedAt != null) {
+    recordTrialBlock(userId, "trial_already_used");
     return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
   }
 
   if (await stripeEmailHasSubscriptionHistory(user.email)) {
+    recordTrialBlock(userId, "stripe_email_in_use");
     return {
       ok: false,
       code: "stripe_email_in_use",
@@ -172,6 +188,7 @@ export async function attemptStartTrial(args: {
     });
   } catch (e) {
     if (e instanceof Error && e.message === "device_race") {
+      recordTrialBlock(userId, "device_already_trialed");
       return {
         ok: false,
         code: "device_already_trialed",
@@ -180,6 +197,7 @@ export async function attemptStartTrial(args: {
       };
     }
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
+      recordTrialBlock(userId, "device_already_trialed");
       return {
         ok: false,
         code: "device_already_trialed",

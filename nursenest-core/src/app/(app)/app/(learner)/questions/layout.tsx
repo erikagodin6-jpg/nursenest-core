@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { traceLayout } from "@/build/tracing";
 import "@/app/learner-exam-session-premium.css";
 import "@/app/learner-flashcard-premium.css";
+import "@/app/learner-flashcard-branding-revamp.css";
 
 /** Segment-level dynamic: question bank stays request-time (no static prerender at build). */
 export const dynamic = "force-dynamic";

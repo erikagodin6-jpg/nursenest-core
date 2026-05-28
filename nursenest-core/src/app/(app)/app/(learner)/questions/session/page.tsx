@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
 /**
- * @deprecated Replaced by the unified practice setup flow at `/app/practice-tests`.
+ * @deprecated Replaced by the direct unified practice launcher at `/app/questions/start`.
  *
  * Compatibility-only alias for older weak-area/question-session callbacks.
  * Keep as a redirect shim until access logs confirm removal is safe. Do not add
@@ -21,5 +21,5 @@ export default async function PracticeQuestionSessionAliasPage({ searchParams }:
     }
   }
   const suffix = q.toString();
-  redirect(suffix ? `/app/practice-tests?${suffix}` : "/app/practice-tests");
+  redirect(suffix ? `/app/questions/start?${suffix}` : "/app/questions/start");
 }

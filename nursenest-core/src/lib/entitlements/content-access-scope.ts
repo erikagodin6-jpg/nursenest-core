@@ -8,6 +8,10 @@ import {
 import type { FlashcardPathwayAccessOptions } from "@/lib/flashcards/flashcard-pathway-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import {
+  standardExamPrepFlashcardScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 
 /** Production DB uses lowercase status strings on `exam_questions` / `content_items`. */
 export const DB_PUBLISHED = "published" as const;
@@ -142,16 +146,24 @@ export function publicMarketingLessonWhere(): Prisma.ContentItemWhereInput {
 /** Published questions in freemium preview pools (rpn/lvn ladder + allied; no RN/NP subscriber depth). */
 export function publicMarketingExamQuestionWhere(): Prisma.ExamQuestionWhereInput {
   return {
-    status: DB_PUBLISHED,
-    tier: { in: ["rpn", "lvn", "allied"] },
+    AND: [
+      { status: DB_PUBLISHED },
+      { tier: { in: ["rpn", "lvn", "allied"] } },
+      standardExamPrepQuestionScopeWhere(),
+    ],
   };
 }
 
 /** Published flashcards in public-marketing tiers (no RN/NP-only depth). */
 export function publicMarketingFlashcardWhere(): Prisma.FlashcardWhereInput {
   return {
-    status: ContentStatus.PUBLISHED,
-    tier: { in: [TierCodeEnum.RPN, TierCodeEnum.LVN_LPN, TierCodeEnum.ALLIED] },
+    AND: [
+      {
+        status: ContentStatus.PUBLISHED,
+        tier: { in: [TierCodeEnum.RPN, TierCodeEnum.LVN_LPN, TierCodeEnum.ALLIED] },
+      },
+      standardExamPrepFlashcardScopeWhere(),
+    ],
   };
 }
 
@@ -260,10 +272,16 @@ export function flashcardAccessWhere(
     country,
     tier: { in: tierIn },
   };
+  const scopeGate =
+    tier === "RPN" || tier === "LVN_LPN" || tier === "RN"
+      ? standardExamPrepFlashcardScopeWhere()
+      : null;
+  const parts: Prisma.FlashcardWhereInput[] = [scoped];
+  if (scopeGate) parts.push(scopeGate);
   if (pathway?.deckPathwayId) {
-    return { AND: [scoped, { deck: { pathwayId: pathway.deckPathwayId } }] };
+    return { AND: [...parts, { deck: { pathwayId: pathway.deckPathwayId } }] };
   }
-  return scoped;
+  return parts.length === 1 ? scoped : { AND: parts };
 }
 
 export function flashcardBankWhereForProfile(country: CountryCode, tier: TierCode): Prisma.FlashcardWhereInput {

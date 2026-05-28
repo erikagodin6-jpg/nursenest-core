@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { AdminSecurityTelemetry } from "@/lib/admin/load-admin-security-telemetry";
 
 type AnalyticsData = {
   generatedAt: string;
@@ -22,6 +23,7 @@ type AnalyticsData = {
     practiceTestsStarted: number | null;
     lessonsCompleted: number | null;
   };
+  securityTelemetry: AdminSecurityTelemetry | null;
 };
 
 function fmt(n: number | null | undefined): string {
@@ -166,6 +168,7 @@ export function AdminAnalyticsDashboard() {
   const ts = data?.generatedAt ? new Date(data.generatedAt).toLocaleTimeString() : null;
   const u = data?.users;
   const a = data?.activity;
+  const s = data?.securityTelemetry;
 
   if (loading) {
     return (
@@ -235,6 +238,54 @@ export function AdminAnalyticsDashboard() {
           <MetricCard label="Practice tests started" value={fmt(a?.practiceTestsStarted)} />
           <MetricCard label="Lessons completed" value={fmt(a?.lessonsCompleted)} sub="progress.completed = true" />
         </div>
+      </div>
+
+      {/* ── User validation / anti-fraud ── */}
+      <div>
+        <SectionTitle>User validation & anti-fraud telemetry</SectionTitle>
+        {s ? (
+          <div className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <MetricCard
+                label="Verified learners"
+                value={fmt(s.verification.verifiedLearners)}
+                sub={`${fmt(s.verification.unverifiedLearners)} unverified`}
+                accent="success"
+              />
+              <MetricCard
+                label="Session users 24h"
+                value={fmt(s.sessionActivity.uniqueUsers24h)}
+                sub={`${fmt(s.sessionActivity.rows24h)} session touches`}
+                accent={s.configured.accountSharingMonitor ? "brand" : "warning"}
+              />
+              <MetricCard
+                label="IP observations 24h"
+                value={fmt(s.sessionActivity.ipObservations24h)}
+                sub={`${fmt(s.sessionActivity.usersWithIpObservations24h)} learners observed`}
+              />
+              <MetricCard
+                label="Open abuse reviews"
+                value={fmt(s.protection.openReviews)}
+                sub={`${fmt(s.protection.rollupEvents7d)} protection events in 7d`}
+                accent={s.protection.openReviews > 0 ? "warning" : "muted"}
+              />
+            </div>
+            {s.diagnostics.length > 0 ? (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-950 dark:text-amber-100">
+                <p className="font-semibold">Why some telemetry may be missing</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5">
+                  {s.diagnostics.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm text-[var(--semantic-text-muted)]">
+            Security telemetry unavailable. Check database connectivity and admin API logs.
+          </p>
+        )}
       </div>
 
       {/* ── Growth + domains side by side ── */}

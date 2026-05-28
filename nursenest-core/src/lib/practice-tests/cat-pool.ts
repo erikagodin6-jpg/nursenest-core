@@ -19,7 +19,10 @@ import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
-import { standardExamPrepQuestionScopeWhere } from "@/lib/questions/difficulty-scope-filter";
+import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 import {
   isCompleteCatQuestionRow,
   NON_ECG_PRACTICE_EXAM_WHERE,
@@ -287,6 +290,9 @@ export async function fetchCatPracticePoolReadiness(
     ? questionAccessWhereWithPathway(entitlement, pathway)
     : questionAccessWhere(entitlement);
   const broadBase = questionAccessWhere(entitlement);
+  const scopeGate = pathway?.roleTrack === "np" || entitlement.tier === "NP"
+    ? npProviderQuestionScopeWhere()
+    : standardExamPrepQuestionScopeWhere();
 
   const strictness = input.selectionStrictness ?? "strict";
 
@@ -313,7 +319,7 @@ export async function fetchCatPracticePoolReadiness(
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       rtVentilatorPremiumBankGateWhere(entitlement),
-      standardExamPrepQuestionScopeWhere(),
+      scopeGate,
       ...secondaryStrict,
     ],
   };
@@ -334,7 +340,7 @@ export async function fetchCatPracticePoolReadiness(
         NON_ECG_PRACTICE_EXAM_WHERE,
         generalStudyBankModuleSurfaceWhere(),
         rtVentilatorPremiumBankGateWhere(entitlement),
-        standardExamPrepQuestionScopeWhere(),
+        scopeGate,
         ...secondaryRelaxed,
       ],
     };
@@ -356,7 +362,7 @@ export async function fetchCatPracticePoolReadiness(
               NON_ECG_PRACTICE_EXAM_WHERE,
               generalStudyBankModuleSurfaceWhere(),
               rtVentilatorPremiumBankGateWhere(entitlement),
-              standardExamPrepQuestionScopeWhere(),
+              scopeGate,
               ...secondaryStrict,
             ],
           })) - rawStrictCount,
@@ -437,6 +443,9 @@ export async function fetchCatPracticePool(
   const base: Prisma.ExamQuestionWhereInput = pathway
     ? questionAccessWhereWithPathway(entitlement, pathway)
     : questionAccessWhere(entitlement);
+  const scopeGate = pathway?.roleTrack === "np" || entitlement.tier === "NP"
+    ? npProviderQuestionScopeWhere()
+    : standardExamPrepQuestionScopeWhere();
 
   const strictness = input.selectionStrictness ?? "strict";
 
@@ -462,7 +471,7 @@ export async function fetchCatPracticePool(
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       rtVentilatorPremiumBankGateWhere(entitlement),
-      standardExamPrepQuestionScopeWhere(),
+      scopeGate,
       ...secondaryStrict,
     ],
   };
@@ -478,7 +487,7 @@ export async function fetchCatPracticePool(
         NON_ECG_PRACTICE_EXAM_WHERE,
         generalStudyBankModuleSurfaceWhere(),
         rtVentilatorPremiumBankGateWhere(entitlement),
-        standardExamPrepQuestionScopeWhere(),
+        scopeGate,
         ...secondaryRelaxed,
       ],
     };

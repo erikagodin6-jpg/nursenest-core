@@ -144,14 +144,14 @@ export function ReadinessScoreCard({
 
   return (
     <article
-      className={`nn-readiness-card nn-cockpit-readiness-card nn-card-interactive relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out`}
+      className={`nn-readiness-card nn-cockpit-readiness-card nn-card-interactive relative min-h-0 min-w-[20rem] max-w-full overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out`}
       aria-labelledby="readiness-heading"
     >
       {/* Ambient glow */}
       <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_12%,transparent),transparent_60%)] blur-3xl" aria-hidden />
 
       {/* ── Hero: score ring + assessment ── */}
-      <div className="relative flex flex-col items-center gap-5 px-6 pb-6 pt-7 text-center sm:flex-row sm:items-start sm:gap-7 sm:px-7 sm:text-left">
+      <div className="relative flex min-w-0 flex-col items-center gap-5 px-6 pb-6 pt-7 text-center min-[720px]:flex-row min-[720px]:items-start min-[720px]:gap-7 sm:px-7 min-[720px]:text-left">
         <div className="flex flex-col items-center gap-2.5">
           <ReadinessRing pct={scorePct} band={readiness.band} />
           <span className="nn-readiness-band-badge">{readinessBandLabel(readiness.band)}</span>
@@ -165,7 +165,7 @@ export function ReadinessScoreCard({
             {readiness.trend ? <TrendPill trend={readiness.trend} /> : null}
           </div>
 
-          <p className="max-w-prose text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
+          <p className="nn-dash-report-copy text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
             {readinessBandGuidance(readiness.band)}
           </p>
 

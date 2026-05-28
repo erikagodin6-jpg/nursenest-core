@@ -224,6 +224,10 @@ export const PH = {
   userReactivated: "user_reactivated",
   /** Session frequency signal — fired once per unique UTC day with activity (deduped client-side). */
   dailyActiveSignal: "daily_active_signal",
+  /** Server: learner rated a flashcard via SM-2 spaced repetition (custom or multi-deck session). */
+  flashcardCardReviewed: "flashcard_card_reviewed",
+  /** Server: learner permanently deleted their account (churn signal). */
+  accountDeleted: "account_deleted",
 } as const;
 
 export type AppSection =

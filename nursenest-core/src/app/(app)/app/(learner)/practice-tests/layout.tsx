@@ -3,6 +3,7 @@ import { traceLayout } from "@/build/tracing";
 import "@/app/learner-exam-session-premium.css";
 import "@/app/learner-loft-simulation.css";
 import "@/app/learner-flashcard-premium.css";
+import "@/app/learner-flashcard-branding-revamp.css";
 
 export const dynamic = "force-dynamic";
 

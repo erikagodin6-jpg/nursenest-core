@@ -205,8 +205,11 @@ export function FlashcardStudyQuestionStack({
         data-nn-premium-flashcard-study
       >
         <div className="nn-flashcard-session-main min-w-0">
-          <div className="nn-flashcard-learning-grid">
-            <article className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] overflow-hidden p-5 sm:p-7 lg:p-8">
+          <div className="nn-flashcard-learning-grid min-w-0 min-h-0">
+            <article
+              className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] min-w-0 min-h-0 overflow-hidden p-5 sm:p-7 lg:p-8"
+              data-nn-flashcard-branding-revamp=""
+            >
               <div className="relative z-[1] flex flex-wrap items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] pb-4">
                 <div className="flex flex-wrap items-center gap-2">
                   {questionLabel ? (
@@ -344,7 +347,8 @@ export function FlashcardStudyQuestionStack({
 
             {exam ? (
               <aside
-                className={`nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq${revealed ? "" : " nn-flashcard-rationale-panel--reserved"}`}
+                className={`nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq min-w-0 min-h-0${revealed ? "" : " nn-flashcard-rationale-panel--reserved"}`}
+                data-nn-flashcard-branding-revamp=""
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
                 {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}
               >
@@ -402,7 +406,8 @@ export function FlashcardStudyQuestionStack({
 
             {revealed && !exam && !sata ? (
               <aside
-                className="nn-flashcard-rationale-panel"
+                className="nn-flashcard-rationale-panel min-w-0 min-h-0"
+                data-nn-flashcard-branding-revamp=""
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
                 data-nn-premium-flashcard-reveal=""
               >
@@ -482,7 +487,8 @@ export function FlashcardStudyQuestionStack({
             </button>
             <aside
               id="nn-study-pulse-rail"
-              className={`nn-flashcard-session-rail nn-flashcard-rail-utility nn-flashcard-rail-surface relative shrink-0 ${!tabletRailOpen ? "max-lg:hidden" : ""}`}
+              className={`nn-flashcard-session-rail nn-flashcard-rail-utility nn-flashcard-rail-surface relative min-w-0 min-h-0 shrink-0 ${!tabletRailOpen ? "max-lg:hidden" : ""}`}
+              data-nn-flashcard-branding-revamp=""
             >
               {rail}
             </aside>

@@ -17,6 +17,10 @@ import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/pra
 import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
+import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 
 const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
@@ -56,12 +60,14 @@ export function pathwayExamQuestionMarketingHubInventoryWhere(
   pathway: ExamPathwayDefinition,
 ): Prisma.ExamQuestionWhereInput {
   const base = pathwayExamQuestionMarketingWhere(pathway);
+  const scopeGate = pathway.roleTrack === "np" ? npProviderQuestionScopeWhere() : standardExamPrepQuestionScopeWhere();
   return {
     AND: [
       base,
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       { NOT: { tags: { has: RT_VENTILATOR_BANK_TAG } } },
+      scopeGate,
     ],
   };
 }

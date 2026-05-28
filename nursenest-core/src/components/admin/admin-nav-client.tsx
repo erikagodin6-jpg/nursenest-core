@@ -2,166 +2,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import {
-  Activity,
-  BarChart3,
-  BookMarked,
-  ClipboardList,
-  CircleDollarSign,
-  GraduationCap,
-  HeartPulse,
-  FileText,
-  Globe,
-  ImageIcon,
-  LayoutDashboard,
-  LineChart,
-  Layers,
-  Menu,
-  Search,
-  Shield,
-  ShieldAlert,
-  Sparkles,
-  Stethoscope,
-  Users,
-  Wrench,
-  X,
-  Package,
-  Megaphone,
-  ListTodo,
-  Cpu,
-  Crosshair,
-  Server,
-  TestTube2,
-  FileDown,
-  Workflow,
-  MessageSquare,
-  ShieldCheck,
-  SquarePen,
-  Radar,
-} from "lucide-react";
-import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { LayoutDashboard, Menu, Search, X } from "lucide-react";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import {
+  getVisibleAdminNavGroups,
+  isAdminNavItemActive,
+  type AdminNavGroup,
+} from "@/components/admin/admin-navigation-config";
 import type { StaffTier } from "@/lib/auth/staff-roles";
 
-type Item = { href: string; label: string; icon: React.ElementType };
-
-type NavGroup = { id: string; title: string; items: Item[] };
-
-const GROUPS: NavGroup[] = [
-  {
-    id: "overview",
-    title: "Overview",
-    items: [
-      { href: "/admin", label: "Command center", icon: LayoutDashboard },
-      { href: "/admin/observability", label: "Observability hub", icon: Radar },
-      { href: "/admin/access", label: "Access & roles", icon: Shield },
-      { href: "/admin/learner-qa", label: "Learner QA view", icon: GraduationCap },
-    ],
-  },
-  {
-    id: "growth",
-    title: "Growth & revenue",
-    items: [
-      { href: "/admin/analytics", label: "Analytics hub", icon: BarChart3 },
-      { href: "/admin/analytics/users", label: "User analytics", icon: LineChart },
-      { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
-      { href: "/admin/analytics/funnels", label: "Funnel analytics", icon: Workflow },
-      { href: "/admin/analytics/study-performance", label: "Study & CAT performance", icon: BookMarked },
-      { href: "/admin/analytics/product-intelligence", label: "Product intelligence", icon: Sparkles },
-      { href: "/admin/analytics/weak-areas", label: "Weak areas", icon: Crosshair },
-      { href: "/admin/users", label: "Users & support", icon: Users },
-      { href: "/admin/feedback", label: "User feedback", icon: MessageSquare },
-      { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },
-    ],
-  },
-  {
-    id: "content",
-    title: "Content & inventory",
-    items: [
-      { href: "/admin/inventory", label: "Inventory drill-down", icon: Package },
-      { href: "/admin/content-coverage", label: "Content coverage", icon: BarChart3 },
-      { href: "/admin/content/page-copy", label: "Page copy editor", icon: SquarePen },
-      { href: "/admin/content", label: "Coverage & quality", icon: Layers },
-      { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
-      { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
-      { href: "/admin/study-cards", label: "Verified study cards", icon: ListTodo },
-      { href: "/admin/clinical-scenarios", label: "Clinical scenarios", icon: HeartPulse },
-      { href: "/admin/osce-stations", label: "OSCE stations", icon: Stethoscope },
-      { href: "/admin/courses", label: "Internal courses", icon: BookMarked },
-      { href: "/admin/media", label: "Media library", icon: ImageIcon },
-      { href: "/admin/printables", label: "Printout store", icon: FileDown },
-    ],
-  },
-  {
-    id: "publishing",
-    title: "Publishing & SEO",
-    items: [
-      { href: "/admin/hub/publishing", label: "Publishing hub", icon: Megaphone },
-      { href: "/admin/content-bulk", label: "Bulk automation", icon: Workflow },
-      { href: "/admin/blog", label: "Blog", icon: FileText },
-      { href: "/admin/seo", label: "SEO & internal links", icon: Search },
-      { href: "/admin/eeat-editorial", label: "E-E-A-T editorial", icon: ShieldCheck },
-    ],
-  },
-  {
-    id: "ai",
-    title: "AI generation",
-    items: [
-      { href: "/admin/hub/ai", label: "AI tools hub", icon: Cpu },
-      { href: "/admin/lessons/generate", label: "Lesson AI", icon: Sparkles },
-      { href: "/admin/lessons/generate-batch", label: "Lesson batch AI", icon: Sparkles },
-      { href: "/admin/ai/exam-questions", label: "Exam question AI", icon: Stethoscope },
-      { href: "/admin/ai/exam-questions/batch", label: "Exam question batch", icon: Stethoscope },
-      { href: "/admin/ai/flashcards", label: "Flashcard AI", icon: Sparkles },
-      { href: "/admin/ai/review", label: "AI review queue", icon: ClipboardList },
-    ],
-  },
-  {
-    id: "product",
-    title: "Product & programs",
-    items: [
-      { href: "/admin/product-availability", label: "Product availability", icon: Package },
-      { href: "/admin/waitlist", label: "Waitlist & upcoming", icon: ListTodo },
-    ],
-  },
-  {
-    id: "platform",
-    title: "Platform",
-    items: [
-      { href: "/admin/operations", label: "System health", icon: Wrench },
-      { href: "/admin/system-status", label: "System status", icon: Server },
-      { href: "/admin/automation-logs", label: "Automation logs", icon: Activity },
-      { href: "/admin/diagnostics", label: "Diagnostics", icon: BarChart3 },
-      { href: "/admin/diagnostics/cat-blueprint-sessions", label: "CAT blueprint sessions", icon: BarChart3 },
-      { href: "/admin/content-quality", label: "Content quality", icon: Shield },
-      { href: "/admin/fraud", label: "Fraud detection", icon: ShieldAlert },
-      { href: "/admin/premium-protection", label: "Premium protection", icon: Shield },
-      { href: "/admin/demo-users", label: "Demo users (QA)", icon: TestTube2 },
-      { href: "/admin/i18n", label: "i18n", icon: Globe },
-      { href: "/admin/diagnostics/theme-qa", label: "Theme QA", icon: Search },
-    ],
-  },
-];
-
-function isActive(pathname: string, href: string): boolean {
-  if (href === "/admin") return pathname === "/admin";
-  /** Avoid highlighting the parent “Analytics hub” when a child route (e.g. /admin/analytics/users) is open. */
-  if (href === "/admin/analytics") return pathname === "/admin/analytics";
-  return pathname === href || pathname.startsWith(`${href}/`);
+function filterGroups(groups: AdminNavGroup[], query: string): AdminNavGroup[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return groups;
+  return groups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) =>
+        `${group.title} ${item.label} ${item.href}`.toLowerCase().includes(normalized),
+      ),
+    }))
+    .filter((group) => group.items.length > 0);
 }
 
 export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier }) {
   const pathname = usePathname() || "/admin";
-  /** Overlay drawer — default closed at all breakpoints so main content is not offset by a flex-column sidebar. */
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const groups = GROUPS.map((g) => ({
-    ...g,
-    items: g.items.filter((item) => isNavHrefAllowedForStaffTier(staffTier, item.href)),
-  })).filter((g) => g.items.length > 0);
+  const [query, setQuery] = useState("");
 
   const close = useCallback(() => setSidebarOpen(false), []);
+  const groups = useMemo(() => getVisibleAdminNavGroups(staffTier), [staffTier]);
+  const visibleGroups = useMemo(() => filterGroups(groups, query), [groups, query]);
 
   useEffect(() => {
     close();
@@ -176,67 +47,124 @@ export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier 
     return () => window.removeEventListener("keydown", onKey);
   }, [sidebarOpen, close]);
 
-  const NavBody = (
-    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4">
-      <Link
-        href="/admin"
-        className="mb-4 flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-bold text-[var(--theme-heading-text)] hover:bg-muted/80"
-        onClick={close}
-      >
-        <LayoutDashboard className="h-4 w-4 text-primary" aria-hidden />
-        Operations center
-      </Link>
-      {staffTier !== "super" ? (
-        <p className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] font-medium leading-snug text-amber-950 dark:text-amber-100">
-          Signed in as{" "}
-          <span className="font-semibold">
-            {staffTier === "content" ? "Content admin" : "Support / viewer"}
+  const navBody = (
+    <>
+      <div className="border-b border-border/70 px-4 py-4">
+        <Link
+          href="/admin"
+          className="flex items-center gap-3 rounded-2xl px-1 py-1 text-[var(--theme-heading-text)]"
+          onClick={close}
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+            <LayoutDashboard className="h-4 w-4" aria-hidden />
           </span>
-          — navigation is limited to your role.
-        </p>
-      ) : null}
-      {groups.map((group) => (
-        <div key={group.id} className="mb-5 last:mb-0">
-          <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{group.title}</p>
-          <ul className="space-y-0.5">
-            {group.items.map((item) => {
-              const active = isActive(pathname, item.href);
-              const Icon = item.icon;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`flex items-center gap-2 rounded-lg px-2 py-2 text-sm transition-colors ${
-                      active
-                        ? "bg-primary/12 font-semibold text-primary ring-1 ring-primary/20"
-                        : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-                    }`}
-                    onClick={close}
-                  >
-                    <Icon className="h-3.5 w-3.5 shrink-0 opacity-85" aria-hidden />
-                    <span className="leading-snug">{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-bold tracking-tight">NurseNest Admin</span>
+            <span className="block truncate text-[11px] font-medium text-muted-foreground">
+              Operations console
+            </span>
+          </span>
+        </Link>
+      </div>
+
+      <div className="border-b border-border/70 px-4 py-3">
+        <label className="relative block">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <span className="sr-only">Search admin navigation</span>
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search admin"
+            className="h-9 w-full rounded-xl border border-border/80 bg-[var(--theme-muted-surface)]/55 pl-9 pr-3 text-sm text-foreground outline-none transition focus:border-primary/50 focus:ring-2 focus:ring-primary/15"
+          />
+        </label>
+        {staffTier !== "super" ? (
+          <p className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-[11px] font-medium leading-snug text-amber-950 dark:text-amber-100">
+            {staffTier === "content" ? "Content admin" : "Support / viewer"} access. Navigation is role-limited.
+          </p>
+        ) : null}
+      </div>
+
+      <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-4" aria-label="Admin navigation">
+        {visibleGroups.length > 0 ? (
+          visibleGroups.map((group) => (
+            <section key={group.id} className="mb-5 last:mb-0">
+              <h2 className="px-2 pb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                {group.title}
+              </h2>
+              <ul className="space-y-1">
+                {group.items.map((item) => {
+                  const active = isAdminNavItemActive(pathname, item.href);
+                  const Icon = item.icon;
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={`group flex min-w-0 items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition ${
+                          active
+                            ? "bg-primary/10 text-primary ring-1 ring-primary/20"
+                            : "text-muted-foreground hover:bg-[var(--theme-muted-surface)]/70 hover:text-[var(--theme-heading-text)]"
+                        }`}
+                        onClick={close}
+                      >
+                        <Icon className="h-4 w-4 shrink-0 opacity-85" aria-hidden />
+                        <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                        {item.badge != null && item.badge > 0 ? (
+                          <span className="shrink-0 rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-200">
+                            {item.badge > 99 ? "99+" : item.badge}
+                          </span>
+                        ) : null}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))
+        ) : (
+          <p className="rounded-xl border border-border/70 bg-[var(--theme-muted-surface)]/40 px-3 py-3 text-sm text-muted-foreground">
+            No admin links match “{query}”.
+          </p>
+        )}
+      </nav>
+
+      <div className="shrink-0 border-t border-border/70 bg-[var(--theme-card-bg)] px-4 py-3">
+        <div className="mb-3 grid grid-cols-2 gap-2 text-xs font-semibold">
+          <Link
+            href="/"
+            className="rounded-xl border border-border/80 px-3 py-2 text-center text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+            onClick={close}
+          >
+            View site
+          </Link>
+          <Link
+            href="/app"
+            className="rounded-xl border border-primary/25 bg-primary/10 px-3 py-2 text-center text-primary hover:bg-primary/15"
+            onClick={close}
+          >
+            Learner app
+          </Link>
         </div>
-      ))}
-    </div>
+        <SignOutButton
+          className="flex min-h-[44px] w-full items-center justify-center rounded-xl border border-border bg-[var(--theme-muted-surface)]/35 px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+          onBeforeSignOut={close}
+        />
+      </div>
+    </>
   );
 
   return (
     <>
-      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-border/80 bg-[var(--theme-card-bg)] px-4 py-3">
+      <div className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border/80 bg-[var(--theme-card-bg)]/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-[var(--theme-card-bg)]/80 lg:hidden">
         <Link href="/admin" className="text-sm font-bold text-[var(--theme-heading-text)]">
           NurseNest admin
         </Link>
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm font-medium"
+          className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-muted/35 px-3 text-sm font-semibold"
           aria-expanded={sidebarOpen}
           aria-controls="admin-nav-drawer"
-          onClick={() => setSidebarOpen((o) => !o)}
+          onClick={() => setSidebarOpen((open) => !open)}
         >
           {sidebarOpen ? <X className="h-4 w-4" aria-hidden /> : <Menu className="h-4 w-4" aria-hidden />}
           Menu
@@ -246,27 +174,19 @@ export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier 
       {sidebarOpen ? (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-black/40"
-          aria-label="Close menu"
+          className="fixed inset-0 z-40 bg-black/45 lg:hidden"
+          aria-label="Close admin menu"
           onClick={close}
         />
       ) : null}
 
       <aside
         id="admin-nav-drawer"
-        className={`fixed inset-y-0 left-0 z-50 flex w-[min(18rem,92vw)] max-w-[18rem] flex-col border-r border-border/80 bg-[var(--theme-card-bg)] shadow-xl transition-transform duration-200 ease-out lg:max-h-screen ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
+        className={`fixed inset-y-0 left-0 z-50 flex w-[min(19rem,92vw)] min-w-0 flex-col border-r border-border/80 bg-[var(--theme-card-bg)] shadow-2xl transition-transform duration-200 ease-out lg:w-72 lg:translate-x-0 lg:shadow-none ${
+          sidebarOpen ? "translate-x-0" : "pointer-events-none -translate-x-full lg:pointer-events-auto"
         }`}
-        aria-hidden={!sidebarOpen}
-        aria-label="Admin navigation"
       >
-        {NavBody}
-        <div className="shrink-0 border-t border-border/80 bg-[var(--theme-card-bg)] px-3 py-3 lg:pb-4">
-          <SignOutButton
-            className="flex w-full min-h-[48px] items-center justify-center rounded-xl border border-border bg-muted/25 px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-            onBeforeSignOut={close}
-          />
-        </div>
+        {navBody}
       </aside>
     </>
   );

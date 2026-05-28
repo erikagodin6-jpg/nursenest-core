@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { loadAdminSecurityTelemetry } from "@/lib/admin/load-admin-security-telemetry";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -78,6 +79,7 @@ export async function GET(req: NextRequest) {
     emailDomainsRaw,
     practiceTestsStarted,
     lessonsCompleted,
+    securityTelemetry,
   ] = await Promise.all([
     // Total non-demo users
     prisma.user.count({ where: realUsers }).catch(() => null),
@@ -129,6 +131,9 @@ export async function GET(req: NextRequest) {
 
     // Lessons completed — progress rows where completed = true
     prisma.progress.count({ where: { completed: true } }).catch(() => null),
+
+    // DB-backed anti-fraud / user verification telemetry.
+    loadAdminSecurityTelemetry().catch(() => null),
   ]);
 
   // Compute retention % (MAU / total, rough proxy)
@@ -179,5 +184,6 @@ export async function GET(req: NextRequest) {
       practiceTestsStarted,
       lessonsCompleted,
     },
+    securityTelemetry,
   });
 }

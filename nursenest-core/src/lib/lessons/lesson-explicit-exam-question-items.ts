@@ -5,6 +5,10 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 import type { ExamQuestionMcqRow, LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import { subscriberMayResolveExplicitExamQuestionRows } from "@/lib/lessons/lesson-explicit-exam-question-access-pure";
 import type { ExplicitQuestionIdDrop } from "@/lib/lessons/lesson-explicit-exam-question-drops";
@@ -141,11 +145,18 @@ export async function loadLessonBankQuizItemsByExamIds(args: {
     };
   }
 
+  const scopeWhere =
+    args.entitlement.tier === "NP" ? npProviderQuestionScopeWhere() : standardExamPrepQuestionScopeWhere();
   const rows = await withDatabaseFallback(
     () =>
       prisma.examQuestion.findMany({
         where: {
-          AND: [questionAccessWhere(args.entitlement), { id: { in: uniq } }, regionWhereForCountry(args.countryCode)],
+          AND: [
+            questionAccessWhere(args.entitlement),
+            scopeWhere,
+            { id: { in: uniq } },
+            regionWhereForCountry(args.countryCode),
+          ],
         },
         select: {
           id: true,

@@ -7,6 +7,10 @@ import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
+import {
   bankExamQuestionRowToFlashcardStudySelectRow,
   type BankExamRowForFlashcard,
 } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
@@ -96,10 +100,17 @@ async function loadExamRowsByIds(
   const uniq = [...new Set(ids)];
   for (let i = 0; i < uniq.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
     const chunk = uniq.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
+    const scopeWhere =
+      entitlement.tier === "NP" ? npProviderQuestionScopeWhere() : standardExamPrepQuestionScopeWhere();
     const rows = await withDatabaseFallback(async (): Promise<BankExamRowForFlashcard[]> => {
       const raw = await prisma.examQuestion.findMany({
         where: {
-          AND: [questionAccessWhere(entitlement), { id: { in: chunk } }, regionWhereForCountry(country)],
+          AND: [
+            questionAccessWhere(entitlement),
+            scopeWhere,
+            { id: { in: chunk } },
+            regionWhereForCountry(country),
+          ],
         },
         select: {
           id: true,

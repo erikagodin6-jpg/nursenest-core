@@ -22,16 +22,21 @@ export default async function AdminSubLayout({ children }: { children: React.Rea
   warnAdminAiGenerationMisconfigurationIfNeeded(aiGate);
 
   return (
-    <div className="flex min-h-[70vh] min-w-0 flex-col bg-[var(--theme-bg)] lg:min-h-screen">
+    <div
+      data-nn-admin-responsive
+      className="min-h-[70vh] min-w-0 bg-[var(--theme-bg)] lg:min-h-screen"
+    >
       <AdminRenderedI18nKeyDevGuard />
       <AdminNavClient staffTier={tier} />
       <AdminAiGenerationProvider value={aiGate}>
-        {!aiGate.runnable ? (
-          <div className="border-b border-border/60 bg-[var(--theme-muted-surface)]/35 px-0 py-3 sm:py-4">
-            <AdminAiGenerationBanner gate={aiGate} />
-          </div>
-        ) : null}
-        <div className="min-w-0 flex-1">{children}</div>
+        <div className="min-w-0 lg:pl-72">
+          {!aiGate.runnable ? (
+            <div className="border-b border-border/60 bg-[var(--theme-muted-surface)]/35 px-0 py-3 sm:py-4">
+              <AdminAiGenerationBanner gate={aiGate} />
+            </div>
+          ) : null}
+          <div className="min-w-0">{children}</div>
+        </div>
       </AdminAiGenerationProvider>
     </div>
   );

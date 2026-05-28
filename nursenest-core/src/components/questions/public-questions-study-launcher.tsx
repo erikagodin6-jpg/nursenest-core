@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Check, ClipboardList, Layers, SlidersHorizontal } from "lucide-react";
 import type { PracticeBodySystemHubAggregate } from "@/lib/questions/pathway-practice-body-system-aggregates";
+import type { PracticeBodySystemHubId } from "@/lib/questions/normalize-question-body-system";
 import type { PracticeSessionStudyFilter } from "@/lib/practice-question-session/constants";
 
 const FILTER_OPTIONS: Array<{ id: PracticeSessionStudyFilter; label: string }> = [
@@ -37,7 +38,7 @@ export function PublicQuestionsStudyLauncher({
 }: Props) {
   const visibleAggregates = aggregates.filter((row) => row.id !== "uncategorized");
   const defaultHub = visibleAggregates.find((row) => row.questionCount > 0)?.id ?? visibleAggregates[0]?.id;
-  const [selectedHubs, setSelectedHubs] = useState<string[]>(defaultHub ? [defaultHub] : []);
+  const [selectedHubs, setSelectedHubs] = useState<PracticeBodySystemHubId[]>(defaultHub ? [defaultHub] : []);
   const [selectedFilters, setSelectedFilters] = useState<PracticeSessionStudyFilter[]>([]);
   const [questionCount, setQuestionCount] = useState<(typeof QUESTION_COUNT_PRESETS)[number]>(20);
 
@@ -56,8 +57,20 @@ export function PublicQuestionsStudyLauncher({
     if (selectedFilters.includes("incorrect")) study.set("studyFilter", "incorrect");
     if (selectedFilters.includes("bookmarked")) study.set("studyFilter", "bookmarked");
     if (alliedProfessionKey.trim()) study.set("alliedProfession", alliedProfessionKey.trim().toLowerCase());
+    if (selectedHubs.length > 0 && selectedHubs.length < visibleAggregates.length) {
+      const topics = new Set<string>();
+      const byId = new Map(visibleAggregates.map((row) => [row.id, row]));
+      for (const hubId of selectedHubs) {
+        const row = byId.get(hubId);
+        if (!row) continue;
+        for (const topic of row.matchingTopics) {
+          if (topic.trim()) topics.add(topic.trim());
+        }
+      }
+      if (topics.size > 0) study.set("topicNames", [...topics].join(","));
+    }
 
-    const callbackPath = `/app/questions?${study.toString()}`;
+    const callbackPath = `/app/questions/start?${study.toString()}`;
     const login = new URLSearchParams();
     login.set(callbackParam, callbackPath);
     return `${loginBaseHref}?${login.toString()}`;
@@ -72,7 +85,7 @@ export function PublicQuestionsStudyLauncher({
     visibleAggregates.length,
   ]);
 
-  function toggleHub(id: string) {
+  function toggleHub(id: PracticeBodySystemHubId) {
     setSelectedHubs((current) =>
       current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
     );

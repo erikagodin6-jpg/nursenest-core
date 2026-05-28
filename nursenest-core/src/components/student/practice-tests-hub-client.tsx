@@ -2,8 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ClipboardCheck, LineChart, PlayCircle, Shuffle, Target } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { LineChart, PlayCircle } from "lucide-react";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import {
   LearnerCategorySelector,
@@ -498,23 +497,6 @@ export function PracticeTestsHubClient({
     discoveryReady && discoveryTotal !== null
       ? `${categorySummary} · ${discoveryTotal} available questions`
       : `${categorySummary} · pathway pool syncing`;
-  const catLandingFeatures: Array<{ icon: LucideIcon; title: string; body: string }> = [
-    {
-      icon: Shuffle,
-      title: "Real adaptive logic",
-      body: "Correct answers raise difficulty. Misses recalibrate the next item.",
-    },
-    {
-      icon: ClipboardCheck,
-      title: "NGN formats",
-      body: "Modern item types appear in the same focused exam workspace.",
-    },
-    {
-      icon: Target,
-      title: "Domain tracking",
-      body: "Results summarize readiness across NCLEX client-needs categories.",
-    },
-  ];
   const resumeSession = useCallback(() => {
     if (!resumeHref) return;
     setCreating(true);
@@ -644,7 +626,7 @@ export function PracticeTestsHubClient({
     return (
       <SharedStudySetupLayout
         mode="cat"
-        className="nn-practice-tests-hub-premium space-y-0 py-0 pb-0"
+        className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
         data-nn-e2e-practice-tests-hub
         data-nn-practice-exam-hub-convergence=""
         data-nn-e2e-cat-simple-landing
@@ -653,141 +635,97 @@ export function PracticeTestsHubClient({
         data-nn-premium-platform-family="exam-study"
         data-nn-premium-platform-module="practice-tests"
       >
-        {hubBootstrapSource === "secondary" ? (
-          <div className="mb-4" data-nn-practice-hub-bootstrap-source="secondary">
-            <LearnerStudyLiveSyncBanner />
-          </div>
-        ) : null}
+        {hubBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
-        <section className="overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] shadow-[0_24px_80px_color-mix(in_srgb,var(--semantic-info)_10%,transparent)]">
-          <div className="grid min-h-[34rem] lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)]">
-            <div className="relative flex min-h-[30rem] items-center overflow-hidden bg-[color-mix(in_srgb,var(--semantic-info)_13%,var(--semantic-surface))] px-6 py-12 sm:px-10 lg:px-14">
-              <div
-                className="pointer-events-none absolute inset-y-0 right-[-12%] hidden w-[22%] skew-x-[-4deg] bg-[var(--semantic-surface)] lg:block"
-                aria-hidden
-              />
-              <div className="relative max-w-xl">
-                <p className="inline-flex rounded-full bg-[var(--semantic-surface)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--semantic-info)] shadow-sm">
-                  NCLEX · CAT exam prep
-                </p>
-                <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] text-[var(--semantic-text-primary)] sm:text-5xl">
-                  Adaptive questions that make the real{" "}
-                  <span className="text-[var(--semantic-info)]">exam feel familiar.</span>
-                </h1>
-                <p className="mt-6 max-w-prose text-base leading-8 text-[var(--semantic-text-secondary)] sm:text-lg">
-                  NurseNest mirrors NCLEX-style adaptive delivery: answer, submit, and move forward in a focused exam interface without study hints or teaching panels.
-                </p>
-                <button
-                  type="button"
-                  onClick={createTest}
-                  disabled={startDisabled}
-                  className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_24%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                  data-nn-e2e-cat-start-exam
-                >
-                  {isLaunching ? (
-                    <>
-                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Opening…
-                    </>
-                  ) : creating ? (
-                    <>
-                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Starting…
-                    </>
-                  ) : (
-                    <>
-                      <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                      Start
-                    </>
-                  )}
-                </button>
-                {!catAvailableForPathway ? (
-                  <p className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-                    CAT is not available for this pathway yet.
-                  </p>
-                ) : null}
-              </div>
+        <h1 className="sr-only">CAT Exam</h1>
+
+        <header
+          className="nn-flashcards-hub-workspace nn-flashcards-hub-hero relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))_0%,var(--semantic-surface)_48%,color-mix(in_srgb,var(--semantic-panel-lavender)_12%,var(--semantic-surface))_100%)] px-5 py-6 sm:px-8 sm:py-8"
+          data-nn-e2e-practice-compact-header
+        >
+          <div
+            className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] blur-3xl"
+            aria-hidden
+          />
+          <div className="relative space-y-6 sm:space-y-7">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-brand)_82%,var(--semantic-text-secondary))]">
+                {heroEyebrow}
+              </p>
+              <h2 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.85rem]">
+                CAT Exam
+              </h2>
+              <p className="mt-2 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.9375rem]">
+                Start an adaptive exam session in the same focused NurseNest study workspace.
+              </p>
             </div>
 
-            <div className="flex items-center justify-center bg-[var(--semantic-surface)] px-6 py-12 sm:px-10 lg:px-14">
-              <div className="w-full max-w-lg rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-6 shadow-[0_24px_70px_color-mix(in_srgb,var(--semantic-info)_13%,transparent)]">
-                <div className="mb-5 flex items-center justify-between gap-4">
-                  <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] px-3 py-1.5 text-xs font-bold uppercase text-[var(--semantic-info)]">
-                    Basic care & comfort
-                  </span>
-                  <span className="text-xs font-medium text-[var(--semantic-text-muted)]">Adaptive item</span>
-                </div>
-                <p className="text-base font-semibold leading-7 text-[var(--semantic-text-primary)]">
-                  A nurse is caring for a client who is 1 day postpartum and breastfeeding. Which instruction does the nurse give first?
-                </p>
-                <div className="mt-5 space-y-3">
-                  {[
-                    ["A", "Apply lanolin cream after each feeding", false],
-                    ["B", "Assess latch position and technique with the next feeding", true],
-                    ["C", "Alternate breast and formula feeding to rest nipples", false],
-                    ["D", "Apply warm compresses for 10 minutes before feeding", false],
-                  ].map(([letter, text, selected]) => (
-                    <div
-                      key={String(letter)}
-                      className={
-                        selected
-                          ? "flex min-h-11 items-center gap-3 rounded-xl border border-[var(--semantic-success)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] px-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
-                          : "flex min-h-11 items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-secondary)]"
-                      }
-                    >
-                      <span
-                        className={
-                          selected
-                            ? "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[var(--semantic-success)] text-xs font-bold text-white"
-                            : "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))] text-xs font-bold text-[var(--semantic-text-muted)]"
-                        }
-                      >
-                        {letter}
-                      </span>
-                      <span>{text}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4 text-xs font-medium text-[var(--semantic-text-muted)]">
-                  Exam-only session · Next item adapts after you submit
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-center sm:grid-cols-4">
-            {[
-              ["2,400+", "Questions"],
-              ["CAT", "Adaptive engine"],
-              ["NGN", "Formats"],
-              [heroEyebrow, "Current pathway"],
-            ].map(([value, label]) => (
-              <div key={`${value}-${label}`} className="border-b border-[var(--semantic-border-soft)] px-4 py-6 sm:border-b-0 sm:border-r last:border-r-0">
-                <p className="text-3xl font-extrabold text-[var(--semantic-text-primary)]">{value}</p>
-                <p className="mt-1 text-xs font-medium text-[var(--semantic-text-muted)]">{label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-4 bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] px-0 py-8 md:grid-cols-3">
-          {catLandingFeatures.map(({ icon: Icon, title, body }) => (
-            <article
-              key={String(title)}
-              className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-6 shadow-sm"
+            <div
+              className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
+              data-nn-e2e-practice-exam-band
             >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] text-[var(--semantic-info)]">
-                <Icon className="h-5 w-5" aria-hidden />
-              </span>
-              <h2 className="mt-4 text-base font-bold text-[var(--semantic-text-primary)]">{title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{body}</p>
-            </article>
-          ))}
-        </section>
+              <p
+                className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]"
+                data-nn-e2e-practice-session-preview
+              >
+                {questionCount} adaptive questions · {heroEyebrow}
+              </p>
+              <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div className="min-w-0 flex-1">
+                  <button
+                    type="button"
+                    onClick={createTest}
+                    disabled={startDisabled}
+                    className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+                    data-nn-e2e-cat-start-exam
+                  >
+                    {isLaunching ? (
+                      <>
+                        <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                        Opening…
+                      </>
+                    ) : creating ? (
+                      <>
+                        <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                        Starting…
+                      </>
+                    ) : (
+                      <>
+                        <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                        Start
+                      </>
+                    )}
+                  </button>
+                  <p
+                    className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
+                    data-nn-e2e-practice-cta-subline
+                  >
+                    {ctaSubline}
+                  </p>
+                  {!catAvailableForPathway ? (
+                    <p className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+                      CAT is not available for this pathway yet.
+                    </p>
+                  ) : null}
+                </div>
+                <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
+                  <span>
+                    <span className="font-semibold text-[var(--semantic-text-primary)]">Question pool </span>
+                    <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">
+                      {discoveryTotal != null ? discoveryTotal : "—"}
+                    </span>
+                  </span>
+                  <span className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline" aria-hidden />
+                  <span className="hidden sm:inline">{setupSummary}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
 
         {error ? (
           <div
-            className="mt-5 rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
+            className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
             role="alert"
           >
             {showCatPoolWarning

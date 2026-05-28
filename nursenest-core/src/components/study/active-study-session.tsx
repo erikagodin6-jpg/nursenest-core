@@ -15,6 +15,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { LeafWatermark } from "@/components/brand/leaf-watermark";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
@@ -429,13 +430,24 @@ export function ActiveStudySession({
 
   return (
     <div
-      className="nn-active-flashcard-session nn-unified-exam-workspace space-y-3"
+      className="nn-active-flashcard-session nn-unified-exam-workspace relative space-y-3"
       data-nn-premium-flashcard-active-session
+      data-nn-flashcard-branding-revamp=""
       data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-pedagogy-tier={tierPedagogyProfile.tier}
       data-nn-unified-exam-workspace=""
       data-nn-exam-workspace-mode={"flashcards" satisfies UnifiedExamWorkspaceMode}
     >
+      <LeafWatermark
+        className="-right-16 -top-20 hidden opacity-[0.14] sm:block md:-right-24 md:-top-28"
+        imageClassName="opacity-90"
+        size={320}
+      />
+      <LeafWatermark
+        className="-bottom-24 -left-20 hidden opacity-[0.08] md:block"
+        imageClassName="opacity-80 rotate-[-18deg]"
+        size={240}
+      />
       <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
         <div className="min-w-0">
           <p className="nn-flashcard-learning-topbar__mode">{header.modeLabel}</p>

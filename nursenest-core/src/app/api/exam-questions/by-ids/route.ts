@@ -11,6 +11,10 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
+import {
+  npProviderQuestionScopeWhere,
+  standardExamPrepQuestionScopeWhere,
+} from "@/lib/questions/difficulty-scope-filter";
 
 export const dynamic = "force-dynamic";
 
@@ -117,11 +121,18 @@ export async function POST(req: NextRequest) {
     }
 
     const baseAccess = questionAccessWhere(ent);
+    const scopeGovernanceWhere =
+      tierLower === "np"
+        ? npProviderQuestionScopeWhere()
+        : tierLower === "newgrad" || tierLower === "allied"
+          ? null
+          : standardExamPrepQuestionScopeWhere();
     // Body `tier` must sit on the subscriber ladder; row tiers are already constrained by `baseAccess`
     // (do not require every row to match a single requested tier string — lessons may mix PN/RN depth).
     const strict: Prisma.ExamQuestionWhereInput = {
       AND: [
         baseAccess,
+        ...(scopeGovernanceWhere ? [scopeGovernanceWhere] : []),
         { id: { in: uniq } },
         regionWhereForCountry(countryCode),
         ...(system?.trim() ? [{ bodySystem: system.trim() } satisfies Prisma.ExamQuestionWhereInput] : []),

@@ -14,6 +14,8 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { validateFlashcardsPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
+import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const bodySchema = z.object({
   rating: z.enum(["again", "hard", "good", "easy", "incorrect", "unsure", "known"]),
@@ -165,6 +167,12 @@ export async function POST(req: NextRequest, { params }: Props) {
         userIdPrefix: userId.slice(0, 8),
         deckId: "custom-session",
         rating: rawRating,
+      });
+
+      captureLearnerProductEvent(userId, entitlement, PH.flashcardCardReviewed, {
+        rating: rawRating,
+        interval_days: nextSchedule.intervalDays,
+        repetitions: nextSchedule.repetitions,
       });
 
       return NextResponse.json({

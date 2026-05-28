@@ -243,9 +243,136 @@ html[data-theme="apex"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-e
   background: var(--semantic-surface);
 }
 
+/* ── CAT viewport containment hardening ──────────────────────────────────────
+   Long generated headers (for example "[DOCUMENTATION Q004]") must never make
+   the exam board wider than the viewport or push answers off-screen. */
+html,
+body {
+  overflow-x: hidden;
+}
+
+.nn-exam-session-premium,
+.nn-learner-exam-shell,
+.nn-cat-exam-chrome,
+.nn-cat-exam-board-frame,
+.nn-cat-exam-board-top,
+.nn-cat-session,
+.nn-cat-exam-content-well,
+.nn-cat-question-card,
+.nn-cat-question-card__exam-scroll,
+.nn-cat-exam-stem-scroll,
+.nn-cat-exam-post-stem {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.nn-cat-exam-chrome .nn-cat-exam-content-well {
+  max-width: min(100%, 48.75rem) !important;
+}
+
+.nn-cat-exam-board-frame,
+.nn-cat-question-card {
+  overflow-y: visible;
+}
+
+.nn-cat-question-card__exam-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.nn-cat-exam-board-top,
+.nn-cat-exam-board-top > *,
+.nn-cat-exam-item-head,
+.nn-cat-exam-item-head > *,
+.nn-cat-topic-meta {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nn-cat-exam-board-top__progress,
+.nn-cat-exam-category-label,
+.nn-cat-topic-meta span {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nn-cat-exam-category-label {
+  white-space: nowrap;
+}
+
+.nn-cat-question-stem,
+.nn-cat-opt__text {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.nn-cat-question-stem {
+  font-size: clamp(0.875rem, 1.6vw, 1.125rem);
+  line-height: 1.48;
+}
+
+.nn-cat-opt-list,
+.nn-cat-opt-list > li,
+.nn-cat-opt {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.nn-cat-opt {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.nn-cat-opt__letter,
+.nn-cat-opt__control {
+  flex: 0 0 auto;
+}
+
+.nn-cat-opt :where(svg) {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 639px) {
   .nn-cat-exam-chrome.nn-cat-premium-convergence.nn-cat-adaptive-exam-session .nn-cat-exam-board-frame {
     border-radius: 0.65rem;
+  }
+
+  .nn-cat-exam-board-top {
+    max-height: none;
+  }
+
+  .nn-cat-exam-board-top__progress {
+    max-width: min(100%, 13rem);
+  }
+
+  .nn-cat-exam-category-label {
+    max-width: min(100%, 11.5rem);
+  }
+}
+
+@media (max-width: 1180px) {
+  .nn-cat-exam-chrome,
+  .nn-cat-exam-board-frame,
+  .nn-cat-session,
+  .nn-cat-question-card {
+    height: auto;
+  }
+
+  .nn-cat-exam-board-frame {
+    max-height: none;
   }
 }
 

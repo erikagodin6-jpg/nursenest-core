@@ -196,15 +196,9 @@ html[data-theme="midnight"] .nn-cockpit-mastery-key {
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 1024px) {
-  .nn-dash-hub-priority-matrix__grid {
-    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
-    align-items: start;
-  }
-
-  .nn-dash-hub-priority-matrix__signals {
-    grid-column: 1 / -1;
-  }
+/* Legacy hook — layout now uses .nn-dashboard-report-layout inside the strip */
+.nn-dash-hub-priority-matrix__grid {
+  display: contents;
 }
 
 /* Quick-launch rail: horizontal thumb strip on small screens, even grid on desktop */

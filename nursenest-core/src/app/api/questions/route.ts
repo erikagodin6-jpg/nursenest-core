@@ -48,6 +48,7 @@ import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-ca
 import { subscriberQuestionsListStaleKey } from "@/lib/durability/questions-list-stale-key";
 import {
   parseQuestionDifficultyScopeMode,
+  npProviderQuestionScopeWhere,
   questionDifficultyScopeSqlForMode,
   questionDifficultyScopeWhereForMode,
   standardExamPrepQuestionScopeSql,
@@ -289,6 +290,8 @@ export async function GET(req: NextRequest) {
 
     try {
       const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+      const effectiveDifficultyScopeMode =
+        difficultyScopeMode === "all" ? "standard_exam_prep" : difficultyScopeMode;
       const previewSelect = {
         id: true,
         stem: true,
@@ -404,7 +407,10 @@ export async function GET(req: NextRequest) {
       }
 
       const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
-      const difficultyScopeWhere = questionDifficultyScopeWhereForMode(difficultyScopeMode);
+      const difficultyScopeWhere =
+        pathway?.roleTrack === "np" || gate.entitlement.tier === "NP"
+          ? npProviderQuestionScopeWhere()
+          : questionDifficultyScopeWhereForMode(effectiveDifficultyScopeMode);
 
       const studyModeFilters: Prisma.ExamQuestionWhereInput[] = [];
       if (studyMode === "high_yield") {
@@ -457,7 +463,7 @@ export async function GET(req: NextRequest) {
       const focusPoolSql = includeQuestionIdsSql(focusIds);
       const examExtraSql = examFilter ? examEqualsFilterSql(examFilter) : Prisma.empty;
       const difficultySqlFrag = difficultyBoundsSql(difficultyMin, difficultyMax);
-      const difficultyScopeSql = questionDifficultyScopeSqlForMode(difficultyScopeMode);
+      const difficultyScopeSql = questionDifficultyScopeSqlForMode(effectiveDifficultyScopeMode);
       const subtopicSql =
         topicCodeFilter && topicCodeFilter.length > 0
           ? Prisma.sql` AND subtopic = ${topicCodeFilter}`
@@ -603,7 +609,7 @@ export async function GET(req: NextRequest) {
         topicRequested: topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
         topicCodeRequested: topicCodeFilter ?? null,
         topicRelaxed,
-        difficultyScope: difficultyScopeMode,
+        difficultyScope: effectiveDifficultyScopeMode,
         ...(educationalLocale !== DEFAULT_MARKETING_LOCALE
           ? { educationalContentLocale: educationalLocale }
           : {}),

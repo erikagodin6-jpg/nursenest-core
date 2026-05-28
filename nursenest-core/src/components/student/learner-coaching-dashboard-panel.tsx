@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Sparkles } from "lucide-react";
 import {
   composeDashboardOrchestrationV3,
   type DashboardOrchestrationV3,
@@ -12,16 +13,24 @@ import { captureGovernedGraphTelemetry } from "@/lib/educational-graph/capture-g
 import { nextActionFromGraphStep } from "@/lib/educational-graph/graph-step-next-action";
 import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 
-const TONE_CLASS: Record<DashboardOrchestrationV3["cards"][0]["tone"], string> = {
-  momentum: "nn-semantic-inset--positive",
-  alert: "nn-semantic-inset--warning",
-  pacing: "nn-semantic-inset--cool",
-  remediation: "nn-semantic-inset--warm",
-  neutral: "border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]",
+const TONE_ACCENT: Record<DashboardOrchestrationV3["cards"][0]["tone"], string> = {
+  momentum: "var(--semantic-success)",
+  alert: "var(--semantic-warning)",
+  pacing: "var(--semantic-info)",
+  remediation: "var(--semantic-chart-4)",
+  neutral: "var(--semantic-brand)",
+};
+
+const TONE_PRIORITY: Record<DashboardOrchestrationV3["cards"][0]["tone"], string> = {
+  momentum: "Momentum",
+  alert: "Priority",
+  pacing: "Pacing",
+  remediation: "Remediation",
+  neutral: "Coach tip",
 };
 
 /**
- * Dashboard orchestration V3 — graph-substrate cards when pathway is known; governed graph telemetry on CTAs.
+ * Premium AI clinical coach — prioritized action cards with clear hierarchy.
  */
 export function LearnerCoachingDashboardPanel() {
   const [orch, setOrch] = useState<DashboardOrchestrationV3 | null | undefined>(undefined);
@@ -59,14 +68,14 @@ export function LearnerCoachingDashboardPanel() {
   if (orch === undefined) {
     return (
       <section
-        className="nn-coaching-dashboard-reserve nn-dash-section"
+        className="nn-coaching-dashboard-reserve nn-dash-section min-w-0"
         aria-busy="true"
         aria-label="Study intelligence loading"
       >
         <div className="nn-skeleton nn-skeleton-shimmer mb-3 h-3 w-32 rounded-full" />
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="nn-skeleton nn-skeleton-shimmer min-h-[5.5rem] rounded-2xl" />
-          <div className="nn-skeleton nn-skeleton-shimmer min-h-[5.5rem] rounded-2xl" />
+        <div className="nn-coaching-command-center__grid">
+          <div className="nn-skeleton nn-skeleton-shimmer min-h-[8rem] rounded-2xl" />
+          <div className="nn-skeleton nn-skeleton-shimmer min-h-[8rem] rounded-2xl" />
         </div>
       </section>
     );
@@ -82,36 +91,48 @@ export function LearnerCoachingDashboardPanel() {
 
   return (
     <section
-      className="space-y-3"
+      className="nn-coaching-command-center min-w-0 min-h-0"
       data-nn-learner-coaching-dashboard=""
       aria-labelledby="learner-coaching-dashboard-heading"
     >
-      <h2
-        id="learner-coaching-dashboard-heading"
-        className="text-xs font-bold uppercase tracking-widest text-[var(--semantic-brand)]"
-      >
-        Study intelligence
-      </h2>
-      {orch.feed?.headline ? (
-        <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{orch.feed.headline}</p>
-      ) : null}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="nn-coaching-command-center__header min-w-0">
+        <div className="flex min-w-0 items-start gap-3">
+          <div
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-brand)]"
+            aria-hidden
+          >
+            <Sparkles className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <h2 id="learner-coaching-dashboard-heading" className="nn-coaching-command-center__title">
+              Clinical study coach
+            </h2>
+            <p className="nn-coaching-command-center__subtitle">
+              {orch.feed?.headline ??
+                "Personalized next steps based on your practice patterns, weak areas, and exam trajectory."}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="nn-coaching-command-center__grid min-w-0 min-h-0">
         {orch.cards.map((card) => {
           const graphStep = actionByCardId.get(card.id);
+          const accent = TONE_ACCENT[card.tone];
           const cta =
             card.href && graphStep ? (
               <GovernedNextActionLink
                 action={nextActionFromGraphStep(graphStep)}
                 graphStep={graphStep}
                 sourceSurface="dashboard_feed"
-                className="nn-btn-secondary mt-3 inline-flex min-h-[2.5rem] items-center rounded-lg px-3 text-xs font-semibold"
+                className="nn-btn-secondary mt-2 inline-flex min-h-[2.75rem] items-center rounded-lg px-4 text-xs font-semibold"
               >
-                Continue
+                Start now
               </GovernedNextActionLink>
             ) : card.href ? (
               <Link
                 href={card.href}
-                className="nn-btn-secondary mt-3 inline-flex min-h-[2.5rem] items-center rounded-lg px-3 text-xs font-semibold"
+                className="nn-btn-secondary mt-2 inline-flex min-h-[2.75rem] items-center rounded-lg px-4 text-xs font-semibold"
                 onClick={() => {
                   void captureGovernedGraphTelemetry({
                     event: "graph_step_clicked",
@@ -125,17 +146,19 @@ export function LearnerCoachingDashboardPanel() {
                   });
                 }}
               >
-                Continue
+                Start now
               </Link>
             ) : null;
 
           return (
             <article
               key={card.id}
-              className={`rounded-2xl p-4 ${TONE_CLASS[card.tone]}`}
+              className="nn-coaching-action-card min-w-0 min-h-0"
+              style={{ ["--coaching-accent" as string]: accent }}
             >
-              <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{card.title}</h3>
-              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{card.body}</p>
+              <span className="nn-coaching-action-card__priority">{TONE_PRIORITY[card.tone]}</span>
+              <h3 className="nn-coaching-action-card__title">{card.title}</h3>
+              <p className="nn-coaching-action-card__body nn-dash-report-copy">{card.body}</p>
               {cta}
             </article>
           );

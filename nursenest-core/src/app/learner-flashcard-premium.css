@@ -5366,6 +5366,27 @@ html:has([data-nn-flashcard-study-session]) .nn-learner-app main {
     justify-content: center;
   }
 
+  [data-nn-canonical-learner-surface="flashcards-v1"] .nn-flashcard-learning-topbar__meta [role="group"][aria-label="Measurement units"] {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.12rem !important;
+    width: auto !important;
+    min-width: 4.55rem !important;
+    justify-self: start;
+    padding: 0.16rem !important;
+  }
+
+  [data-nn-canonical-learner-surface="flashcards-v1"] .nn-flashcard-learning-topbar__meta [role="group"][aria-label="Measurement units"] button {
+    width: auto !important;
+    min-width: 1.9rem !important;
+    flex: 0 0 auto !important;
+    padding-inline: 0.42rem !important;
+    white-space: nowrap;
+  }
+
   [data-nn-canonical-learner-surface="flashcards-v1"] :where(.nn-flashcard-learning-grid, .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel), .nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel))) {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;

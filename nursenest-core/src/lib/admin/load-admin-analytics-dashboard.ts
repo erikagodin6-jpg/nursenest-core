@@ -15,6 +15,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { posthogHogqlTable, posthogProjectConfigured } from "@/lib/observability/posthog-hogql-query";
+import { loadAdminSecurityTelemetry, type AdminSecurityTelemetry } from "@/lib/admin/load-admin-security-telemetry";
 
 export type TimeSeriesPoint = { label: string; value: number };
 
@@ -72,6 +73,7 @@ export type AdminAnalyticsDashboardData = {
     practiceTestsCompleted7d: number;
     note: string;
   };
+  securityTelemetry: AdminSecurityTelemetry;
   subscriptions: {
     active: number;
     grace: number;
@@ -383,6 +385,56 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     pushWarn(e, "catUsage");
   }
 
+  let securityTelemetry: AdminSecurityTelemetry;
+  try {
+    securityTelemetry = await loadAdminSecurityTelemetry();
+  } catch (e) {
+    pushWarn(e, "securityTelemetry");
+    securityTelemetry = await loadAdminSecurityTelemetry().catch(() => ({
+      configured: {
+        database: isDatabaseUrlConfigured(),
+        safeMode: isRuntimeSafeMode(),
+        posthogQueryApi: phConfigured,
+        posthogClientKey: Boolean(process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()),
+        accountSharingMonitor: false,
+        accountSharingSoftOnly: true,
+        accountSharingEnforce: false,
+        maxIps24h: 0,
+        maxActiveDevices: 0,
+      },
+      sessionActivity: {
+        rows24h: 0,
+        rows7d: 0,
+        uniqueUsers24h: 0,
+        uniqueUsers7d: 0,
+        activeDeviceSlots7d: 0,
+        ipObservations24h: 0,
+        usersWithIpObservations24h: 0,
+        suspiciousRowsOpen: 0,
+        latestSeenAt: null,
+      },
+      verification: {
+        learnerUsers: 0,
+        verifiedLearners: 0,
+        unverifiedLearners: 0,
+        newUnverified24h: 0,
+        activeTrials: 0,
+        expiredOrExhaustedTrials: 0,
+        trialDeviceBindings: 0,
+      },
+      protection: {
+        openReviews: 0,
+        reviews7d: 0,
+        resolved7d: 0,
+        rollupEvents7d: 0,
+        userDayEvents7d: 0,
+        topRollups7d: [],
+        recentReviews: [],
+      },
+      diagnostics: ["Security telemetry loader failed before producing a DB-backed snapshot."],
+    }));
+  }
+
   let active = 0;
   let grace = 0;
   let cancelled = 0;
@@ -587,6 +639,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
       practiceTestsCompleted7d,
       note: "CAT/adaptive: ExamSession rows with adaptive_state in last 7d vs linear-pattern sessions. Practice tests: completed adaptive (JSON state) vs all completed.",
     },
+    securityTelemetry,
     subscriptions: {
       active,
       grace,

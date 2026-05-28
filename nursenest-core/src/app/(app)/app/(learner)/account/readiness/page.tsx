@@ -137,16 +137,16 @@ export default async function AccountReadinessPage() {
       : practice.accuracyPct ?? null;
 
   return (
-    <div className="space-y-6">
+    <div className="nn-readiness-report-workspace min-w-0 min-h-0">
       <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
       <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
 
       {/* Page heading */}
-      <div className="nn-learner-page-hero">
-        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
+      <div className="nn-learner-page-hero min-w-0">
+        <h1 className="nn-dash-report-section-title text-2xl text-[var(--semantic-text-primary)]">
           {t("learner.account.readiness.title")}
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+        <p className="nn-dash-report-copy mt-2 text-[var(--semantic-text-secondary)]">
           {t("learner.account.readiness.intro")}
         </p>
       </div>
@@ -165,7 +165,7 @@ export default async function AccountReadinessPage() {
       />
 
       {/* ─── Two-column: Readiness Breakdown + Readiness Factors ─── */}
-      <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
+      <div className="nn-readiness-report-workspace__split min-w-0">
         {/* Dimension breakdown tabs — client component */}
         <ReadinessDimensionTabs dimensions={dimensions} />
 

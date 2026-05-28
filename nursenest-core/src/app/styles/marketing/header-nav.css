@@ -250,6 +250,19 @@
   font-weight: 500;
 }
 
+/* Remove the coloured header/hero separator in row4 marketing chrome. The
+   layout keeps its rows and spacing; only the divider paint is suppressed. */
+[data-nn-header-layout="marketing-row4"].nn-header-marketing-v31,
+[data-nn-header-layout="marketing-row4"] .nn-header-marketing-primary-band,
+[data-nn-header-layout="marketing-row4"] .nn-header-mobile-only-flex,
+[data-nn-header-layout="marketing-row4"] [data-nn-header-row="utility"],
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
 /* Tier strip sits inside `.nn-marketing-nav-v31-frame` (not `.nn-header-logo-row >`), so it keeps
    generic `.nn-header-nav-row` dark chrome + white `--nav-fg`. Row4 chip styling paints light pill
    fills on anchors — rebind tokens to ink-on-paper so RPN/RN/NP labels meet contrast (WCAG). */

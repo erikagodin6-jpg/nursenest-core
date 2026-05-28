@@ -20,7 +20,7 @@ export function AdminShell({
   staffTier?: StaffTier;
 }) {
   return (
-    <div className="flex min-h-screen bg-[var(--theme-page-bg)]">
+    <div data-nn-admin-responsive className="flex min-h-screen min-w-0 overflow-x-hidden bg-[var(--theme-page-bg)]">
       <AdminSidebarNav queuedBlogHint={queuedBlogHint} pendingAiHint={pendingAiHint} staffTier={staffTier} />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/80 bg-[var(--theme-card-bg)]/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-[var(--theme-card-bg)]/80 lg:h-16 lg:px-6">

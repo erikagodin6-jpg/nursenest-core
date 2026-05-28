@@ -51,11 +51,14 @@ export function QuestionCard({
   const hasMeta = topic ?? subtopic ?? difficultyLabel;
   const examHead =
     examCategoryLabel != null && examCategoryLabel.trim().length > 0 ? (
-      <div className="nn-cat-exam-item-head mb-4 flex items-start justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-3">
-        <p className="nn-cat-exam-category-label m-0 inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_9%,var(--semantic-surface))] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+      <div className="nn-cat-exam-item-head mb-4 flex min-w-0 max-w-full items-start justify-between gap-3 overflow-hidden border-b border-[var(--semantic-border-soft)] pb-3">
+        <p
+          className="nn-cat-exam-category-label m-0 inline-flex min-w-0 max-w-[min(100%,14rem)] overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_9%,var(--semantic-surface))] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-brand)] sm:max-w-[18rem]"
+          title={examCategoryLabel.trim().toUpperCase()}
+        >
           {examCategoryLabel.trim().toUpperCase()}
         </p>
-        {examHeaderRightSlot ? <div className="nn-cat-exam-item-head__actions shrink-0">{examHeaderRightSlot}</div> : null}
+        {examHeaderRightSlot ? <div className="nn-cat-exam-item-head__actions min-w-0 shrink-0">{examHeaderRightSlot}</div> : null}
       </div>
     ) : null;
 
@@ -70,7 +73,7 @@ export function QuestionCard({
     ) : null);
 
   const stemBlock = (
-    <p className="nn-cat-question-stem text-[1.02rem] leading-[1.72] tracking-[-0.012em] text-[var(--theme-heading-text)] sm:text-[1.08rem]">
+    <p className="nn-cat-question-stem w-full max-w-full min-w-0 break-words text-[1.02rem] leading-[1.72] tracking-[-0.012em] text-[var(--theme-heading-text)] sm:text-[1.08rem]">
       {typeof stem === "string" && stem.trim().length > 0
         ? stem
         : "Question text is unavailable. Try reloading this item."}
@@ -178,10 +181,10 @@ export function QuestionCard({
             className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4"
           >
             {meta}
-            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 shrink-0 overflow-visible">
+            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 max-w-full shrink-0 overflow-visible">
               {stemBlock}
             </div>
-            <div className="nn-cat-exam-post-stem shrink-0 pt-3 sm:pt-4">{children}</div>
+            <div className="nn-cat-exam-post-stem min-w-0 max-w-full shrink-0 pt-3 sm:pt-4">{children}</div>
           </div>
         </div>
       );
@@ -194,7 +197,7 @@ export function QuestionCard({
         >
           {meta}
           {stemBlock}
-          <div className="mt-4">{children}</div>
+          <div className="mt-4 min-w-0 max-w-full">{children}</div>
         </div>
       </div>
     );
@@ -214,7 +217,7 @@ export function QuestionCard({
         >
           {meta}
           {stemBlock}
-          <div className="mt-4">{children}</div>
+          <div className="mt-4 min-w-0 max-w-full">{children}</div>
         </div>
         <div
           ref={footerRef}
@@ -230,7 +233,7 @@ export function QuestionCard({
     <div className="nn-cat-question-card min-w-0 max-w-full rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-6">
       {meta}
       {stemBlock}
-      <div className="mt-6">{children}</div>
+      <div className="mt-6 min-w-0 max-w-full">{children}</div>
     </div>
   );
 }
@@ -280,7 +283,7 @@ export function AnswerOptionRow({
     return (
       <label
         data-nn-qa-exam-format="sata"
-        className={`nn-cat-opt nn-cat-opt--multi ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"} rounded-2xl border-[var(--semantic-border-soft)] px-4 py-3.5`}
+        className={`nn-cat-opt nn-cat-opt--multi ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"} w-full max-w-full overflow-x-hidden break-words rounded-2xl border-[var(--semantic-border-soft)] px-4 py-3.5`}
       >
         <input
           type="checkbox"
@@ -294,7 +297,7 @@ export function AnswerOptionRow({
           className={`nn-cat-opt__control ${checked || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
           aria-hidden="true"
         />
-        <span className="nn-cat-opt__text text-sm leading-relaxed sm:text-[0.95rem]">{text}</span>
+        <span className="nn-cat-opt__text min-w-0 max-w-full break-words text-sm leading-relaxed sm:text-[0.95rem]">{text}</span>
         {state === "correct" ? (
           <span className="sr-only">Correct answer.</span>
         ) : state === "incorrect" ? (
@@ -315,7 +318,7 @@ export function AnswerOptionRow({
       data-nn-qa-exam-format="mcq"
       disabled={disabled}
       onClick={onClick}
-      className={`nn-cat-opt ${stateClass} ${interactiveClass} rounded-2xl border-[var(--semantic-border-soft)] px-4 py-3.5 text-left`}
+      className={`nn-cat-opt ${stateClass} ${interactiveClass} w-full max-w-full overflow-x-hidden break-words rounded-2xl border-[var(--semantic-border-soft)] px-4 py-3.5 text-left`}
       aria-pressed={state === "selected"}
     >
       <span className="nn-cat-opt__letter">{letter}</span>
@@ -323,7 +326,7 @@ export function AnswerOptionRow({
         className={`nn-cat-opt__control ${state === "selected" || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
         aria-hidden="true"
       />
-      <span className="nn-cat-opt__text text-sm leading-relaxed sm:text-[0.95rem]">{text}</span>
+      <span className="nn-cat-opt__text min-w-0 max-w-full break-words text-sm leading-relaxed sm:text-[0.95rem]">{text}</span>
       {state === "correct" ? (
         <span className="sr-only">Correct answer.</span>
       ) : state === "incorrect" ? (

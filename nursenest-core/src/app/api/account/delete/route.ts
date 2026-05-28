@@ -11,6 +11,8 @@ import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-bod
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 export const runtime = "nodejs";
 
@@ -67,6 +69,10 @@ export async function DELETE(req: Request) {
         correlation,
         severity: "info",
       });
+
+      void captureServerEvent(analyticsDistinctId(userId), PH.accountDeleted, {
+        subscription_cancellation_required: result.subscriptionCancellationRequired,
+      }).catch(() => {});
 
       return NextResponse.json({
         ok: true,

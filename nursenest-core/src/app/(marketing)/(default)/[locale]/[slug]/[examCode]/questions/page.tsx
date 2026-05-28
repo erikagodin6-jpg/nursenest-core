@@ -9,10 +9,7 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
-import {
-  humanizeTopicSlug,
-  pathwayAppQuestionBankTopicHref,
-} from "@/components/lessons/pathway-lesson-link-practice";
+import { humanizeTopicSlug } from "@/components/lessons/pathway-lesson-link-practice";
 import {
   marketingExamHubBasePath,
   marketingPathwayLessonsIndexPath,
@@ -204,15 +201,6 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     ? withAlliedProfessionMarketingQuery(questionsHubPath, alliedProfessionKey)
     : questionsHubPath;
 
-  const appQuestionsScoped = pathwayAppQuestionBankTopicHref(
-    pathway,
-    topicFilterTrim,
-    topicSlugFromUrl || clusterSlugForLessons || undefined,
-    {
-      alliedProfession: alliedProfessionKey || undefined,
-    },
-  );
-
   const hubAggregates = isTopicNarrowed ? [] : await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
   if (process.env.NODE_ENV === "development" && !isTopicNarrowed) {
     const totalQ = hubAggregates.reduce((s, a) => s + a.questionCount, 0);
@@ -232,6 +220,16 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   const linearPracticeUsable = marketingLinearPracticeBankUsable(questionSnapshot);
   const marketingLoginHref = withMarketingLocale(lessonContentLocale, "/login");
+  const focusedPracticeStartParams = new URLSearchParams();
+  focusedPracticeStartParams.set("pathwayId", pathway.id);
+  focusedPracticeStartParams.set("preset", "topic_drill");
+  focusedPracticeStartParams.set("count", "20");
+  focusedPracticeStartParams.set("shuffle", "true");
+  if (displayTopicLabel) focusedPracticeStartParams.set("topicNames", displayTopicLabel);
+  if (alliedProfessionKey) focusedPracticeStartParams.set("alliedProfession", alliedProfessionKey);
+  const focusedPracticeLoginParams = new URLSearchParams();
+  focusedPracticeLoginParams.set(AUTH_CALLBACK_PARAM, `/app/questions/start?${focusedPracticeStartParams.toString()}`);
+  const appQuestionsScoped = `${marketingLoginHref}?${focusedPracticeLoginParams.toString()}`;
 
   return (
     <PublicStudyLandingLayout

@@ -1,0 +1,58 @@
+/* Bridges production tokens → mockup layout (color-only). */
+html[data-theme] {
+  --bg: var(--theme-page-bg);
+  --ink: var(--theme-heading-text);
+  --heading: var(--theme-heading-text);
+  --muted: var(--theme-muted-text);
+  --brand: var(--semantic-brand, var(--theme-primary));
+  --brand-deep: var(--theme-brand-strong, var(--theme-primary));
+  --brand-soft: var(--semantic-brand-soft, color-mix(in srgb, var(--theme-primary) 12%, #ffffff));
+  --border: var(--theme-border);
+  --card: #ffffff;
+  --success: var(--semantic-success, #16a34a);
+  --feat-1: var(--lesson-key-concepts);
+  --feat-2: var(--lesson-assessment);
+  --feat-3: var(--lesson-medications);
+  --mini-1: var(--semantic-panel-cool, var(--lesson-key-concepts));
+  --mini-2: var(--semantic-panel-mint, var(--lesson-assessment));
+  --mini-3: var(--semantic-panel-gold, var(--lesson-medications));
+  --quote-1: var(--semantic-panel-cool, var(--lesson-key-concepts));
+  --quote-2: var(--semantic-panel-positive, var(--lesson-assessment));
+  --quote-3: var(--semantic-panel-lavender, var(--lesson-medications));
+  --cat-band-bg: linear-gradient(135deg, var(--semantic-panel-cool), var(--semantic-panel-mint), var(--semantic-panel-lavender));
+  --cta-bg: linear-gradient(165deg, color-mix(in srgb, var(--semantic-brand) 14%, #fff), var(--theme-page-bg));
+  --hero-headline-gradient: linear-gradient(94deg, var(--semantic-chart-2), var(--semantic-brand), var(--semantic-chart-3));
+  --eyebrow: var(--semantic-chart-2);
+  --panel-glow: radial-gradient(520px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-3) 22%, transparent), transparent 60%);
+  --leaf-tint: var(--semantic-brand);
+}
+
+html[data-theme="blossom"] body,
+html[data-theme="mint-blossom"] body {
+  background-image:
+    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 20%, transparent), transparent 56%),
+    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 56%),
+    linear-gradient(180deg, var(--theme-page-bg), color-mix(in srgb, var(--semantic-chart-4) 8%, var(--theme-page-bg)));
+}
+html[data-theme="blossom"] { --hero-wash: radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-1) 24%, transparent), transparent 58%), var(--theme-page-bg); --section-alt: color-mix(in srgb, var(--semantic-panel-mint) 35%, #fff); }
+html[data-theme="mint-blossom"] { --hero-wash: radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-4) 22%, transparent), transparent 58%), var(--theme-page-bg); --section-alt: color-mix(in srgb, var(--semantic-panel-aqua) 32%, #fff); }
+html[data-theme="ocean"] body {
+  background-image:
+    radial-gradient(ellipse 120% 86% at 0% -12%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-panel-aqua) 40%, #fff), var(--theme-page-bg));
+}
+html[data-theme="ocean"] { --hero-wash: radial-gradient(780px 400px at 8% 8%, color-mix(in srgb, var(--semantic-chart-2) 20%, transparent), transparent 58%), var(--theme-page-bg); --section-alt: color-mix(in srgb, var(--semantic-panel-cool) 42%, #fff); }
+html[data-theme="aurora"] body {
+  background-image:
+    radial-gradient(ellipse 130% 92% at -8% -18%, color-mix(in srgb, var(--semantic-chart-5) 19%, transparent), transparent 56%),
+    linear-gradient(192deg, color-mix(in srgb, var(--semantic-chart-5) 8%, var(--theme-page-bg)), var(--theme-page-bg));
+}
+html[data-theme="aurora"] { --hero-wash: radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-5) 26%, transparent), transparent 58%), var(--theme-page-bg); --feat-1: var(--semantic-panel-warm); --feat-2: var(--semantic-panel-positive); --feat-3: var(--semantic-panel-cool); }
+h1 em.nn-hero-emphasis { font-style: normal; background: var(--hero-headline-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.features .card:nth-child(1) { border-top: 3px solid color-mix(in srgb, var(--semantic-chart-1) 55%, var(--theme-border)); }
+.features .card:nth-child(2) { border-top: 3px solid color-mix(in srgb, var(--semantic-chart-2) 55%, var(--theme-border)); }
+.features .card:nth-child(3) { border-top: 3px solid color-mix(in srgb, var(--semantic-chart-3) 55%, var(--theme-border)); }
+section:not(.white) { background: var(--section-alt, color-mix(in srgb, var(--semantic-panel-cool) 28%, #fff)); }
+.score { color: var(--semantic-chart-2, var(--brand)); }
+.btn-primary { background: linear-gradient(135deg, var(--semantic-brand), color-mix(in srgb, var(--semantic-chart-2) 72%, var(--brand-deep))); }
+.logo { color: var(--theme-primary); }

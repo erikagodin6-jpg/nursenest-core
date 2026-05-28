@@ -65,6 +65,116 @@ function SectionCard({
   );
 }
 
+function SecurityMetric({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
+  return (
+    <div className="rounded-xl border border-border/60 bg-muted/15 p-3">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{value}</p>
+      {sub ? <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{sub}</p> : null}
+    </div>
+  );
+}
+
+function StatusPill({ on, label }: { on: boolean; label: string }) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+        on
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+          : "border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-200"
+      }`}
+    >
+      {label}: {on ? "on" : "off"}
+    </span>
+  );
+}
+
+function SecurityTelemetryCard({ data }: { data: AdminAnalyticsDashboardData["securityTelemetry"] }) {
+  return (
+    <SectionCard
+      title="User verification & anti-fraud telemetry"
+      subtitle="DB-backed signals from session activity, trial/device checks, protection rollups, and abuse reviews. This does not require PostHog."
+    >
+      <div className="flex flex-wrap gap-2">
+        <StatusPill on={data.configured.accountSharingMonitor} label="Session monitor" />
+        <StatusPill on={data.configured.posthogQueryApi} label="PostHog query API" />
+        <StatusPill on={data.configured.posthogClientKey} label="PostHog client key" />
+        <StatusPill on={!data.configured.safeMode} label="DB telemetry" />
+        <StatusPill on={data.configured.accountSharingEnforce} label="Hard enforcement" />
+      </div>
+
+      {data.diagnostics.length > 0 ? (
+        <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-950 dark:text-amber-100">
+          <p className="font-semibold">Telemetry diagnostics</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {data.diagnostics.map((d) => (
+              <li key={d}>{d}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <SecurityMetric label="Verified learners" value={data.verification.verifiedLearners.toLocaleString()} sub={`${data.verification.unverifiedLearners.toLocaleString()} unverified`} />
+        <SecurityMetric label="Session users 24h" value={data.sessionActivity.uniqueUsers24h.toLocaleString()} sub={`${data.sessionActivity.rows24h.toLocaleString()} session touches`} />
+        <SecurityMetric label="IP observations 24h" value={data.sessionActivity.ipObservations24h.toLocaleString()} sub={`${data.sessionActivity.usersWithIpObservations24h.toLocaleString()} learners observed`} />
+        <SecurityMetric label="Open abuse reviews" value={data.protection.openReviews.toLocaleString()} sub={`${data.protection.reviews7d.toLocaleString()} created in 7d`} />
+        <SecurityMetric label="Device trial bindings" value={data.verification.trialDeviceBindings.toLocaleString()} sub={`${data.verification.activeTrials.toLocaleString()} active trials`} />
+        <SecurityMetric label="Protection events 7d" value={data.protection.rollupEvents7d.toLocaleString()} sub={`${data.protection.userDayEvents7d.toLocaleString()} user-day tallies`} />
+        <SecurityMetric label="Suspicious sessions" value={data.sessionActivity.suspiciousRowsOpen.toLocaleString()} sub={`Limits: ${data.configured.maxIps24h} IPs / ${data.configured.maxActiveDevices} devices`} />
+        <SecurityMetric
+          label="Latest session touch"
+          value={data.sessionActivity.latestSeenAt ? new Date(data.sessionActivity.latestSeenAt).toLocaleDateString() : "—"}
+          sub={data.sessionActivity.latestSeenAt ? new Date(data.sessionActivity.latestSeenAt).toLocaleTimeString() : "No session rows yet"}
+        />
+      </div>
+
+      <div className="mt-5 grid gap-4 lg:grid-cols-2">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Top protection signals (7d)</p>
+          {data.protection.topRollups7d.length > 0 ? (
+            <div className="mt-2 space-y-2">
+              {data.protection.topRollups7d.map((r) => (
+                <div key={`${r.metricKey}:${r.segment}`} className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-border/50 bg-muted/10 px-3 py-2 text-xs">
+                  <span className="min-w-0">
+                    <span className="font-mono text-[var(--theme-heading-text)]">{r.metricKey}</span>
+                    {r.segment ? <span className="text-muted-foreground"> · {r.segment}</span> : null}
+                  </span>
+                  <span className="shrink-0 tabular-nums font-semibold">{r.count.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">
+              No premium-protection rollups in the last 7 days. Client deterrence events only appear after protected learner surfaces send telemetry.
+            </p>
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Recent review queue</p>
+          {data.protection.recentReviews.length > 0 ? (
+            <div className="mt-2 space-y-2">
+              {data.protection.recentReviews.map((r) => (
+                <div key={r.id} className="rounded-lg border border-border/50 bg-muted/10 px-3 py-2 text-xs">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-semibold text-[var(--theme-heading-text)]">{r.reason}</span>
+                    <span className="shrink-0 tabular-nums text-muted-foreground">score {r.score}</span>
+                  </div>
+                  <p className="mt-1 text-muted-foreground">
+                    User {r.userIdPrefix} · {new Date(r.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">No abuse-review rows have been queued yet.</p>
+          )}
+        </div>
+      </div>
+    </SectionCard>
+  );
+}
+
 function PostHogTrafficCard({
   traffic,
 }: {
@@ -270,15 +380,21 @@ export function AdminAnalyticsDashboard({ initialData }: { initialData: AdminAna
         {d.traffic.posthogTraffic?.configured ? (
           <PostHogTrafficCard traffic={d.traffic.posthogTraffic} />
         ) : (
-          <SectionCard title="Site traffic" subtitle="PostHog not configured.">
+          <SectionCard title="Site traffic" subtitle="Optional PostHog connection is not active yet.">
             <p className="text-sm text-muted-foreground">{d.traffic.siteTrafficNote}</p>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Set <code className="rounded bg-muted px-1">POSTHOG_PERSONAL_API_KEY</code> and{" "}
-              <code className="rounded bg-muted px-1">POSTHOG_PROJECT_ID</code> to pull live pageview data here.
-            </p>
+            <div className="mt-4 rounded-xl border border-border/70 bg-muted/20 p-3 text-xs leading-5 text-muted-foreground">
+              <p className="font-semibold text-[var(--theme-heading-text)]">Connection checklist</p>
+              <p className="mt-1">
+                Add <code className="rounded bg-muted px-1">POSTHOG_PERSONAL_API_KEY</code>,{" "}
+                <code className="rounded bg-muted px-1">POSTHOG_PROJECT_ID</code>, and the public client key to show live
+                pageview trends here. DB-backed learner, trial, and anti-fraud telemetry continues to render below.
+              </p>
+            </div>
           </SectionCard>
         )}
       </div>
+
+      <SecurityTelemetryCard data={d.securityTelemetry} />
 
       <SectionCard title="Blog content performance" subtitle={d.traffic.blogPerformanceNote}>
         {d.traffic.blogPerformance.length === 0 ? (

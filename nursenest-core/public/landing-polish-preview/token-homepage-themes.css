@@ -1,0 +1,120 @@
+/**
+ * Mockup gate — production-aligned theme + semantic tokens.
+ * Sources: theme-palettes.css, semantic-status-tokens.css (ocean / blossom / mint-blossom / aurora).
+ */
+html[data-theme="ocean"] {
+  --theme-primary: #1d9bd7;
+  --theme-secondary: #14b8a6;
+  --theme-accent: #7dd3fc;
+  --theme-border: #cfe8f4;
+  --theme-page-bg: #f6fbff;
+  --theme-heading-text: #0f172a;
+  --theme-body-text: #334155;
+  --theme-muted-text: #64748b;
+  --theme-brand-strong: #0369a1;
+  --lesson-key-concepts: #e9edff;
+  --lesson-assessment: #e2f7f1;
+  --lesson-medications: #ffeaf2;
+  --lesson-diagnostics: #fff7df;
+  --lesson-interventions: #e4f8ec;
+  --lesson-patient-teaching: #e0f7fb;
+  --semantic-brand: #1d9bd7;
+  --semantic-brand-soft: #e7f5ff;
+  --semantic-success: #16a34a;
+  --semantic-info: #5ab8d4;
+  --semantic-chart-1: #168cc7;
+  --semantic-chart-2: #25b9b1;
+  --semantic-chart-3: #81d6d1;
+  --semantic-chart-4: #d8bd79;
+  --semantic-chart-5: #0f4b6e;
+  --semantic-chart-8: #4aa3cf;
+  --semantic-panel-cool: color-mix(in srgb, #25b9b1 12%, #ffffff);
+  --semantic-panel-mint: color-mix(in srgb, #6dd7b6 11%, #ffffff);
+  --semantic-panel-aqua: color-mix(in srgb, #25b9b1 12%, #ffffff);
+  --semantic-panel-lavender: color-mix(in srgb, #8fa8d8 10%, #ffffff);
+  --semantic-panel-gold: color-mix(in srgb, #d8bd79 12%, #ffffff);
+}
+
+html[data-theme="blossom"] {
+  --theme-primary: #ffa9cc;
+  --theme-secondary: #fff9fb;
+  --theme-accent: #fffdf8;
+  --theme-border: color-mix(in srgb, #ffb7d5 24%, #fff9fb);
+  --theme-page-bg: #fffdfb;
+  --theme-heading-text: #3a3142;
+  --theme-body-text: #4a4453;
+  --theme-muted-text: #554d5e;
+  --theme-brand-strong: #ff8fb8;
+  --lesson-key-concepts: color-mix(in srgb, #bfe7ff 16%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #fff2b8 16%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #d6f0ff 15%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #d9f8e7 14%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #c8f2dc 13%, #ffffff);
+  --semantic-brand: #ffa9cc;
+  --semantic-brand-soft: color-mix(in srgb, #ffb7d5 14%, #ffffff);
+  --semantic-success: #6dd4a8;
+  --semantic-info: #5eb8f0;
+  --semantic-chart-1: #ffa9cc;
+  --semantic-chart-2: #bfe7ff;
+  --semantic-chart-3: #7ec8ff;
+  --semantic-chart-4: #b7efd1;
+  --semantic-chart-5: #ffc7de;
+  --semantic-chart-8: #fff2b8;
+  --semantic-panel-warm: color-mix(in srgb, #fff2b8 18%, #ffffff);
+  --semantic-panel-cool: color-mix(in srgb, #bfe7ff 16%, #ffffff);
+  --semantic-panel-positive: color-mix(in srgb, #d9f8e7 18%, #ffffff);
+  --semantic-panel-aqua: color-mix(in srgb, #d6f0ff 16%, #ffffff);
+  --semantic-panel-mint: color-mix(in srgb, #c8f2dc 18%, #ffffff);
+  --semantic-panel-lavender: color-mix(in srgb, #ffc7de 14%, #ffffff);
+  --semantic-panel-gold: color-mix(in srgb, #fff6cc 16%, #ffffff);
+}
+
+html[data-theme="mint-blossom"] {
+  --theme-primary: #ffb7d5;
+  --theme-secondary: #d9f8e7;
+  --theme-accent: #fffdf8;
+  --theme-border: color-mix(in srgb, #b7efd1 24%, #fff9fb);
+  --theme-page-bg: #fafdfc;
+  --theme-heading-text: #3a3142;
+  --theme-body-text: #4a4453;
+  --theme-muted-text: #554d5e;
+  --theme-brand-strong: #ff8fb8;
+  --lesson-key-concepts: color-mix(in srgb, #bfe7ff 14%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #b7efd1 14%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #fff2b8 14%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #d6f0ff 14%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #d9f8e7 14%, #ffffff);
+  --semantic-brand: #ffb7d5;
+  --semantic-chart-1: #ffb7d5;
+  --semantic-chart-2: #bfe7ff;
+  --semantic-chart-3: #7ec8ff;
+  --semantic-chart-4: #b7efd1;
+  --semantic-chart-5: #ffc7de;
+  --semantic-chart-8: #fff2b8;
+  --semantic-panel-mint: color-mix(in srgb, #c8f2dc 20%, #ffffff);
+  --semantic-panel-aqua: color-mix(in srgb, #d6f0ff 14%, #ffffff);
+  --semantic-panel-gold: color-mix(in srgb, #fff6cc 14%, #ffffff);
+}
+
+html[data-theme="aurora"] {
+  --theme-primary: #9b72ff;
+  --theme-page-bg: color-mix(in srgb, #e8e0fb 10%, color-mix(in srgb, #fce8f3 9%, #faf8ff));
+  --theme-heading-text: #1a202c;
+  --theme-muted-text: color-mix(in srgb, #1a202c 55%, #ffffff);
+  --theme-border: color-mix(in srgb, #1a202c 10%, #eae6f5);
+  --theme-brand-strong: #9b72ff;
+  --lesson-key-concepts: color-mix(in srgb, #4a90e2 12%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #2ecc71 11%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #f39c12 14%, #ffffff);
+  --semantic-brand: #9b72ff;
+  --semantic-chart-1: #756dff;
+  --semantic-chart-2: #34c9d4;
+  --semantic-chart-3: #64d8a6;
+  --semantic-chart-4: #b8e986;
+  --semantic-chart-5: #b09bff;
+  --semantic-chart-8: #d57ad4;
+  --semantic-panel-warm: color-mix(in srgb, #d57ad4 10%, #ffffff);
+  --semantic-panel-cool: color-mix(in srgb, #34c9d4 13%, #ffffff);
+  --semantic-panel-positive: color-mix(in srgb, #64d8a6 13%, #ffffff);
+}

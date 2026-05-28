@@ -27,6 +27,7 @@ import {
   countSavedStudyItems,
   getStudyItemIdsMatchingFilters,
 } from "@/lib/flashcards/study-session-persistence";
+import { LeafWatermark } from "@/components/brand/leaf-watermark";
 import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
@@ -909,6 +910,7 @@ export function FlashcardsHubClient({
       mode="flashcards"
       className="nn-flashcards-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-premium-flashcard-convergence
+      data-nn-flashcard-branding-revamp=""
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"
       data-nn-premium-platform-module="flashcards"
@@ -925,6 +927,11 @@ export function FlashcardsHubClient({
         <div
           className="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,transparent)] blur-3xl"
           aria-hidden
+        />
+        <LeafWatermark
+          className="-right-8 -top-6 opacity-[0.11] sm:-right-12 sm:-top-10"
+          imageClassName="opacity-90"
+          size={200}
         />
         <div className="relative space-y-6 sm:space-y-7">
           <div className="space-y-4">
