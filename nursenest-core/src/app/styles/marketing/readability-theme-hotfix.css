@@ -15,9 +15,14 @@
 .nn-home-marketing-rich-hero {
   --hero-headline-solid: color-mix(
     in srgb,
-    var(--hero-headline-accent, var(--semantic-brand, var(--theme-primary))) 66%,
-    var(--palette-heading, #0f172a) 34%
+    var(--hero-headline-accent, var(--semantic-brand, var(--theme-primary))) 58%,
+    var(--palette-heading, #0f172a) 42%
   );
+}
+
+.nn-home-marketing-rich-hero #home-conversion-hero-heading.nn-hero-headline--premium {
+  font-size: clamp(3rem, 5.85vw, 4.65rem);
+  line-height: 1.06;
 }
 
 .nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
@@ -30,20 +35,20 @@
   text-shadow: none !important;
   filter: none !important;
   will-change: auto !important;
-  font-weight: 680;
+  font-weight: 660;
   opacity: 1 !important;
 }
 
 html[data-theme="ocean"] .nn-home-marketing-rich-hero {
-  --hero-headline-solid: color-mix(in srgb, var(--semantic-info) 78%, var(--palette-heading));
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-info) 68%, var(--palette-heading));
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
-  --hero-headline-solid: color-mix(in srgb, #a92f64 74%, var(--palette-heading) 26%);
+  --hero-headline-solid: color-mix(in srgb, #8f1f4f 82%, var(--palette-heading) 18%);
 }
 
 html[data-theme="aurora"] .nn-home-marketing-rich-hero {
-  --hero-headline-solid: color-mix(in srgb, var(--semantic-chart-5) 82%, var(--palette-heading));
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-chart-5) 72%, var(--palette-heading));
 }
 
 :is(
@@ -58,7 +63,7 @@ html[data-theme="aurora"] .nn-home-marketing-rich-hero {
   html[data-theme="midnight"],
   html[data-theme="apex"]
 ) .nn-home-marketing-rich-hero {
-  --hero-headline-solid: color-mix(in srgb, var(--semantic-info) 72%, var(--palette-heading));
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-info) 76%, var(--palette-heading));
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-header-brand-lockup {
@@ -81,4 +86,26 @@ html[data-theme="aurora"] .nn-home-marketing-rich-hero {
   border-bottom: 0 !important;
   background: var(--nn-header-primary-bg) !important;
   box-shadow: none !important;
+}
+
+[data-nn-header-layout="marketing-row4"].nn-header-marketing-v31 {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
+  max-width: min(100%, 58rem) !important;
+  padding-inline: clamp(1rem, 2.4vw, 2rem) !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner > nav {
+  width: auto !important;
+  max-width: min(100%, 48rem) !important;
+  justify-content: center !important;
+  gap: 0.5rem 0.65rem !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  flex: 0 0 auto !important;
 }
