@@ -1,9 +1,9 @@
 # Scheduled public HTTP probes against the canonical marketing origin only.
 #
 # Checks (no repository secrets required for the primary step):
-#   GET https://www.nursenest.ca/healthz
-#   GET https://www.nursenest.ca/readyz
-#   GET https://www.nursenest.ca/api/health
+#   GET https://nursenest.ca/healthz
+#   GET https://nursenest.ca/readyz
+#   GET https://nursenest.ca/api/health
 #
 # Optional: set PRODUCTION_VERIFY_ORIGIN_BASE_URL (e.g. https://your-app.ondigitalocean.app)
 # to repeat the same three paths on a second host (edge/origin split); omit to skip.
@@ -25,7 +25,7 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: GET /healthz, /readyz, /api/health (www.nursenest.ca)
+      - name: GET /healthz, /readyz, /api/health (nursenest.ca)
         run: |
           set -euo pipefail
           probe() {
@@ -48,7 +48,7 @@ jobs:
               exit 1
             fi
           }
-          BASE="https://www.nursenest.ca"
+          BASE="https://nursenest.ca"
           probe "${BASE}" "/healthz"
           probe "${BASE}" "/readyz"
           probe "${BASE}" "/api/health"
@@ -91,9 +91,9 @@ jobs:
       - name: Optional — IPv6 HEAD /healthz (informational)
         run: |
           set -euo pipefail
-          echo "Target (no secrets): www.nursenest.ca/healthz (IPv6)"
+          echo "Target (no secrets): nursenest.ca/healthz (IPv6)"
           set +e
-          code="$(curl -6 --http1.1 -m 15 -o /dev/null -sS -w "%{http_code}" -I "https://www.nursenest.ca/healthz" 2>/tmp/nn-ipv6.err)"
+          code="$(curl -6 --http1.1 -m 15 -o /dev/null -sS -w "%{http_code}" -I "https://nursenest.ca/healthz" 2>/tmp/nn-ipv6.err)"
           v6=$?
           set -e
           echo "HTTP status: ${code:-n/a} curl_exit=${v6}"

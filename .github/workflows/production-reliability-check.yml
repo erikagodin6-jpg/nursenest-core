@@ -22,18 +22,23 @@ jobs:
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
+          BASE_URL="$(printf '%s' "${BASE_URL:-}" | tr -d '[:space:]')"
+          BASE_URL="${BASE_URL%/}"
+          case "${BASE_URL}" in
+            https://www.nursenest.ca|http://www.nursenest.ca) BASE_URL="https://nursenest.ca" ;;
+          esac
           if [ -z "${BASE_URL:-}" ] || [ -z "${SECRET:-}" ]; then
             echo '::error title=GitHub Actions configuration::Production reliability workflow is missing required repository secrets. This is a CI/CD configuration problem — it does not indicate that production (nursenest.ca) is down or unreachable.'
-            echo '::notice::Add Actions secrets: NURSENEST_PRODUCTION_BASE_URL (e.g. https://www.nursenest.ca) and NURSENEST_RELIABILITY_SECRET (must match production NURSENEST_RELIABILITY_SECRET on DigitalOcean). See nursenest-core/docs/github-actions-production-reliability-check.md'
+            echo '::notice::Add Actions secrets: NURSENEST_PRODUCTION_BASE_URL (e.g. https://nursenest.ca) and NURSENEST_RELIABILITY_SECRET (must match production NURSENEST_RELIABILITY_SECRET on DigitalOcean). See nursenest-core/docs/github-actions-production-reliability-check.md'
             exit 1
           fi
+          echo "BASE_URL=${BASE_URL}" >> "$GITHUB_ENV"
           echo '::notice::Repository secrets for production reliability are present. Any failure after this step reflects production reachability or in-app checks, not missing Actions secrets.'
 
       - name: Initial reliability check
         id: initial
         continue-on-error: true
         env:
-          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
@@ -63,7 +68,6 @@ jobs:
         id: heal
         if: steps.initial.outputs.ok != 'true'
         env:
-          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
@@ -81,7 +85,6 @@ jobs:
         if: steps.initial.outputs.ok != 'true' && steps.heal.outcome == 'success'
         continue-on-error: true
         env:
-          BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail

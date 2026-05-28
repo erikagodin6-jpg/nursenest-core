@@ -1,5 +1,5 @@
 # Calls production HTTP cron routes (blog scheduler + background job worker).
-# Liveness: GET https://www.nursenest.ca/healthz (no secrets).
+# Liveness: GET https://nursenest.ca/healthz (no secrets).
 # Cron POSTs run only after the "Require cron repository secrets" step passes (Bearer never logged).
 # Required repository secrets: PRODUCTION_CRON_BASE_URL (no trailing slash), CRON_SECRET.
 name: scheduled-cron-http-frequent
@@ -21,7 +21,7 @@ jobs:
       - name: Production liveness (GET /healthz)
         run: |
           set -euo pipefail
-          HEALTH_URL="https://www.nursenest.ca/healthz"
+          HEALTH_URL="https://nursenest.ca/healthz"
           echo "Target (no secrets): ${HEALTH_URL#https://}"
           code=""
           if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/healthz.body -w "%{http_code}" "$HEALTH_URL")"; then
@@ -44,6 +44,11 @@ jobs:
         run: |
           set -euo pipefail
           missing=()
+          BASE="$(printf '%s' "${BASE:-}" | tr -d '[:space:]')"
+          BASE="${BASE%/}"
+          case "${BASE}" in
+            https://www.nursenest.ca|http://www.nursenest.ca) BASE="https://nursenest.ca" ;;
+          esac
           [ -z "${BASE:-}" ] && missing+=("PRODUCTION_CRON_BASE_URL")
           [ -z "${CRON_SECRET:-}" ] && missing+=("CRON_SECRET")
           if [ "${#missing[@]}" -ne 0 ]; then
@@ -55,6 +60,7 @@ jobs:
           host="${BASE#*//}"
           host="${host%%/*}"
           echo "Cron base host (from PRODUCTION_CRON_BASE_URL): ${host}"
+          echo "CRON_BASE_URL=${BASE}" >> "$GITHUB_ENV"
 
       - name: POST /api/cron/blog-batch-schedule
         env:
@@ -63,6 +69,7 @@ jobs:
         run: |
           set -euo pipefail
           path="/api/cron/blog-batch-schedule"
+          BASE="${CRON_BASE_URL:?missing normalized cron base URL}"
           host="${BASE#*//}"
           host="${host%%/*}"
           url="${BASE%/}${path}"
@@ -91,6 +98,7 @@ jobs:
         run: |
           set -euo pipefail
           path="/api/cron/jobs"
+          BASE="${CRON_BASE_URL:?missing normalized cron base URL}"
           host="${BASE#*//}"
           host="${host%%/*}"
           url="${BASE%/}${path}"
