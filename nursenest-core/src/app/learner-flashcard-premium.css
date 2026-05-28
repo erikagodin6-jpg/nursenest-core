@@ -5027,3 +5027,186 @@ html:has([data-nn-flashcard-study-session]) .nn-learner-app main {
     max-width: 5.75rem !important;
   }
 }
+
+/* ==========================================================================
+ * Unified learner surface polish
+ * Flashcards remain the canonical interaction model. These rules let practice,
+ * CAT, LOFT, and older bank runners inherit the same spacing, containment, and
+ * theme-aware surface language without creating another exam UI.
+ * ========================================================================== */
+
+.nn-unified-exam-workspace,
+.nn-exam-session-premium,
+.nn-nclex-exam-page {
+  --nn-learner-surface-bg:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--semantic-info) 7%, transparent), transparent 30%),
+    radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--semantic-brand) 6%, transparent), transparent 32%),
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool)), var(--semantic-panel-muted));
+  --nn-learner-surface-card: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  --nn-learner-surface-border: color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-brand) 8%);
+  --nn-learner-surface-shadow: 0 18px 48px -34px color-mix(in srgb, var(--semantic-text-primary) 34%, transparent);
+  --nn-learner-surface-radius: 0.85rem;
+  box-sizing: border-box;
+  min-width: 0;
+  color: var(--semantic-text-primary);
+}
+
+.nn-unified-exam-workspace *,
+.nn-exam-session-premium *,
+.nn-nclex-exam-page * {
+  box-sizing: border-box;
+}
+
+.nn-unified-exam-workspace :where(.nn-flashcard-learning-grid, .nn-question-session, .nn-question-session--split, .nn-nclex-exam-body, .nn-nclex-practice-body, .nn-nclex-question-area, .nn-nclex-practice-main, .nn-nclex-practice-question-card, .nn-cat-exam-content-well, .nn-cat-exam-board-frame),
+.nn-exam-session-premium :where(.nn-question-session, .nn-question-session--split, .nn-question-session-primary, .nn-question-session-rationale),
+.nn-nclex-exam-page :where(.nn-nclex-exam-body, .nn-nclex-practice-body, .nn-nclex-question-area, .nn-nclex-question-inner, .nn-nclex-practice-main, .nn-nclex-practice-question-card) {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+}
+
+.nn-unified-exam-workspace :where(p, li, label, button, summary, td, th, span),
+.nn-exam-session-premium :where(p, li, label, button, summary, td, th, span),
+.nn-nclex-exam-page :where(p, li, label, button, summary, td, th, span) {
+  overflow-wrap: break-word;
+}
+
+.nn-flashcard-study-premium.nn-active-flashcard-session[data-nn-unified-exam-workspace],
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] {
+  width: min(100%, 1600px);
+  max-width: min(96vw, 1600px);
+  margin-inline: auto;
+  background: var(--nn-learner-surface-bg) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
+  align-items: stretch !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid .nn-flashcard-hero-surface,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel,
+.nn-flashcard-study-premium .nn-flashcard-coach-panel,
+.nn-flashcard-study-premium .nn-flashcard-rating-dock,
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-brand) 3.5%, transparent), transparent 45%),
+    var(--nn-learner-surface-card) !important;
+  border-color: var(--nn-learner-surface-border) !important;
+  box-shadow: var(--nn-learner-surface-shadow) !important;
+}
+
+.nn-flashcard-study-premium :where(.nn-flashcard-hero-surface, .nn-flashcard-rationale-panel, .nn-flashcard-coach-panel, .nn-flashcard-rating-dock) {
+  overflow-wrap: break-word;
+}
+
+.nn-flashcard-study-premium :where(.nn-flashcard-hero-stem, .nn-flashcard-rich, .nn-question-stem) {
+  max-width: 100%;
+}
+
+.nn-flashcard-study-premium :where(.nn-flashcard-exam-mcq-premium, .nn-flashcard-sata-answer-list, [data-nn-question-interaction]) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nn-exam-session-premium {
+  width: min(100%, 1600px);
+  max-width: min(96vw, 1600px);
+  margin-inline: auto;
+  border-color: var(--nn-learner-surface-border) !important;
+  background: var(--nn-learner-surface-bg) !important;
+  box-shadow: var(--nn-learner-surface-shadow) !important;
+}
+
+.nn-exam-session-premium .nn-exam-session-topbar,
+.nn-exam-session-premium .nn-question-stem-card,
+.nn-exam-session-premium .nn-question-session-rationale,
+.nn-exam-session-premium .nn-question-rationale-card,
+.nn-exam-session-premium .nn-question-rationale-placeholder,
+.nn-exam-session-premium .nn-practice-rationale-panel,
+.nn-exam-session-premium .nn-practice-rationale-full {
+  border-radius: var(--nn-learner-surface-radius) !important;
+  border-color: var(--nn-learner-surface-border) !important;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-info) 3.5%, transparent), transparent 44%),
+    var(--nn-learner-surface-card) !important;
+  box-shadow: var(--nn-learner-surface-shadow) !important;
+}
+
+.nn-exam-session-premium .nn-question-session--split {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, min(32vw, 440px)) !important;
+  gap: clamp(0.85rem, 1.35vw, 1.25rem) !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: clamp(0.65rem, 1.25vw, 1rem) !important;
+  overflow: hidden !important;
+}
+
+.nn-exam-session-premium .nn-question-session-primary,
+.nn-exam-session-premium .nn-question-session-rationale {
+  overflow-x: hidden !important;
+}
+
+.nn-exam-session-premium .nn-question-session-rationale {
+  max-height: min(66dvh, 42rem);
+}
+
+.nn-exam-session-premium :where(.nn-question-session-primary, .nn-question-session-rationale) > * {
+  max-width: 100%;
+}
+
+.nn-nclex-exam-page.nn-unified-exam-workspace {
+  padding: clamp(0.45rem, 0.9vw, 0.75rem);
+  background: var(--nn-learner-surface-bg) !important;
+  gap: clamp(0.45rem, 0.8vw, 0.7rem);
+}
+
+.nn-nclex-exam-page.nn-unified-exam-workspace :where(.nn-nclex-top-bar, .nn-nclex-bottom-bar, .nn-nclex-practice-question-card, .nn-nclex-question-area) {
+  border-radius: var(--nn-learner-surface-radius);
+  border: 1px solid var(--nn-learner-surface-border);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-brand) 3%, transparent), transparent 42%),
+    var(--nn-learner-surface-card);
+  box-shadow: var(--nn-learner-surface-shadow);
+}
+
+.nn-nclex-exam-page.nn-unified-exam-workspace :where(.nn-nclex-exam-body, .nn-nclex-practice-body) {
+  flex: 1 1 auto;
+  gap: clamp(0.65rem, 1.1vw, 1rem);
+  overflow: hidden;
+}
+
+.nn-nclex-exam-page.nn-unified-exam-workspace :where(.nn-nclex-question-area, .nn-nclex-practice-question-card) {
+  flex: 1 1 auto;
+  overflow-x: hidden;
+}
+
+.nn-nclex-exam-page.nn-unified-exam-workspace :where(.nn-nclex-answer-card, .nn-nclex-practice-answer-card, .nn-qopt-surface) {
+  max-width: 100%;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 86%, var(--semantic-brand) 8%);
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}
+
+@media (max-width: 1180px) {
+  .nn-exam-session-premium .nn-question-session--split {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nn-exam-session-premium .nn-question-session-rationale {
+    max-height: min(38dvh, 22rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .nn-flashcard-study-premium.nn-active-flashcard-session[data-nn-unified-exam-workspace],
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace],
+  .nn-exam-session-premium {
+    max-width: calc(100vw - 0.65rem);
+  }
+
+  .nn-nclex-exam-page.nn-unified-exam-workspace {
+    padding: max(0.35rem, env(safe-area-inset-top, 0px)) 0.35rem max(0.35rem, env(safe-area-inset-bottom, 0px));
+  }
+}

@@ -18,6 +18,7 @@ import {
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { buildAdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
 import { buildQuestionListSearchParams } from "@/lib/practice-question-session/build-question-list-params";
 import {
   DEFAULT_PRACTICE_COUNT,
@@ -458,6 +459,14 @@ export function PracticeQuestionSessionClient({
       : [];
   const primaryCorrectLetter = correctVisibleLetters[0] ?? selectedVisibleLetters[0] ?? "A";
   const fullRationale = rationaleText || resolveMeasurementTokens(current.rationale ?? "", measurementSystem, { pathwayId });
+  const adaptiveCaseSimulation = buildAdaptiveCaseSimulation({
+    id: current.id,
+    questionType: current.questionType,
+    stem: stemDisplay,
+    topic: current.topic,
+    subtopic: current.subtopic,
+    rationale: fullRationale,
+  });
   const practiceExamPayload: ExamMicroQuestionPayload | SataQuestionPayload | null =
     answerOptions.length >= 2
       ? isSata
@@ -570,7 +579,7 @@ export function PracticeQuestionSessionClient({
   return (
     <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="practice_question_session">
       <div
-        className="nn-active-flashcard-session nn-unified-exam-workspace"
+        className="nn-flashcard-study-premium nn-active-flashcard-session nn-unified-exam-workspace"
         data-nn-premium-flashcard-active-session
         data-nn-unified-exam-workspace=""
         data-nn-exam-workspace-mode="practice"
@@ -619,6 +628,7 @@ export function PracticeQuestionSessionClient({
           topicLine={[current.topic, current.subtopic].filter(Boolean).join(" • ") || null}
           itemKindCaption={mode === "weak_area" ? "Remediation" : mode === "exam" ? "Exam practice" : "Question bank"}
           examMicroQuestion={practiceExamPayload}
+          adaptiveCaseSimulation={adaptiveCaseSimulation}
           prompt={stemDisplay}
           answer={fullRationale || "Review the explanation after submitting your answer."}
           explanation={fullRationale}

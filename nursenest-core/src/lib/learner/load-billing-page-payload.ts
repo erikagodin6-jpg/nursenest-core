@@ -28,6 +28,7 @@ import {
 } from "@/lib/subscriptions/stripe-subscription-billing-display";
 import {
   canUserCancelStripeSubscription,
+  canUserReactivateStripeSubscription,
   reconcileUserSubscriptionFromStripe,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 import { ALLIED_CAREER_DISPLAY_NAMES, type AlliedCareerKey } from "@/lib/pricing/display-catalog";
@@ -41,6 +42,14 @@ export type StripeRenewalSnapshot = {
   currentPeriodEnd: Date | null;
   trialEnd: Date | null;
   cancelAtPeriodEnd: boolean;
+  paymentMethodSummary: StripePaymentMethodSummary | null;
+};
+
+export type StripePaymentMethodSummary = {
+  brand: string | null;
+  last4: string | null;
+  expMonth: number | null;
+  expYear: number | null;
 };
 
 export type BillingPagePayload = {
@@ -55,6 +64,8 @@ export type BillingPagePayload = {
   showBillingPortal: boolean;
   /** End-of-period cancel from Account/Billing when Stripe shows an active manageable subscription. */
   showCancelSubscription: boolean;
+  /** Reverse a scheduled end-of-period cancellation while Stripe still considers the subscription manageable. */
+  showReactivateSubscription: boolean;
   effectiveTier: TierCode;
   effectiveCountry: CountryCode | null;
   /** Trial end callout when trial is active, not expired, and no paid ACTIVE row. */
@@ -93,6 +104,23 @@ export function formatBillingTierLabel(tier: TierCode, country: CountryCode | st
   return c ? `${t} · ${c}` : t;
 }
 
+type StripeSubscriptionWithExpandedPaymentMethod = Stripe.Subscription & {
+  default_payment_method?: string | Stripe.PaymentMethod | null;
+};
+
+function paymentMethodSummaryFromSubscription(sub: Stripe.Subscription): StripePaymentMethodSummary | null {
+  const pm = (sub as StripeSubscriptionWithExpandedPaymentMethod).default_payment_method;
+  if (!pm || typeof pm === "string") return null;
+  const card = pm.card;
+  if (!card) return null;
+  return {
+    brand: card.brand ?? null,
+    last4: card.last4 ?? null,
+    expMonth: card.exp_month ?? null,
+    expYear: card.exp_year ?? null,
+  };
+}
+
 function stripeRenewalSnapshotFromSubscription(sub: Stripe.Subscription): StripeRenewalSnapshot {
   const item = sub.items.data[0];
   const rawInterval = item?.price?.recurring?.interval ?? (item?.plan as { interval?: string } | undefined)?.interval;
@@ -109,6 +137,7 @@ function stripeRenewalSnapshotFromSubscription(sub: Stripe.Subscription): Stripe
     currentPeriodEnd,
     trialEnd,
     cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
+    paymentMethodSummary: paymentMethodSummaryFromSubscription(sub),
   };
 }
 
@@ -118,7 +147,7 @@ async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | u
   try {
     const stripe = await getStripeClient();
     if (!stripe) return null;
-    const sub = await stripe.subscriptions.retrieve(sid);
+    const sub = await stripe.subscriptions.retrieve(sid, { expand: ["default_payment_method"] });
     return stripeRenewalSnapshotFromSubscription(sub);
   } catch {
     return null;
@@ -308,7 +337,17 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       currentPeriodEnd: subscriptionRow.currentPeriodEnd,
       trialEnd: subscriptionRow.trialEnd,
       cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
+      paymentMethodSummary: null,
     };
+  }
+  if (stripeRenewal && !stripeRenewal.paymentMethodSummary && subscription?.stripeSubscriptionId) {
+    const expandedRenewal = await loadStripeRenewalSnapshot(subscription.stripeSubscriptionId);
+    if (expandedRenewal?.paymentMethodSummary) {
+      stripeRenewal = {
+        ...stripeRenewal,
+        paymentMethodSummary: expandedRenewal.paymentMethodSummary,
+      };
+    }
   }
   if (qaStaffSim) {
     stripeRenewal = null;
@@ -360,6 +399,9 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
   const showCancelSubscription = Boolean(
     !qaStaffSim && reconcileLiveSub && canUserCancelStripeSubscription(reconcileLiveSub),
   );
+  const showReactivateSubscription = Boolean(
+    !qaStaffSim && reconcileLiveSub && canUserReactivateStripeSubscription(reconcileLiveSub),
+  );
 
   const now = Date.now();
   let showTrialEndCallout =
@@ -396,6 +438,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     surface,
     showBillingPortal,
     showCancelSubscription,
+    showReactivateSubscription,
     effectiveTier,
     effectiveCountry,
     showTrialEndCallout,

@@ -7,8 +7,10 @@ import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-con
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
+import { AdaptiveCaseSimulationPanel } from "@/components/questions/adaptive-case-simulation-panel";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
+import type { AdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
 
 type PromptImageSplit = {
   imageHtml: string | null;
@@ -81,6 +83,7 @@ export function FlashcardStudyQuestionStack({
   examMicroQuestion = null,
   itemKindCaption = null,
   clinicalImageUrl = null,
+  adaptiveCaseSimulation = null,
   prompt,
   answer,
   explanation,
@@ -107,6 +110,7 @@ export function FlashcardStudyQuestionStack({
   examMicroQuestion?: ExamMicroQuestionPayload | SataQuestionPayload | null;
   itemKindCaption?: string | null;
   clinicalImageUrl?: string | null;
+  adaptiveCaseSimulation?: AdaptiveCaseSimulation | null;
   prompt: string;
   answer: string;
   explanation?: string;
@@ -243,6 +247,10 @@ export function FlashcardStudyQuestionStack({
               <div className="relative z-[1] nn-flashcard-hero-stem mt-6 text-pretty text-lg font-semibold leading-snug tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
                 <FlashcardRichContent text={promptBody} />
               </div>
+
+              {adaptiveCaseSimulation ? (
+                <AdaptiveCaseSimulationPanel simulation={adaptiveCaseSimulation} />
+              ) : null}
 
               {exam ? (
                 <div className="relative z-[1] mt-6">

@@ -64,7 +64,7 @@ describe("deriveBillingSurface", () => {
   });
 
   it("when subscription is PAST_DUE but access comes from trial, shows trial messaging (not a false payment lockout)", () => {
-    const trialEnd = new Date("2026-06-01T00:00:00.000Z");
+    const trialEnd = new Date("2026-12-01T00:00:00.000Z");
     assert.equal(
       deriveBillingSurface({
         user: user({ trialStatus: TrialStatus.ACTIVE, trialEndsAt: trialEnd }),

@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from "react";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
+import { buildAdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
 
 export type QuestionRendererMode = "flashcard" | "practice" | "exam" | "review";
 export type QuestionRendererLayout = "standard";
@@ -21,7 +22,15 @@ export function QuestionRenderer({
   ...stackProps
 }: QuestionRendererProps) {
   void mode;
-  void type;
   void layout;
-  return <FlashcardStudyQuestionStack {...stackProps} />;
+  const adaptiveCaseSimulation =
+    stackProps.adaptiveCaseSimulation ??
+    buildAdaptiveCaseSimulation({
+      id: `${type ?? mode}-${stackProps.questionLabel ?? stackProps.prompt.slice(0, 48)}`,
+      questionType: type,
+      stem: stackProps.prompt,
+      topic: stackProps.topicLine,
+      rationale: stackProps.explanation ?? stackProps.answer,
+    });
+  return <FlashcardStudyQuestionStack {...stackProps} adaptiveCaseSimulation={adaptiveCaseSimulation} />;
 }

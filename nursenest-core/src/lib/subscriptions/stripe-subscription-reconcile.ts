@@ -26,9 +26,14 @@ import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-
 import { syncUserFromStripePriceId } from "@/lib/stripe/sync-user-from-stripe-subscription";
 import {
   canUserCancelStripeSubscription,
+  canUserReactivateStripeSubscription,
   pickControllingStripeSubscription,
 } from "@/lib/subscriptions/stripe-subscription-eligibility";
-export { canUserCancelStripeSubscription, pickControllingStripeSubscription } from "@/lib/subscriptions/stripe-subscription-eligibility";
+export {
+  canUserCancelStripeSubscription,
+  canUserReactivateStripeSubscription,
+  pickControllingStripeSubscription,
+} from "@/lib/subscriptions/stripe-subscription-eligibility";
 
 export {
   billingSubscriptionRowFromStripeSubscription,

@@ -401,6 +401,25 @@ describe("billing correctness — static contracts (webhook dedup & trust bounda
     assert.doesNotMatch(cancel, /subscriptions\.cancel/);
   });
 
+  it("app reactivation only reverses scheduled cancellation; it does not create a client-trusted subscription id path", () => {
+    const reactivate = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "billing", "reactivate-subscription", "route.ts"),
+      "utf8",
+    );
+    assert.match(reactivate, /cancel_at_period_end: false/);
+    assert.match(reactivate, /reconcileUserSubscriptionFromStripe\(userId/);
+    assert.doesNotMatch(reactivate, /req\.json/);
+  });
+
+  it("billing page exposes cancellation reversal only through Stripe-backed eligibility", () => {
+    const payload = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "learner", "load-billing-page-payload.ts"),
+      "utf8",
+    );
+    assert.match(payload, /showReactivateSubscription/);
+    assert.match(payload, /canUserReactivateStripeSubscription\(reconcileLiveSub\)/);
+  });
+
   it("webhook idempotency: claim uses primary key insert (duplicate → P2002 / duplicate path)", () => {
     const idem = readFileSync(
       join(nursenestCoreRoot, "src", "lib", "stripe", "stripe-webhook-idempotency.ts"),

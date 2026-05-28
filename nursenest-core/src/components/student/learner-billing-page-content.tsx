@@ -4,7 +4,10 @@ import { SubscriptionStatus } from "@prisma/client";
 import type { BillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import { formatBillingTierLabel } from "@/lib/learner/load-billing-page-payload";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-import { LearnerBillingCancelSubscription } from "@/components/student/learner-billing-cancel-subscription";
+import {
+  LearnerBillingCancelSubscription,
+  LearnerBillingReactivateSubscription,
+} from "@/components/student/learner-billing-cancel-subscription";
 import { LearnerBillingPortalButton } from "@/components/student/learner-billing-portal-button";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 
@@ -74,6 +77,17 @@ function billingIntervalLabel(
     default:
       return t("learner.billingPage.interval.unknown");
   }
+}
+
+function paymentMethodLabel(stripeRenewal: BillingPagePayload["stripeRenewal"], t: LearnerMarketingT): string {
+  const pm = stripeRenewal?.paymentMethodSummary;
+  if (!pm?.brand || !pm.last4) return t("learner.billingPage.paymentMethodManagedByStripe");
+  const brand = pm.brand.toUpperCase();
+  const expiry =
+    typeof pm.expMonth === "number" && typeof pm.expYear === "number"
+      ? ` · ${String(pm.expMonth).padStart(2, "0")}/${String(pm.expYear).slice(-2)}`
+      : "";
+  return `${brand} •••• ${pm.last4}${expiry}`;
 }
 
 function includesListKeys(tier: BillingPagePayload["effectiveTier"]): string[] {
@@ -202,6 +216,7 @@ export function LearnerBillingPageContent({
     pastDueGraceEndsAt,
     billingPeriodEndDisplay,
     showCancelSubscription,
+    showReactivateSubscription,
     alliedProfessionSummary,
   } = payload;
 
@@ -380,6 +395,11 @@ export function LearnerBillingPageContent({
               <dd className="mt-1 text-sm text-muted-foreground">{t("learner.billingPage.noSubscriptionRow")}</dd>
             </div>
           )}
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.billingPage.paymentMethodTitle")}</dt>
+            <dd className="mt-1 text-sm font-medium text-foreground">{paymentMethodLabel(stripeRenewal, t)}</dd>
+            <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.paymentMethodSub")}</p>
+          </div>
         </dl>
 
         <div
@@ -395,6 +415,7 @@ export function LearnerBillingPageContent({
         </div>
       </section>
 
+      <LearnerBillingReactivateSubscription t={t} enabled={showReactivateSubscription} />
       <LearnerBillingCancelSubscription t={t} enabled={showCancelSubscription} />
 
       <section

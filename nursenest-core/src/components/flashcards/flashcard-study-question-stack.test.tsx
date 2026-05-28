@@ -186,3 +186,47 @@ describe("FlashcardStudyQuestionStack — data-nn-revealed attribute", () => {
     assert.match(html, /data-nn-revealed="1"/);
   });
 });
+
+describe("FlashcardStudyQuestionStack — adaptive case simulation", () => {
+  it("renders evolving bedside case data inside the canonical learner card", () => {
+    const html = renderToStaticMarkup(
+      <FlashcardStudyQuestionStack
+        {...BASE_PROPS}
+        prompt="An older client develops new confusion and hypotension."
+        answer="Escalate possible sepsis."
+        examMicroQuestion={MCQ}
+        revealed={false}
+        adaptiveCaseSimulation={{
+          id: "adaptive-case-test",
+          title: "Evolving infection case",
+          focus: "Cue clustering and escalation",
+          patientSummary: "An older client develops new confusion and hypotension.",
+          teachingPoint: "Use trends and cue clusters to escalate early.",
+          stages: [
+            {
+              id: "baseline",
+              timeLabel: "0700",
+              title: "Initial cue",
+              narrative: "The client is newly confused.",
+              vitals: [{ label: "HR", value: "110", unit: "/min", flag: "watch" }],
+            },
+          ],
+          decisions: [
+            {
+              id: "escalate",
+              label: "Escalate with SBAR",
+              priorityLevel: "optimal",
+              responseTitle: "Priority recognized",
+              response: "Escalation protects safety.",
+            },
+          ],
+        }}
+      />,
+    );
+
+    assert.match(html, /data-testid="adaptive-case-simulation"/);
+    assert.match(html, /Adaptive NGN case/);
+    assert.match(html, /Evolving infection case/);
+    assert.match(html, /Escalate with SBAR/);
+  });
+});

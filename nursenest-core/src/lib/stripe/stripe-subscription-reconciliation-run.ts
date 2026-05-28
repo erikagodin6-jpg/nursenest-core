@@ -450,7 +450,7 @@ export async function runStripeSubscriptionReconciliation(
                 ),
               });
               if (priceId) {
-                await syncUserFromStripePriceId(metadataUserId, priceId, metadataPlan ?? resolvedPlanCountry);
+                await syncUserFromStripePriceId(metadataUserId, priceId, resolvedPlanCountry);
                 report.apply.userSyncsApplied += 1;
               }
             }
@@ -581,7 +581,7 @@ export async function runStripeSubscriptionReconciliation(
           patchKeys,
         });
         if (syncUserFromPrice && priceId) {
-          await syncUserFromStripePriceId(row.userId, priceId, metadataPlan ?? resolvedPlanCountry ?? row.planCountry ?? null);
+          await syncUserFromStripePriceId(row.userId, priceId, resolvedPlanCountry ?? row.planCountry ?? null);
           report.apply.userSyncsApplied += 1;
         }
       } catch (e) {
