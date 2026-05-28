@@ -175,8 +175,8 @@
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-study-rail-aside {
-  padding-left: min(0.25rem, env(safe-area-inset-left, 0px));
-  padding-right: min(0.25rem, env(safe-area-inset-right, 0px));
+  padding-left: max(0.25rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.25rem, env(safe-area-inset-right, 0px));
 }
 
 @media (min-width: 1280px) {

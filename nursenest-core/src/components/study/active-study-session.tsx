@@ -433,6 +433,7 @@ export function ActiveStudySession({
       className="nn-active-flashcard-session nn-unified-exam-workspace relative space-y-3"
       data-nn-premium-flashcard-active-session
       data-nn-flashcard-branding-revamp=""
+      data-nn-flashcard-study-session=""
       data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-pedagogy-tier={tierPedagogyProfile.tier}
       data-nn-unified-exam-workspace=""

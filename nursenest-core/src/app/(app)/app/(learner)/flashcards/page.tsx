@@ -345,19 +345,24 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     poolDiagnostics: null,
   };
 
+  const PAGE_RENDER_BUDGET_MS = 3_000;
+
   let visiblePathwayIds: string[] = [];
-  if (userId && catalogPathwayForInventory && entitlement !== "error") {
+  if (userId && catalogPathwayForInventory) {
     try {
       const [inv, visibleIds] = await Promise.all([
-        loadFlashcardsExamInventoryForPathway({
-          userId,
-          entitlement,
-          pathway: catalogPathwayForInventory,
-        }),
+        Promise.race([
+          loadFlashcardsExamInventoryForPathway({
+            userId,
+            entitlement,
+            pathway: catalogPathwayForInventory,
+          }),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), PAGE_RENDER_BUDGET_MS)),
+        ]),
         visiblePathwayIdsForAppLessons(entitlement, learnerPath).catch(() => [] as string[]),
       ]);
       visiblePathwayIds = visibleIds;
-      if (inv.ok) {
+      if (inv && inv.ok) {
         initialHub = {
           categoryOptions: inv.categoryOptions,
           matchingTotal: inv.total,

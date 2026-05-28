@@ -295,19 +295,27 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     });
   }
 
+  const PAGE_RENDER_BUDGET_MS = 3_000;
+
   let initialDiscovery: { buckets: { topic: string; count: number }[]; total: number } | null = null;
   const scopedPid = defaultPathwayId?.trim() ?? "";
   if (scopedPid) {
     try {
       const examContext = buildGlobalExamContext(scopedPid, "en");
-      const { total, topicRows } = await loadSubscriberDiscoveryAggregates(entitlement, examContext);
-      initialDiscovery = {
-        total,
-        buckets: topicRows.map((row) => ({
-          topic: row.topic ?? "Unknown",
-          count: Number(row.cnt),
-        })),
-      };
+      const discoveryResult = await Promise.race([
+        loadSubscriberDiscoveryAggregates(entitlement, examContext),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), PAGE_RENDER_BUDGET_MS)),
+      ]);
+      if (discoveryResult) {
+        const { total, topicRows } = discoveryResult;
+        initialDiscovery = {
+          total,
+          buckets: topicRows.map((row) => ({
+            topic: row.topic ?? "Unknown",
+            count: Number(row.cnt),
+          })),
+        };
+      }
     } catch (e) {
       safeServerLog("learner_practice_tests", "discovery_bootstrap_failed", {
         loader_name: "practice_tests_page",
