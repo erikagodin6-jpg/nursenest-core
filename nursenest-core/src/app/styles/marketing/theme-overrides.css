@@ -19,7 +19,11 @@
 
 /* Homepage body sections — slightly tighter vertical rhythm (scoped). */
 .nn-home-marketing-root .nn-premium-home-section {
-  padding-block: clamp(2.35rem, 4.6vw, calc(var(--nn-rhythm-section-y, 4rem) * 0.9));
+  padding-block: clamp(
+    2.35rem,
+    4.6vw,
+    calc(var(--nn-rhythm-section-y, 4rem) * 0.9)
+  );
 }
 
 @supports (content-visibility: auto) {
@@ -39,7 +43,11 @@
 
 @media (max-width: 640px) {
   .nn-home-marketing-root .nn-premium-home-section {
-    padding-block: clamp(2rem, 5.2vw, calc(var(--nn-rhythm-mobile-section-y, 2.75rem) * 0.95));
+    padding-block: clamp(
+      2rem,
+      5.2vw,
+      calc(var(--nn-rhythm-mobile-section-y, 2.75rem) * 0.95)
+    );
   }
 }
 
@@ -48,13 +56,36 @@
   --nn-premium-tone-info: var(--semantic-info, #0284c7);
   --nn-premium-tone-success: var(--semantic-success, #16a34a);
   --nn-premium-tone-warning: var(--semantic-warning, #d97706);
-  --nn-premium-tone-accent: var(--semantic-chart-5, var(--theme-accent, #ec4899));
+  --nn-premium-tone-accent: var(
+    --semantic-chart-5,
+    var(--theme-accent, #ec4899)
+  );
   --nn-premium-tone-danger: var(--semantic-danger, #e11d48);
-  --nn-premium-meter-brand: linear-gradient(90deg, var(--semantic-brand, #2563eb), var(--semantic-chart-3, #76b6c4));
-  --nn-premium-meter-info: linear-gradient(90deg, var(--semantic-info, #0284c7), var(--semantic-brand, #2563eb));
-  --nn-premium-meter-success: linear-gradient(90deg, var(--semantic-success, #16a34a), var(--semantic-info, #0284c7));
-  --nn-premium-meter-warning: linear-gradient(90deg, var(--semantic-warning, #d97706), var(--semantic-chart-5, #ec4899));
-  --nn-premium-meter-danger: linear-gradient(90deg, var(--semantic-danger, #e11d48), var(--semantic-chart-5, #ec4899));
+  --nn-premium-meter-brand: linear-gradient(
+    90deg,
+    var(--semantic-brand, #2563eb),
+    var(--semantic-chart-3, #76b6c4)
+  );
+  --nn-premium-meter-info: linear-gradient(
+    90deg,
+    var(--semantic-info, #0284c7),
+    var(--semantic-brand, #2563eb)
+  );
+  --nn-premium-meter-success: linear-gradient(
+    90deg,
+    var(--semantic-success, #16a34a),
+    var(--semantic-info, #0284c7)
+  );
+  --nn-premium-meter-warning: linear-gradient(
+    90deg,
+    var(--semantic-warning, #d97706),
+    var(--semantic-chart-5, #ec4899)
+  );
+  --nn-premium-meter-danger: linear-gradient(
+    90deg,
+    var(--semantic-danger, #e11d48),
+    var(--semantic-chart-5, #ec4899)
+  );
 }
 
 /* ---------------------------------------------------------------------
@@ -62,13 +93,30 @@
    Rose / violet / sky / mint blobs via semantic tokens — no neon magenta slabs.
    --------------------------------------------------------------------- */
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-root {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-home-marketing-root {
   background-color: var(--theme-page-bg);
   background-image:
-    radial-gradient(ellipse 130% 92% at -8% -18%, color-mix(in srgb, var(--semantic-chart-5) 19%, transparent), transparent 56%),
-    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-brand) 16%, transparent), transparent 56%),
-    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-2) 15%, transparent), transparent 60%),
-    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-info) 13%, transparent), transparent 60%),
+    radial-gradient(
+      ellipse 130% 92% at -8% -18%,
+      color-mix(in srgb, var(--semantic-chart-5) 19%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 118% 82% at 108% 2%,
+      color-mix(in srgb, var(--semantic-brand) 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 105% 76% at 48% 112%,
+      color-mix(in srgb, var(--semantic-chart-2) 15%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 95% 68% at 90% 96%,
+      color-mix(in srgb, var(--semantic-info) 13%, transparent),
+      transparent 60%
+    ),
     linear-gradient(
       192deg,
       color-mix(in srgb, var(--semantic-chart-5) 8%, var(--theme-page-bg)) 0%,
@@ -78,34 +126,77 @@
     );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero {
-  --hero-headline-accent: var(--semantic-chart-5);
-  --hero-headline-secondary: var(--semantic-brand);
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-home-marketing-rich-hero {
+  --hero-accent-start: #b82762;
+  --hero-accent-middle: #7f55c7;
+  --hero-accent-end: #08725f;
+  --hero-accent-solid-fallback: #8f1f4f;
   --hero-headline-gradient: linear-gradient(
     94deg,
-    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-border-soft)) 0%,
-    color-mix(in srgb, var(--semantic-chart-2) 90%, var(--semantic-border-soft)) 46%,
-    color-mix(in srgb, var(--semantic-brand) 91%, var(--semantic-border-soft)) 100%
+    var(--hero-accent-start) 0%,
+    var(--hero-accent-middle) 46%,
+    var(--hero-accent-end) 100%
   );
-  --hero-headline-glow: drop-shadow(0 0 24px color-mix(in srgb, var(--semantic-brand) 30%, transparent))
-    drop-shadow(0 0 48px color-mix(in srgb, var(--semantic-chart-5) 20%, transparent));
-  --hero-ambient-radial: radial-gradient(120% 90% at 8% 26%, color-mix(in srgb, var(--semantic-chart-5) 20%, transparent) 0%, transparent 58%),
-    radial-gradient(102% 76% at 100% 12%, color-mix(in srgb, var(--semantic-brand) 16%, transparent) 0%, transparent 56%),
-    radial-gradient(92% 70% at 40% 100%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent) 0%, transparent 60%);
+  --hero-ambient-radial:
+    radial-gradient(
+      120% 90% at 8% 26%,
+      color-mix(in srgb, var(--semantic-chart-5) 20%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      102% 76% at 100% 12%,
+      color-mix(in srgb, var(--semantic-brand) 16%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      92% 70% at 40% 100%,
+      color-mix(in srgb, var(--semantic-chart-2) 14%, transparent) 0%,
+      transparent 60%
+    );
   background:
-    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-5) 26%, transparent), transparent 58%),
-    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-brand) 20%, transparent), transparent 56%),
-    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-2) 19%, transparent), transparent 56%),
-    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-info) 16%, transparent), transparent 56%),
+    radial-gradient(
+      820px 440px at 6% 4%,
+      color-mix(in srgb, var(--semantic-chart-5) 26%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      780px 420px at 94% 8%,
+      color-mix(in srgb, var(--semantic-brand) 20%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      740px 400px at 52% 108%,
+      color-mix(in srgb, var(--semantic-chart-2) 19%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      700px 360px at 0% 72%,
+      color-mix(in srgb, var(--semantic-info) 16%, transparent),
+      transparent 56%
+    ),
     var(--page-bg, var(--theme-page-bg));
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero.nn-hero-bridge {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-color: transparent;
   background-image:
-    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-5) 17%, transparent), transparent 54%),
-    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-brand) 15%, transparent), transparent 56%),
-    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 56%),
+    radial-gradient(
+      ellipse 130% 90% at 12% -28%,
+      color-mix(in srgb, var(--semantic-chart-5) 17%, transparent),
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse 108% 80% at 98% -5%,
+      color-mix(in srgb, var(--semantic-brand) 15%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 102% 74% at 48% 118%,
+      color-mix(in srgb, var(--semantic-chart-2) 14%, transparent),
+      transparent 56%
+    ),
     linear-gradient(
       176deg,
       color-mix(in srgb, var(--semantic-chart-5) 9%, var(--theme-page-bg)) 0%,
@@ -115,68 +206,154 @@
   background-repeat: no-repeat;
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-home-section {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-home-section {
   background: transparent;
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-home-section::before {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-home-section::before {
   background:
-    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-5) 14%, transparent), transparent 60%),
-    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-brand) 11%, transparent), transparent 58%),
-    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-info) 12%, transparent), transparent 58%),
-    radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 60%);
+    radial-gradient(
+      760px 400px at 0% 0%,
+      color-mix(in srgb, var(--semantic-chart-5) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      740px 380px at 100% 18%,
+      color-mix(in srgb, var(--semantic-brand) 11%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      720px 360px at 100% 22%,
+      color-mix(in srgb, var(--semantic-info) 12%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      700px 340px at 50% 100%,
+      color-mix(in srgb, var(--semantic-chart-2) 11%, transparent),
+      transparent 60%
+    );
 }
 
 html[data-theme="blossom"] .nn-home-marketing-root {
   background-image:
-    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 20%, transparent), transparent 56%),
-    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 56%),
-    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 60%),
-    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-8) 12%, transparent), transparent 60%),
-    linear-gradient(
-      180deg,
-      #fff9fb 0%,
-      #fffdf8 45%,
-      #e8fff3 100%
-    );
+    radial-gradient(
+      ellipse 128% 88% at -8% -18%,
+      color-mix(in srgb, var(--semantic-chart-1) 20%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 118% 82% at 108% 2%,
+      color-mix(in srgb, var(--semantic-chart-2) 18%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 105% 76% at 48% 112%,
+      color-mix(in srgb, var(--semantic-chart-4) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 95% 68% at 90% 96%,
+      color-mix(in srgb, var(--semantic-chart-8) 12%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #fff9fb 0%, #fffdf8 45%, #e8fff3 100%);
 }
 
 html[data-theme="mint-blossom"] .nn-home-marketing-root {
   background-image:
-    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 16%, transparent), transparent 56%),
-    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-7) 16%, transparent), transparent 56%),
-    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-4) 18%, transparent), transparent 60%),
-    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-8) 10%, transparent), transparent 60%),
+    radial-gradient(
+      ellipse 128% 88% at -8% -18%,
+      color-mix(in srgb, var(--semantic-chart-1) 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 118% 82% at 108% 2%,
+      color-mix(in srgb, var(--semantic-chart-7) 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 105% 76% at 48% 112%,
+      color-mix(in srgb, var(--semantic-chart-4) 18%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 95% 68% at 90% 96%,
+      color-mix(in srgb, var(--semantic-chart-8) 10%, transparent),
+      transparent 60%
+    ),
     linear-gradient(180deg, #fafdfc 0%, #fff9fb 42%, #d6f0ff 100%);
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
-  --hero-headline-accent: var(--semantic-chart-1);
-  --hero-headline-secondary: var(--semantic-chart-3);
+  --hero-accent-start: #b82762;
+  --hero-accent-middle: #7957c2;
+  --hero-accent-end: #08725f;
+  --hero-accent-solid-fallback: #8f1f4f;
   --hero-headline-gradient: linear-gradient(
     92deg,
-    color-mix(in srgb, var(--semantic-chart-1) 96%, transparent) 0%,
-    color-mix(in srgb, var(--semantic-chart-2) 94%, transparent) 48%,
-    color-mix(in srgb, var(--semantic-chart-3) 95%, transparent) 100%
+    var(--hero-accent-start) 0%,
+    var(--hero-accent-middle) 48%,
+    var(--hero-accent-end) 100%
   );
-  --hero-headline-glow: drop-shadow(0 0 24px color-mix(in srgb, var(--semantic-chart-3) 38%, transparent))
-    drop-shadow(0 0 52px color-mix(in srgb, var(--semantic-chart-1) 26%, transparent));
-  --hero-ambient-radial: radial-gradient(122% 90% at 8% 26%, color-mix(in srgb, var(--semantic-chart-1) 24%, transparent) 0%, transparent 58%),
-    radial-gradient(102% 76% at 100% 14%, color-mix(in srgb, var(--semantic-chart-3) 20%, transparent) 0%, transparent 56%),
-    radial-gradient(92% 70% at 38% 100%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent) 0%, transparent 60%);
+  --hero-ambient-radial:
+    radial-gradient(
+      122% 90% at 8% 26%,
+      color-mix(in srgb, var(--semantic-chart-1) 24%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      102% 76% at 100% 14%,
+      color-mix(in srgb, var(--semantic-chart-3) 20%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      92% 70% at 38% 100%,
+      color-mix(in srgb, var(--semantic-chart-2) 18%, transparent) 0%,
+      transparent 60%
+    );
   background:
-    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-1) 24%, transparent), transparent 58%),
-    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-chart-3) 22%, transparent), transparent 56%),
-    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-2) 20%, transparent), transparent 56%),
-    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-chart-4) 16%, transparent), transparent 56%),
+    radial-gradient(
+      820px 440px at 6% 4%,
+      color-mix(in srgb, var(--semantic-chart-1) 24%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      780px 420px at 94% 8%,
+      color-mix(in srgb, var(--semantic-chart-3) 22%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      740px 400px at 52% 108%,
+      color-mix(in srgb, var(--semantic-chart-2) 20%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      700px 360px at 0% 72%,
+      color-mix(in srgb, var(--semantic-chart-4) 16%, transparent),
+      transparent 56%
+    ),
     var(--page-bg, var(--theme-page-bg));
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-image:
-    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-1) 18%, transparent), transparent 54%),
-    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 56%),
-    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-2) 15%, transparent), transparent 56%),
+    radial-gradient(
+      ellipse 130% 90% at 12% -28%,
+      color-mix(in srgb, var(--semantic-chart-1) 18%, transparent),
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse 108% 80% at 98% -5%,
+      color-mix(in srgb, var(--semantic-chart-3) 16%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 102% 74% at 48% 118%,
+      color-mix(in srgb, var(--semantic-chart-2) 15%, transparent),
+      transparent 56%
+    ),
     linear-gradient(
       176deg,
       color-mix(in srgb, var(--semantic-chart-1) 9%, var(--theme-page-bg)) 0%,
@@ -187,14 +364,32 @@ html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
 
 html[data-theme="blossom"] .nn-premium-home-section::before {
   background:
-    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 14%, transparent), transparent 60%),
-    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-chart-3) 13%, transparent), transparent 58%),
-    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-chart-2) 12%, transparent), transparent 58%),
-    radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 60%);
+    radial-gradient(
+      760px 400px at 0% 0%,
+      color-mix(in srgb, var(--semantic-chart-1) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      740px 380px at 100% 18%,
+      color-mix(in srgb, var(--semantic-chart-3) 13%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      720px 360px at 100% 22%,
+      color-mix(in srgb, var(--semantic-chart-2) 12%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      700px 340px at 50% 100%,
+      color-mix(in srgb, var(--semantic-chart-4) 11%, transparent),
+      transparent 60%
+    );
 }
 
 /* Blossom — flat reference header: theme-aware colour only, no main-nav capsule. */
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
@@ -213,23 +408,46 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
 /* Blossom / Aurora: marketing-row4 geometry matches Ocean — token-only nav pill colors below. */
 
 /* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link {
   border-color: transparent;
   background: transparent;
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link:hover {
   background: transparent;
-  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--nn-header-primary-fg));
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 80%,
+    var(--nn-header-primary-fg)
+  );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link[aria-current="page"] {
   border-color: transparent;
   background: transparent;
-  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--nn-header-primary-fg));
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 82%,
+    var(--nn-header-primary-fg)
+  );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row
+  .nn-marketing-nav-link {
   border-color: color-mix(
     in srgb,
     var(--semantic-brand) 22%,
@@ -242,7 +460,10 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
   );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row
+  .nn-marketing-nav-link:hover {
   background: color-mix(
     in srgb,
     var(--semantic-info) 14%,
@@ -250,22 +471,44 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
   );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text:hover {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text:hover {
   border-color: transparent;
   background: transparent;
-  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--nn-header-primary-fg));
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 80%,
+    var(--nn-header-primary-fg)
+  );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text[aria-current="page"] {
   border: 0;
   background: transparent;
-  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--nn-header-primary-fg));
+  color: color-mix(
+    in srgb,
+    var(--semantic-brand) 82%,
+    var(--nn-header-primary-fg)
+  );
   font-weight: 500;
   box-shadow: none;
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip {
   border-color: color-mix(
     in srgb,
     var(--semantic-chart-5) 18%,
@@ -278,9 +521,19 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
   );
 }
 
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
-  border-color: color-mix(in srgb, var(--semantic-brand) 36%, var(--semantic-info));
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a[data-active],
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-brand) 36%,
+    var(--semantic-info)
+  );
   background: color-mix(
     in srgb,
     var(--semantic-brand) 12%,
@@ -295,18 +548,32 @@ html[data-theme="blossom"] .nn-header-brand-lockup {
   color: var(--theme-primary);
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"],
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"],
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-tier-rail {
   background: color-mix(
     in srgb,
     var(--semantic-chart-3) 6%,
     color-mix(in srgb, var(--semantic-chart-1) 5%, var(--nn-header-primary-bg))
   );
-  border-top-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--header-border));
+  border-top-color: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 16%,
+    var(--header-border)
+  );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip {
   border-color: color-mix(
     in srgb,
     var(--semantic-chart-1) 20%,
@@ -319,9 +586,19 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketin
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip:hover {
-  border-color: color-mix(in srgb, var(--semantic-chart-1) 28%, var(--semantic-chart-3));
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a:hover,
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-chart-1) 28%,
+    var(--semantic-chart-3)
+  );
   background: color-mix(
     in srgb,
     var(--semantic-chart-1) 12%,
@@ -329,9 +606,19 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketin
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
-  border-color: color-mix(in srgb, var(--semantic-brand) 40%, var(--semantic-chart-3));
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a[data-active],
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-brand) 40%,
+    var(--semantic-chart-3)
+  );
   background: color-mix(
     in srgb,
     var(--semantic-brand) 14%,
@@ -339,9 +626,20 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketin
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 button {
-  border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-chart-1) 8%, var(--nn-header-primary-bg));
+html[data-theme="blossom"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-theme-row4
+  button {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-chart-3) 22%,
+    var(--semantic-border-soft)
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-1) 8%,
+    var(--nn-header-primary-bg)
+  );
   color: var(--theme-heading-text);
 }
 
@@ -357,26 +655,58 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-u
    <reason>` immediately before a declaration.
    ===================================================================== */
 /* Midnight + marketing-row4 — same Ocean hierarchy; dark header paper + full-strength ink/sky on controls */
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-nav-v31-bar-a {
   color: color-mix(in srgb, var(--nn-header-primary-fg) 90%, transparent);
 }
 
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4,
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button) {
-  border-color: color-mix(in srgb, var(--semantic-info) 38%, var(--semantic-border-soft)) !important;
-  background: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg)) !important;
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-trigger-row4,
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-theme-row4
+  :where(button) {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 38%,
+    var(--semantic-border-soft)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 14%,
+    var(--nn-header-primary-bg)
+  ) !important;
   color: var(--nn-header-primary-fg) !important;
   box-shadow: none !important;
 }
 
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4:hover,
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button:hover) {
-  border-color: color-mix(in srgb, var(--semantic-info) 48%, var(--semantic-border-soft)) !important;
-  background: color-mix(in srgb, var(--semantic-info) 22%, var(--nn-header-primary-bg)) !important;
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-trigger-row4:hover,
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-utility-theme-row4
+  :where(button:hover) {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 48%,
+    var(--semantic-border-soft)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 22%,
+    var(--nn-header-primary-bg)
+  ) !important;
   color: var(--nn-header-primary-fg) !important;
 }
 
-:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+:is(
+    html[data-theme="midnight"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="midnight-ink"]
+  )
   [data-nn-header-layout="marketing-row4"]
   .nn-header-desktop-grid
   > nav
@@ -384,7 +714,11 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-
   color: color-mix(in srgb, var(--nn-header-primary-fg) 94%, transparent);
 }
 
-:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+:is(
+    html[data-theme="midnight"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="midnight-ink"]
+  )
   [data-nn-header-layout="marketing-row4"]
   .nn-header-desktop-grid
   > nav
@@ -392,7 +726,11 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-
   color: var(--nn-header-primary-fg);
 }
 
-:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+:is(
+    html[data-theme="midnight"],
+    html[data-theme="midnight-indigo"],
+    html[data-theme="midnight-ink"]
+  )
   [data-nn-header-layout="marketing-row4"]
   .nn-header-desktop-grid
   > nav
@@ -406,8 +744,14 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-
   -webkit-backdrop-filter: none;
 }
 
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
-html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-nav-row[data-nn-header-band="tier"]
+  nav
+  a,
+html[data-theme="midnight"]
+  [data-nn-header-layout="marketing-row4"]
+  .nn-marketing-tier-chip {
   color: var(--nn-header-primary-fg);
 }
 
@@ -422,7 +766,10 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
 
 .nn-premium-home-section.border-b,
 .nn-premium-home-section[class*="border-b"] {
-  padding-bottom: max(var(--nn-space-section-gap), var(--nn-space-section-landing));
+  padding-bottom: max(
+    var(--nn-space-section-gap),
+    var(--nn-space-section-landing)
+  );
 }
 
 .nn-premium-home-section + .nn-premium-home-section {
@@ -436,21 +783,49 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
   pointer-events: none;
   z-index: -1;
   background:
-    radial-gradient(720px 380px at 0% 0%, color-mix(in srgb, var(--nn-premium-tone-brand) 11%, transparent), transparent 62%),
-    radial-gradient(720px 380px at 100% 20%, color-mix(in srgb, var(--nn-premium-tone-accent) 10%, transparent), transparent 60%);
+    radial-gradient(
+      720px 380px at 0% 0%,
+      color-mix(in srgb, var(--nn-premium-tone-brand) 11%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      720px 380px at 100% 20%,
+      color-mix(in srgb, var(--nn-premium-tone-accent) 10%, transparent),
+      transparent 60%
+    );
 }
 
 .nn-premium-home-section--clinical::before,
 .nn-premium-home-section--readiness::before {
   background:
-    radial-gradient(720px 380px at 8% 12%, color-mix(in srgb, var(--nn-premium-tone-success) 11%, transparent), transparent 62%),
-    radial-gradient(680px 360px at 100% 90%, color-mix(in srgb, var(--nn-premium-tone-info) 10%, transparent), transparent 60%);
+    radial-gradient(
+      720px 380px at 8% 12%,
+      color-mix(in srgb, var(--nn-premium-tone-success) 11%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      680px 360px at 100% 90%,
+      color-mix(in srgb, var(--nn-premium-tone-info) 10%, transparent),
+      transparent 60%
+    );
 }
 
 .nn-premium-home-section--ecosystem::before,
 .nn-premium-home-section--cta::before {
   background:
-    radial-gradient(760px 400px at 4% 0%, color-mix(in srgb, var(--nn-premium-tone-accent) 12%, transparent), transparent 62%),
-    radial-gradient(760px 400px at 100% 12%, color-mix(in srgb, var(--nn-premium-tone-brand) 12%, transparent), transparent 62%),
-    radial-gradient(720px 380px at 55% 100%, color-mix(in srgb, var(--nn-premium-tone-success) 10%, transparent), transparent 60%);
+    radial-gradient(
+      760px 400px at 4% 0%,
+      color-mix(in srgb, var(--nn-premium-tone-accent) 12%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 400px at 100% 12%,
+      color-mix(in srgb, var(--nn-premium-tone-brand) 12%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      720px 380px at 55% 100%,
+      color-mix(in srgb, var(--nn-premium-tone-success) 10%, transparent),
+      transparent 60%
+    );
 }

@@ -73,6 +73,7 @@ import {
   PricingTrustReassurance,
   PricingCTA,
 } from "@/components/marketing/pricing-sections";
+import { PremiumFeatureMatrixRsc } from "@/components/marketing/premium-feature-matrix-rsc";
 
 type NursingPlanRow = {
   tier: TierCode;
@@ -1622,6 +1623,9 @@ export function PricingPageClient({
       <PricingLearnerFaq />
 
       <PricingSubscriptionFaq />
+
+      {/* ── Premium Feature Matrix ── */}
+      <PremiumFeatureMatrixRsc />
 
       {/* ── Section 5 (comparison) ── */}
       <FeatureComparisonTable />

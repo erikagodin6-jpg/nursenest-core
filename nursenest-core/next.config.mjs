@@ -537,6 +537,12 @@ const nextConfig = {
     // Next image optimizer cache. Source assets are versioned/remote CDN-backed;
     // a longer floor reduces repeat image fetches and PageSpeed cache-lifetime noise.
     minimumCacheTTL: 2678400,
+    localPatterns: [
+      {
+        pathname: "/branding/blossom-leaf/**",
+        search: "?v=2026-05-21-opt1",
+      },
+    ],
     remotePatterns: [
       {
         protocol: "https",
