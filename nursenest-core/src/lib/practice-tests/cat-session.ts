@@ -62,7 +62,7 @@ import {
 } from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
-import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { fetchCatPracticePool, fetchCatPracticePoolCached } from "@/lib/practice-tests/cat-pool";
 import { buildCatSelectionAppliedMeta } from "@/lib/practice-tests/cat-selection-applied-meta";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { normalizedAdaptiveCatRunBounds, practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
@@ -419,7 +419,7 @@ export async function createCatPracticeTestPayload(
     selectionStrictness: poolStrictness,
   };
 
-  const { pool, buildMeta } = await fetchCatPracticePool(userId, entitlement, poolInput);
+  const { pool, buildMeta } = await fetchCatPracticePoolCached(userId, entitlement, poolInput);
   const pathwayIdForRecent = requestedPathwayId ?? input.pathwayId ?? null;
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,

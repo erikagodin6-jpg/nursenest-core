@@ -242,6 +242,186 @@
       "filename": "supplementary/practice-tests-hub.png",
       "waitFor": "main",
       "manualReviewNotes": "Practice exams hub — complements slot 1 (rationale) and CAT slots 6–7."
+    },
+    {
+      "id": "extra-rn-marketing-hub",
+      "route": "/us/rn/nclex-rn",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/rn-marketing-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "US RN NCLEX-RN marketing pathway hub."
+    },
+    {
+      "id": "extra-pn-marketing-hub",
+      "route": "/canada/pn/rex-pn",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/pn-marketing-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "CA RPN/PN REx-PN marketing pathway hub."
+    },
+    {
+      "id": "extra-np-marketing-hub",
+      "route": "/canada/np/cnple",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/np-marketing-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "CA NP CNPLE marketing pathway hub."
+    },
+    {
+      "id": "extra-allied-marketing-hub",
+      "route": "/allied/allied-health",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/allied-marketing-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Allied Health marketing hub."
+    },
+    {
+      "id": "extra-new-grad-marketing-hub",
+      "route": "/canada/new-grad",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/new-grad-marketing-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "New Grad marketing hub — transition-to-practice."
+    },
+    {
+      "id": "extra-faq",
+      "route": "/faq",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/faq.png",
+      "waitFor": "main",
+      "manualReviewNotes": "FAQ page — hero shot."
+    },
+    {
+      "id": "extra-clinical-skills",
+      "route": "/app/clinical-skills",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/clinical-skills.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Clinical Skills hub."
+    },
+    {
+      "id": "extra-pharmacology",
+      "route": "/app/pharmacology",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/pharmacology.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Pharmacology hub."
+    },
+    {
+      "id": "extra-readiness",
+      "route": "/app/account/readiness",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/readiness-dashboard.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Readiness dashboard — score and trend."
+    },
+    {
+      "id": "extra-clinical-scenarios",
+      "route": "/app/clinical-scenarios",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/clinical-scenarios.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Clinical scenarios / LOFT-style simulations."
+    },
+    {
+      "id": "extra-osce",
+      "route": "/app/osce",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/osce-simulation.png",
+      "waitFor": "main",
+      "manualReviewNotes": "OSCE simulation hub."
+    },
+    {
+      "id": "extra-np-cnple-cases",
+      "route": "/app/cases/cnple",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/np-cnple-cases.png",
+      "waitFor": "main",
+      "manualReviewNotes": "NP CNPLE case-based reasoning hub."
+    },
+    {
+      "id": "extra-cat-midnight-blossom",
+      "route": "/app/practice-tests/cat-insights",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "blossom",
+      "filename": "supplementary/cat-insights-blossom.png",
+      "waitFor": "main",
+      "manualReviewNotes": "CAT insights in blossom theme — pricing page tier variant."
+    },
+    {
+      "id": "extra-dashboard-midnight",
+      "route": "/app",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "filename": "supplementary/dashboard-midnight.png",
+      "waitFor": "[data-testid=\"learner-dashboard-shell\"], main",
+      "manualReviewNotes": "Learner dashboard in midnight theme — pricing dark variant."
+    },
+    {
+      "id": "extra-flashcards-blossom",
+      "route": "/app/flashcards",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "blossom",
+      "filename": "supplementary/flashcards-blossom.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Flashcards in blossom theme — homepage theme variant."
+    },
+    {
+      "id": "extra-ecg-advanced",
+      "route": "/modules/ecg",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "filename": "supplementary/ecg-module-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "ECG module hub — midnight theme for New Grad ECG section."
+    },
+    {
+      "id": "extra-guided-newgrad",
+      "route": "/app/guided",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/guided-specialty-tracks.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Guided specialty tracks — New Grad transition-to-practice."
+    },
+    {
+      "id": "extra-home-pricing-mobile",
+      "route": "/pricing",
+      "viewport": "mobile",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/pricing-mobile.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Pricing page mobile."
     }
   ]
 }

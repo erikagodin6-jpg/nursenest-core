@@ -1,4 +1,7 @@
-import type { ClinicalSkillDefinition, ClinicalSkillStep } from "@/lib/clinical-skills/clinical-skills-catalog";
+import type {
+  ClinicalSkillDefinition,
+  ClinicalSkillStep,
+} from "@/lib/clinical-skills/clinical-skills-catalog";
 
 export type EnrichedClinicalSkillStep = ClinicalSkillStep & {
   rationale?: string;
@@ -93,7 +96,8 @@ const ENRICHMENT: Record<
     retentionItems: [
       {
         id: "sdc-r1",
-        question: "The patient reports increased wound odor but denies pain. What is your next best action?",
+        question:
+          "The patient reports increased wound odor but denies pain. What is your next best action?",
         options: [
           "Complete wound assessment and notify the provider per infection protocol",
           "Apply a dry dressing quickly and recheck tomorrow",
@@ -101,11 +105,13 @@ const ENRICHMENT: Record<
           "Have the patient cleanse the wound independently",
         ],
         correct: 0,
-        rationale: "Odor change warrants assessment and possible culture or order revision — pain is not required for infection concern.",
+        rationale:
+          "Odor change warrants assessment and possible culture or order revision — pain is not required for infection concern.",
       },
       {
         id: "sdc-r2",
-        question: "What documentation is most important immediately after the dressing change?",
+        question:
+          "What documentation is most important immediately after the dressing change?",
         options: [
           "Wound appearance, drainage, dressing type, patient tolerance, and education provided",
           "Only the time the dressing was changed",
@@ -113,7 +119,8 @@ const ENRICHMENT: Record<
           "Patient food preferences",
         ],
         correct: 0,
-        rationale: "Structured wound documentation supports continuity of care and legal defensibility.",
+        rationale:
+          "Structured wound documentation supports continuity of care and legal defensibility.",
       },
     ],
   },
@@ -153,12 +160,14 @@ const ENRICHMENT: Record<
         "Disposing sharps in a puncture-resistant container",
       ],
       correctIndex: 0,
-      rationale: "Allergies and rights must be verified every administration — prior doses do not eliminate risk.",
+      rationale:
+        "Allergies and rights must be verified every administration — prior doses do not eliminate risk.",
     },
     retentionItems: [
       {
         id: "sq-r1",
-        question: "A patient reports wheezing minutes after an SQ biologic. Priority action?",
+        question:
+          "A patient reports wheezing minutes after an SQ biologic. Priority action?",
         options: [
           "Assess airway and initiate emergency response per anaphylaxis protocol",
           "Document and continue the next scheduled dose",
@@ -166,7 +175,8 @@ const ENRICHMENT: Record<
           "Wait 30 minutes before notifying the provider",
         ],
         correct: 0,
-        rationale: "Respiratory symptoms after injection suggest anaphylaxis until proven otherwise — treat as emergency.",
+        rationale:
+          "Respiratory symptoms after injection suggest anaphylaxis until proven otherwise — treat as emergency.",
       },
     ],
   },
@@ -206,12 +216,14 @@ const ENRICHMENT: Record<
         "Stabilizing the syringe barrel during insertion",
       ],
       correctIndex: 0,
-      rationale: "Incorrect dorsogluteal landmarking can hit the sciatic nerve — confirm landmarks or use ventrogluteal.",
+      rationale:
+        "Incorrect dorsogluteal landmarking can hit the sciatic nerve — confirm landmarks or use ventrogluteal.",
     },
     retentionItems: [
       {
         id: "im-r1",
-        question: "Patient complains of sharp leg pain radiating down the leg after dorsogluteal injection. First action?",
+        question:
+          "Patient complains of sharp leg pain radiating down the leg after dorsogluteal injection. First action?",
         options: [
           "Stop and assess neurovascular status; notify provider",
           "Massage the site vigorously",
@@ -219,7 +231,8 @@ const ENRICHMENT: Record<
           "Document as expected soreness only",
         ],
         correct: 0,
-        rationale: "Radiating pain may indicate nerve involvement — assess and escalate.",
+        rationale:
+          "Radiating pain may indicate nerve involvement — assess and escalate.",
       },
     ],
   },
@@ -259,7 +272,8 @@ const ENRICHMENT: Record<
         "Explaining draping before perineal prep",
       ],
       correctIndex: 0,
-      rationale: "Non-sterile surfaces contaminate the catheter — use a new sterile catheter if contact occurs.",
+      rationale:
+        "Non-sterile surfaces contaminate the catheter — use a new sterile catheter if contact occurs.",
     },
     retentionItems: [
       {
@@ -272,7 +286,8 @@ const ENRICHMENT: Record<
           "Remove drapes and leave the patient",
         ],
         correct: 0,
-        rationale: "Absence of urine requires troubleshooting — balloon inflation without placement risks urethral trauma.",
+        rationale:
+          "Absence of urine requires troubleshooting — balloon inflation without placement risks urethral trauma.",
       },
       {
         id: "fc-r2",
@@ -284,7 +299,8 @@ const ENRICHMENT: Record<
           "Early removal when no longer indicated",
         ],
         correct: 0,
-        rationale: "Open drainage and reflux pathways introduce bacteria into the bladder.",
+        rationale:
+          "Open drainage and reflux pathways introduce bacteria into the bladder.",
       },
     ],
   },
@@ -324,12 +340,14 @@ const ENRICHMENT: Record<
         "Coaching cough etiquette with a cover",
       ],
       correctIndex: 0,
-      rationale: "Emergency trach supplies and algorithm readiness are mandatory whenever the airway is manipulated.",
+      rationale:
+        "Emergency trach supplies and algorithm readiness are mandatory whenever the airway is manipulated.",
     },
     retentionItems: [
       {
         id: "tr-r1",
-        question: "Patient with trach has sudden desaturation and weak breath sounds. Next best action?",
+        question:
+          "Patient with trach has sudden desaturation and weak breath sounds. Next best action?",
         options: [
           "Assess patency, suction if indicated, call for help, and prepare emergency airway equipment",
           "Complete dressing change first",
@@ -337,7 +355,8 @@ const ENRICHMENT: Record<
           "Document only if symptoms persist",
         ],
         correct: 0,
-        rationale: "Acute desaturation is an airway emergency — assess and escalate immediately.",
+        rationale:
+          "Acute desaturation is an airway emergency — assess and escalate immediately.",
       },
     ],
   },
@@ -371,13 +390,14 @@ const ENRICHMENT: Record<
     errorScenario: {
       stem: "Which documentation gap is highest risk?",
       options: [
-        "Recording \"wound looks better\" without measurements or tissue description",
+        'Recording "wound looks better" without measurements or tissue description',
         "Noting drainage color and amount",
         "Including pain reassessment",
         "Stating dressing used per order",
       ],
       correctIndex: 0,
-      rationale: "Vague notes fail to show trend — structured descriptors support clinical and legal standards.",
+      rationale:
+        "Vague notes fail to show trend — structured descriptors support clinical and legal standards.",
     },
     retentionItems: [
       {
@@ -390,7 +410,8 @@ const ENRICHMENT: Record<
           "Apply occlusive plastic wrap tightly",
         ],
         correct: 0,
-        rationale: "Maceration signals moisture management needs and possible infection risk at the margins.",
+        rationale:
+          "Maceration signals moisture management needs and possible infection risk at the margins.",
       },
     ],
   },
@@ -430,7 +451,8 @@ const ENRICHMENT: Record<
         "Securing the tube to prevent pulling",
       ],
       correctIndex: 0,
-      rationale: "Tubes migrate — verify placement before each enteral administration per policy.",
+      rationale:
+        "Tubes migrate — verify placement before each enteral administration per policy.",
     },
     retentionItems: [
       {
@@ -443,7 +465,8 @@ const ENRICHMENT: Record<
           "Remove the tube immediately without orders",
         ],
         correct: 0,
-        rationale: "Unexpected pH warrants hold and further verification — wrong placement risks aspiration.",
+        rationale:
+          "Unexpected pH warrants hold and further verification — wrong placement risks aspiration.",
       },
     ],
   },
@@ -483,7 +506,8 @@ const ENRICHMENT: Record<
         "Baseline myopia with equal pupils",
       ],
       correctIndex: 0,
-      rationale: "Acute focal neuro signs suggest stroke — time-critical escalation.",
+      rationale:
+        "Acute focal neuro signs suggest stroke — time-critical escalation.",
     },
     retentionItems: [
       {
@@ -496,21 +520,29 @@ const ENRICHMENT: Record<
           "Offer sleep medication first",
         ],
         correct: 0,
-        rationale: "Focal weakness with altered orientation is an emergency until ruled out.",
+        rationale:
+          "Focal weakness with altered orientation is an emergency until ruled out.",
       },
     ],
   },
 };
 
 const DEFAULT_STEP_PATCH: StepPatch = {
-  rationale: "Each deliberate step protects patient safety and supports accurate documentation.",
-  bedsideTip: "Explain what you are doing before touch — predictability reduces anxiety.",
-  safetyWarning: "Stop and reassess if the patient reports unexpected pain, bleeding, or distress.",
-  commonError: "Rushing past verification steps to save time — most harm events trace to skipped checks.",
+  rationale:
+    "Each deliberate step protects patient safety and supports accurate documentation.",
+  bedsideTip:
+    "Explain what you are doing before touch — predictability reduces anxiety.",
+  safetyWarning:
+    "Stop and reassess if the patient reports unexpected pain, bleeding, or distress.",
+  commonError:
+    "Rushing past verification steps to save time — most harm events trace to skipped checks.",
   recallPrompt: "What could go wrong if this step were skipped?",
 };
 
-function mergeSteps(skill: ClinicalSkillDefinition, patches?: StepPatch[]): EnrichedClinicalSkillStep[] {
+function mergeSteps(
+  skill: ClinicalSkillDefinition,
+  patches?: StepPatch[],
+): EnrichedClinicalSkillStep[] {
   return skill.steps.map((step, i) => ({
     ...step,
     ...DEFAULT_STEP_PATCH,
@@ -518,7 +550,9 @@ function mergeSteps(skill: ClinicalSkillDefinition, patches?: StepPatch[]): Enri
   }));
 }
 
-function generatedFlashcards(skill: ClinicalSkillDefinition): ClinicalSkillFlashcard[] {
+function generatedFlashcards(
+  skill: ClinicalSkillDefinition,
+): ClinicalSkillFlashcard[] {
   const domain = skill.competencyDomain ?? skill.title;
   const focus = skill.simulationFocus ?? skill.summary;
   return [
@@ -575,7 +609,9 @@ function generatedFlashcards(skill: ClinicalSkillDefinition): ClinicalSkillFlash
   ];
 }
 
-function generatedRetentionItems(skill: ClinicalSkillDefinition): ClinicalSkillRetentionItem[] {
+function generatedRetentionItems(
+  skill: ClinicalSkillDefinition,
+): ClinicalSkillRetentionItem[] {
   const focus = skill.simulationFocus ?? skill.summary;
   return [
     {
@@ -588,8 +624,7 @@ function generatedRetentionItems(skill: ClinicalSkillDefinition): ClinicalSkillR
         "Document only after the end of the shift",
       ],
       correct: 0,
-      rationale:
-        `Unexpected findings tied to ${focus} can change the priority. A safe nurse reassesses, escalates when needed, and then continues only when the patient condition supports it.`,
+      rationale: `Unexpected findings tied to ${focus} can change the priority. A safe nurse reassesses, escalates when needed, and then continues only when the patient condition supports it.`,
     },
     {
       id: `${skill.slug}-retention-2`,
@@ -620,13 +655,14 @@ function generatedRetentionItems(skill: ClinicalSkillDefinition): ClinicalSkillR
   ];
 }
 
-export function getClinicalSkillEnrichment(skill: ClinicalSkillDefinition): ClinicalSkillEnrichment {
+export function getClinicalSkillEnrichment(
+  skill: ClinicalSkillDefinition,
+): ClinicalSkillEnrichment {
   const pack = ENRICHMENT[skill.slug];
   if (!pack) {
     return {
       simulationOverview: `Work through ${skill.title} as a bedside competency simulation focused on ${skill.simulationFocus ?? skill.summary}.`,
-      clinicalRationale:
-        `This skill belongs to ${skill.competencyDomain ?? "clinical practice"} and should be practiced as patient-safety reasoning, not task memorization. The learner should verify the context, assess for instability, perform the action deliberately, recognize unsafe variation, and document the response.`,
+      clinicalRationale: `This skill belongs to ${skill.competencyDomain ?? "clinical practice"} and should be practiced as patient-safety reasoning, not task memorization. The learner should verify the context, assess for instability, perform the action deliberately, recognize unsafe variation, and document the response.`,
       steps: mergeSteps(skill),
       flashcards: generatedFlashcards(skill),
       errorScenario: {
@@ -638,7 +674,8 @@ export function getClinicalSkillEnrichment(skill: ClinicalSkillDefinition): Clin
           "Providing privacy during the procedure",
         ],
         correctIndex: 0,
-        rationale: "Rights and verification prevent wrong-patient and wrong-procedure events.",
+        rationale:
+          "Rights and verification prevent wrong-patient and wrong-procedure events.",
       },
       retentionItems: generatedRetentionItems(skill),
     };
@@ -648,12 +685,20 @@ export function getClinicalSkillEnrichment(skill: ClinicalSkillDefinition): Clin
     simulationOverview: pack.simulationOverview,
     clinicalRationale: pack.clinicalRationale,
     steps: mergeSteps(skill, pack.stepPatches),
-    flashcards: [...pack.flashcards, ...generatedFlashcards(skill)].slice(0, 10),
+    flashcards: [...pack.flashcards, ...generatedFlashcards(skill)].slice(
+      0,
+      10,
+    ),
     errorScenario: pack.errorScenario,
-    retentionItems: pack.retentionItems.length > 0 ? pack.retentionItems : generatedRetentionItems(skill),
+    retentionItems: [
+      ...pack.retentionItems,
+      ...generatedRetentionItems(skill),
+    ].slice(0, 3),
   };
 }
 
-export function sequencingLabelsForSkill(skill: ClinicalSkillDefinition): string[] {
+export function sequencingLabelsForSkill(
+  skill: ClinicalSkillDefinition,
+): string[] {
   return skill.steps.map((s) => s.title);
 }

@@ -1,4 +1,3 @@
-import { randomInt } from "node:crypto";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -23,54 +22,6 @@ function shuffleInPlace<T>(arr: T[]): T[] {
   return arr;
 }
 
-async function pickBaselineRowsByRandomOffset(
-  whereSql: Prisma.Sql,
-  take: number,
-): Promise<{ id: string; stem_hash: string | null }[]> {
-  const boundedTake = Math.max(0, Math.floor(take));
-  if (boundedTake <= 0) return [];
-
-  const countRows = await withRetry(
-    () =>
-      prisma.$queryRaw<{ count: bigint | number | string }[]>`
-      SELECT COUNT(*)::bigint AS count
-      FROM exam_questions
-      WHERE ${whereSql}
-    `,
-  );
-  const total = Number(countRows[0]?.count ?? 0);
-  if (!Number.isFinite(total) || total <= 0) return [];
-
-  const limit = Math.min(boundedTake, total);
-  const offset = randomInt(0, total);
-  const firstRows = await withRetry(
-    () =>
-      prisma.$queryRaw<{ id: string; stem_hash: string | null }[]>`
-      SELECT id, stem_hash
-      FROM exam_questions
-      WHERE ${whereSql}
-      ORDER BY id ASC
-      OFFSET ${offset}
-      LIMIT ${limit}
-    `,
-  );
-
-  if (firstRows.length >= limit || offset === 0)
-    return shuffleInPlace(firstRows).slice(0, limit);
-
-  const wrapRows = await withRetry(
-    () =>
-      prisma.$queryRaw<{ id: string; stem_hash: string | null }[]>`
-      SELECT id, stem_hash
-      FROM exam_questions
-      WHERE ${whereSql}
-      ORDER BY id ASC
-      LIMIT ${limit - firstRows.length}
-    `,
-  );
-  return shuffleInPlace([...firstRows, ...wrapRows]).slice(0, limit);
-}
-
 /**
  * Picks baseline question ids: one random item per distinct topic when topics exist,
  * then fills to `count` while avoiding duplicate `stem_hash` when possible.
@@ -83,15 +34,16 @@ export async function pickRandomBaselineQuestionIds(
 ): Promise<string[]> {
   const whereSql = profileTierExamQuestionWhereSql(country, tier);
 
-  const topicRows = await withRetry(
-    () =>
-      prisma.$queryRaw<{ topic_norm: string }[]>`
-      SELECT DISTINCT lower(trim(topic)) AS topic_norm
+  const spreadRows = await withRetry(() =>
+    prisma.$queryRaw<{ id: string; stem_hash: string | null }[]>`
+      SELECT DISTINCT ON (lower(trim(topic)))
+        id,
+        stem_hash
       FROM exam_questions
       WHERE ${whereSql}
         AND topic IS NOT NULL
         AND trim(topic) <> ''
-      ORDER BY topic_norm ASC
+      ORDER BY lower(trim(topic)), random()
     `,
   );
 
@@ -110,17 +62,10 @@ export async function pickRandomBaselineQuestionIds(
     return true;
   };
 
-  const shuffledTopics = shuffleInPlace(
-    topicRows.map((row) => row.topic_norm).filter(Boolean),
-  );
+  shuffleInPlace(spreadRows);
 
-  for (const topicNorm of shuffledTopics) {
-    const [row] = await pickBaselineRowsByRandomOffset(
-      Prisma.sql`${whereSql} AND topic IS NOT NULL AND lower(trim(topic)) = ${topicNorm}`,
-      1,
-    );
-    if (row) tryAdd(row.id, row.stem_hash);
-    if (selected.length >= count) break;
+  for (const row of spreadRows) {
+    tryAdd(row.id, row.stem_hash);
   }
 
   let guard = 0;
@@ -135,9 +80,16 @@ export async function pickRandomBaselineQuestionIds(
         ? Prisma.sql`AND (stem_hash IS NULL OR stem_hash NOT IN (${Prisma.join([...usedStemHashes])}))`
         : Prisma.empty;
 
-    const fill = await pickBaselineRowsByRandomOffset(
-      Prisma.sql`${whereSql} ${exclude} ${stemExclude}`,
-      need,
+    const fill = await withRetry(() =>
+      prisma.$queryRaw<{ id: string; stem_hash: string | null }[]>`
+        SELECT id, stem_hash
+        FROM exam_questions
+        WHERE ${whereSql}
+        ${exclude}
+        ${stemExclude}
+        ORDER BY random()
+        LIMIT ${need}
+      `,
     );
 
     if (fill.length === 0) break;
@@ -163,9 +115,15 @@ export async function pickRandomBaselineQuestionIds(
     const need = count - selected.length;
     const exclude = excludeQuestionIdsSql(selected);
 
-    const fallback = await pickBaselineRowsByRandomOffset(
-      Prisma.sql`${whereSql} ${exclude}`,
-      need,
+    const fallback = await withRetry(() =>
+      prisma.$queryRaw<{ id: string }[]>`
+        SELECT id
+        FROM exam_questions
+        WHERE ${whereSql}
+        ${exclude}
+        ORDER BY random()
+        LIMIT ${need}
+      `,
     );
 
     for (const row of fallback) {

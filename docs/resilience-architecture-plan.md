@@ -1,37 +1,80 @@
 # NurseNest Resilience Architecture Plan
 
-**Status:** Planning (pre-implementation)  
+**Status:** Implementation in progress — confirmed decisions recorded  
 **Date:** 2026-05-28  
 **Author:** Engineering  
 
 ---
 
-## 1. Current State Audit
+## Confirmed Decisions
 
-### What Already Exists
+| Decision | Choice | Rationale |
+|---|---|---|
+| Redis provider | Railway Managed Redis | Lower latency, simpler networking; not edge-distributed |
+| Redis package | `@upstash/redis` (already installed) | HTTP-based, works with Railway + serverless; no TCP from edge |
+| Snapshot storage | DigitalOcean Spaces (S3-compatible) | Containers are ephemeral; filesystem doesn't survive deploys; already use Spaces |
+| Spaces path | `spaces://resilience/content-snapshots/` | Structured: `questions/`, `flashcards/`, `lessons/`, `cat-pools/` |
+| Service worker | Manual Workbox (`public/sw.js`) | App is too complex for next-pwa; need precise cache control |
+| Seed bundle budget | +25–50 MB max | Avoid catalog bundling / Turbopack chunk explosion regressions |
+| Phase order | 0→1→2→3→4→5→6→7 | Stability first; snapshot before cache; offline last |
+
+---
+
+## Phase Order (Revised)
+
+| Phase | What | Risk |
+|---|---|---|
+| **0** | Production Stability Hardening | Zero |
+| **1** | Snapshot Generation → S3/Spaces | Zero — backend only |
+| **2** | Redis Cache Layer | Low — additive, transparent fallthrough |
+| **3** | Progress Sync Enhancements | Low — extends existing queue |
+| **4** | Service Worker (Manual Workbox) | Medium — client-side, feature-flagged |
+| **5** | CAT Resilience Pools | Medium — new fallback path only |
+| **6** | Admin Resilience Dashboard | Zero — admin-only |
+| **7** | Seed Bundle Hardening | Zero — build-time only |
+
+---
+
+## 1. Accurate Current State Audit
+
+### What Already Exists (confirmed by code inspection)
 
 | Component | Location | Status |
 |---|---|---|
-| Circuit breakers, kill switches, health checks | `server/platform-resilience.ts` (4098 lines) | ✅ Production |
-| Snapshot reader infrastructure | `nursenest-core/src/lib/study-content-failover/` (12 files) | ✅ Production |
-| Service worker registration hook | `nursenest-core/src/hooks/use-service-worker.ts` | ✅ Partial (registers `/sw.js` but `/sw.js` doesn't exist) |
-| IndexedDB progress queue | `nursenest-core/src/lib/progress-sync/progress-sync-queue.ts` | ✅ Production |
-| In-memory server-side cache | `server/performance.ts` (`cacheGet`/`cacheSet`, 200-entry LRU) | ✅ Production |
-| Entitlement cache | `server/entitlements.ts` (60 s TTL, added 2026-05-28) | ✅ Production |
+| Liveness endpoint | `src/app/api/health/route.ts` | ✅ Production |
+| Readiness endpoint (DB probe) | `src/app/api/health/ready/route.ts` | ✅ Production |
+| `/healthz` alias | `src/app/api/healthz/route.ts` + `src/app/(runtime)/healthz/` | ✅ Production |
+| `/readyz` alias | `src/app/(runtime)/readyz/route.ts` | ✅ Production |
+| Synthetic monitoring cron | `src/app/api/cron/monitoring-synthetic/route.ts` | ✅ Production |
+| Startup diagnostics | `src/lib/ops/operational-startup-diagnostics.ts` | ✅ Production |
+| Circuit breakers, kill switches | `server/platform-resilience.ts` (4098 lines) | ✅ Production |
+| Snapshot reader infrastructure | `src/lib/study-content-failover/` (12 files) | ✅ Production |
+| Snapshot writers (lessons/flashcards/practice) | `scripts/study-snapshots/` (6 scripts) | ✅ Partial — filesystem only, no S3 |
+| Snapshot manifest | `scripts/study-snapshots/study-snapshot-manifest-touch.mts` | ✅ Production |
+| Service worker registration hook | `src/hooks/use-service-worker.ts` | ✅ Partial (hook exists; `/sw.js` does not) |
+| IndexedDB progress queue | `src/lib/progress-sync/progress-sync-queue.ts` | ✅ Production |
+| In-memory LRU cache | `server/performance.ts` (200-entry, per-process) | ✅ Production |
+| Upstash Redis package | `@upstash/redis` in `package.json` | ✅ Installed — not wired |
+| `redis` package | `redis` in `package.json` | ✅ Installed — not wired |
+| Production stability smoke test | `tests/e2e/production-stability-smoke.spec.ts` | ✅ Partial — missing homepage + health routes |
+| Entitlement cache | `server/entitlements.ts` (60 s TTL) | ✅ Production |
 | CAT timeout protection | `server/cat-session-api.ts` | ✅ Production |
-| Timedquery wrappers | `server/routes.ts` (via `timedQuery`) | ✅ Production |
+| `timedQuery` wrappers | `server/routes.ts` | ✅ Production |
 
-### What Does NOT Exist (Gaps)
+### What Does NOT Exist (confirmed gaps)
 
 | Component | Gap |
 |---|---|
-| Redis caching layer | No Redis client anywhere in the codebase |
-| Snapshot generation scripts | Referenced but missing (`scripts/study-snapshots/` does not exist) |
-| Static snapshot JSON files | `/public/resilience/` directory does not exist |
-| Actual Service Worker (`/sw.js`) | Registration hook exists but the worker itself does not |
-| CAT resilience pools | No static calibrated question pools |
-| Admin resilience dashboard | No monitoring UI for failover metrics |
-| Offline-first CSS/UX patterns | No offline state UI treatment |
+| S3/Spaces upload for snapshots | Snapshot scripts write to filesystem only; no Spaces upload |
+| Question pack snapshots | No `export-question-packs.mts` |
+| CAT resilience pool export | No `export-cat-resilience-pools.mts` |
+| Snapshot orchestrator | No `run-all-snapshots.mts` |
+| Redis wiring in content routes | `@upstash/redis` installed but zero routes use it |
+| Service worker (`/sw.js`) | Registration hook exists; worker does not |
+| CAT resilience pool JSON files | No static calibrated question pools |
+| Admin resilience dashboard | No monitoring UI |
+| Deploy validation script | No post-deploy automated runner |
+| Seed bundles (per-tier emergency content) | No bundled fallback content |
 
 ---
 

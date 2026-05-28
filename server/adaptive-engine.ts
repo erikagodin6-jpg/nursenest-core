@@ -135,20 +135,20 @@ export async function getNextCards(
   const fetchLimit = safeLimit * 3;
 
   const extra: string[] = [];
-  const filterParams: unknown[] = [userId, tiers];
-  let p = 3;
+  const params: unknown[] = [userId, tiers, fetchLimit];
+  let p = 4;
 
   if (filters?.topic) {
     extra.push(`fb.topic = $${p++}`);
-    filterParams.push(filters.topic);
+    params.push(filters.topic);
   }
   if (filters?.bodySystem) {
     extra.push(`fb.body_system = $${p++}`);
-    filterParams.push(filters.bodySystem);
+    params.push(filters.bodySystem);
   }
   if (filters?.difficulty != null) {
     extra.push(`fb.difficulty = $${p++}`);
-    filterParams.push(filters.difficulty);
+    params.push(filters.difficulty);
   }
   if (filters?.flaggedOnly) {
     extra.push(`COALESCE(ucs.flagged,false) = true`);
@@ -158,23 +158,6 @@ export async function getNextCards(
   }
 
   const whereExtra = extra.length ? ` AND ${extra.join(" AND ")}` : "";
-
-  // Avoid random SQL sorting: count matching rows, pick a random
-  // window offset, then fetch using the indexed primary key ORDER BY fb.id.
-  const countRes = await pool.query(
-    `SELECT COUNT(*)::int AS total
-     FROM flashcard_bank fb
-     LEFT JOIN user_card_stats ucs ON ucs.card_id = fb.id AND ucs.user_id = $1
-     WHERE fb.status='published' AND fb.tier = ANY($2::text[])${whereExtra}`,
-    filterParams
-  );
-  const total: number = countRes.rows[0]?.total ?? 0;
-  const span = Math.max(0, total - fetchLimit);
-  const windowOffset = span > 0 ? Math.floor(Math.random() * span) : 0;
-
-  const fetchParams = [...filterParams, windowOffset, fetchLimit];
-  const offsetP = p;
-  const limitP = p + 1;
 
   const [cardsRes, weakTopicsRes] = await Promise.all([
     pool.query(
@@ -197,10 +180,10 @@ export async function getNextCards(
         ON ucs.card_id = fb.id AND ucs.user_id = $1
       WHERE fb.status='published' AND fb.tier = ANY($2::text[])
       ${whereExtra}
-      ORDER BY fb.id
-      OFFSET $${offsetP} LIMIT $${limitP}
+      ORDER BY RANDOM()
+      LIMIT $3
     `,
-      fetchParams
+      params
     ),
 
     pool.query(

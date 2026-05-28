@@ -2,7 +2,14 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Check } from "lucide-react";
@@ -46,7 +53,10 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
+import {
+  getExamLabel,
+  getNursingRoleLabel,
+} from "@/lib/labels/nursing-role-labels";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { PricingConversionClarity } from "@/components/marketing/pricing-conversion-clarity";
 import { PricingClinicalReadinessEcosystem } from "@/components/marketing/pricing-clinical-readiness-ecosystem";
@@ -74,6 +84,8 @@ import {
   PricingCTA,
 } from "@/components/marketing/pricing-sections";
 import { PremiumFeatureMatrixRsc } from "@/components/marketing/premium-feature-matrix-rsc";
+import { TierValueExperience } from "@/components/marketing/tier-value-experience";
+import type { TierValueKey } from "@/lib/marketing/tier-value-experience";
 
 type NursingPlanRow = {
   tier: TierCode;
@@ -104,11 +116,14 @@ type AlliedPlanRow = {
   planCode: string;
 };
 
-function marketingPricingPayloadHasRenderablePlans(p: PricingOptionsPayload): boolean {
+function marketingPricingPayloadHasRenderablePlans(
+  p: PricingOptionsPayload,
+): boolean {
   const plans = p.plans;
   const allied = p.alliedPlans;
   return (
-    (Array.isArray(plans) && plans.length > 0) || (Array.isArray(allied) && allied.length > 0)
+    (Array.isArray(plans) && plans.length > 0) ||
+    (Array.isArray(allied) && allied.length > 0)
   );
 }
 
@@ -118,8 +133,8 @@ type Segment = "newgrad" | "rn" | "pn" | "np" | "allied";
 function isRenderablePlanRow(row: NursingPlanRow | AlliedPlanRow): boolean {
   return Boolean(
     row.totalLabel?.trim() &&
-      row.monthlyEquivalentLabel?.trim() &&
-      row.planCode?.trim(),
+    row.monthlyEquivalentLabel?.trim() &&
+    row.planCode?.trim(),
   );
 }
 
@@ -130,27 +145,73 @@ type CheckoutRequestError = Error & {
 
 function segmentToTier(segment: Segment, isUS?: boolean): TierCode {
   switch (segment) {
-    case "newgrad": return "NEW_GRAD";
+    case "newgrad":
+      return "NEW_GRAD";
     // "pn" covers both Canada RPN and US LVN_LPN — resolve by region
-    case "pn": return isUS ? "LVN_LPN" : "RPN";
-    case "rn": return "RN";
-    case "np": return "NP";
-    case "allied": return "ALLIED";
-    default: return "RN";
+    case "pn":
+      return isUS ? "LVN_LPN" : "RPN";
+    case "rn":
+      return "RN";
+    case "np":
+      return "NP";
+    case "allied":
+      return "ALLIED";
+    default:
+      return "RN";
   }
 }
 
 function tierToSegment(tier: TierCode, isUS?: boolean): Segment {
   switch (tier) {
     /** Not listed on pricing; avoid impossible UI state if URL ever references this tier. */
-    case "PRE_NURSING": return "rn";
-    case "NEW_GRAD": return "newgrad";
+    case "PRE_NURSING":
+      return "rn";
+    case "NEW_GRAD":
+      return "newgrad";
     case "LVN_LPN":
-    case "RPN": return "pn";
-    case "RN": return "rn";
-    case "NP": return "np";
-    case "ALLIED": return "allied";
-    default: return isUS ? "rn" : "rn";
+    case "RPN":
+      return "pn";
+    case "RN":
+      return "rn";
+    case "NP":
+      return "np";
+    case "ALLIED":
+      return "allied";
+    default:
+      return isUS ? "rn" : "rn";
+  }
+}
+
+function segmentToTierValueKey(segment: Segment): TierValueKey {
+  switch (segment) {
+    case "newgrad":
+      return "newgrad";
+    case "pn":
+      return "pn";
+    case "np":
+      return "np";
+    case "allied":
+      return "allied";
+    case "rn":
+    default:
+      return "rn";
+  }
+}
+
+function tierValueKeyToSegment(key: TierValueKey): Segment | null {
+  switch (key) {
+    case "newgrad":
+      return "newgrad";
+    case "pn":
+      return "pn";
+    case "np":
+      return "np";
+    case "allied":
+      return "allied";
+    case "rn":
+      return "rn";
+    case "preNursing":
+      return null;
   }
 }
 
@@ -201,22 +262,39 @@ const PRICING_AUDIENCE_SEGMENTS = [
   {
     title: "Individual Providers",
     body: "Independent clinicians, tutors, and educators who need exam-aligned learning tools, clinical modules, and focused readiness support.",
-    bullets: ["Single-seat access", "Clinical readiness modules", "Flexible learner pathways"],
+    bullets: [
+      "Single-seat access",
+      "Clinical readiness modules",
+      "Flexible learner pathways",
+    ],
   },
   {
     title: "Clinics",
     body: "Small teams that want structured onboarding, consistent clinical refreshers, and shared readiness language across providers or learners.",
-    bullets: ["Multi-provider onboarding", "Role-aware study pathways", "Team implementation support"],
+    bullets: [
+      "Multi-provider onboarding",
+      "Role-aware study pathways",
+      "Team implementation support",
+    ],
   },
   {
     title: "Healthcare Organizations",
     body: "Organizations supporting cohorts, transition-to-practice programs, remediation, or clinical education initiatives at scale.",
-    bullets: ["Cohort rollout planning", "Analytics and reporting options", "Enterprise support workflows"],
+    bullets: [
+      "Cohort rollout planning",
+      "Analytics and reporting options",
+      "Enterprise support workflows",
+    ],
   },
   {
     title: "Institutional / Enterprise Pricing",
     body: "Custom contracts for schools, programs, and healthcare systems that need scalable licensing, enterprise support, reporting, and integration planning.",
-    bullets: ["Custom contracts", "Scalable licensing", "API/EHR integration planning", "Advanced analytics and reporting"],
+    bullets: [
+      "Custom contracts",
+      "Scalable licensing",
+      "API/EHR integration planning",
+      "Advanced analytics and reporting",
+    ],
   },
 ] as const;
 
@@ -231,22 +309,32 @@ function PricingAudienceSection() {
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">
             Pricing pathways
           </p>
-          <h2 id="pricing-audience-heading" className="mt-3 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">
+          <h2
+            id="pricing-audience-heading"
+            className="mt-3 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]"
+          >
             Plans for individuals, clinics, and institutions
           </h2>
           <p className="mt-4 text-sm leading-7 text-[var(--theme-body-text)]">
-            Choose self-serve access for individual study, or start a sales conversation for multi-provider onboarding,
-            enterprise support, analytics, reporting, and integration planning.
+            Choose self-serve access for individual study, or start a sales
+            conversation for multi-provider onboarding, enterprise support,
+            analytics, reporting, and integration planning.
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Link href="/for-institutions" className={MARKETING_PRIMARY_CTA_CLASS}>
+          <Link
+            href="/for-institutions"
+            className={MARKETING_PRIMARY_CTA_CLASS}
+          >
             Book a Demo
           </Link>
           <Link href="/contact" className={MARKETING_SECONDARY_CTA_CLASS}>
             Contact Sales
           </Link>
-          <Link href="#pricing-plans-heading" className={MARKETING_TERTIARY_LINK_CLASS}>
+          <Link
+            href="#pricing-plans-heading"
+            className={MARKETING_TERTIARY_LINK_CLASS}
+          >
             Get Started
           </Link>
         </div>
@@ -258,12 +346,19 @@ function PricingAudienceSection() {
             key={segment.title}
             className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface-alt)_62%,var(--semantic-surface))] p-5"
           >
-            <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">{segment.title}</h3>
-            <p className="mt-3 text-sm leading-6 text-[var(--theme-body-text)]">{segment.body}</p>
+            <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">
+              {segment.title}
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-[var(--theme-body-text)]">
+              {segment.body}
+            </p>
             <ul className="mt-4 space-y-2 text-sm leading-6 text-[var(--semantic-text-secondary)]">
               {segment.bullets.map((bullet) => (
                 <li key={bullet} className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                  <Check
+                    className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]"
+                    aria-hidden
+                  />
                   <span>{bullet}</span>
                 </li>
               ))}
@@ -281,13 +376,22 @@ function checkoutErrorUserMessage(
   t: (key: string, params?: Record<string, string | number>) => string,
 ): string {
   const { code, message } = parsed;
-  if (code === STRIPE_PRICE_NOT_CONFIGURED_CODE) return t("pages.pricing.error.checkoutPlanNotConfigured");
-  if (code === CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE) return t("pages.pricing.error.checkoutFreePathway");
-  if (code === CHECKOUT_UNAUTHORIZED_CODE || httpStatus === 401) return t("pages.pricing.error.checkoutSignIn");
-  if (code === CHECKOUT_POLICY_VERSION_MISMATCH_CODE) return t("pages.pricing.error.checkoutPolicyStale");
-  if (code === CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE) return t("pages.pricing.globalContext.mustAckBeforeCheckout");
-  if (code === CHECKOUT_INVALID_PAYLOAD_CODE) return t("pages.pricing.error.checkoutInvalidRequest");
-  if (code === CHECKOUT_STRIPE_UNAVAILABLE_CODE || code === CHECKOUT_SESSION_FAILED_CODE) {
+  if (code === STRIPE_PRICE_NOT_CONFIGURED_CODE)
+    return t("pages.pricing.error.checkoutPlanNotConfigured");
+  if (code === CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE)
+    return t("pages.pricing.error.checkoutFreePathway");
+  if (code === CHECKOUT_UNAUTHORIZED_CODE || httpStatus === 401)
+    return t("pages.pricing.error.checkoutSignIn");
+  if (code === CHECKOUT_POLICY_VERSION_MISMATCH_CODE)
+    return t("pages.pricing.error.checkoutPolicyStale");
+  if (code === CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE)
+    return t("pages.pricing.globalContext.mustAckBeforeCheckout");
+  if (code === CHECKOUT_INVALID_PAYLOAD_CODE)
+    return t("pages.pricing.error.checkoutInvalidRequest");
+  if (
+    code === CHECKOUT_STRIPE_UNAVAILABLE_CODE ||
+    code === CHECKOUT_SESSION_FAILED_CODE
+  ) {
     return t("pages.pricing.error.checkoutTemporarilyUnavailable");
   }
   if (message.length > 0) return message;
@@ -368,11 +472,17 @@ function CheckoutCancelledNotice({
   if (dismissed || sp.get("checkout") !== "cancelled") return null;
   return (
     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--color-card))] px-4 py-3 text-sm shadow-[var(--elevation-rest)]">
-      <p className="font-semibold text-[var(--semantic-warning-contrast)]">{t("pages.pricing.checkout.cancelledHeading")}</p>
+      <p className="font-semibold text-[var(--semantic-warning-contrast)]">
+        {t("pages.pricing.checkout.cancelledHeading")}
+      </p>
       <p className="mt-0.5 text-[color-mix(in_srgb,var(--semantic-warning-contrast)_85%,var(--semantic-text-muted))]">
         {t("pages.pricing.checkout.cancelledBody")}
       </p>
-      <button type="button" onClick={() => setDismissed(true)} className="mt-1.5 text-xs underline opacity-70 hover:opacity-100">
+      <button
+        type="button"
+        onClick={() => setDismissed(true)}
+        className="mt-1.5 text-xs underline opacity-70 hover:opacity-100"
+      >
         {t("pages.pricing.checkout.dismissCancelled")}
       </button>
     </div>
@@ -403,9 +513,12 @@ export function PricingPageClient({
   /** From RSC `searchParams` — avoids `useSearchParams()` (CSR bailout + full-page Suspense skeleton on `/pricing`). */
   initialSearchParamsString?: string;
 }) {
-  const hasServerCatalogRef = useRef(marketingPricingPayloadHasRenderablePlans(initialPricingOptions));
+  const hasServerCatalogRef = useRef(
+    marketingPricingPayloadHasRenderablePlans(initialPricingOptions),
+  );
   const [segment, setSegment] = useState<Segment>("rn");
-  const [selectedAlliedCareer, setSelectedAlliedCareer] = useState<AlliedCareerKey>("paramedic");
+  const [selectedAlliedCareer, setSelectedAlliedCareer] =
+    useState<AlliedCareerKey>("paramedic");
   const checkoutSegmentRef = useRef<Segment>("rn");
   const checkoutAlliedCareerRef = useRef<AlliedCareerKey>("paramedic");
   useEffect(() => {
@@ -415,13 +528,19 @@ export function PricingPageClient({
     checkoutAlliedCareerRef.current = selectedAlliedCareer;
   }, [selectedAlliedCareer]);
   const [nursingPlans, setNursingPlans] = useState<NursingPlanRow[]>(() =>
-    Array.isArray(initialPricingOptions.plans) ? (initialPricingOptions.plans as NursingPlanRow[]) : [],
+    Array.isArray(initialPricingOptions.plans)
+      ? (initialPricingOptions.plans as NursingPlanRow[])
+      : [],
   );
   const [alliedPlans, setAlliedPlans] = useState<AlliedPlanRow[]>(() =>
-    Array.isArray(initialPricingOptions.alliedPlans) ? (initialPricingOptions.alliedPlans as AlliedPlanRow[]) : [],
+    Array.isArray(initialPricingOptions.alliedPlans)
+      ? (initialPricingOptions.alliedPlans as AlliedPlanRow[])
+      : [],
   );
   const [trialDays, setTrialDays] = useState(() =>
-    typeof initialPricingOptions.trialDays === "number" ? initialPricingOptions.trialDays : 3,
+    typeof initialPricingOptions.trialDays === "number"
+      ? initialPricingOptions.trialDays
+      : 3,
   );
   const [loadError, setLoadError] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
@@ -430,14 +549,18 @@ export function PricingPageClient({
   const [clientReady, setClientReady] = useState(false);
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const [showConsentPrompt, setShowConsentPrompt] = useState(false);
-  const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
+  const [pendingCheckoutDuration, setPendingCheckoutDuration] =
+    useState<BillingDuration | null>(null);
   const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
   const checkoutInFlightRef = useRef(false);
-  const [plansLoaded, setPlansLoaded] = useState(() => hasServerCatalogRef.current);
+  const [plansLoaded, setPlansLoaded] = useState(
+    () => hasServerCatalogRef.current,
+  );
   /** Soft gate: partial global regions (cookie + signed explicit context) require NA billing acknowledgment before checkout. */
   const [naPathwayAcknowledged, setNaPathwayAcknowledged] = useState(false);
   /** Allied Health only — explicit acknowledgement before any paid checkout (persists until segment/career changes). */
-  const [alliedProfessionCheckoutAck, setAlliedProfessionCheckoutAck] = useState(false);
+  const [alliedProfessionCheckoutAck, setAlliedProfessionCheckoutAck] =
+    useState(false);
   const { locale, t } = useMarketingI18n();
   useEffect(() => {
     setClientReady(true);
@@ -458,7 +581,9 @@ export function PricingPageClient({
 
   const checkoutBodyGlobalSlug = useMemo((): GlobalRegionSlug => {
     if (globalMarketSlug) return globalMarketSlug;
-    const fromServer = serverCheckoutRegionSlugs.find((slug) => isGlobalRegionSlug(slug));
+    const fromServer = serverCheckoutRegionSlugs.find((slug) =>
+      isGlobalRegionSlug(slug),
+    );
     if (fromServer) return fromServer;
     return region === "US" ? "us" : "canada";
   }, [globalMarketSlug, serverCheckoutRegionSlugs, region]);
@@ -468,7 +593,10 @@ export function PricingPageClient({
 
   const heroTrialFooter = useMemo(() => {
     if (trialDays <= 0) {
-      return { sub: t("pages.pricing.checkout.recurringShort"), fine: "" as const };
+      return {
+        sub: t("pages.pricing.checkout.recurringShort"),
+        fine: "" as const,
+      };
     }
     return {
       sub: t("pages.pricing.trial.shortLead"),
@@ -494,7 +622,10 @@ export function PricingPageClient({
     });
   }, [locale, region, segment]);
 
-  const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
+  const localize = useCallback(
+    (href: string) => withMarketingLocale(locale, href),
+    [locale],
+  );
 
   useEffect(() => {
     if (hasServerCatalogRef.current) {
@@ -528,7 +659,9 @@ export function PricingPageClient({
           if (!hadRenderableServerCatalog && !hasServerCatalogRef.current) {
             setNursingPlans([]);
             setAlliedPlans([]);
-            setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            setLoadError(
+              tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"),
+            );
           } else if (hadRenderableServerCatalog) {
             console.warn(
               JSON.stringify({
@@ -547,7 +680,10 @@ export function PricingPageClient({
             JSON.stringify({
               scope: "marketing_pricing",
               event: "pricing_options_refresh_failed_kept_ssr",
-              message: (e instanceof Error ? e.message : String(e)).slice(0, 240),
+              message: (e instanceof Error ? e.message : String(e)).slice(
+                0,
+                240,
+              ),
             }),
           );
         }
@@ -588,7 +724,8 @@ export function PricingPageClient({
     ? ALLIED_CAREER_DISPLAY_NAMES[selectedAlliedCareer]
     : segmentLabels[segment];
   const alliedCheckoutBlocked = isAllied && !alliedProfessionCheckoutAck;
-  const isFreeNursingPricingTrack = !isAllied && isFreeStripeBillingNursingTier(tier);
+  const isFreeNursingPricingTrack =
+    !isAllied && isFreeStripeBillingNursingTier(tier);
 
   const filteredNursingPlans = useMemo(
     () => nursingPlans.filter((p) => p.tier === tier),
@@ -615,11 +752,19 @@ export function PricingPageClient({
       loadError === null &&
       displayPlans.length === 0 &&
       (nursingPlans.length > 0 || alliedPlans.length > 0),
-    [isFreeNursingPricingTrack, plansLoaded, loadError, displayPlans.length, nursingPlans.length, alliedPlans.length],
+    [
+      isFreeNursingPricingTrack,
+      plansLoaded,
+      loadError,
+      displayPlans.length,
+      nursingPlans.length,
+      alliedPlans.length,
+    ],
   );
 
   const showPricingGrid = plansLoaded && loadError === null && !trackDataGap;
-  const showPaidPlanDurationGrid = showPricingGrid && !isFreeNursingPricingTrack;
+  const showPaidPlanDurationGrid =
+    showPricingGrid && !isFreeNursingPricingTrack;
 
   const showNorthAmericaStripeScopeNote = useMemo(
     () => authoritativeRegionSlugs.some((slug) => !canShowPricing(slug)),
@@ -667,7 +812,8 @@ export function PricingPageClient({
       callbackParams.set("checkoutIntent", "1");
       callbackParams.set("checkoutTier", checkoutTier);
       callbackParams.set("checkoutDuration", duration);
-      if (checkoutIsAllied) callbackParams.set("checkoutAlliedCareer", checkoutAlliedCareer);
+      if (checkoutIsAllied)
+        callbackParams.set("checkoutAlliedCareer", checkoutAlliedCareer);
       else callbackParams.delete("checkoutAlliedCareer");
       try {
         window.sessionStorage.setItem(
@@ -683,7 +829,9 @@ export function PricingPageClient({
       }
       const callbackPath = `${pathname}?${callbackParams.toString()}`;
       const loginPath = localize("/login");
-      window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
+      window.location.assign(
+        `${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`,
+      );
     },
     [localize, pathname, initialSearchParamsString, region],
   );
@@ -700,7 +848,9 @@ export function PricingPageClient({
       callbackParams.set("checkoutDuration", duration);
       const callbackPath = `${pathname}?${callbackParams.toString()}`;
       const loginPath = localize("/login");
-      window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
+      window.location.assign(
+        `${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`,
+      );
     },
     [initialSearchParamsString, localize, pathname],
   );
@@ -740,7 +890,10 @@ export function PricingPageClient({
         global_market_slug: checkoutBodyGlobalSlug,
         authoritative_region_slugs: authoritativeRegionKey,
         ...(checkoutIsAllied
-          ? { allied_career: checkoutAlliedCareer, allied_profession_acknowledged: alliedProfessionCheckoutAck }
+          ? {
+              allied_career: checkoutAlliedCareer,
+              allied_profession_acknowledged: alliedProfessionCheckoutAck,
+            }
           : {}),
       });
       try {
@@ -750,7 +903,9 @@ export function PricingPageClient({
           acceptPolicies: true,
           policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
           region: checkoutBodyGlobalSlug,
-          ...(pricingCheckoutSoftGate && naPathwayAcknowledged ? { naBillingScopeAcknowledged: true as const } : {}),
+          ...(pricingCheckoutSoftGate && naPathwayAcknowledged
+            ? { naBillingScopeAcknowledged: true as const }
+            : {}),
         };
         if (checkoutIsAllied) {
           body.alliedCareer = checkoutAlliedCareer;
@@ -790,44 +945,63 @@ export function PricingPageClient({
           try {
             parsedBody = JSON.parse(trimmedResponse) as unknown;
           } catch (parseError) {
-            console.error("[pricing_checkout] response_json_parse_failed", parseError);
+            console.error(
+              "[pricing_checkout] response_json_parse_failed",
+              parseError,
+            );
             parsedBody = null;
           }
         }
 
         if (!res.ok) {
           const parsed = parseCheckoutApiErrorBody(parsedBody);
-          if (parsed.code === CHECKOUT_UNAUTHORIZED_CODE || res.status === 401) {
+          if (
+            parsed.code === CHECKOUT_UNAUTHORIZED_CODE ||
+            res.status === 401
+          ) {
             setCheckoutLoading(false);
             redirectGuestToLoginForCheckout(duration);
             return;
           }
           console.error("[pricing_checkout] parsed_error_body", parsed);
-          const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
+          const err = new Error(
+            checkoutErrorUserMessage(parsed, res.status, t),
+          ) as CheckoutRequestError;
           err.parsed = parsed;
           err.status = res.status;
           throw err;
         }
 
         if (!contentType.toLowerCase().includes("application/json")) {
-          console.error("[pricing_checkout] checkout API returned non-JSON response", {
-            status: res.status,
-            contentType,
-            body: responseText,
-          });
-          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+          console.error(
+            "[pricing_checkout] checkout API returned non-JSON response",
+            {
+              status: res.status,
+              contentType,
+              body: responseText,
+            },
+          );
+          throw new Error(
+            t("pages.pricing.error.checkoutTemporarilyUnavailable"),
+          );
         }
 
         if (!parsedBody || typeof parsedBody !== "object") {
-          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+          throw new Error(
+            t("pages.pricing.error.checkoutTemporarilyUnavailable"),
+          );
         }
 
-        const checkoutUrl = validatedCheckoutRedirectUrl((parsedBody as { url?: unknown }).url);
+        const checkoutUrl = validatedCheckoutRedirectUrl(
+          (parsedBody as { url?: unknown }).url,
+        );
         if (!checkoutUrl) {
           console.error("[pricing_checkout] invalid_checkout_redirect_url", {
             urlPresent: Boolean((parsedBody as { url?: unknown }).url),
           });
-          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+          throw new Error(
+            t("pages.pricing.error.checkoutTemporarilyUnavailable"),
+          );
         }
         console.info("[pricing_checkout] redirect_url_received", {
           checkoutUrl,
@@ -838,14 +1012,24 @@ export function PricingPageClient({
         console.error("[pricing_checkout] start checkout failed", error);
         setCheckoutOpsHint(null);
         const checkoutErr = error as CheckoutRequestError;
-        if (checkoutErr.status === 401 || checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE) {
+        if (
+          checkoutErr.status === 401 ||
+          checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE
+        ) {
           redirectGuestToLoginForCheckout(duration);
           return;
         }
         if (checkoutErr.parsed?.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
           setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
-          if (showStripePriceEnvKeyOnCheckoutError() && checkoutErr.parsed.envKey) {
-            setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: checkoutErr.parsed.envKey }));
+          if (
+            showStripePriceEnvKeyOnCheckoutError() &&
+            checkoutErr.parsed.envKey
+          ) {
+            setCheckoutOpsHint(
+              t("pages.pricing.error.checkoutOpsStripePrice", {
+                envKey: checkoutErr.parsed.envKey,
+              }),
+            );
           }
         } else {
           const raw = error instanceof Error ? error.message.trim() : "";
@@ -859,7 +1043,9 @@ export function PricingPageClient({
             raw.includes("unexpected response") ||
             raw.includes("empty response")
           ) {
-            setCheckoutError(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+            setCheckoutError(
+              t("pages.pricing.error.checkoutTemporarilyUnavailable"),
+            );
           } else {
             setCheckoutError(raw);
           }
@@ -896,7 +1082,9 @@ export function PricingPageClient({
       setCheckoutError(null);
       setCheckoutOpsHint(null);
       if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
-        setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
+        setCheckoutError(
+          t("pages.pricing.globalContext.mustAckBeforeCheckout"),
+        );
         return;
       }
       if (isAllied && !alliedProfessionCheckoutAck) {
@@ -956,35 +1144,58 @@ export function PricingPageClient({
         const payload = (await res.json().catch(() => ({}))) as unknown;
         if (!res.ok) {
           const parsed = parseCheckoutApiErrorBody(payload);
-          if (parsed.code === CHECKOUT_UNAUTHORIZED_CODE || res.status === 401) {
+          if (
+            parsed.code === CHECKOUT_UNAUTHORIZED_CODE ||
+            res.status === 401
+          ) {
             setCheckoutLoading(false);
             redirectGuestToLoginForAdvancedEcgCheckout(duration);
             return;
           }
-          const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
+          const err = new Error(
+            checkoutErrorUserMessage(parsed, res.status, t),
+          ) as CheckoutRequestError;
           err.parsed = parsed;
           err.status = res.status;
           throw err;
         }
-        const checkoutUrl = validatedCheckoutRedirectUrl((payload as { url?: unknown }).url);
+        const checkoutUrl = validatedCheckoutRedirectUrl(
+          (payload as { url?: unknown }).url,
+        );
         if (!checkoutUrl) {
-          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+          throw new Error(
+            t("pages.pricing.error.checkoutTemporarilyUnavailable"),
+          );
         }
         window.location.assign(checkoutUrl);
       } catch (error) {
         const checkoutErr = error as CheckoutRequestError;
-        if (checkoutErr.status === 401 || checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE) {
+        if (
+          checkoutErr.status === 401 ||
+          checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE
+        ) {
           setCheckoutLoading(false);
           redirectGuestToLoginForAdvancedEcgCheckout(duration);
           return;
         }
         if (checkoutErr.parsed?.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
           setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
-          if (showStripePriceEnvKeyOnCheckoutError() && checkoutErr.parsed.envKey) {
-            setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: checkoutErr.parsed.envKey }));
+          if (
+            showStripePriceEnvKeyOnCheckoutError() &&
+            checkoutErr.parsed.envKey
+          ) {
+            setCheckoutOpsHint(
+              t("pages.pricing.error.checkoutOpsStripePrice", {
+                envKey: checkoutErr.parsed.envKey,
+              }),
+            );
           }
         } else {
-          setCheckoutError(error instanceof Error && error.message.trim().length > 0 ? error.message : t("pages.pricing.error.checkoutNetwork"));
+          setCheckoutError(
+            error instanceof Error && error.message.trim().length > 0
+              ? error.message
+              : t("pages.pricing.error.checkoutNetwork"),
+          );
         }
         checkoutInFlightRef.current = false;
         setCheckoutLoading(false);
@@ -998,37 +1209,42 @@ export function PricingPageClient({
     ],
   );
 
-  const confirmConsentAndCheckout = useCallback((event?: MouseEvent<HTMLElement>) => {
-    preventCheckoutDefault(event);
-    if (checkoutInFlightRef.current || checkoutLoading) return;
-    if (!pendingCheckoutDuration) return;
-    if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
-      setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
-      return;
-    }
-    if (isAllied && !alliedProfessionCheckoutAck) {
-      setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
-      return;
-    }
-    if (!policiesAccepted) {
-      setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
-      return;
-    }
-    setShowConsentPrompt(false);
-    const duration = pendingCheckoutDuration;
-    setPendingCheckoutDuration(null);
-    void startCheckout(duration);
-  }, [
-    pendingCheckoutDuration,
-    policiesAccepted,
-    pricingCheckoutSoftGate,
-    naPathwayAcknowledged,
-    isAllied,
-    alliedProfessionCheckoutAck,
-    checkoutLoading,
-    startCheckout,
-    t,
-  ]);
+  const confirmConsentAndCheckout = useCallback(
+    (event?: MouseEvent<HTMLElement>) => {
+      preventCheckoutDefault(event);
+      if (checkoutInFlightRef.current || checkoutLoading) return;
+      if (!pendingCheckoutDuration) return;
+      if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
+        setCheckoutError(
+          t("pages.pricing.globalContext.mustAckBeforeCheckout"),
+        );
+        return;
+      }
+      if (isAllied && !alliedProfessionCheckoutAck) {
+        setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
+        return;
+      }
+      if (!policiesAccepted) {
+        setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
+        return;
+      }
+      setShowConsentPrompt(false);
+      const duration = pendingCheckoutDuration;
+      setPendingCheckoutDuration(null);
+      void startCheckout(duration);
+    },
+    [
+      pendingCheckoutDuration,
+      policiesAccepted,
+      pricingCheckoutSoftGate,
+      naPathwayAcknowledged,
+      isAllied,
+      alliedProfessionCheckoutAck,
+      checkoutLoading,
+      startCheckout,
+      t,
+    ],
+  );
 
   const SEGMENT_ORDER: Segment[] = ["newgrad", "rn", "pn", "np", "allied"];
 
@@ -1037,13 +1253,25 @@ export function PricingPageClient({
     const sp = new URLSearchParams(initialSearchParamsString);
     if (sp.get("checkoutIntent") !== "1") {
       try {
-        const stored = window.sessionStorage.getItem(CHECKOUT_INTENT_STORAGE_KEY);
-        const parsed = stored ? JSON.parse(stored) as { tier?: unknown; duration?: unknown; alliedCareer?: unknown } : null;
-        if (typeof parsed?.tier === "string" && typeof parsed.duration === "string") {
+        const stored = window.sessionStorage.getItem(
+          CHECKOUT_INTENT_STORAGE_KEY,
+        );
+        const parsed = stored
+          ? (JSON.parse(stored) as {
+              tier?: unknown;
+              duration?: unknown;
+              alliedCareer?: unknown;
+            })
+          : null;
+        if (
+          typeof parsed?.tier === "string" &&
+          typeof parsed.duration === "string"
+        ) {
           sp.set("checkoutIntent", "1");
           sp.set("checkoutTier", parsed.tier);
           sp.set("checkoutDuration", parsed.duration);
-          if (typeof parsed.alliedCareer === "string") sp.set("checkoutAlliedCareer", parsed.alliedCareer);
+          if (typeof parsed.alliedCareer === "string")
+            sp.set("checkoutAlliedCareer", parsed.alliedCareer);
         }
       } catch {
         // Ignore corrupted client storage and fall back to explicit URL intent only.
@@ -1055,15 +1283,24 @@ export function PricingPageClient({
 
     if (checkoutModule === "advanced_ecg") {
       if (!checkoutDuration) return;
-      const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
-      if (!allowedDurations.includes(checkoutDuration as BillingDuration)) return;
+      const allowedDurations: BillingDuration[] = [
+        "monthly",
+        "3-month",
+        "6-month",
+        "yearly",
+      ];
+      if (!allowedDurations.includes(checkoutDuration as BillingDuration))
+        return;
 
       setCheckoutIntentHandled(true);
       const cleanParams = new URLSearchParams(sp.toString());
       cleanParams.delete("checkoutIntent");
       cleanParams.delete("checkoutModule");
       cleanParams.delete("checkoutDuration");
-      const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
+      const cleanUrl =
+        cleanParams.size > 0
+          ? `${pathname}?${cleanParams.toString()}`
+          : pathname;
       window.history.replaceState({}, "", cleanUrl);
 
       if (!policiesAccepted) {
@@ -1085,7 +1322,9 @@ export function PricingPageClient({
       cleanParamsEarly.delete("checkoutDuration");
       cleanParamsEarly.delete("checkoutAlliedCareer");
       const cleanUrlEarly =
-        cleanParamsEarly.size > 0 ? `${pathname}?${cleanParamsEarly.toString()}` : pathname;
+        cleanParamsEarly.size > 0
+          ? `${pathname}?${cleanParamsEarly.toString()}`
+          : pathname;
       window.history.replaceState({}, "", cleanUrlEarly);
       try {
         window.sessionStorage.removeItem(CHECKOUT_INTENT_STORAGE_KEY);
@@ -1094,9 +1333,24 @@ export function PricingPageClient({
       return;
     }
 
-    const allowedTiers: TierCode[] = ["NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"];
-    const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
-    if (!allowedTiers.includes(checkoutTier as TierCode) || !allowedDurations.includes(checkoutDuration as BillingDuration)) {
+    const allowedTiers: TierCode[] = [
+      "NEW_GRAD",
+      "RPN",
+      "LVN_LPN",
+      "RN",
+      "NP",
+      "ALLIED",
+    ];
+    const allowedDurations: BillingDuration[] = [
+      "monthly",
+      "3-month",
+      "6-month",
+      "yearly",
+    ];
+    if (
+      !allowedTiers.includes(checkoutTier as TierCode) ||
+      !allowedDurations.includes(checkoutDuration as BillingDuration)
+    ) {
       return;
     }
 
@@ -1105,7 +1359,10 @@ export function PricingPageClient({
     setSegment(tierToSegment(tierCode, region === "US"));
     if (tierCode === "ALLIED") {
       const checkoutAlliedCareer = sp.get("checkoutAlliedCareer");
-      if (checkoutAlliedCareer && ALLIED_CAREER_KEYS.includes(checkoutAlliedCareer as AlliedCareerKey)) {
+      if (
+        checkoutAlliedCareer &&
+        ALLIED_CAREER_KEYS.includes(checkoutAlliedCareer as AlliedCareerKey)
+      ) {
         setSelectedAlliedCareer(checkoutAlliedCareer as AlliedCareerKey);
       }
     }
@@ -1118,16 +1375,26 @@ export function PricingPageClient({
     cleanParams.delete("checkoutTier");
     cleanParams.delete("checkoutDuration");
     cleanParams.delete("checkoutAlliedCareer");
-    const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
+    const cleanUrl =
+      cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
     window.history.replaceState({}, "", cleanUrl);
     try {
       window.sessionStorage.removeItem(CHECKOUT_INTENT_STORAGE_KEY);
     } catch {}
-  }, [authStatus, checkoutIntentHandled, initialSearchParamsString, localize, pathname, policiesAccepted, region, startAdvancedEcgCheckout, t]);
+  }, [
+    authStatus,
+    checkoutIntentHandled,
+    initialSearchParamsString,
+    localize,
+    pathname,
+    policiesAccepted,
+    region,
+    startAdvancedEcgCheckout,
+    t,
+  ]);
 
   return (
     <div className="nn-pricing-premium-root mx-auto flex w-full max-w-6xl flex-col gap-12 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
-
       {/* ── Section 1: Hero ── */}
       <PricingHero
         eyebrow={t("pages.pricing.hero.choicePill")}
@@ -1145,7 +1412,9 @@ export function PricingPageClient({
         <div
           className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]"
           role="region"
-          aria-label={t("pages.pricing.globalContext.northAmericaStripeScopeAria")}
+          aria-label={t(
+            "pages.pricing.globalContext.northAmericaStripeScopeAria",
+          )}
         >
           <p>{t("pages.pricing.globalContext.northAmericaStripeScope")}</p>
           <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_04%,var(--color-card))] p-3 text-left text-[13px] leading-snug text-[var(--palette-text)]">
@@ -1158,7 +1427,9 @@ export function PricingPageClient({
                 if (e.target.checked) setCheckoutError(null);
               }}
             />
-            <span>{t("pages.pricing.globalContext.ackNorthAmericaBillingLabel")}</span>
+            <span>
+              {t("pages.pricing.globalContext.ackNorthAmericaBillingLabel")}
+            </span>
           </label>
         </div>
       ) : null}
@@ -1229,7 +1500,9 @@ export function PricingPageClient({
                     });
                   }}
                   className="nn-pricing-pill-control px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out"
-                  data-active={selectedAlliedCareer === career ? "true" : "false"}
+                  data-active={
+                    selectedAlliedCareer === career ? "true" : "false"
+                  }
                 >
                   {ALLIED_CAREER_DISPLAY_NAMES[career]}
                 </button>
@@ -1274,10 +1547,15 @@ export function PricingPageClient({
           alliedCareerLabel={isAllied ? selectedTierScopeLabel : undefined}
         />
 
-        <CheckoutCancelledNotice searchQuery={initialSearchParamsString} t={t} />
+        <CheckoutCancelledNotice
+          searchQuery={initialSearchParamsString}
+          t={t}
+        />
 
         {!plansLoaded && !loadError ? (
-          <PricingPlanGridSkeleton ariaLabel={t("pages.pricing.loadingPlansAria")} />
+          <PricingPlanGridSkeleton
+            ariaLabel={t("pages.pricing.loadingPlansAria")}
+          />
         ) : null}
 
         {plansLoaded && loadError ? (
@@ -1298,160 +1576,207 @@ export function PricingPageClient({
 
         {/* Paid duration cards — list prices from server-hydrated catalog; client may refresh from `/api/pricing/options`. */}
         {showPaidPlanDurationGrid ? (
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start">
-          {BILLING_DURATION_ORDER.map((duration) => {
-            const rawRow = rowByDuration.get(duration);
-            const row = rawRow && isRenderablePlanRow(rawRow) ? rawRow : undefined;
-            /**
-             * Catalog gaps: e.g. NEW_GRAD has no 3-month row in `display-catalog` (no Stripe price).
-             * We must **not** drop the grid cell — that read as “pricing never loaded”.
-             */
-            const slotUnavailable = Boolean(!rawRow);
-            const rowDataInvalid = Boolean(rawRow && !row);
-            const isBest = Boolean(row?.isBestValue);
-            const isPop = Boolean(row?.isMostPopular);
-            const isHighlighted = Boolean(row) && !slotUnavailable && !rowDataInvalid && (isBest || isPop);
-            const canAttemptCheckout = Boolean(row) && !slotUnavailable && !rowDataInvalid;
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start">
+            {BILLING_DURATION_ORDER.map((duration) => {
+              const rawRow = rowByDuration.get(duration);
+              const row =
+                rawRow && isRenderablePlanRow(rawRow) ? rawRow : undefined;
+              /**
+               * Catalog gaps: e.g. NEW_GRAD has no 3-month row in `display-catalog` (no Stripe price).
+               * We must **not** drop the grid cell — that read as “pricing never loaded”.
+               */
+              const slotUnavailable = Boolean(!rawRow);
+              const rowDataInvalid = Boolean(rawRow && !row);
+              const isBest = Boolean(row?.isBestValue);
+              const isPop = Boolean(row?.isMostPopular);
+              const isHighlighted =
+                Boolean(row) &&
+                !slotUnavailable &&
+                !rowDataInvalid &&
+                (isBest || isPop);
+              const canAttemptCheckout =
+                Boolean(row) && !slotUnavailable && !rowDataInvalid;
 
-            return (
-              <article
-                key={duration}
-                className={`nn-card-interactive nn-motion-standard nn-pricing-plan-card relative flex flex-col rounded-2xl border transition-shadow duration-200 ${
-                  isPop
-                    ? "z-10 p-7 xl:-my-3 xl:p-8"
-                    : isBest
-                      ? "p-7"
-                      : "p-6 hover:shadow-[var(--elevation-hover)]"
-                }`}
-                data-highlight={isPop ? "popular" : isBest ? "value" : undefined}
-              >
-                {isPop ? (
-                  <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
-                    {t("pages.pricing.conversion.badgePopular")}
-                  </span>
-                ) : isBest ? (
-                  <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-success)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
-                    {t("pages.pricing.conversion.badgeBestValue")}
-                  </span>
-                ) : null}
+              return (
+                <article
+                  key={duration}
+                  className={`nn-card-interactive nn-motion-standard nn-pricing-plan-card relative flex flex-col rounded-2xl border transition-shadow duration-200 ${
+                    isPop
+                      ? "z-10 p-7 xl:-my-3 xl:p-8"
+                      : isBest
+                        ? "p-7"
+                        : "p-6 hover:shadow-[var(--elevation-hover)]"
+                  }`}
+                  data-highlight={
+                    isPop ? "popular" : isBest ? "value" : undefined
+                  }
+                >
+                  {isPop ? (
+                    <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
+                      {t("pages.pricing.conversion.badgePopular")}
+                    </span>
+                  ) : isBest ? (
+                    <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-success)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
+                      {t("pages.pricing.conversion.badgeBestValue")}
+                    </span>
+                  ) : null}
 
-                <h3 className={isPop ? "text-xl font-bold text-[var(--palette-heading)]" : "nn-marketing-h3"}>
-                  {t(PLAN_DURATION_LABEL_KEY[duration])}
-                </h3>
+                  <h3
+                    className={
+                      isPop
+                        ? "text-xl font-bold text-[var(--palette-heading)]"
+                        : "nn-marketing-h3"
+                    }
+                  >
+                    {t(PLAN_DURATION_LABEL_KEY[duration])}
+                  </h3>
 
-                <p className={`mt-2 leading-snug text-muted-foreground ${isPop ? "text-sm font-medium" : "text-[13px]"}`}>
-                  {t(DURATION_TAGLINE_KEY[duration])}
-                </p>
-
-                {duration !== "monthly" && (
-                  <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]" aria-hidden />
-                    {t("pages.pricing.foundingPricing.line")}
+                  <p
+                    className={`mt-2 leading-snug text-muted-foreground ${isPop ? "text-sm font-medium" : "text-[13px]"}`}
+                  >
+                    {t(DURATION_TAGLINE_KEY[duration])}
                   </p>
-                )}
 
-                {rowDataInvalid ? (
-                  <div className="mt-8 flex flex-1 flex-col justify-end gap-2">
-                    <p className="text-sm text-muted-foreground">{t("pages.pricing.plan.rowDataIncomplete")}</p>
-                  </div>
-                ) : slotUnavailable ? (
-                  <div className="mt-8 flex flex-1 flex-col justify-end gap-2">
-                    <p className="text-sm text-muted-foreground">{t("pages.pricing.plan.durationNotOffered")}</p>
-                  </div>
-                ) : row ? (
-                  <>
-                    <div
-                      className="mt-6 border-t pt-5"
-                      style={{ borderColor: isPop
-                        ? "color-mix(in srgb, var(--semantic-info) 15%, var(--semantic-border-soft))"
-                        : "var(--semantic-border-soft)" }}
-                    >
-                      {"anchorPriceLabel" in row && row.anchorPriceLabel && (
-                        <p className="text-sm text-muted-foreground line-through decoration-muted-foreground/50">
-                          {row.anchorPriceLabel}
-                        </p>
-                      )}
-                      <p className={`font-black tabular-nums text-[var(--palette-heading)] ${isPop ? "text-3xl" : isHighlighted ? "text-[28px]" : "text-2xl"}`}>
-                        {row.totalLabel}
+                  {duration !== "monthly" && (
+                    <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
+                      <span
+                        className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]"
+                        aria-hidden
+                      />
+                      {t("pages.pricing.foundingPricing.line")}
+                    </p>
+                  )}
+
+                  {rowDataInvalid ? (
+                    <div className="mt-8 flex flex-1 flex-col justify-end gap-2">
+                      <p className="text-sm text-muted-foreground">
+                        {t("pages.pricing.plan.rowDataIncomplete")}
                       </p>
                     </div>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {row.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}
-                    </p>
-                    {row.savingsVsMonthlyPercent > 0 ? (
-                      <p className="mt-1.5 text-xs font-semibold text-[var(--semantic-success)]">
-                        {t("pages.pricing.plan.saveVsMonthly", { pct: row.savingsVsMonthlyPercent })}
+                  ) : slotUnavailable ? (
+                    <div className="mt-8 flex flex-1 flex-col justify-end gap-2">
+                      <p className="text-sm text-muted-foreground">
+                        {t("pages.pricing.plan.durationNotOffered")}
                       </p>
-                    ) : null}
-
-                    <ul className="mt-6 flex-1 space-y-2.5 text-sm text-[var(--palette-text)]">
-                      {PLAN_CARD_BULLET_KEYS.map((key) => (
-                        <li key={key} className="flex gap-2">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                          <span>{t(key)}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <button
-                      type="button"
-                      data-testid={`pricing-checkout-${duration}`}
-                      disabled={
-                        !clientReady ||
-                        checkoutLoading ||
-                        authStatus === "loading" ||
-                        (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||
-                        alliedCheckoutBlocked
-                      }
-                      onClick={(event) => requestCheckout(duration, event)}
-                      className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
-                    >
-                      {checkoutLoading
-                        ? CHECKOUT_LOADING_LABEL
-                        : canAttemptCheckout ? paidPlanPrimaryCtaLabel : t("pages.pricing.checkout.comingSoon")}
-                    </button>
-                    {canAttemptCheckout ? (
-                      <>
-                        {pricingCheckoutSoftGate ? (
-                          <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
-                            {t("pages.pricing.checkout.northAmericaBillingSubcopy")}
+                    </div>
+                  ) : row ? (
+                    <>
+                      <div
+                        className="mt-6 border-t pt-5"
+                        style={{
+                          borderColor: isPop
+                            ? "color-mix(in srgb, var(--semantic-info) 15%, var(--semantic-border-soft))"
+                            : "var(--semantic-border-soft)",
+                        }}
+                      >
+                        {"anchorPriceLabel" in row && row.anchorPriceLabel && (
+                          <p className="text-sm text-muted-foreground line-through decoration-muted-foreground/50">
+                            {row.anchorPriceLabel}
                           </p>
-                        ) : null}
-                        {!pricingCheckoutSoftGate && trialDays > 0 ? (
-                          <>
-                            <p
-                              className={`mt-3 text-center text-xs leading-snug ${
-                                isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"
-                              }`}
-                            >
-                              {heroTrialFooter.sub}
-                            </p>
-                            <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
-                              {heroTrialFooter.fine}
-                            </p>
-                          </>
-                        ) : !pricingCheckoutSoftGate ? (
-                          <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
-                            {t("pages.pricing.checkout.recurringShort")}
-                          </p>
-                        ) : null}
-                        {isAllied && alliedCheckoutBlocked ? (
-                          <p className="mt-3 text-center text-xs font-medium leading-snug text-[var(--semantic-warning-contrast)]">
-                            {t("pages.pricing.alliedLock.mustAckBeforeCheckout")}
-                          </p>
-                        ) : null}
-                      </>
-                    ) : (
-                      <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
-                        {t("pages.pricing.checkout.unavailableBody")}
+                        )}
+                        <p
+                          className={`font-black tabular-nums text-[var(--palette-heading)] ${isPop ? "text-3xl" : isHighlighted ? "text-[28px]" : "text-2xl"}`}
+                        >
+                          {row.totalLabel}
+                        </p>
+                      </div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {row.monthlyEquivalentLabel}{" "}
+                        {t("pages.pricing.plan.avgSuffix")}
                       </p>
-                    )}
-                  </>
-                ) : null}
-              </article>
-            );
-          })}
-        </div>
+                      {row.savingsVsMonthlyPercent > 0 ? (
+                        <p className="mt-1.5 text-xs font-semibold text-[var(--semantic-success)]">
+                          {t("pages.pricing.plan.saveVsMonthly", {
+                            pct: row.savingsVsMonthlyPercent,
+                          })}
+                        </p>
+                      ) : null}
+
+                      <ul className="mt-6 flex-1 space-y-2.5 text-sm text-[var(--palette-text)]">
+                        {PLAN_CARD_BULLET_KEYS.map((key) => (
+                          <li key={key} className="flex gap-2">
+                            <Check
+                              className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]"
+                              aria-hidden
+                            />
+                            <span>{t(key)}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        type="button"
+                        data-testid={`pricing-checkout-${duration}`}
+                        disabled={
+                          !clientReady ||
+                          checkoutLoading ||
+                          authStatus === "loading" ||
+                          (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||
+                          alliedCheckoutBlocked
+                        }
+                        onClick={(event) => requestCheckout(duration, event)}
+                        className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
+                      >
+                        {checkoutLoading
+                          ? CHECKOUT_LOADING_LABEL
+                          : canAttemptCheckout
+                            ? paidPlanPrimaryCtaLabel
+                            : t("pages.pricing.checkout.comingSoon")}
+                      </button>
+                      <Link
+                        href="#pricing-tier-value"
+                        className="mt-3 inline-flex justify-center text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-4"
+                      >
+                        See everything included
+                      </Link>
+                      {canAttemptCheckout ? (
+                        <>
+                          {pricingCheckoutSoftGate ? (
+                            <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
+                              {t(
+                                "pages.pricing.checkout.northAmericaBillingSubcopy",
+                              )}
+                            </p>
+                          ) : null}
+                          {!pricingCheckoutSoftGate && trialDays > 0 ? (
+                            <>
+                              <p
+                                className={`mt-3 text-center text-xs leading-snug ${
+                                  isPop
+                                    ? "font-semibold text-[var(--semantic-info)]"
+                                    : "text-muted-foreground"
+                                }`}
+                              >
+                                {heroTrialFooter.sub}
+                              </p>
+                              <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
+                                {heroTrialFooter.fine}
+                              </p>
+                            </>
+                          ) : !pricingCheckoutSoftGate ? (
+                            <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
+                              {t("pages.pricing.checkout.recurringShort")}
+                            </p>
+                          ) : null}
+                          {isAllied && alliedCheckoutBlocked ? (
+                            <p className="mt-3 text-center text-xs font-medium leading-snug text-[var(--semantic-warning-contrast)]">
+                              {t(
+                                "pages.pricing.alliedLock.mustAckBeforeCheckout",
+                              )}
+                            </p>
+                          ) : null}
+                        </>
+                      ) : (
+                        <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
+                          {t("pages.pricing.checkout.unavailableBody")}
+                        </p>
+                      )}
+                    </>
+                  ) : null}
+                </article>
+              );
+            })}
+          </div>
         ) : null}
 
         {showConsentPrompt ? (
@@ -1474,15 +1799,24 @@ export function PricingPageClient({
                   />
                   <span className="text-[var(--palette-text)]">
                     {t("pages.pricing.checkout.policyAckStart")}
-                    <Link href={termsHref} className="nn-link-quiet font-semibold">
+                    <Link
+                      href={termsHref}
+                      className="nn-link-quiet font-semibold"
+                    >
                       {t("pages.pricing.checkout.policyTermsLabel")}
                     </Link>
                     {t("pages.pricing.checkout.policyAckBetween1")}
-                    <Link href={privacyHref} className="nn-link-quiet font-semibold">
+                    <Link
+                      href={privacyHref}
+                      className="nn-link-quiet font-semibold"
+                    >
                       {t("pages.pricing.checkout.policyPrivacyLabel")}
                     </Link>
                     {t("pages.pricing.checkout.policyAckBetween2")}
-                    <Link href={refundHref} className="nn-link-quiet font-semibold">
+                    <Link
+                      href={refundHref}
+                      className="nn-link-quiet font-semibold"
+                    >
                       {t("pages.pricing.checkout.policyRefundLabel")}
                     </Link>
                     {t("pages.pricing.checkout.policyAckEnd")}
@@ -1502,7 +1836,11 @@ export function PricingPageClient({
                         if (e.target.checked) setCheckoutError(null);
                       }}
                     />
-                    <span className="text-[var(--palette-text)]">{t("pages.pricing.globalContext.ackNorthAmericaBillingLabel")}</span>
+                    <span className="text-[var(--palette-text)]">
+                      {t(
+                        "pages.pricing.globalContext.ackNorthAmericaBillingLabel",
+                      )}
+                    </span>
                   </label>
                 </div>
               ) : null}
@@ -1512,7 +1850,9 @@ export function PricingPageClient({
                   data-testid="pricing-allied-profession-warning-modal"
                   className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_07%,var(--color-card))] p-4 text-sm"
                 >
-                  <p className="font-semibold text-[var(--semantic-warning-contrast)]">{t("pages.pricing.alliedLock.warningTitle")}</p>
+                  <p className="font-semibold text-[var(--semantic-warning-contrast)]">
+                    {t("pages.pricing.alliedLock.warningTitle")}
+                  </p>
                   <ul className="mt-2 list-inside list-disc space-y-1 text-[13px] leading-snug text-muted-foreground">
                     <li>{t("pages.pricing.alliedLock.line1")}</li>
                     <li>{t("pages.pricing.alliedLock.line2")}</li>
@@ -1529,7 +1869,9 @@ export function PricingPageClient({
                         if (e.target.checked) setCheckoutError(null);
                       }}
                     />
-                    <span className="text-[var(--palette-text)]">{t("pages.pricing.alliedLock.ackLabel")}</span>
+                    <span className="text-[var(--palette-text)]">
+                      {t("pages.pricing.alliedLock.ackLabel")}
+                    </span>
                   </label>
                 </div>
               ) : null}
@@ -1561,7 +1903,9 @@ export function PricingPageClient({
                   {checkoutLoading
                     ? CHECKOUT_LOADING_LABEL
                     : pricingCheckoutSoftGate
-                      ? t("pages.pricing.checkout.continueToNorthAmericaCheckout")
+                      ? t(
+                          "pages.pricing.checkout.continueToNorthAmericaCheckout",
+                        )
                       : t("pages.pricing.checkout.continueToSecureCheckout")}
                 </button>
               </div>
@@ -1573,23 +1917,46 @@ export function PricingPageClient({
         {trialDays > 0 && (
           <div className="nn-pricing-trial-card mx-auto max-w-xl rounded-2xl border px-8 py-6 text-center shadow-[var(--elevation-rest)]">
             <p className="text-lg font-semibold text-[var(--palette-heading)]">
-              {t("pages.pricing.trial.bannerTitleWithDays", { days: trialDays })}
+              {t("pages.pricing.trial.bannerTitleWithDays", {
+                days: trialDays,
+              })}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               {t("pages.pricing.trial.bannerLead")}
               {` ${heroTrialFooter.sub}`}
             </p>
-            <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.trial.bannerFinePrint")}</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("pages.pricing.trial.bannerFinePrint")}
+            </p>
           </div>
         )}
 
         {/* Checkout feedback */}
         <div className="mx-auto max-w-xl space-y-4">
-          {checkoutError ? <p className="text-center text-sm text-destructive">{checkoutError}</p> : null}
+          {checkoutError ? (
+            <p className="text-center text-sm text-destructive">
+              {checkoutError}
+            </p>
+          ) : null}
           {checkoutOpsHint ? (
-            <p className="rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">{checkoutOpsHint}</p>
+            <p className="rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">
+              {checkoutOpsHint}
+            </p>
           ) : null}
         </div>
+
+        <TierValueExperience
+          activeTier={segmentToTierValueKey(segment)}
+          onTierSelect={(key) => {
+            const next = tierValueKeyToSegment(key);
+            if (!next) {
+              window.location.href = localize("/pre-nursing");
+              return;
+            }
+            checkoutSegmentRef.current = next;
+            setSegment(next);
+          }}
+        />
       </section>
 
       {/* ── Trust + value + FAQs (after plans) ── */}
@@ -1614,7 +1981,10 @@ export function PricingPageClient({
 
       <PricingEcgClarityBlock />
 
-      <PricingAdvancedEcgAddOn onCheckout={(duration) => void startAdvancedEcgCheckout(duration)} checkoutLoading={checkoutLoading} />
+      <PricingAdvancedEcgAddOn
+        onCheckout={(duration) => void startAdvancedEcgCheckout(duration)}
+        checkoutLoading={checkoutLoading}
+      />
 
       <PricingRegionFaq />
 
@@ -1651,20 +2021,32 @@ export function PricingPageClient({
       {/* Bottom links */}
       <div className="text-center">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
+          <Link
+            href="#pricing-plans-heading"
+            className={MARKETING_PRIMARY_CTA_CLASS}
+          >
             {paidPlanPrimaryCtaLabel}
           </Link>
-          <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
+          <Link
+            href={tryQuestionsHref}
+            className={MARKETING_TERTIARY_LINK_CLASS}
+          >
             {t("pages.pricing.cta.bottomSecondaryTryQuestions")}
           </Link>
         </div>
         {trialDays > 0 ? (
           <>
-            <p className="mt-3 text-xs text-muted-foreground">{heroTrialFooter.sub}</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">{heroTrialFooter.fine}</p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              {heroTrialFooter.sub}
+            </p>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              {heroTrialFooter.fine}
+            </p>
           </>
         ) : (
-          <p className="mt-3 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            {t("pages.pricing.checkout.recurringShort")}
+          </p>
         )}
       </div>
     </div>

@@ -2,7 +2,7 @@
  * CAT readiness pool floors — pure constants with no Prisma, DB, or Next server APIs.
  * Safe to import from Client Components and marketing gates (must not pull in `cat-pool.ts`).
  */
-export const CAT_MIN_COMPLETE_POOL = 150;
+export const CAT_MIN_COMPLETE_POOL = 30;
 
 /** CAT readiness pool floor — full tracks use {@link CAT_MIN_COMPLETE_POOL}; Pre-Nursing uses a smaller MV pool. */
 export function catReadinessMinCompletePoolRows(

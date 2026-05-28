@@ -20,13 +20,16 @@ import {
 import { ClinicalSkillContextRail } from "@/components/clinical-skills/clinical-skill-context-rail";
 import { ClinicalSkillsErrorSpotting } from "@/components/clinical-skills/clinical-skills-error-spotting";
 import { ClinicalSkillsFlashcardReview } from "@/components/clinical-skills/clinical-skills-flashcard-review";
+import { ClinicalSkillsLabModeOverview } from "@/components/clinical-skills/clinical-skills-lab-mode-overview";
 import { ClinicalSkillsProcedureWorkspace } from "@/components/clinical-skills/clinical-skills-procedure-workspace";
 import { ClinicalSkillsRetentionQuickSet } from "@/components/clinical-skills/clinical-skills-retention-quick-set";
 import { ClinicalSkillsSequencingChallenge } from "@/components/clinical-skills/clinical-skills-sequencing-challenge";
+import { ClinicalSkillsSimulationMode } from "@/components/clinical-skills/clinical-skills-simulation-mode";
 import { useClinicalSkillProgressActions } from "@/components/clinical-skills/clinical-skills-progress-actions";
 import { clinicalSkillTierLabel } from "@/lib/clinical-skills/clinical-skills-display";
 import type { ClinicalSkillDefinition } from "@/lib/clinical-skills/clinical-skills-catalog";
 import { clinicalSkillCheckpointsToQuizItems } from "@/lib/clinical-skills/clinical-skills-checkpoints";
+import { buildClinicalSkillCompetencyLabProfile } from "@/lib/clinical-skills/clinical-skills-competency-lab";
 import { getClinicalSkillEnrichment } from "@/lib/clinical-skills/clinical-skills-enrichment";
 import {
   computeSimulationReadinessPct,
@@ -49,17 +52,27 @@ export function ClinicalSkillDetailClient({
   userId: string | null;
   initialProgress?: PathwayLessonProgressStatus;
 }) {
-  const qp = pathwayId?.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : "";
+  const qp = pathwayId?.trim()
+    ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+    : "";
   const hubHref = `/app/clinical-skills${qp}`;
   const enrichment = useMemo(() => getClinicalSkillEnrichment(skill), [skill]);
-  const { state, markViewed, markCompleted } = useClinicalSkillsProgress(userId);
-  const { progressStatus, onCheckpointFinished } = useClinicalSkillProgressActions({
-    skillSlug: skill.slug,
-    userId,
-    initialStatus: initialProgress,
-  });
+  const labProfile = useMemo(
+    () => buildClinicalSkillCompetencyLabProfile(skill),
+    [skill],
+  );
+  const { state, markViewed, markCompleted } =
+    useClinicalSkillsProgress(userId);
+  const { progressStatus, onCheckpointFinished } =
+    useClinicalSkillProgressActions({
+      skillSlug: skill.slug,
+      userId,
+      initialStatus: initialProgress,
+    });
 
-  const [competency, setCompetency] = useState<ClinicalSkillLessonCompetency>(() => readClinicalSkillCompetency(skill.slug));
+  const [competency, setCompetency] = useState<ClinicalSkillLessonCompetency>(
+    () => readClinicalSkillCompetency(skill.slug),
+  );
 
   useEffect(() => {
     markViewed(skill.slug);
@@ -76,7 +89,10 @@ export function ClinicalSkillDetailClient({
     [skill.slug],
   );
 
-  const quizItems = useMemo(() => clinicalSkillCheckpointsToQuizItems(skill.slug), [skill.slug]);
+  const quizItems = useMemo(
+    () => clinicalSkillCheckpointsToQuizItems(skill.slug),
+    [skill.slug],
+  );
   const localDone = state.completedSlugs.includes(skill.slug);
   const serverDone = progressStatus === "completed";
   const readinessPct = computeSimulationReadinessPct(
@@ -91,16 +107,25 @@ export function ClinicalSkillDetailClient({
   };
 
   return (
-    <div className="nn-clinical-skills-lesson-workspace space-y-6" data-nn-clinical-skill-detail="">
+    <div
+      className="nn-clinical-skills-lesson-workspace space-y-6"
+      data-nn-clinical-skill-detail=""
+    >
       <header className="nn-clinical-skills-lesson-hero nn-learner-page-hero">
         <div className="space-y-2">
           <p className="nn-clinical-skills-lesson-hero__eyebrow">
-            Clinical skills · {clinicalSkillTierLabel(skill.competencyTier)} · {serverDone || localDone ? "Completed" : "In training"}
+            Clinical skills · {clinicalSkillTierLabel(skill.competencyTier)} ·{" "}
+            {serverDone || localDone ? "Completed" : "In training"}
           </p>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{skill.title}</h1>
-          <p className="max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{skill.summary}</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
+            {skill.title}
+          </h1>
+          <p className="max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {skill.summary}
+          </p>
           <p className="text-sm text-[var(--semantic-text-secondary)]">
-            Interactive bedside simulation — rehearse sequencing, safety judgment, flashcards, and competency checkpoints in one workstation.
+            Interactive bedside simulation — rehearse sequencing, safety
+            judgment, flashcards, and competency checkpoints in one workstation.
           </p>
         </div>
         <div className="mt-4 flex flex-wrap gap-2 text-sm">
@@ -116,21 +141,75 @@ export function ClinicalSkillDetailClient({
         </div>
       </header>
 
+      <ClinicalSkillsLabModeOverview profile={labProfile} />
+
       <div className="nn-clinical-skills-lesson-workspace__grid">
         <div className="nn-clinical-skills-lesson-workspace__primary min-w-0 space-y-5">
-          <ClinicalSkillsLearningBlock title="Simulation overview" eyebrow="Bedside context" tone="brand" icon={Sparkles}>
-            <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{enrichment.simulationOverview}</p>
+          <ClinicalSkillsLearningBlock
+            title="Competency blueprint"
+            eyebrow="Minimum skill requirements"
+            tone="brand"
+            icon={ClipboardList}
+          >
+            <div className="grid gap-3 sm:grid-cols-2">
+              {labProfile.requiredSections.map((section) => (
+                <article
+                  key={section.key}
+                  className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3"
+                >
+                  <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--semantic-brand)]">
+                    {section.label}
+                  </h2>
+                  <p className="mt-2 text-xs leading-5 text-[var(--semantic-text-secondary)]">
+                    {section.body}
+                  </p>
+                </article>
+              ))}
+            </div>
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="Clinical rationale" eyebrow="Why this matters" tone="info" icon={Brain}>
-            <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{enrichment.clinicalRationale}</p>
+          <ClinicalSkillsLearningBlock
+            title="Simulation overview"
+            eyebrow="Learn mode"
+            tone="brand"
+            icon={Sparkles}
+          >
+            <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {enrichment.simulationOverview}
+            </p>
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="Procedure workspace" eyebrow="Psychomotor sequence" tone="info" icon={Stethoscope}>
-            <ClinicalSkillsProcedureWorkspace skill={skill} onCompetencyChange={setCompetency} />
+          <ClinicalSkillsLearningBlock
+            title="Clinical rationale"
+            eyebrow="Learn mode"
+            tone="info"
+            icon={Brain}
+            id="clinical-skills-learn-mode"
+          >
+            <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {enrichment.clinicalRationale}
+            </p>
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="Procedural sequencing" eyebrow="Active recall" tone="success" icon={ListOrdered}>
+          <ClinicalSkillsLearningBlock
+            title="Procedure workspace"
+            eyebrow="Competency mode"
+            tone="info"
+            icon={Stethoscope}
+            id="clinical-skills-competency-mode"
+          >
+            <ClinicalSkillsProcedureWorkspace
+              skill={skill}
+              onCompetencyChange={setCompetency}
+            />
+          </ClinicalSkillsLearningBlock>
+
+          <ClinicalSkillsLearningBlock
+            title="Procedural sequencing"
+            eyebrow="Active recall"
+            tone="success"
+            icon={ListOrdered}
+          >
             <ClinicalSkillsSequencingChallenge
               skill={skill}
               passed={competency.sequencingPassed}
@@ -138,7 +217,12 @@ export function ClinicalSkillDetailClient({
             />
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="What went wrong?" eyebrow="Safety checkpoint" tone="warning" icon={AlertTriangle}>
+          <ClinicalSkillsLearningBlock
+            title="What went wrong?"
+            eyebrow="Safety checkpoint"
+            tone="warning"
+            icon={AlertTriangle}
+          >
             <ClinicalSkillsErrorSpotting
               scenario={enrichment.errorScenario}
               passed={competency.errorSpottingPassed}
@@ -146,7 +230,22 @@ export function ClinicalSkillDetailClient({
             />
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="Global safety checkpoints" eyebrow="Before you finish" tone="warning" icon={AlertTriangle}>
+          <ClinicalSkillsLearningBlock
+            title="Patient status simulation"
+            eyebrow="Simulation mode"
+            tone="warning"
+            icon={AlertTriangle}
+            id="clinical-skills-simulation-mode"
+          >
+            <ClinicalSkillsSimulationMode skill={skill} />
+          </ClinicalSkillsLearningBlock>
+
+          <ClinicalSkillsLearningBlock
+            title="Global safety checkpoints"
+            eyebrow="Before you finish"
+            tone="warning"
+            icon={AlertTriangle}
+          >
             <ClinicalSkillsChipList
               items={[
                 "Verify orders, allergies, and patient identity before psychomotor steps",
@@ -158,10 +257,20 @@ export function ClinicalSkillDetailClient({
           </ClinicalSkillsLearningBlock>
 
           {enrichment.retentionItems.length > 0 ? (
-            <ClinicalSkillsLearningBlock title="Bedside retention prompts" eyebrow="Scenario recall" tone="info" icon={Brain}>
+            <ClinicalSkillsLearningBlock
+              title="Bedside retention prompts"
+              eyebrow="Review mode"
+              tone="info"
+              icon={Brain}
+            >
               <ClinicalSkillsRetentionQuickSet
                 items={enrichment.retentionItems}
-                onFinished={(score, total) => persistCompetency({ retentionScore: score, retentionTotal: total })}
+                onFinished={(score, total) =>
+                  persistCompetency({
+                    retentionScore: score,
+                    retentionTotal: total,
+                  })
+                }
               />
             </ClinicalSkillsLearningBlock>
           ) : null}
@@ -173,12 +282,18 @@ export function ClinicalSkillDetailClient({
               aria-labelledby="clinical-skills-checkpoint-heading"
             >
               <header className="nn-clinical-skills-checkpoint-module__head">
-                <p className="nn-clinical-skills-block__eyebrow">Competency checkpoint</p>
-                <h2 id="clinical-skills-checkpoint-heading" className="text-lg font-semibold text-[var(--semantic-text-primary)]">
+                <p className="nn-clinical-skills-block__eyebrow">
+                  Competency checkpoint
+                </p>
+                <h2
+                  id="clinical-skills-checkpoint-heading"
+                  className="text-lg font-semibold text-[var(--semantic-text-primary)]"
+                >
                   Clinical judgment questions
                 </h2>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-                  Answer each item, review rationales, and score at least 70% to record competency completion.
+                  Answer each item, review rationales, and score at least 70% to
+                  record competency completion.
                 </p>
               </header>
               <div className="nn-clinical-skills-checkpoint-module__body">
@@ -195,19 +310,35 @@ export function ClinicalSkillDetailClient({
             </section>
           ) : null}
 
-          <ClinicalSkillsLearningBlock title="Competency flashcards" eyebrow="Spaced retention" tone="brand" icon={Layers}>
+          <ClinicalSkillsLearningBlock
+            title="Competency flashcards"
+            eyebrow="Review mode"
+            tone="brand"
+            icon={Layers}
+            id="clinical-skills-review-mode"
+          >
             <p className="mb-3 text-sm text-[var(--semantic-text-secondary)]">
-              Reinforce safety steps, sequencing, and clinical rationale — flip each card to build long-term procedural memory.
+              Reinforce safety steps, sequencing, and clinical rationale — flip
+              each card to build long-term procedural memory.
             </p>
             <ClinicalSkillsFlashcardReview
               cards={enrichment.flashcards}
               reviewedIds={competency.reviewedFlashcardIds}
-              onReviewedChange={(ids) => persistCompetency({ reviewedFlashcardIds: ids })}
+              onReviewedChange={(ids) =>
+                persistCompetency({ reviewedFlashcardIds: ids })
+              }
             />
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="Confidence check" eyebrow="Self-rating" tone="info" icon={ShieldCheck}>
-            <p className="text-sm text-[var(--semantic-text-secondary)]">How ready do you feel to perform this skill at the bedside?</p>
+          <ClinicalSkillsLearningBlock
+            title="Confidence check"
+            eyebrow="Self-rating"
+            tone="info"
+            icon={ShieldCheck}
+          >
+            <p className="text-sm text-[var(--semantic-text-secondary)]">
+              How ready do you feel to perform this skill at the bedside?
+            </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
@@ -226,12 +357,20 @@ export function ClinicalSkillDetailClient({
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">1 = needs lab rehearsal · 5 = simulation-ready confidence</p>
+            <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+              1 = needs lab rehearsal · 5 = simulation-ready confidence
+            </p>
           </ClinicalSkillsLearningBlock>
 
-          <ClinicalSkillsLearningBlock title="Documentation callout" eyebrow="Close the loop" tone="brand" icon={ClipboardList}>
+          <ClinicalSkillsLearningBlock
+            title="Documentation callout"
+            eyebrow="Close the loop"
+            tone="brand"
+            icon={ClipboardList}
+          >
             <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-              Document indication, patient response, supplies, education, and follow-up — pair with your facility checklist and EHR fields.
+              Document indication, patient response, supplies, education, and
+              follow-up — pair with your facility checklist and EHR fields.
             </p>
           </ClinicalSkillsLearningBlock>
 
@@ -247,7 +386,9 @@ export function ClinicalSkillDetailClient({
                   : "bg-[var(--role-cta)] text-[var(--role-cta-foreground)] shadow-[0_2px_10px_var(--role-cta-shadow)]",
               )}
             >
-              {localDone || serverDone ? "Marked complete" : "Mark walkthrough reviewed"}
+              {localDone || serverDone
+                ? "Marked complete"
+                : "Mark walkthrough reviewed"}
             </button>
           </div>
         </div>
@@ -266,11 +407,19 @@ export function ClinicalSkillDetailClient({
 
       <section className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-5 sm:p-6">
         <div className="flex gap-3">
-          <ShieldCheck className="h-5 w-5 shrink-0 text-[var(--semantic-info)]" aria-hidden />
+          <ShieldCheck
+            className="h-5 w-5 shrink-0 text-[var(--semantic-info)]"
+            aria-hidden
+          />
           <div>
-            <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Adaptive remediation</h2>
+            <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">
+              Adaptive remediation
+            </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-              Weak sequencing or checkpoint scores stay visible in your competency rail. NurseNest can surface this lab alongside labs, medication calculations, and scenarios when related weakness signals appear on your dashboard.
+              Weak sequencing or checkpoint scores stay visible in your
+              competency rail. NurseNest can surface this lab alongside labs,
+              medication calculations, and scenarios when related weakness
+              signals appear on your dashboard.
             </p>
           </div>
         </div>

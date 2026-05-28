@@ -12,9 +12,11 @@ import { ReadinessHeroCard } from "@/components/study/readiness-hero-card";
 import { ReadinessDimensionTabs } from "@/components/study/readiness-dimension-tabs";
 import { ReadinessStrengthGrid } from "@/components/study/readiness-strength-grid";
 import { ReadinessFocusPlan } from "@/components/study/readiness-focus-plan";
+import { AdaptiveIntelligencePanel } from "@/components/study/adaptive-intelligence-panel";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadReadinessDashboardData } from "@/lib/learner/readiness-dashboard-data";
+import { buildAdaptiveIntelligenceProfile } from "@/lib/learner/adaptive-intelligence-profile";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
@@ -28,13 +30,18 @@ export async function generateMetadata(): Promise<Metadata> {
         robots: { index: false, follow: false },
       };
     },
-    { pathname: "/app/account/readiness", routeGroup: "student.learner.account_readiness" },
+    {
+      pathname: "/app/account/readiness",
+      routeGroup: "student.learner.account_readiness",
+    },
   );
 }
 
 export default async function AccountReadinessPage() {
   const { t, locale } = await getLearnerMarketingBundle();
-  const session = await getProtectedRouteSession("(student).app.(learner).account.readiness");
+  const session = await getProtectedRouteSession(
+    "(student).app.(learner).account.readiness",
+  );
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.readiness"));
   const localeTag = locale.replace(/_/g, "-");
@@ -48,8 +55,14 @@ export default async function AccountReadinessPage() {
           headline={t("learner.account.readiness.title")}
           body="We are checking your learner session."
           hint="Return to the study hub and try again if this does not refresh."
-          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          primaryCta={{
+            label: "Open Study Hub",
+            href: "/app",
+            variant: "primary",
+          }}
+          secondaryCtas={[
+            { label: t("nav.lessons"), href: "/lessons", variant: "secondary" },
+          ]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -63,13 +76,22 @@ export default async function AccountReadinessPage() {
     return (
       <div className="space-y-6">
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
-        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
+        <LearnerPerformanceWorkspaceNav
+          t={t}
+          pathname="/app/account/readiness"
+        />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.entitlement.verifyFailed")}
           tone="default"
-          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          primaryCta={{
+            label: t("paywall.cta.openStudyHub"),
+            href: "/app",
+            variant: "primary",
+          }}
+          secondaryCtas={[
+            { label: t("nav.lessons"), href: "/lessons", variant: "secondary" },
+          ]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -81,14 +103,27 @@ export default async function AccountReadinessPage() {
     return (
       <div className="space-y-6">
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
-        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
+        <LearnerPerformanceWorkspaceNav
+          t={t}
+          pathname="/app/account/readiness"
+        />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.profile.performanceGate.body")}
           hint={emptyStateCopy.entitlementLocked.body}
           tone="locked"
-          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
-          secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
+          primaryCta={{
+            label: t("cta.continuePlan"),
+            href: "/pricing",
+            variant: "primary",
+          }}
+          secondaryCtas={[
+            {
+              label: t("paywall.cta.openStudyHub"),
+              href: "/app",
+              variant: "secondary",
+            },
+          ]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -108,7 +143,10 @@ export default async function AccountReadinessPage() {
     return (
       <div className="space-y-6">
         <LearnerBreadcrumbTrail kind="account-hub" pathname="/app/account" />
-        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
+        <LearnerPerformanceWorkspaceNav
+          t={t}
+          pathname="/app/account/readiness"
+        />
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
             {t("learner.account.readiness.title")}
@@ -123,8 +161,15 @@ export default async function AccountReadinessPage() {
     );
   }
 
-  const { snapshot, topicPerf, catSignal, dimensions, catTrend, benchmark } = payload;
+  const { snapshot, topicPerf, catSignal, dimensions, catTrend, benchmark } =
+    payload;
   const { readiness, practice, studyStreakDays } = snapshot;
+  const adaptiveProfile = buildAdaptiveIntelligenceProfile({
+    snapshot,
+    topicPerf,
+    dimensions,
+    catTrend,
+  });
 
   const weakTopics = topicPerf?.weakTopics ?? [];
   const strongTopics = topicPerf?.strongTopics ?? [];
@@ -134,7 +179,7 @@ export default async function AccountReadinessPage() {
   const overallAccuracyPct =
     practice.gradedTotal > 0 && practice.gradedCorrect != null
       ? Math.round((practice.gradedCorrect / practice.gradedTotal) * 100)
-      : practice.accuracyPct ?? null;
+      : (practice.accuracyPct ?? null);
 
   return (
     <div className="nn-readiness-report-workspace min-w-0 min-h-0">
@@ -186,7 +231,9 @@ export default async function AccountReadinessPage() {
             </h2>
             <p
               className="mt-0.5 text-xs"
-              style={{ color: "var(--semantic-text-muted, var(--muted-foreground))" }}
+              style={{
+                color: "var(--semantic-text-muted, var(--muted-foreground))",
+              }}
             >
               The four factors that make up your readiness index
             </p>
@@ -206,28 +253,35 @@ export default async function AccountReadinessPage() {
                     pct == null
                       ? "var(--semantic-text-muted)"
                       : pct >= 75
-                      ? "var(--semantic-success)"
-                      : pct >= 50
-                      ? "var(--semantic-info)"
-                      : "var(--semantic-warning)";
+                        ? "var(--semantic-success)"
+                        : pct >= 50
+                          ? "var(--semantic-info)"
+                          : "var(--semantic-warning)";
                   const fillClass =
                     pct == null
                       ? "nn-progress-fill-semantic-brand"
                       : pct >= 75
-                      ? "nn-progress-fill-semantic-success"
-                      : pct >= 50
-                      ? "nn-progress-fill-semantic-info"
-                      : "nn-progress-fill-semantic-warning";
+                        ? "nn-progress-fill-semantic-success"
+                        : pct >= 50
+                          ? "nn-progress-fill-semantic-info"
+                          : "nn-progress-fill-semantic-warning";
 
                   return (
-                    <li key={factor.id} className="nn-semantic-inset p-4 rounded-xl" style={{
-                      background: `color-mix(in srgb, ${accent} 5%, var(--bg-card))`,
-                      border: `1px solid color-mix(in srgb, ${accent} 15%, var(--border-subtle))`,
-                    }}>
+                    <li
+                      key={factor.id}
+                      className="nn-semantic-inset p-4 rounded-xl"
+                      style={{
+                        background: `color-mix(in srgb, ${accent} 5%, var(--bg-card))`,
+                        border: `1px solid color-mix(in srgb, ${accent} 15%, var(--border-subtle))`,
+                      }}
+                    >
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
                         <h3
                           className="text-xs font-semibold"
-                          style={{ color: "var(--theme-heading-text, var(--foreground))" }}
+                          style={{
+                            color:
+                              "var(--theme-heading-text, var(--foreground))",
+                          }}
                         >
                           {factor.label}
                         </h3>
@@ -263,7 +317,10 @@ export default async function AccountReadinessPage() {
                       ) : null}
                       <p
                         className="mt-2 text-[11px] leading-relaxed"
-                        style={{ color: "var(--semantic-text-secondary, var(--muted-foreground))" }}
+                        style={{
+                          color:
+                            "var(--semantic-text-secondary, var(--muted-foreground))",
+                        }}
                       >
                         {factor.detail}
                       </p>
@@ -274,7 +331,9 @@ export default async function AccountReadinessPage() {
             ) : (
               <p
                 className="text-sm"
-                style={{ color: "var(--semantic-text-muted, var(--muted-foreground))" }}
+                style={{
+                  color: "var(--semantic-text-muted, var(--muted-foreground))",
+                }}
               >
                 Complete practice sessions to see your score signals.
               </p>
@@ -301,6 +360,8 @@ export default async function AccountReadinessPage() {
         nextActions={readiness.nextActions}
         benchmark={benchmark}
       />
+
+      <AdaptiveIntelligencePanel profile={adaptiveProfile} />
 
       {/* ─── Cross-links ─── */}
       <LearnerAccountCrossLinks variant="readiness" t={t} />

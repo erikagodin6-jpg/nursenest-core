@@ -1,6 +1,7 @@
 import { randomInt, randomUUID } from "node:crypto";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { getCatPool, setCatPool } from "@/lib/server/content-cache";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
@@ -546,4 +547,26 @@ export async function countCompleteCatPracticePool(
 ): Promise<number> {
   const { pool } = await fetchCatPracticePool(userId, entitlement, input);
   return pool.length;
+}
+
+/**
+ * Redis-cached variant of {@link fetchCatPracticePool}.
+ * Cache key: userId + pathwayId (30-min TTL).
+ * Falls through to the live query on cache miss or when Redis is not configured.
+ */
+export async function fetchCatPracticePoolCached(
+  userId: string,
+  entitlement: AccessScope,
+  input: PickQuestionsInput,
+): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta; fromCache: boolean }> {
+  const pathwayKey = input.pathwayId?.trim() ?? "_default";
+  const cached = await getCatPool<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }>(userId, pathwayKey);
+  if (cached && Array.isArray(cached.pool) && cached.pool.length > 0) {
+    return { ...cached, fromCache: true };
+  }
+  const result = await fetchCatPracticePool(userId, entitlement, input);
+  if (result.pool.length > 0) {
+    await setCatPool(userId, pathwayKey, result);
+  }
+  return { ...result, fromCache: false };
 }
