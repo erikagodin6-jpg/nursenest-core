@@ -35,6 +35,8 @@ describe("question difficulty/scope filtering", () => {
       classifyQuestionDifficultyScope({ difficulty: 5, topic: "Prioritization" }),
       classifyQuestionDifficultyScope({ difficulty: 3, tags: ["icu"] }),
       classifyQuestionDifficultyScope({ difficulty: 3, stem: "A mechanically ventilated client has a high-pressure alarm." }),
+      classifyQuestionDifficultyScope({ difficulty: 3, stem: "If plateau pressure increases while peak pressure remains similar, what changed?" }),
+      classifyQuestionDifficultyScope({ difficulty: 3, topic: "Lung compliance and airway resistance" }),
       classifyQuestionDifficultyScope({ difficulty: 3, subtopic: "invasive hemodynamic monitoring" }),
       classifyQuestionDifficultyScope({ difficulty: 3, stem: "The nurse is asked to titrate norepinephrine based on arterial line readings." }),
       classifyQuestionDifficultyScope({ difficulty: 3, stem: "A client receiving CRRT and ECMO has a sudden circuit alarm." }),

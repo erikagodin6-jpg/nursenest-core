@@ -4649,3 +4649,262 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
     max-height: 3.45rem !important;
   }
 }
+
+/* Viewport-fit pass: keep the split study UI inside 13–15" laptop widths. */
+html:has([data-nn-flashcard-study-session]) {
+  overflow-x: hidden !important;
+}
+
+html:has([data-nn-flashcard-study-session]) body,
+html:has([data-nn-flashcard-study-session]) .nn-learner-app,
+html:has([data-nn-flashcard-study-session]) .nn-learner-app main {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+.nn-flashcard-study-canvas {
+  box-sizing: border-box !important;
+  width: min(100%, calc(100vw - clamp(1rem, 2.5vw, 2rem))) !important;
+  max-width: min(96vw, 1600px) !important;
+  padding-inline: clamp(0.35rem, 1vw, 0.75rem) !important;
+  overflow-x: hidden !important;
+}
+
+.nn-flashcard-study-premium.nn-premium-flashcard-session-root,
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-unified-exam-workspace],
+.nn-flashcard-study-premium .nn-premium-flashcard-stack-outer,
+.nn-flashcard-study-premium .nn-flashcard-session-layout[data-nn-premium-flashcard-study],
+.nn-flashcard-study-premium .nn-flashcard-session-main {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid,
+.nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, clamp(280px, 27vw, 360px)) !important;
+  column-gap: clamp(0.6rem, 1.1vw, 1rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel)) {
+  width: 100% !important;
+  max-width: min(100%, 900px) !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid > *,
+.nn-flashcard-study-premium .nn-flashcard-hero-surface,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel,
+.nn-flashcard-study-premium .nn-flashcard-session-main-footer,
+.nn-flashcard-study-premium .nn-flashcard-coach-panel,
+.nn-flashcard-study-premium .nn-flashcard-rating-dock {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+  width: 100% !important;
+  min-width: 0 !important;
+  justify-self: stretch !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__header,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__body {
+  padding-inline: clamp(0.7rem, 1.15vw, 1.05rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__body {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  padding-inline: clamp(0.75rem, 1.2vw, 1rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar,
+.nn-flashcard-study-premium .nn-flashcard-session-main-footer {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+@media (min-width: 1101px) and (max-width: 1340px) {
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta {
+    gap: 0.32rem !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div {
+    min-width: 3.15rem !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div:nth-child(2),
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div:nth-child(4) {
+    display: none !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid,
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px) !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid,
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel)),
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+    max-height: min(32dvh, 16rem) !important;
+  }
+}
+
+/* Final focused-study readability pass: keep entry-level review calm while giving rationale enough room. */
+.nn-flashcard-study-premium .nn-flashcard-learning-grid,
+.nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+  grid-template-columns: minmax(0, 1.55fr) minmax(360px, min(34vw, 460px)) !important;
+  column-gap: clamp(0.85rem, 1.4vw, 1.35rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 88%, transparent) !important;
+  background: color-mix(in srgb, var(--semantic-surface) 98%, white 2%) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__header {
+  min-height: 2.75rem !important;
+  padding: 0.72rem 1rem !important;
+  font-size: 0.95rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__body {
+  padding: 0.95rem 1.05rem 1.1rem !important;
+  font-size: clamp(0.84rem, 0.78vw, 0.94rem) !important;
+  line-height: 1.58 !important;
+  color: var(--semantic-text-secondary) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  display: grid !important;
+  gap: 0.28rem !important;
+  border-radius: 0.9rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 6%, var(--semantic-surface)) !important;
+  padding: 0.72rem 0.82rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span,
+.nn-flashcard-study-premium .nn-flashcard-rationale-section h3,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect h3 {
+  margin: 0 !important;
+  font-size: 0.68rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: var(--semantic-text-muted) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept p {
+  margin: 0 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.45 !important;
+  font-weight: 650 !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-section {
+  display: grid !important;
+  gap: 0.42rem !important;
+  margin-top: 0.82rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-inline-rationale__answer {
+  display: inline-flex !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  border-radius: 999px !important;
+  padding: 0.34rem 0.68rem !important;
+  font-size: 0.78rem !important;
+  line-height: 1.25 !important;
+  font-weight: 750 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-inline-rationale__body {
+  margin-top: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect {
+  margin-top: 0.95rem !important;
+  padding-top: 0.82rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect > div {
+  display: grid !important;
+  gap: 0.42rem !important;
+  margin-top: 0.48rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect details {
+  border-radius: 0.78rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, transparent) !important;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 42%, var(--semantic-surface)) !important;
+  padding: 0.5rem 0.58rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect summary {
+  display: flex !important;
+  cursor: pointer !important;
+  list-style: none !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  color: var(--semantic-text-secondary) !important;
+  font-size: 0.78rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect summary > span {
+  display: inline-flex !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-border-soft)) !important;
+  color: var(--semantic-text-primary) !important;
+  font-size: 0.64rem !important;
+  font-weight: 800 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect details .nn-flashcard-rich,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect details .nn-question-stem {
+  margin-top: 0.48rem !important;
+  padding-left: 1.7rem !important;
+  font-size: 0.8rem !important;
+  line-height: 1.45 !important;
+  color: var(--semantic-text-secondary) !important;
+}
+
+@media (max-width: 1180px) {
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid,
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:not(:has(.nn-flashcard-rationale-panel)),
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid:has(.nn-flashcard-rationale-panel) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+    max-height: min(38dvh, 22rem) !important;
+  }
+}

@@ -254,7 +254,7 @@ export async function loadExamQuestionRowsForFlashcardPool(
         q.topic,
         q.body_system AS "bodySystem"
       FROM exam_questions q
-      WHERE ${whereSql}${topicScope}
+      WHERE ${whereSql}${topicScope}${FLASHCARD_USABILITY_SQL}
       ORDER BY q.id
       LIMIT ${cap}
     `;
