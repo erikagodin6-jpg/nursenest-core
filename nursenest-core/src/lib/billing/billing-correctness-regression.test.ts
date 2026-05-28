@@ -382,6 +382,25 @@ describe("billing correctness — row-level premium eligibility (reconciliation 
 });
 
 describe("billing correctness — static contracts (webhook dedup & trust boundaries)", () => {
+  it("checkout creates subscriptions with a 3-day trial and no same-day paid invoice", () => {
+    const checkout = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "subscriptions", "checkout", "route.ts"),
+      "utf8",
+    );
+    assert.match(checkout, /const trialDays = STRIPE_TRIAL_DAYS/);
+    assert.match(checkout, /trial_period_days: trialDays/);
+    assert.match(checkout, /payment_method_collection: "always"/);
+  });
+
+  it("app cancellation schedules end-of-period cancellation instead of revoking trial or paid-through access", () => {
+    const cancel = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "billing", "cancel-subscription", "route.ts"),
+      "utf8",
+    );
+    assert.match(cancel, /cancel_at_period_end: true/);
+    assert.doesNotMatch(cancel, /subscriptions\.cancel/);
+  });
+
   it("webhook idempotency: claim uses primary key insert (duplicate → P2002 / duplicate path)", () => {
     const idem = readFileSync(
       join(nursenestCoreRoot, "src", "lib", "stripe", "stripe-webhook-idempotency.ts"),

@@ -213,6 +213,10 @@ export function LearnerBillingPageContent({
     accessOk &&
     entitlement.reason === "past_due_grace" &&
     subscription?.status === SubscriptionStatus.PAST_DUE;
+  const stripeTrialEnd =
+    stripeRenewal?.trialEnd && stripeRenewal.trialEnd.getTime() > Date.now()
+      ? stripeRenewal.trialEnd
+      : null;
 
   return (
     <div
@@ -348,6 +352,19 @@ export function LearnerBillingPageContent({
             ) : null}
             {!stripeRenewal?.currentPeriodEnd ? (
               <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.renewalHint")}</p>
+            ) : null}
+            {stripeTrialEnd ? (
+              <p className="mt-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_82%,var(--semantic-surface))] px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+                Free trial ends{" "}
+                <span className="font-semibold text-foreground">
+                  {stripeTrialEnd.toLocaleDateString(localeTag, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                . Billing begins after the trial unless you cancel first. If you cancel now, access remains available until the trial ends.
+              </p>
             ) : null}
           </div>
           {subscription ? (

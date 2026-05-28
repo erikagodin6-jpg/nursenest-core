@@ -34,7 +34,7 @@ async function stripeEmailHasSubscriptionHistory(email: string): Promise<boolean
 }
 
 /**
- * Starts a one-time 24h trial: full subscriber-equivalent entitlement for the user’s profile tier + country.
+ * Starts a one-time 3-day trial: full subscriber-equivalent entitlement for the user’s profile tier + country.
  */
 export async function attemptStartTrial(args: {
   userId: string;

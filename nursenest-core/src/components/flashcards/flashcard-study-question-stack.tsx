@@ -62,7 +62,8 @@ function correctAnswerSummary(exam: ExamMicroQuestionPayload): string {
 
 function rationaleKeyConcept(text: string | null | undefined): string {
   const line = firstTeachingLine(text);
-  return line || "Focus on the clinical cue that changes patient safety or priority.";
+  if (!line) return "Focus on the clinical cue that changes patient safety or priority.";
+  return line.length > 120 ? `${line.slice(0, 117).trim()}...` : "Use the highest-risk cue to choose the safest priority action.";
 }
 
 type StackLabels = {
@@ -92,7 +93,9 @@ export function FlashcardStudyQuestionStack({
   mainFooter,
   revealLinksSection,
   onAnswerSubmitted,
+  onBeforeAnswerReveal,
   onSataReveal,
+  onBeforeSataReveal,
   onRationaleOpened,
   questionLabel,
   marked = false,
@@ -118,8 +121,12 @@ export function FlashcardStudyQuestionStack({
   revealLinksSection?: ReactNode;
   /** Fired when the learner commits an MCQ answer (before reveal). */
   onAnswerSubmitted?: (selectedLetter: string, isCorrect: boolean) => void;
+  /** Optional async gate for bank-backed grading. Return false to keep the item unrevealed. */
+  onBeforeAnswerReveal?: (selectedLetter: string) => boolean | Promise<boolean>;
   /** Fired when the learner commits a SATA answer by pressing Reveal. */
   onSataReveal?: (selectedLetters: string[], correctLetters: string[]) => void;
+  /** Optional async gate for bank-backed SATA grading. Return false to keep the item unrevealed. */
+  onBeforeSataReveal?: (selectedLetters: string[]) => boolean | Promise<boolean>;
   /** Fired once when the rationale panel first mounts for this card. */
   onRationaleOpened?: () => void;
   questionLabel?: string;
@@ -135,6 +142,7 @@ export function FlashcardStudyQuestionStack({
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
   const [rationaleOpen, setRationaleOpen] = useState(true);
   const [submittedLetter, setSubmittedLetter] = useState<string | null>(null);
+  const [submittingAnswer, setSubmittingAnswer] = useState(false);
   // Study Pulse rail: hidden by default at tablet (< lg) so it doesn't crowd the card
   const [tabletRailOpen, setTabletRailOpen] = useState(false);
   // Tracks current SATA selections so the reveal button can report them before reveal fires.
@@ -144,6 +152,7 @@ export function FlashcardStudyQuestionStack({
   useEffect(() => {
     setPickedLetter(null);
     setSubmittedLetter(null);
+    setSubmittingAnswer(false);
     setRationaleOpen(true);
     sataSelectionsRef.current = [];
     openedRationaleKeyRef.current = null;
@@ -166,11 +175,18 @@ export function FlashcardStudyQuestionStack({
     setPickedLetter(letter);
   }
 
-  function submitMcqAnswer() {
-    if (!pickedLetter || revealed || !exam || !tutorMcq) return;
-    setSubmittedLetter(pickedLetter);
-    onAnswerSubmitted?.(pickedLetter, pickedLetter === exam.correctLetter);
-    onReveal?.();
+  async function submitMcqAnswer() {
+    if (!pickedLetter || revealed || !exam || !tutorMcq || submittingAnswer) return;
+    setSubmittingAnswer(true);
+    try {
+      const canReveal = await onBeforeAnswerReveal?.(pickedLetter);
+      if (canReveal === false) return;
+      setSubmittedLetter(pickedLetter);
+      onAnswerSubmitted?.(pickedLetter, pickedLetter === exam.correctLetter);
+      onReveal?.();
+    } finally {
+      setSubmittingAnswer(false);
+    }
   }
 
   const promptSplit = splitPromptLeadingImage(prompt);
@@ -238,7 +254,8 @@ export function FlashcardStudyQuestionStack({
                     answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
                     revealHint={null}
                     onPickLetter={commitPick}
-                    onSubmitAnswer={submitMcqAnswer}
+                    onSubmitAnswer={() => void submitMcqAnswer()}
+                    submitting={submittingAnswer}
                   />
                 </div>
               ) : null}
@@ -258,14 +275,24 @@ export function FlashcardStudyQuestionStack({
                     <div className="mt-4 flex justify-center">
                       <button
                         type="button"
-                        onClick={() => {
-                          onSataReveal?.(sataSelectionsRef.current, sata.correctLetters);
-                          onReveal();
+                        onClick={async () => {
+                          if (submittingAnswer) return;
+                          setSubmittingAnswer(true);
+                          try {
+                            const selectedLetters = sataSelectionsRef.current;
+                            const canReveal = await onBeforeSataReveal?.(selectedLetters);
+                            if (canReveal === false) return;
+                            onSataReveal?.(selectedLetters, sata.correctLetters);
+                            onReveal();
+                          } finally {
+                            setSubmittingAnswer(false);
+                          }
                         }}
+                        disabled={submittingAnswer}
                         data-testid="sata-reveal-btn"
                         className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
                       >
-                        Submit Answer
+                        {submittingAnswer ? "Checking..." : "Submit Answer"}
                       </button>
                     </div>
                   ) : null}

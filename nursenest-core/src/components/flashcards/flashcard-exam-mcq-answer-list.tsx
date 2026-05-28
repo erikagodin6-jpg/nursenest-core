@@ -25,6 +25,7 @@ export type FlashcardExamMcqAnswerListProps = {
   tutorMcq: boolean;
   answerChoicesHeading: string;
   revealHint?: string | null;
+  submitting?: boolean;
   onPickLetter?: (letter: string) => void;
   onSubmitAnswer?: () => void;
 };
@@ -36,6 +37,7 @@ export function FlashcardExamMcqAnswerList({
   tutorMcq,
   answerChoicesHeading,
   revealHint,
+  submitting = false,
   onPickLetter,
   onSubmitAnswer,
 }: FlashcardExamMcqAnswerListProps) {
@@ -155,9 +157,9 @@ export function FlashcardExamMcqAnswerList({
           type="button"
           className="nn-flashcard-submit-answer"
           onClick={onSubmitAnswer}
-          disabled={!pickedLetter}
+          disabled={!pickedLetter || submitting}
         >
-          Submit Answer
+          {submitting ? "Checking..." : "Submit Answer"}
         </button>
       ) : null}
 

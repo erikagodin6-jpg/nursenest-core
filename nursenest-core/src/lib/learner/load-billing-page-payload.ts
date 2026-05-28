@@ -39,6 +39,7 @@ export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 export type StripeRenewalSnapshot = {
   billingInterval: "day" | "week" | "month" | "year" | null;
   currentPeriodEnd: Date | null;
+  trialEnd: Date | null;
   cancelAtPeriodEnd: boolean;
 };
 
@@ -101,9 +102,12 @@ function stripeRenewalSnapshotFromSubscription(sub: Stripe.Subscription): Stripe
       : null;
   const endSec = item?.current_period_end;
   const currentPeriodEnd = typeof endSec === "number" && endSec > 0 ? new Date(endSec * 1000) : null;
+  const trialEndSec = sub.trial_end;
+  const trialEnd = typeof trialEndSec === "number" && trialEndSec > 0 ? new Date(trialEndSec * 1000) : null;
   return {
     billingInterval,
     currentPeriodEnd,
+    trialEnd,
     cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
   };
 }
@@ -298,10 +302,11 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
   let stripeRenewal: StripeRenewalSnapshot | null = reconcileLiveSub
     ? stripeRenewalSnapshotFromSubscription(reconcileLiveSub)
     : await loadStripeRenewalSnapshot(subscription?.stripeSubscriptionId);
-  if (!stripeRenewal && subscriptionRow?.currentPeriodEnd) {
+  if (!stripeRenewal && (subscriptionRow?.currentPeriodEnd || subscriptionRow?.trialEnd)) {
     stripeRenewal = {
       billingInterval: null,
       currentPeriodEnd: subscriptionRow.currentPeriodEnd,
+      trialEnd: subscriptionRow.trialEnd,
       cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
     };
   }

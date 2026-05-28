@@ -8,10 +8,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const clientPath = join(__dirname, "practice-question-session-client.tsx");
 
 describe("PracticeQuestionSessionClient rationale timing", () => {
-  it("reveals rationale only in tutor / weak_area modes after grading (not raw stem phase)", () => {
+  it("routes practice questions through the shared flashcard learner surface", () => {
     const src = readFileSync(clientPath, "utf8");
-    assert.ok(src.includes('showRationaleNow = Boolean(g && (mode === "tutor" || mode === "weak_area"))'));
-    assert.ok(src.includes('itemStep === "answering"'));
-    assert.ok(src.includes('showRationaleNow && rationaleText'));
+    assert.ok(src.includes("QuestionRenderer"));
+    assert.ok(src.includes('data-nn-exam-workspace-mode="practice"'));
+    assert.ok(src.includes("onBeforeAnswerReveal={submitPracticeMcqAnswer}"));
+    assert.ok(src.includes("onBeforeSataReveal={submitPracticeSataAnswer}"));
+    assert.equal(src.includes("ExamSessionShell"), false);
+    assert.equal(src.includes("nn-question-session--split"), false);
   });
 });

@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { FlashcardItemKind } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
+import { QuestionRenderer } from "@/components/questions/question-renderer";
+import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
-import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
-import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
-import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
 import {
   questionIdsWithIncorrectAttempts,
@@ -62,33 +62,6 @@ type QuestionListResponse = {
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
   return [];
-}
-
-function gradedAnswerSurfaceClass(
-  graded: boolean,
-  grade: { correct: boolean; correctKeys?: string[] } | undefined,
-  canonical: string,
-  picked: boolean,
-): string {
-  const base = "nn-qopt-surface";
-  if (!graded || !grade) return base;
-  const keys = grade.correctKeys;
-  if (keys && keys.length > 0) {
-    const ck = new Set(keys);
-    if (ck.has(canonical)) return `${base} nn-qopt-surface--correct`;
-    if (picked) return `${base} nn-qopt-surface--incorrect`;
-    return `${base} nn-qopt-surface--dim`;
-  }
-  if (picked) {
-    return grade.correct ? `${base} nn-qopt-surface--correct` : `${base} nn-qopt-surface--incorrect`;
-  }
-  return `${base} nn-qopt-surface--dim`;
-}
-
-function activeAnswerSurfaceClass(picked: boolean): string {
-  return ["nn-qopt-surface", "nn-qopt-surface--interactive", picked ? "nn-qopt-surface--selected" : ""]
-    .filter(Boolean)
-    .join(" ");
 }
 
 export function PracticeQuestionSessionClient({
@@ -255,9 +228,10 @@ export function PracticeQuestionSessionClient({
     return null;
   }, [isWeakAreaSession, weakAreaNote]);
 
-  async function submitAnswer() {
-    if (!current) return;
-    if (answer === null || (Array.isArray(answer) && answer.length === 0)) return;
+  async function submitAnswerWith(nextAnswer: unknown): Promise<boolean> {
+    if (!current) return false;
+    if (nextAnswer === null || (Array.isArray(nextAnswer) && nextAnswer.length === 0)) return false;
+    setAnswer(nextAnswer);
     setGrading(true);
     try {
       const res = await fetch("/api/questions/grade", {
@@ -265,7 +239,7 @@ export function PracticeQuestionSessionClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           questionId: current.id,
-          answer,
+          answer: nextAnswer,
           pathwayId: pathwayId ?? undefined,
           attemptMode: mode === "exam" ? "quiz" : mode === "weak_area" ? "remediation" : "practice",
         }),
@@ -281,7 +255,7 @@ export function PracticeQuestionSessionClient({
       };
       if (!res.ok) {
         setError(data.error ?? "Could not grade this item.");
-        return;
+        return false;
       }
       const correct = Boolean(data.correct);
       const correctKeys = Array.isArray(data.correctKeys) ? (data.correctKeys as string[]) : undefined;
@@ -296,6 +270,7 @@ export function PracticeQuestionSessionClient({
       setGraded((prev) => ({ ...prev, [current.id]: row }));
       examRationaleRef.current[current.id] = row;
       setItemStep("feedback");
+      return true;
     } finally {
       setGrading(false);
     }
@@ -466,209 +441,206 @@ export function PracticeQuestionSessionClient({
   const rationaleText = g?.rationale ? resolveMeasurementTokens(g.rationale, measurementSystem, { pathwayId }) : "";
   const pearl = g?.clinicalPearl ? resolveMeasurementTokens(g.clinicalPearl, measurementSystem, { pathwayId }) : "";
   const elapsedLabel = `${String(Math.floor(sessionElapsedSec / 60)).padStart(2, "0")}:${String(sessionElapsedSec % 60).padStart(2, "0")}`;
+  const visibleLetters = optsCanonical.map((_, optionIndex) => String.fromCharCode("A".charCodeAt(0) + optionIndex));
+  const canonicalToLetter = new Map(optsCanonical.map((canonical, optionIndex) => [canonical, visibleLetters[optionIndex] ?? ""]));
+  const letterToCanonical = new Map(optsCanonical.map((canonical, optionIndex) => [visibleLetters[optionIndex] ?? "", canonical]));
+  const answerOptions = optsCanonical.map((canonical, optionIndex) => ({
+    letter: visibleLetters[optionIndex] ?? String.fromCharCode("A".charCodeAt(0) + optionIndex),
+    text: optsClinical[optionIndex] ?? optsDisplay[optionIndex] ?? canonical,
+  }));
+  const correctVisibleLetters = (g?.correctKeys ?? [])
+    .map((key) => canonicalToLetter.get(key))
+    .filter((letter): letter is string => Boolean(letter));
+  const selectedVisibleLetters = Array.isArray(answer)
+    ? answer.map((key) => canonicalToLetter.get(String(key))).filter((letter): letter is string => Boolean(letter))
+    : typeof answer === "string"
+      ? [canonicalToLetter.get(answer)].filter((letter): letter is string => Boolean(letter))
+      : [];
+  const primaryCorrectLetter = correctVisibleLetters[0] ?? selectedVisibleLetters[0] ?? "A";
+  const fullRationale = rationaleText || resolveMeasurementTokens(current.rationale ?? "", measurementSystem, { pathwayId });
+  const practiceExamPayload: ExamMicroQuestionPayload | SataQuestionPayload | null =
+    answerOptions.length >= 2
+      ? isSata
+        ? {
+            itemKind: "SATA",
+            questionStem: stemDisplay,
+            answerOptions,
+            correctLetters: correctVisibleLetters,
+            rationaleCorrect:
+              fullRationale || "Use the cues in the stem to select every option that protects safety and addresses the priority finding.",
+            rationaleByLetter: answerOptions.map((option) => {
+              const isCorrectOption = correctVisibleLetters.includes(option.letter);
+              return {
+                letter: option.letter,
+                correct: isCorrectOption,
+                rationale: isCorrectOption
+                  ? "This selection matches the priority cues in the question."
+                  : "This option may sound reasonable, but it does not match the safest priority for the cues given.",
+              };
+            }),
+          }
+        : {
+            itemKind: FlashcardItemKind.CLINICAL,
+            questionStem: stemDisplay,
+            answerOptions,
+            correctLetter: primaryCorrectLetter,
+            rationaleCorrect:
+              fullRationale || "Choose the option that best addresses safety, priority, and the most urgent patient cue.",
+            rationaleIncorrect: answerOptions
+              .filter((option) => option.letter !== primaryCorrectLetter)
+              .map((option) => ({
+                letter: option.letter,
+                rationale:
+                  "This option is lower priority for the stem cues. Compare it with the correct answer and choose the action that best protects safety first.",
+              })),
+          }
+      : null;
+
+  const submitPracticeMcqAnswer = async (selectedLetter: string): Promise<boolean> => {
+    const canonical = letterToCanonical.get(selectedLetter);
+    if (!canonical) return false;
+    return submitAnswerWith(canonical);
+  };
+
+  const submitPracticeSataAnswer = async (selectedLetters: string[]): Promise<boolean> => {
+    const canonical = selectedLetters.map((letter) => letterToCanonical.get(letter)).filter((item): item is string => Boolean(item));
+    return submitAnswerWith(canonical);
+  };
+
+  const practiceFooter = (
+    <div className="space-y-3">
+      {weakAreaBanner ? (
+        <div className="nn-flashcard-coach-panel">
+          <p className="font-semibold text-[var(--semantic-text-primary)]">Weak Areas</p>
+          <p className="mt-1 text-[var(--semantic-text-secondary)]">{weakAreaBanner}</p>
+        </div>
+      ) : null}
+      {g?.peerStats ? (
+        <QuestionBankPeerPerformancePanel
+          peerStats={g.peerStats}
+          optionCanonicals={optsCanonical}
+          optionDisplays={optsClinical}
+        />
+      ) : null}
+      {g && showRationaleNow && pearl ? (
+        <div className="nn-flashcard-coach-panel">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+            Key nursing takeaway
+          </p>
+          <p className="mt-1 text-[var(--semantic-text-primary)]">{pearl}</p>
+        </div>
+      ) : null}
+      {g && itemStep !== "confidence" ? (
+        <div className="nn-flashcard-rating-dock">
+          <button
+            type="button"
+            className={mode === "exam" ? "nn-btn-secondary rounded-full px-5 py-2 text-sm font-semibold" : "nn-btn-primary rounded-full px-5 py-2 text-sm font-semibold"}
+            onClick={() => setItemStep("confidence")}
+          >
+            {mode === "exam" ? "Continue" : "Rate confidence"}
+          </button>
+        </div>
+      ) : null}
+      {g && itemStep === "confidence" ? (
+        <div className="nn-flashcard-rating-dock" aria-label="Rate confidence">
+          {(
+            [
+              { k: "low" as const, lab: "Low confidence" },
+              { k: "medium" as const, lab: "Medium confidence" },
+              { k: "high" as const, lab: "High confidence" },
+            ] as const
+          ).map((row) => (
+            <button
+              key={row.k}
+              type="button"
+              className="nn-flashcard-shell-action"
+              onClick={() => {
+                recordAttempt(row.k);
+                afterConfidence();
+              }}
+            >
+              {row.lab}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
 
   return (
     <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="practice_question_session">
-      <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
-        <ExamSessionStickyChrome>
-          <ExamSessionTopBar
-            left={
-              <div className="space-y-1">
-                <Link
-                  href={`/app/questions${pathwayId ? `?pathwayId=${encodeURIComponent(pathwayId)}` : ""}`}
-                  className="text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 transition-opacity duration-200 hover:underline"
-                >
-                  Exit session
-                </Link>
-                <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--theme-heading-text)]">
-                  Question {idx + 1} of {total}
-                </p>
-                {current.topic ? <p className="line-clamp-1 text-sm font-medium text-[var(--theme-heading-text)]">{current.topic}</p> : null}
-              </div>
-            }
-            center={
-              <div className="flex flex-col items-center gap-0.5">
-                <span className="nn-marketing-caption font-semibold tabular-nums tracking-wide text-[var(--semantic-text-muted)]">
-                  {elapsedLabel}
-                </span>
-                <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
-                  {sessionAttempted > 0 ? `${sessionCorrect}/${sessionAttempted} correct` : "Practice"}
-                </span>
-              </div>
-            }
-            right={
-              <div className="flex justify-end gap-2">
-                <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} />
-                <ExamSessionThemeTrigger />
-              </div>
-            }
-          />
-          <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionAttempted} />
-        </ExamSessionStickyChrome>
+      <div
+        className="nn-active-flashcard-session nn-unified-exam-workspace"
+        data-nn-premium-flashcard-active-session
+        data-nn-unified-exam-workspace=""
+        data-nn-exam-workspace-mode="practice"
+      >
+        <div className="nn-flashcard-learning-topbar" aria-label="Practice question session">
+          <div className="min-w-0">
+            <p className="nn-flashcard-learning-topbar__mode">Practice</p>
+            <h1>Practice Questions</h1>
+          </div>
 
-        <div className="nn-question-session nn-question-session--split">
-          <div className="nn-question-session-primary min-h-0 space-y-5 overflow-y-auto p-4 sm:p-6">
-            {weakAreaBanner ? (
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-                <p className="font-semibold text-[var(--semantic-text-primary)]">Weak Areas</p>
-                <p className="mt-1">{weakAreaBanner}</p>
-              </div>
-            ) : null}
-            <div className="nn-question-stem-card">
-              {current.questionType ? <span className="nn-question-type-chip">{current.questionType}</span> : null}
-              {current.subtopic ? <p className="mb-2 text-xs font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p> : null}
-              <p className="nn-question-stem mt-2">{stemDisplay}</p>
+          <div className="nn-flashcard-learning-topbar__meta">
+            <div>
+              <span>Progress</span>
+              <strong>{idx + 1} of {total}</strong>
+              <i aria-hidden>
+                <b style={{ width: `${((idx + 1) / Math.max(1, total)) * 100}%` }} />
+              </i>
             </div>
-
-            {itemStep === "answering" ? (
-              isSata ? (
-                <ul className="nn-qopt-list" role="group" aria-label="Answer choices">
-                  {optsCanonical.map((canonical, i) => {
-                    const label = optsClinical[i] ?? optsDisplay[i] ?? canonical;
-                    const selected = Array.isArray(answer) ? answer.includes(canonical) : false;
-                    return (
-                      <li key={canonical}>
-                        <label className={`flex min-h-[3.25rem] cursor-pointer items-start gap-3 rounded-[inherit] px-3 py-2.5 ${activeAnswerSurfaceClass(selected)}`}>
-                          <input
-                            type="checkbox"
-                            checked={selected}
-                            onChange={(e) => {
-                              const prev = Array.isArray(answer) ? [...answer] : [];
-                              const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
-                              setAnswer(next);
-                            }}
-                            className="mt-1 size-5"
-                          />
-                          <QuestionChoiceLetter index={i} />
-                          <span className="min-w-0 flex-1 text-base leading-relaxed">{label}</span>
-                        </label>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <ul className="nn-qopt-list" role="radiogroup" aria-label="Answer choices">
-                  {optsCanonical.map((canonical, i) => {
-                    const label = optsClinical[i] ?? optsDisplay[i] ?? canonical;
-                    const picked = answer === canonical;
-                    return (
-                      <li key={canonical}>
-                        <button
-                          type="button"
-                          onClick={() => setAnswer(canonical)}
-                          className={`flex w-full items-start gap-3 px-4 py-4 text-left text-base ${activeAnswerSurfaceClass(picked)}`}
-                        >
-                          <QuestionChoiceLetter index={i} />
-                          <span className="min-w-0 flex-1">{label}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )
-            ) : (
-              <div className="space-y-3">
-                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{g?.correct ? "Correct" : "Incorrect"}</p>
-                {g && current ? (
-                  <ul className="nn-qopt-list nn-qopt-feedback-phase" aria-label="Answer review">
-                    {optsCanonical.map((canonical, i) => {
-                      const label = optsClinical[i] ?? optsDisplay[i] ?? canonical;
-                      const raw = answer;
-                      const picked = Array.isArray(raw) ? raw.includes(canonical) : raw === canonical;
-                      const surface = gradedAnswerSurfaceClass(true, g, canonical, picked);
-                      return (
-                        <li key={canonical}>
-                          <div className={`flex items-start gap-3 px-3 py-2.5 text-sm ${surface}`}>
-                            <QuestionChoiceLetter index={i} />
-                            <span className="min-w-0 flex-1 leading-relaxed">{label}</span>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : null}
-                {g?.peerStats ? (
-                  <QuestionBankPeerPerformancePanel
-                    peerStats={g.peerStats}
-                    optionCanonicals={optsCanonical}
-                    optionDisplays={optsClinical}
-                  />
-                ) : null}
-                {g && showRationaleNow && rationaleText ? (
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-surface))] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-                    <p className="text-xs font-semibold uppercase text-[var(--semantic-text-muted)]">Rationale</p>
-                    <p className="mt-2">{rationaleText}</p>
-                  </div>
-                ) : null}
-                {g && showRationaleNow && pearl ? (
-                  <div className="nn-rationale-clinical-takeaway rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_55%,var(--semantic-surface))] p-4 text-sm shadow-sm">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Key nursing takeaway</p>
-                    <p className="mt-2 text-[var(--semantic-text-primary)]">{pearl}</p>
-                  </div>
-                ) : null}
-                {g && showRationaleNow && g.rationaleSections?.length
-                  ? g.rationaleSections.map((s) => (
-                      <div key={s.heading} className="rounded-xl border border-[var(--semantic-border-soft)] p-4 text-sm">
-                        <p className="text-xs font-semibold uppercase text-[var(--semantic-text-muted)]">{s.heading}</p>
-                        <p className="mt-2 text-[var(--semantic-text-secondary)]">{resolveMeasurementTokens(s.body, measurementSystem, { pathwayId })}</p>
-                      </div>
-                    ))
-                  : null}
-              </div>
-            )}
-
-            {itemStep === "answering" ? (
-              <div className="flex flex-wrap gap-3 pt-2">
-                <button
-                  type="button"
-                  disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
-                  onClick={() => void submitAnswer()}
-                  className="nn-btn-primary inline-flex min-h-12 flex-1 items-center justify-center rounded-full px-8 text-sm font-semibold disabled:opacity-50 sm:flex-none"
-                >
-                  {grading ? "Checking…" : "Submit answer"}
-                </button>
-              </div>
-            ) : itemStep === "feedback" ? (
-              <div className="pt-2">
-                <button
-                  type="button"
-                  className={`rounded-full px-6 py-2 text-sm font-semibold ${
-                    mode === "exam" ? "nn-btn-secondary" : "nn-btn-primary"
-                  }`}
-                  onClick={() => setItemStep("confidence")}
-                >
-                  {mode === "exam" ? "Continue" : "Rate confidence"}
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-3 border-t border-[var(--semantic-border-soft)] pt-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">How confident were you?</p>
-                <div className="flex flex-wrap gap-2">
-                  {(
-                    [
-                      { k: "low" as const, lab: "Low confidence" },
-                      { k: "medium" as const, lab: "Medium confidence" },
-                      { k: "high" as const, lab: "High confidence" },
-                    ] as const
-                  ).map((row) => (
-                    <button
-                      key={row.k}
-                      type="button"
-                      className="min-h-11 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
-                      onClick={() => {
-                        recordAttempt(row.k);
-                        afterConfidence();
-                      }}
-                    >
-                      {row.lab}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <div className="max-sm:hidden">
+              <span>Focus</span>
+              <strong>{current.topic ?? "Mixed"}</strong>
+            </div>
+            <div>
+              <span>Time elapsed</span>
+              <strong className="font-mono">{elapsedLabel}</strong>
+            </div>
+            <div>
+              <span>Questions</span>
+              <strong>{sessionAttempted > 0 ? `${sessionCorrect}/${sessionAttempted}` : `${idx + 1} of ${total}`}</strong>
+            </div>
+            <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} locked />
+            <Link
+              href={`/app/questions${pathwayId ? `?pathwayId=${encodeURIComponent(pathwayId)}` : ""}`}
+              className="nn-flashcard-shell-action"
+            >
+              Exit
+            </Link>
           </div>
         </div>
-      </ExamSessionShell>
+
+        <QuestionRenderer
+          mode="practice"
+          type={current.questionType}
+          layout="standard"
+          sessionModeLabel={current.questionType ? current.questionType.replace(/_/g, " ") : "Practice"}
+          topicLine={[current.topic, current.subtopic].filter(Boolean).join(" • ") || null}
+          itemKindCaption={mode === "weak_area" ? "Remediation" : mode === "exam" ? "Exam practice" : "Question bank"}
+          examMicroQuestion={practiceExamPayload}
+          prompt={stemDisplay}
+          answer={fullRationale || "Review the explanation after submitting your answer."}
+          explanation={fullRationale}
+          pearl={pearl}
+          revealed={Boolean(g)}
+          onReveal={() => undefined}
+          onBeforeAnswerReveal={submitPracticeMcqAnswer}
+          onBeforeSataReveal={submitPracticeSataAnswer}
+          onSataReveal={() => undefined}
+          mcqInteractionMode="tutor_select"
+          labels={{
+            answerHeading: "Answer and rationale",
+            whyCorrectHeading: "Why this is correct",
+            whyIncorrectHeading: "Why the other options are not priority",
+            takeawayHeading: "Key nursing takeaway",
+            answerChoicesHeading: isSata ? "Select all that apply" : "Answer choices",
+          }}
+          questionLabel={`Question ${idx + 1} of ${total}`}
+          onAdvance={g ? () => setItemStep("confidence") : undefined}
+          mainFooter={practiceFooter}
+        />
+      </div>
     </ProtectedPremiumContent>
   );
 }
