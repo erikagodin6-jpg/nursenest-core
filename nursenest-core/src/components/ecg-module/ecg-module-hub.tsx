@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Activity, ChevronRight, Gauge, Zap, BookOpen, ShieldCheck, Baby } from "lucide-react";
+import { EcgTelemetryReadinessBand } from "@/components/ecg-module/ecg-telemetry-readiness-band";
+import { EcgTierScopesPanel } from "@/components/ecg-module/ecg-tier-scopes-panel";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { ECG_CURRICULUM } from "@/lib/ecg-module/ecg-curriculum-content";
 
@@ -86,8 +88,11 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
               {t("learner.studyHome.quickLaunch.ecgTitle")}
             </h1>
             <p className="max-w-prose text-base leading-relaxed text-[var(--semantic-text-secondary)]">
-              A true progressive ECG curriculum — not a quiz bank. Learn the mechanism behind every rhythm, work through systematic interpretation before seeing answers, and build NCLEX-ready clinical reasoning.
+              Master telemetry through interactive ECG simulation — animated rhythm strips, pause-and-measure tools, adaptive interpretation, and bedside clinical reasoning built for real-world cardiac care.
             </p>
+            <div className="max-w-md">
+              <EcgTelemetryReadinessBand />
+            </div>
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/modules/ecg/basic/lessons"
@@ -105,11 +110,11 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
             {/* Feature chips */}
             <ul className="flex flex-wrap gap-2 pt-3" aria-label="Module features">
               {[
-                "Answers hidden until submission",
-                "7-step guided analysis",
-                "Mechanism-based lessons",
-                "NCLEX traps explained",
-                "Nursing priorities per rhythm",
+                "Animated telemetry strips",
+                "Pause-and-measure intervals",
+                "Guided + independent modes",
+                "Learn · retrieve · discriminate · transfer",
+                "Tier-scoped clinical pathways",
               ].map((f) => (
                 <li
                   key={f}
@@ -131,6 +136,18 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
             </p>
           </div>
         </div>
+      </section>
+
+      <section aria-labelledby="ecg-tier-pathways-heading" className="space-y-4">
+        <div>
+          <h2 id="ecg-tier-pathways-heading" className="text-xl font-semibold text-[var(--semantic-text-primary)]">
+            Tier-scoped telemetry pathways
+          </h2>
+          <p className="mt-1 max-w-prose text-sm text-[var(--semantic-text-secondary)]">
+            RN acute telemetry, RPN rhythm safety, and NP advanced cardiac reasoning — each with distinct report-card signals and remediation focus.
+          </p>
+        </div>
+        <EcgTierScopesPanel />
       </section>
 
       {/* ── Curriculum Roadmap ────────────────────────────────────────────── */}

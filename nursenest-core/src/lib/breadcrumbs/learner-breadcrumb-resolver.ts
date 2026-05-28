@@ -62,8 +62,8 @@ export type LearnerBreadcrumbKind =
 export type LearnerBreadcrumbInput =
   | { kind: "dashboard" }
   | { kind: "labs-hub" }
-  | { kind: "labs-category"; categoryLabel: string }
-  | { kind: "labs-lesson"; categoryLabel: string; lessonTitle: string }
+  | { kind: "labs-category"; categoryLabel: string; categorySlug?: string }
+  | { kind: "labs-lesson"; categoryLabel: string; lessonTitle: string; categorySlug?: string }
   | { kind: "practice-tests" }
   | { kind: "practice-test-leaf"; leafLabel: string }
   | { kind: "coach" }
@@ -144,9 +144,12 @@ export function resolveLearnerBreadcrumbResolution(input: LearnerBreadcrumbInput
     case "labs-hub":
       return learnerResolution(learnerLabsHubCrumbs(), input.kind);
     case "labs-category":
-      return learnerResolution(learnerLabsCategoryCrumbs(input.categoryLabel), input.kind);
+      return learnerResolution(learnerLabsCategoryCrumbs(input.categoryLabel, input.categorySlug), input.kind);
     case "labs-lesson":
-      return learnerResolution(learnerLabsLessonCrumbs(input.categoryLabel, input.lessonTitle), input.kind);
+      return learnerResolution(
+        learnerLabsLessonCrumbs(input.categoryLabel, input.lessonTitle, input.categorySlug),
+        input.kind,
+      );
     case "practice-tests":
       return learnerResolution(learnerPracticeTestsCrumbs(), input.kind);
     case "practice-test-leaf":

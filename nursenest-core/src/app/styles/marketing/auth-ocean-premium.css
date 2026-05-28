@@ -1,0 +1,137 @@
+/* ==========================================================================
+   auth-ocean-premium.css — Premium auth on Ocean (navy · teal · aqua · slate)
+
+   Scope: html[data-theme="ocean"] .nn-premium-auth-system only.
+   ========================================================================== */
+
+html[data-theme="ocean"] .nn-premium-auth-system {
+  --nn-auth-accent-primary: var(--semantic-chart-2);
+  --nn-auth-accent-secondary: var(--semantic-chart-5);
+  --nn-auth-accent-warm: var(--semantic-chart-3);
+  --nn-auth-accent-success: var(--semantic-success);
+  --auth-bg: color-mix(in srgb, var(--semantic-panel-aqua) 28%, var(--semantic-bg-base));
+  --auth-surface: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool));
+  --auth-surface-elevated: color-mix(in srgb, var(--semantic-surface) 98%, var(--semantic-panel-muted));
+  --auth-primary: var(--semantic-chart-2);
+  --auth-input-bg: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-aqua));
+  --nn-auth-theme-covered: 1;
+}
+
+html[data-theme="ocean"] .nn-premium-auth-system::before {
+  background:
+    radial-gradient(760px 340px at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 22%, transparent), transparent 66%),
+    radial-gradient(720px 320px at 100% 6%, color-mix(in srgb, var(--semantic-chart-5) 18%, transparent), transparent 68%),
+    radial-gradient(640px 260px at 48% 100%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent), transparent 72%);
+  opacity: 0.88;
+}
+
+html[data-theme="ocean"] .nn-premium-auth-story {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 28%, var(--semantic-border-soft));
+  background:
+    radial-gradient(520px 200px at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 20%, transparent), transparent 70%),
+    radial-gradient(480px 180px at 100% 20%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 72%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-aqua) 32%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool)) 52%,
+      color-mix(in srgb, var(--semantic-panel-muted) 24%, var(--semantic-surface)) 100%
+    );
+}
+
+html[data-theme="ocean"] .nn-premium-auth-card {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 22%, var(--semantic-border-soft));
+  background:
+    radial-gradient(480px 200px at 100% 0%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 68%),
+    radial-gradient(420px 160px at 0% 100%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-aqua));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    0 18px 44px -28px color-mix(in srgb, var(--semantic-chart-5) 20%, transparent);
+}
+
+html[data-theme="ocean"] .nn-premium-auth-theme-pill {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 32%, var(--semantic-border-soft));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-panel-aqua) 45%, var(--semantic-surface))
+  );
+}
+
+html[data-theme="ocean"] .nn-premium-auth-eyebrow {
+  color: color-mix(in srgb, var(--semantic-chart-3) 55%, var(--semantic-chart-2));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-trust-chips > span:nth-child(3n + 1) {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-trust-chips > span:nth-child(3n + 2) {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 48%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-trust-chips > span:nth-child(3n) {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-aqua) 50%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-readiness-tile:nth-child(1) {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 52%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-readiness-tile:nth-child(2) {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 45%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-readiness-tile:nth-child(3) {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-lavender) 42%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-readiness-tile:nth-child(4) {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-aqua) 48%, var(--semantic-surface));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-readiness-tile strong {
+  color: color-mix(in srgb, var(--semantic-chart-2) 75%, var(--semantic-brand));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-input {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 20%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-aqua)) !important;
+}
+
+html[data-theme="ocean"] .nn-premium-auth-input:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-chart-2) 28%, transparent);
+}
+
+html[data-theme="ocean"] .nn-premium-auth-primary-button {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-chart-2) 92%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-chart-5) 78%, var(--semantic-chart-2))
+  ) !important;
+  color: var(--auth-primary-foreground, var(--semantic-surface)) !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-5) 28%, transparent);
+  box-shadow:
+    0 16px 34px -22px color-mix(in srgb, var(--semantic-chart-5) 35%, transparent),
+    0 8px 24px -16px color-mix(in srgb, var(--semantic-chart-2) 22%, transparent);
+}
+
+html[data-theme="ocean"] .nn-premium-auth-signup-story {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 26%, var(--semantic-border-soft));
+  background:
+    radial-gradient(520px 200px at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 70%),
+    radial-gradient(480px 180px at 100% 20%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent), transparent 72%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-aqua));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-signup-pathway-card.is-selected {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 42%, var(--semantic-border-soft));
+  box-shadow: 0 8px 22px -14px color-mix(in srgb, var(--semantic-chart-5) 32%, transparent);
+}

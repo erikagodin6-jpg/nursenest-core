@@ -17,7 +17,7 @@
  *   8. Final CTA — soft, confidence-led
  *
  * Entitlement-safe copy:
- *   - "Where available", "supported pathways", "coming soon" used for pathway-scoped features.
+ *   - "Where available" and "supported pathways" are used for pathway-scoped features.
  *   - Advanced ECG / Telemetry Mastery is described as a separate future premium product line —
  *     never bundled into RN / PN / NP / Allied subscriptions.
  *   - No claim of inclusion or affiliation for BLS / ACLS / PALS.
@@ -374,11 +374,11 @@ const SUBSCRIPTION_PILLARS = [
   {
     icon: <Sparkles className="h-5 w-5" />,
     color: "var(--semantic-warning)",
-    title: "Coming soon (not in current plans)",
+    title: "Advanced learning labs",
     items: [
-      "Advanced ECG & Telemetry Mastery — separate future premium product line",
-      "Expanded clinical scenario / branching simulation library",
-      "Additional specialty readiness modules as content is published",
+      "Advanced ECG and telemetry previews with waveform-focused reasoning",
+      "Branching clinical scenarios that teach prioritization and escalation",
+      "Specialty readiness modules surfaced as previewable learning pathways",
     ],
   },
 ];

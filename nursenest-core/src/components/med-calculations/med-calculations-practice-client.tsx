@@ -11,19 +11,30 @@ import {
   mergeMedCalcProgress,
   useMedCalcProgress,
 } from "@/lib/med-calculations/med-calculations-progress";
+import type { MedCalcTrack } from "@/lib/med-calculations/med-calculations-engine";
 
 type Props = {
   userId: string;
   lesson: MedCalcLessonDefinition;
   questions: MedCalcQuestion[];
   hasAccess: boolean;
+  medTrack: MedCalcTrack;
+  onSessionComplete?: () => void;
+  onPracticeEngage?: () => void;
 };
 
 function sessionQuestionSet(questions: MedCalcQuestion[], hasAccess: boolean) {
   return hasAccess ? questions : questions.slice(0, 2);
 }
 
-export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAccess }: Props) {
+export function MedCalculationsPracticeClient({
+  userId,
+  lesson,
+  questions,
+  hasAccess,
+  onSessionComplete,
+  onPracticeEngage,
+}: Props) {
   const pool = useMemo(() => sessionQuestionSet(questions, hasAccess), [questions, hasAccess]);
   const [strictMode, setStrictMode] = useState(hasAccess);
   const [timedMode, setTimedMode] = useState(false);
@@ -121,6 +132,7 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
       updateProgress(true, finalPass);
       if (finalPass) {
         setSessionPassed(true);
+        onSessionComplete?.();
         return;
       }
       setIndex(strictNext.index);
@@ -130,6 +142,7 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
     }
 
     updateProgress(false, false);
+    onPracticeEngage?.();
     if (strictMode) {
       const strictNext = applyStrictModeAttempt(
         { index, streak: currentStreak, resets: sessionResets, passed: false, poolLength: pool.length },
@@ -195,21 +208,21 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[0]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Question</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Question</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">
             {index + 1} / {pool.length}
           </div>
         </div>
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[1]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Current streak</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Current streak</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{currentStreak}</div>
         </div>
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[2]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Best streak</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Best streak</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{Math.max(lessonProgress.bestStreak, currentStreak)}</div>
         </div>
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[3]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Timer</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Timer</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">
             {timedMode ? `${Math.floor(remainingSec / 60)}:${String(remainingSec % 60).padStart(2, "0")}` : "Off"}
           </div>
@@ -323,19 +336,19 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[0]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Strict attempts</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Strict attempts</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{lessonProgress.strictAttempts}</div>
         </div>
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[1]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Strict passes</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Strict passes</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{lessonProgress.strictPasses}</div>
         </div>
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[2]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Session resets</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Session resets</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{sessionResets}</div>
         </div>
         <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[3]}`}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Overall accuracy</div>
+          <div className="text-[0.65rem] font-semibold tracking-wide text-[var(--semantic-text-muted)]">Overall accuracy</div>
           <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">
             {totals.totalAnswered > 0 ? Math.round((totals.correctAnswered / totals.totalAnswered) * 100) : 0}%
           </div>

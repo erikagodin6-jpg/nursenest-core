@@ -1,0 +1,191 @@
+/* Prioritization & delegation learning system
+   --------------------------------------------------------------------------
+   Keeps the Flashcards learner shell intact while adding bedside urgency,
+   assignment, delegation, and escalation visual language. */
+
+.nn-priority-hub {
+  --nn-priority-accent: var(--semantic-danger);
+  --nn-priority-accent-2: var(--semantic-warning);
+  --nn-priority-accent-3: var(--semantic-info);
+}
+
+html[data-theme="mint-blossom"] .nn-priority-hub,
+html[data-theme="blossom"] .nn-priority-hub,
+html[data-theme="garden"] .nn-priority-hub {
+  --nn-priority-accent: color-mix(in srgb, var(--semantic-danger) 72%, var(--semantic-brand));
+  --nn-priority-accent-2: color-mix(in srgb, var(--semantic-warning) 78%, var(--semantic-chart-5));
+  --nn-priority-accent-3: color-mix(in srgb, var(--semantic-info) 72%, var(--semantic-success));
+}
+
+html[data-theme="ocean"] .nn-priority-hub,
+html[data-theme="midnight"] .nn-priority-hub,
+html[data-theme="midnight-indigo"] .nn-priority-hub {
+  --nn-priority-accent: color-mix(in srgb, var(--semantic-danger) 62%, var(--semantic-chart-5));
+  --nn-priority-accent-2: color-mix(in srgb, var(--semantic-warning) 62%, var(--semantic-info));
+  --nn-priority-accent-3: color-mix(in srgb, var(--semantic-info) 82%, var(--semantic-success));
+}
+
+.nn-priority-hero {
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--nn-priority-accent) 14%, transparent), transparent 32%),
+    radial-gradient(circle at 96% 18%, color-mix(in srgb, var(--nn-priority-accent-3) 12%, transparent), transparent 36%),
+    linear-gradient(145deg, color-mix(in srgb, var(--semantic-panel-warm) 18%, var(--semantic-surface)), var(--semantic-surface) 52%, color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--semantic-surface)));
+}
+
+.nn-priority-badge {
+  border: 1px solid color-mix(in srgb, var(--nn-priority-accent) 26%, var(--semantic-border-soft));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nn-priority-accent) 9%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  padding: 0.3rem 0.75rem;
+}
+
+.nn-priority-badge--delegation {
+  border-color: color-mix(in srgb, var(--nn-priority-accent-3) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-priority-accent-3) 9%, var(--semantic-surface));
+}
+
+.nn-priority-badge--escalation {
+  border-color: color-mix(in srgb, var(--nn-priority-accent-2) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-priority-accent-2) 10%, var(--semantic-surface));
+}
+
+.nn-priority-command-card {
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 80%, transparent);
+}
+
+.nn-priority-patient-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 52%, var(--semantic-surface));
+  padding: 0.65rem 0.75rem;
+}
+
+.nn-priority-patient-row span {
+  min-width: 0;
+}
+
+.nn-priority-patient-row strong,
+.nn-priority-patient-row small {
+  display: block;
+}
+
+.nn-priority-patient-row strong {
+  color: var(--semantic-text-primary);
+  font-size: 0.84rem;
+}
+
+.nn-priority-patient-row small {
+  overflow-wrap: break-word;
+  color: var(--semantic-text-secondary);
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.nn-priority-patient-row em {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nn-priority-accent) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--nn-priority-accent) 86%, var(--semantic-text-primary));
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 800;
+  padding: 0.25rem 0.5rem;
+}
+
+.nn-priority-surface {
+  background:
+    radial-gradient(circle at 3% 0%, color-mix(in srgb, var(--nn-priority-accent-2) 10%, transparent), transparent 30%),
+    radial-gradient(circle at 98% 14%, color-mix(in srgb, var(--nn-priority-accent-3) 9%, transparent), transparent 34%),
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--semantic-surface));
+}
+
+.nn-priority-mini-stat {
+  min-width: 0;
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 56%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+  padding: 0.65rem 0.5rem;
+}
+
+.nn-priority-mini-stat strong {
+  display: block;
+  color: var(--semantic-text-primary);
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.nn-priority-activity-card {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 7%, var(--semantic-surface)), var(--semantic-surface) 44%, color-mix(in srgb, var(--semantic-panel-muted) 24%, var(--semantic-surface)));
+  box-shadow: var(--semantic-shadow-soft);
+  padding: 1rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.nn-priority-activity-card:hover,
+.nn-priority-activity-card[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 42%, var(--semantic-border-soft));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    0 14px 34px color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 10%, transparent);
+  transform: translateY(-1px);
+}
+
+.nn-priority-activity-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.nn-priority-activity-card__icon {
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 12%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 86%, var(--semantic-text-primary));
+}
+
+.nn-priority-acuity,
+.nn-priority-chip {
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.nn-priority-acuity {
+  background: color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--priority-accent, var(--nn-priority-accent)) 86%, var(--semantic-text-primary));
+  padding: 0.25rem 0.55rem;
+}
+
+.nn-priority-chip {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent);
+  color: var(--semantic-text-secondary);
+  padding: 0.22rem 0.48rem;
+}
+
+.nn-priority-action-band {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--nn-priority-accent) 8%, var(--semantic-surface)), var(--semantic-surface) 56%, color-mix(in srgb, var(--nn-priority-accent-3) 7%, var(--semantic-surface)));
+}
+
+@media (max-width: 760px) {
+  .nn-priority-patient-row {
+    align-items: flex-start;
+  }
+}

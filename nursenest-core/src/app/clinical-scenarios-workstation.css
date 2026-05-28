@@ -1,0 +1,277 @@
+[data-nn-clinical-scenarios-workstation] {
+  --nn-cs-radius: 1.15rem;
+}
+
+.nn-clinical-scenarios-simulation {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nn-clinical-scenarios-handoff {
+  border-radius: var(--nn-cs-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-chart-1) 6%, var(--semantic-surface))
+  );
+  padding: 1.25rem 1.35rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-clinical-scenarios-handoff__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  padding: 0.25rem 0.65rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-text-primary));
+}
+
+.nn-clinical-scenarios-handoff__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .nn-clinical-scenarios-handoff__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.nn-clinical-scenarios-handoff__card {
+  border-radius: 0.85rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.85rem 1rem;
+}
+
+.nn-clinical-scenarios-handoff__card--accent {
+  border-color: color-mix(in srgb, var(--semantic-brand) 25%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+}
+
+.nn-clinical-scenarios-telemetry {
+  border-radius: var(--nn-cs-radius);
+  border: 1px solid var(--semantic-border-soft);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-clinical-scenarios-telemetry--stable {
+  background: color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+}
+
+.nn-clinical-scenarios-telemetry--watch {
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-warning) 28%, var(--semantic-border-soft));
+}
+
+.nn-clinical-scenarios-telemetry--unstable {
+  background: color-mix(in srgb, var(--semantic-chart-5) 10%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
+}
+
+.nn-clinical-scenarios-telemetry--critical {
+  background: color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft));
+}
+
+.nn-clinical-scenarios-telemetry__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.nn-clinical-scenarios-telemetry__acuity {
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: var(--semantic-surface);
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-clinical-scenarios-telemetry__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .nn-clinical-scenarios-telemetry__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.nn-clinical-scenarios-telemetry__vital dt {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-clinical-scenarios-telemetry__vital dd {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-scenarios-telemetry__vital {
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--semantic-surface));
+  padding: 0.45rem 0.55rem;
+}
+
+.nn-clinical-scenarios-telemetry__note {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-clinical-scenarios-stage {
+  border-radius: var(--nn-cs-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-warm) 10%, var(--semantic-surface));
+  padding: 1rem 1.15rem;
+}
+
+.nn-clinical-scenarios-judgment {
+  border-radius: var(--nn-cs-radius);
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 1rem 1.15rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-clinical-scenarios-judgment__title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--semantic-brand) 85%, var(--semantic-text-secondary));
+}
+
+.nn-clinical-scenarios-judgment__stem {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-scenarios-judgment__focus {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-clinical-scenarios-judgment__options {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nn-clinical-scenarios-judgment__option {
+  border-radius: 0.75rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--semantic-surface));
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-scenarios-judgment__option--active {
+  border-color: color-mix(in srgb, var(--semantic-brand) 45%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+}
+
+.nn-clinical-scenarios-judgment__commit {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--semantic-border-soft);
+}
+
+.nn-clinical-scenarios-judgment__commit-btn {
+  margin-top: 0.75rem;
+  border-radius: 999px;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: var(--role-cta);
+  color: var(--role-cta-foreground);
+}
+
+.nn-clinical-scenarios-sequencing__arrow {
+  border-radius: 0.45rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.2rem;
+}
+
+.nn-clinical-scenarios-report {
+  border-radius: var(--nn-cs-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 10%, var(--semantic-surface));
+  padding: 1.15rem 1.25rem;
+}
+
+.nn-clinical-scenarios-report__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--semantic-success);
+}
+
+.nn-clinical-scenarios-report__grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+  .nn-clinical-scenarios-report__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.nn-clinical-scenarios-report__panel {
+  border-radius: 0.85rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.85rem 1rem;
+}
+
+.nn-clinical-scenarios-report__timeline {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--semantic-border-soft);
+}
+
+.nn-clinical-scenarios-remediation {
+  border-radius: var(--nn-cs-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface));
+  padding: 1.15rem 1.25rem;
+}
+
+.nn-clinical-scenarios-remediation__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--semantic-chart-2) 90%, var(--semantic-text-secondary));
+}

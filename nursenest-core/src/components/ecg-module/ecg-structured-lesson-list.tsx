@@ -1,5 +1,6 @@
 import { RetentionCheckCard } from "@/components/learning-science/retention-check-card";
-import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
+import { EcgFoundationalUnitsPanel } from "@/components/ecg-module/ecg-foundational-units-panel";
+import { EcgTelemetryLessonWorkspace } from "@/components/ecg-module/ecg-telemetry-lesson-workspace";
 import { buildDefaultRetentionChecks } from "@/lib/learning-science/retention-system";
 import { getEcgStructuredLessons, getEcgStructuredLessonStripConfig } from "@/lib/ecg-module/ecg-structured-lessons";
 import type { EcgLevel } from "@/lib/ecg-module/ecg-module-config";
@@ -39,6 +40,8 @@ export function EcgStructuredLessonList({ level }: { level: EcgLevel }) {
         </p>
       </div>
 
+      {level === "basic" ? <EcgFoundationalUnitsPanel /> : null}
+
       {lessons.map((lesson, lessonIndex) => {
         const stripConfig = getEcgStructuredLessonStripConfig(lesson);
         const checks = buildDefaultRetentionChecks({
@@ -76,16 +79,10 @@ export function EcgStructuredLessonList({ level }: { level: EcgLevel }) {
             </header>
 
             {stripConfig ? (
-              <div className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface-alt)_54%,var(--semantic-surface))] p-6 sm:p-8">
-                <EcgLiveStrip
-                  config={stripConfig}
-                  mode="live"
-                  title={`${lesson.title} rhythm strip`}
-                  leadLabel="Lead II"
-                  showMeasurements
-                  showCaliper={lesson.id === "how-to-read-an-ecg-strip"}
-                  zoomable
-                />
+              <div className="border-b border-[var(--semantic-border-soft)] p-6 sm:p-8">
+                <EcgTelemetryLessonWorkspace lessonId={lesson.id} title={lesson.title} stripConfig={stripConfig}>
+                  <span className="sr-only">Lesson content follows strip lab</span>
+                </EcgTelemetryLessonWorkspace>
               </div>
             ) : null}
 

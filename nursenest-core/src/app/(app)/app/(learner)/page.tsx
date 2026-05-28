@@ -28,6 +28,8 @@ import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner
 import { LearnerStudyHome } from "@/components/student/learner-study-home";
 import { inferContinueStudyFromActivity } from "@/lib/learner/infer-continue-study-from-activity";
 import { buildLearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
+import { aggregateLabProgressCounts, loadLabLessonProgressMap } from "@/lib/labs/lab-lesson-progress";
+import { labTrackFromTier, listLabLessonsForTrack } from "@/lib/labs/labs-engine";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -231,6 +233,16 @@ async function LearnerDashboardHeavyContent({
         preferredPathwayId && !skipNonCriticalHome
           ? await inferContinueStudyFromActivity(userId, preferredPathwayId)
           : null;
+      let labsLessonsCompleted: number | undefined;
+      let labsLessonsTotal: number | undefined;
+      if (!skipNonCriticalHome && entitlement.hasAccess) {
+        const labTrack = labTrackFromTier(entitlement.tier);
+        const labLessons = listLabLessonsForTrack(labTrack, entitlement);
+        const labProgressMap = await loadLabLessonProgressMap(userId, labTrack, labLessons, entitlement);
+        const labAgg = aggregateLabProgressCounts(labProgressMap);
+        labsLessonsCompleted = labAgg.completed;
+        labsLessonsTotal = labAgg.total;
+      }
       const reportCard =
         preferredPathwayId && studySnap
           ? buildLearnerReportCardViewModel({
@@ -238,6 +250,8 @@ async function LearnerDashboardHeavyContent({
               snapshot: premiumSnapshot,
               studySnap,
               continueCheckpoint,
+              labsLessonsCompleted,
+              labsLessonsTotal,
             })
           : null;
       const scopedContinueLinks = continueLinks.map((link) => ({

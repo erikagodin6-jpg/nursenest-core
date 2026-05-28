@@ -1,0 +1,463 @@
+/**
+ * Clinical Lab Workstation — persistent sidebar shell, leaf atmosphere, density.
+ * Scoped to [data-nn-labs-workstation]. Presentation only.
+ */
+
+[data-nn-labs-workstation] {
+  --nn-labs-sidebar-width: 17.5rem;
+  --nn-labs-rail-width: 18rem;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+}
+
+[data-nn-labs-workstation]::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  right: -6%;
+  top: 0;
+  width: min(36vw, 380px);
+  aspect-ratio: 50 / 44;
+  opacity: 0.05;
+  background-color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-chart-2));
+  mask-image: url("/brand/leaf-logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/brand/leaf-logo.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  transform: rotate(8deg);
+}
+
+.nn-labs-workstation__frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .nn-labs-workstation__frame {
+    grid-template-columns: var(--nn-labs-sidebar-width) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.nn-labs-workstation__sidebar {
+  display: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .nn-labs-workstation__sidebar {
+    display: block;
+    position: sticky;
+    top: calc(var(--nn-learner-sticky-offset, 4.5rem) + 0.5rem);
+    max-height: calc(100dvh - var(--nn-learner-sticky-offset, 4.5rem) - 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand) 10%);
+    background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool));
+    box-shadow: var(--semantic-shadow-soft);
+  }
+}
+
+.nn-labs-workstation__main {
+  min-width: 0;
+  min-height: 0;
+  padding-bottom: 2rem;
+}
+
+.nn-labs-workstation__mobile-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 1024px) {
+  .nn-labs-workstation__mobile-strip {
+    display: none;
+  }
+}
+
+.nn-labs-workstation__continue {
+  display: block;
+  margin: 0.75rem 0.75rem 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 45%, var(--semantic-surface));
+  text-decoration: none;
+}
+
+.nn-labs-workstation__continue-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-success);
+}
+
+.nn-labs-workstation__continue-title {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-labs-workstation__nav-head {
+  padding: 1rem 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-labs-workstation__nav-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-labs-workstation__nav-home {
+  display: inline-flex;
+  margin-top: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  text-decoration: none;
+}
+
+.nn-labs-workstation__nav-home[data-active="true"] {
+  color: var(--semantic-text-primary);
+}
+
+.nn-labs-workstation__category {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+}
+
+.nn-labs-workstation__category summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-labs-workstation__category summary::-webkit-details-marker {
+  display: none;
+}
+
+.nn-labs-workstation__category[data-active="true"] summary {
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+.nn-labs-workstation__lesson-list {
+  padding: 0 0.5rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.nn-labs-workstation__lesson-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--semantic-text-secondary);
+  text-decoration: none;
+}
+
+.nn-labs-workstation__lesson-link:hover {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-labs-workstation__lesson-link[data-active="true"] {
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+  background: color-mix(in srgb, var(--semantic-chart-2) 12%, var(--semantic-surface));
+  box-shadow: inset 2px 0 0 var(--semantic-brand);
+}
+
+.nn-labs-workstation__lesson-meta {
+  flex-shrink: 0;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+}
+
+.nn-labs-workstation__chip {
+  flex-shrink: 0;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid var(--semantic-border-soft);
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  background: var(--semantic-surface);
+  text-decoration: none;
+}
+
+.nn-labs-workstation__chip[data-active="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-labs-lesson-workspace__grid {
+  display: grid;
+  min-width: 0;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1280px) {
+  .nn-labs-lesson-workspace__grid {
+    grid-template-columns: minmax(0, 1fr) var(--nn-labs-rail-width);
+    align-items: start;
+  }
+}
+
+.nn-labs-lesson-rail {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+@media (min-width: 1280px) {
+  .nn-labs-lesson-rail {
+    position: sticky;
+    top: calc(var(--nn-learner-sticky-offset, 4.5rem) + 0.5rem);
+    max-height: calc(100dvh - var(--nn-learner-sticky-offset, 4.5rem) - 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.nn-labs-lesson-rail__card {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool));
+  padding: 0.85rem 1rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-labs-lesson-rail__card h3 {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-labs-lesson-rail__card ul {
+  margin-top: 0.5rem;
+  list-style: disc;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-labs-hub .nn-labs-hub__hero {
+  margin-top: 0;
+}
+
+.nn-labs-workstation__lesson-link[data-progress="completed"] span:first-child::after {
+  content: " ✓";
+  color: var(--semantic-success);
+  font-weight: 700;
+}
+
+.nn-labs-workstation__lesson-link[data-progress="in_progress"] {
+  border-left: 2px solid color-mix(in srgb, var(--semantic-info) 55%, transparent);
+}
+
+.nn-labs-lesson-hero {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 80%, var(--semantic-brand) 12%);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 42%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-panel-warm) 18%, var(--semantic-surface))
+  );
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-labs-lesson-hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--semantic-brand);
+}
+
+.nn-lab-block {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--nn-lab-block-hue, var(--semantic-border-soft)) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--nn-lab-block-hue, var(--semantic-surface)) 8%, var(--semantic-surface)),
+    var(--semantic-surface)
+  );
+  box-shadow: var(--semantic-shadow-soft);
+  overflow: hidden;
+}
+
+.nn-lab-block__head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--nn-lab-block-hue, var(--semantic-border-soft)) 14%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-lab-block-hue, var(--semantic-surface)) 6%, var(--semantic-surface-muted));
+}
+
+.nn-lab-block__icon {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--nn-lab-block-hue, var(--semantic-border-soft)) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-lab-block-hue, var(--semantic-surface)) 12%, var(--semantic-surface));
+  color: var(--nn-lab-block-hue, var(--semantic-brand));
+}
+
+.nn-lab-block__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-lab-block__title {
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lab-block__body {
+  padding: 1rem 1rem 1.1rem;
+}
+
+.nn-lab-escalation-row,
+.nn-lab-algorithm-step,
+.nn-lab-scenario-card,
+.nn-lab-pattern-card {
+  border-radius: 0.75rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-surface-muted) 65%, var(--semantic-surface));
+  padding: 0.75rem 0.85rem;
+}
+
+.nn-lab-pattern-card__action {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-info);
+}
+
+.nn-lab-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.nn-lab-chip-list li {
+  border-radius: 999px;
+  border: 1px solid var(--semantic-border-soft);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--semantic-text-secondary);
+  background: var(--semantic-surface);
+}
+
+.nn-lab-chip-list--medication li {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-3) 8%, var(--semantic-surface));
+}
+
+.nn-lab-chip-list--escalation li {
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface));
+}
+
+.nn-lab-scenario-reveal summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-brand);
+}
+
+.nn-lab-quiz-module {
+  border-radius: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 18%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+  overflow: hidden;
+}
+
+.nn-lab-quiz-module__head {
+  padding: 1rem 1.1rem 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-success) 16%, var(--semantic-border-soft));
+}
+
+.nn-lab-quiz-module__body {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.nn-lab-study-loop-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  text-decoration: none;
+  background: var(--semantic-surface);
+}
+
+.nn-lab-study-loop-link:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+}
+
+html[data-theme="midnight"] .nn-labs-lesson-hero,
+html[data-theme="midnight-indigo"] .nn-labs-lesson-hero,
+html[data-theme="apex"] .nn-labs-lesson-hero {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool))
+  );
+}

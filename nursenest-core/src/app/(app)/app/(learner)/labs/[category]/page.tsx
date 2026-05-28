@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { LabsCategoryPage } from "@/components/labs/labs-category-page";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import type { LabCategorySlug } from "@/lib/labs/labs-engine";
 import { LABS_CATEGORIES, listLabLessonsForTrack } from "@/lib/labs/labs-engine";
@@ -38,29 +38,20 @@ export default async function LabsCategoryRoute({ params }: Props) {
 
   return (
     <div className="space-y-6">
-      <LearnerBreadcrumbTrail kind="labs-category" categoryLabel={meta.heading} pathname="/app/labs" />
-      <header className="nn-learner-page-hero space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">Labs</p>
-        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{meta.heading}</h1>
-        <p className="max-w-3xl text-sm text-[var(--semantic-text-secondary)]">{meta.description}</p>
-        <Link href="/app/labs" className="inline-block text-sm font-semibold text-primary hover:underline">
-          All lab categories
-        </Link>
-      </header>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {lessons.map((lesson) => (
-          <article key={lesson.slug} className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
-            <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">{lesson.shortTitle}</h2>
-            <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{lesson.description}</p>
-            <Link
-              href={`/app/labs/${lesson.category}/${lesson.slug}`}
-              className="mt-3 inline-flex text-sm font-semibold text-primary hover:underline"
-            >
-              Open lesson
-            </Link>
-          </article>
-        ))}
-      </div>
+      <LearnerBreadcrumbTrail
+        kind="labs-category"
+        categoryLabel={meta.heading}
+        categorySlug={slug}
+        pathname={`/app/labs/${slug}`}
+      />
+      <LabsCategoryPage
+        heading={meta.heading}
+        description={meta.description}
+        categorySlug={slug}
+        lessons={lessons}
+        hasAccess={context.hasAccess}
+        labTrack={context.track}
+      />
     </div>
   );
 }

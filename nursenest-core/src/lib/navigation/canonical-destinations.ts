@@ -181,7 +181,7 @@ export function publicMarketingFooterStudyToolsDestinations(region: MarketingReg
     medicationMathApp: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pathwayId),
     /** Public marketing med math explainer + drills hub (no `/app` gate). */
     medicationMathTool: "/tools/med-math",
-    pharmacology: pathwayHubAppQuestionsHref(pathwayId, "Pharmacology"),
+    pharmacology: `/app/pharmacology?pathwayId=${encodeURIComponent(pathwayId)}`,
   } as const;
 }
 

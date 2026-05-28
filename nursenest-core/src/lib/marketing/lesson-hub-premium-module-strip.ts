@@ -5,7 +5,7 @@ import {
   type PremiumHubModuleKey,
 } from "@/lib/marketing/exam-pathway-hub-premium-modules";
 
-/** Mirrors exam-hub premium “study tools” row: labs → math → clinical skills → pharm → scenarios → ECG → OSCE → NGN (order matches hub intent). */
+/** Mirrors exam-hub premium “study tools” row: labs → math → clinical skills → pharm → scenarios → ECG → OSCE → prioritization (order matches hub intent). */
 const LESSON_HUB_PREMIUM_STRIP_KEYS: readonly PremiumHubModuleKey[] = [
   "labs",
   "med_calc",
@@ -27,7 +27,7 @@ const FALLBACK_TITLE: Partial<Record<PremiumHubModuleKey, string>> = {
   clinical_cases: "Clinical cases",
   ecg: "ECG",
   osce: "OSCE",
-  ngn_tools: "NGN tools",
+  ngn_tools: "Prioritization & delegation",
 };
 
 export type LessonHubPremiumStripLink = { key: string; label: string; href: string };

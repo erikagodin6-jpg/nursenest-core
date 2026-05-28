@@ -24,6 +24,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { withRetry } from "@/lib/resilience/with-retry";
 import {
   ALL_STRATEGY_KEYS,
+  getStrategy,
   isStrategyKey,
   type StrategyKey,
 } from "@/lib/study/strategy-taxonomy";
@@ -76,6 +77,64 @@ function parseCorrectAnswer(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x: unknown) => String(x));
   if (typeof raw === "string") return [raw];
   return [];
+}
+
+function buildStarterStrategyQuestions(strategyKey: string, take = BATCH_SIZE): StrategyQuestion[] {
+  const keys: StrategyKey[] =
+    strategyKey === "mixed"
+      ? [...ALL_STRATEGY_KEYS]
+      : isStrategyKey(strategyKey)
+      ? [strategyKey]
+      : ["prioritization"];
+
+  const starters = keys.flatMap((key) => {
+    const strategy = getStrategy(key);
+    const label = strategy?.label ?? "Clinical judgment";
+    const framework = strategy?.decisionRule ?? "Use the nursing process, safety, and patient stability to decide what happens first.";
+    const principle = strategy?.nursingPrinciple ?? "Choose the action that protects the patient from the most immediate harm.";
+    const trap = strategy?.typicalTrap ?? "A lower-priority option may sound helpful but delays the action that addresses the immediate risk.";
+
+    return [
+      {
+        id: `starter-${key}-assess-first`,
+        stem: `A nurse is using ${label.toLowerCase()} reasoning during a busy shift. Which action best reflects safe entry-level nursing judgment?`,
+        options: [
+          "Address the finding that creates the most immediate safety or physiologic risk",
+          "Complete the easiest routine task first to reduce the task list",
+          "Delay action until all patients can be assessed in detail",
+          "Focus first on the patient who is most upset but clinically stable",
+        ],
+        correctAnswer: ["Address the finding that creates the most immediate safety or physiologic risk"],
+        rationale: `${label} questions test whether the nurse can identify the risk that can harm the patient soonest. ${principle} Lower-priority tasks may still matter, but choosing them first can delay recognition of deterioration or an unsafe condition.`,
+        examStrategy: key,
+        clinicalTrap: trap,
+        memoryHook: strategy?.decisionRule ?? "Risk now beats routine care later.",
+        frameworkUsed: framework,
+        topic: "Clinical judgment",
+        difficulty: 1,
+      },
+      {
+        id: `starter-${key}-lower-priority`,
+        stem: `Which response shows the most common reasoning error when applying ${label.toLowerCase()} on an exam item?`,
+        options: [
+          "Choosing a helpful intervention that delays the highest-priority assessment or safety action",
+          "Comparing the patient's current condition with the baseline",
+          "Escalating a new unstable finding through the chain of command",
+          "Delegating a routine task for a stable patient within scope",
+        ],
+        correctAnswer: ["Choosing a helpful intervention that delays the highest-priority assessment or safety action"],
+        rationale: `Many distractors are partly correct but mistimed. The nurse should ask what must happen first to prevent harm, then decide which helpful actions can safely wait. This builds transferable prioritization rather than memorizing a single scenario.`,
+        examStrategy: key,
+        clinicalTrap: trap,
+        memoryHook: "Partly right can still be wrong if the timing is unsafe.",
+        frameworkUsed: framework,
+        topic: "Clinical judgment",
+        difficulty: 2,
+      },
+    ] satisfies StrategyQuestion[];
+  });
+
+  return starters.slice(0, Math.max(1, take));
 }
 
 // ── Server Actions ─────────────────────────────────────────────────────────────
@@ -158,9 +217,15 @@ export async function loadStrategySession(
 
     const nextCursor = rows.length === take ? (rows[rows.length - 1]?.id ?? null) : null;
 
+    if (questions.length === 0) {
+      const starterQuestions = buildStarterStrategyQuestions(strategyKey, take);
+      return { questions: starterQuestions, nextCursor: null, total: starterQuestions.length, strategyKey };
+    }
+
     return { questions, nextCursor, total, strategyKey };
   } catch {
-    return { questions: [], nextCursor: null, total: 0, strategyKey };
+    const starterQuestions = buildStarterStrategyQuestions(strategyKey, Math.min(batchSize ?? BATCH_SIZE, MAX_BATCH_SIZE));
+    return { questions: starterQuestions, nextCursor: null, total: starterQuestions.length, strategyKey };
   }
 }
 

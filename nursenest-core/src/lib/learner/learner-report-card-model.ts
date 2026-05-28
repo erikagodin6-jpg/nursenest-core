@@ -13,6 +13,9 @@ export type LearnerReportCardViewModel = {
   readinessPct: number | null;
   lessonsCompleted: number;
   lessonsTotal: number;
+  /** Clinical Lab Workstation completion (track-scoped labs lessons). */
+  labsLessonsCompleted?: number;
+  labsLessonsTotal?: number;
   weakTopics: string[];
   strongTopics: string[];
   recentSummary: string | null;
@@ -36,8 +39,10 @@ export function buildLearnerReportCardViewModel(input: {
   studySnap: LearnerStudySnapshot | null;
   /** Optional inferred “continue” row — href must already include pathwayId. */
   continueCheckpoint?: ContinueStudyCheckpoint | null;
+  labsLessonsCompleted?: number;
+  labsLessonsTotal?: number;
 }): LearnerReportCardViewModel {
-  const { pathwayId, snapshot, studySnap, continueCheckpoint } = input;
+  const { pathwayId, snapshot, studySnap, continueCheckpoint, labsLessonsCompleted, labsLessonsTotal } = input;
   const pid = pathwayId.trim();
   const pct = readinessPctFromSnapshot(snapshot);
   const readinessLabel =
@@ -55,6 +60,14 @@ export function buildLearnerReportCardViewModel(input: {
 
   const recommendedActions: string[] = [];
   if (weakTopics.length > 0) recommendedActions.push("Drill your weakest topics");
+  if (
+    typeof labsLessonsCompleted === "number" &&
+    typeof labsLessonsTotal === "number" &&
+    labsLessonsTotal > 0 &&
+    labsLessonsCompleted < labsLessonsTotal
+  ) {
+    recommendedActions.push("Continue the clinical lab workstation");
+  }
   if ((snapshot.overallLessons.pct ?? 0) < 40) recommendedActions.push("Complete more pathway lessons");
   if (snapshot.practice.accuracyPct != null && snapshot.practice.accuracyPct < 65) {
     recommendedActions.push("Review rationales on missed bank items");
@@ -62,6 +75,7 @@ export function buildLearnerReportCardViewModel(input: {
   if (recommendedActions.length === 0) recommendedActions.push("Keep your daily streak");
 
   const links: LearnerReportCardLink[] = [];
+  links.push({ label: "Clinical labs", href: "/app/labs" });
   const topWeak = studySnap?.topWeak?.topic?.trim();
   const topicSlug = topWeak ? normalizeTopicSlugInput(topWeak) : "";
   if (topWeak && topicSlug) {
@@ -108,6 +122,8 @@ export function buildLearnerReportCardViewModel(input: {
     readinessPct: pct,
     lessonsCompleted: snapshot.overallLessons.completed,
     lessonsTotal: snapshot.overallLessons.total,
+    labsLessonsCompleted,
+    labsLessonsTotal,
     weakTopics,
     strongTopics,
     recentSummary,

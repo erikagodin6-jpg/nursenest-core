@@ -48,7 +48,7 @@ export function getHomeHeroSlideExamTrackKey(screenshotIndex1To15: number): stri
   const m: Partial<Record<number, string>> = {
     1: "pn",
     2: "rn",
-    3: "clinical_judgment",
+    3: "prioritization_delegation",
     7: "np",
     9: "study_modes",
     10: "rn",
@@ -86,7 +86,7 @@ const HOME_HERO_SLIDE_KEY_PREFIX = "components.homeHeroCarousel";
 const HOME_HERO_SLIDE_COPY_FALLBACKS: Record<number, { label: string; title: string; caption: string }> = {
   1: { label: "Question Bank", title: "Practice with exam-style questions", caption: "Build confidence with rationales and focused review." },
   2: { label: "RN Prep", title: "Study by pathway and topic", caption: "Keep NCLEX-RN practice tied to the skills you are reviewing." },
-  3: { label: "Clinical Judgment", title: "Work through safer next steps", caption: "See how cues, priorities, and rationales connect." },
+  3: { label: "Prioritization & Delegation", title: "Practice bedside decisions", caption: "Work through who to see first, what to escalate, and which tasks are safe to delegate." },
   4: { label: "Lessons", title: "Review the concept before you test", caption: "Use concise lessons to close gaps before another question set." },
   5: { label: "Progress", title: "Track what needs attention", caption: "Follow your study activity across questions, lessons, and review." },
   6: { label: "Flashcards", title: "Reinforce high-yield facts", caption: "Turn weak points into short review sessions." },

@@ -13,6 +13,10 @@ export type ParsedBranchingOption = {
   effect: ConsequenceEffect;
   /** Next stage `orderIndex`; defaults to linear +1 when absent. */
   nextStageOrder: number | null;
+  /** Correct priority rank (1 = first) for ranking interactions. */
+  rankOrder: number | null;
+  /** Correct sequence position (1 = first) for ordered-response interactions. */
+  sequenceOrder: number | null;
 };
 
 export type BranchingStageView = {
@@ -32,6 +36,16 @@ export type BranchingStageView = {
   nextStageOrder: number | null;
 };
 
+export type ScenarioDecisionRecord = {
+  stageOrder: number;
+  questionStem: string;
+  pickedLabel: string;
+  isCorrect: boolean;
+  trajectory: ConsequenceTrajectory;
+  effect: ConsequenceEffect;
+  atMs: number;
+};
+
 export type BranchingEngineState = {
   currentOrderIndex: number;
   /** Per-stage orderIndex → option ids hidden for that stage (e.g. best option removed). */
@@ -46,6 +60,8 @@ export type BranchingEngineState = {
   mistakeLabels: string[];
   /** Prepended to `scenarioText` for stages after a deteriorating branch. */
   deteriorationBannerByStageOrder: Record<number, string>;
+  /** Committed decisions for timeline replay and performance report. */
+  decisionTrail: ScenarioDecisionRecord[];
 };
 
 export function initialBranchingEngineState(startOrderIndex = 0): BranchingEngineState {
@@ -58,6 +74,7 @@ export function initialBranchingEngineState(startOrderIndex = 0): BranchingEngin
     incorrectWeight: 0,
     mistakeLabels: [],
     deteriorationBannerByStageOrder: {},
+    decisionTrail: [],
   };
 }
 
@@ -121,9 +138,27 @@ export function parseBranchingOptions(raw: unknown): ParsedBranchingOption[] {
     } else if (nextStageOrder == null && typeof nsm === "string" && /^\d+$/.test(nsm)) {
       nextStageOrder = Number.parseInt(nsm, 10);
     }
-    out.push({ id, label, isCorrect, rationale, trajectory, effect, nextStageOrder });
+    const rankOrder =
+      typeof o.rankOrder === "number" && Number.isFinite(o.rankOrder) ? Math.floor(o.rankOrder) : null;
+    const sequenceOrder =
+      typeof o.sequenceOrder === "number" && Number.isFinite(o.sequenceOrder)
+        ? Math.floor(o.sequenceOrder)
+        : null;
+    out.push({ id, label, isCorrect, rationale, trajectory, effect, nextStageOrder, rankOrder, sequenceOrder });
   }
   return out;
+}
+
+export type StageQuestionFormat = "mcq" | "sata" | "ranking" | "sequencing";
+
+/** Infer interaction format from option metadata (no schema change required). */
+export function inferStageQuestionFormat(options: ParsedBranchingOption[]): StageQuestionFormat {
+  if (!options.length) return "mcq";
+  if (options.every((o) => o.sequenceOrder != null)) return "sequencing";
+  if (options.every((o) => o.rankOrder != null)) return "ranking";
+  const correctCount = options.filter((o) => o.isCorrect).length;
+  if (correctCount >= 2) return "sata";
+  return "mcq";
 }
 
 /** True when options carry structured branching fields (rationale / consequence / isCorrect). */
@@ -180,8 +215,9 @@ export function applyChoiceToBranchingState(args: {
   state: BranchingEngineState;
   stages: BranchingStageView[];
   picked: ParsedBranchingOption;
+  stage?: BranchingStageView;
 }): BranchingEngineState {
-  const { state, stages, picked } = args;
+  const { state, stages, picked, stage } = args;
   const nextOrder =
     picked.nextStageOrder != null && Number.isFinite(picked.nextStageOrder)
       ? picked.nextStageOrder
@@ -218,6 +254,19 @@ export function applyChoiceToBranchingState(args: {
 
   const rationaleTrail = [...state.rationaleTrail, picked.rationale || ""].filter((s) => s.trim().length > 0);
 
+  const decisionTrail: ScenarioDecisionRecord[] = [
+    ...state.decisionTrail,
+    {
+      stageOrder: state.currentOrderIndex,
+      questionStem: stage?.questionStem ?? "",
+      pickedLabel: picked.label,
+      isCorrect: picked.isCorrect,
+      trajectory: picked.trajectory,
+      effect: picked.effect,
+      atMs: Date.now(),
+    },
+  ];
+
   return {
     currentOrderIndex: nextOrder,
     hiddenOptionIdsByStageOrder: hidden,
@@ -227,6 +276,7 @@ export function applyChoiceToBranchingState(args: {
     incorrectWeight: state.incorrectWeight + wrongWeightBump,
     mistakeLabels,
     deteriorationBannerByStageOrder: deterioration,
+    decisionTrail,
   };
 }
 

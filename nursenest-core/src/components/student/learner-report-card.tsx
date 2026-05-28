@@ -15,13 +15,23 @@ export function LearnerReportCard({ model, t }: { model: LearnerReportCardViewMo
           </h2>
           <p className="mt-1.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{model.readinessLabel}</p>
         </div>
-        <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] px-3 py-2 text-right shadow-[inset_0_1px_0_color-mix(in_srgb,var(--semantic-text-primary)_05%,transparent)]">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-            {t("learner.dashboard.embedReportCard.lessonsEyebrow")}
-          </p>
-          <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
-            {model.lessonsCompleted}/{model.lessonsTotal}
-          </p>
+        <div className="flex flex-wrap gap-2">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] px-3 py-2 text-right shadow-[inset_0_1px_0_color-mix(in_srgb,var(--semantic-text-primary)_05%,transparent)]">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+              {t("learner.dashboard.embedReportCard.lessonsEyebrow")}
+            </p>
+            <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
+              {model.lessonsCompleted}/{model.lessonsTotal}
+            </p>
+          </div>
+          {typeof model.labsLessonsTotal === "number" && model.labsLessonsTotal > 0 ? (
+            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] px-3 py-2 text-right">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Clinical labs</p>
+              <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
+                {model.labsLessonsCompleted ?? 0}/{model.labsLessonsTotal}
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
 

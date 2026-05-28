@@ -23,7 +23,7 @@ const FLOW_STEPS = [
     key: "practice",
     label: "Practice",
     title: "Questions",
-    body: "Apply judgment to NGN-style prompts, rationales, and clinical distractors.",
+    body: "Practice who to see first, what to escalate, and which delegation choices are safe under pressure.",
     icon: Brain,
     hrefKey: "questionBank",
     tone: "info",

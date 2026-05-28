@@ -9,6 +9,7 @@ import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { appPathwayCatSessionStartPath, resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
+import { LABS_EXPANSION_LESSONS } from "@/lib/labs/labs-lessons-expansion";
 
 export type LabCategorySlug =
   | "electrolytes"
@@ -170,7 +171,7 @@ export const LABS_CATEGORIES: readonly LabCategoryDefinition[] = [
   },
 ] as const;
 
-const LESSONS: readonly LabLessonDefinition[] = [
+const CORE_LESSONS: readonly LabLessonDefinition[] = [
   {
     slug: "potassium-priority-management",
     category: "electrolytes",
@@ -991,7 +992,9 @@ const LESSONS: readonly LabLessonDefinition[] = [
     supportedTracks: ["rn", "pn", "np", "allied"],
     practiceQuestionTopic: "abg",
   },
-] as const;
+];
+
+const LESSONS: readonly LabLessonDefinition[] = [...CORE_LESSONS, ...LABS_EXPANSION_LESSONS];
 
 function questionId(topic: LabLessonDefinition, type: LabQuestionType, suffix?: string) {
   return suffix ? `${topic.slug}:${type}:${suffix}` : `${topic.slug}:${type}`;
@@ -1064,7 +1067,8 @@ function patternScenarioQuestion(topic: LabLessonDefinition, pattern = topic.pat
 }
 
 function buildQuestions(topic: LabLessonDefinition): LabQuestion[] {
-  const [thresholdA, thresholdB] = topic.priorityThresholds;
+  const thresholdA = topic.priorityThresholds[0]!;
+  const thresholdB = topic.priorityThresholds[1] ?? topic.priorityThresholds[0]!;
   const firstScenario = topic.microScenarios[0]!;
   const secondScenario = topic.microScenarios[1];
   const firstPattern = topic.patternRecognition[0]!;
@@ -1097,6 +1101,7 @@ function buildQuestions(topic: LabLessonDefinition): LabQuestion[] {
       }
     : patternScenarioQuestion(topic);
 
+  const prioritizationUrgentIndex = topic.priorityThresholds.length > 1 ? 1 : 0;
   const prioritizationOptions = [
     `${thresholdA.label}: ${thresholdA.threshold}`,
     `${thresholdB.label}: ${thresholdB.threshold}`,
@@ -1109,9 +1114,9 @@ function buildQuestions(topic: LabLessonDefinition): LabQuestion[] {
     difficulty: "advanced",
     stem: `Which finding requires the most urgent escalation in the ${topic.shortTitle.toLowerCase()} workflow?`,
     options: prioritizationOptions,
-    correctIndex: 1,
-    rationale: thresholdB.whyItMatters,
-    answerDistribution: illustrativeAnswerDistribution(topic, prioritizationOptions, 1),
+    correctIndex: prioritizationUrgentIndex,
+    rationale: (topic.priorityThresholds[prioritizationUrgentIndex] ?? thresholdA).whyItMatters,
+    answerDistribution: illustrativeAnswerDistribution(topic, prioritizationOptions, prioritizationUrgentIndex),
   };
 
   const trendOptions = [

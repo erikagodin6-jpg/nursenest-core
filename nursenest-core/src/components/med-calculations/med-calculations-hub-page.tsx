@@ -11,6 +11,9 @@ import type {
 type Props = {
   trackLabel: string;
   hasAccess: boolean;
+  progressSummary?: { completed: number; inProgress: number; total: number };
+  continueHref?: string;
+  continueTitle?: string;
   categories: Array<MedCalcCategoryDefinition & { lessons: MedCalcLessonDefinition[] }>;
   inventory: { lessonCount: number; questionCount: number; flashcardCount: number; categoryCount: number };
   studyLinks: MedCalcStudyLinks;
@@ -27,14 +30,23 @@ function Stat({ label, value, accentIndex }: { label: string; value: string | nu
   const wrap = STAT_ACCENT[accentIndex % STAT_ACCENT.length] ?? STAT_ACCENT[0];
   return (
     <div className={`rounded-xl border px-3 py-2.5 shadow-[var(--semantic-shadow-soft)] ${wrap}`}>
-      <div className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">{label}</div>
+      <div className="text-[0.65rem] font-medium tracking-wide text-[var(--semantic-text-muted)]">{label}</div>
       <div className="mt-1 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">{value}</div>
     </div>
   );
 }
 
 /** Premium medication math workstation — Ocean structure, semantic tokens only (theme-aware). */
-export function MedCalculationsHubPage({ trackLabel, hasAccess, categories, inventory, studyLinks }: Props) {
+export function MedCalculationsHubPage({
+  trackLabel,
+  hasAccess,
+  categories,
+  inventory,
+  studyLinks,
+  progressSummary,
+  continueHref,
+  continueTitle,
+}: Props) {
   const frameworkChips = ["Dosage drills", "IV drip & pumps", "Weight-based dosing", "Dimensional analysis"] as const;
 
   return (
@@ -52,14 +64,14 @@ export function MedCalculationsHubPage({ trackLabel, hasAccess, categories, inve
         />
         <div className="relative flex min-w-0 flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl min-w-0 space-y-3">
-            <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-5)_88%,var(--semantic-text-primary))]">
+            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-5)_88%,var(--semantic-text-primary))]">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-5)_85%,var(--semantic-text-primary))]">
                 <Calculator className="h-4 w-4" aria-hidden strokeWidth={2} />
               </span>
               Medication calculations
             </p>
             <h1 className="text-balance text-3xl font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-[2rem]">
-              High-stakes med calculations training
+              High-stakes medication safety training
             </h1>
             <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               Built for {trackLabel}. Interactive drills for dimensional analysis, ratio-proportion, formula setup, conversions,
@@ -116,6 +128,28 @@ export function MedCalculationsHubPage({ trackLabel, hasAccess, categories, inve
             timed sessions, and strict-mode passes.
           </p>
         ) : null}
+        {progressSummary && progressSummary.total > 0 ? (
+        <div
+          className="relative mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_06%,var(--semantic-surface))] px-4 py-3"
+          role="status"
+        >
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Mastery progress</p>
+            <p className="text-xs text-[var(--semantic-text-secondary)]">
+              {progressSummary.completed} of {progressSummary.total} topics completed
+              {progressSummary.inProgress > 0 ? ` · ${progressSummary.inProgress} in progress` : ""}
+            </p>
+          </div>
+          {continueHref && continueTitle ? (
+            <Link
+              href={continueHref}
+              className="inline-flex min-h-10 items-center rounded-full bg-[var(--role-cta)] px-4 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_12px_var(--role-cta-shadow)]"
+            >
+              Continue: {continueTitle}
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
       </header>
 
       <div className="space-y-10">
@@ -138,7 +172,7 @@ export function MedCalculationsHubPage({ trackLabel, hasAccess, categories, inve
                   }`}
                 >
                   <div className="min-w-0 space-y-2">
-                    <p className="text-[10px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-2)_85%,var(--semantic-text-secondary))]">
+                    <p className="text-[11px] font-semibold text-[color-mix(in_srgb,var(--semantic-chart-2)_85%,var(--semantic-text-secondary))]">
                       {category.title}
                     </p>
                     <h3 className="break-words text-base font-semibold text-[var(--semantic-text-primary)]">{lesson.shortTitle}</h3>

@@ -4,6 +4,7 @@ import { Award, ChevronRight, Crown, FileText, Flame, Sparkles, Target } from "l
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { LessonContinuationStrip } from "@/components/student/lesson-continuation-strip";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
+import { LearnerFeatureDiscoveryBand } from "@/components/discovery/clinical-readiness-discovery";
 
 function Bar({
   value,
@@ -132,6 +133,16 @@ export function PremiumLearnerHub({
     return "/app/flashcards/weak-areas";
   })();
 
+  const pharmacologyHref = (() => {
+    const lp = snapshot.learnerPath?.trim();
+    if (lp) return `/app/pharmacology?pathwayId=${encodeURIComponent(lp)}`;
+    if (pathways.length === 1) {
+      const id = pathways[0]?.pathwayId?.trim();
+      if (id) return `/app/pharmacology?pathwayId=${encodeURIComponent(id)}`;
+    }
+    return "/app/pharmacology";
+  })();
+
   const momentumSection =
     momentumMessages.length > 0 ? (
       <ul className={compactIntro ? "space-y-2" : "relative mt-5 space-y-2 border-t border-[var(--semantic-border-soft)] pt-4"}>
@@ -230,6 +241,8 @@ export function PremiumLearnerHub({
         </section>
       ) : null}
 
+      <LearnerFeatureDiscoveryBand pathwayId={snapshot.learnerPath} weakTopicTitles={weakTopicTitles} />
+
       {snapshot.flashcards ? (
         <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Flashcards</h2>
@@ -264,6 +277,12 @@ export function PremiumLearnerHub({
               className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-foreground"
             >
               Study priority review
+            </Link>
+            <Link
+              href={pharmacologyHref}
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_9%,var(--semantic-surface))] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
+            >
+              Pharmacology Practice
             </Link>
           </div>
           {snapshot.flashcards.suggestedDecks.length > 0 ? (

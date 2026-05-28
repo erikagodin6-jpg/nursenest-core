@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MeasurementInterpretationPanel } from "@/components/measurements/measurement-interpretation-panel";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import type { LabCategoryDefinition, LabLessonDefinition, LabTrack, LabsStudyLinks } from "@/lib/labs/labs-engine";
+import { labLessonStatusLabel, labTrackFocusLabel } from "@/lib/labs/labs-display";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 
 export type LabsHubPageProps = {
@@ -105,8 +106,8 @@ function TopicCard({
           <h3 className="text-base font-semibold leading-snug text-[var(--semantic-text-primary)]">{lesson.shortTitle}</h3>
           <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{lesson.description}</p>
         </div>
-        <span className="shrink-0 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-muted)] px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-          {hasAccess ? "Full lesson" : "Preview"}
+        <span className="shrink-0 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-muted)] px-2 py-1 text-[0.65rem] font-semibold text-[var(--semantic-text-muted)]">
+          {labLessonStatusLabel(hasAccess)}
         </span>
       </div>
 
@@ -121,7 +122,7 @@ function TopicCard({
 
       {lesson.priorityThresholds[0] ? (
         <div className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))] px-3 py-2">
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[var(--semantic-danger)]">Critical-value cue</p>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-danger)]">Critical-value cue</p>
           <p className="mt-1 text-sm font-semibold text-[var(--semantic-text-primary)]">{lesson.priorityThresholds[0].label}</p>
           <p className="mt-0.5 text-xs text-[var(--semantic-text-secondary)]">{lesson.priorityThresholds[0].threshold}</p>
         </div>
@@ -129,7 +130,7 @@ function TopicCard({
 
       {tierLines.length > 0 ? (
         <div className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] px-3 py-2">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">{labTrack.toUpperCase()} focus</p>
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">{labTrackFocusLabel(labTrack)}</p>
           <ul className="mt-1 list-disc space-y-0.5 pl-4 text-sm text-[var(--semantic-text-secondary)]">
             {tierLines.slice(0, 4).map((line) => (
               <li key={line}>{line}</li>
@@ -251,7 +252,7 @@ export function LabsHubPage({ trackLabel, labTrack, hasAccess, categories, inven
         aria-labelledby="labs-critical-watchlist"
       >
         <h2 id="labs-critical-watchlist" className="text-lg font-semibold text-[var(--semantic-text-primary)]">
-          Critical-value & escalation watchlist
+          Critical-value and escalation watchlist
         </h2>
         <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
           Cross-cutting thresholds pulled from lesson priorities — use them as bedside cues, not memorized trivia.

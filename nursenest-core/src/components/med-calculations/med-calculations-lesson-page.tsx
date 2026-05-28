@@ -3,14 +3,21 @@
 import Link from "next/link";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import {
-  type MedCalcFlashcard,
-  type MedCalcLessonDefinition,
-  type MedCalcQuestion,
-  type MedCalcStudyLinks,
-} from "@/lib/med-calculations/med-calculations-engine";
+import { MedCalcLessonArticle } from "@/components/med-calculations/med-calc-lesson-article";
+import { MedCalcLessonContextRail } from "@/components/med-calculations/med-calc-lesson-context-rail";
+import { useMedCalcLessonProgressActions } from "@/components/med-calculations/med-calc-lesson-progress-client";
 import { MedCalculationsPracticeClient } from "@/components/med-calculations/med-calculations-practice-client";
+import { MedCalcLearningBlock } from "@/components/med-calculations/med-calc-learning-block";
+import { medCalcLessonStatusLabel, medCalcProgressStatusLabel } from "@/lib/med-calculations/med-calc-display";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import type {
+  MedCalcFlashcard,
+  MedCalcLessonDefinition,
+  MedCalcQuestion,
+  MedCalcStudyLinks,
+  MedCalcTrack,
+} from "@/lib/med-calculations/med-calculations-engine";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
 type Props = {
   userId: string;
@@ -19,87 +26,37 @@ type Props = {
   flashcards: MedCalcFlashcard[];
   hasAccess: boolean;
   trackLabel: string;
+  medTrack: MedCalcTrack;
   studyLinks: MedCalcStudyLinks;
+  initialProgress?: PathwayLessonProgressStatus;
 };
 
-function BulletList({ items }: { items: string[] }) {
-  return (
-    <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--semantic-text-secondary)]">
-      {items.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
-    </ul>
-  );
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="space-y-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-      <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">{title}</h2>
-      {children}
-    </section>
-  );
-}
-
-function LessonArticle({
+export function MedCalculationsLessonPreview({
   lesson,
-  flashcards,
-}: {
-  lesson: MedCalcLessonDefinition;
-  flashcards: MedCalcFlashcard[];
-}) {
+  questions,
+}: Pick<Props, "lesson" | "questions">) {
+  const previewQuestions = questions.slice(0, 2);
   return (
-    <div className="space-y-5">
-      <Section title="Concept explanation">
-        <BulletList items={lesson.conceptExplanation} />
-      </Section>
-      <Section title="Dimensional analysis method">
-        <BulletList items={lesson.dimensionalAnalysisMethod} />
-      </Section>
-      <Section title="Ratio-proportion method">
-        <BulletList items={lesson.ratioProportionMethod} />
-      </Section>
-      <Section title="Formula method">
-        <BulletList items={lesson.formulaMethod} />
-      </Section>
-      <Section title="Equation manipulation">
-        <BulletList items={lesson.equationManipulation} />
-      </Section>
-      <Section title="Unit conversions">
-        <BulletList items={lesson.unitConversions} />
-      </Section>
-      <Section title="Worked examples">
-        <div className="space-y-4">
-          {lesson.workedExamples.map((example) => (
-            <article key={example.title} className="rounded-lg border border-[var(--semantic-border-soft)] p-4">
-              <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">{example.title}</h3>
-              <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{example.problem}</p>
-              <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-[var(--semantic-text-secondary)]">
-                {example.steps.map((step) => (
-                  <li key={step}>{step}</li>
-                ))}
-              </ol>
-              <p className="mt-3 text-sm font-medium text-[var(--semantic-text-primary)]">Answer: {example.answer}</p>
+    <div className="space-y-4">
+      <MedCalcLearningBlock title="Clinical frame" eyebrow="Preview">
+        <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--semantic-text-secondary)]">
+          {lesson.conceptExplanation.slice(0, 2).map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </MedCalcLearningBlock>
+      <MedCalcLearningBlock title="Preview drills" eyebrow="Sample items">
+        <div className="space-y-3">
+          {previewQuestions.map((question) => (
+            <article key={question.id} className="nn-med-calc-worked-card">
+              <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{question.stem}</p>
+              <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+                {question.type.replaceAll("_", " ")} · {question.difficulty}
+              </p>
             </article>
           ))}
         </div>
-      </Section>
-      <Section title="Common mistakes">
-        <BulletList items={lesson.commonMistakes} />
-      </Section>
-      <Section title="Safety considerations">
-        <BulletList items={lesson.safetyConsiderations} />
-      </Section>
-      <Section title="Generated flashcards">
-        <div className="grid gap-4 lg:grid-cols-2">
-          {flashcards.map((card) => (
-            <article key={card.id} className="rounded-lg border border-[var(--semantic-border-soft)] p-3">
-              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{card.prompt}</p>
-              <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{card.answer}</p>
-            </article>
-          ))}
-        </div>
-      </Section>
+      </MedCalcLearningBlock>
     </div>
   );
 }
@@ -111,28 +68,36 @@ export function MedCalculationsLessonPage({
   flashcards,
   hasAccess,
   trackLabel,
+  medTrack,
   studyLinks,
+  initialProgress = "not_started",
 }: Props) {
-  const previewQuestions = questions.slice(0, 2);
   const { measurementSystem, preference } = useMeasurementPreference("SI");
+  const { progressStatus, onSessionComplete, onPracticeEngage } = useMedCalcLessonProgressActions({
+    track: medTrack,
+    category: lesson.category,
+    lessonSlug: lesson.slug,
+    hasAccess,
+    initialStatus: initialProgress,
+  });
 
   return (
-    <div className="min-w-0 space-y-6" data-nn-med-calc-lesson="">
-      <header className="nn-learner-page-hero">
-        <div className="min-w-0 space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">
-            Medication calculations / {lesson.shortTitle}
+    <div className="nn-med-calc-lesson-workspace space-y-6" data-nn-med-calc-lesson="">
+      <header className="nn-med-calc-lesson-hero nn-learner-page-hero">
+        <div className="space-y-2">
+          <p className="nn-med-calc-lesson-hero__eyebrow">
+            Medication calculations · {lesson.shortTitle} · {medCalcProgressStatusLabel(progressStatus)}
           </p>
-          <h1 className="break-words text-3xl font-bold text-[var(--semantic-text-primary)]">{lesson.title}</h1>
-          <p className="text-sm text-[var(--semantic-text-secondary)]">{lesson.description}</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{lesson.title}</h1>
+          <p className="max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{lesson.description}</p>
           <p className="text-sm text-[var(--semantic-text-secondary)]">
-            Built for {trackLabel}. This topic teaches the setup, the rounding rule, the worked steps, and the safety check
-            that has to sit beside the arithmetic.
+            Built for {trackLabel}. {medCalcLessonStatusLabel(hasAccess)} — bedside dosing setup, safety checks, and strict
+            drill readiness for NCLEX-style medication math.
           </p>
           <p className="text-xs text-[var(--semantic-text-secondary)]">
             {measurementSystem === "US"
-              ? "Imperial display keeps worked examples friendly to lb / °F style references."
-              : "Metric display keeps worked examples anchored to kg / cm / °C and SI-first medication math."}
+              ? "Imperial display keeps worked examples friendly to lb-style references where relevant."
+              : "Metric display keeps worked examples anchored to kg and SI-first medication math."}
           </p>
         </div>
         <div className="mt-4 max-w-sm">
@@ -144,61 +109,62 @@ export function MedCalculationsLessonPage({
             compact
           />
         </div>
-        <div className="mt-4 flex min-w-0 flex-wrap gap-3 text-sm">
-          <Link
-            href="/app/med-calculations"
-            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
-          >
-            Back to hub
+        <div className="mt-4 flex flex-wrap gap-2 text-sm">
+          <Link href="/app/med-calculations" className="nn-med-calc-study-loop-link">
+            Overview
           </Link>
-          <Link
-            href={studyLinks.flashcardsHref}
-            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
-          >
+          <Link href={studyLinks.flashcardsHref} className="nn-med-calc-study-loop-link">
             Flashcards
           </Link>
-          <Link
-            href={studyLinks.questionsHref}
-            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
-          >
+          <Link href={studyLinks.questionsHref} className="nn-med-calc-study-loop-link">
             Practice questions
-          </Link>
-          <Link
-            href={studyLinks.catHref}
-            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
-          >
-            Practice tests
           </Link>
         </div>
       </header>
 
-      {hasAccess ? (
-        <>
-          <LessonArticle lesson={lesson} flashcards={flashcards} />
-          <MedCalculationsPracticeClient userId={userId} lesson={lesson} questions={questions} hasAccess={hasAccess} />
-        </>
-      ) : (
-        <div className="space-y-5">
-          <Section title="Preview">
-            <BulletList items={lesson.conceptExplanation.slice(0, 1)} />
-            <BulletList items={lesson.formulaMethod.slice(0, 1)} />
-            <BulletList items={lesson.safetyConsiderations.slice(0, 1)} />
-          </Section>
-          <Section title="Preview questions">
-            <div className="space-y-3">
-              {previewQuestions.map((question) => (
-                <article key={question.id} className="rounded-lg border border-[var(--semantic-border-soft)] p-3">
-                  <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{question.stem}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">
-                    {question.type.replaceAll("_", " ")} · {question.difficulty}
+      <div className="nn-med-calc-lesson-workspace__grid">
+        <div className="nn-med-calc-lesson-workspace__primary min-w-0 space-y-5">
+          {hasAccess ? (
+            <>
+              <MedCalcLessonArticle lesson={lesson} flashcards={flashcards} />
+              <section className="nn-med-calc-drill-module" id="med-calc-interactive-drills" aria-labelledby="med-calc-drill-heading">
+                <header className="nn-med-calc-drill-module__head">
+                  <p className="nn-med-calc-block__eyebrow">Interactive drills</p>
+                  <h2 id="med-calc-drill-heading" className="text-lg font-semibold text-[var(--semantic-text-primary)]">
+                    Strict practice mode
+                  </h2>
+                  <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+                    Numeric input, full solution review, timed runs, and zero-error strict completion when enabled.
                   </p>
-                </article>
-              ))}
+                </header>
+                <div className="nn-med-calc-drill-module__body">
+                  <MedCalculationsPracticeClient
+                    userId={userId}
+                    lesson={lesson}
+                    questions={questions}
+                    hasAccess={hasAccess}
+                    medTrack={medTrack}
+                    onSessionComplete={onSessionComplete}
+                    onPracticeEngage={onPracticeEngage}
+                  />
+                </div>
+              </section>
+            </>
+          ) : (
+            <div className="space-y-5">
+              <MedCalculationsLessonPreview lesson={lesson} questions={questions} />
+              <SubscriptionPaywall context="lessons" />
             </div>
-          </Section>
-          <SubscriptionPaywall context="lessons" />
+          )}
         </div>
-      )}
+        <MedCalcLessonContextRail
+          lesson={lesson}
+          medTrack={medTrack}
+          studyLinks={studyLinks}
+          progressStatus={progressStatus}
+          questionCount={questions.length}
+        />
+      </div>
     </div>
   );
 }

@@ -500,7 +500,7 @@ export function StrategySessionClient({
           className="text-center text-sm"
           style={{ color: "var(--theme-muted-text)" }}
         >
-          {loadingMore ? "Loading questions…" : "No questions available for this strategy."}
+          {loadingMore ? "Loading questions…" : "Refresh to continue with a starter strategy set."}
         </p>
       )}
 

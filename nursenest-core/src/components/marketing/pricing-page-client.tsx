@@ -50,6 +50,10 @@ import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-lab
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { PricingConversionClarity } from "@/components/marketing/pricing-conversion-clarity";
 import { PricingClinicalReadinessEcosystem } from "@/components/marketing/pricing-clinical-readiness-ecosystem";
+import { PricingInteractiveShowcase } from "@/components/marketing/pricing-interactive-showcase";
+import { PricingLabsWorkstationFeature } from "@/components/marketing/pricing-labs-workstation-feature";
+import { PricingMedCalcWorkstationFeature } from "@/components/marketing/pricing-med-calc-workstation-feature";
+import { PricingClinicalSkillsWorkstationFeature } from "@/components/marketing/pricing-clinical-skills-workstation-feature";
 import { PricingAdvancedEcgAddOn } from "@/components/marketing/pricing-advanced-ecg-add-on";
 import { PricingEcgClarityBlock } from "@/components/marketing/pricing-ecg-clarity-block";
 import { PricingRegionFaq } from "@/components/marketing/pricing-region-faq";
@@ -1597,7 +1601,15 @@ export function PricingPageClient({
 
       <PricingAudienceSection />
 
+      <PricingInteractiveShowcase />
+
       <PricingClinicalReadinessEcosystem />
+
+      <PricingLabsWorkstationFeature />
+
+      <PricingMedCalcWorkstationFeature />
+
+      <PricingClinicalSkillsWorkstationFeature />
 
       <PricingEcgClarityBlock />
 

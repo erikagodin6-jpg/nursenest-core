@@ -1,0 +1,232 @@
+/* Feature discovery and premium capability showcases
+   --------------------------------------------------------------------------
+   Shared by the learner dashboard, Explore NurseNest hub, and pricing modules. */
+
+.nn-feature-hub,
+.nn-feature-discovery-band,
+.nn-pricing-feature-showcase {
+  --nn-feature-glow-a: var(--semantic-brand);
+  --nn-feature-glow-b: var(--semantic-info);
+}
+
+html[data-theme="ocean"] .nn-feature-hub,
+html[data-theme="midnight"] .nn-feature-hub,
+html[data-theme="midnight-indigo"] .nn-feature-hub,
+html[data-theme="ocean"] .nn-feature-discovery-band,
+html[data-theme="midnight"] .nn-feature-discovery-band,
+html[data-theme="midnight-indigo"] .nn-feature-discovery-band {
+  --nn-feature-glow-a: color-mix(in srgb, var(--semantic-info) 78%, var(--semantic-success));
+  --nn-feature-glow-b: color-mix(in srgb, var(--semantic-chart-4) 82%, var(--semantic-brand));
+}
+
+.nn-feature-hub-hero {
+  background:
+    radial-gradient(circle at 6% 0%, color-mix(in srgb, var(--nn-feature-glow-a) 13%, transparent), transparent 32%),
+    radial-gradient(circle at 96% 12%, color-mix(in srgb, var(--nn-feature-glow-b) 12%, transparent), transparent 36%),
+    linear-gradient(145deg, color-mix(in srgb, var(--semantic-panel-warm) 16%, var(--semantic-surface)), var(--semantic-surface) 55%, color-mix(in srgb, var(--semantic-panel-cool) 15%, var(--semantic-surface)));
+}
+
+.nn-feature-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 18%, var(--semantic-border-soft));
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 11%, transparent), transparent 34%),
+    linear-gradient(145deg, color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 6%, var(--semantic-surface)), var(--semantic-surface) 52%, color-mix(in srgb, var(--semantic-panel-muted) 26%, var(--semantic-surface)));
+  box-shadow: var(--semantic-shadow-soft);
+  padding: 1rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.nn-feature-card:hover {
+  border-color: color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 38%, var(--semantic-border-soft));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    0 16px 36px color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 11%, transparent);
+  transform: translateY(-1px);
+}
+
+.nn-feature-badge {
+  border: 1px solid color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 20%, var(--semantic-border-soft));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 8%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.22rem 0.5rem;
+}
+
+.nn-feature-preview {
+  min-height: 7.5rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 18%, var(--semantic-border-soft));
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-surface) 82%, transparent), color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 8%, var(--semantic-surface))),
+    var(--semantic-surface);
+}
+
+.nn-feature-preview--telemetry {
+  display: grid;
+  align-content: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #101827, color-mix(in srgb, var(--feature-accent, var(--semantic-info)) 18%, #101827));
+  padding: 0.75rem;
+}
+
+.nn-feature-preview--telemetry svg {
+  width: 100%;
+  height: auto;
+}
+
+.nn-feature-preview--telemetry path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--semantic-success) 82%, white);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.nn-feature-preview__label {
+  color: color-mix(in srgb, var(--semantic-success) 82%, white);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nn-feature-preview--assignment {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.75rem;
+}
+
+.nn-feature-preview__patient {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 58%, var(--semantic-surface));
+  padding: 0.5rem 0.6rem;
+}
+
+.nn-feature-preview__patient strong,
+.nn-feature-preview__patient small {
+  display: block;
+}
+
+.nn-feature-preview__patient strong {
+  font-size: 0.76rem;
+  color: var(--semantic-text-primary);
+}
+
+.nn-feature-preview__patient small {
+  color: var(--semantic-text-secondary);
+  font-size: 0.68rem;
+}
+
+.nn-feature-preview__patient em {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--feature-accent, var(--semantic-danger)) 10%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--feature-accent, var(--semantic-danger)) 84%, var(--semantic-text-primary));
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 900;
+  padding: 0.2rem 0.45rem;
+}
+
+.nn-feature-preview--bars,
+.nn-feature-preview--analytics,
+.nn-feature-preview--flashcards,
+.nn-feature-preview--math,
+.nn-feature-preview--branching {
+  display: grid;
+  gap: 0.65rem;
+  align-content: center;
+  padding: 0.85rem;
+}
+
+.nn-feature-preview--bars span {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nn-feature-preview--bars small {
+  font-weight: 800;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-feature-preview--bars i {
+  display: block;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--feature-accent, var(--semantic-success)), color-mix(in srgb, var(--feature-accent, var(--semantic-success)) 44%, var(--semantic-surface)));
+}
+
+.nn-feature-preview--analytics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.nn-feature-preview--analytics span,
+.nn-feature-preview--flashcards span,
+.nn-feature-preview--math span,
+.nn-feature-preview--math strong,
+.nn-feature-preview--math small,
+.nn-feature-preview--branching span {
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 58%, var(--semantic-surface));
+  padding: 0.65rem;
+}
+
+.nn-feature-preview--analytics strong {
+  display: block;
+  color: var(--semantic-text-primary);
+  font-size: 1.05rem;
+}
+
+.nn-feature-preview--analytics small,
+.nn-feature-preview--math small {
+  color: var(--semantic-text-secondary);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.nn-feature-preview--flashcards {
+  grid-template-columns: 1fr;
+}
+
+.nn-feature-preview--flashcards span {
+  color: var(--semantic-text-primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.nn-feature-preview--math strong {
+  color: var(--semantic-text-primary);
+}
+
+.nn-feature-preview--branching {
+  grid-template-columns: auto 1fr auto 1fr auto;
+  align-items: center;
+}
+
+.nn-feature-preview--branching i {
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 48%, var(--semantic-border-soft));
+}
+
+@media (max-width: 760px) {
+  .nn-feature-preview--analytics,
+  .nn-feature-preview--branching {
+    grid-template-columns: 1fr;
+  }
+}

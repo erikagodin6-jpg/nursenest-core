@@ -42,7 +42,11 @@ export async function GET(req: Request) {
   const ids = await pickRandomBaselineQuestionIds(country, tier, BASELINE_QUESTION_COUNT);
   if (ids.length === 0) {
     return NextResponse.json(
-      { error: "No questions available for your profile yet. Try again later.", code: "empty_bank" },
+      {
+        error:
+          "Baseline assessment is being refreshed for your profile. Continue with lessons, flashcards, or practice questions while we prepare the next scored set.",
+        code: "baseline_refreshing",
+      },
       { status: 503 },
     );
   }

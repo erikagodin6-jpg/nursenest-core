@@ -111,7 +111,7 @@ export default async function StrategySessionPage({ params }: Props) {
         )}
       </div>
 
-      {/* Empty state */}
+      {/* Starter content fallback */}
       {initialBatch.questions.length === 0 ? (
         <div
           className="rounded-2xl px-8 py-12 text-center"
@@ -125,10 +125,11 @@ export default async function StrategySessionPage({ params }: Props) {
             className="text-lg font-semibold"
             style={{ color: "var(--theme-heading-text)" }}
           >
-            No questions available yet
+            Strategy practice is ready
           </p>
           <p className="mt-2 text-sm" style={{ color: "var(--theme-muted-text)" }}>
-            Questions tagged with this strategy will appear here as the question bank grows.
+            We could not load this practice set in the current request. Open another strategy or
+            refresh to start a safe starter set with rationale-based coaching.
           </p>
           <Link
             href="/app/strategy"

@@ -24,10 +24,10 @@ test("med calculations hub renders all core sections", () => {
     />,
   );
 
-  assert.match(html, /High-stakes med calculations training/);
+  assert.match(html, /High-stakes medication safety training/);
   assert.match(html, />Tablets</);
   assert.match(html, />Heparin protocols</);
-  assert.match(html, /Strict practice mode/);
+  assert.match(html, /Strict mode/);
 });
 
 test("med calculations lesson renders structured teaching sections", () => {
@@ -42,11 +42,12 @@ test("med calculations lesson renders structured teaching sections", () => {
       flashcards={getMedCalcFlashcards(lesson!)}
       hasAccess
       trackLabel="RN"
+      medTrack="rn"
       studyLinks={buildMedCalcStudyLinks("ca-rn-nclex-rn", lesson!.questionTopic)}
     />,
   );
 
-  assert.match(html, /Concept explanation/);
-  assert.match(html, /Strict practice mode/);
+  assert.match(html, /Dimensional analysis/);
+  assert.match(html, /Strict mode/);
   assert.match(html, /Heparin protocols/);
 });

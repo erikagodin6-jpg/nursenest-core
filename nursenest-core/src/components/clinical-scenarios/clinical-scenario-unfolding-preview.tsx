@@ -24,6 +24,15 @@ import {
 } from "@/lib/clinical-scenarios/clinical-scenario-trajectory";
 import { clinicalScenarioTierNarrative } from "@/lib/clinical-scenarios/clinical-scenario-tier-focus";
 import type { ClinicalScenarioCompletionStudyBundle } from "@/lib/clinical-scenarios/clinical-scenario-completion-study-links";
+import { computePatientState } from "@/lib/clinical-scenarios/clinical-scenario-patient-state-engine";
+import {
+  buildClinicalScenarioPerformanceReport,
+} from "@/lib/clinical-scenarios/clinical-scenario-performance-report";
+import { ClinicalScenarioPatientTelemetryStrip } from "@/components/clinical-scenarios/clinical-scenario-patient-telemetry-strip";
+import { ClinicalScenarioQuestionPanel } from "@/components/clinical-scenarios/clinical-scenario-question-panel";
+import { ClinicalScenarioPerformanceReportCard } from "@/components/clinical-scenarios/clinical-scenario-performance-report-card";
+import { ClinicalScenarioRemediationFlashcards } from "@/components/clinical-scenarios/clinical-scenario-remediation-flashcards";
+import { ClinicalScenarioSimulationHandoff } from "@/components/clinical-scenarios/clinical-scenario-simulation-handoff";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 
 export type ClinicalScenarioStagePreview = {
@@ -232,6 +241,29 @@ export function ClinicalScenarioUnfoldingPreview({
     scenario.stages.length,
   ]);
 
+  const performanceReport = useMemo(() => {
+    if (!branching || !branchComplete) return null;
+    return buildClinicalScenarioPerformanceReport({ scenario, branchState });
+  }, [branching, branchComplete, scenario, branchState]);
+
+  const livePatientState = useMemo(() => {
+    const deteriorationActive = Boolean(branchState.deteriorationBannerByStageOrder[branchOrderIdx]);
+    return computePatientState({
+      baselineVitals: scenario.initialVitals,
+      stageVitals: branchStage?.vitals ?? scenario.initialVitals,
+      trajectoryPath: branchState.trajectoryPath,
+      incorrectWeight: branchState.incorrectWeight,
+      deteriorationBannerActive: deteriorationActive,
+    });
+  }, [
+    branchOrderIdx,
+    branchStage?.vitals,
+    branchState.deteriorationBannerByStageOrder,
+    branchState.incorrectWeight,
+    branchState.trajectoryPath,
+    scenario.initialVitals,
+  ]);
+
   const trajectoryLegacy: PatientTrajectory | null = useMemo(() => {
     if (!legacyStage || !legacyPicked) return null;
     return patientTrajectoryFromConsequence(legacyConsequences[legacyPicked]);
@@ -315,6 +347,18 @@ export function ClinicalScenarioUnfoldingPreview({
           incorrectWeight,
           mistakeLabels: !picked.isCorrect ? [...prev.mistakeLabels, picked.label] : [...prev.mistakeLabels],
           deteriorationBannerByStageOrder,
+          decisionTrail: [
+            ...prev.decisionTrail,
+            {
+              stageOrder: prev.currentOrderIndex,
+              questionStem: branchStage.questionStem,
+              pickedLabel: picked.label,
+              isCorrect: picked.isCorrect,
+              trajectory: picked.trajectory,
+              effect: picked.effect,
+              atMs: Date.now(),
+            },
+          ],
         };
       });
       setBranchFreeDone(true);
@@ -333,6 +377,7 @@ export function ClinicalScenarioUnfoldingPreview({
       state: branchState,
       stages: branchStages,
       picked,
+      stage: branchStage ? toBranchingStageView(branchStage) : undefined,
     });
     setBranchState(next);
     setBranchPending(null);
@@ -364,43 +409,17 @@ export function ClinicalScenarioUnfoldingPreview({
     const showSummary = branchComplete;
 
     return (
-      <div className="space-y-4">
-        <header className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--bg-card))] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-success)]">Clinical simulation</p>
-          <h2 className="mt-1 text-xl font-semibold text-[var(--semantic-text-primary)]">{scenario.title}</h2>
-          <p className="mt-2 text-sm text-[var(--theme-body-text)]">
-            {scenario.pathwayId} · {categoryLabel} · {scenario.tierFocus.replace(/_/g, " ")} · {scenario.difficulty}
+      <div className="nn-clinical-scenarios-simulation space-y-4" data-nn-clinical-scenarios-workstation="">
+        <ClinicalScenarioSimulationHandoff scenario={scenario} tierNarrative={tierNarrative} categoryLabel={categoryLabel} />
+        {!fullScenarioAccess && isPremiumScenario ? (
+          <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-2 text-xs text-[var(--semantic-warning)]">
+            Premium simulation: free tier includes stage 1 only. Upgrade for the full branching case — your decisions change patient outcomes.
           </p>
-          <p className="mt-1 text-xs text-[var(--semantic-chart-3)]">Status: {scenario.publishStatus}</p>
-          {!fullScenarioAccess && isPremiumScenario ? (
-            <p className="mt-2 text-xs text-[var(--semantic-warning)]">
-              Premium simulation: Free includes stage 1 only. Upgrade for the full multi-stage case with branching consequences.
-            </p>
-          ) : null}
-          {tierNarrative ? (
-            <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-info)]">{tierNarrative}</p>
-          ) : null}
-        </header>
+        ) : null}
 
-        <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] p-4">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-chart-2)]">Patient snapshot</h3>
-          <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">
-            <span className="font-semibold">Age / context:</span> {scenario.patientAgeContext}
-          </p>
-          <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">
-            <span className="font-semibold">Presenting concern:</span> {scenario.presentingConcern}
-          </p>
-          <p className="mt-2 text-sm text-[var(--theme-body-text)]">{scenario.briefHistory}</p>
-          {scenario.medicationsAllergies ? (
-            <p className="mt-2 text-sm text-[var(--semantic-warning)]">
-              <span className="font-semibold">Meds / allergies:</span> {scenario.medicationsAllergies}
-            </p>
-          ) : null}
-        </section>
-
-        {renderKeyValuePanel("Initial vitals (case baseline)", scenario.initialVitals)}
-        {renderKeyValuePanel("Admission assessment", { "Key findings": scenario.assessmentFindings })}
+        <ClinicalScenarioPatientTelemetryStrip state={livePatientState} />
         {renderKeyValuePanel("Labs & diagnostics", scenario.labsDiagnostics)}
+        {renderKeyValuePanel("Admission assessment", { "Key findings": scenario.assessmentFindings })}
 
         {showSummary ? (
           <section
@@ -414,51 +433,28 @@ export function ClinicalScenarioUnfoldingPreview({
             <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">
               Incorrect decisions: {branchState.incorrectCount} (weighted burden: {branchState.incorrectWeight})
             </p>
+            {performanceReport ? <ClinicalScenarioPerformanceReportCard report={performanceReport} /> : null}
+            {performanceReport ? (
+              <ClinicalScenarioRemediationFlashcards
+                report={performanceReport}
+                weakFlashcardsHref={studyCompletionLinks?.weakFlashcardsHref}
+              />
+            ) : null}
             {branchOutcome ? (
-              <div
-                className="mt-4 space-y-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--bg-card))] p-4"
-                data-testid="clinical-scenario-outcome-screen"
-              >
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">Simulation debrief</p>
-                <p className="text-sm font-semibold capitalize text-[var(--semantic-text-primary)]">
-                  Outcome: {branchOutcome.outcome}
-                </p>
-                <p className="text-sm text-[var(--theme-body-text)]">{branchOutcome.summary}</p>
-                <div>
-                  <p className="text-xs font-semibold uppercase text-[var(--semantic-info)]">Rationale highlights</p>
-                  <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
-                    {branchState.rationaleTrail.map((r, i) => (
-                      <li key={i}>{r}</li>
-                    ))}
-                  </ol>
-                </div>
-                {branchOutcome.keyMistakes.length ? (
-                  <div>
-                    <p className="text-xs font-semibold uppercase text-[var(--semantic-danger)]">Mistakes to review</p>
-                    <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
-                      {branchOutcome.keyMistakes.map((m, i) => (
-                        <li key={i}>{m}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-                <div>
-                  <p className="text-xs font-semibold uppercase text-[var(--semantic-success)]">Correct pathway (ideal choices)</p>
-                  <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-[var(--semantic-text-primary)]">
-                    {correctPathwayLines(scenario.stages).map((line, i) => (
-                      <li key={i}>{line}</li>
-                    ))}
-                  </ol>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase text-[var(--semantic-chart-2)]">Clinical pearls</p>
-                  <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
-                    {branchOutcome.clinicalPearls.map((p, i) => (
-                      <li key={i}>{p}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <details className="mt-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 text-sm">
+                <summary className="cursor-pointer font-semibold text-[var(--semantic-text-primary)]">Clinical pearls & ideal pathway</summary>
+                <p className="mt-2 capitalize text-[var(--semantic-text-secondary)]">Outcome: {branchOutcome.outcome}</p>
+                <ol className="mt-2 list-decimal space-y-1 pl-5 text-[var(--semantic-text-secondary)]">
+                  {correctPathwayLines(scenario.stages).map((line, i) => (
+                    <li key={i}>{line}</li>
+                  ))}
+                </ol>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-[var(--semantic-text-secondary)]">
+                  {branchOutcome.clinicalPearls.map((p, i) => (
+                    <li key={i}>{p}</li>
+                  ))}
+                </ul>
+              </details>
             ) : null}
             {showSummary && studyCompletionLinks ? (
               <ClinicalScenarioStudyFollowupBlock links={studyCompletionLinks} />
@@ -480,60 +476,32 @@ export function ClinicalScenarioUnfoldingPreview({
           </section>
         ) : branchStage ? (
           <>
-            <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--bg-card))] p-4">
+            <section className="nn-clinical-scenarios-stage">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-warning)]">
                   Stage {branchStage.orderIndex + 1} of {scenario.stages.length}
                 </h3>
-                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--bg-muted)] px-3 py-1 text-xs font-semibold text-[var(--semantic-text-primary)]">
+                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1 text-xs font-semibold text-[var(--semantic-text-primary)]">
                   Trajectory: {trajectoryLabelText(aggregateBranchTrajectory)}
                 </span>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
                 {narrativeScenarioText(toBranchingStageView(branchStage), branchState)}
               </p>
-              {renderKeyValuePanel("Vitals (stage)", branchStage.vitals)}
               <p className="mt-3 text-sm text-[var(--semantic-text-primary)]">
                 <span className="font-semibold">Assessment:</span> {branchStage.assessmentFindings}
               </p>
               {renderKeyValuePanel("Lab / diagnostic updates", branchStage.labUpdates)}
             </section>
 
-            <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">Clinical judgment check</h3>
-              <p className="mt-2 text-sm font-medium text-[var(--semantic-text-primary)]">{branchStage.questionStem}</p>
-              <p className="mt-1 text-xs text-[var(--theme-body-text)]">Focus: {branchStage.clinicalJudgmentFocus}</p>
-              <div className="mt-3 flex flex-col gap-2">
-                {branchVisible.map((o) => (
-                  <button
-                    key={o.id}
-                    type="button"
-                    className={`rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
-                      branchPending?.id === o.id
-                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--bg-muted))]"
-                        : "border-[var(--semantic-border-soft)] bg-[var(--bg-muted)]/40 hover:border-[color-mix(in_srgb,var(--semantic-info)_40%,var(--semantic-border-soft))]"
-                    }`}
-                    onClick={() => setBranchPending(o)}
-                  >
-                    {o.label}
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            {branchPending ? (
-              <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--bg-card))] p-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">Selected option</h3>
-                <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">{branchPending.rationale}</p>
-                <button
-                  type="button"
-                  className="mt-4 rounded-full bg-[var(--semantic-brand)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-on-brand)]"
-                  onClick={commitBranchChoice}
-                >
-                  Commit & continue
-                </button>
-              </section>
-            ) : null}
+            <ClinicalScenarioQuestionPanel
+              questionStem={branchStage.questionStem}
+              focus={branchStage.clinicalJudgmentFocus}
+              options={branchVisible}
+              pending={branchPending}
+              onSelectPending={setBranchPending}
+              onCommit={commitBranchChoice}
+            />
           </>
         ) : null}
 

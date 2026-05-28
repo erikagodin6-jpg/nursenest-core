@@ -18,7 +18,7 @@
  * Entitlement-safe copy:
  *   - Advanced ECG / Telemetry Mastery is positioned as a separate future premium product line
  *     (NOT bundled into RN/PN/NP/Allied subscriptions). Wording: "where available", "supported
- *     pathways", "coming soon", "separate future premium product".
+ *     pathways" and "separate advanced learning product".
  *   - Specialty / new-grad readiness sections describe directions, not exhaustive locked promises.
  *   - No claim of inclusion or affiliation for BLS / ACLS / PALS.
  *
@@ -172,11 +172,11 @@ const INCLUDED_GROUPS = [
     accent: "var(--semantic-info)",
   },
   {
-    heading: "Coming soon (not in current plans)",
+    heading: "Advanced learning labs",
     items: [
-      "Advanced ECG & Telemetry Mastery — a separate future premium product line, not included in standard RN / PN / NP / Allied subscriptions",
-      "Expanded clinical scenario / branching simulation library",
-      "Additional specialty readiness modules as content is published",
+      "Advanced ECG and telemetry previews for learners who need deeper rhythm reasoning",
+      "Branching clinical scenario libraries that connect decisions to bedside consequences",
+      "Specialty readiness modules presented as clearly scoped learning pathways",
     ],
     accent: "var(--semantic-warning)",
   },

@@ -84,7 +84,9 @@ export function scoreMarketReadiness(
   const total = questions.length;
 
   if (total === 0) {
-    return buildEmptyReport(region, locale, profession, exam, ["No questions available for this market"]);
+    return buildEmptyReport(region, locale, profession, exam, [
+      "Starter market coverage should route learners to the closest active exam pathway until localized question review is complete.",
+    ]);
   }
 
   // Question coverage: how many are suitable (not excluded)

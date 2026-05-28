@@ -11,6 +11,7 @@ import { loadLabsRouteContext } from "@/lib/labs/labs-route-loader";
 export const metadata: Metadata = {
   title: "Labs | NurseNest",
   description: "Clinical lab reasoning engine: prioritization, trends, patterns, and integrated study loops.",
+  robots: { index: false, follow: false },
 };
 
 export default async function LabsHubRoute() {

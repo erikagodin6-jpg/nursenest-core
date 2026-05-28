@@ -1,0 +1,267 @@
+/**
+ * ECG Telemetry Workstation — premium monitor lab shell (theme-aware).
+ * Scoped to [data-nn-ecg-workstation].
+ */
+
+[data-nn-ecg-workstation] {
+  --nn-ecg-sidebar-width: 17.5rem;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+}
+
+[data-nn-ecg-workstation]::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  right: -4%;
+  top: 2rem;
+  width: min(32vw, 320px);
+  aspect-ratio: 50 / 44;
+  opacity: 0.04;
+  background: color-mix(in srgb, var(--semantic-chart-2) 60%, var(--semantic-brand));
+  mask-image: url("/brand/leaf-logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/brand/leaf-logo.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.nn-ecg-workstation__frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .nn-ecg-workstation__frame {
+    grid-template-columns: var(--nn-ecg-sidebar-width) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+}
+
+.nn-ecg-workstation__sidebar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nn-ecg-workstation__sidebar {
+    display: block;
+    position: sticky;
+    top: calc(var(--nn-learner-sticky-offset, 4.5rem) + 0.5rem);
+    max-height: calc(100dvh - var(--nn-learner-sticky-offset, 4.5rem) - 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, var(--semantic-info) 12%);
+    background: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool));
+    box-shadow: var(--semantic-shadow-soft);
+  }
+}
+
+.nn-ecg-workstation__home {
+  display: block;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--semantic-border-soft);
+  text-decoration: none;
+}
+
+.nn-ecg-workstation__home-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-info) 88%, var(--semantic-text-primary));
+}
+
+.nn-ecg-workstation__home-title {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-ecg-workstation__nav-section + .nn-ecg-workstation__nav-section {
+  margin-top: 1rem;
+}
+
+.nn-ecg-workstation__nav-title {
+  margin: 0 0 0.35rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-ecg-workstation__nav-link {
+  display: block;
+  margin-bottom: 0.25rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.65rem;
+  font-size: 12px;
+  color: var(--semantic-text-secondary);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.nn-ecg-workstation__nav-link:hover {
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface));
+}
+
+.nn-ecg-workstation__nav-link--active {
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+}
+
+.nn-ecg-workstation__main {
+  min-width: 0;
+}
+
+.nn-ecg-workstation__mobile-strip {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 1024px) {
+  .nn-ecg-workstation__mobile-strip {
+    display: none;
+  }
+}
+
+.nn-ecg-workstation__chip {
+  flex-shrink: 0;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--semantic-border-soft);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nn-ecg-workstation__chip--active {
+  border-color: color-mix(in srgb, var(--semantic-info) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-ecg-readiness-band {
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 42%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-ecg-telemetry-lesson__strip-stage {
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 30%, var(--semantic-surface));
+}
+
+.nn-ecg-measurement-lab {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  border: 1px dashed color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-surface-alt) 55%, var(--semantic-surface));
+}
+
+.nn-ecg-measurement-lab__grid {
+  position: relative;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  cursor: crosshair;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--semantic-danger) 35%, transparent) 0,
+      color-mix(in srgb, var(--semantic-danger) 35%, transparent) 1px,
+      transparent 1px,
+      transparent calc(100% / 24)
+    ),
+    color-mix(in srgb, var(--semantic-panel-warm) 25%, var(--semantic-surface));
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-ecg-measurement-lab__marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.nn-ecg-measurement-lab__marker--start {
+  background: var(--semantic-info);
+}
+
+.nn-ecg-measurement-lab__marker--end {
+  background: var(--semantic-brand);
+}
+
+.nn-ecg-measurement-lab__count {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.35rem;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--semantic-surface);
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-ecg-measurement-lab__btn {
+  min-height: 2rem;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-ecg-measurement-lab__btn--ghost {
+  border-color: var(--semantic-border-soft);
+  background: var(--semantic-surface);
+}
+
+[data-theme="midnight"] .nn-ecg-telemetry-lesson__strip-stage,
+[data-theme="midnight"] .nn-ecg-readiness-band {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+}
+
+[data-theme="midnight"] .nn-ecg-measurement-lab__grid {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--semantic-chart-3) 45%, transparent) 0,
+      color-mix(in srgb, var(--semantic-chart-3) 45%, transparent) 1px,
+      transparent 1px,
+      transparent calc(100% / 24)
+    ),
+    color-mix(in srgb, var(--semantic-surface-alt) 80%, var(--semantic-surface));
+}

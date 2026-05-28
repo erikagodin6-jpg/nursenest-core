@@ -65,6 +65,7 @@ import {
 } from "@/lib/marketing/allied-hub-premium-module-policy";
 import { isMltSpecialtyMarketingSurfacesEnabled } from "@/lib/mlt/mlt-premium-module-config";
 import { isRtVentilatorMarketingSurfacesEnabled } from "@/lib/rt-ventilator/rt-ventilator-module-config";
+import { prioritizationHubHref } from "@/lib/prioritization/prioritization-delegation-system";
 
 export type PremiumHubModuleKey =
   | "labs"
@@ -311,19 +312,19 @@ function pushCoreStudyToolCards(
     wrapGuestWithLoginCallback: true,
   });
 
-  // NCLEX Next Gen tooling copy is nursing-pathway specific; allied hubs use the same mixed-questions
-  // route via Practice exams + flashcards without implying RN/NP NGN branding.
+  // Bedside prioritization and delegation is nursing-pathway specific; allied hubs use the same mixed-questions
+  // route via Practice exams + flashcards without implying RN/NP decision-round scope.
   if (pathway.roleTrack !== "allied") {
     studyTools.push({
       key: "ngn_tools",
-      icon: Brain,
+      icon: ClipboardCheck,
       variant: "default",
       extraClass: "nn-exam-hub-study-card--featured",
       titleKey: "components.examPathwayHub.premiumModules.ngnToolsTitle",
       bodyKey: "components.examPathwayHub.premiumModules.ngnToolsBody",
       ctaKey: "components.examPathwayHub.premiumModules.ngnToolsCta",
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
-      href: scopeAlliedAppHref(pathway, pathwayHubAppQuestionsPathwayMixedHref(pathway.id), alliedProfessionKey),
+      href: scopeAlliedAppHref(pathway, prioritizationHubHref(pathway.id), alliedProfessionKey),
       wrapGuestWithLoginCallback: true,
     });
   }
@@ -527,7 +528,6 @@ function pushAlliedSupplementalPremiumStudyTools(
 
 function buildNewGradOnlyCards(pathway: ExamPathwayDefinition): PremiumModuleCardModel[] {
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
-  const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = marketingCatPathForPathway(pathway);
 
   return [
@@ -545,14 +545,14 @@ function buildNewGradOnlyCards(pathway: ExamPathwayDefinition): PremiumModuleCar
     },
     {
       key: "clinical_judgment",
-      icon: Stethoscope,
+      icon: ClipboardCheck,
       variant: "featured",
       extraClass: "nn-exam-hub-study-card--featured",
       titleKey: "components.examPathwayHub.premiumModules.clinicalJudgmentTitle",
       bodyKey: "components.examPathwayHub.premiumModules.clinicalJudgmentBody",
       ctaKey: "components.examPathwayHub.premiumModules.clinicalJudgmentCta",
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
-      href: questionsHref,
+      href: prioritizationHubHref(pathway.id),
       wrapGuestWithLoginCallback: false,
     },
     {

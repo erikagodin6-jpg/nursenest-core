@@ -1,0 +1,715 @@
+/**
+ * Clinical Lab Workstation — persistent sidebar shell, leaf atmosphere, density.
+ * Scoped to [data-nn-clinical-skills-workstation]. Presentation only.
+ */
+
+[data-nn-clinical-skills-workstation] {
+  --nn-clinical-skills-sidebar-width: 17.5rem;
+  --nn-clinical-skills-rail-width: 18rem;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+}
+
+[data-nn-clinical-skills-workstation]::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  right: -6%;
+  top: 0;
+  width: min(36vw, 380px);
+  aspect-ratio: 50 / 44;
+  opacity: 0.05;
+  background-color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-chart-1));
+  mask-image: url("/brand/leaf-logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/brand/leaf-logo.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  transform: rotate(8deg);
+}
+
+.nn-clinical-skills-workstation__frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .nn-clinical-skills-workstation__frame {
+    grid-template-columns: var(--nn-clinical-skills-sidebar-width) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.nn-clinical-skills-workstation__sidebar {
+  display: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .nn-clinical-skills-workstation__sidebar {
+    display: block;
+    position: sticky;
+    top: calc(var(--nn-learner-sticky-offset, 4.5rem) + 0.5rem);
+    max-height: calc(100dvh - var(--nn-learner-sticky-offset, 4.5rem) - 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand) 10%);
+    background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool));
+    box-shadow: var(--semantic-shadow-soft);
+  }
+}
+
+.nn-clinical-skills-workstation__main {
+  min-width: 0;
+  min-height: 0;
+  padding-bottom: 2rem;
+}
+
+.nn-clinical-skills-workstation__mobile-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 1024px) {
+  .nn-clinical-skills-workstation__mobile-strip {
+    display: none;
+  }
+}
+
+.nn-clinical-skills-workstation__continue {
+  display: block;
+  margin: 0.75rem 0.75rem 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 45%, var(--semantic-surface));
+  text-decoration: none;
+}
+
+.nn-clinical-skills-workstation__continue-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-success);
+}
+
+.nn-clinical-skills-workstation__continue-title {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-workstation__nav-head {
+  padding: 1rem 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-clinical-skills-workstation__nav-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-clinical-skills-workstation__nav-home {
+  display: inline-flex;
+  margin-top: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  text-decoration: none;
+}
+
+.nn-clinical-skills-workstation__nav-home[data-active="true"] {
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-workstation__category {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+}
+
+.nn-clinical-skills-workstation__category summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-workstation__category summary::-webkit-details-marker {
+  display: none;
+}
+
+.nn-clinical-skills-workstation__category[data-active="true"] summary {
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+.nn-clinical-skills-workstation__lesson-list {
+  padding: 0 0.5rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.nn-clinical-skills-workstation__lesson-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--semantic-text-secondary);
+  text-decoration: none;
+}
+
+.nn-clinical-skills-workstation__lesson-link:hover {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-workstation__lesson-link[data-active="true"] {
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+  background: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-surface));
+  box-shadow: inset 2px 0 0 var(--semantic-brand);
+}
+
+.nn-clinical-skills-workstation__lesson-meta {
+  flex-shrink: 0;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+}
+
+.nn-clinical-skills-workstation__chip {
+  flex-shrink: 0;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid var(--semantic-border-soft);
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  background: var(--semantic-surface);
+  text-decoration: none;
+}
+
+.nn-clinical-skills-workstation__chip[data-active="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-lesson-workspace__grid {
+  display: grid;
+  min-width: 0;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1280px) {
+  .nn-clinical-skills-lesson-workspace__grid {
+    grid-template-columns: minmax(0, 1fr) var(--nn-clinical-skills-rail-width);
+    align-items: start;
+  }
+}
+
+.nn-clinical-skills-lesson-rail {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+@media (min-width: 1280px) {
+  .nn-clinical-skills-lesson-rail {
+    position: sticky;
+    top: calc(var(--nn-learner-sticky-offset, 4.5rem) + 0.5rem);
+    max-height: calc(100dvh - var(--nn-learner-sticky-offset, 4.5rem) - 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.nn-clinical-skills-lesson-rail__card {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool));
+  padding: 0.85rem 1rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-clinical-skills-lesson-rail__card h3 {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-clinical-skills-lesson-rail__card ul {
+  margin-top: 0.5rem;
+  list-style: disc;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-clinical-skills-hub .nn-clinical-skills-hub__hero {
+  margin-top: 0;
+}
+
+.nn-clinical-skills-workstation__lesson-link[data-progress="completed"] span:first-child::after {
+  content: " ✓";
+  color: var(--semantic-success);
+  font-weight: 700;
+}
+
+.nn-clinical-skills-workstation__lesson-link[data-progress="in_progress"] {
+  border-left: 2px solid color-mix(in srgb, var(--semantic-info) 55%, transparent);
+}
+
+.nn-clinical-skills-lesson-hero {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 80%, var(--semantic-brand) 12%);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 42%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-panel-warm) 18%, var(--semantic-surface))
+  );
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-clinical-skills-lesson-hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--semantic-brand);
+}
+
+.nn-clinical-skills-block {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--nn-clinical-skills-block-hue, var(--semantic-border-soft)) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--nn-clinical-skills-block-hue, var(--semantic-surface)) 8%, var(--semantic-surface)),
+    var(--semantic-surface)
+  );
+  box-shadow: var(--semantic-shadow-soft);
+  overflow: hidden;
+}
+
+.nn-clinical-skills-block__head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--nn-clinical-skills-block-hue, var(--semantic-border-soft)) 14%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-clinical-skills-block-hue, var(--semantic-surface)) 6%, var(--semantic-surface-muted));
+}
+
+.nn-clinical-skills-block__icon {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--nn-clinical-skills-block-hue, var(--semantic-border-soft)) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-clinical-skills-block-hue, var(--semantic-surface)) 12%, var(--semantic-surface));
+  color: var(--nn-clinical-skills-block-hue, var(--semantic-brand));
+}
+
+.nn-clinical-skills-block__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-clinical-skills-block__title {
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-block__body {
+  padding: 1rem 1rem 1.1rem;
+}
+
+.nn-clinical-skills-formula-row,
+.nn-clinical-skills-example-step,
+.nn-clinical-skills-worked-card,
+.nn-clinical-skills-safety-card {
+  border-radius: 0.75rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-surface-muted) 65%, var(--semantic-surface));
+  padding: 0.75rem 0.85rem;
+}
+
+.nn-clinical-skills-safety-card__action {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-info);
+}
+
+.nn-lab-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.nn-lab-chip-list li {
+  border-radius: 999px;
+  border: 1px solid var(--semantic-border-soft);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--semantic-text-secondary);
+  background: var(--semantic-surface);
+}
+
+.nn-lab-chip-list--medication li {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-3) 8%, var(--semantic-surface));
+}
+
+.nn-lab-chip-list--escalation li {
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface));
+}
+
+.nn-clinical-skills-worked-reveal summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-brand);
+}
+
+.nn-clinical-skills-drill-module {
+  border-radius: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 18%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+  overflow: hidden;
+}
+
+.nn-clinical-skills-drill-module__head {
+  padding: 1rem 1.1rem 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-success) 16%, var(--semantic-border-soft));
+}
+
+.nn-clinical-skills-drill-module__body {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.nn-clinical-skills-study-loop-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  text-decoration: none;
+  background: var(--semantic-surface);
+}
+
+.nn-clinical-skills-study-loop-link:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+}
+
+html[data-theme="midnight"] .nn-clinical-skills-lesson-hero,
+html[data-theme="midnight-indigo"] .nn-clinical-skills-lesson-hero,
+html[data-theme="apex"] .nn-clinical-skills-lesson-hero {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool))
+  );
+}
+
+.nn-clinical-skills-checkpoint-module {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+  overflow: hidden;
+}
+.nn-clinical-skills-checkpoint-module__head {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, transparent);
+}
+.nn-clinical-skills-checkpoint-module__body {
+  padding: 1rem 1.25rem 1.25rem;
+}
+.nn-clinical-skills-step-timeline {
+  position: relative;
+  padding-left: 0.5rem;
+}
+.nn-clinical-skills-step-timeline::before {
+  content: "";
+  position: absolute;
+  left: 1.15rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-4) 50%, transparent),
+    color-mix(in srgb, var(--semantic-brand) 35%, transparent)
+  );
+}
+
+/* Simulation procedure workspace */
+.nn-clinical-skills-procedure-workspace {
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .nn-clinical-skills-procedure-workspace {
+    grid-template-columns: minmax(11rem, 13.5rem) minmax(0, 1fr);
+    align-items: start;
+  }
+  .nn-clinical-skills-procedure-workspace__nav {
+    position: sticky;
+    top: 5.5rem;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+  }
+}
+.nn-clinical-skills-procedure-workspace__nav-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+  margin-bottom: 0.5rem;
+}
+.nn-clinical-skills-procedure-workspace__nav ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+@media (max-width: 1023px) {
+  .nn-clinical-skills-procedure-workspace__nav ol {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+.nn-clinical-skills-procedure-workspace__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  border-radius: 0.65rem;
+  border: 1px solid transparent;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.nn-clinical-skills-procedure-workspace__nav-item:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+}
+.nn-clinical-skills-procedure-workspace__nav-item--active {
+  border-color: color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+.nn-clinical-skills-procedure-workspace__nav-item--done .nn-clinical-skills-procedure-workspace__nav-num {
+  background: color-mix(in srgb, var(--semantic-success) 18%, var(--semantic-surface));
+  color: var(--semantic-success);
+}
+.nn-clinical-skills-procedure-workspace__nav-num {
+  flex-shrink: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--semantic-chart-4) 12%, var(--semantic-surface));
+}
+.nn-clinical-skills-procedure-step {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-4) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-4) 4%, var(--semantic-surface));
+  padding: 1rem 1.1rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+.nn-clinical-skills-procedure-step--active {
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-brand) 12%, transparent), var(--semantic-shadow-soft);
+}
+.nn-clinical-skills-procedure-step--done {
+  border-color: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+}
+.nn-clinical-skills-procedure-step__head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+.nn-clinical-skills-procedure-step__num {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  color: color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-text-primary));
+  background: var(--semantic-surface);
+}
+.nn-clinical-skills-procedure-step__callout {
+  display: flex;
+  gap: 0.5rem;
+  border-radius: 0.65rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.65rem 0.75rem;
+}
+.nn-clinical-skills-procedure-step__callout--info {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 25%, var(--semantic-surface));
+}
+.nn-clinical-skills-procedure-step__callout--warning {
+  border-color: color-mix(in srgb, var(--semantic-warning) 25%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface));
+}
+.nn-clinical-skills-procedure-step__callout--danger {
+  border-color: color-mix(in srgb, var(--semantic-danger) 25%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+}
+
+/* Flashcard deck */
+.nn-clinical-skills-flashcard-deck__card {
+  position: relative;
+  width: 100%;
+  min-height: 11rem;
+  border-radius: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-chart-1) 8%, var(--semantic-surface))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+  padding: 1.25rem 1.35rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.nn-clinical-skills-flashcard-deck__card:hover {
+  transform: translateY(-2px);
+}
+.nn-clinical-skills-flashcard-deck__face--back {
+  display: none;
+}
+.nn-clinical-skills-flashcard-deck__card--flipped .nn-clinical-skills-flashcard-deck__face--front {
+  display: none;
+}
+.nn-clinical-skills-flashcard-deck__card--flipped .nn-clinical-skills-flashcard-deck__face--back {
+  display: block;
+}
+.nn-clinical-skills-flashcard-deck__nav-btn,
+.nn-clinical-skills-flashcard-deck__ghost-btn,
+.nn-clinical-skills-flashcard-deck__mark-btn {
+  border-radius: 0.65rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+.nn-clinical-skills-flashcard-deck__mark-btn {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 25%, var(--semantic-border-soft));
+}
+.nn-clinical-skills-flashcard-deck__nav-btn:disabled {
+  opacity: 0.45;
+}
+
+/* Sequencing + shared action buttons */
+.nn-clinical-skills-sequencing__arrow {
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.25rem;
+  color: var(--semantic-text-primary);
+}
+.nn-clinical-skills-sequencing__arrow:disabled {
+  opacity: 0.4;
+}
+.nn-clinical-skills-sequencing__primary {
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: var(--role-cta);
+  color: var(--role-cta-foreground);
+  box-shadow: 0 2px 10px var(--role-cta-shadow);
+}
+.nn-clinical-skills-sequencing__ghost {
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  color: var(--semantic-text-primary);
+}
+
+.nn-clinical-skills-competency-meter {
+  padding: 0.25rem 0;
+}
+.nn-clinical-skills-lesson-rail__card--meter {
+  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface));
+}

@@ -10,6 +10,8 @@ import {
   listMedCalcCategoriesForTrack,
   type MedCalcCategorySlug,
 } from "@/lib/med-calculations/med-calculations-engine";
+import { auth } from "@/lib/auth";
+import { loadMedCalcLessonProgressForLesson } from "@/lib/med-calculations/med-calc-lesson-progress";
 import { loadMedCalculationsRouteContext } from "@/lib/med-calculations/med-calculations-route-loader";
 
 type Props = {
@@ -24,6 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${lesson.title} | NurseNest`,
     description: lesson.description,
+    robots: { index: false, follow: false },
   };
 }
 
@@ -36,6 +39,11 @@ export default async function MedCalculationsLessonRoute({ params }: Props) {
   const questions = getMedCalcQuestions(lesson);
   const flashcards = getMedCalcFlashcards(lesson);
   const studyLinks = buildMedCalcStudyLinks(context.pathwayId, lesson.questionTopic);
+  const session = await auth();
+  const userId = (session?.user as { id?: string } | undefined)?.id;
+  const initialProgress = userId
+    ? await loadMedCalcLessonProgressForLesson(userId, context.track, lesson)
+    : ("not_started" as const);
   const categoryLabel =
     listMedCalcCategoriesForTrack(context.track).find((c) => c.slug === lesson.category)?.title ?? category;
 
@@ -49,6 +57,8 @@ export default async function MedCalculationsLessonRoute({ params }: Props) {
       />
       <MedCalculationsLessonPage
         userId={context.userId}
+        medTrack={context.track}
+        initialProgress={initialProgress}
         lesson={lesson}
         questions={questions}
         flashcards={flashcards}

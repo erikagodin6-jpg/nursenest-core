@@ -66,9 +66,18 @@ test("study links fall back safely when pathway is unknown", () => {
   assert.equal(links.catLaunchHref, "/app/practice-tests?catLaunch=1");
 });
 
+test("NP track receives deeper electrolyte and synthesis lessons than RN alone", () => {
+  const rn = listLabLessonsForTrack("rn");
+  const np = listLabLessonsForTrack("np");
+  assert.ok(np.length > rn.length);
+  assert.ok(np.some((l) => l.slug === "np-advanced-acid-base-lab-synthesis"));
+  assert.ok(rn.some((l) => l.slug === "sodium-fluid-osmolality-patterns"));
+  assert.ok(!rn.some((l) => l.slug === "np-advanced-acid-base-lab-synthesis"));
+});
+
 test("inventory counts remain non-empty so paid labs does not surface empty states", () => {
   const inventory = countLabsInventoryForTrack("rn");
-  assert.ok(inventory.lessonCount >= 7);
+  assert.ok(inventory.lessonCount >= 10);
   assert.ok(inventory.questionCount >= inventory.lessonCount * 6);
   assert.ok(inventory.flashcardCount >= inventory.lessonCount * 5);
 });

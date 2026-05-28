@@ -3,7 +3,12 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { loadContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
 import { loadContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
 import { loadRemediationReport } from "@/lib/admin/content-quality-remediation";
-import { RATIONALE_MIN_WORDS, LESSON_MIN_WORDS } from "@/lib/content-quality/standards";
+import {
+  ACTIVITY_DEPTH_GLOBAL_REQUIRED_ELEMENTS,
+  ACTIVITY_DEPTH_STANDARDS,
+  RATIONALE_MIN_WORDS,
+  LESSON_MIN_WORDS,
+} from "@/lib/content-quality/standards";
 import { ContentQualityRefreshButton } from "@/components/admin/content-quality-refresh-button";
 
 export const dynamic = "force-dynamic";
@@ -289,6 +294,65 @@ export default async function AdminContentQualityPage() {
           <li>Bulk publish to PUBLISHED skips rows that fail the bar. Fix individually or use overrides.</li>
           <li>AI draft promotion to the bank is blocked until the draft meets the bar (promotes as DRAFT only).</li>
         </ul>
+      </section>
+
+      <section className="mt-8 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Activity substance standards</p>
+            <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">Minimum depth by activity type</h2>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              These standards define the floor for premium activities: no tiny quizzes, no passive skill pages, no static
+              scenarios, and no low-value flashcard bundles.
+            </p>
+          </div>
+          <div className="rounded-lg border border-border/70 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+            Global requirements: {ACTIVITY_DEPTH_GLOBAL_REQUIRED_ELEMENTS.join(" · ")}
+          </div>
+        </div>
+        <div className="mt-4 overflow-auto">
+          <table className="w-full min-w-[760px] text-left text-sm">
+            <thead className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
+              <tr>
+                <th className="py-2 pr-3">Activity</th>
+                <th className="py-2 pr-3 text-right">Min / ideal interactions</th>
+                <th className="py-2 pr-3 text-right">Min / ideal questions</th>
+                <th className="py-2 pr-3 text-right">Flashcards</th>
+                <th className="py-2 pr-3 text-right">Branching</th>
+                <th className="py-2">Required elements</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(ACTIVITY_DEPTH_STANDARDS).map((standard) => (
+                <tr key={standard.track} className="border-b border-border/40 align-top">
+                  <td className="py-3 pr-3">
+                    <p className="font-semibold text-foreground">{standard.label}</p>
+                    <p className="mt-1 max-w-xs text-xs leading-relaxed text-muted-foreground">{standard.tierNotes}</p>
+                  </td>
+                  <td className="py-3 pr-3 text-right tabular-nums">
+                    {standard.minimumInteractions} / {standard.idealInteractions}
+                  </td>
+                  <td className="py-3 pr-3 text-right tabular-nums">
+                    {standard.minimumQuestions} / {standard.idealQuestions}
+                  </td>
+                  <td className="py-3 pr-3 text-right tabular-nums">
+                    {standard.minimumFlashcards} / {standard.idealFlashcards}
+                  </td>
+                  <td className="py-3 pr-3 text-right tabular-nums">{standard.minimumBranchingPoints}</td>
+                  <td className="py-3">
+                    <div className="flex max-w-md flex-wrap gap-1.5">
+                      {standard.requiredElements.map((item) => (
+                        <span key={item} className="rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   );

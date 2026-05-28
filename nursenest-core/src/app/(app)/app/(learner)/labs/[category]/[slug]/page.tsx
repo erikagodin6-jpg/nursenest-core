@@ -11,6 +11,8 @@ import {
   type LabCategorySlug,
 } from "@/lib/labs/labs-engine";
 import { loadLabsRouteContext } from "@/lib/labs/labs-route-loader";
+import { auth } from "@/lib/auth";
+import { loadLabLessonProgressForLesson } from "@/lib/labs/lab-lesson-progress";
 
 type Props = {
   params: Promise<{ category: string; slug: string }>;
@@ -27,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${lesson.title} | NurseNest Labs`,
     description: lesson.description,
+    robots: { index: false, follow: false },
   };
 }
 
@@ -43,14 +46,20 @@ export default async function LabLessonRoute({ params }: Props) {
   const flashcards = getLabLessonFlashcards(lesson);
   const studyLinks = buildLabsStudyLinks(context.pathwayId, lesson.practiceQuestionTopic);
   const categoryLabel = LABS_CATEGORIES.find((c) => c.slug === lesson.category)?.title ?? category;
+  const session = await auth();
+  const userId = (session?.user as { id?: string } | undefined)?.id;
+  const initialProgress = userId
+    ? await loadLabLessonProgressForLesson(userId, context.track, lesson)
+    : ("not_started" as const);
 
   return (
     <div className="space-y-6">
       <LearnerBreadcrumbTrail
         kind="labs-lesson"
         categoryLabel={categoryLabel}
+        categorySlug={lesson.category}
         lessonTitle={lesson.shortTitle}
-        pathname="/app/labs"
+        pathname={`/app/labs/${lesson.category}/${lesson.slug}`}
       />
       <LabLessonPage
         lesson={lesson}
@@ -60,6 +69,7 @@ export default async function LabLessonRoute({ params }: Props) {
         questions={questions}
         flashcards={flashcards}
         studyLinks={studyLinks}
+        initialProgress={initialProgress}
       />
     </div>
   );

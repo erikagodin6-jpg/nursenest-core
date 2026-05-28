@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Long-form scenario structure</title>
+    <link rel="stylesheet" href="./activity-depth-preview.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="topbar"><span class="brand"><span class="mark">N</span>NurseNest</span><span class="nav"><span>Scenario</span><span>25 interactions</span><span>5 branches</span><span>3 outcomes</span></span></nav>
+      <section class="hero">
+        <p class="eyebrow">Unfolding patient simulation</p>
+        <h1>The patient condition changes because of learner decisions.</h1>
+        <p class="lead">Scenarios include handoff, chart review, prioritization, intervention, reassessment, escalation, and outcome review. No static cases ship.</p>
+      </section>
+      <section class="grid two section">
+        <div class="panel">
+          <p class="eyebrow">Scenario timeline</p>
+          <div class="timeline">
+            <div class="step"><time>07:15</time><strong>Handoff: CHF exacerbation, urine output falling</strong><span class="tag">cue</span></div>
+            <div class="step"><time>07:32</time><strong>Question 4: rank assessment priorities</strong><span class="tag">rank</span></div>
+            <div class="step"><time>07:48</time><strong>New lab: potassium 3.0, diuretic due</strong><span class="tag hot">safety</span></div>
+            <div class="step"><time>08:05</time><strong>Branch: delayed escalation worsens dyspnea</strong><span class="tag hot">branch</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="eyebrow">Minimum structure</p>
+          <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
+            <div class="metric"><strong>15+</strong><span>RN scenario interactions</span></div>
+            <div class="metric"><strong>5+</strong><span>branching points</span></div>
+            <div class="metric"><strong>14+</strong><span>flashcards</span></div>
+            <div class="metric"><strong>5+</strong><span>remediation prompts</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,251 @@
+/**
+ * Homepage branding revamp 2026 — theme tokens, typography hierarchy, leaf atmosphere.
+ * Presentation only: no copy, layout grid, or section order changes.
+ * Scoped to `.nn-home-marketing-root[data-nn-homepage-branding-revamp]`.
+ */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Leaf watermark — brand atmosphere (mask, theme-tinted) */
+.nn-home-marketing-root[data-nn-homepage-branding-revamp]::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  right: -4%;
+  top: 2.5rem;
+  width: min(38vw, 420px);
+  aspect-ratio: 50 / 44;
+  opacity: 0.06;
+  background-color: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-chart-2));
+  mask-image: url("/brand/leaf-logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("/brand/leaf-logo.svg");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  transform: rotate(10deg);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Typography hierarchy (section vs card vs body) ───────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-marketing-h2 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--palette-heading);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-marketing-h3 {
+  font-weight: 600;
+  letter-spacing: -0.014em;
+  color: var(--palette-heading);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-marketing-body,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-marketing-lead {
+  font-weight: 400;
+  color: var(--palette-text-muted);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-marketing-body-sm {
+  font-weight: 400;
+  font-size: var(--text-marketing-body-sm, 0.9375rem);
+  line-height: 1.6;
+  color: var(--palette-text-muted);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-home-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-depth-card h3,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-pathway-card h3 {
+  font-size: clamp(1.02rem, 1.05vw, 1.125rem);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.28;
+  color: var(--palette-heading);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-flow-card > span.mt-1 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--palette-heading);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-flow-card > span.nn-marketing-caption {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--palette-text-muted);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-clinical-note > p:first-child {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-clinical-note > .nn-marketing-body-sm {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 400;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-mini__title {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--palette-heading);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-mini__sub {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--palette-text-muted);
+}
+
+/* Override blossom “lightweight” heading weights on homepage only */
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp]
+  :where(.nn-marketing-h1, .nn-marketing-h2, .nn-marketing-h3, .nn-marketing-h4) {
+  font-weight: 700;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp]
+  .nn-marketing-h1 {
+  font-weight: 700;
+}
+
+/* ── Section surfaces (multi-hue semantic bands) ─────────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-home-section--clinical {
+  background: color-mix(in srgb, var(--nn-marketing-surface-secondary, var(--semantic-panel-cool)) 28%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-home-section--ecosystem {
+  background: color-mix(in srgb, var(--nn-marketing-surface-tertiary, var(--semantic-panel-mint)) 22%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-home-section--readiness {
+  background: color-mix(in srgb, var(--semantic-panel-positive) 18%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-home-section--trust {
+  background: color-mix(in srgb, var(--semantic-success-soft) 35%, var(--theme-page-bg));
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-home-section--cta {
+  background: color-mix(in srgb, var(--semantic-panel-warm) 24%, transparent);
+}
+
+html[data-theme="ocean"] .nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-home-marketing-rich-hero {
+  background-image: var(--nn-marketing-gradient-hero, var(--hero-ambient-radial));
+}
+
+html[data-theme="mint-blossom"] .nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-home-marketing-rich-hero,
+html[data-theme="blossom"] .nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-home-marketing-rich-hero {
+  background-image: var(--nn-marketing-gradient-blossom, var(--nn-marketing-gradient-hero));
+}
+
+/* Cards — semantic tints, not flat white/pink slabs */
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] :where(
+    .nn-premium-depth-card,
+    .nn-premium-flow-card,
+    .nn-premium-pathway-card,
+    .nn-premium-clinical-note
+  ) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 12%);
+  background: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-surface-elevated));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-brand) 6%, transparent),
+    0 18px 44px -32px color-mix(in srgb, var(--semantic-chart-3) 14%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-depth-card[data-role] {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--depth-soft, var(--semantic-brand-soft)) 42%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 96%, transparent)
+  );
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-flow-card {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-surface) 97%, transparent),
+    color-mix(in srgb, var(--premium-flow-accent, var(--semantic-brand)) 8%, var(--semantic-surface))
+  );
+}
+
+/* Hero panel — clinical workstation polish */
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-panel {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-info) 18%);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface-elevated)),
+    color-mix(in srgb, var(--semantic-surface) 94%, transparent)
+  );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-2) 10%, transparent),
+    0 24px 56px -36px color-mix(in srgb, var(--semantic-chart-5) 18%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-stat {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+  background: color-mix(in srgb, var(--semantic-surface-elevated) 88%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-stat--readiness {
+  border-top-color: color-mix(in srgb, var(--semantic-success) 55%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-stat--streak {
+  border-top-color: color-mix(in srgb, var(--semantic-warning) 50%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] .nn-premium-hero-stat--mastery {
+  border-top-color: color-mix(in srgb, var(--semantic-info) 50%, transparent);
+}
+
+/* Trust fear cards on homepage */
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] [data-testid="section-home-trust-fears"] .nn-marketing-h2 + .nn-marketing-body {
+  font-weight: 400;
+  color: var(--palette-text-muted);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] [data-testid="section-home-trust-fears"] article .nn-marketing-h3 {
+  font-weight: 700;
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp] [data-testid="section-home-trust-fears"] article .nn-marketing-body-sm {
+  font-weight: 400;
+  color: var(--palette-text-muted);
+}
+
+@media (max-width: 640px) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp]::after {
+    width: min(52vw, 280px);
+    opacity: 0.05;
+    right: -12%;
+  }
+}

@@ -1,5 +1,5 @@
-import { LabValuesModulePage } from "@/components/lab-values/lab-values-module-page";
+import { redirect } from "next/navigation";
 
 export default function LabValuesBasicsPage() {
-  return <LabValuesModulePage level="basics" />;
+  redirect("/app/labs");
 }

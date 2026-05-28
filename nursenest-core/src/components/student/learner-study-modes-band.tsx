@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, Brain, Crosshair, LayoutList } from "lucide-react";
+import { BookOpen, Brain, Crosshair, LayoutList, Pill } from "lucide-react";
 import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import { catStartHrefFromPremiumSnapshot } from "@/lib/learner/learner-dashboard-cat-start-href";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
@@ -33,11 +33,12 @@ export function LearnerStudyModesBand({
 
   const lessonsHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.lessons, pathwayId);
   const flashHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.flashcards, pathwayId);
+  const pharmacologyHref = withPathwayQuery("/app/pharmacology", pathwayId);
   const practiceHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.practice, pathwayId);
   const catHref = catStartHrefFromPremiumSnapshot(snapshot);
 
   return (
-    <div className="nn-dash-study-modes-grid grid gap-3 min-[520px]:grid-cols-2 min-[1100px]:grid-cols-4">
+    <div className="nn-dash-study-modes-grid grid gap-3 min-[520px]:grid-cols-2 min-[1100px]:grid-cols-5">
       <Link
         href={lessonsHref}
         className="group flex min-h-[8.5rem] flex-col justify-between rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_08%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md"
@@ -69,6 +70,30 @@ export function LearnerStudyModesBand({
         </div>
         <span className="mt-3 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))] group-hover:underline">
           {t("learner.studyModes.flashcards.cta")}
+        </span>
+      </Link>
+
+      <Link
+        href={pharmacologyHref}
+        className="group relative flex min-h-[8.5rem] flex-col justify-between overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface)),var(--semantic-surface)_55%,color-mix(in_srgb,var(--semantic-warning)_7%,var(--semantic-surface)))] p-4 shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <div aria-hidden className="pointer-events-none absolute -right-8 -top-10 h-24 w-24 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-2)_14%,transparent)] blur-2xl" />
+        <div className="relative flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-chart-2)_13%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-2)_92%,var(--semantic-text-primary))]">
+            <Pill className="h-5 w-5" aria-hidden strokeWidth={2} />
+          </span>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--semantic-chart-2)_82%,var(--semantic-text-secondary))]">
+              Medication safety
+            </p>
+            <h3 className="mt-0.5 text-sm font-bold text-[var(--semantic-text-primary)]">Pharmacology Practice</h3>
+            <p className="mt-1.5 text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
+              Master drug classes, adverse effects, interactions, and patient teaching.
+            </p>
+          </div>
+        </div>
+        <span className="relative mt-3 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-2)_88%,var(--semantic-text-primary))] group-hover:underline">
+          Start medication review
         </span>
       </Link>
 

@@ -91,7 +91,7 @@ export function HomeObjectionFaqSection() {
                   safeT(
                     t,
                     `pages.home.objections.${key}Answer`,
-                    "Answer coming soon.",
+                    "NurseNest gives learners structured practice, rationale review, and pathway-aware study guidance so they can keep moving safely.",
                   ),
                   locale,
                 )}

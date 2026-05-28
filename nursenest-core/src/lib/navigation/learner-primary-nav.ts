@@ -14,6 +14,9 @@ export const CANONICAL_LEARNER_ROUTES = {
   lessons: "/app/lessons",
   practice: "/app/practice-tests",
   flashcards: "/app/flashcards",
+  pharmacology: "/app/pharmacology",
+  prioritization: "/app/prioritization-delegation",
+  explore: "/app/explore",
   /** Gated by server + public nav flag; route 404s when the learner store is off. */
   printables: "/app/printables",
   osce: SCENARIO_LEARNER_ROUTES.osce,

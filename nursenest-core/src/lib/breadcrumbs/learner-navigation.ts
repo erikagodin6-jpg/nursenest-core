@@ -65,20 +65,24 @@ export function learnerLabsHubCrumbs(): BreadcrumbCrumb[] {
   ]);
 }
 
-export function learnerLabsCategoryCrumbs(categoryLabel: string): BreadcrumbCrumb[] {
+export function learnerLabsCategoryCrumbs(categoryLabel: string, categorySlug?: string): BreadcrumbCrumb[] {
   return truncateLearnerCrumbs([
     LEARNER_HOME,
     { name: "Dashboard", href: "/app" },
     { name: "Labs", href: "/app/labs" },
-    { name: categoryLabel, href: undefined },
+    { name: categoryLabel, href: categorySlug ? `/app/labs/${categorySlug}` : undefined },
   ]);
 }
 
-export function learnerLabsLessonCrumbs(categoryLabel: string, lessonTitle: string): BreadcrumbCrumb[] {
+export function learnerLabsLessonCrumbs(
+  categoryLabel: string,
+  lessonTitle: string,
+  categorySlug?: string,
+): BreadcrumbCrumb[] {
   return truncateLearnerCrumbs([
     LEARNER_HOME,
     { name: "Labs", href: "/app/labs" },
-    { name: categoryLabel, href: undefined },
+    { name: categoryLabel, href: categorySlug ? `/app/labs/${categorySlug}` : undefined },
     { name: lessonTitle, href: undefined },
   ]);
 }
@@ -161,7 +165,7 @@ export function learnerMedCalHubCrumbs(): BreadcrumbCrumb[] {
 export function learnerMedCalLessonCrumbs(categoryLabel: string, lessonTitle: string): BreadcrumbCrumb[] {
   return truncateLearnerCrumbs([
     LEARNER_HOME,
-    { name: "Med calculations", href: "/app/med-calculations" },
+    { name: "Medication calculations", href: "/app/med-calculations" },
     { name: categoryLabel, href: undefined },
     { name: lessonTitle, href: undefined },
   ]);

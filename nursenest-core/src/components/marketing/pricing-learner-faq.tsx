@@ -4,7 +4,7 @@ import { ChevronDown, HeartHandshake } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp } from "@/lib/motion";
 
-const DETAIL_KEYS = ["passGuarantee", "startingBehind", "tryBeforePay", "examRealism", "refundRemorse"] as const;
+const DETAIL_KEYS = ["passGuarantee", "startingBehind", "tryBeforePay", "examRealism", "clinicalSkills", "refundRemorse"] as const;
 
 /**
  * Emotional / skeptic objections (pass anxiety, remorse, exam realism) — distinct band from region + reliability FAQs.

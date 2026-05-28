@@ -113,6 +113,7 @@ export function AuthExperienceShell({
           data-nn-auth-layout={layout}
           data-nn-auth-state={_state}
           data-nn-auth-theme={_theme}
+          data-nn-auth-branding-revamp=""
           data-nn-premium-color-depth=""
           data-nn-premium-full-platform-convergence=""
         >
@@ -122,7 +123,11 @@ export function AuthExperienceShell({
             aria-labelledby={hideHeader ? undefined : "premium-auth-heading"}
           >
             {visualPanel}
-            <section className="nn-premium-auth-card nn-premium-auth-card--signup" data-nn-premium-auth-card>
+            <section
+              className="nn-premium-auth-card nn-premium-auth-card--signup"
+              data-nn-premium-auth-card
+              data-nn-auth-branding-revamp=""
+            >
               {cardInner}
             </section>
           </section>
@@ -141,11 +146,16 @@ export function AuthExperienceShell({
           data-nn-auth-layout={layout}
           data-nn-auth-state={_state}
           data-nn-auth-theme={_theme}
+          data-nn-auth-branding-revamp=""
           data-nn-premium-color-depth=""
           data-nn-premium-full-platform-convergence=""
         >
           <section className="nn-premium-auth-centered" aria-labelledby="premium-auth-heading">
-            <section className="nn-premium-auth-card nn-premium-auth-card--centered" data-nn-premium-auth-card>
+            <section
+              className="nn-premium-auth-card nn-premium-auth-card--centered"
+              data-nn-premium-auth-card
+              data-nn-auth-branding-revamp=""
+            >
               {cardInner}
             </section>
           </section>
@@ -164,6 +174,7 @@ export function AuthExperienceShell({
           data-nn-auth-layout={layout}
           data-nn-auth-state={_state}
           data-nn-auth-theme={_theme}
+          data-nn-auth-branding-revamp=""
         >
           {children}
         </main>
@@ -182,12 +193,13 @@ export function AuthExperienceShell({
         data-nn-auth-layout={layout}
         data-nn-auth-state={_state}
         data-nn-auth-theme={_theme}
+        data-nn-auth-branding-revamp=""
         data-nn-premium-color-depth=""
         data-nn-premium-full-platform-convergence=""
       >
         <section className="nn-premium-auth-layout" aria-labelledby="premium-auth-heading">
           {storyPanel}
-          <section className="nn-premium-auth-card" data-nn-premium-auth-card>
+          <section className="nn-premium-auth-card" data-nn-premium-auth-card data-nn-auth-branding-revamp="">
             {cardInner}
           </section>
         </section>

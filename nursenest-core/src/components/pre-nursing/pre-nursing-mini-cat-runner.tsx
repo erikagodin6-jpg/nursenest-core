@@ -323,7 +323,7 @@ export function PreNursingMiniCatRunner({ questionsOverlay = {} }: MiniCatRunner
     const state = createMiniCatState();
     const firstQuestion = selectNextQuestion(state);
     if (!firstQuestion) {
-      // Fallback: no questions available
+      // Starter fallback: keep the runner stable if the local bank is unavailable.
       return;
     }
     setPhase({

@@ -104,7 +104,7 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           ),
           body: tr(
             "pages.home.premium.pathways.rn.body",
-            "Adaptive lessons, NGN case practice, weak-area targeting, and readiness loops for registered nurse candidates.",
+            "Adaptive lessons, prioritization and delegation scenarios, weak-area targeting, and readiness loops for registered nurse candidates.",
           ),
           href: loc(hubs.rn),
           cta: tr("pages.home.premium.pathways.rn.cta", "Explore RN"),

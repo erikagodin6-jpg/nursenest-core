@@ -13,9 +13,10 @@ test("basic ECG structured lessons render deterministic live strips", () => {
   const stripCount = html.match(/data-testid="ecg-live-strip"/g)?.length ?? 0;
 
   assert.ok(stripCount >= 10, `Expected basic lessons to render ECG strips, found ${stripCount}`);
-  assert.match(html, /Normal Sinus Rhythm rhythm strip/);
-  assert.match(html, /Atrial Fibrillation rhythm strip/);
-  assert.match(html, /Ventricular Fibrillation rhythm strip/);
+  assert.match(html, /Normal Sinus Rhythm — (annotated review|independent interpretation)/);
+  assert.match(html, /Atrial Fibrillation — (annotated review|independent interpretation)/);
+  assert.match(html, /Interactive measurement lab/);
+  assert.match(html, /University-level ECG foundations/);
 });
 
 test("every basic ECG structured lesson has a deterministic strip config", () => {
