@@ -21,14 +21,22 @@ import {
 } from "@/lib/entitlements/subscription-paid-access";
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
-import type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
+import type {
+  AccessScope,
+  SubscriptionPlanStatus,
+  UserAccess,
+} from "./user-access-types";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MODULE_ADD_ON_PLAN_CODE_PREFIX } from "@/lib/subscriptions/subscription-plan-codes";
 
-export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
+export type {
+  AccessScope,
+  SubscriptionPlanStatus,
+  UserAccess,
+} from "./user-access-types";
 
 /**
  * Runtime cross-request cache to reduce entitlement DB pressure for hot routes.
@@ -36,6 +44,9 @@ export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-acc
  * Notes:
  * - This is intentionally short TTL, per-process, and best-effort (works in long-lived Node runtimes).
  * - We never grant access based on a stale cache entry unless the cached value already hasPremium=true.
+ * - Invalidation is TTL-driven: subscription/profile writes are DB-authoritative immediately for uncached reads,
+ *   and this cache expires after 60s. Webhook/admin entitlement changes therefore converge within one TTL per
+ *   Node process without introducing a cross-instance invalidation dependency.
  */
 type RuntimeUserAccessCacheEntry = { ua: UserAccess; cachedAtMs: number };
 const runtimeUserAccessCache = new Map<string, RuntimeUserAccessCacheEntry>();
@@ -52,13 +63,18 @@ function withSessionJwt(
     sessionJwt: { role: user.role, credentialVersion: user.credentialVersion },
   };
 }
-export { subscriptionStatusForSession, type SessionSubscriptionStatus } from "./subscription-session-status";
+export {
+  subscriptionStatusForSession,
+  type SessionSubscriptionStatus,
+} from "./subscription-session-status";
 
 async function loadAdminLearnerQaSimulationModule() {
   return import("@/lib/admin/admin-learner-qa-simulation");
 }
 
-function mapSubscriptionPlanStatus(status: SubscriptionStatus | undefined | null): SubscriptionPlanStatus {
+function mapSubscriptionPlanStatus(
+  status: SubscriptionStatus | undefined | null,
+): SubscriptionPlanStatus {
   if (!status) return "none";
   switch (status) {
     case SubscriptionStatus.ACTIVE:
@@ -141,7 +157,9 @@ function emptyAccess(userId: string): UserAccess {
  *
  * **Audit matrix** (Stripe ↔ DB ↔ premium ↔ content gates): `entitlement-state-matrix.ts`.
  */
-const getUserAccessCached = cache(async function getUserAccessCached(userId: string): Promise<UserAccess> {
+const getUserAccessCached = cache(async function getUserAccessCached(
+  userId: string,
+): Promise<UserAccess> {
   const t0 = performance.now();
   const telemetry = {
     userFound: false,
@@ -254,8 +272,10 @@ async function getUserAccessCore(
 
   /** Staff roles: full internal product access — do not run subscription queries or imply a paid Stripe plan. */
   if (isLearnerEntitlementStaffBypassRole(user.role)) {
-    const { buildUserAccessForAdminLearnerQa, getVerifiedAdminLearnerQaSimulation } =
-      await loadAdminLearnerQaSimulationModule();
+    const {
+      buildUserAccessForAdminLearnerQa,
+      getVerifiedAdminLearnerQaSimulation,
+    } = await loadAdminLearnerQaSimulationModule();
     const qaSim = await getVerifiedAdminLearnerQaSimulation(userId);
     if (qaSim) {
       safeServerLog("admin_learner_qa", "entitlement_overlay", {
@@ -317,9 +337,13 @@ async function getUserAccessCore(
       if (s.status === SubscriptionStatus.PAST_DUE) return true;
       return activeLikePaidWindowOpen(s, now);
     }) ?? null;
-  const latestSubscription: SubscriptionSelect | null = baseSubscriptionRows[0] ?? null;
+  const latestSubscription: SubscriptionSelect | null =
+    baseSubscriptionRows[0] ?? null;
 
-  if (subscriptionRows.length === SUBSCRIPTION_HISTORY_WINDOW && activeSubscription === null) {
+  if (
+    subscriptionRows.length === SUBSCRIPTION_HISTORY_WINDOW &&
+    activeSubscription === null
+  ) {
     telemetry.subscriptionQueries = 2;
     const fallbackRows = await withRetry(() =>
       prisma.subscription.findMany({
@@ -348,12 +372,21 @@ async function getUserAccessCore(
       .filter((s) => cancelledPaidThroughActive(s, now))
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0] ?? null;
 
-  const planRow: SubscriptionSelect | null = activeSubscription ?? latestSubscription;
+  const planRow: SubscriptionSelect | null =
+    activeSubscription ?? latestSubscription;
   const billingRegionSlug = planRow?.billingRegionSlug?.trim() || null;
-  const planCode = activeSubscription?.planCode?.trim() || latestSubscription?.planCode?.trim() || null;
-  const planDuration = activeSubscription?.planDuration ?? latestSubscription?.planDuration ?? null;
+  const planCode =
+    activeSubscription?.planCode?.trim() ||
+    latestSubscription?.planCode?.trim() ||
+    null;
+  const planDuration =
+    activeSubscription?.planDuration ??
+    latestSubscription?.planDuration ??
+    null;
   const cancelAtPeriodEnd =
-    activeSubscription?.cancelAtPeriodEnd ?? latestSubscription?.cancelAtPeriodEnd ?? false;
+    activeSubscription?.cancelAtPeriodEnd ??
+    latestSubscription?.cancelAtPeriodEnd ??
+    false;
   const expiresAt =
     activeSubscription?.currentPeriodEnd ??
     activeSubscription?.trialEnd ??
@@ -366,12 +399,13 @@ async function getUserAccessCore(
     userAlliedProfessionKey: user.alliedProfessionKey,
   });
 
-  const { tier: effectiveTier, country: effectiveCountry } = effectiveTierCountryForAccess(
-    user,
-    activeSubscription,
-  );
+  const { tier: effectiveTier, country: effectiveCountry } =
+    effectiveTierCountryForAccess(user, activeSubscription);
 
-  if (activeSubscription?.planTier && activeSubscription.planTier !== user.tier) {
+  if (
+    activeSubscription?.planTier &&
+    activeSubscription.planTier !== user.tier
+  ) {
     safeServerLog("entitlement", "user_tier_subscription_plan_mismatch", {
       userTier: String(user.tier),
       planTier: String(activeSubscription.planTier),
@@ -379,7 +413,10 @@ async function getUserAccessCore(
   }
 
   if (activeSubscription?.status === SubscriptionStatus.ACTIVE) {
-    if (effectiveTier === TierCode.ALLIED && alliedResolvedActive.pendingOccupation) {
+    if (
+      effectiveTier === TierCode.ALLIED &&
+      alliedResolvedActive.pendingOccupation
+    ) {
       return withSessionJwt(
         {
           userId,
@@ -411,7 +448,9 @@ async function getUserAccessCore(
         allowedProfession: {
           tier: effectiveTier,
           alliedCareer:
-            effectiveTier === "ALLIED" ? (alliedResolvedActive.career as AlliedCareerKey | null) : null,
+            effectiveTier === "ALLIED"
+              ? (alliedResolvedActive.career as AlliedCareerKey | null)
+              : null,
         },
         allowedExam: { pathwayId },
         plan: {
@@ -427,7 +466,10 @@ async function getUserAccessCore(
   }
 
   if (activeSubscription?.status === SubscriptionStatus.GRACE) {
-    if (effectiveTier === TierCode.ALLIED && alliedResolvedActive.pendingOccupation) {
+    if (
+      effectiveTier === TierCode.ALLIED &&
+      alliedResolvedActive.pendingOccupation
+    ) {
       return withSessionJwt(
         {
           userId,
@@ -459,7 +501,9 @@ async function getUserAccessCore(
         allowedProfession: {
           tier: effectiveTier,
           alliedCareer:
-            effectiveTier === "ALLIED" ? (alliedResolvedActive.career as AlliedCareerKey | null) : null,
+            effectiveTier === "ALLIED"
+              ? (alliedResolvedActive.career as AlliedCareerKey | null)
+              : null,
         },
         allowedExam: { pathwayId },
         plan: {
@@ -482,7 +526,10 @@ async function getUserAccessCore(
       pastDueSince: activeSubscription.pastDueSince,
     });
     if (grantPastDue) {
-      if (effectiveTier === TierCode.ALLIED && alliedResolvedActive.pendingOccupation) {
+      if (
+        effectiveTier === TierCode.ALLIED &&
+        alliedResolvedActive.pendingOccupation
+      ) {
         return withSessionJwt(
           {
             userId,
@@ -514,7 +561,9 @@ async function getUserAccessCore(
           allowedProfession: {
             tier: effectiveTier,
             alliedCareer:
-              effectiveTier === "ALLIED" ? (alliedResolvedActive.career as AlliedCareerKey | null) : null,
+              effectiveTier === "ALLIED"
+                ? (alliedResolvedActive.career as AlliedCareerKey | null)
+                : null,
           },
           allowedExam: { pathwayId },
           plan: {
@@ -532,7 +581,8 @@ async function getUserAccessCore(
 
   if (cancelledPaidThrough) {
     const endMs = subscriptionEntitlementEndMs(cancelledPaidThrough);
-    const { tier: canceledTier, country: canceledCountry } = effectiveTierCountryForAccess(user, cancelledPaidThrough);
+    const { tier: canceledTier, country: canceledCountry } =
+      effectiveTierCountryForAccess(user, cancelledPaidThrough);
     const alliedCanceled = resolveAlliedEntitlementFromProfile({
       subscriptionAlliedCareer: cancelledPaidThrough.alliedCareer,
       userAlliedProfessionKey: user.alliedProfessionKey,
@@ -546,7 +596,8 @@ async function getUserAccessCore(
           reason: "allied_occupation_required",
           allowedRegion: {
             country: canceledCountry,
-            billingRegionSlug: cancelledPaidThrough.billingRegionSlug?.trim() || null,
+            billingRegionSlug:
+              cancelledPaidThrough.billingRegionSlug?.trim() || null,
           },
           allowedProfession: {
             tier: canceledTier,
@@ -571,12 +622,15 @@ async function getUserAccessCore(
         reason: "canceled_paid_through",
         allowedRegion: {
           country: canceledCountry,
-          billingRegionSlug: cancelledPaidThrough.billingRegionSlug?.trim() || null,
+          billingRegionSlug:
+            cancelledPaidThrough.billingRegionSlug?.trim() || null,
         },
         allowedProfession: {
           tier: canceledTier,
           alliedCareer:
-            canceledTier === "ALLIED" ? (alliedCanceled.career as AlliedCareerKey | null) : null,
+            canceledTier === "ALLIED"
+              ? (alliedCanceled.career as AlliedCareerKey | null)
+              : null,
         },
         allowedExam: { pathwayId },
         plan: {
@@ -632,7 +686,9 @@ async function getUserAccessCore(
         allowedProfession: {
           tier: user.tier,
           alliedCareer:
-            user.tier === "ALLIED" ? (alliedTrial.career as AlliedCareerKey | null) : null,
+            user.tier === "ALLIED"
+              ? (alliedTrial.career as AlliedCareerKey | null)
+              : null,
         },
         allowedExam: { pathwayId },
         plan: {
@@ -661,7 +717,9 @@ async function getUserAccessCore(
       allowedProfession: {
         tier: user.tier,
         alliedCareer:
-          user.tier === "ALLIED" ? (alliedNoSub.career as AlliedCareerKey | null) : null,
+          user.tier === "ALLIED"
+            ? (alliedNoSub.career as AlliedCareerKey | null)
+            : null,
       },
       allowedExam: { pathwayId },
       plan: {
@@ -684,6 +742,8 @@ export function accessScopeFromUserAccess(ua: UserAccess): AccessScope {
     tier: ua.allowedProfession.tier,
     country: ua.allowedRegion.country,
     alliedCareer: ua.allowedProfession.alliedCareer,
-    ...(ua.adminLearnerQaSimulation === true ? { adminLearnerQaSimulation: true as const } : {}),
+    ...(ua.adminLearnerQaSimulation === true
+      ? { adminLearnerQaSimulation: true as const }
+      : {}),
   };
 }

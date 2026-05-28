@@ -3,6 +3,29 @@ import { pool } from "./storage";
 import type { Request, Response, NextFunction } from "express";
 import type { AccessSource, EntitlementDecisionObject } from "@shared/schema";
 
+/* ----------------------------------------------------------------
+   In-memory user cache for resolveEntitlement.
+   TTL: 60 s.  Keyed on userId.
+   Invalidated on subscription change via clearEntitlementCache().
+   ---------------------------------------------------------------- */
+const USER_CACHE_TTL_MS = 60_000;
+const _userCache = new Map<string, { user: any; expiresAt: number }>();
+
+function getCachedUser(userId: string): any | null {
+  const entry = _userCache.get(userId);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) { _userCache.delete(userId); return null; }
+  return entry.user;
+}
+
+function setCachedUser(userId: string, user: any): void {
+  _userCache.set(userId, { user, expiresAt: Date.now() + USER_CACHE_TTL_MS });
+}
+
+export function clearEntitlementCache(userId?: string): void {
+  if (userId) { _userCache.delete(userId); } else { _userCache.clear(); }
+}
+
 /**
  * ------------------------------
  * CONSTANTS
@@ -243,15 +266,18 @@ export async function resolveEntitlement(
   requestPath?: string
 ): Promise<EntitlementDecisionObject> {
 
-  let user;
+  let user = getCachedUser(userId);
 
-  try {
-    const r = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
-    user = r.rows[0];
-  } catch {
-    const decision = baseDecision(productType, productId);
-    decision.accessDecisionReason = "db_failure";
-    return decision;
+  if (!user) {
+    try {
+      const r = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+      user = r.rows[0];
+      if (user) setCachedUser(userId, user);
+    } catch {
+      const decision = baseDecision(productType, productId);
+      decision.accessDecisionReason = "db_failure";
+      return decision;
+    }
   }
 
   if (!user) return baseDecision(productType, productId);

@@ -32,7 +32,10 @@ import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
-import type { FlashcardsHubServerPayload, FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
+import type {
+  FlashcardsHubServerPayload,
+  FlashcardsPoolInventoryDiagnostics,
+} from "@/lib/flashcards/flashcards-hub-types";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
@@ -52,7 +55,10 @@ import {
 } from "@/lib/flashcards/flashcards-hub-preferences";
 import { buildFlashcardsCategorySignals } from "@/lib/flashcards/flashcards-hub-category-signals";
 import { buildFlashcardsSessionPreview } from "@/lib/flashcards/flashcards-hub-session-copy";
-import { parseHubMode, parseHubSystemsFromSearchParams } from "@/lib/flashcards/flashcards-hub-url";
+import {
+  parseHubMode,
+  parseHubSystemsFromSearchParams,
+} from "@/lib/flashcards/flashcards-hub-url";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 
 function buildCustomSessionQuery(args: {
@@ -86,7 +92,10 @@ function buildCustomSessionQuery(args: {
   if (args.incorrectOnly) q.set("incorrectOnly", "1");
   if (args.starredOnly) {
     q.set("starredOnly", "1");
-    const starredIds = getStudyItemIdsMatchingFilters({ starredOnly: true }, 500);
+    const starredIds = getStudyItemIdsMatchingFilters(
+      { starredOnly: true },
+      500,
+    );
     if (starredIds.length > 0) q.set("stateIds", starredIds.join(","));
   }
   if (args.notStudiedOnly) q.set("notStudiedOnly", "1");
@@ -138,15 +147,19 @@ export function FlashcardsHubClient({
   const searchParams = useSearchParams();
   const prefsHydratedRef = useRef(false);
   const heroEyebrow = flashcardsHeroEyebrow?.trim() || pathwayDisplayName;
-  const heroTitle = flashcardsHeroTitle?.trim() || t("learner.flashcards.hub.title");
-  const heroSubtitle = flashcardsHeroSubtitle?.trim() || t("learner.flashcards.hub.subtitle");
+  const heroTitle =
+    flashcardsHeroTitle?.trim() || t("learner.flashcards.hub.title");
+  const heroSubtitle =
+    flashcardsHeroSubtitle?.trim() || t("learner.flashcards.hub.subtitle");
   const apForQuery =
-    alliedProfessionKey?.trim() && isAlliedMarketingCorePathwayId(scopedPathwayId)
+    alliedProfessionKey?.trim() &&
+    isAlliedMarketingCorePathwayId(scopedPathwayId)
       ? alliedProfessionKey.trim().toLowerCase()
       : "";
   const resolvedLessonsHubHref = (() => {
     const base =
-      lessonsHubHref?.trim() || `/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
+      lessonsHubHref?.trim() ||
+      `/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
     if (!apForQuery) return base;
     const join = base.includes("?") ? "&" : "?";
     return `${base}${join}alliedProfession=${encodeURIComponent(apForQuery)}`;
@@ -156,17 +169,25 @@ export function FlashcardsHubClient({
     Array<{ id: string; title: string; description?: string; count: number }>
   >(() => initialHub?.categoryOptions ?? []);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [matchingCards, setMatchingCards] = useState<number | null>(() => initialHub?.matchingTotal ?? null);
-  const [lessonVirtualDiagnostics, setLessonVirtualDiagnostics] = useState<FlashcardLessonVirtualDiagnostics | null>(
-    () => initialHub?.lessonVirtualDiagnostics ?? null,
+  const [matchingCards, setMatchingCards] = useState<number | null>(
+    () => initialHub?.matchingTotal ?? null,
   );
-  const [poolDiagnostics, setPoolDiagnostics] = useState<FlashcardsPoolInventoryDiagnostics | null>(
-    () => initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null,
-  );
+  const [lessonVirtualDiagnostics, setLessonVirtualDiagnostics] =
+    useState<FlashcardLessonVirtualDiagnostics | null>(
+      () => initialHub?.lessonVirtualDiagnostics ?? null,
+    );
+  const [poolDiagnostics, setPoolDiagnostics] =
+    useState<FlashcardsPoolInventoryDiagnostics | null>(
+      () => initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null,
+    );
   useEffect(() => {
-    setPoolDiagnostics(initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null);
+    setPoolDiagnostics(
+      initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null,
+    );
   }, [initialPoolDiagnostics, initialHub?.poolDiagnostics]);
-  const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
+  const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>(
+    [],
+  );
   const [cardLimit, setCardLimit] = useState<FlashcardsHubCardLimit>(20);
   const [customLimitInput, setCustomLimitInput] = useState("");
   const [shuffleOn, setShuffleOn] = useState(true);
@@ -178,9 +199,13 @@ export function FlashcardsHubClient({
   const [starredOnly, setStarredOnly] = useState(false);
   const [notStudiedOnly, setNotStudiedOnly] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
-  const [weakTopics, setWeakTopics] = useState<TopicPerformanceSnapshot | null>(null);
+  const [weakTopics, setWeakTopics] = useState<TopicPerformanceSnapshot | null>(
+    null,
+  );
   const [resumeCk, setResumeCk] = useState(() =>
-    typeof window !== "undefined" ? readFlashcardsCustomSessionCheckpoint(scopedPathwayId) : null,
+    typeof window !== "undefined"
+      ? readFlashcardsCustomSessionCheckpoint(scopedPathwayId)
+      : null,
   );
 
   useEffect(() => {
@@ -191,10 +216,14 @@ export function FlashcardsHubClient({
     let cancelled = false;
     const delayMs = weakOnly ? 0 : 2_000;
     const timer = window.setTimeout(() => {
-      void fetch("/api/learner/weak-areas", { credentials: "include", cache: "no-store" })
+      void fetch("/api/learner/weak-areas", {
+        credentials: "include",
+        cache: "no-store",
+      })
         .then((r) => (r.ok ? r.json() : null))
         .then((j) => {
-          if (!cancelled && j && typeof j === "object") setWeakTopics(j as TopicPerformanceSnapshot);
+          if (!cancelled && j && typeof j === "object")
+            setWeakTopics(j as TopicPerformanceSnapshot);
         })
         .catch(() => {});
     }, delayMs);
@@ -212,7 +241,9 @@ export function FlashcardsHubClient({
   const isCustomCardLimit = useMemo(
     () =>
       cardLimit !== "all" &&
-      !(FLASHCARD_SESSION_PRESETS as readonly number[]).includes(cardLimit as number),
+      !(FLASHCARD_SESSION_PRESETS as readonly number[]).includes(
+        cardLimit as number,
+      ),
     [cardLimit],
   );
 
@@ -240,13 +271,16 @@ export function FlashcardsHubClient({
       if (Number.isFinite(n) && n >= 10) {
         const clamped = Math.min(500, Math.floor(n));
         setCardLimit(clamped);
-        if (!(FLASHCARD_SESSION_PRESETS as readonly number[]).includes(clamped)) {
+        if (
+          !(FLASHCARD_SESSION_PRESETS as readonly number[]).includes(clamped)
+        ) {
           setCustomLimitInput(String(clamped));
         }
       }
     } else {
       setCardLimit(prefs.cardLimit);
-      if (prefs.customCardLimit != null) setCustomLimitInput(String(prefs.customCardLimit));
+      if (prefs.customCardLimit != null)
+        setCustomLimitInput(String(prefs.customCardLimit));
     }
 
     const hubMode = parseHubMode(sp);
@@ -294,9 +328,12 @@ export function FlashcardsHubClient({
     const next: FlashcardsHubPreferencesV1 = {
       v: 1,
       cardLimit,
-      customCardLimit: Number.isFinite(custom as number) ? (custom as number) : null,
+      customCardLimit: Number.isFinite(custom as number)
+        ? (custom as number)
+        : null,
       shuffleOn,
-      selectedCanonicalIds: selectedCanonicalIds as FlashcardsHubPreferencesV1["selectedCanonicalIds"],
+      selectedCanonicalIds:
+        selectedCanonicalIds as FlashcardsHubPreferencesV1["selectedCanonicalIds"],
       weakOnly,
       incorrectOnly,
       starredOnly,
@@ -325,11 +362,20 @@ export function FlashcardsHubClient({
    * the hub does not stick on "0 items in pool" while advertising a non-zero pool.
    */
   const sumInitialCategoryCounts =
-    initialHub?.categoryOptions?.reduce((s, c) => s + (typeof c.count === "number" && Number.isFinite(c.count) ? c.count : 0), 0) ??
-    0;
-  const skipDuplicateInitialInventoryFetchRef = useRef(Boolean(initialHub && sumInitialCategoryCounts > 0));
+    initialHub?.categoryOptions?.reduce(
+      (s, c) =>
+        s +
+        (typeof c.count === "number" && Number.isFinite(c.count) ? c.count : 0),
+      0,
+    ) ?? 0;
+  const skipDuplicateInitialInventoryFetchRef = useRef(
+    Boolean(initialHub && sumInitialCategoryCounts > 0),
+  );
 
-  const allBuilderCategoryIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
+  const allBuilderCategoryIds = useMemo(
+    () => builderCategories.map((c) => c.id),
+    [builderCategories],
+  );
 
   const countsByCanonical = useMemo(
     () => getFlashcardCountsByBodySystem(scopedPathwayId, builderCategories),
@@ -337,7 +383,11 @@ export function FlashcardsHubClient({
   );
 
   const sumCanonicalPool = useMemo(
-    () => CANONICAL_STUDY_CATEGORIES.reduce((s, c) => s + (countsByCanonical[c.id] ?? 0), 0),
+    () =>
+      CANONICAL_STUDY_CATEGORIES.reduce(
+        (s, c) => s + (countsByCanonical[c.id] ?? 0),
+        0,
+      ),
     [countsByCanonical],
   );
 
@@ -354,7 +404,11 @@ export function FlashcardsHubClient({
   const poolFillPct = useMemo(() => {
     if (matchingCards == null) return 0;
     if (matchingCards <= 0) return 0;
-    if (sumCanonicalPool > 0) return Math.min(100, Math.round((matchingCards / sumCanonicalPool) * 100));
+    if (sumCanonicalPool > 0)
+      return Math.min(
+        100,
+        Math.round((matchingCards / sumCanonicalPool) * 100),
+      );
     return 100;
   }, [matchingCards, sumCanonicalPool]);
 
@@ -376,6 +430,9 @@ export function FlashcardsHubClient({
 
   const refreshCategories = useCallback(async () => {
     setLoadError(null);
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 25_000);
 
     try {
       const progressFiltersActive =
@@ -410,19 +467,26 @@ export function FlashcardsHubClient({
         const res = await fetch(`/api/flashcards/custom-session?${qs}`, {
           credentials: "include",
           cache: "no-store",
+          signal: controller.signal,
         });
         let json: unknown;
         try {
           json = await res.json();
         } catch {
           if (builderCategoriesRef.current.length > 0) {
-            logDedupedClientDiagnostic("flashcards_hub", "custom_session_json_kept_stale", scopedPathwayId, {
-              pathwayId: scopedPathwayId,
-            });
+            logDedupedClientDiagnostic(
+              "flashcards_hub",
+              "custom_session_json_kept_stale",
+              scopedPathwayId,
+              {
+                pathwayId: scopedPathwayId,
+              },
+            );
             setLoadError(null);
             return;
           }
-          const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
+          const base =
+            "Flashcard inventory returned invalid JSON. Try again or contact support.";
           setLoadError(
             process.env.NODE_ENV === "development"
               ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/custom-session)`
@@ -437,14 +501,21 @@ export function FlashcardsHubClient({
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         if (!parsed.ok) {
           if (builderCategoriesRef.current.length > 0) {
-            logDedupedClientDiagnostic("flashcards_hub", "custom_session_parse_kept_stale", scopedPathwayId, {
-              pathwayId: scopedPathwayId,
-              httpStatus: res.status,
-            });
+            logDedupedClientDiagnostic(
+              "flashcards_hub",
+              "custom_session_parse_kept_stale",
+              scopedPathwayId,
+              {
+                pathwayId: scopedPathwayId,
+                httpStatus: res.status,
+              },
+            );
             setLoadError(null);
             return;
           }
-          const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
+          const base = parsed.message.trim()
+            ? parsed.message
+            : "Could not load flashcard topics.";
           setLoadError(
             process.env.NODE_ENV === "development"
               ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
@@ -457,29 +528,46 @@ export function FlashcardsHubClient({
         }
         setBuilderCategories(parsed.categoryOptions);
         setMatchingCards(parsed.summary?.matchingCards ?? 0);
-        setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
+        setLessonVirtualDiagnostics(
+          parsed.summary?.lessonVirtualDiagnostics ?? null,
+        );
         setPoolDiagnostics(parsed.summary?.poolInventoryDiagnostics ?? null);
         return;
       }
 
       const invUrl = `/api/flashcards/inventory?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
-      const res = await fetch(invUrl, { credentials: "include", cache: "no-store" });
+      const res = await fetch(invUrl, {
+        credentials: "include",
+        cache: "no-store",
+        signal: controller.signal,
+      });
       let json: unknown;
       try {
         json = await res.json();
       } catch {
-        logDedupedClientDiagnostic("flashcards_hub", "inventory_json_parse_failed", scopedPathwayId, {
-          pathwayId: scopedPathwayId,
-          httpStatus: res.status,
-        });
-        if (builderCategoriesRef.current.length > 0) {
-          logDedupedClientDiagnostic("flashcards_hub", "inventory_json_kept_stale", scopedPathwayId, {
+        logDedupedClientDiagnostic(
+          "flashcards_hub",
+          "inventory_json_parse_failed",
+          scopedPathwayId,
+          {
             pathwayId: scopedPathwayId,
-          });
+            httpStatus: res.status,
+          },
+        );
+        if (builderCategoriesRef.current.length > 0) {
+          logDedupedClientDiagnostic(
+            "flashcards_hub",
+            "inventory_json_kept_stale",
+            scopedPathwayId,
+            {
+              pathwayId: scopedPathwayId,
+            },
+          );
           setLoadError(null);
           return;
         }
-        const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
+        const base =
+          "Flashcard inventory returned invalid JSON. Try again or contact support.";
         setLoadError(
           process.env.NODE_ENV === "development"
             ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/inventory)`
@@ -492,16 +580,26 @@ export function FlashcardsHubClient({
       }
       const parsed = parseFlashcardInventoryResponse(res.ok, json);
       if (!parsed.ok) {
-        logDedupedClientDiagnostic("flashcards_hub", "inventory_parse_failed", `${scopedPathwayId}:${res.status}`, {
-          pathwayId: scopedPathwayId,
-          httpStatus: res.status,
-          httpOk: res.ok,
-        });
-        if (builderCategoriesRef.current.length > 0) {
-          logDedupedClientDiagnostic("flashcards_hub", "inventory_parse_kept_stale", scopedPathwayId, {
+        logDedupedClientDiagnostic(
+          "flashcards_hub",
+          "inventory_parse_failed",
+          `${scopedPathwayId}:${res.status}`,
+          {
             pathwayId: scopedPathwayId,
             httpStatus: res.status,
-          });
+            httpOk: res.ok,
+          },
+        );
+        if (builderCategoriesRef.current.length > 0) {
+          logDedupedClientDiagnostic(
+            "flashcards_hub",
+            "inventory_parse_kept_stale",
+            scopedPathwayId,
+            {
+              pathwayId: scopedPathwayId,
+              httpStatus: res.status,
+            },
+          );
           setLoadError(null);
           return;
         }
@@ -517,7 +615,9 @@ export function FlashcardsHubClient({
             },
           );
         }
-        const base = parsed.message.trim() ? parsed.message : "Could not load flashcard pool counts.";
+        const base = parsed.message.trim()
+          ? parsed.message
+          : "Could not load flashcard pool counts.";
         setLoadError(
           process.env.NODE_ENV === "development"
             ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
@@ -545,9 +645,14 @@ export function FlashcardsHubClient({
       const total = totalFromSummary ?? totalFromBody;
       if (typeof total !== "number" || !Number.isFinite(total)) {
         if (builderCategoriesRef.current.length > 0) {
-          logDedupedClientDiagnostic("flashcards_hub", "inventory_missing_total_kept_stale", scopedPathwayId, {
-            pathwayId: scopedPathwayId,
-          });
+          logDedupedClientDiagnostic(
+            "flashcards_hub",
+            "inventory_missing_total_kept_stale",
+            scopedPathwayId,
+            {
+              pathwayId: scopedPathwayId,
+            },
+          );
           setLoadError(null);
           return;
         }
@@ -576,13 +681,19 @@ export function FlashcardsHubClient({
                 opts,
                 new Set(sel as CanonicalBodySystemId[]),
               );
-              const sum = ids.reduce((s, id) => s + (opts.find((c) => c.id === id)?.count ?? 0), 0);
+              const sum = ids.reduce(
+                (s, id) => s + (opts.find((c) => c.id === id)?.count ?? 0),
+                0,
+              );
               return sum > 0 ? sum : total;
             })();
       setMatchingCards(match);
       setPoolDiagnostics(invSummary?.poolInventoryDiagnostics ?? null);
       if (process.env.NODE_ENV === "development") {
-        const totalCards = opts.reduce((n, c) => n + (typeof c.count === "number" ? c.count : 0), 0);
+        const totalCards = opts.reduce(
+          (n, c) => n + (typeof c.count === "number" ? c.count : 0),
+          0,
+        );
         console.debug("[flashcards-hub] inventory", {
           pathwayId: scopedPathwayId,
           topicRows: opts.length,
@@ -591,25 +702,47 @@ export function FlashcardsHubClient({
           matchingCards: match,
         });
       }
-    } catch {
-      logDedupedClientDiagnostic("flashcards_hub", "inventory_network_error", scopedPathwayId, {
-        pathwayId: scopedPathwayId,
-      });
-      if (builderCategoriesRef.current.length > 0) {
-        logDedupedClientDiagnostic("flashcards_hub", "inventory_network_kept_stale", scopedPathwayId, {
+    } catch (e) {
+      const aborted = e instanceof DOMException && e.name === "AbortError";
+      logDedupedClientDiagnostic(
+        "flashcards_hub",
+        "inventory_network_error",
+        scopedPathwayId,
+        {
           pathwayId: scopedPathwayId,
-        });
+          errorName: aborted
+            ? "TimeoutError"
+            : e instanceof Error
+              ? e.name
+              : typeof e,
+        },
+      );
+      if (builderCategoriesRef.current.length > 0) {
+        logDedupedClientDiagnostic(
+          "flashcards_hub",
+          "inventory_network_kept_stale",
+          scopedPathwayId,
+          {
+            pathwayId: scopedPathwayId,
+          },
+        );
         setLoadError(null);
         return;
       }
-      const base = "Network error while loading flashcards. Check your connection and try again.";
+      const base = aborted
+        ? "Flashcards took too long to load. Check your connection and try again."
+        : "Network error while loading flashcards. Check your connection and try again.";
       setLoadError(
-        process.env.NODE_ENV === "development" ? `${base} (pathwayId=${scopedPathwayId})` : base,
+        process.env.NODE_ENV === "development"
+          ? `${base} (pathwayId=${scopedPathwayId})`
+          : base,
       );
       setBuilderCategories([]);
       setMatchingCards(null);
       setLessonVirtualDiagnostics(null);
       setPoolDiagnostics(null);
+    } finally {
+      window.clearTimeout(timeout);
     }
   }, [
     scopedPathwayId,
@@ -676,7 +809,9 @@ export function FlashcardsHubClient({
       ? Math.min(100, Math.round((resumeCk.index / resumeCk.totalCards) * 100))
       : 0;
   const resumeCardsRemaining =
-    resumeCk && resumeCk.totalCards > 0 ? Math.max(1, resumeCk.totalCards - resumeCk.index) : 0;
+    resumeCk && resumeCk.totalCards > 0
+      ? Math.max(1, resumeCk.totalCards - resumeCk.index)
+      : 0;
 
   const quickReviewQuery = useMemo(
     () =>
@@ -734,16 +869,29 @@ export function FlashcardsHubClient({
 
   const starredCount = useMemo(() => countSavedStudyItems().starred, []);
 
-  const activePreset = useMemo((): "all" | "weak" | "incorrect" | "starred" | "unseen" | "custom" => {
-    if (starredOnly && !weakOnly && !incorrectOnly && !notStudiedOnly) return "starred";
-    if (notStudiedOnly && !weakOnly && !incorrectOnly && !starredOnly) return "unseen";
-    if (incorrectOnly && !weakOnly && !starredOnly && !notStudiedOnly) return "incorrect";
-    if (weakOnly && !incorrectOnly && !starredOnly && !notStudiedOnly) return "weak";
-    if (!weakOnly && !incorrectOnly && !starredOnly && !notStudiedOnly) return "all";
+  const activePreset = useMemo(():
+    | "all"
+    | "weak"
+    | "incorrect"
+    | "starred"
+    | "unseen"
+    | "custom" => {
+    if (starredOnly && !weakOnly && !incorrectOnly && !notStudiedOnly)
+      return "starred";
+    if (notStudiedOnly && !weakOnly && !incorrectOnly && !starredOnly)
+      return "unseen";
+    if (incorrectOnly && !weakOnly && !starredOnly && !notStudiedOnly)
+      return "incorrect";
+    if (weakOnly && !incorrectOnly && !starredOnly && !notStudiedOnly)
+      return "weak";
+    if (!weakOnly && !incorrectOnly && !starredOnly && !notStudiedOnly)
+      return "all";
     return "custom";
   }, [weakOnly, incorrectOnly, starredOnly, notStudiedOnly]);
 
-  const applyFilterPreset = (p: "all" | "weak" | "incorrect" | "starred" | "unseen") => {
+  const applyFilterPreset = (
+    p: "all" | "weak" | "incorrect" | "starred" | "unseen",
+  ) => {
     if (p === "all") {
       setWeakOnly(false);
       setIncorrectOnly(false);
@@ -779,17 +927,26 @@ export function FlashcardsHubClient({
       matchingCards === 0 &&
       !starredOnly &&
       builderCategories.length > 0 &&
-      (weakOnly || incorrectOnly || notStudiedOnly || selectedCanonicalIds.length > 0)
+      (weakOnly ||
+        incorrectOnly ||
+        notStudiedOnly ||
+        selectedCanonicalIds.length > 0)
     ) {
       return (
         <div
           className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-filter-empty
         >
-          <p className="font-medium text-[var(--semantic-text-primary)]">No cards match this combination</p>
+          <p className="font-medium text-[var(--semantic-text-primary)]">
+            No cards match this combination
+          </p>
           <p className="mt-2">
-            Choose <strong>All cards</strong>, clear extra system picks, or open the{" "}
-            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+            Choose <strong>All cards</strong>, clear extra system picks, or open
+            the{" "}
+            <Link
+              href={resolvedLessonsHubHref}
+              className="font-semibold text-[var(--semantic-brand)] underline"
+            >
               lessons hub
             </Link>
             .
@@ -813,9 +970,13 @@ export function FlashcardsHubClient({
           className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-pathway-empty-seeded
         >
-          <p className="font-medium text-[var(--semantic-text-primary)]">No flashcards are seeded for this pathway yet.</p>
+          <p className="font-medium text-[var(--semantic-text-primary)]">
+            No flashcards are seeded for this pathway yet.
+          </p>
           {process.env.NODE_ENV === "development" ? (
-            <p className="mt-2 font-mono text-xs text-[var(--semantic-text-muted)]">pathwayId={scopedPathwayId}</p>
+            <p className="mt-2 font-mono text-xs text-[var(--semantic-text-muted)]">
+              pathwayId={scopedPathwayId}
+            </p>
           ) : null}
         </div>
       );
@@ -825,17 +986,25 @@ export function FlashcardsHubClient({
       !starredOnly &&
       builderCategories.length === 0 &&
       (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) === 0 &&
-      !(lessonVirtualDiagnostics && lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0)
+      !(
+        lessonVirtualDiagnostics &&
+        lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0
+      )
     ) {
       return (
         <div
           className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-setup-report
         >
-          <p className="font-medium text-[var(--semantic-text-primary)]">Deck not loaded yet</p>
+          <p className="font-medium text-[var(--semantic-text-primary)]">
+            Deck not loaded yet
+          </p>
           <p className="mt-2">
             Open the{" "}
-            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+            <Link
+              href={resolvedLessonsHubHref}
+              className="font-semibold text-[var(--semantic-brand)] underline"
+            >
               lessons hub
             </Link>{" "}
             for this track or choose <strong>All cards</strong>.
@@ -855,10 +1024,15 @@ export function FlashcardsHubClient({
           className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-lessons-no-derived-cards
         >
-          <p className="font-medium text-[var(--semantic-text-primary)]">Lesson-linked cards are still building</p>
+          <p className="font-medium text-[var(--semantic-text-primary)]">
+            Lesson-linked cards are still building
+          </p>
           <p className="mt-2">
             Try <strong>All cards</strong>, refresh, or continue in the{" "}
-            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+            <Link
+              href={resolvedLessonsHubHref}
+              className="font-semibold text-[var(--semantic-brand)] underline"
+            >
               lessons hub
             </Link>
             .
@@ -878,7 +1052,9 @@ export function FlashcardsHubClient({
           className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-inventory-mismatch
         >
-          <p className="font-medium text-[var(--semantic-text-primary)]">Cards exist but categories need a refresh</p>
+          <p className="font-medium text-[var(--semantic-text-primary)]">
+            Cards exist but categories need a refresh
+          </p>
           <p className="mt-2">Clear filters and reload this page.</p>
         </div>
       );
@@ -920,7 +1096,9 @@ export function FlashcardsHubClient({
       data-nn-premium-platform-module="flashcards"
       data-nn-e2e-flashcards-hub
     >
-      {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
+      {pathwayBootstrapSource === "secondary" ? (
+        <LearnerStudyLiveSyncBanner />
+      ) : null}
 
       <h1 className="sr-only">{heroTitle}</h1>
 
@@ -966,7 +1144,8 @@ export function FlashcardsHubClient({
                   {t("learner.flashcards.hub.resumeHeadline")}
                 </p>
                 <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
-                  {resumeCk.systemsLabel} · {resumeProgressPct}% through this run · ~{resumeCardsRemaining} card
+                  {resumeCk.systemsLabel} · {resumeProgressPct}% through this
+                  run · ~{resumeCardsRemaining} card
                   {resumeCardsRemaining === 1 ? "" : "s"} remaining
                 </p>
               </div>
@@ -1003,7 +1182,10 @@ export function FlashcardsHubClient({
             <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0 flex-1">
                 {resumeHref ? (
-                  <p className="text-xs text-[var(--semantic-text-muted)]" data-nn-e2e-flashcards-cta-subline>
+                  <p
+                    className="text-xs text-[var(--semantic-text-muted)]"
+                    data-nn-e2e-flashcards-cta-subline
+                  >
                     {ctaSubline}
                   </p>
                 ) : (
@@ -1026,13 +1208,20 @@ export function FlashcardsHubClient({
               </div>
               <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
                 <span>
-                  <span className="font-semibold text-[var(--semantic-text-primary)]">Deck match </span>
+                  <span className="font-semibold text-[var(--semantic-text-primary)]">
+                    Deck match{" "}
+                  </span>
                   <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">
                     {matchingCards != null ? matchingCards : "—"}
                   </span>
                 </span>
-                <span className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline" aria-hidden />
-                <span className="hidden tabular-nums sm:inline">{poolFillPct}% of pathway pool</span>
+                <span
+                  className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline"
+                  aria-hidden
+                />
+                <span className="hidden tabular-nums sm:inline">
+                  {poolFillPct}% of pathway pool
+                </span>
               </div>
             </div>
             <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-3 h-1.5 max-w-xl overflow-hidden rounded-full bg-[var(--semantic-progress-track)]">
@@ -1047,12 +1236,16 @@ export function FlashcardsHubClient({
 
       {loadError ? (
         builderCategories.length === 0 ? (
-          <FlashcardErrorBoundary error={new Error(loadError)} onRetry={refreshCategories} />
+          <FlashcardErrorBoundary
+            error={new Error(loadError)}
+            onRetry={refreshCategories}
+          />
         ) : (
           <div
             className="rounded-lg border px-3 py-2 text-sm"
             style={{
-              background: "var(--surface-secondary, var(--semantic-panel-muted))",
+              background:
+                "var(--surface-secondary, var(--semantic-panel-muted))",
               borderColor: "var(--border-subtle, var(--semantic-border-soft))",
               color: "var(--foreground, var(--semantic-text-primary))",
             }}
@@ -1093,17 +1286,23 @@ export function FlashcardsHubClient({
           >
             All systems
             {selectedCanonicalIds.length === 0 ? (
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] text-[10px]" aria-hidden>
+              <span
+                className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] text-[10px]"
+                aria-hidden
+              >
                 ✓
               </span>
             ) : null}
           </button>
           {selectedCanonicalIds.length > 0 ? (
             <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)]">
-              {selectedCanonicalIds.length} system{selectedCanonicalIds.length === 1 ? "" : "s"} selected
+              {selectedCanonicalIds.length} system
+              {selectedCanonicalIds.length === 1 ? "" : "s"} selected
             </span>
           ) : (
-            <span className="text-xs text-[var(--semantic-text-muted)]">Tap systems below to focus your deck</span>
+            <span className="text-xs text-[var(--semantic-text-muted)]">
+              Tap systems below to focus your deck
+            </span>
           )}
         </div>
       </SharedStudySetupSurface>
@@ -1121,150 +1320,176 @@ export function FlashcardsHubClient({
           </span>
         </summary>
         <div className="space-y-6 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
-        <div>
-          <h3 id="nn-flashcards-setup-heading" className="sr-only">
-            Session setup
-          </h3>
-        </div>
+          <div>
+            <h3 id="nn-flashcards-setup-heading" className="sr-only">
+              Session setup
+            </h3>
+          </div>
 
-        <div className="space-y-4" data-nn-e2e-flashcards-session-size>
-          <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Session size</p>
-          <div
-            className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap"
-            role="group"
-            aria-label="Session size"
-          >
-            {FLASHCARD_SESSION_PRESETS.map((n) => {
-              const on = cardLimit === n && !isCustomCardLimit;
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  data-nn-e2e-session-size-preset={n}
-                  data-active={on}
-                  aria-pressed={on}
-                  className="nn-flashcards-session-segment min-h-12 flex-1 rounded-xl border border-[var(--semantic-border-soft)] px-4 py-3 text-sm font-bold text-[var(--semantic-text-secondary)] sm:min-w-[4.5rem] sm:flex-none"
-                  onClick={() => {
-                    setCardLimit(n);
-                    setCustomLimitInput("");
-                  }}
-                >
-                  {n}
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              data-nn-e2e-session-size-preset="all"
-              data-active={cardLimit === "all"}
-              aria-pressed={cardLimit === "all"}
-              className="nn-flashcards-session-segment nn-flashcards-session-segment--full min-h-12 flex-[1.2] rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_30%,var(--semantic-border-soft))] px-4 py-3 text-left sm:min-w-[9rem]"
-              onClick={() => {
-                setCardLimit("all");
-                setCustomLimitInput("");
-              }}
+          <div className="space-y-4" data-nn-e2e-flashcards-session-size>
+            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+              Session size
+            </p>
+            <div
+              className="nn-flashcards-session-segmented flex flex-col gap-2 sm:flex-row sm:flex-wrap"
+              role="group"
+              aria-label="Session size"
             >
-              <span className="block text-sm font-bold text-[var(--semantic-text-primary)]">Full review</span>
-              <span className="mt-0.5 block text-[11px] font-medium text-[var(--semantic-text-muted)]">
-                Deep study · all matched cards
+              {FLASHCARD_SESSION_PRESETS.map((n) => {
+                const on = cardLimit === n && !isCustomCardLimit;
+                return (
+                  <button
+                    key={n}
+                    type="button"
+                    data-nn-e2e-session-size-preset={n}
+                    data-active={on}
+                    aria-pressed={on}
+                    className="nn-flashcards-session-segment min-h-12 flex-1 rounded-xl border border-[var(--semantic-border-soft)] px-4 py-3 text-sm font-bold text-[var(--semantic-text-secondary)] sm:min-w-[4.5rem] sm:flex-none"
+                    onClick={() => {
+                      setCardLimit(n);
+                      setCustomLimitInput("");
+                    }}
+                  >
+                    {n}
+                  </button>
+                );
+              })}
+              <button
+                type="button"
+                data-nn-e2e-session-size-preset="all"
+                data-active={cardLimit === "all"}
+                aria-pressed={cardLimit === "all"}
+                className="nn-flashcards-session-segment nn-flashcards-session-segment--full min-h-12 flex-[1.2] rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_30%,var(--semantic-border-soft))] px-4 py-3 text-left sm:min-w-[9rem]"
+                onClick={() => {
+                  setCardLimit("all");
+                  setCustomLimitInput("");
+                }}
+              >
+                <span className="block text-sm font-bold text-[var(--semantic-text-primary)]">
+                  Full review
+                </span>
+                <span className="mt-0.5 block text-[11px] font-medium text-[var(--semantic-text-muted)]">
+                  Deep study · all matched cards
+                </span>
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
+              <label
+                className="text-sm font-medium text-[var(--semantic-text-secondary)]"
+                htmlFor="nn-flashcards-custom-limit"
+              >
+                Custom
+              </label>
+              <input
+                id="nn-flashcards-custom-limit"
+                type="number"
+                min={10}
+                max={500}
+                inputMode="numeric"
+                placeholder="25"
+                value={customLimitInput}
+                data-nn-e2e-custom-card-limit
+                className="nn-flashcards-custom-limit-input"
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  setCustomLimitInput(raw);
+                  const n = Number(raw);
+                  if (Number.isFinite(n) && n >= 10)
+                    setCardLimit(Math.min(500, Math.floor(n)));
+                }}
+              />
+              <span className="text-xs text-[var(--semantic-text-muted)]">
+                10–500 cards
               </span>
-            </button>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
-            <label className="text-sm font-medium text-[var(--semantic-text-secondary)]" htmlFor="nn-flashcards-custom-limit">
-              Custom
-            </label>
-            <input
-              id="nn-flashcards-custom-limit"
-              type="number"
-              min={10}
-              max={500}
-              inputMode="numeric"
-              placeholder="25"
-              value={customLimitInput}
-              data-nn-e2e-custom-card-limit
-              className="nn-flashcards-custom-limit-input"
-              onChange={(e) => {
-                const raw = e.target.value;
-                setCustomLimitInput(raw);
-                const n = Number(raw);
-                if (Number.isFinite(n) && n >= 10) setCardLimit(Math.min(500, Math.floor(n)));
-              }}
-            />
-            <span className="text-xs text-[var(--semantic-text-muted)]">10–500 cards</span>
-          </div>
-        </div>
 
-        <LearnerFilterBar title="Study mode" className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5 shadow-none">
-          <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
-            <LearnerCtaLink
-              href={quickReviewHref}
-              className="nn-flashcards-quick-review-cta inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold sm:min-h-9"
-              data-nn-e2e-flashcards-quick-review
-            >
-              {t("learner.flashcards.hub.quickReviewCta")}
-            </LearnerCtaLink>
-            <button
-              type="button"
-              data-active={activePreset === "weak"}
-              aria-pressed={activePreset === "weak"}
-              className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
-              onClick={() => applyFilterPreset("weak")}
-            >
-              Weak areas
-            </button>
-            <button
-              type="button"
-              data-active={activePreset === "unseen"}
-              aria-pressed={activePreset === "unseen"}
-              className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
-              onClick={() => applyFilterPreset("unseen")}
-            >
-              Only unseen
-            </button>
-            {(
-              [
-                ["all", "All cards"],
-                ["starred", "Starred"],
-                ["incorrect", t("learner.flashcards.hub.filterReviewIncorrect")],
-              ] as const
-            ).map(([key, label]) => {
-              const on = activePreset === key;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  data-active={on}
-                  aria-pressed={on}
-                  className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
-                  onClick={() => applyFilterPreset(key)}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-          <button
-            type="button"
-            data-active={shuffleOn}
-            aria-pressed={shuffleOn}
-            className="nn-flashcards-study-chip mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:w-auto"
-            onClick={() => setShuffleOn((v) => !v)}
-            data-nn-e2e-flashcards-shuffle
+          <LearnerFilterBar
+            title="Study mode"
+            className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5 shadow-none"
           >
-            <Shuffle className="h-4 w-4 text-[var(--semantic-chart-3)]" aria-hidden />
-            {shuffleOn ? "Shuffle on" : "Shuffle off"}
-          </button>
-        </LearnerFilterBar>
+            <div
+              className="flex flex-wrap gap-2"
+              data-nn-e2e-flashcard-filter-presets
+            >
+              <LearnerCtaLink
+                href={quickReviewHref}
+                className="nn-flashcards-quick-review-cta inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold sm:min-h-9"
+                data-nn-e2e-flashcards-quick-review
+              >
+                {t("learner.flashcards.hub.quickReviewCta")}
+              </LearnerCtaLink>
+              <button
+                type="button"
+                data-active={activePreset === "weak"}
+                aria-pressed={activePreset === "weak"}
+                className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+                onClick={() => applyFilterPreset("weak")}
+              >
+                Weak areas
+              </button>
+              <button
+                type="button"
+                data-active={activePreset === "unseen"}
+                aria-pressed={activePreset === "unseen"}
+                className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+                onClick={() => applyFilterPreset("unseen")}
+              >
+                Only unseen
+              </button>
+              {(
+                [
+                  ["all", "All cards"],
+                  ["starred", "Starred"],
+                  [
+                    "incorrect",
+                    t("learner.flashcards.hub.filterReviewIncorrect"),
+                  ],
+                ] as const
+              ).map(([key, label]) => {
+                const on = activePreset === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    data-active={on}
+                    aria-pressed={on}
+                    className="nn-flashcards-study-chip inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:min-h-9"
+                    onClick={() => applyFilterPreset(key)}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              data-active={shuffleOn}
+              aria-pressed={shuffleOn}
+              className="nn-flashcards-study-chip mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-secondary)] sm:w-auto"
+              onClick={() => setShuffleOn((v) => !v)}
+              data-nn-e2e-flashcards-shuffle
+            >
+              <Shuffle
+                className="h-4 w-4 text-[var(--semantic-chart-3)]"
+                aria-hidden
+              />
+              {shuffleOn ? "Shuffle on" : "Shuffle off"}
+            </button>
+          </LearnerFilterBar>
         </div>
       </details>
 
       <div
         className="nn-flashcards-sticky-start hidden fixed inset-x-0 bottom-0 z-20 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 py-3 shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_85%,transparent)] sm:px-6 md:hidden"
         data-nn-e2e-flashcards-sticky-cta
-        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
+        style={{
+          paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))",
+        }}
       >
-        <p className="mb-2 line-clamp-2 text-center text-[11px] text-[var(--semantic-text-muted)]">{ctaSubline}</p>
+        <p className="mb-2 line-clamp-2 text-center text-[11px] text-[var(--semantic-text-muted)]">
+          {ctaSubline}
+        </p>
         {resumeHref ? (
           <LearnerCtaLink
             href={resumeHref}
@@ -1293,23 +1518,41 @@ export function FlashcardsHubClient({
         </summary>
         <div className="mt-4 space-y-4 border-t border-[var(--semantic-border-soft)] pt-4">
           {activePreset === "custom" ? (
-            <p className="text-xs text-[var(--semantic-text-muted)]">Multiple progress filters are active.</p>
+            <p className="text-xs text-[var(--semantic-text-muted)]">
+              Multiple progress filters are active.
+            </p>
           ) : null}
           <div className="grid gap-2 sm:grid-cols-2">
             <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
-              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={weakOnly}
+                onChange={(e) => setWeakOnly(e.target.checked)}
+              />
               Weak areas only
             </label>
             <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
-              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={incorrectOnly}
+                onChange={(e) => setIncorrectOnly(e.target.checked)}
+              />
               Previously incorrect
             </label>
             <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
-              <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={notStudiedOnly}
+                onChange={(e) => setNotStudiedOnly(e.target.checked)}
+              />
               Not studied
             </label>
             <label className="flex min-h-11 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm text-[var(--semantic-text-primary)]">
-              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={starredOnly}
+                onChange={(e) => setStarredOnly(e.target.checked)}
+              />
               Starred only
             </label>
           </div>
@@ -1328,13 +1571,19 @@ export function FlashcardsHubClient({
               Lessons (same pathway)
             </Link>
             {catHref ? (
-              <Link href={catHref} className="font-semibold text-[var(--semantic-info)] underline underline-offset-2">
+              <Link
+                href={catHref}
+                className="font-semibold text-[var(--semantic-info)] underline underline-offset-2"
+              >
                 Adaptive CAT
               </Link>
             ) : null}
             {hubTopicSlug?.trim() ? (
               <Link
-                href={buildAppPracticeTestsTopicHref(scopedPathwayId, hubTopicSlug)}
+                href={buildAppPracticeTestsTopicHref(
+                  scopedPathwayId,
+                  hubTopicSlug,
+                )}
                 className="font-semibold text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))] underline underline-offset-2"
                 data-testid="flashcards-hub-link-practice-tests-topic"
                 data-nn-pathway-id={scopedPathwayId}
@@ -1344,21 +1593,44 @@ export function FlashcardsHubClient({
             ) : null}
           </div>
 
-          {process.env.NODE_ENV === "development" && lessonVirtualDiagnostics ? (
+          {process.env.NODE_ENV === "development" &&
+          lessonVirtualDiagnostics ? (
             <div
               className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-xs text-[var(--semantic-text-secondary)]"
               data-nn-e2e-flashcards-lesson-diagnostics
             >
-              <p className="font-semibold text-[var(--semantic-text-primary)]">Lesson-linked inventory (dev)</p>
+              <p className="font-semibold text-[var(--semantic-text-primary)]">
+                Lesson-linked inventory (dev)
+              </p>
               <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
                 <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
-                <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
-                <li>lessons with derived cards: {lessonVirtualDiagnostics.lessonsWithDerivedCards}</li>
-                <li>total generated virtual cards: {lessonVirtualDiagnostics.totalGeneratedVirtualCards}</li>
-                <li>recall rows: {lessonVirtualDiagnostics.recallVirtualCount}</li>
-                <li>section-derived rows: {lessonVirtualDiagnostics.sectionDerivedVirtualCount}</li>
-                <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
-                <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
+                <li>
+                  catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}
+                </li>
+                <li>
+                  lessons with derived cards:{" "}
+                  {lessonVirtualDiagnostics.lessonsWithDerivedCards}
+                </li>
+                <li>
+                  total generated virtual cards:{" "}
+                  {lessonVirtualDiagnostics.totalGeneratedVirtualCards}
+                </li>
+                <li>
+                  recall rows: {lessonVirtualDiagnostics.recallVirtualCount}
+                </li>
+                <li>
+                  section-derived rows:{" "}
+                  {lessonVirtualDiagnostics.sectionDerivedVirtualCount}
+                </li>
+                <li>
+                  generic-filler-tagged section rows:{" "}
+                  {lessonVirtualDiagnostics.genericFillerSectionCardHits}
+                </li>
+                <li>
+                  selected systems/categories:{" "}
+                  {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") ||
+                    "(all)"}
+                </li>
                 <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
               </ul>
             </div>
@@ -1368,18 +1640,34 @@ export function FlashcardsHubClient({
               className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-xs text-[var(--semantic-text-secondary)]"
               data-nn-e2e-flashcards-pool-diagnostics
             >
-              <p className="font-semibold text-[var(--semantic-text-primary)]">Pool diagnostics (dev)</p>
+              <p className="font-semibold text-[var(--semantic-text-primary)]">
+                Pool diagnostics (dev)
+              </p>
               <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
                 <li>pathwayId: {poolDiagnostics.pathwayId}</li>
-                <li>exam_question SQL pool: {poolDiagnostics.examQuestionSqlPoolCount}</li>
-                <li>dedicated Flashcard rows (deck pathway): {poolDiagnostics.dedicatedFlashcardRowCount}</li>
-                <li>tier / country scope: {poolDiagnostics.tier ?? "—"} / {poolDiagnostics.country ?? "—"}</li>
+                <li>
+                  exam_question SQL pool:{" "}
+                  {poolDiagnostics.examQuestionSqlPoolCount}
+                </li>
+                <li>
+                  dedicated Flashcard rows (deck pathway):{" "}
+                  {poolDiagnostics.dedicatedFlashcardRowCount}
+                </li>
+                <li>
+                  tier / country scope: {poolDiagnostics.tier ?? "—"} /{" "}
+                  {poolDiagnostics.country ?? "—"}
+                </li>
                 <li>pool source: {poolDiagnostics.poolSource}</li>
                 {poolDiagnostics.legacyCanonicalPrismaPoolCount != null ? (
-                  <li>legacy Prisma exam IN() count: {poolDiagnostics.legacyCanonicalPrismaPoolCount}</li>
+                  <li>
+                    legacy Prisma exam IN() count:{" "}
+                    {poolDiagnostics.legacyCanonicalPrismaPoolCount}
+                  </li>
                 ) : null}
                 {poolDiagnostics.zeroHint ? (
-                  <li className="text-[var(--semantic-warning)]">{poolDiagnostics.zeroHint}</li>
+                  <li className="text-[var(--semantic-warning)]">
+                    {poolDiagnostics.zeroHint}
+                  </li>
                 ) : null}
               </ul>
             </div>

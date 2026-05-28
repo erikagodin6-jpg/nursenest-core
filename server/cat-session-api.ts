@@ -6,6 +6,30 @@ import { selectNextItem } from "./cat-engine";
 
 const router = Router();
 
+const CAT_ROUTE_TIMEOUT_MS = 15_000;
+
+function withCatTimeout<T>(promise: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error("CAT_TIMEOUT")), CAT_ROUTE_TIMEOUT_MS);
+    promise.then(
+      (v) => { clearTimeout(t); resolve(v); },
+      (e) => { clearTimeout(t); reject(e); }
+    );
+  });
+}
+
+function catTimeout(res: any, fn: () => Promise<void>) {
+  return withCatTimeout(fn()).catch((e: any) => {
+    if (!res.headersSent) {
+      const isTimeout = e?.message === "CAT_TIMEOUT";
+      res.status(isTimeout ? 503 : 500).json({
+        error: isTimeout ? "CAT request timed out. Please try again." : e.message,
+        code: isTimeout ? "CAT_TIMEOUT" : "CAT_ERROR",
+      });
+    }
+  });
+}
+
 /* =========================
    HELPERS
 ========================= */
@@ -66,8 +90,7 @@ async function selectNextQuestion(
    START CAT
 ========================= */
 
-router.post("/api/cat/start", async (req, res) => {
-  try {
+router.post("/api/cat/start", (req, res) => catTimeout(res, async () => {
     const user = await requireAuth(req, res);
     if (!user) return;
 
@@ -110,18 +133,13 @@ router.post("/api/cat/start", async (req, res) => {
         topic: nextQ.topic,
       },
     });
-
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+}));
 
 /* =========================
    ANSWER
 ========================= */
 
-router.post("/api/cat/:id/answer", async (req, res) => {
-  try {
+router.post("/api/cat/:id/answer", (req, res) => catTimeout(res, async () => {
     const user = await requireAuth(req, res);
     if (!user) return;
 
@@ -180,11 +198,7 @@ router.post("/api/cat/:id/answer", async (req, res) => {
           }
         : null,
     });
-
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+}));
 
 export function registerCatRoutes(app: any) {
   app.use(router);

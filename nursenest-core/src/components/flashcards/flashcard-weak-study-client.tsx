@@ -5,7 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
-import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import {
+  ActiveStudySession,
+  type ActiveStudyCard,
+} from "@/components/study/active-study-session";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
@@ -48,7 +51,9 @@ export function FlashcardWeakStudyClient({
   const [weakTopics, setWeakTopics] = useState<string[]>([]);
   const [hint, setHint] = useState<string | null>(null);
   const [pathwayRequired, setPathwayRequired] = useState(false);
-  const [resolvedPathwayId, setResolvedPathwayId] = useState<string | null>(null);
+  const [resolvedPathwayId, setResolvedPathwayId] = useState<string | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // Deduplication guard: each load() call gets a fresh token; the effect only fires
@@ -60,6 +65,8 @@ export function FlashcardWeakStudyClient({
     setError(null);
 
     const token = ++loadTokenRef.current;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 25_000);
 
     try {
       const qs = new URLSearchParams();
@@ -67,7 +74,7 @@ export function FlashcardWeakStudyClient({
 
       const res = await fetch(
         `/api/flashcards/weak-queue${qs.toString() ? `?${qs}` : ""}`,
-        { credentials: "include" }
+        { credentials: "include", signal: controller.signal },
       );
 
       const data = await res.json();
@@ -94,9 +101,17 @@ export function FlashcardWeakStudyClient({
         }
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Error");
+      const aborted = e instanceof DOMException && e.name === "AbortError";
+      setError(
+        aborted
+          ? "Flashcards took too long to load. Check your connection and try again."
+          : e instanceof Error
+            ? e.message
+            : "Error",
+      );
       setQueue([]);
     } finally {
+      window.clearTimeout(timeout);
       setLoading(false);
     }
   }, [pathwayId]);
@@ -136,7 +151,10 @@ export function FlashcardWeakStudyClient({
   // ❌ Error
   if (error && queue.length === 0) {
     return (
-      <div className="py-20 text-center" data-nn-e2e-flashcards-weak-study-error>
+      <div
+        className="py-20 text-center"
+        data-nn-e2e-flashcards-weak-study-error
+      >
         <p className="text-sm text-[var(--semantic-danger)]">{error}</p>
         <Link
           href={flashcardsHubHref}
@@ -217,13 +235,20 @@ export function FlashcardWeakStudyClient({
       topicSlug,
       lessonHref: c.lessonStudyHref?.trim() ? c.lessonStudyHref : null,
       lessonTitle: c.lessonStudyTitle?.trim() ? c.lessonStudyTitle : null,
-      practiceTopicHref: pid && topicSlug ? pathwayHubAppQuestionsHref(pid, topicSlug) : null,
-      practiceTestsTopicHref: pid && topicSlug ? buildAppPracticeTestsTopicHref(pid, topicSlug) : null,
+      practiceTopicHref:
+        pid && topicSlug ? pathwayHubAppQuestionsHref(pid, topicSlug) : null,
+      practiceTestsTopicHref:
+        pid && topicSlug
+          ? buildAppPracticeTestsTopicHref(pid, topicSlug)
+          : null,
     };
   });
 
   return (
-    <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6" data-nn-e2e-flashcards-weak-study-root>
+    <div
+      className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6"
+      data-nn-e2e-flashcards-weak-study-root
+    >
       {/* HEADER */}
       <div className="mb-4 flex items-center justify-between">
         <Link
@@ -243,7 +268,10 @@ export function FlashcardWeakStudyClient({
       </div>
 
       {/* SESSION — match deck/custom premium shell for visual + readiness parity */}
-      <ExamSessionShell examMode="practice" className="nn-premium-flashcard-session-root nn-flashcard-study-premium">
+      <ExamSessionShell
+        examMode="practice"
+        className="nn-premium-flashcard-session-root nn-flashcard-study-premium"
+      >
         <ActiveStudySession
           cards={activeCards}
           layout="split"

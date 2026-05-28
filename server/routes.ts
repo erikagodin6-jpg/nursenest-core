@@ -18087,7 +18087,7 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
                 rationale_media, lesson_links, body_system, topic, subtopic,
                 region_scope, flashcard_enabled, source_question_id, hints
          FROM flashcard_bank WHERE ${where}
-         ORDER BY RANDOM()
+         ORDER BY id
          LIMIT $${paramIdx++} OFFSET $${paramIdx++}`,
         [...params, limit, offset],
         { label: "flashcard-bank/fetch", timeoutMs: 5000 }

@@ -135,20 +135,20 @@ export async function getNextCards(
   const fetchLimit = safeLimit * 3;
 
   const extra: string[] = [];
-  const params: unknown[] = [userId, tiers, fetchLimit];
-  let p = 4;
+  const filterParams: unknown[] = [userId, tiers];
+  let p = 3;
 
   if (filters?.topic) {
     extra.push(`fb.topic = $${p++}`);
-    params.push(filters.topic);
+    filterParams.push(filters.topic);
   }
   if (filters?.bodySystem) {
     extra.push(`fb.body_system = $${p++}`);
-    params.push(filters.bodySystem);
+    filterParams.push(filters.bodySystem);
   }
   if (filters?.difficulty != null) {
     extra.push(`fb.difficulty = $${p++}`);
-    params.push(filters.difficulty);
+    filterParams.push(filters.difficulty);
   }
   if (filters?.flaggedOnly) {
     extra.push(`COALESCE(ucs.flagged,false) = true`);
@@ -159,10 +159,27 @@ export async function getNextCards(
 
   const whereExtra = extra.length ? ` AND ${extra.join(" AND ")}` : "";
 
+  // Avoid ORDER BY RANDOM() full-table sort: count matching rows, pick a random
+  // window offset, then fetch using the indexed primary key ORDER BY fb.id.
+  const countRes = await pool.query(
+    `SELECT COUNT(*)::int AS total
+     FROM flashcard_bank fb
+     LEFT JOIN user_card_stats ucs ON ucs.card_id = fb.id AND ucs.user_id = $1
+     WHERE fb.status='published' AND fb.tier = ANY($2::text[])${whereExtra}`,
+    filterParams
+  );
+  const total: number = countRes.rows[0]?.total ?? 0;
+  const span = Math.max(0, total - fetchLimit);
+  const windowOffset = span > 0 ? Math.floor(Math.random() * span) : 0;
+
+  const fetchParams = [...filterParams, windowOffset, fetchLimit];
+  const offsetP = p;
+  const limitP = p + 1;
+
   const [cardsRes, weakTopicsRes] = await Promise.all([
     pool.query(
       `
-      SELECT fb.*, 
+      SELECT fb.*,
         COALESCE(ucs.times_incorrect,0) _incorrect_count,
         COALESCE(ucs.flagged,false) _flagged,
         COALESCE(ucs.mastered,false) _mastered,
@@ -176,14 +193,14 @@ export async function getNextCards(
           END, 0.5
         ) _avg_confidence
       FROM flashcard_bank fb
-      LEFT JOIN user_card_stats ucs 
+      LEFT JOIN user_card_stats ucs
         ON ucs.card_id = fb.id AND ucs.user_id = $1
       WHERE fb.status='published' AND fb.tier = ANY($2::text[])
       ${whereExtra}
-      ORDER BY RANDOM()
-      LIMIT $3
+      ORDER BY fb.id
+      OFFSET $${offsetP} LIMIT $${limitP}
     `,
-      params
+      fetchParams
     ),
 
     pool.query(
