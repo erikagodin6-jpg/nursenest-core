@@ -4,12 +4,19 @@ import { createHash } from "node:crypto";
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-/** When set to a positive integer (ms), logs queries at or above the threshold via {@link safeServerLog}. */
+/**
+ * Slow-query threshold in milliseconds.
+ * Production default: 500ms (always-on).
+ * Override via PRISMA_SLOW_QUERY_LOG_MS env var (set to "0" to disable).
+ */
 export function readPrismaSlowQueryThresholdMs(): number {
   const raw = process.env.PRISMA_SLOW_QUERY_LOG_MS?.trim();
-  if (!raw) return 0;
-  const n = Number(raw);
-  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  if (raw === "0") return 0;
+  if (raw) {
+    const n = Number(raw);
+    if (Number.isFinite(n) && n > 0) return Math.floor(n);
+  }
+  return 500;
 }
 
 /** When set to a positive integer (chars), logs a fingerprint for unusually long SQL text (no literals redacted beyond Prisma’s `$n` params). */

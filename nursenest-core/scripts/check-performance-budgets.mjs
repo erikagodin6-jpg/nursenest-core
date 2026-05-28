@@ -10,7 +10,7 @@
  *
  * --warn-only: print violations but always exit 0 (useful during migration periods)
  */
-import { statSync, existsSync, readdirSync } from "node:fs";
+import { statSync, existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -201,6 +201,95 @@ if (existsSync(serverChunksDir)) {
   }
 } else {
   console.log("\nℹ️  No server chunks found — skipping catalog bundling check");
+}
+
+// ─── Route registry integrity check ───────────────────────────────────────
+//
+// Validates that every CI-enforced route in the performance registry
+// has a defined budget and that budget definitions are internally consistent.
+// Does NOT measure live routes — that's done by Playwright e2e tests.
+
+console.log("\n=== Route Performance Registry ===\n");
+
+let registryFile;
+try {
+  registryFile = join(ROOT, "src/lib/performance/route-registry.ts");
+} catch {
+  registryFile = null;
+}
+
+if (registryFile && existsSync(registryFile)) {
+  const content = readFileSync(registryFile, "utf8");
+
+  // Count CI-enforced routes
+  const ciEnforcedMatches = content.match(/ciEnforced:\s*true/g);
+  const ciEnforcedCount = ciEnforcedMatches ? ciEnforcedMatches.length : 0;
+
+  // Verify budgets are set
+  const missingBudgets = [];
+  const ttfbMatches = content.match(/ttfbBudgetMs:\s*0/g);
+  if (ttfbMatches) {
+    missingBudgets.push(`${ttfbMatches.length} route(s) with ttfbBudgetMs: 0 (except static-only routes)`);
+  }
+
+  console.log(`✅ Route registry found: ${ciEnforcedCount} CI-enforced route budgets`);
+  if (missingBudgets.length > 0) {
+    console.log(`⚠️  Warning: ${missingBudgets.join("; ")}`);
+  }
+
+  // Check key routes are covered
+  const REQUIRED_ROUTE_IDS = [
+    "marketing-homepage",
+    "learner-dashboard",
+    "learner-questions",
+    "learner-flashcards",
+    "learner-lessons",
+    "learner-cat",
+    "learner-analytics",
+  ];
+
+  let registryPassed = 0;
+  let registryFailed = 0;
+  for (const id of REQUIRED_ROUTE_IDS) {
+    const present = content.includes(`id: "${id}"`);
+    if (present) {
+      registryPassed++;
+    } else {
+      console.log(`❌ Required route budget missing from registry: ${id}`);
+      registryFailed++;
+      failed++;
+    }
+  }
+  if (registryFailed === 0) {
+    console.log(`✅ All ${REQUIRED_ROUTE_IDS.length} required route budgets registered`);
+    passed++;
+  }
+} else {
+  console.log("⚠️  Route registry not found at src/lib/performance/route-registry.ts — skipping");
+}
+
+// ─── N+1 detector module presence check ───────────────────────────────────
+
+console.log("\n=== Performance Observability Modules ===\n");
+
+const REQUIRED_PERF_MODULES = [
+  { file: "src/lib/performance/route-registry.ts",        label: "Route performance registry" },
+  { file: "src/lib/performance/server-timing.ts",         label: "Server-Timing header builder" },
+  { file: "src/lib/performance/n-plus-one-detector.ts",   label: "N+1 query detector" },
+  { file: "src/lib/performance/cache-observability.ts",   label: "Cache observability layer" },
+  { file: "src/lib/performance/connection-pool-monitor.ts", label: "Connection pool monitor" },
+  { file: "src/lib/performance/activity-startup-metrics.ts", label: "Activity startup metrics" },
+];
+
+for (const mod of REQUIRED_PERF_MODULES) {
+  const absPath = join(ROOT, mod.file);
+  if (existsSync(absPath)) {
+    console.log(`✅ ${mod.label}`);
+    passed++;
+  } else {
+    console.log(`❌ ${mod.label} — missing: ${mod.file}`);
+    failed++;
+  }
 }
 
 // ─── Summary ──────────────────────────────────────────────────────────────

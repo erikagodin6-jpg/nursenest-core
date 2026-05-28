@@ -218,6 +218,66 @@ function logSlowOrFailedQuery(
   }
 }
 
+/** Pool saturation thresholds for alerting. */
+const POOL_WARN_USED_PCT = 0.8;
+const POOL_CRITICAL_USED_PCT = 0.95;
+const POOL_HEALTH_LOG_INTERVAL_MS = 60_000;
+
+/**
+ * Attaches connection pool saturation monitoring.
+ * Logs on acquire when pool is >80% used; logs critical at >95%.
+ * Emits periodic health snapshots every 60 seconds.
+ */
+function attachPoolSaturationMonitor(pool: pg.Pool, target: DatabaseTarget): void {
+  const max = DEFAULT_MAX_POOL_SIZE;
+
+  pool.on("acquire", () => {
+    const used = pool.totalCount - pool.idleCount;
+    const pct = max > 0 ? used / max : 0;
+    if (pct >= POOL_CRITICAL_USED_PCT) {
+      console.error(
+        JSON.stringify({
+          type: "db_pool_critical",
+          target,
+          used,
+          idle: pool.idleCount,
+          waiting: pool.waitingCount,
+          max,
+          usedPct: Math.round(pct * 100),
+        }),
+      );
+    } else if (pct >= POOL_WARN_USED_PCT) {
+      console.warn(
+        JSON.stringify({
+          type: "db_pool_pressure",
+          target,
+          used,
+          idle: pool.idleCount,
+          waiting: pool.waitingCount,
+          max,
+          usedPct: Math.round(pct * 100),
+        }),
+      );
+    }
+  });
+
+  setInterval(() => {
+    const used = pool.totalCount - pool.idleCount;
+    console.log(
+      JSON.stringify({
+        type: "db_pool_health",
+        target,
+        total: pool.totalCount,
+        used,
+        idle: pool.idleCount,
+        waiting: pool.waitingCount,
+        max,
+        usedPct: max > 0 ? Math.round((used / max) * 100) : 0,
+      }),
+    );
+  }, POOL_HEALTH_LOG_INTERVAL_MS).unref();
+}
+
 function wrapPoolQuery(pool: pg.Pool, target: DatabaseTarget): void {
   const originalQuery = pool.query.bind(pool);
 
@@ -258,6 +318,7 @@ function createPool(target: DatabaseTarget): pg.Pool {
   });
 
   wrapPoolQuery(pool, target);
+  attachPoolSaturationMonitor(pool, target);
 
   pool.on("connect", (client) => {
     client.on("error", (err) => {

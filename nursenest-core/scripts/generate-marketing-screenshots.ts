@@ -17,10 +17,15 @@
  *
  * ENV
  *   PLAYWRIGHT_BASE_URL           (default: http://127.0.0.1:3000)
- *   QA_PAID_EMAIL / QA_PAID_PASSWORD
+ *   QA_PAID_EMAIL / QA_PAID_PASSWORD     default paid account (RN persona)
  *   E2E_PAID_EMAIL / E2E_PAID_PASSWORD
  *   SCREENSHOT_DEMO_EMAIL / SCREENSHOT_DEMO_PASSWORD
  *   PLAYWRIGHT_TEST_EMAIL / PLAYWRIGHT_TEST_PASSWORD
+ *   SCREENSHOT_RN_EMAIL / SCREENSHOT_RN_PASSWORD      RN-specific persona
+ *   SCREENSHOT_PN_EMAIL / SCREENSHOT_PN_PASSWORD      RPN/PN-specific persona
+ *   SCREENSHOT_NP_EMAIL / SCREENSHOT_NP_PASSWORD      NP-specific persona
+ *   SCREENSHOT_ALLIED_EMAIL / SCREENSHOT_ALLIED_PASSWORD  Allied persona
+ *   SCREENSHOT_NEWGRAD_EMAIL / SCREENSHOT_NEWGRAD_PASSWORD  New Grad persona
  *   SCREENSHOT_WAIT_MS            extra hydration wait ms (default: 1200)
  *   SCREENSHOT_WEBP_QUALITY       1-100 (default: 82)
  *   SCREENSHOT_SKIP_FRAME         set "1" to skip browser-chrome compositing
@@ -30,7 +35,7 @@
  * PREREQUISITES
  *   1. `npx playwright install chromium`
  *   2. App running at PLAYWRIGHT_BASE_URL  (npm run dev:next:3000)
- *   3. Paid/demo account seeded           (npm run seed:auth-qa)
+ *   3. Personas seeded: DATABASE_URL=... npm run seed:marketing-personas
  *   4. `sharp` already a project dependency
  *
  * OUTPUT
@@ -69,6 +74,29 @@ const SKIP_FRAME = process.env.SCREENSHOT_SKIP_FRAME === "1";
 
 // ─── Credentials ─────────────────────────────────────────────────────────────
 
+/**
+ * Per-tier persona credentials. Each tier gets its own login so the dashboard,
+ * analytics, and hub show tier-appropriate data.
+ * Falls back to the default QA account if the tier-specific vars are not set.
+ */
+const TIER_CREDENTIALS: Record<string, { email: string; password: string } | null> = {
+  rn:      resolveOptionalCreds("SCREENSHOT_RN_EMAIL",      "SCREENSHOT_RN_PASSWORD"),
+  pn:      resolveOptionalCreds("SCREENSHOT_PN_EMAIL",      "SCREENSHOT_PN_PASSWORD"),
+  np:      resolveOptionalCreds("SCREENSHOT_NP_EMAIL",      "SCREENSHOT_NP_PASSWORD"),
+  allied:  resolveOptionalCreds("SCREENSHOT_ALLIED_EMAIL",  "SCREENSHOT_ALLIED_PASSWORD"),
+  newgrad: resolveOptionalCreds("SCREENSHOT_NEWGRAD_EMAIL", "SCREENSHOT_NEWGRAD_PASSWORD"),
+};
+
+function resolveOptionalCreds(
+  emailVar: string,
+  passwordVar: string,
+): { email: string; password: string } | null {
+  const email = process.env[emailVar]?.trim();
+  const password = process.env[passwordVar]?.trim();
+  if (!email || !password) return null;
+  return { email, password };
+}
+
 function resolveCredentials(): { email: string; password: string } {
   const email =
     process.env.QA_PAID_EMAIL ??
@@ -89,6 +117,12 @@ function resolveCredentials(): { email: string; password: string } {
         "  E2E_PAID_EMAIL + E2E_PAID_PASSWORD",
         "  SCREENSHOT_DEMO_EMAIL + SCREENSHOT_DEMO_PASSWORD",
         "  PLAYWRIGHT_TEST_EMAIL + PLAYWRIGHT_TEST_PASSWORD",
+        "",
+        "For richer tier-specific screenshots, also set per-persona vars:",
+        "  SCREENSHOT_RN_EMAIL / SCREENSHOT_RN_PASSWORD",
+        "  SCREENSHOT_PN_EMAIL / SCREENSHOT_PN_PASSWORD",
+        "  SCREENSHOT_NP_EMAIL / SCREENSHOT_NP_PASSWORD",
+        "  (seed with: DATABASE_URL=... npm run seed:marketing-personas)",
       ].join("\n"),
     );
   }
@@ -140,13 +174,22 @@ type CaptureTarget = {
   route: string;
   theme: ThemeId;
   auth: AuthMode;
-  /** Which viewports to also capture (desktop is always first). */
+  /**
+   * Which viewports to also capture. Desktop is always first.
+   * For mobile-first targets, put mobile/tablet first to express intent,
+   * but desktop capture always runs regardless.
+   */
   viewports?: ViewportKey[];
   /** CSS selector to wait for before screenshotting. */
   waitFor?: string;
   /** Also capture in all other themes. Desktop only. */
   themeVariants?: boolean;
   extraWaitMs?: number;
+  /**
+   * Persona key to use for login (rn/pn/np/allied/newgrad).
+   * Falls back to default QA account if the persona creds aren't set.
+   */
+  persona?: string;
   notes?: string;
 };
 
@@ -976,6 +1019,351 @@ const TARGETS: CaptureTarget[] = [
     viewports: ["desktop"],
     waitFor: "main",
   },
+
+  // ── Mobile-first captures (Phase 4) ──────────────────────────────────────────
+  // These are dedicated mobile captures that are NOT just resized desktops.
+  // Each is captured from the mobile viewport first, showing the real mobile UI.
+  {
+    key: "mobile-homepage",
+    label: "Mobile — Homepage hero",
+    tier: "mobile",
+    route: "/",
+    theme: "ocean",
+    auth: "guest",
+    viewports: ["mobile"],
+    waitFor: "main",
+    themeVariants: true,
+    notes: "320px, 375px, 390px, 430px viewport captures.",
+  },
+  {
+    key: "mobile-pricing",
+    label: "Mobile — Pricing page",
+    tier: "mobile",
+    route: "/pricing",
+    theme: "ocean",
+    auth: "guest",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-faq",
+    label: "Mobile — FAQ page",
+    tier: "mobile",
+    route: "/faq",
+    theme: "ocean",
+    auth: "guest",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-questions",
+    label: "Mobile — Practice Questions",
+    tier: "mobile",
+    route: "/app/questions",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+    themeVariants: true,
+  },
+  {
+    key: "mobile-flashcards",
+    label: "Mobile — Flashcard study",
+    tier: "mobile",
+    route: "/app/flashcards",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+    themeVariants: true,
+  },
+  {
+    key: "mobile-lessons",
+    label: "Mobile — Lesson library",
+    tier: "mobile",
+    route: "/app/lessons",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-clinical-skills",
+    label: "Mobile — Clinical Skills",
+    tier: "mobile",
+    route: "/app/clinical-skills",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-pharmacology",
+    label: "Mobile — Pharmacology",
+    tier: "mobile",
+    route: "/app/pharmacology",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-ecg",
+    label: "Mobile — ECG module",
+    tier: "mobile",
+    route: "/modules/ecg",
+    theme: "midnight",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-analytics",
+    label: "Mobile — Analytics dashboard",
+    tier: "mobile",
+    route: "/app/analytics",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+  },
+  {
+    key: "mobile-readiness",
+    label: "Mobile — Readiness dashboard",
+    tier: "mobile",
+    route: "/app/account/readiness",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["mobile"],
+    waitFor: "main",
+    themeVariants: true,
+  },
+  // Tablet captures for key marketing surfaces
+  {
+    key: "tablet-homepage",
+    label: "Tablet — Homepage",
+    tier: "mobile",
+    route: "/",
+    theme: "ocean",
+    auth: "guest",
+    viewports: ["tablet"],
+    waitFor: "main",
+  },
+  {
+    key: "tablet-dashboard",
+    label: "Tablet — Learner dashboard",
+    tier: "mobile",
+    route: "/app",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["tablet"],
+    waitFor: '[data-testid="learner-dashboard-shell"], main',
+    themeVariants: true,
+  },
+
+  // ── New Grad flagship (Phase 5) ──────────────────────────────────────────────
+  {
+    key: "newgrad-transition-dashboard",
+    label: "New Grad — Transition-to-Practice dashboard detail",
+    tier: "newgrad-flagship",
+    route: "/app",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop", "mobile"],
+    waitFor: '[data-testid="learner-dashboard-shell"], main',
+    themeVariants: true,
+    persona: "newgrad",
+    notes: "Uses New Grad persona for richer transition-to-practice data.",
+  },
+  {
+    key: "newgrad-specialty-selection",
+    label: "New Grad — Specialty Pathway Selector",
+    tier: "newgrad-flagship",
+    route: "/app/explore",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop", "mobile"],
+    waitFor: "main",
+    persona: "newgrad",
+  },
+  {
+    key: "newgrad-telemetry-learning",
+    label: "New Grad — Telemetry learning workspace",
+    tier: "newgrad-flagship",
+    route: "/modules/ecg/basic/lessons",
+    theme: "midnight",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "newgrad",
+    notes: "ECG/telemetry in midnight theme — flagship new grad differentiator.",
+  },
+  {
+    key: "newgrad-advanced-ecg",
+    label: "New Grad — Advanced ECG module hub",
+    tier: "newgrad-flagship",
+    route: "/modules/ecg",
+    theme: "midnight",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "newgrad",
+  },
+  {
+    key: "newgrad-simulation-experience",
+    label: "New Grad — Clinical simulation experience",
+    tier: "newgrad-flagship",
+    route: "/app/clinical-scenarios",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop", "tablet"],
+    waitFor: "main",
+    persona: "newgrad",
+  },
+  {
+    key: "newgrad-shift-prioritization",
+    label: "New Grad — Shift prioritization practice",
+    tier: "newgrad-flagship",
+    route: "/app/questions",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "newgrad",
+    notes: "Uses New Grad persona so topic stats show shift/delegation content.",
+  },
+  {
+    key: "newgrad-readiness-full",
+    label: "New Grad — Readiness dashboard (full data)",
+    tier: "newgrad-flagship",
+    route: "/app/account/readiness",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop", "mobile"],
+    waitFor: "main",
+    themeVariants: true,
+    persona: "newgrad",
+  },
+  {
+    key: "newgrad-clinical-skills-full",
+    label: "New Grad — Clinical Skills (full data)",
+    tier: "newgrad-flagship",
+    route: "/app/clinical-skills",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "newgrad",
+  },
+  {
+    key: "newgrad-pharmacology-full",
+    label: "New Grad — Advanced Pharmacology (full data)",
+    tier: "newgrad-flagship",
+    route: "/app/pharmacology",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "newgrad",
+  },
+  {
+    key: "newgrad-analytics-growth",
+    label: "New Grad — Analytics growth timeline",
+    tier: "newgrad-flagship",
+    route: "/app/analytics",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    themeVariants: true,
+    persona: "newgrad",
+    notes: "Shows growth over time with New Grad persona data.",
+  },
+
+  // ── Allied Health profession-specific (Phase 6) ──────────────────────────────
+  // Allied captures use the Allied persona to show profession-specific content.
+  {
+    key: "allied-profession-hub",
+    label: "Allied Health — Profession hub (MLT example)",
+    tier: "allied-profession",
+    route: "/app",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop", "mobile"],
+    waitFor: '[data-testid="learner-dashboard-shell"], main',
+    themeVariants: true,
+    persona: "allied",
+    notes: "Uses Allied (MLT) persona — shows profession-specific hub.",
+  },
+  {
+    key: "allied-profession-questions",
+    label: "Allied Health — Profession-specific questions",
+    tier: "allied-profession",
+    route: "/app/questions",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "allied",
+  },
+  {
+    key: "allied-profession-flashcards",
+    label: "Allied Health — Profession-specific flashcards",
+    tier: "allied-profession",
+    route: "/app/flashcards",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "allied",
+  },
+  {
+    key: "allied-profession-lessons",
+    label: "Allied Health — Profession-specific lessons",
+    tier: "allied-profession",
+    route: "/app/lessons",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "allied",
+  },
+  {
+    key: "allied-profession-clinical-skills",
+    label: "Allied Health — Profession-specific clinical skills",
+    tier: "allied-profession",
+    route: "/app/clinical-skills",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    persona: "allied",
+  },
+  {
+    key: "allied-profession-analytics",
+    label: "Allied Health — Profession analytics",
+    tier: "allied-profession",
+    route: "/app/analytics",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    themeVariants: true,
+    persona: "allied",
+    notes: "Shows allied profession performance data.",
+  },
+  {
+    key: "allied-profession-readiness",
+    label: "Allied Health — Profession readiness",
+    tier: "allied-profession",
+    route: "/app/account/readiness",
+    theme: "ocean",
+    auth: "paid",
+    viewports: ["desktop"],
+    waitFor: "main",
+    themeVariants: true,
+    persona: "allied",
+  },
 ];
 
 // ─── Browser frame ────────────────────────────────────────────────────────────
@@ -1364,16 +1752,64 @@ async function main(): Promise<void> {
   }
 
   const browser = await chromium.launch({ headless: true });
-  const context: BrowserContext = await browser.newContext({
-    viewport: VIEWPORTS.desktop,
-    reducedMotion: "reduce",
-    userAgent:
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
-      "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 NurseNestScreenshotBot/2.0",
-  });
-  const page = await context.newPage();
 
-  let loggedIn = false;
+  /**
+   * Create a fresh context per persona so cookies/auth state don't bleed between accounts.
+   * All personas share the same browser process for efficiency.
+   */
+  const CONTEXT_UA =
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
+    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 NurseNestScreenshotBot/2.0";
+
+  async function createFreshContext(): Promise<{ context: BrowserContext; page: Page }> {
+    const ctx = await browser.newContext({
+      viewport: VIEWPORTS.desktop,
+      reducedMotion: "reduce",
+      userAgent: CONTEXT_UA,
+    });
+    return { context: ctx, page: await ctx.newPage() };
+  }
+
+  // Track which (email, personaKey) combinations are logged in
+  const loggedInContexts = new Map<
+    string,
+    { context: BrowserContext; page: Page }
+  >();
+
+  async function getPageForPersona(
+    auth: AuthMode,
+    persona?: string,
+  ): Promise<Page> {
+    if (auth === "guest") {
+      // Reuse a single guest context
+      const key = "__guest__";
+      if (!loggedInContexts.has(key)) {
+        const { context, page } = await createFreshContext();
+        loggedInContexts.set(key, { context, page });
+      }
+      return loggedInContexts.get(key)!.page;
+    }
+
+    // Determine which credentials to use
+    const personaCreds =
+      persona ? (TIER_CREDENTIALS[persona] ?? null) : null;
+    const activeCreds = personaCreds ?? creds;
+    if (!activeCreds) {
+      throw new Error(
+        "Paid auth required — set QA_PAID_EMAIL + QA_PAID_PASSWORD" +
+        (persona ? ` (or SCREENSHOT_${persona.toUpperCase()}_EMAIL + SCREENSHOT_${persona.toUpperCase()}_PASSWORD)` : ""),
+      );
+    }
+
+    const key = activeCreds.email;
+    if (!loggedInContexts.has(key)) {
+      const { context, page } = await createFreshContext();
+      await login(page, activeCreds.email, activeCreds.password);
+      loggedInContexts.set(key, { context, page });
+    }
+    return loggedInContexts.get(key)!.page;
+  }
+
   const manifest: ManifestEntry[] = [];
   const errors: Array<{
     key: string;
@@ -1382,22 +1818,15 @@ async function main(): Promise<void> {
     error: string;
   }> = [];
 
-  async function ensureAuth(auth: AuthMode): Promise<void> {
-    if (auth === "guest") return;
-    if (loggedIn) return;
-    if (!creds)
-      throw new Error("Paid auth required — set QA_PAID_EMAIL + QA_PAID_PASSWORD");
-    await login(page, creds.email, creds.password);
-    loggedIn = true;
-  }
-
   for (const target of targets) {
     console.log(`\n[${target.tier}] ${target.key}`);
     console.log(`  ${target.label}`);
-    console.log(`  ${target.route}  (${target.auth})`);
+    const personaLabel = target.persona ? ` [${target.persona}]` : "";
+    console.log(`  ${target.route}  (${target.auth}${personaLabel})`);
 
+    let page: Page;
     try {
-      await ensureAuth(target.auth);
+      page = await getPageForPersona(target.auth, target.persona);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error(`  ✗ auth: ${msg}`);
@@ -1405,11 +1834,14 @@ async function main(): Promise<void> {
       continue;
     }
 
-    // Determine viewports to capture (always include desktop)
-    const rawViewports: ViewportKey[] = [
-      "desktop",
-      ...(target.viewports?.filter((v) => v !== "desktop") ?? []),
-    ];
+    // Mobile-first targets: only capture the declared viewports (no forced desktop)
+    const isMobileFirst = target.tier === "mobile";
+    const rawViewports: ViewportKey[] = isMobileFirst
+      ? (target.viewports ?? ["mobile"])
+      : [
+          "desktop",
+          ...(target.viewports?.filter((v) => v !== "desktop") ?? []),
+        ];
     const viewportsTodo: ViewportKey[] = cli.viewports
       ? rawViewports.filter((v) => cli.viewports!.includes(v))
       : rawViewports;
@@ -1432,7 +1864,7 @@ async function main(): Promise<void> {
     }
 
     // Multi-theme variants (desktop only, skips the default theme)
-    if (target.themeVariants) {
+    if (target.themeVariants && !isMobileFirst) {
       const variantThemes = themeVariantSet.filter((t) => t !== target.theme);
       for (const theme of variantThemes) {
         process.stdout.write(`  desktop  ${theme} … `);
@@ -1450,6 +1882,10 @@ async function main(): Promise<void> {
     }
   }
 
+  // Close all browser contexts
+  for (const { context } of loggedInContexts.values()) {
+    await context.close().catch(() => {});
+  }
   await browser.close();
 
   // Manifest

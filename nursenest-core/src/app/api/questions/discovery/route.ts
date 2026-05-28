@@ -18,6 +18,7 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { withRetry } from "@/lib/resilience/with-retry";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
+import { loadWithManifest, questionDiscoveryManifestKey, questionDiscoverySnapshotPath } from "@/lib/server/manifest-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -81,6 +82,61 @@ export async function GET(req: NextRequest) {
           },
         });
       }
+
+      // ── Phase 2.5: manifest-loader — Redis → snapshot → live ──────────────
+      const tier = String(gate.entitlement.tier ?? "");
+      const country = String(gate.entitlement.country ?? "");
+      if (tier && country) {
+        const manifestResult = await loadWithManifest<QuestionDiscoveryManifestPayload>({
+          redisKey: questionDiscoveryManifestKey(tier, country, requestedPathwayId),
+          redisTtl: 60 * 60,
+          snapshotPath: questionDiscoverySnapshotPath(tier, country, requestedPathwayId),
+          buildLive: async () => {
+            const agg = await loadSubscriberDiscoveryAggregates(gate.entitlement, examContext);
+            return {
+              tier, country, pathwayId: requestedPathwayId,
+              total: agg.total,
+              topicBuckets: agg.topicRows.map((r) => ({ topic: r.topic ?? "Unknown", count: Number(r.cnt) })),
+              examBuckets: agg.examRows.map((r) => ({ exam: r.exam ?? null, count: Number(r.cnt) })),
+              topicsTruncated: agg.topicRows.length >= DISCOVERY_TOPIC_BUCKET_CAP,
+              examsTruncated: agg.examRows.length >= DISCOVERY_EXAM_BUCKET_CAP,
+            };
+          },
+          isValid: (d) => d.total > 0,
+        });
+
+        const mp = manifestResult.data;
+        const topicsOmittedCount = mp.topicsTruncated
+          ? Math.max(0, mp.total - mp.topicBuckets.reduce((s, b) => s + b.count, 0))
+          : 0;
+        const examsOmittedCount = mp.examsTruncated
+          ? Math.max(0, mp.total - mp.examBuckets.reduce((s, b) => s + b.count, 0))
+          : 0;
+
+        const discoveryBody = {
+          total: mp.total,
+          buckets: mp.topicBuckets,
+          examFamily: mp.examBuckets,
+          limits: {
+            topicBucketCap: DISCOVERY_TOPIC_BUCKET_CAP,
+            examBucketCap: DISCOVERY_EXAM_BUCKET_CAP,
+            topicsTruncated: mp.topicsTruncated,
+            examsTruncated: mp.examsTruncated,
+            topicsOmittedCount,
+            examsOmittedCount,
+            aggregateStrategy: "sql_top_n" as const,
+          },
+        };
+        logLargeApiResponse("/api/questions/discovery", estimateJsonUtf8Bytes(discoveryBody));
+        if (discoveryCache.size > DISCOVERY_CACHE_MAX) discoveryCache.clear();
+        discoveryCache.set(cacheKey, { cachedAtMs: Date.now(), body: discoveryBody });
+        const res = NextResponse.json(discoveryBody);
+        res.headers.set("x-nn-discovery-cache", "miss");
+        res.headers.set("x-nn-discovery-manifest", manifestResult.source);
+        res.headers.set("Cache-Control", "private, no-store");
+        return res;
+      }
+      // ── End Phase 2.5 ──────────────────────────────────────────────────────
 
       const t0 = performance.now();
       const { total, topicRows, examRows } = await withRetry(() =>

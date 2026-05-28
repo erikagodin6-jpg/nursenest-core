@@ -9,6 +9,12 @@ import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-fla
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { isTransientDatabaseError } from "@/lib/resilience/with-retry";
+import {
+  loadWithManifest,
+  flashcardInventoryManifestKey,
+  flashcardInventorySnapshotPath,
+  type FlashcardInventoryManifestPayload,
+} from "@/lib/server/manifest-loader";
 
 type InventoryCacheEntry = {
   cachedAtMs: number;
@@ -93,6 +99,49 @@ export async function GET(req: NextRequest) {
         h.set("x-nn-inventory-cache", "hit");
         return NextResponse.json(cached.body, { status: 200, headers: h });
       }
+
+      // ── Phase 2.5: manifest-loader — Redis → snapshot → live ──────────────
+      const tier = String(gate.entitlement.tier ?? "");
+      const country = String(gate.entitlement.country ?? "");
+      if (tier && country) {
+        const manifestResult = await loadWithManifest<FlashcardInventoryManifestPayload>({
+          redisKey: flashcardInventoryManifestKey(tier, country, pathway.id),
+          redisTtl: 60 * 60,
+          snapshotPath: flashcardInventorySnapshotPath(tier, country, pathway.id),
+          buildLive: async () => {
+            const inv = await loadFlashcardsExamInventoryForPathway({
+              userId: gate.userId,
+              entitlement: gate.entitlement,
+              pathway,
+            });
+            if (!inv.ok) throw new Error(inv.code);
+            return {
+              tier, country, pathwayId: pathway.id,
+              total: inv.total,
+              categoryOptions: inv.categoryOptions,
+              categories: Object.entries(inv.countsByBuilderId).map(([name, count]) => ({ name, count })),
+            };
+          },
+          isValid: (d) => d.total > 0,
+        }).catch(() => null);
+
+        if (manifestResult) {
+          const mp = manifestResult.data;
+          const inventoryBody = {
+            success: true as const,
+            total: mp.total,
+            categoryOptions: mp.categoryOptions,
+            categories: mp.categories,
+          };
+          const h = new Headers(headers);
+          h.set("x-nn-inventory-cache", "miss");
+          h.set("x-nn-inventory-manifest", manifestResult.source);
+          if (inventoryCache.size > INVENTORY_CACHE_MAX) inventoryCache.clear();
+          inventoryCache.set(cacheKey, { cachedAtMs: Date.now(), body: inventoryBody });
+          return NextResponse.json(inventoryBody, { status: 200, headers: h });
+        }
+      }
+      // ── End Phase 2.5 ──────────────────────────────────────────────────────
 
       const invStarted = performance.now();
       let inv;

@@ -27,15 +27,32 @@ export function getPrismaQueryLog(): CapturedPrismaQuery[] {
   return [...(g.__PRISMA_QUERY_LOG__ ?? [])];
 }
 
+export type AttachPrismaQueryCaptureOptions = {
+  /**
+   * When true, stores every query in the in-process log and runs the SQL heuristic audit.
+   * When false (production default), only the slow-query logger fires — no per-query storage.
+   */
+  fullCapture?: boolean;
+};
+
 /**
- * Enables `$on('query')` logging + SQL heuristic audit. Call once on the shared `PrismaClient`.
- * Safe to skip in production unless `PRISMA_QUERY_AUDIT=1`.
+ * Attaches `$on('query')` to the shared PrismaClient.
+ * - In development / PRISMA_QUERY_AUDIT=1: full capture (in-memory log + SQL audit).
+ * - In production: slim capture — slow-query logging only; no per-query storage cost.
  */
-export function attachPrismaQueryCapture(prisma: PrismaClient): void {
-  const p = prisma as PrismaClient & { $on(event: string, cb: (e: { query: string; duration: number }) => void): void };
+export function attachPrismaQueryCapture(
+  prisma: PrismaClient,
+  opts: AttachPrismaQueryCaptureOptions = {},
+): void {
+  const full = opts.fullCapture ?? false;
+  const p = prisma as PrismaClient & {
+    $on(event: string, cb: (e: { query: string; duration: number }) => void): void;
+  };
   p.$on("query", (e) => {
-    pushQuery({ query: e.query, durationMs: e.duration });
-    auditRawSqlQuery(e.query);
     logPrismaQueryDiagnosticsIfConfigured(e.duration, e.query);
+    if (full) {
+      pushQuery({ query: e.query, durationMs: e.duration });
+      auditRawSqlQuery(e.query);
+    }
   });
 }

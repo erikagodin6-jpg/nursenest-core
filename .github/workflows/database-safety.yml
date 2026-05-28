@@ -1,0 +1,96 @@
+name: Database safety
+
+on:
+  pull_request:
+    paths:
+      - "nursenest-core/prisma/migrations/**"
+      - "migrations/**"
+      - "nursenest-core/src/**"
+      - "server/**"
+  push:
+    branches: [main]
+    paths:
+      - "nursenest-core/prisma/migrations/**"
+      - "migrations/**"
+      - "nursenest-core/src/**"
+      - "server/**"
+
+permissions:
+  contents: read
+
+jobs:
+  migration-safety:
+    name: Migration safety lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check migration files changed in this PR/push
+        run: |
+          node scripts/check-migration-safety.mjs --base origin/main
+        # Fails if any changed migration uses non-CONCURRENTLY CREATE INDEX
+        # or destructive DDL without a safety comment.
+
+  n-plus-one-scan:
+    name: N+1 query detector (new files)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Detect N+1 patterns in files changed in this PR
+        run: |
+          # Get files changed vs main, scan only those
+          CHANGED=$(git diff --name-only --diff-filter=ACM origin/main -- "*.ts" "*.tsx" "*.js" | \
+            grep -E "(src/|server/)" | head -100)
+          if [ -z "$CHANGED" ]; then
+            echo "✅ No relevant source files changed."
+            exit 0
+          fi
+          # Run detector on changed directories only (heuristic)
+          node scripts/detect-n-plus-one.mjs --severity 3 --fail
+        continue-on-error: true
+        # N+1 scan is advisory for now; set continue-on-error: false to enforce.
+        # Suppress false positives with "// nn-db-ok" on the flagged line.
+
+  query-budget-check:
+    name: Query budget contracts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - run: npm ci
+
+      - name: Run query budget contract tests
+        run: npx vitest run --reporter=verbose src/lib/db/prisma-bounded-read-regression.test.ts
+        # Fail if any query that should be bounded (findMany, findFirst) exceeds its budget.
+        env:
+          PRISMA_QUERY_AUDIT: "0"
+          DATABASE_URL: "postgresql://skip:skip@localhost:5432/skip"
+          # Budget tests use mocks — no real DB needed.

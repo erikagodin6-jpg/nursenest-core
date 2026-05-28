@@ -37,11 +37,8 @@ import {
 const SCRIPT_DIR = import.meta.dirname ?? __dirname;
 const ROOT_DIR = path.resolve(SCRIPT_DIR, "../..");
 
-const baseDir = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR?.trim();
-if (!baseDir) {
-  console.error("[snapshots] STUDY_PUBLISHED_SNAPSHOT_DIR is required");
-  process.exit(1);
-}
+import { tmpdir } from "node:os";
+const baseDir = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR?.trim() || tmpdir();
 
 const TIERS = (process.env.SNAPSHOT_TIERS ?? "RN,RPN,NP").split(",").map((t) => t.trim().toUpperCase());
 const COUNTRIES = (process.env.SNAPSHOT_COUNTRIES ?? "US,CA").split(",").map((c) => c.trim().toUpperCase());
@@ -181,6 +178,22 @@ async function main(): Promise<void> {
       );
     }
   }
+
+  // ─── Phase 2.5: Manifest acceleration ────────────────────────────────────
+  // Question discovery aggregates (replaces GROUP BY on startup)
+  results.push(run("question-manifests:all", `${tsx} scripts/study-snapshots/export-question-manifests.mts`));
+
+  // Flashcard inventory counts (replaces 3-query Prisma transaction on startup)
+  results.push(run("flashcard-inventory:all", `${tsx} scripts/study-snapshots/export-flashcard-inventory-snapshots.mts`));
+
+  // Lesson count + first-page manifests (replaces contentItem.count() + findMany on startup)
+  results.push(run("lesson-manifests:all", `${tsx} scripts/study-snapshots/export-lesson-manifests.mts`));
+
+  // Clinical skills category manifest
+  results.push(run("clinical-skills-manifest", `${tsx} scripts/study-snapshots/export-clinical-skills-manifests.mts`));
+
+  // ECG category manifest
+  results.push(run("ecg-manifest", `${tsx} scripts/study-snapshots/export-ecg-manifests.mts`));
 
   // ─── Stage 7: Build + upload manifest ──────────────────────────────────────
   const manifestJson = await buildManifest(results);

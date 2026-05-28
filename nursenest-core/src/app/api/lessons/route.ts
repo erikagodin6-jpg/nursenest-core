@@ -34,6 +34,7 @@ import { productEvent } from "@/lib/observability/product-events";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
+import { loadWithManifest, lessonManifestKey, lessonManifestSnapshotPath, type LessonManifestPayload } from "@/lib/server/manifest-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -204,7 +205,47 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      const [lessons, total] = await Promise.all([
+      // ── Phase 2.5: manifest-first count + first-page acceleration ──────────
+      const tier = String(gate.entitlement.tier ?? "");
+      const country = String(gate.entitlement.country ?? "");
+      let manifestTotal: number | null = null;
+      let manifestFirstPage: LessonManifestPayload["firstPage"] | null = null;
+      if (tier && country && page === 1 && skipRows === 0) {
+        const mr = await loadWithManifest<LessonManifestPayload>({
+          redisKey: lessonManifestKey(tier, country),
+          redisTtl: 60 * 60,
+          snapshotPath: lessonManifestSnapshotPath(tier, country),
+          buildLive: async () => {
+            const [count, rows] = await Promise.all([
+              prisma.contentItem.count({ where: whereBase }),
+              prisma.contentItem.findMany({
+                where: whereBase,
+                select: { id: true, slug: true, title: true, topic: true, tier: true, estimatedDurationMinutes: true, publishedAt: true },
+                orderBy: LESSON_LIST_ORDER_BY,
+                take: pageSize,
+              }),
+            ]);
+            return {
+              tier, country,
+              totalLessons: count,
+              topicBreakdown: [],
+              firstPage: rows.map((r) => ({
+                id: r.id, title: r.title, slug: r.slug, topic: r.topic,
+                tier: r.tier, estimatedDurationMinutes: r.estimatedDurationMinutes,
+                publishedAt: r.publishedAt?.toISOString() ?? null,
+              })),
+              firstPageSize: pageSize,
+            };
+          },
+          isValid: (d) => d.totalLessons > 0,
+        }).catch(() => null);
+        if (mr) { manifestTotal = mr.data.totalLessons; manifestFirstPage = mr.data.firstPage; }
+      }
+      // ── End Phase 2.5 ──────────────────────────────────────────────────────
+
+      const [lessons, total] = manifestTotal !== null && manifestFirstPage !== null
+        ? [manifestFirstPage.map((r) => ({ id: r.id, slug: r.slug, title: r.title, summary: undefined as string | undefined })), manifestTotal]
+        : await Promise.all([
         withRetry(() =>
           prisma.contentItem.findMany({
             where: whereBase,

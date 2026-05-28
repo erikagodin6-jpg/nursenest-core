@@ -21,6 +21,11 @@ import {
 } from "@/components/clinical/clinical-case-ui";
 import type { MedicationEntry, LabResult, TimelineEvent, VitalSign, AdherenceMedEntry } from "@/components/clinical/clinical-case-ui";
 import { mergeAdherenceWithMedications } from "@/lib/cases/medication-adherence";
+import {
+  buildSimulationPracticeFrame,
+  consequenceNarrativeForDecision,
+  type SimulationPracticeFrame,
+} from "@/lib/cases/simulation-clinical-judgment-engine";
 
 const CNPLE_LOFT_PATHWAY_ID = "ca-np-cnple";
 
@@ -146,6 +151,7 @@ export function CnpleLongitudinalCaseShell({
   const step = currentStep.step;
   const evolved = currentStep.evolvedState;
   const trajectoryState = currentStep.trajectoryState;
+  const practiceFrame = buildSimulationPracticeFrame(patientCase, step);
 
   const labs: LabResult[] = evolved?.evolvedLabs?.length
     ? evolved.evolvedLabs.map((l) => ({
@@ -255,6 +261,8 @@ export function CnpleLongitudinalCaseShell({
             governCopy={governCopy}
           />
 
+          <SimulationPracticeFramePanel frame={practiceFrame} governCopy={governCopy} />
+
           <QuestionPanel
             step={currentStep}
             selectedOption={selectedOption}
@@ -305,8 +313,105 @@ export function CnpleLongitudinalCaseShell({
               step.question.clinicalJudgmentFocus ?? "Clinical judgment and safe next-step reasoning.",
             )}
             domain={step.cnpleDomain}
+            practiceFrame={practiceFrame}
           />
         </aside>
+      </div>
+    </div>
+  );
+}
+
+function SimulationPracticeFramePanel({
+  frame,
+  governCopy,
+}: {
+  frame: SimulationPracticeFrame;
+  governCopy: (t: string) => string;
+}) {
+  const visibleSignals = frame.patientEvolutionSignals.slice(0, 4);
+  return (
+    <div
+      className="rounded-2xl border p-5 shadow-[var(--semantic-shadow-soft)]"
+      style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-surface)" }}
+      data-cnple-case="practice-frame"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
+            Virtual clinical experience
+          </p>
+          <h2 className="mt-1 text-[15px] font-bold" style={{ color: "var(--semantic-text-primary)" }}>
+            Manage the patient, not the question
+          </h2>
+        </div>
+        <span
+          className="rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em]"
+          style={{
+            borderColor: "color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft))",
+            background: "color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface))",
+            color: "var(--semantic-text-secondary)",
+          }}
+        >
+          {frame.timeHorizon.replace("_", " ")}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-panel-muted)" }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: "var(--semantic-text-muted)" }}>
+            Care cycle
+          </p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {frame.requiredActions.map((action) => (
+              <span
+                key={action}
+                className="rounded-full border px-2.5 py-1 text-[11px] font-semibold capitalize"
+                style={{
+                  borderColor: "color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-border-soft))",
+                  background: "var(--semantic-surface)",
+                  color: "var(--semantic-text-secondary)",
+                }}
+              >
+                {action}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-panel-muted)" }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: "var(--semantic-text-muted)" }}>
+            Patient evolution
+          </p>
+          <ul className="mt-2 space-y-1.5">
+            {visibleSignals.map((signal, index) => (
+              <li key={`${signal.source}-${index}`} className="text-[12px] leading-snug" style={{ color: "var(--semantic-text-secondary)" }}>
+                {governCopy(signal.label)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-xl border p-3" style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-panel-muted)" }}>
+        <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: "var(--semantic-text-muted)" }}>
+          Adaptive remediation if missed
+        </p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {frame.adaptiveRemediationRoutes.map((route) => (
+            <span
+              key={`${route.surface}-${route.reason}`}
+              className="rounded-full border px-2.5 py-1 text-[11px] font-semibold"
+              style={{
+                borderColor: "var(--semantic-border-soft)",
+                background: "var(--semantic-surface)",
+                color: "var(--semantic-text-secondary)",
+              }}
+              title={route.reason}
+            >
+              {route.surface.replace("_", " ")}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -645,6 +750,9 @@ function RationaleReveal({
         <p className="text-[13px] leading-relaxed" style={{ color: "var(--semantic-text-primary)" }}>
           {governCopy(result.consequence)}
         </p>
+        <p className="mt-2 text-[12px] leading-relaxed" style={{ color: "var(--semantic-text-secondary)" }}>
+          {consequenceNarrativeForDecision(result.trajectory)}
+        </p>
       </div>
 
       {result.rationale && (
@@ -672,7 +780,15 @@ function RationaleReveal({
   );
 }
 
-function ClinicalNotesPanel({ judmentFocus, domain }: { judmentFocus: string; domain: string }) {
+function ClinicalNotesPanel({
+  judmentFocus,
+  domain,
+  practiceFrame,
+}: {
+  judmentFocus: string;
+  domain: string;
+  practiceFrame: SimulationPracticeFrame;
+}) {
   return (
     <div
       className="rounded-xl border p-4"
@@ -694,6 +810,42 @@ function ClinicalNotesPanel({ judmentFocus, domain }: { judmentFocus: string; do
         >
           {domain.replace(/-/g, " ")}
         </span>
+      </div>
+      <div className="mt-4 border-t pt-3" style={{ borderColor: "var(--semantic-border-soft)" }}>
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
+          Charting requirements
+        </p>
+        <ul className="space-y-1.5">
+          {practiceFrame.documentationTasks.map((task) => (
+            <li key={task} className="text-[12px] leading-snug" style={{ color: "var(--semantic-text-secondary)" }}>
+              {task}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-4 border-t pt-3" style={{ borderColor: "var(--semantic-border-soft)" }}>
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
+          Team communication
+        </p>
+        <ul className="space-y-1.5">
+          {practiceFrame.teamCommunicationPrompts.map((prompt) => (
+            <li key={prompt} className="text-[12px] leading-snug" style={{ color: "var(--semantic-text-secondary)" }}>
+              {prompt}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="mt-4 border-t pt-3" style={{ borderColor: "var(--semantic-border-soft)" }}>
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
+          Handoff
+        </p>
+        <ul className="space-y-1.5">
+          {practiceFrame.handoffPrompts.map((prompt) => (
+            <li key={prompt} className="text-[12px] leading-snug" style={{ color: "var(--semantic-text-secondary)" }}>
+              {prompt}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

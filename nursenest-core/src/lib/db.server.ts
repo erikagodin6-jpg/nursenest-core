@@ -26,15 +26,14 @@ function assertEnvBootstrapRan(): void {
 function shouldCapturePrismaQueries(): boolean {
   if (process.env.PRISMA_QUERY_AUDIT === "0") return false;
   if (process.env.PRISMA_QUERY_AUDIT === "1") return true;
-
   return process.env.NODE_ENV !== "production";
 }
 
+/**
+ * In production, always emit query events so slow-query logging fires.
+ * The query-capture attachment decides what to record and log.
+ */
 function prismaLogOptions(): Prisma.LogLevel[] | Prisma.LogDefinition[] {
-  if (!shouldCapturePrismaQueries()) {
-    return ["error"];
-  }
-
   return [
     { emit: "event", level: "query" },
     { emit: "stdout", level: "error" },
@@ -63,11 +62,8 @@ function createPrismaClient(): PrismaClient {
     log: prismaLogOptions(),
   });
 
-  if (
-    shouldCapturePrismaQueries() &&
-    globalForPrisma.__PRISMA_QUERY_CAPTURE_ATTACHED__ !== true
-  ) {
-    attachPrismaQueryCapture(client);
+  if (globalForPrisma.__PRISMA_QUERY_CAPTURE_ATTACHED__ !== true) {
+    attachPrismaQueryCapture(client, { fullCapture: shouldCapturePrismaQueries() });
     globalForPrisma.__PRISMA_QUERY_CAPTURE_ATTACHED__ = true;
   }
 
