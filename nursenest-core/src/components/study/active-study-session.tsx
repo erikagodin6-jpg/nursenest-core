@@ -25,7 +25,10 @@ import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/me
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { useFlashcardStudyTelemetry, deriveCardFlags } from "@/lib/flashcards/use-flashcard-study-telemetry";
 import type { CardEventMeta } from "@/lib/flashcards/use-flashcard-study-telemetry";
-import type { UnifiedExamWorkspaceMode } from "@/lib/exam-workspace/unified-exam-workspace";
+import {
+  CANONICAL_LEARNER_SURFACE_VERSION,
+  type UnifiedExamWorkspaceMode,
+} from "@/lib/exam-workspace/unified-exam-workspace";
 import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
 
 /* ================= TYPES ================= */
@@ -428,6 +431,7 @@ export function ActiveStudySession({
     <div
       className="nn-active-flashcard-session nn-unified-exam-workspace space-y-3"
       data-nn-premium-flashcard-active-session
+      data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-pedagogy-tier={tierPedagogyProfile.tier}
       data-nn-unified-exam-workspace=""
       data-nn-exam-workspace-mode={"flashcards" satisfies UnifiedExamWorkspaceMode}

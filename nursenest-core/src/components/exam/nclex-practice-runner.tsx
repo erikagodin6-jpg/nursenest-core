@@ -29,6 +29,10 @@ import { governMeasurementSurfaceCopy } from "@/lib/measurements/measurement-sur
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import {
+  CANONICAL_LEARNER_SURFACE_VERSION,
+  type UnifiedExamWorkspaceMode,
+} from "@/lib/exam-workspace/unified-exam-workspace";
 
 type QRow = {
   id: string;
@@ -488,7 +492,13 @@ export function NclexPracticeRunner({
 
   if (phase === "loading") {
     return (
-      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace flex items-center justify-center" data-nclex-shell="practice">
+      <div
+        className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace flex items-center justify-center"
+        data-nclex-shell="practice"
+        data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
+        data-nn-unified-exam-workspace=""
+        data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
+      >
         <div className="nn-nclex-spinner" />
       </div>
     );
@@ -496,7 +506,14 @@ export function NclexPracticeRunner({
 
   if (phase === "error") {
     return (
-      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace" data-nclex-shell="practice" style={{ padding: "2rem", textAlign: "center" }}>
+      <div
+        className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace"
+        data-nclex-shell="practice"
+        data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
+        data-nn-unified-exam-workspace=""
+        data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
+        style={{ padding: "2rem", textAlign: "center" }}
+      >
         <p className="text-[var(--semantic-danger)]" style={{ marginBottom: "1rem" }}>{error}</p>
         <Link href="/app/practice-tests" className="font-semibold text-[var(--semantic-brand)]">
           Return to practice tests
@@ -507,7 +524,14 @@ export function NclexPracticeRunner({
 
   if (results) {
     return (
-      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace" data-nclex-shell="practice" style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}>
+      <div
+        className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace"
+        data-nclex-shell="practice"
+        data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
+        data-nn-unified-exam-workspace=""
+        data-nn-exam-workspace-mode={"review" satisfies UnifiedExamWorkspaceMode}
+        style={{ maxWidth: "52rem", margin: "0 auto", padding: "2rem 1.5rem" }}
+      >
         <h1 className="text-2xl font-extrabold text-[var(--semantic-text-primary)]" style={{ marginBottom: "1.5rem" }}>
           Practice Exam Results
         </h1>
@@ -559,7 +583,14 @@ export function NclexPracticeRunner({
   // Only fires when the question is loaded (current !== null) and is clearly invalid.
   if (current && !isBowtie && !cleanStem.trim()) {
     return (
-      <div className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace" data-nclex-shell="practice" style={{ padding: "2rem", textAlign: "center" }}>
+      <div
+        className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace"
+        data-nclex-shell="practice"
+        data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
+        data-nn-unified-exam-workspace=""
+        data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
+        style={{ padding: "2rem", textAlign: "center" }}
+      >
         <p className="text-sm text-[var(--semantic-text-secondary)]" style={{ marginBottom: "1rem" }}>
           This question could not be rendered. Skip to the next question or return to practice tests.
         </p>
@@ -680,7 +711,9 @@ export function NclexPracticeRunner({
     <div
       className="nn-nclex-exam-page nn-unified-exam-workspace nn-nclex-practice-workspace"
       data-nclex-shell="practice"
+      data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-unified-exam-workspace=""
+      data-nn-exam-workspace-mode={"practice-exam" satisfies UnifiedExamWorkspaceMode}
     >
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <NclexPracticeTopBar

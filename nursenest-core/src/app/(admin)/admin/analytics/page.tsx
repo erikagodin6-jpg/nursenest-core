@@ -48,6 +48,9 @@ export default async function AdminAnalyticsPage() {
           <Link href="/admin/analytics/study-performance" className="text-primary underline">
             Study performance
           </Link>
+          <Link href="/admin/analytics/educator" className="text-primary underline">
+            Educator analytics
+          </Link>
           <Link href="/admin/analytics/product-intelligence" className="text-primary underline">
             Product intelligence
           </Link>

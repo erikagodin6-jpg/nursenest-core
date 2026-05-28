@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  balanceCognitiveLoadSequence,
+  cognitiveLoadPenaltyMultiplier,
   difficultyBandFromScore,
   estimateAbilityLogistic,
   filterSeenIds,
@@ -42,5 +44,39 @@ describe("adaptive-question-selection", () => {
       0,
     );
     assert.ok(k === "x" || k === "y");
+  });
+
+  it("penalizes stacked high-acuity and pharmacology questions", () => {
+    const recent = [
+      { id: "a", difficulty: 4, riskLevel: "high", topic: "sepsis" },
+      { id: "b", difficulty: 5, riskLevel: "high", topic: "respiratory distress" },
+      { id: "c", difficulty: 4, topic: "insulin pharmacology" },
+      { id: "d", difficulty: 4, topic: "heparin pharmacology" },
+    ];
+
+    const hardPharm = cognitiveLoadPenaltyMultiplier(
+      { id: "next-hard", difficulty: 5, riskLevel: "high", topic: "warfarin pharmacology" },
+      recent,
+    );
+    const recovery = cognitiveLoadPenaltyMultiplier(
+      { id: "next-recovery", difficulty: 2, riskLevel: "low", topic: "infection control" },
+      recent,
+    );
+
+    assert.ok(hardPharm < 0.5);
+    assert.ok(recovery > hardPharm);
+  });
+
+  it("balances a preselected sequence so high-acuity items are spaced apart", () => {
+    const ordered = balanceCognitiveLoadSequence([
+      { id: "high-1", difficulty: 5, riskLevel: "high", topic: "sepsis" },
+      { id: "high-2", difficulty: 5, riskLevel: "high", topic: "shock" },
+      { id: "high-3", difficulty: 4, riskLevel: "high", topic: "respiratory distress" },
+      { id: "low-1", difficulty: 2, riskLevel: "low", topic: "falls" },
+      { id: "low-2", difficulty: 2, riskLevel: "low", topic: "standard precautions" },
+    ]);
+
+    const firstThree = ordered.slice(0, 3).map((row) => row.id);
+    assert.ok(firstThree.includes("low-1") || firstThree.includes("low-2"));
   });
 });

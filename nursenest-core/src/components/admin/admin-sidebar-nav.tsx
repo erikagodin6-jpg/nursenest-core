@@ -67,6 +67,7 @@ const sections: NavSection[] = [
       { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
       { href: "/admin/analytics/funnels", label: "Funnels", icon: Workflow },
       { href: "/admin/analytics/study-performance", label: "Study performance", icon: BookMarked },
+      { href: "/admin/analytics/educator", label: "Educator analytics", icon: GraduationCap },
       { href: "/admin/subscriptions", label: "Subscriptions", icon: Activity },
     ],
   },

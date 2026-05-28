@@ -26,7 +26,10 @@ import type { CatExamUiPhase } from "@/lib/practice-tests/cat-exam-ui-state";
 import { NclexCalculatorModal } from "@/components/exam/nclex-calculator-modal";
 import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
 import { NclexLabReference } from "@/components/exam/nclex-lab-reference";
-import type { UnifiedExamWorkspaceMode } from "@/lib/exam-workspace/unified-exam-workspace";
+import {
+  CANONICAL_LEARNER_SURFACE_VERSION,
+  type UnifiedExamWorkspaceMode,
+} from "@/lib/exam-workspace/unified-exam-workspace";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CAT EXAM LAYOUT
@@ -106,6 +109,7 @@ export function NclexCatExamLayout({
     <div
       className="nn-nclex-exam-page nn-unified-exam-workspace nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session nn-cat-premium-convergence"
       data-nclex-shell="cat"
+      data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-unified-exam-workspace=""
       data-nn-exam-workspace-mode={"cat" satisfies UnifiedExamWorkspaceMode}
       data-cat-exam-root=""
@@ -339,6 +343,7 @@ export function NclexPracticeExamLayout({
         rationaleActive ? "nn-nclex-exam-page--rationale-active" : "",
       ].filter(Boolean).join(" ")}
       data-nclex-shell="practice"
+      data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
       data-nn-unified-exam-workspace=""
       data-nn-exam-workspace-mode={"practice" satisfies UnifiedExamWorkspaceMode}
       data-cat-exam-root=""

@@ -3,8 +3,9 @@
 import type { ComponentProps } from "react";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import { buildAdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
+import type { UnifiedExamWorkspaceMode } from "@/lib/exam-workspace/unified-exam-workspace";
 
-export type QuestionRendererMode = "flashcard" | "practice" | "exam" | "review";
+export type QuestionRendererMode = UnifiedExamWorkspaceMode | "exam" | "flashcard";
 export type QuestionRendererLayout = "standard";
 
 type FlashcardStackProps = ComponentProps<typeof FlashcardStudyQuestionStack>;

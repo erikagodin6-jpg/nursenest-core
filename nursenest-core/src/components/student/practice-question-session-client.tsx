@@ -7,6 +7,10 @@ import { FlashcardItemKind } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { QuestionRenderer } from "@/components/questions/question-renderer";
+import {
+  CANONICAL_LEARNER_SURFACE_VERSION,
+  type UnifiedExamWorkspaceMode,
+} from "@/lib/exam-workspace/unified-exam-workspace";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
@@ -581,8 +585,9 @@ export function PracticeQuestionSessionClient({
       <div
         className="nn-flashcard-study-premium nn-active-flashcard-session nn-unified-exam-workspace"
         data-nn-premium-flashcard-active-session
+        data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
         data-nn-unified-exam-workspace=""
-        data-nn-exam-workspace-mode="practice"
+        data-nn-exam-workspace-mode={"practice" satisfies UnifiedExamWorkspaceMode}
       >
         <div className="nn-flashcard-learning-topbar" aria-label="Practice question session">
           <div className="min-w-0">

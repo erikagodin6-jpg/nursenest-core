@@ -19,6 +19,7 @@ import {
   PRACTICE_TEST_MAX_Q,
   PRACTICE_TEST_MIN_Q,
 } from "@/lib/practice-tests/linear-session-pick-order";
+import { balanceCognitiveLoadSequence } from "@/lib/questions/adaptive-question-selection";
 import { buildPrioritizedLinearPickBand } from "@/lib/study/learner-study-prioritizer";
 import { practiceRecentSessionLookback, STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT } from "@/lib/study/study-diversity-config";
 import { logStudyDiversity } from "@/lib/study/study-diversity-log";
@@ -141,7 +142,15 @@ export async function pickPracticeQuestionIds(
     nowMs: Date.now(),
   });
 
-  const ids = linearSessionPickOrder(bandIds, n, input.sessionPickSalt);
+  const shuffledIds = linearSessionPickOrder(bandIds, n, input.sessionPickSalt);
+  const rowById = new Map(recentFiltered.pool.map((row) => [row.id, row]));
+  const selectedRows = shuffledIds.flatMap((id) => {
+    const row = rowById.get(id);
+    return row ? [row] : [];
+  });
+  const balancedRows = balanceCognitiveLoadSequence(selectedRows);
+  const balancedIds = balancedRows.map((row) => row.id);
+  const ids = balancedIds.length === shuffledIds.length ? balancedIds : shuffledIds;
   logStudyDiversity("linear_pick", {
     poolSize: pool.length,
     poolAfterRecent: recentFiltered.pool.length,
@@ -150,6 +159,7 @@ export async function pickPracticeQuestionIds(
     questionCount: n,
     hasSalt: saltTrim && saltTrim.length >= 8 ? 1 : 0,
     prioritizedBand: bandIds.length,
+    cognitiveLoadBalanced: 1,
   });
   logCoreApiStudyDiagnostic({
     endpoint: "pickPracticeQuestionIds",

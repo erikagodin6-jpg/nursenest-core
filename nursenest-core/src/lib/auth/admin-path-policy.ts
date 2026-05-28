@@ -77,6 +77,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/api/admin/content-bulk",
   "/api/admin/dashboard",
   "/api/admin/diagnostics",
+  "/api/admin/educator",
   "/api/admin/gaps",
   "/api/admin/insights",
   "/api/admin/jobs",

@@ -16,6 +16,7 @@ test("support staff can access /admin root and support-allowlisted routes", () =
   assert.equal(isPathAllowedForStaffTier("support", "/admin"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/operations"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/users"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/educator/remediation-assignments"), true);
 });
 
 test("support staff cannot access super-only routes", () => {

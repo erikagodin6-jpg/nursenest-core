@@ -14,6 +14,10 @@ import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-ex
 import { flashcardDeckHref, STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 import type { HydratedSession, SessionCardPayload } from "@/lib/flashcards/session-runtime-types";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import {
+  CANONICAL_LEARNER_SURFACE_VERSION,
+  type UnifiedExamWorkspaceMode,
+} from "@/lib/exam-workspace/unified-exam-workspace";
 import type { FlashcardItemKind } from "@prisma/client";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -193,7 +197,13 @@ export function FlashcardSessionPlayer({ session, deckId }: Props) {
      * exam CSS that would otherwise clip content below the fold.
      * See learner-global.css and globals.css :has([data-nn-flashcard-study-session]) overrides.
      */
-    <div data-nn-flashcard-study-session="" className="flex flex-col">
+    <div
+      data-nn-flashcard-study-session=""
+      data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}
+      data-nn-unified-exam-workspace=""
+      data-nn-exam-workspace-mode={"flashcards" satisfies UnifiedExamWorkspaceMode}
+      className="flex flex-col"
+    >
       {/* ── Compact progress header ── */}
       <div className="shrink-0 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2.5">
         <div className="mx-auto flex max-w-5xl items-center gap-4">

@@ -42,6 +42,7 @@ import type {
   RiskLevel,
 } from "./types";
 import { COGNITIVE_WEIGHTS, RISK_WEIGHTS } from "./types";
+import { cognitiveLoadPenaltyMultiplier } from "@/lib/questions/adaptive-question-selection";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -235,7 +236,11 @@ export function selectNextQuestion(
       score *= 1.1;
     }
 
-    // 6. Deterministic tie-break noise (avoids identical ordering across runs)
+    // 6. Cognitive load balance: preserve adaptive challenge while avoiding
+    //    stacked high-acuity / high-complexity runs that burn learners out.
+    score *= cognitiveLoadPenaltyMultiplier(q, state.sessionAnswers);
+
+    // 7. Deterministic tie-break noise (avoids identical ordering across runs)
     score += pseudoRandom(q.id, stepIndex) * 0.01;
 
     if (score > bestScore) {
