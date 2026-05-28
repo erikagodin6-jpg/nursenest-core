@@ -5,6 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { AdminLearnerQaPublicState } from "@/lib/admin/admin-learner-qa-simulation";
 import {
+  buildQaPersonaPlaywrightPlan,
+  buildQaPersonaStateInjection,
+  QA_PERSONA_TEMPLATES,
+  type QaPersonaTemplate,
+} from "@/lib/qa-personas/qa-persona-system";
+import {
   ADMIN_LEARNER_QA_MOBILE_FLOW_LINKS,
   ADMIN_LEARNER_QA_MOBILE_VIEWPORT_PRESETS,
   adminLearnerQaMobilePreviewHref,
@@ -22,6 +28,23 @@ type Track = (typeof TRACKS)[number];
 type NpSpec = (typeof NP_SPECIALTIES)[number];
 type Allied = (typeof ALLIED_CAREERS)[number];
 type PlanV = (typeof PLAN_VARIANTS)[number];
+
+function personaToQaPreset(persona: QaPersonaTemplate): {
+  track: Track;
+  lifecycle: (typeof LIFECYCLES)[number];
+  country: "US" | "CA";
+  planVariant?: PlanV;
+} {
+  return {
+    track: persona.tier === "RPN_LPN" ? "RPN" : persona.tier,
+    lifecycle:
+      persona.lifecycle === "brand_new" ? "trial" :
+      persona.lifecycle === "returning_inactive" ? "expired" :
+      "paid_active",
+    country: persona.country,
+    planVariant: persona.lifecycle === "advanced" ? "yearly" : "monthly",
+  };
+}
 
 async function postSimulate(body: Record<string, unknown>) {
   return fetch("/api/admin/learner-qa/simulate", {
@@ -205,6 +228,55 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
             label="Pre-Nursing · free"
             onClick={() => void applyPreset({ track: "PRE_NURSING", lifecycle: "none", country: "US" })}
           />
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 shadow-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Persona lab</p>
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Persistent simulated learner personas</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Templates define realistic weakness patterns, injected readiness state, Playwright flow expectations, and replay timelines.
+            </p>
+          </div>
+          <Link href="/admin/learner-qa" className="text-xs font-semibold text-primary">
+            Replay-ready
+          </Link>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {QA_PERSONA_TEMPLATES.slice(0, 6).map((persona) => {
+            const injection = buildQaPersonaStateInjection(persona.id);
+            const plan = buildQaPersonaPlaywrightPlan(persona.id);
+            const preset = personaToQaPreset(persona);
+            return (
+              <article key={persona.id} className="rounded-xl border border-border/80 bg-background/60 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{persona.displayName}</p>
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">{persona.description}</p>
+                  </div>
+                  <span className="rounded-full bg-muted px-2 py-1 text-[0.68rem] font-semibold text-muted-foreground">
+                    {persona.tier}
+                  </span>
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                  <Metric label="Ready" value={`${injection.readiness.overall}%`} />
+                  <Metric label="Due" value={String(injection.activityHistory.remediationDue)} />
+                  <Metric label="Flows" value={String(plan.flows.length)} />
+                </div>
+                <p className="mt-3 text-xs text-muted-foreground">{persona.dashboardExpectation}</p>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void applyPreset(preset)}
+                  className="mt-3 rounded-lg border border-border bg-[var(--semantic-surface)] px-3 py-2 text-xs font-semibold hover:bg-muted/40 disabled:opacity-50"
+                >
+                  Simulate persona shell
+                </button>
+              </article>
+            );
+          })}
         </div>
       </div>
 
@@ -433,5 +505,14 @@ function PresetBtn({
     >
       {label}
     </button>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="rounded-lg border border-border/70 bg-muted/20 px-2 py-1">
+      <strong className="block text-[var(--theme-heading-text)]">{value}</strong>
+      <small className="text-muted-foreground">{label}</small>
+    </span>
   );
 }

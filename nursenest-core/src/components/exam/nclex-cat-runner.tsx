@@ -90,10 +90,9 @@ function isBowtieQuestion(q: QRow): boolean {
 
 // ── Session loader ────────────────────────────────────────────────────────────
 
-// Single-request boot: ?hydrate=full returns session metadata + all question
-// content in one DB round-trip.  Without this flag the runner had to make two
-// serial requests (metadata → then individual question), showing a spinner for
-// the combined latency of both.
+// Fast boot: ?hydrate=minimal returns session metadata only, then we fetch the
+// current question (and prefetch the next via the question-cache effect). Avoids
+// loading every delivered question body on session open — the main CAT startup cost.
 async function loadSession(testId: string, signal?: AbortSignal): Promise<{
   questionIds: string[];
   questions: Record<string, QRow>; // pre-hydrated question cache
@@ -108,7 +107,7 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
   pathwayId?: string | null;
 }> {
   const res = await fetchWithRetry(
-    `/api/practice-tests/${testId}?hydrate=full`,
+    `/api/practice-tests/${testId}?hydrate=minimal`,
     { method: "GET", signal, credentials: "include", cache: "no-store" },
     { attempts: 2, timeoutMs: 12_000 },
   );
@@ -133,17 +132,13 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
     throw new Error("malformed_question_ids");
   }
 
-  // Build question cache from the hydrated questions array
+  const cursorIndex = typeof j.cursorIndex === "number" ? j.cursorIndex : 0;
+
+  // Seed only the current question so first paint avoids a full-exam payload.
   const questionMap: Record<string, QRow> = {};
-  if (Array.isArray(j.questions)) {
-    for (const q of j.questions) {
-      if (q && typeof q === "object") {
-        const row = q as Record<string, unknown>;
-        if (typeof row.id === "string" && row.id) {
-          questionMap[row.id] = row as unknown as QRow;
-        }
-      }
-    }
+  if (rawIds.length > 0 && j.status !== "COMPLETED") {
+    const currentQ = await fetchQuestion(testId, cursorIndex, signal);
+    if (currentQ) questionMap[currentQ.id] = currentQ;
   }
 
   return {
@@ -152,7 +147,7 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
     answers: (j.answers && typeof j.answers === "object" && !Array.isArray(j.answers))
       ? (j.answers as Record<string, unknown>)
       : {},
-    cursorIndex: Math.max(0, Math.min(rawIds.length > 0 ? rawIds.length - 1 : 0, j.cursorIndex ?? 0)),
+    cursorIndex: Math.max(0, Math.min(rawIds.length > 0 ? rawIds.length - 1 : 0, cursorIndex)),
     timedMode: j.timedMode ?? false,
     timeLimitSec: j.timeLimitSec ?? null,
     elapsedMs: j.elapsedMs ?? null,
@@ -163,7 +158,7 @@ async function loadSession(testId: string, signal?: AbortSignal): Promise<{
   };
 }
 
-// Fallback: fetch a single question if it was somehow not in the hydrated batch.
+// Fallback: fetch a single question when it is not yet in the local cache.
 async function fetchQuestion(testId: string, index: number, signal?: AbortSignal): Promise<QRow | null> {
   try {
     const res = await fetchWithRetry(
@@ -365,9 +360,7 @@ export function NclexCatRunner({
     return () => controller.abort();
   }, [testId, retryNonce]);
 
-  // ── Fallback fetch: fire only when a question is missing from the hydrated cache ──
-  // Under normal conditions this never fires — all questions arrive with ?hydrate=full.
-  // It exists as a safety net for any edge-case where hydration returns a partial batch.
+  // ── Question cache: fetch current + next when missing (prefetch for transitions) ──
 
   useEffect(() => {
     if (phase !== "ready" || catUiPhase === "completed") return;

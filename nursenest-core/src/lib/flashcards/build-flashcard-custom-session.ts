@@ -210,6 +210,73 @@ export async function buildFlashcardCustomSession(
     const examContext = canonicalPathwayId?.trim() ? buildGlobalExamContext(canonicalPathwayId.trim(), "en") : null;
     const pathwayScopeId = canonicalPathwayId?.trim() || pathwayId?.trim() || null;
 
+    const needsProgressEarly = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+    const persistenceFiltersEarly = starredOnly || savedOnly || notesOnly || revisitOnly;
+    const useExamForInventoryEarly =
+      Boolean(pathwayScopeId) &&
+      !lessonId &&
+      !includeCards &&
+      !needsProgressEarly &&
+      !persistenceFiltersEarly;
+
+    if (useExamForInventoryEarly && pathwayScopeId) {
+      const pathwayForInventory = getExamPathwayById(pathwayScopeId);
+      if (pathwayForInventory) {
+        const inv = await loadFlashcardsExamInventoryForPathway({
+          userId,
+          entitlement,
+          pathway: pathwayForInventory,
+        });
+        if (inv.ok) {
+          const examInventoryCounts = inv.countsByBuilderId;
+          const examTotal = inv.total;
+          const selectedCategorySum = selectedCategories.reduce(
+            (s, id) => s + (examInventoryCounts[id] ?? 0),
+            0,
+          );
+          const matchingCardsForSummary =
+            selectedCategories.length === 0
+              ? examTotal
+              : selectedCategorySum > 0
+                ? selectedCategorySum
+                : examTotal;
+          const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
+          const summary: FlashcardCustomSessionSummary = {
+            pathwayId: pathwayScopeId,
+            topicCode,
+            lessonId,
+            selectedCategories,
+            matchingCards: matchingCardsForSummary,
+            returnedCards: 0,
+            mode,
+            shuffle,
+            weakOnly,
+            incorrectOnly,
+            starredOnly,
+            savedOnly,
+            notesOnly,
+            revisitOnly,
+            notStudiedOnly,
+            recentStudiedOnly,
+            recentDays,
+            sourceKind,
+            cardLimit: cardLimitRaw ?? "20",
+            queryRelaxation,
+            sessionShuffleSalt,
+            lessonVirtualDiagnostics: null,
+            poolInventoryDiagnostics: inv.diagnostics,
+          };
+          return {
+            ok: true,
+            queryRelaxation,
+            summary,
+            categoryOptions: inv.categoryOptions,
+            cards: [],
+          };
+        }
+      }
+    }
+
     const allowLessonQuestionVirtuals =
       sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
 
@@ -348,8 +415,6 @@ export async function buildFlashcardCustomSession(
 
     const augmentExamBankPool =
       Boolean(pathwayScopeId && !lessonId) && (sourceKind === "all" || sourceKind === "question");
-    const needsProgressEarly = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
-    const persistenceFiltersEarly = starredOnly || savedOnly || notesOnly || revisitOnly;
     if (
       pathwayScopeId &&
       allowLessonQuestionVirtuals &&

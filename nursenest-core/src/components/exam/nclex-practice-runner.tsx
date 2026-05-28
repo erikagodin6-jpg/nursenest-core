@@ -93,7 +93,7 @@ function isBowtieQuestion(q: QRow): boolean {
 
 async function loadSession(testId: string, signal?: AbortSignal) {
   const res = await fetchWithRetry(
-    `/api/practice-tests/${testId}?hydrate=full`,
+    `/api/practice-tests/${testId}?hydrate=minimal`,
     { method: "GET", signal, credentials: "include", cache: "no-store" },
     { attempts: 2, timeoutMs: 12_000 },
   );
@@ -107,22 +107,16 @@ async function loadSession(testId: string, signal?: AbortSignal) {
     cursorIndex?: number;
     answers?: Record<string, unknown>;
     questionIds?: unknown;
-    questions?: unknown[];
     results?: PracticeTestResultsJson | null;
     adaptiveState?: unknown;
   };
 
   const questionIds = Array.isArray(j.questionIds) ? j.questionIds.map(String) : [];
+  const cursorIndex = typeof j.cursorIndex === "number" ? j.cursorIndex : 0;
   const questionCache: Record<string, QRow> = {};
-  if (Array.isArray(j.questions)) {
-    for (const q of j.questions) {
-      if (q && typeof q === "object") {
-        const row = q as Record<string, unknown>;
-        if (typeof row.id === "string" && row.id) {
-          questionCache[row.id] = row as unknown as QRow;
-        }
-      }
-    }
+  if (questionIds.length > 0 && j.status !== "COMPLETED") {
+    const currentQ = await fetchQuestion(testId, cursorIndex, signal);
+    if (currentQ) questionCache[currentQ.id] = currentQ;
   }
 
   return {

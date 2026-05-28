@@ -66,28 +66,38 @@ export async function loadWeakTopicsFromExamSessions(
   const attempted = new Map<string, number>();
   const baseWhere = questionAccessWhere(entitlement);
 
+  const answersByQuestionId = new Map<string, unknown>();
+  const allQuestionIds = new Set<string>();
   for (const s of sessions) {
     const sanitized = sanitizeSessionQuestionIds(s.questionIds);
-    const ids = sanitized.ids;
-    if (ids.length === 0) continue;
-
+    for (const id of sanitized.ids) allQuestionIds.add(id);
     const answers =
       typeof s.answers === "object" && s.answers !== null && !Array.isArray(s.answers)
         ? (s.answers as Record<string, unknown>)
         : {};
+    for (const [qid, answer] of Object.entries(answers)) {
+      if (typeof qid === "string" && qid.trim()) answersByQuestionId.set(qid.trim(), answer);
+    }
+  }
 
-    const qs = await prisma.examQuestion.findMany({
-      where: { AND: [{ id: { in: ids } }, baseWhere] },
-      select: { id: true, topic: true, questionType: true, correctAnswer: true },
-    });
+  const questionIdList = [...allQuestionIds];
+  if (questionIdList.length === 0) return [];
 
-    for (const q of qs) {
-      const label = normalizeTopicKey(q.topic);
-      attempted.set(label, (attempted.get(label) ?? 0) + 1);
-      const ok = answerMatches(q.questionType, q.correctAnswer as Prisma.JsonValue, answers[q.id]);
-      if (!ok) {
-        missed.set(label, (missed.get(label) ?? 0) + 1);
-      }
+  const qs = await prisma.examQuestion.findMany({
+    where: { AND: [{ id: { in: questionIdList } }, baseWhere] },
+    select: { id: true, topic: true, questionType: true, correctAnswer: true },
+  });
+
+  for (const q of qs) {
+    const label = normalizeTopicKey(q.topic);
+    attempted.set(label, (attempted.get(label) ?? 0) + 1);
+    const ok = answerMatches(
+      q.questionType,
+      q.correctAnswer as Prisma.JsonValue,
+      answersByQuestionId.get(q.id),
+    );
+    if (!ok) {
+      missed.set(label, (missed.get(label) ?? 0) + 1);
     }
   }
 

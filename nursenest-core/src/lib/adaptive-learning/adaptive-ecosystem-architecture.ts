@@ -4,6 +4,10 @@ export type AdaptiveEcosystemSurface =
   | "practice_exams"
   | "cat_loft_exams"
   | "simulations"
+  | "clinical_skills"
+  | "ecg_telemetry"
+  | "labs"
+  | "med_calculations"
   | "analytics"
   | "remediation"
   | "ai_tutor";
@@ -17,6 +21,9 @@ export type AdaptiveEcosystemCapability =
   | "confidence_calibration"
   | "spaced_repetition"
   | "case_progression"
+  | "guided_progression"
+  | "cross_surface_recommendations"
+  | "competency_depth_standards"
   | "remediation_queue"
   | "profession_scope";
 
@@ -64,6 +71,10 @@ export const REQUIRED_ADAPTIVE_ECOSYSTEM_SURFACES = [
   "practice_exams",
   "cat_loft_exams",
   "simulations",
+  "clinical_skills",
+  "ecg_telemetry",
+  "labs",
+  "med_calculations",
   "analytics",
   "remediation",
   "ai_tutor",
@@ -78,6 +89,9 @@ export const REQUIRED_ADAPTIVE_ECOSYSTEM_CAPABILITIES = [
   "confidence_calibration",
   "spaced_repetition",
   "case_progression",
+  "guided_progression",
+  "cross_surface_recommendations",
+  "competency_depth_standards",
   "remediation_queue",
   "profession_scope",
 ] as const satisfies readonly AdaptiveEcosystemCapability[];

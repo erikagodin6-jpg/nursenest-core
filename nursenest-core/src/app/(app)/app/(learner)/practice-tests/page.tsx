@@ -24,8 +24,9 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
+import { loadSubscriberDiscoveryAggregates } from "@/lib/questions/subscriber-discovery-aggregates";
 
 type PageProps = {
   searchParams: Promise<{
@@ -294,17 +295,29 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     });
   }
 
-  let pathwayLessonPractice = null;
-  try {
-    pathwayLessonPractice =
-      defaultPathwayId && defaultPathwayId.trim().length > 0
-        ? await getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
-        : null;
-  } catch {
-    pathwayLessonPractice = null;
+  let initialDiscovery: { buckets: { topic: string; count: number }[]; total: number } | null = null;
+  const scopedPid = defaultPathwayId?.trim() ?? "";
+  if (scopedPid) {
+    try {
+      const examContext = buildGlobalExamContext(scopedPid, "en");
+      const { total, topicRows } = await loadSubscriberDiscoveryAggregates(entitlement, examContext);
+      initialDiscovery = {
+        total,
+        buckets: topicRows.map((row) => ({
+          topic: row.topic ?? "Unknown",
+          count: Number(row.cnt),
+        })),
+      };
+    } catch (e) {
+      safeServerLog("learner_practice_tests", "discovery_bootstrap_failed", {
+        loader_name: "practice_tests_page",
+        pathway_id: scopedPid,
+        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      initialDiscovery = null;
+    }
   }
 
-  const scopedPid = defaultPathwayId?.trim() ?? "";
   const catalogPathway = scopedPid ? getExamPathwayById(scopedPid) : undefined;
   const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPid)?.label;
   const pathwayDisplayName =
@@ -319,7 +332,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
       hubBootstrapSource={hubBootstrapSource}
       catHref={catHref}
-      pathwayLessonPractice={pathwayLessonPractice}
+      initialDiscovery={initialDiscovery}
       initialCatMode={catRequested}
     />
   );

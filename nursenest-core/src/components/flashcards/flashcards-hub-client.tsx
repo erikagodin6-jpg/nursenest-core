@@ -189,16 +189,20 @@ export function FlashcardsHubClient({
 
   useEffect(() => {
     let cancelled = false;
-    void fetch("/api/learner/weak-areas", { credentials: "include", cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => {
-        if (!cancelled && j && typeof j === "object") setWeakTopics(j as TopicPerformanceSnapshot);
-      })
-      .catch(() => {});
+    const delayMs = weakOnly ? 0 : 2_000;
+    const timer = window.setTimeout(() => {
+      void fetch("/api/learner/weak-areas", { credentials: "include", cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => {
+          if (!cancelled && j && typeof j === "object") setWeakTopics(j as TopicPerformanceSnapshot);
+        })
+        .catch(() => {});
+    }, delayMs);
     return () => {
       cancelled = true;
+      window.clearTimeout(timer);
     };
-  }, [scopedPathwayId]);
+  }, [scopedPathwayId, weakOnly]);
 
   const effectiveCardCount = useMemo(
     () => effectiveSessionCardCount(cardLimit, matchingCards),

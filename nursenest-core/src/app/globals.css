@@ -5828,3 +5828,215 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
     transition: none !important;
   }
 }
+
+.nn-onboarding-ecosystem__shell {
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--theme-primary) 12%, transparent), transparent 34rem),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--semantic-info) 10%, transparent), transparent 30rem),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+  padding: clamp(1.15rem, 3vw, 2rem);
+}
+
+.nn-onboarding-ecosystem__eyebrow {
+  color: color-mix(in srgb, var(--theme-primary) 80%, var(--semantic-text-primary));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+}
+
+.nn-onboarding-ecosystem__title {
+  color: var(--semantic-text-primary);
+  font-size: clamp(2rem, 4.4vw, 4rem);
+  font-weight: 680;
+  letter-spacing: 0;
+  line-height: 1.02;
+}
+
+.nn-onboarding-ecosystem__subtitle {
+  color: var(--semantic-text-secondary);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.7;
+  margin-top: 1rem;
+  max-width: 46rem;
+}
+
+.nn-onboarding-ecosystem__metric,
+.nn-onboarding-ecosystem__feature,
+.nn-onboarding-ecosystem__group,
+.nn-onboarding-ecosystem__summary-row {
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--semantic-surface) 86%, transparent);
+  box-shadow: 0 14px 40px color-mix(in srgb, var(--semantic-text-primary) 7%, transparent);
+}
+
+.nn-onboarding-ecosystem__metric {
+  padding: 1rem;
+}
+
+.nn-onboarding-ecosystem__metric strong,
+.nn-onboarding-ecosystem__summary-row strong {
+  color: var(--semantic-text-primary);
+  display: block;
+  font-weight: 760;
+}
+
+.nn-onboarding-ecosystem__metric span,
+.nn-onboarding-ecosystem__summary-row span {
+  color: var(--semantic-text-secondary);
+  display: block;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  margin-top: 0.25rem;
+}
+
+.nn-onboarding-ecosystem__feature {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.nn-onboarding-ecosystem__feature.is-compact {
+  grid-template-columns: minmax(7.5rem, 0.75fr) minmax(0, 1fr);
+  align-items: center;
+}
+
+.nn-onboarding-ecosystem__feature p,
+.nn-onboarding-ecosystem__group h3 {
+  color: var(--semantic-text-muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nn-onboarding-ecosystem__feature h3 {
+  color: var(--semantic-text-primary);
+  font-size: 1rem;
+  font-weight: 760;
+  margin-top: 0.35rem;
+}
+
+.nn-onboarding-ecosystem__feature span {
+  color: var(--semantic-text-secondary);
+  display: block;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  margin-top: 0.4rem;
+}
+
+.nn-onboarding-ecosystem__group {
+  padding: 1rem;
+}
+
+.nn-onboarding-ecosystem__chip {
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, var(--semantic-border-soft));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-primary) 9%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  font-size: 0.76rem;
+  font-weight: 760;
+  padding: 0.42rem 0.68rem;
+}
+
+.nn-onboarding-ecosystem__weak,
+.nn-onboarding-ecosystem__study-style {
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 1rem;
+  background: var(--semantic-surface);
+  color: var(--semantic-text-secondary);
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.9rem;
+  text-align: left;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.nn-onboarding-ecosystem__weak:hover,
+.nn-onboarding-ecosystem__study-style:hover {
+  background: color-mix(in srgb, var(--theme-primary) 6%, var(--semantic-surface));
+  transform: translateY(-1px);
+}
+
+.nn-onboarding-ecosystem__weak.is-selected,
+.nn-onboarding-ecosystem__study-style.is-selected {
+  border-color: color-mix(in srgb, var(--theme-primary) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface));
+}
+
+.nn-onboarding-ecosystem__weak span,
+.nn-onboarding-ecosystem__study-style span {
+  color: var(--theme-primary);
+}
+
+.nn-onboarding-ecosystem__weak strong,
+.nn-onboarding-ecosystem__study-style strong {
+  color: var(--semantic-text-primary);
+  font-size: 0.9rem;
+}
+
+.nn-onboarding-ecosystem__weak small,
+.nn-onboarding-ecosystem__study-style small {
+  color: var(--semantic-text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.nn-onboarding-ecosystem__confidence {
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 1.1rem;
+  background: var(--semantic-surface);
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.nn-onboarding-ecosystem__confidence span {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.nn-onboarding-ecosystem__confidence strong {
+  color: var(--semantic-text-primary);
+}
+
+.nn-onboarding-ecosystem__confidence em {
+  color: var(--semantic-text-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 760;
+}
+
+.nn-onboarding-ecosystem__confidence input {
+  accent-color: var(--theme-primary);
+  width: 100%;
+}
+
+.nn-onboarding-ecosystem__summary-row {
+  align-items: flex-start;
+  color: var(--semantic-success);
+  display: flex;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+@media (max-width: 720px) {
+  .nn-onboarding-ecosystem__shell {
+    border-radius: 1.35rem;
+    padding: 1rem;
+  }
+
+  .nn-onboarding-ecosystem__feature.is-compact {
+    grid-template-columns: 1fr;
+  }
+}

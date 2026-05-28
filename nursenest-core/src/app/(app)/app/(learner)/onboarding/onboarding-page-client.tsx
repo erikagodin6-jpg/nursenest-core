@@ -26,7 +26,7 @@ export function OnboardingPageClient({
     router.prefetch(afterOnboarding);
   }, [router, afterOnboarding]);
 
-  const handleComplete = () => {
+  const handleComplete = (destination?: string) => {
     if (!resumeTrackedRef.current) {
       resumeTrackedRef.current = true;
       trackProductEvent(PH.onboardingResumeSuccess, {
@@ -35,7 +35,7 @@ export function OnboardingPageClient({
       });
     }
     try {
-      router.replace(afterOnboarding);
+      router.replace(destination && destination.startsWith("/") ? destination : afterOnboarding);
     } catch {
       trackProductEvent(PH.onboardingResumeFailure, { actor: "learner" });
     }

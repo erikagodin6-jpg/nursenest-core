@@ -15,7 +15,6 @@ import {
   getQuestionCountsByBodySystem,
   type CanonicalBodySystemId,
 } from "@/lib/learner-study-hub/body-system-data";
-import type { PathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
 import { buildCatExamStartPayload } from "@/lib/practice-tests/cat-exam-start-payload";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
@@ -41,7 +40,7 @@ type PracticeTestsHubClientProps = {
   catEligiblePathwayIds?: string[];
   hubBootstrapSource?: "primary" | "secondary";
   catHref?: string;
-  pathwayLessonPractice?: PathwayLessonPracticeHubSnapshot | null;
+  initialDiscovery?: { buckets: TopicBucket[]; total: number } | null;
   initialCatMode?: boolean;
 };
 
@@ -105,6 +104,7 @@ export function PracticeTestsHubClient({
   pathwayDisplayName = "",
   catEligiblePathwayIds = [],
   hubBootstrapSource = "primary",
+  initialDiscovery = null,
   initialCatMode = false,
 }: PracticeTestsHubClientProps) {
   const router = useRouter();
@@ -118,10 +118,11 @@ export function PracticeTestsHubClient({
   const [questionCount, setQuestionCount] = useState(() => (initialCatMode ? CAT_COUNTS[0] : 50));
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<CanonicalBodySystemId[]>([]);
   const [categorySearch, setCategorySearch] = useState("");
-  const [topics, setTopics] = useState<TopicBucket[]>([]);
-  const [discoveryTotal, setDiscoveryTotal] = useState<number | null>(null);
-  const [discoveryReady, setDiscoveryReady] = useState(false);
+  const [topics, setTopics] = useState<TopicBucket[]>(() => initialDiscovery?.buckets ?? []);
+  const [discoveryTotal, setDiscoveryTotal] = useState<number | null>(() => initialDiscovery?.total ?? null);
+  const [discoveryReady, setDiscoveryReady] = useState(() => initialDiscovery != null);
   const [discoveryLoading, setDiscoveryLoading] = useState(false);
+  const skipInitialDiscoveryFetchRef = useRef(initialDiscovery != null);
   const [creating, setCreating] = useState(false);
   const [launchingHref, setLaunchingHref] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -202,7 +203,6 @@ export function PracticeTestsHubClient({
   useEffect(() => {
     let cancelled = false;
     const pid = pathwayId.trim();
-    setDiscoveryLoading(true);
     if (!pid) {
       setTopics([]);
       setDiscoveryTotal(null);
@@ -210,6 +210,13 @@ export function PracticeTestsHubClient({
       setDiscoveryLoading(false);
       return;
     }
+
+    if (skipInitialDiscoveryFetchRef.current) {
+      skipInitialDiscoveryFetchRef.current = false;
+      return;
+    }
+
+    setDiscoveryLoading(true);
 
     (async () => {
       try {

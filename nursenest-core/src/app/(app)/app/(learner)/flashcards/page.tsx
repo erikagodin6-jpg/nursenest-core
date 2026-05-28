@@ -26,6 +26,7 @@ import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-f
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import {
@@ -331,7 +332,8 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     return <FlashcardErrorBoundary />;
   }
 
-  const catalogPathway = getExamPathwayById(scopedPathwayId);
+  const catalogPathwayForInventory = getExamPathwayById(scopedPathwayId);
+  const catalogPathway = catalogPathwayForInventory;
   const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
   const pathwayDisplayName =
     catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPathwayId;
@@ -342,6 +344,47 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     lessonVirtualDiagnostics: null,
     poolDiagnostics: null,
   };
+
+  let visiblePathwayIds: string[] = [];
+  if (userId && catalogPathwayForInventory && entitlement !== "error") {
+    try {
+      const [inv, visibleIds] = await Promise.all([
+        loadFlashcardsExamInventoryForPathway({
+          userId,
+          entitlement,
+          pathway: catalogPathwayForInventory,
+        }),
+        visiblePathwayIdsForAppLessons(entitlement, learnerPath).catch(() => [] as string[]),
+      ]);
+      visiblePathwayIds = visibleIds;
+      if (inv.ok) {
+        initialHub = {
+          categoryOptions: inv.categoryOptions,
+          matchingTotal: inv.total,
+          lessonVirtualDiagnostics: null,
+          poolDiagnostics: inv.diagnostics,
+        };
+      }
+    } catch (e) {
+      safeServerLog("learner_flashcards", "inventory_bootstrap_failed", {
+        loader_name: "flashcards_page",
+        user_id_prefix: userId.slice(0, 8),
+        pathway_id: scopedPathwayId,
+        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      try {
+        visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+      } catch {
+        visiblePathwayIds = [];
+      }
+    }
+  } else {
+    try {
+      visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+    } catch {
+      visiblePathwayIds = [];
+    }
+  }
 
   if (initialHub.categoryOptions.length === 0) {
     safeServerLog("learner_flashcards", "category_options_empty", {
@@ -356,12 +399,6 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     };
   }
 
-  let visiblePathwayIds: string[] = [];
-  try {
-    visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
-  } catch {
-    visiblePathwayIds = [];
-  }
   let catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: scopedPathwayId,

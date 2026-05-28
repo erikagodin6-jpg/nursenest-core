@@ -518,18 +518,117 @@ function mergeSteps(skill: ClinicalSkillDefinition, patches?: StepPatch[]): Enri
   }));
 }
 
+function generatedFlashcards(skill: ClinicalSkillDefinition): ClinicalSkillFlashcard[] {
+  const domain = skill.competencyDomain ?? skill.title;
+  const focus = skill.simulationFocus ?? skill.summary;
+  return [
+    {
+      id: `${skill.slug}-auto-focus`,
+      front: `What is the main bedside risk in ${skill.title}?`,
+      back: `The key risk is ${focus}. Safe practice starts with identifying whether the patient is stable enough to proceed or needs escalation.`,
+    },
+    {
+      id: `${skill.slug}-auto-first`,
+      front: `What should the nurse verify before ${skill.title}?`,
+      back: "Confirm patient identity, relevant orders or policy, allergies or contraindications, baseline status, and whether the action fits the nurse's role and setting.",
+    },
+    {
+      id: `${skill.slug}-auto-assessment`,
+      front: `Which assessment question guides ${skill.title}?`,
+      back: "Ask: what finding would make this unsafe to continue right now? That question keeps the skill tied to patient safety instead of rote task completion.",
+    },
+    {
+      id: `${skill.slug}-auto-stop`,
+      front: `When should ${skill.title} be paused or escalated?`,
+      back: "Pause when there is unexpected pain, respiratory distress, bleeding, altered mental status, contamination, device failure, or a mismatch between the order and patient condition.",
+    },
+    {
+      id: `${skill.slug}-auto-document`,
+      front: `What documentation matters after ${skill.title}?`,
+      back: "Chart the assessment, action performed, patient response, teaching, safety concerns, notifications, and follow-up plan.",
+    },
+    {
+      id: `${skill.slug}-auto-communication`,
+      front: `How does communication protect the patient during ${skill.title}?`,
+      back: "Clear explanation, closed-loop requests, and timely escalation prevent missed cues and help the care team respond before deterioration becomes harder to reverse.",
+    },
+    {
+      id: `${skill.slug}-auto-error`,
+      front: `What is a common novice error in ${domain}?`,
+      back: "Moving directly to the task before checking stability, indications, and safety constraints. Assessment and verification come before implementation.",
+    },
+    {
+      id: `${skill.slug}-auto-transfer`,
+      front: `How does ${skill.title} transfer to exam questions?`,
+      back: "Choose the option that protects airway, breathing, circulation, safety, infection prevention, and timely escalation before convenience or routine completion.",
+    },
+    {
+      id: `${skill.slug}-auto-retention`,
+      front: `What should be remembered one week from now about ${skill.title}?`,
+      back: "The safest nurse notices the cue that changes priority, explains the risk, performs the skill deliberately, and reassesses the patient response.",
+    },
+    {
+      id: `${skill.slug}-auto-principle`,
+      front: `Which nursing principle anchors ${skill.title}?`,
+      back: "Assessment before implementation, least-risk action first, patient-centered communication, and documentation that proves the safety loop was closed.",
+    },
+  ];
+}
+
+function generatedRetentionItems(skill: ClinicalSkillDefinition): ClinicalSkillRetentionItem[] {
+  const focus = skill.simulationFocus ?? skill.summary;
+  return [
+    {
+      id: `${skill.slug}-retention-1`,
+      question: `During ${skill.title}, which response best shows safe nursing judgment?`,
+      options: [
+        "Pause to reassess unexpected findings before continuing the skill",
+        "Finish quickly so the task is not delayed",
+        "Ask another learner to decide without giving a report",
+        "Document only after the end of the shift",
+      ],
+      correct: 0,
+      rationale:
+        `Unexpected findings tied to ${focus} can change the priority. A safe nurse reassesses, escalates when needed, and then continues only when the patient condition supports it.`,
+    },
+    {
+      id: `${skill.slug}-retention-2`,
+      question: `Which documentation pattern is strongest after ${skill.title}?`,
+      options: [
+        "Assessment, action, patient response, teaching, and follow-up plan",
+        "Only the time the task was completed",
+        "A vague note that the patient tolerated care",
+        "A note copied from the previous shift",
+      ],
+      correct: 0,
+      rationale:
+        "Documentation should show the clinical reasoning trail: what was assessed, what was done, how the patient responded, and what needs follow-up.",
+    },
+    {
+      id: `${skill.slug}-retention-3`,
+      question: `What makes ${skill.title} more than a checklist task?`,
+      options: [
+        "The nurse uses patient cues to decide whether to continue, modify, or escalate",
+        "The nurse memorizes the steps without reassessment",
+        "The nurse waits for the next shift to evaluate outcomes",
+        "The nurse avoids patient teaching to save time",
+      ],
+      correct: 0,
+      rationale:
+        "Clinical skills become professional nursing practice when the nurse connects each step to patient condition, safety risk, and response.",
+    },
+  ];
+}
+
 export function getClinicalSkillEnrichment(skill: ClinicalSkillDefinition): ClinicalSkillEnrichment {
   const pack = ENRICHMENT[skill.slug];
   if (!pack) {
     return {
-      simulationOverview: skill.summary,
-      clinicalRationale: skill.summary,
+      simulationOverview: `Work through ${skill.title} as a bedside competency simulation focused on ${skill.simulationFocus ?? skill.summary}.`,
+      clinicalRationale:
+        `This skill belongs to ${skill.competencyDomain ?? "clinical practice"} and should be practiced as patient-safety reasoning, not task memorization. The learner should verify the context, assess for instability, perform the action deliberately, recognize unsafe variation, and document the response.`,
       steps: mergeSteps(skill),
-      flashcards: skill.steps.slice(0, 4).map((s, i) => ({
-        id: `${skill.slug}-auto-${i}`,
-        front: `Key point: ${s.title}`,
-        back: s.detail,
-      })),
+      flashcards: generatedFlashcards(skill),
       errorScenario: {
         stem: "Which action most threatens patient safety during this procedure?",
         options: [
@@ -541,7 +640,7 @@ export function getClinicalSkillEnrichment(skill: ClinicalSkillDefinition): Clin
         correctIndex: 0,
         rationale: "Rights and verification prevent wrong-patient and wrong-procedure events.",
       },
-      retentionItems: [],
+      retentionItems: generatedRetentionItems(skill),
     };
   }
 
@@ -549,9 +648,9 @@ export function getClinicalSkillEnrichment(skill: ClinicalSkillDefinition): Clin
     simulationOverview: pack.simulationOverview,
     clinicalRationale: pack.clinicalRationale,
     steps: mergeSteps(skill, pack.stepPatches),
-    flashcards: pack.flashcards,
+    flashcards: [...pack.flashcards, ...generatedFlashcards(skill)].slice(0, 10),
     errorScenario: pack.errorScenario,
-    retentionItems: pack.retentionItems,
+    retentionItems: pack.retentionItems.length > 0 ? pack.retentionItems : generatedRetentionItems(skill),
   };
 }
 

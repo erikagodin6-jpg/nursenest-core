@@ -145,6 +145,7 @@ html[data-theme="midnight-indigo"] .nn-feature-discovery-band {
 .nn-feature-preview--analytics,
 .nn-feature-preview--flashcards,
 .nn-feature-preview--math,
+.nn-feature-preview--skills,
 .nn-feature-preview--branching {
   display: grid;
   gap: 0.65rem;
@@ -175,7 +176,12 @@ html[data-theme="midnight-indigo"] .nn-feature-discovery-band {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.nn-feature-preview--skills {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .nn-feature-preview--analytics span,
+.nn-feature-preview--skills span,
 .nn-feature-preview--flashcards span,
 .nn-feature-preview--math span,
 .nn-feature-preview--math strong,
@@ -190,6 +196,25 @@ html[data-theme="midnight-indigo"] .nn-feature-discovery-band {
   display: block;
   color: var(--semantic-text-primary);
   font-size: 1.05rem;
+}
+
+.nn-feature-preview--skills strong {
+  display: inline-grid;
+  place-items: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 16%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--feature-accent, var(--semantic-brand)) 82%, var(--semantic-text-primary));
+  font-size: 0.72rem;
+}
+
+.nn-feature-preview--skills small {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--semantic-text-secondary);
+  font-size: 0.64rem;
+  font-weight: 850;
 }
 
 .nn-feature-preview--analytics small,
@@ -226,6 +251,7 @@ html[data-theme="midnight-indigo"] .nn-feature-discovery-band {
 
 @media (max-width: 760px) {
   .nn-feature-preview--analytics,
+  .nn-feature-preview--skills,
   .nn-feature-preview--branching {
     grid-template-columns: 1fr;
   }

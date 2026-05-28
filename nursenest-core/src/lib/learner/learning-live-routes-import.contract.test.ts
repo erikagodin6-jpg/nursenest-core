@@ -21,13 +21,15 @@ describe("learner live study routes import contract", () => {
     assert.match(src, /from "@\/lib\/flashcards\/flashcards-pathway-query"/);
     assert.match(src, /requireExplicitRequestedPathwayId:\s*true/);
     assert.match(src, /FlashcardsPathwayPickSurface/);
+    assert.match(src, /loadFlashcardsExamInventoryForPathway/);
   });
 
   it("practice-tests page wires PracticeTestsHubClient (live /app/practice-tests)", () => {
     const src = read("src/app/(app)/app/(learner)/practice-tests/page.tsx");
     assert.match(src, /PracticeTestsHubClient/);
     assert.match(src, /from "@\/components\/student\/practice-tests-hub-client"/);
-    assert.match(src, /pathwayLessonPractice/);
+    assert.match(src, /initialDiscovery/);
+    assert.doesNotMatch(src, /getPathwayLessonPracticeHubSnapshot/);
   });
 
   it("practice-exams route redirects to the canonical practice-tests hub", () => {

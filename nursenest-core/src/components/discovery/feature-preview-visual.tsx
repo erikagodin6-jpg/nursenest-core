@@ -43,6 +43,19 @@ export function FeaturePreviewVisual({ kind }: { kind: FlagshipExperience["previ
     );
   }
 
+  if (kind === "skills") {
+    return (
+      <div className="nn-feature-preview nn-feature-preview--skills" aria-hidden>
+        {["Verify", "Assess", "Perform", "Escalate"].map((label, index) => (
+          <span key={label}>
+            <strong>{index + 1}</strong>
+            <small>{label}</small>
+          </span>
+        ))}
+      </div>
+    );
+  }
+
   if (kind === "analytics") {
     return (
       <div className="nn-feature-preview nn-feature-preview--analytics" aria-hidden>

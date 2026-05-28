@@ -3,6 +3,7 @@ export type FlagshipExperienceId =
   | "telemetry-simulation"
   | "branching-scenarios"
   | "prioritization-delegation"
+  | "clinical-skills-lab"
   | "labs-workstation"
   | "med-calculation-drills"
   | "adaptive-remediation"
@@ -16,7 +17,7 @@ export type FlagshipExperience = {
   description: string;
   clinicalValue: string;
   href: string;
-  previewKind: "telemetry" | "branching" | "assignment" | "labs" | "med-math" | "analytics" | "flashcards";
+  previewKind: "telemetry" | "branching" | "assignment" | "skills" | "labs" | "med-math" | "analytics" | "flashcards";
   badges: readonly string[];
   recommendedWhen: readonly string[];
   accentVar: string;
@@ -75,6 +76,19 @@ export const FLAGSHIP_EXPERIENCES: readonly FlagshipExperience[] = [
     recommendedWhen: ["Prioritization weakness detected", "Delegation misses repeat", "Unstable-patient recognition is slow"],
     accentVar: "--semantic-danger",
     premiumLevel: "advanced",
+  },
+  {
+    id: "clinical-skills-lab",
+    title: "Clinical Skills simulation lab",
+    eyebrow: "Competency workstation",
+    description: "Role-scoped bedside skills with step progression, safety checkpoints, MCQs, retention cards, and remediation hooks.",
+    clinicalValue: "Turns procedures into nursing judgment practice by connecting every skill to assessment, escalation, communication, and documentation.",
+    href: "/app/clinical-skills",
+    previewKind: "skills",
+    badges: ["Competency lab", "Simulation-ready", "Role-scoped"],
+    recommendedWhen: ["Procedure confidence is low", "Documentation gaps repeat", "Bedside safety skills need reinforcement"],
+    accentVar: "--semantic-chart-2",
+    premiumLevel: "included",
   },
   {
     id: "labs-workstation",
@@ -165,6 +179,10 @@ export function recommendedFlagshipExperiences(args: {
   if (/priorit|delegat|unstable|safety|deteriorat|respiratory/.test(weak)) {
     preferred.add("prioritization-delegation");
     preferred.add("branching-scenarios");
+  }
+  if (/skill|procedure|foley|catheter|sterile|wound|trach|injection|assessment|documentation|handoff|escalation/.test(weak)) {
+    preferred.add("clinical-skills-lab");
+    preferred.add("adaptive-remediation");
   }
   if (/med|pharm|dose|calculation|insulin|heparin|warfarin/.test(weak)) {
     preferred.add("med-calculation-drills");
