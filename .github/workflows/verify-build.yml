@@ -20,6 +20,8 @@ jobs:
       # `npm run typecheck` runs before `next build` in `ci:verify`; skip duplicate integrated TS pass
       # to lower peak RAM (see `next.config.mjs` `typescript.ignoreBuildErrors`).
       SKIP_NEXT_BUILD_TYPECHECK: "1"
+      # Prisma validation only parses the schema in CI; provide a dummy direct URL so directUrl validates.
+      DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/nursenest_ci?schema=public"
       # Turbopack + multi-worker compile enforced inside the build wrapper.
     timeout-minutes: 45
     defaults:

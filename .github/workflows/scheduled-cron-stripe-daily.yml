@@ -21,6 +21,11 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
+          BASE="$(printf '%s' "${BASE:-}" | tr -d '[:space:]')"
+          BASE="${BASE%/}"
+          case "${BASE}" in
+            https://www.nursenest.ca|http://www.nursenest.ca) BASE="https://nursenest.ca" ;;
+          esac
           test -n "${BASE:-}" && test -n "${CRON_SECRET:-}" || { echo "Missing PRODUCTION_CRON_BASE_URL or CRON_SECRET"; exit 1; }
           curl -fsS -X POST "${BASE}/api/cron/stripe-reconcile" \
             -H "Authorization: Bearer ${CRON_SECRET}" \
