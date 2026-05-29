@@ -1,17 +1,10 @@
 import "server-only";
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import type { Tier2OptionalService } from "@/lib/resilience/learning-continuity";
 import { safeOptional } from "@/lib/server/safe-optional";
 
-export type StudyModeOptionalService =
-  | "adaptive_learning"
-  | "recommendations"
-  | "analytics"
-  | "friends"
-  | "leaderboards"
-  | "readiness"
-  | "gamification"
-  | "cache_invalidation";
+export type StudyModeOptionalService = Tier2OptionalService;
 
 export async function safeStudyOptional<T>(
   service: StudyModeOptionalService,
@@ -33,4 +26,3 @@ export async function safeStudyOptional<T>(
     },
   });
 }
-

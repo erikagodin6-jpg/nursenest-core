@@ -1,6 +1,7 @@
 "use client";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { EMERGENCY_STUDY_MODE_MESSAGE } from "@/lib/resilience/learning-continuity";
 
 /**
  * Surfaces durability / degraded / emergency flags without implying the product is “down”.
@@ -35,7 +36,7 @@ export function LearnerDegradedModeBanner({
     >
       <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.degraded.bannerTitle")}</p>
       <p className="mt-0.5 leading-relaxed text-[var(--semantic-text-secondary)]">
-        {emergency ? t("learner.degraded.emergencyBannerBody") : t("learner.degraded.bannerBody")}
+        {emergency ? EMERGENCY_STUDY_MODE_MESSAGE : t("learner.degraded.bannerBody")}
       </p>
     </div>
   );

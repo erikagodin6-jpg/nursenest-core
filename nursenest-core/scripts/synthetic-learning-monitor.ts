@@ -162,6 +162,12 @@ async function runAll(browser: Browser): Promise<CheckResult[]> {
     if (!/pharmacology|medication|drug|safety/i.test(text)) throw new Error("pharmacology_content_missing");
   }));
 
+  results.push(await runCheck(page, "ecg_launch", "/modules/ecg/basic/lessons", async () => {
+    await firstVisible(page, "[data-nn-ecg-module], [data-testid*='ecg'], .nn-ecg-module, main", 90_000);
+    const text = await page.locator("main").innerText().catch(() => "");
+    if (!/ecg|rhythm|strip|interpretation|cardiac/i.test(text)) throw new Error("ecg_content_missing");
+  }));
+
   return results;
 }
 

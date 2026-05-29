@@ -4,6 +4,8 @@
 **Owner:** Engineering + Operations  
 **Review Cycle:** Quarterly
 
+Mission-critical Tier 1/Tier 2 learning continuity rules are codified in [`mission-critical-learning-continuity.md`](./mission-critical-learning-continuity.md).
+
 ---
 
 ## 1. Purpose
@@ -31,6 +33,7 @@ This plan ensures NurseNest can continue delivering its core learning services d
 - Learner content delivery (lessons, flashcards, questions)
 - Subscription access verification
 - Active CAT session continuity
+- Clinical Skills, Pharmacology, and ECG launch continuity
 
 ### Tier 2 — High Priority (RTO < 15 minutes)
 - Progress saving and sync

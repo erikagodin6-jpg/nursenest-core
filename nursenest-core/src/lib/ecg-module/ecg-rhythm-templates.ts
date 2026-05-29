@@ -44,6 +44,27 @@ export const ECG_RHYTHM_TEMPLATES: EcgRhythmTemplate[] = [
   // Pediatric normal variant — cyclic R-R variation, NOT a pathologic arrhythmia.
   // regularity "regularly_irregular" triggers special RSA sinusoidal modulation in beatOffsets().
   template("respiratory_sinus_arrhythmia", "Respiratory sinus arrhythmia", [55, 120], "regularly_irregular", "present", "normal", [0.06, 0.10], ["cyclic R-R variation with breathing", "uniform sinus P-waves throughout", "narrow QRS"], ["chaotic R-R without respiratory correlation", "absent or variable P-wave morphology"], "basic", ["RN", "PN", "RPN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["sinus", "pediatric", "normal_variant"]),
+
+  // ── Junctional rhythms ─────────────────────────────────────────────────────────
+  // AV node becomes the primary pacemaker; no sinus P-waves before QRS.
+  template("junctional_rhythm", "Junctional rhythm", [40, 60], "regular", "absent", "not_measurable", [0.06, 0.10], ["narrow QRS", "rate 40-60 BPM", "absent or retrograde P-waves", "no upright sinus P before QRS"], ["upright sinus P preceding every QRS", "wide bizarre QRS complexes"], "intermediate", ["RN", "PN", "RPN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["junctional"]),
+  template("accelerated_junctional_rhythm", "Accelerated junctional rhythm", [61, 100], "regular", "absent", "not_measurable", [0.06, 0.10], ["narrow QRS", "rate 61-100 BPM", "no sinus P-waves", "AV node rate competes with or suppresses sinus node"], ["wide QRS", "clear upright sinus P before every QRS"], "intermediate", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["junctional"]),
+
+  // ── Ventricular escape rhythms ─────────────────────────────────────────────────
+  // Slow idioventricular: backup ventricular pacemaker fires when higher pacemakers fail.
+  template("ventricular_escape_rhythm", "Ventricular escape rhythm", [20, 40], "regular", "absent", "not_measurable", [0.12, 0.20], ["wide bizarre QRS", "very slow rate 20-40 BPM", "no sinus P-waves", "backup ventricular pacemaker site"], ["narrow QRS", "normal P-wave axis", "rate above 40 BPM"], "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["ventricular", "bradycardia", "escape"], true),
+  // Accelerated idioventricular rhythm (AIVR): ventricular ectopic pacemaker at 41-100 BPM.
+  template("idioventricular_rhythm", "Idioventricular rhythm (AIVR)", [41, 100], "regular", "absent", "not_measurable", [0.12, 0.20], ["wide QRS", "rate 41-100 BPM", "no sinus P-waves", "AV dissociation may be visible", "common post-reperfusion in AMI"], ["narrow QRS", "upright sinus P before every QRS"], "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["ventricular", "conduction"]),
+
+  // ── Bundle branch blocks ───────────────────────────────────────────────────────
+  // RBBB: right bundle fails → delayed right ventricular activation → RSR' in V1, wide S in I/V6.
+  template("right_bundle_branch_block", "Right bundle branch block", [50, 120], "regular", "present", "normal", [0.12, 0.18], ["RSR' pattern in V1 (rabbit ears)", "wide S wave in lead I and V6", "wide QRS ≥ 0.12s", "secondary ST-T changes in V1–V3"], ["narrow QRS", "absent P-waves", "QS pattern in V1"], "intermediate", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["conduction", "bundle-branch"]),
+  // LBBB: left bundle fails → delayed LV activation → broad notched R in I/V6, QS in V1, discordant T.
+  template("left_bundle_branch_block", "Left bundle branch block", [50, 120], "regular", "present", "normal", [0.12, 0.18], ["broad notched R in lead I and V6", "QS or rS pattern in V1", "wide QRS ≥ 0.12s", "discordant ST-T changes opposite to QRS"], ["narrow QRS", "RSR' in V1", "normal ST segments"], "intermediate", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["conduction", "bundle-branch"]),
+
+  // ── NSTEMI pattern ─────────────────────────────────────────────────────────────
+  // Subendocardial ischemia: ST depression ± T-wave flattening/inversion, no ST elevation.
+  template("nstemi_pattern", "NSTEMI pattern", [50, 130], "regular", "present", "normal", [0.06, 0.11], ["ST depression ≥ 1mm in ≥ 2 contiguous leads", "T-wave flattening or inversion", "no ST elevation in the ischemic territory"], ["ST elevation", "normal ST-T segments throughout", "pathologic Q waves as sole finding"], "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["ischemia", "nstemi"], true),
 ];
 
 function template(

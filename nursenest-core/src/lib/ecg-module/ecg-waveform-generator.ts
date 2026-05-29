@@ -127,6 +127,14 @@ export type EcgStripMediaConfig = {
     widenedQrs?: boolean;
     stElevation?: boolean;
     pacerSpikes?: boolean;
+    /** NSTEMI / subendocardial ischemia: horizontal or downsloping ST depression */
+    stDepression?: boolean;
+    /** RBBB: RSR' (rabbit-ears) pattern in V1 — adds R' wave after the S-wave */
+    rsrPrime?: boolean;
+    /** LBBB: broad notched R in I/V6, QS in V1 — replaces standard Q-R-S morphology */
+    broadNotchedR?: boolean;
+    /** Junctional: small retrograde P-wave appearing after QRS (~80–100 ms post-QRS) */
+    retrogradeP?: boolean;
   };
 };
 

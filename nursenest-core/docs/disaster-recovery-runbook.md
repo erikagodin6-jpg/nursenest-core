@@ -6,6 +6,8 @@
 
 This runbook provides step-by-step recovery procedures for every failure mode. Follow the section matching your incident type.
 
+For the current Tier 1/Tier 2 learning continuity contract, Emergency Study Mode flags, and synthetic activity checks, see [`mission-critical-learning-continuity.md`](./mission-critical-learning-continuity.md).
+
 ---
 
 ## Quick Reference
