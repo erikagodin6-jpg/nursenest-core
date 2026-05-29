@@ -6,6 +6,7 @@ export type SocialSnapshotInput = {
   weeklyStudyStreak?: number | null;
   practiceAccuracyPct?: number | null;
   flashcardProgressPct?: number | null;
+  flashcardsStudiedCount?: number | null;
   weakTopicCodes?: string[] | null;
   catCompletedCount?: number | null;
 };
@@ -93,6 +94,15 @@ export function buildSanitizedSocialSnapshots(
       statKey: SocialStatKey.FLASHCARD_PROGRESS,
       value: { range: flashcardRange },
     });
+  } else {
+    const flashcardCount = countBand(input.flashcardsStudiedCount);
+    if (flashcardCount) {
+      rows.push({
+        ...shared,
+        statKey: SocialStatKey.FLASHCARD_PROGRESS,
+        value: { count: flashcardCount },
+      });
+    }
   }
 
   const weakTopicCodes = Array.isArray(input.weakTopicCodes)

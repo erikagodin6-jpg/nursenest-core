@@ -22,8 +22,25 @@ export async function GET(req: Request) {
         addresseeUserId: true,
         status: true,
         updatedAt: true,
+        requester: { select: { id: true, name: true } },
+        addressee: { select: { id: true, name: true } },
       },
     });
-    return NextResponse.json({ friends: rows }, { headers: mergeSubscriberPrivateCacheHeaders() });
+    const friends = rows.map((row) => {
+      const other = row.requesterUserId === gate.userId ? row.addressee : row.requester;
+      return {
+        id: row.id,
+        requesterUserId: row.requesterUserId,
+        addresseeUserId: row.addresseeUserId,
+        status: row.status,
+        updatedAt: row.updatedAt,
+        direction: row.requesterUserId === gate.userId ? "outgoing" : "incoming",
+        otherUser: {
+          id: other.id,
+          displayName: other.name?.trim() || "NurseNest learner",
+        },
+      };
+    });
+    return NextResponse.json({ friends }, { headers: mergeSubscriberPrivateCacheHeaders() });
   });
 }

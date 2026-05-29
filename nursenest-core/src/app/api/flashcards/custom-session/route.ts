@@ -14,6 +14,7 @@ import {
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import { withTimeout } from "@/lib/server/with-timeout";
 
 export const dynamic = "force-dynamic";
 
@@ -117,32 +118,36 @@ export async function GET(req: NextRequest) {
         selectedCategoryCount: selectedCategories.length,
       });
 
-      const built = await buildFlashcardCustomSession({
-        userId,
-        entitlement,
-        pathwayId,
-        topicCode,
-        lessonId,
-        selectedCategories,
-        stateIds,
-        weakOnly,
-        incorrectOnly,
-        starredOnly,
-        savedOnly,
-        notesOnly,
-        revisitOnly,
-        notStudiedOnly,
-        recentStudiedOnly,
-        recentDays,
-        shuffle,
-        mode,
-        limit,
-        includeCards,
-        sourceKind,
-        offset,
-        sessionSeed: sp.get("sessionSeed")?.trim() || null,
-        cardLimitRaw: sp.get("cardLimit"),
-      });
+      const built = await withTimeout(
+        buildFlashcardCustomSession({
+          userId,
+          entitlement,
+          pathwayId,
+          topicCode,
+          lessonId,
+          selectedCategories,
+          stateIds,
+          weakOnly,
+          incorrectOnly,
+          starredOnly,
+          savedOnly,
+          notesOnly,
+          revisitOnly,
+          notStudiedOnly,
+          recentStudiedOnly,
+          recentDays,
+          shuffle,
+          mode,
+          limit,
+          includeCards,
+          sourceKind,
+          offset,
+          sessionSeed: sp.get("sessionSeed")?.trim() || null,
+          cardLimitRaw: sp.get("cardLimit"),
+        }),
+        includeCards ? 5_000 : 2_000,
+        { label: "flashcards_custom_session_startup" },
+      );
 
       if (!built.ok) {
         const kind = classifyDatabaseFallbackKind(new Error(built.reason));

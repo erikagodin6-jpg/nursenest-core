@@ -1,14 +1,14 @@
 # NurseNest Marketing Screenshot Validation Report
 
-**Generated:** 2026-05-29T01:04:01.089Z
+**Generated:** 2026-05-29T01:11:46.525Z
 
 ## Summary
 
 | Status | Count |
 |--------|-------|
-| ✅ Pass | 7 |
-| ⚠️ Warn | 19 |
-| ❌ Fail | 19 |
+| ✅ Pass | 14 |
+| ⚠️ Warn | 15 |
+| ❌ Fail | 16 |
 | Total | 45 |
 
 ## Recommendations
@@ -37,9 +37,9 @@
 | ❌ | `allied/allied-hub.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `newgrad/newgrad-hub.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `newgrad/newgrad-readiness.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `marketing/marketing-home-desktop.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `marketing/pricing.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `marketing/faq.webp` | File not found — run: npm run generate:marketing-screenshots |
+| ✅ | `marketing/marketing-home-desktop.webp` |  |
+| ✅ | `marketing/pricing.webp` |  |
+| ✅ | `marketing/faq.webp` |  |
 
 ## Mobile Screenshots
 
@@ -59,16 +59,16 @@
 | ⚠️ | `ocean / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `midnight / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `midnight / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `midnight / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `midnight / marketing-home-desktop.webp` |  |
 | ⚠️ | `blossom / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `blossom / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `blossom / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `blossom / marketing-home-desktop.webp` |  |
 | ⚠️ | `aurora / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `aurora / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `aurora / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `aurora / marketing-home-desktop.webp` |  |
 | ⚠️ | `sage-garden / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `sage-garden / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `sage-garden / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `sage-garden / marketing-home-desktop.webp` |  |
 
 ## Legacy Fallback Images
 

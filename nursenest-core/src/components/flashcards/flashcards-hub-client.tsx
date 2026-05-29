@@ -209,11 +209,27 @@ export function FlashcardsHubClient({
   const [weakTopics, setWeakTopics] = useState<TopicPerformanceSnapshot | null>(
     null,
   );
+  const [deferredInsightsReady, setDeferredInsightsReady] = useState(false);
   const [resumeCk, setResumeCk] = useState(() =>
     typeof window !== "undefined"
       ? readFlashcardsCustomSessionCheckpoint(scopedPathwayId)
       : null,
   );
+
+  useEffect(() => {
+    setDeferredInsightsReady(false);
+    const start = window.performance.now();
+    const timer = window.setTimeout(() => {
+      setDeferredInsightsReady(true);
+      if (process.env.NODE_ENV !== "production") {
+        console.debug("[flashcards-hub] deferred insights enabled", {
+          pathwayId: scopedPathwayId,
+          delayMs: Math.round(window.performance.now() - start),
+        });
+      }
+    }, 1_500);
+    return () => window.clearTimeout(timer);
+  }, [scopedPathwayId]);
 
   useEffect(() => {
     setResumeCk(readFlashcardsCustomSessionCheckpoint(scopedPathwayId));
@@ -439,7 +455,11 @@ export function FlashcardsHubClient({
     setLoadError(null);
 
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 25_000);
+    const timeout = window.setTimeout(() => controller.abort(), 5_000);
+    const startedAt = window.performance.now();
+    if (process.env.NODE_ENV !== "production") {
+      console.time(`[flashcards-hub] inventory refresh ${scopedPathwayId}`);
+    }
 
     try {
       const progressFiltersActive =
@@ -476,6 +496,16 @@ export function FlashcardsHubClient({
           cache: "no-store",
           signal: controller.signal,
         });
+        const elapsedMs = Math.round(window.performance.now() - startedAt);
+        if (process.env.NODE_ENV !== "production") {
+          console.debug("[flashcards-hub] custom-session metadata response", {
+            pathwayId: scopedPathwayId,
+            elapsedMs,
+            status: res.status,
+            contentLength: res.headers.get("content-length") ?? null,
+            serverTiming: res.headers.get("server-timing") ?? null,
+          });
+        }
         let json: unknown;
         try {
           json = await res.json();
@@ -548,6 +578,18 @@ export function FlashcardsHubClient({
         cache: "no-store",
         signal: controller.signal,
       });
+      const elapsedMs = Math.round(window.performance.now() - startedAt);
+      if (process.env.NODE_ENV !== "production") {
+        console.debug("[flashcards-hub] inventory response", {
+          pathwayId: scopedPathwayId,
+          elapsedMs,
+          status: res.status,
+          cache: res.headers.get("x-nn-inventory-cache") ?? null,
+          manifest: res.headers.get("x-nn-inventory-manifest") ?? null,
+          contentLength: res.headers.get("content-length") ?? null,
+          serverTiming: res.headers.get("server-timing") ?? null,
+        });
+      }
       let json: unknown;
       try {
         json = await res.json();
@@ -750,6 +792,9 @@ export function FlashcardsHubClient({
       setPoolDiagnostics(null);
     } finally {
       window.clearTimeout(timeout);
+      if (process.env.NODE_ENV !== "production") {
+        console.timeEnd(`[flashcards-hub] inventory refresh ${scopedPathwayId}`);
+      }
     }
   }, [
     scopedPathwayId,
@@ -1135,7 +1180,10 @@ export function FlashcardsHubClient({
                 {heroSubtitle}
               </p>
             </div>
-            <FlashcardsHubReadinessStrip pathwayId={scopedPathwayId} />
+            <FlashcardsHubReadinessStrip
+              pathwayId={scopedPathwayId}
+              enabled={deferredInsightsReady}
+            />
           </div>
 
           {resumeHref && resumeCk ? (
@@ -1687,7 +1735,9 @@ export function FlashcardsHubClient({
           Performance insights
         </summary>
         <div className="pt-3">
-          <FlashcardsHubAnalytics pathwayId={scopedPathwayId} />
+          {deferredInsightsReady ? (
+            <FlashcardsHubAnalytics pathwayId={scopedPathwayId} />
+          ) : null}
         </div>
       </details>
     </SharedStudySetupLayout>

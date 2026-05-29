@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -37,9 +38,11 @@ function ProofImage({
   const [currentSrc, setCurrentSrc] = useState(src);
 
   return (
-    <img
+    <Image
       src={currentSrc}
       alt={alt}
+      fill
+      sizes="(min-width: 1024px) 44vw, 100vw"
       className="absolute inset-0 h-full w-full object-cover object-top"
       loading="lazy"
       decoding="async"

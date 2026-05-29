@@ -21,14 +21,11 @@ import {
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { readFlashcardsHubPathwayBootstrapSnapshot } from "@/lib/study-content-failover/flashcards-hub-bootstrap-snapshot-read";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
-import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import {
   pathwayFlashcardsHubH1,
   pathwayFlashcardsHubLead,
@@ -40,6 +37,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
 const DEFAULT_FLASHCARDS_PATHWAY_ID = "ca-rn-nclex-rn";
+const FLASHCARDS_PAGE_TIMING_LABEL = "flashcards_hub_server_bootstrap";
 
 type PageProps = {
   searchParams: Promise<{
@@ -125,8 +123,15 @@ function FlashcardsRouteRecovery({ pathwayId, reason }: { pathwayId: string; rea
 }
 
 async function FlashcardsPageContent({ searchParams }: PageProps) {
-  const { t } = await getLearnerMarketingBundle();
-  const sp = await searchParams;
+  const bootstrapStarted = performance.now();
+  if (process.env.NODE_ENV !== "production" || process.env.NN_FLASHCARDS_HUB_TIMING === "1") {
+    console.time(FLASHCARDS_PAGE_TIMING_LABEL);
+  }
+  const [marketingBundle, sp] = await Promise.all([
+    getLearnerMarketingBundle(),
+    searchParams,
+  ]);
+  const { t } = marketingBundle;
 
   const rawAllied = sp.alliedProfession;
   const alliedProfessionParam =
@@ -211,12 +216,13 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
-      const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
-
-      const u = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { learnerPath: true },
-      });
+      const [compatible, u] = await Promise.all([
+        listPathwaysCompatibleWithSubscription(entitlement),
+        prisma.user.findUnique({
+          where: { id: userId },
+          select: { learnerPath: true },
+        }),
+      ]);
 
       const lp = u?.learnerPath?.trim() ?? null;
       learnerPath = lp;
@@ -345,61 +351,6 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     poolDiagnostics: null,
   };
 
-  const PAGE_RENDER_BUDGET_MS = 700;
-
-  let visiblePathwayIds: string[] = [];
-  if (userId && catalogPathwayForInventory) {
-    try {
-      const [inv, visibleIds] = await Promise.all([
-        Promise.race([
-          loadFlashcardsExamInventoryForPathway({
-            userId,
-            entitlement,
-            pathway: catalogPathwayForInventory,
-          }),
-          new Promise<null>((resolve) => setTimeout(() => resolve(null), PAGE_RENDER_BUDGET_MS)),
-        ]),
-        Promise.race([
-          visiblePathwayIdsForAppLessons(entitlement, learnerPath).catch(() => [] as string[]),
-          new Promise<string[]>((resolve) => setTimeout(() => resolve([]), PAGE_RENDER_BUDGET_MS)),
-        ]),
-      ]);
-      visiblePathwayIds = visibleIds;
-      if (inv && inv.ok) {
-        initialHub = {
-          categoryOptions: inv.categoryOptions,
-          matchingTotal: inv.total,
-          lessonVirtualDiagnostics: null,
-          poolDiagnostics: inv.diagnostics,
-        };
-      }
-    } catch (e) {
-      safeServerLog("learner_flashcards", "inventory_bootstrap_failed", {
-        loader_name: "flashcards_page",
-        user_id_prefix: userId.slice(0, 8),
-        pathway_id: scopedPathwayId,
-        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
-      });
-      try {
-        visiblePathwayIds = await Promise.race([
-          visiblePathwayIdsForAppLessons(entitlement, learnerPath),
-          new Promise<string[]>((resolve) => setTimeout(() => resolve([]), PAGE_RENDER_BUDGET_MS)),
-        ]);
-      } catch {
-        visiblePathwayIds = [];
-      }
-    }
-  } else {
-    try {
-      visiblePathwayIds = await Promise.race([
-        visiblePathwayIdsForAppLessons(entitlement, learnerPath),
-        new Promise<string[]>((resolve) => setTimeout(() => resolve([]), PAGE_RENDER_BUDGET_MS)),
-      ]);
-    } catch {
-      visiblePathwayIds = [];
-    }
-  }
-
   if (initialHub.categoryOptions.length === 0) {
     safeServerLog("learner_flashcards", "category_options_empty", {
       loader_name: "flashcards_page",
@@ -413,23 +364,30 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     };
   }
 
-  let catHref = resolveStudyLoopCatHref({
-    authState: "signed_in",
-    pathwayId: scopedPathwayId,
-    availablePathwayIds: visiblePathwayIds,
-    intent: "start",
-  });
   const alliedKeyForFlashcards =
     alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId) ? alliedProfessionFromQuery : "";
-  if (alliedKeyForFlashcards && (catHref.includes("catLaunch=1") || catHref.includes("/app/practice-tests/cat-launch"))) {
-    catHref = appPathwayCatSessionStartPath(scopedPathwayId, { alliedProfession: alliedKeyForFlashcards });
-  }
+  const catHref = appPathwayCatSessionStartPath(scopedPathwayId, {
+    alliedProfession: alliedKeyForFlashcards || null,
+  });
 
   const flashcardsHeroEyebrow = catalogPathway
     ? `${pathwayRegionAwareExamName(catalogPathway)} · ${pathwayCountryLabel(catalogPathway)}`
     : undefined;
   const flashcardsHeroTitle = catalogPathway ? pathwayFlashcardsHubH1(catalogPathway) : undefined;
   const flashcardsHeroSubtitle = catalogPathway ? pathwayFlashcardsHubLead(catalogPathway) : undefined;
+  const bootstrapMs = Math.round(performance.now() - bootstrapStarted);
+  if (process.env.NODE_ENV !== "production" || process.env.NN_FLASHCARDS_HUB_TIMING === "1") {
+    console.timeEnd(FLASHCARDS_PAGE_TIMING_LABEL);
+  }
+  safeServerLog("learner_flashcards", "server_shell_ready", {
+    loader_name: "flashcards_page",
+    pathway_id: scopedPathwayId,
+    bootstrap_ms: bootstrapMs,
+    category_rows: initialHub.categoryOptions.length,
+    inventory_source: "deferred_client_api",
+    blocking_inventory: "0",
+    blocking_adaptive: "0",
+  });
 
   return (
     <div className="space-y-2">

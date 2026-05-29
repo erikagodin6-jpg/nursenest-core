@@ -36,6 +36,7 @@ import {
   assessPracticeTestSessionHydrateContract,
   normalizeLinearPracticeCreateContract,
 } from "@/lib/practice-tests/practice-session-contract";
+import { withTimeout } from "@/lib/server/with-timeout";
 
 export const dynamic = "force-dynamic";
 
@@ -434,7 +435,22 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const catReadiness = await assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayIdForCat);
+    let catReadiness: Awaited<ReturnType<typeof assessCatPracticeReadinessForPathway>> | { ok: true };
+    try {
+      catReadiness = await withTimeout(
+        assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayIdForCat),
+        2_500,
+        { label: "cat_practice_readiness_preflight" },
+      );
+    } catch (error) {
+      catReadiness = { ok: true };
+      safeServerLog("practice_tests", "cat_readiness_preflight_degraded", {
+        loader_name: "practice_tests_create_api",
+        user_id_prefix: gate.userId.slice(0, 8),
+        pathway_id: pathwayIdForCat,
+        message: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+      });
+    }
     safeServerLog("practice_tests", "cat_readiness_result", {
       loader_name: "practice_tests_create_api",
       user_id_prefix: gate.userId.slice(0, 8),
@@ -634,7 +650,7 @@ export async function POST(req: Request) {
         });
         return { kind: "created" as const, row, cat };
       },
-      { maxWait: 15_000, timeout: 60_000 },
+      { maxWait: 3_000, timeout: 12_000 },
     );
 
     if (txOutcome.kind === "resume") {

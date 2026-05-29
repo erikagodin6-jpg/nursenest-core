@@ -65,10 +65,10 @@ describe("core API learning surfaces", () => {
     const page = readFileSync(join(appRoot, "app/(app)/app/(learner)/flashcards/[deckRef]/page.tsx"), "utf8");
     const helper = readFileSync(join(appRoot, "lib/runtime/learner-activity-fetch.ts"), "utf8");
     assert.match(deck, /new AbortController\(\)/);
-    assert.match(deck, /timeoutMs:\s*12_000/);
+    assert.match(deck, /timeoutMs:\s*8_000/);
     assert.match(deck, /setRetryNonce/);
     assert.match(custom, /new AbortController\(\)/);
-    assert.match(custom, /timeoutMs:\s*12_000/);
+    assert.match(custom, /timeoutMs:\s*8_000/);
     assert.match(custom, /setRetryNonce/);
     assert.match(page, /loadLearnerActivityBootstrap/);
     assert.match(page, /routeParams/);
@@ -103,10 +103,11 @@ describe("core API learning surfaces", () => {
     assert.match(lifecycle, /auth-resolving/);
     assert.match(lifecycle, /normalizeLearnerActivityRouteParams/);
     assert.match(state, /LearnerActivityState/);
-    for (const src of [flashDeck, flashDeckDetail, flashCustom, flashWeak, practiceRun, catStart]) {
+    for (const src of [flashDeck, flashDeckDetail, flashCustom, flashWeak, practiceRun]) {
       assert.match(src, /loadLearnerActivityBootstrap/);
       assert.match(src, /LearnerActivityState/);
     }
+    assert.match(catStart, /redirect\(`\/app\/practice-tests\?/);
     assert.doesNotMatch(flashDeck, /getProtectedRouteSession/);
     assert.doesNotMatch(flashDeckDetail, /getProtectedRouteSession/);
     assert.doesNotMatch(flashCustom, /getProtectedRouteSession/);

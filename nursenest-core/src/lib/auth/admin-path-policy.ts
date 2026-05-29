@@ -71,6 +71,8 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/subscriptions",
   "/admin/system-status",
   "/admin/users",
+  "/admin/beta",
+  "/api/admin/beta",
   "/admin/feedback",
   "/api/admin/analytics",
   "/api/admin/automation-logs",

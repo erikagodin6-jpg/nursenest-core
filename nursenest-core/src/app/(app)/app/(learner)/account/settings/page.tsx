@@ -31,6 +31,11 @@ const SETTING_DESTINATIONS: readonly { href: string; titleKey?: string; title?: 
     title: "Social study privacy",
     body: "Manage friends, group codes, challenges, leaderboards, and privacy-safe stat visibility.",
   },
+  {
+    href: "/app/account/beta",
+    title: "Beta Program",
+    body: "Redeem invitation codes, review enabled previews, and send feedback to the NurseNest team.",
+  },
 ] as const;
 
 export async function generateMetadata(): Promise<Metadata> {

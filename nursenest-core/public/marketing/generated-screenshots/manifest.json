@@ -1,0 +1,280 @@
+{
+  "generatedAt": "2026-05-29T01:08:29.246Z",
+  "baseUrl": "http://127.0.0.1:3000",
+  "outputDir": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots",
+  "totalCaptured": 18,
+  "totalErrors": 0,
+  "captures": [
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:05:33.884Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:05:40.128Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:05:50.159Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "aurora",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:00.399Z"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "tier": "marketing",
+      "label": "Homepage — desktop hero",
+      "theme": "sage-garden",
+      "viewport": "desktop",
+      "route": "/",
+      "files": [
+        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop.webp",
+        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop-1200w.webp",
+        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop-768w.webp",
+        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:07.984Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/pricing.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-768w.webp",
+        "public/marketing/generated-screenshots/marketing/pricing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:22.416Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/themes/midnight/pricing.webp",
+        "public/marketing/generated-screenshots/themes/midnight/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/pricing-768w.webp",
+        "public/marketing/generated-screenshots/themes/midnight/pricing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:29.657Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/themes/blossom/pricing.webp",
+        "public/marketing/generated-screenshots/themes/blossom/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/pricing-768w.webp",
+        "public/marketing/generated-screenshots/themes/blossom/pricing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:36.903Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "aurora",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/themes/aurora/pricing.webp",
+        "public/marketing/generated-screenshots/themes/aurora/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/themes/aurora/pricing-768w.webp",
+        "public/marketing/generated-screenshots/themes/aurora/pricing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:44.425Z"
+    },
+    {
+      "key": "pricing",
+      "tier": "marketing",
+      "label": "Pricing page",
+      "theme": "sage-garden",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "files": [
+        "public/marketing/generated-screenshots/themes/sage-garden/pricing.webp",
+        "public/marketing/generated-screenshots/themes/sage-garden/pricing-1200w.webp",
+        "public/marketing/generated-screenshots/themes/sage-garden/pricing-768w.webp",
+        "public/marketing/generated-screenshots/themes/sage-garden/pricing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:06:51.349Z"
+    },
+    {
+      "key": "faq",
+      "tier": "marketing",
+      "label": "FAQ page",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/faq",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/faq.webp",
+        "public/marketing/generated-screenshots/marketing/faq-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/faq-768w.webp",
+        "public/marketing/generated-screenshots/marketing/faq-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:07:00.124Z"
+    },
+    {
+      "key": "rn-marketing-hub",
+      "tier": "marketing",
+      "label": "RN pathway hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/us/rn/nclex-rn",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:07:16.196Z"
+    },
+    {
+      "key": "rn-questions-marketing",
+      "tier": "marketing",
+      "label": "RN Question Bank — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/us/rn/nclex-rn/questions",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing.webp",
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-768w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:07:32.246Z"
+    },
+    {
+      "key": "rn-lessons-marketing",
+      "tier": "marketing",
+      "label": "RN Lessons — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/us/rn/nclex-rn/lessons",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing.webp",
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-768w.webp",
+        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:07:47.293Z"
+    },
+    {
+      "key": "pn-marketing-hub",
+      "tier": "marketing",
+      "label": "RPN/PN pathway hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/canada/pn/rex-pn",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:07:54.269Z"
+    },
+    {
+      "key": "np-marketing-hub",
+      "tier": "marketing",
+      "label": "NP pathway hub — marketing (CNPLE)",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/canada/np/cnple",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/np-marketing-hub-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:08:04.505Z"
+    },
+    {
+      "key": "allied-marketing-hub",
+      "tier": "marketing",
+      "label": "Allied Health hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/allied/allied-health",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:08:19.295Z"
+    },
+    {
+      "key": "new-grad-marketing-hub",
+      "tier": "marketing",
+      "label": "New Grad hub — marketing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "route": "/canada/new-grad",
+      "files": [
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub.webp",
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-1200w.webp",
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-768w.webp",
+        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-480w.webp"
+      ],
+      "generatedAt": "2026-05-29T01:08:29.173Z"
+    }
+  ],
+  "errors": []
+}

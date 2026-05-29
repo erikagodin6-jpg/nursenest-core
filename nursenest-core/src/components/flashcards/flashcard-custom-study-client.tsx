@@ -48,10 +48,6 @@ type ApiCard = {
   clinicalImageUrl?: string | null;
 };
 
-type McqApiCard = ApiCard & {
-  examMicroQuestion: ExamMicroQuestionPayload;
-};
-
 type SessionSummary = {
   matchingCards: number;
   returnedCards?: number;
@@ -72,9 +68,10 @@ function isPlaceholderFlashcardStem(stem: string): boolean {
   );
 }
 
-function hasUsableExamQuestion(card: ApiCard): card is McqApiCard {
+function hasRenderableFlashcard(card: ApiCard): boolean {
+  if (!card.front.trim() || !card.back.trim()) return false;
   const exam = card.examMicroQuestion;
-  if (!exam || isSataPayload(exam)) return false;
+  if (!exam || isSataPayload(exam)) return true;
   const stem = exam.questionStem?.trim() ?? "";
   return Boolean(
     stem.length >= 10 &&
@@ -92,7 +89,7 @@ export function FlashcardCustomStudyClient() {
   const { t } = useMarketingI18n();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cards, setCards] = useState<McqApiCard[]>([]);
+  const [cards, setCards] = useState<ApiCard[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
   const [loadingStage, setLoadingStage] = useState<"preparing" | "due" | "building" | "still">("preparing");
@@ -193,7 +190,7 @@ export function FlashcardCustomStudyClient() {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 2, timeoutMs: 20_000 });
+        }, { attempts: 2, timeoutMs: 8_000 });
         let json: unknown;
         try {
           json = await res.json();
@@ -229,7 +226,7 @@ export function FlashcardCustomStudyClient() {
         const validCards = rawCards.filter(
           (c) => c && typeof c.id === "string" && c.id.length > 0 &&
                  typeof c.front === "string" && typeof c.back === "string",
-        ).filter(hasUsableExamQuestion);
+        ).filter(hasRenderableFlashcard);
         if (!cancelled) {
           setCards(validCards);
           setSummary(
@@ -294,7 +291,7 @@ export function FlashcardCustomStudyClient() {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 1, timeoutMs: 12_000 });
+        }, { attempts: 1, timeoutMs: 6_000 });
         if (!res.ok) return;
         const json = await res.json();
         const rawCards =
@@ -304,7 +301,7 @@ export function FlashcardCustomStudyClient() {
         const validCards = rawCards.filter(
           (c) => c && typeof c.id === "string" && c.id.length > 0 &&
                  typeof c.front === "string" && typeof c.back === "string",
-        ).filter(hasUsableExamQuestion);
+        ).filter(hasRenderableFlashcard);
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         setCards((prev) => {
           const seen = new Set(prev.map((card) => card.id));
@@ -369,7 +366,7 @@ export function FlashcardCustomStudyClient() {
           prompt: c.front,
           answer: c.back,
           explanation: c.explanation,
-          examMicroQuestion: c.examMicroQuestion,
+          examMicroQuestion: isSataPayload(c.examMicroQuestion) ? undefined : c.examMicroQuestion,
           topic: c.topic,
           subtopic: c.subtopic,
           sourceKey: c.sourceKey,
@@ -540,7 +537,7 @@ export function FlashcardCustomStudyClient() {
       <section className={emptyStateClass}>
         <h2 className={emptyHeadingClass}>No cards for this pathway yet</h2>
         <p>
-          There are no published NCLEX multiple-choice cards for this filter. Try All cards or pick another body system.
+          There are no published cards for this filter. Try All cards or pick another body system.
         </p>
         <Link href={exitHref} className={emptyLinkClass}>
           {t("flashcards.backToMyCards")}

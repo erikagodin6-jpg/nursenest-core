@@ -9,6 +9,7 @@ import {
   Crosshair,
   FileDown,
   FileText,
+  FlaskConical,
   Globe,
   GraduationCap,
   HeartPulse,
@@ -67,6 +68,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     title: "Users",
     items: [
       { href: "/admin/users", label: "Users & support", icon: Users },
+      { href: "/admin/beta", label: "Beta access", icon: FlaskConical },
       { href: "/admin/feedback", label: "Feedback", icon: MessageSquare },
       { href: "/admin/waitlist", label: "Waitlist", icon: ListTodo },
       { href: "/admin/demo-users", label: "Demo users", icon: TestTube2 },

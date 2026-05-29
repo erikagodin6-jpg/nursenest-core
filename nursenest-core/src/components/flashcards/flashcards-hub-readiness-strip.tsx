@@ -50,19 +50,22 @@ const toneFillClass: Record<ReturnType<typeof buildFlashcardsReadinessNarrative>
 export function FlashcardsHubReadinessStrip({
   pathwayId,
   className = "",
+  enabled = true,
 }: {
   pathwayId: string;
   className?: string;
+  enabled?: boolean;
 }) {
   const [stats, setStats] = useState<FlashcardSrsStats | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     const controller = new AbortController();
     void fetchSrsStats(pathwayId, controller.signal).then((s) => {
       if (!controller.signal.aborted && s) setStats(s);
     });
     return () => controller.abort();
-  }, [pathwayId]);
+  }, [enabled, pathwayId]);
 
   const narrative = buildFlashcardsReadinessNarrative(stats);
   const masteryPct = stats?.masteryPct ?? 0;

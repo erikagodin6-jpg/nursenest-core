@@ -40,7 +40,6 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { bankExamQuestionRowToFlashcardStudySelectRow } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
 import { loadExamQuestionRowsForFlashcardPool } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
 import { resolveAccessScopeForPathwayExamQuestionPool } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
-import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -56,17 +55,6 @@ const MAX_BATCH = 40;
 type Props = { params: Promise<{ deckRef: string }> };
 
 export const dynamic = "force-dynamic";
-
-function isUsableMcqStudyCard(card: FlashcardStudyApiCard): boolean {
-  const exam = card.examMicroQuestion;
-  return Boolean(
-    exam &&
-      !isSataPayload(exam) &&
-      exam.questionStem?.trim() &&
-      Array.isArray(exam.answerOptions) &&
-      exam.answerOptions.length === 4,
-  );
-}
 
 async function loadBankBackedStudyCards(args: {
   userId: string;
@@ -107,7 +95,6 @@ async function loadBankBackedStudyCards(args: {
       fullBackAvailable: true,
       examOptionShuffleSalt: args.examOptionShuffleSalt,
     });
-    if (!isUsableMcqStudyCard(serialized)) continue;
     args.existingExamQuestionIds.add(row.id);
     out.push(serialized);
   }
@@ -221,8 +208,7 @@ export async function GET(req: NextRequest, { params }: Props) {
             ...row,
             back: truncateForPreview(row.back),
           };
-        })
-        .filter(isUsableMcqStudyCard);
+        });
       const body = {
         mode: "preview" as const,
         deckId: deck.id,
@@ -305,26 +291,8 @@ export async function GET(req: NextRequest, { params }: Props) {
             fullBackAvailable: true,
             examOptionShuffleSalt,
           }),
-        )
-        .filter(isUsableMcqStudyCard);
-      const existingExamQuestionIds = new Set(
-        serializedDeckCards
-          .map((card) => card.sourceKey?.startsWith("exam_q:") ? card.sourceKey.slice("exam_q:".length) : null)
-          .filter((id): id is string => Boolean(id)),
-      );
-      const bankCards = serializedDeckCards.length < limit
-        ? await loadBankBackedStudyCards({
-            userId,
-            entitlement,
-            pathwayId: deck.pathwayId,
-            take: limit - serializedDeckCards.length,
-            educationalLocale,
-            flashcardBundle,
-            examOptionShuffleSalt,
-            existingExamQuestionIds,
-          })
-        : [];
-      const studyCards = [...serializedDeckCards, ...bankCards].slice(0, limit);
+        );
+      const studyCards = serializedDeckCards.slice(0, limit);
       const body = {
         mode: "subscriber" as const,
         deckId: deck.id,
@@ -334,7 +302,7 @@ export async function GET(req: NextRequest, { params }: Props) {
         session: {
           cursor: requestedCursor,
           queueLength: null,
-          done: rows.length <= limit && bankCards.length === 0,
+          done: rows.length <= limit,
           batchSize: studyCards.length,
           instant: true,
         },
@@ -342,7 +310,7 @@ export async function GET(req: NextRequest, { params }: Props) {
           requestedCount,
           returnedCount: studyCards.length,
           totalAvailable: null,
-          hasMore: rows.length > limit || bankCards.length > 0,
+          hasMore: rows.length > limit,
         },
       };
       const approx = estimateJsonUtf8Bytes(body);
@@ -483,8 +451,7 @@ export async function GET(req: NextRequest, { params }: Props) {
           fullBackAvailable: true,
           examOptionShuffleSalt,
         }),
-      )
-      .filter(isUsableMcqStudyCard);
+      );
     const bankCards = serializedDeckCards.length < limit
       ? await loadBankBackedStudyCards({
           userId,

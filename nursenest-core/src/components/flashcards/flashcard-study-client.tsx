@@ -20,7 +20,6 @@ import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-ques
 import { FlashcardSrsStatsStrip } from "@/components/flashcards/flashcard-srs-stats-strip";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
-import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 type CardPayload = {
   id: string;
@@ -48,17 +47,6 @@ type StudyResponse = {
     hasMore?: boolean;
   };
 };
-
-function hasUsableExamQuestion(card: CardPayload): boolean {
-  const exam = card.examMicroQuestion;
-  return Boolean(
-    exam?.questionStem?.trim() &&
-      Array.isArray(exam.answerOptions) &&
-      exam.answerOptions.length === 4 &&
-      !isSataPayload(exam) &&
-      !isPlaceholderFlashcardStem(exam.questionStem),
-  );
-}
 
 function isPlaceholderFlashcardStem(stem: string | null | undefined): boolean {
   const normalized = String(stem ?? "").replace(/\s+/g, " ").trim().toLowerCase();
@@ -120,7 +108,7 @@ export function FlashcardStudyClient({
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 2, timeoutMs: 12_000 });
+        }, { attempts: 2, timeoutMs: 8_000 });
         if (!res.ok) {
           throw new Error(`study_http_${res.status}`);
         }
@@ -135,7 +123,7 @@ export function FlashcardStudyClient({
                 typeof card.back === "string",
             )
           : [];
-        const cards = cardsRaw.filter(hasUsableExamQuestion);
+        const cards = cardsRaw.filter((card) => !isPlaceholderFlashcardStem(card.examMicroQuestion?.questionStem));
 
         if (!cancelled) {
           setMode(data.mode === "preview" ? "preview" : "subscriber");
@@ -173,7 +161,7 @@ export function FlashcardStudyClient({
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
-        }, { attempts: 1, timeoutMs: 10_000 });
+        }, { attempts: 1, timeoutMs: 6_000 });
         if (!res.ok) return;
         const data = (await res.json()) as StudyResponse;
         const cardsRaw = Array.isArray(data.cards)
@@ -186,7 +174,7 @@ export function FlashcardStudyClient({
                 typeof card.back === "string",
             )
           : [];
-        const cards = cardsRaw.filter(hasUsableExamQuestion);
+        const cards = cardsRaw.filter((card) => !isPlaceholderFlashcardStem(card.examMicroQuestion?.questionStem));
         setQueue((prev) => {
           const seen = new Set(prev.map((card) => card.id));
           const merged = [...prev];
@@ -276,7 +264,7 @@ export function FlashcardStudyClient({
   if (queue.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--semantic-text-secondary)]">
-        No NCLEX multiple-choice study cards are available for this deck yet. Return to the hub and start a bank-backed RN/PN/NP set.
+        No study cards are available for this deck yet. Return to the hub and choose another deck or pathway.
       </div>
     );
   }

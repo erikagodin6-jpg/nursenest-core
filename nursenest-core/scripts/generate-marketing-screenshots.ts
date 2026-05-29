@@ -193,6 +193,35 @@ type CaptureTarget = {
   notes?: string;
 };
 
+type CaptureReadinessCheck = {
+  name: string;
+  selector: string;
+  minVisible?: number;
+};
+
+const BLOCKED_CAPTURE_TEXT = [
+  "Just a moment",
+  "Loading",
+  "Please wait",
+  "Fetching",
+  "Preparing",
+  "Application error",
+  "Something went wrong",
+] as const;
+
+const BLOCKED_CAPTURE_SELECTORS = [
+  ".nn-skeleton",
+  "[class*='skeleton' i]",
+  "[data-testid*='skeleton' i]",
+  "[aria-busy='true']",
+  "[role='status']",
+  "[class*='spinner' i]",
+  "[class*='loading' i]",
+  "[data-loading='true']",
+  ".animate-pulse",
+  ".animate-spin",
+] as const;
+
 // ─── All capture targets ──────────────────────────────────────────────────────
 
 const TARGETS: CaptureTarget[] = [
@@ -1495,13 +1524,28 @@ async function login(page: Page, email: string, password: string): Promise<void>
 // ─── Theme application ────────────────────────────────────────────────────────
 
 async function applyTheme(page: Page, theme: string): Promise<void> {
-  await page.evaluate(
+  await page.addInitScript(
     ({ key, value }: { key: string; value: string }) => {
-      localStorage.setItem(key, value);
+      try {
+        localStorage.setItem(key, value);
+      } catch {
+        // Some initial documents (about:blank, opaque error pages) deny storage.
+      }
       document.documentElement.setAttribute("data-theme", value);
     },
     { key: THEME_STORAGE_KEY, value: theme },
   );
+  await page.evaluate(
+    ({ key, value }: { key: string; value: string }) => {
+      try {
+        localStorage.setItem(key, value);
+      } catch {
+        // Theme attribute is enough for the current document when storage is blocked.
+      }
+      document.documentElement.setAttribute("data-theme", value);
+    },
+    { key: THEME_STORAGE_KEY, value: theme },
+  ).catch(() => {});
 }
 
 // ─── Page hydration ───────────────────────────────────────────────────────────
@@ -1521,6 +1565,129 @@ async function settle(page: Page, extraMs: number): Promise<void> {
   if (extraMs > 0) await page.waitForTimeout(extraMs);
 }
 
+function targetReadinessChecks(target: CaptureTarget): CaptureReadinessCheck[] {
+  const keyRoute = `${target.key} ${target.route}`.toLowerCase();
+  if (keyRoute.includes("flashcard")) {
+    return [
+      { name: "flashcard prompt", selector: ".nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem" },
+      { name: "flashcard controls", selector: "button:has-text('Reveal answer'), button:has-text('Next'), [aria-label*='confidence' i], .nn-flashcard-rating-dock" },
+    ];
+  }
+  if (keyRoute.includes("question") || keyRoute.includes("/app/questions")) {
+    return [
+      { name: "practice question stem", selector: ".nn-question-stem, [data-testid*='question' i], [data-nn-question-card]" },
+      { name: "answer options", selector: ".nn-qopt-list button, .nn-qopt-list label, [data-testid*='answer' i] button, button.nn-cat-opt, label.nn-cat-opt", minVisible: 2 },
+    ];
+  }
+  if (keyRoute.includes("cat") || keyRoute.includes("practice-tests")) {
+    return [
+      { name: "CAT interface", selector: ".nn-cat, .nn-exam-session, [data-nn-qa-practice-hub-start-test], [data-testid*='cat' i]" },
+      { name: "CAT question or launch content", selector: ".nn-question-stem, .nn-premium-practice-hub-hero, h1, h2" },
+    ];
+  }
+  if (keyRoute.includes("lesson")) {
+    return [
+      { name: "lesson title", selector: "h1, h2, [data-lesson-title]" },
+      { name: "lesson content", selector: "article, [data-lesson-content], main p, main li" },
+    ];
+  }
+  if (keyRoute.includes("clinical-skill")) {
+    return [{ name: "clinical skills activity", selector: "[data-clinical-skills], .nn-clinical-skills, main h1, main h2" }];
+  }
+  if (keyRoute.includes("pharmacology")) {
+    return [{ name: "pharmacology activity", selector: "[data-pharmacology], .nn-pharmacology, main h1, main h2" }];
+  }
+  if (keyRoute.includes("ecg") || keyRoute.includes("/modules/ecg")) {
+    return [
+      { name: "ECG strip or module", selector: "canvas, svg, [data-ecg-strip], .ecg-strip, main h1, main h2" },
+      { name: "ECG interpretation content", selector: "[data-ecg-interpretation], main p, main li" },
+    ];
+  }
+  return [{ name: "page content", selector: "main h1, main h2, main p, main a, main button" }];
+}
+
+async function countVisible(page: Page, selector: string): Promise<number> {
+  return page.locator(selector).evaluateAll((nodes) =>
+    nodes.filter((node) => {
+      const el = node as HTMLElement;
+      if (el.closest("[aria-hidden='true']")) return false;
+      const style = window.getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 && rect.width > 1 && rect.height > 1;
+    }).length,
+  ).catch(() => 0);
+}
+
+async function blockedDomReasons(page: Page): Promise<string[]> {
+  return page.evaluate(
+    ({ blockedText, blockedSelectors }: { blockedText: string[]; blockedSelectors: string[] }) => {
+      function visible(el: Element): boolean {
+        if (el.closest("[aria-hidden='true']")) return false;
+        const h = el as HTMLElement;
+        const style = window.getComputedStyle(h);
+        const rect = h.getBoundingClientRect();
+        return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 && rect.width > 1 && rect.height > 1;
+      }
+
+      const reasons: string[] = [];
+      const bodyText = document.body?.innerText ?? "";
+      for (const text of blockedText) {
+        const re = new RegExp(`\\b${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+        if (re.test(bodyText)) reasons.push(`blocked text: ${text}`);
+      }
+      for (const selector of blockedSelectors) {
+        const matches = Array.from(document.querySelectorAll(selector)).filter(visible);
+        if (matches.length > 0) reasons.push(`blocked selector: ${selector} (${matches.length})`);
+      }
+      const pathname = window.location.pathname;
+      if (/\/login|\/signup/i.test(pathname)) reasons.push(`authentication redirect: ${pathname}`);
+      if ((document.body?.innerText ?? "").trim().length < 120) reasons.push("blank or near-empty page text");
+      return reasons;
+    },
+    { blockedText: [...BLOCKED_CAPTURE_TEXT], blockedSelectors: [...BLOCKED_CAPTURE_SELECTORS] },
+  );
+}
+
+async function waitForScreenshotReady(page: Page, target: CaptureTarget): Promise<void> {
+  await page.waitForFunction(
+    () => document.documentElement.getAttribute("data-loaded") === "true" || document.body?.getAttribute("data-loaded") === "true" || document.readyState === "complete",
+    undefined,
+    { timeout: 20_000 },
+  ).catch(() => {});
+
+  const checks = targetReadinessChecks(target);
+  for (const check of checks) {
+    await page.waitForSelector(check.selector, { state: "visible", timeout: 30_000 });
+    const count = await countVisible(page, check.selector);
+    if (count < (check.minVisible ?? 1)) {
+      throw new Error(`readiness check failed: ${check.name} (${count} visible for ${check.selector})`);
+    }
+  }
+
+  await page.waitForFunction(
+    ({ blockedText, blockedSelectors }: { blockedText: string[]; blockedSelectors: string[] }) => {
+      function visible(el: Element): boolean {
+        if (el.closest("[aria-hidden='true']")) return false;
+        const h = el as HTMLElement;
+        const style = window.getComputedStyle(h);
+        const rect = h.getBoundingClientRect();
+        return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 && rect.width > 1 && rect.height > 1;
+      }
+      const text = document.body?.innerText ?? "";
+      const noBlockedText = blockedText.every((phrase) => !new RegExp(`\\b${phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(text));
+      const noBlockedSelectors = blockedSelectors.every((selector) => Array.from(document.querySelectorAll(selector)).filter(visible).length === 0);
+      return noBlockedText && noBlockedSelectors;
+    },
+    { blockedText: [...BLOCKED_CAPTURE_TEXT], blockedSelectors: [...BLOCKED_CAPTURE_SELECTORS] },
+    { timeout: 20_000 },
+  );
+
+  const reasons = await blockedDomReasons(page);
+  if (reasons.length > 0) {
+    throw new Error(`screenshot rejected: ${reasons.join("; ")}`);
+  }
+}
+
 // ─── Single capture ───────────────────────────────────────────────────────────
 
 type ManifestEntry = {
@@ -1531,6 +1698,11 @@ type ManifestEntry = {
   viewport: string;
   route: string;
   files: string[];
+  qualityGate: {
+    passed: true;
+    readinessChecks: string[];
+    blockedStatesRejected: readonly string[];
+  };
   generatedAt: string;
 };
 
@@ -1561,6 +1733,8 @@ async function captureOne(
   }
 
   await settle(page, target.extraWaitMs ?? EXTRA_WAIT_MS);
+  await waitForScreenshotReady(page, target);
+  const readinessChecks = targetReadinessChecks(target).map((check) => check.name);
 
   const rawPng = await page.screenshot({
     fullPage: false,
@@ -1582,6 +1756,11 @@ async function captureOne(
     viewport,
     route: target.route,
     files: saved.map((f) => path.relative(APP_ROOT, f)),
+    qualityGate: {
+      passed: true,
+      readinessChecks,
+      blockedStatesRejected: BLOCKED_CAPTURE_TEXT,
+    },
     generatedAt: new Date().toISOString(),
   };
 }

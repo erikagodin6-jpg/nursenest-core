@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-29T01:04:01.089Z",
+  "generatedAt": "2026-05-29T01:11:46.525Z",
   "summary": {
     "total": 45,
-    "pass": 7,
-    "warn": 19,
-    "fail": 19,
+    "pass": 14,
+    "warn": 15,
+    "fail": 16,
     "skip": 0
   },
   "cdnSlotsChecked": false,
@@ -142,24 +142,24 @@
       "category": "local-generated",
       "label": "marketing/marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-29T01:05:33.469Z"
     },
     {
       "id": "local-marketing-pricing-webp",
       "category": "local-generated",
       "label": "marketing/pricing.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/pricing.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-29T01:06:22.056Z"
     },
     {
       "id": "local-marketing-faq-webp",
       "category": "local-generated",
       "label": "marketing/faq.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/faq.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-29T01:06:59.758Z"
     },
     {
       "id": "mobile-mobile-mobile-homepage-webp",
@@ -238,8 +238,7 @@
       "category": "theme-variant",
       "label": "midnight / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-blossom-learner-dashboard-webp",
@@ -262,8 +261,7 @@
       "category": "theme-variant",
       "label": "blossom / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-aurora-learner-dashboard-webp",
@@ -286,8 +284,7 @@
       "category": "theme-variant",
       "label": "aurora / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-sage-garden-learner-dashboard-webp",
@@ -310,8 +307,7 @@
       "category": "theme-variant",
       "label": "sage-garden / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "fallback-dashboard-redesign-preview-01-dash-desktop-ocean-png",

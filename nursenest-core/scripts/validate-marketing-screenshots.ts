@@ -57,7 +57,7 @@ type CheckStatus = "pass" | "warn" | "fail" | "skip";
 
 type ScreenshotCheck = {
   id: string;
-  category: "cdn-slot" | "local-generated" | "theme-variant" | "mobile" | "fallback";
+  category: "cdn-slot" | "local-generated" | "theme-variant" | "mobile" | "fallback" | "quality-gate";
   label: string;
   assetPath: string;
   status: CheckStatus;
@@ -65,6 +65,24 @@ type ScreenshotCheck = {
   component?: string;
   page?: string;
   captureDate?: string;
+};
+
+type GeneratedManifest = {
+  generatedAt?: string;
+  totalErrors?: number;
+  captures?: Array<{
+    key?: string;
+    tier?: string;
+    viewport?: string;
+    route?: string;
+    files?: string[];
+    qualityGate?: {
+      passed?: boolean;
+      readinessChecks?: string[];
+      blockedStatesRejected?: string[];
+    };
+  }>;
+  errors?: Array<{ key?: string; theme?: string; viewport?: string; error?: string }>;
 };
 
 type ValidationReport = {
@@ -415,6 +433,98 @@ async function checkLegacyFallbacks(checks: ScreenshotCheck[]): Promise<void> {
   }
 }
 
+async function checkManifestQualityGate(checks: ScreenshotCheck[]): Promise<void> {
+  console.log("\n[QUALITY] Checking generated manifest quality gates …");
+  const manifestPath = path.join(GENERATED_DIR, "manifest.json");
+  let raw = "";
+  try {
+    raw = await fs.readFile(manifestPath, "utf8");
+  } catch {
+    console.log("  ✗ manifest.json missing");
+    checks.push({
+      id: "quality-manifest-missing",
+      category: "quality-gate",
+      label: "manifest.json",
+      assetPath: manifestPath,
+      status: "fail",
+      detail: "Generated screenshot manifest is missing.",
+    });
+    return;
+  }
+
+  let manifest: GeneratedManifest;
+  try {
+    manifest = JSON.parse(raw) as GeneratedManifest;
+  } catch {
+    checks.push({
+      id: "quality-manifest-json",
+      category: "quality-gate",
+      label: "manifest.json",
+      assetPath: manifestPath,
+      status: "fail",
+      detail: "Generated screenshot manifest is not valid JSON.",
+    });
+    return;
+  }
+
+  const errors = manifest.errors ?? [];
+  if ((manifest.totalErrors ?? errors.length) > 0) {
+    console.log(`  ✗ manifest has ${manifest.totalErrors ?? errors.length} capture errors`);
+    checks.push({
+      id: "quality-manifest-errors",
+      category: "quality-gate",
+      label: "capture errors",
+      assetPath: manifestPath,
+      status: "fail",
+      detail: errors.map((e) => `${e.key ?? "unknown"}: ${e.error ?? "error"}`).slice(0, 4).join("; "),
+    });
+  } else {
+    console.log("  ✓ no capture errors recorded");
+    checks.push({
+      id: "quality-manifest-errors",
+      category: "quality-gate",
+      label: "capture errors",
+      assetPath: manifestPath,
+      status: "pass",
+    });
+  }
+
+  const captures = manifest.captures ?? [];
+  if (captures.length === 0) {
+    checks.push({
+      id: "quality-manifest-empty",
+      category: "quality-gate",
+      label: "captured screenshots",
+      assetPath: manifestPath,
+      status: "fail",
+      detail: "No screenshots are recorded in the manifest.",
+    });
+    return;
+  }
+
+  let passed = 0;
+  let missing = 0;
+  for (const capture of captures) {
+    const hasGate =
+      capture.qualityGate?.passed === true &&
+      Array.isArray(capture.qualityGate.readinessChecks) &&
+      capture.qualityGate.readinessChecks.length > 0 &&
+      Array.isArray(capture.qualityGate.blockedStatesRejected) &&
+      capture.qualityGate.blockedStatesRejected.length > 0;
+    if (hasGate) passed++;
+    else missing++;
+  }
+  console.log(`  ${missing === 0 ? "✓" : "✗"} quality gate metadata ${passed}/${captures.length}`);
+  checks.push({
+    id: "quality-manifest-gate-metadata",
+    category: "quality-gate",
+    label: "quality gate metadata",
+    assetPath: manifestPath,
+    status: missing === 0 ? "pass" : "fail",
+    detail: missing === 0 ? undefined : `${missing} capture(s) were generated before screenshot readiness guards existed. Regenerate before publishing.`,
+  });
+}
+
 // ─── Report generation ────────────────────────────────────────────────────────
 
 function buildReport(checks: ScreenshotCheck[], cdnChecked: boolean): ValidationReport {
@@ -504,6 +614,7 @@ function buildMarkdown(report: ValidationReport): string {
     "mobile",
     "theme-variant",
     "fallback",
+    "quality-gate",
   ] as const;
   const categoryLabels: Record<string, string> = {
     "cdn-slot": "CDN Slots (screenshot1–15)",
@@ -511,6 +622,7 @@ function buildMarkdown(report: ValidationReport): string {
     "mobile": "Mobile Screenshots",
     "theme-variant": "Theme Variants",
     "fallback": "Legacy Fallback Images",
+    "quality-gate": "Screenshot Readiness Quality Gate",
   };
 
   for (const cat of categories) {
@@ -563,6 +675,7 @@ async function main(): Promise<void> {
   await checkMobileFiles(checks);
   await checkThemeVariants(checks);
   await checkLegacyFallbacks(checks);
+  await checkManifestQualityGate(checks);
 
   const report = buildReport(checks, DO_CDN_CHECK && !LOCAL_ONLY);
 

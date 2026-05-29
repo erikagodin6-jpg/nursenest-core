@@ -9,6 +9,7 @@ import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-fla
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { isTransientDatabaseError } from "@/lib/resilience/with-retry";
+import { buildServerTimingHeader } from "@/lib/performance/server-timing";
 import {
   loadWithManifest,
   flashcardInventoryManifestKey,
@@ -37,6 +38,31 @@ function inventoryCacheKey(userId: string, pathwayId: string): string {
 
 export const dynamic = "force-dynamic";
 
+type InventoryTimingSegment = { name: string; durationMs: number };
+
+function jsonWithInventoryTiming(
+  body: unknown,
+  init: {
+    status: number;
+    headers: Headers;
+    startedAt: number;
+    segments?: InventoryTimingSegment[];
+    cacheDisposition?: "hit" | "miss" | "stale" | "bypass" | "none";
+  },
+) {
+  const headers = new Headers(init.headers);
+  const payload = JSON.stringify(body);
+  headers.set("content-type", "application/json; charset=utf-8");
+  headers.set("x-nn-payload-bytes", String(new TextEncoder().encode(payload).length));
+  const serverTiming = buildServerTimingHeader({
+    totalMs: Math.round(performance.now() - init.startedAt),
+    segments: init.segments,
+    cacheDisposition: init.cacheDisposition,
+  });
+  if (serverTiming) headers.set("Server-Timing", serverTiming);
+  return new NextResponse(payload, { status: init.status, headers });
+}
+
 /**
  * GET /api/flashcards/inventory?pathwayId=...
  *
@@ -49,21 +75,28 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/flashcards/inventory", "content", async () => {
+    const routeStarted = performance.now();
+    const timings: InventoryTimingSegment[] = [];
+    const mark = (name: string, startedAt: number) => {
+      timings.push({ name, durationMs: Math.round(performance.now() - startedAt) });
+    };
     const headers = mergeSubscriberPrivateCacheHeaders();
     try {
+      const gateStarted = performance.now();
       const gate = await requireSubscriberSession();
+      mark("auth_gate", gateStarted);
       if (!gate.ok) return gate.response;
 
       if (!gate.entitlement.hasAccess) {
-        return NextResponse.json(
+        return jsonWithInventoryTiming(
           { success: false, error: "subscription_required", categories: [], total: 0, categoryOptions: [] },
-          { status: 403, headers },
+          { status: 403, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "none" },
         );
       }
 
       const pathwayIdRaw = req.nextUrl.searchParams.get("pathwayId")?.trim();
       if (!pathwayIdRaw) {
-        return NextResponse.json(
+        return jsonWithInventoryTiming(
           {
             success: false,
             code: "pathway_id_required",
@@ -72,14 +105,14 @@ export async function GET(req: NextRequest) {
             total: 0,
             categoryOptions: [],
           },
-          { status: 400, headers },
+          { status: 400, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "none" },
         );
       }
 
       const pathwayId = normalizeLearnerFlashcardsPathwayQueryId(pathwayIdRaw, gate.entitlement.country);
       const pathway = getExamPathwayById(pathwayId);
       if (!pathway) {
-        return NextResponse.json(
+        return jsonWithInventoryTiming(
           {
             success: false,
             code: "unknown_pathway",
@@ -88,22 +121,31 @@ export async function GET(req: NextRequest) {
             total: 0,
             categoryOptions: [],
           },
-          { status: 400, headers },
+          { status: 400, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "none" },
         );
       }
 
       const cacheKey = inventoryCacheKey(gate.userId, pathway.id);
+      const memoryCacheStarted = performance.now();
       const cached = inventoryCache.get(cacheKey);
+      mark("memory_cache", memoryCacheStarted);
       if (cached && Date.now() - cached.cachedAtMs < INVENTORY_CACHE_TTL_MS) {
         const h = new Headers(headers);
         h.set("x-nn-inventory-cache", "hit");
-        return NextResponse.json(cached.body, { status: 200, headers: h });
+        return jsonWithInventoryTiming(cached.body, {
+          status: 200,
+          headers: h,
+          startedAt: routeStarted,
+          segments: timings,
+          cacheDisposition: "hit",
+        });
       }
 
       // ── Phase 2.5: manifest-loader — Redis → snapshot → live ──────────────
       const tier = String(gate.entitlement.tier ?? "");
       const country = String(gate.entitlement.country ?? "");
       if (tier && country) {
+        const manifestStarted = performance.now();
         const manifestResult = await loadWithManifest<FlashcardInventoryManifestPayload>({
           redisKey: flashcardInventoryManifestKey(tier, country, pathway.id),
           redisTtl: 60 * 60,
@@ -124,6 +166,7 @@ export async function GET(req: NextRequest) {
           },
           isValid: (d) => d.total > 0,
         }).catch(() => null);
+        mark("manifest", manifestStarted);
 
         if (manifestResult) {
           const mp = manifestResult.data;
@@ -138,7 +181,13 @@ export async function GET(req: NextRequest) {
           h.set("x-nn-inventory-manifest", manifestResult.source);
           if (inventoryCache.size > INVENTORY_CACHE_MAX) inventoryCache.clear();
           inventoryCache.set(cacheKey, { cachedAtMs: Date.now(), body: inventoryBody });
-          return NextResponse.json(inventoryBody, { status: 200, headers: h });
+          return jsonWithInventoryTiming(inventoryBody, {
+            status: 200,
+            headers: h,
+            startedAt: routeStarted,
+            segments: timings,
+            cacheDisposition: manifestResult.source === "redis" ? "hit" : "miss",
+          });
         }
       }
       // ── End Phase 2.5 ──────────────────────────────────────────────────────
@@ -158,7 +207,7 @@ export async function GET(req: NextRequest) {
           transient: isTransientDatabaseError(e) ? 1 : 0,
         });
 
-        return NextResponse.json(
+        return jsonWithInventoryTiming(
           {
             success: false,
             code: "inventory_unavailable",
@@ -168,11 +217,12 @@ export async function GET(req: NextRequest) {
             categoryOptions: [],
             retryable: true,
           },
-          { status: 503, headers },
+          { status: 503, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "miss" },
         );
       }
 
       const inventoryRouteMs = Math.round(performance.now() - invStarted);
+      timings.push({ name: "live_inventory", durationMs: inventoryRouteMs });
 
       if (!inv.ok) {
         safeServerLog("flashcards", "inventory_route_load_failed", {
@@ -181,12 +231,12 @@ export async function GET(req: NextRequest) {
           code: inv.code,
         });
         if (inv.code === "pathway_not_entitled") {
-          return NextResponse.json(
+          return jsonWithInventoryTiming(
             { success: false, code: inv.code, message: inv.message, categories: [], total: 0, categoryOptions: [] },
-            { status: 403, headers },
+            { status: 403, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "miss" },
           );
         }
-        return NextResponse.json(
+        return jsonWithInventoryTiming(
           {
             success: false,
             code: inv.code,
@@ -196,7 +246,7 @@ export async function GET(req: NextRequest) {
             categoryOptions: [],
             retryable: true,
           },
-          { status: 503, headers },
+          { status: 503, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "miss" },
         );
       }
 
@@ -224,10 +274,16 @@ export async function GET(req: NextRequest) {
       const h = new Headers(headers);
       h.set("x-nn-inventory-cache", "miss");
 
-      return NextResponse.json(body, { headers: h });
+      return jsonWithInventoryTiming(body, {
+        status: 200,
+        headers: h,
+        startedAt: routeStarted,
+        segments: timings,
+        cacheDisposition: "miss",
+      });
     } catch (error) {
       safeServerLogCritical("flashcards", "inventory_route_error", {}, error);
-      return NextResponse.json(
+      return jsonWithInventoryTiming(
         {
           success: false,
           error: "inventory_failed",
@@ -235,7 +291,7 @@ export async function GET(req: NextRequest) {
           total: 0,
           categoryOptions: [],
         },
-        { status: 500, headers },
+        { status: 500, headers, startedAt: routeStarted, segments: timings, cacheDisposition: "none" },
       );
     }
   });

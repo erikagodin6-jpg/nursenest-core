@@ -178,6 +178,12 @@ model User {
   socialGroupsOwned                         SocialGroup[]                 @relation("SocialGroupOwner")
   socialGroupMemberships                    SocialGroupMembership[]
   socialStatSnapshots                       SocialStatSnapshot[]
+  betaAccessCodesCreated                    BetaAccessCode[]              @relation("BetaAccessCodeCreator")
+  betaAccessGrants                          BetaAccessGrant[]             @relation("BetaAccessGrantUser")
+  betaAccessGrantsRevoked                   BetaAccessGrant[]             @relation("BetaAccessGrantRevoker")
+  betaFeedbackReports                       BetaFeedbackReport[]
+  betaActivityEvents                        BetaActivityEvent[]
+  betaInvitationEmailsSent                  BetaInvitationEmailLog[]       @relation("BetaInvitationEmailSender")
 
   // ── Account lifecycle / inactivity management ──────────────────────────────
   /// * Exempt from automatic inactivity deletion regardless of role/tier.
@@ -688,6 +694,105 @@ model TrialDeviceBinding {
   userId          String
   createdAt       DateTime @default(now())
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// * Admin-issued beta invitation codes. Raw redemption checks use `codeHash`; `displayCode` is shown to staff.
+model BetaAccessCode {
+  id              String              @id @default(cuid())
+  codeHash        String              @unique @db.VarChar(128)
+  displayCode     String              @unique @db.VarChar(80)
+  name            String              @db.VarChar(120)
+  description     String?             @db.VarChar(800)
+  enabled         Boolean             @default(true)
+  features        BetaFeatureKey[]     @default([])
+  maxRedemptions  Int?
+  usageCount      Int                 @default(0)
+  expiresAt       DateTime?
+  disabledAt      DateTime?
+  createdByUserId String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  creator         User?               @relation("BetaAccessCodeCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  grants          BetaAccessGrant[]
+  invitationLogs  BetaInvitationEmailLog[]
+
+  @@index([enabled, expiresAt])
+  @@index([createdAt])
+  @@map("beta_access_codes")
+}
+
+/// * A tester's redeemed beta access. Access remains active until revoked.
+model BetaAccessGrant {
+  id              String           @id @default(cuid())
+  codeId          String
+  userId          String
+  features        BetaFeatureKey[] @default([])
+  redeemedAt      DateTime         @default(now())
+  revokedAt       DateTime?
+  revokedByUserId String?
+  revokeReason    String?          @db.VarChar(500)
+  code            BetaAccessCode   @relation(fields: [codeId], references: [id], onDelete: Cascade)
+  user            User             @relation("BetaAccessGrantUser", fields: [userId], references: [id], onDelete: Cascade)
+  revokedBy       User?            @relation("BetaAccessGrantRevoker", fields: [revokedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([codeId, userId])
+  @@index([userId, revokedAt])
+  @@index([codeId, redeemedAt])
+  @@map("beta_access_grants")
+}
+
+model BetaFeedbackReport {
+  id                String           @id @default(cuid())
+  userId            String
+  feature           BetaFeatureKey
+  kind              BetaFeedbackKind @default(GENERAL)
+  rating            Int?
+  summary           String           @db.VarChar(500)
+  details           String?
+  pageUrl           String?          @db.VarChar(2048)
+  browser           String?          @db.VarChar(512)
+  screenshotDataUrl String?
+  status            UserFeedbackStatus @default(NEW)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([feature, createdAt])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("beta_feedback_reports")
+}
+
+model BetaActivityEvent {
+  id        String          @id @default(cuid())
+  userId    String
+  feature   BetaFeatureKey?
+  eventType String          @db.VarChar(80)
+  pageUrl   String?         @db.VarChar(2048)
+  metadata  Json?
+  createdAt DateTime        @default(now())
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([feature, eventType, createdAt])
+  @@index([eventType, createdAt])
+  @@map("beta_activity_events")
+}
+
+model BetaInvitationEmailLog {
+  id           String          @id @default(cuid())
+  codeId       String
+  targetEmail  String          @db.VarChar(320)
+  sentByUserId String?
+  status       String          @default("PENDING") @db.VarChar(40)
+  failureReason String?        @db.VarChar(500)
+  createdAt    DateTime        @default(now())
+  code         BetaAccessCode   @relation(fields: [codeId], references: [id], onDelete: Cascade)
+  sentBy       User?           @relation("BetaInvitationEmailSender", fields: [sentByUserId], references: [id], onDelete: SetNull)
+
+  @@index([codeId, createdAt])
+  @@index([targetEmail, createdAt])
+  @@map("beta_invitation_email_logs")
 }
 
 /// * Idempotency and cooldown tracking for retention and transactional emails.
@@ -3804,6 +3909,23 @@ enum UserFeedbackStatus {
   UNDER_REVIEW
   FIXED
   DISMISSED
+}
+
+enum BetaFeatureKey {
+  FLASHCARDS_V2
+  CLINICAL_SKILLS_EXPANSION
+  PHARMACOLOGY_EXPANSION
+  FRIEND_CODE_SYSTEM
+  ADVANCED_ANALYTICS
+  ECG_ENHANCEMENTS
+  CNPLE_SIMULATION_UPDATES
+}
+
+enum BetaFeedbackKind {
+  BUG
+  SUGGESTION
+  QUALITY_RATING
+  GENERAL
 }
 
 /// * AI-generated content review workflow — never auto-published to learner pools.

@@ -45,6 +45,7 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { JSON_BODY_STANDARD, readTextBodyWithByteLimit } from "@/lib/http/json-body-limit";
+import { withTimeout } from "@/lib/server/with-timeout";
 
 export const dynamic = "force-dynamic";
 
@@ -120,7 +121,11 @@ export async function POST(req: NextRequest) {
   setSentryServerContext({ route: "/api/exams/start", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   if (allowRuntimeMinimalQuestionBankSeed()) {
-    await seedMinimalQuestionBankIfEmpty();
+    await withTimeout(seedMinimalQuestionBankIfEmpty(), 1_000, { label: "exam_start_optional_seed" }).catch((error) => {
+      safeServerLog("api_exams_start", "optional_seed_deferred", {
+        message: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+      });
+    });
   }
 
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
@@ -196,11 +201,15 @@ export async function POST(req: NextRequest) {
                     : examId;
 
   if (effectiveExamId) {
-    const exam = await withRetry(() =>
-      prisma.exam.findUnique({
-        where: { id: effectiveExamId },
-        select: { id: true, status: true, country: true, tier: true },
-      }),
+    const exam = await withTimeout(
+      withRetry(() =>
+        prisma.exam.findUnique({
+          where: { id: effectiveExamId },
+          select: { id: true, status: true, country: true, tier: true },
+        }),
+      ),
+      2_500,
+      { label: "exam_start_exam_lookup" },
     );
     if (!exam || exam.status !== ContentStatus.PUBLISHED) {
       return NextResponse.json({ error: "Exam not found", code: "exam_not_found" }, { status: 404 });
@@ -300,12 +309,16 @@ export async function POST(req: NextRequest) {
             ? Math.min(FULL_EXAM_2026_QUESTION_TARGET, MAX_SESSION_QUESTION_IDS)
             : DEFAULT_POOL_LIMIT;
 
-    const questionPoolRaw = await withRetry(() =>
-      prisma.examQuestion.findMany({
-        where: scopedPresetWhere,
-        select: { id: true, stem: true, options: true, questionType: true, difficulty: true },
-        take: questionTag ? TAG_POOL_FETCH : poolLimit,
-      }),
+    const questionPoolRaw = await withTimeout(
+      withRetry(() =>
+        prisma.examQuestion.findMany({
+          where: scopedPresetWhere,
+          select: { id: true, stem: true, options: true, questionType: true, difficulty: true },
+          take: questionTag ? TAG_POOL_FETCH : poolLimit,
+        }),
+      ),
+      5_000,
+      { label: "exam_start_question_pool" },
     );
 
     const useStratifiedFullExam =
@@ -321,19 +334,23 @@ export async function POST(req: NextRequest) {
         : shuffleIds(questionPoolRaw).slice(0, poolLimit)
       : questionPoolRaw.slice(0, poolLimit);
 
-    const session = await prisma.examSession.create({
-      data: {
-        userId: gate.userId,
-        examId: effectiveExamId,
-        questionIds: questionPool.map((q) => q.id),
-        answers: {},
-        currentIndex: 0,
-        status: ExamSessionStatus.IN_PROGRESS,
-        timedMode,
-        timeLimitSec,
-        elapsedMs: 0,
-      },
-    });
+    const session = await withTimeout(
+      prisma.examSession.create({
+        data: {
+          userId: gate.userId,
+          examId: effectiveExamId,
+          questionIds: questionPool.map((q) => q.id),
+          answers: {},
+          currentIndex: 0,
+          status: ExamSessionStatus.IN_PROGRESS,
+          timedMode,
+          timeLimitSec,
+          elapsedMs: 0,
+        },
+      }),
+      3_000,
+      { label: "exam_start_session_create" },
+    );
 
     const poolDiagnostics =
       questionPool.length === 0 ? await diagnoseExamStartEmpty(gate.entitlement) : undefined;
