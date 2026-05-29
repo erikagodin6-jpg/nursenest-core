@@ -6,6 +6,9 @@ import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-con
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
+import { CommunityPerformancePanel } from "@/components/flashcards/community-performance-panel";
+import { AdaptiveRemediationPanel } from "@/components/flashcards/adaptive-remediation-panel";
+import { resolveEcosystemLinks } from "@/lib/flashcards/flashcard-ecosystem-resolver";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 
@@ -18,6 +21,10 @@ type MobileCard = {
   examMicroQuestion?: ExamMicroQuestionPayload | null;
   topic?: string | null;
   subtopic?: string | null;
+  lessonHref?: string | null;
+  lessonTitle?: string | null;
+  practiceTopicHref?: string | null;
+  practiceTestsTopicHref?: string | null;
 };
 
 /* ── Phase machine ─────────────────────────────────────────────── */
@@ -56,11 +63,13 @@ export function MobileFlashcardFlow({
   elapsed,
   saving,
   examPathwayLabel,
+  pathwayId,
   onAnswerSubmitted,
   onRevealComplete,
   onRate,
 }: {
   card: MobileCard;
+  pathwayId?: string | null;
   cardIndex: number;
   totalCards: number;
   elapsed: number;
@@ -144,6 +153,19 @@ export function MobileFlashcardFlow({
   const progressPct = Math.round(((cardIndex + 1) / Math.max(1, totalCards)) * 100);
   const formatElapsed = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+
+  // Ecosystem plan for mobile rationale phase
+  const ecosystemPlan = resolveEcosystemLinks({
+    cardId: card.id,
+    topic: card.topic ?? null,
+    subtopic: card.subtopic ?? null,
+    pathwayId: pathwayId ?? null,
+    lessonHref: card.lessonHref,
+    lessonTitle: card.lessonTitle,
+    practiceTopicHref: card.practiceTopicHref,
+    practiceTestsTopicHref: card.practiceTestsTopicHref,
+    isIncorrect: isCorrect === false,
+  });
 
   /* ── Phase renderers ─────────────────────────────────────────── */
 
@@ -264,6 +286,21 @@ export function MobileFlashcardFlow({
             explanation={card.explanation}
             pearl={buildPearl(card)}
             examPathwayLabel={examPathwayLabel}
+          />
+
+          {/* Community performance */}
+          <CommunityPerformancePanel
+            flashcardId={card.id}
+            revealed
+            submittedLetter={submittedLetter}
+            correctLetter={exam?.correctLetter}
+          />
+
+          {/* Adaptive remediation */}
+          <AdaptiveRemediationPanel
+            plan={ecosystemPlan}
+            isIncorrect={isCorrect === false}
+            topic={card.topic}
           />
 
           {/* Review question link */}

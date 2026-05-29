@@ -20,6 +20,13 @@ import { correlationIdFromRequest } from "@/lib/observability/request-correlatio
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { recordReferralSignup } from "@/lib/referrals/referral-rewards";
+import {
+  REFERRAL_CODE_COOKIE,
+  REFERRAL_LANDING_COOKIE,
+  REFERRAL_UTM_CAMPAIGN_COOKIE,
+  REFERRAL_UTM_MEDIUM_COOKIE,
+  REFERRAL_UTM_SOURCE_COOKIE,
+} from "@/lib/referrals/referral-attribution-cookies";
 import { captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
@@ -56,6 +63,20 @@ const schema = z.object({
   referralCode: z.preprocess(emptyToUndef, z.string().max(64).optional()),
   captchaToken: z.string().optional(),
 });
+
+function readCookie(req: Request, name: string): string | null {
+  const cookie = req.headers.get("cookie") ?? "";
+  const found = cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${name}=`));
+  if (!found) return null;
+  try {
+    return decodeURIComponent(found.slice(name.length + 1));
+  } catch {
+    return found.slice(name.length + 1);
+  }
+}
 
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/signup", "auth", async () => {
@@ -248,12 +269,18 @@ export async function POST(req: Request) {
     });
   });
   void triggerWelcomeEmailRequested(createdId);
-  if (parsed.data.referralCode) {
+  const referralCode = parsed.data.referralCode || readCookie(req, REFERRAL_CODE_COOKIE);
+  if (referralCode) {
     void recordReferralSignup({
       referredUserId: createdId,
-      rawCode: parsed.data.referralCode,
+      rawCode: referralCode,
       signupIp: ip !== "unknown" ? ip.slice(0, 64) : null,
       origin: new URL(req.url).origin,
+      firstLandingPath: readCookie(req, REFERRAL_LANDING_COOKIE),
+      signupPath: new URL(req.url).pathname,
+      utmSource: readCookie(req, REFERRAL_UTM_SOURCE_COOKIE),
+      utmMedium: readCookie(req, REFERRAL_UTM_MEDIUM_COOKIE),
+      utmCampaign: readCookie(req, REFERRAL_UTM_CAMPAIGN_COOKIE),
     }).catch((e) => {
       safeServerLog("referrals", "signup_attribution_failed", {
         detail: e instanceof Error ? e.message.slice(0, 160) : "unknown",

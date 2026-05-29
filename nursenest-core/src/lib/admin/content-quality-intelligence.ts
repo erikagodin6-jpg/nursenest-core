@@ -24,7 +24,7 @@ export type MissedContentItem = {
 
 export type TopicEngagementItem = {
   topic: string;
-  avgCorrectRate: number;  // 0–1
+  avgCorrectRate: number;
   totalAttempts: number;
 };
 
@@ -40,11 +40,23 @@ export type ContentIssueFlag = {
 const WINDOW_DAYS = 30;
 const MIN_ATTEMPTS = 10;
 
+type QuestionMissRow = {
+  question_id: string;
+  total_count: bigint;
+  correct_count: bigint;
+};
+
+type TopicRow = {
+  topic: string | null;
+  total_count: bigint;
+  correct_count: bigint;
+};
+
 export async function loadContentQualityReport(): Promise<ContentQualityReport | null> {
   if (!isDatabaseUrlConfigured()) return null;
 
-  const since = new Date(Date.now() - WINDOW_DAYS * 86_400_000);
   const now = new Date();
+  const since = new Date(Date.now() - WINDOW_DAYS * 86_400_000);
 
   // ── Most missed flashcards (via FlashcardMastery aggregate) ──────────────
   const flashcardMasteryData = await prisma.flashcardMastery.groupBy({
@@ -59,7 +71,7 @@ export async function loadContentQualityReport(): Promise<ContentQualityReport |
   const flashcardDetails = flashcardIds.length > 0
     ? await prisma.flashcard.findMany({
         where: { id: { in: flashcardIds } },
-        select: { id: true, topic: true, subtopic: true },
+        select: { id: true, category: { select: { name: true, slug: true } } },
       })
     : [];
   const flashcardMap = new Map(flashcardDetails.map((f) => [f.id, f]));
@@ -70,32 +82,36 @@ export async function loadContentQualityReport(): Promise<ContentQualityReport |
       const correct = r._sum.correctCount ?? 0;
       const incorrectCount = total - correct;
       const f = flashcardMap.get(r.flashcardId);
+      const label = f?.category?.name ?? r.flashcardId.slice(0, 12);
       return {
         id: r.flashcardId,
-        topic: f?.topic ?? null,
-        subtopic: f?.subtopic ?? null,
+        topic: f?.category?.name ?? null,
+        subtopic: f?.category?.slug ?? null,
         incorrectCount,
         totalAttempts: total,
         incorrectRate: total > 0 ? incorrectCount / total : 0,
-        label: f?.topic ?? r.flashcardId.slice(0, 12),
+        label,
       };
     })
     .filter((r) => r.incorrectRate > 0.5)
     .sort((a, b) => b.incorrectRate - a.incorrectRate)
     .slice(0, 15);
 
-  // ── Most missed questions (via ExamQuestionPracticeAnswerAttempt) ─────────
-  const questionMissData = await prisma.examQuestionPracticeAnswerAttempt.groupBy({
-    by: ["questionId"],
-    where: { createdAt: { gte: since } },
-    _count: { _all: true },
-    _sum: { isCorrect: true },
-    having: { _count: { _all: { gte: MIN_ATTEMPTS } } },
-    orderBy: { _sum: { isCorrect: "asc" } },
-    take: 30,
-  });
+  // ── Most missed questions (raw SQL for reliable groupBy+having) ─────────
+  const questionMissRows = await prisma.$queryRaw<QuestionMissRow[]>`
+    SELECT
+      question_id,
+      COUNT(*) AS total_count,
+      SUM(CASE WHEN is_correct THEN 1 ELSE 0 END) AS correct_count
+    FROM exam_question_practice_answer_attempts
+    WHERE created_at >= ${since}
+    GROUP BY question_id
+    HAVING COUNT(*) >= ${MIN_ATTEMPTS}
+    ORDER BY SUM(CASE WHEN is_correct THEN 1 ELSE 0 END) ASC
+    LIMIT 30
+  `;
 
-  const questionIds = questionMissData.map((r) => r.questionId).filter(Boolean) as string[];
+  const questionIds = questionMissRows.map((r) => r.question_id);
   const questionDetails = questionIds.length > 0
     ? await prisma.examQuestion.findMany({
         where: { id: { in: questionIds } },
@@ -104,64 +120,48 @@ export async function loadContentQualityReport(): Promise<ContentQualityReport |
     : [];
   const questionMap = new Map(questionDetails.map((q) => [q.id, q]));
 
-  const mostMissedQuestions: MissedContentItem[] = questionMissData
+  const mostMissedQuestions: MissedContentItem[] = questionMissRows
     .map((r) => {
-      const total = r._count._all;
-      // _sum.isCorrect counts `true` values in Prisma when the field is Boolean
-      const correct = Number(r._sum.isCorrect ?? 0);
+      const total = Number(r.total_count);
+      const correct = Number(r.correct_count);
       const incorrectCount = total - correct;
-      const q = questionMap.get(r.questionId);
+      const q = questionMap.get(r.question_id);
       return {
-        id: r.questionId,
+        id: r.question_id,
         topic: q?.topic ?? null,
         subtopic: q?.subtopic ?? null,
         incorrectCount,
         totalAttempts: total,
         incorrectRate: total > 0 ? incorrectCount / total : 0,
-        label: q?.topic ?? r.questionId.slice(0, 12),
+        label: q?.topic ?? r.question_id.slice(0, 12),
       };
     })
     .filter((r) => r.incorrectRate > 0.6)
     .sort((a, b) => b.incorrectRate - a.incorrectRate)
     .slice(0, 15);
 
-  // ── Topic engagement via question attempts ───────────────────────────────
-  const topicData = await prisma.examQuestionPracticeAnswerAttempt.groupBy({
-    by: ["questionId"],
-    where: { createdAt: { gte: since } },
-    _count: { _all: true },
-    _sum: { isCorrect: true },
-    having: { _count: { _all: { gte: MIN_ATTEMPTS } } },
-    take: 200,
-  });
+  // ── Topic engagement (raw SQL) ───────────────────────────────────────────
+  const topicRows = await prisma.$queryRaw<TopicRow[]>`
+    SELECT
+      eq.topic,
+      COUNT(a.id) AS total_count,
+      SUM(CASE WHEN a.is_correct THEN 1 ELSE 0 END) AS correct_count
+    FROM exam_question_practice_answer_attempts a
+    JOIN exam_questions eq ON eq.id = a.question_id
+    WHERE a.created_at >= ${since}
+      AND eq.topic IS NOT NULL
+    GROUP BY eq.topic
+    HAVING COUNT(a.id) >= ${MIN_ATTEMPTS}
+    ORDER BY COUNT(a.id) DESC
+    LIMIT 200
+  `;
 
-  // Aggregate by topic
-  const topicAggMap = new Map<string, { correct: number; total: number }>();
-  const topicQIds = topicData.map((r) => r.questionId).filter(Boolean) as string[];
-  const topicQDetails = topicQIds.length > 0
-    ? await prisma.examQuestion.findMany({
-        where: { id: { in: topicQIds } },
-        select: { id: true, topic: true },
-      })
-    : [];
-  const topicQMap = new Map(topicQDetails.map((q) => [q.id, q.topic]));
-
-  for (const r of topicData) {
-    const topic = topicQMap.get(r.questionId);
-    if (!topic) continue;
-    const existing = topicAggMap.get(topic) ?? { correct: 0, total: 0 };
-    topicAggMap.set(topic, {
-      correct: existing.correct + Number(r._sum.isCorrect ?? 0),
-      total: existing.total + r._count._all,
-    });
-  }
-
-  const topicList: TopicEngagementItem[] = [...topicAggMap.entries()]
-    .filter(([, v]) => v.total >= MIN_ATTEMPTS)
-    .map(([topic, v]) => ({
-      topic,
-      avgCorrectRate: v.total > 0 ? v.correct / v.total : 0,
-      totalAttempts: v.total,
+  const topicList: TopicEngagementItem[] = topicRows
+    .filter((r) => r.topic != null)
+    .map((r) => ({
+      topic: r.topic!,
+      avgCorrectRate: Number(r.total_count) > 0 ? Number(r.correct_count) / Number(r.total_count) : 0,
+      totalAttempts: Number(r.total_count),
     }));
 
   const lowestConfidenceTopics = [...topicList]
@@ -197,9 +197,10 @@ export async function loadContentQualityReport(): Promise<ContentQualityReport |
     });
   }
 
-  potentialIssueFlags.sort((a, b) =>
-    (a.severity === "high" ? 0 : a.severity === "medium" ? 1 : 2) -
-    (b.severity === "high" ? 0 : b.severity === "medium" ? 1 : 2),
+  potentialIssueFlags.sort(
+    (a, b) =>
+      (a.severity === "high" ? 0 : a.severity === "medium" ? 1 : 2) -
+      (b.severity === "high" ? 0 : b.severity === "medium" ? 1 : 2),
   );
 
   return {

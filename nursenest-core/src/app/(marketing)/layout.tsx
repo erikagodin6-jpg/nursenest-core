@@ -1,5 +1,6 @@
 import { traceLayout } from "@/build/tracing";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
+import { ReferralAttributionTracker } from "@/components/referrals/referral-attribution-tracker";
 import type { Session } from "next-auth";
 
 import "./marketing-styles.css";
@@ -54,6 +55,7 @@ const MarketingGroupLayout = traceLayout(
 
     return (
       <AuthSessionProvider session={session} runtimeBoundary="public">
+        <ReferralAttributionTracker />
         {children}
       </AuthSessionProvider>
     );

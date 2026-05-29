@@ -8,10 +8,12 @@ Implemented a referral lifecycle that sits beside the existing social study/frie
 
 1. Existing learner opens `Invite Friends` from `/app/account/social`.
 2. NurseNest creates a unique referral code and referral link.
-3. Invited friend signs up through `/signup?ref=CODE` or submits the code through the signup form payload.
-4. System records one attribution row for the referred account.
-5. Referral progresses only when the referred learner verifies email, completes onboarding, and starts at least one learning activity.
-6. Paid subscription conversion is tracked separately for premium reward rules.
+3. Referral attribution persists from `/signup?ref=CODE`, homepage, pricing, blog, email campaign links, social shares, and direct referral links using a 30-day first-party referral cookie.
+4. Marketing visits record click analytics without granting rewards.
+5. Invited friend signs up through the persisted referral cookie or submits the code through the signup form payload.
+6. System records one attribution row for the referred account.
+7. Referral progresses only when the referred learner verifies email, completes onboarding, and starts at least one learning activity.
+8. Paid subscription conversion is tracked separately for premium reward rules and ambassador status.
 
 ## Qualification Rules
 
@@ -34,6 +36,8 @@ Migration:
 
 `prisma/migrations/20260529143000_referral_rewards_system/migration.sql`
 
+`prisma/migrations/20260529153000_referral_growth_attribution/migration.sql`
+
 New tables:
 
 - `referral_codes`
@@ -42,6 +46,8 @@ New tables:
 - `referral_reward_grants`
 - `referral_fraud_signals`
 - `referral_events`
+- `referral_clicks`
+- `referral_ambassador_profiles`
 
 ## Surfaces
 
@@ -54,6 +60,35 @@ Admin:
 
 - `/admin/referrals`
 - Rule creation, rule enable/disable, top referrers, manual reward grants, recent rewards, conversion metrics, and fraud review queue.
+- Referral click totals, configurable reward recipients, double-sided friend/referrer rewards, discount/trial reward kinds, and ambassador tracking.
+
+## Configurable Double-Sided Rewards
+
+Reward rules are admin-configurable. Rules can grant rewards to:
+
+- Referrer
+- Friend
+- Both referrer and friend
+
+Supported reward kinds include:
+
+- Free days
+- Free month
+- Account credit
+- First-month discount
+- Premium trial
+- Feature unlock
+- Ambassador status
+
+Account-created rewards use the `SIGNUP_ATTRIBUTED` trigger and are intended for friend-side incentives such as a configured discount or trial. Qualification and paid rewards remain gated by verified/onboarded/active and subscription milestones.
+
+## Ambassador Program
+
+Ambassador profile state is derived from paid referral counts and configurable ambassador reward rules:
+
+- Ambassador defaults to 5 paid referrals if no configured rule exists.
+- Elite Ambassador defaults to 20 paid referrals if no configured rule exists.
+- Profiles store early feature access, priority support, and featured community profile eligibility.
 
 ## Abuse Protection
 
@@ -83,9 +118,13 @@ Already present:
 New in this pass:
 
 - Referral attribution
+- Persistent marketing referral cookies
+- Referral click analytics
 - Reward qualification
 - Configurable reward rules
+- Double-sided reward recipients
 - Paid-conversion tracking
+- Ambassador profile tracking
 - Admin referral management
 - Learner referral dashboard
 
@@ -100,4 +139,4 @@ The test verifies:
 - Rewards require verified/onboarded/active qualification gates.
 - Signup, email verification, onboarding, activity, and Stripe subscription paths are wired.
 - Learner and admin surfaces are discoverable.
-- Referral schema includes attribution, rewards, fraud signals, and audit events.
+- Referral schema includes attribution, rewards, click analytics, ambassador profiles, fraud signals, and audit events.

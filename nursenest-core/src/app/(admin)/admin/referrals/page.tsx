@@ -47,8 +47,9 @@ export default async function AdminReferralManagementPage() {
         </p>
       </header>
 
-      <section className="grid gap-4 md:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-5">
         {[
+          ["Referral clicks", dashboard.clickCount],
           ["Accounts created", created],
           ["Qualified referrals", qualified],
           ["Paid conversions", subscribed],
@@ -77,6 +78,7 @@ export default async function AdminReferralManagementPage() {
               <label className="grid gap-1 text-sm font-semibold">
                 Trigger
                 <select name="trigger" className="rounded-xl border border-border bg-background px-3 py-2 text-sm">
+                  <option value="SIGNUP_ATTRIBUTED">Account created</option>
                   <option value="QUALIFIED_REFERRAL_COUNT">Qualified referrals</option>
                   <option value="PAID_REFERRAL_COUNT">Paid referrals</option>
                 </select>
@@ -88,18 +90,34 @@ export default async function AdminReferralManagementPage() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1 text-sm font-semibold">
+                Recipient
+                <select name="recipient" className="rounded-xl border border-border bg-background px-3 py-2 text-sm">
+                  <option value="REFERRER">Referrer</option>
+                  <option value="FRIEND">Invited friend</option>
+                  <option value="BOTH">Both</option>
+                </select>
+              </label>
+              <label className="grid gap-1 text-sm font-semibold">
                 Reward
                 <select name="rewardKind" className="rounded-xl border border-border bg-background px-3 py-2 text-sm">
                   <option value="FREE_DAYS">Free days</option>
                   <option value="FREE_MONTH">Free month</option>
                   <option value="ACCOUNT_CREDIT">Account credit</option>
+                  <option value="FIRST_MONTH_DISCOUNT">First month discount</option>
+                  <option value="PREMIUM_TRIAL">Premium trial</option>
                   <option value="FEATURE_UNLOCK">Feature unlock</option>
                   <option value="AMBASSADOR_STATUS">Ambassador status</option>
                 </select>
               </label>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1 text-sm font-semibold">
                 Value
                 <input name="rewardValue" type="number" min="0" placeholder="7, 30, or credit cents" className="rounded-xl border border-border bg-background px-3 py-2 text-sm" />
+              </label>
+              <label className="grid gap-1 text-sm font-semibold">
+                Discount percent
+                <input name="discountPercent" type="number" min="0" max="100" placeholder="20" className="rounded-xl border border-border bg-background px-3 py-2 text-sm" />
               </label>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -127,7 +145,7 @@ export default async function AdminReferralManagementPage() {
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="font-bold text-[var(--theme-heading-text)]">{rule.name}</p>
-                      <p className="text-sm text-muted-foreground">{rule.trigger.replaceAll("_", " ")} · threshold {rule.threshold} · {rule.rewardKind.replaceAll("_", " ")}</p>
+                      <p className="text-sm text-muted-foreground">{rule.trigger.replaceAll("_", " ")} · threshold {rule.threshold} · {rule.recipient?.toLowerCase() ?? "referrer"} · {rule.rewardKind.replaceAll("_", " ")}</p>
                     </div>
                     <form action={toggleReferralRewardRule}>
                       <input type="hidden" name="id" value={rule.id} />
@@ -146,6 +164,29 @@ export default async function AdminReferralManagementPage() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-3xl border border-border/70 bg-[var(--theme-card-bg)] p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Ambassadors</h2>
+          <div className="mt-4 space-y-3">
+            {dashboard.ambassadors.map((profile: any) => (
+              <article key={profile.userId} className="rounded-2xl border border-border/70 bg-background/50 p-4">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="font-bold text-[var(--theme-heading-text)]">{profile.user?.name ?? "Learner"}</p>
+                    <p className="text-sm text-muted-foreground">{profile.user?.email ?? profile.userId}</p>
+                  </div>
+                  <p className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-primary">
+                    {profile.status.replaceAll("_", " ")}
+                  </p>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {profile.paidReferralCount} paid referrals · {profile.qualifiedReferralCount} qualified referrals
+                </p>
+              </article>
+            ))}
+            {dashboard.ambassadors.length === 0 ? <p className="text-sm text-muted-foreground">No ambassadors unlocked yet.</p> : null}
+          </div>
+        </div>
+
         <div className="rounded-3xl border border-border/70 bg-[var(--theme-card-bg)] p-6 shadow-sm">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Top referrers</h2>
           <div className="mt-4 space-y-3">

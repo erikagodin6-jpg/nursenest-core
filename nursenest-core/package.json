@@ -7,6 +7,9 @@
     "node_modules"
   ],
   "scripts": {
+    "snapshots:generate": "npx tsx scripts/snapshots/generate-all-snapshots.ts",
+    "snapshots:generate:flashcards": "npx tsx scripts/snapshots/generate-flashcard-snapshots.ts",
+    "snapshots:generate:lessons": "npx tsx scripts/snapshots/generate-lesson-snapshots.ts",
     "dev:client": "vite dev --port 5000",
     "dev:next": "node scripts/assert-local-auth-secret.mjs && node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && npx next dev",
     "dev:next:3000": "node scripts/dev/start-next-dev-3000.mjs",

@@ -24,6 +24,8 @@ import {
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { readFlashcardsSubscriberListSnapshot } from "@/lib/study-content-failover/flashcards-list-snapshot-read";
 import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
+import { cacheGet, cacheSet, isCacheConfigured } from "@/lib/cache/redis-content-cache";
+import { flashcardListKey, CACHE_TTL } from "@/lib/cache/content-cache-keys";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
 export const maxDuration = 60;
@@ -106,6 +108,23 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // ── Layer 2: Redis cache read-through ────────────────────────────────────
+  const cacheKey = flashcardListKey(
+    String(gate.entitlement.tier ?? "unknown"),
+    String(gate.entitlement.country ?? "unknown"),
+    educationalLocale,
+    page,
+    pageSize,
+  );
+  if (isCacheConfigured()) {
+    const cached = await cacheGet<{ page: number; pageSize: number; total: number; pageCount: number; flashcards: unknown[] }>(cacheKey);
+    if (cached && Array.isArray(cached.flashcards)) {
+      const body = { ...cached, mode: "subscriber" as const, source_used: "cache" as const };
+      logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));
+      return NextResponse.json(body);
+    }
+  }
+
   try {
     const where = flashcardAccessWhere(gate.entitlement);
     const [flashcards, total] = await Promise.all([
@@ -152,6 +171,10 @@ export async function GET(req: NextRequest) {
       mode: "subscriber" as const,
       source_used: "primary" as const,
     };
+
+    // Populate cache (non-blocking, never throws)
+    void cacheSet(cacheKey, { page, pageSize, total, pageCount, flashcards: localized }, CACHE_TTL.FLASHCARD_LIST);
+
     logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));
     return NextResponse.json(body);
   } catch (e) {

@@ -30,12 +30,24 @@ test("referral management is surfaced to learners and admins", () => {
   assert.match(read("src/app/(admin)/admin/page.tsx"), /\/admin\/referrals/);
 });
 
+test("referral attribution persists across marketing pages and records click analytics", () => {
+  assert.match(read("src/proxy.ts"), /REFERRAL_CODE_COOKIE/);
+  assert.match(read("src/proxy.ts"), /referralCodeFromSearchParams/);
+  assert.match(read("src/app/(marketing)/layout.tsx"), /ReferralAttributionTracker/);
+  assert.match(read("src/app/api/referrals/click/route.ts"), /recordReferralClick/);
+  assert.match(read("src/app/api/signup/route.ts"), /REFERRAL_CODE_COOKIE/);
+});
+
 test("referral schema tracks attribution, rewards, fraud signals, and event audit", () => {
   const schema = read("prisma/schema.prisma");
-  for (const model of ["ReferralCode", "ReferralAttribution", "ReferralRewardRule", "ReferralRewardGrant", "ReferralFraudSignal", "ReferralEvent"]) {
+  for (const model of ["ReferralCode", "ReferralAttribution", "ReferralRewardRule", "ReferralRewardGrant", "ReferralFraudSignal", "ReferralEvent", "ReferralClick", "ReferralAmbassadorProfile"]) {
     assert.match(schema, new RegExp(`model ${model}`));
   }
   assert.match(schema, /ReferralQualificationStatus/);
+  assert.match(schema, /ReferralRewardRecipient/);
+  assert.match(schema, /FIRST_MONTH_DISCOUNT/);
+  assert.match(schema, /PREMIUM_TRIAL/);
+  assert.match(schema, /ReferralAmbassadorStatus/);
   assert.match(schema, /SELF_REFERRAL/);
   assert.match(schema, /DUPLICATE_NORMALIZED_EMAIL/);
   assert.match(schema, /SHARED_SIGNUP_IP/);

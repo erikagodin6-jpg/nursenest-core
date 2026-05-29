@@ -17,10 +17,18 @@ type ReferralDashboardCardProps = {
       status: string;
       rewardKind: string;
       rewardValue: number | null;
+      discountPercent?: number | null;
       featureKey: string | null;
       durationDays: number | null;
       reason: string;
     }>;
+    ambassador?: {
+      status: string;
+      paidReferralCount: number;
+      qualifiedReferralCount: number;
+      earlyFeatureAccess: boolean;
+      prioritySupport: boolean;
+    } | null;
     recentReferrals: Array<{
       id: string;
       status: string;
@@ -35,6 +43,8 @@ type ReferralDashboardCardProps = {
 function rewardLabel(reward: ReferralDashboardCardProps["dashboard"]["rewards"][number]): string {
   if (reward.rewardKind === "FREE_DAYS") return `${reward.rewardValue ?? reward.durationDays ?? 7} free days`;
   if (reward.rewardKind === "FREE_MONTH") return "1 free month";
+  if (reward.rewardKind === "FIRST_MONTH_DISCOUNT") return `${reward.discountPercent ?? reward.rewardValue ?? 20}% off first month`;
+  if (reward.rewardKind === "PREMIUM_TRIAL") return `${reward.durationDays ?? reward.rewardValue ?? 14}-day premium trial`;
   if (reward.rewardKind === "FEATURE_UNLOCK") return `${reward.featureKey ?? "Premium feature"} access`;
   if (reward.rewardKind === "AMBASSADOR_STATUS") return "Premium Ambassador status";
   if (reward.rewardKind === "ACCOUNT_CREDIT") return `$${reward.rewardValue ?? 0} account credit`;
@@ -118,6 +128,19 @@ export function ReferralDashboardCard({ dashboard }: ReferralDashboardCardProps)
             </div>
           ))}
         </div>
+
+        {dashboard.ambassador && dashboard.ambassador.status !== "NONE" ? (
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Ambassador status</p>
+            <h3 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">
+              {dashboard.ambassador.status === "ELITE_AMBASSADOR" ? "NurseNest Elite Ambassador" : "NurseNest Ambassador"}
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {dashboard.ambassador.paidReferralCount} paid referrals · early feature access
+              {dashboard.ambassador.prioritySupport ? " · priority support" : ""}
+            </p>
+          </div>
+        ) : null}
 
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">

@@ -32,7 +32,8 @@ export async function POST(req: NextRequest, ctx: Ctx) {
       return NextResponse.json({ ok: false, error: "Target user not found" }, { status: 404 });
     }
     // Safety: never allow impersonating another admin
-    if (exists.role === "admin" || exists.role === "staff") {
+    const adminRoles = ["ADMIN", "SUPER_ADMIN", "CONTENT_ADMIN", "SUPPORT_ADMIN"] as const;
+    if (adminRoles.includes(exists.role as typeof adminRoles[number])) {
       return NextResponse.json(
         { ok: false, error: "Cannot impersonate admin or staff accounts" },
         { status: 403 },
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest, ctx: Ctx) {
     }
   }
 
-  await startViewAsSession(gate.userId, targetId);
+  await startViewAsSession(gate.admin.userId, targetId);
 
   return NextResponse.json({
     ok: true,
@@ -55,7 +56,7 @@ export async function DELETE(req: NextRequest, ctx: Ctx) {
   if (!gate.ok) return gate.response;
 
   const { userId: targetId } = await ctx.params;
-  await clearViewAsSession(gate.userId, targetId);
+  await clearViewAsSession(gate.admin.userId, targetId);
 
   return NextResponse.json({ ok: true, message: "View-as session cleared." });
 }

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "8b132fad97446583d2bfd20b06818d445a126bceeaab7adb0c5cef02a5bda9a1",
-  "generatedAt": "2026-05-29T01:28:53.562Z",
+  "fingerprint": "ca9447829abbe04a04eef61a0ab0d5f0e373ab6666729dd39d757d4b90acfca2",
+  "generatedAt": "2026-05-29T08:41:45.710Z",
   "inputs": [
     {
       "type": "file",
@@ -42,6 +42,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/analytics/content-quality/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/analytics/content/page.tsx"
     },
     {
@@ -62,6 +66,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/analytics/retention-risk/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/analytics/study-performance/page.tsx"
     },
     {
@@ -79,6 +87,14 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/automation-logs/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/beta/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/beta/page.tsx"
     },
     {
       "type": "file",
@@ -306,6 +322,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/ops-center/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/osce-stations/[id]/page.tsx"
     },
     {
@@ -382,6 +402,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/referrals/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/referrals/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/seo/page.tsx"
     },
     {
@@ -399,6 +427,10 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/users/[userId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/users/[userId]/view-as/page.tsx"
     },
     {
       "type": "file",
@@ -503,6 +535,14 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/account/analytics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/beta/actions.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/account/beta/page.tsx"
     },
     {
       "type": "file",
@@ -2746,11 +2786,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/analytics/content-quality/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/analytics/dashboard/route.ts"
     },
     {
       "type": "file",
       "path": "src/app/api/admin/analytics/funnels/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/analytics/retention-risk/route.ts"
     },
     {
       "type": "file",
@@ -2774,11 +2822,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/beta/testers/export/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/billing/integrity-summary/route.ts"
     },
     {
       "type": "file",
       "path": "src/app/api/admin/billing/stripe-reconcile/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/billing/subscription-actions/route.ts"
     },
     {
       "type": "file",
@@ -3210,6 +3266,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/ops-center/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/ops/run/route.ts"
     },
     {
@@ -3294,6 +3354,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/question-quality/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/questions/[id]/route.ts"
     },
     {
@@ -3370,6 +3434,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/users/[userId]/health-score/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/users/[userId]/impersonate/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/users/[userId]/ops/route.ts"
     },
     {
@@ -3438,6 +3510,18 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/beta/activity/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/beta/feedback/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/beta/me/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/billing/cancel-subscription/route.ts"
     },
     {
@@ -3447,6 +3531,10 @@
     {
       "type": "file",
       "path": "src/app/api/billing/reactivate-subscription/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/billing/subscription-management/route.ts"
     },
     {
       "type": "file",
@@ -3514,7 +3602,15 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/cron/compute-question-quality/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/cron/content-completion/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/cron/generate-snapshots/route.ts"
     },
     {
       "type": "file",
@@ -3598,6 +3694,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/flashcards/community-stats/[flashcardId]/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/flashcards/custom-session/route.ts"
     },
     {
@@ -3650,6 +3750,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/health/activity-startup/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/health/e2e-account-probe/route.ts"
     },
     {
@@ -3690,11 +3794,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/internal/synthetic-learning-monitor/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/labs/progress/route.ts"
     },
     {
       "type": "file",
       "path": "src/app/api/learner/account/oauth-disconnect/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/activity-lifecycle/route.ts"
     },
     {
       "type": "file",
@@ -3830,6 +3942,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/referrals/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/reset-progress/route-deps.ts"
     },
     {
@@ -3891,6 +4007,10 @@
     {
       "type": "file",
       "path": "src/app/api/learner/social/invite-code/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/social/notifications/route.ts"
     },
     {
       "type": "file",
@@ -4075,6 +4195,10 @@
     {
       "type": "file",
       "path": "src/app/api/readiness-health/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/referrals/click/route.ts"
     },
     {
       "type": "file",
@@ -7325,6 +7449,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 33813
+    "durationMs": 35937
   }
 }

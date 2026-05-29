@@ -9,6 +9,7 @@ import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/le
 import type { ReadinessBand } from "@/lib/learner/readiness-score";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { storeReadinessSnapshot } from "@/lib/learner/store-readiness-snapshot";
 
 /**
  * Maps readiness band + numeric score to a conservative pass-likelihood tier for UI/API consumers.
@@ -102,6 +103,9 @@ export async function GET(req: Request) {
     }));
 
     const passLikelihood = passLikelihoodFromReadiness(dashboard.readiness.score, dashboard.readiness.band);
+
+    // Persist readiness snapshot (fire-and-forget — never blocks response)
+    void storeReadinessSnapshot(gate.userId, pathwayId, dashboard.readiness);
 
     return NextResponse.json({
       generatedAt: new Date().toISOString(),

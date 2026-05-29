@@ -32,6 +32,11 @@ import {
 } from "@/lib/exam-workspace/unified-exam-workspace";
 import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
 import { MobileFlashcardFlow } from "@/components/study/mobile-flashcard-flow";
+import { CommunityPerformancePanel } from "@/components/flashcards/community-performance-panel";
+import { AdaptiveRemediationPanel, RelatedContentPanel } from "@/components/flashcards/adaptive-remediation-panel";
+import { WeakAreaRecoveryBanner, updateTopicPerformance, detectWeakTopics, type TopicPerformanceMap } from "@/components/flashcards/weak-area-recovery-banner";
+import { MasteryMoment, updateMasteryStreak, detectMasteredTopics, type MasteryStreakMap } from "@/components/flashcards/mastery-moment";
+import { resolveEcosystemLinks, buildWeakAreaPlan, type WeakAreaPlan } from "@/lib/flashcards/flashcard-ecosystem-resolver";
 
 /* ================= TYPES ================= */
 
@@ -224,6 +229,13 @@ export function ActiveStudySession({
   const [confidence, setConfidence] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
   const lastCardsSignature = useRef<string>("");
 
+  // Adaptive ecosystem 3.0 — session-level topic tracking
+  const [topicPerf, setTopicPerf] = useState<TopicPerformanceMap>(new Map());
+  const [masteryStreaks, setMasteryStreaks] = useState<MasteryStreakMap>(new Map());
+  const [weakAreaDismissed, setWeakAreaDismissed] = useState<Set<string>>(new Set());
+  const [masteryTopic, setMasteryTopic] = useState<string | null>(null);
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState<boolean | null>(null);
+
   const current = sessionCards[index] ?? null;
   const pinState = current?.id ? getStudyItemState(current.id) : {};
 
@@ -298,6 +310,21 @@ export function ActiveStudySession({
 
       setRatingTally((t) => ({ ...t, [rating]: t[rating] + 1 }));
       telemetry.onRated(card.id, rating, buildCardMeta(card));
+
+      // Track topic performance for weak area + mastery detection
+      const isCorrect = rating === "good" || rating === "easy";
+      setLastAnswerCorrect(isCorrect);
+      if (card.topic) {
+        setTopicPerf((prev) => updateTopicPerformance(prev, card.topic, isCorrect));
+        setMasteryStreaks((prev) => {
+          const next = updateMasteryStreak(prev, card.topic, isCorrect);
+          const mastered = detectMasteredTopics(next, 5);
+          if (mastered.includes(card.topic ?? "") && !masteryTopic) {
+            setMasteryTopic(card.topic ?? null);
+          }
+          return next;
+        });
+      }
 
       await onRate?.(card.id, rating);
 
@@ -460,6 +487,36 @@ export function ActiveStudySession({
     measurementSystem,
   );
 
+  // Adaptive ecosystem 3.0 — ecosystem plan for current card
+  const ecosystemPlan = resolveEcosystemLinks({
+    cardId: current.id,
+    topic: current.topic ?? null,
+    subtopic: current.subtopic ?? null,
+    pathwayId: sessionPathwayId,
+    lessonHref: current.lessonHref,
+    lessonTitle: current.lessonTitle,
+    practiceTopicHref: current.practiceTopicHref,
+    practiceTestsTopicHref: current.practiceTestsTopicHref,
+    isIncorrect: lastAnswerCorrect === false,
+  });
+
+  const weakTopics = detectWeakTopics(topicPerf);
+  const activeWeakTopics = weakTopics.filter((w) => !weakAreaDismissed.has(w.topic));
+  const weakAreaPlans = new Map<string, WeakAreaPlan>(
+    activeWeakTopics.map((w) => [
+      w.topic,
+      buildWeakAreaPlan({
+        topic: w.topic,
+        missCount: w.total - w.correct,
+        totalCount: w.total,
+        pathwayId: sessionPathwayId,
+        lessonHref: current.topic === w.topic ? current.lessonHref : undefined,
+        practiceTopicHref: current.topic === w.topic ? current.practiceTopicHref : undefined,
+        practiceTestsTopicHref: current.topic === w.topic ? current.practiceTestsTopicHref : undefined,
+      }),
+    ]),
+  );
+
   return (
     <div
       className="nn-active-flashcard-session nn-unified-exam-workspace relative space-y-3"
@@ -471,6 +528,26 @@ export function ActiveStudySession({
       data-nn-unified-exam-workspace=""
       data-nn-exam-workspace-mode={"flashcards" satisfies UnifiedExamWorkspaceMode}
     >
+      {/* ── ADAPTIVE ECOSYSTEM OVERLAYS ─────────────────────────── */}
+      {masteryTopic ? (
+        <div className="absolute inset-x-3 top-14 z-40 sm:inset-x-6 sm:top-16">
+          <MasteryMoment
+            topic={masteryTopic}
+            streakCount={masteryStreaks.get(masteryTopic) ?? 5}
+            onDismiss={() => setMasteryTopic(null)}
+          />
+        </div>
+      ) : null}
+      {activeWeakTopics.length > 0 && revealed ? (
+        <div className="absolute inset-x-3 bottom-20 z-30 sm:inset-x-6 sm:bottom-24">
+          <WeakAreaRecoveryBanner
+            weakTopics={activeWeakTopics}
+            plans={weakAreaPlans}
+            onDismiss={() => setWeakAreaDismissed((prev) => new Set([...prev, activeWeakTopics[0]?.topic ?? ""]))}
+          />
+        </div>
+      ) : null}
+
       {/* ── MOBILE FLOW (sm and below only) ──────────────────────── */}
       <div className="flex flex-col flex-1 min-h-0 overflow-hidden sm:hidden">
         <MobileFlashcardFlow
@@ -480,8 +557,10 @@ export function ActiveStudySession({
           elapsed={elapsed}
           saving={saving}
           examPathwayLabel={resolveExamPathwayLabel(sessionPathwayId)}
-          onAnswerSubmitted={() => {
+          pathwayId={sessionPathwayId}
+          onAnswerSubmitted={(isCorrect) => {
             setRevealed(true);
+            setLastAnswerCorrect(isCorrect);
             if (current?.id) telemetry.onReveal(current.id, buildCardMeta(current));
           }}
           onRevealComplete={() => {
@@ -491,12 +570,25 @@ export function ActiveStudySession({
             } else {
               setIndex((i) => i + 1);
               setRevealed(false);
+              setLastAnswerCorrect(null);
             }
           }}
           onRate={async (rating) => {
+            const isCorrect = rating === "good" || rating === "easy";
             await onRate?.(current.id, rating);
             setRatingTally((t) => ({ ...t, [rating]: t[rating] + 1 }));
             telemetry.onRated(current.id, rating, buildCardMeta(current));
+            if (current.topic) {
+              setTopicPerf((prev) => updateTopicPerformance(prev, current.topic, isCorrect));
+              setMasteryStreaks((prev) => {
+                const next = updateMasteryStreak(prev, current.topic, isCorrect);
+                const mastered = detectMasteredTopics(next, 5);
+                if (mastered.includes(current.topic ?? "") && !masteryTopic) {
+                  setMasteryTopic(current.topic ?? null);
+                }
+                return next;
+              });
+            }
           }}
         />
       </div>
@@ -613,47 +705,20 @@ export function ActiveStudySession({
         marked={Boolean(pinState.starred)}
         onToggleMark={toggleMarked}
         onAdvance={goNext}
-        revealLinksSection={
-          revealed && (current.lessonHref || current.practiceTestsTopicHref || current.practiceTopicHref) ? (
-            <div
-              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] px-3 py-2.5"
-              data-testid="flashcard-inline-study-links"
-            >
-              <div className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">
-                Related study
-              </div>
-              <div className="flex flex-col gap-1.5">
-                {current.lessonHref ? (
-                  <Link
-                    href={current.lessonHref}
-                    data-testid="flashcard-lesson-link-inline"
-                    className="text-xs font-medium text-[var(--semantic-brand)] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
-                  >
-                    {current.lessonTitle?.trim() || t("learner.studyLoop.reviewLessonCta")}
-                  </Link>
-                ) : null}
-                {current.practiceTestsTopicHref ? (
-                  <Link
-                    href={current.practiceTestsTopicHref}
-                    data-testid="flashcard-practice-tests-link-inline"
-                    className="text-xs font-medium text-[var(--semantic-chart-2)] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-chart-2)_45%,transparent)]"
-                  >
-                    {t("learner.studyLoop.practiceQuestionsThisTopic")}
-                  </Link>
-                ) : null}
-                {current.practiceTopicHref ? (
-                  <Link
-                    href={current.practiceTopicHref}
-                    data-testid="flashcard-topic-drill-link-inline"
-                    className="text-xs font-medium text-[var(--semantic-info)] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_45%,transparent)]"
-                  >
-                    {t("learner.qbank.ui.topicDrillSameCode")}
-                  </Link>
-                ) : null}
-              </div>
-            </div>
-          ) : null
-        }
+        revealLinksSection={revealed ? (
+          <div className="space-y-3" data-testid="flashcard-ecosystem-links">
+            <CommunityPerformancePanel
+              flashcardId={current.id}
+              revealed={revealed}
+              correctLetter={displayExam && !isSataPayload(displayExam) ? displayExam.correctLetter : undefined}
+            />
+            <AdaptiveRemediationPanel
+              plan={ecosystemPlan}
+              isIncorrect={lastAnswerCorrect === false}
+              topic={current.topic}
+            />
+          </div>
+        ) : null}
         mainFooter={(
           <>
             <div className="nn-flashcard-study-support-strip" data-nn-flashcard-support-strip>

@@ -190,6 +190,7 @@ model User {
   referralRewardsGrantedByAdmin             ReferralRewardGrant[]          @relation("ReferralRewardGrantedBy")
   referralFraudSignals                      ReferralFraudSignal[]          @relation("ReferralFraudSubject")
   referralFraudSignalsReviewed              ReferralFraudSignal[]          @relation("ReferralFraudReviewer")
+  referralAmbassadorProfile                 ReferralAmbassadorProfile?
   betaAccessCodesCreated                    BetaAccessCode[]              @relation("BetaAccessCodeCreator")
   betaAccessGrants                          BetaAccessGrant[]             @relation("BetaAccessGrantUser")
   betaAccessGrantsRevoked                   BetaAccessGrant[]             @relation("BetaAccessGrantRevoker")
@@ -2579,11 +2580,14 @@ model ReferralCode {
   displayCode   String   @unique @map("display_code") @db.VarChar(32)
   referralLink  String?  @map("referral_link") @db.VarChar(512)
   enabled       Boolean  @default(true)
+  clickCount    Int      @default(0) @map("click_count")
+  lastClickedAt DateTime? @map("last_clicked_at")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   disabledAt    DateTime? @map("disabled_at")
   user          User     @relation("ReferralCodeOwner", fields: [userId], references: [id], onDelete: Cascade)
   attributions  ReferralAttribution[]
+  clicks        ReferralClick[]
 
   @@index([userId, enabled])
   @@index([enabled, createdAt])
@@ -2597,6 +2601,11 @@ model ReferralAttribution {
   referralCodeId        String?                      @map("referral_code_id")
   referralCodeDisplay   String                       @map("referral_code_display") @db.VarChar(32)
   referralLink          String?                      @map("referral_link") @db.VarChar(512)
+  firstLandingPath       String?                      @map("first_landing_path") @db.VarChar(512)
+  signupPath             String?                      @map("signup_path") @db.VarChar(512)
+  utmSource              String?                      @map("utm_source") @db.VarChar(120)
+  utmMedium              String?                      @map("utm_medium") @db.VarChar(120)
+  utmCampaign            String?                      @map("utm_campaign") @db.VarChar(160)
   status                ReferralQualificationStatus  @default(ACCOUNT_CREATED)
   emailVerifiedAt       DateTime?                    @map("email_verified_at")
   onboardingCompletedAt DateTime?                    @map("onboarding_completed_at")
@@ -2629,8 +2638,10 @@ model ReferralRewardRule {
   enabled             Boolean            @default(true)
   trigger             ReferralRewardTrigger
   threshold           Int                @default(1)
+  recipient           ReferralRewardRecipient @default(REFERRER)
   rewardKind          ReferralRewardKind @map("reward_kind")
   rewardValue         Int?               @map("reward_value")
+  discountPercent     Int?               @map("discount_percent")
   featureKey          String?            @map("feature_key") @db.VarChar(96)
   durationDays        Int?               @map("duration_days")
   createdByUserId     String?            @map("created_by_user_id")
@@ -2640,6 +2651,7 @@ model ReferralRewardRule {
   grants              ReferralRewardGrant[]
 
   @@index([enabled, trigger, threshold])
+  @@index([recipient, enabled])
   @@map("referral_reward_rules")
 }
 
@@ -2650,8 +2662,10 @@ model ReferralRewardGrant {
   referrerUserId   String               @map("referrer_user_id")
   recipientUserId  String               @map("recipient_user_id")
   status           ReferralRewardStatus @default(PENDING)
+  recipientType    ReferralRewardRecipient @default(REFERRER) @map("recipient")
   rewardKind       ReferralRewardKind   @map("reward_kind")
   rewardValue      Int?                 @map("reward_value")
+  discountPercent  Int?                 @map("discount_percent")
   featureKey       String?              @map("feature_key") @db.VarChar(96)
   durationDays     Int?                 @map("duration_days")
   reason           String               @db.VarChar(240)
@@ -2668,10 +2682,48 @@ model ReferralRewardGrant {
   recipient        User                 @relation("ReferralRewardRecipient", fields: [recipientUserId], references: [id], onDelete: Cascade)
   grantedBy        User?                @relation("ReferralRewardGrantedBy", fields: [grantedByUserId], references: [id], onDelete: SetNull)
 
-  @@unique([ruleId, referrerUserId, attributionId])
+  @@unique([ruleId, referrerUserId, attributionId, recipientType], map: "referral_reward_grants_rule_referrer_attr_recipient_key")
   @@index([referrerUserId, status, createdAt(sort: Desc)])
   @@index([recipientUserId, status, createdAt(sort: Desc)])
   @@map("referral_reward_grants")
+}
+
+model ReferralClick {
+  id             String   @id @default(cuid())
+  referralCodeId String?  @map("referral_code_id")
+  displayCode    String   @map("display_code") @db.VarChar(32)
+  landingPath    String?  @map("landing_path") @db.VarChar(512)
+  referrerUrl    String?  @map("referrer_url") @db.VarChar(1024)
+  utmSource      String?  @map("utm_source") @db.VarChar(120)
+  utmMedium      String?  @map("utm_medium") @db.VarChar(120)
+  utmCampaign    String?  @map("utm_campaign") @db.VarChar(160)
+  sessionHash    String?  @map("session_hash") @db.VarChar(128)
+  ipHash         String?  @map("ip_hash") @db.VarChar(128)
+  userAgentHash  String?  @map("user_agent_hash") @db.VarChar(128)
+  createdAt      DateTime @default(now()) @map("created_at")
+  referralCode   ReferralCode? @relation(fields: [referralCodeId], references: [id], onDelete: SetNull)
+
+  @@index([referralCodeId, createdAt(sort: Desc)])
+  @@index([displayCode, createdAt(sort: Desc)])
+  @@index([utmSource, createdAt(sort: Desc)])
+  @@map("referral_clicks")
+}
+
+model ReferralAmbassadorProfile {
+  userId                 String                    @id @map("user_id")
+  status                 ReferralAmbassadorStatus  @default(NONE)
+  paidReferralCount      Int                       @default(0) @map("paid_referral_count")
+  qualifiedReferralCount Int                       @default(0) @map("qualified_referral_count")
+  unlockedAt             DateTime?                 @map("unlocked_at")
+  eliteUnlockedAt        DateTime?                 @map("elite_unlocked_at")
+  featuredCommunityProfile Boolean                 @default(false) @map("featured_community_profile")
+  earlyFeatureAccess     Boolean                   @default(false) @map("early_feature_access")
+  prioritySupport        Boolean                   @default(false) @map("priority_support")
+  updatedAt              DateTime                  @updatedAt @map("updated_at")
+  user                   User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, paidReferralCount])
+  @@map("referral_ambassador_profiles")
 }
 
 model ReferralFraudSignal {
@@ -3882,15 +3934,24 @@ enum ReferralQualificationStatus {
 }
 
 enum ReferralRewardTrigger {
+  SIGNUP_ATTRIBUTED
   QUALIFIED_REFERRAL_COUNT
   PAID_REFERRAL_COUNT
   MANUAL
+}
+
+enum ReferralRewardRecipient {
+  REFERRER
+  FRIEND
+  BOTH
 }
 
 enum ReferralRewardKind {
   FREE_DAYS
   FREE_MONTH
   ACCOUNT_CREDIT
+  FIRST_MONTH_DISCOUNT
+  PREMIUM_TRIAL
   FEATURE_UNLOCK
   AMBASSADOR_STATUS
   MANUAL
@@ -3909,6 +3970,12 @@ enum ReferralFraudSignalType {
   REFERRAL_LOOP
   DUPLICATE_DEVICE
   MANUAL_REVIEW
+}
+
+enum ReferralAmbassadorStatus {
+  NONE
+  AMBASSADOR
+  ELITE_AMBASSADOR
 }
 
 enum TrialStatus {

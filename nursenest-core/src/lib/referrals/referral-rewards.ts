@@ -13,8 +13,17 @@ type ReferralStatus =
   | "REJECTED"
   | "FRAUD_REVIEW";
 
-type ReferralRewardTrigger = "QUALIFIED_REFERRAL_COUNT" | "PAID_REFERRAL_COUNT" | "MANUAL";
-type ReferralRewardKind = "FREE_DAYS" | "FREE_MONTH" | "ACCOUNT_CREDIT" | "FEATURE_UNLOCK" | "AMBASSADOR_STATUS" | "MANUAL";
+type ReferralRewardTrigger = "SIGNUP_ATTRIBUTED" | "QUALIFIED_REFERRAL_COUNT" | "PAID_REFERRAL_COUNT" | "MANUAL";
+type ReferralRewardKind =
+  | "FREE_DAYS"
+  | "FREE_MONTH"
+  | "ACCOUNT_CREDIT"
+  | "FIRST_MONTH_DISCOUNT"
+  | "PREMIUM_TRIAL"
+  | "FEATURE_UNLOCK"
+  | "AMBASSADOR_STATUS"
+  | "MANUAL";
+type ReferralRewardRecipient = "REFERRER" | "FRIEND" | "BOTH";
 
 const referralDb = prisma as typeof prisma & {
   referralCode: any;
@@ -23,6 +32,8 @@ const referralDb = prisma as typeof prisma & {
   referralRewardGrant: any;
   referralFraudSignal: any;
   referralEvent: any;
+  referralClick: any;
+  referralAmbassadorProfile: any;
 };
 
 const REFERRAL_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -108,6 +119,11 @@ export async function recordReferralSignup(args: {
   signupIp?: string | null;
   deviceFingerprint?: string | null;
   origin?: string | null;
+  firstLandingPath?: string | null;
+  signupPath?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
 }): Promise<{ ok: true; attributed: boolean } | { ok: false; code: "missing" | "self_referral" | "already_attributed" }> {
   const raw = args.rawCode?.trim();
   if (!raw) return { ok: false, code: "missing" };
@@ -141,6 +157,11 @@ export async function recordReferralSignup(args: {
       referralCodeId: referralCode.id,
       referralCodeDisplay: referralCode.displayCode,
       referralLink: referralCode.referralLink ?? (args.origin ? `${args.origin.replace(/\/$/, "")}/signup?ref=${encodeURIComponent(referralCode.displayCode)}` : null),
+      firstLandingPath: args.firstLandingPath?.slice(0, 512) ?? null,
+      signupPath: args.signupPath?.slice(0, 512) ?? null,
+      utmSource: args.utmSource?.slice(0, 120) ?? null,
+      utmMedium: args.utmMedium?.slice(0, 120) ?? null,
+      utmCampaign: args.utmCampaign?.slice(0, 160) ?? null,
       status: "ACCOUNT_CREATED",
       signupIpHash: hashNullable(args.signupIp),
       deviceHash: hashNullable(args.deviceFingerprint),
@@ -152,6 +173,7 @@ export async function recordReferralSignup(args: {
 
   await writeReferralEvent(attribution.id, args.referredUserId, "account_created", { referralCode: referralCode.displayCode });
   void sendReferralEmail(referralCode.userId, "A friend joined NurseNest", "Your referral created an account. Rewards unlock only after they verify email, finish onboarding, and start studying.");
+  await grantReferralRewardsForTrigger(referralCode.userId, "SIGNUP_ATTRIBUTED", attribution.id);
 
   if ((referred?.normalizedEmail && referrer?.normalizedEmail && referred.normalizedEmail === referrer.normalizedEmail) || referred?.email === referrer?.email) {
     await flagReferral(attribution.id, args.referredUserId, "DUPLICATE_NORMALIZED_EMAIL", "Referrer and referred account share the same normalized email.");
@@ -236,45 +258,145 @@ export async function markReferralSubscribed(userId: string): Promise<void> {
   });
   await writeReferralEvent(attribution.id, userId, "paid_subscription", {});
   await grantReferralRewardsForTrigger(attribution.referrerUserId, "PAID_REFERRAL_COUNT", attribution.id);
+  await refreshAmbassadorProfile(attribution.referrerUserId);
 }
 
 async function grantReferralRewardsForTrigger(referrerUserId: string, trigger: ReferralRewardTrigger, attributionId: string): Promise<void> {
   const count = await referralDb.referralAttribution.count({
     where: {
       referrerUserId,
-      ...(trigger === "PAID_REFERRAL_COUNT" ? { firstSubscribedAt: { not: null } } : { qualifiedAt: { not: null } }),
+      ...(trigger === "PAID_REFERRAL_COUNT"
+        ? { firstSubscribedAt: { not: null } }
+        : trigger === "SIGNUP_ATTRIBUTED"
+          ? {}
+          : { qualifiedAt: { not: null } }),
     },
   });
   const rules = await referralDb.referralRewardRule.findMany({
     where: { enabled: true, trigger, threshold: { lte: count } },
     orderBy: { threshold: "asc" },
-    select: { id: true, threshold: true, rewardKind: true, rewardValue: true, featureKey: true, durationDays: true, name: true },
+    select: { id: true, threshold: true, recipient: true, rewardKind: true, rewardValue: true, discountPercent: true, featureKey: true, durationDays: true, name: true },
   });
+  const triggerLabel = trigger === "PAID_REFERRAL_COUNT" ? "paid referrals" : trigger === "SIGNUP_ATTRIBUTED" ? "created accounts" : "qualified referrals";
   for (const rule of rules) {
-    await referralDb.referralRewardGrant.upsert({
-      where: { ruleId_referrerUserId_attributionId: { ruleId: rule.id, referrerUserId, attributionId } },
-      create: {
-        ruleId: rule.id,
-        attributionId,
-        referrerUserId,
-        recipientUserId: referrerUserId,
-        status: "GRANTED",
-        rewardKind: rule.rewardKind as ReferralRewardKind,
-        rewardValue: rule.rewardValue,
-        featureKey: rule.featureKey,
-        durationDays: rule.durationDays,
-        reason: `${rule.name}: ${count} ${trigger === "PAID_REFERRAL_COUNT" ? "paid" : "qualified"} referrals`,
-        grantedAt: new Date(),
-      },
-      update: {},
+    const attribution = await referralDb.referralAttribution.findUnique({
+      where: { id: attributionId },
+      select: { referredUserId: true },
     });
-    void sendReferralEmail(referrerUserId, "NurseNest referral reward unlocked", `Reward unlocked: ${rule.name}. You can review earned rewards in Invite Friends.`);
+    const recipients: Array<{ recipient: ReferralRewardRecipient; userId: string }> =
+      rule.recipient === "BOTH"
+        ? [
+            { recipient: "REFERRER", userId: referrerUserId },
+            ...(attribution?.referredUserId ? [{ recipient: "FRIEND" as const, userId: attribution.referredUserId }] : []),
+          ]
+        : [{ recipient: rule.recipient as ReferralRewardRecipient, userId: rule.recipient === "FRIEND" && attribution?.referredUserId ? attribution.referredUserId : referrerUserId }];
+
+    for (const grantRecipient of recipients) {
+      await referralDb.referralRewardGrant.upsert({
+        where: { ruleId_referrerUserId_attributionId_recipientType: { ruleId: rule.id, referrerUserId, attributionId, recipientType: grantRecipient.recipient } },
+        create: {
+          ruleId: rule.id,
+          attributionId,
+          referrerUserId,
+          recipientUserId: grantRecipient.userId,
+          status: "GRANTED",
+          recipientType: grantRecipient.recipient,
+          rewardKind: rule.rewardKind as ReferralRewardKind,
+          rewardValue: rule.rewardValue,
+          discountPercent: rule.discountPercent,
+          featureKey: rule.featureKey,
+          durationDays: rule.durationDays,
+          reason: `${rule.name}: ${count} ${triggerLabel}`,
+          grantedAt: new Date(),
+        },
+        update: {},
+      });
+      void sendReferralEmail(grantRecipient.userId, "NurseNest referral reward unlocked", `Reward unlocked: ${rule.name}. You can review earned rewards in Invite Friends.`);
+    }
   }
+}
+
+export async function recordReferralClick(args: {
+  rawCode: string;
+  landingPath?: string | null;
+  referrerUrl?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  sessionId?: string | null;
+  ip?: string | null;
+  userAgent?: string | null;
+}): Promise<void> {
+  const displayCode = normalizeReferralCode(args.rawCode);
+  if (!displayCode) return;
+  const code = await referralDb.referralCode.findFirst({
+    where: { codeHash: hashReferralCode(displayCode), enabled: true },
+    select: { id: true },
+  });
+  await referralDb.referralClick.create({
+    data: {
+      referralCodeId: code?.id ?? null,
+      displayCode,
+      landingPath: args.landingPath?.slice(0, 512) ?? null,
+      referrerUrl: args.referrerUrl?.slice(0, 1024) ?? null,
+      utmSource: args.utmSource?.slice(0, 120) ?? null,
+      utmMedium: args.utmMedium?.slice(0, 120) ?? null,
+      utmCampaign: args.utmCampaign?.slice(0, 160) ?? null,
+      sessionHash: hashNullable(args.sessionId),
+      ipHash: hashNullable(args.ip),
+      userAgentHash: hashNullable(args.userAgent),
+    },
+  });
+  if (code?.id) {
+    await referralDb.referralCode.update({
+      where: { id: code.id },
+      data: { clickCount: { increment: 1 }, lastClickedAt: new Date() },
+    });
+  }
+}
+
+async function refreshAmbassadorProfile(userId: string): Promise<void> {
+  const [paidReferralCount, qualifiedReferralCount, ambassadorRules] = await Promise.all([
+    referralDb.referralAttribution.count({ where: { referrerUserId: userId, firstSubscribedAt: { not: null } } }),
+    referralDb.referralAttribution.count({ where: { referrerUserId: userId, qualifiedAt: { not: null } } }),
+    referralDb.referralRewardRule.findMany({
+      where: { enabled: true, rewardKind: "AMBASSADOR_STATUS" },
+      select: { threshold: true, featureKey: true },
+      orderBy: { threshold: "asc" },
+    }),
+  ]);
+  const ambassadorThreshold = ambassadorRules.find((rule: { featureKey: string | null }) => rule.featureKey !== "elite_ambassador")?.threshold ?? 5;
+  const eliteThreshold = ambassadorRules.find((rule: { featureKey: string | null }) => rule.featureKey === "elite_ambassador")?.threshold ?? 20;
+  const status = paidReferralCount >= eliteThreshold ? "ELITE_AMBASSADOR" : paidReferralCount >= ambassadorThreshold ? "AMBASSADOR" : "NONE";
+  await referralDb.referralAmbassadorProfile.upsert({
+    where: { userId },
+    create: {
+      userId,
+      status,
+      paidReferralCount,
+      qualifiedReferralCount,
+      unlockedAt: status !== "NONE" ? new Date() : null,
+      eliteUnlockedAt: status === "ELITE_AMBASSADOR" ? new Date() : null,
+      earlyFeatureAccess: status !== "NONE",
+      prioritySupport: status === "ELITE_AMBASSADOR",
+      featuredCommunityProfile: status === "ELITE_AMBASSADOR",
+    },
+    update: {
+      status,
+      paidReferralCount,
+      qualifiedReferralCount,
+      unlockedAt: status !== "NONE" ? new Date() : undefined,
+      eliteUnlockedAt: status === "ELITE_AMBASSADOR" ? new Date() : undefined,
+      earlyFeatureAccess: status !== "NONE",
+      prioritySupport: status === "ELITE_AMBASSADOR",
+      featuredCommunityProfile: status === "ELITE_AMBASSADOR",
+    },
+  });
 }
 
 export async function loadReferralDashboard(userId: string, origin?: string) {
   const code = await getOrCreateReferralCode(userId, origin);
-  const [summaryRows, rewards, recentReferrals] = await Promise.all([
+  const [summaryRows, rewards, recentReferrals, ambassador] = await Promise.all([
     referralDb.referralAttribution.groupBy({
       by: ["status"],
       where: { referrerUserId: userId },
@@ -302,6 +424,7 @@ export async function loadReferralDashboard(userId: string, origin?: string) {
         referred: { select: { name: true, createdAt: true } },
       },
     }),
+    referralDb.referralAmbassadorProfile.findUnique({ where: { userId } }).catch(() => null),
   ]);
   const counts = Object.fromEntries(summaryRows.map((row: { status: string; _count: { _all: number } }) => [row.status, row._count._all]));
   return {
@@ -314,11 +437,12 @@ export async function loadReferralDashboard(userId: string, origin?: string) {
     },
     rewards,
     recentReferrals,
+    ambassador,
   };
 }
 
 export async function loadAdminReferralDashboard() {
-  const [topReferrers, statusRows, rewards, fraudSignals, rules] = await Promise.all([
+  const [topReferrers, statusRows, rewards, fraudSignals, rules, clickCount, ambassadors] = await Promise.all([
     referralDb.referralAttribution.groupBy({
       by: ["referrerUserId"],
       _count: { _all: true },
@@ -329,6 +453,8 @@ export async function loadAdminReferralDashboard() {
     referralDb.referralRewardGrant.findMany({ orderBy: { createdAt: "desc" }, take: 25, include: { referrer: { select: { email: true, name: true } } } }),
     referralDb.referralFraudSignal.findMany({ where: { resolvedAt: null }, orderBy: { createdAt: "desc" }, take: 25, include: { subject: { select: { email: true, name: true } } } }),
     referralDb.referralRewardRule.findMany({ orderBy: [{ trigger: "asc" }, { threshold: "asc" }], take: 50 }),
+    referralDb.referralClick.count(),
+    referralDb.referralAmbassadorProfile.findMany({ where: { status: { in: ["AMBASSADOR", "ELITE_AMBASSADOR"] } }, orderBy: [{ status: "desc" }, { paidReferralCount: "desc" }], take: 20, include: { user: { select: { email: true, name: true } } } }),
   ]);
   const referrerUsers = await prisma.user.findMany({
     where: { id: { in: topReferrers.map((row: { referrerUserId: string }) => row.referrerUserId) } },
@@ -344,5 +470,7 @@ export async function loadAdminReferralDashboard() {
     rewards,
     fraudSignals,
     rules,
+    clickCount,
+    ambassadors,
   };
 }

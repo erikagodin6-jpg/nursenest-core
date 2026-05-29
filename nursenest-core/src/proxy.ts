@@ -20,6 +20,16 @@ import {
   computeMarketingNarrowViewportHintFromRequestHeaders,
   MARKETING_NARROW_VIEWPORT_HINT_HEADER,
 } from "@/lib/marketing/marketing-narrow-viewport-hint";
+import {
+  REFERRAL_CLICK_PENDING_COOKIE,
+  REFERRAL_CODE_COOKIE,
+  REFERRAL_COOKIE_MAX_AGE_SECONDS,
+  REFERRAL_LANDING_COOKIE,
+  REFERRAL_UTM_CAMPAIGN_COOKIE,
+  REFERRAL_UTM_MEDIUM_COOKIE,
+  REFERRAL_UTM_SOURCE_COOKIE,
+  referralCodeFromSearchParams,
+} from "@/lib/referrals/referral-attribution-cookies";
 
 let authProxyDepsPromise: Promise<{ runAuthMiddleware: NextMiddleware }> | null = null;
 
@@ -119,7 +129,34 @@ function forwardRequest(request: NextRequest): NextResponse {
   const cid = request.headers.get(NN_CORRELATION_HEADER);
   if (cid) res.headers.set(NN_CORRELATION_HEADER, cid);
 
-  return res;
+  return attachReferralAttributionCookies(request, res);
+}
+
+function setReferralCookie(res: NextResponse, name: string, value: string): void {
+  res.cookies.set(name, value.slice(0, 512), {
+    path: "/",
+    maxAge: REFERRAL_COOKIE_MAX_AGE_SECONDS,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+}
+
+function attachReferralAttributionCookies(request: NextRequest, response: NextResponse): NextResponse {
+  const code = referralCodeFromSearchParams(request.nextUrl.searchParams);
+  if (!code) return response;
+
+  setReferralCookie(response, REFERRAL_CODE_COOKIE, code);
+  setReferralCookie(response, REFERRAL_LANDING_COOKIE, `${request.nextUrl.pathname}${request.nextUrl.search}`.slice(0, 512));
+  setReferralCookie(response, REFERRAL_CLICK_PENDING_COOKIE, "1");
+
+  const utmSource = request.nextUrl.searchParams.get("utm_source")?.trim();
+  const utmMedium = request.nextUrl.searchParams.get("utm_medium")?.trim();
+  const utmCampaign = request.nextUrl.searchParams.get("utm_campaign")?.trim();
+  if (utmSource) setReferralCookie(response, REFERRAL_UTM_SOURCE_COOKIE, utmSource);
+  if (utmMedium) setReferralCookie(response, REFERRAL_UTM_MEDIUM_COOKIE, utmMedium);
+  if (utmCampaign) setReferralCookie(response, REFERRAL_UTM_CAMPAIGN_COOKIE, utmCampaign);
+
+  return response;
 }
 
 export function isStaticAssetBypassPath(pathname: string): boolean {
@@ -267,7 +304,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       });
 
       next.headers.set(NN_CORRELATION_HEADER, correlationId);
-      return next;
+      return attachReferralAttributionCookies(forwarded, next);
     }
 
     if (res.status >= 300 && res.status < 400) {
@@ -288,9 +325,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     });
 
     final.headers.set(NN_CORRELATION_HEADER, correlationId);
-    return final;
+    return attachReferralAttributionCookies(forwarded, final);
   } catch {
-    return NextResponse.next();
+    return attachReferralAttributionCookies(request, NextResponse.next());
   }
 }
 
