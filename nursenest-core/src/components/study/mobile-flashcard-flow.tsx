@@ -1,16 +1,33 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronRight, CheckCircle2, XCircle } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  CheckCircle2,
+  ChevronsRight,
+  Gem,
+  Heart,
+  Lightbulb,
+  RefreshCw,
+  XCircle,
+} from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
-import { CommunityPerformancePanel } from "@/components/flashcards/community-performance-panel";
-import { AdaptiveRemediationPanel } from "@/components/flashcards/adaptive-remediation-panel";
 import { resolveEcosystemLinks } from "@/lib/flashcards/flashcard-ecosystem-resolver";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
+import {
+  buildSimpleCorrectRationale,
+  buildSimpleDistractorRationale,
+  isGenericRationaleText,
+} from "@/lib/questions/rationale-quality";
 
 /** Minimal card shape needed by the mobile flow — matches ActiveStudyCard. */
 type MobileCard = {
@@ -27,19 +44,17 @@ type MobileCard = {
   practiceTestsTopicHref?: string | null;
 };
 
-/* ── Phase machine ─────────────────────────────────────────────── */
-type MobilePhase = "question" | "rationale" | "confidence" | "rating";
+type RatingKey = "again" | "hard" | "good" | "easy";
 
-const RATING_META = [
-  { key: "again", label: "Again", sub: "Need more practice", colorClass: "nn-mobile-rating--again" },
-  { key: "hard",  label: "Hard",  sub: "Getting there",      colorClass: "nn-mobile-rating--hard"  },
-  { key: "good",  label: "Good",  sub: "Understood",         colorClass: "nn-mobile-rating--good"  },
-  { key: "easy",  label: "Easy",  sub: "Mastered",           colorClass: "nn-mobile-rating--easy"  },
-] as const;
+const RATING_META: Array<{ key: RatingKey; label: string; icon: React.ReactNode; colorClass: string }> = [
+  { key: "again", label: "Again",  icon: <RefreshCw  className="h-5 w-5" aria-hidden />, colorClass: "nn-mobile-rating--again" },
+  { key: "hard",  label: "Hard",   icon: <BarChart3   className="h-5 w-5" aria-hidden />, colorClass: "nn-mobile-rating--hard"  },
+  { key: "good",  label: "Good",   icon: <CheckCircle2 className="h-5 w-5" aria-hidden />, colorClass: "nn-mobile-rating--good"  },
+  { key: "easy",  label: "Easy",   icon: <ChevronsRight className="h-5 w-5" aria-hidden />, colorClass: "nn-mobile-rating--easy"  },
+];
 
-type RatingKey = (typeof RATING_META)[number]["key"];
+/* ── Helpers ───────────────────────────────────────────────────────────────── */
 
-/* ── Helpers ───────────────────────────────────────────────────── */
 function buildPearl(card: MobileCard): string {
   const src: string =
     (card.examMicroQuestion as ExamMicroQuestionPayload | null)?.rationaleCorrect ||
@@ -50,11 +65,38 @@ function buildPearl(card: MobileCard): string {
   return first ? (first.endsWith(".") ? first : `${first}.`) : "Review the rationale carefully.";
 }
 
+function correctAnswerSummary(exam: ExamMicroQuestionPayload): string {
+  const correct = exam.answerOptions.find((o) => o.letter === exam.correctLetter);
+  return correct ? `${exam.correctLetter}. ${correct.text.trim()}` : exam.correctLetter;
+}
 
-/* ══════════════════════════════════════════════════════════════════
-   MobileFlashcardFlow — rendered only on sm and below via CSS.
-   Shares all state/callbacks with ActiveStudySession.
-   ══════════════════════════════════════════════════════════════════ */
+function resolveCorrectRationale(exam: ExamMicroQuestionPayload, fallback?: string): string {
+  const authored = exam.rationaleCorrect?.trim() || (fallback ?? "").trim();
+  if (!authored || authored.length < 80 || isGenericRationaleText(authored)) {
+    return buildSimpleCorrectRationale({
+      stem: exam.questionStem,
+      correctOptionText: exam.answerOptions.find((o) => o.letter === exam.correctLetter)?.text,
+    });
+  }
+  return authored;
+}
+
+function resolveDistractorRationale(exam: ExamMicroQuestionPayload, letter: string, optionText: string): string {
+  const authored = exam.rationaleIncorrect?.find((r) => r.letter === letter)?.rationale?.trim() ?? "";
+  if (!authored || authored.length < 60 || isGenericRationaleText(authored)) {
+    return buildSimpleDistractorRationale({
+      stem: exam.questionStem,
+      optionText,
+      correctOptionText: exam.answerOptions.find((o) => o.letter === exam.correctLetter)?.text,
+    });
+  }
+  return authored;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MobileFlashcardFlow — rendered only on sm and below.
+   Single-scroll design matching the NurseNest mobile mockup.
+   ══════════════════════════════════════════════════════════════════════════════ */
 
 export function MobileFlashcardFlow({
   card,
@@ -75,33 +117,35 @@ export function MobileFlashcardFlow({
   elapsed: number;
   saving: boolean;
   examPathwayLabel: string;
-  /** Called when the learner submits an MCQ/SATA answer or reveals a plain card. Arg: isCorrect (null for plain). */
   onAnswerSubmitted?: (isCorrect: boolean | null) => void;
-  /** Called after rating is submitted — parent should advance to next card. */
   onRevealComplete?: () => void;
   onRate: (rating: RatingKey) => Promise<void>;
 }) {
-  const [phase, setPhase] = useState<MobilePhase>("question");
-  const [pickedLetter, setPickedLetter] = useState<string | null>(null);
+  const [revealed, setRevealed]           = useState(false);
+  const [pickedLetter, setPickedLetter]   = useState<string | null>(null);
   const [submittedLetter, setSubmittedLetter] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [confidence, setConfidence] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const sataSelectionsRef = useRef<string[]>([]);
+  const [submitting, setSubmitting]       = useState(false);
+  const [confidence, setConfidence]       = useState<1 | 2 | 3 | 4 | 5 | null>(null);
+  const [isCorrect, setIsCorrect]         = useState<boolean | null>(null);
+  const [rationaleOpen, setRationaleOpen] = useState(true);
+  const [hintOpen, setHintOpen]           = useState(false);
+  const sataSelectionsRef                 = useRef<string[]>([]);
 
   const isSata = isSataPayload(card.examMicroQuestion);
-  const exam = isSata ? null : (card.examMicroQuestion as ExamMicroQuestionPayload | null);
-  const sata = isSata ? (card.examMicroQuestion as unknown as SataQuestionPayload) : null;
+  const exam   = isSata ? null : (card.examMicroQuestion as ExamMicroQuestionPayload | null);
+  const sata   = isSata ? (card.examMicroQuestion as unknown as SataQuestionPayload) : null;
   const isPlain = !exam && !sata;
 
-  // Reset all phase state when card changes
+  /* Reset on card change */
   useEffect(() => {
-    setPhase("question");
+    setRevealed(false);
     setPickedLetter(null);
     setSubmittedLetter(null);
     setSubmitting(false);
     setConfidence(null);
     setIsCorrect(null);
+    setRationaleOpen(true);
+    setHintOpen(false);
     sataSelectionsRef.current = [];
   }, [card.id]);
 
@@ -113,7 +157,7 @@ export function MobileFlashcardFlow({
       setSubmittedLetter(pickedLetter);
       setIsCorrect(correct);
       onAnswerSubmitted?.(correct);
-      setPhase("rationale");
+      setRevealed(true);
     } finally {
       setSubmitting(false);
     }
@@ -130,7 +174,7 @@ export function MobileFlashcardFlow({
         selected.every((l) => sata.correctLetters.includes(l));
       setIsCorrect(allCorrect);
       onAnswerSubmitted?.(allCorrect);
-      setPhase("rationale");
+      setRevealed(true);
     } finally {
       setSubmitting(false);
     }
@@ -139,22 +183,18 @@ export function MobileFlashcardFlow({
   const handlePlainReveal = useCallback(() => {
     setIsCorrect(null);
     onAnswerSubmitted?.(null);
-    setPhase("rationale");
+    setRevealed(true);
   }, [onAnswerSubmitted]);
 
-  const handleRatingSubmit = useCallback(
-    async (rating: RatingKey) => {
-      await onRate(rating);
-      onRevealComplete?.();
-    },
-    [onRate, onRevealComplete],
-  );
+  const handleRatingSubmit = useCallback(async (rating: RatingKey) => {
+    await onRate(rating);
+    onRevealComplete?.();
+  }, [onRate, onRevealComplete]);
 
   const progressPct = Math.round(((cardIndex + 1) / Math.max(1, totalCards)) * 100);
   const formatElapsed = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
-  // Ecosystem plan for mobile rationale phase
   const ecosystemPlan = resolveEcosystemLinks({
     cardId: card.id,
     topic: card.topic ?? null,
@@ -167,29 +207,222 @@ export function MobileFlashcardFlow({
     isIncorrect: isCorrect === false,
   });
 
-  /* ── Phase renderers ─────────────────────────────────────────── */
+  const topicLabel = [card.topic, card.subtopic].filter(Boolean).join(" · ");
+  const resolvedCorrectRationale = exam ? resolveCorrectRationale(exam, card.explanation) : "";
 
-  if (phase === "question") {
-    return (
-      <div className="nn-mobile-fc-screen nn-mobile-fc-screen--question" data-mobile-phase="question">
-        {/* Header strip */}
-        <div className="nn-mobile-fc-header">
-          <div className="nn-mobile-fc-progress-col">
-            <span className="nn-mobile-fc-progress-label">
-              {cardIndex + 1} <span className="opacity-50">of</span> {totalCards}
-            </span>
-            <div className="nn-mobile-fc-progress-track" role="progressbar" aria-valuenow={cardIndex + 1} aria-valuemin={1} aria-valuemax={totalCards}>
-              <div className="nn-mobile-fc-progress-fill" style={{ width: `${progressPct}%` }} />
-            </div>
-          </div>
-          <span className="nn-mobile-fc-timer font-mono">{formatElapsed(elapsed)}</span>
+  /* ── Compact sticky header ─────────────────────────────────────────────────── */
+  const header = (
+    <div className="nn-mobile-fc-compact-header">
+      <div className="nn-mobile-fc-stat-group">
+        <span className="nn-mobile-fc-stat-label">
+          <BarChart3 className="h-3 w-3" aria-hidden /> Progress
+        </span>
+        <strong className="nn-mobile-fc-stat-value" style={{ whiteSpace: "nowrap" }}>
+          {cardIndex + 1} <span style={{ opacity: 0.5, fontWeight: 400 }}>of</span> {totalCards}
+        </strong>
+        <div className="nn-mobile-fc-progress-track" role="progressbar" aria-valuenow={cardIndex + 1} aria-valuemin={1} aria-valuemax={totalCards}>
+          <div className="nn-mobile-fc-progress-fill" style={{ width: `${progressPct}%` }} />
         </div>
+      </div>
+      <div className="nn-mobile-fc-stat-group">
+        <span className="nn-mobile-fc-stat-label">Focus</span>
+        <strong className="nn-mobile-fc-stat-value">{topicLabel || "All systems"}</strong>
+      </div>
+      <div className="nn-mobile-fc-stat-group">
+        <span className="nn-mobile-fc-stat-label">Elapsed</span>
+        <strong className="nn-mobile-fc-stat-value nn-mobile-fc-timer">{formatElapsed(elapsed)}</strong>
+      </div>
+    </div>
+  );
+
+  /* ── Result status bar (shown after answering) ─────────────────────────────── */
+  const statusBar = revealed && (
+    <div className={`nn-mobile-fc-status-bar ${isCorrect === true ? "nn-mobile-fc-status-bar--correct" : isCorrect === false ? "nn-mobile-fc-status-bar--incorrect" : "nn-mobile-fc-status-bar--neutral"}`}>
+      <div className="nn-mobile-fc-status-bar__left">
+        {isCorrect === true  && <CheckCircle2 className="h-5 w-5" aria-hidden />}
+        {isCorrect === false && <XCircle      className="h-5 w-5" aria-hidden />}
+        <span>{isCorrect === true ? "Correct!" : isCorrect === false ? "Incorrect" : "Answer submitted"}</span>
+      </div>
+      <button type="button" className="nn-mobile-fc-next-btn" onClick={onRevealComplete}>
+        Next <ChevronRight className="h-4 w-4" aria-hidden />
+      </button>
+    </div>
+  );
+
+  /* ── Metadata strip ─────────────────────────────────────────────────────────── */
+  const metaStrip = (
+    <div className="nn-mobile-fc-meta-strip">
+      {/* Hint */}
+      <div className="nn-mobile-fc-meta-row">
+        <div className="nn-mobile-fc-meta-row__label">
+          <Lightbulb className="h-4 w-4" aria-hidden />
+          <span>Hint</span>
+        </div>
+        {hintOpen ? (
+          <p className="nn-mobile-fc-meta-row__body">
+            {topicLabel ? `Connect this to ${topicLabel}.` : "Look for the safest clinical priority."}
+          </p>
+        ) : (
+          <button type="button" className="nn-mobile-hint-pill" onClick={() => setHintOpen(true)}>
+            Reveal hint
+          </button>
+        )}
+      </div>
+
+      {/* Why This Matters */}
+      <div className="nn-mobile-fc-meta-row nn-mobile-fc-meta-row--link">
+        <div className="nn-mobile-fc-meta-row__label">
+          <Heart className="h-4 w-4" aria-hidden />
+          <span>Why This Matters</span>
+        </div>
+        <ChevronRight className="nn-mobile-fc-meta-row__chevron h-4 w-4" aria-hidden />
+        {card.topic ? (
+          <p className="nn-mobile-fc-meta-row__body">
+            {`This concept connects ${card.topic.toLowerCase()} to direct clinical judgment.`}
+          </p>
+        ) : null}
+      </div>
+
+      {/* Related Lesson */}
+      <div className="nn-mobile-fc-meta-row nn-mobile-fc-meta-row--link">
+        <div className="nn-mobile-fc-meta-row__label">
+          <BookOpen className="h-4 w-4" aria-hidden />
+          <span>Related Lesson</span>
+        </div>
+        <ChevronRight className="nn-mobile-fc-meta-row__chevron h-4 w-4" aria-hidden />
+        {card.lessonHref ? (
+          <Link href={card.lessonHref} className="nn-mobile-fc-meta-row__body nn-mobile-fc-lesson-link">
+            {card.lessonTitle?.trim() || topicLabel || "View lesson"}
+          </Link>
+        ) : (
+          <p className="nn-mobile-fc-meta-row__body">{topicLabel || "Review linked content from the hub."}</p>
+        )}
+      </div>
+    </div>
+  );
+
+  /* ── Confidence + rating (only after revealing) ─────────────────────────────── */
+  const confidenceRating = revealed && (
+    <>
+      {/* Confidence scale */}
+      <div className="nn-mobile-fc-confidence-section">
+        <span className="nn-mobile-fc-confidence-label">How confident are you?</span>
+        <div className="nn-mobile-fc-confidence-row">
+          {([1, 2, 3, 4, 5] as const).map((score) => (
+            <button
+              key={score}
+              type="button"
+              aria-label={`Confidence ${score}`}
+              aria-pressed={confidence === score}
+              className={`nn-mobile-fc-confidence-btn ${confidence === score ? "nn-mobile-fc-confidence-btn--active" : ""}`}
+              onClick={() => setConfidence(score)}
+            >
+              {score}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Rating dock */}
+      <div className="nn-mobile-fc-rating-dock" aria-label="Grade this card">
+        {RATING_META.map(({ key, label, icon, colorClass }) => (
+          <button
+            key={key}
+            type="button"
+            disabled={saving}
+            className={`nn-mobile-fc-rating-btn ${colorClass}`}
+            onClick={() => void handleRatingSubmit(key)}
+          >
+            {icon}
+            <span>{label}</span>
+          </button>
+        ))}
+      </div>
+    </>
+  );
+
+  /* ── MCQ/SATA revealed rationale ─────────────────────────────────────────────── */
+  const mcqRationale = revealed && exam && (
+    <div className="nn-mobile-fc-rationale-content">
+      {/* Clinical Pearl */}
+      <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl">
+        <span className="nn-clinical-pearl-label">
+          <Gem className="h-3.5 w-3.5" aria-hidden />
+          Clinical Pearl
+        </span>
+        <p>{buildPearl(card)}</p>
+      </section>
+
+      {/* Correct answer */}
+      <div className="nn-mobile-rationale-section">
+        <span className="nn-mobile-rationale-section__label">Correct Answer</span>
+        <span className="nn-mobile-rationale-correct-chip">{correctAnswerSummary(exam)}</span>
+      </div>
+
+      {/* Why this is correct */}
+      <div className="nn-mobile-rationale-section">
+        <span className="nn-mobile-rationale-section__label">Why This Is Correct</span>
+        <p className="nn-mobile-rationale-section__body">
+          <FlashcardRichContent text={resolvedCorrectRationale} />
+        </p>
+      </div>
+
+      {/* Why other options */}
+      {exam.answerOptions.filter((o) => o.letter !== exam.correctLetter).length > 0 ? (
+        <div className="nn-mobile-rationale-section">
+          <span className="nn-mobile-rationale-section__label">Why Other Options Are Incorrect</span>
+          <div className="nn-mobile-rationale-distractors">
+            {exam.answerOptions
+              .filter((o) => o.letter !== exam.correctLetter)
+              .map((o) => (
+                <div key={o.letter} className="nn-mobile-rationale-distractor">
+                  <span className="nn-mobile-rationale-distractor__badge">{o.letter}</span>
+                  <div className="nn-mobile-rationale-distractor__body">
+                    <strong>{o.text}</strong>
+                    {" – "}
+                    {resolveDistractorRationale(exam, o.letter, o.text)}
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      ) : null}
+
+      {/* Exam Takeaway */}
+      <div className="nn-mobile-rationale-takeaway">
+        <div className="nn-mobile-rationale-takeaway__header">
+          <Lightbulb className="h-4 w-4" aria-hidden />
+          <span>{examPathwayLabel}/REx-PN Takeaway</span>
+        </div>
+        <p>{card.topic ? `Prioritize ${card.topic.toLowerCase()} concepts when you see these clinical cues.` : "Connect the stem finding to the action that prevents the most immediate harm."}</p>
+      </div>
+    </div>
+  );
+
+  /* ══════════════════════════════════════════════════════════════════════════════
+     RENDER — single scrollable view
+     ══════════════════════════════════════════════════════════════════════════════ */
+  return (
+    <div className="nn-mobile-fc-root" data-revealed={revealed ? "1" : "0"}>
+      {/* Sticky compact header */}
+      {header}
+
+      {/* Scrollable content area */}
+      <div className="nn-mobile-fc-scroll">
+        {/* Topic label */}
+        {topicLabel ? (
+          <p className="nn-mobile-fc-topic-label">{topicLabel}</p>
+        ) : null}
+
+        {/* Status bar (after answering) */}
+        {statusBar}
 
         {/* Question card */}
-        <div className="nn-mobile-fc-question-surface">
-          <div className="nn-mobile-fc-question-body">
-            <FlashcardRichContent text={card.examMicroQuestion
-              ? String((card.examMicroQuestion as ExamMicroQuestionPayload).questionStem ?? card.prompt)
+        <div className="nn-mobile-fc-question-card">
+          <div className="nn-mobile-fc-question-stem">
+            <FlashcardRichContent text={
+              exam ? String(exam.questionStem ?? card.prompt)
+              : sata ? String(sata.questionStem ?? card.prompt)
               : card.prompt
             } />
           </div>
@@ -198,7 +431,7 @@ export function MobileFlashcardFlow({
             <div className="mt-4">
               <FlashcardExamMcqAnswerList
                 exam={exam}
-                revealed={false}
+                revealed={revealed}
                 pickedLetter={pickedLetter}
                 tutorMcq
                 answerChoicesHeading="Answer choices"
@@ -215,190 +448,90 @@ export function MobileFlashcardFlow({
               <FlashcardSataAnswerList
                 options={sata.answerOptions}
                 correctLetters={sata.correctLetters}
-                rationaleByLetter={[]}
-                revealed={false}
+                rationaleByLetter={revealed ? sata.rationaleByLetter : []}
+                revealed={revealed}
                 answerChoicesHeading="Select all that apply"
                 revealHint="Choose all correct options, then reveal."
                 onSelectionsChange={(letters) => { sataSelectionsRef.current = letters; }}
               />
             </div>
           ) : null}
-        </div>
 
-        {/* Submit / Reveal CTA */}
-        <div className="nn-mobile-fc-cta-row">
-          {exam ? (
-            <button
-              type="button"
-              disabled={!pickedLetter || submitting}
-              onClick={() => void handleMcqSubmit()}
-              className="nn-mobile-fc-cta-btn"
-            >
-              {submitting ? "Checking…" : "Submit Answer"}
-            </button>
-          ) : sata ? (
-            <button
-              type="button"
-              disabled={submitting}
-              onClick={handleSataReveal}
-              className="nn-mobile-fc-cta-btn"
-            >
-              {submitting ? "Checking…" : "Submit Answer"}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handlePlainReveal}
-              className="nn-mobile-fc-cta-btn"
-            >
-              Reveal Answer
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (phase === "rationale") {
-    const hasResult = isCorrect !== null;
-    return (
-      <div className="nn-mobile-fc-screen nn-mobile-fc-screen--rationale" data-mobile-phase="rationale">
-        {/* Result banner */}
-        {hasResult ? (
-          <div className={`nn-mobile-fc-result-banner ${isCorrect ? "nn-mobile-fc-result-banner--correct" : "nn-mobile-fc-result-banner--incorrect"}`}>
-            {isCorrect ? (
-              <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden />
-            ) : (
-              <XCircle className="h-5 w-5 shrink-0" aria-hidden />
-            )}
-            <div>
-              <strong>{isCorrect ? "Correct" : "Incorrect"}</strong>
-              <span>{isCorrect ? "Great work — review the rationale." : "Let’s review this concept."}</span>
+          {/* Submit CTA (pre-reveal) */}
+          {!revealed ? (
+            <div className="nn-mobile-fc-cta-row">
+              {exam ? (
+                <button
+                  type="button"
+                  disabled={!pickedLetter || submitting}
+                  onClick={() => void handleMcqSubmit()}
+                  className="nn-mobile-fc-cta-btn"
+                >
+                  {submitting ? "Checking…" : "Submit Answer"}
+                </button>
+              ) : sata ? (
+                <button
+                  type="button"
+                  disabled={submitting}
+                  onClick={handleSataReveal}
+                  className="nn-mobile-fc-cta-btn"
+                >
+                  {submitting ? "Checking…" : "Submit Answer"}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handlePlainReveal}
+                  className="nn-mobile-fc-cta-btn"
+                >
+                  Reveal Answer
+                </button>
+              )}
             </div>
+          ) : null}
+        </div>
+
+        {/* Rationale section (collapsible, shown after reveal) */}
+        {revealed ? (
+          <div className="nn-mobile-fc-rationale-section">
+            <button
+              type="button"
+              className="nn-mobile-fc-rationale-toggle"
+              aria-expanded={rationaleOpen}
+              onClick={() => setRationaleOpen((o) => !o)}
+            >
+              <div className="nn-mobile-fc-rationale-toggle__label">
+                <Lightbulb className="h-4 w-4" aria-hidden />
+                <span>Rationale</span>
+              </div>
+              {rationaleOpen
+                ? <ChevronUp   className="h-4 w-4" aria-hidden />
+                : <ChevronDown className="h-4 w-4" aria-hidden />}
+            </button>
+            {rationaleOpen ? (
+              exam ? mcqRationale : (
+                <div className="nn-mobile-fc-rationale-content">
+                  <FlashcardStudyRevealPanels
+                    exam={exam}
+                    answer={card.answer}
+                    explanation={card.explanation}
+                    pearl={buildPearl(card)}
+                    examPathwayLabel={examPathwayLabel}
+                  />
+                </div>
+              )
+            ) : null}
           </div>
         ) : null}
 
-        {/* Rationale content */}
-        <div className="nn-mobile-fc-rationale-body">
-          <FlashcardStudyRevealPanels
-            exam={exam}
-            answer={card.answer}
-            explanation={card.explanation}
-            pearl={buildPearl(card)}
-            examPathwayLabel={examPathwayLabel}
-          />
+        {/* Metadata strip */}
+        {metaStrip}
 
-          {/* Community performance */}
-          <CommunityPerformancePanel
-            flashcardId={card.id}
-            revealed
-            submittedLetter={submittedLetter}
-            correctLetter={exam?.correctLetter}
-          />
+        {/* Confidence + rating (after reveal) */}
+        {confidenceRating}
 
-          {/* Adaptive remediation */}
-          <AdaptiveRemediationPanel
-            plan={ecosystemPlan}
-            isIncorrect={isCorrect === false}
-            topic={card.topic}
-          />
-
-          {/* Review question link */}
-          <button
-            type="button"
-            className="nn-mobile-fc-review-q-link"
-            onClick={() => setPhase("question")}
-          >
-            Review question
-            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-          </button>
-        </div>
-
-        {/* Continue CTA */}
-        <div className="nn-mobile-fc-cta-row">
-          <button
-            type="button"
-            className="nn-mobile-fc-cta-btn"
-            onClick={() => setPhase("confidence")}
-          >
-            Continue
-            <ChevronRight className="h-4 w-4" aria-hidden />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (phase === "confidence") {
-    return (
-      <div className="nn-mobile-fc-screen nn-mobile-fc-screen--confidence" data-mobile-phase="confidence">
-        <div className="nn-mobile-fc-stage-header">
-          <h2>How confident were you?</h2>
-          <p>Rate your confidence on this concept.</p>
-        </div>
-
-        <div className="nn-mobile-fc-confidence-grid">
-          {([1, 2, 3, 4, 5] as const).map((score) => (
-            <button
-              key={score}
-              type="button"
-              aria-label={`Confidence ${score}`}
-              aria-pressed={confidence === score}
-              className={`nn-mobile-fc-confidence-btn ${confidence === score ? "nn-mobile-fc-confidence-btn--active" : ""}`}
-              onClick={() => setConfidence(score)}
-            >
-              {score}
-            </button>
-          ))}
-        </div>
-        <div className="nn-mobile-fc-confidence-labels">
-          <span>Not confident</span>
-          <span>Very confident</span>
-        </div>
-
-        <div className="nn-mobile-fc-cta-row">
-          <button
-            type="button"
-            disabled={!confidence}
-            className="nn-mobile-fc-cta-btn"
-            onClick={() => setPhase("rating")}
-          >
-            Continue
-            <ChevronRight className="h-4 w-4" aria-hidden />
-          </button>
-          <button
-            type="button"
-            className="nn-mobile-fc-skip-link"
-            onClick={() => setPhase("rating")}
-          >
-            Skip
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  /* phase === "rating" */
-  return (
-    <div className="nn-mobile-fc-screen nn-mobile-fc-screen--rating" data-mobile-phase="rating">
-      <div className="nn-mobile-fc-stage-header">
-        <h2>How did this card feel?</h2>
-        <p>This drives when you see this card again.</p>
-      </div>
-
-      <div className="nn-mobile-fc-rating-grid">
-        {RATING_META.map(({ key, label, sub, colorClass }) => (
-          <button
-            key={key}
-            type="button"
-            disabled={saving}
-            className={`nn-mobile-fc-rating-card ${colorClass}`}
-            onClick={() => void handleRatingSubmit(key)}
-          >
-            <strong>{label}</strong>
-            <span>{sub}</span>
-          </button>
-        ))}
+        {/* Bottom spacer for safe area */}
+        <div style={{ height: "env(safe-area-inset-bottom, 1rem)", minHeight: "1rem" }} />
       </div>
     </div>
   );

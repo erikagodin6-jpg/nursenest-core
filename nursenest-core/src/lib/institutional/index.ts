@@ -35,3 +35,21 @@ export type {
 } from "@/lib/institutional/instructor-assignment-orchestration";
 
 export { createPhase7StubInstructorAssignmentOrchestrator } from "@/lib/institutional/instructor-assignment-orchestration";
+
+export type {
+  InstitutionType,
+  InstitutionalCohortRow,
+  InstitutionalDashboardData,
+  InstitutionalLearnerRow,
+  InstitutionalLicenseEventRow,
+  InstitutionalOrganizationSummary,
+  InstitutionalRole,
+  InstitutionalStatus,
+} from "@/lib/institutional/licensing-types";
+
+export {
+  INSTITUTION_TYPES,
+  calculateSeatUtilization,
+  institutionTypeLabel,
+  normalizeInstitutionType,
+} from "@/lib/institutional/licensing-types";

@@ -1282,3 +1282,326 @@ html[data-theme="midnight-ink"] .nn-cat-exam-chrome.nn-cat-premium-convergence .
     transform: none;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PRACTICE EXAM / CAT — Bowtie, Matrix, rationale, type badge — theme-aware
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Question type panel: semantic tokens replace hardcoded hex ──────────────── */
+.nn-nclex-type-panel {
+  background: var(--semantic-surface);
+  border-right-color: color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+}
+
+.nn-nclex-type-panel__type-label {
+  color: var(--semantic-text-primary);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.nn-nclex-type-panel__type-sub {
+  color: var(--semantic-text-muted);
+}
+
+.nn-nclex-type-panel__divider {
+  background: color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+}
+
+.nn-nclex-type-panel__instruction {
+  color: var(--semantic-text-secondary);
+}
+
+/* Icon wraps: all theme-aware via semantic tokens */
+.nn-nclex-type-panel__icon-wrap {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-brand);
+  border-radius: 0.65rem;
+}
+
+.nn-nclex-type-panel__icon-wrap--mcq {
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  color: var(--semantic-success);
+}
+
+.nn-nclex-type-panel__icon-wrap--sata {
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 10%, var(--semantic-surface));
+  color: var(--semantic-info, var(--semantic-brand));
+}
+
+.nn-nclex-type-panel__icon-wrap--bowtie {
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+.nn-nclex-type-panel__icon-wrap--matrix {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  color: var(--semantic-brand);
+}
+
+.nn-nclex-type-panel__icon-wrap--hl {
+  background: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
+  color: var(--semantic-warning);
+}
+
+.nn-nclex-type-panel__icon-wrap--drag {
+  background: color-mix(in srgb, var(--semantic-chart-5) 12%, var(--semantic-surface));
+  color: var(--semantic-chart-5);
+}
+
+.nn-nclex-type-panel__icon-wrap--case {
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  color: var(--semantic-info);
+}
+
+/* ── Question surfaces: bright white, clear shadow, no decorative gradients ───── */
+.nn-cat-question-card::before,
+.nn-practice-q-card--premium[data-question-surface="practice"]::before,
+.nn-question-stem-card::before {
+  display: none !important;
+}
+
+.nn-exam-session-premium .nn-cat-question-card,
+.nn-exam-session-premium .nn-practice-q-card--premium[data-question-surface="practice"],
+.nn-exam-session-premium .nn-question-stem-card {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 8%) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 4px 16px -8px color-mix(in srgb, var(--semantic-text-primary) 12%, transparent) !important;
+}
+
+.nn-exam-session-premium.nn-learner-exam-shell {
+  background: color-mix(in srgb, var(--semantic-surface) 55%, var(--semantic-panel-muted)) !important;
+}
+
+/* ── Rationale panel: match flashcard rationale vibrancy ─────────────────────── */
+.nn-practice-exam-rationale-premium .nn-practice-exam-rationale-panel__card,
+.nn-practice-exam-rationale-sheet--premium,
+.nn-question-session-rationale .nn-practice-rationale-full-frame,
+.nn-question-session-rationale [class*="RationaleFullFrame"] {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 8%) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 4px 16px -8px color-mix(in srgb, var(--semantic-text-primary) 12%, transparent) !important;
+}
+
+/* ── Clinical Pearl in NCLEX/CAT rationale: vibrant bordered callout ─────────── */
+.nn-nclex-rationale__section--pearl {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.45rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 28%, var(--semantic-border-soft)) !important;
+  border-left: 3.5px solid var(--semantic-info, var(--semantic-brand)) !important;
+  border-radius: 0.85rem !important;
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 9%, var(--semantic-surface)) !important;
+  padding: 0.85rem 1rem !important;
+  box-shadow: 0 2px 10px -4px color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 20%, transparent) !important;
+}
+
+.nn-nclex-rationale__section--pearl .nn-nclex-rationale__section-title {
+  font-size: 0.67rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 88%, var(--semantic-text-primary)) !important;
+}
+
+.nn-nclex-rationale__section--pearl .nn-nclex-rationale__section-icon {
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 15%, var(--semantic-surface)) !important;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 88%, var(--semantic-text-primary)) !important;
+}
+
+.nn-nclex-rationale__section--pearl .nn-nclex-rationale__section-body {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  line-height: 1.52 !important;
+  color: var(--semantic-text-primary) !important;
+  margin: 0 !important;
+}
+
+/* ── Rationale section headers: uppercase label hierarchy ────────────────────── */
+.nn-nclex-rationale__section-title,
+.nn-nclex-rationale-sidebar__section h2,
+.nn-nclex-rationale-compact__why > span:first-child {
+  font-size: 0.67rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--semantic-text-muted) !important;
+}
+
+/* Correct answer section: green chip matching flashcard treatment */
+.nn-nclex-rationale__answer-card--correct {
+  border-radius: 0.85rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface)) !important;
+}
+
+.nn-nclex-rationale__answer-badge--correct {
+  background: var(--semantic-success) !important;
+  color: white !important;
+}
+
+/* Key takeaway: exam tip treatment */
+.nn-nclex-rationale__key-takeaway {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 22%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 6%, var(--semantic-surface)) !important;
+  padding: 0.65rem 0.85rem !important;
+}
+
+.nn-nclex-rationale__key-takeaway-title {
+  font-size: 0.67rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 85%, var(--semantic-text-primary)) !important;
+}
+
+.nn-nclex-rationale__key-takeaway-text {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.52 !important;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 75%, var(--semantic-text-primary)) !important;
+}
+
+/* Distractor letter badges */
+.nn-nclex-rationale__distractor-badge {
+  background: var(--semantic-surface) !important;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-text-muted)) !important;
+  color: var(--semantic-text-secondary) !important;
+  font-weight: 750 !important;
+  border-radius: 999px !important;
+}
+
+/* ── Bowtie diagram: bright sections, colored headings ───────────────────────── */
+.bowtie-ngn.bowtie-ngn--premium {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 8%) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 3px 12px -6px color-mix(in srgb, var(--semantic-text-primary) 12%, transparent) !important;
+}
+
+.bowtie-ngn.bowtie-ngn--premium::before {
+  display: none !important;
+}
+
+/* Bowtie column panels */
+.bowtie-ngn.bowtie-ngn--premium > div {
+  border-radius: 0.75rem !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 6%) !important;
+  background: color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted)) !important;
+}
+
+/* Column header labels (CONDITION / KEY FINDINGS / INTERVENTIONS) */
+.bowtie-ngn.bowtie-ngn--premium [role="heading"],
+.bowtie-ngn.bowtie-ngn--premium [data-col-header] {
+  font-size: 0.67rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--semantic-brand) !important;
+}
+
+/* Bowtie option buttons */
+.bowtie-ngn.bowtie-ngn--premium button[role="option"],
+.bowtie-ngn.bowtie-ngn--premium [aria-label$="slot, empty"],
+.bowtie-ngn.bowtie-ngn--premium [aria-label*=" slot:"] {
+  border-radius: 0.65rem !important;
+  border-color: var(--semantic-border-soft) !important;
+  background: var(--semantic-surface) !important;
+  color: var(--semantic-text-primary) !important;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.bowtie-ngn.bowtie-ngn--premium button[role="option"][aria-pressed="true"],
+.bowtie-ngn.bowtie-ngn--premium button[role="option"][aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 55%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)) !important;
+}
+
+/* Center diagnosis bubble */
+.bowtie-ngn.bowtie-ngn--premium [class*="diagnosis"],
+.bowtie-ngn.bowtie-ngn--premium [data-bowtie-center] {
+  border-radius: 1rem !important;
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)) !important;
+}
+
+/* ── Matrix table: clear column headers with semantic colors ─────────────────── */
+/* The matrix uses generic table/th elements — scope within exam context */
+.nn-exam-session-premium table th,
+[data-matrix-table] th,
+[data-nn-matrix-table] th {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  color: var(--semantic-text-secondary) !important;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)) !important;
+}
+
+/* Appropriate column: green */
+.nn-exam-session-premium table th[data-col="appropriate"],
+[data-matrix-col="appropriate"],
+.nn-matrix-col-appropriate {
+  color: var(--semantic-success) !important;
+  font-weight: 800 !important;
+}
+
+/* Contraindicated column: danger */
+.nn-exam-session-premium table th[data-col="contraindicated"],
+[data-matrix-col="contraindicated"],
+.nn-matrix-col-contraindicated {
+  color: var(--semantic-danger) !important;
+  font-weight: 800 !important;
+}
+
+/* Requires Provider Order column: info/brand */
+.nn-exam-session-premium table th[data-col="provider-order"],
+[data-matrix-col="provider-order"],
+.nn-matrix-col-provider {
+  color: var(--semantic-info, var(--semantic-brand)) !important;
+  font-weight: 800 !important;
+}
+
+/* Matrix table row alternating backgrounds */
+.nn-exam-session-premium table tr:nth-child(even) td,
+[data-matrix-table] tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 20%, var(--semantic-surface));
+}
+
+/* ── Theme Clinical Pearl overrides for exam rationale ───────────────────────── */
+html[data-theme="ocean"] .nn-nclex-rationale__section--pearl {
+  border-left-color: var(--semantic-info) !important;
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-surface)) !important;
+}
+html[data-theme="ocean"] .nn-nclex-rationale__section--pearl .nn-nclex-rationale__section-title,
+html[data-theme="ocean"] .nn-nclex-rationale__section--pearl .nn-nclex-rationale__section-icon {
+  color: var(--semantic-info) !important;
+}
+
+html[data-theme="midnight"] .nn-nclex-rationale__section--pearl,
+html[data-theme="midnight-indigo"] .nn-nclex-rationale__section--pearl {
+  border-left-color: var(--semantic-info, #60A5FA) !important;
+  border-color: color-mix(in srgb, var(--semantic-info, #60A5FA) 30%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info, #38BDF8) 12%, var(--semantic-surface)) !important;
+}
+
+html[data-theme="aurora"] .nn-nclex-rationale__section--pearl {
+  border-left-color: var(--semantic-primary, var(--semantic-brand)) !important;
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)) !important;
+}
+
+html[data-theme="sunset"] .nn-nclex-rationale__section--pearl {
+  border-left-color: var(--semantic-warning) !important;
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)) !important;
+}
+

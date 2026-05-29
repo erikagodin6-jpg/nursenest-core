@@ -72,6 +72,8 @@ export async function POST(req: Request) {
     attemptMode?: unknown;
     /** Pre-answer self rating from question bank (optional). */
     selfReportedConfidence?: "low" | "medium" | "high";
+    /** Milliseconds between question render and answer submission. */
+    timeSpentMs?: unknown;
   };
   try {
     body = (await req.json()) as typeof body;
@@ -153,6 +155,10 @@ export async function POST(req: Request) {
     const correct = gradeMatches(row.questionType, row.correctAnswer, body.answer);
     const expected = canonicalCorrectKeysForGrade(row.questionType, row.correctAnswer);
     const attemptMode = parseGradeAttemptMode(body.attemptMode);
+    const responseTimeMs =
+      typeof body.timeSpentMs === "number" && Number.isFinite(body.timeSpentMs) && body.timeSpentMs >= 0
+        ? Math.min(Math.round(body.timeSpentMs), 30 * 60 * 1000)
+        : null;
 
     const effectivePathwayId = effectivePathwayIdEarly;
 
@@ -309,6 +315,7 @@ export async function POST(req: Request) {
         isCorrect: correct,
         correctKeys: expected,
         attemptMode,
+        responseTimeMs,
       });
     } catch (e) {
       safeServerLogCritical("api_questions_grade", "peer_analytics_failed", { questionId: row.id }, e);

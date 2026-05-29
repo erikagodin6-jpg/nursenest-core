@@ -41,6 +41,10 @@ import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { LearnerDashboardReadinessNextStrip } from "@/components/student/learner-dashboard-readiness-next-strip";
 import { PostExamDashboardBridgeBanner } from "@/components/student/post-exam-dashboard-bridge";
+import { PersonalizedLearningCommandCenter } from "@/components/student/personalized-learning-command-center";
+import { buildPersonalizedCommandCenterPlan } from "@/lib/learner/personalized-command-center";
+import { ExamSuccessForecastCard } from "@/components/student/exam-success-forecast-card";
+import { buildExamSuccessForecast } from "@/lib/learner/exam-success-forecast";
 const LearnerCoachingDashboardPanel = dynamic(() =>
   import("@/components/student/learner-coaching-dashboard-panel").then(
     (m) => m.LearnerCoachingDashboardPanel,
@@ -223,6 +227,8 @@ export function LearnerStudyHome({
     (showCoach && weakTopicTitles.length > 0);
 
   const hubNavItems: LearnerDashboardHubNavItem[] = [
+    { href: "#personalized-command-center", label: "Today's plan" },
+    { href: "#exam-success-forecast", label: "Success forecast" },
     { href: "#study-priority", label: t("learner.studyHome.sectionPriorityTitle") },
     { href: "#study-quick-launch", label: t("learner.studyHome.quickLaunchNavLabel") },
     { href: "#study-modes", label: t("learner.studyModes.sectionNavLabel") },
@@ -266,6 +272,17 @@ export function LearnerStudyHome({
       const p = preferredPathwayId ? getExamPathwayById(preferredPathwayId) : null;
       return p ? isNpPremiumConvergencePathway(p) : false;
     })();
+  const commandPlan = buildPersonalizedCommandCenterPlan({
+    snapshot,
+    studySnap,
+    preferredPathwayId,
+  });
+  const successForecast = buildExamSuccessForecast({
+    snapshot,
+    studySnap,
+    pathwayId: preferredPathwayId,
+    commandPlan,
+  });
 
   const content = (
     <div
@@ -284,6 +301,12 @@ export function LearnerStudyHome({
     >
       <PostExamDashboardBridgeBanner />
       <LearnerCoachingDashboardPanel />
+
+      <PersonalizedLearningCommandCenter plan={commandPlan} />
+
+      <section id="exam-success-forecast" className="nn-dash-band nn-dash-band--stack-tight">
+        <ExamSuccessForecastCard forecast={successForecast} />
+      </section>
 
       {/* 1 — Premium hero strip: readiness snapshot + optional exam/streak + primary next action */}
       <LearnerDashboardReadinessNextStrip

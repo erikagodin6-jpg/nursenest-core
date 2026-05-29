@@ -6697,3 +6697,937 @@ html[data-theme="sunset"] .nn-mobile-fc-cta-btn {
     min-width: 6.75rem !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   FLASHCARDS POLISH — layout hardening, Clinical Pearl, vibrancy, hierarchy
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Progress counter: never wrap, match reference mockup layout ─────────────── */
+.nn-flashcard-topbar-progress > strong {
+  white-space: nowrap !important;
+  max-width: none !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+.nn-flashcard-topbar-progress > strong span {
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+.nn-flashcard-topbar-progress {
+  min-width: 5.5rem;
+}
+
+/* ── Topbar stat label: icon + text inline ───────────────────────────────────── */
+.nn-flashcard-topbar-stat-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.28rem !important;
+  white-space: nowrap !important;
+  font-size: 0.66rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  color: var(--semantic-text-muted) !important;
+}
+
+/* ── Topbar overall vibrancy ─────────────────────────────────────────────────── */
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-topbar {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-text-primary) 6%) !important;
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--semantic-border-soft) 60%, transparent),
+    0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent) !important;
+}
+
+/* ── Question + Rationale panels: white surface, clear shadow ────────────────── */
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid .nn-flashcard-hero-surface {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 10%) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 60%, transparent),
+    0 4px 16px -8px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent) !important;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rationale-panel {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 10%) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 60%, transparent),
+    0 4px 16px -8px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent) !important;
+}
+
+/* ── Workspace background: slightly tinted, not flat grey ────────────────────── */
+.nn-active-flashcard-session[data-nn-flashcard-study-session] {
+  background: color-mix(in srgb, var(--semantic-surface) 60%, var(--semantic-panel-muted)) !important;
+}
+
+/* ── CLINICAL PEARL — premium vibrant callout ────────────────────────────────── */
+
+/* Remove old flat treatment, replace with themed bordered callout */
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.48rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 28%, var(--semantic-border-soft)) !important;
+  border-left: 3.5px solid var(--semantic-info, var(--semantic-brand)) !important;
+  border-radius: 0.85rem !important;
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 9%, var(--semantic-surface)) !important;
+  padding: 0.85rem 1rem !important;
+  box-shadow: 0 2px 10px -4px color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 20%, transparent) !important;
+  margin-bottom: 0.15rem !important;
+}
+
+/* Pearl label row: icon + "CLINICAL PEARL" */
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span,
+.nn-flashcard-rationale-key-concept .nn-clinical-pearl-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.38rem !important;
+  margin: 0 !important;
+  font-size: 0.67rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 88%, var(--semantic-text-primary)) !important;
+}
+
+/* Pearl body text */
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept p {
+  margin: 0 !important;
+  font-size: 0.93rem !important;
+  font-weight: 600 !important;
+  line-height: 1.52 !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+/* Theme overrides — use semantic tokens, no hardcoded colours */
+html[data-theme="ocean"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  border-left-color: var(--semantic-info) !important;
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-surface)) !important;
+}
+html[data-theme="ocean"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span {
+  color: var(--semantic-info) !important;
+}
+
+html[data-theme="blossom"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept,
+html[data-theme="mint-blossom"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  border-left-color: var(--semantic-primary, var(--semantic-brand)) !important;
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)) !important;
+}
+html[data-theme="blossom"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span,
+html[data-theme="mint-blossom"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span {
+  color: var(--semantic-brand) !important;
+}
+
+html[data-theme="midnight"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept,
+html[data-theme="midnight-indigo"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept,
+html[data-theme="deep-twilight"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  border-left-color: var(--semantic-info, #60A5FA) !important;
+  border-color: color-mix(in srgb, var(--semantic-info, #60A5FA) 30%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info, #38BDF8) 12%, var(--semantic-surface)) !important;
+}
+html[data-theme="midnight"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span,
+html[data-theme="midnight-indigo"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span,
+html[data-theme="deep-twilight"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span {
+  color: var(--semantic-info, #60A5FA) !important;
+}
+
+html[data-theme="aurora"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  border-left-color: var(--semantic-primary, var(--semantic-brand)) !important;
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)) !important;
+}
+
+html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  border-left-color: var(--semantic-warning) !important;
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)) !important;
+}
+html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span {
+  color: color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-text-primary)) !important;
+}
+
+/* ── Rationale sections: clear labelled hierarchy ────────────────────────────── */
+.nn-flashcard-study-premium .nn-flashcard-rationale-section {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.38rem !important;
+  margin-top: 0.88rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-section h3,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect h3 {
+  margin: 0 !important;
+  font-size: 0.66rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--semantic-text-muted) !important;
+}
+
+/* Correct answer chip — green pill matching mockup */
+.nn-flashcard-study-premium .nn-flashcard-inline-rationale__answer {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 40%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface)) !important;
+  padding: 0.32rem 0.85rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 650 !important;
+  line-height: 1.25 !important;
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary)) !important;
+}
+
+/* Correct rationale body text */
+.nn-flashcard-study-premium .nn-flashcard-inline-rationale__body {
+  font-size: 0.875rem !important;
+  line-height: 1.58 !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+/* Why Other Options section */
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect {
+  margin-top: 0.88rem !important;
+  padding-top: 0.78rem !important;
+  border-top: 1px solid var(--semantic-border-soft) !important;
+}
+
+/* Distractor items: clean letter-labelled list */
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+  margin-top: 0.45rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect details {
+  border-radius: 0.7rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, transparent) !important;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface)) !important;
+  padding: 0.5rem 0.65rem !important;
+  font-size: 0.84rem !important;
+  line-height: 1.5 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect summary {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  list-style: none !important;
+  font-size: 0.82rem !important;
+  font-weight: 650 !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect summary::-webkit-details-marker {
+  display: none !important;
+}
+
+/* Letter badge in distractor summary */
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel__incorrect summary span:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+  border-radius: 999px !important;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-text-muted)) !important;
+  background: var(--semantic-surface) !important;
+  font-size: 0.72rem !important;
+  font-weight: 750 !important;
+  color: var(--semantic-text-secondary) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Exam tip section */
+.nn-flashcard-study-premium .nn-flashcard-rationale-section--exam-tip {
+  border-radius: 0.75rem !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 22%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 6%, var(--semantic-surface)) !important;
+  padding: 0.6rem 0.75rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-section--exam-tip summary {
+  list-style: none !important;
+  font-size: 0.8rem !important;
+  font-weight: 750 !important;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 85%, var(--semantic-text-primary)) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-section--exam-tip summary::-webkit-details-marker {
+  display: none !important;
+}
+
+/* ── Coach panel: clean horizontal strip ─────────────────────────────────────── */
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 80%, transparent) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent) !important;
+}
+
+.nn-flashcard-coach-panel__section > span,
+.nn-flashcard-confidence-scale > span {
+  font-size: 0.67rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--semantic-text-muted) !important;
+  text-transform: uppercase !important;
+}
+
+/* ── Rating dock: proportional, icon-aware ───────────────────────────────────── */
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 80%, transparent) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent) !important;
+  padding: 0.5rem !important;
+  gap: 0.5rem !important;
+}
+
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-rating-dock button {
+  min-height: 2.75rem !important;
+  font-size: 0.88rem !important;
+  font-weight: 650 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.42rem !important;
+}
+
+/* ── Support strip: cleaner, more readable ───────────────────────────────────── */
+.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-study-support-strip {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 80%, transparent) !important;
+  font-size: 0.82rem !important;
+  padding: 0.6rem 0.85rem !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent) !important;
+}
+
+/* ── Prevent left-side clipping on footer ────────────────────────────────────── */
+.nn-flashcard-study-premium .nn-flashcard-session-main-footer {
+  overflow: visible !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-study-support-strip,
+.nn-flashcard-study-premium .nn-flashcard-coach-panel,
+.nn-flashcard-study-premium .nn-flashcard-rating-dock {
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+
+/* ── Confidence scale buttons: clearer active state ─────────────────────────── */
+.nn-flashcard-confidence-scale > div {
+  gap: 0.4rem !important;
+}
+
+.nn-flashcard-confidence-scale button[aria-pressed="true"] {
+  background: var(--semantic-brand) !important;
+  border-color: var(--semantic-brand) !important;
+  color: white !important;
+  box-shadow: 0 3px 10px -4px color-mix(in srgb, var(--semantic-brand) 55%, transparent) !important;
+}
+
+/* ── Answer status bar: vibrant feedback ─────────────────────────────────────── */
+.nn-flashcard-answer-status {
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface)) !important;
+  border-color: color-mix(in srgb, var(--semantic-success) 34%, var(--semantic-border-soft)) !important;
+}
+
+/* ── Reduce vertical space between sections (~30%) ───────────────────────────── */
+.nn-flashcard-study-premium .nn-premium-flashcard-stack-outer {
+  gap: 0.65rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-session-main-footer.space-y-4 > * + * {
+  margin-top: 0.6rem !important;
+}
+
+/* ── Rationale panel header: slightly more prominent ────────────────────────── */
+.nn-flashcard-rationale-panel__header {
+  border-bottom-color: color-mix(in srgb, var(--semantic-border-soft) 72%, transparent) !important;
+  padding: 0.8rem 1rem !important;
+}
+
+.nn-flashcard-rationale-panel__header > div {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: var(--semantic-text-primary) !important;
+  gap: 0.5rem !important;
+}
+
+.nn-flashcard-rationale-panel__header svg {
+  color: var(--semantic-brand) !important;
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MOBILE FLASHCARD FLOW 2.1 — single-scroll redesign matching NurseNest mockup
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Root container ──────────────────────────────────────────────────────────── */
+.nn-mobile-fc-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--semantic-surface) 55%, var(--semantic-panel-muted));
+}
+
+/* ── Compact sticky header ───────────────────────────────────────────────────── */
+.nn-mobile-fc-compact-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  flex-shrink: 0;
+  padding: 0.65rem 1rem 0.55rem;
+  background: var(--semantic-surface);
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+  box-shadow: 0 1px 4px -2px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+}
+
+.nn-mobile-fc-stat-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.nn-mobile-fc-stat-group:first-child {
+  flex-shrink: 0;
+}
+
+.nn-mobile-fc-stat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--semantic-text-muted);
+  white-space: nowrap;
+}
+
+.nn-mobile-fc-stat-label svg {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex-shrink: 0;
+}
+
+.nn-mobile-fc-stat-value {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 7rem;
+}
+
+.nn-mobile-fc-timer {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono, monospace);
+}
+
+/* Progress track in header */
+.nn-mobile-fc-compact-header .nn-mobile-fc-progress-track {
+  height: 3px;
+  width: 100%;
+  min-width: 3.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-panel-muted));
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--semantic-brand), color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-chart-2)));
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Scrollable content area ─────────────────────────────────────────────────── */
+.nn-mobile-fc-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 0.85rem 0.9rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Topic label ─────────────────────────────────────────────────────────────── */
+.nn-mobile-fc-topic-label {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  letter-spacing: 0.01em;
+}
+
+/* ── Status bar (Correct / Incorrect) ───────────────────────────────────────── */
+.nn-mobile-fc-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: 0.9rem;
+  border: 1px solid;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.nn-mobile-fc-status-bar__left {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.nn-mobile-fc-status-bar--correct {
+  border-color: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary));
+}
+
+.nn-mobile-fc-status-bar--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-danger) 72%, var(--semantic-text-primary));
+}
+
+.nn-mobile-fc-status-bar--neutral {
+  border-color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 7%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-mobile-fc-next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, var(--semantic-brand) 12%);
+  border-radius: 999px;
+  background: var(--semantic-surface);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  white-space: nowrap;
+}
+
+/* ── Question card ───────────────────────────────────────────────────────────── */
+.nn-mobile-fc-question-card {
+  border-radius: 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 8%);
+  background: var(--semantic-surface);
+  padding: 1.1rem 1rem;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 50%, transparent),
+    0 4px 14px -8px color-mix(in srgb, var(--semantic-text-primary) 12%, transparent);
+}
+
+.nn-mobile-fc-question-stem {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.42;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ── Submit CTA ──────────────────────────────────────────────────────────────── */
+.nn-mobile-fc-cta-row {
+  margin-top: 1rem;
+}
+
+.nn-mobile-fc-cta-btn {
+  display: inline-flex;
+  width: 100%;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 48%, var(--semantic-border-soft));
+  border-radius: 0.8rem;
+  background: var(--semantic-brand);
+  color: white;
+  font-size: 0.92rem;
+  font-weight: 750;
+  box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--semantic-brand) 48%, transparent);
+  transition: opacity 150ms ease;
+}
+
+.nn-mobile-fc-cta-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Rationale section ───────────────────────────────────────────────────────── */
+.nn-mobile-fc-rationale-section {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 8%);
+  background: var(--semantic-surface);
+  overflow: hidden;
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+}
+
+.nn-mobile-fc-rationale-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nn-mobile-fc-rationale-toggle__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 750;
+  color: var(--semantic-text-primary);
+}
+
+.nn-mobile-fc-rationale-toggle svg {
+  color: var(--semantic-brand);
+}
+
+.nn-mobile-fc-rationale-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.25rem 1rem 1rem;
+}
+
+/* ── MCQ rationale sections ──────────────────────────────────────────────────── */
+.nn-mobile-rationale-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nn-mobile-rationale-section__label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-mobile-rationale-section__body {
+  font-size: 0.88rem;
+  line-height: 1.58;
+  color: var(--semantic-text-primary);
+  margin: 0;
+}
+
+.nn-mobile-rationale-correct-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  padding: 0.3rem 0.85rem;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary));
+  width: fit-content;
+}
+
+.nn-mobile-rationale-distractors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.nn-mobile-rationale-distractor {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, transparent);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 30%, var(--semantic-surface));
+  padding: 0.55rem 0.7rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--semantic-text-primary);
+}
+
+.nn-mobile-rationale-distractor__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 80%, var(--semantic-text-muted));
+  background: var(--semantic-surface);
+  font-size: 0.72rem;
+  font-weight: 750;
+  color: var(--semantic-text-secondary);
+  flex-shrink: 0;
+}
+
+.nn-mobile-rationale-distractor__body strong {
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-mobile-rationale-takeaway {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-radius: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 7%, var(--semantic-surface));
+  padding: 0.65rem 0.85rem;
+}
+
+.nn-mobile-rationale-takeaway__header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 85%, var(--semantic-text-primary));
+}
+
+.nn-mobile-rationale-takeaway p {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 72%, var(--semantic-text-primary));
+  margin: 0;
+}
+
+/* ── Metadata strip ──────────────────────────────────────────────────────────── */
+.nn-mobile-fc-meta-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  background: var(--semantic-surface);
+  overflow: hidden;
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+}
+
+.nn-mobile-fc-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 60%, transparent);
+}
+
+.nn-mobile-fc-meta-row:last-child {
+  border-bottom: none;
+}
+
+.nn-mobile-fc-meta-row--link {
+  cursor: pointer;
+}
+
+.nn-mobile-fc-meta-row__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  flex-shrink: 0;
+  min-width: 8rem;
+}
+
+.nn-mobile-fc-meta-row__label svg {
+  flex-shrink: 0;
+  color: var(--semantic-brand);
+}
+
+.nn-mobile-fc-meta-row__chevron {
+  margin-left: auto;
+  color: var(--semantic-text-muted);
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.nn-mobile-fc-meta-row__body {
+  width: 100%;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-mobile-hint-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  padding: 0.3rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+}
+
+.nn-mobile-fc-lesson-link {
+  color: var(--semantic-brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ── Confidence section ──────────────────────────────────────────────────────── */
+.nn-mobile-fc-confidence-section {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  background: var(--semantic-surface);
+  padding: 0.85rem 1rem;
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+}
+
+.nn-mobile-fc-confidence-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
+  margin-bottom: 0.65rem;
+}
+
+.nn-mobile-fc-confidence-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nn-mobile-fc-confidence-btn {
+  flex: 1;
+  min-height: 2.75rem;
+  min-width: 44px;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 80%, var(--semantic-text-muted));
+  border-radius: 0.65rem;
+  background: var(--semantic-surface);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--semantic-text-secondary);
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.nn-mobile-fc-confidence-btn--active {
+  border-color: var(--semantic-brand) !important;
+  background: var(--semantic-brand) !important;
+  color: white !important;
+  box-shadow: 0 3px 10px -4px color-mix(in srgb, var(--semantic-brand) 55%, transparent);
+}
+
+/* ── Rating dock ─────────────────────────────────────────────────────────────── */
+.nn-mobile-fc-rating-dock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  background: var(--semantic-surface);
+  padding: 0.6rem;
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+}
+
+.nn-mobile-fc-rating-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 3.5rem;
+  min-width: 44px;
+  border-radius: 0.75rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--semantic-text-secondary);
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.nn-mobile-fc-rating-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.nn-mobile-fc-rating-btn.nn-mobile-rating--again {
+  border-color: color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-danger) 72%, var(--semantic-text-primary));
+}
+
+.nn-mobile-fc-rating-btn.nn-mobile-rating--hard {
+  border-color: color-mix(in srgb, var(--semantic-warning) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 7%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-warning) 72%, var(--semantic-text-primary));
+}
+
+.nn-mobile-fc-rating-btn.nn-mobile-rating--good {
+  border-color: color-mix(in srgb, var(--semantic-success) 36%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary));
+}
+
+.nn-mobile-fc-rating-btn.nn-mobile-rating--easy {
+  border-color: color-mix(in srgb, var(--semantic-brand) 36%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-primary));
+}
+
+/* Theme-specific progress fill colours (re-declare for compact header) */
+html[data-theme="blossom"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill,
+html[data-theme="mint-blossom"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  background: linear-gradient(90deg, #FFA9CC, #B7EFD1);
+}
+html[data-theme="ocean"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  background: linear-gradient(90deg, #1D9BD7, #14B8A6);
+}
+html[data-theme="aurora"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  background: linear-gradient(90deg, #9B72FF, #4A90E2);
+}
+html[data-theme="sunset"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  background: linear-gradient(90deg, #E07862, #E8B44F);
+}
+html[data-theme="midnight"] .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+  background: linear-gradient(90deg, #38BDF8, #60A5FA);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-mobile-fc-compact-header .nn-mobile-fc-progress-fill {
+    transition: none;
+  }
+}
+

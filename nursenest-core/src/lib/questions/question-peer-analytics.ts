@@ -18,6 +18,7 @@ const INSUFFICIENT_MSG =
 export type QuestionPeerStatsPayload = {
   totalAttempts: number;
   correctPercentage: number | null;
+  averageResponseTimeMs: number | null;
   optionPercentages: Record<string, number> | null;
   selectedOptionKeys: string[];
   correctOptionKeys: string[];
@@ -69,6 +70,7 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
     isCorrect: boolean;
     correctKeys: string[];
     attemptMode: PracticeQuestionAnswerMode;
+    responseTimeMs?: number | null;
   },
 ): Promise<QuestionPeerStatsPayload | null> {
   if (!isQuestionPeerAnalyticsEnabled()) return null;
@@ -77,6 +79,10 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
   const selectedKeys = selectedKeysFromAnswer(params.questionType, params.answer);
   const selectedPersist = persistSelectedOptionKey(selectedKeys);
   const bumpKeys = selectedKeys.length > 0 ? [...new Set(selectedKeys)] : ["(none)"];
+  const responseTimeMs =
+    typeof params.responseTimeMs === "number" && Number.isFinite(params.responseTimeMs) && params.responseTimeMs >= 0
+      ? Math.min(Math.round(params.responseTimeMs), 30 * 60 * 1000)
+      : null;
 
   const payload = await prisma.$transaction(async (tx) => {
     await tx.examQuestionPracticeAnswerAttempt.create({
@@ -85,6 +91,7 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
         questionId: params.questionId,
         selectedOptionKey: selectedPersist,
         isCorrect: params.isCorrect,
+        responseTimeMs,
         mode: params.attemptMode,
         pathwayId: params.pathwayId,
       },
@@ -110,10 +117,18 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
         questionId: params.questionId,
         totalAttempts: 1,
         correctAttempts: params.isCorrect ? 1 : 0,
+        responseTimeTotalMs: responseTimeMs ?? 0,
+        responseTimeSamples: responseTimeMs == null ? 0 : 1,
       },
       update: {
         totalAttempts: { increment: 1 },
         ...(params.isCorrect ? { correctAttempts: { increment: 1 } } : {}),
+        ...(responseTimeMs == null
+          ? {}
+          : {
+              responseTimeTotalMs: { increment: responseTimeMs },
+              responseTimeSamples: { increment: 1 },
+            }),
       },
     });
 
@@ -130,6 +145,10 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
       !insufficient && total > 0 && perf
         ? roundPct((100 * perf.correctAttempts) / total)
         : null;
+    const averageResponseTimeMs =
+      !insufficient && perf && perf.responseTimeSamples > 0
+        ? Math.round(perf.responseTimeTotalMs / perf.responseTimeSamples)
+        : null;
 
     const optionPercentages: Record<string, number> = {};
     for (const row of optionRows) {
@@ -140,6 +159,7 @@ export async function recordQuestionPeerAnalyticsAndBuildPayload(
     const out: QuestionPeerStatsPayload = {
       totalAttempts: total,
       correctPercentage: insufficient ? null : correctPct,
+      averageResponseTimeMs,
       optionPercentages: insufficient ? null : optionPercentages,
       selectedOptionKeys: selectedKeys,
       correctOptionKeys: [...params.correctKeys],

@@ -6,6 +6,8 @@ import {
   BarChart3,
   Bookmark,
   ChevronRight,
+  ChevronsRight,
+  CheckCircle2,
   Clock3,
   Home,
   Keyboard,
@@ -889,11 +891,11 @@ export function ActiveStudySession({
 
             <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
               {([
-                ["again", "Again"],
-                ["hard", "Hard"],
-                ["good", "Good"],
-                ["easy", "Easy"],
-              ] as const).map(([rating, label]) => (
+                ["again", "Again", <RefreshCw key="again" className="h-4 w-4" aria-hidden />],
+                ["hard", "Hard", <BarChart3 key="hard" className="h-4 w-4" aria-hidden />],
+                ["good", "Good", <CheckCircle2 key="good" className="h-4 w-4" aria-hidden />],
+                ["easy", "Easy", <ChevronsRight key="easy" className="h-4 w-4" aria-hidden />],
+              ] as const).map(([rating, label, icon]) => (
                 <button
                   key={rating}
                   type="button"
@@ -901,6 +903,7 @@ export function ActiveStudySession({
                   onClick={() => void submitRating(rating)}
                   disabled={!revealed || saving}
                 >
+                  {icon}
                   {label}
                 </button>
               ))}

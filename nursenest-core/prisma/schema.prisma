@@ -914,6 +914,110 @@ model Subscription {
   @@index([userId, createdAt(sort: Desc)])
 }
 
+/// * Institution / organization-level seat licensing for schools, hospitals, residency programs, and health systems.
+/// * Billing can be linked to Stripe at the organization level while learner entitlement remains user-scoped at launch.
+model InstitutionalOrganization {
+  id                   String   @id @default(cuid())
+  name                 String   @db.VarChar(160)
+  slug                 String   @unique @db.VarChar(140)
+  type                 String   @db.VarChar(64)
+  status               String   @default("active") @db.VarChar(32)
+  seatCap              Int      @default(0) @map("seat_cap")
+  primaryTimezone      String?  @default("UTC") @map("primary_timezone") @db.VarChar(64)
+  stripeCustomerId     String?  @map("stripe_customer_id") @db.VarChar(128)
+  stripeSubscriptionId String?  @map("stripe_subscription_id") @db.VarChar(128)
+  renewalAt            DateTime? @map("renewal_at")
+  createdByUserId      String?  @map("created_by_user_id")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  memberships InstitutionalMembership[]
+  cohorts     InstitutionalCohort[]
+  events      InstitutionalLicenseEvent[]
+
+  @@index([status, type])
+  @@index([renewalAt])
+  @@map("institutional_organizations")
+}
+
+/// * User membership under an institution. Active learner memberships consume seats.
+model InstitutionalMembership {
+  id             String    @id @default(cuid())
+  organizationId String    @map("organization_id")
+  userId         String    @map("user_id")
+  role           String    @db.VarChar(32)
+  status         String    @default("active") @db.VarChar(32)
+  invitedEmail   String?   @map("invited_email") @db.VarChar(320)
+  assignedAt     DateTime? @default(now()) @map("assigned_at")
+  removedAt      DateTime? @map("removed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  organization InstitutionalOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId, status])
+  @@index([organizationId, role, status])
+  @@map("institutional_memberships")
+}
+
+/// * Class, residency block, orientation group, or faculty-managed cohort.
+model InstitutionalCohort {
+  id               String    @id @default(cuid())
+  organizationId   String    @map("organization_id")
+  name             String    @db.VarChar(160)
+  defaultPathwayId String?   @map("default_pathway_id") @db.VarChar(128)
+  status           String    @default("active") @db.VarChar(32)
+  startsAt         DateTime? @map("starts_at")
+  endsAt           DateTime? @map("ends_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  organization InstitutionalOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  memberships  InstitutionalCohortMembership[]
+
+  @@index([organizationId, status])
+  @@index([defaultPathwayId])
+  @@map("institutional_cohorts")
+}
+
+/// * Cohort membership used for faculty dashboards and class-level reports.
+model InstitutionalCohortMembership {
+  id        String    @id @default(cuid())
+  cohortId  String    @map("cohort_id")
+  userId    String    @map("user_id")
+  role      String    @default("learner") @db.VarChar(32)
+  active    Boolean   @default(true)
+  joinedAt  DateTime  @default(now()) @map("joined_at")
+  leftAt    DateTime? @map("left_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  cohort InstitutionalCohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+
+  @@unique([cohortId, userId])
+  @@index([userId, active])
+  @@index([cohortId, active, role])
+  @@map("institutional_cohort_memberships")
+}
+
+/// * Immutable institutional seat, renewal, assignment, and removal ledger.
+model InstitutionalLicenseEvent {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  actorUserId    String?  @map("actor_user_id")
+  eventType      String   @map("event_type") @db.VarChar(64)
+  seatDelta      Int?     @map("seat_delta")
+  meta           Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization InstitutionalOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt(sort: Desc)])
+  @@index([eventType, createdAt(sort: Desc)])
+  @@map("institutional_license_events")
+}
+
 /// * **Claim** row inserted **before** webhook handlers run — prevents concurrent double-apply across instances.
 /// * Deleted on handler failure so Stripe retries are not permanently skipped.
 model StripeWebhookEvent {
@@ -1746,6 +1850,7 @@ model ExamQuestionPracticeAnswerAttempt {
   questionId         String                     @map("question_id") @db.VarChar
   selectedOptionKey  String                     @map("selected_option_key") @db.Text
   isCorrect          Boolean                    @map("is_correct")
+  responseTimeMs     Int?                       @map("response_time_ms")
   mode               PracticeQuestionAnswerMode @default(practice) @map("mode")
   pathwayId          String?                    @map("pathway_id") @db.VarChar(64)
   createdAt          DateTime                   @default(now()) @map("created_at")
@@ -1804,6 +1909,8 @@ model ExamQuestionPerformanceAggregate {
   questionId        String   @id @map("question_id") @db.VarChar
   totalAttempts     Int      @default(0) @map("total_attempts")
   correctAttempts   Int      @default(0) @map("correct_attempts")
+  responseTimeTotalMs Int     @default(0) @map("response_time_total_ms")
+  responseTimeSamples Int     @default(0) @map("response_time_samples")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
   question ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)

@@ -66,7 +66,7 @@ export function RtVentilatorModuleHub({ t }: { t: LearnerMarketingT }) {
         </div>
       </section>
 
-      <MechanicalVentWaveformPanel label={t("rtVentilator.hub.sampleWaveformLabel")} />
+      <VentHubPreview label={t("rtVentilator.hub.sampleWaveformLabel")} />
 
       <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-5 sm:px-6">
         <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">{t("rtVentilator.hub.catPracticeTitle")}</h2>

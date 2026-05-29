@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadFlaggedQuestionsForReview } from "@/lib/questions/compute-question-psychometrics";
+import { loadQuestionQualityDashboard } from "@/lib/questions/load-question-quality-dashboard.server";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +19,10 @@ export async function GET(req: NextRequest) {
   const severity = req.nextUrl.searchParams.get("severity") as
     | "low" | "medium" | "high" | "critical" | null;
   const limit = Math.min(200, Number(req.nextUrl.searchParams.get("limit") ?? 100));
+  if (req.nextUrl.searchParams.get("view") === "dashboard") {
+    const data = await loadQuestionQualityDashboard({ limit });
+    return NextResponse.json({ ok: true, data });
+  }
 
   const flagged = await loadFlaggedQuestionsForReview({ severity: severity ?? undefined, limit });
   return NextResponse.json({ ok: true, items: flagged, count: flagged.length });

@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Gem } from "lucide-react";
 
 type StackLabels = {
   answerHeading?: string;
@@ -154,16 +154,14 @@ export function FlashcardStudyRevealPanels({
 
       {/* ── 2. Clinical Pearl ──────────────────────────────────────────── */}
       {pearlText ? (
-        <section className="nn-rationale-section nn-rationale-section--pearl rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_60%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)]">
-          <CollapsibleSection
-            label="Clinical Pearl"
-            colorClass="text-[color-mix(in_srgb,var(--semantic-warning)_80%,var(--semantic-text-primary))]"
-            defaultOpen
-          >
-            <div className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
-              <FlashcardRichContent text={pearlText} />
-            </div>
-          </CollapsibleSection>
+        <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl">
+          <span className="nn-clinical-pearl-label">
+            <Gem className="h-3.5 w-3.5" aria-hidden />
+            Clinical Pearl
+          </span>
+          <div className="text-sm leading-relaxed text-[var(--semantic-text-primary)] font-semibold">
+            <FlashcardRichContent text={pearlText} />
+          </div>
         </section>
       ) : null}
 

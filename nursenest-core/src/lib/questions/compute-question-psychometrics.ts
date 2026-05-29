@@ -13,6 +13,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { computeQuestionQualityAnalytics } from "@/lib/questions/question-quality-analytics";
 
 const MIN_ATTEMPTS_FOR_PVALUE = 50;
 const MIN_ATTEMPTS_FOR_DISTRACTORS = 50;
@@ -24,6 +25,9 @@ export type QuestionPsychometricFlags = {
   misleading_distractor: boolean;      // any wrong option > 60% selection
   answer_key_error: boolean;  // correct option 0% AND totalAttempts ≥ 20
   low_educational_value: boolean;      // p-value > 0.92 OR few attempts
+  ambiguous: boolean;
+  poor_discrimination: boolean;
+  frequently_reported: boolean;
 };
 
 export type QuestionPsychometrics = {
@@ -34,6 +38,7 @@ export type QuestionPsychometrics = {
   distractorRates: Record<string, number>; // optionKey → selection rate (0–1)
   flags: QuestionPsychometricFlags;
   qualityScore: number;                 // 0–100 composite
+  averageResponseTimeMs: number | null;
   highestSeverity: "none" | "low" | "medium" | "high" | "critical";
 };
 
@@ -42,6 +47,7 @@ function computeFlags(
   totalAttempts: number,
   distractorRates: Record<string, number>,
   correctOptionKey: string | null,
+  analytics: ReturnType<typeof computeQuestionQualityAnalytics>,
 ): QuestionPsychometricFlags {
   const distractorValues = Object.entries(distractorRates)
     .filter(([k]) => k !== correctOptionKey)
@@ -56,11 +62,15 @@ function computeFlags(
     misleading_distractor: distractorValues.some((r) => r > 0.60),
     answer_key_error: totalAttempts >= 20 && correctRate === 0,
     low_educational_value: pValue > 0.92,
+    ambiguous: analytics.flags.includes("ambiguous"),
+    poor_discrimination: analytics.flags.includes("poor_discrimination"),
+    frequently_reported: analytics.flags.includes("frequently_reported"),
   };
 }
 
 function computeHighestSeverity(flags: QuestionPsychometricFlags): QuestionPsychometrics["highestSeverity"] {
   if (flags.answer_key_error || flags.misleading_distractor) return "critical";
+  if (flags.poor_discrimination || flags.ambiguous) return "high";
   if (flags.too_difficult) return "high";
   if (flags.too_easy || flags.non_functional_distractor || flags.low_educational_value) return "medium";
   return "none";
@@ -70,6 +80,9 @@ function computeQualityScore(pValue: number, flags: QuestionPsychometricFlags): 
   // Start at 100, deduct for issues
   let score = 100;
   if (flags.answer_key_error) score -= 50;
+  if (flags.poor_discrimination) score -= 25;
+  if (flags.ambiguous) score -= 20;
+  if (flags.frequently_reported) score -= 15;
   if (flags.misleading_distractor) score -= 30;
   if (flags.too_difficult) score -= 20;
   if (flags.too_easy) score -= 10;
@@ -145,6 +158,8 @@ export async function computeQuestionPsychometricsBatch(opts: {
       const total = perf.totalAttempts;
       const correct = perf.correctAttempts;
       const pValue = total > 0 ? correct / total : 0;
+      const averageResponseTimeMs =
+        perf.responseTimeSamples > 0 ? Math.round(perf.responseTimeTotalMs / perf.responseTimeSamples) : null;
 
       const options = optionsByQuestion.get(perf.questionId) ?? [];
       const distractorRates: Record<string, number> = {};
@@ -155,9 +170,16 @@ export async function computeQuestionPsychometricsBatch(opts: {
       }
 
       const correctKey = correctKeyByQuestion.get(perf.questionId) ?? null;
-      const flags = computeFlags(pValue, total, distractorRates, correctKey);
+      const analytics = computeQuestionQualityAnalytics({
+        totalAttempts: total,
+        correctAttempts: correct,
+        correctOptionKeys: correctKey ? [correctKey] : [],
+        optionSelections: options,
+        averageResponseTimeMs,
+      });
+      const flags = computeFlags(pValue, total, distractorRates, correctKey, analytics);
       const severity = computeHighestSeverity(flags);
-      const qualityScore = computeQualityScore(pValue, flags);
+      const qualityScore = Math.min(computeQualityScore(pValue, flags), analytics.healthScore);
 
       const activeFlags = (Object.keys(flags) as Array<keyof typeof flags>)
         .filter((k) => flags[k]);
@@ -177,7 +199,19 @@ export async function computeQuestionPsychometricsBatch(opts: {
             isAdaptiveEligible: false,
             isMockExamEligible: false,
             qualityScore,
-            qualityFeedback: { activeFlags, severity, pValue, distractorRates },
+            qualityFeedback: {
+              activeFlags,
+              severity,
+              pValue,
+              difficultyIndex: analytics.difficultyIndex,
+              correctResponseRate: analytics.correctResponseRate,
+              averageResponseTimeMs,
+              distractorRates,
+              mostSelectedWrongAnswer: analytics.mostSelectedWrongAnswer,
+              mostSelectedWrongAnswerRate: analytics.mostSelectedWrongAnswerRate,
+              retirementCandidate: analytics.retirementCandidate,
+              reviewPriority: analytics.reviewPriority,
+            },
           },
         });
         result.autoDisabled++;
@@ -193,7 +227,19 @@ export async function computeQuestionPsychometricsBatch(opts: {
           where: { id: perf.questionId },
           data: {
             qualityScore,
-            qualityFeedback: { activeFlags, severity, pValue, distractorRates },
+            qualityFeedback: {
+              activeFlags,
+              severity,
+              pValue,
+              difficultyIndex: analytics.difficultyIndex,
+              correctResponseRate: analytics.correctResponseRate,
+              averageResponseTimeMs,
+              distractorRates,
+              mostSelectedWrongAnswer: analytics.mostSelectedWrongAnswer,
+              mostSelectedWrongAnswerRate: analytics.mostSelectedWrongAnswerRate,
+              retirementCandidate: analytics.retirementCandidate,
+              reviewPriority: analytics.reviewPriority,
+            },
           },
         });
       }
@@ -226,6 +272,7 @@ export async function loadFlaggedQuestionsForReview(opts: {
   isMockExamEligible: boolean;
   totalAttempts: number | null;
   pValue: number | null;
+  averageResponseTimeMs: number | null;
 }>> {
   if (!isDatabaseUrlConfigured()) return [];
 
@@ -248,7 +295,7 @@ export async function loadFlaggedQuestionsForReview(opts: {
       isAdaptiveEligible: true,
       isMockExamEligible: true,
       performanceAggregate: {
-        select: { totalAttempts: true, correctAttempts: true },
+        select: { totalAttempts: true, correctAttempts: true, responseTimeTotalMs: true, responseTimeSamples: true },
       },
     },
     orderBy: { qualityScore: "asc" },
@@ -268,5 +315,9 @@ export async function loadFlaggedQuestionsForReview(opts: {
     pValue: q.performanceAggregate
       ? q.performanceAggregate.correctAttempts / q.performanceAggregate.totalAttempts
       : null,
+    averageResponseTimeMs:
+      q.performanceAggregate && q.performanceAggregate.responseTimeSamples > 0
+        ? Math.round(q.performanceAggregate.responseTimeTotalMs / q.performanceAggregate.responseTimeSamples)
+        : null,
   }));
 }

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Lightbulb, XCircle, X } from "lucide-react";
+import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Gem, Lightbulb, XCircle, X } from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
@@ -467,17 +467,20 @@ export function FlashcardStudyQuestionStack({
                 {revealed ? (
                   <div className="nn-flashcard-rationale-panel__body">
                     <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl">
-                      <span>Clinical Pearl</span>
+                      <span className="nn-clinical-pearl-label">
+                        <Gem className="h-3.5 w-3.5" aria-hidden />
+                        Clinical Pearl
+                      </span>
                       <p>{rationaleKeyConcept(resolvedCorrectRationale)}</p>
                     </section>
                     <section className="nn-flashcard-rationale-section">
-                      <h3>Correct answer</h3>
+                      <h3>Correct Answer</h3>
                       <div className="nn-flashcard-inline-rationale__answer">
                         {correctAnswerSummary(exam)}
                       </div>
                     </section>
                     <section className="nn-flashcard-rationale-section">
-                      <h3>Correct Answer Explanation</h3>
+                      <h3>Why This Is Correct</h3>
                       <div className="nn-flashcard-inline-rationale__body">
                         <FlashcardRichContent text={resolvedCorrectRationale} />
                       </div>
