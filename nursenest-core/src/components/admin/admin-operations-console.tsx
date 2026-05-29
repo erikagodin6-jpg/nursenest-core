@@ -185,6 +185,109 @@ export function AdminOperationsConsole({
       </section>
 
       <section>
+        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Synthetic learning monitor</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Authenticated Playwright checks for learner activity startup. Results are written by the scheduled external
+          monitor and alert to email, Slack, and Discord on failure.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className={`nn-card rounded-xl border p-4 ${toneForSeverity((h.syntheticLearning.uptimePct ?? 100) >= 99, (h.syntheticLearning.uptimePct ?? 100) < 99)}`}>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Uptime ({h.syntheticLearning.windowHours}h)</p>
+            <p className="mt-1 text-3xl font-bold">
+              {h.syntheticLearning.uptimePct == null ? "No data" : `${h.syntheticLearning.uptimePct}%`}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Passed {h.syntheticLearning.passed} / {h.syntheticLearning.total}
+            </p>
+          </div>
+          <div className={`nn-card rounded-xl border p-4 ${toneForSeverity((h.syntheticLearning.p95StartupMs ?? 0) < 3000, (h.syntheticLearning.p95StartupMs ?? 0) >= 3000)}`}>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Startup latency</p>
+            <p className="mt-1 text-sm">
+              Avg: <strong>{h.syntheticLearning.avgStartupMs == null ? "n/a" : `${h.syntheticLearning.avgStartupMs}ms`}</strong>
+            </p>
+            <p className="mt-1 text-sm">
+              p95: <strong>{h.syntheticLearning.p95StartupMs == null ? "n/a" : `${h.syntheticLearning.p95StartupMs}ms`}</strong>
+            </p>
+          </div>
+          <div className={`nn-card rounded-xl border p-4 ${toneForSeverity(h.syntheticLearning.failed === 0, h.syntheticLearning.failed > 0)}`}>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Failures</p>
+            <p className="mt-1 text-3xl font-bold">{h.syntheticLearning.failed}</p>
+            <p className="mt-1 text-xs text-muted-foreground">Last 24 hours</p>
+          </div>
+          <div className="nn-card rounded-xl border border-border/70 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Coverage</p>
+            <p className="mt-1 text-sm">
+              {h.syntheticLearning.latestByCheck.length > 0
+                ? `${h.syntheticLearning.latestByCheck.length} activity checks reporting`
+                : "Waiting for first monitor run"}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Flashcards, CAT, questions, lessons, skills, pharmacology</p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 xl:grid-cols-2">
+          <div className="nn-card rounded-xl border border-border/70 p-4">
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Latest checks</h3>
+            {h.syntheticLearning.latestByCheck.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">No synthetic learning results recorded yet.</p>
+            ) : (
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full min-w-[520px] text-left text-xs">
+                  <thead className="text-muted-foreground">
+                    <tr>
+                      <th className="py-2 pr-3">Check</th>
+                      <th className="py-2 pr-3">Status</th>
+                      <th className="py-2 pr-3">Latency</th>
+                      <th className="py-2 pr-3">When</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {h.syntheticLearning.latestByCheck.map((row) => (
+                      <tr key={row.checkName} className="border-t border-border/60">
+                        <td className="py-2 pr-3">
+                          <p className="font-semibold">{row.checkName}</p>
+                          <p className="text-muted-foreground">{row.route}</p>
+                        </td>
+                        <td className={row.status === "pass" ? "py-2 pr-3 text-emerald-700" : "py-2 pr-3 text-rose-700"}>
+                          {row.status}
+                        </td>
+                        <td className="py-2 pr-3">{row.durationMs}ms</td>
+                        <td className="py-2 pr-3">{new Date(row.checkedAt).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          <div className="nn-card rounded-xl border border-border/70 p-4">
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Recent failures</h3>
+            {h.syntheticLearning.recentFailures.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">No recent learning activity failures.</p>
+            ) : (
+              <ul className="mt-3 space-y-3">
+                {h.syntheticLearning.recentFailures.map((row) => (
+                  <li key={`${row.checkName}-${row.checkedAt}`} className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="font-semibold text-rose-800 dark:text-rose-200">{row.checkName}</p>
+                      <span className="text-xs text-muted-foreground">{row.durationMs}ms</span>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">{row.route}</p>
+                    {row.error ? <p className="mt-1 text-xs text-rose-800 dark:text-rose-200">{row.error}</p> : null}
+                    {row.screenshotDataUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={row.screenshotDataUrl} alt="" className="mt-2 max-h-40 rounded border border-border/60 object-contain" />
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section>
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Automation & generation</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Cron worker jobs, blog/content automation logs, and AI studio runs. Use filters on the full automation log page

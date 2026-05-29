@@ -118,6 +118,9 @@ model User {
   oauthProviderLinks            OAuthProviderLink[]
   attempts                      ExamAttempt[]
   examSessions                  ExamSession[]
+  learnerActivityEvents         LearnerActivityEvent[]
+  learnerActivityAuditSnapshots LearnerActivityAuditSnapshot[]
+  userFrictionEvents            UserFrictionEvent[]
   flashcardDraftsCreated        GeneratedFlashcardDraft[]   @relation("FlashcardDraftCreatedBy")
   flashcardDraftsReviewed       GeneratedFlashcardDraft[]   @relation("FlashcardDraftReviewedBy")
   lessonDraftsCreated           GeneratedLessonDraft[]      @relation("LessonDraftCreatedBy")
@@ -4193,4 +4196,127 @@ model PathwayLaunchWorkflow {
   @@index([stage])
   @@index([isTeamFocus])
   @@map("pathway_launch_workflows")
+}
+
+// ─── Learner Observability Platform ──────────────────────────────────────────
+//
+// Models added as part of the Learner Observability & Business Intelligence Platform.
+// These supplement the in-process observability layer (structured logs + PostHog)
+// with persistent records for audit, chargeback defense, and trend analysis.
+
+/// * Immutable record of a learner study activity event (completion, abandonment, error).
+/// * Used for chargeback defense, engagement analytics, and feature health monitoring.
+/// * Written by server-side activity handlers; never modified after insert.
+model LearnerActivityEvent {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  /// * Activity type: questions, flashcards, lessons, cat, loft, ecg, pharmacology, etc.
+  activityType  String   @map("activity_type") @db.VarChar(64)
+  /// * Lifecycle event: started, completed, abandoned, errored.
+  lifecycle     String   @db.VarChar(32)
+  tier          String   @db.VarChar(32)
+  pathwayId     String?  @map("pathway_id") @db.VarChar(128)
+  sessionId     String?  @map("session_id") @db.VarChar(128)
+  durationMs    Int?     @map("duration_ms")
+  itemsCompleted Int?    @map("items_completed")
+  score         Int?
+  /// * Extra context: e.g. { reason: "navigation" } for abandonment.
+  meta          Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, activityType, createdAt(sort: Desc)])
+  @@index([activityType, lifecycle, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("learner_activity_events")
+}
+
+/// * Periodic learner activity snapshot for chargeback defense evidence generation.
+/// * Captures cumulative counts at a point in time; never contains PII.
+/// * Generated on-demand by the chargeback report API or nightly cron.
+model LearnerActivityAuditSnapshot {
+  id                          String   @id @default(cuid())
+  userId                      String   @map("user_id")
+  tier                        String   @db.VarChar(32)
+  snapshotDate                DateTime @default(now()) @map("snapshot_date")
+  questionsAnsweredTotal      Int      @default(0) @map("questions_answered_total")
+  flashcardsReviewedTotal     Int      @default(0) @map("flashcards_reviewed_total")
+  lessonsCompletedTotal       Int      @default(0) @map("lessons_completed_total")
+  catExamsTakenTotal          Int      @default(0) @map("cat_exams_taken_total")
+  simulationCasesTotal        Int      @default(0) @map("simulation_cases_total")
+  loginCountTotal             Int      @default(0) @map("login_count_total")
+  estimatedStudyMinutesTotal  Int      @default(0) @map("estimated_study_minutes_total")
+  /// * ISO date string of first recorded activity (subscription start proxy).
+  firstActivityAt             String?  @map("first_activity_at") @db.VarChar(32)
+  /// * ISO date string of most recent activity.
+  lastActivityAt              String?  @map("last_activity_at") @db.VarChar(32)
+  user                        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, snapshotDate(sort: Desc)])
+  @@map("learner_activity_audit_snapshots")
+}
+
+/// * User friction event — server-side record of learner frustration signal.
+/// * Supplements the in-process friction detector with persistent storage for trend analysis.
+model UserFrictionEvent {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  sessionId String?  @map("session_id") @db.VarChar(128)
+  /// * Signal type: repeated_retry, rapid_refresh, activity_launch_failed, etc.
+  signal    String   @db.VarChar(64)
+  activity  String?  @db.VarChar(64)
+  route     String?  @db.VarChar(200)
+  /// * Weight 1–10 (higher = more frustration signal strength).
+  weight    Int      @default(5)
+  /// * Extra context (never PII).
+  meta      Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([signal, createdAt(sort: Desc)])
+  @@map("user_friction_events")
+}
+
+/// * Feature health status snapshot — daily record of per-feature health scores.
+/// * Powers the "feature health over time" trend charts in the ops center dashboard.
+model FeatureHealthSnapshot {
+  id            String   @id @default(cuid())
+  snapshotDate  DateTime @default(now()) @map("snapshot_date")
+  featureId     String   @map("feature_id") @db.VarChar(64)
+  score         Int
+  /// * Status: healthy, watch, degraded, critical.
+  status        String   @db.VarChar(32)
+  completionRate Decimal? @map("completion_rate") @db.Decimal(5, 4)
+  errorRate     Decimal? @map("error_rate") @db.Decimal(5, 4)
+  p95StartupMs  Int?     @map("p95_startup_ms")
+  cacheHitRate  Decimal? @map("cache_hit_rate") @db.Decimal(5, 4)
+
+  @@index([featureId, snapshotDate(sort: Desc)])
+  @@index([snapshotDate(sort: Desc)])
+  @@map("feature_health_snapshots")
+}
+
+/// * Synthetic browser monitoring result for authenticated learner study flows.
+/// * Written by the external Playwright monitor every 15 minutes; screenshots are
+/// * stored as compact data URLs only for recent diagnostic evidence.
+model SyntheticLearningCheckResult {
+  id                String   @id @default(cuid())
+  runId             String   @map("run_id") @db.VarChar(96)
+  checkName         String   @map("check_name") @db.VarChar(96)
+  route             String   @db.VarChar(512)
+  status            String   @db.VarChar(16)
+  durationMs        Int      @map("duration_ms")
+  httpStatus        Int?     @map("http_status")
+  error             String?  @db.VarChar(1000)
+  screenshotDataUrl String?  @map("screenshot_data_url")
+  meta              Json?
+  checkedAt         DateTime @default(now()) @map("checked_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@index([checkName, checkedAt(sort: Desc)])
+  @@index([status, checkedAt(sort: Desc)])
+  @@index([runId])
+  @@index([checkedAt(sort: Desc)])
+  @@map("synthetic_learning_check_results")
 }

@@ -90,6 +90,33 @@ export type AdminOperationsHealth = {
     grace: number;
     stripeWebhookEvents24h: number;
   };
+  syntheticLearning: {
+    windowHours: number;
+    uptimePct: number | null;
+    avgStartupMs: number | null;
+    p95StartupMs: number | null;
+    total: number;
+    passed: number;
+    failed: number;
+    latestByCheck: Array<{
+      checkName: string;
+      route: string;
+      status: string;
+      durationMs: number;
+      checkedAt: string;
+      error: string | null;
+      screenshotDataUrl: string | null;
+    }>;
+    recentFailures: Array<{
+      checkName: string;
+      route: string;
+      status: string;
+      durationMs: number;
+      checkedAt: string;
+      error: string | null;
+      screenshotDataUrl: string | null;
+    }>;
+  };
 };
 
 function emptyHealth(generatedAt: string): AdminOperationsHealth {
@@ -133,6 +160,52 @@ function emptyHealth(generatedAt: string): AdminOperationsHealth {
       grace: -1,
       stripeWebhookEvents24h: -1,
     },
+    syntheticLearning: {
+      windowHours: 24,
+      uptimePct: null,
+      avgStartupMs: null,
+      p95StartupMs: null,
+      total: 0,
+      passed: 0,
+      failed: 0,
+      latestByCheck: [],
+      recentFailures: [],
+    },
+  };
+}
+
+type SyntheticLearningAggregateRow = {
+  total: bigint | number;
+  passed: bigint | number;
+  failed: bigint | number;
+  avg_ms: number | null;
+  p95_ms: number | null;
+};
+
+type SyntheticLearningResultRow = {
+  check_name: string;
+  route: string;
+  status: string;
+  duration_ms: number;
+  checked_at: Date;
+  error: string | null;
+  screenshot_data_url: string | null;
+};
+
+function toNumber(value: bigint | number | null | undefined): number {
+  if (typeof value === "bigint") return Number(value);
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+function mapSyntheticLearningRow(row: SyntheticLearningResultRow) {
+  return {
+    checkName: row.check_name,
+    route: row.route,
+    status: row.status,
+    durationMs: row.duration_ms,
+    checkedAt: row.checked_at.toISOString(),
+    error: row.error,
+    screenshotDataUrl: row.screenshot_data_url,
   };
 }
 
@@ -194,6 +267,9 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
         subPastDue,
         subGrace,
         stripe24h,
+        syntheticAggRows,
+        syntheticLatestRows,
+        syntheticFailures,
       ] = await Promise.all([
         prisma.backgroundJob.groupBy({
           by: ["status"],
@@ -339,12 +415,52 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
         prisma.stripeWebhookEvent.count({
           where: { createdAt: { gte: since24h } },
         }),
+        prisma.$queryRaw<SyntheticLearningAggregateRow[]>`
+          SELECT
+            COUNT(*)::bigint AS total,
+            COUNT(*) FILTER (WHERE status = 'pass')::bigint AS passed,
+            COUNT(*) FILTER (WHERE status = 'fail')::bigint AS failed,
+            ROUND(AVG(duration_ms))::int AS avg_ms,
+            percentile_disc(0.95) WITHIN GROUP (ORDER BY duration_ms)::int AS p95_ms
+          FROM synthetic_learning_check_results
+          WHERE checked_at >= ${since24h}
+        `,
+        prisma.$queryRaw<SyntheticLearningResultRow[]>`
+          SELECT DISTINCT ON (check_name)
+            check_name,
+            route,
+            status,
+            duration_ms,
+            checked_at,
+            error,
+            screenshot_data_url
+          FROM synthetic_learning_check_results
+          ORDER BY check_name, checked_at DESC
+        `,
+        prisma.$queryRaw<SyntheticLearningResultRow[]>`
+          SELECT
+            check_name,
+            route,
+            status,
+            duration_ms,
+            checked_at,
+            error,
+            screenshot_data_url
+          FROM synthetic_learning_check_results
+          WHERE status = 'fail'
+          ORDER BY checked_at DESC
+          LIMIT 20
+        `,
       ]);
 
       const byStatus: Record<string, number> = {};
       for (const g of bgGroups) {
         byStatus[g.status] = g._count._all;
       }
+      const syntheticAgg = syntheticAggRows[0] ?? { total: 0, passed: 0, failed: 0, avg_ms: null, p95_ms: null };
+      const syntheticTotal = toNumber(syntheticAgg.total);
+      const syntheticPassed = toNumber(syntheticAgg.passed);
+      const syntheticFailed = toNumber(syntheticAgg.failed);
 
       return {
         backgroundJobs: {
@@ -410,6 +526,17 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
           pastDue: subPastDue,
           grace: subGrace,
           stripeWebhookEvents24h: stripe24h,
+        },
+        syntheticLearning: {
+          windowHours: 24,
+          uptimePct: syntheticTotal > 0 ? Math.round((syntheticPassed / syntheticTotal) * 10000) / 100 : null,
+          avgStartupMs: syntheticAgg.avg_ms,
+          p95StartupMs: syntheticAgg.p95_ms,
+          total: syntheticTotal,
+          passed: syntheticPassed,
+          failed: syntheticFailed,
+          latestByCheck: syntheticLatestRows.map(mapSyntheticLearningRow),
+          recentFailures: syntheticFailures.map(mapSyntheticLearningRow),
         },
       };
     },

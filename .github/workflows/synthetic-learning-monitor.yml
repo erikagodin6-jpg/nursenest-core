@@ -1,0 +1,57 @@
+name: Synthetic learning monitor
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: synthetic-learning-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: Authenticated learner activity checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run synthetic learning checks
+        env:
+          SYNTHETIC_MONITOR_BASE_URL: ${{ secrets.SYNTHETIC_MONITOR_BASE_URL || 'https://www.nursenest.ca' }}
+          SYNTHETIC_MONITOR_RESULT_ENDPOINT: ${{ secrets.SYNTHETIC_MONITOR_RESULT_ENDPOINT }}
+          SYNTHETIC_MONITOR_SECRET: ${{ secrets.SYNTHETIC_MONITOR_SECRET }}
+          SYNTHETIC_MONITOR_PATHWAY_ID: ${{ secrets.SYNTHETIC_MONITOR_PATHWAY_ID }}
+          QA_PAID_EMAIL: ${{ secrets.QA_PAID_EMAIL }}
+          QA_PAID_PASSWORD: ${{ secrets.QA_PAID_PASSWORD }}
+          E2E_PAID_EMAIL: ${{ secrets.E2E_PAID_EMAIL }}
+          E2E_PAID_PASSWORD: ${{ secrets.E2E_PAID_PASSWORD }}
+        run: npm run monitor:synthetic-learning
+
+      - name: Upload monitor artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-learning-monitor-${{ github.run_id }}
+          path: nursenest-core/test-results/synthetic-learning-monitor
+          if-no-files-found: ignore

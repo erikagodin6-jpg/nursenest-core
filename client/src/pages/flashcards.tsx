@@ -2880,23 +2880,35 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
       updated[updated.length - 1] = { ...updated[updated.length - 1], confidence };
       return updated;
     });
-    try {
-      await fetch("/api/flashcard-session/answer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.id,
-          questionId: card.id,
-          selectedIndex: adaptiveSelectedOption,
-          wasCorrect: lastResult.correct,
-          confidence,
-          topic: card.topic,
-          bodySystem: card.bodySystem,
-          tier: effectiveTier === "admin" ? "rn" : effectiveTier,
-        }),
-      });
-    } catch {}
-  }, [user, adaptiveCards, adaptiveIndex, adaptiveResults, adaptiveSelectedOption, effectiveTier]);
+    // Persist asynchronously — don't block the UX transition
+    fetch("/api/flashcard-session/answer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user.id,
+        questionId: card.id,
+        selectedIndex: adaptiveSelectedOption,
+        wasCorrect: lastResult.correct,
+        confidence,
+        topic: card.topic,
+        bodySystem: card.bodySystem,
+        tier: effectiveTier === "admin" ? "rn" : effectiveTier,
+      }),
+    }).catch(() => {});
+    // Auto-advance after a brief pause so the learner sees their selection
+    setTimeout(() => {
+      if (adaptiveIndex < adaptiveCards.length - 1) {
+        setAdaptiveIndex(prev => prev + 1);
+        setAdaptiveSelectedOption(null);
+        setAdaptiveShowRationale(false);
+        setAdaptiveConfidence(null);
+        setAdaptiveSubmitted(false);
+      } else {
+        fetchAdaptiveSummary();
+        setView("adaptive-report");
+      }
+    }, 180);
+  }, [user, adaptiveCards, adaptiveIndex, adaptiveResults, adaptiveSelectedOption, effectiveTier, fetchAdaptiveSummary]);
 
   const handleAdaptiveNext = useCallback(() => {
     if (adaptiveIndex < adaptiveCards.length - 1) {
@@ -6755,9 +6767,9 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
               </div>
               <Button
                 size="sm"
-                disabled={!adaptiveConfidence}
                 onClick={handleAdaptiveNext}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 font-medium rounded-lg text-xs h-8 px-4 shadow-sm"
+                aria-label={adaptiveIndex < adaptiveCards.length - 1 ? "Next card" : "Finish session"}
                 data-testid="button-adaptive-next"
               >
                 {adaptiveIndex < adaptiveCards.length - 1 ? "Next Card" : "Finish"} <ChevronRight className="w-4 h-4" />
@@ -7430,6 +7442,41 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
                       </Card>
                     </div>
                   </div>
+
+                  {/* SM2 rating bar — visible after answering, auto-advances on selection */}
+                  <div
+                    className="rounded-xl border border-border bg-card px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 animate-in slide-in-from-bottom-2 duration-200"
+                    data-testid="section-sm2-rating"
+                    role="group"
+                    aria-label="Rate this card"
+                  >
+                    <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide shrink-0">
+                      {t("flashcards.rateDifficulty")}
+                    </span>
+                    <div className="flex flex-1 items-center gap-2 flex-wrap" data-testid="group-question-sm2-ratings">
+                      {(["again", "hard", "good", "easy"] as const).map((rating) => {
+                        const ratingMeta: Record<string, { label: string; sublabel: string; className: string }> = {
+                          again: { label: t("flashcards.ratingAgain"), sublabel: t("flashcards.ratingAgainSublabel") || "Need more practice", className: "border-rose-200 text-rose-700 hover:bg-rose-50 focus-visible:ring-rose-300" },
+                          hard: { label: t("flashcards.ratingHard"),  sublabel: t("flashcards.ratingHardSublabel")  || "Getting there",       className: "border-orange-200 text-orange-700 hover:bg-orange-50 focus-visible:ring-orange-300" },
+                          good: { label: t("flashcards.ratingGood"),  sublabel: t("flashcards.ratingGoodSublabel")  || "Understood",           className: "border-emerald-200 text-emerald-700 hover:bg-emerald-50 focus-visible:ring-emerald-300" },
+                          easy: { label: t("flashcards.ratingEasy"),  sublabel: t("flashcards.ratingEasySublabel")  || "Mastered",             className: "border-blue-200 text-blue-700 hover:bg-blue-50 focus-visible:ring-blue-300" },
+                        };
+                        const meta = ratingMeta[rating];
+                        return (
+                          <button
+                            key={rating}
+                            type="button"
+                            className={`flex-1 min-w-[72px] flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg border bg-card font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${meta.className}`}
+                            onClick={() => handleSM2Rating(rating)}
+                            data-testid={`button-question-rating-${rating}`}
+                          >
+                            <span className="text-[13px] font-semibold leading-tight">{meta.label}</span>
+                            <span className="text-[10px] opacity-60 leading-tight">{meta.sublabel}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 ) : (
                   <Card className="border border-border shadow-md bg-card overflow-hidden rounded-2xl flex flex-col animate-in fade-in duration-200">
                     <CardContent className="px-6 sm:px-8 py-6 flex flex-col flex-1">
@@ -7552,7 +7599,9 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-3 pt-3 flex-wrap border-t border-border">
+          {/* Bottom navigation bar — always visible, never becomes inaccessible */}
+          <div className="flex items-center justify-between gap-3 pt-3 flex-wrap border-t border-border" data-testid="section-nav-toolbar">
+            {/* Left: bookmark / mastered utilities */}
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -7591,14 +7640,41 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
                 )}
               </Button>
             </div>
-            <Button
-              size="sm"
-              onClick={handleNext}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 font-medium rounded-lg text-xs h-8 px-4 shadow-sm"
-              data-testid="button-next-card"
-            >
-              {currentIndex < sessionCards.length - 1 ? "Next Card" : "Finish"} <ChevronRight className="w-3.5 h-3.5" />
-            </Button>
+
+            {/* Right: card counter + Previous / Next navigation */}
+            <div className="flex items-center gap-2" data-testid="group-card-navigation">
+              {/* Card position indicator — always visible */}
+              <span className="text-[11px] text-muted-foreground font-medium tabular-nums select-none" data-testid="text-card-counter">
+                {currentIndex + 1} / {sessionCards.length}
+              </span>
+
+              {/* Previous — disabled on first card */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className="gap-1 rounded-lg text-xs h-8 px-3 border-border text-muted-foreground hover:bg-secondary disabled:opacity-40"
+                aria-label="Previous card"
+                data-testid="button-prev-card"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Prev</span>
+              </Button>
+
+              {/* Next / Finish — always enabled so the session is never trapped */}
+              <Button
+                size="sm"
+                onClick={handleNext}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1 font-medium rounded-lg text-xs h-8 px-4 shadow-sm"
+                aria-label={currentIndex < sessionCards.length - 1 ? "Next card" : "Finish session"}
+                data-testid="button-next-card"
+              >
+                <span className="hidden sm:inline">{currentIndex < sessionCards.length - 1 ? "Next" : "Finish"}</span>
+                <span className="sm:hidden">{currentIndex < sessionCards.length - 1 ? "Next" : "Done"}</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
           </div>
         </div>
       </main>

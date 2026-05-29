@@ -383,6 +383,84 @@ function checkPerformanceTests(): void {
   }
 }
 
+// ─── Check 7: Learner observability platform modules ─────────────────────────
+
+function checkObservabilityPlatform(): void {
+  console.log("\n[7] Learner observability platform …");
+
+  const REQUIRED_OBS_MODULES = [
+    { path: "src/lib/observability/learner-completion-observability.ts", label: "Completion observability" },
+    { path: "src/lib/observability/user-friction-detector.ts",           label: "User friction detector" },
+    { path: "src/lib/observability/time-to-learning-metrics.ts",         label: "Time-to-learning metrics" },
+    { path: "src/lib/observability/adaptive-learning-observability.ts",  label: "Adaptive learning telemetry" },
+    { path: "src/lib/observability/user-activity-audit-trail.ts",        label: "Activity audit trail (chargeback defense)" },
+    { path: "src/lib/observability/feature-health-engine.ts",            label: "Feature health engine" },
+    { path: "src/lib/observability/seo-observability.ts",                label: "SEO observability" },
+    { path: "src/lib/observability/ops-center.ts",                       label: "Operations center aggregator" },
+    { path: "src/lib/observability/event-taxonomy.ts",                   label: "Platform event taxonomy" },
+    { path: "src/components/admin/ops-center-dashboard.tsx",             label: "Ops center dashboard component" },
+    { path: "src/app/api/admin/ops-center/route.ts",                     label: "Ops center API route" },
+    { path: "src/app/(admin)/admin/ops-center/page.tsx",                 label: "Ops center admin page" },
+  ] as const;
+
+  let allPresent = true;
+  for (const mod of REQUIRED_OBS_MODULES) {
+    const absPath = path.join(APP_ROOT, mod.path);
+    if (fs.existsSync(absPath)) {
+      pass("OBS-MOD", mod.label);
+    } else {
+      critical("OBS-MOD-MISSING", `${mod.label} not found: ${mod.path}`);
+      allPresent = false;
+    }
+  }
+
+  if (allPresent) {
+    pass("OBS-PLATFORM", "All observability platform modules present");
+  }
+
+  // Verify event taxonomy has required categories
+  const taxonomyPath = path.join(APP_ROOT, "src/lib/observability/event-taxonomy.ts");
+  if (fs.existsSync(taxonomyPath)) {
+    const content = fs.readFileSync(taxonomyPath, "utf8");
+    const requiredCategories = ["LEARNER_EVENTS", "BILLING_EVENTS", "PERFORMANCE_EVENTS",
+      "AUTH_EVENTS", "CONTENT_EVENTS", "SEO_EVENTS", "AUDIT_EVENTS", "ALL_EVENTS"];
+    let taxPassed = 0;
+    for (const cat of requiredCategories) {
+      if (content.includes(`export const ${cat}`)) taxPassed++;
+      else warning("OBS-TAXONOMY", `Missing event category: ${cat}`);
+    }
+    if (taxPassed === requiredCategories.length) {
+      pass("OBS-TAXONOMY", `All ${requiredCategories.length} event categories defined`);
+    }
+  }
+
+  // Verify Prisma schema has audit models
+  const schemaPath = path.join(APP_ROOT, "prisma/schema.prisma");
+  if (fs.existsSync(schemaPath)) {
+    const content = fs.readFileSync(schemaPath, "utf8");
+    const models = ["LearnerActivityEvent", "LearnerActivityAuditSnapshot", "UserFrictionEvent", "FeatureHealthSnapshot"];
+    let schemaPass = 0;
+    for (const m of models) {
+      if (content.includes(`model ${m}`)) schemaPass++;
+      else warning("OBS-SCHEMA", `Prisma model missing: ${m}`);
+    }
+    if (schemaPass === models.length) {
+      pass("OBS-SCHEMA", `All ${models.length} observability Prisma models defined`);
+    }
+  }
+
+  // Verify contract tests present
+  const contractTestPath = path.join(APP_ROOT,
+    "src/lib/observability/learner-observability-platform.contract.test.ts");
+  if (fs.existsSync(contractTestPath)) {
+    const content = fs.readFileSync(contractTestPath, "utf8");
+    const testCount = (content.match(/^test\(/gm) ?? []).length;
+    pass("OBS-TESTS", `Observability contract tests: ${testCount} test(s)`);
+  } else {
+    warning("OBS-TESTS", "Observability contract tests not found");
+  }
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 function main(): void {
@@ -398,6 +476,7 @@ function main(): void {
   checkNPlusOneDetector();
   checkBaselineRegression();
   checkPerformanceTests();
+  checkObservabilityPlatform();
 
   const criticals = findings.filter((f) => f.severity === "critical");
   const warnings = findings.filter((f) => f.severity === "warning");
