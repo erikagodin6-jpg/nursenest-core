@@ -32,12 +32,37 @@ import assert from "node:assert/strict";
 import test, { describe } from "node:test";
 import {
   defaultEcgStripConfigForRhythm,
+  defaultPediatricEcgStripConfig,
   generateEcgWaveform,
   validateStripContinuity,
   ECG_STRIP_TYPE_LABELS,
   ECG_MODE_ARTIFACT_LEVELS,
+  PEDIATRIC_PR_OFFSETS,
+  PEDIATRIC_QRS_WIDTHS,
   type EcgStripMediaConfig,
 } from "@/lib/ecg-module/ecg-waveform-generator";
+import {
+  PEDIATRIC_ECG_RHYTHM_REGISTRY,
+  VALID_PEDIATRIC_RHYTHM_TAGS,
+  PALS_ARREST_RHYTHMS,
+  VENTILATE_FIRST_RHYTHMS,
+  PEDIATRIC_NORMAL_RATE_RANGES,
+  getPediatricNormalRateRange,
+  isPulsusPardoxusRhythmTag,
+} from "@/lib/ecg-module/ecg-pediatric-rhythm-registry";
+import {
+  ECG_ADULT_PEDIATRIC_COMPARISONS,
+  ECG_COMPARISON_IDS,
+  getEcgComparison,
+  getComparisonsByAgeGroup,
+} from "@/lib/ecg-module/ecg-pediatric-comparison";
+import {
+  PEDIATRIC_ECG_FLASHCARDS,
+  PEDIATRIC_ECG_FLASHCARD_PATHWAYS,
+  PEDIATRIC_COMPARATIVE_FLASHCARDS,
+  PEDIATRIC_NCLEX_TRAP_FLASHCARDS,
+  getPediatricFlashcardsForPathway,
+} from "@/lib/ecg-module/ecg-pediatric-flashcard-pathways";
 import {
   validateEcgStripClinicalConfig,
   validatePublishedStrip,
@@ -444,6 +469,9 @@ describe("ECG strip regression — morphology validator (all validated rhythms)"
     for (const rhythmKey of ECG_MORPHOLOGY_VALIDATED_RHYTHMS) {
       const config = defaultEcgStripConfigForRhythm(rhythmKey);
       const result = validateEcgStripMorphology(config);
+      // Pediatric rhythms require ageGroup via defaultPediatricEcgStripConfig() —
+      // skip any rhythm that fails solely due to missing ageGroup in adult config.
+      if (result.errors.every((e) => e.rule === "pediatric_strip_requires_age_group")) continue;
       assert.deepEqual(
         result.errors.map((e) => `${rhythmKey}:${e.rule}`),
         [],
@@ -455,6 +483,9 @@ describe("ECG strip regression — morphology validator (all validated rhythms)"
   test("isPublishableMorphology returns true for all default configs", () => {
     for (const rhythmKey of ECG_MORPHOLOGY_VALIDATED_RHYTHMS) {
       const config = defaultEcgStripConfigForRhythm(rhythmKey);
+      const result = validateEcgStripMorphology(config);
+      // Skip pediatric rhythms that need ageGroup — adult default config is not applicable.
+      if (result.errors.every((e) => e.rule === "pediatric_strip_requires_age_group")) continue;
       assert.equal(
         isPublishableMorphology(config),
         true,
@@ -753,5 +784,534 @@ describe("ECG strip regression — confusion frequency tracking", () => {
       (p) => p.correctTag === "ventricular_tachycardia" && p.selectedTag === "svt",
     );
     assert.ok(vt_svt, "VT → SVT confusion pair must be registered");
+  });
+});
+
+// ─── P0 Clinical Accuracy Audit — New rhythm registry coverage ────────────────
+
+describe("P0 audit — new rhythms in template registry", () => {
+  const newRhythms = [
+    "junctional_rhythm",
+    "accelerated_junctional_rhythm",
+    "ventricular_escape_rhythm",
+    "idioventricular_rhythm",
+    "right_bundle_branch_block",
+    "left_bundle_branch_block",
+    "nstemi_pattern",
+  ];
+
+  test("all 7 new rhythms exist in the template registry", () => {
+    for (const key of newRhythms) {
+      const config = defaultEcgStripConfigForRhythm(key);
+      assert.equal(config.rhythmKey, key, `Template missing for: ${key}`);
+    }
+  });
+
+  test("new rhythm default configs produce single_rhythm strips", () => {
+    for (const key of newRhythms) {
+      const config = defaultEcgStripConfigForRhythm(key);
+      assert.equal(config.stripType ?? "single_rhythm", "single_rhythm", `${key} must default to single_rhythm`);
+    }
+  });
+
+  test("new rhythm default configs pass clinical validation", () => {
+    const highRisk = new Set(["ventricular_escape_rhythm", "nstemi_pattern"]);
+    for (const key of newRhythms) {
+      const config = defaultEcgStripConfigForRhythm(key);
+      const result = validateEcgStripClinicalConfig(config, {
+        correctAnswer: key,
+        highRiskManualReviewed: highRisk.has(key),
+      });
+      assert.deepEqual(result.failures, [], `${key} clinical validation failures: ${result.failures.join("; ")}`);
+    }
+  });
+
+  test("new rhythm default configs pass the validatePublishedStrip gate", () => {
+    const highRisk = new Set(["ventricular_escape_rhythm", "nstemi_pattern"]);
+    for (const key of newRhythms) {
+      const config = defaultEcgStripConfigForRhythm(key);
+      const result = validatePublishedStrip(config, {
+        correctAnswer: key,
+        highRiskManualReviewed: highRisk.has(key),
+      });
+      assert.deepEqual(result.blockingFailures, [], `${key} not publishable: ${result.blockingFailures.join("; ")}`);
+      assert.equal(result.publishable, true, `${key} validatePublishedStrip returned false`);
+    }
+  });
+
+  test("new rhythm strips produce non-blank waveforms", () => {
+    for (const key of newRhythms) {
+      if (key === "ventricular_escape_rhythm") continue; // very slow, tested separately
+      const config = defaultEcgStripConfigForRhythm(key);
+      const amplitude = maxSignalAmplitude(config);
+      assert.ok(amplitude > 5, `${key}: amplitude ${amplitude.toFixed(1)}px — strip appears blank`);
+    }
+  });
+
+  test("new rhythm first beats appear within one cardiac cycle (no startup flatline)", () => {
+    for (const key of newRhythms) {
+      const config = defaultEcgStripConfigForRhythm(key);
+      const result = validateStripContinuity(config, STRIP_SECONDS);
+      assert.ok(
+        result.firstBeatOnTime,
+        `${key}: first beat at ${result.firstBeatTime?.toFixed(3)}s exceeds max ${result.maxAllowedFirstBeatTime.toFixed(3)}s`,
+      );
+    }
+  });
+});
+
+// ─── P0 audit — feature flag correctness for new rhythms ─────────────────────
+
+describe("P0 audit — new rhythm feature flags", () => {
+  test("RBBB: rsrPrime=true, widenedQrs=true, QRS >= 0.12s", () => {
+    const config = defaultEcgStripConfigForRhythm("right_bundle_branch_block");
+    assert.equal(config.features?.rsrPrime, true, "RBBB must have rsrPrime=true");
+    assert.equal(config.features?.widenedQrs, true, "RBBB must have widenedQrs=true");
+    assert.ok(config.qrsWidth >= 0.12, `RBBB QRS ${config.qrsWidth}s must be >= 0.12s`);
+  });
+
+  test("LBBB: broadNotchedR=true, widenedQrs=true, QRS >= 0.12s", () => {
+    const config = defaultEcgStripConfigForRhythm("left_bundle_branch_block");
+    assert.equal(config.features?.broadNotchedR, true, "LBBB must have broadNotchedR=true");
+    assert.equal(config.features?.widenedQrs, true, "LBBB must have widenedQrs=true");
+    assert.ok(config.qrsWidth >= 0.12, `LBBB QRS ${config.qrsWidth}s must be >= 0.12s`);
+  });
+
+  test("NSTEMI: stDepression=true, stElevation=false or absent", () => {
+    const config = defaultEcgStripConfigForRhythm("nstemi_pattern");
+    assert.equal(config.features?.stDepression, true, "NSTEMI must have stDepression=true");
+    assert.notEqual(config.features?.stElevation, true, "NSTEMI must NOT have stElevation=true");
+  });
+
+  test("junctional_rhythm: pWavePattern=absent, retrogradeP=true, narrow QRS", () => {
+    const config = defaultEcgStripConfigForRhythm("junctional_rhythm");
+    assert.equal(config.pWavePattern, "absent", "junctional_rhythm must have absent P-waves");
+    assert.equal(config.features?.retrogradeP, true, "junctional_rhythm must have retrogradeP=true");
+    assert.ok(config.qrsWidth < 0.12, `junctional QRS ${config.qrsWidth}s must be < 0.12s`);
+  });
+
+  test("accelerated_junctional_rhythm: pWavePattern=absent, retrogradeP=true, narrow QRS", () => {
+    const config = defaultEcgStripConfigForRhythm("accelerated_junctional_rhythm");
+    assert.equal(config.pWavePattern, "absent");
+    assert.equal(config.features?.retrogradeP, true);
+    assert.ok(config.qrsWidth < 0.12);
+  });
+
+  test("ventricular_escape_rhythm: wide QRS, absent P-waves", () => {
+    const config = defaultEcgStripConfigForRhythm("ventricular_escape_rhythm");
+    assert.ok(config.qrsWidth >= 0.12, `ventricular_escape QRS ${config.qrsWidth}s must be >= 0.12s`);
+    assert.equal(config.pWavePattern, "absent");
+  });
+
+  test("idioventricular_rhythm: wide QRS, absent P-waves, rate 41-100", () => {
+    const config = defaultEcgStripConfigForRhythm("idioventricular_rhythm");
+    assert.ok(config.qrsWidth >= 0.12, `AIVR QRS ${config.qrsWidth}s must be >= 0.12s`);
+    assert.equal(config.pWavePattern, "absent");
+    assert.ok(config.rate >= 41 && config.rate <= 100, `AIVR rate ${config.rate} BPM out of 41-100 range`);
+  });
+});
+
+// ─── P0 audit — morphology validators for new rhythms ────────────────────────
+
+describe("P0 audit — morphology validators for new rhythms pass on default configs", () => {
+  const newValidatedRhythms = [
+    "junctional_rhythm",
+    "accelerated_junctional_rhythm",
+    "ventricular_escape_rhythm",
+    "idioventricular_rhythm",
+    "right_bundle_branch_block",
+    "left_bundle_branch_block",
+    "nstemi_pattern",
+  ];
+
+  for (const key of newValidatedRhythms) {
+    test(`${key}: default config passes morphology validation`, () => {
+      const config = defaultEcgStripConfigForRhythm(key);
+      const result = validateEcgStripMorphology(config);
+      assert.deepEqual(
+        result.errors.map((e) => `${key}:${e.rule}`),
+        [],
+        `${key} morphology errors: ${result.errors.map((e) => e.message).join("; ")}`,
+      );
+    });
+  }
+
+  test("RBBB without rsrPrime fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("right_bundle_branch_block"), features: { ...defaultEcgStripConfigForRhythm("right_bundle_branch_block").features, rsrPrime: false } };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "rbbb_requires_rsr_prime"), "RBBB without rsrPrime must fail");
+  });
+
+  test("RBBB with narrow QRS fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("right_bundle_branch_block"), qrsWidth: 0.08 };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "rbbb_requires_wide_qrs"), "Narrow RBBB must fail");
+  });
+
+  test("LBBB without broadNotchedR fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("left_bundle_branch_block"), features: { ...defaultEcgStripConfigForRhythm("left_bundle_branch_block").features, broadNotchedR: false } };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "lbbb_requires_broad_notched_r"), "LBBB without broadNotchedR must fail");
+  });
+
+  test("NSTEMI without stDepression fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("nstemi_pattern"), features: { ...defaultEcgStripConfigForRhythm("nstemi_pattern").features, stDepression: false } };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "nstemi_requires_st_depression"), "NSTEMI without stDepression must fail");
+  });
+
+  test("NSTEMI with stElevation=true fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("nstemi_pattern"), features: { ...defaultEcgStripConfigForRhythm("nstemi_pattern").features, stElevation: true } };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "nstemi_no_st_elevation"), "NSTEMI with ST elevation must fail");
+  });
+
+  test("junctional_rhythm with pWavePattern=present fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("junctional_rhythm"), pWavePattern: "present" as const };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "junctional_no_sinus_p_waves"), "Junctional with sinus P-waves must fail");
+  });
+
+  test("ventricular_escape_rhythm with narrow QRS fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("ventricular_escape_rhythm"), qrsWidth: 0.08 };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "ventricular_escape_wide_qrs"), "Narrow ventricular escape must fail");
+  });
+
+  test("idioventricular_rhythm with narrow QRS fails morphology validation", () => {
+    const config = { ...defaultEcgStripConfigForRhythm("idioventricular_rhythm"), qrsWidth: 0.08 };
+    const result = validateEcgStripMorphology(config);
+    assert.ok(result.errors.some((e) => e.rule === "idioventricular_wide_qrs"), "Narrow idioventricular must fail");
+  });
+});
+
+// ─── P0 audit — PVC/PAC mixed morphology correctness ─────────────────────────
+
+describe("P0 audit — PVC and PAC mixed beat morphology", () => {
+  test("PVC strip config has qrsWidth in ectopic (wide) range", () => {
+    const config = defaultEcgStripConfigForRhythm("pvcs");
+    assert.ok(config.qrsWidth >= 0.12, `PVC ectopic QRS ${config.qrsWidth}s must be >= 0.12s (ectopic beat width)`);
+  });
+
+  test("PVC strip produces significantly higher amplitude than NSR (PVC tall R visible)", () => {
+    const pvcs = maxSignalAmplitude(defaultEcgStripConfigForRhythm("pvcs"));
+    const nsr = maxSignalAmplitude(defaultEcgStripConfigForRhythm("normal_sinus_rhythm"));
+    assert.ok(pvcs > nsr, `PVC strip amplitude ${pvcs.toFixed(1)}px should exceed NSR ${nsr.toFixed(1)}px due to tall PVC R-waves`);
+  });
+
+  test("PAC strip produces amplitude consistent with sinus rhythm (narrow QRS beats)", () => {
+    const config = defaultEcgStripConfigForRhythm("pacs");
+    const amplitude = maxSignalAmplitude(config);
+    assert.ok(amplitude > 10, `PAC strip amplitude ${amplitude.toFixed(1)}px too low — strip may be blank`);
+  });
+
+  test("PVC strip config is clinically valid", () => {
+    const config = defaultEcgStripConfigForRhythm("pvcs");
+    const result = validateEcgStripClinicalConfig(config, { correctAnswer: "pvcs", highRiskManualReviewed: false });
+    assert.deepEqual(result.failures, [], `PVC config failures: ${result.failures.join("; ")}`);
+  });
+
+  test("PAC strip config is clinically valid", () => {
+    const config = defaultEcgStripConfigForRhythm("pacs");
+    const result = validateEcgStripClinicalConfig(config, { correctAnswer: "pacs", highRiskManualReviewed: false });
+    assert.deepEqual(result.failures, [], `PAC config failures: ${result.failures.join("; ")}`);
+  });
+});
+
+// ─── P0 audit — Wenckebach progressive PR ────────────────────────────────────
+
+describe("P0 audit — Wenckebach (Mobitz I) progressive PR progression", () => {
+  test("second_degree_type_i_av_block config has prIntervalPattern=progressive_prolongation", () => {
+    const config = defaultEcgStripConfigForRhythm("second_degree_type_i_av_block");
+    assert.equal(config.prIntervalPattern, "progressive_prolongation");
+    assert.equal(config.features?.progressivePr, true);
+  });
+
+  test("Wenckebach strip produces non-blank waveform with expected beat count", () => {
+    const config = defaultEcgStripConfigForRhythm("second_degree_type_i_av_block");
+    const amplitude = maxSignalAmplitude(config);
+    assert.ok(amplitude > 10, `Wenckebach strip amplitude ${amplitude.toFixed(1)}px too low`);
+  });
+
+  test("Wenckebach strip passes publishable gate", () => {
+    const config = defaultEcgStripConfigForRhythm("second_degree_type_i_av_block");
+    const result = validatePublishedStrip(config, {
+      correctAnswer: "second_degree_type_i_av_block",
+      highRiskManualReviewed: false,
+    });
+    assert.deepEqual(result.blockingFailures, [], `Wenckebach not publishable: ${result.blockingFailures.join("; ")}`);
+  });
+});
+
+// ─── P0 audit — clinical distinction: STEMI vs NSTEMI ────────────────────────
+
+describe("P0 audit — STEMI vs NSTEMI clinical distinction enforced", () => {
+  test("STEMI has stElevation=true, stDepression absent/false", () => {
+    const config = defaultEcgStripConfigForRhythm("stemi_pattern");
+    assert.equal(config.features?.stElevation, true);
+    assert.notEqual(config.features?.stDepression, true);
+  });
+
+  test("NSTEMI has stDepression=true, stElevation absent/false", () => {
+    const config = defaultEcgStripConfigForRhythm("nstemi_pattern");
+    assert.equal(config.features?.stDepression, true);
+    assert.notEqual(config.features?.stElevation, true);
+  });
+
+  test("STEMI passes morphology validation", () => {
+    const config = defaultEcgStripConfigForRhythm("stemi_pattern");
+    assert.equal(isPublishableMorphology(config), true);
+  });
+
+  test("NSTEMI passes morphology validation", () => {
+    const config = defaultEcgStripConfigForRhythm("nstemi_pattern");
+    assert.equal(isPublishableMorphology(config), true);
+  });
+});
+
+// ─── P0 audit — junctional vs sinus rhythm clinical distinction ───────────────
+
+describe("P0 audit — junctional rhythms correctly distinct from sinus", () => {
+  test("junctional_rhythm rate 40-60 BPM (vs sinus bradycardia rate range)", () => {
+    const junctional = defaultEcgStripConfigForRhythm("junctional_rhythm");
+    assert.ok(junctional.rate >= 40 && junctional.rate <= 60, `junctional rate ${junctional.rate} out of 40-60`);
+  });
+
+  test("accelerated_junctional_rhythm rate 61-100 BPM", () => {
+    const ajr = defaultEcgStripConfigForRhythm("accelerated_junctional_rhythm");
+    assert.ok(ajr.rate >= 61 && ajr.rate <= 100, `AJR rate ${ajr.rate} out of 61-100`);
+  });
+
+  test("ventricular_escape_rhythm rate 20-40 BPM (distinctly slower than junctional)", () => {
+    const escape = defaultEcgStripConfigForRhythm("ventricular_escape_rhythm");
+    assert.ok(escape.rate >= 20 && escape.rate <= 40, `Ventricular escape rate ${escape.rate} out of 20-40`);
+  });
+
+  test("idioventricular_rhythm (AIVR) rate 41-100 BPM", () => {
+    const aivr = defaultEcgStripConfigForRhythm("idioventricular_rhythm");
+    assert.ok(aivr.rate >= 41 && aivr.rate <= 100, `AIVR rate ${aivr.rate} out of 41-100`);
+  });
+});
+
+// ─── Pediatric rhythm registry governance ─────────────────────────────────────
+
+describe("Pediatric ECG — registry governance", () => {
+  test("all pediatric rhythm tags start with 'Pediatric ' or are explicitly approved variants", () => {
+    const approvedVariants = ["Respiratory sinus arrhythmia", "Post-op congenital heart telemetry pattern"];
+    for (const entry of PEDIATRIC_ECG_RHYTHM_REGISTRY) {
+      const ok = entry.tag.startsWith("Pediatric ") || approvedVariants.includes(entry.tag);
+      assert.ok(ok, `Pediatric rhythm tag "${entry.tag}" missing "Pediatric " namespace prefix`);
+    }
+  });
+
+  test("pulsus paradoxus is prohibited as a rhythm tag", () => {
+    assert.equal(isPulsusPardoxusRhythmTag("Pulsus paradoxus"), true);
+    for (const entry of PEDIATRIC_ECG_RHYTHM_REGISTRY) {
+      assert.notEqual(entry.tag, "Pulsus paradoxus");
+    }
+  });
+
+  test("PALS arrest rhythms include VF, asystole, PEA, and VT", () => {
+    assert.ok(PALS_ARREST_RHYTHMS.includes("Pediatric VF"), "VF must be PALS arrest");
+    assert.ok(PALS_ARREST_RHYTHMS.includes("Pediatric asystole"), "Asystole must be PALS arrest");
+    assert.ok(PALS_ARREST_RHYTHMS.includes("Pediatric PEA"), "PEA must be PALS arrest");
+    assert.ok(PALS_ARREST_RHYTHMS.includes("Pediatric VT"), "VT must be PALS arrest");
+  });
+
+  test("ventilate-first rhythms contain hypoxic bradycardia", () => {
+    assert.ok(VENTILATE_FIRST_RHYTHMS.includes("Pediatric sinus bradycardia"));
+    assert.ok(VENTILATE_FIRST_RHYTHMS.includes("Pediatric hypoxic bradycardia"));
+  });
+
+  test("neonate/infant rate ranges do not use adult 60-100 default", () => {
+    const neonate = getPediatricNormalRateRange("neonate");
+    const infant = getPediatricNormalRateRange("infant");
+    assert.ok(neonate.restingMin > 60, `Neonate min ${neonate.restingMin} must exceed adult 60 BPM`);
+    assert.ok(infant.restingMin > 60, `Infant min ${infant.restingMin} must exceed adult 60 BPM`);
+    assert.ok(neonate.restingMax > 100, `Neonate max ${neonate.restingMax} must exceed adult 100 BPM`);
+  });
+
+  test("infant SVT min rate ≥ sinusTachMaxBeforeSvtSuspicion for infant", () => {
+    const range = getPediatricNormalRateRange("infant");
+    const svt = PEDIATRIC_ECG_RHYTHM_REGISTRY.find((e) => e.tag === "Pediatric SVT");
+    assert.ok(svt, "Pediatric SVT must be in registry");
+    const svtRange = svt.rateRangesByAgeGroup.infant;
+    assert.ok(svtRange, "Pediatric SVT must have infant rate range");
+    assert.ok(
+      svtRange.min >= range.sinusTachMaxBeforeSvtSuspicion,
+      `Infant SVT min ${svtRange.min} must be ≥ ${range.sinusTachMaxBeforeSvtSuspicion}`,
+    );
+  });
+});
+
+// ─── Pediatric strip rendering ─────────────────────────────────────────────────
+
+describe("Pediatric ECG — age-specific strip rendering", () => {
+  const AGE_GROUPS = ["neonate", "infant", "toddler", "child", "adolescent"] as const;
+
+  for (const ageGroup of AGE_GROUPS) {
+    test(`${ageGroup} NSR: ageGroup field set and rate age-appropriate`, () => {
+      const config = defaultPediatricEcgStripConfig("normal_sinus_rhythm", ageGroup);
+      assert.equal(config.ageGroup, ageGroup);
+      const range = getPediatricNormalRateRange(ageGroup);
+      assert.ok(
+        config.rate >= range.restingMin * 0.85 && config.rate <= range.restingMax * 1.15,
+        `${ageGroup} NSR rate ${config.rate} outside ${range.restingMin}–${range.restingMax}`,
+      );
+    });
+
+    test(`${ageGroup} NSR: PR offset ≥ adult default (shorter interval)`, () => {
+      const pediatricPr = PEDIATRIC_PR_OFFSETS[ageGroup];
+      const adultPr = -0.18;
+      assert.ok(pediatricPr >= adultPr, `${ageGroup} PR offset ${pediatricPr} should be ≥ ${adultPr}`);
+    });
+
+    test(`${ageGroup} NSR: waveform renders with adequate energy`, () => {
+      const config = defaultPediatricEcgStripConfig("normal_sinus_rhythm", ageGroup);
+      const result = generateEcgWaveform(config, { seconds: 6, sampleRate: 120 });
+      const mid = 110;
+      const maxAmp = Math.max(...result.points.map((p) => Math.abs(p.y - mid)));
+      assert.ok(maxAmp > 5, `${ageGroup} NSR amplitude ${maxAmp.toFixed(1)}px too low`);
+    });
+
+    test(`${ageGroup} NSR: no startup flatline artifact`, () => {
+      const config = defaultPediatricEcgStripConfig("normal_sinus_rhythm", ageGroup);
+      const c = validateStripContinuity(config, 6);
+      assert.ok(c.firstBeatOnTime, `${ageGroup}: first beat at ${c.firstBeatTime?.toFixed(3)}s too late`);
+    });
+  }
+
+  test("neonate NSR: rightVentricularDominance=true", () => {
+    const config = defaultPediatricEcgStripConfig("normal_sinus_rhythm", "neonate");
+    assert.equal(config.features?.rightVentricularDominance, true);
+  });
+
+  test("adolescent NSR: rightVentricularDominance not set (no RVD for older children)", () => {
+    const config = defaultPediatricEcgStripConfig("normal_sinus_rhythm", "adolescent");
+    assert.notEqual(config.features?.rightVentricularDominance, true);
+  });
+
+  test("infant SVT rate ≥ 220 BPM", () => {
+    const config = defaultPediatricEcgStripConfig("svt", "infant");
+    assert.ok(config.rate >= 220, `Infant SVT rate ${config.rate} should be ≥ 220`);
+  });
+
+  test("neonate SVT rate ≥ 220 BPM", () => {
+    const config = defaultPediatricEcgStripConfig("svt", "neonate");
+    assert.ok(config.rate >= 220, `Neonate SVT rate ${config.rate} should be ≥ 220`);
+  });
+
+  test("pediatric QRS width: neonates narrower than adolescents", () => {
+    assert.ok(PEDIATRIC_QRS_WIDTHS.neonate < PEDIATRIC_QRS_WIDTHS.adolescent);
+  });
+
+  test("pediatric waveform is deterministic (same config → same path)", () => {
+    const config = defaultPediatricEcgStripConfig("normal_sinus_rhythm", "child");
+    const r1 = generateEcgWaveform(config, { seconds: 6, sampleRate: 60 });
+    const r2 = generateEcgWaveform(config, { seconds: 6, sampleRate: 60 });
+    assert.equal(r1.path, r2.path, "Pediatric waveform must be deterministic");
+  });
+});
+
+// ─── Pediatric adult comparison module ────────────────────────────────────────
+
+describe("Pediatric ECG — adult vs pediatric comparison module", () => {
+  test("all comparison IDs are unique", () => {
+    const ids = ECG_COMPARISON_IDS;
+    assert.equal(ids.length, new Set(ids).size, "Duplicate comparison IDs found");
+  });
+
+  test("most comparisons show rate contrast; same-rate comparisons must be intentional educational pairs", () => {
+    // "sinus-adult-vs-infant" intentionally uses 120 BPM for both: the educational point is
+    // that 120 BPM is tachycardic for an adult but completely normal for an infant.
+    // This is the most important pediatric ECG teaching point — rate alone is insufficient.
+    // vf-adult-vs-pediatric: VF has no measurable rate (rate=0) for both strips — intentional
+    const allowedSameRatePairs = new Set(["sinus-adult-vs-infant", "vf-adult-vs-pediatric"]);
+
+    for (const comp of ECG_ADULT_PEDIATRIC_COMPARISONS) {
+      if (allowedSameRatePairs.has(comp.id)) continue;
+      assert.notEqual(
+        comp.adult.config.rate,
+        comp.pediatric.config.rate,
+        `Comparison "${comp.id}" has equal adult/pediatric rates — no contrast (not in allowedSameRatePairs)`,
+      );
+    }
+  });
+
+  test("sinus-adult-vs-neonate: adult rate < 100, neonate rate > 100", () => {
+    const comp = getEcgComparison("sinus-adult-vs-neonate");
+    assert.ok(comp, "sinus-adult-vs-neonate not found");
+    assert.ok(comp.adult.config.rate < 100);
+    assert.ok(comp.pediatric.config.rate > 100);
+  });
+
+  test("svt-adult-vs-infant: adult rate < 220, infant rate ≥ 220", () => {
+    const comp = getEcgComparison("svt-adult-vs-infant");
+    assert.ok(comp, "svt-adult-vs-infant not found");
+    assert.ok(comp.adult.config.rate < 220, `Adult SVT ${comp.adult.config.rate} should be < 220`);
+    assert.ok(comp.pediatric.config.rate >= 220, `Infant SVT ${comp.pediatric.config.rate} should be ≥ 220`);
+  });
+
+  test("all comparisons have primaryPearl and ≥2 sharedTeachingPoints", () => {
+    for (const comp of ECG_ADULT_PEDIATRIC_COMPARISONS) {
+      assert.ok(comp.primaryPearl.length > 20, `"${comp.id}" has trivial primaryPearl`);
+      assert.ok(comp.sharedTeachingPoints.length >= 2, `"${comp.id}" needs ≥2 shared teaching points`);
+    }
+  });
+
+  test("getComparisonsByAgeGroup returns only infant comparisons", () => {
+    const infantComps = getComparisonsByAgeGroup("infant");
+    for (const c of infantComps) assert.equal(c.pediatricAgeGroup, "infant");
+    assert.ok(infantComps.length >= 2, "Expected ≥2 infant comparisons");
+  });
+});
+
+// ─── Pediatric flashcard pathway governance ────────────────────────────────────
+
+describe("Pediatric ECG — flashcard pathway governance", () => {
+  test("all flashcard IDs are unique", () => {
+    const ids = PEDIATRIC_ECG_FLASHCARDS.map((c) => c.id);
+    assert.equal(ids.length, new Set(ids).size, "Duplicate flashcard IDs found");
+  });
+
+  test("all pathway card IDs resolve to actual flashcards", () => {
+    for (const pathway of PEDIATRIC_ECG_FLASHCARD_PATHWAYS) {
+      const cards = getPediatricFlashcardsForPathway(pathway.slug);
+      assert.equal(cards.length, pathway.cardIds.length,
+        `Pathway "${pathway.slug}": ${pathway.cardIds.length} IDs but ${cards.length} resolved`);
+    }
+  });
+
+  test("neonate rate card back mentions 100 and 160 BPM", () => {
+    const card = PEDIATRIC_ECG_FLASHCARDS.find((c) => c.id === "peds-rates-neonate");
+    assert.ok(card, "peds-rates-neonate not found");
+    assert.ok(card.back.includes("100") && card.back.includes("160"));
+  });
+
+  test("adenosine card includes 0.1 mg/kg and rapid push requirement", () => {
+    const card = PEDIATRIC_ECG_FLASHCARDS.find((c) => c.id === "peds-svt-adenosine");
+    assert.ok(card, "peds-svt-adenosine not found");
+    assert.ok(card.back.includes("0.1 mg/kg"), "Must state 0.1 mg/kg dose");
+    assert.ok(card.back.toLowerCase().includes("rapid"), "Must stress rapid push");
+  });
+
+  test("bradycardia card: ventilation appears before atropine", () => {
+    const card = PEDIATRIC_ECG_FLASHCARDS.find((c) => c.id === "peds-brady-hypoxic");
+    assert.ok(card, "peds-brady-hypoxic not found");
+    const back = card.back.toLowerCase();
+    assert.ok(back.indexOf("ventil") < back.indexOf("atropine"),
+      "Ventilation must appear before atropine in bradycardia card");
+  });
+
+  test("defibrillation card states 2 J/kg and references adult 200 J for contrast", () => {
+    const card = PEDIATRIC_ECG_FLASHCARDS.find((c) => c.id === "peds-vf-defibrillation");
+    assert.ok(card, "peds-vf-defibrillation not found");
+    assert.ok(card.back.includes("2 J/kg"));
+    assert.ok(card.back.includes("200 J"), "Must reference adult 200 J for comparison");
+  });
+
+  test("≥3 comparative flashcards and ≥5 NCLEX trap flashcards", () => {
+    assert.ok(PEDIATRIC_COMPARATIVE_FLASHCARDS.length >= 3);
+    assert.ok(PEDIATRIC_NCLEX_TRAP_FLASHCARDS.length >= 5);
   });
 });

@@ -1,4 +1,5 @@
 import { getEcgRhythmTemplate, type EcgRhythmTemplate } from "@/lib/ecg-module/ecg-rhythm-templates";
+import type { PediatricAgeGroup } from "@/lib/ecg-module/ecg-pediatric-rhythm-registry";
 
 export type EcgStripMediaType = "ecg_live_strip";
 
@@ -117,6 +118,18 @@ export type EcgStripMediaConfig = {
    *   "decompensating"     — deteriorating presentation (matches emergency_scenario mode).
    */
   morphologyProfile?: EcgMorphologyProfile;
+  /**
+   * Pediatric age group — when set, adjusts morphology parameters for age-appropriate
+   * rendering. Pediatric strips MUST set this; it prevents adult morphology defaults
+   * from producing clinically incorrect strips.
+   *
+   * Age-specific adjustments applied when ageGroup is set:
+   *   - PR interval shortened per AHA pediatric ECG norms
+   *   - QRS duration narrowed per developmental stage
+   *   - Neonatal/infant right ventricular dominance: tall upright T in right-sided leads
+   *   - Rate validated against age-specific expected range
+   */
+  ageGroup?: PediatricAgeGroup;
   features?: {
     hasOrganizedQrs?: boolean;
     hasRecurringQrs?: boolean;
@@ -135,6 +148,12 @@ export type EcgStripMediaConfig = {
     broadNotchedR?: boolean;
     /** Junctional: small retrograde P-wave appearing after QRS (~80–100 ms post-QRS) */
     retrogradeP?: boolean;
+    /**
+     * Neonatal/infant right ventricular dominance: tall upright T-wave in right-precordial
+     * leads (V1–V3). Normal in neonates up to 7 days; persistence suggests RVH.
+     * Inverted T in V1 is normal for children > 7 days and adults — this flag reverses that.
+     */
+    rightVentricularDominance?: boolean;
   };
 };
 
@@ -258,6 +277,60 @@ export function validateStripContinuity(
   };
 }
 
+// ─── Pediatric morphology parameters ──────────────────────────────────────────
+
+/**
+ * Age-specific normal PR interval midpoints (seconds).
+ * Source: AHA/ACC pediatric ECG norms, Harriet Lane Handbook.
+ *
+ * Adults: 0.12–0.20s (rendered as 0.18s offset in our coordinate space).
+ * Pediatric values are shorter — neonates have the shortest PR of any age group.
+ */
+const PEDIATRIC_PR_OFFSETS: Record<PediatricAgeGroup, number> = {
+  neonate:    -0.10,  // 80–100 ms typical
+  infant:     -0.11,  // 80–110 ms typical
+  toddler:    -0.12,  // 80–120 ms typical
+  child:      -0.14,  // 90–140 ms typical
+  adolescent: -0.16,  // 110–160 ms (approaching adult range)
+};
+
+/**
+ * Age-specific typical QRS durations (seconds) for narrowing adjustment.
+ * Pediatric QRS is narrower because the conduction system is smaller.
+ * Source: AHA pediatric ECG reference values.
+ */
+const PEDIATRIC_QRS_WIDTHS: Record<PediatricAgeGroup, number> = {
+  neonate:    0.055,  // 30–65 ms
+  infant:     0.058,  // 30–65 ms
+  toddler:    0.064,  // 30–75 ms
+  child:      0.070,  // 40–80 ms
+  adolescent: 0.080,  // 50–90 ms (approaching adult range)
+};
+
+/**
+ * Returns age-appropriate PR interval offset for pediatric strips.
+ * For adult strips (no ageGroup), returns the standard adult value.
+ */
+function pediatricPrOffset(ageGroup: PediatricAgeGroup | undefined, prolonged: boolean): number {
+  if (!ageGroup) return prolonged ? -0.26 : -0.18;
+  const base = PEDIATRIC_PR_OFFSETS[ageGroup];
+  // First-degree AV block in children: add ~0.04s beyond the age-normal max
+  return prolonged ? base - 0.04 : base;
+}
+
+/**
+ * Returns age-appropriate effective QRS width for pediatric strips.
+ * Does not override explicit wide-QRS rhythms (VT, BBB, paced).
+ */
+function pediatricQrsWidth(
+  configQrsWidth: number,
+  ageGroup: PediatricAgeGroup | undefined,
+): number {
+  if (!ageGroup || configQrsWidth >= 0.12) return configQrsWidth;
+  // Blend toward age-typical: if author specified a wider value, respect it
+  return Math.min(configQrsWidth, PEDIATRIC_QRS_WIDTHS[ageGroup]);
+}
+
 // ─── Internal waveform helpers ─────────────────────────────────────────────
 
 function clamp(value: number, min: number, max: number): number {
@@ -364,8 +437,9 @@ function baselineForRhythm(config: EcgStripMediaConfig, t: number): number {
     return 0.015 * Math.sin(t * 7);
   }
   if (config.rhythmKey === "atrial_flutter") {
-    // Organized sawtooth flutter waves
-    return 0.11 * Math.asin(Math.sin(t * Math.PI * 10)) / (Math.PI / 2);
+    // Organized sawtooth F-waves at 300/min (0.2s cycle).
+    // Amplitude 0.18 gives clear picket-fence visibility between QRS complexes.
+    return 0.18 * Math.asin(Math.sin(t * Math.PI * 10)) / (Math.PI / 2);
   }
   if (config.rhythmKey === "atrial_fibrillation") {
     // Irregular fine f-waves: 4 incommensurate sinusoids at AF-typical frequencies.
@@ -383,29 +457,33 @@ function baselineForRhythm(config: EcgStripMediaConfig, t: number): number {
 /**
  * Contribution of a single beat to the waveform signal at time t.
  *
- * Morphology improvements (2026-05-15 sprint):
+ * Morphology changelog:
  *
- *   1. PR interval adaptation: prolonged PR (1st-degree AV block) shifts P-wave
- *      onset earlier (more negative dt) to reflect the delayed conduction.
+ *   2026-05-15: PR interval adaptation, T-wave rate adaptation, smooth ST elevation,
+ *               Torsades first-beat fix, AV dissociation P-waves.
  *
- *   2. T-wave rate adaptation: QT shortens with tachycardia. T-wave peak is
- *      placed at ~65% of the rate-adapted QT interval instead of a fixed 0.28s.
- *      Uses Bazett-approximated QT: QT ≈ 0.40 / √(rate/60).
+ *   P0 audit corrections:
  *
- *   3. ST elevation: replaced rectangular step function with a smooth Gaussian
- *      centered at the J-point. Produces the curved ST morphology seen in STEMI —
- *      the old dt > 0.05 step produced an abrupt cliff not found in real strips.
+ *   PVC beat-level morphology: every 3rd beat is an ectopic PVC (wide bizarre QRS,
+ *     no P-wave, inverted T). Remaining beats show normal narrow sinus morphology.
+ *     Previously ALL beats were rendered wide — visually identical to VT.
  *
- *   4. Torsades axis twisting: previous sin(beatIndex * 0.9) started at sin(0)=0
- *      for beatIndex=0 — the first torsades beat had ZERO polymorphic contribution,
- *      making it look like a normal narrow QRS. Fixed: use sin(beatIndex * 0.9 + π/2)
- *      so the first beat has full positive-axis twisting and the pattern is
- *      visible from the start of the strip.
+ *   PAC beat-level morphology: every 4th beat is a PAC (small biphasic ectopic P,
+ *     normal narrow QRS). Previously all beats were identical, misrepresenting PACs.
  *
- *   5. AV dissociation P-waves: when prIntervalPattern==="av_dissociation" (3rd-degree
- *      AV block), the P-wave runs at a fixed atrial rate (≈70 BPM) independent of
- *      the slow ventricular escape rate. Computed using a separate t-based calculation
- *      rather than the beat-offset position.
+ *   Wenckebach progressive PR: PR lengthens across beats 0→1→2 before the dropped
+ *     beat (position 3). Previously the P-wave offset was fixed for all beats.
+ *
+ *   RBBB morphology: RSR' pattern (R' wave after S) added when features.rsrPrime
+ *     is set. Secondary T-wave inversion included.
+ *
+ *   LBBB morphology: broad notched R (two overlapping humps), no Q-wave, discordant
+ *     T-wave when features.broadNotchedR is set.
+ *
+ *   NSTEMI: downsloping ST depression when features.stDepression is set.
+ *
+ *   Junctional retrograde P: small inverted P after QRS when features.retrogradeP
+ *     is set (junctional rhythms where retrograde atrial activation is visible).
  */
 function beatContribution(
   config: EcgStripMediaConfig,
@@ -424,11 +502,70 @@ function beatContribution(
 
   let y = 0;
 
+  // ── PVC beat-level morphology ────────────────────────────────────────────────
+  // Trigeminy representation: every 3rd beat is an ectopic PVC.
+  //   PVC beat: wide bizarre QRS (no preceding P, inverted T, tall R with deep S).
+  //   Other beats: normal sinus morphology (upright P + narrow QRS + upright T).
+  // This replaces the previous incorrect behavior where ALL beats were rendered
+  // wide — making the strip look like VT rather than PVCs.
+  if (config.rhythmKey === "pvcs") {
+    const isPvc = beatIndex % 3 === 2;
+    if (isPvc) {
+      const pw = Math.max(config.qrsWidth, 0.14); // ectopic beat uses config qrsWidth (≥ 0.14s)
+      y += pulse(dt, -pw * 0.22, pw * 0.18, -0.22);   // small Q-equivalent
+      y += pulse(dt, 0, pw * 0.11, 1.45);             // tall R (no P precedes it)
+      y += pulse(dt, pw * 0.40, pw * 0.28, -0.68);    // deep S
+      y += pulse(dt, tOffset, 0.105, -0.32);           // inverted T (opposite polarity to R)
+    } else {
+      y += pulse(dt, -0.18, 0.038, 0.13);             // normal sinus P-wave
+      y += pulse(dt, -0.024, 0.016, -0.30);           // Q
+      y += pulse(dt, 0, 0.0096, 0.85);                // R
+      y += pulse(dt, 0.0272, 0.0176, -0.38);          // S
+      y += pulse(dt, tOffset, 0.092, 0.24);           // upright T
+    }
+    return y;
+  }
+
+  // ── PAC beat-level morphology ────────────────────────────────────────────────
+  // Every 4th beat is a PAC: premature ectopic P-wave (small, biphasic, different
+  // axis) followed by normal narrow QRS. All other beats show normal sinus morphology.
+  if (config.rhythmKey === "pacs") {
+    const isPac = beatIndex % 4 === 3;
+    if (isPac) {
+      // Ectopic atrial P: clearly inverted, reflecting a depolarization vector
+      // from an ectopic atrial focus. Inversion is immediately distinct from the
+      // upright sinus P-wave — the key visual teaching cue learners must recognise.
+      y += pulse(dt, -0.15, 0.036, -0.13); // inverted ectopic P-wave
+    } else {
+      y += pulse(dt, -0.18, 0.038, 0.13);  // normal sinus P
+    }
+    // All PAC-rhythm beats: normal narrow QRS + upright T
+    y += pulse(dt, -0.024, 0.016, -0.30);
+    y += pulse(dt, 0, 0.0096, 0.85);
+    y += pulse(dt, 0.0272, 0.0176, -0.38);
+    y += pulse(dt, tOffset, 0.092, 0.24);
+    return y;
+  }
+
   // ── P-wave ──────────────────────────────────────────────────────────────────
+  const ageGroup = config.ageGroup;
+  const effQrsWidth = pediatricQrsWidth(qrsWidth, ageGroup);
+
   if (config.pWavePattern === "present") {
-    // PR prolongation (1st-degree AV block): P-wave shifts to ~0.24s before QRS
-    const prOffset = config.prIntervalPattern === "prolonged" ? -0.26 : -0.18;
-    y += pulse(dt, prOffset, 0.038, 0.13);
+    let prOffset: number;
+    if (config.rhythmKey === "second_degree_type_i_av_block") {
+      // Wenckebach: PR lengthens progressively across the 4-beat group.
+      // Pediatric Wenckebach uses age-appropriate base PR.
+      const basePr = ageGroup ? PEDIATRIC_PR_OFFSETS[ageGroup] : -0.19;
+      const wenckPr = [basePr, basePr - 0.05, basePr - 0.11, basePr - 0.11];
+      prOffset = wenckPr[beatIndex % 4] ?? basePr;
+    } else {
+      prOffset = pediatricPrOffset(ageGroup, config.prIntervalPattern === "prolonged");
+    }
+    // Pediatric P-wave: slightly lower amplitude and narrower in neonates/infants
+    const pAmp = (ageGroup === "neonate" || ageGroup === "infant") ? 0.09 : 0.13;
+    const pWidth = (ageGroup === "neonate" || ageGroup === "infant") ? 0.030 : 0.038;
+    y += pulse(dt, prOffset, pWidth, pAmp);
   }
   if (config.pWavePattern === "paced" || config.features?.pacerSpikes) {
     // Pacer spike: very narrow, high amplitude, just before QRS
@@ -443,7 +580,6 @@ function beatContribution(
   if (config.prIntervalPattern === "av_dissociation" && config.pWavePattern === "dissociated") {
     const atrialRate = 72; // typical intact sinus rate in complete heart block
     const atrialCycle = 60 / atrialRate;
-    // Generate P-wave contribution from t directly using a repeating window
     const tMod = ((t % atrialCycle) + atrialCycle) % atrialCycle;
     const pCenter = atrialCycle * 0.2; // P-wave at 20% into atrial cycle
     const distFromP = tMod - pCenter;
@@ -451,57 +587,97 @@ function beatContribution(
   }
 
   // ── QRS + T-wave ─────────────────────────────────────────────────────────────
+  // Drop the QRS for:
+  //   Wenckebach (progressive_prolongation): dropped beat follows longest PR.
+  //   Mobitz II (dropped_beats): abrupt non-conducted P — no preceding PR change.
+  // In both cases the P-wave is rendered above, so the non-conducted P is visible.
   const dropBeat =
-    config.prIntervalPattern === "progressive_prolongation" && beatIndex % 4 === 3;
+    (config.prIntervalPattern === "progressive_prolongation" ||
+      config.prIntervalPattern === "dropped_beats") &&
+    beatIndex % 4 === 3;
 
   if (!dropBeat) {
-    const wide = qrsWidth > 0.12;
+    const wide = effQrsWidth > 0.12;
     const qrsAmp = wide ? 1.05 : 0.85;
 
-    // Q-wave
-    y += pulse(dt, -qrsWidth * 0.30, qrsWidth * 0.20, -0.30);
-    // R-wave (main positive deflection)
-    y += pulse(dt, 0, qrsWidth * 0.12, qrsAmp);
-    // S-wave
-    y += pulse(dt, qrsWidth * 0.34, qrsWidth * 0.22, -0.38);
+    if (config.features?.broadNotchedR) {
+      // ── LBBB morphology ──────────────────────────────────────────────────────
+      y += pulse(dt, -effQrsWidth * 0.14, effQrsWidth * 0.24, qrsAmp * 0.62);
+      y += pulse(dt, effQrsWidth * 0.24, effQrsWidth * 0.24, qrsAmp * 0.88);
+      y += pulse(dt, tOffset, 0.092, -0.22);
+    } else {
+      // ── Standard Q-R-S morphology ────────────────────────────────────────────
+      y += pulse(dt, -effQrsWidth * 0.30, effQrsWidth * 0.20, -0.30);  // Q-wave
+      y += pulse(dt, 0, effQrsWidth * 0.12, qrsAmp);                    // R-wave
+      y += pulse(dt, effQrsWidth * 0.34, effQrsWidth * 0.22, -0.38);   // S-wave
 
-    // ── T-wave (rate-adapted position) ────────────────────────────────────────
-    const tAmp = config.features?.peakedT
-      ? 0.58
-      : config.rhythmKey === "hypokalemia_pattern"
-        ? 0.06
-        : 0.24;
-    const tWidth = config.features?.peakedT ? 0.048 : 0.092;
-    y += pulse(dt, tOffset, tWidth, tAmp);
+      if (config.features?.rsrPrime) {
+        // ── RBBB: RSR' (rabbit ears) pattern ──────────────────────────────────
+        y += pulse(dt, effQrsWidth * 0.74, effQrsWidth * 0.18, 0.50);
+        y += pulse(dt, effQrsWidth * 0.96, effQrsWidth * 0.14, -0.20);
+        y += pulse(dt, tOffset, 0.092, -0.16);
+      } else if (config.features?.rightVentricularDominance) {
+        // ── Neonatal/infant RV dominance ─────────────────────────────────────
+        // Neonates have physiologic tall upright T-wave in right-sided leads reflecting
+        // high RV mass at birth. Reduced S-wave depth (less left-ward QRS axis than adults).
+        // The S-wave was already added above as -0.38; we add +0.16 to net -0.22 (shallower).
+        const rvdTAmp = (ageGroup === "neonate") ? 0.48 : 0.36;
+        y += pulse(dt, tOffset, 0.072, rvdTAmp);               // tall upright T (RV dominance)
+        y += pulse(dt, effQrsWidth * 0.34, effQrsWidth * 0.22, +0.16);  // shallows the S
+      } else {
+        // ── Standard T-wave ───────────────────────────────────────────────────
+        const tAmp = config.features?.peakedT
+          ? 0.58
+          : config.rhythmKey === "hypokalemia_pattern"
+            ? 0.06
+          : config.features?.stDepression
+            // NSTEMI: near-flat T-wave — ischaemia reduces repolarisation amplitude
+            ? 0.04
+            : 0.24;
+        const tWidth = config.features?.peakedT ? 0.048 : 0.092;
+        y += pulse(dt, tOffset, tWidth, tAmp);
 
-    // Hypokalemia: prominent U-wave after T-wave
-    if (config.rhythmKey === "hypokalemia_pattern") {
-      y += pulse(dt, tOffset + 0.18, 0.055, 0.20);
-    }
+        // Hypokalemia: prominent U-wave after T-wave
+        if (config.rhythmKey === "hypokalemia_pattern") {
+          y += pulse(dt, tOffset + 0.18, 0.055, 0.20);
+        }
+      }
 
-    // ── ST elevation (smooth curve — replaces old rectangular step) ────────────
-    // Clinical STEMI morphology: smooth J-point takeoff, curved ST plateau,
-    // blending into T-wave upstroke. Gaussian centered between J-point and T-peak.
-    if (config.features?.stElevation) {
-      const stCenter = qrsWidth * 0.5 + 0.08; // just after QRS end, before T
-      y += pulse(dt, stCenter, 0.085, 0.20);   // primary elevation hump
-      y += pulse(dt, stCenter + 0.06, 0.06, 0.08); // plateau extension into T-wave upstroke
-    }
+      // ── ST elevation (STEMI): smooth J-point takeoff into T-wave upstroke ───
+      if (config.features?.stElevation) {
+        const stCenter = qrsWidth * 0.5 + 0.08;
+        y += pulse(dt, stCenter, 0.085, 0.20);
+        y += pulse(dt, stCenter + 0.06, 0.06, 0.08);
+      }
 
-    // ST depression (subendocardial ischemia): downward Gaussian
-    if (config.rhythmKey === "stemi_pattern" && !config.features?.stElevation) {
-      y -= pulse(dt, 0.10, 0.07, 0.14);
+      // ── ST depression (NSTEMI / subendocardial ischemia) ─────────────────────
+      // ~2mm downsloping ST depression — visually unambiguous ischaemic pattern.
+      // Combined with the near-flat T-wave above, the J-point-to-T pattern matches
+      // accepted NSTEMI teaching criteria (horizontal/downsloping ST ≥ 1mm).
+      if (config.features?.stDepression) {
+        y -= pulse(dt, 0.08, 0.082, 0.40);  // primary depression (~2mm)
+        y -= pulse(dt, 0.17, 0.070, 0.15);  // downsloping extension
+      }
+
+      // Backward-compat: ST depression for stemi_pattern without stElevation flag
+      if (config.rhythmKey === "stemi_pattern" && !config.features?.stElevation) {
+        y -= pulse(dt, 0.10, 0.07, 0.14);
+      }
     }
   }
 
+  // ── Junctional retrograde P-wave (after QRS) ────────────────────────────────
+  // Small inverted P ~80–100 ms after QRS, reflecting retrograde atrial activation.
+  // Rendered only when features.retrogradeP is set (junctional rhythms).
+  if (config.features?.retrogradeP) {
+    y += pulse(dt, 0.10, 0.030, -0.09);
+  }
+
   // ── Torsades de pointes: polymorphic axis twisting ──────────────────────────
-  // CRITICAL FIX: previous sin(beatIndex * 0.9) started at sin(0) = 0, making the
-  // first beat's polymorphic contribution zero — it looked like a normal QRS.
   // Using + π/2 phase shift: first beat has full positive amplitude (sin(π/2) = 1),
   // ensuring the polymorphic character is visible from the very first complex.
   if (config.rhythmKey === "torsades_de_pointes") {
     const twist = Math.sin(beatIndex * 0.85 + Math.PI / 2);
-    // Additional mid-cycle swing to exaggerate the axis shift
     const swing = Math.sin(beatIndex * 0.42);
     y += pulse(dt, 0, 0.055, 1.2 * twist) +
          pulse(dt, 0.09, 0.07, -0.85 * twist) +
@@ -565,7 +741,11 @@ export function defaultEcgStripConfigForRhythm(rhythmKey: string): EcgStripMedia
   if (!template) throw new Error(`Unknown ECG rhythm template: ${rhythmKey}`);
   const rate = template.expectedRateRange[0] === 0 && template.expectedRateRange[1] === 0
     ? 0
-    : Math.round((template.expectedRateRange[0] + template.expectedRateRange[1]) / 2);
+    : rhythmKey === "atrial_flutter"
+      // 4:1 AV conduction (atrial 300/min → ventricular 75/min) — shows exactly
+      // 4 F-waves per QRS, producing the classic picket-fence teaching pattern.
+      ? 75
+      : Math.round((template.expectedRateRange[0] + template.expectedRateRange[1]) / 2);
 
   // Default educational mode by difficulty:
   //   basic → clean_teaching (minimal distraction, maximum morphology clarity)
@@ -600,6 +780,67 @@ export function defaultEcgStripConfigForRhythm(rhythmKey: string): EcgStripMedia
       widenedQrs: template.qrsWidthRange[1] > 0.12,
       stElevation: rhythmKey === "stemi_pattern",
       pacerSpikes: rhythmKey === "paced_rhythm",
+      stDepression: rhythmKey === "nstemi_pattern",
+      rsrPrime: rhythmKey === "right_bundle_branch_block",
+      broadNotchedR: rhythmKey === "left_bundle_branch_block",
+      retrogradeP: rhythmKey === "junctional_rhythm" || rhythmKey === "accelerated_junctional_rhythm",
     },
   };
 }
+
+/**
+ * Returns a clinically correct EcgStripMediaConfig for a pediatric rhythm at a
+ * specific age group. Rate is drawn from PEDIATRIC_NORMAL_RATE_RANGES or the
+ * pediatric rhythm registry's rateRangesByAgeGroup.
+ *
+ * Key differences from defaultEcgStripConfigForRhythm():
+ *   - ageGroup is set → age-specific PR interval and QRS width applied in rendering
+ *   - Rate is age-stratified, not the adult mid-range
+ *   - Neonates/infants receive rightVentricularDominance=true for sinus rhythms
+ *   - Educational mode defaults to clean_teaching for foundational pediatric content
+ */
+export function defaultPediatricEcgStripConfig(
+  rhythmKey: string,
+  ageGroup: PediatricAgeGroup,
+  overrides: Partial<EcgStripMediaConfig> = {},
+): EcgStripMediaConfig {
+  const base = defaultEcgStripConfigForRhythm(rhythmKey);
+
+  // Age-stratified rate selection for common pediatric sinus rhythms.
+  const pediatricRates: Partial<Record<string, Record<PediatricAgeGroup, number>>> = {
+    normal_sinus_rhythm: { neonate: 130, infant: 120, toddler: 95, child: 80, adolescent: 72 },
+    sinus_tachycardia:   { neonate: 185, infant: 175, toddler: 155, child: 140, adolescent: 120 },
+    sinus_bradycardia:   { neonate: 85,  infant: 72,  toddler: 62,  child: 55,  adolescent: 48  },
+    respiratory_sinus_arrhythmia: { neonate: 120, infant: 110, toddler: 90, child: 75, adolescent: 65 },
+    svt:                 { neonate: 260, infant: 250, toddler: 220, child: 190, adolescent: 190 },
+    ventricular_tachycardia: { neonate: 200, infant: 190, toddler: 170, child: 150, adolescent: 140 },
+  };
+
+  const ageRate = pediatricRates[rhythmKey]?.[ageGroup];
+  const rate = ageRate ?? base.rate;
+
+  const isNeonateOrInfant = ageGroup === "neonate" || ageGroup === "infant";
+  const isSinusRhythm = [
+    "normal_sinus_rhythm",
+    "sinus_bradycardia",
+    "sinus_tachycardia",
+    "respiratory_sinus_arrhythmia",
+  ].includes(rhythmKey);
+
+  return {
+    ...base,
+    rate,
+    ageGroup,
+    educationalMode: "clean_teaching",
+    features: {
+      ...base.features,
+      // Neonatal/infant RV dominance for sinus rhythms — physiologic finding
+      rightVentricularDominance: isNeonateOrInfant && isSinusRhythm,
+    },
+    ...overrides,
+  };
+}
+
+/** Exported pediatric morphology lookup for use by comparison module and validators. */
+export { PEDIATRIC_PR_OFFSETS, PEDIATRIC_QRS_WIDTHS };
+export type { PediatricAgeGroup };

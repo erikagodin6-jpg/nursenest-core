@@ -65,6 +65,47 @@ export const ECG_RHYTHM_TEMPLATES: EcgRhythmTemplate[] = [
   // ── NSTEMI pattern ─────────────────────────────────────────────────────────────
   // Subendocardial ischemia: ST depression ± T-wave flattening/inversion, no ST elevation.
   template("nstemi_pattern", "NSTEMI pattern", [50, 130], "regular", "present", "normal", [0.06, 0.11], ["ST depression ≥ 1mm in ≥ 2 contiguous leads", "T-wave flattening or inversion", "no ST elevation in the ischemic territory"], ["ST elevation", "normal ST-T segments throughout", "pathologic Q waves as sole finding"], "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["ischemia", "nstemi"], true),
+
+  // ── Pediatric-specific rhythm templates ────────────────────────────────────────
+  // NOTE: Rate ranges here represent the WIDEST cross-age-group span.
+  // Always use defaultPediatricEcgStripConfig(rhythmKey, ageGroup) for age-specific rates.
+  // These templates exist so the validator and renderer can look up morphology rules;
+  // they are namespaced with "pediatric_" to prevent mixing with adult question banks.
+
+  // Pediatric SVT: narrow-complex, very high rate. Neonates 220–300; adolescents 150–250.
+  // Key discriminator vs sinus tachycardia: abrupt onset, rate fixed (not variable with activity).
+  template("pediatric_svt", "Pediatric SVT", [150, 300], "regular", "absent", "not_measurable", [0.04, 0.08],
+    ["very rapid narrow-complex tachycardia", "abrupt onset/offset", "rate fixed regardless of activity", "P-waves absent or retrograde after QRS"],
+    ["gradual rate change with activity (suggests sinus tach)", "wide QRS without aberrancy", "variable rate"],
+    "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["tachycardia", "pediatric", "svt", "pals"], true),
+
+  // Pediatric hypoxic bradycardia: final step before cardiac arrest. Hypoxia primary cause.
+  // Rate below age-appropriate threshold + poor perfusion = ventilate immediately.
+  template("pediatric_hypoxic_bradycardia", "Pediatric hypoxic bradycardia", [0, 60], "regular", "present", "normal", [0.04, 0.08],
+    ["rate below age-appropriate threshold", "sinus P-waves present initially", "progressive rate slowing", "poor perfusion signs"],
+    ["adequate perfusion with bradycardia", "complete AV block with narrow QRS", "junctional escape with retrograde P"],
+    "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["bradycardia", "pediatric", "hypoxia", "pals", "arrest"], true),
+
+  // Junctional ectopic tachycardia (JET): post-cardiac-surgery narrow-complex tachycardia.
+  // AV dissociation may be subtle. NOT shockable — cardioversion will not terminate JET.
+  template("junctional_ectopic_tachycardia", "Junctional ectopic tachycardia (JET)", [180, 250], "regular", "absent", "not_measurable", [0.04, 0.09],
+    ["narrow or near-narrow QRS", "rate 180–250 in post-op neonates/infants", "AV dissociation (slower P-waves march independently)", "does NOT terminate with adenosine or cardioversion"],
+    ["terminates with adenosine (rules out JET)", "irregular rhythm", "wide QRS without aberrancy"],
+    "advanced", ["RN", "NP", "CARDIAC_TECH"], ["tachycardia", "pediatric", "junctional", "post-op", "congenital-heart"], true),
+
+  // Pediatric VT: wide-complex tachycardia in children. Less common than in adults.
+  // Primary cause in children: structural heart disease, channelopathy, post-op.
+  template("pediatric_ventricular_tachycardia", "Pediatric ventricular tachycardia", [120, 300], "regular", "absent", "not_measurable", [0.12, 0.22],
+    ["wide-complex tachycardia", "AV dissociation", "rate above age-normal", "fusion beats or capture beats may be visible"],
+    ["narrow QRS", "adenosine-terminable (suggests SVT with aberrancy)", "rate within age-normal sinus range"],
+    "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["ventricular", "pediatric", "pals", "arrest"], true),
+
+  // Pediatric sinus rhythm — normal variant for age. Rate range spans all age groups.
+  // Use defaultPediatricEcgStripConfig("pediatric_normal_sinus", ageGroup) for age-specific rate.
+  template("pediatric_normal_sinus", "Pediatric normal sinus rhythm", [55, 160], "regular", "present", "normal", [0.04, 0.09],
+    ["upright P before every QRS", "rate within age-appropriate normal range", "narrow QRS for age", "shorter PR interval than adult norms"],
+    ["rate outside age-appropriate range", "absent or retrograde P-waves", "irregular rhythm"],
+    "basic", ["RN", "PN", "RPN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["sinus", "pediatric", "normal"]),
 ];
 
 function template(

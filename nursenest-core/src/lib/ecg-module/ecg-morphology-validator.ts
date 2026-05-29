@@ -23,6 +23,10 @@ import type {
   EcgEducationalMode,
 } from "@/lib/ecg-module/ecg-waveform-generator";
 import { getEcgRhythmTemplate } from "@/lib/ecg-module/ecg-rhythm-templates";
+import {
+  getPediatricNormalRateRange,
+  type PediatricAgeGroup,
+} from "@/lib/ecg-module/ecg-pediatric-rhythm-registry";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -321,6 +325,327 @@ function validateHighRateMorphology(config: EcgStripMediaConfig): EcgMorphologyV
   return v;
 }
 
+function validateJunctionalMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.pWavePattern === "present") {
+    v.push({
+      rule: "junctional_no_sinus_p_waves",
+      severity: "error",
+      message: `Junctional rhythm strip has pWavePattern="present" — junctional rhythms have absent or retrograde P-waves, not normal upright sinus P-waves.`,
+      clinicalRationale:
+        "A junctional rhythm with normal upright sinus P-waves preceding each QRS is indistinguishable from normal sinus rhythm. " +
+        "Learners would be taught to identify sinus rhythm as junctional, a fundamental rhythm-identification error.",
+    });
+  }
+  if (config.qrsWidth >= 0.12) {
+    v.push({
+      rule: "junctional_narrow_qrs",
+      severity: "warning",
+      message: `Junctional rhythm strip QRS ${config.qrsWidth}s — expected < 0.12s for uncomplicated junctional pacemaker.`,
+      clinicalRationale:
+        "Junctional rhythms conduct normally through the His–Purkinje system, producing narrow QRS. " +
+        "A wide QRS at junctional rates suggests ventricular escape rhythm or aberrant conduction — a different diagnosis with different management.",
+    });
+  }
+  return v;
+}
+
+function validateVentricularEscapeMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.qrsWidth < 0.12) {
+    v.push({
+      rule: "ventricular_escape_wide_qrs",
+      severity: "error",
+      message: `Ventricular escape rhythm strip QRS ${config.qrsWidth}s — must be ≥ 0.12s.`,
+      clinicalRationale:
+        "Ventricular escape beats originate in ventricular myocardium, bypassing the His–Purkinje system and always producing wide QRS (≥ 120ms). " +
+        "A narrow-QRS ventricular escape is a clinical impossibility and would lead learners to underestimate pacing urgency.",
+    });
+  }
+  if (config.pWavePattern !== "absent" && config.pWavePattern !== "dissociated") {
+    v.push({
+      rule: "ventricular_escape_no_sinus_p",
+      severity: "warning",
+      message: `Ventricular escape strip has pWavePattern="${config.pWavePattern}" — expected "absent" or "dissociated".`,
+      clinicalRationale:
+        "In ventricular escape rhythm the SA node has failed or is dissociated from the ventricles. " +
+        "Organized sinus P-waves before each QRS contradicts the escape mechanism and confuses the clinical picture.",
+    });
+  }
+  return v;
+}
+
+function validateIdioventricularMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.qrsWidth < 0.12) {
+    v.push({
+      rule: "idioventricular_wide_qrs",
+      severity: "error",
+      message: `Idioventricular rhythm strip QRS ${config.qrsWidth}s — must be ≥ 0.12s.`,
+      clinicalRationale:
+        "AIVR originates from an accelerated ventricular pacemaker cell, always producing wide QRS (≥ 120ms). " +
+        "A narrow AIVR strip would be misidentified as accelerated junctional rhythm, leading to incorrect interpretation of post-reperfusion MI findings.",
+    });
+  }
+  return v;
+}
+
+function validateRbbbMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.qrsWidth < 0.12) {
+    v.push({
+      rule: "rbbb_requires_wide_qrs",
+      severity: "error",
+      message: `RBBB strip QRS ${config.qrsWidth}s — must be ≥ 0.12s.`,
+      clinicalRationale:
+        "Bundle branch blocks are defined by delayed ventricular activation producing QRS ≥ 120ms. A narrow RBBB is clinically impossible.",
+    });
+  }
+  if (!config.features?.rsrPrime) {
+    v.push({
+      rule: "rbbb_requires_rsr_prime",
+      severity: "error",
+      message: "RBBB strip missing features.rsrPrime=true.",
+      clinicalRationale:
+        "The RSR' pattern (rabbit ears) in V1 is the defining morphological feature of RBBB. " +
+        "Without it, learners cannot distinguish RBBB from LBBB, nonspecific IVCD, or VT — each with different clinical implications.",
+    });
+  }
+  return v;
+}
+
+function validateLbbbMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.qrsWidth < 0.12) {
+    v.push({
+      rule: "lbbb_requires_wide_qrs",
+      severity: "error",
+      message: `LBBB strip QRS ${config.qrsWidth}s — must be ≥ 0.12s.`,
+      clinicalRationale: "LBBB is defined by QRS ≥ 120ms. A narrow LBBB is a clinical impossibility.",
+    });
+  }
+  if (!config.features?.broadNotchedR) {
+    v.push({
+      rule: "lbbb_requires_broad_notched_r",
+      severity: "error",
+      message: "LBBB strip missing features.broadNotchedR=true.",
+      clinicalRationale:
+        "The broad notched R-wave in leads I and V6 is the defining feature of LBBB. " +
+        "Without this morphology, the strip is indistinguishable from nonspecific IVCD, " +
+        "and learners miss the clinical significance for STEMI identification (LBBB = STEMI equivalent in the right context).",
+    });
+  }
+  return v;
+}
+
+function validateNstemiMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (!config.features?.stDepression) {
+    v.push({
+      rule: "nstemi_requires_st_depression",
+      severity: "error",
+      message: "NSTEMI strip missing features.stDepression=true.",
+      clinicalRationale:
+        "ST depression is the defining ECG feature of subendocardial ischemia (NSTEMI). " +
+        "Without it, the strip cannot teach learners to identify NSTEMI, the most common acute coronary syndrome pattern.",
+    });
+  }
+  if (config.features?.stElevation) {
+    v.push({
+      rule: "nstemi_no_st_elevation",
+      severity: "error",
+      message: "NSTEMI strip has features.stElevation=true — NSTEMI is defined by ST depression, not elevation.",
+      clinicalRationale:
+        "A NSTEMI strip with ST elevation teaches the opposite finding from the diagnostic criterion. " +
+        "Learners would confuse NSTEMI with STEMI — an error that directly affects triage and cath lab activation decisions.",
+    });
+  }
+  return v;
+}
+
+// ─── Pediatric morphology validators ──────────────────────────────────────────
+
+/**
+ * Validates that a pediatric strip has the ageGroup field set.
+ * Pediatric rhythm templates without ageGroup will use adult morphology defaults,
+ * producing clinically incorrect strips.
+ */
+function validatePediatricAgeGroupPresent(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (!config.ageGroup) {
+    v.push({
+      rule: "pediatric_strip_requires_age_group",
+      severity: "error",
+      message:
+        `Pediatric rhythm "${config.rhythmKey}" strip is missing the ageGroup field. ` +
+        "Use defaultPediatricEcgStripConfig(rhythmKey, ageGroup) to get age-appropriate parameters.",
+      clinicalRationale:
+        "Without ageGroup set, the waveform renderer uses adult PR interval and QRS defaults. " +
+        "A neonate strip rendered with adult PR intervals (0.18s) would be clinically incorrect — " +
+        "neonate normal PR is 0.08–0.10s. Learners trained on incorrect pediatric morphology " +
+        "will misidentify normal neonatal ECGs as first-degree AV block.",
+    });
+  }
+  return v;
+}
+
+/**
+ * Validates that a pediatric strip's rate is within the age-appropriate normal
+ * or expected range for the rhythm.
+ *
+ * This catches the most dangerous error: a neonate SVT strip rendered at 150 BPM
+ * (adult SVT range) when neonatal SVT is 220–300 BPM.
+ */
+function validatePediatricRateForAgeGroup(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  const ageGroup = config.ageGroup as PediatricAgeGroup | undefined;
+  if (!ageGroup || config.rate === 0) return v;
+
+  const ranges = getPediatricNormalRateRange(ageGroup);
+
+  // For sinus rhythms: rate must be within normal resting range (with tolerance)
+  const sinusRhythms = ["pediatric_normal_sinus", "normal_sinus_rhythm", "respiratory_sinus_arrhythmia"];
+  if (sinusRhythms.includes(config.rhythmKey)) {
+    const low = ranges.restingMin * 0.85;  // 15% below min (clinical variability)
+    const high = ranges.restingMax * 1.15; // 15% above max
+    if (config.rate < low || config.rate > high) {
+      v.push({
+        rule: "pediatric_sinus_rate_outside_age_range",
+        severity: "warning",
+        message:
+          `Pediatric ${config.rhythmKey} strip rate ${config.rate} BPM is outside the expected range ` +
+          `for ${ageGroup} (${ranges.restingMin}–${ranges.restingMax} BPM ±15%).`,
+        clinicalRationale:
+          `A ${ageGroup} sinus rhythm at ${config.rate} BPM would be misidentified ` +
+          `as ${config.rate < ranges.restingMin ? "bradycardia" : "tachycardia"} if the normal ` +
+          "age-specific range is not known. Learners must internalize that pediatric normal " +
+          "rates are age-stratified, not the adult 60–100 BPM standard.",
+      });
+    }
+  }
+
+  // For SVT: must be above sinusTachMaxBeforeSvtSuspicion
+  if (config.rhythmKey === "pediatric_svt") {
+    if (config.rate < ranges.sinusTachMaxBeforeSvtSuspicion) {
+      v.push({
+        rule: "pediatric_svt_rate_below_svt_threshold",
+        severity: "error",
+        message:
+          `Pediatric SVT strip rate ${config.rate} BPM is below the SVT threshold for ` +
+          `${ageGroup} (≥ ${ranges.sinusTachMaxBeforeSvtSuspicion} BPM). ` +
+          "At this rate, the strip represents sinus tachycardia, not SVT.",
+        clinicalRationale:
+          "In infants, sinus tachycardia can reach 220 BPM with fever or sepsis. " +
+          "Presenting a strip at 180 BPM as 'SVT' in an infant teaches learners to " +
+          "cardiovert what may be sinus tach — a dangerous management error.",
+      });
+    }
+  }
+
+  // For bradycardia: must be below the age-specific bradycardia threshold
+  if (config.rhythmKey === "sinus_bradycardia" || config.rhythmKey === "pediatric_hypoxic_bradycardia") {
+    if (config.rate >= ranges.bradycardiaThreshold) {
+      v.push({
+        rule: "pediatric_bradycardia_rate_too_fast",
+        severity: "warning",
+        message:
+          `Pediatric bradycardia strip rate ${config.rate} BPM is at or above the bradycardia ` +
+          `threshold for ${ageGroup} (< ${ranges.bradycardiaThreshold} BPM).`,
+        clinicalRationale:
+          `A ${ageGroup} heart rate of ${config.rate} BPM is not bradycardic for this age group. ` +
+          "Presenting it as bradycardia teaches learners an incorrect threshold and may " +
+          "cause them to under-triage a child who truly is bradycardic.",
+      });
+    }
+  }
+
+  return v;
+}
+
+/**
+ * Validates that a pediatric SVT strip has narrow QRS (absent or near-normal width).
+ * Wide-QRS SVT with aberrancy is a distinct scenario requiring explicit labeling.
+ */
+function validatePediatricSvtMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.qrsWidth > 0.09 && !config.features?.widenedQrs) {
+    v.push({
+      rule: "pediatric_svt_narrow_complex",
+      severity: "error",
+      message:
+        `Pediatric SVT strip QRS ${config.qrsWidth}s is wider than expected without ` +
+        "features.widenedQrs=true. Pediatric SVT QRS is typically ≤ 0.08–0.09s.",
+      clinicalRationale:
+        "Pediatric SVT with a wide QRS (aberrancy or antidromic WPW) is a distinct " +
+        "educational scenario. Presenting it without labeling teaches learners to accept " +
+        "wide-complex tachycardia as typical SVT — missing the VT differential in a child.",
+    });
+  }
+  if (config.pWavePattern === "present") {
+    v.push({
+      rule: "pediatric_svt_no_sinus_p_waves",
+      severity: "error",
+      message: `Pediatric SVT strip has pWavePattern="present" — SVT has absent or retrograde P-waves.`,
+      clinicalRationale:
+        "Sinus P-waves before every QRS identifies sinus tachycardia, not SVT. " +
+        "A pediatric SVT strip with sinus P-waves teaches the wrong discriminating feature.",
+    });
+  }
+  return v;
+}
+
+/**
+ * Validates that JET (junctional ectopic tachycardia) is not incorrectly flagged
+ * as adenosine-responsive or cardioversion-responsive in the question rationale.
+ * This is a morphology proxy check: JET must have pWavePattern "absent" or "dissociated".
+ */
+function validateJetMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.pWavePattern === "present") {
+    v.push({
+      rule: "jet_no_sinus_p_waves",
+      severity: "error",
+      message: `JET strip has pWavePattern="present" — JET has AV dissociation, not sinus P-wave conduction.`,
+      clinicalRationale:
+        "JET originates from the AV junction, which fires independently faster than the sinus node. " +
+        "Visible sinus P-waves marching at a slower rate than QRS defines the AV dissociation. " +
+        "A strip showing 1:1 sinus conduction is not JET — it would be treated differently (adenosine " +
+        "for SVT vs cooling and antiarrhythmics for JET).",
+    });
+  }
+  if (config.qrsWidth > 0.10) {
+    v.push({
+      rule: "jet_narrow_qrs",
+      severity: "warning",
+      message: `JET strip QRS ${config.qrsWidth}s — JET conducts via His-Purkinje, producing narrow or near-narrow QRS (≤ 0.10s).`,
+      clinicalRationale:
+        "JET is distinguished from VT by its narrow QRS. A wide-QRS 'JET' strip would " +
+        "be clinically indistinguishable from VT — a different PALS algorithm pathway.",
+    });
+  }
+  return v;
+}
+
+/**
+ * Validates pediatric VT morphology — same rules as adult VT but with
+ * age-specific rate validation.
+ */
+function validatePediatricVtMorphology(config: EcgStripMediaConfig): EcgMorphologyViolation[] {
+  const v: EcgMorphologyViolation[] = [];
+  if (config.qrsWidth < 0.12) {
+    v.push({
+      rule: "pediatric_vt_wide_qrs",
+      severity: "error",
+      message: `Pediatric VT strip QRS ${config.qrsWidth}s — must be ≥ 0.12s.`,
+      clinicalRationale:
+        "Pediatric VT, like adult VT, is defined by wide QRS (≥ 120ms). A narrow-QRS " +
+        "wide-complex tachycardia in a child should be labeled SVT with aberrancy or JET, " +
+        "not VT — different PALS management pathways.",
+    });
+  }
+  return v;
+}
+
 // ─── Registry of validators per rhythmKey ──────────────────────────────────────
 
 type MorphologyValidator = (config: EcgStripMediaConfig) => EcgMorphologyViolation[];
@@ -331,11 +656,50 @@ const RHYTHM_VALIDATORS: Record<string, MorphologyValidator[]> = {
   torsades_de_pointes: [validateTorsadesMorphology, validateHighRateMorphology],
   atrial_fibrillation: [validateAfibMorphology],
   stemi_pattern: [validateStemiMorphology],
+  nstemi_pattern: [validateNstemiMorphology],
   paced_rhythm: [validatePacedRhythmMorphology],
   second_degree_type_i_av_block: [validateAvBlockMorphology],
   second_degree_type_ii_av_block: [validateAvBlockMorphology],
   third_degree_av_block: [validateAvBlockMorphology],
   asystole: [validateAsystoleMorphology],
+  // P0 clinical accuracy audit additions
+  junctional_rhythm: [validateJunctionalMorphology],
+  accelerated_junctional_rhythm: [validateJunctionalMorphology],
+  ventricular_escape_rhythm: [validateVentricularEscapeMorphology],
+  idioventricular_rhythm: [validateIdioventricularMorphology],
+  right_bundle_branch_block: [validateRbbbMorphology],
+  left_bundle_branch_block: [validateLbbbMorphology],
+  // Pediatric rhythm validators — enforce age-specific morphology rules
+  pediatric_svt: [
+    validatePediatricAgeGroupPresent,
+    validatePediatricRateForAgeGroup,
+    validatePediatricSvtMorphology,
+    validateHighRateMorphology,
+  ],
+  pediatric_hypoxic_bradycardia: [
+    validatePediatricAgeGroupPresent,
+    validatePediatricRateForAgeGroup,
+  ],
+  pediatric_ventricular_tachycardia: [
+    validatePediatricAgeGroupPresent,
+    validatePediatricRateForAgeGroup,
+    validatePediatricVtMorphology,
+    validateHighRateMorphology,
+  ],
+  pediatric_normal_sinus: [
+    validatePediatricAgeGroupPresent,
+    validatePediatricRateForAgeGroup,
+  ],
+  junctional_ectopic_tachycardia: [
+    validatePediatricAgeGroupPresent,
+    validateJetMorphology,
+    validateHighRateMorphology,
+  ],
+  // Adult rhythms used in pediatric context still need age validation
+  normal_sinus_rhythm:            [],  // pediatric use handled by age group check at runtime
+  sinus_bradycardia:              [],
+  sinus_tachycardia:              [],
+  respiratory_sinus_arrhythmia:   [],
 };
 
 // ─── Public API ─────────────────────────────────────────────────────────────────
