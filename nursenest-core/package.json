@@ -416,7 +416,7 @@
     "i18n:check-sync": "npx tsx ../script/i18n-check-sync.ts",
     "i18n:precommit-check": "bash ../script/i18n-precommit-check.sh",
     "i18n:report-placeholder-fallbacks": "npx tsx ../script/i18n-report-placeholder-fallbacks.ts",
-    "i18n:ci": "npm run i18n:compile && npm run i18n:validate:production && npm run i18n:check-drift && npm run i18n:report-placeholder-fallbacks",
+    "i18n:ci": "npm run i18n:compile && npm run i18n:validate:production && npm run i18n:validate-runtime && npm run i18n:check-drift && npm run i18n:report-placeholder-fallbacks",
     "i18n:audit:fr": "node scripts/audit-french-completeness.mjs && node scripts/write-i18n-readiness-summary.mjs",
     "i18n:audit:en": "node scripts/audit-english-i18n-regression.mjs && node scripts/write-i18n-readiness-summary.mjs",
     "i18n:audit:es": "node scripts/audit-spanish-completeness.mjs && node scripts/write-i18n-readiness-summary.mjs",
@@ -491,7 +491,8 @@
     "test:ecg-seo-authority": "node --import tsx --test src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts",
     "test:ecg-cluster": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts",
     "test:ecg-full": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/ecg-module/ecg-route-existence.contract.test.ts",
-    "knip": "knip"
+    "knip": "knip",
+    "i18n:validate-runtime": "npx tsx scripts/validate-i18n-runtime-keys.ts"
   },
   "dependencies": {
     "@auth/core": "0.37.2",

@@ -7,6 +7,7 @@ on:
       - "nursenest-core/src/lib/i18n/**"
       - "nursenest-core/src/lib/seo/**"
       - "nursenest-core/scripts/audit-*-i18n*.mjs"
+      - "nursenest-core/scripts/validate-i18n-runtime-keys.ts"
       - "nursenest-core/scripts/audit-french-completeness.mjs"
       - "nursenest-core/scripts/audit-spanish-completeness.mjs"
       - "nursenest-core/scripts/translate-fr-missing.mjs"
@@ -36,6 +37,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: English i18n regression audit
         run: npm run i18n:audit:en
+      - name: Runtime translation key contract
+        run: npm run i18n:validate-runtime
       - name: French completeness audit
         run: npm run i18n:audit:fr
       - name: Spanish completeness audit

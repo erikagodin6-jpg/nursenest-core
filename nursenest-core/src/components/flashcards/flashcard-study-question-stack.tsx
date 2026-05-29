@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Gem, Lightbulb, XCircle, X } from "lucide-react";
+import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Gem, GraduationCap, Lightbulb, XCircle, X } from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
@@ -86,7 +86,7 @@ function resolveCorrectRationale(exam: ExamMicroQuestionPayload, fallback: strin
   });
 }
 
-function resolveDistractorRationales(exam: ExamMicroQuestionPayload): Array<{ letter: string; rationale: string }> {
+function resolveDistractorRationales(exam: ExamMicroQuestionPayload): Array<{ letter: string; optionText: string; rationale: string }> {
   const correctOptionText = answerOptionText(exam, exam.correctLetter);
   return exam.answerOptions
     .filter((option) => option.letter !== exam.correctLetter)
@@ -94,6 +94,7 @@ function resolveDistractorRationales(exam: ExamMicroQuestionPayload): Array<{ le
       const authored = exam.rationaleIncorrect.find((row) => row.letter === option.letter)?.rationale.trim() ?? "";
       return {
         letter: option.letter,
+        optionText: option.text,
         rationale: isWeakRationaleText(authored)
           ? buildSimpleDistractorRationale({
               stem: exam.questionStem,
@@ -488,26 +489,30 @@ export function FlashcardStudyQuestionStack({
                     {resolvedDistractorRationales.length > 0 ? (
                       <section className="nn-flashcard-rationale-panel__incorrect">
                         <h3>Why Other Options Are Incorrect</h3>
-                        <div>
+                        <ul className="nn-flashcard-distractor-list">
                           {resolvedDistractorRationales.map((row) => (
-                            <details key={row.letter} open={row.letter === submittedLetter}>
-                              <summary>
-                                <span>{row.letter}</span>
-                                <strong>Why not this option?</strong>
-                              </summary>
-                              <FlashcardRichContent text={row.rationale} className="[&_p]:mb-0" />
-                            </details>
+                            <li key={row.letter} className="nn-flashcard-distractor-item" data-nn-submitted={row.letter === submittedLetter ? "wrong" : undefined}>
+                              <span className="nn-flashcard-distractor-letter">{row.letter}.</span>
+                              <div className="nn-flashcard-distractor-body">
+                                {row.optionText ? <strong>{row.optionText}</strong> : null}
+                                {row.optionText && row.rationale ? <span className="nn-flashcard-distractor-sep"> – </span> : null}
+                                <FlashcardRichContent text={row.rationale} className="nn-flashcard-distractor-rationale [&_p]:mb-0 [&_p]:inline" />
+                              </div>
+                            </li>
                           ))}
-                        </div>
+                        </ul>
                       </section>
                     ) : null}
                     {(() => {
                       const tip = buildExamTipForMcq(exam, examPathwayLabel);
                       return tip ? (
-                        <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip">
-                          <summary>{examPathwayLabel} Takeaway</summary>
+                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip">
+                          <h3 className="nn-flashcard-takeaway-heading">
+                            <GraduationCap className="h-3.5 w-3.5" aria-hidden />
+                            {examPathwayLabel} Takeaway
+                          </h3>
                           <p className="nn-flashcard-inline-rationale__body text-sm leading-relaxed">{tip}</p>
-                        </details>
+                        </section>
                       ) : null;
                     })()}
                     {(() => {

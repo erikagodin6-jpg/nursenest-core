@@ -88,7 +88,18 @@ for (const rel of CRITICAL_FILES) {
   const currentPath = path.join(REPO_ROOT, rel);
   if (!before || !fs.existsSync(currentPath)) continue;
   const after = fs.readFileSync(currentPath, "utf8");
-  if (hash(before) !== hash(after)) changedCriticalEnglishCopy.push(rel);
+  if (hash(before) === hash(after)) continue;
+  try {
+    const beforeJson = JSON.parse(before);
+    const afterJson = JSON.parse(after);
+    const changedExistingKeys = Object.keys(beforeJson).filter((key) => afterJson[key] !== beforeJson[key]);
+    const deletedExistingKeys = Object.keys(beforeJson).filter((key) => !Object.prototype.hasOwnProperty.call(afterJson, key));
+    if (changedExistingKeys.length > 0 || deletedExistingKeys.length > 0) {
+      changedCriticalEnglishCopy.push(`${rel} (${changedExistingKeys.length} changed, ${deletedExistingKeys.length} deleted)`);
+    }
+  } catch {
+    changedCriticalEnglishCopy.push(rel);
+  }
 }
 
 const results = [{
