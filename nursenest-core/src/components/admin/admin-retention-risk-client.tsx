@@ -2,8 +2,40 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { RetentionRiskProfile, RetentionRiskSummary, RiskLevel } from "@/lib/admin/subscription-risk";
-import { riskLevelColor } from "@/lib/admin/subscription-risk";
+
+type RiskLevel = "critical" | "high" | "medium" | "low";
+
+type RetentionRiskSignal = {
+  code: string;
+  label: string;
+  severity: RiskLevel;
+  detail: string;
+};
+
+type RetentionRiskProfile = {
+  userId: string;
+  email: string;
+  name: string;
+  tier: string;
+  riskLevel: RiskLevel;
+  riskScore: number;
+  healthScore: number;
+  daysSinceLastActivity: number | null;
+  signals: RetentionRiskSignal[];
+  subscriptionEndsAt: string | null;
+  daysUntilExpiry: number | null;
+  recommendedAction: string;
+};
+
+type RetentionRiskSummary = {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+  total: number;
+  profiles: RetentionRiskProfile[];
+  generatedAt: string;
+};
 
 type Props = { initialData?: RetentionRiskSummary | null };
 
@@ -13,6 +45,15 @@ const RISK_LABELS: Record<RiskLevel, string> = {
   medium: "Medium",
   low: "Low",
 };
+
+function riskLevelColor(level: RiskLevel): string {
+  switch (level) {
+    case "critical": return "text-red-700 bg-red-50 border-red-200";
+    case "high": return "text-orange-700 bg-orange-50 border-orange-200";
+    case "medium": return "text-amber-700 bg-amber-50 border-amber-200";
+    case "low": return "text-green-700 bg-green-50 border-green-200";
+  }
+}
 
 function RiskBadge({ level }: { level: RiskLevel }) {
   return (

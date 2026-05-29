@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "ca9447829abbe04a04eef61a0ab0d5f0e373ab6666729dd39d757d4b90acfca2",
-  "generatedAt": "2026-05-29T08:41:45.710Z",
+  "fingerprint": "1be63042f66fbfb9d060b3f60a963c619ab5976dd5e6a1bcbc28d279b069f8f8",
+  "generatedAt": "2026-05-29T11:18:36.554Z",
   "inputs": [
     {
       "type": "file",
@@ -3011,6 +3011,10 @@
     {
       "type": "file",
       "path": "src/app/api/admin/clinical-nursing-scenarios/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/content-audit/high-end-completeness/route.contract.test.ts"
     },
     {
       "type": "file",
@@ -7449,6 +7453,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 35937
+    "durationMs": 33281
   }
 }

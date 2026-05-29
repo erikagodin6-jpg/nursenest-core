@@ -114,6 +114,16 @@ console.error(
 );
 
 runStep({ name: "typecheck_critical", command: npmCmd, args: ["run", "typecheck:critical"] });
+runStep({
+  name: "admin_content_audit_route_contracts",
+  command: process.execPath,
+  args: [
+    "--import",
+    "tsx",
+    "--test",
+    path.join(packageRoot, "src/app/api/admin/content-audit/high-end-completeness/route.contract.test.ts"),
+  ],
+});
 runStep({ name: "i18n_compile", command: npmCmd, args: ["run", "i18n:compile"] });
 runStep({
   name: "i18n_validate_production",

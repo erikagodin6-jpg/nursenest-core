@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { buildHighEndCompletenessAudit } from "@/lib/content-audit/high-end-completeness-audit";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
+
 /**
  * High-end completeness audit for pathway dominance standards.
  * Admin-only JSON report used by ops, planning, and release gates.
