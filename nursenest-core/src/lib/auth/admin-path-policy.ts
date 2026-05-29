@@ -54,6 +54,7 @@ const CONTENT_FORBIDDEN_PREFIXES = [
  */
 const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/access",
+  "/admin/business-command-center",
   "/admin/observability",
   "/api/admin/observability",
   "/admin/analytics",

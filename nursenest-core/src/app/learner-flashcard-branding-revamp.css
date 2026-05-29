@@ -359,164 +359,196 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   MOCKUP IMPLEMENTATION — 2026-05-28
-   Matches approved visual spec exactly. Scope: [data-nn-flashcard-branding-revamp]
+   MOCKUP IMPLEMENTATION — v2 2026-05-29
+   Single layout. Zero hardcoded hex values. All coloring via semantic tokens.
+   Scope: [data-nn-flashcard-branding-revamp]
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Grid proportions (55 / 45 split matching mockup) ────────────── */
-.nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-learning-grid {
-  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr) !important;
-}
-
-/* ── Progress: "1 of 250" on a single line ───────────────────────── */
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress {
-  flex-direction: row;
+/* ── TOPBAR LEFT SECTION: Return to Hub + mode chip + title ──────── */
+.nn-flashcard-topbar-left {
+  display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
+  min-width: 0;
+  flex-shrink: 0;
 }
 
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress > strong {
+.nn-flashcard-return-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  padding: 0.25rem 0.6rem 0.25rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--semantic-border-soft);
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--semantic-text-secondary);
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease;
   white-space: nowrap;
-  font-size: 0.82rem;
-  font-weight: 750;
+}
+
+.nn-flashcard-return-link:hover {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 80%, var(--semantic-surface));
   color: var(--semantic-text-primary);
 }
 
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress-track {
-  min-width: 3.5rem;
-  width: clamp(3.5rem, 6vw, 6rem);
-  height: 3px;
-  margin-top: 0;
+.nn-flashcard-topbar-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ── Clinical Pearl — elevated accent card ───────────────────────── */
+/* Override the legacy stacked left section when we have the new structure */
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar {
+  min-height: 3rem;
+  padding: 0.38rem 0.75rem;
+  gap: 0.5rem;
+}
+
+/* ── Progress: "1 of 250" inline — ONE line ──────────────────────── */
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.55rem !important;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress > strong {
+  white-space: nowrap !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: var(--semantic-text-primary) !important;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress-track {
+  min-width: 3.5rem !important;
+  width: clamp(3.5rem, 5vw, 5.5rem) !important;
+  height: 3px !important;
+  margin-top: 0 !important;
+  align-self: center !important;
+}
+
+/* Meta dividers — smaller min-width for compact topbar */
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta > div {
+  min-height: 2rem !important;
+  min-width: 0 !important;
+}
+
+/* ── Grid: 55/45 split matching mockup ───────────────────────────── */
+.nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] .nn-flashcard-learning-grid {
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr) !important;
+}
+
+/* ── Hero stem — matched typography ─────────────────────────────── */
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-hero-stem {
+  margin-top: 1rem !important;
+  font-size: clamp(1rem, 2.2vw, 1.15rem) !important;
+  line-height: 1.45 !important;
+}
+
+/* ── Clinical Pearl — left accent border, brand tint ────────────── */
+/*    Uses only semantic tokens — resolves correctly for all 5 themes */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept {
   position: relative;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft)) !important;
-  border-left: 3px solid var(--semantic-brand) !important;
-  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface)) !important;
   border-radius: 0.75rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft)) !important;
+  border-left-width: 3px !important;
+  border-left-color: var(--semantic-brand) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface)) !important;
+  padding: 0.65rem 0.78rem !important;
 }
 
-html[data-theme="blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept,
-html[data-theme="mint-blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept {
-  border-left-color: #f472b6 !important;
-  border-color: color-mix(in srgb, #f472b6 22%, var(--semantic-border-soft)) !important;
-  background: color-mix(in srgb, #fdf2f8 85%, var(--semantic-surface)) !important;
-}
-
-html[data-theme="ocean"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept {
-  border-left-color: #14b8a6 !important;
-  border-color: color-mix(in srgb, #14b8a6 22%, var(--semantic-border-soft)) !important;
-  background: color-mix(in srgb, #f0fdfa 85%, var(--semantic-surface)) !important;
-}
-
-html[data-theme="midnight"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept {
-  border-left-color: #38bdf8 !important;
-  background: color-mix(in srgb, #0f172a 60%, var(--semantic-surface)) !important;
-}
-
-/* Clinical Pearl label — uppercase caps, brand-colored */
+/* Clinical Pearl label */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-clinical-pearl-label {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 0.3rem !important;
-  font-size: 0.65rem !important;
+  gap: 0.28rem !important;
+  font-size: 0.62rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
-  color: var(--semantic-brand) !important;
-}
-
-html[data-theme="blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-clinical-pearl-label,
-html[data-theme="mint-blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-clinical-pearl-label {
-  color: #be185d !important;
-}
-
-html[data-theme="ocean"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-clinical-pearl-label {
-  color: #0d9488 !important;
+  color: var(--semantic-brand-strong, var(--semantic-brand)) !important;
+  margin-bottom: 0.3rem !important;
 }
 
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept p {
-  font-size: 0.9rem !important;
+  font-size: 0.88rem !important;
   line-height: 1.55 !important;
   font-weight: 500 !important;
   color: var(--semantic-text-primary) !important;
-  margin-top: 0.35rem !important;
+  margin: 0 !important;
 }
 
-/* ── Correct Answer pill — brand background ──────────────────────── */
+/* ── Correct Answer pill — brand-tinted badge ────────────────────── */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-inline-rationale__answer {
-  background: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface)) !important;
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 36%, var(--semantic-border-soft)) !important;
-  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--semantic-text-primary)) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 32%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface)) !important;
+  color: var(--semantic-brand-strong, var(--semantic-brand)) !important;
   font-weight: 700 !important;
   font-size: 0.82rem !important;
-  padding: 0.3rem 0.75rem !important;
-  border-radius: 999px !important;
+  padding: 0.28rem 0.72rem !important;
 }
 
-html[data-theme="blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-inline-rationale__answer,
-html[data-theme="mint-blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-inline-rationale__answer {
-  background: #fce7f3 !important;
-  border-color: #fbcfe8 !important;
-  color: #be185d !important;
-}
-
-html[data-theme="ocean"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-inline-rationale__answer {
-  background: #ccfbf1 !important;
-  border-color: #99f6e4 !important;
-  color: #0f766e !important;
-}
-
-/* ── Rationale sections — tighter vertical rhythm ────────────────── */
+/* ── Rationale panel body — compact padding ───────────────────────── */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-panel__body {
   padding: 0.85rem 1rem !important;
-  gap: 0 !important;
 }
 
+/* ── Rationale section headings — consistent uppercase labels ─────── */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section {
   margin-top: 0.75rem !important;
-  padding-top: 0 !important;
-  gap: 0.3rem !important;
+  gap: 0.28rem !important;
 }
 
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section h3 {
-  font-size: 0.63rem !important;
+  font-size: 0.62rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
   color: var(--semantic-text-muted) !important;
+  margin: 0 !important;
 }
 
-/* ── Distractor list — flat, no accordion ────────────────────────── */
+/* ── Distractor list — flat items, no accordion ───────────────────── */
 .nn-flashcard-distractor-list {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0;
+  margin: 0.45rem 0 0;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 
 .nn-flashcard-distractor-item {
   display: flex;
-  gap: 0.45rem;
-  font-size: 0.84rem;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.83rem;
   line-height: 1.5;
   color: var(--semantic-text-secondary);
 }
 
-.nn-flashcard-distractor-item[data-nn-submitted="wrong"] {
-  color: var(--semantic-danger);
+.nn-flashcard-distractor-item[data-nn-submitted="wrong"] .nn-flashcard-distractor-letter,
+.nn-flashcard-distractor-item[data-nn-submitted="wrong"] .nn-flashcard-distractor-body {
+  color: color-mix(in srgb, var(--semantic-danger) 80%, var(--semantic-text-secondary));
 }
 
 .nn-flashcard-distractor-letter {
   flex-shrink: 0;
-  font-weight: 750;
+  min-width: 1rem;
+  font-weight: 700;
   color: var(--semantic-text-primary);
-  min-width: 1.1rem;
 }
 
 .nn-flashcard-distractor-body {
@@ -531,51 +563,33 @@ html[data-theme="ocean"] .nn-flashcard-rationale-panel[data-nn-flashcard-brandin
 
 .nn-flashcard-distractor-sep {
   color: var(--semantic-text-muted);
+  margin: 0 0.1rem;
 }
 
 .nn-flashcard-distractor-rationale {
   display: inline;
 }
 
-/* ── NCLEX Takeaway — lavender card ──────────────────────────────── */
+/* ── NCLEX / Exam Takeaway — soft panel, graduation icon label ────── */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section--exam-tip {
   margin-top: 0.85rem !important;
-  padding: 0.65rem 0.82rem !important;
+  padding: 0.6rem 0.78rem !important;
   border-radius: 0.72rem !important;
-  border: 1px solid color-mix(in srgb, var(--semantic-chart-7) 22%, var(--semantic-border-soft)) !important;
-  background: color-mix(in srgb, var(--semantic-panel-lavender) 60%, var(--semantic-surface)) !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-panel-cool) 80%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface)) !important;
 }
 
-html[data-theme="blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section--exam-tip,
-html[data-theme="mint-blossom"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section--exam-tip {
-  background: color-mix(in srgb, #f3e8ff 75%, var(--semantic-surface)) !important;
-  border-color: #e9d5ff !important;
-}
-
-html[data-theme="ocean"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section--exam-tip {
-  background: color-mix(in srgb, #eff6ff 80%, var(--semantic-surface)) !important;
-  border-color: #bfdbfe !important;
-}
-
+/* Takeaway heading with graduation cap icon */
 .nn-flashcard-takeaway-heading {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 0.3rem !important;
-  font-size: 0.63rem !important;
+  gap: 0.28rem !important;
+  font-size: 0.62rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
-  color: color-mix(in srgb, var(--semantic-chart-7) 70%, var(--semantic-text-muted)) !important;
-  margin: 0 0 0.3rem !important;
-}
-
-html[data-theme="blossom"] .nn-flashcard-takeaway-heading,
-html[data-theme="mint-blossom"] .nn-flashcard-takeaway-heading {
-  color: #7c3aed !important;
-}
-
-html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
-  color: #1d4ed8 !important;
+  color: color-mix(in srgb, var(--semantic-brand) 80%, var(--semantic-text-muted)) !important;
+  margin: 0 0 0.28rem !important;
 }
 
 .nn-flashcard-rationale-section--exam-tip .nn-flashcard-inline-rationale__body {
@@ -585,17 +599,17 @@ html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
   margin: 0 !important;
 }
 
-/* ── Answer status banner — compact ──────────────────────────────── */
+/* ── Answer status (Correct! / Incorrect) — compact banner ────────── */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-answer-status {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 0.85rem;
-  padding: 0.6rem 0.85rem;
+  margin-top: 0.8rem;
+  padding: 0.55rem 0.8rem;
   border-radius: 0.65rem;
   border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface));
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
 }
 
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-answer-status:has(.text-\[var\(--semantic-danger\)\]) {
@@ -604,26 +618,26 @@ html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
 }
 
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-answer-status p {
-  margin: 0.1rem 0 0;
-  font-size: 0.8rem;
+  margin: 0.08rem 0 0;
+  font-size: 0.79rem;
   line-height: 1.4;
   color: var(--semantic-text-secondary);
 }
 
-/* ── Coach panel — compact metadata strip matching mockup ────────── */
+/* ── Metadata strip / Coach panel ─────────────────────────────────── */
 .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] .nn-flashcard-coach-panel {
-  grid-template-columns: 0.8fr 1.4fr 1.35fr 1.2fr !important;
-  max-height: 5.5rem !important;
+  grid-template-columns: 0.75fr 1.4fr 1.3fr 1.2fr !important;
   min-height: 4.5rem !important;
+  max-height: 5.5rem !important;
 }
 
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-coach-panel__section > span,
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale > span {
-  font-size: 0.7rem !important;
+  font-size: 0.69rem !important;
   font-weight: 700 !important;
-  letter-spacing: 0.02em !important;
   color: var(--semantic-text-muted) !important;
   text-transform: none !important;
+  letter-spacing: 0 !important;
 }
 
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-coach-panel__section p {
@@ -632,39 +646,38 @@ html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
   -webkit-line-clamp: 3 !important;
 }
 
-/* ── Confidence scale — circle buttons, active = brand ──────────── */
+/* ── Confidence scale — circle buttons, active = brand fill ─────── */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale button {
-  aspect-ratio: 1;
+  aspect-ratio: 1 !important;
   border-radius: 9999px !important;
   font-size: 0.78rem !important;
   font-weight: 650 !important;
   border-color: var(--semantic-border-soft) !important;
   background: var(--semantic-surface) !important;
   color: var(--semantic-text-secondary) !important;
-  transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease !important;
+}
+
+/* Reset hardcoded 3rd-button green — aria-pressed is the single source of truth */
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale button:nth-child(3) {
+  border-color: var(--semantic-border-soft) !important;
+  background: var(--semantic-surface) !important;
+  color: var(--semantic-text-secondary) !important;
 }
 
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale button[aria-pressed="true"] {
   background: var(--semantic-brand) !important;
   border-color: var(--semantic-brand) !important;
-  color: #fff !important;
-  box-shadow: 0 4px 12px -6px color-mix(in srgb, var(--semantic-brand) 55%, transparent) !important;
+  color: var(--semantic-on-brand, #fff) !important;
+  box-shadow: 0 4px 12px -6px color-mix(in srgb, var(--semantic-brand) 52%, transparent) !important;
 }
 
-/* Remove the hardcoded 3rd-button green default — let aria-pressed drive it */
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale button:nth-child(3) {
-  background: var(--semantic-surface) !important;
-  border-color: var(--semantic-border-soft) !important;
-  color: var(--semantic-text-secondary) !important;
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale button[aria-pressed="false"]:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface)) !important;
 }
 
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale button:nth-child(3)[aria-pressed="true"] {
-  background: var(--semantic-brand) !important;
-  border-color: var(--semantic-brand) !important;
-  color: #fff !important;
-}
-
-/* ── Rating dock — taller, colorful tint matching mockup ─────────── */
+/* ── Rating dock — full-width tinted buttons matching mockup ─────── */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock {
   gap: 0.4rem !important;
   padding: 0.4rem !important;
@@ -682,68 +695,61 @@ html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
   font-weight: 700 !important;
 }
 
+/* Again — danger tint */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="again"] {
   border-color: color-mix(in srgb, var(--semantic-danger) 32%, var(--semantic-border-soft)) !important;
   background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface)) !important;
   color: var(--semantic-danger) !important;
 }
-
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="again"]:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface)) !important;
+  background: color-mix(in srgb, var(--semantic-danger) 11%, var(--semantic-surface)) !important;
 }
 
+/* Hard — warning tint */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="hard"] {
   border-color: color-mix(in srgb, var(--semantic-warning) 36%, var(--semantic-border-soft)) !important;
   background: color-mix(in srgb, var(--semantic-warning) 6%, var(--semantic-surface)) !important;
   color: color-mix(in srgb, var(--semantic-warning) 72%, var(--semantic-text-primary)) !important;
 }
-
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="hard"]:hover:not(:disabled) {
   background: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface)) !important;
 }
 
+/* Good — success tint */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="good"] {
   border-color: color-mix(in srgb, var(--semantic-success) 36%, var(--semantic-border-soft)) !important;
   background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface)) !important;
-  color: color-mix(in srgb, var(--semantic-success) 72%, var(--semantic-text-primary)) !important;
+  color: color-mix(in srgb, var(--semantic-success) 68%, var(--semantic-text-primary)) !important;
 }
-
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="good"]:hover:not(:disabled) {
   background: color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface)) !important;
 }
 
+/* Easy — brand tint */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="easy"] {
   border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft)) !important;
   background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface)) !important;
   color: var(--semantic-brand) !important;
 }
-
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button[data-nn-flashcard-grade="easy"]:hover:not(:disabled) {
   background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface)) !important;
 }
 
-/* ── Topbar session metadata — tighter on small viewports ────────── */
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar {
-  min-height: 3rem;
-  padding: 0.4rem 0.7rem;
-}
-
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta > div {
-  min-height: 2.2rem;
-}
-
-/* ── Hero surface — tighter internal padding ─────────────────────── */
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-hero-stem {
-  margin-top: 1rem !important;
-  font-size: clamp(1rem, 2.2vw, 1.15rem) !important;
-}
-
-/* ── Bottom footer — reduce dead space ───────────────────────────── */
+/* ── Footer spacing ───────────────────────────────────────────────── */
 .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-session-main-footer {
-  gap: 0.55rem !important;
+  gap: 0.5rem !important;
 }
 
-/* ── Mobile: stack rationale below card, no max-height cap ──────── */
+/* ── Midnight: elevated dark surfaces for Clinical Pearl + Takeaway ─ */
+html[data-theme="midnight"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept {
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface)) !important;
+}
+
+html[data-theme="midnight"] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section--exam-tip {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 70%, var(--semantic-surface)) !important;
+}
+
+/* ── RESPONSIVE: single column below 1024px ───────────────────────── */
 @media (max-width: 1023px) {
   .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-grid {
     grid-template-columns: minmax(0, 1fr) !important;
@@ -759,7 +765,7 @@ html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
     max-height: none !important;
   }
 
-  .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-coach-panel {
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] .nn-flashcard-coach-panel {
     grid-template-columns: 1fr 1fr !important;
     max-height: none !important;
     min-height: auto !important;
@@ -767,5 +773,9 @@ html[data-theme="ocean"] .nn-flashcard-takeaway-heading {
 
   .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-rating-dock button {
     min-height: 3rem !important;
+  }
+
+  .nn-flashcard-return-link {
+    display: none; /* collapsed on small screens — back is always accessible via nav */
   }
 }

@@ -59,6 +59,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     title: "Overview",
     items: [
       { href: "/admin", label: "Command center", icon: LayoutDashboard },
+      { href: "/admin/business-command-center", label: "Business command", icon: CircleDollarSign },
       { href: "/admin/observability", label: "Observability", icon: Radar },
       { href: "/admin/access", label: "Access & roles", icon: Shield },
       { href: "/admin/learner-qa", label: "Learner QA", icon: GraduationCap },

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import {
+  ArrowLeft,
   BarChart3,
   Bookmark,
   ChevronRight,
@@ -670,9 +671,16 @@ export function ActiveStudySession({
         className="hidden md:block"
       />
       <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
-        <div className="min-w-0">
-          <p className="nn-flashcard-learning-topbar__mode">{header.modeLabel}</p>
-          <h1>{header.sessionTitle}</h1>
+        {/* Left section: return link + mode chip + title */}
+        <div className="nn-flashcard-topbar-left min-w-0 shrink-0">
+          <Link href={header.exitHref} className="nn-flashcard-return-link" onClick={onExit}>
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
+            Return to Hub
+          </Link>
+          <span className="nn-flashcard-chip nn-flashcard-chip--mode">{header.modeLabel}</span>
+          {header.sessionTitle ? (
+            <span className="nn-flashcard-topbar-title max-w-[min(100%,14rem)] truncate">{header.sessionTitle}</span>
+          ) : null}
         </div>
 
         <div className="nn-flashcard-learning-topbar__meta">
