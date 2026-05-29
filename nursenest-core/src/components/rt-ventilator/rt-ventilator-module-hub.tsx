@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-import { MechanicalVentWaveformPanel } from "@/components/rt-ventilator/mechanical-vent-waveform-panel";
+import { VentHubPreview } from "@/components/rt-ventilator/vent-hub-preview";
 
 const ALLIED_PATHWAY_ID = "us-allied-core";
 

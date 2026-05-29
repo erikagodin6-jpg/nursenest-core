@@ -2,44 +2,15 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { computeLearnerHealthScore } from "./learner-health-score";
-
-// ── Risk levels ──────────────────────────────────────────────────────────────
-export type RiskLevel = "critical" | "high" | "medium" | "low";
-
-export type RetentionRiskProfile = {
-  userId: string;
-  email: string;
-  name: string;
-  tier: string;
-  riskLevel: RiskLevel;
-  riskScore: number; // 0–100 (higher = more at-risk)
-  healthScore: number; // 0–100 (lower = more at-risk)
-  daysSinceLastActivity: number | null;
-  signals: RetentionRiskSignal[];
-  subscriptionEndsAt: string | null;
-  daysUntilExpiry: number | null;
-  recommendedAction: string;
-};
-
-export type RetentionRiskSignal = {
-  code: string;
-  label: string;
-  severity: "critical" | "high" | "medium" | "low";
-  detail: string;
-};
+import { computeLearnerHealthScore } from "./learner-health-score.server";
+import type {
+  RetentionRiskProfile,
+  RetentionRiskSignal,
+  RetentionRiskSummary,
+  RiskLevel,
+} from "./subscription-risk.types";
 
 // ── Load all at-risk subscribers ─────────────────────────────────────────────
-
-export type RetentionRiskSummary = {
-  critical: number;
-  high: number;
-  medium: number;
-  low: number;
-  total: number;
-  profiles: RetentionRiskProfile[];
-  generatedAt: string;
-};
 
 export async function loadRetentionRiskDashboard(opts?: {
   minRiskLevel?: RiskLevel;
@@ -234,13 +205,4 @@ export async function loadRetentionRiskDashboard(opts?: {
     profiles: filtered,
     generatedAt: now.toISOString(),
   };
-}
-
-export function riskLevelColor(level: RiskLevel): string {
-  switch (level) {
-    case "critical": return "text-red-700 bg-red-50 border-red-200";
-    case "high":     return "text-orange-700 bg-orange-50 border-orange-200";
-    case "medium":   return "text-amber-700 bg-amber-50 border-amber-200";
-    case "low":      return "text-slate-600 bg-slate-50 border-slate-200";
-  }
 }

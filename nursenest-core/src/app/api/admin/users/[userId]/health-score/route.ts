@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { computeLearnerHealthScore } from "@/lib/admin/learner-health-score";
+import { computeLearnerHealthScore } from "@/lib/admin/learner-health-score.server";
 
 type Ctx = { params: Promise<{ userId: string }> };
 

@@ -36,10 +36,19 @@ import {
 import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
 import { MobileFlashcardFlow } from "@/components/study/mobile-flashcard-flow";
 import { CommunityPerformancePanel } from "@/components/flashcards/community-performance-panel";
-import { AdaptiveRemediationPanel, RelatedContentPanel } from "@/components/flashcards/adaptive-remediation-panel";
+import { AdaptiveRemediationPanel } from "@/components/flashcards/adaptive-remediation-panel";
 import { WeakAreaRecoveryBanner, updateTopicPerformance, detectWeakTopics, type TopicPerformanceMap } from "@/components/flashcards/weak-area-recovery-banner";
 import { MasteryMoment, updateMasteryStreak, detectMasteredTopics, type MasteryStreakMap } from "@/components/flashcards/mastery-moment";
-import { resolveEcosystemLinks, buildWeakAreaPlan, type WeakAreaPlan } from "@/lib/flashcards/flashcard-ecosystem-resolver";
+import type { WeakAreaPlan } from "@/lib/flashcards/flashcard-ecosystem-resolver";
+import { buildRelatedLearningPlan, buildWeakTopicRemediationPlan } from "@/lib/flashcards/related-learning-engine";
+import {
+  buildLearningInsights,
+  buildRecommendedNextSteps,
+  calculateConfidenceAccuracyGap,
+  calculateLearnerReadinessIndex,
+  summarizeStudyStreak,
+  type FlashcardLearningSignal,
+} from "@/lib/flashcards/learning-insight-engine";
 
 /* ================= TYPES ================= */
 
@@ -238,6 +247,7 @@ export function ActiveStudySession({
   const [weakAreaDismissed, setWeakAreaDismissed] = useState<Set<string>>(new Set());
   const [masteryTopic, setMasteryTopic] = useState<string | null>(null);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState<boolean | null>(null);
+  const [learningSignals, setLearningSignals] = useState<FlashcardLearningSignal[]>([]);
 
   const current = sessionCards[index] ?? null;
   const pinState = current?.id ? getStudyItemState(current.id) : {};
@@ -297,6 +307,7 @@ export function ActiveStudySession({
   useEffect(() => {
     setHintOpen(false);
     setConfidence(null);
+    setLastAnswerCorrect(null);
   }, [currentId]);
 
   useEffect(() => {
@@ -315,8 +326,20 @@ export function ActiveStudySession({
       telemetry.onRated(card.id, rating, buildCardMeta(card));
 
       // Track topic performance for weak area + mastery detection
-      const isCorrect = rating === "good" || rating === "easy";
+      const isCorrect = lastAnswerCorrect ?? (rating === "good" || rating === "easy");
       setLastAnswerCorrect(isCorrect);
+      setLearningSignals((prev) => [
+        ...prev.slice(-24),
+        {
+          cardId: card.id,
+          topic: card.topic,
+          subtopic: card.subtopic,
+          isCorrect,
+          confidence,
+          rating,
+          timestamp: Date.now(),
+        },
+      ]);
       if (card.topic) {
         setTopicPerf((prev) => updateTopicPerformance(prev, card.topic, isCorrect));
         setMasteryStreaks((prev) => {
@@ -343,7 +366,7 @@ export function ActiveStudySession({
 
       setSaving(false);
     },
-    [index, onNeedMore, onRate, onSessionComplete, sessionCards, sessionMeta?.hasMore, telemetry],
+    [confidence, index, lastAnswerCorrect, masteryTopic, onNeedMore, onRate, onSessionComplete, sessionCards, sessionMeta?.hasMore, telemetry],
   );
 
   const goPrevious = useCallback(() => {
@@ -418,6 +441,12 @@ export function ActiveStudySession({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [completed, current, loading, revealed, saving, sessionCards.length, submitRating, telemetry]);
 
+  const adaptiveStudyStreak = summarizeStudyStreak(learningSignals);
+  const adaptiveLearningInsights = buildLearningInsights(learningSignals);
+  const adaptiveConfidenceGap = calculateConfidenceAccuracyGap(learningSignals);
+  const adaptiveReadinessIndex = calculateLearnerReadinessIndex(learningSignals);
+  const adaptiveNextSteps = buildRecommendedNextSteps(learningSignals);
+
   if (loading) {
     return (
       <FlashcardStudySessionSkeleton
@@ -451,6 +480,17 @@ export function ActiveStudySession({
           <h2 className="text-xl font-bold text-[var(--semantic-text-primary)]">{t("flashcards.sessionComplete")}</h2>
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("flashcards.sessionProgress")}</p>
         </div>
+        {adaptiveStudyStreak.reviewed > 0 ? (
+          <div className="w-full rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-left shadow-[var(--semantic-shadow-soft)]">
+            <span className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+              Recommended next step
+            </span>
+            <p className="mt-1 text-sm font-semibold text-[var(--semantic-text-primary)]">{adaptiveNextSteps[0]}</p>
+            <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+              Session summary: {adaptiveStudyStreak.reviewed} reviewed · {adaptiveStudyStreak.mastered} mastered · {adaptiveStudyStreak.needsReview} needs review · {adaptiveReadinessIndex.level}
+            </p>
+          </div>
+        ) : null}
         <div className="flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
           <button
             type="button"
@@ -491,7 +531,7 @@ export function ActiveStudySession({
   );
 
   // Adaptive ecosystem 3.0 — ecosystem plan for current card
-  const ecosystemPlan = resolveEcosystemLinks({
+  const ecosystemPlan = buildRelatedLearningPlan({
     cardId: current.id,
     topic: current.topic ?? null,
     subtopic: current.subtopic ?? null,
@@ -508,7 +548,7 @@ export function ActiveStudySession({
   const weakAreaPlans = new Map<string, WeakAreaPlan>(
     activeWeakTopics.map((w) => [
       w.topic,
-      buildWeakAreaPlan({
+      buildWeakTopicRemediationPlan({
         topic: w.topic,
         missCount: w.total - w.correct,
         totalCount: w.total,
@@ -519,6 +559,11 @@ export function ActiveStudySession({
       }),
     ]),
   );
+  const studyStreak = adaptiveStudyStreak;
+  const learningInsights = adaptiveLearningInsights;
+  const confidenceGap = adaptiveConfidenceGap;
+  const readinessIndex = adaptiveReadinessIndex;
+  const nextSteps = adaptiveNextSteps;
 
   return (
     <div
@@ -581,6 +626,17 @@ export function ActiveStudySession({
             await onRate?.(current.id, rating);
             setRatingTally((t) => ({ ...t, [rating]: t[rating] + 1 }));
             telemetry.onRated(current.id, rating, buildCardMeta(current));
+            setLearningSignals((prev) => [
+              ...prev.slice(-24),
+              {
+                cardId: current.id,
+                topic: current.topic,
+                subtopic: current.subtopic,
+                isCorrect,
+                rating,
+                timestamp: Date.now(),
+              },
+            ]);
             if (current.topic) {
               setTopicPerf((prev) => updateTopicPerformance(prev, current.topic, isCorrect));
               setMasteryStreaks((prev) => {
@@ -678,6 +734,7 @@ export function ActiveStudySession({
         }}
         onAnswerSubmitted={(letter, isCorrect) => {
           if (!current?.id) return;
+          setLastAnswerCorrect(isCorrect);
           const meta = buildCardMeta(current);
           telemetry.onAnswerSubmitted(current.id, {
             selectedLetter: letter,
@@ -698,6 +755,7 @@ export function ActiveStudySession({
             correctLetters.length > 0 &&
             correctLetters.every((l) => selectedLetters.includes(l)) &&
             selectedLetters.every((l) => correctLetters.includes(l));
+          setLastAnswerCorrect(allCorrectSelected);
           telemetry.onAnswerSubmitted(current.id, {
             selectedLetters,
             correctLetters,
@@ -751,6 +809,14 @@ export function ActiveStudySession({
             </div>
 
             <div className="nn-flashcard-coach-panel">
+              {studyStreak.reviewed > 0 ? (
+                <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--insight">
+                  <span>Today</span>
+                  <p>
+                    {studyStreak.reviewed} reviewed · {studyStreak.mastered} mastered · {studyStreak.improving} improving · {studyStreak.needsReview} needs review
+                  </p>
+                </div>
+              ) : null}
               <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--coach">
                 <span>Tutor</span>
               </div>
@@ -795,6 +861,30 @@ export function ActiveStudySession({
                 </div>
                 <p><span>Not confident</span><span>Very confident</span></p>
               </div>
+              {learningInsights[0] ? (
+                <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--insight">
+                  <span>Learning Insight</span>
+                  <p>{learningInsights[0].message}</p>
+                </div>
+              ) : null}
+              {confidenceGap.message ? (
+                <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--insight">
+                  <span>Confidence Check</span>
+                  <p>{confidenceGap.message}</p>
+                </div>
+              ) : null}
+              {studyStreak.reviewed >= 3 ? (
+                <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--insight">
+                  <span>Learner Readiness Index</span>
+                  <p>{readinessIndex.level} · {readinessIndex.score}/100</p>
+                </div>
+              ) : null}
+              {completed || learningSignals.length >= 5 ? (
+                <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--insight">
+                  <span>Recommended Next Step</span>
+                  <p>{nextSteps[0]}</p>
+                </div>
+              ) : null}
             </div>
 
             <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">

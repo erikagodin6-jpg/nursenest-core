@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth/guards";
-import { loadRetentionRiskDashboard } from "@/lib/admin/subscription-risk";
+import { loadRetentionRiskDashboard } from "@/lib/admin/subscription-risk.server";
 import { AdminRetentionRiskClient } from "@/components/admin/admin-retention-risk-client";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 

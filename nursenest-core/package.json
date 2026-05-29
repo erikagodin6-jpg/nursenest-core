@@ -82,6 +82,7 @@
     "build:prepare-content": "node scripts/run-build-prepare-content.mjs",
     "build:next": "node scripts/run-next-prod-build.mjs",
     "build:production": "node scripts/run-build-production.mjs",
+    "validate:client-server-boundaries": "node scripts/validate-client-server-boundaries.mjs --scope=phase11",
     "build:verify-turbopack-safety": "node scripts/verify-turbopack-build-safety.mjs",
     "build:server": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=server npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",
     "build:client": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=client npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",

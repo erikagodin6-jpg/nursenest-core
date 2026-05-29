@@ -12,21 +12,50 @@ type FlashcardRow = {
   updatedAt: string;
 };
 
+type FlashcardSummary = {
+  generatedAt: string;
+  decks: { total: number; published: number; hidden: number };
+  cards: {
+    total: number;
+    published: number;
+    publishedOrphans: number;
+    publishedMissingTopicCode: number;
+    perExamFamily: Record<string, number>;
+  };
+  quality: {
+    publishedDecksWithCardCountUnder3: number;
+    deckAndTagSlugCollisions: string[];
+    sampledCards?: number;
+    sampledNeedsReview?: number;
+    sampledCritical?: number;
+    reviewQueueSample?: Array<{ id: string; score: number; severity: string; flags: string[] }>;
+  };
+  health?: {
+    recentAttempts7d: number;
+    recentOptionResponses7d: number;
+    recentSessions7d: number;
+  };
+};
+
 export function AdminFlashcardListClient() {
   const [rows, setRows] = useState<FlashcardRow[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState<FlashcardSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`/api/admin/flashcards?page=${page}&pageSize=25`, { credentials: "include" })
-      .then((r) => r.json())
-      .then((data: { flashcards?: FlashcardRow[]; total?: number }) => {
+    Promise.all([
+      fetch(`/api/admin/flashcards?page=${page}&pageSize=25`, { credentials: "include" }).then((r) => r.json()),
+      fetch("/api/admin/flashcards/summary", { credentials: "include" }).then((r) => r.json()).catch(() => null),
+    ])
+      .then(([data, summaryData]: [{ flashcards?: FlashcardRow[]; total?: number }, FlashcardSummary | null]) => {
         setRows(data.flashcards ?? []);
         setTotal(data.total ?? 0);
+        setSummary(summaryData);
       })
       .catch(() => setError("Failed to load flashcards."))
       .finally(() => setLoading(false));
@@ -49,6 +78,55 @@ export function AdminFlashcardListClient() {
 
   return (
     <div className="space-y-4">
+      {summary ? (
+        <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)]">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-sm font-bold text-[var(--semantic-text-primary)]">Flashcard Health</h2>
+              <p className="text-xs text-[var(--semantic-text-muted)]">
+                Learner intelligence, completion, and content-quality signals.
+              </p>
+            </div>
+            <span className="text-[11px] text-[var(--semantic-text-muted)]">
+              Updated {new Date(summary.generatedAt).toLocaleString()}
+            </span>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Published cards", summary.cards.published.toLocaleString()],
+              ["Sessions 7d", (summary.health?.recentSessions7d ?? 0).toLocaleString()],
+              ["Attempts 7d", (summary.health?.recentAttempts7d ?? 0).toLocaleString()],
+              ["Quality flags", `${summary.quality.sampledCritical ?? 0} critical`],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">{label}</span>
+                <strong className="mt-1 block text-lg text-[var(--semantic-text-primary)]">{value}</strong>
+              </div>
+            ))}
+          </div>
+          {summary.quality.reviewQueueSample?.length ? (
+            <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
+              <h3 className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                Question quality review queue
+              </h3>
+              <div className="mt-2 space-y-2">
+                {summary.quality.reviewQueueSample.slice(0, 4).map((row) => (
+                  <Link
+                    key={row.id}
+                    href={`/admin/flashcards/${row.id}`}
+                    className="flex flex-col gap-1 rounded-lg border border-[var(--semantic-border-soft)] px-3 py-2 text-xs hover:bg-[var(--semantic-panel-muted)] sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <span className="font-semibold text-[var(--semantic-text-primary)]">{row.id}</span>
+                    <span className="text-[var(--semantic-text-muted)]">
+                      {row.severity} · score {row.score} · {row.flags.join(", ")}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
       <p className="text-xs text-[var(--semantic-text-muted)]">{total} total flashcards</p>
       <div className="overflow-x-auto rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]">
         <table className="w-full text-left text-sm">

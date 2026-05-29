@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-05-29T12:11:00.047Z",
+  "scope": "phase11",
+  "clientEntrypoints": [
+    "src/components/admin/admin-activity-timeline-panel.tsx",
+    "src/components/admin/admin-learner-health-panel.tsx",
+    "src/components/admin/admin-retention-risk-client.tsx",
+    "src/components/admin/admin-user-protection-panel.tsx",
+    "src/components/admin/admin-view-as-controls.tsx",
+    "src/components/admin/content-quality-refresh-button.tsx"
+  ],
+  "forbiddenImports": [
+    "server-only",
+    "@prisma/client",
+    "Prisma client",
+    "db.server",
+    "safe-database",
+    "@/lib/db"
+  ],
+  "violations": []
+}

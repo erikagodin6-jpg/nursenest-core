@@ -18,7 +18,7 @@ export interface OverlayEntry {
   vital: string;
   value: string;
   explanation: string;
-  urgency: "info" | "warning" | "critical";
+  urgency: "info" | "warning" | "critical" | null;
 }
 
 export interface MonitorOverlay {

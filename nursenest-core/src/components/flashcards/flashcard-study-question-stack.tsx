@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Lightbulb, X } from "lucide-react";
+import { BookOpen, Bookmark, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Lightbulb, XCircle, X } from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
@@ -143,6 +143,28 @@ function buildMemoryHookForMcq(text: string, exam?: ExamMicroQuestionPayload | n
   const sentences = clean.match(/[^.!?]+[.!?]+/g) ?? [];
   const hook = sentences.slice(0, 2).join(" ").trim();
   return hook.length > 20 ? hook : "Cue, action, reassess: connect the stem finding to the next nursing step.";
+}
+
+function buildResultFeedback(input: {
+  exam: ExamMicroQuestionPayload | null;
+  submittedLetter: string | null;
+  topicLine?: string | null;
+  correctRationale: string;
+}): string {
+  const { exam, submittedLetter, topicLine, correctRationale } = input;
+  if (!exam) return "Review the rationale, then choose how this card should return.";
+  const correctText = answerOptionText(exam, exam.correctLetter);
+  const topic = topicLine?.split("·")[0]?.trim();
+  const teachingLine = firstTeachingLine(correctRationale);
+  const isCorrect = submittedLetter === exam.correctLetter;
+  if (isCorrect) {
+    if (correctText) return `You identified ${correctText}.`;
+    if (topic) return `You recognized the ${topic.toLowerCase()} concept.`;
+    return teachingLine || "You selected the supported clinical action.";
+  }
+  if (correctText) return `Review why ${correctText} is supported before rating this card.`;
+  if (topic) return `Revisit the ${topic.toLowerCase()} cue and compare it with the correct rationale.`;
+  return teachingLine || "Compare the stem cue with the correct answer before moving on.";
 }
 
 type StackLabels = {
@@ -400,7 +422,11 @@ export function FlashcardStudyQuestionStack({
                         ? "text-[var(--semantic-danger)]"
                         : "text-[var(--semantic-success)]"
                     }`}>
-                      <CheckCircle2 className="h-5 w-5" aria-hidden />
+                      {exam && submittedLetter && submittedLetter !== exam.correctLetter ? (
+                        <XCircle className="h-5 w-5" aria-hidden />
+                      ) : (
+                        <CheckCircle2 className="h-5 w-5" aria-hidden />
+                      )}
                       <span>
                         {exam && submittedLetter
                           ? submittedLetter === exam.correctLetter
@@ -409,7 +435,11 @@ export function FlashcardStudyQuestionStack({
                           : "Answer submitted"}
                       </span>
                     </div>
-                    <p>Review the rationale, then choose how this card should return.</p>
+                    <p>
+                      {exam
+                        ? buildResultFeedback({ exam, submittedLetter, topicLine, correctRationale: resolvedCorrectRationale })
+                        : "Review the rationale, then choose how this card should return."}
+                    </p>
                   </div>
                   {onAdvance ? (
                     <button type="button" className="nn-flashcard-next-inline" onClick={onAdvance}>
@@ -471,21 +501,21 @@ export function FlashcardStudyQuestionStack({
                     {(() => {
                       const tip = buildExamTipForMcq(exam, examPathwayLabel);
                       return tip ? (
-                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip">
-                          <h3>{examPathwayLabel} Tip</h3>
+                        <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip">
+                          <summary>{examPathwayLabel} Takeaway</summary>
                           <p className="nn-flashcard-inline-rationale__body text-sm leading-relaxed">{tip}</p>
-                        </section>
+                        </details>
                       ) : null;
                     })()}
                     {(() => {
                       const hook = buildMemoryHookForMcq(resolvedCorrectRationale, exam);
                       return (
-                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook">
-                          <h3>Memory Hook</h3>
+                        <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook">
+                          <summary>Memory Hook</summary>
                           <p className="nn-flashcard-inline-rationale__body text-sm italic leading-relaxed">
                             &ldquo;{hook}&rdquo;
                           </p>
-                        </section>
+                        </details>
                       );
                     })()}
                     {revealLinksSection ? (

@@ -33,7 +33,7 @@ const CONTENT_ICONS: Record<EcosystemContentType, React.ElementType> = {
 const CONTENT_TYPE_LABELS: Record<EcosystemContentType, string> = {
   "lesson":         "Lesson",
   "questions":      "Practice Questions",
-  "drill":          "Topic Drill",
+  "drill":          "Practice Flashcards",
   "pharmacology":   "Pharmacology",
   "ecg":            "ECG Drill",
   "simulation":     "Simulation",
@@ -80,23 +80,30 @@ export function AdaptiveRemediationPanel({
   topic?: string | null;
 }) {
   if (!plan.primary && plan.secondary.length === 0) return null;
+  const visibleLinks = [plan.primary, ...plan.secondary].filter(Boolean) as EcosystemLink[];
 
   return (
     <section className="nn-adaptive-remediation" aria-label="Recommended next steps">
       <div className="nn-adaptive-remediation__header">
         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
         <span>
-          {isIncorrect ? "Recommended remediation" : "Continue learning"}
+          {isIncorrect ? "Strengthen this topic" : "Continue learning"}
           {topic ? ` — ${topic}` : ""}
         </span>
       </div>
+      {isIncorrect ? (
+        <p className="nn-adaptive-remediation__copy">
+          Use one focused activity now to turn this miss into a stronger recall pathway.
+        </p>
+      ) : null}
 
       <div className="nn-adaptive-remediation__links">
-        {plan.primary ? (
-          <EcosystemLinkCard link={plan.primary} variant="primary" />
-        ) : null}
-        {plan.secondary.map((link) => (
-          <EcosystemLinkCard key={`${link.type}-${link.href}`} link={link} variant="secondary" />
+        {visibleLinks.map((link, index) => (
+          <EcosystemLinkCard
+            key={`${link.type}-${link.href}`}
+            link={link}
+            variant={index === 0 ? "primary" : "secondary"}
+          />
         ))}
       </div>
     </section>

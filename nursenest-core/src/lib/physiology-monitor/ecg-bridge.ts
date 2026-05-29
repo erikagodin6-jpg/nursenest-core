@@ -111,7 +111,7 @@ export function buildEcgConfigFromState(
 
 // ─── Educational mode derivation ─────────────────────────────────────────────
 
-function deriveEducationalMode(state: PhysiologyState): EcgStripMediaConfig["educationalMode"] {
+function deriveEducationalMode(state: PhysiologyState): NonNullable<EcgStripMediaConfig["educationalMode"]> {
   if (state.conditionStage === "critical" || state.conditionStage === "severe") {
     return "emergency_scenario";
   }

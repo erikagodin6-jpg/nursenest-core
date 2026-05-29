@@ -62,7 +62,8 @@ export type EcgAdultPediatricComparison = {
 // ─── Comparison factory ─────────────────────────────────────────────────────────
 
 function normalRangeForAge(ageGroup: PediatricAgeGroup): { min: number; max: number } {
-  return PEDIATRIC_NORMAL_RATE_RANGES.find((r) => r.ageGroup === ageGroup)!;
+  const range = PEDIATRIC_NORMAL_RATE_RANGES.find((r) => r.ageGroup === ageGroup)!;
+  return { min: range.restingMin, max: range.restingMax };
 }
 
 // ─── Comparison library ─────────────────────────────────────────────────────────

@@ -115,6 +115,11 @@ console.error(
 
 runStep({ name: "typecheck_critical", command: npmCmd, args: ["run", "typecheck:critical"] });
 runStep({
+  name: "client_server_boundary_phase11",
+  command: process.execPath,
+  args: [path.join(packageRoot, "scripts", "validate-client-server-boundaries.mjs"), "--scope=phase11"],
+});
+runStep({
   name: "admin_content_audit_route_contracts",
   command: process.execPath,
   args: [

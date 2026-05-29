@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth/guards";
 import { loadViewAsUserContext } from "@/lib/admin/admin-view-as-user";
-import { computeLearnerHealthScore } from "@/lib/admin/learner-health-score";
+import { computeLearnerHealthScore } from "@/lib/admin/learner-health-score.server";
 import { buildAccountActivityEvidence } from "@/lib/admin/account-activity-evidence";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";

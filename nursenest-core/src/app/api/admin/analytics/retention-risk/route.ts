@@ -1,7 +1,8 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { loadRetentionRiskDashboard, type RiskLevel } from "@/lib/admin/subscription-risk";
+import { loadRetentionRiskDashboard } from "@/lib/admin/subscription-risk.server";
+import type { RiskLevel } from "@/lib/admin/subscription-risk.types";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
