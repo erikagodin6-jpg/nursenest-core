@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -44,7 +44,7 @@ type StudyResponse = {
   sessionMeta?: {
     requestedCount?: number;
     returnedCount?: number;
-    totalAvailable?: number;
+    totalAvailable?: number | null;
     hasMore?: boolean;
   };
 };
@@ -96,6 +96,7 @@ export function FlashcardStudyClient({
   const [title, setTitle] = useState("");
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
   const [queue, setQueue] = useState<CardPayload[]>([]);
+  const [sessionMeta, setSessionMeta] = useState<StudyResponse["sessionMeta"] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [resumeGateOpen, setResumeGateOpen] = useState(false);
@@ -103,6 +104,7 @@ export function FlashcardStudyClient({
   const [sessionKey, setSessionKey] = useState(0);
   const [retryNonce, setRetryNonce] = useState(0);
   const safeDeckRef = useMemo(() => encodeURIComponent(deckRef), [deckRef]);
+  const prefetchedCursors = useRef(new Set<number>());
 
   // 🚀 fetch cards
   useEffect(() => {
@@ -112,8 +114,9 @@ export function FlashcardStudyClient({
     (async () => {
       setLoading(true);
       setLoadError(null);
+      prefetchedCursors.current.clear();
       try {
-        const res = await fetchWithRetry(`/api/flashcards/decks/${safeDeckRef}/study`, {
+        const res = await fetchWithRetry(`/api/flashcards/decks/${safeDeckRef}/study?instant=1&limit=1&cursor=0`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
@@ -137,6 +140,7 @@ export function FlashcardStudyClient({
         if (!cancelled) {
           setMode(data.mode === "preview" ? "preview" : "subscriber");
           setQueue(cards);
+          setSessionMeta(data.sessionMeta);
           if (data.title) setTitle(formatTitleCase(data.title));
         }
       } catch (error) {
@@ -158,6 +162,47 @@ export function FlashcardStudyClient({
     };
   }, [deckRef, safeDeckRef, retryNonce]);
 
+  const prefetchMore = useCallback(
+    async (loadedCount: number) => {
+      if (!sessionMeta?.hasMore) return;
+      if (prefetchedCursors.current.has(loadedCount)) return;
+      prefetchedCursors.current.add(loadedCount);
+      const controller = new AbortController();
+      try {
+        const res = await fetchWithRetry(`/api/flashcards/decks/${safeDeckRef}/study?instant=1&limit=4&cursor=${loadedCount}`, {
+          credentials: "include",
+          cache: "no-store",
+          signal: controller.signal,
+        }, { attempts: 1, timeoutMs: 10_000 });
+        if (!res.ok) return;
+        const data = (await res.json()) as StudyResponse;
+        const cardsRaw = Array.isArray(data.cards)
+          ? data.cards.filter(
+              (card): card is CardPayload =>
+                card != null &&
+                typeof card.id === "string" &&
+                card.id.length > 0 &&
+                typeof card.front === "string" &&
+                typeof card.back === "string",
+            )
+          : [];
+        const cards = cardsRaw.filter(hasUsableExamQuestion);
+        setQueue((prev) => {
+          const seen = new Set(prev.map((card) => card.id));
+          const merged = [...prev];
+          for (const card of cards) {
+            if (!seen.has(card.id)) merged.push(card);
+          }
+          return merged;
+        });
+        setSessionMeta(data.sessionMeta);
+      } catch {
+        prefetchedCursors.current.delete(loadedCount);
+      }
+    },
+    [safeDeckRef, sessionMeta?.hasMore],
+  );
+
   // 🧠 resume logic
   useLayoutEffect(() => {
     if (loading || queue.length === 0) return;
@@ -166,7 +211,7 @@ export function FlashcardStudyClient({
     if (!ck) return;
 
     setResumeGateOpen(true);
-    setResumeInitial({ index: ck.index, revealed: ck.revealed });
+    setResumeInitial({ index: Math.min(ck.index, Math.max(0, queue.length - 1)), revealed: ck.revealed });
   }, [loading, queue.length, deckRef]);
 
   const retryLoad = useCallback(() => {
@@ -320,6 +365,13 @@ export function FlashcardStudyClient({
           sessionMode={studyMode}
           initialCardIndex={resumeInitial.index}
           initialRevealed={resumeInitial.revealed}
+          sessionMeta={{
+            requestedCount: sessionMeta?.requestedCount,
+            returnedCount: queue.length,
+            totalAvailable: sessionMeta?.totalAvailable ?? undefined,
+            hasMore: Boolean(sessionMeta?.hasMore),
+          }}
+          onNeedMore={({ loadedCount }) => void prefetchMore(loadedCount)}
           onStudyProgress={(s) =>
             saveDeckSessionCheckpoint(deckRef, s.index, s.revealed)
           }

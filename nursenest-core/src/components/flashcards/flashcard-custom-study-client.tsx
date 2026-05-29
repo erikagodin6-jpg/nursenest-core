@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, ArrowLeft, RefreshCw } from "lucide-react";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
@@ -55,6 +55,8 @@ type McqApiCard = ApiCard & {
 type SessionSummary = {
   matchingCards: number;
   returnedCards?: number;
+  hasMore?: boolean;
+  offset?: number;
   weakOnly: boolean;
   starredOnly: boolean;
   selectedCategories: string[];
@@ -94,6 +96,12 @@ export function FlashcardCustomStudyClient() {
   const [summary, setSummary] = useState<SessionSummary | null>(null);
   const [retryNonce, setRetryNonce] = useState(0);
   const [loadingStage, setLoadingStage] = useState<"preparing" | "due" | "building" | "still">("preparing");
+  const prefetchedOffsets = useRef(new Set<number>());
+  const sessionSeedRef = useRef<string>("");
+  if (!sessionSeedRef.current) {
+    sessionSeedRef.current =
+      globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+  }
 
   const searchParamString = sp.toString();
   const pathwayId = useMemo(() => {
@@ -112,8 +120,16 @@ export function FlashcardCustomStudyClient() {
     const q = new URLSearchParams(searchParamString);
     q.set("includeCards", "1");
     if (!q.get("shuffle")) q.set("shuffle", "1");
-    if (!q.get("cardLimit")) q.set("cardLimit", "20");
+    q.set("sessionSeed", sessionSeedRef.current);
+    q.set("offset", "0");
+    q.set("cardLimit", "1");
     return q.toString();
+  }, [searchParamString]);
+
+  const requestedCardLimit = useMemo(() => {
+    const q = new URLSearchParams(searchParamString);
+    const raw = Number(q.get("cardLimit") || "20");
+    return Number.isFinite(raw) ? Math.max(1, Math.floor(raw)) : 20;
   }, [searchParamString]);
 
   const exitHref = useMemo(() => {
@@ -171,6 +187,7 @@ export function FlashcardCustomStudyClient() {
       setLoading(true);
       setError(null);
       setLoadingStage("preparing");
+      prefetchedOffsets.current.clear();
       try {
         const res = await fetchWithRetry(`/api/flashcards/custom-session?${queryString}`, {
           credentials: "include",
@@ -220,6 +237,8 @@ export function FlashcardCustomStudyClient() {
               ? {
                   matchingCards: parsed.summary.matchingCards,
                   returnedCards: parsed.summary.returnedCards,
+                  hasMore: parsed.summary.hasMore,
+                  offset: parsed.summary.offset,
                   weakOnly: parsed.summary.weakOnly,
                   starredOnly: parsed.summary.starredOnly,
                   selectedCategories: parsed.summary.selectedCategories ?? [],
@@ -256,6 +275,59 @@ export function FlashcardCustomStudyClient() {
       controller.abort();
     };
   }, [queryString, pathwayId, retryNonce]);
+
+  const prefetchMore = useCallback(
+    async (loadedCount: number) => {
+      if (!summary?.hasMore) return;
+      if (loadedCount >= Math.min(requestedCardLimit, summary.matchingCards)) return;
+      if (prefetchedOffsets.current.has(loadedCount)) return;
+      prefetchedOffsets.current.add(loadedCount);
+      const controller = new AbortController();
+      try {
+        const q = new URLSearchParams(searchParamString);
+        q.set("includeCards", "1");
+        if (!q.get("shuffle")) q.set("shuffle", "1");
+        q.set("sessionSeed", sessionSeedRef.current);
+        q.set("offset", String(loadedCount));
+        q.set("cardLimit", String(Math.min(4, requestedCardLimit - loadedCount)));
+        const res = await fetchWithRetry(`/api/flashcards/custom-session?${q.toString()}`, {
+          credentials: "include",
+          cache: "no-store",
+          signal: controller.signal,
+        }, { attempts: 1, timeoutMs: 12_000 });
+        if (!res.ok) return;
+        const json = await res.json();
+        const rawCards =
+          json && typeof json === "object" && Array.isArray((json as { cards?: unknown }).cards)
+            ? ((json as { cards: ApiCard[] }).cards ?? [])
+            : [];
+        const validCards = rawCards.filter(
+          (c) => c && typeof c.id === "string" && c.id.length > 0 &&
+                 typeof c.front === "string" && typeof c.back === "string",
+        ).filter(hasUsableExamQuestion);
+        const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
+        setCards((prev) => {
+          const seen = new Set(prev.map((card) => card.id));
+          const merged = [...prev];
+          for (const card of validCards) {
+            if (!seen.has(card.id)) merged.push(card);
+          }
+          return merged;
+        });
+        if (parsed.ok && parsed.summary) {
+          setSummary((prev) => prev ? {
+            ...prev,
+            returnedCards: Math.max(prev.returnedCards ?? 0, loadedCount + validCards.length),
+            hasMore: parsed.summary?.hasMore,
+            offset: parsed.summary?.offset,
+          } : prev);
+        }
+      } catch {
+        prefetchedOffsets.current.delete(loadedCount);
+      }
+    },
+    [requestedCardLimit, searchParamString, summary?.hasMore, summary?.matchingCards],
+  );
 
   const loadingCopy = useMemo(() => {
     switch (loadingStage) {
@@ -339,14 +411,13 @@ export function FlashcardCustomStudyClient() {
 
   const sessionMeta = useMemo(() => {
     if (!summary) return undefined;
-    const q = new URLSearchParams(searchParamString);
-    const requested = Math.max(1, Number(q.get("cardLimit") || "20") || 20);
     return {
-      requestedCount: requested,
+      requestedCount: requestedCardLimit,
       returnedCount: summary.returnedCards ?? cards.length,
       totalAvailable: summary.matchingCards,
+      hasMore: Boolean(summary.hasMore && cards.length < Math.min(requestedCardLimit, summary.matchingCards)),
     };
-  }, [summary, searchParamString, cards.length]);
+  }, [summary, requestedCardLimit, cards.length]);
 
   const onRate = useCallback(async (cardId: string, rating: "again" | "hard" | "good" | "easy") => {
     if (isSyntheticFlashcardStudyId(cardId)) return;
@@ -496,6 +567,7 @@ export function FlashcardCustomStudyClient() {
           enableLocalStudyPins
           initialCardIndex={initialCardIndex}
           onStudyProgress={onStudyProgress}
+          onNeedMore={({ loadedCount }) => void prefetchMore(loadedCount)}
           onSessionComplete={onSessionComplete}
         />
       </ExamSessionShell>

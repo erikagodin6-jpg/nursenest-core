@@ -44,8 +44,10 @@ function pathwayLessonCardSummary(row: {
  * Subscriber pathway lesson hub slice for native shells — mirrors `/app/lessons` pathway branch
  * (PathwayLesson rows + same renderability resolver as `/app/lessons/[id]`).
  *
- * Query: pathwayId (optional filter), topicSlug?, topic?, q?, page?, limit?
+ * Query: pathwayId (optional filter), topicSlug?, topic?, q?, page?, limit?, includeProgress?
  * Progress fields are only populated for active subscribers (`entitlement.hasAccess`).
+ * `includeProgress=0` skips per-row progress aggregation for speculative prefetch
+ * and first-content list refreshes.
  */
 export async function GET(req: Request) {
   return runWithApiTelemetry(req, "GET /api/learner/pathway-lessons", "content", async () => {
@@ -96,6 +98,7 @@ export async function GET(req: Request) {
         : null;
     const qRaw = url.searchParams.get("q") ?? "";
     const qEffective = qRaw.trim().length > 0 ? qRaw.trim() : null;
+    const includeProgress = url.searchParams.get("includeProgress") !== "0";
 
     const pageParsed = parseListPage(url.searchParams.get("page"));
     if (!pageParsed.ok) {
@@ -233,7 +236,7 @@ export async function GET(req: Request) {
     }));
 
     let progressByPathwaySlug: Record<string, "not_started" | "in_progress" | "completed"> | null = null;
-    if (entitlement.hasAccess && rows.length > 0) {
+    if (includeProgress && entitlement.hasAccess && rows.length > 0) {
       const grouped = new Map<string, string[]>();
       for (const r of rows) {
         const pid = r.pathwayMeta.pathwayId;
@@ -264,6 +267,7 @@ export async function GET(req: Request) {
       scanCapped: paginated.scanCapped,
       rows,
       progressByPathwaySlug,
+      includeProgress,
       entitlement: {
         hasAccess: entitlement.hasAccess,
         /** When true, clients may show per-row progress (server-backed only). */

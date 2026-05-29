@@ -40,6 +40,10 @@ export type FlashcardCustomSessionSummary = {
   queryRelaxation?: FlashcardCustomSessionQueryRelaxation;
   /** Opaque per-response salt used for MCQ option shuffle (and echoed for client debugging). */
   sessionShuffleSalt?: string;
+  /** Zero-based window start for progressive session loading. */
+  offset?: number;
+  /** True when another card window can be fetched with the same session seed. */
+  hasMore?: boolean;
   lessonVirtualDiagnostics?: FlashcardLessonVirtualDiagnostics | null;
   /** From `/api/flashcards/inventory` — exam bank vs Flashcard table transparency. */
   poolInventoryDiagnostics?: FlashcardsPoolInventoryDiagnostics | null;
@@ -222,6 +226,8 @@ export function parseFlashcardCustomSessionResponse(
           ? s.queryRelaxation
           : undefined,
       sessionShuffleSalt: typeof s.sessionShuffleSalt === "string" ? s.sessionShuffleSalt : undefined,
+      offset: typeof s.offset === "number" && Number.isFinite(s.offset) ? Math.max(0, Math.floor(s.offset)) : undefined,
+      hasMore: s.hasMore === true,
       lessonVirtualDiagnostics: parseLessonVirtualDiagnostics(s.lessonVirtualDiagnostics),
       poolInventoryDiagnostics: parsePoolInventoryDiagnostics(s.poolInventoryDiagnostics),
     };

@@ -1,0 +1,149 @@
+{
+  "contrastBackground": "#fff9fb",
+  "contrastReport": {
+    "accentStart": 6.25,
+    "accentMiddle": 6.6,
+    "accentEnd": 6.54,
+    "accentFallback": 8.15
+  },
+  "layoutDelta": {
+    "heroHeight": 0,
+    "h1Height": 0,
+    "mobileHeroHeight": 0,
+    "mobileH1Height": 0
+  },
+  "captures": {
+    "blossomBeforeDesktop": {
+      "file": "/root/nursenest-core/nursenest-core/docs/screenshots/blossom-hero-contrast/blossom-before-desktop.png",
+      "metrics": {
+        "theme": "blossom",
+        "accentStart": "#b82762",
+        "accentMiddle": "#7957c2",
+        "accentEnd": "#08725f",
+        "accentFallback": "#8f1f4f",
+        "gradient": "linear-gradient(92deg, #b82762 0%, #7957c2 48%, #08725f 100%)",
+        "heroRect": {
+          "width": 1440,
+          "height": 942
+        },
+        "h1Rect": {
+          "width": 526,
+          "height": 224
+        },
+        "fontSize": "68px",
+        "fontWeight": "700",
+        "lineHeight": "74.8px"
+      }
+    },
+    "blossomAfterDesktop": {
+      "file": "/root/nursenest-core/nursenest-core/docs/screenshots/blossom-hero-contrast/blossom-after-desktop.png",
+      "metrics": {
+        "theme": "blossom",
+        "accentStart": "#b5165b",
+        "accentMiddle": "#6842b8",
+        "accentEnd": "#075f96",
+        "accentFallback": "#8f1f4f",
+        "gradient": "linear-gradient(92deg,\n    #b5165b 0%,\n    #6842b8 48%,\n    #075f96 100%)",
+        "heroRect": {
+          "width": 1440,
+          "height": 942
+        },
+        "h1Rect": {
+          "width": 526,
+          "height": 224
+        },
+        "fontSize": "68px",
+        "fontWeight": "700",
+        "lineHeight": "74.8px"
+      }
+    },
+    "blossomBeforeMobile": {
+      "file": "/root/nursenest-core/nursenest-core/docs/screenshots/blossom-hero-contrast/blossom-before-mobile.png",
+      "metrics": {
+        "theme": "blossom",
+        "accentStart": "#b82762",
+        "accentMiddle": "#7957c2",
+        "accentEnd": "#08725f",
+        "accentFallback": "#8f1f4f",
+        "gradient": "linear-gradient(92deg, #b82762 0%, #7957c2 48%, #08725f 100%)",
+        "heroRect": {
+          "width": 390,
+          "height": 841
+        },
+        "h1Rect": {
+          "width": 358,
+          "height": 145
+        },
+        "fontSize": "44px",
+        "fontWeight": "700",
+        "lineHeight": "48.4px"
+      }
+    },
+    "blossomAfterMobile": {
+      "file": "/root/nursenest-core/nursenest-core/docs/screenshots/blossom-hero-contrast/blossom-after-mobile.png",
+      "metrics": {
+        "theme": "blossom",
+        "accentStart": "#b5165b",
+        "accentMiddle": "#6842b8",
+        "accentEnd": "#075f96",
+        "accentFallback": "#8f1f4f",
+        "gradient": "linear-gradient(92deg,\n    #b5165b 0%,\n    #6842b8 48%,\n    #075f96 100%)",
+        "heroRect": {
+          "width": 390,
+          "height": 841
+        },
+        "h1Rect": {
+          "width": 358,
+          "height": 145
+        },
+        "fontSize": "44px",
+        "fontWeight": "700",
+        "lineHeight": "48.4px"
+      }
+    },
+    "oceanAfterDesktop": {
+      "file": "/root/nursenest-core/nursenest-core/docs/screenshots/blossom-hero-contrast/ocean-after-desktop.png",
+      "metrics": {
+        "theme": "ocean",
+        "accentStart": "#076f8a",
+        "accentMiddle": "#126fc4",
+        "accentEnd": "#5856b8",
+        "accentFallback": "#075f7d",
+        "gradient": "linear-gradient(94deg,\n    #076f8a 0%,\n    #126fc4 44%,\n    #5856b8 100%)",
+        "heroRect": {
+          "width": 1440,
+          "height": 942
+        },
+        "h1Rect": {
+          "width": 526,
+          "height": 224
+        },
+        "fontSize": "68px",
+        "fontWeight": "700",
+        "lineHeight": "74.8px"
+      }
+    },
+    "midnightAfterDesktop": {
+      "file": "/root/nursenest-core/nursenest-core/docs/screenshots/blossom-hero-contrast/midnight-after-desktop.png",
+      "metrics": {
+        "theme": "midnight",
+        "accentStart": "#5fd8cd",
+        "accentMiddle": "#79b8ff",
+        "accentEnd": "#cda4ff",
+        "accentFallback": "#86ccff",
+        "gradient": "linear-gradient(100deg,\n    #5fd8cd 0%,\n    #79b8ff 38%,\n    #cda4ff 100%)",
+        "heroRect": {
+          "width": 1440,
+          "height": 942
+        },
+        "h1Rect": {
+          "width": 526,
+          "height": 224
+        },
+        "fontSize": "68px",
+        "fontWeight": "700",
+        "lineHeight": "74.8px"
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ import {
   buildFlashcardCustomSession,
   parseCustomSessionCardLimit,
   parseCustomSessionCategories,
+  parseCustomSessionOffset,
   parseCustomSessionStudyMode,
 } from "@/lib/flashcards/build-flashcard-custom-session";
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
@@ -88,6 +89,7 @@ export async function GET(req: NextRequest) {
       const shuffle = sp.get("shuffle") === "1";
       const mode = parseCustomSessionStudyMode(sp.get("mode"));
       const limit = parseCustomSessionCardLimit(sp.get("cardLimit"));
+      const offset = parseCustomSessionOffset(sp.get("offset"));
       // NOTE: includeCards is read above for cache gating.
       const sourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
 
@@ -137,6 +139,7 @@ export async function GET(req: NextRequest) {
         limit,
         includeCards,
         sourceKind,
+        offset,
         sessionSeed: sp.get("sessionSeed")?.trim() || null,
         cardLimitRaw: sp.get("cardLimit"),
       });

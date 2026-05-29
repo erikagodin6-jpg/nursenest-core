@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import {
   Bookmark,
   ChevronRight,
@@ -81,6 +81,7 @@ type Props = {
   initialCardIndex?: number;
   initialRevealed?: boolean;
   onStudyProgress?: (state: { index: number; revealed: boolean }) => void;
+  onNeedMore?: (state: { loadedCount: number; index: number }) => void;
   onSessionComplete?: () => void;
   onSessionRestart?: () => void;
   /** Local-only star / review flags (localStorage) for flashcard-style sessions. */
@@ -164,6 +165,7 @@ export function ActiveStudySession({
   initialCardIndex = 0,
   initialRevealed = false,
   onStudyProgress,
+  onNeedMore,
   onSessionComplete,
   onSessionRestart,
 }: Props) {
@@ -212,6 +214,7 @@ export function ActiveStudySession({
   const [ratingTally, setRatingTally] = useState({ again: 0, hard: 0, good: 0, easy: 0 });
   const [hintOpen, setHintOpen] = useState(false);
   const [confidence, setConfidence] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
+  const lastCardsSignature = useRef<string>("");
 
   const current = sessionCards[index] ?? null;
   const pinState = current?.id ? getStudyItemState(current.id) : {};
@@ -226,15 +229,27 @@ export function ActiveStudySession({
   const telemetry = useFlashcardStudyTelemetry({ pathwayId: sessionPathwayId });
 
   useEffect(() => {
-    setSessionCards(deduped);
-    setIndex(initialCardIndex);
-    const initialCard = deduped[initialCardIndex] ?? null;
-    setRevealed(Boolean(initialRevealed && !initialCard?.examMicroQuestion));
-    setCompleted(false);
-    setIsPaused(false);
-    setElapsed(0);
-    setRatingTally({ again: 0, hard: 0, good: 0, easy: 0 });
-    setConfidence(null);
+    const nextSignature = deduped.map((card) => card.id).join("|");
+    setSessionCards((prev) => {
+      const previousSignature = lastCardsSignature.current;
+      const appended =
+        prev.length > 0 &&
+        deduped.length >= prev.length &&
+        deduped.slice(0, prev.length).every((card, i) => card.id === prev[i]?.id);
+      lastCardsSignature.current = nextSignature;
+      if (appended && nextSignature !== previousSignature) {
+        return deduped;
+      }
+      setIndex(initialCardIndex);
+      const initialCard = deduped[initialCardIndex] ?? null;
+      setRevealed(Boolean(initialRevealed && !initialCard?.examMicroQuestion));
+      setCompleted(false);
+      setIsPaused(false);
+      setElapsed(0);
+      setRatingTally({ again: 0, hard: 0, good: 0, easy: 0 });
+      setConfidence(null);
+      return deduped;
+    });
   }, [deduped, initialCardIndex, initialRevealed]);
 
   // Track dwell time from card front shown → reveal. Fires on mount (card 0) and each card advance.
@@ -248,6 +263,13 @@ export function ActiveStudySession({
   useEffect(() => {
     onStudyProgress?.({ index, revealed });
   }, [index, onStudyProgress, revealed]);
+
+  useEffect(() => {
+    if (!sessionMeta?.hasMore) return;
+    if (sessionCards.length - index <= 2) {
+      onNeedMore?.({ loadedCount: sessionCards.length, index });
+    }
+  }, [index, onNeedMore, sessionCards.length, sessionMeta?.hasMore]);
 
   useEffect(() => {
     setHintOpen(false);
@@ -271,7 +293,9 @@ export function ActiveStudySession({
 
       await onRate?.(card.id, rating);
 
-      if (index >= sessionCards.length - 1) {
+      if (index >= sessionCards.length - 1 && sessionMeta?.hasMore) {
+        onNeedMore?.({ loadedCount: sessionCards.length, index });
+      } else if (index >= sessionCards.length - 1) {
         setCompleted(true);
         onSessionComplete?.();
       } else {
@@ -281,7 +305,7 @@ export function ActiveStudySession({
 
       setSaving(false);
     },
-    [index, onRate, onSessionComplete, sessionCards, telemetry],
+    [index, onNeedMore, onRate, onSessionComplete, sessionCards, sessionMeta?.hasMore, telemetry],
   );
 
   const goPrevious = useCallback(() => {

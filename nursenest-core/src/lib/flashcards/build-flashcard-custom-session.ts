@@ -75,6 +75,7 @@ export type BuildFlashcardCustomSessionInput = {
   limit: number;
   includeCards: boolean;
   sourceKind: CustomSessionSourceKind;
+  offset?: number;
   /** Optional deterministic shuffle seed (falls back to random). */
   sessionSeed?: string | null;
   cardLimitRaw?: string | null;
@@ -186,6 +187,7 @@ export async function buildFlashcardCustomSession(
     limit,
     includeCards,
     sourceKind,
+    offset = 0,
     sessionSeed,
     cardLimitRaw,
   } = input;
@@ -312,11 +314,14 @@ export async function buildFlashcardCustomSession(
         })()
       : null;
 
+    const cardScanLimit = includeCards
+      ? Math.min(FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT, Math.max((offset + limit) * 8, 80))
+      : FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT;
     const cards = await prisma.flashcard.findMany({
       where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOptsResolved)),
       select: flashcardSelect,
       orderBy: { updatedAt: "desc" },
-      take: FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT,
+      take: cardScanLimit,
     });
 
     let lessonQuestionVirtuals: Awaited<ReturnType<typeof loadLessonLinkedFlashcardVirtuals>> = [];
@@ -688,11 +693,12 @@ export async function buildFlashcardCustomSession(
     const selectedRows = shuffle
       ? orderFlashcardsForAdaptiveSession(scoped, progressByScopedId, new Date(), orderingSeed)
       : scoped;
-    const limited = selectedRows.slice(0, limit);
+    const boundedOffset = Math.max(0, Math.floor(offset));
+    const limited = selectedRows.slice(boundedOffset, boundedOffset + limit);
 
     const cardsForSession: CustomSessionSerializedCard[] = [];
     if (includeCards) {
-      for (const [index, card] of selectedRows.entries()) {
+      for (const [index, card] of limited.entries()) {
         if (cardsForSession.length >= limit) break;
         const mixedSwap = mode === "mixed" && index % 2 === 1;
         const swap = mode === "definition_to_term" || mixedSwap;
@@ -754,6 +760,8 @@ export async function buildFlashcardCustomSession(
       recentDays,
       sourceKind,
       cardLimit: cardLimitRaw ?? "20",
+      offset: boundedOffset,
+      hasMore: boundedOffset + cardsForSession.length < matchingCardsForSummary,
       queryRelaxation,
       sessionShuffleSalt,
       lessonVirtualDiagnostics,
@@ -869,7 +877,13 @@ export function parseCustomSessionCardLimit(value: string | null | undefined): n
   if (!value || value === "all") return FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT;
   const n = Number(value);
   if (!Number.isFinite(n) || n < 1) return 20;
-  return Math.min(FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT, Math.max(10, n));
+  return Math.min(FLASHCARD_CUSTOM_SESSION_RETURN_LIMIT, Math.max(1, n));
+}
+
+export function parseCustomSessionOffset(value: string | null | undefined): number {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return Math.min(FLASHCARD_CUSTOM_SESSION_DB_CARD_SCAN_LIMIT - 1, Math.floor(n));
 }
 
 export function parseCustomSessionStudyMode(value: string | null | undefined): CustomSessionStudyMode {

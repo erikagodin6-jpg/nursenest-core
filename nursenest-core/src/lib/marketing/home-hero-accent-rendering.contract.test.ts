@@ -78,8 +78,18 @@ function tokenHex(
   token: (typeof requiredTokens)[number],
 ): string {
   const match = new RegExp(`${token}:\\s*(#[0-9a-fA-F]{6})\\b`).exec(block);
-  assert.ok(match, `missing ${token}`);
-  return match[1];
+  if (match) return match[1];
+  const varMatch = new RegExp(`${token}:\\s*var\\((--[a-zA-Z0-9-]+)\\)`).exec(
+    block,
+  );
+  if (varMatch) {
+    const resolved = new RegExp(
+      `${varMatch[1]}:\\s*(#[0-9a-fA-F]{6})\\b`,
+    ).exec(block);
+    assert.ok(resolved, `missing resolved ${varMatch[1]} for ${token}`);
+    return resolved[1];
+  }
+  assert.fail(`missing ${token}`);
 }
 
 describe("homepage hero accent rendering", () => {
@@ -116,6 +126,35 @@ describe("homepage hero accent rendering", () => {
       assert.ok(
         ratio >= 4.5,
         `midnight ${token} contrast ${ratio.toFixed(2)} must be >= 4.5 on dark hero`,
+      );
+    }
+  });
+
+  it("uses darker Blossom theme-owned accent variables with a pink to lavender to sky progression", () => {
+    const block = mergedThemeBlock("blossom");
+    assert.match(block, /--blossom-hero-accent-pink:\s*#[0-9a-fA-F]{6}\b/);
+    assert.match(
+      block,
+      /--blossom-hero-accent-lavender:\s*#[0-9a-fA-F]{6}\b/,
+    );
+    assert.match(block, /--blossom-hero-accent-sky:\s*#[0-9a-fA-F]{6}\b/);
+    assert.match(
+      block,
+      /--hero-accent-start:\s*var\(--blossom-hero-accent-pink\)/,
+    );
+    assert.match(
+      block,
+      /--hero-accent-middle:\s*var\(--blossom-hero-accent-lavender\)/,
+    );
+    assert.match(
+      block,
+      /--hero-accent-end:\s*var\(--blossom-hero-accent-sky\)/,
+    );
+    for (const token of requiredTokens) {
+      const ratio = contrastRatio(tokenHex(block, token), "#fff9fb");
+      assert.ok(
+        ratio >= 4.5,
+        `blossom ${token} contrast ${ratio.toFixed(2)} must remain readable on Blossom paper`,
       );
     }
   });

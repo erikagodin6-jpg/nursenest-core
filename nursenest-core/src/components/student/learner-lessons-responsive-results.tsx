@@ -45,10 +45,12 @@ function urlForFilters(filters: FilterState): string {
   return s ? `/app/lessons?${s}` : "/app/lessons";
 }
 
-function apiUrlForFilters(filters: FilterState): string {
+function apiUrlForFilters(filters: FilterState, opts: { includeProgress?: boolean } = {}): string {
   const url = urlForFilters(filters);
-  const query = url.includes("?") ? url.slice(url.indexOf("?")) : "";
-  return `/api/learner/pathway-lessons${query}`;
+  const qs = new URLSearchParams(url.includes("?") ? url.slice(url.indexOf("?")) : "");
+  if (opts.includeProgress === false) qs.set("includeProgress", "0");
+  const query = qs.toString();
+  return query ? `/api/learner/pathway-lessons?${query}` : "/api/learner/pathway-lessons";
 }
 
 function progressByRowIdFromApi(rows: LearnerLessonVirtualRow[], raw: Record<string, PathwayLessonProgressStatus> | null): Record<string, PathwayLessonProgressStatus> {
@@ -187,7 +189,7 @@ export function LearnerLessonsResponsiveResults({
       setLoading(true);
 
       try {
-        const res = await fetch(apiUrlForFilters(nextFilters), {
+        const res = await fetch(apiUrlForFilters(nextFilters, { includeProgress: true }), {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
@@ -236,7 +238,7 @@ export function LearnerLessonsResponsiveResults({
       const controller = new AbortController();
       prefetchControllersRef.current.add(controller);
       try {
-        const res = await fetch(apiUrlForFilters(nextFilters), {
+        const res = await fetch(apiUrlForFilters(nextFilters, { includeProgress: false }), {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,

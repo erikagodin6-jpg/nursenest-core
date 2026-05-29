@@ -1,6 +1,6 @@
 # Activity Performance Report
 
-Generated: 2026-05-28T23:58:19.948Z
+Generated: 2026-05-29T00:54:48.843Z
 
 ## Scope
 
@@ -13,14 +13,14 @@ Live measurements come from `tests/e2e/performance/perf-baseline.json` when reco
 | Route | Budget | TTFB Budget | DB Budget | Max Queries | Latest First Content | Latest TTI | Worst API | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Learner Dashboard (/app) | 2000ms | 1000ms | 300ms | 15 | — | — | — | No sample |
-| Question Bank (/app/questions) | 2000ms | 1200ms | 400ms | 15 | — | — | — | No sample |
-| Flashcards Hub (/app/flashcards) | 2000ms | 1000ms | 300ms | 12 | — | — | — | No sample |
-| Lesson Library (/app/lessons) | 2000ms | 1200ms | 400ms | 15 | — | — | — | No sample |
-| Clinical Skills (/app/clinical-skills) | 2000ms | 1200ms | 350ms | 15 | — | — | — | No sample |
-| Pharmacology (/app/pharmacology) | 2000ms | 1200ms | 350ms | 15 | — | — | — | No sample |
-| ECG Workstation (/modules/ecg/basic/lessons) | 2000ms | 1200ms | 350ms | 18 | — | — | — | No sample |
-| CAT Exam Launch (/app/practice-tests/cat-launch) | 3000ms | 1500ms | 500ms | 20 | — | — | — | No sample |
-| LOFT / OSCE Simulation (/app/osce) | 3000ms | 1500ms | 600ms | 22 | — | — | — | No sample |
+| Question Bank (/app/questions) | 2000ms | 500ms | 400ms | 15 | — | — | — | No sample |
+| Flashcards Hub (/app/flashcards) | 2000ms | 500ms | 300ms | 12 | — | — | — | No sample |
+| Lesson Library (/app/lessons) | 2000ms | 500ms | 400ms | 15 | — | — | — | No sample |
+| Clinical Skills (/app/clinical-skills) | 2000ms | 500ms | 350ms | 15 | — | — | — | No sample |
+| Pharmacology (/app/pharmacology) | 2000ms | 500ms | 350ms | 15 | — | — | — | No sample |
+| ECG Workstation (/modules/ecg/basic/lessons) | 2000ms | 500ms | 350ms | 18 | — | — | — | No sample |
+| CAT Exam Launch (/app/practice-tests/cat-launch) | 3000ms | 500ms | 500ms | 20 | — | — | — | No sample |
+| LOFT / OSCE Simulation (/app/osce) | 3000ms | 500ms | 600ms | 22 | — | — | — | No sample |
 | Analytics Dashboard (/app/analytics) | 2500ms | 1500ms | 500ms | 20 | — | — | — | No sample |
 
 ## Instrumentation

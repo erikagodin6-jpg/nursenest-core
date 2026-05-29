@@ -20,6 +20,10 @@ const DETAIL_DB_TIMEOUT_MS = 2500;
  * GET /api/learner/pathway-lesson?id=<pathway_lessons.cuid>
  * GET /api/learner/pathway-lesson?pathwayId=<id>&slug=<slug>
  *
+ * `firstContent=1` returns the lesson record and the first visible content window
+ * without progress or related-lesson personalization. Use it when opening the
+ * reader shell; hydrate progress/related study actions after content is visible.
+ *
  * Canonical PathwayLesson payload for native detail (same resolver stack as `/app/lessons/[id]`).
  */
 export async function GET(req: Request) {
@@ -54,6 +58,7 @@ export async function GET(req: Request) {
     const id = url.searchParams.get("id")?.trim() ?? "";
     const pathwayId = url.searchParams.get("pathwayId")?.trim() ?? "";
     const slug = url.searchParams.get("slug")?.trim() ?? "";
+    const firstContentOnly = url.searchParams.get("firstContent") === "1";
 
     const readOmit = await pathwayLessonReadOmitArgs();
 
@@ -112,18 +117,20 @@ export async function GET(req: Request) {
     }
 
     const record = resolution.record;
-    const progressStatus = entitlement.hasAccess
+    const progressStatus = !firstContentOnly && entitlement.hasAccess
       ? await loadPathwayLessonProgressForSlug(gate.userId, resolution.pathwayId, record.slug)
       : ("not_started" as const);
 
-    const related = await getRelatedPathwayLessons(
-      resolution.pathwayId,
-      record.topicSlug,
-      record.slug,
-      8,
-      marketingLocale,
-      record.bodySystem,
-    );
+    const related = firstContentOnly
+      ? []
+      : await getRelatedPathwayLessons(
+          resolution.pathwayId,
+          record.topicSlug,
+          record.slug,
+          8,
+          marketingLocale,
+          record.bodySystem,
+        );
 
     const relatedFiltered = related.filter((l) => l.slug !== record.slug).slice(0, 8);
     const relatedSlugs = relatedFiltered.map((l) => l.slug);
@@ -152,6 +159,7 @@ export async function GET(req: Request) {
       pathwayId: resolution.pathwayId,
       lessonId: pwRow.id,
       record,
+      firstContentOnly,
       progressStatus,
       related: relatedSummaries,
       entitlement: {

@@ -126,6 +126,9 @@ export async function GET(req: NextRequest, { params }: Props) {
   const limit = Math.min(MAX_BATCH, requestedCount);
   const reset = sp.get("reset") === "1";
   const shuffle = sp.get("shuffle") === "1";
+  const instant = sp.get("instant") === "1";
+  const rawCursor = Number(sp.get("cursor") ?? "0");
+  const requestedCursor = Number.isFinite(rawCursor) && rawCursor > 0 ? Math.floor(rawCursor) : 0;
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
   const flashcardBundle =
     educationalLocale === "en" ? undefined : await resolveMergedFlashcardEducationalBundle(educationalLocale);
@@ -255,6 +258,98 @@ export async function GET(req: NextRequest, { params }: Props) {
     const cardWhere: Prisma.FlashcardWhereInput = {
       AND: [{ deckId: deck.id, status: ContentStatus.PUBLISHED }, flashcardAccessWhere(entitlement)],
     };
+
+    if (instant) {
+      const rows = await withRetry(() =>
+        prisma.flashcard.findMany({
+          where: cardWhere,
+          select: {
+            id: true,
+            front: true,
+            back: true,
+            lessonId: true,
+            sourceKey: true,
+            examItemKind: true,
+            questionStem: true,
+            answerOptions: true,
+            correctAnswer: true,
+            rationaleCorrect: true,
+            rationaleIncorrect: true,
+            options: {
+              orderBy: { displayOrder: "asc" },
+              select: {
+                id: true,
+                optionKey: true,
+                content: true,
+                isCorrect: true,
+                rationale: true,
+                displayOrder: true,
+                selectCount: true,
+                correctSelectCount: true,
+              },
+            },
+            category: { select: { name: true, topicCode: true } },
+            deck: { select: { pathwayId: true } },
+          },
+          orderBy: { positionInDeck: "asc" },
+          skip: requestedCursor,
+          take: limit + 1,
+        }),
+      );
+      const serializedDeckCards = rows
+        .slice(0, limit)
+        .map((c) =>
+          serializeFlashcardForDeckStudy(c, {
+            educationalLocale,
+            flashcardBundle,
+            fullBackAvailable: true,
+            examOptionShuffleSalt,
+          }),
+        )
+        .filter(isUsableMcqStudyCard);
+      const existingExamQuestionIds = new Set(
+        serializedDeckCards
+          .map((card) => card.sourceKey?.startsWith("exam_q:") ? card.sourceKey.slice("exam_q:".length) : null)
+          .filter((id): id is string => Boolean(id)),
+      );
+      const bankCards = serializedDeckCards.length < limit
+        ? await loadBankBackedStudyCards({
+            userId,
+            entitlement,
+            pathwayId: deck.pathwayId,
+            take: limit - serializedDeckCards.length,
+            educationalLocale,
+            flashcardBundle,
+            examOptionShuffleSalt,
+            existingExamQuestionIds,
+          })
+        : [];
+      const studyCards = [...serializedDeckCards, ...bankCards].slice(0, limit);
+      const body = {
+        mode: "subscriber" as const,
+        deckId: deck.id,
+        slug: deck.slug,
+        title: deck.title,
+        cards: studyCards,
+        session: {
+          cursor: requestedCursor,
+          queueLength: null,
+          done: rows.length <= limit && bankCards.length === 0,
+          batchSize: studyCards.length,
+          instant: true,
+        },
+        sessionMeta: {
+          requestedCount,
+          returnedCount: studyCards.length,
+          totalAvailable: null,
+          hasMore: rows.length > limit || bankCards.length > 0,
+        },
+      };
+      const approx = estimateJsonUtf8Bytes(body);
+      logLargeApiResponse(`/api/flashcards/decks/${deckRef}/study?instant=1`, approx);
+      if (approx > 120_000) logFlashcardLargePayload({ route: "study_subscriber_instant", approxUtf8: approx });
+      return NextResponse.json(body);
+    }
 
     const deckCards = await withRetry(() =>
       prisma.flashcard.findMany({
