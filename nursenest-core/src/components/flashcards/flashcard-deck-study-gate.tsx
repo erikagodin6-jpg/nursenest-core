@@ -8,12 +8,18 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
+type DeckCardLimit = 10 | 20 | 25 | 50 | "all";
+
+const DECK_CARD_LIMITS: readonly DeckCardLimit[] = [10, 20, 25, 50, "all"];
+
 export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
   const { t } = useMarketingI18n();
   const router = useRouter();
   const sp = useSearchParams();
   const [title, setTitle] = useState<string>(() => t("learner.flashcards.hub.title"));
   const [loading, setLoading] = useState(true);
+  const [selectedTopic, setSelectedTopic] = useState("all");
+  const [selectedCardLimit, setSelectedCardLimit] = useState<DeckCardLimit>(25);
 
   useEffect(() => {
     let cancelled = false;
@@ -53,58 +59,94 @@ export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
 
   const startQs = new URLSearchParams(sp.toString());
   startQs.set("start", "1");
+  startQs.set("configured", "1");
+  startQs.set("focus", selectedTopic);
+  startQs.set("cardLimit", String(selectedCardLimit));
 
   const startHref = `/app/flashcards/${encodeURIComponent(
     deckRef
   )}?${startQs.toString()}`;
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-12 sm:py-16">
-      <div className="nn-premium-flashcard-gate-card rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
-        {/* Title */}
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)]">
-          {loading ? t("learner.flashcards.hub.loadingDecks") : title}
-        </h1>
-
-        {/* Description */}
-        <p className="mt-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-          {t("learner.flashcards.hub.customStudyIntro")}
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href="/app/flashcards#study-session"
-            className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border-2 border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-3 text-center text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_40%,transparent)]"
-          >
+    <div className="nn-flashcard-study-canvas nn-flashcard-study-canvas--launcher mx-auto px-4 py-8 sm:py-12">
+      <div className="nn-flashcard-deck-launcher" data-nn-e2e-flashcard-session-launcher>
+        <div className="nn-flashcard-deck-launcher__header">
+          <Link href="/app/flashcards#study-session" className="nn-flashcard-deck-launcher__return">
             {t("flashcards.configuration")}
           </Link>
+          <div>
+            <p className="nn-flashcard-deck-launcher__eyebrow">Study setup</p>
+            <h1>{loading ? t("learner.flashcards.hub.loadingDecks") : title}</h1>
+            <p>
+              Select a focus and card count before the session starts. Existing active sessions can still
+              resume directly.
+            </p>
+          </div>
+        </div>
 
+        <div className="nn-flashcard-deck-launcher__grid">
+          <section className="nn-flashcard-deck-launcher__section" aria-labelledby="flashcard-deck-topic">
+            <div className="nn-flashcard-deck-launcher__section-heading">
+              <h2 id="flashcard-deck-topic">Body system or topic</h2>
+              <p>Keep every system available or focus this deck.</p>
+            </div>
+            <div className="nn-flashcard-deck-launcher__topic-grid">
+              {[
+                { id: "all", label: "All systems", detail: "Use all eligible cards in this deck." },
+                { id: "deck", label: loading ? "Selected deck" : title, detail: "Focus this session on the current deck topic." },
+              ].map((topic) => (
+                <button
+                  key={topic.id}
+                  type="button"
+                  data-nn-e2e-flashcard-launcher-topic={topic.id}
+                  data-selected={selectedTopic === topic.id}
+                  aria-pressed={selectedTopic === topic.id}
+                  className="nn-flashcard-deck-launcher__topic"
+                  onClick={() => setSelectedTopic(topic.id)}
+                >
+                  <span>{topic.label}</span>
+                  <small>{topic.detail}</small>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <section className="nn-flashcard-deck-launcher__section" aria-labelledby="flashcard-deck-count">
+            <div className="nn-flashcard-deck-launcher__section-heading">
+              <h2 id="flashcard-deck-count">Number of cards</h2>
+              <p>Choose a quick review or a deeper study set.</p>
+            </div>
+            <div className="nn-flashcard-deck-launcher__count-grid" role="group" aria-label="Number of cards">
+              {DECK_CARD_LIMITS.map((limit) => (
+                <button
+                  key={String(limit)}
+                  type="button"
+                  data-nn-e2e-session-size-preset={String(limit)}
+                  data-selected={selectedCardLimit === limit}
+                  aria-pressed={selectedCardLimit === limit}
+                  className="nn-flashcard-deck-launcher__count"
+                  onClick={() => setSelectedCardLimit(limit)}
+                >
+                  {limit === "all" ? "Full review" : limit}
+                </button>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <div className="nn-flashcard-deck-launcher__footer">
+          <p>
+            Starts with {selectedCardLimit === "all" ? "the full deck" : `${selectedCardLimit} cards`} · {selectedTopic === "all" ? "All systems" : title}
+          </p>
           <button
             type="button"
             onClick={() => router.push(startHref)}
-            className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full px-5 py-3 text-sm font-bold shadow-md transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] motion-reduce:transition-none"
-            style={{
-              background: "var(--role-cta, var(--semantic-brand))",
-              color:
-                "var(--role-cta-foreground, var(--semantic-text-on-brand, #fff))",
-            }}
+            className="nn-flashcard-deck-launcher__start"
+            data-nn-e2e-flashcard-launcher-start
           >
             {t("flashcards.startSession")}
           </button>
         </div>
-
-        {/* Divider */}
-        <div className="mt-6 h-px bg-[var(--semantic-border-soft)]" />
-
-        {/* Tip */}
-        <p className="mt-4 text-xs text-[var(--semantic-text-muted)]">
-          Tip: bookmark{" "}
-          <span className="rounded bg-[var(--semantic-panel-muted)] px-1.5 py-0.5 font-mono">
-            ?start=1
-          </span>{" "}
-          to skip this screen next time.
-        </p>
       </div>
     </div>
   );

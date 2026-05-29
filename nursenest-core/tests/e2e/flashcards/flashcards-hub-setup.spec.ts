@@ -96,6 +96,36 @@ test.describe("Flashcards hub session setup", () => {
     }
   });
 
+  test("launcher stays first, then selected systems and card count start study", async ({ page, baseURL }, testInfo) => {
+    test.setTimeout(180_000);
+    const observers = attachPageObservers(page, { profile: "app" });
+    try {
+      const ok = await gotoHub(page, baseURL);
+      test.skip(!ok, "Hub not accessible.");
+      const main = learnerAppMainLandmark(page);
+      await expect(main.locator("[data-nn-e2e-flashcards-setup-panel]")).toBeVisible({ timeout: 60_000 });
+      await expect(page.locator(".nn-premium-flashcard-session-root.nn-flashcard-study-premium")).toHaveCount(0);
+
+      const firstCard = main.locator("[data-nn-e2e-body-system-card]").first();
+      test.skip(!(await firstCard.isVisible({ timeout: 30_000 }).catch(() => false)), "No system cards.");
+      await firstCard.click();
+      await main.locator("[data-nn-e2e-flashcards-setup-panel] summary").click();
+      await main.locator('[data-nn-e2e-session-size-preset="20"]').click();
+      await expect(main.locator("[data-nn-e2e-flashcards-cta-subline]")).toContainText("20 cards", {
+        timeout: 10_000,
+      });
+
+      await main.locator("[data-nn-e2e-start-review]").click();
+      await page.waitForURL(/\/app\/flashcards\/custom/, { timeout: 120_000 });
+      await expect(page.locator(".nn-premium-flashcard-session-root.nn-flashcard-study-premium")).toBeVisible({
+        timeout: 120_000,
+      });
+    } finally {
+      observers.dispose();
+      await logObserverDiagnostics(observers, testInfo.title);
+    }
+  });
+
   test("full review preset uses cardLimit=all in start href", async ({ page, baseURL }, testInfo) => {
     test.setTimeout(180_000);
     const observers = attachPageObservers(page, { profile: "app" });

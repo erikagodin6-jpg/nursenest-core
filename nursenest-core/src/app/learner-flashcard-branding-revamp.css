@@ -861,3 +861,362 @@ html[data-theme] .nn-flashcard-study-premium .nn-flashcard-rationale-panel[data-
   align-items: center !important;
   flex-shrink: 0 !important;
 }
+
+/* ── Card title block: STUDY / Flashcards / Reproductive Obstetrics ── */
+/* Replaces the flat chip row — renders as a mini title hierarchy       */
+
+.nn-flashcard-card-title-row {
+  padding-bottom: 0.75rem;
+}
+
+.nn-flashcard-card-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+/* "STUDY" — uppercase micro-label in brand color */
+.nn-flashcard-card-surface-label {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+  line-height: 1.2;
+  margin-bottom: 0.1rem;
+}
+
+/* "Flashcards" — medium heading */
+.nn-flashcard-card-surface-type {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 750;
+  color: var(--semantic-text-primary);
+  line-height: 1.25;
+  margin: 0;
+}
+
+/* "Reproductive Obstetrics" — subtitle in brand/muted */
+.nn-flashcard-card-topic-subtitle {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--semantic-brand);
+  line-height: 1.3;
+  margin: 0.12rem 0 0;
+  opacity: 0.85;
+}
+
+/* Theme-specific topic subtitle colors */
+html[data-theme="ocean"] .nn-flashcard-card-topic-subtitle {
+  color: var(--semantic-chart-2, #1D9BD7);
+}
+
+html[data-theme="midnight"] .nn-flashcard-card-topic-subtitle {
+  color: var(--semantic-chart-5, #60A5FA);
+}
+
+/* Mark button stays at top-right, vertically aligned with the title block */
+.nn-flashcard-card-title-row .nn-flashcard-mark-button {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+}
+
+/* Final flashcards/practice-study layout alignment: match reference preview. */
+.nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+.nn-premium-flashcard-session-root.nn-flashcard-study-premium,
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-study-session] {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted)) !important;
+  box-shadow: none !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-study-session] .nn-flashcard-learning-topbar {
+  display: grid !important;
+  grid-template-columns: minmax(20rem, 1fr) max-content !important;
+  align-items: center !important;
+  min-height: 5rem !important;
+  height: 5rem !important;
+  padding: 0 clamp(1.25rem, 2vw, 2rem) !important;
+  border-bottom: 1px solid var(--semantic-border-soft) !important;
+  border-radius: 0 !important;
+  background: var(--semantic-surface) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 58%, transparent) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-topbar-left {
+  display: flex !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  gap: clamp(0.85rem, 1.2vw, 1.25rem) !important;
+  overflow: hidden !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-return-link,
+.nn-flashcard-study-premium .nn-flashcard-chip--mode,
+.nn-flashcard-study-premium .nn-flashcard-topbar-title {
+  min-height: 2.5rem !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-topbar-title {
+  color: var(--semantic-text-secondary) !important;
+  font-size: 0.86rem !important;
+  font-weight: 600 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: max-content !important;
+  align-items: center !important;
+  justify-content: end !important;
+  gap: clamp(0.6rem, 0.85vw, 1rem) !important;
+  height: 5rem !important;
+  overflow: visible !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta > div {
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  align-content: center !important;
+  gap: 0.18rem !important;
+  min-height: 3.25rem !important;
+  height: 3.25rem !important;
+  min-width: max-content !important;
+  padding-inline: clamp(0.65rem, 0.9vw, 1rem) !important;
+  border-left: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, transparent) !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-topbar-progress {
+  grid-template-columns: auto auto !important;
+  width: clamp(9rem, 10vw, 11rem) !important;
+  min-width: clamp(9rem, 10vw, 11rem) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-topbar-stat-label,
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta strong {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  line-height: 1.08 !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-topbar-progress-track {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.nn-flashcard-study-premium .nn-exam-measurement-toggle,
+.nn-flashcard-study-premium [role="group"][aria-label="Measurement units"],
+.nn-flashcard-study-premium .nn-flashcard-shell-action {
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  align-self: center !important;
+  white-space: nowrap !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-shell-action {
+  border-radius: 0.82rem !important;
+  padding-inline: 1.1rem !important;
+}
+
+.nn-flashcard-study-premium .nn-premium-flashcard-stack-outer {
+  max-width: min(100%, 98rem) !important;
+  gap: clamp(1rem, 1.4vw, 1.35rem) !important;
+  padding: clamp(1.15rem, 2vw, 1.55rem) clamp(1.25rem, 2vw, 2rem) clamp(1.25rem, 2vw, 1.75rem) !important;
+}
+
+.nn-flashcard-study-heading {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0 0 0.65rem;
+}
+
+.nn-flashcard-study-heading__eyebrow {
+  margin: 0;
+  color: var(--semantic-brand);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.nn-flashcard-study-heading h1,
+.nn-flashcard-study-heading p {
+  margin: 0;
+}
+
+.nn-flashcard-study-heading h1 {
+  color: var(--semantic-text-primary);
+  font-size: clamp(1.5rem, 1.7vw, 2rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.nn-flashcard-study-heading p {
+  color: var(--semantic-brand);
+  font-size: clamp(0.95rem, 1vw, 1.1rem);
+  font-weight: 650;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-learning-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(25rem, 0.92fr) !important;
+  gap: clamp(1rem, 1.55vw, 1.5rem) !important;
+  align-items: stretch !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-hero-surface,
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel {
+  background: var(--semantic-surface) !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand) 10%) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-surface) 72%, transparent), 0 0.5rem 1.6rem -1.25rem color-mix(in srgb, var(--semantic-text-primary) 22%, transparent) !important;
+}
+
+.nn-flashcard-card-action-row {
+  min-height: 1.75rem;
+  margin-bottom: clamp(0.75rem, 1.2vw, 1.25rem);
+}
+
+.nn-flashcard-study-premium .nn-flashcard-hero-stem {
+  margin-top: 0 !important;
+  max-width: 46rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rationale-key-concept {
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface)) !important;
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft)) !important;
+  border-left-color: var(--semantic-brand) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-coach-panel {
+  grid-template-columns: minmax(9rem, 0.82fr) minmax(14rem, 1.45fr) minmax(12rem, 1.15fr) minmax(18rem, 1.35fr) !important;
+  min-height: 5.5rem !important;
+  max-height: none !important;
+  overflow: visible !important;
+  background: var(--semantic-surface) !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-brand) 8%) !important;
+  border-radius: 0.95rem !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rating-dock {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: clamp(0.75rem, 1.2vw, 1rem) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-rating-dock button {
+  min-height: 3.25rem !important;
+  border-radius: 0.85rem !important;
+  background: var(--semantic-surface) !important;
+}
+
+@media (max-width: 1220px) {
+  .nn-flashcard-study-premium .nn-flashcard-topbar-title {
+    display: none !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar {
+    grid-template-columns: minmax(12rem, 0.65fr) minmax(0, 1.35fr) !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-learning-topbar__meta {
+    gap: 0.4rem !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .nn-flashcard-study-premium .nn-flashcard-learning-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nn-flashcard-study-premium .nn-flashcard-coach-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+.nn-practice-exam-progress-premium {
+  display: grid !important;
+  min-height: 5rem !important;
+  align-content: center !important;
+  border-bottom: 1px solid var(--semantic-border-soft) !important;
+  background: var(--semantic-surface) !important;
+  padding: 0 clamp(1.25rem, 2vw, 2rem) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 58%, transparent) !important;
+}
+
+.nn-practice-exam-progress-premium > div:first-child {
+  align-items: center !important;
+  gap: clamp(0.85rem, 1.2vw, 1.25rem) !important;
+}
+
+.nn-practice-exam-progress-premium .nn-practice-exam-progress__track {
+  max-width: 11rem !important;
+  margin-top: 0.3rem !important;
+}
+
+/* Higher-specificity locks because this file contains older !important flashcard experiments above. */
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar {
+  min-height: 5rem !important;
+  height: 5rem !important;
+  grid-template-columns: minmax(20rem, 1fr) max-content !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta > div {
+  min-height: 3.25rem !important;
+  height: 3.25rem !important;
+  min-width: max-content !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(25rem, 0.92fr) !important;
+}
+
+.nn-flashcard-study-premium .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp],
+.nn-flashcard-study-premium .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] {
+  background: var(--semantic-surface) !important;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand) 10%) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   CRITICAL FIX: The premium CSS rule .nn-flashcard-learning-topbar__meta span
+   { display: block } turns the "of" span inside <strong>1 of 2</strong> into
+   a block element, causing three-line display. Restore it to inline here.
+   Selector specificity [0,2,0] beats the [0,2,0] meta-span rule because this
+   file is imported AFTER learner-flashcard-premium.css (cascade wins on ties).
+   ══════════════════════════════════════════════════════════════════════════════ */
+.nn-flashcard-topbar-progress > strong span {
+  display: inline !important;
+  font-weight: 400 !important;
+  opacity: 0.6 !important;
+}
+
+/* Also ensure the strong itself never exceeds available col width */
+.nn-flashcard-topbar-progress > strong {
+  white-space: nowrap !important;
+  max-width: none !important;
+}
+
+/* Ensure the card title topic subtitle span (inside the title block) is also inline */
+.nn-flashcard-card-title-block span {
+  display: inline !important;
+}

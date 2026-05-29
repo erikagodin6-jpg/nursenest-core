@@ -178,7 +178,6 @@ type StackLabels = {
 };
 
 export function FlashcardStudyQuestionStack({
-  sessionModeLabel,
   topicLine,
   examMicroQuestion = null,
   itemKindCaption = null,
@@ -206,7 +205,7 @@ export function FlashcardStudyQuestionStack({
   onAdvance,
   examPathwayLabel = "NCLEX",
 }: {
-  sessionModeLabel: string;
+  sessionModeLabel?: string;
   topicLine?: string | null;
   examMicroQuestion?: ExamMicroQuestionPayload | SataQuestionPayload | null;
   itemKindCaption?: string | null;
@@ -304,27 +303,24 @@ export function FlashcardStudyQuestionStack({
         data-nn-premium-flashcard-study
       >
         <div className="nn-flashcard-session-main min-w-0">
+          <div className="nn-flashcard-study-heading">
+            <p className="nn-flashcard-study-heading__eyebrow">Study</p>
+            <h1>Flashcards</h1>
+            {topicLine ? (
+              <p>{topicLine.split("·")[0]?.trim() ?? topicLine}</p>
+            ) : null}
+          </div>
           <div className="nn-flashcard-learning-grid min-w-0 min-h-0">
             <article
               className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] min-w-0 min-h-0 overflow-hidden p-5 sm:p-7 lg:p-8"
               data-nn-flashcard-branding-revamp=""
             >
-              {/* ── Card title block — matches mockup: STUDY / Flashcards / topic ── */}
-              <div className="nn-flashcard-card-title-row relative z-[1] flex items-start justify-between gap-2 border-b border-[var(--semantic-border-soft)] pb-3">
-                <div className="nn-flashcard-card-title-block min-w-0">
-                  <p className="nn-flashcard-card-surface-label">
-                    {sessionModeLabel || "Study"}
-                  </p>
-                  <p className="nn-flashcard-card-surface-type">Flashcards</p>
-                  {topicLine ? (
-                    <p className="nn-flashcard-card-topic-subtitle truncate max-w-[min(100%,340px)]">
-                      {topicLine.split("·")[0]?.trim() ?? topicLine}
-                    </p>
-                  ) : null}
-                  {itemKindCaption ? (
-                    <span className="nn-flashcard-chip nn-flashcard-chip--kind mt-1">{itemKindCaption}</span>
-                  ) : null}
-                </div>
+              <div className="nn-flashcard-card-action-row relative z-[1] flex items-start justify-between gap-2">
+                {itemKindCaption ? (
+                  <span className="nn-flashcard-chip nn-flashcard-chip--kind">{itemKindCaption}</span>
+                ) : (
+                  <span aria-hidden />
+                )}
                 {onToggleMark ? (
                   <button
                     type="button"
@@ -457,6 +453,7 @@ export function FlashcardStudyQuestionStack({
               <aside
                 className={`nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq min-w-0 min-h-0${revealed ? "" : " nn-flashcard-rationale-panel--reserved"}`}
                 data-nn-flashcard-branding-revamp=""
+                data-nn-rationale-state={revealed ? "revealed" : "locked"}
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
                 {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}
               >
@@ -534,7 +531,12 @@ export function FlashcardStudyQuestionStack({
                     ) : null}
                   </div>
                 ) : (
-                  <div className="nn-flashcard-rationale-panel__body nn-flashcard-rationale-panel__body--reserved" aria-hidden="true" />
+                  <div className="nn-flashcard-rationale-panel__body nn-flashcard-rationale-panel__body--reserved">
+                    <div className="nn-flashcard-rationale-locked">
+                      <BookOpen className="h-5 w-5" aria-hidden />
+                      <p>Choose an answer to unlock clinical teaching, option-level feedback, and exam takeaways.</p>
+                    </div>
+                  </div>
                 )}
               </aside>
             ) : null}
@@ -543,6 +545,7 @@ export function FlashcardStudyQuestionStack({
               <aside
                 className="nn-flashcard-rationale-panel min-w-0 min-h-0"
                 data-nn-flashcard-branding-revamp=""
+                data-nn-rationale-state="revealed"
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
                 data-nn-premium-flashcard-reveal=""
               >

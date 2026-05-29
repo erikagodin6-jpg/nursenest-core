@@ -672,15 +672,15 @@ export function ActiveStudySession({
       />
       <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
         {/* Left section: return link + mode chip + title */}
-        <div className="nn-flashcard-topbar-left min-w-0 shrink-0">
+        <div className="nn-flashcard-topbar-left min-w-0 flex-1">
           <Link href={header.exitHref} className="nn-flashcard-return-link" onClick={onExit}>
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
             Return to Hub
           </Link>
           <span className="nn-flashcard-chip nn-flashcard-chip--mode">{header.modeLabel}</span>
-          {header.sessionTitle ? (
-            <span className="nn-flashcard-topbar-title max-w-[min(100%,14rem)] truncate">{header.sessionTitle}</span>
-          ) : null}
+          <span className="nn-flashcard-topbar-title max-w-[min(100%,14rem)] truncate">
+            Distractions reduced
+          </span>
         </div>
 
         <div className="nn-flashcard-learning-topbar__meta">
@@ -728,7 +728,6 @@ export function ActiveStudySession({
 
       {/* MAIN CARD */}
       <FlashcardStudyQuestionStack
-        sessionModeLabel={header.modeLabel}
         examPathwayLabel={resolveExamPathwayLabel(sessionPathwayId)}
         topicLine={formatTopicLine(current)}
         examMicroQuestion={displayExam}
@@ -827,9 +826,6 @@ export function ActiveStudySession({
                   </p>
                 </div>
               ) : null}
-              <div className="nn-flashcard-coach-panel__section nn-flashcard-coach-panel__section--coach">
-                <span>Tutor</span>
-              </div>
               <div className="nn-flashcard-coach-panel__section">
                 <span>Hint</span>
                 {hintOpen ? (

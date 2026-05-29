@@ -12,6 +12,7 @@ import {
   buildConversionFunnel,
   buildConversionIntelligenceReport,
   type ConversionCohort,
+  type FeatureDiscoveryInput,
   type ConversionIntelligenceReport,
   type ConversionStage,
   type ConversionStageMetric,
@@ -234,7 +235,7 @@ function buildConversionIntelligence(data: Omit<AdminFunnelAnalyticsData, "conve
     .filter((row) => row.count != null)
     .map((row) => {
       const label = row.label.toLowerCase();
-      const feature =
+      const feature: FeatureDiscoveryInput["feature"] =
         label.includes("lesson") ? "lessons" : label.includes("question") ? "questions" : label.includes("practice") || label.includes("cat") ? "cat" : "questions";
       return {
         feature,

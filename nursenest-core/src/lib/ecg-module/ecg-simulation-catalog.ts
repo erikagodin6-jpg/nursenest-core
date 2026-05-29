@@ -27,6 +27,11 @@
  */
 
 import type { EcgSimulationRecord, EcgSimulationProfession } from "@/lib/ecg-module/ecg-simulation-schema";
+import {
+  ECG_SIMULATION_EXPANSIONS,
+  getSimulationExpansion,
+  EXPANDED_SIMULATION_IDS,
+} from "@/lib/ecg-module/ecg-simulation-expansions";
 
 // ─── Helper to build skeleton simulations ─────────────────────────────────────
 
@@ -972,7 +977,7 @@ const EXTENDED_SIMULATIONS_NEW_GRAD: ReadonlyArray<EcgSimulationRecord> = [
 
 // ─── Full catalog assembly ─────────────────────────────────────────────────────
 
-export const ECG_SIMULATION_CATALOG: ReadonlyArray<EcgSimulationRecord> = [
+const RAW_CATALOG: ReadonlyArray<EcgSimulationRecord> = [
   ...FLAGSHIP_SIMULATIONS,
   ...STANDARD_SIMULATIONS_RN,
   ...STANDARD_SIMULATIONS_RPN,
@@ -989,6 +994,14 @@ export const ECG_SIMULATION_CATALOG: ReadonlyArray<EcgSimulationRecord> = [
   skeletonSim("ecg-np-acute-heart-failure-rhythm", "Acute HF + Arrhythmia — Decongestive Therapy and Rate Control", "Manage a patient with decompensated HF and new-onset AFib simultaneously. Balance diuresis, rate control, and monitoring for hemodynamic changes.", ["NP"], "atrial_fibrillation", "atrial_fibrillation", "critical_care", "HF ICU — Complex Management", 71, "Acute decompensated HF + AFib", 5, ["rhythm_recognition", "acls_critical_rhythms"]),
   skeletonSim("ecg-rt-ventilator-liberation-rhythm", "Ventilator Liberation — ECG Assessment During Extubation", "Assess cardiac rhythm and hemodynamics immediately before, during, and after extubation. Identify rhythm changes that predict extubation failure.", ["RT"], "sinus_tachycardia", "pvcs", "critical_care", "ICU — Extubation Assessment Protocol", 61, "Prolonged mechanical ventilation — extubation", 4, ["rhythm_recognition"]),
 ];
+
+/**
+ * Merge expansions: replace skeleton entries with fully-authored versions.
+ * Expansions override any skeleton record with the same id; order is preserved.
+ */
+export const ECG_SIMULATION_CATALOG: ReadonlyArray<EcgSimulationRecord> = RAW_CATALOG.map(
+  (sim) => getSimulationExpansion(sim.id) ?? sim,
+);
 
 // ─── Accessor functions ────────────────────────────────────────────────────────
 
