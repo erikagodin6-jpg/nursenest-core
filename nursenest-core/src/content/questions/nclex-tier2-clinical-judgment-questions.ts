@@ -579,7 +579,7 @@ function buildQuestion(s: Scenario, index: number): NclexTier2Question {
         A: `Correct: ${s.rationale}`,
         B: `Incorrect: this option is less safe because ${s.trap.toLowerCase()}`,
         C: `Incorrect: this option delays priority nursing action because ${s.trap.toLowerCase()}`,
-        D: `Incorrect: this option does not address the most urgent cue because ${s.trap.toLowerCase()}`,
+        D: `Incorrect: this option misses the time-sensitive finding because ${s.trap.toLowerCase()}`,
       },
     },
     hints: s.hints,

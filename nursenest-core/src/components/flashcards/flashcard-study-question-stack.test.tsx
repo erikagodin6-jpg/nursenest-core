@@ -155,8 +155,39 @@ describe("FlashcardStudyQuestionStack — MCQ rationale placement", () => {
       />,
     );
 
-    assert.equal(html.match(/Oxygen directly addresses hypoxia/g)?.length, 1);
+    assert.match(html, /Administer supplemental oxygen/);
     assert.doesNotMatch(html, /Correct answer<\/span>/);
+  });
+
+  it("renders educator rationale sections without placeholder reasoning text", () => {
+    const html = renderToStaticMarkup(
+      <FlashcardStudyQuestionStack
+        {...BASE_PROPS}
+        prompt="A patient is hypoxic. Priority action?"
+        answer="A"
+        examMicroQuestion={{
+          ...MCQ,
+          rationaleCorrect:
+            "Administer supplemental oxygen is correct because it responds to the priority cue in the question. The clinical reasoning is to choose the action.",
+          rationaleIncorrect: [
+            {
+              letter: "B",
+              rationale: "This option does not address the priority assessment or intervention implied by the stem.",
+            },
+          ],
+        }}
+        revealed={true}
+        onReveal={() => {}}
+      />,
+    );
+
+    assert.match(html, /Clinical Pearl/);
+    assert.match(html, /Correct Answer Explanation/);
+    assert.match(html, /Why Other Options Are Incorrect/);
+    assert.match(html, /NCLEX Tip/);
+    assert.match(html, /Memory Hook/);
+    assert.doesNotMatch(html, /responds to the priority cue/i);
+    assert.doesNotMatch(html, /clinical reasoning is to choose the action/i);
   });
 });
 

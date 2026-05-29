@@ -86,12 +86,12 @@ export function FlashcardExamMcqAnswerList({
           };
 
           const baseRow = (
-            <div className="flex items-start gap-3">
+            <div className="flex min-h-[2.25rem] items-center gap-3">
               {/* Letter */}
               <span
                 className={`${optionLetterCircleClass(
                   visualArgs
-                )} transition`}
+                )} self-center transition`}
                 aria-hidden
               >
                 {option.letter}
@@ -100,17 +100,17 @@ export function FlashcardExamMcqAnswerList({
               {/* Text */}
               <FlashcardRichContent
                 text={stripRedundantMcqLetterPrefix(option.text)}
-                className="flex-1 text-[var(--semantic-text-primary)] leading-relaxed [&_p]:mb-1 [&_p:last-child]:mb-0"
+                className="flex-1 self-center text-[var(--semantic-text-primary)] leading-relaxed [&_p]:my-0"
               />
 
               {/* Correct icon */}
               {revealed && isCorrect ? (
                 <CheckCircle2
-                  className="h-5 w-5 shrink-0 text-[var(--semantic-success)] animate-fade-in"
+                  className="h-5 w-5 shrink-0 self-center text-[var(--semantic-success)] animate-fade-in"
                   aria-hidden
                 />
               ) : (
-                <span className="h-5 w-5 shrink-0" aria-hidden />
+                <span className="h-5 w-5 shrink-0 self-center" aria-hidden />
               )}
             </div>
           );
@@ -121,6 +121,9 @@ export function FlashcardExamMcqAnswerList({
                 <button
                   type="button"
                   onClick={() => onPickLetter?.(option.letter)}
+                  data-selected={isPicked ? "true" : undefined}
+                  data-correct={revealed && isCorrect ? "true" : undefined}
+                  data-picked-wrong={revealed && isPicked && !isCorrect ? "true" : undefined}
                   className={`${flashcardExamMcqOptionClass(
                     visualArgs
                   )} w-full text-left transition-all duration-150`}
@@ -129,6 +132,9 @@ export function FlashcardExamMcqAnswerList({
                 </button>
               ) : (
                 <div
+                  data-selected={isPicked ? "true" : undefined}
+                  data-correct={revealed && isCorrect ? "true" : undefined}
+                  data-picked-wrong={revealed && isPicked && !isCorrect ? "true" : undefined}
                   className={`${flashcardExamMcqOptionClass(
                     visualArgs
                   )} transition-all duration-150`}

@@ -480,15 +480,15 @@ export function PracticeQuestionSessionClient({
             answerOptions,
             correctLetters: correctVisibleLetters,
             rationaleCorrect:
-              fullRationale || "Use the cues in the stem to select every option that protects safety and addresses the priority finding.",
+              fullRationale || "Match each selected option to a concrete assessment finding, risk, or ordered intervention in the stem.",
             rationaleByLetter: answerOptions.map((option) => {
               const isCorrectOption = correctVisibleLetters.includes(option.letter);
               return {
                 letter: option.letter,
                 correct: isCorrectOption,
                 rationale: isCorrectOption
-                  ? "This selection matches the priority cues in the question."
-                  : "This option may sound reasonable, but it does not match the safest priority for the cues given.",
+                  ? "This selection is supported by a finding in the stem and belongs in the immediate care plan."
+                  : "This option may sound reasonable, but the stem does not provide the assessment finding or risk pattern needed to support it.",
               };
             }),
           }
@@ -498,13 +498,13 @@ export function PracticeQuestionSessionClient({
             answerOptions,
             correctLetter: primaryCorrectLetter,
             rationaleCorrect:
-              fullRationale || "Choose the option that best addresses safety, priority, and the most urgent patient cue.",
+              fullRationale || "The correct option is the one directly supported by the client data in the stem and the expected nursing response.",
             rationaleIncorrect: answerOptions
               .filter((option) => option.letter !== primaryCorrectLetter)
               .map((option) => ({
                 letter: option.letter,
                 rationale:
-                  "This option is lower priority for the stem cues. Compare it with the correct answer and choose the action that best protects safety first.",
+                  "This option is tempting because it may be true in another context, but this stem does not make it the best supported response.",
               })),
           }
       : null;
@@ -647,7 +647,7 @@ export function PracticeQuestionSessionClient({
           labels={{
             answerHeading: "Answer and rationale",
             whyCorrectHeading: "Why this is correct",
-            whyIncorrectHeading: "Why the other options are not priority",
+            whyIncorrectHeading: "Why the other options do not fit this stem",
             takeawayHeading: "Key nursing takeaway",
             answerChoicesHeading: isSata ? "Select all that apply" : "Answer choices",
           }}

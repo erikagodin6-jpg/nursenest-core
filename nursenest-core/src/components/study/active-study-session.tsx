@@ -3,13 +3,16 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import {
+  BarChart3,
   Bookmark,
   ChevronRight,
+  Clock3,
   Home,
   Keyboard,
   Pause,
   Play,
   RefreshCw,
+  Target,
 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
@@ -616,7 +619,10 @@ export function ActiveStudySession({
 
         <div className="nn-flashcard-learning-topbar__meta">
           <div className="nn-flashcard-topbar-progress">
-            <span>Progress</span>
+            <span className="nn-flashcard-topbar-stat-label">
+              <BarChart3 className="h-3.5 w-3.5" aria-hidden />
+              Progress
+            </span>
             <strong>{index + 1} <span className="font-normal opacity-60">of</span> {sessionCards.length}</strong>
             <div className="nn-flashcard-topbar-progress-track" role="progressbar" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={sessionCards.length}>
               <div
@@ -626,14 +632,20 @@ export function ActiveStudySession({
             </div>
           </div>
           <div className="max-sm:hidden">
-            <span>Focus</span>
+            <span className="nn-flashcard-topbar-stat-label">
+              <Target className="h-3.5 w-3.5" aria-hidden />
+              Focus
+            </span>
             <strong>{focusLabel}</strong>
           </div>
           <div>
-            <span>Elapsed</span>
+            <span className="nn-flashcard-topbar-stat-label">
+              <Clock3 className="h-3.5 w-3.5" aria-hidden />
+              Elapsed
+            </span>
             <strong className="font-mono">{formatElapsed(elapsed)}</strong>
           </div>
-          <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} locked />
+          <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} locked className="nn-flashcard-measurement-toggle" />
           <button
             type="button"
             className="nn-flashcard-shell-action"

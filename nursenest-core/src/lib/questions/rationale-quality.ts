@@ -7,6 +7,8 @@ export type SimpleRationaleContext = {
 const GENERIC_RATIONALE_PATTERNS = [
   /\bthis option does not address the priority assessment or intervention implied by the stem\b/i,
   /\bthis option does not address the priority\b/i,
+  /\bresponds to the priority cue\b/i,
+  /\bclinical reasoning is to choose the action\b/i,
   /\bthis is incorrect\b/i,
   /\bnot the best answer\b/i,
   /\bthis is not correct\b/i,
@@ -56,7 +58,7 @@ function inferPrinciple(stem: string): string {
   if (/\b(isolation|infection|ppe|hand hygiene|sterile)\b/.test(s)) {
     return "Infection-control questions prioritize preventing transmission before convenience or routine workflow.";
   }
-  return "Use the nursing process: identify the most urgent cue, act on safety first, and reassess before lower-priority care.";
+  return "Anchor the answer to the cue that would change bedside monitoring, immediate nursing action, or escalation timing for this client.";
 }
 
 export function isGenericRationaleText(value: string | null | undefined): boolean {
@@ -75,7 +77,7 @@ export function buildSimpleCorrectRationale(context: SimpleRationaleContext): st
   const stemCue = firstSentence(context.stem, "The stem points to the most immediate client-safety cue.");
   const correct = text(context.correctOptionText) || "the correct option";
   const principle = inferPrinciple(context.stem);
-  return `${correct} is correct because it responds to the priority cue in the question: ${stemCue} The clinical reasoning is to choose the action that prevents harm or guides safe escalation before lower-priority care. ${principle}`;
+  return `${correct} is the safest answer because it directly addresses the cue in the stem: ${stemCue} This choice protects the client before routine care, documentation, teaching, or delayed reassessment. ${principle}`;
 }
 
 export function buildSimpleDistractorRationale(context: SimpleRationaleContext): string {

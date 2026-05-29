@@ -209,3 +209,151 @@ html[data-theme="ocean"] .nn-flashcard-hero-surface[data-nn-flashcard-branding-r
     transition: none;
   }
 }
+
+/* ── Final flashcard polish pass: white-first study canvas, crisp controls ── */
+html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
+  background: var(--semantic-surface);
+}
+
+html[data-theme] .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar,
+html[data-theme] .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp],
+html[data-theme] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp],
+html[data-theme] .nn-flashcard-rail-surface[data-nn-flashcard-branding-revamp],
+html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .nn-flashcard-coach-panel {
+  background: var(--semantic-surface);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 86%, var(--semantic-brand) 8%);
+  box-shadow: 0 18px 42px -34px color-mix(in srgb, var(--semantic-text-primary) 24%, transparent);
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar {
+  align-items: center;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta {
+  align-items: center;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta > div {
+  display: flex;
+  min-height: 2.45rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-stat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-stat-label svg {
+  display: block;
+  color: var(--semantic-brand);
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta i {
+  display: none;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta .nn-flashcard-measurement-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(3.25rem, 1fr));
+  align-items: center;
+  justify-content: center;
+  width: 7.25rem !important;
+  min-height: 2.35rem !important;
+  gap: 0.18rem !important;
+  overflow: visible !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 12%) !important;
+  border-radius: 0.8rem !important;
+  background: var(--semantic-surface) !important;
+  padding: 0.18rem !important;
+  box-shadow: none !important;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta .nn-flashcard-measurement-toggle button {
+  display: inline-flex;
+  min-width: 0 !important;
+  min-height: 1.85rem !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.62rem !important;
+  padding: 0 0.55rem !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta .nn-flashcard-measurement-toggle button[aria-pressed="true"] {
+  background: var(--semantic-brand) !important;
+  color: var(--semantic-on-brand, #fff) !important;
+  box-shadow: 0 10px 20px -16px color-mix(in srgb, var(--semantic-brand) 68%, transparent) !important;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta .nn-flashcard-measurement-toggle button[aria-pressed="false"] {
+  background: var(--semantic-surface) !important;
+  color: var(--semantic-text-secondary) !important;
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button,
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div {
+  background: var(--semantic-surface);
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button[data-selected="true"],
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div[data-selected="true"] {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button[data-correct="true"],
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div[data-correct="true"] {
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-success) 52%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button[data-picked-wrong="true"],
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div[data-picked-wrong="true"] {
+  background: color-mix(in srgb, var(--semantic-danger) 7%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-danger) 36%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button > div,
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div > div {
+  align-items: center;
+}
+
+.nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept,
+.nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section,
+.nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-panel__incorrect details,
+.nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-reveal-stack--premium section,
+.nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-reveal-stack--premium details {
+  background: var(--semantic-surface);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 8%);
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-coach-panel__section,
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-confidence-scale {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-hint-reveal {
+  align-self: flex-start;
+  margin-left: 0;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-session-main-footer {
+  margin-top: 1rem;
+}
+
+@media (max-width: 860px), (max-height: 560px) and (orientation: landscape) {
+  [data-nn-canonical-learner-surface="flashcards-v1"] .nn-flashcard-learning-topbar__meta .nn-flashcard-measurement-toggle {
+    width: 100%;
+    min-width: 0;
+    justify-self: stretch;
+  }
+}

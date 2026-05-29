@@ -65,6 +65,7 @@
     "manifests:all": "npm run manifests:questions && npm run manifests:flashcard-inventory && npm run manifests:lessons && npm run manifests:clinical-skills && npm run manifests:ecg && npm run manifests:activity",
     "readiness:verify": "node --import tsx --test src/lib/exam-pathways/cnple-hub-readiness.contract.test.ts src/lib/exam-pathways/cnple-product-readiness.contract.test.ts",
     "audit:exam-bank": "npx tsx scripts/audit-exam-question-bank.ts",
+    "audit:rationale-quality": "npx tsx scripts/audit-question-flashcard-rationales.mts",
     "audit:exam-remediation-queue": "npx tsx scripts/build-clinical-question-remediation-queue.ts",
     "audit:flashcard-pools": "npx tsx scripts/audit-flashcard-pools.ts",
     "audit:lesson-image-coverage": "npx tsx scripts/lesson-image-coverage-audit.mts",

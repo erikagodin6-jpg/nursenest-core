@@ -8,6 +8,11 @@ import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-ex
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
 import { AdaptiveCaseSimulationPanel } from "@/components/questions/adaptive-case-simulation-panel";
+import {
+  buildSimpleCorrectRationale,
+  buildSimpleDistractorRationale,
+  isGenericRationaleText,
+} from "@/lib/questions/rationale-quality";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 import type { AdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
@@ -62,10 +67,50 @@ function correctAnswerSummary(exam: ExamMicroQuestionPayload): string {
   return correctText ? `${exam.correctLetter}. ${correctText}` : exam.correctLetter;
 }
 
+function isWeakRationaleText(text: string | null | undefined): boolean {
+  const clean = String(text ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return !clean || clean.length < 80 || isGenericRationaleText(clean);
+}
+
+function answerOptionText(exam: ExamMicroQuestionPayload, letter: string | null | undefined): string {
+  if (!letter) return "";
+  return exam.answerOptions.find((option) => option.letter === letter)?.text.trim() ?? "";
+}
+
+function resolveCorrectRationale(exam: ExamMicroQuestionPayload, fallback: string | null | undefined): string {
+  const authored = exam.rationaleCorrect?.trim() || String(fallback ?? "").trim();
+  if (!isWeakRationaleText(authored)) return authored;
+  return buildSimpleCorrectRationale({
+    stem: exam.questionStem,
+    correctOptionText: answerOptionText(exam, exam.correctLetter),
+  });
+}
+
+function resolveDistractorRationales(exam: ExamMicroQuestionPayload): Array<{ letter: string; rationale: string }> {
+  const correctOptionText = answerOptionText(exam, exam.correctLetter);
+  return exam.answerOptions
+    .filter((option) => option.letter !== exam.correctLetter)
+    .map((option) => {
+      const authored = exam.rationaleIncorrect.find((row) => row.letter === option.letter)?.rationale.trim() ?? "";
+      return {
+        letter: option.letter,
+        rationale: isWeakRationaleText(authored)
+          ? buildSimpleDistractorRationale({
+              stem: exam.questionStem,
+              optionText: option.text,
+              correctOptionText,
+            })
+          : authored,
+      };
+    });
+}
+
 function rationaleKeyConcept(text: string | null | undefined): string {
   const line = firstTeachingLine(text);
-  if (!line) return "Focus on the clinical cue that changes patient safety or priority.";
-  return line.length > 120 ? `${line.slice(0, 117).trim()}...` : "Use the highest-risk cue to choose the safest priority action.";
+  if (!line || isGenericRationaleText(line)) {
+    return "Start with the cue that changes immediate safety, then choose the nursing action that protects the client before routine care.";
+  }
+  return line.length > 120 ? `${line.slice(0, 117).trim()}...` : line;
 }
 
 function buildExamTipForMcq(exam: ExamMicroQuestionPayload, pathwayLabel: string): string | null {
@@ -83,15 +128,21 @@ function buildExamTipForMcq(exam: ExamMicroQuestionPayload, pathwayLabel: string
   if (stem.includes("medication") || stem.includes("drug") || stem.includes("administer")) {
     return `${pathwayLabel}: know the mechanism of action — ask what system the drug affects and what requires monitoring.`;
   }
-  return null;
+  return `${pathwayLabel}: read the stem for timing, safety, scope, and stability cues before comparing answer choices.`;
 }
 
-function buildMemoryHookForMcq(text: string): string | null {
+function buildMemoryHookForMcq(text: string, exam?: ExamMicroQuestionPayload | null): string {
   const clean = String(text ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-  if (!clean) return null;
+  if (!clean && exam?.questionStem) {
+    const stem = exam.questionStem.toLowerCase();
+    if (/\b(o2|oxygen|spo2|dyspnea|airway|respiratory)\b/.test(stem)) return "Breathing problems move before paperwork, teaching, or delayed reassessment.";
+    if (/\b(delegate|assignment|uap|psw|assistive personnel|scope)\b/.test(stem)) return "Stable and predictable can be delegated; assessment and teaching stay with the nurse.";
+    if (/\b(medication|dose|administer|insulin|warfarin|heparin|opioid|digoxin)\b/.test(stem)) return "Before giving a drug, check the risk cue that could make the medication unsafe.";
+  }
+  if (!clean) return "Safety first, then reassess: protect the client before lower-priority care.";
   const sentences = clean.match(/[^.!?]+[.!?]+/g) ?? [];
   const hook = sentences.slice(0, 2).join(" ").trim();
-  return hook.length > 20 ? hook : null;
+  return hook.length > 20 ? hook : "Safety first, then reassess: protect the client before lower-priority care.";
 }
 
 type StackLabels = {
@@ -218,6 +269,8 @@ export function FlashcardStudyQuestionStack({
 
   const promptSplit = splitPromptLeadingImage(prompt);
   const promptBody = promptSplit.remainingPrompt || String(prompt ?? "");
+  const resolvedCorrectRationale = exam ? resolveCorrectRationale(exam, explanation || answer) : "";
+  const resolvedDistractorRationales = exam ? resolveDistractorRationales(exam) : [];
 
   const showUnsupportedCardAlert = !exam && !sata;
   return (
@@ -385,7 +438,7 @@ export function FlashcardStudyQuestionStack({
                   <div className="nn-flashcard-rationale-panel__body">
                     <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl">
                       <span>Clinical Pearl</span>
-                      <p>{rationaleKeyConcept(exam.rationaleCorrect || explanation || answer)}</p>
+                      <p>{rationaleKeyConcept(resolvedCorrectRationale)}</p>
                     </section>
                     <section className="nn-flashcard-rationale-section">
                       <h3>Correct answer</h3>
@@ -394,16 +447,16 @@ export function FlashcardStudyQuestionStack({
                       </div>
                     </section>
                     <section className="nn-flashcard-rationale-section">
-                      <h3>Why This Is Correct</h3>
+                      <h3>Correct Answer Explanation</h3>
                       <div className="nn-flashcard-inline-rationale__body">
-                        <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
+                        <FlashcardRichContent text={resolvedCorrectRationale} />
                       </div>
                     </section>
-                    {exam.rationaleIncorrect.length > 0 ? (
+                    {resolvedDistractorRationales.length > 0 ? (
                       <section className="nn-flashcard-rationale-panel__incorrect">
                         <h3>Why Other Options Are Incorrect</h3>
                         <div>
-                          {exam.rationaleIncorrect.map((row) => (
+                          {resolvedDistractorRationales.map((row) => (
                             <details key={row.letter} open={row.letter === submittedLetter}>
                               <summary>
                                 <span>{row.letter}</span>
@@ -425,15 +478,15 @@ export function FlashcardStudyQuestionStack({
                       ) : null;
                     })()}
                     {(() => {
-                      const hook = buildMemoryHookForMcq(exam.rationaleCorrect || explanation || answer);
-                      return hook ? (
+                      const hook = buildMemoryHookForMcq(resolvedCorrectRationale, exam);
+                      return (
                         <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook">
                           <h3>Memory Hook</h3>
                           <p className="nn-flashcard-inline-rationale__body text-sm italic leading-relaxed">
                             &ldquo;{hook}&rdquo;
                           </p>
                         </section>
-                      ) : null;
+                      );
                     })()}
                     {revealLinksSection ? (
                       <div className="mt-3" data-testid="flashcard-reveal-links">
