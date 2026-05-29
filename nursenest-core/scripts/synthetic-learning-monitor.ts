@@ -1,6 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { chromium, type Browser, type Page } from "playwright";
+import {
+  LEARNING_DELIVERY_THRESHOLDS_MS,
+  classifyLearningStartupDuration,
+} from "../src/lib/resilience/learning-continuity";
 
 type CheckResult = {
   runId: string;
@@ -98,17 +102,30 @@ async function runCheck(
     status = "fail";
     error = e instanceof Error ? e.message.slice(0, 1000) : String(e).slice(0, 1000);
   }
+  const durationMs = Date.now() - started;
+  const deliveryLevel = classifyLearningStartupDuration(durationMs);
+  if (status === "pass" && deliveryLevel === "emergency") {
+    status = "fail";
+    error = `startup_exceeded_critical_${LEARNING_DELIVERY_THRESHOLDS_MS.critical}ms`;
+  }
   return {
     runId: RUN_ID,
     checkName,
     route,
     status,
-    durationMs: Date.now() - started,
+    durationMs,
     httpStatus,
     error,
     screenshotDataUrl: await screenshotDataUrl(page, checkName),
     checkedAt: new Date().toISOString(),
-    meta: { finalUrl: page.url() },
+    meta: {
+      finalUrl: page.url(),
+      deliveryLevel,
+      primaryTargetMs: LEARNING_DELIVERY_THRESHOLDS_MS.primaryTarget,
+      backupThresholdMs: LEARNING_DELIVERY_THRESHOLDS_MS.backupDelivery,
+      criticalThresholdMs: LEARNING_DELIVERY_THRESHOLDS_MS.critical,
+      backupDeliveryRequired: deliveryLevel !== "primary",
+    },
   };
 }
 

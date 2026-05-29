@@ -115,6 +115,7 @@
     "test:e2e:performance-budgets:mobile": "npx playwright test tests/e2e/performance/learner-activity-performance-budgets.spec.ts --project=chromium-paid --grep mobile",
     "perf:activity-report": "npx tsx scripts/generate-activity-startup-report.ts",
     "monitor:synthetic-learning": "npx tsx scripts/synthetic-learning-monitor.ts",
+    "gate:learning-delivery": "npx tsx scripts/learning-delivery-predeploy-gate.mts",
     "test:synthetic-learning-monitoring": "node --import tsx --test src/lib/observability/synthetic-learning-monitoring.test.ts",
     "test:observability-platform": "node --import tsx --test src/lib/observability/learner-observability-platform.contract.test.ts",
     "test:observability-platform-2": "node --import tsx --test src/lib/observability/observability-platform-2.contract.test.ts",

@@ -4,13 +4,14 @@ import { prisma } from "@/lib/db";
 import { checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { LEARNING_DELIVERY_THRESHOLDS_MS } from "@/lib/resilience/learning-continuity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const HEADERS = { "Cache-Control": "no-store" };
-const ACTIVITY_STARTUP_WARN_MS = 10_000;
-const ACTIVITY_STARTUP_CRITICAL_MS = 30_000;
+const ACTIVITY_STARTUP_WARN_MS = LEARNING_DELIVERY_THRESHOLDS_MS.warning;
+const ACTIVITY_STARTUP_CRITICAL_MS = LEARNING_DELIVERY_THRESHOLDS_MS.critical;
 
 async function boundedCount(label: string, run: () => Promise<number>): Promise<number | null> {
   const value = await withDatabaseFallbackTimeout(run, -1, 1_500, {
@@ -50,6 +51,8 @@ export async function GET() {
       activityStartup: ok ? "ok" : "degraded",
       durationMs,
       thresholds: {
+        primaryTargetMs: LEARNING_DELIVERY_THRESHOLDS_MS.primaryTarget,
+        backupDeliveryMs: LEARNING_DELIVERY_THRESHOLDS_MS.backupDelivery,
         warnMs: ACTIVITY_STARTUP_WARN_MS,
         criticalMs: ACTIVITY_STARTUP_CRITICAL_MS,
       },

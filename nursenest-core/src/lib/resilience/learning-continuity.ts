@@ -26,9 +26,26 @@ export const TIER_2_OPTIONAL_SERVICES = [
 export type Tier2OptionalService = (typeof TIER_2_OPTIONAL_SERVICES)[number];
 
 export const EMERGENCY_STUDY_MODE_MESSAGE =
-  "Some advanced services are temporarily unavailable. Your learning activities remain fully accessible.";
+  "Advanced services are temporarily unavailable. Your study session remains fully accessible.";
+
+export const BACKUP_DELIVERY_MODE_MESSAGE = "Loading study session...";
+
+export const LEARNING_DELIVERY_THRESHOLDS_MS = {
+  primaryTarget: 2_000,
+  backupDelivery: 5_000,
+  warning: 10_000,
+  critical: 30_000,
+  syntheticInterval: 5 * 60 * 1000,
+} as const;
+
+export type LearningDeliveryLevel = "primary" | "backup" | "emergency";
+
+export function classifyLearningStartupDuration(durationMs: number): LearningDeliveryLevel {
+  if (durationMs >= LEARNING_DELIVERY_THRESHOLDS_MS.critical) return "emergency";
+  if (durationMs >= LEARNING_DELIVERY_THRESHOLDS_MS.backupDelivery) return "backup";
+  return "primary";
+}
 
 export function isTier2OptionalService(service: string): service is Tier2OptionalService {
   return TIER_2_OPTIONAL_SERVICES.includes(service as Tier2OptionalService);
 }
-
