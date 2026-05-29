@@ -526,7 +526,7 @@ export function AlliedCareerGrowth({ pricingHref }: { pricingHref: string }) {
                   } as CSSProperties
                 }
               >
-                <Icon className="h-4.5 w-4.5" aria-hidden />
+                <Icon className="h-5 w-5" aria-hidden />
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-bold text-[var(--theme-heading-text)]">{title}</p>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { Sparkles } from "lucide-react";
-import { NewGradMarketingCommandHero } from "@/components/marketing/new-grad/new-grad-marketing-command-hero";
 import {
   NewGradHeroFull,
   NewGradFirstYearFramework,
@@ -13,14 +12,11 @@ import {
   NewGradTestimonialStrip,
   NewGradCareerOutcomes,
 } from "@/components/marketing/new-grad/new-grad-homepage-sections";
-import { MarketingHubGuidedStudyPathStrip } from "@/components/marketing/marketing-hub-guided-study-path";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import type { PublicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { newGradMarketingHubBase, type NewGradMarketingShell } from "@/lib/navigation/new-grad-marketing-hub-paths";
 import { listNewGradWorkAreas } from "@/lib/new-grad/new-grad-work-areas";
-
-const LANDING_HERO_ACCENT = "--semantic-chart-2";
 
 export function NewGradMarketingLanding({
   shell,

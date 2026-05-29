@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-05-29T08:06:59.090Z",
+  "baseUrl": "https://nursenest.ca",
+  "outputDir": "/root/nursenest-core/docs/screenshots/marketing-slot-captures",
+  "pathwayIdDefault": "ca-rn-nclex-rn",
+  "cdnBaseDocumentation": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com",
+  "uploadPolicy": "Do not upload to DigitalOcean Spaces or overwrite production screenshot1.png–screenshot15.png keys until manually approved (see docs/SCREENSHOT_CAPTURE_TO_CDN.md).",
+  "slots": [
+    {
+      "screenshotSlot": 14,
+      "targetId": "slot-14-marketing-home-desktop",
+      "route": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "auth": "guest",
+      "theme": "ocean",
+      "localRelativePath": "screenshot14.png",
+      "recommendedCdnObjectKey": "screenshot14.png",
+      "recommendedCdnUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot14.png",
+      "manualReviewNotes": "Public marketing homepage — hero + platform preview; pause carousel if needed.",
+      "registryScreenshotId": 14
+    }
+  ],
+  "supplementary": [],
+  "errors": []
+}

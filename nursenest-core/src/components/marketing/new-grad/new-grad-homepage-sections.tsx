@@ -279,7 +279,7 @@ export function NewGradFirstYearFramework({
                   } as CSSProperties
                 }
               >
-                <Icon className="h-4.5 w-4.5" aria-hidden />
+                <Icon className="h-5 w-5" aria-hidden />
               </span>
               <h3 className="mt-3 text-sm font-bold text-[var(--theme-heading-text)]">
                 {domain.title}
@@ -404,7 +404,7 @@ export function NewGradClinicalScenarios({
                     } as CSSProperties
                   }
                 >
-                  <Icon className="h-4.5 w-4.5" aria-hidden />
+                  <Icon className="h-5 w-5" aria-hidden />
                 </span>
                 <div className="min-w-0">
                   <span
@@ -851,7 +851,7 @@ export function NewGradCareerOutcomes({ signUpHref }: { signUpHref: string }) {
           {OUTCOME_ITEMS.map(({ icon: Icon, title, body }) => (
             <div key={title} className="flex items-start gap-3">
               <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] text-[var(--semantic-brand)]">
-                <Icon className="h-4.5 w-4.5" aria-hidden />
+                <Icon className="h-5 w-5" aria-hidden />
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-bold text-[var(--theme-heading-text)]">{title}</p>
