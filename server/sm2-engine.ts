@@ -12,6 +12,8 @@ export interface SM2ReviewInput {
   deckId?: string;
   rating: SM2Rating;
   responseTimeMs?: number;
+  /** Caller-supplied deduplication key (user+session+card position). Same key within 90s returns cached result. */
+  idempotencyKey?: string;
 }
 
 export interface SM2ReviewResult {
@@ -20,6 +22,23 @@ export interface SM2ReviewResult {
   interval: number;
   repetitions: number;
   nextReviewAt: Date;
+}
+
+// In-memory idempotency cache.  TTL = 90 s; capped at 500 entries.
+// Prevents duplicate SM2 state mutations when a client retries a timed-out request.
+const _idemCache = new Map<string, { result: SM2ReviewResult; expiresAt: number }>();
+function _idemGet(key: string): SM2ReviewResult | undefined {
+  const entry = _idemCache.get(key);
+  if (!entry) return undefined;
+  if (entry.expiresAt < Date.now()) { _idemCache.delete(key); return undefined; }
+  return entry.result;
+}
+function _idemSet(key: string, result: SM2ReviewResult): void {
+  if (_idemCache.size >= 500) {
+    const oldestKey = _idemCache.keys().next().value;
+    if (oldestKey !== undefined) _idemCache.delete(oldestKey);
+  }
+  _idemCache.set(key, { result, expiresAt: Date.now() + 90_000 });
 }
 
 const SM2_INTERVALS: Record<SM2Rating, number[]> = {
@@ -66,6 +85,13 @@ function computeCardState(repetitions: number, interval: number, rating: SM2Rati
 }
 
 export async function processSM2Review(input: SM2ReviewInput): Promise<SM2ReviewResult> {
+  // Short-circuit on duplicate within idempotency window (90 s).
+  if (input.idempotencyKey) {
+    const idemKey = `${input.userId}:${input.idempotencyKey}`;
+    const cached = _idemGet(idemKey);
+    if (cached) return cached;
+  }
+
   const existing = await pool.query(
     `SELECT * FROM spaced_repetition_cards WHERE user_id = $1 AND card_id = $2`,
     [input.userId, input.cardId]
@@ -155,13 +181,20 @@ export async function processSM2Review(input: SM2ReviewInput): Promise<SM2Review
     studyMode: "spaced",
   });
 
-  return {
+  const result: SM2ReviewResult = {
     cardState,
     easeFactor: newEF,
     interval: newInterval,
     repetitions: newReps,
     nextReviewAt,
   };
+
+  // Cache result for idempotency window.
+  if (input.idempotencyKey) {
+    _idemSet(`${input.userId}:${input.idempotencyKey}`, result);
+  }
+
+  return result;
 }
 
 export async function getCardsDueForReview(userId: string, limit = 20): Promise<any[]> {

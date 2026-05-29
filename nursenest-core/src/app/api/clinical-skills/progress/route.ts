@@ -8,6 +8,7 @@ import { getClinicalSkillBySlug } from "@/lib/clinical-skills/clinical-skills-ca
 import { clinicalSkillProgressId } from "@/lib/clinical-skills/clinical-skills-lesson-progress";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { emitActivityStarted, emitActivityCompleted } from "@/lib/observability/activity-instrumentation-hooks";
 
 export const dynamic = "force-dynamic";
 
@@ -50,11 +51,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Progress unavailable" }, { status: 503 });
     }
 
+    const tier = (session?.user as { tier?: string } | undefined)?.tier ?? "RN";
     const syntheticLessonId = clinicalSkillProgressId(skill.slug);
     const wantsComplete = completed === true || action === "complete";
     const wantsUncomplete = action === "uncomplete";
     const wantsEngage = action === "engage";
     const wantsOpen = action === "open" || completed === false;
+
+    // Emit observability events (non-blocking, non-fatal)
+    if (wantsOpen || wantsEngage) {
+      void emitActivityStarted({ userId, activity: "clinical-skills", tier });
+    }
 
     try {
       const existing = await prisma.progress.findUnique({
@@ -83,6 +90,7 @@ export async function POST(req: Request) {
           update: { completed: true, engagedAt: existing?.engagedAt ?? new Date() },
         });
         await invalidateLearnerPrivateReadCache(userId);
+        void emitActivityCompleted({ userId, activity: "clinical-skills", tier, durationMs: 0, itemsCompleted: 1 });
         return NextResponse.json({ ok: true });
       }
 

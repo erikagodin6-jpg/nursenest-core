@@ -466,6 +466,7 @@
     "db:generate:safe": "node scripts/prisma-safe.mjs generate",
     "db:schema:check:safe": "node scripts/prisma-safe.mjs check-schema",
     "production:preflight": "node scripts/production-preflight.mjs",
+    "ha:validate": "npx tsx scripts/ha-validate-deployment.mts",
     "test:db-env-safety": "node --test src/lib/db/runtime-env-and-prisma-safety.contract.test.mjs",
     "mobile:typecheck": "npm -w @nursenest/mobile-shared run typecheck && npm -w @nursenest/mobile-app run typecheck",
     "mobile:test:shared": "npm -w @nursenest/mobile-shared run test",

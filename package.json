@@ -135,6 +135,7 @@
     "db:generate:safe": "npm --prefix nursenest-core run db:generate:safe",
     "db:schema:check:safe": "npm --prefix nursenest-core run db:schema:check:safe",
     "production:preflight": "npm --prefix nursenest-core run production:preflight",
+    "ha:validate": "npm --prefix nursenest-core run ha:validate --",
     "mobile:eas:build": "npm --prefix apps/mobile run eas:build",
     "mobile:release:readiness": "npm --prefix apps/mobile run release:readiness",
     "mobile:typecheck:shared": "npm --prefix packages/nursenest-mobile-shared run typecheck",

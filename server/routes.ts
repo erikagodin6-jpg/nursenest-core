@@ -23498,11 +23498,14 @@ Return ONLY valid JSON with this exact structure:
     const reviewEnd = instrumentCorePath("sm2_review");
     try {
       const authUser = req.authUser;
-      const { cardId, deckId, rating, responseTimeMs } = req.body;
+      const { cardId, deckId, rating, responseTimeMs, idempotencyKey } = req.body;
       if (!cardId || !rating || !["again", "hard", "good", "easy"].includes(rating)) {
         return res.status(400).json({ error: "cardId and valid rating (again/hard/good/easy) required" });
       }
-      const result = await sm2Engine.processSM2Review({ userId: authUser.id, cardId, deckId, rating, responseTimeMs });
+      const result = await sm2Engine.processSM2Review({
+        userId: authUser.id, cardId, deckId, rating, responseTimeMs,
+        idempotencyKey: idempotencyKey ?? undefined,
+      });
       reviewEnd();
       res.json(result);
     } catch (e: any) {

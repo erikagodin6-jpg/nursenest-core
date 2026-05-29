@@ -1913,6 +1913,23 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
   const [sessionResults, setSessionResults] = useState<{ id: string; correct: boolean }[]>([]);
   const [region, setRegion] = useState<"US" | "CA">("CA");
 
+  // Per-session card tracking — prevents duplicate SRS events and enables safe back navigation.
+  // Key format: `${sessionIndex}:${cardId}` (position + ID for uniqueness within a session).
+  const [sessionRatings, setSessionRatings] = useState<
+    Record<string, "again" | "hard" | "good" | "easy">
+  >({});
+  const [sessionAnswers, setSessionAnswers] = useState<
+    Record<string, { selectedOption: number; isCorrect: boolean }>
+  >({});
+
+  // Stable session ID for server-side idempotency keys.  Regenerated at session start.
+  const sessionIdRef = useRef(`sess_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+  const resetSessionTracking = () => {
+    setSessionRatings({});
+    setSessionAnswers({});
+    sessionIdRef.current = `sess_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  };
+
   const [examFlashcards, setExamFlashcards] = useState<ExamFlashcard[]>([]);
   const [examFlashcardsLoading, setExamFlashcardsLoading] = useState(false);
   const [examFlashcardCounts, setExamFlashcardCounts] = useState<Record<string, number>>({});
@@ -2880,21 +2897,37 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
       updated[updated.length - 1] = { ...updated[updated.length - 1], confidence };
       return updated;
     });
-    // Persist asynchronously — don't block the UX transition
-    fetch("/api/flashcard-session/answer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.id,
-        questionId: card.id,
-        selectedIndex: adaptiveSelectedOption,
-        wasCorrect: lastResult.correct,
-        confidence,
-        topic: card.topic,
-        bodySystem: card.bodySystem,
-        tier: effectiveTier === "admin" ? "rn" : effectiveTier,
-      }),
-    }).catch(() => {});
+    // Persist with exponential-backoff retry — confidence data must not be silently lost.
+    const payload = JSON.stringify({
+      userId: user.id,
+      questionId: card.id,
+      selectedIndex: adaptiveSelectedOption,
+      wasCorrect: lastResult.correct,
+      confidence,
+      topic: card.topic,
+      bodySystem: card.bodySystem,
+      tier: effectiveTier === "admin" ? "rn" : effectiveTier,
+    });
+    const persistWithRetry = (attempt = 0) => {
+      fetch("/api/flashcard-session/answer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).catch(() => {
+        if (attempt < 3) {
+          setTimeout(() => persistWithRetry(attempt + 1), 500 * Math.pow(2, attempt));
+        }
+        // Final failure: store in localStorage for session-start retry.
+        else {
+          try {
+            const pending = JSON.parse(localStorage.getItem("nn-pending-answers") || "[]");
+            pending.push({ payload, ts: Date.now() });
+            localStorage.setItem("nn-pending-answers", JSON.stringify(pending.slice(-30)));
+          } catch {}
+        }
+      });
+    };
+    persistWithRetry();
     // Auto-advance after a brief pause so the learner sees their selection
     setTimeout(() => {
       if (adaptiveIndex < adaptiveCards.length - 1) {
@@ -3081,13 +3114,24 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
     setRegion((localStorage.getItem("nursenest-region") as "US" | "CA") || "US");
   }, []);
 
-  // Keyboard navigation for the active study session
+  // Keyboard navigation for the active study session.
+  // SRS INTEGRITY: ArrowRight requires the card to be answered/engaged first.
+  //   • Question cards  → showRationale must be true (user selected an answer)
+  //   • Term/flip cards → isFlipped must be true (user saw the definition)
+  // ArrowLeft always allowed — it restores the previous answered state.
   useEffect(() => {
     if (view !== "study") return;
+    const card = sessionCards[currentIndex];
+    const canAdvance =
+      !card ||
+      (card.type === "question" ? showRationale : isFlipped);
+
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-      if (e.key === "ArrowRight" || (e.key === "Enter" && showRationale) || (e.key === " " && showRationale)) {
+
+      if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
+        if (!canAdvance) return; // block skip on unanswered/un-flipped cards
         e.preventDefault();
         handleNext();
       } else if (e.key === "ArrowLeft") {
@@ -3098,7 +3142,7 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, showRationale, currentIndex, sessionCards.length]);
+  }, [view, showRationale, isFlipped, currentIndex, sessionCards.length]);
 
   const categories = useMemo(() => Array.from(new Set(allCards.map(c => c.category))), [allCards]);
   const categoryLabelMap: Record<string, string> = {
@@ -3280,20 +3324,42 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
     setView("study");
   };
 
-  const handleSM2Rating = async (rating: "again" | "hard" | "good" | "easy") => {
+  const handleSM2Rating = (rating: "again" | "hard" | "good" | "easy") => {
     const card = sessionCards[currentIndex];
-    if (user && card.id && card.source !== "static") {
-      try {
-        const token = localStorage.getItem("token") || localStorage.getItem("adminToken");
-        const headers: Record<string, string> = { "Content-Type": "application/json" };
-        if (token) headers["Authorization"] = `Bearer ${token}`;
-        await fetch("/api/sm2/review", {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ cardId: card.id, rating }),
-        });
-      } catch {}
+    const sessionKey = `${currentIndex}:${card.id}`;
+
+    // IDEMPOTENCY GUARD: one rating per card per review cycle.
+    // If the learner navigated back and tries to re-rate, just advance.
+    if (sessionRatings[sessionKey]) {
+      handleNext();
+      return;
     }
+
+    // Commit rating to local session state immediately (optimistic + dedup fence)
+    setSessionRatings(prev => ({ ...prev, [sessionKey]: rating }));
+
+    // Fire-and-forget: persist to SRS engine; never block the UX transition.
+    if (user && card.id && card.source !== "static") {
+      const token = localStorage.getItem("token") || localStorage.getItem("adminToken");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      // idempotencyKey: unique per user+session+position so server can safely deduplicate retries.
+      const idempotencyKey = `${sessionIdRef.current}:${currentIndex}:${card.id}`;
+      fetch("/api/sm2/review", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ cardId: card.id, rating, idempotencyKey }),
+      }).catch(() => {
+        // Enqueue in localStorage so the next session startup can retry failed ratings.
+        try {
+          const pending: { cardId: string; rating: string; userId: string; idempotencyKey: string; ts: number }[] =
+            JSON.parse(localStorage.getItem("nn-pending-sm2") || "[]");
+          pending.push({ cardId: card.id, rating, userId: user.id, idempotencyKey, ts: Date.now() });
+          localStorage.setItem("nn-pending-sm2", JSON.stringify(pending.slice(-50)));
+        } catch {}
+      });
+    }
+
     handleNext();
   };
 
@@ -3315,8 +3381,21 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
+    if (currentIndex === 0) return;
+    const prevIndex = currentIndex - 1;
+    const prevCard = sessionCards[prevIndex];
+    const prevKey = `${prevIndex}:${prevCard?.id}`;
+    const prevAnswer = sessionAnswers[prevKey];
+
+    setCurrentIndex(prevIndex);
+
+    if (prevAnswer) {
+      // Restore the answered state so the learner can review rationale but cannot re-rate.
+      setSelectedOption(prevAnswer.selectedOption);
+      setShowRationale(prevCard?.type === "question");
+      setIsFlipped(prevCard?.type !== "question");
+    } else {
+      // Card was never answered — present it fresh.
       setSelectedOption(null);
       setShowRationale(false);
       setIsFlipped(false);
@@ -3326,33 +3405,50 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
   const handleOptionClick = (index: number) => {
     if (showRationale) return;
     const card = sessionCards[currentIndex];
+    const sessionKey = `${currentIndex}:${card.id}`;
+
+    // IDEMPOTENCY GUARD: never re-submit an answer for a card already answered this session.
+    // This prevents duplicate /api/flashcard-session/answer events when the learner
+    // navigates back and re-clicks an option.
+    if (sessionAnswers[sessionKey]) {
+      // Restore the rationale view for an already-answered card.
+      setSelectedOption(sessionAnswers[sessionKey].selectedOption);
+      setShowRationale(true);
+      return;
+    }
+
     const isCorrect = index === card.correctIndex;
+
+    // Record answer for back-navigation restoration and dedup.
+    setSessionAnswers(prev => ({ ...prev, [sessionKey]: { selectedOption: index, isCorrect } }));
     setSessionResults(prev => [...prev, { id: card.id, correct: isCorrect }]);
     setSelectedOption(index);
     setShowRationale(true);
+
     if (!isPaid && user) {
       decrementPreview();
     }
+
+    // Fire-and-forget answer persistence.
     if (user && card.source && card.source !== "static") {
-      try {
-        const ansHeaders: Record<string, string> = { "Content-Type": "application/json" };
-        const ut = localStorage.getItem("nursenest-user-token");
-        if (ut) ansHeaders["x-user-token"] = ut;
-        fetch("/api/flashcard-session/answer", {
-          method: "POST",
-          headers: ansHeaders,
-          body: JSON.stringify({
-            userId: user.id,
-            questionId: card.id,
-            selectedIndex: index,
-            wasCorrect: isCorrect,
-            confidence: isCorrect ? "confident" : "unsure",
-            topic: card.topic || card.category,
-            bodySystem: card.bodySystem || card.category,
-            tier: effectiveTier === "admin" ? "rn" : effectiveTier,
-          }),
-        });
-      } catch {}
+      const ansHeaders: Record<string, string> = { "Content-Type": "application/json" };
+      const ut = localStorage.getItem("nursenest-user-token");
+      if (ut) ansHeaders["x-user-token"] = ut;
+      fetch("/api/flashcard-session/answer", {
+        method: "POST",
+        headers: ansHeaders,
+        body: JSON.stringify({
+          userId: user.id,
+          questionId: card.id,
+          selectedIndex: index,
+          wasCorrect: isCorrect,
+          // Confidence updated later when user rates (again/hard/good/easy)
+          confidence: isCorrect ? "confident" : "unsure",
+          topic: card.topic || card.category,
+          bodySystem: card.bodySystem || card.category,
+          tier: effectiveTier === "admin" ? "rn" : effectiveTier,
+        }),
+      }).catch(() => {});
     }
   };
 
@@ -7443,8 +7539,8 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
                     </div>
                   </div>
 
-                  {/* SM2 rating bar — visible after answering, auto-advances on selection */}
-                  <div
+                  {/* SM2 rating bar — hidden once rated to prevent duplicate SRS events */}
+                  {!sessionRatings[`${currentIndex}:${currentCard?.id}`] && <div
                     className="rounded-xl border border-border bg-card px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 animate-in slide-in-from-bottom-2 duration-200"
                     data-testid="section-sm2-rating"
                     role="group"
@@ -7476,7 +7572,22 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
                         );
                       })}
                     </div>
-                  </div>
+                  </div>}
+
+                  {/* Already-rated indicator — shows when learner navigates back to a rated card */}
+                  {sessionRatings[`${currentIndex}:${currentCard?.id}`] && (
+                    <div
+                      className="rounded-xl border border-border bg-muted/30 px-4 py-2.5 flex items-center gap-3 text-sm"
+                      data-testid="section-sm2-already-rated"
+                    >
+                      <span className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
+                        {t("flashcards.rateDifficulty")}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 text-primary text-xs font-semibold capitalize">
+                        ✓ {sessionRatings[`${currentIndex}:${currentCard?.id}`]}
+                      </span>
+                    </div>
+                  )}
                 ) : (
                   <Card className="border border-border shadow-md bg-card overflow-hidden rounded-2xl flex flex-col animate-in fade-in duration-200">
                     <CardContent className="px-6 sm:px-8 py-6 flex flex-col flex-1">

@@ -21,6 +21,9 @@ This runbook provides step-by-step recovery procedures for every failure mode. F
 | Adaptive recs gone | § 7 — Adaptive Recovery |
 | Admin panel broken | § 8 — Admin Recovery |
 | Full outage | § 9 — Total Recovery |
+| Primary app or database unavailable | [`deployment/high-availability-standby-architecture.md`](./deployment/high-availability-standby-architecture.md) |
+
+For platform-level failover, use the high availability standby runbook. Target recovery is under 15 minutes using the standby deployment plus promoted database replica.
 
 ---
 
