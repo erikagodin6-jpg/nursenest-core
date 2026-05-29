@@ -244,6 +244,43 @@ export type EcgSimulationRecord = {
   criticalSafetyDecisions: ReadonlyArray<string>;
 };
 
+// ─── Phase 3 completion thresholds ────────────────────────────────────────────
+
+export const PHASE3_THRESHOLDS = {
+  MIN_DECISION_POINTS: 4,
+  MIN_RHYTHM_NODES: 4,
+  MIN_DOCUMENTATION_TASKS: 3,
+  MIN_MISSABLE_WARNINGS: 3,
+  MIN_DEBRIEF_SECTIONS: 5,   // of 6 possible: narrative, missedWarnings, prevention, objectives, pearls, references
+  MIN_STABILIZATION_BRANCHES: 2,  // correct_action transitions across all nodes
+  MIN_DETERIORATION_BRANCHES: 3,  // no_action + incorrect_action transitions across all nodes
+} as const;
+
+// ─── Branch counting helpers ───────────────────────────────────────────────────
+
+export function countStabilizationBranches(sim: EcgSimulationRecord): number {
+  return sim.rhythmProgression.reduce((sum, node) =>
+    sum + node.transitions.filter((t) => t.trigger === "correct_action").length, 0);
+}
+
+export function countDeteriorationBranches(sim: EcgSimulationRecord): number {
+  return sim.rhythmProgression.reduce((sum, node) =>
+    sum + node.transitions.filter(
+      (t) => t.trigger === "no_action" || t.trigger === "incorrect_action" || t.trigger === "partial_action",
+    ).length, 0);
+}
+
+export function countPopulatedDebriefSections(debrief: EcgSimulationDebrief): number {
+  return [
+    debrief.clinicalNarrative?.length > 20,
+    debrief.missedWarnings?.length > 0,
+    debrief.preventionOpportunities?.length > 0,
+    debrief.learningObjectives?.length > 0,
+    debrief.clinicalPearls?.length > 0,
+    debrief.guidelineReferences?.length > 0,
+  ].filter(Boolean).length;
+}
+
 // ─── Validation ────────────────────────────────────────────────────────────────
 
 export const SIMULATION_REQUIRED_FIELDS: ReadonlyArray<keyof EcgSimulationRecord> = [
@@ -263,25 +300,54 @@ export function validateEcgSimulation(sim: EcgSimulationRecord): string[] {
     }
   }
 
-  if (sim.rhythmProgression.length < 2) {
-    errors.push(`${sim.id}: rhythmProgression must have ≥2 nodes (initial + at least one change)`);
+  // Phase 3 thresholds
+  const T = PHASE3_THRESHOLDS;
+
+  if (sim.rhythmProgression.length < T.MIN_RHYTHM_NODES) {
+    errors.push(`${sim.id}: rhythmProgression has ${sim.rhythmProgression.length} nodes — minimum ${T.MIN_RHYTHM_NODES}`);
   }
-  if (sim.decisionPoints.length < 1) {
-    errors.push(`${sim.id}: must have ≥1 decisionPoint`);
+  if (sim.decisionPoints.length < T.MIN_DECISION_POINTS) {
+    errors.push(`${sim.id}: has ${sim.decisionPoints.length} decision points — minimum ${T.MIN_DECISION_POINTS}`);
   }
-  if (sim.debrief.learningObjectives.length < 1) {
-    errors.push(`${sim.id}: debrief must have ≥1 learningObjective`);
+  if (sim.documentationTasks.length < T.MIN_DOCUMENTATION_TASKS) {
+    errors.push(`${sim.id}: has ${sim.documentationTasks.length} documentation tasks — minimum ${T.MIN_DOCUMENTATION_TASKS}`);
   }
+  if (sim.debrief.missedWarnings.length < T.MIN_MISSABLE_WARNINGS) {
+    errors.push(`${sim.id}: has ${sim.debrief.missedWarnings.length} missed warnings — minimum ${T.MIN_MISSABLE_WARNINGS}`);
+  }
+  if (sim.debrief.learningObjectives.length < 3) {
+    errors.push(`${sim.id}: has ${sim.debrief.learningObjectives.length} learning objectives — minimum 3`);
+  }
+
+  const debriefSections = countPopulatedDebriefSections(sim.debrief);
+  if (debriefSections < T.MIN_DEBRIEF_SECTIONS) {
+    errors.push(`${sim.id}: has ${debriefSections} populated debrief sections — minimum ${T.MIN_DEBRIEF_SECTIONS}`);
+  }
+
+  const stabilization = countStabilizationBranches(sim);
+  if (stabilization < T.MIN_STABILIZATION_BRANCHES) {
+    errors.push(`${sim.id}: has ${stabilization} stabilization branches — minimum ${T.MIN_STABILIZATION_BRANCHES}`);
+  }
+
+  const deterioration = countDeteriorationBranches(sim);
+  if (deterioration < T.MIN_DETERIORATION_BRANCHES) {
+    errors.push(`${sim.id}: has ${deterioration} deterioration branches — minimum ${T.MIN_DETERIORATION_BRANCHES}`);
+  }
+
   if (sim.targetProfessions.length < 1) {
     errors.push(`${sim.id}: must target ≥1 profession`);
   }
 
-  // Life-threatening simulations require a code-related decision point
-  const hasLifeThreatening = sim.rhythmProgression.some(
-    (n) => n.riskLevel === "life_threatening",
-  );
+  // Life-threatening simulations require an escalation decision point
+  const hasLifeThreatening = sim.rhythmProgression.some((n) => n.riskLevel === "life_threatening");
   if (hasLifeThreatening && sim.decisionPoints.every((dp) => dp.decisionType !== "escalation")) {
     errors.push(`${sim.id}: simulation includes life-threatening rhythm but has no escalation decision point`);
+  }
+
+  // Required decision type coverage for Phase 3
+  const dpTypes = new Set(sim.decisionPoints.map((dp) => dp.decisionType));
+  if (!dpTypes.has("escalation")) {
+    errors.push(`${sim.id}: must have at least one "escalation" decision point`);
   }
 
   return errors;

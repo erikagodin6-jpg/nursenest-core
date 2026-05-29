@@ -1198,22 +1198,53 @@ html[data-theme="midnight"] .nn-flashcard-card-topic-subtitle {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
-   CRITICAL FIX: The premium CSS rule .nn-flashcard-learning-topbar__meta span
-   { display: block } turns the "of" span inside <strong>1 of 2</strong> into
-   a block element, causing three-line display. Restore it to inline here.
-   Selector specificity [0,2,0] beats the [0,2,0] meta-span rule because this
-   file is imported AFTER learner-flashcard-premium.css (cascade wins on ties).
+   CRITICAL FIX: Progress "1 of 2" on one line.
+   Root cause 1: .nn-flashcard-learning-topbar__meta span { display: block }
+     turns the inline "of" span into a block element.
+   Root cause 2: grid justify-self:end + narrow auto column constrains width.
+   Solution: force the progress container to simple flex-row, remove grid
+   context constraints, ensure "of" span is inline.
+   Specificity: [0,4,0] — matches the premium [0,4,0] rules but comes LATER
+   in the cascade (branding-revamp.css imported after premium.css).
    ══════════════════════════════════════════════════════════════════════════════ */
-.nn-flashcard-topbar-progress > strong span {
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress {
+  display: flex !important;
+  flex-direction: column !important;
+  width: auto !important;
+  min-width: 5rem !important;
+  max-width: none !important;
+  gap: 0.12rem !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress > strong {
+  display: block !important;
+  white-space: nowrap !important;
+  max-width: none !important;
+  width: max-content !important;
+  grid-row: unset !important;
+  grid-area: unset !important;
+  justify-self: unset !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+/* Restore "of" span to inline — overrides meta span { display: block } */
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress > strong span {
   display: inline !important;
   font-weight: 400 !important;
   opacity: 0.6 !important;
 }
 
-/* Also ensure the strong itself never exceeds available col width */
-.nn-flashcard-topbar-progress > strong {
-  white-space: nowrap !important;
-  max-width: none !important;
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress-track {
+  grid-row: unset !important;
+  grid-area: unset !important;
+  grid-column: unset !important;
+  width: 100% !important;
+  min-width: 4rem !important;
+  height: 3px !important;
+  margin: 0 !important;
+  align-self: unset !important;
 }
 
 /* Ensure the card title topic subtitle span (inside the title block) is also inline */
