@@ -4,6 +4,15 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { Sparkles } from "lucide-react";
 import { NewGradMarketingCommandHero } from "@/components/marketing/new-grad/new-grad-marketing-command-hero";
+import {
+  NewGradHeroFull,
+  NewGradFirstYearFramework,
+  NewGradClinicalScenarios,
+  NewGradDashboardPreview,
+  NewGradLearningEcosystem,
+  NewGradTestimonialStrip,
+  NewGradCareerOutcomes,
+} from "@/components/marketing/new-grad/new-grad-homepage-sections";
 import { MarketingHubGuidedStudyPathStrip } from "@/components/marketing/marketing-hub-guided-study-path";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
@@ -23,79 +32,47 @@ export function NewGradMarketingLanding({
   const { t } = useMarketingI18n();
   const base = newGradMarketingHubBase(shell);
   const areas = listNewGradWorkAreas();
-  const regionLabel =
-    shell === "us"
-      ? safeHomepageMarketingT(t, "newGrad.marketing.landing.regionUS", "United States")
-      : safeHomepageMarketingT(t, "newGrad.marketing.landing.regionCanada", "Canada");
   const tr = (key: string, fallback: string) => safeHomepageMarketingT(t, key, fallback);
 
+  // Ecosystem hrefs mapped from study destinations + fixed module paths
+  const ecosystemHrefs = {
+    lessons: study.lessons,
+    flashcards: study.flashcards,
+    questions: study.questions,
+    simulations: "/clinical-scenarios",
+    clinicalSkills: "/clinical-scenarios",
+    pharmacology: study.lessons,
+    ecg: "/modules/ecg",
+    dashboard: "/login",
+  } as const;
+
   return (
-    <div className="nn-premium-pathway-hub nn-premium-pathway-hub--new-grad space-y-10" data-nn-new-grad-marketing-landing="1">
-      <NewGradMarketingCommandHero
-        accentVar={LANDING_HERO_ACCENT}
-        eyebrow={
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">
-            {regionLabel} · {t("nav.mega.newGrad.label")}
-          </p>
-        }
-        title={
-          <h1 className="nn-marketing-h1 mt-3 max-w-3xl text-balance text-[var(--theme-heading-text)]">
-            {t("nav.mega.newGrad.label")}
-          </h1>
-        }
-        subtitle={
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--semantic-text-secondary)] sm:text-lg">
-            {tr(
-              "newGrad.marketing.landing.leadBody",
-              "First-year nurses: pick your clinical unit to see shift priorities, safety edges, and study entry points scoped to the New Grad transition-to-practice library — without dropping you into the generic NCLEX-RN marketing hub.",
-            )}
-          </p>
-        }
-        tertiary={
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-            {t("nav.mega.newGrad.hubDescription")}
-          </p>
-        }
+    <div
+      className="nn-premium-pathway-hub nn-premium-pathway-hub--new-grad space-y-10"
+      data-nn-new-grad-marketing-landing="1"
+    >
+      {/* ── Full Redesigned Hero ──────────────────────────────────────── */}
+      <NewGradHeroFull
+        primaryHref={study.hubHref}
+        simulationsHref="/clinical-scenarios"
       />
 
-      <MarketingHubGuidedStudyPathStrip
-        headingId="ng-landing-guided-path-heading"
-        title="Start here on the transition pathway"
-        subtitle="Pick a unit lens for emotional context, or jump straight into the same New Grad library surfaces — always scoped away from the generic NCLEX-RN marketing hub."
-        steps={[
-          {
-            title: "Choose work area",
-            hint: "Unit-first priorities and study entry.",
-            href: `${base}#ng-work-areas-heading`,
-            tone: "brand",
-          },
-          {
-            title: "Lessons library",
-            hint: "Transition catalog on this pathway.",
-            href: study.lessons,
-            tone: "success",
-          },
-          {
-            title: "Practice questions",
-            hint: "Bank items for New Grad tier.",
-            href: study.questions,
-            tone: "info",
-          },
-          {
-            title: "Readiness exams",
-            hint: "CAT-style hub when you are ready.",
-            href: study.cat,
-            tone: "warning",
-          },
-          {
-            title: "Flashcards",
-            hint: "Recall inside the app.",
-            href: study.flashcards,
-            tone: "chart1",
-          },
-        ]}
-      />
+      {/* ── First-Year Success Framework ─────────────────────────────── */}
+      <NewGradFirstYearFramework lessonsHref={study.lessons} />
 
+      {/* ── Real Clinical Scenarios ──────────────────────────────────── */}
+      <NewGradClinicalScenarios simulationsHref="/clinical-scenarios" />
+
+      {/* ── Dashboard Preview ────────────────────────────────────────── */}
+      <NewGradDashboardPreview dashboardHref="/login" />
+
+      {/* ── Learning Ecosystem ───────────────────────────────────────── */}
+      <NewGradLearningEcosystem hrefs={ecosystemHrefs} />
+
+      {/* ── Testimonials ─────────────────────────────────────────────── */}
+      <NewGradTestimonialStrip />
+
+      {/* ── Clinical Work Areas ──────────────────────────────────────── */}
       <section
         className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
         aria-labelledby="ng-work-areas-heading"
@@ -154,6 +131,7 @@ export function NewGradMarketingLanding({
         </ul>
       </section>
 
+      {/* ── Study Modes Quick Access ──────────────────────────────────── */}
       <section
         aria-labelledby="ng-study-modes-heading"
         className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 sm:p-8"
@@ -207,6 +185,9 @@ export function NewGradMarketingLanding({
           </div>
         </div>
       </section>
+
+      {/* ── Career Outcomes / Closing CTA ────────────────────────────── */}
+      <NewGradCareerOutcomes signUpHref="/signup" />
     </div>
   );
 }

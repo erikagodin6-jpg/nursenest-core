@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { prisma } from "@/lib/db";
+import { htmlEmailShell, sendTransactionalEmailHtml } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type ReferralStatus =
@@ -85,6 +86,22 @@ async function flagReferral(attributionId: string | null, subjectUserId: string,
   }).catch(() => {});
 }
 
+async function sendReferralEmail(userId: string, subject: string, body: string): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true, emailEngagementOptOut: true } });
+  if (!user?.email || user.emailEngagementOptOut) return;
+  await sendTransactionalEmailHtml({
+    to: user.email,
+    subject,
+    html: htmlEmailShell(subject, `<p>${body}</p>`),
+    text: body,
+  }).catch((error: unknown) => {
+    safeServerLog("referrals", "email_send_failed", {
+      subject: subject.slice(0, 80),
+      detail: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+    });
+  });
+}
+
 export async function recordReferralSignup(args: {
   referredUserId: string;
   rawCode?: string | null;
@@ -134,6 +151,7 @@ export async function recordReferralSignup(args: {
   });
 
   await writeReferralEvent(attribution.id, args.referredUserId, "account_created", { referralCode: referralCode.displayCode });
+  void sendReferralEmail(referralCode.userId, "A friend joined NurseNest", "Your referral created an account. Rewards unlock only after they verify email, finish onboarding, and start studying.");
 
   if ((referred?.normalizedEmail && referrer?.normalizedEmail && referred.normalizedEmail === referrer.normalizedEmail) || referred?.email === referrer?.email) {
     await flagReferral(attribution.id, args.referredUserId, "DUPLICATE_NORMALIZED_EMAIL", "Referrer and referred account share the same normalized email.");
@@ -174,6 +192,7 @@ export async function refreshReferralQualification(referredUserId: string): Prom
   });
   if (becomesQualified) {
     await writeReferralEvent(row.id, referredUserId, "qualified", {});
+    void sendReferralEmail(row.referrerUserId, "Your NurseNest referral qualified", "Nice work: your referral verified, completed onboarding, and started learning. Any matching reward rules have been applied.");
     await grantReferralRewardsForTrigger(updated.referrerUserId, "QUALIFIED_REFERRAL_COUNT", row.id);
   }
 }
@@ -249,6 +268,7 @@ async function grantReferralRewardsForTrigger(referrerUserId: string, trigger: R
       },
       update: {},
     });
+    void sendReferralEmail(referrerUserId, "NurseNest referral reward unlocked", `Reward unlocked: ${rule.name}. You can review earned rewards in Invite Friends.`);
   }
 }
 

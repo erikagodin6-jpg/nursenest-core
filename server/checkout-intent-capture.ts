@@ -175,7 +175,7 @@ export function registerCheckoutIntentRoutes(app: Express): void {
 
   // Admin: mark recovered
   app.post("/api/admin/checkout-intents/:id/recovered", async (req: Request, res: Response) => {
-    await markCheckoutRecovered(req.params.id);
+    await markCheckoutRecovered(String(req.params.id));
     return res.json({ ok: true });
   });
 }

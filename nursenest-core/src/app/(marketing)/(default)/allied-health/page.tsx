@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { type AlliedHealthHubCopy, AlliedHealthTrustStrip, AlliedHubProfessionSections } from "@/components/marketing/allied-health-hub-content";
+import { AlliedHealthHomepage } from "@/components/marketing/allied-health-homepage";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { alliedProfessionsGroupedForHub } from "@/lib/allied/allied-professions-registry";
@@ -113,96 +114,46 @@ export default async function AlliedHealthHubPage() {
   const { crumbs, schemaItems } = alliedHubBreadcrumbs();
 
   return (
-    <>
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 sm:gap-12 lg:gap-14 nn-marketing-x nn-rhythm-page">
-        <BreadcrumbJsonLd items={schemaItems} />
-        <div>
-          <BreadcrumbTrail items={crumbs} />
-        </div>
-
-        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-[var(--hero-branded-wash)] px-6 py-[var(--space-hero-bottom)] shadow-[var(--shadow-elevated)] sm:px-11 sm:py-[clamp(2.25rem,4.5vw,3.25rem)]">
-          <div
-            className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)] blur-3xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute left-0 top-10 hidden h-[calc(100%-5rem)] w-1 rounded-full bg-gradient-to-b from-primary/80 via-primary/40 to-transparent sm:block"
-            aria-hidden
-          />
-          <div className="relative">
-            <p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{t("pages.alliedHealthHub.heroKicker")}</p>
-            <h1 className="nn-marketing-h1 mt-4 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]">
-              {t("pages.alliedHealthHub.heroH1")}
-            </h1>
-            <p className="nn-marketing-body mt-4 max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
-              {t("pages.alliedHealthHub.heroValueLine")}
-            </p>
-            <p className="nn-marketing-body mt-3 max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
-              {t("pages.alliedHealthHub.heroWorkflowLine")}
-            </p>
-            <p className="nn-marketing-body mt-3 max-w-2xl text-pretty italic text-[var(--palette-text-muted)] sm:text-base">
-              {t("pages.alliedHealthHub.heroTestimonial")}
-            </p>
-            <div className="mt-[var(--nn-rhythm-text-to-cta)] flex flex-wrap gap-[var(--nn-rhythm-btn-group-gap)] sm:gap-[calc(var(--nn-rhythm-btn-group-gap)+0.15rem)]">
-              <Link
-                href="/pricing"
-                className="inline-flex rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-95"
-              >
-                {t("pages.alliedHealthHub.ctaSeeAlliedPlans")}
-              </Link>
-              <a
-                href="#allied-professions-heading"
-                className="inline-flex rounded-full border border-[var(--border-medium)] bg-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-card-bg))] px-6 py-2.5 text-sm font-semibold text-foreground shadow-sm transition hover:border-primary/35 hover:bg-[var(--surface-interactive-hover)]"
-              >
-                {t("pages.alliedHealthHub.ctaPickCountryProfession")}
-              </a>
-            </div>
-          </div>
-        </header>
-
-        <section
-          className="nn-card px-5 py-6 sm:px-8 sm:py-8"
-          aria-labelledby="allied-who-heading"
-        >
-          <h2 id="allied-who-heading" className="nn-marketing-h3 text-[var(--theme-heading-text)]">
-            {t("pages.alliedHealthHub.whoHeading")}
-          </h2>
-          <p className="nn-marketing-body-sm mt-3 max-w-2xl leading-relaxed text-[var(--theme-muted-text)]">
-            {t("pages.alliedHealthHub.whoBody")}
-          </p>
-        </section>
-
-        <section
-          className="nn-card px-5 py-5 sm:px-8 sm:py-6"
-          aria-label={t("pages.alliedHealthHub.regionH2")}
-        >
-          <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">
-            After you pick an occupation track below, open the{" "}
-            <Link href={ALLIED_GLOBAL_HUB_PATH} className="font-semibold text-primary underline-offset-4 hover:underline">
-              global allied pathway hub
-            </Link>{" "}
-            for the shared Allied Health surface: occupation-scoped lessons, flashcards, practice questions, labs, and adaptive readiness
-            entry points without a country fork.
-          </p>
-        </section>
-
-        <AlliedHubProfessionSections grouped={grouped} copy={hubCopy.professions} />
-
-        <AlliedHealthTrustStrip copy={hubCopy.trust} />
-
-        <p className="mt-[var(--nn-rhythm-section-y)] border-t border-[var(--border-subtle)] pt-[var(--nn-rhythm-tight-y)] text-center text-xs text-[var(--theme-muted-text)]">
-          <Link
-            href="/lessons"
-            className="font-semibold text-primary underline-offset-4 transition hover:underline"
-          >
-            {t("pages.alliedHealthHub.footerNursingPathwaysLink")}
-          </Link>
-        </p>
+    <div className="mx-auto flex max-w-6xl flex-col gap-10 sm:gap-12 lg:gap-14 nn-marketing-x nn-rhythm-page">
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div>
+        <BreadcrumbTrail items={crumbs} />
       </div>
-    </>
+
+      {/* ── Redesigned Allied Health Homepage ─────────────────────────── */}
+      <AlliedHealthHomepage
+        professionExplorerHref="#allied-professions-explorer"
+        pricingHref="/pricing"
+      />
+
+      {/* ── Global pathway note ────────────────────────────────────────── */}
+      <section
+        className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)] px-5 py-5 sm:px-8 sm:py-6"
+        aria-label="Allied pathway hub note"
+      >
+        <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">
+          After you pick an occupation track, open the{" "}
+          <Link href={ALLIED_GLOBAL_HUB_PATH} className="font-semibold text-primary underline-offset-4 hover:underline">
+            global allied pathway hub
+          </Link>{" "}
+          for the shared Allied Health surface: occupation-scoped lessons, flashcards, practice
+          questions, labs, and adaptive readiness entry points without a country fork.
+        </p>
+      </section>
+
+      {/* ── Full Profession Directory (SEO depth) ─────────────────────── */}
+      <AlliedHubProfessionSections grouped={grouped} copy={hubCopy.professions} />
+
+      <AlliedHealthTrustStrip copy={hubCopy.trust} />
+
+      <p className="mt-[var(--nn-rhythm-section-y)] border-t border-[var(--border-subtle)] pt-[var(--nn-rhythm-tight-y)] text-center text-xs text-[var(--theme-muted-text)]">
+        <Link
+          href="/lessons"
+          className="font-semibold text-primary underline-offset-4 transition hover:underline"
+        >
+          {t("pages.alliedHealthHub.footerNursingPathwaysLink")}
+        </Link>
+      </p>
+    </div>
   );
 }

@@ -142,12 +142,25 @@ export async function gatherResilienceMetrics(): Promise<ResilienceMetrics> {
     }
   } catch {}
 
-  // Recent alerts from platform resilience in-memory store
+  // Recent alerts pulled from DB (platform-resilience persists them there)
   let alerts: ResilienceMetrics["alerts"] = [];
   try {
-    const { getRecentAlerts } = await import("./platform-resilience");
-    alerts = (getRecentAlerts ? getRecentAlerts() : []).slice(0, 20);
-  } catch {}
+    const { rows: alertRows } = await pool.query(
+      `SELECT id, severity, category, title, message, source, acknowledged, created_at
+       FROM resilience_alerts ORDER BY created_at DESC LIMIT 20`
+    );
+    alerts = alertRows.map((r: any) => ({
+      id: r.id,
+      severity: r.severity,
+      category: r.category,
+      title: r.title,
+      message: r.message,
+      createdAt: r.created_at instanceof Date ? r.created_at.getTime() : Date.now(),
+      acknowledged: !!r.acknowledged,
+    }));
+  } catch {
+    // resilience_alerts table may not exist yet — non-fatal
+  }
 
   return {
     timestamp: new Date().toISOString(),

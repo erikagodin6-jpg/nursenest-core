@@ -5,6 +5,8 @@ import { loadAdminUserSupportDetail } from "@/lib/admin/load-admin-user-support-
 import { loadAdaptiveLearnerAdminSummary } from "@/lib/admin/adaptive-learner-summary.server";
 import { AdminAdaptiveLearnerOverview } from "@/components/admin/admin-adaptive-learner-overview";
 import { AdminUserProtectionPanel } from "@/components/admin/admin-user-protection-panel";
+import { AdminLearnerHealthPanel } from "@/components/admin/admin-learner-health-panel";
+import { AdminActivityTimelinePanel } from "@/components/admin/admin-activity-timeline-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +45,18 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
           <Link href="/admin" className="text-muted-foreground underline">
             Overview
           </Link>
+          <Link
+            href={`/admin/users/${u.id}/view-as`}
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary transition hover:bg-primary/10"
+          >
+            🔍 View As Learner
+          </Link>
+          <Link
+            href={`/admin/analytics/retention-risk`}
+            className="text-muted-foreground underline"
+          >
+            Retention risk
+          </Link>
         </div>
       </div>
 
@@ -60,6 +74,12 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
       <AdminAdaptiveLearnerOverview data={adaptiveSummary} />
 
       <AdminUserProtectionPanel userId={u.id} evidence={d.activityEvidence} />
+
+      {/* Phase 11C — Learner Health Score */}
+      <AdminLearnerHealthPanel userId={u.id} />
+
+      {/* Phase 11A — Full Activity Timeline */}
+      <AdminActivityTimelinePanel userId={u.id} timeline={d.activityEvidence?.timeline ?? []} />
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="nn-card p-5">

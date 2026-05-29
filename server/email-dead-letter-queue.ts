@@ -127,7 +127,7 @@ export async function markEmailFailed(id: string, error: string): Promise<void> 
       );
       addAlert("warning", "email_dlq", "Email Dead Letter", `Email ${id} exceeded ${max_attempts} attempts. Last error: ${error}`, "email-dlq");
     } else {
-      const backoffMs = RETRY_BACKOFF_MS[nextAttempt - 1] || RETRY_BACKOFF_MS[RETRY_BACKOFF_MS.length - 1];
+      const backoffMs = (RETRY_BACKOFF_MS[nextAttempt - 1] ?? RETRY_BACKOFF_MS[RETRY_BACKOFF_MS.length - 1]) as number;
       const nextRetry = new Date(Date.now() + backoffMs).toISOString();
       await pool.query(
         `UPDATE email_queue SET status = 'retrying', attempts = $1, last_error = $2, next_retry_at = $3 WHERE id = $4`,
@@ -202,7 +202,7 @@ export function registerEmailQueueRoutes(app: Express): void {
   });
 
   app.post("/api/admin/email-queue/:id/replay", async (req: Request, res: Response) => {
-    await replayDeadLetterEmail(req.params.id);
+    await replayDeadLetterEmail(String(req.params.id));
     return res.json({ ok: true });
   });
 
