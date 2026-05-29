@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { SubscriptionStatus } from "@prisma/client";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { recordCheckoutPolicyAcceptance } from "@/lib/business-protection/business-protection-audit";
 import { prisma } from "@/lib/db";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
@@ -186,6 +187,20 @@ export async function POST(req: Request) {
     if (!checkoutUrl) {
       throw new Error("Stripe checkout session did not include a redirect URL.");
     }
+
+    await recordCheckoutPolicyAcceptance({
+      userId,
+      scope: "critical_care_bundle_checkout",
+      policyBundleVersion: body.data.policyVersion,
+      acceptedAt,
+      req,
+      stripeCheckoutSessionId: checkoutSession.id,
+      stripeCustomerId: typeof checkoutSession.customer === "string" ? checkoutSession.customer : null,
+      planCode: CRITICAL_CARE_BUNDLE_PLAN_CODE,
+      amountTotal: checkoutSession.amount_total,
+      currency: checkoutSession.currency,
+      metadata: { moduleKey: "critical_care_bundle", baseTierAtCheckout: canonicalAccess.tier ?? null },
+    });
 
     return NextResponse.json({ url: checkoutUrl });
   } catch (error) {

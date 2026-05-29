@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { recordCheckoutPolicyAcceptance } from "@/lib/business-protection/business-protection-audit";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -536,6 +537,25 @@ export async function POST(req: Request) {
     safeServerLog("stripe_checkout", "checkout_session_url_returned", {
       stripeSessionId: checkoutSession.id,
       checkoutUrl,
+    });
+    await recordCheckoutPolicyAcceptance({
+      userId,
+      scope: "subscription_checkout",
+      policyBundleVersion: policyVersion,
+      acceptedAt,
+      req,
+      stripeCheckoutSessionId: checkoutSession.id,
+      stripeCustomerId: typeof checkoutSession.customer === "string" ? checkoutSession.customer : null,
+      stripeSubscriptionId: typeof checkoutSession.subscription === "string" ? checkoutSession.subscription : null,
+      planCode,
+      amountTotal: checkoutSession.amount_total,
+      currency: checkoutSession.currency,
+      metadata: {
+        tier,
+        duration,
+        alliedCareer: careerKey ?? null,
+        region: resolvedRegion ?? null,
+      },
     });
     emitStructuredLog("checkout_session_created", "info", {
       correlationId: correlationIdFromRequest(req) ?? undefined,

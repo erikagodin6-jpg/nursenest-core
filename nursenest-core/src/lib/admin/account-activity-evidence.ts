@@ -1,5 +1,6 @@
 import "server-only";
 
+import { loadPolicyAcceptanceEvidenceRows, type PolicyAcceptanceEvidenceRow } from "@/lib/business-protection/business-protection-audit";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -67,6 +68,7 @@ export type AccountActivityEvidence = {
     currentPeriodEnd: string | null;
     cancelAtPeriodEnd: boolean;
   }>;
+  policyAcceptances: PolicyAcceptanceEvidenceRow[];
   accessBreakdown: Array<{ label: string; count: number; lastAt: string | null }>;
   timeline: AdminActivityTimelineItem[];
   disputeSummary: string;
@@ -86,6 +88,12 @@ export function buildActivityEvidenceTextReport(evidence: AccountActivityEvidenc
     `- Last active: ${s.lastActiveAt ?? "not recorded"}`,
     `- Subscription start: ${s.subscriptionStartedAt ?? "not recorded"}`,
     `- Subscription rows: ${s.subscriptionHistoryCount} (${s.activeSubscriptionCount} active/grace)`,
+    "",
+    "Policy Acceptances",
+    ...evidence.policyAcceptances.map(
+      (p) =>
+        `- ${p.acceptedAt} ${p.scope} v${p.policyBundleVersion}${p.planCode ? ` · ${p.planCode}` : ""}${p.country ? ` · ${p.country}` : ""}`,
+    ),
     "",
     "Access Breakdown",
     ...evidence.accessBreakdown.map((r) => `- ${r.label}: ${r.count.toLocaleString()}${r.lastAt ? ` (last ${r.lastAt})` : ""}`),
@@ -164,6 +172,16 @@ export function buildActivityEvidenceHtmlReport(evidence: AccountActivityEvidenc
     ${row("Practice tests completed", s.practiceTestsCompleted)}
     ${row("Question attempts", s.questionAttempts)}
   </table>
+  <h2>Policy Acceptances</h2>
+  <table>
+    <tr><th>Accepted At</th><th>Scope</th><th>Version</th><th>Plan</th><th>Context</th></tr>
+    ${evidence.policyAcceptances
+      .map(
+        (p) =>
+          `<tr><td>${escapeHtml(p.acceptedAt)}</td><td>${escapeHtml(p.scope)}</td><td>${escapeHtml(p.policyBundleVersion)}</td><td>${escapeHtml(p.planCode ?? "not recorded")}</td><td>${escapeHtml([p.country, p.browser, p.device].filter(Boolean).join(" / ") || "not recorded")}</td></tr>`,
+      )
+      .join("")}
+  </table>
   <h2>Recent Activity Timeline</h2>
   <ol>${timeline}</ol>
   <h2>Evidence Notes</h2>
@@ -199,6 +217,7 @@ export async function buildAccountActivityEvidence(userId: string): Promise<Acco
     questionAttemptsCount,
     recentQuestionAttempts,
     abuseReviews,
+    policyAcceptances,
   ] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
@@ -299,6 +318,7 @@ export async function buildAccountActivityEvidence(userId: string): Promise<Acco
       take: 20,
       select: { reason: true, score: true, createdAt: true, dismissedAt: true, resolution: true },
     }),
+    loadPolicyAcceptanceEvidenceRows(userId),
   ]);
 
   if (!user) return null;
@@ -486,6 +506,7 @@ export async function buildAccountActivityEvidence(userId: string): Promise<Acco
       currentPeriodEnd: iso(s.currentPeriodEnd),
       cancelAtPeriodEnd: s.cancelAtPeriodEnd,
     })),
+    policyAcceptances,
     accessBreakdown,
     timeline,
     disputeSummary,

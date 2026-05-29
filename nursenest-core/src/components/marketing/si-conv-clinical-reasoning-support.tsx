@@ -132,11 +132,10 @@ export function SiConvMarketingExplainer() {
             <ProofImage />
           </div>
           <p className="mt-3 text-xs leading-5 text-[var(--semantic-text-muted)]">
-            Question -> SI/CONV panel -> rationale: learners see the cue, the clinical issue, and the reasoning behind each answer.
+            Question {"->"} SI/CONV panel {"->"} rationale: learners see the cue, the clinical issue, and the reasoning behind each answer.
           </p>
         </div>
       </div>
     </section>
   );
 }
-

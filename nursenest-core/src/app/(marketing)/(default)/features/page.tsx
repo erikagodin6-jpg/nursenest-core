@@ -24,6 +24,15 @@ export default function FeaturesPage() {
           body: "Question practice and exam modes help learners identify weak areas, review rationales, and build safer clinical judgment patterns.",
         },
         {
+          title: "SI/CONV clinical reasoning",
+          body: "Supported questions can guide learners through Situation Identification plus Clinical Overview and Nursing Verification, so they learn which cues matter, what problem is unfolding, and why the best intervention is prioritized.",
+          bullets: [
+            "Clinical reasoning for nurses and nursing clinical judgment practice",
+            "NCLEX-style cue recognition, prioritization, and decision-making support",
+            "Clear explanations that go beyond right-or-wrong answer checking",
+          ],
+        },
+        {
           title: "Clinical modules",
           body: "ECG, labs, medication math, and other clinical-readiness modules are designed to support real decision-making, not isolated memorization.",
         },

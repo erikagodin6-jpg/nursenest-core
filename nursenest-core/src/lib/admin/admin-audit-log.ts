@@ -3,6 +3,7 @@
  * Correlation: prefers edge/request ids when present on the incoming Request.
  */
 import type { AdminSession } from "@/lib/admin/admin-types";
+import { recordAdminAuditEvent } from "@/lib/business-protection/business-protection-audit";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -30,4 +31,20 @@ export function logAdminApiGate(opts: {
     correlation: correlationIdFromRequest(opts.req) ?? "",
     severity,
   });
+
+  if (opts.admin?.userId && opts.req && opts.result === "allowed") {
+    void recordAdminAuditEvent({
+      actorUserId: opts.admin.userId,
+      action: "admin_api_gate",
+      targetType: "admin_api",
+      targetId: opts.path.slice(0, 160),
+      req: opts.req,
+      result: "allowed",
+      metadata: {
+        tier: opts.admin.tier,
+        role: String(opts.admin.role),
+        correlation: correlationIdFromRequest(opts.req) ?? "",
+      },
+    });
+  }
 }

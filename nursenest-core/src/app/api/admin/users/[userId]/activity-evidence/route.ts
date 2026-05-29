@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { recordChargebackEvidenceExport } from "@/lib/business-protection/business-protection-audit";
 import {
   buildAccountActivityEvidence,
   buildActivityEvidenceHtmlReport,
@@ -22,6 +23,20 @@ export async function GET(req: NextRequest, ctx: RouteContext) {
   }
 
   const format = req.nextUrl.searchParams.get("format");
+  const exportFormat = format === "txt" ? "txt" : format === "html" ? "html" : "json";
+  await recordChargebackEvidenceExport({
+    userId,
+    generatedByUserId: gate.admin.userId,
+    format: exportFormat,
+    summary: {
+      activeDays: evidence.summary.activeDays,
+      totalEstimatedMinutes: evidence.summary.totalEstimatedMinutes,
+      subscriptionHistoryCount: evidence.summary.subscriptionHistoryCount,
+      policyAcceptanceCount: evidence.policyAcceptances.length,
+      generatedAt: evidence.generatedAt,
+    },
+  });
+
   if (format === "txt") {
     const report = buildActivityEvidenceTextReport(evidence);
     return new NextResponse(report, {
