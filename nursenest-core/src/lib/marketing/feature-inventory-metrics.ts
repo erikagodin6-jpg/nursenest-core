@@ -326,6 +326,18 @@ export function buildFeatureMatrixRows(inventory: TierInventoryMetrics): {
           },
         },
         {
+          label: "SI/CONV Clinical Reasoning Support",
+          description:
+            "Structured Situation Identification plus Clinical Overview and Nursing Verification on supported questions",
+          values: {
+            newGrad: true,
+            rn: true,
+            rpn: true,
+            np: true,
+            allied: true,
+          },
+        },
+        {
           label: "Hints",
           description: "Progressive hint system for guided problem-solving",
           values: {

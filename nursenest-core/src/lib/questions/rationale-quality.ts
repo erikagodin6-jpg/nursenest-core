@@ -50,7 +50,7 @@ function inferPrinciple(stem: string): string {
     return "Delegate only predictable, stable tasks; assessment, teaching, and unstable changes stay with the nurse.";
   }
   if (/\b(insulin|warfarin|heparin|opioid|digoxin|medication|dose|administer)\b/.test(s)) {
-    return "Medication-safety questions require checking the client condition and high-risk cues before giving the drug.";
+    return "Medication-safety questions require checking the client condition, dose risk, and monitoring data before giving the drug.";
   }
   if (/\b(teach|understanding|discharge|education|statement)\b/.test(s)) {
     return "Teaching questions test whether the client can identify unsafe symptoms and act correctly at home.";
@@ -82,7 +82,7 @@ export function buildSimpleCorrectRationale(context: SimpleRationaleContext): st
 
 export function buildSimpleDistractorRationale(context: SimpleRationaleContext): string {
   const option = text(context.optionText) || "This option";
-  const correct = text(context.correctOptionText) || "the priority answer";
+  const correct = text(context.correctOptionText) || "the supported answer";
   const principle = inferPrinciple(context.stem);
-  return `${option} can seem reasonable, but it is lower priority than ${correct}. Choosing it first could delay the action tied to the most urgent safety cue in the stem. ${principle}`;
+  return `${option} can seem reasonable, but the stem supports ${correct} more directly. Choosing it first could delay the assessment, monitoring, or intervention linked to the client's specific risk pattern. ${principle}`;
 }

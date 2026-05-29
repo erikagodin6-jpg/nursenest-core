@@ -3537,7 +3537,7 @@ export function PracticeTestRunnerClient({
     ),
     missingDistractorFallback: tx(
       "learner.practiceTests.run.rationaleMissingDistractorFallback",
-      "This choice may look plausible, but it is lower priority than the correct answer. Use the stem cues to choose the option that protects safety, addresses the most urgent change, or gives the nurse the assessment data needed before acting.",
+      "This choice may look plausible, but the stem does not provide the assessment finding, clinical threshold, or timing cue needed to support it over the correct answer.",
     ),
   };
 

@@ -21,6 +21,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   BarChart3,
   BookOpen,
+  Brain,
   Check,
   ClipboardCheck,
   Crosshair,
@@ -37,6 +38,7 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
+import { SI_CONV_MARKETING } from "@/lib/marketing/si-conv-clinical-reasoning";
 
 const SURFACE = "var(--semantic-surface)";
 const SURFACE_ELEVATED = "color-mix(in srgb, var(--palette-primary) 4%, var(--semantic-surface))";
@@ -349,6 +351,25 @@ export function FeatureComparisonTable() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div
+        className="mt-4 rounded-2xl border p-4"
+        style={{
+          borderColor: `color-mix(in srgb, var(--semantic-brand) 20%, ${BORDER})`,
+          background: `color-mix(in srgb, var(--semantic-brand) 5%, ${SURFACE})`,
+        }}
+      >
+        <div className="flex gap-3">
+          <Brain className="mt-0.5 h-5 w-5 shrink-0" style={{ color: "var(--semantic-brand)" }} aria-hidden />
+          <div>
+            <p className="text-sm font-bold" style={{ color: TEXT_PRIMARY }}>
+              Feature comparison: {SI_CONV_MARKETING.shortLabel}
+            </p>
+            <p className="mt-1 text-sm leading-6" style={{ color: TEXT_SECONDARY }}>
+              Included for RN, RPN/PN, NP, Allied Health, RT, and New Grad supported questions. SI/CONV helps learners move from answer checking to nursing clinical judgment by naming the patient situation, important cues, likely issue, and reasoning behind the answer.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

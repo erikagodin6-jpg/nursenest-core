@@ -28,8 +28,16 @@ const DEFAULT_SCAN_ROOTS = [
   "src/content/questions",
   "src/content/flashcards",
   "src/content/cases",
+  "src/components/exam",
+  "src/components/flashcards",
+  "src/components/student",
+  "src/components/study",
   "src/lib/ecg-module",
+  "src/lib/flashcards",
+  "src/lib/questions",
   "src/lib/pre-nursing",
+  "scripts/bowtie-starter-batch-data.ts",
+  "scripts/maternal-newborn-expansion-defs-b.mjs",
   "prisma/seed.ts",
 ];
 
@@ -43,7 +51,9 @@ function listFiles(scanRoots: string[]): string[] {
       .split(/\r?\n/)
       .map((s) => s.trim())
       .filter(Boolean)
-      .filter((file) => /\.(ts|tsx|json|md|mts)$/.test(file));
+      .filter((file) => /\.(ts|tsx|json|md|mts)$/.test(file))
+      .filter((file) => !/\.(test|spec)\.(ts|tsx|mts)$/.test(file))
+      .filter((file) => !file.includes("/__tests__/"));
   } catch {
     return [];
   }
@@ -131,10 +141,22 @@ function inferStem(source: string, index: number): string {
   return findNearbyValue(before, "stem") || findNearbyValue(before, "questionStem") || findNearbyValue(before, "question");
 }
 
+function templateExpressionLabel(expression: string): string {
+  const compact = expression.replace(/\s+/g, " ").trim();
+  if (/condition/i.test(compact)) return "scenario-specific condition";
+  if (/concerningCue|cue/i.test(compact)) return "scenario-specific cue";
+  if (/expectedFinding|baseline/i.test(compact)) return "expected baseline finding";
+  if (/priorityAction|action|intervention/i.test(compact)) return "scenario-specific intervention";
+  if (/monitor/i.test(compact)) return "scenario-specific monitoring";
+  if (/correct/i.test(compact)) return "correct answer";
+  if (/option|choice/i.test(compact)) return "answer option";
+  return "item-specific detail";
+}
+
 function cleanLiteral(raw: string): string {
   return raw
     .replace(/\\n/g, " ")
-    .replace(/\$\{[^}]+\}/g, " ")
+    .replace(/\$\{([^}]+)\}/g, (_match, expression: string) => templateExpressionLabel(expression))
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -172,7 +194,7 @@ function buildMarkdown(records: AuditRecord[]): string {
     "",
     "## Scope",
     "",
-    "Static source-backed audit of question, flashcard, case, ECG, pre-nursing, and seed content. Database-backed production rows should be audited with `npm run audit:exam-bank` and `npx tsx scripts/audit-flashcard-content-quality.ts` against the target database.",
+    "Static source-backed audit of question, flashcard, case, ECG, pre-nursing, learner rationale fallbacks, and seed content. Template literals are reported with item-specific placeholders so generated content can be reviewed without erasing scenario variables. Database-backed production rows should be audited with `npm run audit:exam-bank` and `npx tsx scripts/audit-flashcard-content-quality.ts` against the target database.",
     "",
     "## Summary",
     "",
@@ -205,6 +227,14 @@ function buildMarkdown(records: AuditRecord[]): string {
     "- Exam tips must name the relevant exam or question type and the specific reasoning trap.",
     "- Memory hooks must be short, accurate, and memorable.",
     "- SI/CONV explanations must identify the situation cue, clinical overview, and nursing verification for the actual item.",
+    "",
+    "## Before / After Examples Applied",
+    "",
+    "| Surface | Before | After |",
+    "| --- | --- | --- |",
+    "| Practice/CAT distractor fallback | This choice may look plausible, but it is lower priority than the correct answer. | This choice may look plausible, but the stem does not provide the assessment finding, clinical threshold, or timing cue needed to support it over the correct answer. |",
+    "| Flashcard memory hook fallback | Safety first, then reassess: protect the client before lower-priority care. | Cue, action, reassess: connect the stem finding to the next nursing step. |",
+    "| Shared distractor generator | This option can seem reasonable, but it is lower priority than the correct answer. | This option can seem reasonable, but the stem supports the correct answer more directly and the distractor misses the client-specific risk pattern. |",
     "",
   ];
 

@@ -307,7 +307,7 @@ export function evaluatePremiumContentDepth(input: PremiumContentDepthInput): Pr
       code: "MISSING_BEDSIDE_AMBIGUITY",
       severity: "warning",
       message: "Content does not reflect realistic bedside ambiguity.",
-      remediation: "Name why an incorrect option is tempting and what subtle flaw makes it less safe or less appropriate.",
+      remediation: "Name why an incorrect option is tempting and what specific stem detail, threshold, or scope rule makes it wrong.",
     });
   }
 

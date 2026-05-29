@@ -148,7 +148,7 @@ function LessonPreview() {
                   <h3 className="font-bold text-[var(--preview-text)]">{item.label}</h3>
                 </div>
                 <ul className="mt-4 space-y-2 text-sm leading-6 text-[var(--preview-muted)]">
-                  <li>Recognize priority cues before selecting an intervention.</li>
+                  <li>Recognize the assessment finding that changes the intervention.</li>
                   <li>Connect bedside assessment to exam-style judgment.</li>
                   <li>Use trend-based escalation rather than isolated numbers.</li>
                 </ul>
@@ -206,7 +206,7 @@ function DashboardPreview({ kind }: { kind: PreviewKind }) {
             <Pill tone="blue">Actionable</Pill>
           </div>
           <div className="mt-5 space-y-3">
-            {["Review cardiac priority cues", "Complete mixed practice set", "Reinforce missed pharmacology cards", "Check readiness trend"].map((item, index) => (
+            {["Review cardiac assessment findings", "Complete mixed practice set", "Reinforce missed pharmacology cards", "Check readiness trend"].map((item, index) => (
               <div key={item} className="flex items-center justify-between rounded-2xl border border-[var(--preview-border)] bg-[var(--preview-elevated)] p-4">
                 <div className="flex items-center gap-3">
                   <span className="grid h-9 w-9 place-items-center rounded-2xl bg-[var(--preview-accent-soft)] font-bold text-[var(--preview-accent)]">{index + 1}</span>

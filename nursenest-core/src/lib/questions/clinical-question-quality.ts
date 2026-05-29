@@ -205,7 +205,7 @@ export function evaluateClinicalQuestionQuality(
       field: "rationale",
       message: "Rationale is generic or placeholder-like instead of teaching the exam thought process.",
       remediation:
-        "Explain the correct answer, the clinical cue that makes it a priority, why alternatives are unsafe or lower priority, and the transferable nursing principle.",
+        "Explain the correct answer, the stem-specific clinical cue, why alternatives are unsafe or unsupported, and the transferable nursing principle.",
     });
   }
 

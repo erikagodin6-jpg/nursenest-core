@@ -163,7 +163,7 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
     return {
       ok: false,
       code: "flashcard_guardrail_rn_np_distractor_rationale",
-      error: "RN/NP exam-style cards need a concise teaching rationale for each distractor (unsafe, delayed, or lower-priority option).",
+      error: "RN/NP exam-style cards need a concise teaching rationale for each distractor, including the misconception and the stem detail it fails to address.",
     };
   }
   const genericDistractor = exam.rationaleIncorrect.find((d) => isGenericRationaleText(d.rationale));
@@ -171,7 +171,7 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
     return {
       ok: false,
       code: "flashcard_guardrail_rn_np_distractor_rationale_quality",
-      error: `Distractor rationale for option ${genericDistractor.letter} is vague or placeholder-like. Explain why it is unsafe, delayed, or lower priority.`,
+      error: `Distractor rationale for option ${genericDistractor.letter} is vague or placeholder-like. Explain why it is tempting, what stem detail it misses, and what clinical misconception it represents.`,
     };
   }
   return { ok: true };

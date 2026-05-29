@@ -104,6 +104,19 @@ Items are original—they are not leaked test questions. They are written to mat
 
 Every scored item includes a teaching rationale: why the best option is safest under the clinical framework, and why each distractor fails. The goal is transferable judgment you can apply to the next item, not memorizing a single letter pattern.
 
+## What Is SI/CONV?
+
+SI/CONV is NurseNest's structured clinical reasoning framework.
+
+Instead of simply showing whether an answer is right or wrong, SI/CONV helps learners understand:
+
+- What cues were important
+- What clinical problem was occurring
+- Why a particular intervention was prioritized
+- How experienced nurses think through patient situations
+
+SI/CONV stands for **Situation Identification** plus **Clinical Overview and Nursing Verification**. It is available on supported questions throughout the platform, including practice questions, CAT-style review, flashcards, simulations, and clinical judgment activities where the item supports deeper reasoning.
+
 ## Is the NurseNest Platform Reliable While I Study?
 
 Your progress is stored with your account; access to premium content is checked on the server so your tier and pathway stay enforced. Paid checkout runs through Stripe. If you hit a technical issue, email support@nursenest.ca (please allow up to 4 business days for a response)—we treat study-time stability as core to the product.

@@ -42,15 +42,17 @@ export const CONTENT_QUALITY_THRESHOLD = 72;
 export const CONTENT_QUALITY_CRITICAL_THRESHOLD = 50;
 
 export const GENERIC_CONTENT_PATTERNS: readonly { id: string; re: RegExp; severity: ContentQualityIssue["severity"] }[] = [
+  { id: "priority_cue", re: /\bpriority\s+cues?\b/i, severity: "high" },
   { id: "responds_priority_cue", re: /\bresponds?\s+to\s+the\s+priority\s+cue\b/i, severity: "critical" },
   { id: "clinical_reasoning_is", re: /\bthe\s+clinical\s+reasoning\s+is\b/i, severity: "critical" },
   { id: "choose_the_action", re: /\bchoose\s+the\s+action\b/i, severity: "high" },
-  { id: "guides_safe_escalation", re: /\bguides?\s+safe\s+escalation\b/i, severity: "high" },
+  { id: "safe_escalation", re: /\bsafe\s+escalation\b/i, severity: "high" },
   { id: "supports_safe_care", re: /\bsupports?\s+safe\s+care\b/i, severity: "medium" },
   { id: "using_nursing_process", re: /\busing\s+the\s+nursing\s+process\b/i, severity: "high" },
   { id: "use_nursing_process", re: /\buse\s+the\s+nursing\s+process\b/i, severity: "high" },
   { id: "identify_priority", re: /\bidentify\s+the\s+priority\b/i, severity: "medium" },
   { id: "most_urgent_cue", re: /\bmost\s+urgent\s+cue\b/i, severity: "high" },
+  { id: "lower_priority", re: /\blower[-\s]+priority\b/i, severity: "high" },
   { id: "not_best_answer", re: /\bnot\s+the\s+best\s+answer\b/i, severity: "critical" },
   { id: "less_appropriate", re: /\bless\s+appropriate\b/i, severity: "critical" },
   { id: "not_priority", re: /\bnot\s+priority\b/i, severity: "critical" },

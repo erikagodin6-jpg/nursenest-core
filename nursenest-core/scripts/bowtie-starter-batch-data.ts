@@ -382,11 +382,11 @@ function makeItem(config: TierConfig, index: number): BowtieQuestionBankBulkItem
     labs: labSet(bodySystem, index),
     bank: [
       { id: condition, label: pattern.condition },
-      { id: distractorA, label: pattern.alternateCondition, rationale: "This option does not explain the priority change." },
+      { id: distractorA, label: pattern.alternateCondition, rationale: "This option does not explain the assessment trend described in the stem." },
       { id: intervention, label: pattern.action },
-      { id: distractorB, label: pattern.unsafeAction, rationale: "This response delays or worsens care for the priority cue." },
+      { id: distractorB, label: pattern.unsafeAction, rationale: "This response delays or worsens care for the client's changing assessment findings." },
       { id: monitoring, label: pattern.monitor },
-      { id: distractorC, label: pattern.unrelatedMonitor, rationale: "This does not confirm response to the priority intervention." },
+      { id: distractorC, label: pattern.unrelatedMonitor, rationale: "This does not confirm response to the selected clinical intervention." },
     ],
     slotLabels: {
       condition: "Condition/problem",
@@ -396,12 +396,12 @@ function makeItem(config: TierConfig, index: number): BowtieQuestionBankBulkItem
     correctMapping: { condition, intervention, monitoring },
     correctRationales: {
       condition: `The cue pattern is most consistent with ${pattern.condition.toLowerCase()}.`,
-      intervention: `${pattern.action} directly addresses the priority while staying aligned with ${config.pathwayLabel} scope.`,
+      intervention: `${pattern.action} directly addresses the stem findings while staying aligned with ${config.pathwayLabel} scope.`,
       monitoring: `${pattern.monitor} evaluates whether the selected action is working.`,
     },
     distractorRationales: {
-      [distractorA]: "This is plausible but not the best explanation for the priority cue.",
-      [distractorB]: "Delaying action is unsafe when the client has a changing priority finding.",
+      [distractorA]: "This is plausible but does not account for the assessment trend in the stem.",
+      [distractorB]: "Delaying action is unsafe when the client has a changing clinical finding.",
       [distractorC]: "This does not measure the outcome tied to the clinical problem.",
     },
   };

@@ -567,7 +567,7 @@ const SCENARIOS: readonly Scenario[] = [
         "Only the patient should activate patient-controlled analgesia; family activation is a serious safety risk.",
     },
     hints: [
-      "The respiratory rate and arousal level are the priority cues.",
+      "The respiratory rate and arousal level show opioid-related ventilatory depression.",
       "Oxygen saturation may improve temporarily while ventilation remains inadequate.",
       "Choose the action that stops medication exposure and supports breathing.",
     ],

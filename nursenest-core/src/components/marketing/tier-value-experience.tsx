@@ -9,6 +9,7 @@ import {
   BookOpen,
   Brain,
   ClipboardCheck,
+  CheckCircle2,
   Target,
 } from "lucide-react";
 import {
@@ -17,6 +18,7 @@ import {
   type TierValueKey,
   type TierValueStageKey,
 } from "@/lib/marketing/tier-value-experience";
+import { SI_CONV_MARKETING } from "@/lib/marketing/si-conv-clinical-reasoning";
 
 const STAGE_ICONS: Record<TierValueStageKey, typeof BookOpen> = {
   learn: BookOpen,
@@ -115,6 +117,30 @@ export function TierValueExperience({
               </button>
             );
           })}
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+              {SI_CONV_MARKETING.whatYouGetTitle}
+            </p>
+            <h3 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">
+              {SI_CONV_MARKETING.whatYouGetLead}
+            </h3>
+            <p className="mt-2 text-sm leading-7 text-[var(--semantic-text-secondary)]">
+              {SI_CONV_MARKETING.shortBenefit}
+            </p>
+          </div>
+          <ul className="grid gap-2 text-sm text-[var(--semantic-text-secondary)] sm:grid-cols-2 lg:max-w-md">
+            {SI_CONV_MARKETING.whatYouGetBullets.map((item) => (
+              <li key={item} className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 

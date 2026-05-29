@@ -402,7 +402,7 @@ export function evaluateDistractorOptimization(
         severity: "warning",
         optionId: distractor.id,
         message: "Distractor rationale is too generic to teach clinical reasoning.",
-        remediation: "Name the misconception, cue, or safety issue that makes the option less appropriate.",
+        remediation: "Name the misconception, stem cue, or safety issue that makes the option wrong for this specific question.",
       });
     }
   }

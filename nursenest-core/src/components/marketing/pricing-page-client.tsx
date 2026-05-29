@@ -74,6 +74,10 @@ import { PricingSubscriptionFaq } from "@/components/marketing/pricing-subscript
 import { PricingHero } from "@/components/marketing/pricing-hero";
 import { PricingTierScopePanel } from "@/components/marketing/pricing-tier-scope-panel";
 import {
+  SiConvMarketingExplainer,
+  SiConvPricingFeatureDisclosure,
+} from "@/components/marketing/si-conv-clinical-reasoning-support";
+import {
   ValuePropsStrip,
   FeatureComparisonTable,
   PricingFeaturesGrid,
@@ -1707,6 +1711,8 @@ export function PricingPageClient({
                         ))}
                       </ul>
 
+                      <SiConvPricingFeatureDisclosure />
+
                       <button
                         type="button"
                         data-testid={`pricing-checkout-${duration}`}
@@ -1994,6 +2000,8 @@ export function PricingPageClient({
       <PricingReliabilityFaq />
 
       <PricingLearnerFaq />
+
+      <SiConvMarketingExplainer />
 
       <PricingSubscriptionFaq />
 

@@ -400,9 +400,9 @@ function PathwayShowcase() {
               })}
             </div>
 
-            {/* NCLEX priority cue */}
+            {/* NCLEX assessment cue */}
             <div className="mt-4 rounded-2xl border border-[var(--preview-border)] bg-[var(--preview-surface)]/80 p-3">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--preview-muted)]">NCLEX Priority Cue</p>
+              <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--preview-muted)]">NCLEX Assessment Cue</p>
               <p className="mt-1 text-sm font-semibold text-[var(--preview-text)]">
                 "Which client should the nurse assess first?" — systems reasoning, not isolated facts.
               </p>

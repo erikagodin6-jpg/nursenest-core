@@ -139,10 +139,10 @@ function buildMemoryHookForMcq(text: string, exam?: ExamMicroQuestionPayload | n
     if (/\b(delegate|assignment|uap|psw|assistive personnel|scope)\b/.test(stem)) return "Stable and predictable can be delegated; assessment and teaching stay with the nurse.";
     if (/\b(medication|dose|administer|insulin|warfarin|heparin|opioid|digoxin)\b/.test(stem)) return "Before giving a drug, check the risk cue that could make the medication unsafe.";
   }
-  if (!clean) return "Safety first, then reassess: protect the client before lower-priority care.";
+  if (!clean) return "Cue, action, reassess: connect the stem finding to the next nursing step.";
   const sentences = clean.match(/[^.!?]+[.!?]+/g) ?? [];
   const hook = sentences.slice(0, 2).join(" ").trim();
-  return hook.length > 20 ? hook : "Safety first, then reassess: protect the client before lower-priority care.";
+  return hook.length > 20 ? hook : "Cue, action, reassess: connect the stem finding to the next nursing step.";
 }
 
 type StackLabels = {
