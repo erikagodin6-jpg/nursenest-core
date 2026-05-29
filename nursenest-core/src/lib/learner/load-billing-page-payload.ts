@@ -33,6 +33,7 @@ import {
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 import { ALLIED_CAREER_DISPLAY_NAMES, type AlliedCareerKey } from "@/lib/pricing/display-catalog";
 import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
+import { listManagedBillingPlans, type ManagedBillingPlan } from "@/lib/billing/subscription-management";
 
 export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 
@@ -43,6 +44,9 @@ export type StripeRenewalSnapshot = {
   trialEnd: Date | null;
   cancelAtPeriodEnd: boolean;
   paymentMethodSummary: StripePaymentMethodSummary | null;
+  nextInvoiceAmountDue: number | null;
+  nextInvoiceCurrency: string | null;
+  invoices: StripeInvoiceSummary[];
 };
 
 export type StripePaymentMethodSummary = {
@@ -50,6 +54,17 @@ export type StripePaymentMethodSummary = {
   last4: string | null;
   expMonth: number | null;
   expYear: number | null;
+};
+
+export type StripeInvoiceSummary = {
+  id: string;
+  created: Date | null;
+  amountPaid: number | null;
+  amountDue: number | null;
+  currency: string | null;
+  status: string | null;
+  hostedInvoiceUrl: string | null;
+  invoicePdf: string | null;
 };
 
 export type BillingPagePayload = {
@@ -74,6 +89,7 @@ export type BillingPagePayload = {
   pastDueGraceEndsAt: Date | null;
   /** Best-effort current period end (Stripe API, else DB) for “access until” copy. */
   billingPeriodEndDisplay: Date | null;
+  managedBillingPlans: ManagedBillingPlan[];
   /** Allied Health only — selected profession display + lock after subscription (support overrides excluded). */
   alliedProfessionSummary: {
     displayLabel: string | null;
@@ -138,6 +154,9 @@ function stripeRenewalSnapshotFromSubscription(sub: Stripe.Subscription): Stripe
     trialEnd,
     cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
     paymentMethodSummary: paymentMethodSummaryFromSubscription(sub),
+    nextInvoiceAmountDue: null,
+    nextInvoiceCurrency: null,
+    invoices: [],
   };
 }
 
@@ -148,7 +167,31 @@ async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | u
     const stripe = await getStripeClient();
     if (!stripe) return null;
     const sub = await stripe.subscriptions.retrieve(sid, { expand: ["default_payment_method"] });
-    return stripeRenewalSnapshotFromSubscription(sub);
+    const snapshot = stripeRenewalSnapshotFromSubscription(sub);
+    const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+    const [preview, invoices] = await Promise.all([
+      stripe.invoices.createPreview({ customer: customerId, subscription: sid }).catch(() => null),
+      stripe.invoices.list({ customer: customerId, subscription: sid, limit: 5 }).catch(() => null),
+    ]);
+    return {
+      ...snapshot,
+      nextInvoiceAmountDue: typeof preview?.amount_due === "number" ? preview.amount_due : null,
+      nextInvoiceCurrency: typeof preview?.currency === "string" ? preview.currency : null,
+      invoices:
+        invoices?.data.map((invoice) => ({
+          id: invoice.id ?? "",
+          created:
+            typeof invoice.created === "number" && invoice.created > 0
+              ? new Date(invoice.created * 1000)
+              : null,
+          amountPaid: typeof invoice.amount_paid === "number" ? invoice.amount_paid : null,
+          amountDue: typeof invoice.amount_due === "number" ? invoice.amount_due : null,
+          currency: typeof invoice.currency === "string" ? invoice.currency : null,
+          status: invoice.status ?? null,
+          hostedInvoiceUrl: invoice.hosted_invoice_url ?? null,
+          invoicePdf: invoice.invoice_pdf ?? null,
+        })) ?? [],
+    };
   } catch {
     return null;
   }
@@ -259,6 +302,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         status: subscriptionRow.status,
         stripeSubscriptionId: subscriptionRow.stripeSubscriptionId,
         stripeCustomerId: subscriptionRow.stripeCustomerId,
+        planCode: subscriptionRow.planCode,
         planTier: subscriptionRow.planTier,
         planCountry: subscriptionRow.planCountry,
         alliedCareer: subscriptionRow.alliedCareer ?? null,
@@ -338,6 +382,9 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       trialEnd: subscriptionRow.trialEnd,
       cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
       paymentMethodSummary: null,
+      nextInvoiceAmountDue: null,
+      nextInvoiceCurrency: null,
+      invoices: [],
     };
   }
   if (stripeRenewal && !stripeRenewal.paymentMethodSummary && subscription?.stripeSubscriptionId) {
@@ -346,6 +393,9 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       stripeRenewal = {
         ...stripeRenewal,
         paymentMethodSummary: expandedRenewal.paymentMethodSummary,
+        nextInvoiceAmountDue: stripeRenewal.nextInvoiceAmountDue ?? expandedRenewal.nextInvoiceAmountDue,
+        nextInvoiceCurrency: stripeRenewal.nextInvoiceCurrency ?? expandedRenewal.nextInvoiceCurrency,
+        invoices: stripeRenewal.invoices.length > 0 ? stripeRenewal.invoices : expandedRenewal.invoices,
       };
     }
   }
@@ -444,6 +494,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     showTrialEndCallout,
     pastDueGraceEndsAt,
     billingPeriodEndDisplay,
+    managedBillingPlans: qaStaffSim ? [] : listManagedBillingPlans(),
     alliedProfessionSummary,
   };
 }

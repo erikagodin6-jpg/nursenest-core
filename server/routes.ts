@@ -1013,6 +1013,11 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   const { registerAnalyticsEventsRoutes } = await import("./analytics-events-routes");
   registerAnalyticsEventsRoutes(app);
 
+  // Phase 8 — RUM ingest (registered early so learner pages can POST metrics immediately)
+  const { registerRumRoutes, ensureRumTables } = await import("./rum-routes");
+  ensureRumTables().catch(e => console.warn("[RUM] Table init:", e.message));
+  registerRumRoutes(app);
+
   const { registerProfessionPracticeQuestionsRoutes } = await import("./profession-practice-questions-routes");
   registerProfessionPracticeQuestionsRoutes(app);
 

@@ -20,7 +20,7 @@
  */
 
 import { useEffect, useState, useCallback } from "react";
-import type { OpsCenterSnapshot, SystemHealthLevel } from "@/lib/observability/ops-center";
+import type { OpsCenterSnapshot, OpsTrafficLight, SystemHealthLevel } from "@/lib/observability/ops-center";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -49,6 +49,24 @@ const STATUS_ICON: Record<SystemHealthLevel, string> = {
   critical: "✗",
 };
 
+const TRAFFIC_LABEL: Record<OpsTrafficLight, string> = {
+  green: "healthy",
+  yellow: "degraded",
+  red: "failing",
+};
+
+const TRAFFIC_CLASS: Record<OpsTrafficLight, string> = {
+  green: "text-[#16a34a] bg-[color-mix(in_srgb,#16a34a_12%,transparent)]",
+  yellow: "text-[#d97706] bg-[color-mix(in_srgb,#d97706_12%,transparent)]",
+  red: "text-[#dc2626] bg-[color-mix(in_srgb,#dc2626_14%,transparent)]",
+};
+
+const TRAFFIC_DOT: Record<OpsTrafficLight, string> = {
+  green: "●",
+  yellow: "●",
+  red: "●",
+};
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function StatusPill({ level, label }: { level: SystemHealthLevel; label: string }) {
@@ -58,6 +76,15 @@ function StatusPill({ level, label }: { level: SystemHealthLevel; label: string 
     >
       <span aria-hidden>{STATUS_ICON[level]}</span>
       {label}
+    </span>
+  );
+}
+
+function TrafficPill({ status, label }: { status: OpsTrafficLight; label?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${TRAFFIC_CLASS[status]}`}>
+      <span aria-hidden>{TRAFFIC_DOT[status]}</span>
+      {label ?? TRAFFIC_LABEL[status]}
     </span>
   );
 }
@@ -118,25 +145,61 @@ function MetricRow({ label, value, sub }: { label: string; value: string | numbe
   );
 }
 
-function FeatureGrid({
-  features,
-}: {
-  features: Array<{ label: string; status: SystemHealthLevel; score: number }>;
-}) {
+function DrilldownList({ items }: { items: OpsCenterSnapshot["infrastructure"]["drilldown"] }) {
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-      {features.map((f) => (
-        <div
-          key={f.label}
-          className={`flex flex-col gap-1 rounded-xl border border-[var(--semantic-border-soft)] p-3 ${STATUS_BG[f.status]}`}
+    <div className="space-y-2">
+      {items.map((item) => (
+        <details
+          key={item.label}
+          className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,transparent)] p-3"
         >
-          <span className={`text-xs font-semibold ${STATUS_COLOR[f.status]}`}>
-            {STATUS_ICON[f.status]} {f.label}
-          </span>
-          <span className={`text-lg font-black tabular-nums ${STATUS_COLOR[f.status]}`}>
-            {f.score}
-          </span>
-        </div>
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm">
+            <span className="font-semibold text-[var(--semantic-text-primary)]">{item.label}</span>
+            <span className="flex shrink-0 items-center gap-2">
+              <span className="text-xs tabular-nums text-[var(--semantic-text-muted)]">{item.value}</span>
+              <TrafficPill status={item.status} />
+            </span>
+          </summary>
+          <div className="mt-2 text-xs text-[var(--semantic-text-muted)]">
+            {item.detail ?? "No additional detail reported."}
+            {item.href ? (
+              <a className="ml-2 font-semibold text-[var(--semantic-brand)] underline" href={item.href}>
+                Open
+              </a>
+            ) : null}
+          </div>
+        </details>
+      ))}
+    </div>
+  );
+}
+
+function LearningActivityGrid({ activities }: { activities: OpsCenterSnapshot["learningActivities"] }) {
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {activities.map((activity) => (
+        <details
+          key={activity.key}
+          className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm"
+        >
+          <summary className="flex cursor-pointer list-none items-start justify-between gap-3">
+            <div>
+              <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{activity.label}</p>
+              <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+                p95 {activity.startupP95Ms == null ? "no samples" : `${activity.startupP95Ms}ms`} / {activity.startupBudgetMs}ms
+              </p>
+            </div>
+            <TrafficPill status={activity.status} />
+          </summary>
+          <div className="mt-3 space-y-2 border-t border-[var(--semantic-border-soft)] pt-3 text-xs text-[var(--semantic-text-muted)]">
+            <MetricRow label="Health score" value={activity.score} sub="/100" />
+            <MetricRow label="Startup samples" value={activity.sampleCount} />
+            <p>{activity.detail}</p>
+            <a className="font-semibold text-[var(--semantic-brand)] underline" href={activity.href}>
+              Open subsystem
+            </a>
+          </div>
+        </details>
       ))}
     </div>
   );
@@ -201,8 +264,8 @@ export function OpsCenterDashboard() {
 
   useEffect(() => {
     fetchSnapshot();
-    // Auto-refresh every 60 seconds
-    const interval = setInterval(fetchSnapshot, 60_000);
+    // Admin operations view refreshes frequently enough to show failures without forcing a live socket.
+    const interval = setInterval(fetchSnapshot, 15_000);
     return () => clearInterval(interval);
   }, [fetchSnapshot]);
 
@@ -232,24 +295,8 @@ export function OpsCenterDashboard() {
     );
   }
 
-  const { systemHealth, learnerHealth, featureHealth, performanceHealth,
-          remediationHealth, frictionHealth, timeToLearning, alerts } = snapshot;
-
-  // Build feature list for the grid (placeholder — in production, featureReports come from API)
-  const featureList = [
-    { label: "Dashboard", status: learnerHealth.level, score: learnerHealth.overallScore },
-    { label: "Questions", status: featureHealth.criticalFeatures.includes("Practice Questions") ? "critical" as const : "healthy" as const, score: 90 },
-    { label: "Flashcards", status: "healthy" as const, score: 95 },
-    { label: "Lessons", status: "healthy" as const, score: 88 },
-    { label: "Clinical Skills", status: "healthy" as const, score: 92 },
-    { label: "Pharmacology", status: "healthy" as const, score: 91 },
-    { label: "ECG", status: "healthy" as const, score: 87 },
-    { label: "CAT Exam", status: "healthy" as const, score: 85 },
-    { label: "LOFT", status: "healthy" as const, score: 83 },
-    { label: "Analytics", status: "healthy" as const, score: 89 },
-    { label: "Readiness", status: "healthy" as const, score: 90 },
-    { label: "Study Plan", status: "healthy" as const, score: 93 },
-  ];
+  const { infrastructure, systemHealth, learnerHealth, featureHealth, performanceHealth,
+          remediationHealth, frictionHealth, timeToLearning, alerts, users, learningActivities } = snapshot;
 
   return (
     <div className="space-y-6">
@@ -264,7 +311,7 @@ export function OpsCenterDashboard() {
           </h1>
           {lastRefresh && (
             <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
-              Last updated: {lastRefresh} · Auto-refreshes every 60s
+              Last updated: {lastRefresh} · Auto-refreshes every 15s
             </p>
           )}
         </div>
@@ -284,10 +331,10 @@ export function OpsCenterDashboard() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
         {[
           { label: "System", score: systemHealth.score, level: systemHealth.level },
+          { label: "Infra", score: infrastructure.status === "green" ? 100 : infrastructure.status === "yellow" ? 75 : 30, level: infrastructure.status === "green" ? "healthy" as const : infrastructure.status === "yellow" ? "watch" as const : "critical" as const },
           { label: "Learners", score: learnerHealth.overallScore, level: learnerHealth.level },
           { label: "Features", score: Math.round(100 - featureHealth.criticalCount * 15 - featureHealth.degradedCount * 8), level: featureHealth.level },
           { label: "Performance", score: performanceHealth.poolUtilization != null ? 100 - performanceHealth.poolUtilization : 100, level: performanceHealth.level },
-          { label: "Friction", score: Math.max(0, 100 - frictionHealth.criticalFrustrationSessions * 10 - frictionHealth.highFrustrationSessions * 3), level: frictionHealth.level },
           { label: "TTL", score: timeToLearning.journeysTotal > 0 ? Math.round((timeToLearning.journeysOnTarget / timeToLearning.journeysTotal) * 100) : 100, level: timeToLearning.level },
         ].map((kpi) => (
           <div
@@ -307,6 +354,44 @@ export function OpsCenterDashboard() {
           <AlertFeed alerts={alerts} />
         </SectionCard>
       )}
+
+      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <SectionCard title="Infrastructure" status={infrastructure.status === "green" ? "healthy" : infrastructure.status === "yellow" ? "watch" : "critical"}>
+          <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] p-3">
+              <p className="text-[11px] font-semibold uppercase text-[var(--semantic-text-muted)]">Uptime</p>
+              <p className="mt-1 text-lg font-black tabular-nums text-[var(--semantic-text-primary)]">
+                {Math.floor(infrastructure.uptimeSeconds / 3600)}h {Math.floor((infrastructure.uptimeSeconds % 3600) / 60)}m
+              </p>
+            </div>
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] p-3">
+              <p className="text-[11px] font-semibold uppercase text-[var(--semantic-text-muted)]">Version</p>
+              <p className="mt-1 truncate text-sm font-bold text-[var(--semantic-text-primary)]">{infrastructure.deploymentVersion}</p>
+            </div>
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] p-3">
+              <p className="text-[11px] font-semibold uppercase text-[var(--semantic-text-muted)]">Environment</p>
+              <p className="mt-1 text-sm font-bold text-[var(--semantic-text-primary)]">{infrastructure.environment}</p>
+            </div>
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] p-3">
+              <p className="text-[11px] font-semibold uppercase text-[var(--semantic-text-muted)]">Database</p>
+              <p className="mt-1 text-sm font-bold text-[var(--semantic-text-primary)]">{infrastructure.database}</p>
+            </div>
+          </div>
+          <DrilldownList items={infrastructure.drilldown} />
+        </SectionCard>
+
+        <SectionCard title="Users & Revenue Signals">
+          <MetricRow label="Active users" value={users.activeUsers ?? "—"} sub="15 min" />
+          <MetricRow label="Active study sessions" value={users.activeStudySessions ?? "—"} sub="15 min" />
+          <MetricRow label="Study sessions" value={users.studySessions24h ?? "—"} sub="24h" />
+          <MetricRow label="Active subscriptions" value={users.activeSubscriptions ?? "—"} />
+          <MetricRow label="Past-due subscriptions" value={users.pastDueSubscriptions ?? "—"} />
+        </SectionCard>
+      </div>
+
+      <SectionCard title="Learning Activities">
+        <LearningActivityGrid activities={learningActivities} />
+      </SectionCard>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {/* Learner health */}
@@ -345,6 +430,21 @@ export function OpsCenterDashboard() {
               Slow: {performanceHealth.slowActivities.join(", ")}
             </p>
           )}
+          <div className="mt-4 border-t border-[var(--semantic-border-soft)] pt-3">
+            <p className="mb-2 text-xs font-bold uppercase text-[var(--semantic-text-muted)]">Slowest routes</p>
+            {performanceHealth.slowestRoutes.length === 0 ? (
+              <p className="text-xs text-[var(--semantic-text-muted)]">No route latency samples yet.</p>
+            ) : (
+              performanceHealth.slowestRoutes.map((route) => (
+                <MetricRow
+                  key={route.route}
+                  label={route.label}
+                  value={route.p95Ms == null ? "—" : `${route.p95Ms}ms`}
+                  sub={`budget ${route.budgetMs}ms`}
+                />
+              ))
+            )}
+          </div>
         </SectionCard>
 
         {/* Remediation intelligence */}
@@ -374,7 +474,7 @@ export function OpsCenterDashboard() {
         </SectionCard>
       </div>
 
-      {/* Feature health grid */}
+      <div className="grid gap-6 lg:grid-cols-2">
       <SectionCard title="Feature Health" status={featureHealth.level}>
         <div className="mb-3 flex gap-4 text-xs text-[var(--semantic-text-muted)]">
           <span>
@@ -390,8 +490,38 @@ export function OpsCenterDashboard() {
             <span className="text-[#dc2626]">✗</span> Critical: {featureHealth.criticalCount}
           </span>
         </div>
-        <FeatureGrid features={featureList} />
+        {featureHealth.criticalFeatures.length > 0 ? (
+          <ul className="space-y-2 text-xs text-[#dc2626]">
+            {featureHealth.criticalFeatures.map((feature) => (
+              <li key={feature} className="rounded-xl bg-[color-mix(in_srgb,#dc2626_8%,transparent)] p-3">
+                {feature}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-xs text-[var(--semantic-text-muted)]">
+            Feature health engine reports no critical feature failures.
+          </p>
+        )}
       </SectionCard>
+
+      <SectionCard title="Slowest Queries">
+        {performanceHealth.slowestQueries.length === 0 ? (
+          <p className="text-xs text-[var(--semantic-text-muted)]">
+            No Prisma query samples captured in this process. Enable full query capture in non-production or inspect slow-query logs for production.
+          </p>
+        ) : (
+          performanceHealth.slowestQueries.map((query) => (
+            <MetricRow
+              key={`${query.fingerprint}:${query.durationMs}`}
+              label={query.fingerprint}
+              value={`${query.durationMs}ms`}
+              sub={`${query.approxSqlChars} chars`}
+            />
+          ))
+        )}
+      </SectionCard>
+      </div>
 
       {/* No-alerts confirmation */}
       {alerts.length === 0 && (

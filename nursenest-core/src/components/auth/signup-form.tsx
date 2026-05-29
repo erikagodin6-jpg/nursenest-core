@@ -90,6 +90,7 @@ export function SignupForm({
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
+  const referralCode = searchParams?.get("ref")?.trim() || searchParams?.get("friendCode")?.trim() || "";
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
   /** When the widget is shown, `/api/signup` may require a token (see `isTurnstileEnforced`). */
   const turnstileQaBypassActive =
@@ -172,6 +173,7 @@ export function SignupForm({
       studyGoal: String(formData.get("studyGoal") ?? ""),
       dailyStudyMinutes: Number(formData.get("dailyStudyMinutes") ?? 30),
       learnerPath: learnerPathRaw || undefined,
+      referralCode: referralCode || undefined,
       ...(captchaToken ? { captchaToken } : {}),
     };
 

@@ -47,6 +47,7 @@ import {
   persistStripeSubscriptionMirrorForUser,
   resolveUserIdForOrphanStripeSubscription,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
+import { markReferralSubscribed } from "@/lib/referrals/referral-rewards";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
@@ -657,6 +658,7 @@ export async function applyStripeWebhookEvent(
           tier: plan?.tier ? String(plan.tier) : undefined,
           source: "stripe_checkout_session_completed",
         });
+        void markReferralSubscribed(userId);
       }
       await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);
 

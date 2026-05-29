@@ -8,19 +8,36 @@ const read = (p: string) => fs.readFileSync(path.join(root, p), "utf8");
 
 test("ECG routes exist only in the strict mastery structure", () => {
   for (const route of [
-    "src/app/modules/ecg/basic/lessons/page.tsx",
-    "src/app/modules/ecg/basic/quizzes/page.tsx",
-    "src/app/modules/ecg/basic/worksheets/page.tsx",
-    "src/app/modules/ecg/advanced/lessons/page.tsx",
-    "src/app/modules/ecg/advanced/video-drills/page.tsx",
-    "src/app/modules/ecg/advanced/scenarios/page.tsx",
-    "src/app/modules/ecg/advanced/worksheets/page.tsx",
-    "src/app/modules/ecg-interpretation/lessons/page.tsx",
-    "src/app/modules/ecg-interpretation/practice/page.tsx",
-    "src/app/modules/ecg-interpretation/quiz/page.tsx",
+    "src/app/(app)/modules/ecg/basic/lessons/page.tsx",
+    "src/app/(app)/modules/ecg/basic/quizzes/page.tsx",
+    "src/app/(app)/modules/ecg/basic/worksheets/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/lessons/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/video-drills/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/scenarios/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/worksheets/page.tsx",
+    "src/app/(app)/modules/ecg-interpretation/lessons/page.tsx",
+    "src/app/(app)/modules/ecg-interpretation/practice/page.tsx",
+    "src/app/(app)/modules/ecg-interpretation/quiz/page.tsx",
   ]) {
     assert.equal(fs.existsSync(path.join(root, route)), true, `${route} should exist`);
   }
+});
+
+test("Advanced ECG route family is protected by the separate Advanced ECG add-on gate", () => {
+  for (const route of [
+    "src/app/(app)/modules/ecg/advanced/lessons/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/video-drills/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/scenarios/page.tsx",
+    "src/app/(app)/modules/ecg/advanced/worksheets/page.tsx",
+  ]) {
+    const source = read(route);
+    assert.match(source, /AdvancedEcgContentGate/, `${route} must render through AdvancedEcgContentGate`);
+  }
+
+  const gate = read("src/components/advanced-ecg/advanced-ecg-content-gate.tsx");
+  assert.match(gate, /loadAdvancedEcgAccess/);
+  assert.match(gate, /AdvancedEcgPremiumHub/);
+  assert.match(gate, /!access\.ok/);
 });
 
 test("ECG worksheet API reuses printable entitlement and download analytics path", () => {
@@ -84,8 +101,8 @@ test("ECG answer route records isolated ECG analytics instead of grading through
 });
 
 test("ECG learner layout uses dynamic robots metadata; legacy interpretation stays noindex nofollow", () => {
-  const layout = read("src/app/modules/ecg/layout.tsx");
-  const legacyLayout = read("src/app/modules/ecg-interpretation/layout.tsx");
+  const layout = read("src/app/(app)/modules/ecg/layout.tsx");
+  const legacyLayout = read("src/app/(app)/modules/ecg-interpretation/layout.tsx");
   const access = read("src/lib/ecg-module/ecg-module.server.ts");
   assert.match(layout, /index:\s*false/);
   assert.match(layout, /generateMetadata/);

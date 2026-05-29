@@ -181,6 +181,15 @@ model User {
   socialGroupsOwned                         SocialGroup[]                 @relation("SocialGroupOwner")
   socialGroupMemberships                    SocialGroupMembership[]
   socialStatSnapshots                       SocialStatSnapshot[]
+  referralCodes                             ReferralCode[]                 @relation("ReferralCodeOwner")
+  referralsSent                             ReferralAttribution[]          @relation("ReferralReferrer")
+  referralReceived                          ReferralAttribution?           @relation("ReferralReferred")
+  referralRewardRulesCreated                ReferralRewardRule[]           @relation("ReferralRewardRuleCreator")
+  referralRewardsGranted                    ReferralRewardGrant[]          @relation("ReferralRewardRecipient")
+  referralRewardsFromMyInvites              ReferralRewardGrant[]          @relation("ReferralRewardReferrer")
+  referralRewardsGrantedByAdmin             ReferralRewardGrant[]          @relation("ReferralRewardGrantedBy")
+  referralFraudSignals                      ReferralFraudSignal[]          @relation("ReferralFraudSubject")
+  referralFraudSignalsReviewed              ReferralFraudSignal[]          @relation("ReferralFraudReviewer")
   betaAccessCodesCreated                    BetaAccessCode[]              @relation("BetaAccessCodeCreator")
   betaAccessGrants                          BetaAccessGrant[]             @relation("BetaAccessGrantUser")
   betaAccessGrantsRevoked                   BetaAccessGrant[]             @relation("BetaAccessGrantRevoker")
@@ -2563,6 +2572,143 @@ model SocialStatSnapshot {
   @@map("social_stat_snapshots")
 }
 
+model ReferralCode {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  codeHash      String   @unique @map("code_hash") @db.VarChar(128)
+  displayCode   String   @unique @map("display_code") @db.VarChar(32)
+  referralLink  String?  @map("referral_link") @db.VarChar(512)
+  enabled       Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  disabledAt    DateTime? @map("disabled_at")
+  user          User     @relation("ReferralCodeOwner", fields: [userId], references: [id], onDelete: Cascade)
+  attributions  ReferralAttribution[]
+
+  @@index([userId, enabled])
+  @@index([enabled, createdAt])
+  @@map("referral_codes")
+}
+
+model ReferralAttribution {
+  id                    String                       @id @default(cuid())
+  referrerUserId        String                       @map("referrer_user_id")
+  referredUserId        String                       @unique @map("referred_user_id")
+  referralCodeId        String?                      @map("referral_code_id")
+  referralCodeDisplay   String                       @map("referral_code_display") @db.VarChar(32)
+  referralLink          String?                      @map("referral_link") @db.VarChar(512)
+  status                ReferralQualificationStatus  @default(ACCOUNT_CREATED)
+  emailVerifiedAt       DateTime?                    @map("email_verified_at")
+  onboardingCompletedAt DateTime?                    @map("onboarding_completed_at")
+  firstActivityAt       DateTime?                    @map("first_activity_at")
+  qualifiedAt           DateTime?                    @map("qualified_at")
+  firstSubscribedAt     DateTime?                    @map("first_subscribed_at")
+  rejectedAt            DateTime?                    @map("rejected_at")
+  rejectionReason       String?                      @map("rejection_reason") @db.VarChar(500)
+  signupIpHash          String?                      @map("signup_ip_hash") @db.VarChar(128)
+  deviceHash            String?                      @map("device_hash") @db.VarChar(128)
+  createdAt             DateTime                     @default(now()) @map("created_at")
+  updatedAt             DateTime                     @updatedAt @map("updated_at")
+  referrer              User                         @relation("ReferralReferrer", fields: [referrerUserId], references: [id], onDelete: Cascade)
+  referred              User                         @relation("ReferralReferred", fields: [referredUserId], references: [id], onDelete: Cascade)
+  referralCode          ReferralCode?                @relation(fields: [referralCodeId], references: [id], onDelete: SetNull)
+  rewardGrants          ReferralRewardGrant[]
+  fraudSignals          ReferralFraudSignal[]
+  events                ReferralEvent[]
+
+  @@index([referrerUserId, status, createdAt(sort: Desc)])
+  @@index([status, qualifiedAt])
+  @@index([firstSubscribedAt])
+  @@map("referral_attributions")
+}
+
+model ReferralRewardRule {
+  id                  String             @id @default(cuid())
+  name                String             @db.VarChar(160)
+  description         String?            @db.VarChar(800)
+  enabled             Boolean            @default(true)
+  trigger             ReferralRewardTrigger
+  threshold           Int                @default(1)
+  rewardKind          ReferralRewardKind @map("reward_kind")
+  rewardValue         Int?               @map("reward_value")
+  featureKey          String?            @map("feature_key") @db.VarChar(96)
+  durationDays        Int?               @map("duration_days")
+  createdByUserId     String?            @map("created_by_user_id")
+  createdAt           DateTime           @default(now()) @map("created_at")
+  updatedAt           DateTime           @updatedAt @map("updated_at")
+  creator             User?              @relation("ReferralRewardRuleCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  grants              ReferralRewardGrant[]
+
+  @@index([enabled, trigger, threshold])
+  @@map("referral_reward_rules")
+}
+
+model ReferralRewardGrant {
+  id               String               @id @default(cuid())
+  ruleId           String?              @map("rule_id")
+  attributionId    String?              @map("attribution_id")
+  referrerUserId   String               @map("referrer_user_id")
+  recipientUserId  String               @map("recipient_user_id")
+  status           ReferralRewardStatus @default(PENDING)
+  rewardKind       ReferralRewardKind   @map("reward_kind")
+  rewardValue      Int?                 @map("reward_value")
+  featureKey       String?              @map("feature_key") @db.VarChar(96)
+  durationDays     Int?                 @map("duration_days")
+  reason           String               @db.VarChar(240)
+  grantedAt        DateTime?            @map("granted_at")
+  grantedByUserId  String?              @map("granted_by_user_id")
+  revokedAt        DateTime?            @map("revoked_at")
+  revokeReason     String?              @map("revoke_reason") @db.VarChar(500)
+  meta             Json?
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+  rule             ReferralRewardRule?  @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+  attribution      ReferralAttribution? @relation(fields: [attributionId], references: [id], onDelete: SetNull)
+  referrer         User                 @relation("ReferralRewardReferrer", fields: [referrerUserId], references: [id], onDelete: Cascade)
+  recipient        User                 @relation("ReferralRewardRecipient", fields: [recipientUserId], references: [id], onDelete: Cascade)
+  grantedBy        User?                @relation("ReferralRewardGrantedBy", fields: [grantedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([ruleId, referrerUserId, attributionId])
+  @@index([referrerUserId, status, createdAt(sort: Desc)])
+  @@index([recipientUserId, status, createdAt(sort: Desc)])
+  @@map("referral_reward_grants")
+}
+
+model ReferralFraudSignal {
+  id              String                  @id @default(cuid())
+  attributionId   String?                 @map("attribution_id")
+  subjectUserId   String                  @map("subject_user_id")
+  type            ReferralFraudSignalType
+  severity        String                  @default("review") @db.VarChar(32)
+  detail          String                  @db.VarChar(800)
+  resolvedAt      DateTime?               @map("resolved_at")
+  reviewedByUserId String?                @map("reviewed_by_user_id")
+  createdAt       DateTime                @default(now()) @map("created_at")
+  attribution     ReferralAttribution?    @relation(fields: [attributionId], references: [id], onDelete: SetNull)
+  subject         User                    @relation("ReferralFraudSubject", fields: [subjectUserId], references: [id], onDelete: Cascade)
+  reviewedBy      User?                   @relation("ReferralFraudReviewer", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([subjectUserId, createdAt(sort: Desc)])
+  @@index([type, createdAt(sort: Desc)])
+  @@index([resolvedAt])
+  @@map("referral_fraud_signals")
+}
+
+model ReferralEvent {
+  id             String   @id @default(cuid())
+  attributionId  String?  @map("attribution_id")
+  userId         String?  @map("user_id")
+  eventType      String   @map("event_type") @db.VarChar(80)
+  meta           Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  attribution    ReferralAttribution? @relation(fields: [attributionId], references: [id], onDelete: SetNull)
+
+  @@index([attributionId, createdAt(sort: Desc)])
+  @@index([eventType, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("referral_events")
+}
+
 model BackgroundJob {
   id           String    @id @default(cuid())
   type         String
@@ -3722,6 +3868,47 @@ enum SocialCodeAudience {
   GROUP
   CLASSROOM
   FRIEND_OR_GROUP
+}
+
+enum ReferralQualificationStatus {
+  ACCOUNT_CREATED
+  EMAIL_VERIFIED
+  ONBOARDED
+  ACTIVE
+  QUALIFIED
+  SUBSCRIBED
+  REJECTED
+  FRAUD_REVIEW
+}
+
+enum ReferralRewardTrigger {
+  QUALIFIED_REFERRAL_COUNT
+  PAID_REFERRAL_COUNT
+  MANUAL
+}
+
+enum ReferralRewardKind {
+  FREE_DAYS
+  FREE_MONTH
+  ACCOUNT_CREDIT
+  FEATURE_UNLOCK
+  AMBASSADOR_STATUS
+  MANUAL
+}
+
+enum ReferralRewardStatus {
+  PENDING
+  GRANTED
+  REVOKED
+}
+
+enum ReferralFraudSignalType {
+  SELF_REFERRAL
+  DUPLICATE_NORMALIZED_EMAIL
+  SHARED_SIGNUP_IP
+  REFERRAL_LOOP
+  DUPLICATE_DEVICE
+  MANUAL_REVIEW
 }
 
 enum TrialStatus {

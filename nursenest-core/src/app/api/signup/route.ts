@@ -19,6 +19,7 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { recordReferralSignup } from "@/lib/referrals/referral-rewards";
 import { captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
@@ -52,6 +53,7 @@ const schema = z.object({
     z.coerce.number().int().min(5).max(600).optional(),
   ),
   learnerPath: z.preprocess(emptyToUndef, z.enum(["new_grad", "experienced", "career_change"]).optional()),
+  referralCode: z.preprocess(emptyToUndef, z.string().max(64).optional()),
   captchaToken: z.string().optional(),
 });
 
@@ -246,6 +248,18 @@ export async function POST(req: Request) {
     });
   });
   void triggerWelcomeEmailRequested(createdId);
+  if (parsed.data.referralCode) {
+    void recordReferralSignup({
+      referredUserId: createdId,
+      rawCode: parsed.data.referralCode,
+      signupIp: ip !== "unknown" ? ip.slice(0, 64) : null,
+      origin: new URL(req.url).origin,
+    }).catch((e) => {
+      safeServerLog("referrals", "signup_attribution_failed", {
+        detail: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+      });
+    });
+  }
 
   return NextResponse.json({ ok: true, verificationSent: true }, { status: 201 });
   });

@@ -35,6 +35,7 @@
  */
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { markReferralFirstActivity } from "@/lib/referrals/referral-rewards";
 
 // ─── Audit event types ────────────────────────────────────────────────────────
 
@@ -158,6 +159,15 @@ export function recordAuditEvent(record: AuditRecord): void {
     at: record.timestamp,
     ...record.meta,
   });
+
+  if (
+    record.eventType !== "login" &&
+    record.eventType !== "session_start" &&
+    record.eventType !== "session_end" &&
+    !record.eventType.startsWith("subscription_")
+  ) {
+    void markReferralFirstActivity(record.userId);
+  }
 }
 
 // ─── Chargeback evidence report ───────────────────────────────────────────────

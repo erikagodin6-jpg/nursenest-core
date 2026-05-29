@@ -4,6 +4,7 @@ import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { markReferralEmailVerified } from "@/lib/referrals/referral-rewards";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,11 @@ export async function GET(req: NextRequest) {
   }
 
   await captureServerEvent(analyticsDistinctId(result.userId), "email_verified", {}).catch(() => {});
+  void markReferralEmailVerified(result.userId).catch((e) => {
+    safeServerLog("referrals", "email_verified_mark_failed", {
+      detail: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+    });
+  });
 
   const callbackRaw = req.nextUrl.searchParams.get("callbackUrl");
   const successUrl = new URL(`${base}/verify-email`);

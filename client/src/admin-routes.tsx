@@ -57,6 +57,7 @@ const AdminTierHealth = lazy(() => import("@/pages/admin-tier-health"));
 const AdminQBankImport = lazy(() => import("@/pages/admin-qbank-import"));
 const AdminQBankManage = lazy(() => import("@/pages/admin-qbank-manage"));
 const AdminFlashcardStudio = lazy(() => import("@/pages/admin-flashcard-studio"));
+const AdminFlashcardHealth = lazy(() => import("@/pages/admin-flashcard-health"));
 const AdminExplanationsPage = lazy(() => import("@/pages/admin-explanations"));
 const AdminNgnGenerator = lazy(() => import("@/pages/admin-ngn-generator"));
 const AdminAutopilot = lazy(() => import("@/pages/admin-autopilot"));
@@ -116,6 +117,7 @@ const AdminProfessionsPage = lazy(() => import("@/pages/admin-professions"));
 const AdminUniversalImport = lazy(() => import("@/pages/admin-universal-import"));
 const AdminAlliedHealthSEO = lazy(() => import("@/pages/admin-allied-health-seo"));
 const AdminObservability = lazy(() => import("@/pages/admin-observability"));
+const AdminRumDashboard = lazy(() => import("@/pages/admin-rum-dashboard"));
 const ExamReadinessDemo = lazy(() => import("@/pages/exam-readiness-demo"));
 const DemoLearningProgress = lazy(() => import("@/pages/demo-learning-progress"));
 const ContentEditorPage = lazy(() => import("@/pages/content-editor"));
@@ -175,6 +177,7 @@ export function AdminRoutes() {
         <Route path="/admin/subscriber-rescue" component={AdminSubscriberRescue} />
         <Route path="/admin/billing-support" component={AdminBillingSupport} />
         <Route path="/admin-performance" component={AdminPerformance} />
+        <Route path="/admin/rum" component={AdminRumDashboard} />
         <Route path="/admin/incidents" component={AdminIncidents} />
         <Route path="/admin/ops/incidents/:id" component={AdminOpsIncidentDetail} />
         <Route path="/admin/ops/incidents" component={AdminOpsIncidents} />
@@ -210,6 +213,7 @@ export function AdminRoutes() {
         <Route path="/admin/qbank/import" component={AdminQBankImport} />
         <Route path="/admin/qbank/manage" component={AdminQBankManage} />
         <Route path="/admin/flashcard-studio" component={AdminFlashcardStudio} />
+        <Route path="/admin/flashcard-health" component={AdminFlashcardHealth} />
         <Route path="/admin/explanations" component={AdminExplanationsPage} />
         <Route path="/admin/qbank/ngn-generator" component={AdminNgnGenerator} />
         <Route path="/admin/autopilot" component={AdminAutopilot} />
@@ -289,6 +293,7 @@ export function AdminRoutes() {
         <Route path="/:locale/admin/subscriber-rescue" component={AdminSubscriberRescue} />
         <Route path="/:locale/admin/billing-support" component={AdminBillingSupport} />
         <Route path="/:locale/admin-performance" component={AdminPerformance} />
+        <Route path="/:locale/admin/rum" component={AdminRumDashboard} />
         <Route path="/:locale/admin/incidents" component={AdminIncidents} />
         <Route path="/:locale/admin/ops/incidents/:id" component={AdminOpsIncidentDetail} />
         <Route path="/:locale/admin/ops/incidents" component={AdminOpsIncidents} />

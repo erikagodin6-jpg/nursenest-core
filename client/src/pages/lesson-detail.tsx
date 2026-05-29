@@ -1781,10 +1781,23 @@ export default function LessonDetail() {
     setApiLoading(true);
     setDbLoading(true);
     const controller = new AbortController();
-    fetch(`/api/lessons/content/${id}`, { signal: controller.signal, headers: getAuthHeaders() })
+    const headers = getAuthHeaders();
+
+    // Phase 10: two-stage load.
+    // Stage 1 — above-fold (title + intro section): renders immediately.
+    // Stage 2 — full content: merges in remaining sections once ready.
+    const aboveFoldCtrl = new AbortController();
+
+    let fullDataResolved = false;
+    let aboveFoldApplied = false;
+
+    // Stage 2: full content fetch (starts in parallel)
+    fetch(`/api/lessons/content/${id}`, { signal: controller.signal, headers })
       .then(async (r) => {
         const parsed = await readApiJsonResponse(r);
+        fullDataResolved = true;
         if (!parsed.ok) {
+          aboveFoldCtrl.abort();
           const st = parsed.status;
           const code = parsed.code;
           const body = parsed.errorBody as Record<string, unknown>;
@@ -1801,32 +1814,24 @@ export default function LessonDetail() {
             setApiLoading(false);
             return;
           }
-
           if (isAuthRequiredCode(code, st)) {
             setLessonApiError({ code: code || BackendErrorCodes.AUTH_REQUIRED, status: st });
             setApiLesson(null);
             setApiLoading(false);
             return;
           }
-
           if (code === BackendErrorCodes.CONTENT_MODULE_UNAVAILABLE || st === 503) {
-            setLessonApiError({
-              code: code || BackendErrorCodes.CONTENT_MODULE_UNAVAILABLE,
-              status: st,
-              retryable: true,
-            });
+            setLessonApiError({ code: code || BackendErrorCodes.CONTENT_MODULE_UNAVAILABLE, status: st, retryable: true });
             setApiLesson(null);
             setApiLoading(false);
             return;
           }
-
           if (isLessonNotFoundCode(code, st)) {
             setLessonApiError({ code: code || BackendErrorCodes.LESSON_NOT_FOUND, status: st });
             setApiLesson(null);
             setApiLoading(false);
             return;
           }
-
           setLessonApiError({ code, status: st });
           setApiLesson(null);
           setApiLoading(false);
@@ -1845,7 +1850,7 @@ export default function LessonDetail() {
             setIsPreviewOnly(true);
             setPreviewRequiredTier((data.requiredTier as string) || (data.tier as string) || "rpn");
           }
-          const { id: _id, isPreviewOnly: _ip, requiredTier: _rt, ...lesson } = data;
+          const { id: _id, isPreviewOnly: _ip, requiredTier: _rt, isAboveFoldOnly: _af, ...lesson } = data as any;
           setApiLesson(lesson as LessonContent);
           setApiLessonId(returnedId || id);
         }
@@ -1858,7 +1863,26 @@ export default function LessonDetail() {
           setApiLoading(false);
         }
       });
-    return () => controller.abort();
+
+    // Stage 1: above-fold — show title + intro section while full content loads
+    fetch(`/api/lessons/content/${id}/above-fold`, { signal: aboveFoldCtrl.signal, headers })
+      .then(async (r) => {
+        if (!r.ok || fullDataResolved || aboveFoldApplied) return;
+        try {
+          const data = await r.json();
+          if (fullDataResolved || aboveFoldApplied) return;
+          aboveFoldApplied = true;
+          const { id: _id, isAboveFoldOnly: _af, isPreviewOnly: _ip, requiredTier: _rt, ...lesson } = data as any;
+          if (lesson.title) {
+            setApiLesson(lesson as LessonContent);
+            setApiLessonId(id);
+            setApiLoading(false); // paint immediately; full data will merge via stage 2
+          }
+        } catch {}
+      })
+      .catch(() => {});
+
+    return () => { controller.abort(); aboveFoldCtrl.abort(); };
   }, [id, authLoading, lessonContentRetryNonce, setLocation]);
 
   const baseLesson = apiLesson;

@@ -101,10 +101,10 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
                 Start Level 1 — Foundations
               </Link>
               <Link
-                href="/modules/ecg/advanced/lessons"
+                href="/modules/ecg-advanced"
                 className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-5 text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)]"
               >
-                Jump to Advanced
+                Upgrade for Advanced ECG
               </Link>
             </div>
             {/* Feature chips */}

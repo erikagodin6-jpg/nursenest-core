@@ -69,6 +69,29 @@ const OUT_ROOT = process.env.SCREENSHOT_OUT_DIR
 const EXTRA_WAIT_MS = Number(process.env.SCREENSHOT_WAIT_MS ?? "1400");
 const PATHWAY_ID = process.env.SCREENSHOT_PATHWAY_ID?.trim() || "us-rn-nclex-rn";
 
+const BLOCKED_CAPTURE_TEXT = [
+  "Loading",
+  "Just a moment",
+  "Please wait",
+  "Fetching",
+  "Preparing",
+  "Application error",
+  "Something went wrong",
+] as const;
+
+const BLOCKED_CAPTURE_SELECTORS = [
+  ".nn-skeleton",
+  "[class*='skeleton' i]",
+  "[data-testid*='skeleton' i]",
+  "[aria-busy='true']",
+  "[role='status']",
+  "[class*='spinner' i]",
+  "[class*='loading' i]",
+  "[data-loading='true']",
+  ".animate-pulse",
+  ".animate-spin",
+] as const;
+
 // ── Credentials ───────────────────────────────────────────────────────────────
 
 function resolveCredentials(): { email: string; password: string } {
@@ -1067,6 +1090,221 @@ interface CaptureResult {
   success: boolean;
   error?: string;
   bytes?: number;
+  validation?: CaptureValidation;
+}
+
+type CaptureReadinessCheck = {
+  name: string;
+  selector: string;
+  minVisible?: number;
+};
+
+type CaptureValidation = {
+  passed: boolean;
+  checks: string[];
+  rejectedReasons: string[];
+  bodyTextLength: number;
+  finalUrl: string;
+  validatedAt: string;
+};
+
+async function visibleCount(page: Page, selector: string): Promise<number> {
+  return page.locator(selector).evaluateAll((elements) =>
+    elements.filter((element) => {
+      const style = window.getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return (
+        style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        Number(style.opacity) !== 0 &&
+        rect.width > 0 &&
+        rect.height > 0
+      );
+    }).length,
+  ).catch(() => 0);
+}
+
+function readinessChecksForSpec(spec: CaptureSpec): CaptureReadinessCheck[] {
+  const main = { name: "main content visible", selector: "main, [role='main']", minVisible: 1 };
+
+  if (spec.requiresExamSession || spec.category === "cat") {
+    return [
+      main,
+      {
+        name: "CAT question visible",
+        selector: ".nn-cat-question-stem, [data-nn-question-stem], .question-stem, [data-question-card], main p",
+        minVisible: 1,
+      },
+      {
+        name: "CAT timer visible",
+        selector: "[data-cat-timer], [data-testid*='timer' i], [aria-label*='timer' i], .nn-cat-timer, .timer, time",
+        minVisible: 1,
+      },
+      {
+        name: "CAT controls visible",
+        selector: "button, [role='button']",
+        minVisible: 2,
+      },
+    ];
+  }
+
+  if (spec.category === "flashcards") {
+    const isHubLike = /hub|decks|weak-areas/.test(spec.slug);
+    if (isHubLike) {
+      return [
+        main,
+        {
+          name: "flashcard deck content visible",
+          selector: "[data-flashcard-deck], [data-testid*='flashcard' i], a[href*='flashcards'], button",
+          minVisible: 2,
+        },
+        {
+          name: "flashcard controls visible",
+          selector: "button, a[href*='flashcards'], [role='button']",
+          minVisible: 2,
+        },
+      ];
+    }
+    return [
+      main,
+      {
+        name: "flashcard question visible",
+        selector: "[data-flashcard-question], [data-testid*='flashcard-question' i], [data-card-front], .flashcard-question, main h1, main h2, main p",
+        minVisible: 1,
+      },
+      {
+        name: "flashcard answers visible",
+        selector: "[data-flashcard-answer], [data-testid*='answer' i], button, [role='button']",
+        minVisible: 2,
+      },
+      {
+        name: "flashcard controls visible",
+        selector: "button, [role='button']",
+        minVisible: 2,
+      },
+    ];
+  }
+
+  if (spec.category === "practice-exams") {
+    return [
+      main,
+      {
+        name: "practice question or bank content visible",
+        selector: "[data-question-card], [data-nn-question-stem], .question-stem, main h1, main h2, main p",
+        minVisible: 1,
+      },
+      {
+        name: "practice controls visible",
+        selector: "button, [role='button'], a[href*='questions'], a[href*='practice-tests']",
+        minVisible: 2,
+      },
+    ];
+  }
+
+  return [
+    main,
+    {
+      name: "educational content visible",
+      selector: "main h1, main h2, main h3, main p, main article, [data-loaded='true'], [data-nn-activity-content]",
+      minVisible: 2,
+    },
+    {
+      name: "navigation or action controls visible",
+      selector: "button, [role='button'], a",
+      minVisible: 1,
+    },
+  ];
+}
+
+async function blockedDomReasons(page: Page): Promise<string[]> {
+  const reasons: string[] = [];
+  const bodyText = await page.locator("body").innerText({ timeout: 10_000 }).catch(() => "");
+
+  for (const blockedText of BLOCKED_CAPTURE_TEXT) {
+    const pattern = new RegExp(`\\b${blockedText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+    if (pattern.test(bodyText)) reasons.push(`blocked text visible: ${blockedText}`);
+  }
+
+  for (const selector of BLOCKED_CAPTURE_SELECTORS) {
+    const count = await visibleCount(page, selector);
+    if (count > 0) reasons.push(`blocked loader selector visible: ${selector} (${count})`);
+  }
+
+  const currentUrl = page.url();
+  try {
+    const pathname = new URL(currentUrl).pathname;
+    if (/\/login|\/signup/i.test(pathname)) reasons.push(`authentication redirect: ${pathname}`);
+  } catch {
+    /* ignore */
+  }
+
+  if (bodyText.trim().length < 120) reasons.push("blank or near-empty page text");
+  return reasons;
+}
+
+async function validateScreenshotReadiness(page: Page, spec: CaptureSpec): Promise<CaptureValidation> {
+  const checks = readinessChecksForSpec(spec);
+  const passedChecks: string[] = [];
+  const rejectedReasons: string[] = [];
+
+  for (const check of checks) {
+    await page.locator(check.selector).first().waitFor({ state: "visible", timeout: 30_000 }).catch(() => {});
+    const count = await visibleCount(page, check.selector);
+    if (count < (check.minVisible ?? 1)) {
+      rejectedReasons.push(`readiness check failed: ${check.name} (${count} visible for ${check.selector})`);
+    } else {
+      passedChecks.push(check.name);
+    }
+  }
+
+  const clearStartedAt = Date.now();
+  while (Date.now() - clearStartedAt < 20_000) {
+    const reasons = await blockedDomReasons(page);
+    if (reasons.length === 0) break;
+    await page.waitForTimeout(250);
+  }
+
+  rejectedReasons.push(...await blockedDomReasons(page));
+
+  const bodyText = await page.locator("body").innerText({ timeout: 5_000 }).catch(() => "");
+  return {
+    passed: rejectedReasons.length === 0,
+    checks: passedChecks,
+    rejectedReasons,
+    bodyTextLength: bodyText.trim().length,
+    finalUrl: page.url(),
+    validatedAt: new Date().toISOString(),
+  };
+}
+
+async function assertScreenshotReady(page: Page, spec: CaptureSpec): Promise<CaptureValidation> {
+  const validation = await validateScreenshotReadiness(page, spec);
+  if (!validation.passed) {
+    throw new Error(`screenshot rejected: ${validation.rejectedReasons.join("; ")}`);
+  }
+  return validation;
+}
+
+async function captureValidatedScreenshot(
+  page: Page,
+  spec: CaptureSpec,
+  filePath: string,
+): Promise<CaptureValidation> {
+  const validation = await assertScreenshotReady(page, spec);
+
+  if (spec.cropSelector) {
+    const target = page.locator(spec.cropSelector).first();
+    const visible = await target.isVisible({ timeout: 20_000 }).catch(() => false);
+    if (visible) {
+      await target.screenshot({ path: filePath, animations: "disabled" });
+    } else {
+      await page.screenshot({ path: filePath, fullPage: true, animations: "disabled" });
+    }
+  } else {
+    await page.screenshot({ path: filePath, fullPage: true, animations: "disabled" });
+  }
+
+  return validation;
 }
 
 async function captureSpec(
@@ -1080,6 +1318,7 @@ async function captureSpec(
 
   const filePath = path.join(dir, `${spec.slug}.png`);
   const origin = BASE_URL;
+  let validation: CaptureValidation | undefined;
 
   try {
     // Set viewport
@@ -1114,18 +1353,7 @@ async function captureSpec(
 
       await page.waitForTimeout(300);
 
-      // Capture
-      if (spec.cropSelector) {
-        const target = page.locator(spec.cropSelector).first();
-        const visible = await target.isVisible({ timeout: 20_000 }).catch(() => false);
-        if (visible) {
-          await target.screenshot({ path: filePath, animations: "disabled" });
-        } else {
-          await page.screenshot({ path: filePath, fullPage: true, animations: "disabled" });
-        }
-      } else {
-        await page.screenshot({ path: filePath, fullPage: true, animations: "disabled" });
-      }
+      validation = await captureValidatedScreenshot(page, spec, filePath);
 
       await page.unroute("**/api/practice-tests/*/question**").catch(() => {});
 
@@ -1158,21 +1386,11 @@ async function captureSpec(
       await applyTheme(page, spec.theme);
       await stabilize(page, spec.extraWaitMs ?? 0);
 
-      if (spec.cropSelector) {
-        const target = page.locator(spec.cropSelector).first();
-        const visible = await target.isVisible({ timeout: 30_000 }).catch(() => false);
-        if (visible) {
-          await target.screenshot({ path: filePath, animations: "disabled" });
-        } else {
-          await page.screenshot({ path: filePath, fullPage: true, animations: "disabled" });
-        }
-      } else {
-        await page.screenshot({ path: filePath, fullPage: true, animations: "disabled" });
-      }
+      validation = await captureValidatedScreenshot(page, spec, filePath);
     }
 
     const stat = await fs.stat(filePath);
-    return { slug: spec.slug, filePath, success: true, bytes: stat.size };
+    return { slug: spec.slug, filePath, success: true, bytes: stat.size, validation };
 
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -1463,6 +1681,7 @@ async function writeManifest(
         success: r.success,
         bytes: r.bytes,
         error: r.error,
+        validation: r.validation,
         filePath: r.filePath,
       };
     }),
@@ -1472,6 +1691,51 @@ async function writeManifest(
     path.join(outputDir, "manifest.json"),
     JSON.stringify(manifest, null, 2),
   );
+}
+
+async function writeValidationReport(
+  specs: CaptureSpec[],
+  results: CaptureResult[],
+  outputDir: string,
+): Promise<void> {
+  const resultMap = new Map(results.map((result) => [result.slug, result]));
+  const invalid = results.filter((result) => !result.success || result.validation?.passed === false);
+  const valid = results.filter((result) => result.success && result.validation?.passed !== false);
+  const report = [
+    "# NurseNest Screenshot Validation Report",
+    "",
+    `Generated: ${new Date().toISOString()}`,
+    `Base URL: ${BASE_URL}`,
+    `Total specs: ${specs.length}`,
+    `Valid screenshots: ${valid.length}`,
+    `Rejected screenshots: ${invalid.length}`,
+    "",
+    "## Gate",
+    "",
+    "- No skeleton loaders visible before capture.",
+    "- No spinners visible before capture.",
+    "- No loading, suspense, or blank content states visible before capture.",
+    "- Required activity content must be visible before capture.",
+    `- Blocked text: ${BLOCKED_CAPTURE_TEXT.join(", ")}`,
+    "",
+    "## Results",
+    "",
+    "| Screenshot | Category | Theme | Viewport | Status | Validation |",
+    "| --- | --- | --- | --- | --- | --- |",
+    ...specs.map((spec) => {
+      const result = resultMap.get(spec.slug);
+      const status = result?.success && result.validation?.passed !== false ? "valid" : "rejected";
+      const validation = result?.validation
+        ? result.validation.passed
+          ? `checks: ${result.validation.checks.join(", ")}`
+          : result.validation.rejectedReasons.join("; ")
+        : result?.error ?? "not captured";
+      return `| ${spec.slug} | ${spec.category} | ${spec.theme} | ${spec.viewport} | ${status} | ${validation.replace(/\|/g, "\\|").slice(0, 500)} |`;
+    }),
+    "",
+  ].join("\n");
+
+  await fs.writeFile(path.join(outputDir, "screenshot-validation-report.md"), report);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -1614,6 +1878,7 @@ Env:
 
   // Write manifest
   await writeManifest(allSpecs, results, OUT_ROOT);
+  await writeValidationReport(allSpecs, results, OUT_ROOT);
 
   // Generate gallery
   if (!args.noGallery) {
@@ -1636,7 +1901,12 @@ Env:
     }
   }
   console.log(`  Output: ${OUT_ROOT}`);
+  console.log(`  Validation report: ${path.join(OUT_ROOT, "screenshot-validation-report.md")}`);
   console.log("─────────────────────────────────────────\n");
+
+  if (failCount > 0) {
+    process.exitCode = 1;
+  }
 }
 
 main().catch((err) => {

@@ -1,6 +1,9 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { initRum } from "./lib/rum-collector";
+
+initRum();
 
 createRoot(document.getElementById("root")!).render(<App />);
 (window as any).__reactRendered = true;

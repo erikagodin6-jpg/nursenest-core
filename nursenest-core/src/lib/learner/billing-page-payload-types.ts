@@ -4,6 +4,7 @@ export type BillingSubscriptionRow = {
   status: SubscriptionStatus;
   stripeSubscriptionId: string;
   stripeCustomerId: string | null;
+  planCode: string | null;
   planTier: TierCode | null;
   planCountry: CountryCode | null;
   alliedCareer: string | null;

@@ -5,6 +5,7 @@ import { serverLearnerPosthogDisabledForVerifiedQaUser } from "@/lib/observabili
 import { captureServerEvent } from "@/lib/observability/posthog-server";
 import { analyticsDistinctId } from "@/lib/observability/posthog-distinct-id";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
+import { markReferralOnboardingCompleted } from "@/lib/referrals/referral-rewards";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -63,6 +64,7 @@ export async function POST(req: Request) {
         pathway_id: pathwayId ?? "none",
       });
     }
+    void markReferralOnboardingCompleted(userId);
 
     return NextResponse.json({ ok: true, pathwayId });
   } catch {

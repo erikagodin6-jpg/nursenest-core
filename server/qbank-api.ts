@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import { getAllowedExamTiers } from "../shared/tier-config";
 import { validateQuestion, checkPoolHealth, structuredExamError, logExamRequest, addIncident } from "./exam-reliability";
 import { requireEntitlement, checkEntitlement } from "./entitlements";
+import { routeParamString } from "./route-params";
 
 const QBANK_FREE_DAILY_LIMIT = 15;
 
@@ -612,8 +613,13 @@ export function setupQBankRoutes(app: Express) {
       const isPracticeMode = mode === "practice";
       const includeRationale = userTier === "admin" || isPracticeMode;
 
-      const rationaleColumns = includeRationale ? ", rationale, correct_answer_explanation, distractor_rationales, hints" : "";
-      let query = `SELECT id, tier, exam, question_type, stem, options, correct_answer${rationaleColumns}, body_system, topic, subtopic, difficulty, region_scope, scenario, clinical_pearl, exam_strategy, memory_hook, framework_used, clinical_trap, hints
+      // Phase 9: only fetch enrichment columns when they'll be returned.
+      // Exam mode startup sends: stem, options, metadata only (no answers, rationale, hints).
+      // Practice mode / admin sends the full set for immediate feedback.
+      const enrichmentColumns = includeRationale
+        ? ", correct_answer, rationale, correct_answer_explanation, distractor_rationales, hints, scenario, clinical_pearl, exam_strategy, memory_hook, framework_used, clinical_trap"
+        : "";
+      let query = `SELECT id, tier, exam, question_type, stem, options${enrichmentColumns}, body_system, topic, subtopic, difficulty, region_scope
                    FROM exam_questions
                    WHERE tier = $1 AND status = 'published'`;
       const params: any[] = [queryTier];
@@ -708,33 +714,36 @@ export function setupQBankRoutes(app: Express) {
       const parsedQuestions = result.rows.map((row: any) => {
           const parsedOptions = normalizeQuestionOptions(row.options);
 
-          let parsedCorrect = row.correct_answer;
-          if (typeof parsedCorrect === "string") {
-            try {
-              parsedCorrect = JSON.parse(parsedCorrect);
-              if (typeof parsedCorrect === "string") {
-                const mapped = letterMap[parsedCorrect.toUpperCase()];
-                if (mapped !== undefined) {
-                  parsedCorrect = [mapped];
-                } else {
-                  console.warn(`[exam-set] Excluding question ${row.id}: unrecognized correct_answer string "${parsedCorrect}"`);
+          // Phase 9: correct_answer is only fetched (and returned) when includeRationale is true.
+          let parsedCorrect: number[] | undefined;
+          if (includeRationale && row.correct_answer !== undefined) {
+            let raw = row.correct_answer;
+            if (typeof raw === "string") {
+              try {
+                raw = JSON.parse(raw);
+                if (typeof raw === "string") {
+                  const mapped = letterMap[raw.toUpperCase()];
+                  if (mapped !== undefined) raw = [mapped];
+                  else {
+                    console.warn(`[exam-set] Excluding question ${row.id}: unrecognized correct_answer string "${raw}"`);
+                    return null;
+                  }
+                }
+              } catch {
+                const mapped = letterMap[raw.toUpperCase()];
+                if (mapped !== undefined) raw = [mapped];
+                else {
+                  console.warn(`[exam-set] Excluding question ${row.id}: unparseable correct_answer "${raw}"`);
                   return null;
                 }
               }
-            } catch {
-              const mapped = letterMap[parsedCorrect.toUpperCase()];
-              if (mapped !== undefined) {
-                parsedCorrect = [mapped];
-              } else {
-                console.warn(`[exam-set] Excluding question ${row.id}: unparseable correct_answer "${parsedCorrect}"`);
-                return null;
-              }
             }
-          }
-          if (typeof parsedCorrect === "number") parsedCorrect = [parsedCorrect];
-          if (!Array.isArray(parsedCorrect)) {
-            console.warn(`[exam-set] Excluding question ${row.id}: correct_answer is not an array after parsing`);
-            return null;
+            if (typeof raw === "number") raw = [raw];
+            if (!Array.isArray(raw)) {
+              console.warn(`[exam-set] Excluding question ${row.id}: correct_answer is not an array after parsing`);
+              return null;
+            }
+            parsedCorrect = raw;
           }
 
           let parsedDistractorRationales = row.distractor_rationales;
@@ -756,7 +765,8 @@ export function setupQBankRoutes(app: Express) {
             regionScope: row.region_scope,
           };
 
-          // Always include educational fields when rationale is permitted (practice mode or admin)
+          // Enrichment data only included in practice mode or admin.
+          // In exam mode the client fetches /api/qbank/question/:id/enrichment lazily.
           if (includeRationale) {
             base.correctAnswer = parsedCorrect;
             base.rationale = row.rationale;
@@ -768,7 +778,6 @@ export function setupQBankRoutes(app: Express) {
             base.memoryHook = row.memory_hook;
             base.frameworkUsed = row.framework_used;
             base.clinicalTrap = row.clinical_trap;
-            // Deliver progressive hints only in practice/tutor mode (not exam mode)
             if (isPracticeMode || userTier === "admin") {
               let parsedHints = row.hints;
               if (typeof parsedHints === "string") {
@@ -805,6 +814,68 @@ export function setupQBankRoutes(app: Express) {
       structuredExamError(res, 500, "exam_set_error", "We're having trouble loading questions right now. Please try again.", {
         retryable: true,
       });
+    }
+  });
+
+  // Phase 9 — lazy question enrichment endpoint
+  // Called after the user submits an answer (or clicks "Explain") to fetch rationale, hints, etc.
+  // Keeps the initial exam-set payload lean.
+  app.get("/api/qbank/question/:id/enrichment", qbankLimiter, async (req: any, res) => {
+    try {
+      const user = await resolveAuthUser(req);
+      if (!user) return res.status(401).json({ error: "Authentication required" });
+
+      const id = routeParamString(req.params.id);
+      if (!id) return res.status(400).json({ error: "Missing question id" });
+
+      const { rows } = await pool.query(
+        `SELECT id, correct_answer, rationale, correct_answer_explanation,
+                distractor_rationales, hints, scenario,
+                clinical_pearl, exam_strategy, memory_hook, framework_used, clinical_trap
+         FROM exam_questions
+         WHERE id = $1 AND status = 'published'`,
+        [id],
+      );
+
+      if (rows.length === 0) return res.status(404).json({ error: "Question not found" });
+
+      const row = rows[0];
+
+      let parsedCorrect = row.correct_answer;
+      try {
+        if (typeof parsedCorrect === "string") parsedCorrect = JSON.parse(parsedCorrect);
+        if (typeof parsedCorrect === "number") parsedCorrect = [parsedCorrect];
+      } catch { parsedCorrect = null; }
+
+      let parsedDistractorRationales = row.distractor_rationales;
+      try {
+        if (typeof parsedDistractorRationales === "string") parsedDistractorRationales = JSON.parse(parsedDistractorRationales);
+      } catch { parsedDistractorRationales = null; }
+
+      let parsedHints = row.hints;
+      try {
+        if (typeof parsedHints === "string") parsedHints = JSON.parse(parsedHints);
+      } catch { parsedHints = null; }
+
+      // Cache enrichment briefly — same answer for all users
+      res.setHeader("Cache-Control", "private, max-age=300");
+      return res.json({
+        id: row.id,
+        correctAnswer: parsedCorrect,
+        rationale: row.rationale || null,
+        correctAnswerExplanation: row.correct_answer_explanation || null,
+        distractorRationales: parsedDistractorRationales,
+        hints: parsedHints,
+        scenario: row.scenario || null,
+        clinicalPearl: row.clinical_pearl || null,
+        examStrategy: row.exam_strategy || null,
+        memoryHook: row.memory_hook || null,
+        frameworkUsed: row.framework_used || null,
+        clinicalTrap: row.clinical_trap || null,
+      });
+    } catch (e: any) {
+      console.error("[QBank] enrichment error:", e.message);
+      return res.status(500).json({ error: "enrichment_failed" });
     }
   });
 

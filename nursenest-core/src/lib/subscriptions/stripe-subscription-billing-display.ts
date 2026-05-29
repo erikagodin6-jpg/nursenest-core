@@ -41,6 +41,7 @@ export function billingSubscriptionRowFromStripeSubscription(sub: Stripe.Subscri
     status: mapped,
     stripeSubscriptionId: sub.id,
     stripeCustomerId: customerId?.trim() ?? null,
+    planCode: typeof sub.metadata?.planCode === "string" ? sub.metadata.planCode : null,
     planTier: mappedPlan?.tier ?? null,
     planCountry: mappedPlan?.country ?? null,
     alliedCareer: mappedPlan?.alliedCareer ?? null,

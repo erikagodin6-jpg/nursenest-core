@@ -3128,6 +3128,59 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
     setRegion((localStorage.getItem("nursenest-region") as "US" | "CA") || "US");
   }, []);
 
+  // Drain the localStorage retry queues populated by failed SM2 / answer API calls.
+  // Runs once at mount so recoverable data from previous sessions is never permanently lost.
+  useEffect(() => {
+    if (!user) return;
+    const drainSM2 = async () => {
+      try {
+        const raw = localStorage.getItem("nn-pending-sm2");
+        if (!raw) return;
+        const pending: { cardId: string; rating: string; userId: string; idempotencyKey?: string; ts: number }[] =
+          JSON.parse(raw);
+        if (!pending.length) return;
+        // Only retry items for this user; stale items (>24h) are discarded.
+        const now = Date.now();
+        const mine = pending.filter(p => p.userId === user.id && now - p.ts < 86_400_000);
+        if (!mine.length) { localStorage.removeItem("nn-pending-sm2"); return; }
+        const token = localStorage.getItem("token") || localStorage.getItem("adminToken");
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+        await Promise.allSettled(mine.map(p =>
+          fetch("/api/sm2/review", {
+            method: "POST",
+            headers,
+            body: JSON.stringify({ cardId: p.cardId, rating: p.rating, idempotencyKey: p.idempotencyKey }),
+          })
+        ));
+        localStorage.removeItem("nn-pending-sm2");
+      } catch {}
+    };
+
+    const drainAnswers = async () => {
+      try {
+        const raw = localStorage.getItem("nn-pending-answers");
+        if (!raw) return;
+        const pending: { payload: string; ts: number }[] = JSON.parse(raw);
+        if (!pending.length) return;
+        const now = Date.now();
+        const fresh = pending.filter(p => now - p.ts < 86_400_000);
+        if (!fresh.length) { localStorage.removeItem("nn-pending-answers"); return; }
+        await Promise.allSettled(fresh.map(p =>
+          fetch("/api/flashcard-session/answer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: p.payload,
+          })
+        ));
+        localStorage.removeItem("nn-pending-answers");
+      } catch {}
+    };
+
+    drainSM2();
+    drainAnswers();
+  }, [user]);
+
   // Keyboard navigation for the active study session.
   // SRS INTEGRITY: ArrowRight requires the card to be answered/engaged first.
   //   • Question cards  → showRationale must be true (user selected an answer)

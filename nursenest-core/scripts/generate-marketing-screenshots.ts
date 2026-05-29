@@ -1673,6 +1673,61 @@ type ManifestEntry = {
   generatedAt: string;
 };
 
+async function writeValidationReport(
+  manifest: ManifestEntry[],
+  errors: Array<{ key: string; theme: string; viewport: string; error: string }>,
+): Promise<string> {
+  const reportPath = path.join(OUT_DIR, "screenshot-validation-report.md");
+  const report = [
+    "# NurseNest Marketing Screenshot Validation Report",
+    "",
+    `Generated: ${new Date().toISOString()}`,
+    `Base URL: ${BASE_URL}`,
+    `Total valid captures: ${manifest.length}`,
+    `Rejected captures: ${errors.length}`,
+    "",
+    "## Gate",
+    "",
+    "- No skeleton loaders visible before capture.",
+    "- No spinners visible before capture.",
+    "- No loading, suspense, auth redirect, or blank content states visible before capture.",
+    "- Route-specific content selectors must be visible before capture.",
+    `- Blocked text: ${BLOCKED_CAPTURE_TEXT.join(", ")}`,
+    "",
+    "## Valid Captures",
+    "",
+    "| Key | Tier | Theme | Viewport | Route | Readiness Checks | Files |",
+    "| --- | --- | --- | --- | --- | --- | --- |",
+    ...manifest.map((entry) =>
+      [
+        entry.key,
+        entry.tier,
+        entry.theme,
+        entry.viewport,
+        entry.route,
+        entry.qualityGate.readinessChecks.join(", "),
+        entry.files.join(", "),
+      ].map((value) => String(value).replace(/\|/g, "\\|")).join(" | "),
+    ).map((row) => `| ${row} |`),
+    "",
+    "## Rejected Captures",
+    "",
+    errors.length === 0
+      ? "None."
+      : [
+          "| Key | Theme | Viewport | Reason |",
+          "| --- | --- | --- | --- |",
+          ...errors.map((error) =>
+            `| ${error.key} | ${error.theme} | ${error.viewport} | ${error.error.replace(/\|/g, "\\|")} |`,
+          ),
+        ].join("\n"),
+    "",
+  ].join("\n");
+
+  await fs.writeFile(reportPath, report);
+  return reportPath;
+}
+
 async function captureOne(
   page: Page,
   target: CaptureTarget,
@@ -2052,11 +2107,13 @@ async function main(): Promise<void> {
       2,
     ),
   );
+  const validationReportPath = await writeValidationReport(manifest, errors);
 
   console.log("\n────────────────────────────────────────────");
   console.log(`Captured  : ${manifest.length}`);
   console.log(`Errors    : ${errors.length}`);
   console.log(`Manifest  : ${manifestPath}`);
+  console.log(`Validation: ${validationReportPath}`);
   console.log();
   console.log(
     "Review captures before uploading to CDN (see docs/SCREENSHOT_CAPTURE_TO_CDN.md).",

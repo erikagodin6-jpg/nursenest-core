@@ -27,6 +27,11 @@ export const BILLING_AUDIT_EVENTS = [
   "reconciliation_mismatch_found",
   "reconciliation_repaired",
   "refund_processed",
+  "subscription_change_previewed",
+  "subscription_upgrade_applied",
+  "subscription_downgrade_scheduled",
+  "subscription_tier_switch_applied",
+  "admin_subscription_action_applied",
   "admin_override_applied",
   "admin_override_removed",
   /** Staff invoked POST `/api/admin/billing/stripe-reconcile` (dry-run or apply). */

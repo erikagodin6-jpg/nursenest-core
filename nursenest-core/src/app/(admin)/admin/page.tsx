@@ -74,6 +74,11 @@ function AdminFocusLinks() {
       copy: "Review subscriptions, trials, revenue health, and cancellation states.",
     },
     {
+      href: "/admin/referrals",
+      title: "Referrals",
+      copy: "Manage invite rewards, qualification gates, paid conversions, and fraud review.",
+    },
+    {
       href: "/admin/operations",
       title: "Operations",
       copy: "System health, jobs, diagnostics, and internal reliability tools.",

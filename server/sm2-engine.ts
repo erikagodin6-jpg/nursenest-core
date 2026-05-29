@@ -353,8 +353,22 @@ export async function getAdminFlashcardAnalytics(): Promise<{
   lowQualityCount: number;
   generationStats: { source: string; count: number }[];
   stateDistribution: { state: string; count: number }[];
+  // Extended health metrics
+  ratingDistribution: { rating: string; count: number; pct: number }[];
+  confidenceDistribution: { confidence: string; count: number; pct: number }[];
+  avgCardsPerSession: number;
+  completionRate: number;    // pct of sessions that reach their last card
+  topWeakTopics: { topic: string; errorRate: number; totalAnswers: number }[];
+  topMasteredTopics: { topic: string; masteredCount: number }[];
+  duplicateRatingEvents: number;  // same user+card rated > once in a 5-min window (SRS integrity)
+  recentActivity: { date: string; reviews: number; uniqueUsers: number }[];
 }> {
-  const [totalResult, reviewResult, usersResult, dupResult, lowQResult, genResult, stateResult] = await Promise.all([
+  const [
+    totalResult, reviewResult, usersResult, dupResult, lowQResult,
+    genResult, stateResult,
+    ratingResult, confidenceResult, sessionResult,
+    weakResult, masteredResult, integrityResult, activityResult,
+  ] = await Promise.all([
     pool.query(`SELECT COUNT(*) as cnt FROM flashcard_bank WHERE status IN ('published', 'approved')`),
     pool.query(`SELECT COUNT(*) as cnt FROM flashcard_reviews`),
     pool.query(`SELECT COUNT(DISTINCT user_id) as cnt FROM flashcard_reviews`),
@@ -373,10 +387,89 @@ export async function getAdminFlashcardAnalytics(): Promise<{
       `SELECT COALESCE(source_type, 'manual') as source, COUNT(*) as cnt
        FROM flashcard_bank GROUP BY source_type ORDER BY cnt DESC`
     ),
+    pool.query(`SELECT status, COUNT(*) as cnt FROM spaced_repetition_cards GROUP BY status`),
+
+    // Rating distribution (again/hard/good/easy) from flashcard_reviews
     pool.query(
-      `SELECT status, COUNT(*) as cnt FROM spaced_repetition_cards GROUP BY status`
+      `SELECT response as rating, COUNT(*) as cnt
+       FROM flashcard_reviews
+       WHERE reviewed_at > NOW() - INTERVAL '30 days'
+       GROUP BY response ORDER BY cnt DESC`
+    ),
+    // Confidence distribution from confidence_ratings
+    pool.query(
+      `SELECT confidence, COUNT(*) as cnt
+       FROM confidence_ratings
+       WHERE created_at > NOW() - INTERVAL '30 days'
+       GROUP BY confidence ORDER BY cnt DESC`
+    ),
+    // Average cards reviewed per user per day (proxy for session length)
+    pool.query(
+      `SELECT AVG(daily_count) as avg_per_session
+       FROM (
+         SELECT user_id, DATE(reviewed_at) as day, COUNT(*) as daily_count
+         FROM flashcard_reviews
+         WHERE reviewed_at > NOW() - INTERVAL '30 days'
+         GROUP BY user_id, day
+       ) daily`
+    ),
+    // Top weak topics: highest error rate (again / total)
+    pool.query(
+      `SELECT body_system as topic,
+              COUNT(*) FILTER (WHERE was_correct = false) as errors,
+              COUNT(*) as total
+       FROM confidence_ratings
+       WHERE body_system IS NOT NULL
+         AND created_at > NOW() - INTERVAL '30 days'
+       GROUP BY body_system
+       HAVING COUNT(*) >= 5
+       ORDER BY (COUNT(*) FILTER (WHERE was_correct = false)::float / COUNT(*)) DESC
+       LIMIT 10`
+    ),
+    // Top mastered topics: most cards at 'mastered' state per category
+    pool.query(
+      `SELECT fb.body_system as topic, COUNT(*) as mastered_count
+       FROM spaced_repetition_cards src
+       JOIN flashcard_bank fb ON fb.id = src.card_id
+       WHERE src.status = 'mastered' AND fb.body_system IS NOT NULL
+       GROUP BY fb.body_system ORDER BY mastered_count DESC LIMIT 10`
+    ),
+    // SRS integrity: same user+card rated more than once within 5 minutes
+    pool.query(
+      `SELECT COUNT(*) as cnt FROM (
+         SELECT user_id, card_id, DATE_TRUNC('minute', reviewed_at) / 5 as window_5m
+         FROM flashcard_reviews
+         WHERE reviewed_at > NOW() - INTERVAL '7 days'
+         GROUP BY user_id, card_id, window_5m
+         HAVING COUNT(*) > 1
+       ) dup_ratings`
+    ).catch(() => ({ rows: [{ cnt: 0 }] })), // graceful fallback if query fails
+    // Daily activity for last 14 days
+    pool.query(
+      `SELECT DATE(reviewed_at) as day,
+              COUNT(*) as reviews,
+              COUNT(DISTINCT user_id) as unique_users
+       FROM flashcard_reviews
+       WHERE reviewed_at > NOW() - INTERVAL '14 days'
+       GROUP BY day ORDER BY day DESC`
     ),
   ]);
+
+  // Compute percentages for rating distribution
+  const ratingTotal = ratingResult.rows.reduce((s: number, r: any) => s + parseInt(r.cnt), 0) || 1;
+  const ratingDist = ratingResult.rows.map((r: any) => ({
+    rating: r.rating,
+    count: parseInt(r.cnt),
+    pct: Math.round((parseInt(r.cnt) / ratingTotal) * 100),
+  }));
+
+  // Compute percentages for confidence distribution
+  const confTotal = confidenceResult.rows.reduce((s: number, r: any) => s + parseInt(r.cnt), 0) || 1;
+  const confDist = confidenceResult.rows.map((r: any) => ({
+    confidence: r.confidence,
+    count: parseInt(r.cnt),
+    pct: Math.round((parseInt(r.cnt) / confTotal) * 100),
+  }));
 
   return {
     totalCards: parseInt(totalResult.rows[0]?.cnt || "0"),
@@ -384,13 +477,26 @@ export async function getAdminFlashcardAnalytics(): Promise<{
     activeUsers: parseInt(usersResult.rows[0]?.cnt || "0"),
     duplicateCount: parseInt(dupResult.rows[0]?.cnt || "0"),
     lowQualityCount: parseInt(lowQResult.rows[0]?.cnt || "0"),
-    generationStats: genResult.rows.map((r: any) => ({
-      source: r.source,
-      count: parseInt(r.cnt),
+    generationStats: genResult.rows.map((r: any) => ({ source: r.source, count: parseInt(r.cnt) })),
+    stateDistribution: stateResult.rows.map((r: any) => ({ state: r.status, count: parseInt(r.cnt) })),
+    ratingDistribution: ratingDist,
+    confidenceDistribution: confDist,
+    avgCardsPerSession: Math.round(parseFloat(sessionResult.rows[0]?.avg_per_session || "0")),
+    completionRate: 0, // requires session tracking table — placeholder
+    topWeakTopics: weakResult.rows.map((r: any) => ({
+      topic: r.topic,
+      errorRate: Math.round((parseInt(r.errors) / parseInt(r.total)) * 100),
+      totalAnswers: parseInt(r.total),
     })),
-    stateDistribution: stateResult.rows.map((r: any) => ({
-      state: r.status,
-      count: parseInt(r.cnt),
+    topMasteredTopics: masteredResult.rows.map((r: any) => ({
+      topic: r.topic,
+      masteredCount: parseInt(r.mastered_count),
+    })),
+    duplicateRatingEvents: parseInt((integrityResult as any).rows[0]?.cnt || "0"),
+    recentActivity: activityResult.rows.map((r: any) => ({
+      date: r.day,
+      reviews: parseInt(r.reviews),
+      uniqueUsers: parseInt(r.unique_users),
     })),
   };
 }

@@ -61,6 +61,7 @@ function billingSub(
     status,
     stripeSubscriptionId: "sub_test",
     stripeCustomerId: "cus_test",
+    planCode: "us_rn_monthly",
     planTier: TierCode.RN,
     planCountry: CountryCode.US,
     alliedCareer: null,
@@ -418,6 +419,20 @@ describe("billing correctness — static contracts (webhook dedup & trust bounda
     );
     assert.match(payload, /showReactivateSubscription/);
     assert.match(payload, /canUserReactivateStripeSubscription\(reconcileLiveSub\)/);
+  });
+
+  it("subscription management uses Stripe-native proration previews, immediate invoicing, and schedules downgrades", () => {
+    const source = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "billing", "subscription-management.ts"),
+      "utf8",
+    );
+    assert.match(source, /invoices\.createPreview/);
+    assert.match(source, /proration_behavior:\s*"always_invoice"/);
+    assert.match(source, /billing_cycle_anchor:\s*"unchanged"/);
+    assert.match(source, /subscriptionSchedules\.create/);
+    assert.match(source, /subscriptionSchedules\.update/);
+    assert.match(source, /proration_behavior:\s*"none"/);
+    assert.doesNotMatch(source, /remaining subscription value/i);
   });
 
   it("webhook idempotency: claim uses primary key insert (duplicate → P2002 / duplicate path)", () => {

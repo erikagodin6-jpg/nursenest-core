@@ -647,6 +647,103 @@ export function setupLessonContentRoutes(app: Express): void {
     }
   });
 
+  // Phase 10 — above-fold endpoint
+  // Returns only the sections needed to render above the fold (title + cellular intro).
+  // The client uses this for the initial visible render, then lazy-loads the remaining
+  // sections via /api/lessons/content/:slug/sections.
+  app.get("/api/lessons/content/:slug/above-fold", async (req: Request, res: Response) => {
+    try {
+      const slug = routeParamString(req.params.slug).trim();
+      if (!slug) return res.status(400).json({ error: "Missing slug" });
+
+      let lesson = await getLessonById(slug);
+      if (!lesson) return res.status(404).json({ error: "Lesson not found", code: "LESSON_NOT_FOUND" });
+
+      const userTier = await extractLessonUserTier(req);
+      if (userTier !== "admin" && isLessonIncomplete(slug, lesson)) {
+        return res.status(404).json({ error: "Lesson not found", code: "LESSON_NOT_FOUND" });
+      }
+
+      const lessonTier = deriveTier(slug);
+      if (userTier !== "admin" && !canUserAccessLesson(userTier, lessonTier)) {
+        return res.status(403).json({ error: "Access denied", code: "LESSON_TIER_LOCKED", requiredTier: lessonTier });
+      }
+
+      const region = (req as any).region || "US";
+      const adapted = adaptLessonContent(lesson, region);
+
+      // Return only title + intro section — the minimum needed to paint above the fold.
+      const aboveFold: any = {
+        id: slug,
+        tier: lessonTier,
+        title: adapted.title,
+        image: adapted.image,
+        summary: adapted.summary,
+        definition: adapted.definition,
+        cellular: adapted.cellular,
+        seo: adapted.seo,
+        isAboveFoldOnly: true,
+      };
+
+      res.setHeader("Cache-Control", "private, max-age=60, stale-while-revalidate=300");
+      return res.json(aboveFold);
+    } catch (err: any) {
+      const { status, body } = lessonApiFailureResponse(err);
+      res.status(status).json(body);
+    }
+  });
+
+  // Phase 10 — deferred sections endpoint
+  // Delivers all content BELOW the fold: risk factors, management, nursing actions,
+  // medications, quiz, etc. Called after above-fold is rendered.
+  app.get("/api/lessons/content/:slug/sections", async (req: Request, res: Response) => {
+    try {
+      const slug = routeParamString(req.params.slug).trim();
+      if (!slug) return res.status(400).json({ error: "Missing slug" });
+
+      let lesson = await getLessonById(slug);
+      if (!lesson) return res.status(404).json({ error: "Lesson not found", code: "LESSON_NOT_FOUND" });
+
+      const userTier = await extractLessonUserTier(req);
+      if (userTier !== "admin" && isLessonIncomplete(slug, lesson)) {
+        return res.status(404).json({ error: "Lesson not found", code: "LESSON_NOT_FOUND" });
+      }
+
+      const lessonTier = deriveTier(slug);
+      if (userTier !== "admin" && !canUserAccessLesson(userTier, lessonTier)) {
+        return res.status(403).json({ error: "Access denied", code: "LESSON_TIER_LOCKED", requiredTier: lessonTier });
+      }
+
+      const region = (req as any).region || "US";
+      const adapted = adaptLessonContent(lesson, region);
+
+      // Everything except the title+cellular already returned by above-fold
+      const sections: any = {
+        id: slug,
+        riskFactors: adapted.riskFactors,
+        diagnostics: adapted.diagnostics,
+        management: adapted.management,
+        nursingActions: adapted.nursingActions,
+        assessmentFindings: adapted.assessmentFindings,
+        signs: adapted.signs,
+        medications: adapted.medications,
+        pearls: adapted.pearls,
+        lifespan: adapted.lifespan,
+        quiz: adapted.quiz,
+        preTest: adapted.preTest,
+        postTest: adapted.postTest,
+        content: adapted.content,
+        blocks: adapted.blocks,
+      };
+
+      res.setHeader("Cache-Control", "private, max-age=60, stale-while-revalidate=300");
+      return res.json(sections);
+    } catch (err: any) {
+      const { status, body } = lessonApiFailureResponse(err);
+      res.status(status).json(body);
+    }
+  });
+
   app.get("/api/lessons/count", async (_req: Request, res: Response) => {
     try {
       const meta = await buildMetadata();

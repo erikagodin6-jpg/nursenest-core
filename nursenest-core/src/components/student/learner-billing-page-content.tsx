@@ -10,6 +10,7 @@ import {
 } from "@/components/student/learner-billing-cancel-subscription";
 import { LearnerBillingPortalButton } from "@/components/student/learner-billing-portal-button";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
+import { LearnerSubscriptionManagementPanel } from "@/components/student/learner-subscription-management-panel";
 
 function subscriptionStatusLabel(
   status: SubscriptionStatus,
@@ -88,6 +89,14 @@ function paymentMethodLabel(stripeRenewal: BillingPagePayload["stripeRenewal"], 
       ? ` · ${String(pm.expMonth).padStart(2, "0")}/${String(pm.expYear).slice(-2)}`
       : "";
   return `${brand} •••• ${pm.last4}${expiry}`;
+}
+
+function billingMoney(amount: number | null | undefined, currency: string | null | undefined): string {
+  if (amount == null) return "Managed in Stripe";
+  return new Intl.NumberFormat("en", {
+    style: "currency",
+    currency: (currency ?? "usd").toUpperCase(),
+  }).format(amount / 100);
 }
 
 function includesListKeys(tier: BillingPagePayload["effectiveTier"]): string[] {
@@ -218,6 +227,7 @@ export function LearnerBillingPageContent({
     showCancelSubscription,
     showReactivateSubscription,
     alliedProfessionSummary,
+    managedBillingPlans,
   } = payload;
 
   const planLabel = formatBillingTierLabel(effectiveTier, effectiveCountry);
@@ -400,6 +410,13 @@ export function LearnerBillingPageContent({
             <dd className="mt-1 text-sm font-medium text-foreground">{paymentMethodLabel(stripeRenewal, t)}</dd>
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.paymentMethodSub")}</p>
           </div>
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next invoice</dt>
+            <dd className="mt-1 text-sm font-medium text-foreground">
+              {billingMoney(stripeRenewal?.nextInvoiceAmountDue, stripeRenewal?.nextInvoiceCurrency)}
+            </dd>
+            <p className="mt-1 text-xs text-muted-foreground">Stripe calculates taxes, discounts, credits, and prorations.</p>
+          </div>
         </dl>
 
         <div
@@ -413,6 +430,61 @@ export function LearnerBillingPageContent({
             {t("learner.billingPage.ctaUpgrade")}
           </Link>
         </div>
+        {showBillingPortal ? (
+          <div className="border-t border-border/50 px-5 py-5">
+            <LearnerSubscriptionManagementPanel
+              plans={managedBillingPlans}
+              currentPlanCode={subscription?.planCode ?? null}
+              renewalDate={stripeRenewal?.currentPeriodEnd?.toISOString() ?? null}
+            />
+          </div>
+        ) : null}
+        {stripeRenewal?.invoices && stripeRenewal.invoices.length > 0 ? (
+          <div className="border-t border-border/50 px-5 py-5">
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Recent invoices</h3>
+            <div className="mt-3 overflow-x-auto">
+              <table className="w-full min-w-[520px] text-left text-sm">
+                <thead className="text-xs uppercase tracking-wide text-muted-foreground">
+                  <tr>
+                    <th className="py-2 pr-4">Date</th>
+                    <th className="py-2 pr-4">Status</th>
+                    <th className="py-2 pr-4">Amount</th>
+                    <th className="py-2">Invoice</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  {stripeRenewal.invoices.map((invoice) => (
+                    <tr key={invoice.id}>
+                      <td className="py-2 pr-4 text-muted-foreground">
+                        {invoice.created
+                          ? invoice.created.toLocaleDateString(localeTag, { year: "numeric", month: "short", day: "numeric" })
+                          : "—"}
+                      </td>
+                      <td className="py-2 pr-4 text-foreground">{invoice.status ?? "—"}</td>
+                      <td className="py-2 pr-4 text-foreground">
+                        {billingMoney(invoice.amountPaid ?? invoice.amountDue, invoice.currency)}
+                      </td>
+                      <td className="py-2">
+                        {invoice.hostedInvoiceUrl || invoice.invoicePdf ? (
+                          <a
+                            className="font-semibold text-primary underline-offset-2 hover:underline"
+                            href={invoice.hostedInvoiceUrl ?? invoice.invoicePdf ?? "#"}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            View
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <LearnerBillingReactivateSubscription t={t} enabled={showReactivateSubscription} />

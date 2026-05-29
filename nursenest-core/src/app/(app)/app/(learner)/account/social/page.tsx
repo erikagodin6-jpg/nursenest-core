@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { SocialStatKey, SocialVisibilityScope } from "@prisma/client";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
+import { ReferralDashboardCard } from "@/components/referrals/referral-dashboard-card";
 import { SocialStudySettingsClient } from "@/components/student/social-study-settings-client";
 import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loadReferralDashboard } from "@/lib/referrals/referral-rewards";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,13 +41,14 @@ export default async function AccountSocialPage() {
     );
   }
 
-  const [settings, code] = await Promise.all([
+  const [settings, code, referralDashboard] = await Promise.all([
     prisma.socialPrivacySetting.findUnique({ where: { userId } }),
     prisma.socialInviteCode.findFirst({
       where: { userId },
       orderBy: { createdAt: "desc" },
       select: { id: true, displayCode: true, enabled: true },
     }),
+    loadReferralDashboard(userId),
   ]);
 
   return (
@@ -54,8 +57,9 @@ export default async function AccountSocialPage() {
       <LearnerAccountPageHero
         eyebrow={t("learner.account.shell.kicker")}
         title="Social study privacy"
-        description="Choose whether friends, informal groups, or classrooms can see privacy-safe study ranges. No answers, notes, email, billing, or exact profile data are shared."
+        description="Invite friends, manage privacy-safe study comparisons, and create challenges. Rewards are only granted after referred learners verify, onboard, and begin studying."
       />
+      <ReferralDashboardCard dashboard={referralDashboard} />
       <SocialStudySettingsClient
         initialSettings={{
           socialEnabled: settings?.socialEnabled ?? false,
