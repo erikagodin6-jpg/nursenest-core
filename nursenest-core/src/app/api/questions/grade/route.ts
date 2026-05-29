@@ -34,6 +34,7 @@ import {
   parseGradeAttemptMode,
   recordQuestionPeerAnalyticsAndBuildPayload,
 } from "@/lib/questions/question-peer-analytics";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 
 export const dynamic = "force-dynamic";
 
@@ -126,7 +127,13 @@ export async function POST(req: Request) {
         select: { learnerPath: true },
       }),
       isRemediationEngineEnabled()
-        ? buildTopicLapseIndex(prisma, gate.userId)
+        ? safeStudyOptional(
+            "adaptive_learning",
+            "questions_grade",
+            () => buildTopicLapseIndex(prisma, gate.userId),
+            emptyLapseIndex(),
+            { timeoutMs: 500, label: "question_grade_lapse_index" },
+          )
         : emptyLapseIndex(),
     ]);
 
@@ -311,7 +318,7 @@ export async function POST(req: Request) {
     if (Math.random() < 0.05 && !skipLearnerBusinessAnalyticsForAccessScope(gate.entitlement)) {
       void captureServerEvent(analyticsDistinctId(gate.userId), PH.learnerQuestionGradedSample, {
         is_correct: correct,
-      });
+      }).catch(() => {});
     }
 
     return NextResponse.json({

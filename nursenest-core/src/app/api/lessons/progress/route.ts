@@ -18,6 +18,7 @@ import {
   captureStudyProgressFunnelAfterUpsert,
   loadStudyFunnelBeforeSnapshot,
 } from "@/lib/observability/study-funnel-capture";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +78,13 @@ export async function POST(req: Request) {
       });
       return notSubscribedResponse();
     }
-    const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
+    const funnelBefore = await safeStudyOptional(
+      "analytics",
+      "lessons_progress",
+      () => loadStudyFunnelBeforeSnapshot(userId),
+      null,
+      { timeoutMs: 500, label: "lesson_progress_funnel_before" },
+    );
     const existingPathway = await prisma.progress.findUnique({
       where: { userId_lessonId: { userId, lessonId } },
       select: { completed: true },
@@ -87,17 +94,32 @@ export async function POST(req: Request) {
       create: { userId, lessonId, completed },
       update: { completed },
     });
-    captureLessonProgressAnalytics(userId, gate.entitlement, {
-      lessonId,
-      pathwayId: pw.pathwayId,
-      lessonSlug: pw.slug,
-      source: "pathway_lesson_row",
-      hadExistingRow: !!existingPathway,
-      priorCompleted: existingPathway?.completed ?? false,
-      nextCompleted: completed,
-    });
-    captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
-    await invalidateLearnerPrivateReadCache(userId);
+    await safeStudyOptional(
+      "analytics",
+      "lessons_progress",
+      async () => {
+        captureLessonProgressAnalytics(userId, gate.entitlement, {
+          lessonId,
+          pathwayId: pw.pathwayId,
+          lessonSlug: pw.slug,
+          source: "pathway_lesson_row",
+          hadExistingRow: !!existingPathway,
+          priorCompleted: existingPathway?.completed ?? false,
+          nextCompleted: completed,
+        });
+        if (funnelBefore) captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
+        return true;
+      },
+      false,
+      { timeoutMs: 500, label: "pathway_lesson_progress_analytics" },
+    );
+    await safeStudyOptional(
+      "cache_invalidation",
+      "lessons_progress",
+      () => invalidateLearnerPrivateReadCache(userId).then(() => true),
+      false,
+      { timeoutMs: 500, label: "pathway_lesson_progress_cache_invalidation" },
+    );
     return NextResponse.json({ ok: true });
   }
 
@@ -106,7 +128,13 @@ export async function POST(req: Request) {
     select: { id: true },
   });
   if (contentRow) {
-    const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
+    const funnelBefore = await safeStudyOptional(
+      "analytics",
+      "lessons_progress",
+      () => loadStudyFunnelBeforeSnapshot(userId),
+      null,
+      { timeoutMs: 500, label: "cms_lesson_progress_funnel_before" },
+    );
     const existingContent = await prisma.progress.findUnique({
       where: { userId_lessonId: { userId, lessonId } },
       select: { completed: true },
@@ -116,15 +144,30 @@ export async function POST(req: Request) {
       create: { userId, lessonId, completed },
       update: { completed },
     });
-    captureLessonProgressAnalytics(userId, gate.entitlement, {
-      lessonId,
-      source: "cms_lesson",
-      hadExistingRow: !!existingContent,
-      priorCompleted: existingContent?.completed ?? false,
-      nextCompleted: completed,
-    });
-    captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
-    await invalidateLearnerPrivateReadCache(userId);
+    await safeStudyOptional(
+      "analytics",
+      "lessons_progress",
+      async () => {
+        captureLessonProgressAnalytics(userId, gate.entitlement, {
+          lessonId,
+          source: "cms_lesson",
+          hadExistingRow: !!existingContent,
+          priorCompleted: existingContent?.completed ?? false,
+          nextCompleted: completed,
+        });
+        if (funnelBefore) captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
+        return true;
+      },
+      false,
+      { timeoutMs: 500, label: "cms_lesson_progress_analytics" },
+    );
+    await safeStudyOptional(
+      "cache_invalidation",
+      "lessons_progress",
+      () => invalidateLearnerPrivateReadCache(userId).then(() => true),
+      false,
+      { timeoutMs: 500, label: "cms_lesson_progress_cache_invalidation" },
+    );
     return NextResponse.json({ ok: true });
   }
 

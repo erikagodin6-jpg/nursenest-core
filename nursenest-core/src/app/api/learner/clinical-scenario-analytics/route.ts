@@ -6,6 +6,7 @@ import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 
 export const dynamic = "force-dynamic";
 
@@ -76,40 +77,54 @@ export async function POST(req: Request) {
     const trajectoryPath = b.trajectoryPath ?? [];
     const maxStageOrderReached = b.maxStageOrderReached ?? b.reachedStageOrder;
 
-    await captureServerEvent(analyticsDistinctId(userId), "clinical_scenario_branch", {
-      scenario_id: b.scenarioId,
-      pathway_id: b.pathwayId,
-      tier_focus: b.tierFocus,
-      stage_order: b.stageOrder,
-      option_id: b.optionId,
-      is_correct: b.isCorrect,
-      incorrect_so_far: b.incorrectSoFar,
-      incorrect_weight: incorrectWeight,
-      trajectory_aggregate: b.trajectoryAggregate,
-      trajectory_path: trajectoryPath.length > 0 ? trajectoryPath.join(",") : undefined,
-      reached_stage_order: b.reachedStageOrder,
-      max_stage_order_reached: maxStageOrderReached,
-      premium_unlocked: b.premiumUnlocked,
-      completed_scenario: b.completedScenario ?? false,
-      is_premium_scenario: b.isPremiumScenario ?? false,
-    });
+    await safeStudyOptional(
+      "analytics",
+      "clinical_scenario",
+      () =>
+        captureServerEvent(analyticsDistinctId(userId), "clinical_scenario_branch", {
+          scenario_id: b.scenarioId,
+          pathway_id: b.pathwayId,
+          tier_focus: b.tierFocus,
+          stage_order: b.stageOrder,
+          option_id: b.optionId,
+          is_correct: b.isCorrect,
+          incorrect_so_far: b.incorrectSoFar,
+          incorrect_weight: incorrectWeight,
+          trajectory_aggregate: b.trajectoryAggregate,
+          trajectory_path: trajectoryPath.length > 0 ? trajectoryPath.join(",") : undefined,
+          reached_stage_order: b.reachedStageOrder,
+          max_stage_order_reached: maxStageOrderReached,
+          premium_unlocked: b.premiumUnlocked,
+          completed_scenario: b.completedScenario ?? false,
+          is_premium_scenario: b.isPremiumScenario ?? false,
+        }),
+      undefined,
+      { timeoutMs: 500, label: "clinical_scenario_branch_analytics" },
+    );
 
-    await recordClinicalScenarioSimulationRun({
-      userId,
-      scenarioId: b.scenarioId,
-      pathwayId: b.pathwayId,
-      tierFocus: b.tierFocus,
-      summary: {
-        incorrectCount: b.incorrectSoFar,
-        incorrectWeight,
-        trajectoryPath: trajectoryPath.map(String),
-        maxStageOrderReached,
-        completedScenario: b.completedScenario ?? false,
-        premiumUnlocked: b.premiumUnlocked,
-        trajectoryAggregate: b.trajectoryAggregate,
-        isPremiumScenario: b.isPremiumScenario ?? false,
-      },
-    });
+    await safeStudyOptional(
+      "analytics",
+      "clinical_scenario",
+      () =>
+        recordClinicalScenarioSimulationRun({
+          userId,
+          scenarioId: b.scenarioId,
+          pathwayId: b.pathwayId,
+          tierFocus: b.tierFocus,
+          summary: {
+            incorrectCount: b.incorrectSoFar,
+            incorrectWeight,
+            trajectoryPath: trajectoryPath.map(String),
+            maxStageOrderReached,
+            completedScenario: b.completedScenario ?? false,
+            premiumUnlocked: b.premiumUnlocked,
+            trajectoryAggregate: b.trajectoryAggregate,
+            isPremiumScenario: b.isPremiumScenario ?? false,
+          },
+        }),
+      undefined,
+      { timeoutMs: 700, label: "clinical_scenario_run_record" },
+    );
 
     return NextResponse.json({ ok: true }, { headers: mergeSubscriberPrivateCacheHeaders() });
   });

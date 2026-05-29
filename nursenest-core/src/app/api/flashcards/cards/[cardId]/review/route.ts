@@ -16,6 +16,7 @@ import { validateFlashcardsPostLaunchRequest } from "@/lib/learner/study-product
 import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 
 const bodySchema = z.object({
   rating: z.enum(["again", "hard", "good", "easy", "incorrect", "unsure", "known"]),
@@ -140,28 +141,38 @@ export async function POST(req: NextRequest, { params }: Props) {
           },
         });
 
-        const today = utcDayIndex(now);
-        const existing = await tx.flashcardUserStats.findUnique({ where: { userId } });
-        const lastDay = existing?.lastStudyDate ? utcDayIndex(existing.lastStudyDate) : null;
-        const streak = nextStreakCounts(existing?.currentStreak ?? 0, existing?.longestStreak ?? 0, lastDay, today);
-
-        await tx.flashcardUserStats.upsert({
-          where: { userId },
-          create: {
-            userId,
-            currentStreak: streak.currentStreak,
-            longestStreak: streak.longestStreak,
-            lastStudyDate: now,
-            cardsReviewedTotal: 1,
-          },
-          update: {
-            currentStreak: streak.currentStreak,
-            longestStreak: streak.longestStreak,
-            lastStudyDate: now,
-            cardsReviewedTotal: { increment: 1 },
-          },
-        });
       });
+
+      await safeStudyOptional(
+        "gamification",
+        "flashcards_card_review",
+        async () => {
+          const today = utcDayIndex(now);
+          const existing = await prisma.flashcardUserStats.findUnique({ where: { userId } });
+          const lastDay = existing?.lastStudyDate ? utcDayIndex(existing.lastStudyDate) : null;
+          const streak = nextStreakCounts(existing?.currentStreak ?? 0, existing?.longestStreak ?? 0, lastDay, today);
+
+          await prisma.flashcardUserStats.upsert({
+            where: { userId },
+            create: {
+              userId,
+              currentStreak: streak.currentStreak,
+              longestStreak: streak.longestStreak,
+              lastStudyDate: now,
+              cardsReviewedTotal: 1,
+            },
+            update: {
+              currentStreak: streak.currentStreak,
+              longestStreak: streak.longestStreak,
+              lastStudyDate: now,
+              cardsReviewedTotal: { increment: 1 },
+            },
+          });
+          return true;
+        },
+        false,
+        { timeoutMs: 500, label: "flashcards_card_streak_stats" },
+      );
 
       logFlashcardProgressSaved({
         userIdPrefix: userId.slice(0, 8),
@@ -169,11 +180,20 @@ export async function POST(req: NextRequest, { params }: Props) {
         rating: rawRating,
       });
 
-      captureLearnerProductEvent(userId, entitlement, PH.flashcardCardReviewed, {
-        rating: rawRating,
-        interval_days: nextSchedule.intervalDays,
-        repetitions: nextSchedule.repetitions,
-      });
+      await safeStudyOptional(
+        "analytics",
+        "flashcards_card_review",
+        async () => {
+          captureLearnerProductEvent(userId, entitlement, PH.flashcardCardReviewed, {
+            rating: rawRating,
+            interval_days: nextSchedule.intervalDays,
+            repetitions: nextSchedule.repetitions,
+          });
+          return true;
+        },
+        false,
+        { timeoutMs: 500, label: "flashcards_card_review_analytics" },
+      );
 
       return NextResponse.json({
         ok: true,

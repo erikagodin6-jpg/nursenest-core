@@ -3069,6 +3069,25 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
     setRegion((localStorage.getItem("nursenest-region") as "US" | "CA") || "US");
   }, []);
 
+  // Keyboard navigation for the active study session
+  useEffect(() => {
+    if (view !== "study") return;
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.key === "ArrowRight" || (e.key === "Enter" && showRationale) || (e.key === " " && showRationale)) {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrev();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, showRationale, currentIndex, sessionCards.length]);
+
   const categories = useMemo(() => Array.from(new Set(allCards.map(c => c.category))), [allCards]);
   const categoryLabelMap: Record<string, string> = {
     "Cardiovascular": t("flashcards.categoryCardiovascular"),
@@ -3280,6 +3299,15 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
       setIsFlipped(false);
     } else {
       setView("report");
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+      setSelectedOption(null);
+      setShowRationale(false);
+      setIsFlipped(false);
     }
   };
 

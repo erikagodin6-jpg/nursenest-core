@@ -25,6 +25,7 @@ import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-s
 import { validateFlashcardsPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import type { Prisma } from "@prisma/client";
 import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 
 const bodySchema = z.object({
   flashcardId: z.string().min(4),
@@ -173,33 +174,43 @@ export async function POST(req: NextRequest, { params }: Props) {
         }
       }
 
-      const today = utcDayIndex(now);
-      const existing = await tx.flashcardUserStats.findUnique({ where: { userId } });
-      const lastDay = existing?.lastStudyDate ? utcDayIndex(existing.lastStudyDate) : null;
-      const streak = nextStreakCounts(
-        existing?.currentStreak ?? 0,
-        existing?.longestStreak ?? 0,
-        lastDay,
-        today,
-      );
-
-      await tx.flashcardUserStats.upsert({
-        where: { userId },
-        create: {
-          userId,
-          currentStreak: streak.currentStreak,
-          longestStreak: streak.longestStreak,
-          lastStudyDate: now,
-          cardsReviewedTotal: 1,
-        },
-        update: {
-          currentStreak: streak.currentStreak,
-          longestStreak: streak.longestStreak,
-          lastStudyDate: now,
-          cardsReviewedTotal: { increment: 1 },
-        },
-      });
     });
+
+    await safeStudyOptional(
+      "gamification",
+      "flashcards_deck_review",
+      async () => {
+        const today = utcDayIndex(now);
+        const existing = await prisma.flashcardUserStats.findUnique({ where: { userId } });
+        const lastDay = existing?.lastStudyDate ? utcDayIndex(existing.lastStudyDate) : null;
+        const streak = nextStreakCounts(
+          existing?.currentStreak ?? 0,
+          existing?.longestStreak ?? 0,
+          lastDay,
+          today,
+        );
+
+        await prisma.flashcardUserStats.upsert({
+          where: { userId },
+          create: {
+            userId,
+            currentStreak: streak.currentStreak,
+            longestStreak: streak.longestStreak,
+            lastStudyDate: now,
+            cardsReviewedTotal: 1,
+          },
+          update: {
+            currentStreak: streak.currentStreak,
+            longestStreak: streak.longestStreak,
+            lastStudyDate: now,
+            cardsReviewedTotal: { increment: 1 },
+          },
+        });
+        return true;
+      },
+      false,
+      { timeoutMs: 500, label: "flashcards_deck_streak_stats" },
+    );
 
     logFlashcardProgressSaved({
       userIdPrefix: userId.slice(0, 8),
