@@ -287,10 +287,10 @@ html[data-theme="mint-blossom"] .nn-home-marketing-root {
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
-  --blossom-hero-accent-pink: #b5165b;
-  --blossom-hero-accent-lavender: #6842b8;
-  --blossom-hero-accent-sky: #075f96;
-  --blossom-hero-accent-solid: #8f1f4f;
+  --blossom-hero-accent-pink: #cf2f78;
+  --blossom-hero-accent-lavender: #8157cf;
+  --blossom-hero-accent-sky: #1f76b0;
+  --blossom-hero-accent-solid: #b82c69;
   --hero-accent-start: var(--blossom-hero-accent-pink);
   --hero-accent-middle: var(--blossom-hero-accent-lavender);
   --hero-accent-end: var(--blossom-hero-accent-sky);
