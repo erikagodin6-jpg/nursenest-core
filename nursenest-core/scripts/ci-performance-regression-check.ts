@@ -389,18 +389,29 @@ function checkObservabilityPlatform(): void {
   console.log("\n[7] Learner observability platform …");
 
   const REQUIRED_OBS_MODULES = [
-    { path: "src/lib/observability/learner-completion-observability.ts", label: "Completion observability" },
-    { path: "src/lib/observability/user-friction-detector.ts",           label: "User friction detector" },
-    { path: "src/lib/observability/time-to-learning-metrics.ts",         label: "Time-to-learning metrics" },
-    { path: "src/lib/observability/adaptive-learning-observability.ts",  label: "Adaptive learning telemetry" },
-    { path: "src/lib/observability/user-activity-audit-trail.ts",        label: "Activity audit trail (chargeback defense)" },
-    { path: "src/lib/observability/feature-health-engine.ts",            label: "Feature health engine" },
-    { path: "src/lib/observability/seo-observability.ts",                label: "SEO observability" },
-    { path: "src/lib/observability/ops-center.ts",                       label: "Operations center aggregator" },
-    { path: "src/lib/observability/event-taxonomy.ts",                   label: "Platform event taxonomy" },
-    { path: "src/components/admin/ops-center-dashboard.tsx",             label: "Ops center dashboard component" },
-    { path: "src/app/api/admin/ops-center/route.ts",                     label: "Ops center API route" },
-    { path: "src/app/(admin)/admin/ops-center/page.tsx",                 label: "Ops center admin page" },
+    // Platform 1.0
+    { path: "src/lib/observability/learner-completion-observability.ts",  label: "Completion observability" },
+    { path: "src/lib/observability/user-friction-detector.ts",            label: "User friction detector" },
+    { path: "src/lib/observability/time-to-learning-metrics.ts",          label: "Time-to-learning metrics" },
+    { path: "src/lib/observability/adaptive-learning-observability.ts",   label: "Adaptive learning telemetry" },
+    { path: "src/lib/observability/user-activity-audit-trail.ts",         label: "Activity audit trail (chargeback defense)" },
+    { path: "src/lib/observability/feature-health-engine.ts",             label: "Feature health engine" },
+    { path: "src/lib/observability/seo-observability.ts",                 label: "SEO observability" },
+    { path: "src/lib/observability/ops-center.ts",                        label: "Operations center aggregator" },
+    { path: "src/lib/observability/event-taxonomy.ts",                    label: "Platform event taxonomy" },
+    { path: "src/components/admin/ops-center-dashboard.tsx",              label: "Ops center dashboard component" },
+    { path: "src/app/api/admin/ops-center/route.ts",                      label: "Ops center API route" },
+    { path: "src/app/(admin)/admin/ops-center/page.tsx",                  label: "Ops center admin page" },
+    // Platform 2.0
+    { path: "src/lib/observability/instrumentation-coverage-audit.ts",   label: "Instrumentation coverage audit" },
+    { path: "src/lib/observability/activity-instrumentation-hooks.ts",   label: "Activity instrumentation hooks (wiring layer)" },
+    { path: "src/lib/observability/learning-outcomes-engine.ts",         label: "Learning outcomes engine" },
+    { path: "src/lib/observability/trend-analytics.ts",                  label: "Trend analytics (7d/30d/90d/180d)" },
+    { path: "src/lib/observability/content-quality-intelligence.ts",     label: "Content quality intelligence" },
+    { path: "src/lib/observability/rationale-quality-engine.ts",         label: "Rationale quality engine" },
+    { path: "src/lib/observability/tier-alignment-engine.ts",            label: "Tier alignment audit engine" },
+    { path: "src/lib/observability/platform-readiness-engine.ts",        label: "Platform readiness engine" },
+    { path: "src/lib/observability/content-review-queue.ts",             label: "Content review queue" },
   ] as const;
 
   let allPresent = true;
@@ -449,15 +460,55 @@ function checkObservabilityPlatform(): void {
     }
   }
 
-  // Verify contract tests present
-  const contractTestPath = path.join(APP_ROOT,
-    "src/lib/observability/learner-observability-platform.contract.test.ts");
-  if (fs.existsSync(contractTestPath)) {
-    const content = fs.readFileSync(contractTestPath, "utf8");
-    const testCount = (content.match(/^test\(/gm) ?? []).length;
-    pass("OBS-TESTS", `Observability contract tests: ${testCount} test(s)`);
-  } else {
-    warning("OBS-TESTS", "Observability contract tests not found");
+  // Verify contract tests present (Platform 1.0 + 2.0)
+  let totalTestCount = 0;
+  const contractTests = [
+    "src/lib/observability/learner-observability-platform.contract.test.ts",
+    "src/lib/observability/observability-platform-2.contract.test.ts",
+  ];
+  for (const testFile of contractTests) {
+    const contractTestPath = path.join(APP_ROOT, testFile);
+    if (fs.existsSync(contractTestPath)) {
+      const content = fs.readFileSync(contractTestPath, "utf8");
+      const testCount = (content.match(/^test\(/gm) ?? []).length;
+      totalTestCount += testCount;
+      pass("OBS-TESTS", `${path.basename(testFile)}: ${testCount} test(s)`);
+    } else {
+      warning("OBS-TESTS", `Contract test not found: ${testFile}`);
+    }
+  }
+  if (totalTestCount > 0) {
+    pass("OBS-TESTS-TOTAL", `Total observability contract tests: ${totalTestCount}`);
+  }
+
+  const coverageAuditPath = path.join(APP_ROOT, "src/lib/observability/instrumentation-coverage-audit.ts");
+  if (fs.existsSync(coverageAuditPath)) {
+    const content = fs.readFileSync(coverageAuditPath, "utf8");
+    const requiredLifecycleEvents = [
+      "activity_started",
+      "activity_completed",
+      "activity_abandoned",
+      "activity_error",
+      "activity_resume",
+    ];
+    const missingLifecycleEvents = requiredLifecycleEvents.filter((event) => !content.includes(event));
+    if (missingLifecycleEvents.length === 0) {
+      pass("OBS-LIFECYCLE", "All required learner lifecycle events are represented");
+    } else {
+      critical("OBS-LIFECYCLE-MISSING", `Missing lifecycle events: ${missingLifecycleEvents.join(", ")}`);
+    }
+
+    if (content.includes('status: "dark"')) {
+      critical("OBS-DARK-ROUTE", "Instrumentation coverage audit contains a dark learner route");
+    } else {
+      pass("OBS-DARK-ROUTE", "No dark learner routes in instrumentation coverage audit");
+    }
+
+    if (content.includes("isCoverageAcceptable(minPercent = 90)")) {
+      pass("OBS-COVERAGE-GATE", "Observability coverage gate is set to 90%+");
+    } else {
+      critical("OBS-COVERAGE-GATE", "Observability coverage gate must default to 90%+");
+    }
   }
 }
 

@@ -2,11 +2,11 @@
  * Learner Activity Completion Observability
  *
  * Tracks the full lifecycle of every learner activity:
- *   started → completed | abandoned
+ *   started → resumed → completed | abandoned | errored
  *
  * Activities tracked:
  *   questions, flashcards, lessons, clinical-skills, pharmacology,
- *   ecg, cat, loft, analytics, study-plan, readiness
+ *   ecg, cat, loft, analytics, dashboard, study-plan, readiness
  *
  * Emits:
  *   - Structured server logs (picked up by log drains)
@@ -30,6 +30,9 @@
  */
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { randomUUID } from "node:crypto";
 
 // ─── Activity types ───────────────────────────────────────────────────────────
 
@@ -43,10 +46,12 @@ export type LearnerActivityType =
   | "cat"
   | "loft"
   | "analytics"
+  | "dashboard"
   | "study-plan"
+  | "smart-review"
   | "readiness";
 
-export type ActivityLifecycleEvent = "started" | "completed" | "abandoned" | "errored";
+export type ActivityLifecycleEvent = "started" | "completed" | "abandoned" | "errored" | "resumed";
 
 // ─── Event records ────────────────────────────────────────────────────────────
 
@@ -83,6 +88,15 @@ export type ActivityAbandonedRecord = {
   reason?: "navigation" | "timeout" | "error" | "unknown";
 };
 
+export type ActivityResumedRecord = {
+  userId: string;
+  activity: LearnerActivityType;
+  sessionId?: string;
+  tier: string;
+  pathwayId?: string;
+  durationMs?: number;
+};
+
 // ─── In-process metrics store ─────────────────────────────────────────────────
 
 type ActivityBucket = {
@@ -90,6 +104,7 @@ type ActivityBucket = {
   completed: number;
   abandoned: number;
   errored: number;
+  resumed: number;
   totalDurationMs: number;
   durationSamples: number;
   itemsCompletedTotal: number;
@@ -107,6 +122,7 @@ function bucket(activity: LearnerActivityType): ActivityBucket {
       completed: 0,
       abandoned: 0,
       errored: 0,
+      resumed: 0,
       totalDurationMs: 0,
       durationSamples: 0,
       itemsCompletedTotal: 0,
@@ -120,6 +136,62 @@ function bucket(activity: LearnerActivityType): ActivityBucket {
 
 // ─── Recording functions ──────────────────────────────────────────────────────
 
+type PersistableActivityRecord = {
+  userId: string;
+  activity: LearnerActivityType;
+  lifecycle: ActivityLifecycleEvent;
+  tier: string;
+  pathwayId?: string;
+  sessionId?: string;
+  durationMs?: number;
+  itemsCompleted?: number;
+  score?: number;
+  meta?: Record<string, unknown>;
+};
+
+function persistActivityEvent(record: PersistableActivityRecord): void {
+  if (!isDatabaseUrlConfigured()) return;
+  const meta = record.meta ? JSON.stringify(record.meta) : null;
+  void prisma
+    .$executeRaw`
+      INSERT INTO learner_activity_events (
+        id,
+        user_id,
+        activity_type,
+        lifecycle,
+        tier,
+        pathway_id,
+        session_id,
+        duration_ms,
+        items_completed,
+        score,
+        meta,
+        created_at
+      )
+      VALUES (
+        ${randomUUID()},
+        ${record.userId},
+        ${record.activity},
+        ${record.lifecycle},
+        ${record.tier},
+        ${record.pathwayId ?? null},
+        ${record.sessionId ?? null},
+        ${record.durationMs ?? null},
+        ${record.itemsCompleted ?? null},
+        ${record.score ?? null},
+        ${meta}::jsonb,
+        NOW()
+      )
+    `
+    .catch((error: unknown) => {
+      safeServerLog("learner", "activity_event_persist_failed", {
+        activity: record.activity,
+        lifecycle: record.lifecycle,
+        error: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
+      });
+    });
+}
+
 export function recordActivityStarted(record: ActivityStartedRecord): void {
   bucket(record.activity).started++;
   safeServerLog("learner", "activity_started", {
@@ -128,6 +200,15 @@ export function recordActivityStarted(record: ActivityStartedRecord): void {
     pathwayId: record.pathwayId?.slice(0, 80),
     sessionId: record.sessionId?.slice(0, 32),
     at: record.startTimestamp,
+  });
+  persistActivityEvent({
+    userId: record.userId,
+    activity: record.activity,
+    lifecycle: "started",
+    tier: record.tier,
+    pathwayId: record.pathwayId,
+    sessionId: record.sessionId,
+    meta: { startTimestamp: record.startTimestamp },
   });
 }
 
@@ -150,6 +231,16 @@ export function recordActivityCompleted(record: ActivityCompletedRecord): void {
     score: record.score,
     sessionId: record.sessionId?.slice(0, 32),
   });
+  persistActivityEvent({
+    userId: record.userId,
+    activity: record.activity,
+    lifecycle: "completed",
+    tier: record.tier,
+    sessionId: record.sessionId,
+    durationMs: record.durationMs,
+    itemsCompleted: record.itemsCompleted,
+    score: record.score,
+  });
 }
 
 export function recordActivityAbandoned(record: ActivityAbandonedRecord): void {
@@ -166,18 +257,68 @@ export function recordActivityAbandoned(record: ActivityAbandonedRecord): void {
     reason: record.reason ?? "unknown",
     sessionId: record.sessionId?.slice(0, 32),
   });
+  persistActivityEvent({
+    userId: record.userId,
+    activity: record.activity,
+    lifecycle: "abandoned",
+    tier: record.tier,
+    sessionId: record.sessionId,
+    durationMs: record.durationMs,
+    meta: {
+      completionRatio: record.completionRatio,
+      reason: record.reason ?? "unknown",
+    },
+  });
 }
 
 export function recordActivityError(
   activity: LearnerActivityType,
   tier: string,
   errorMessage: string,
+  context?: { userId?: string; sessionId?: string; pathwayId?: string },
 ): void {
   bucket(activity).errored++;
   safeServerLog("learner", "activity_error", {
     activity,
     tier,
     error: errorMessage.slice(0, 200),
+  });
+  if (context?.userId) {
+    persistActivityEvent({
+      userId: context.userId,
+      activity,
+      lifecycle: "errored",
+      tier,
+      pathwayId: context.pathwayId,
+      sessionId: context.sessionId,
+      meta: { error: errorMessage.slice(0, 200) },
+    });
+  }
+}
+
+export function recordActivityResumed(record: ActivityResumedRecord): void {
+  const b = bucket(record.activity);
+  b.resumed++;
+  if (record.durationMs != null) {
+    b.totalDurationMs += record.durationMs;
+    b.durationSamples++;
+  }
+
+  safeServerLog("learner", "activity_resume", {
+    activity: record.activity,
+    tier: record.tier,
+    pathwayId: record.pathwayId?.slice(0, 80),
+    sessionId: record.sessionId?.slice(0, 32),
+    durationMs: record.durationMs,
+  });
+  persistActivityEvent({
+    userId: record.userId,
+    activity: record.activity,
+    lifecycle: "resumed",
+    tier: record.tier,
+    pathwayId: record.pathwayId,
+    sessionId: record.sessionId,
+    durationMs: record.durationMs,
   });
 }
 
@@ -291,7 +432,9 @@ export function getAllActivityHealthScores(): ActivityHealthScore[] {
     "cat",
     "loft",
     "analytics",
+    "dashboard",
     "study-plan",
+    "smart-review",
     "readiness",
   ];
   return allActivities.map(computeActivityHealthScore);

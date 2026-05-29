@@ -28,6 +28,12 @@ import { getPlatformRemediationSuccessRate, getTopicImprovementReports, getRemed
 import { computeAllFeatureHealth, summarizeFeatureHealth } from "@/lib/observability/feature-health-engine";
 import { getCacheLayerStats, checkCacheAlerts } from "@/lib/performance/cache-observability";
 import { getLatestPoolSample, getPoolUtilizationTrend, checkPoolAlert } from "@/lib/performance/connection-pool-monitor";
+import { getPlatformImprovementRate } from "@/lib/observability/learning-outcomes-engine";
+import { getPlatformQuestionQualitySummary } from "@/lib/observability/content-quality-intelligence";
+import { generateInstrumentationCoverageReport } from "@/lib/observability/instrumentation-coverage-audit";
+import { buildPlatformReadinessReport } from "@/lib/observability/platform-readiness-engine";
+import { getQueueSummary } from "@/lib/observability/content-review-queue";
+import { getPlatformTrendSummary } from "@/lib/observability/trend-analytics";
 import { getActivityStartupStats, formatActivityStartupReport } from "@/lib/performance/activity-startup-metrics";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -79,6 +85,38 @@ export type OpsCenterSnapshot = {
     level: SystemHealthLevel;
     journeysOnTarget: number;
     journeysTotal: number;
+  };
+  contentQuality: {
+    totalTracked: number;
+    flaggedCount: number;
+    criticalCount: number;
+    avgQualityScore: number | null;
+  };
+  learningOutcomes: {
+    improvingTopics: number;
+    totalMeasuredTopics: number;
+    improvementRate: number | null;
+    avgGain: number | null;
+  };
+  platformReadiness: {
+    overallScore: number;
+    status: SystemHealthLevel;
+    summary: string;
+    actionRequired: boolean;
+  };
+  reviewQueue: {
+    total: number;
+    critical: number;
+    high: number;
+    unacknowledged: number;
+  };
+  instrumentation: {
+    coveragePercent: number;
+    darkActivities: number;
+  };
+  weeklyTrend: {
+    regressions: number;
+    improvements: number;
   };
   alerts: PlatformSummaryAlert[];
 };
@@ -208,6 +246,61 @@ export async function buildOpsCenterSnapshot(): Promise<OpsCenterSnapshot> {
     : ttlOnTarget >= ttlStats.length * 0.5 ? "degraded"
     : "critical";
 
+  // ── Content quality ────────────────────────────────────────────────────────
+  const contentQualitySummary = getPlatformQuestionQualitySummary();
+  if (contentQualitySummary.criticalCount > 5) {
+    alerts.push({
+      severity: "warn",
+      category: "Content",
+      message: `${contentQualitySummary.criticalCount} questions with critical quality issues`,
+    });
+  }
+
+  // ── Learning outcomes ──────────────────────────────────────────────────────
+  const learningOutcomes = getPlatformImprovementRate();
+
+  // ── Instrumentation coverage ───────────────────────────────────────────────
+  const coverageReport = generateInstrumentationCoverageReport();
+  if (coverageReport.darkCount > 3) {
+    alerts.push({
+      severity: "warn",
+      category: "Instrumentation",
+      message: `${coverageReport.darkCount} activities have zero observability — data blind spots`,
+    });
+  }
+
+  // ── Content review queue ───────────────────────────────────────────────────
+  const queueSummary = getQueueSummary();
+  if (queueSummary.critical > 0) {
+    alerts.push({
+      severity: "critical",
+      category: "Content Queue",
+      message: `${queueSummary.critical} critical content review item(s) pending`,
+    });
+  }
+
+  // ── Weekly trend ───────────────────────────────────────────────────────────
+  const weeklyTrend = getPlatformTrendSummary("7d");
+
+  // ── Platform readiness ─────────────────────────────────────────────────────
+  const infraScore = poolSample?.utilization != null
+    ? Math.round((1 - poolSample.utilization) * 100) : 100;
+  const readinessReport = buildPlatformReadinessReport({
+    featureHealthScore: Math.round(100 - featureSummary.criticalCount * 15 - featureSummary.degradedCount * 8),
+    learnerHealthScore: activityHealth.overallScore,
+    contentQualityScore: contentQualitySummary.avgQualityScore ?? 100,
+    infraHealthScore: infraScore,
+    instrumentationCoveragePercent: coverageReport.coveragePercent,
+  });
+
+  if (readinessReport.status === "critical") {
+    alerts.push({
+      severity: "critical",
+      category: "Platform Readiness",
+      message: `Platform readiness score: ${readinessReport.overallScore}/100 — ${readinessReport.summary}`,
+    });
+  }
+
   // ── Overall system health ──────────────────────────────────────────────────
   const levelPriority: Record<SystemHealthLevel, number> = {
     healthy: 0, watch: 1, degraded: 2, critical: 3,
@@ -215,14 +308,10 @@ export async function buildOpsCenterSnapshot(): Promise<OpsCenterSnapshot> {
 
   const allLevels: SystemHealthLevel[] = [
     learnerLevel, featureSummary.overallStatus, perfLevel, frictionLevel, ttlLevel,
+    readinessReport.status,
   ];
   const worstLevel = allLevels.reduce(
     (a, b) => levelPriority[a] > levelPriority[b] ? a : b, "healthy",
-  );
-  const avgScore = Math.round(
-    (activityHealth.overallScore * 0.4 +
-      (100 - featureSummary.criticalCount * 15 - featureSummary.degradedCount * 8) * 0.35 +
-      (poolSample?.utilization != null ? (1 - poolSample.utilization) * 100 : 100) * 0.25),
   );
 
   const systemSummaries: Record<SystemHealthLevel, string> = {
@@ -236,7 +325,7 @@ export async function buildOpsCenterSnapshot(): Promise<OpsCenterSnapshot> {
     generatedAt: now,
     systemHealth: {
       level: worstLevel,
-      score: Math.max(0, Math.min(100, avgScore)),
+      score: readinessReport.overallScore,
       summary: systemSummaries[worstLevel],
     },
     learnerHealth: {
@@ -283,6 +372,38 @@ export async function buildOpsCenterSnapshot(): Promise<OpsCenterSnapshot> {
       level: ttlLevel,
       journeysOnTarget: ttlOnTarget,
       journeysTotal: ttlStats.length,
+    },
+    contentQuality: {
+      totalTracked: contentQualitySummary.totalTracked,
+      flaggedCount: contentQualitySummary.flaggedCount,
+      criticalCount: contentQualitySummary.criticalCount,
+      avgQualityScore: contentQualitySummary.avgQualityScore,
+    },
+    learningOutcomes: {
+      improvingTopics: learningOutcomes.improvingTopics,
+      totalMeasuredTopics: learningOutcomes.totalMeasuredTopics,
+      improvementRate: learningOutcomes.improvementRate,
+      avgGain: learningOutcomes.avgGain,
+    },
+    platformReadiness: {
+      overallScore: readinessReport.overallScore,
+      status: readinessReport.status as SystemHealthLevel,
+      summary: readinessReport.summary,
+      actionRequired: readinessReport.actionRequired,
+    },
+    reviewQueue: {
+      total: queueSummary.total,
+      critical: queueSummary.critical,
+      high: queueSummary.high,
+      unacknowledged: queueSummary.unacknowledged,
+    },
+    instrumentation: {
+      coveragePercent: coverageReport.coveragePercent,
+      darkActivities: coverageReport.darkCount,
+    },
+    weeklyTrend: {
+      regressions: weeklyTrend.regressions.length,
+      improvements: weeklyTrend.improvements.length,
     },
     alerts,
   };

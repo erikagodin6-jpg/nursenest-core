@@ -96,7 +96,7 @@ test("completion observability: low completion rate degrades health score", () =
 test("completion observability: all activity types have health scores", () => {
   resetCompletionObservability();
   const scores = getAllActivityHealthScores();
-  assert.equal(scores.length, 11, "Should have 11 activity types");
+  assert.equal(scores.length, 13, "Should have 13 activity types");
   for (const s of scores) {
     assert.ok(typeof s.score === "number", `Score must be a number for ${s.activity}`);
     assert.ok(["healthy", "watch", "degraded", "critical"].includes(s.status));

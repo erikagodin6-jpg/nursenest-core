@@ -37,6 +37,7 @@ import { CheckoutSuccessBanner } from "@/components/student/checkout-success-ban
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
+import { LearnerActivityLifecycleBeacon } from "@/components/observability/learner-activity-lifecycle-beacon";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
@@ -524,7 +525,12 @@ const LearnerShellLayout = traceLayout(
                   }
                 />
               ) : null}
-              {!skipNonCritical && !qaShell ? <LearnerAppSectionAnalytics /> : null}
+              {!skipNonCritical && !qaShell ? (
+                <>
+                  <LearnerAppSectionAnalytics />
+                  <LearnerActivityLifecycleBeacon />
+                </>
+              ) : null}
               <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] overflow-x-clip bg-[var(--semantic-bg-base)] pt-0.5 md:pt-1">
                 <div className="flex min-h-0 flex-col gap-2 md:gap-2.5">
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-2.5 md:px-4 md:py-2">

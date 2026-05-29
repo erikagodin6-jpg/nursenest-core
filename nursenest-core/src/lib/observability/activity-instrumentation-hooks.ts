@@ -26,6 +26,7 @@ import {
   recordActivityCompleted,
   recordActivityAbandoned,
   recordActivityError,
+  recordActivityResumed,
   type LearnerActivityType,
 } from "@/lib/observability/learner-completion-observability";
 import {
@@ -160,7 +161,11 @@ export function emitActivityError(
   opts: ActivityEventBase & { errorMessage: string },
 ): void {
   try {
-    recordActivityError(opts.activity, opts.tier, opts.errorMessage);
+    recordActivityError(opts.activity, opts.tier, opts.errorMessage, {
+      userId: opts.userId,
+      sessionId: opts.sessionId,
+      pathwayId: opts.pathwayId,
+    });
   } catch {
     /* non-fatal */
   }
@@ -171,6 +176,29 @@ export function emitActivityError(
       sessionId: opts.sessionId,
       signal: "activity_launch_failed",
       activity: opts.activity,
+    });
+  } catch {
+    /* non-fatal */
+  }
+}
+
+/**
+ * Fire-and-forget: emit activity_resume.
+ * Call when a learner returns to an active study surface.
+ */
+export function emitActivityResume(
+  opts: ActivityEventBase & {
+    durationMs?: number;
+  },
+): void {
+  try {
+    recordActivityResumed({
+      userId: opts.userId,
+      activity: opts.activity,
+      tier: opts.tier,
+      pathwayId: opts.pathwayId,
+      sessionId: opts.sessionId,
+      durationMs: opts.durationMs,
     });
   } catch {
     /* non-fatal */

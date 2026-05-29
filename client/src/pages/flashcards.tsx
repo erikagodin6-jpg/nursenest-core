@@ -101,6 +101,7 @@ import { ProtectedImage } from "@/components/protected-image";
 import { getCategoryImage } from "@/lib/system-images";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
+import { flashcardTelemetry } from "@/lib/flashcard-telemetry";
 import { AdaptiveStudyHub } from "@/components/adaptive-study";
 import { SocialProofBar } from "@/components/conversion-funnel";
 import { AITutorWidget } from "@/components/ai-tutor-widget";
@@ -1924,11 +1925,14 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
 
   // Stable session ID for server-side idempotency keys.  Regenerated at session start.
   const sessionIdRef = useRef(`sess_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+  const sessionStartTimeRef = useRef<number>(Date.now());
   const resetSessionTracking = () => {
     setSessionRatings({});
     setSessionAnswers({});
     sessionIdRef.current = `sess_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    sessionStartTimeRef.current = Date.now();
   };
+  const sessionRatingCounts = useRef({ again: 0, hard: 0, good: 0, easy: 0 });
 
   const [examFlashcards, setExamFlashcards] = useState<ExamFlashcard[]>([]);
   const [examFlashcardsLoading, setExamFlashcardsLoading] = useState(false);
@@ -2897,6 +2901,16 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
       updated[updated.length - 1] = { ...updated[updated.length - 1], confidence };
       return updated;
     });
+    flashcardTelemetry.confidenceSelected({
+      sessionId: sessionIdRef.current, userId: user?.id,
+      cardId: card.id, cardType: "question",
+      topic: card.topic ?? card.bodySystem, sessionIndex: adaptiveIndex, confidence,
+    });
+    flashcardTelemetry.autoAdvanced({
+      sessionId: sessionIdRef.current, userId: user?.id,
+      cardId: card.id, cardType: "question",
+      topic: card.topic ?? card.bodySystem, sessionIndex: adaptiveIndex, trigger: "confidence_auto",
+    });
     // Persist with exponential-backoff retry — confidence data must not be silently lost.
     const payload = JSON.stringify({
       userId: user.id,
@@ -3133,9 +3147,19 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
       if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
         if (!canAdvance) return; // block skip on unanswered/un-flipped cards
         e.preventDefault();
+        flashcardTelemetry.keyboardNext({
+          sessionId: sessionIdRef.current, userId: user?.id,
+          cardId: card?.id ?? "", cardType: card?.type ?? "question",
+          topic: card?.topic ?? card?.category, sessionIndex: currentIndex, key: e.key,
+        });
         handleNext();
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
+        flashcardTelemetry.keyboardPrev({
+          sessionId: sessionIdRef.current, userId: user?.id,
+          cardId: card?.id ?? "", cardType: card?.type ?? "question",
+          topic: card?.topic ?? card?.category, sessionIndex: currentIndex, key: e.key,
+        });
         handlePrev();
       }
     };
@@ -3321,7 +3345,16 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
       } catch {}
     }
     await fetchPreviewStatus();
+    resetSessionTracking();
+    sessionRatingCounts.current = { again: 0, hard: 0, good: 0, easy: 0 };
     setView("study");
+    // Telemetry: session opened (fired after state is set, so sessionCards is current)
+    flashcardTelemetry.sessionOpened({
+      sessionId: sessionIdRef.current,
+      userId: user?.id,
+      tier: effectiveTier,
+      sessionLength: sessionCards.length,
+    });
   };
 
   const handleSM2Rating = (rating: "again" | "hard" | "good" | "easy") => {
@@ -3337,6 +3370,18 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
 
     // Commit rating to local session state immediately (optimistic + dedup fence)
     setSessionRatings(prev => ({ ...prev, [sessionKey]: rating }));
+    sessionRatingCounts.current[rating]++;
+    flashcardTelemetry.ratingSelected({
+      sessionId: sessionIdRef.current, userId: user?.id, tier: effectiveTier,
+      cardId: card.id, cardType: card.type, topic: card.topic ?? card.category,
+      sessionIndex: currentIndex, rating,
+      isCorrect: sessionAnswers[sessionKey]?.isCorrect,
+    });
+    flashcardTelemetry.autoAdvanced({
+      sessionId: sessionIdRef.current, userId: user?.id,
+      cardId: card.id, cardType: card.type, topic: card.topic ?? card.category,
+      sessionIndex: currentIndex, trigger: "sm2_rating",
+    });
 
     // Fire-and-forget: persist to SRS engine; never block the UX transition.
     if (user && card.id && card.source !== "static") {
@@ -3370,18 +3415,43 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
         return;
       }
     }
+    const card = sessionCards[currentIndex];
     if (currentIndex < sessionCards.length - 1) {
+      flashcardTelemetry.manualNext({
+        sessionId: sessionIdRef.current, userId: user?.id,
+        cardId: card?.id ?? "", cardType: card?.type ?? "question",
+        topic: card?.topic ?? card?.category, sessionIndex: currentIndex,
+      });
       setCurrentIndex(prev => prev + 1);
       setSelectedOption(null);
       setShowRationale(false);
       setIsFlipped(false);
     } else {
+      // Session complete
+      flashcardTelemetry.sessionCompleted({
+        sessionId: sessionIdRef.current, userId: user?.id, tier: effectiveTier,
+        sessionLength: sessionCards.length,
+        cardsAnswered: Object.keys(sessionAnswers).length,
+        cardsSkipped: sessionCards.length - Object.keys(sessionAnswers).length,
+        againCount: sessionRatingCounts.current.again,
+        hardCount: sessionRatingCounts.current.hard,
+        goodCount: sessionRatingCounts.current.good,
+        easyCount: sessionRatingCounts.current.easy,
+        correctCount: sessionResults.filter(r => r.correct).length,
+        durationMs: Date.now() - sessionStartTimeRef.current,
+      });
       setView("report");
     }
   };
 
   const handlePrev = () => {
     if (currentIndex === 0) return;
+    const card = sessionCards[currentIndex];
+    flashcardTelemetry.manualPrev({
+      sessionId: sessionIdRef.current, userId: user?.id,
+      cardId: card?.id ?? "", cardType: card?.type ?? "question",
+      topic: card?.topic ?? card?.category, sessionIndex: currentIndex,
+    });
     const prevIndex = currentIndex - 1;
     const prevCard = sessionCards[prevIndex];
     const prevKey = `${prevIndex}:${prevCard?.id}`;
@@ -3424,6 +3494,16 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
     setSessionResults(prev => [...prev, { id: card.id, correct: isCorrect }]);
     setSelectedOption(index);
     setShowRationale(true);
+    flashcardTelemetry.answered({
+      sessionId: sessionIdRef.current, userId: user?.id, tier: effectiveTier,
+      cardId: card.id, cardType: card.type, topic: card.topic ?? card.category,
+      sessionIndex: currentIndex, selectedIndex: index, isCorrect,
+    });
+    flashcardTelemetry.rationaleViewed({
+      sessionId: sessionIdRef.current, userId: user?.id,
+      cardId: card.id, cardType: card.type, topic: card.topic ?? card.category,
+      sessionIndex: currentIndex,
+    });
 
     if (!isPaid && user) {
       decrementPreview();
@@ -7384,6 +7464,7 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
             {currentCard.type === "question" ? (
               <>
                 {showRationale ? (
+                  <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 animate-in fade-in duration-300" data-testid="section-study-review-layout">
                     <div className="flex flex-col gap-3">
                       <Card className="border border-border shadow-sm bg-card overflow-hidden rounded-xl flex flex-col">
@@ -7588,6 +7669,7 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
                       </span>
                     </div>
                   )}
+                  </>
                 ) : (
                   <Card className="border border-border shadow-md bg-card overflow-hidden rounded-2xl flex flex-col animate-in fade-in duration-200">
                     <CardContent className="px-6 sm:px-8 py-6 flex flex-col flex-1">

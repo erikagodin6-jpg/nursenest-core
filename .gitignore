@@ -182,6 +182,13 @@ nursenest-core/reports/ui-redesign-preview/*.png
 docs/screenshots/**/*.png
 docs/screenshots/**/*.webp
 
+# Assessment / marketing screenshot outputs (machine-generated; .gitkeep preserves dirs)
+# -----------------------------------------------------------------------------
+marketing-assets/screenshots/**/*.png
+marketing-assets/screenshots/**/*.webp
+marketing-assets/screenshots/gallery/index.html
+marketing-assets/screenshots/manifest.json
+
 # Cursor / IDE / local tooling (large or machine-specific — never commit)
 # -----------------------------------------------------------------------------
 playwright-report/
