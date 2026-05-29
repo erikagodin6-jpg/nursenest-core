@@ -309,25 +309,26 @@ export function FlashcardStudyQuestionStack({
               className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] min-w-0 min-h-0 overflow-hidden p-5 sm:p-7 lg:p-8"
               data-nn-flashcard-branding-revamp=""
             >
-              <div className="relative z-[1] flex flex-wrap items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] pb-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  {questionLabel ? (
-                    <span className="nn-flashcard-question-label">{questionLabel}</span>
-                  ) : null}
-                  <span className="nn-flashcard-chip nn-flashcard-chip--mode">{sessionModeLabel}</span>
+              {/* ── Card title block — matches mockup: STUDY / Flashcards / topic ── */}
+              <div className="nn-flashcard-card-title-row relative z-[1] flex items-start justify-between gap-2 border-b border-[var(--semantic-border-soft)] pb-3">
+                <div className="nn-flashcard-card-title-block min-w-0">
+                  <p className="nn-flashcard-card-surface-label">
+                    {sessionModeLabel || "Study"}
+                  </p>
+                  <p className="nn-flashcard-card-surface-type">Flashcards</p>
                   {topicLine ? (
-                    <span className="nn-flashcard-chip nn-flashcard-chip--topic max-w-[min(100%,420px)] truncate">
-                      {topicLine}
-                    </span>
+                    <p className="nn-flashcard-card-topic-subtitle truncate max-w-[min(100%,340px)]">
+                      {topicLine.split("·")[0]?.trim() ?? topicLine}
+                    </p>
                   ) : null}
                   {itemKindCaption ? (
-                    <span className="nn-flashcard-chip nn-flashcard-chip--kind">{itemKindCaption}</span>
+                    <span className="nn-flashcard-chip nn-flashcard-chip--kind mt-1">{itemKindCaption}</span>
                   ) : null}
                 </div>
                 {onToggleMark ? (
                   <button
                     type="button"
-                    className="nn-flashcard-mark-button"
+                    className="nn-flashcard-mark-button shrink-0"
                     aria-pressed={marked}
                     onClick={onToggleMark}
                   >

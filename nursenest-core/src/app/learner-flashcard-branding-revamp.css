@@ -364,13 +364,52 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
    Scope: [data-nn-flashcard-branding-revamp]
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ── TOPBAR: force flex row — match [0,4,0] specificity of the grid override ─ */
+/* The premium CSS has .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-study-session] .nn-flashcard-learning-topbar { display: grid !important } */
+/* We match with .nn-flashcard-study-premium prepended to beat it at equal specificity (later in cascade wins) */
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 3rem !important;
+  padding: 0.38rem 0.75rem !important;
+  gap: 0.5rem !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-learning-topbar__meta {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  gap: 0.55rem !important;
+}
+
 /* ── TOPBAR LEFT SECTION: Return to Hub + mode chip + title ──────── */
+/* The premium CSS has .nn-flashcard-study-premium .nn-flashcard-learning-topbar > .min-w-0 { flex-direction: column !important } */
+/* We target the specific class to override with equal specificity but later in cascade */
 .nn-flashcard-topbar-left {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: 0.55rem;
   min-width: 0;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+}
+
+/* Higher-specificity override to beat the .min-w-0 column rule */
+.nn-flashcard-study-premium .nn-flashcard-learning-topbar > .nn-flashcard-topbar-left {
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+/* Return to Hub link — reduce height to fit compact topbar */
+.nn-flashcard-return-link {
+  min-height: 0 !important;
+  height: 2rem !important;
 }
 
 .nn-flashcard-return-link {
@@ -411,27 +450,42 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
   gap: 0.5rem;
 }
 
-/* ── Progress: "1 of 250" inline — ONE line ──────────────────────── */
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress {
-  flex-direction: row !important;
+/* ── Progress: "Progress 1 of 250" on one row, bar below (Issue 2) ── */
+/* Grid approach: label col | value col in row 1; bar spans both in row 2 */
+/* [0,4,0] specificity beats the premium .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-study-session] rules at [0,4,0] coming EARLIER in the cascade */
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress {
+  display: grid !important;
+  grid-template-columns: auto auto !important;
+  grid-template-rows: auto auto !important;
+  grid-template-areas: "label value" "bar bar" !important;
+  column-gap: 0.35rem !important;
+  row-gap: 0.1rem !important;
   align-items: center !important;
-  gap: 0.55rem !important;
+  width: auto !important;
+  min-width: auto !important;
 }
 
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress > strong {
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress .nn-flashcard-topbar-stat-label {
+  grid-area: label !important;
+  white-space: nowrap !important;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress > strong {
+  grid-area: value !important;
+  justify-self: start !important;
   white-space: nowrap !important;
   font-size: 0.82rem !important;
   font-weight: 700 !important;
   line-height: 1 !important;
-  color: var(--semantic-text-primary) !important;
+  max-width: none !important;
 }
 
-.nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress-track {
-  min-width: 3.5rem !important;
-  width: clamp(3.5rem, 5vw, 5.5rem) !important;
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-branding-revamp] .nn-flashcard-topbar-progress-track {
+  grid-area: bar !important;
+  width: 100% !important;
+  min-width: 4rem !important;
   height: 3px !important;
   margin-top: 0 !important;
-  align-self: center !important;
 }
 
 /* Meta dividers — smaller min-width for compact topbar */
@@ -775,7 +829,35 @@ html[data-theme="midnight"] .nn-flashcard-rationale-panel[data-nn-flashcard-bran
     min-height: 3rem !important;
   }
 
-  .nn-flashcard-return-link {
-    display: none; /* collapsed on small screens — back is always accessible via nav */
-  }
+  /* Return to Hub: stays visible on mobile — shorter label auto-truncates via overflow:hidden on parent */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TARGETED SPECIFICITY OVERRIDES — Issues 1, 3, 5
+   These rules are appended LAST in the cascade. They use the
+   html[data-theme] element prefix to reach [0,N,1] specificity,
+   definitively beating all [0,N,0] premium rules.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Issue 1 + 5: Clinical Pearl — brand token, not info token, for every theme.
+   Selector specificity: [0,5,1] — beats the premium per-theme overrides at [0,3,1]. */
+html[data-theme] .nn-flashcard-study-premium .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept {
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface)) !important;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft)) !important;
+  border-left: 3px solid var(--semantic-brand) !important;
+  border-radius: 0.78rem !important;
+}
+
+/* Pearl label — brand color for every theme */
+html[data-theme] .nn-flashcard-study-premium .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept .nn-clinical-pearl-label,
+html[data-theme] .nn-flashcard-study-premium .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-key-concept > span {
+  color: var(--semantic-brand-strong, var(--semantic-brand)) !important;
+}
+
+/* Issue 3: Mode chip hidden by .nn-flashcard-chip--mode { display: none } [0,1,0].
+   Restore it with [0,2,0] specificity + !important. */
+.nn-flashcard-topbar-left .nn-flashcard-chip--mode {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
 }

@@ -8,6 +8,14 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { posthogHogqlScalar, posthogProjectConfigured } from "@/lib/observability/posthog-hogql-query";
+import {
+  buildConversionFunnel,
+  buildConversionIntelligenceReport,
+  type ConversionCohort,
+  type ConversionIntelligenceReport,
+  type ConversionStage,
+  type ConversionStageMetric,
+} from "@/lib/conversion/conversion-intelligence-engine";
 
 export type FunnelSegment = {
   country: "ALL" | CountryCode;
@@ -43,6 +51,7 @@ export type AdminFunnelAnalyticsData = {
   /** Product engagement volumes (same HogQL semantics as `steps`; not an ordered funnel). */
   engagementSteps: FunnelStepRow[];
   posthogConfigured: boolean;
+  conversionIntelligence: ConversionIntelligenceReport;
 };
 
 const MS_DAY = 86400000;
@@ -155,6 +164,96 @@ const ENGAGEMENT_STEP_DEF: Array<{ id: string; label: string; event: string; not
   { id: "pathway_pref", label: "Exam pathway preference saved", event: PH.learnerPathwayPreferenceSaved },
 ];
 
+function cohortFromSegment(segment: FunnelSegment): ConversionCohort {
+  const pathway = segment.pathway.toLowerCase();
+  if (pathway.includes("rpn") || pathway.includes("pn") || pathway.includes("lpn")) return "RPN";
+  if (pathway.includes("np") || pathway.includes("cnple")) return "NP";
+  if (pathway.includes("rt") || pathway.includes("respiratory")) return "RT";
+  if (pathway.includes("allied")) return "Allied";
+  if (pathway.includes("new")) return "NewGrad";
+  if (pathway.includes("hesi")) return "HESI";
+  if (pathway.includes("teas")) return "TEAS";
+  if (pathway.includes("advanced") && pathway.includes("ecg")) return "AdvancedECG";
+  if (pathway.includes("ecg")) return "ECGCore";
+  return "RN";
+}
+
+function conversionStageForRow(row: FunnelStepRow): ConversionStage | null {
+  switch (row.id) {
+    case "home_view":
+      return "anonymous_visitor";
+    case "home_to_hub_click":
+    case "exam_hub_view":
+      return "marketing_page";
+    case "hub_study_intent":
+    case "first_study":
+    case "first_prog_proxy":
+      return "feature_exploration";
+    case "signup":
+    case "signup_proxy":
+      return "signup";
+    case "checkout":
+      return "checkout";
+    case "subscribed":
+    case "sub_proxy":
+      return "subscription";
+    case "repeat_study":
+    case "renewal":
+      return "retention";
+    default:
+      return null;
+  }
+}
+
+function buildConversionIntelligence(data: Omit<AdminFunnelAnalyticsData, "conversionIntelligence">): ConversionIntelligenceReport {
+  const stageOrder: ConversionStage[] = [
+    "anonymous_visitor",
+    "marketing_page",
+    "pricing",
+    "signup",
+    "email_verification",
+    "trial_or_free_access",
+    "feature_exploration",
+    "checkout",
+    "subscription",
+    "retention",
+  ];
+  const mapped = new Map<ConversionStage, ConversionStageMetric>();
+  for (const row of data.steps) {
+    const stage = conversionStageForRow(row);
+    if (!stage || row.count == null) continue;
+    const prior = mapped.get(stage);
+    mapped.set(stage, {
+      stage,
+      label: prior?.label ?? row.label,
+      count: (prior?.count ?? 0) + row.count,
+    });
+  }
+  const stages = stageOrder.filter((stage) => mapped.has(stage)).map((stage) => mapped.get(stage) as ConversionStageMetric);
+  const engagementFeatures = data.engagementSteps
+    .filter((row) => row.count != null)
+    .map((row) => {
+      const label = row.label.toLowerCase();
+      const feature =
+        label.includes("lesson") ? "lessons" : label.includes("question") ? "questions" : label.includes("practice") || label.includes("cat") ? "cat" : "questions";
+      return {
+        feature,
+        explorers: row.count ?? 0,
+        subscribersAfterExploration: Math.min(row.count ?? 0, mapped.get("subscription")?.count ?? 0),
+      };
+    });
+
+  return buildConversionIntelligenceReport({
+    generatedAt: data.generatedAt,
+    funnels: [buildConversionFunnel(cohortFromSegment(data.query.segment), stages)],
+    featureDiscovery: engagementFeatures,
+  });
+}
+
+function withConversionIntelligence(data: Omit<AdminFunnelAnalyticsData, "conversionIntelligence">): AdminFunnelAnalyticsData {
+  return { ...data, conversionIntelligence: buildConversionIntelligence(data) };
+}
+
 async function hogqlStepRows(
   defs: Array<{ id: string; label: string; event: string; note?: string }>,
   q: ParsedFunnelQuery,
@@ -223,7 +322,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
     const engagement = await hogqlStepRows(ENGAGEMENT_STEP_DEF, q);
     warnings.push(...funnel.warnings, ...engagement.warnings);
 
-    return {
+    return withConversionIntelligence({
       generatedAt,
       query: q,
       source: "posthog_hogql",
@@ -233,7 +332,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       steps: funnel.rows,
       engagementSteps: engagement.rows,
       posthogConfigured: true,
-    };
+    });
   }
 
   /** DB-only proxies — no marketing funnel without PostHog. */
@@ -320,7 +419,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       },
     ];
 
-    return {
+    return withConversionIntelligence({
       generatedAt,
       query: q,
       source: "database_proxy",
@@ -330,10 +429,10 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       steps,
       engagementSteps: [],
       posthogConfigured: false,
-    };
+    });
   } catch (e) {
     warnings.push(e instanceof Error ? e.message : String(e));
-    return {
+    return withConversionIntelligence({
       generatedAt,
       query: q,
       source: "unavailable",
@@ -343,6 +442,6 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       steps: [],
       engagementSteps: [],
       posthogConfigured: false,
-    };
+    });
   }
 }

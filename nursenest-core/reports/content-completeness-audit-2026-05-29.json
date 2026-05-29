@@ -1,0 +1,6098 @@
+{
+  "generatedAt": "2026-05-29T21:06:04.877Z",
+  "scope": [
+    "RN",
+    "RPN / PN",
+    "NP / CNPLE",
+    "RT",
+    "All Allied Health",
+    "New Grad RN",
+    "New Grad RPN",
+    "ECG Core",
+    "Advanced ECG",
+    "Clinical Skills",
+    "Pharmacology",
+    "Med Math",
+    "Questions",
+    "Flashcards",
+    "Lessons",
+    "CAT",
+    "LOFT Simulations",
+    "Readiness Assessments",
+    "Study Plans",
+    "Adaptive Learning",
+    "Analytics",
+    "Career Resources",
+    "Authority Content",
+    "Blog Ecosystem"
+  ],
+  "evidenceSources": [
+    "Prisma database via .env.local DATABASE_URL",
+    "prisma/schema.prisma",
+    "src/lib/content-audit/high-end-completeness-audit.ts thresholds",
+    "src/lib/questions/question-bank-coverage-thresholds.ts thresholds",
+    "src/lib/navigation/country-exam-launch-readiness.ts launch checks",
+    "src/lib/clinical-skills/clinical-skills-catalog.ts",
+    "src/lib/pharmacology/pharmacology-learning-system.ts",
+    "src/lib/ecg-module/ecg-premium-curated-pack.ts",
+    "src/app route tree",
+    "src/lib feature modules"
+  ],
+  "caveats": [
+    "Database connection unavailable during audit (Can't reach database server at `HOST:5432`). DB-backed metrics fell back to committed snapshots or are reported as zero/not scored.",
+    "Percentages are not emitted for areas where no authoritative expected inventory baseline exists in code, docs, or thresholds.",
+    "Clinical accuracy and SME-level content quality are flagged by heuristics here; manual clinical review remains required.",
+    "Feature completeness is based on committed route/module evidence and does not replace Playwright runtime validation.",
+    "Database counts reflect the database pointed to by .env.local at audit time."
+  ],
+  "scorecard": {
+    "RN": 90.7,
+    "RPN": 90,
+    "NP": 100,
+    "RT": 66.7,
+    "Allied": 83.1,
+    "NewGrad": 90.3,
+    "ClinicalSkills": 100,
+    "Pharmacology": null,
+    "ECGCore": 13.3,
+    "AdvancedECG": 7.7,
+    "Questions": 26.5,
+    "Flashcards": null,
+    "Lessons": 83.3,
+    "CAT": null,
+    "LOFT": null,
+    "AdaptiveLearning": 100,
+    "Analytics": null,
+    "SEO": 41.4,
+    "CommercialReadiness": 100,
+    "OverallPlatformCompletion": 87.3
+  },
+  "pathwayReports": [
+    {
+      "key": "rn",
+      "label": "RN",
+      "group": "Core Nursing",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 1020,
+          "expected": 5000,
+          "percent": 20.4,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 430,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 171,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 73.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 80.1,
+      "commercialReadiness": 100,
+      "overallCompletion": 90.7,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 1020/5000 (20.4%)"
+      ]
+    },
+    {
+      "key": "rpn_pn",
+      "label": "RPN / PN",
+      "group": "Core Nursing",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 730,
+          "expected": 5000,
+          "percent": 14.6,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 355,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 107,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 71.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 78.7,
+      "commercialReadiness": 100,
+      "overallCompletion": 90,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 730/5000 (14.6%)"
+      ]
+    },
+    {
+      "key": "np_cnple",
+      "label": "NP / CNPLE",
+      "group": "Advanced Practice",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 2756,
+          "expected": 1000,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 937,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 71,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 100,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 100,
+      "commercialReadiness": 100,
+      "overallCompletion": 100,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "rt",
+      "label": "Respiratory Therapy",
+      "group": "Allied Health",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": 2000,
+          "percent": 0,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": 150,
+          "percent": 0,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 0,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 33.3,
+      "commercialReadiness": 100,
+      "overallCompletion": 66.7,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 0/2000 (0%)",
+        "Lessons: 0/150 (0%)"
+      ]
+    },
+    {
+      "key": "allied",
+      "label": "All Allied Health",
+      "group": "Allied Health",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 310,
+          "expected": 2000,
+          "percent": 15.5,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 125,
+          "expected": 150,
+          "percent": 83.3,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 49.4,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 66.3,
+      "commercialReadiness": 100,
+      "overallCompletion": 83.1,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 310/2000 (15.5%)",
+        "Lessons: 125/150 (83.3%)"
+      ]
+    },
+    {
+      "key": "new_grad_rn",
+      "label": "New Grad RN",
+      "group": "New Grad",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 1020,
+          "expected": 5000,
+          "percent": 20.4,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 430,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 171,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 73.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 80.1,
+      "commercialReadiness": 100,
+      "overallCompletion": 90.7,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 1020/5000 (20.4%)"
+      ]
+    },
+    {
+      "key": "new_grad_rpn",
+      "label": "New Grad RPN",
+      "group": "New Grad",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 730,
+          "expected": 5000,
+          "percent": 14.6,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 355,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 107,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 71.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 78.7,
+      "commercialReadiness": 100,
+      "overallCompletion": 90,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 730/5000 (14.6%)"
+      ]
+    }
+  ],
+  "professionBreakdown": [
+    {
+      "key": "rn",
+      "label": "RN",
+      "group": "Core Nursing",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 1020,
+          "expected": 5000,
+          "percent": 20.4,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 430,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 171,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 73.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 80.1,
+      "commercialReadiness": 100,
+      "overallCompletion": 90.7,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 1020/5000 (20.4%)"
+      ]
+    },
+    {
+      "key": "rpn_pn",
+      "label": "RPN / PN",
+      "group": "Core Nursing",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 730,
+          "expected": 5000,
+          "percent": 14.6,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 355,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 107,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 71.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 78.7,
+      "commercialReadiness": 100,
+      "overallCompletion": 90,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 730/5000 (14.6%)"
+      ]
+    },
+    {
+      "key": "np_cnple",
+      "label": "NP / CNPLE",
+      "group": "Advanced Practice",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 2756,
+          "expected": 1000,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 937,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 71,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 100,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 100,
+      "commercialReadiness": 100,
+      "overallCompletion": 100,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "rt",
+      "label": "Respiratory Therapy",
+      "group": "Allied Health",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": 2000,
+          "percent": 0,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": 150,
+          "percent": 0,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 0,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 33.3,
+      "commercialReadiness": 100,
+      "overallCompletion": 66.7,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 0/2000 (0%)",
+        "Lessons: 0/150 (0%)"
+      ]
+    },
+    {
+      "key": "allied",
+      "label": "All Allied Health",
+      "group": "Allied Health",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 310,
+          "expected": 2000,
+          "percent": 15.5,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 125,
+          "expected": 150,
+          "percent": 83.3,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 49.4,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 66.3,
+      "commercialReadiness": 100,
+      "overallCompletion": 83.1,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 310/2000 (15.5%)",
+        "Lessons: 125/150 (83.3%)"
+      ]
+    },
+    {
+      "key": "new_grad_rn",
+      "label": "New Grad RN",
+      "group": "New Grad",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 1020,
+          "expected": 5000,
+          "percent": 20.4,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 430,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 171,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 73.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 80.1,
+      "commercialReadiness": 100,
+      "overallCompletion": 90.7,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 1020/5000 (20.4%)"
+      ]
+    },
+    {
+      "key": "new_grad_rpn",
+      "label": "New Grad RPN",
+      "group": "New Grad",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 730,
+          "expected": 5000,
+          "percent": 14.6,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: exam question counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: flashcard counts + repo high-end completeness thresholds",
+          "note": "Not scored without live DB flashcard rows."
+        },
+        {
+          "label": "Lessons",
+          "actual": 355,
+          "expected": 300,
+          "percent": 100,
+          "status": "scored",
+          "source": "Committed pathway-readiness snapshot fallback: pathway lesson counts + repo high-end completeness thresholds"
+        },
+        {
+          "label": "CAT eligible questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "Committed pathway-readiness snapshot fallback: CAT eligible counts + repo CAT threshold",
+          "note": "Not scored without live DB is_adaptive_eligible rows."
+        },
+        {
+          "label": "Clinical skills",
+          "actual": 107,
+          "expected": 50,
+          "percent": 100,
+          "status": "scored",
+          "source": "Static clinical-skills catalog contract"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; no repo-wide expected baseline found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "questions",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "adaptive_learning",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for adaptive_learning"
+          ]
+        },
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation"
+          ]
+        },
+        {
+          "key": "progress_tracking",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for progress_tracking"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        },
+        {
+          "key": "study_plans",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for study_plans"
+          ]
+        },
+        {
+          "key": "cat",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for cat"
+          ]
+        },
+        {
+          "key": "loft",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for loft"
+          ]
+        },
+        {
+          "key": "clinical_skills",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills"
+          ]
+        },
+        {
+          "key": "pharmacology",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology"
+          ]
+        },
+        {
+          "key": "ecg",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg"
+          ]
+        },
+        {
+          "key": "simulation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation"
+          ]
+        },
+        {
+          "key": "scoring",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for scoring"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [
+        {
+          "key": "weak_topic_detection",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for weak_topic_detection"
+          ]
+        },
+        {
+          "key": "remediation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for remediation_routing"
+          ]
+        },
+        {
+          "key": "lesson_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for lesson_routing"
+          ]
+        },
+        {
+          "key": "question_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for question_routing"
+          ]
+        },
+        {
+          "key": "flashcard_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for flashcard_routing"
+          ]
+        },
+        {
+          "key": "clinical_skills_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for clinical_skills_routing"
+          ]
+        },
+        {
+          "key": "pharmacology_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for pharmacology_routing"
+          ]
+        },
+        {
+          "key": "ecg_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for ecg_routing"
+          ]
+        },
+        {
+          "key": "simulation_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for simulation_routing"
+          ]
+        },
+        {
+          "key": "readiness_routing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for readiness_routing"
+          ]
+        }
+      ],
+      "commercialMetrics": [
+        {
+          "key": "purchase_path",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for purchase_path"
+          ]
+        },
+        {
+          "key": "access_control",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for access_control"
+          ]
+        },
+        {
+          "key": "navigation",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for navigation"
+          ]
+        },
+        {
+          "key": "marketing",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for marketing"
+          ]
+        },
+        {
+          "key": "seo",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for seo"
+          ]
+        },
+        {
+          "key": "feature_discoverability",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for feature_discoverability"
+          ]
+        }
+      ],
+      "contentCompleteness": 71.5,
+      "featureCompleteness": 100,
+      "adaptiveCompleteness": 100,
+      "learningEcosystemCompleteness": 78.7,
+      "commercialReadiness": 100,
+      "overallCompletion": 90,
+      "evidence": [
+        "Committed snapshot: question counts",
+        "Committed snapshot: lesson counts",
+        "DB unavailable: flashcards not counted",
+        "DB unavailable: simulations not counted",
+        "Static: clinical-skills catalog",
+        "Static: app/lib route and feature files"
+      ],
+      "gaps": [
+        "Questions: 730/5000 (14.6%)"
+      ]
+    }
+  ],
+  "newGradBreakdown": [
+    {
+      "key": "icu",
+      "label": "ICU",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "emergency",
+      "label": "Emergency",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "medicine",
+      "label": "Medicine",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "surgery",
+      "label": "Surgery",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "telemetry",
+      "label": "Telemetry",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "critical_care",
+      "label": "Critical Care",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "perioperative",
+      "label": "Perioperative",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "pediatrics",
+      "label": "Pediatrics",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "nicu",
+      "label": "NICU",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "mental_health",
+      "label": "Mental Health",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "community",
+      "label": "Community",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "home_care",
+      "label": "Home Care",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "operating_room",
+      "label": "Operating Room",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "labour_delivery",
+      "label": "Labour & Delivery",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    },
+    {
+      "key": "postpartum",
+      "label": "Postpartum",
+      "group": "New Grad Specialty",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons NEW_GRAD specialty signals; no specialty expected baseline found"
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards NEW_GRAD tier; no specialty expected baseline found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios specialty signals; no specialty expected baseline found"
+        }
+      ],
+      "featureMetrics": [],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": 0,
+      "featureCompleteness": 0,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 0,
+      "commercialReadiness": 0,
+      "overallCompletion": 0,
+      "evidence": [
+        "DB NEW_GRAD specialty signal filters"
+      ],
+      "gaps": [
+        "Questions: no detected specialty rows",
+        "Lessons: no detected specialty rows",
+        "Flashcards: no detected specialty rows",
+        "Simulations: no detected specialty rows"
+      ]
+    }
+  ],
+  "alliedBreakdown": [
+    {
+      "key": "respiratory",
+      "label": "Respiratory Therapy",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "occupational-therapy",
+      "label": "Occupational Therapy",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "physiotherapy",
+      "label": "Physiotherapy",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "paramedic",
+      "label": "Paramedic",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "mlt",
+      "label": "Medical Laboratory",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "diagnostic-imaging",
+      "label": "Diagnostic Imaging",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    },
+    {
+      "key": "social-work",
+      "label": "Social Work",
+      "group": "Allied Profession",
+      "contentMetrics": [
+        {
+          "label": "Questions",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB exam_questions filtered by allied profession signals",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Lessons",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB pathway_lessons.allied_profession_key",
+          "note": "Not scored because the database was unavailable."
+        },
+        {
+          "label": "Flashcards",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB flashcards are tier/pathway scoped; profession-specific expected baseline not found"
+        },
+        {
+          "label": "Simulations",
+          "actual": 0,
+          "expected": null,
+          "percent": null,
+          "status": "not_scored",
+          "source": "DB clinical_nursing_scenarios; profession-specific expected baseline not found"
+        }
+      ],
+      "featureMetrics": [
+        {
+          "key": "profession_homepage",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for profession_homepage"
+          ]
+        },
+        {
+          "key": "hub",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for hub"
+          ]
+        },
+        {
+          "key": "questions",
+          "status": "partial",
+          "evidence": [
+            "file existence check for questions"
+          ]
+        },
+        {
+          "key": "lessons",
+          "status": "partial",
+          "evidence": [
+            "file existence check for lessons"
+          ]
+        },
+        {
+          "key": "flashcards",
+          "status": "partial",
+          "evidence": [
+            "file existence check for flashcards"
+          ]
+        },
+        {
+          "key": "simulations",
+          "status": "partial",
+          "evidence": [
+            "file existence check for simulations"
+          ]
+        },
+        {
+          "key": "analytics",
+          "status": "implemented",
+          "evidence": [
+            "file existence check for analytics"
+          ]
+        }
+      ],
+      "adaptiveMetrics": [],
+      "commercialMetrics": [],
+      "contentCompleteness": null,
+      "featureCompleteness": 71.4,
+      "adaptiveCompleteness": 0,
+      "learningEcosystemCompleteness": 71.4,
+      "commercialReadiness": 0,
+      "overallCompletion": 71.4,
+      "evidence": [
+        "DB profession filters",
+        "Static allied feature files"
+      ],
+      "gaps": []
+    }
+  ],
+  "ecosystemAudits": {
+    "clinicalSkills": {
+      "total": 221,
+      "rn": 171,
+      "rpnPn": 107,
+      "np": 71,
+      "targetMinimumPerTier": 50,
+      "targetIdealPerTier": 75,
+      "rnCoverage": 100,
+      "rpnPnCoverage": 100,
+      "npCoverage": 100
+    },
+    "pharmacology": {
+      "categories": 20,
+      "commonMedicationMentions": 100,
+      "expectedBaseline": "No repo-wide numeric expected baseline found; report uses detected category and medication counts only."
+    },
+    "medMath": {
+      "lessons": 10,
+      "categories": 10,
+      "questions": 50,
+      "flashcards": 50,
+      "expectedBaseline": "No repo-wide numeric expected baseline found."
+    },
+    "ecg": {
+      "coreQuestions": 20,
+      "advancedQuestions": 23,
+      "totalCuratedPackQuestions": 43,
+      "fullLaunchThreshold": 300,
+      "basicThreshold": 150,
+      "coreCoverage": 13.3,
+      "advancedCoverage": 7.7
+    },
+    "analytics": {
+      "learnerActivityEvents": 0,
+      "readinessTaggedEvents": 0,
+      "instrumentationFilesPresent": true
+    },
+    "seo": {
+      "publishedBlogPosts": 14,
+      "contentItems": 164,
+      "sitemapPresent": false,
+      "robotsPresent": false,
+      "seoLibPresent": true,
+      "authorityClustersPresent": true
+    }
+  },
+  "contentQualityAudit": {
+    "genericPhraseOccurrencesInSource": {
+      "responds to the priority cue": 3,
+      "the clinical reasoning is": 1,
+      "guides safe escalation": 0,
+      "supports safe care": 2,
+      "using the nursing process": 0,
+      "choose the best answer": 0,
+      "focus on the most urgent issue": 0,
+      "prevents harm": 1182
+    },
+    "genericPhraseOccurrencesInPublishedExamQuestions": {
+      "responds to the priority cue": 0,
+      "the clinical reasoning is": 0,
+      "guides safe escalation": 0,
+      "supports safe care": 0,
+      "using the nursing process": 0,
+      "choose the best answer": 0,
+      "focus on the most urgent issue": 0,
+      "prevents harm": 0
+    },
+    "publishedQuestionsMissingRationale": 0,
+    "duplicatePublishedStemHashes": 0,
+    "qualityScore": "Not reduced to a single score without SME weighting; raw flags are reported."
+  },
+  "seoAudit": {
+    "publishedBlogPosts": 14,
+    "contentItems": 164,
+    "sitemapPresent": false,
+    "robotsPresent": false,
+    "seoLibPresent": true,
+    "authorityClustersPresent": true
+  },
+  "commercialReadinessAudit": {
+    "pathwayCommercialScores": {
+      "RN": 100,
+      "RPN / PN": 100,
+      "NP / CNPLE": 100,
+      "Respiratory Therapy": 100,
+      "All Allied Health": 100,
+      "New Grad RN": 100,
+      "New Grad RPN": 100
+    },
+    "checkSource": "Static checkout, entitlement, navigation, marketing, SEO, discoverability file checks."
+  },
+  "priorityMatrix": [
+    {
+      "priority": "P0",
+      "item": "RN: Questions: 1020/5000 (20.4%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "RPN / PN: Questions: 730/5000 (14.6%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "Respiratory Therapy: Questions: 0/2000 (0%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "Respiratory Therapy: Lessons: 0/150 (0%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "All Allied Health: Questions: 310/2000 (15.5%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "All Allied Health: Lessons: 125/150 (83.3%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "New Grad RN: Questions: 1020/5000 (20.4%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P0",
+      "item": "New Grad RPN: Questions: 730/5000 (14.6%)",
+      "evidence": "Committed snapshot: question counts; Committed snapshot: lesson counts; DB unavailable: flashcards not counted; DB unavailable: simulations not counted; Static: clinical-skills catalog; Static: app/lib route and feature files",
+      "estimatedHours": "16-80",
+      "complexity": "High",
+      "impact": "Critical"
+    },
+    {
+      "priority": "P1",
+      "item": "SEO completeness is below full checklist coverage.",
+      "evidence": "Static sitemap/robots/SEO/blog authority checks",
+      "estimatedHours": "8-32",
+      "complexity": "Medium",
+      "impact": "High"
+    }
+  ],
+  "next90Days": [
+    "Close P0 scored content gaps first: questions, flashcards, lessons, and CAT pools below explicit repo thresholds.",
+    "Add missing authoritative baselines for LOFT, simulations, pharmacology, med math, analytics, career resources, and specialty tracks so future audits can score them numerically.",
+    "Run Playwright learner-access journeys for every pathway marked commercially ready.",
+    "Convert content quality flags into admin review queues and block future seeds with generic rationale phrase checks.",
+    "Expand Allied and New Grad specialty content using profession-specific competency maps instead of aggregate allied counts.",
+    "Attach every readiness/adaptive recommendation to canonical lessons, questions, flashcards, clinical skills, pharmacology, ECG, or simulations."
+  ]
+}

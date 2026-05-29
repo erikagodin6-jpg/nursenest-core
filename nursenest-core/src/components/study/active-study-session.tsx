@@ -898,23 +898,27 @@ export function ActiveStudySession({
             </div>
 
             <div className="nn-flashcard-rating-dock" aria-label="Grade this flashcard">
-              {([
-                ["again", "Again", <RefreshCw key="again" className="h-4 w-4" aria-hidden />],
-                ["hard", "Hard", <BarChart3 key="hard" className="h-4 w-4" aria-hidden />],
-                ["good", "Good", <CheckCircle2 key="good" className="h-4 w-4" aria-hidden />],
-                ["easy", "Easy", <ChevronsRight key="easy" className="h-4 w-4" aria-hidden />],
-              ] as const).map(([rating, label, icon]) => (
-                <button
-                  key={rating}
-                  type="button"
-                  data-nn-flashcard-grade={rating}
-                  onClick={() => void submitRating(rating)}
-                  disabled={!revealed || saving}
-                >
-                  {icon}
-                  {label}
-                </button>
-              ))}
+              {(["again", "hard", "good", "easy"] as const).map((rating) => {
+                const labelMap = { again: "Again", hard: "Hard", good: "Good", easy: "Easy" } as const;
+                const iconMap = {
+                  again: <RefreshCw  className="h-4 w-4" aria-hidden />,
+                  hard:  <BarChart3  className="h-4 w-4" aria-hidden />,
+                  good:  <CheckCircle2 className="h-4 w-4" aria-hidden />,
+                  easy:  <ChevronsRight className="h-4 w-4" aria-hidden />,
+                };
+                return (
+                  <button
+                    key={rating}
+                    type="button"
+                    data-nn-flashcard-grade={rating}
+                    onClick={() => void submitRating(rating)}
+                    disabled={!revealed || saving}
+                  >
+                    {iconMap[rating]}
+                    {labelMap[rating]}
+                  </button>
+                );
+              })}
             </div>
           </>
         )}

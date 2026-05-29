@@ -11,10 +11,14 @@ export type ContentScopeSeverity = "low" | "medium" | "high" | "critical";
 
 export type ContentScopeIssueType =
   | "rn_too_advanced"
+  | "rn_icu_ventilator_management"
+  | "rn_advanced_telemetry"
   | "rpn_too_advanced"
+  | "rpn_np_level_diagnostics"
   | "np_too_basic"
   | "rt_content_in_nursing"
   | "icu_content_in_entry_level"
+  | "specialist_scope_leakage"
   | "country_mismatch"
   | "exam_mismatch"
   | "allied_scope_mismatch";
@@ -101,6 +105,56 @@ const RT_TECHNICAL = [
   "end-tidal co2 waveform",
   "abg compensation",
   "respiratory therapist",
+];
+
+const ICU_VENTILATOR_MANAGEMENT = [
+  "ventilator mode",
+  "pressure control ventilation",
+  "volume control ventilation",
+  "peep titration",
+  "plateau pressure",
+  "driving pressure",
+  "auto-peep",
+  "ventilator dyssynchrony",
+  "prone ventilation",
+  "paralytic infusion",
+];
+
+const ADVANCED_TELEMETRY = [
+  "temporary transvenous pacing",
+  "overdrive pacing",
+  "synchronized cardioversion energy selection",
+  "wide-complex tachycardia algorithm",
+  "torsades magnesium protocol",
+  "pacemaker failure to capture",
+  "failure to sense",
+  "capture threshold",
+  "12-lead posterior mi",
+];
+
+const NP_DIAGNOSTIC_MANAGEMENT = [
+  "differential diagnosis",
+  "prescribe",
+  "initiate antibiotic therapy",
+  "order ct",
+  "order mri",
+  "diagnostic workup",
+  "adjust insulin regimen",
+  "start anticoagulation",
+  "interpret diagnostic criteria",
+  "rule out pulmonary embolism",
+];
+
+const SPECIALIST_SCOPE_MARKERS = [
+  "ecmo",
+  "iabp",
+  "crrt",
+  "bronchoscopy",
+  "central venous pressure waveform",
+  "pulmonary artery catheter",
+  "advanced hemodynamic monitoring",
+  "intra-aortic balloon pump",
+  "rapid sequence intubation",
 ];
 
 const BASIC_FOUNDATION = [
@@ -257,6 +311,58 @@ export function auditContentScope(item: ContentScopeAuditItem): ContentScopeFind
     );
   }
 
+  const ventilatorEvidence = matchesAny(blob, ICU_VENTILATOR_MANAGEMENT);
+  if (ventilatorEvidence.length > 0 && tier === "rn" && !tags.some((tag) => tag.includes("icu") || tag.includes("critical-care") || tag.includes("rt"))) {
+    findings.push(
+      makeFinding(
+        item,
+        "rn_icu_ventilator_management",
+        "critical",
+        ventilatorEvidence,
+        "Move this item to RT/New Grad ICU/critical-care scope or rewrite it so RN learners recognize deterioration and escalate rather than manage ventilator settings.",
+      ),
+    );
+  }
+
+  const telemetryEvidence = matchesAny(blob, ADVANCED_TELEMETRY);
+  if (telemetryEvidence.length > 0 && tier === "rn" && !tags.some((tag) => tag.includes("advanced-ecg") || tag.includes("critical-care") || tag.includes("telemetry"))) {
+    findings.push(
+      makeFinding(
+        item,
+        "rn_advanced_telemetry",
+        "high",
+        telemetryEvidence,
+        "Route to Advanced ECG/telemetry specialty content or lower the item to entry-level rhythm recognition, nursing action, and escalation.",
+      ),
+    );
+  }
+
+  const npDiagnosticEvidence = matchesAny(blob, NP_DIAGNOSTIC_MANAGEMENT);
+  if (npDiagnosticEvidence.length > 0 && (tier === "rpn" || tier === "lvn_lpn") && !tags.some((tag) => tag.includes("np") || tag.includes("provider"))) {
+    findings.push(
+      makeFinding(
+        item,
+        "rpn_np_level_diagnostics",
+        "critical",
+        npDiagnosticEvidence,
+        "Rewrite for RPN/LPN scope around assessment findings, reporting, monitoring, and assigned interventions instead of diagnosis, prescribing, or independent management.",
+      ),
+    );
+  }
+
+  const specialistEvidence = matchesAny(blob, SPECIALIST_SCOPE_MARKERS);
+  if (specialistEvidence.length > 0 && isEntryLevelTier(tier) && !tags.some((tag) => tag.includes("specialty") || tag.includes("icu") || tag.includes("critical-care"))) {
+    findings.push(
+      makeFinding(
+        item,
+        "specialist_scope_leakage",
+        "high",
+        specialistEvidence,
+        "Retag for a specialty pathway or rewrite to match entry-to-practice expectations with recognition and escalation rather than specialist management.",
+      ),
+    );
+  }
+
   const rtEvidence = matchesAny(blob, RT_TECHNICAL);
   if (rtEvidence.length > 0 && isNursingTier(tier) && careerType !== "rrt" && careerType !== "respiratory") {
     findings.push(
@@ -342,4 +448,3 @@ export function summarizeScopeCompliance(items: ContentScopeAuditItem[], finding
     byIssueType,
   };
 }
-

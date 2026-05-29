@@ -2,17 +2,10 @@ import "server-only";
 
 import { createHash, randomUUID } from "node:crypto";
 import { prisma } from "@/lib/db";
+import { CHECKOUT_POLICY_ACCEPTANCE_WORDING } from "@/lib/business-protection/policy-wording";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-
-export const CHECKOUT_POLICY_ACCEPTANCE_WORDING = [
-  "I understand this is a digital educational subscription service.",
-  "I understand access begins immediately upon purchase.",
-  "I understand the cancellation policy.",
-  "I understand the refund policy.",
-  "I understand how recurring billing works.",
-] as const;
 
 function jsonHash(value: unknown): string {
   return createHash("sha256").update(JSON.stringify(value)).digest("hex");
