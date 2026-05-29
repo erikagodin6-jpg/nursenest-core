@@ -77,6 +77,7 @@ export function useHubPrefetch({ pathwayId, prefetch, delayMs = 1200 }: HubPrefe
   const router = useRouter();
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_NN_ENABLE_HUB_PREFETCH !== "1") return;
     if (prefetch.length === 0) return;
 
     const hrefs = prefetch.map((t) => buildPrefetchHref(t, pathwayId));

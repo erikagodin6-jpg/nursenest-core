@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { UnitSystemToggle } from "@/components/unit-system-toggle";
 import { Link } from "wouter";
 import { AlliedSEO } from "@/allied/allied-seo";
 import { mltLabValues } from "@/data/mlt-lab-values";
@@ -98,7 +99,7 @@ const EXTENDED_LAB_VALUES = [
 ];
 
 export function MltLabValuesCompleteChart() {
-  const [unit, setUnit] = useState<"si" | "us">("si");
+  const [unit, setUnit] = useState<"si" | "conventional">("si");
 
   const chartFaqs = [
     { q: "Can I print this lab values chart?", a: "Yes, use your browser's print function (Ctrl/Cmd + P) to print this chart. The table is formatted for clean printing. Bookmark this page for quick reference during your study sessions." },
@@ -160,22 +161,11 @@ export function MltLabValuesCompleteChart() {
             Every lab value you need to know for the CSMLS and ASCP certification exams, organized by discipline with both SI and conventional units. Bookmark this page as your go-to reference during exam prep.
           </p>
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden text-sm" data-testid="chart-unit-toggle">
-              <button
-                onClick={() => setUnit("si")}
-                className={`px-4 py-2 font-medium transition-colors ${unit === "si" ? "bg-purple-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                data-testid="button-si"
-              >
-                SI Units (Canada)
-              </button>
-              <button
-                onClick={() => setUnit("us")}
-                className={`px-4 py-2 font-medium transition-colors ${unit === "us" ? "bg-purple-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                data-testid="button-us"
-              >
-                Conventional (US)
-              </button>
-            </div>
+            <UnitSystemToggle
+              unit={unit}
+              onUnitChange={setUnit}
+              data-testid="chart-unit-toggle"
+            />
           </div>
         </section>
 
@@ -186,7 +176,7 @@ export function MltLabValuesCompleteChart() {
                 <tr className="bg-purple-50">
                   <th className="text-left px-4 py-3 font-semibold text-purple-900 border-b border-purple-100">{t("allied.mltLabValuesViral.analyte")}</th>
                   <th className="text-left px-4 py-3 font-semibold text-purple-900 border-b border-purple-100">
-                    {unit === "si" ? "Normal Range (SI)" : "Normal Range (US)"}
+                    {unit === "si" ? "Normal Range (SI)" : "Normal Range (Conventional)"}
                   </th>
                   <th className="text-left px-4 py-3 font-semibold text-purple-900 border-b border-purple-100">{t("allied.mltLabValuesViral.specimen")}</th>
                   <th className="text-left px-4 py-3 font-semibold text-purple-900 border-b border-purple-100">{t("allied.mltLabValuesViral.discipline")}</th>
@@ -204,7 +194,7 @@ export function MltLabValuesCompleteChart() {
                         lv.name
                       )}
                     </td>
-                    <td className="px-4 py-2.5 text-emerald-700 font-medium">{unit === "si" ? lv.si : lv.us}</td>
+                    <td className="px-4 py-2.5 text-emerald-700 font-medium">{unit === "si" ? lv.si : lv.us ?? lv.si}</td>
                     <td className="px-4 py-2.5 text-gray-500">{lv.specimen}</td>
                     <td className="px-4 py-2.5 text-gray-500">{lv.discipline}</td>
                   </tr>

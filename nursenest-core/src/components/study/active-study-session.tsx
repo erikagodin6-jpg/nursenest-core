@@ -15,7 +15,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
-import { LeafWatermark } from "@/components/brand/leaf-watermark";
+import { DecorativeThemeWatermark } from "@/components/brand/decorative-theme-watermark";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
@@ -31,6 +31,7 @@ import {
   type UnifiedExamWorkspaceMode,
 } from "@/lib/exam-workspace/unified-exam-workspace";
 import { resolveTierPedagogyProfile } from "@/lib/nursing-tiers/tier-pedagogy-profile";
+import { MobileFlashcardFlow } from "@/components/study/mobile-flashcard-flow";
 
 /* ================= TYPES ================= */
 
@@ -108,6 +109,13 @@ function dedupeCardsById(cards: ActiveStudyCard[]): ActiveStudyCard[] {
     seen.add(c.id);
     return true;
   });
+}
+
+function resolveExamPathwayLabel(pathwayId: string | null): string {
+  if (!pathwayId) return "NCLEX";
+  if (/rex|rpn/.test(pathwayId)) return "REx-PN";
+  if (/cnple|np/.test(pathwayId)) return "CNPLE";
+  return "NCLEX";
 }
 
 function buildClinicalPearl(card: ActiveStudyCard, fallback: string): string {
@@ -463,15 +471,50 @@ export function ActiveStudySession({
       data-nn-unified-exam-workspace=""
       data-nn-exam-workspace-mode={"flashcards" satisfies UnifiedExamWorkspaceMode}
     >
-      <LeafWatermark
-        className="-right-16 -top-20 hidden opacity-[0.14] sm:block md:-right-24 md:-top-28"
-        imageClassName="opacity-90"
-        size={320}
+      {/* ── MOBILE FLOW (sm and below only) ──────────────────────── */}
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden sm:hidden">
+        <MobileFlashcardFlow
+          card={current}
+          cardIndex={index}
+          totalCards={sessionCards.length}
+          elapsed={elapsed}
+          saving={saving}
+          examPathwayLabel={resolveExamPathwayLabel(sessionPathwayId)}
+          onAnswerSubmitted={() => {
+            setRevealed(true);
+            if (current?.id) telemetry.onReveal(current.id, buildCardMeta(current));
+          }}
+          onRevealComplete={() => {
+            if (index >= sessionCards.length - 1) {
+              setCompleted(true);
+              onSessionComplete?.();
+            } else {
+              setIndex((i) => i + 1);
+              setRevealed(false);
+            }
+          }}
+          onRate={async (rating) => {
+            await onRate?.(current.id, rating);
+            setRatingTally((t) => ({ ...t, [rating]: t[rating] + 1 }));
+            telemetry.onRated(current.id, rating, buildCardMeta(current));
+          }}
+        />
+      </div>
+
+      {/* ── DESKTOP / TABLET LAYOUT (sm and above only) ─────────── */}
+      <div className="hidden sm:contents">
+
+      <DecorativeThemeWatermark
+        position="top-right"
+        size={300}
+        opacity="opacity-[0.03]"
+        className="hidden sm:block"
       />
-      <LeafWatermark
-        className="-bottom-24 -left-20 hidden opacity-[0.08] md:block"
-        imageClassName="opacity-80 rotate-[-18deg]"
-        size={240}
+      <DecorativeThemeWatermark
+        position="bottom-left"
+        size={220}
+        opacity="opacity-[0.02]"
+        className="hidden md:block"
       />
       <div className="nn-flashcard-learning-topbar" aria-label="Flashcard session">
         <div className="min-w-0">
@@ -480,24 +523,23 @@ export function ActiveStudySession({
         </div>
 
         <div className="nn-flashcard-learning-topbar__meta">
-          <div>
+          <div className="nn-flashcard-topbar-progress">
             <span>Progress</span>
-            <strong>{index + 1} of {sessionCards.length}</strong>
-            <i aria-hidden>
-              <b style={{ width: `${((index + 1) / Math.max(1, sessionCards.length)) * 100}%` }} />
-            </i>
+            <strong>{index + 1} <span className="font-normal opacity-60">of</span> {sessionCards.length}</strong>
+            <div className="nn-flashcard-topbar-progress-track" role="progressbar" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={sessionCards.length}>
+              <div
+                className="nn-flashcard-topbar-progress-fill"
+                style={{ width: `${((index + 1) / Math.max(1, sessionCards.length)) * 100}%` }}
+              />
+            </div>
           </div>
           <div className="max-sm:hidden">
             <span>Focus</span>
             <strong>{focusLabel}</strong>
           </div>
           <div>
-            <span>Time elapsed</span>
+            <span>Elapsed</span>
             <strong className="font-mono">{formatElapsed(elapsed)}</strong>
-          </div>
-          <div>
-            <span>Questions</span>
-            <strong>{index + 1} of {sessionCards.length}</strong>
           </div>
           <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} locked />
           <button
@@ -517,6 +559,7 @@ export function ActiveStudySession({
       {/* MAIN CARD */}
       <FlashcardStudyQuestionStack
         sessionModeLabel={header.modeLabel}
+        examPathwayLabel={resolveExamPathwayLabel(sessionPathwayId)}
         topicLine={formatTopicLine(current)}
         examMicroQuestion={displayExam}
         clinicalImageUrl={current.clinicalImageUrl?.trim() || null}
@@ -698,6 +741,8 @@ export function ActiveStudySession({
           </>
         )}
       />
+
+      </div>{/* end sm:contents desktop wrapper */}
     </div>
   );
 }

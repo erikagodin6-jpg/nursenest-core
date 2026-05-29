@@ -1,64 +1,10 @@
 /**
  * Flashcard branding revamp 2026 — color, leaf atmosphere, readability.
  * Presentation only: no layout grid, workflow, or DOM structure changes.
+ *
+ * Watermarks: real <img> assets via DecorativeThemeWatermark component.
+ * No mask-image / clipped SVGs / arch shapes here.
  */
-
-/* ── Leaf watermark layers (mask — theme-tinted) ───────────────────────────── */
-.nn-flashcards-hub-premium[data-nn-premium-flashcard-convergence][data-nn-flashcard-branding-revamp]::after,
-.nn-active-flashcard-session[data-nn-premium-flashcard-active-session][data-nn-flashcard-branding-revamp]::after {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  z-index: 0;
-  aspect-ratio: 50 / 44;
-  background-color: color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-chart-2));
-  mask-image: url("/brand/leaf-logo.svg");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  -webkit-mask-image: url("/brand/leaf-logo.svg");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-}
-
-.nn-flashcards-hub-premium[data-nn-premium-flashcard-convergence][data-nn-flashcard-branding-revamp]::after {
-  right: -6%;
-  top: -10%;
-  width: min(40vw, 360px);
-  opacity: 0.09;
-  filter: blur(0.5px);
-}
-
-.nn-active-flashcard-session[data-nn-premium-flashcard-active-session][data-nn-flashcard-branding-revamp]::after {
-  right: 2%;
-  top: 4.5rem;
-  width: min(32vw, 280px);
-  opacity: 0.07;
-  filter: blur(1px);
-}
-
-.nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp]::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  left: -12%;
-  bottom: -18%;
-  z-index: 0;
-  width: min(52%, 320px);
-  aspect-ratio: 50 / 44;
-  opacity: 0.06;
-  background-color: color-mix(in srgb, var(--semantic-chart-4) 70%, var(--semantic-brand));
-  mask-image: url("/brand/leaf-logo.svg");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  -webkit-mask-image: url("/brand/leaf-logo.svg");
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  transform: rotate(-14deg);
-}
 
 /* Responsive grid safety */
 .nn-flashcard-learning-grid > *,

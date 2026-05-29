@@ -6,6 +6,8 @@ import {
 } from "@/lib/observability/learner-product-analytics";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
+import { buildPracticeAdaptivePostMissPayload } from "@/lib/learner/build-learner-adaptive-wire-bundle";
+import { recordQuestionPeerAnalyticsAndBuildPayload } from "@/lib/questions/question-peer-analytics";
 import {
   advanceCatPracticeTest,
   finalizeCatPracticeTest,
@@ -29,6 +31,8 @@ export const practiceTestRouteDeps = {
   advanceCatPracticeTest,
   finalizeCatPracticeTest,
   recordTopicOutcomesFromPracticeTest,
+  buildPracticeAdaptivePostMissPayload,
+  recordQuestionPeerAnalyticsAndBuildPayload,
   enrichPracticeTestResultsWithCatCoach,
   computePracticeTestResults,
   parsePracticeTestConfigAtBoundary,

@@ -1,4 +1,5 @@
 import { LocaleLink } from "@/lib/LocaleLink";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 import { SeoLessonDetail } from "@/pages/seo-lesson-detail";
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useParams, useLocation } from "wouter";
@@ -2213,9 +2214,10 @@ export default function LessonDetail() {
       const dbTierLabel = dbContent.tier === "np" ? "NP Focus" : dbContent.tier === "rn" ? "RN Focus" : dbContent.tier === "free" ? "Free" : "RPN Focus";
 
       return (
-        <div className="min-h-screen bg-warmwhite flex flex-col font-sans text-gray-900">
+        <div className="min-h-screen bg-warmwhite flex flex-col font-sans text-gray-900 relative overflow-hidden">
+          <DecorativeBrandWatermark position="tr" opacity={0.025} />
           <Navigation />
-          <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full" data-testid="db-lesson-detail">
+          <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full relative" data-testid="db-lesson-detail">
             <nav aria-label={t("pages.lessonDetail.breadcrumb")} className="mb-4 text-sm text-gray-500">
               <ol className="flex items-center gap-1 flex-wrap">
                 <li><LocaleLink href="/" className="hover:text-primary transition-colors">{t("pages.lessonDetail.home")}</LocaleLink></li>

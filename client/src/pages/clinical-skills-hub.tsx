@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 import { Link, useLocation } from "wouter";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
@@ -164,7 +165,8 @@ export default function ClinicalSkillsHub() {
       />
 
       <section className="relative py-16 sm:py-20 overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white border-b" data-testid="section-hero">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <DecorativeBrandWatermark position="tr" opacity={0.03} />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-blue-600">{t("pages.clinicalSkillsHub.home")}</Link>
             <ChevronRight className="w-3.5 h-3.5" />

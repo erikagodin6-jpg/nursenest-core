@@ -4,6 +4,7 @@ import { isDeletedAccountEmail } from "@/lib/account/delete-learner-account";
 import { safeAwait } from "@/lib/async/safe-await";
 import { AUTH_NODE_SESSION_READ_TIMEOUT_MS } from "@/lib/auth/auth-session-constants";
 import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   getAuthSessionWithJwtCookieFallback,
@@ -18,15 +19,33 @@ function getAuthModulePromise(): Promise<typeof import("@/lib/auth")> {
 
 type LoadSession = () => Promise<Session | null | undefined>;
 
+const ACTIVE_USER_CHECK_UNAVAILABLE = Symbol("active_user_check_unavailable");
+type ActiveUserCheckResult = { email: string } | null | typeof ACTIVE_USER_CHECK_UNAVAILABLE;
+
 async function activeSessionOrNull(session: Session, surface: string): Promise<Session | null> {
   const userId = (session.user as { id?: string })?.id ?? "";
   if (!userId) return session;
 
   try {
-    const row = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { email: true },
-    });
+    const row = await withDatabaseFallbackTimeout<ActiveUserCheckResult>(
+      () =>
+        prisma.user.findUnique({
+          where: { id: userId },
+          select: { email: true },
+        }),
+      ACTIVE_USER_CHECK_UNAVAILABLE,
+      650,
+      { scope: "auth", label: "protected_route_active_user_check" },
+    );
+    if (row === ACTIVE_USER_CHECK_UNAVAILABLE) {
+      safeServerLog("auth", "protected_route_active_user_check_timed_out", {
+        surface,
+        userIdPrefix: userId.slice(0, 8),
+        severity: "warning",
+        outcome: "session_preserved_on_db_timeout",
+      });
+      return session;
+    }
     if (!row || isDeletedAccountEmail(row.email)) {
       safeServerLog("auth", "protected_route_inactive_user_blocked", {
         surface,

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 import { Navigation } from "@/components/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -196,9 +197,10 @@ export default function QBankStudyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-warmwhite">
+    <div className="min-h-screen bg-warmwhite relative overflow-hidden">
+      <DecorativeBrandWatermark position="tr" opacity={0.025} />
       <Navigation />
-      <div className="mx-auto px-4 py-8 pb-16 max-w-[900px]">
+      <div className="mx-auto px-4 py-8 pb-16 max-w-[900px] relative">
         {!started ? (
           <Card className="premium-card border-0 shadow-md">
             <CardHeader>

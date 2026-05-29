@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { UnitSystemToggle } from "@/components/unit-system-toggle";
 import { Link, useParams } from "wouter";
 import { AlliedSEO } from "@/allied/allied-seo";
 import { useI18n } from "@/lib/i18n";
@@ -49,26 +50,6 @@ function Breadcrumbs({ labName }: { labName?: string }) {
   );
 }
 
-function UnitToggle({ unit, setUnit }: { unit: "si" | "conventional"; setUnit: (u: "si" | "conventional") => void }) {
-  return (
-    <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden text-sm" data-testid="unit-toggle">
-      <button
-        onClick={() => setUnit("si")}
-        className={`px-4 py-2 font-medium transition-colors ${unit === "si" ? "bg-purple-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-        data-testid="button-unit-si"
-      >
-        SI Units (Canada)
-      </button>
-      <button
-        onClick={() => setUnit("conventional")}
-        className={`px-4 py-2 font-medium transition-colors ${unit === "conventional" ? "bg-purple-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-        data-testid="button-unit-conventional"
-      >
-        Conventional (US)
-      </button>
-    </div>
-  );
-}
 
 function ComparisonTable({ data, unit }: { data: MltLabValuePageData; unit: "si" | "conventional" }) {
   const range = data.normalRange[unit];
@@ -367,7 +348,7 @@ export function MltLabValuePage() {
             <Microscope className="w-3.5 h-3.5" />
             {data.discipline}
           </span>
-          <UnitToggle unit={unit} setUnit={setUnit} />
+          <UnitSystemToggle unit={unit} onUnitChange={setUnit} />
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight" data-testid="h1-title">

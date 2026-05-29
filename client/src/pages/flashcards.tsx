@@ -100,6 +100,7 @@ import { AnswerOption, RationaleSection, RationaleImageBlock, QuestionContextHea
 import { ProtectedImage } from "@/components/protected-image";
 import { getCategoryImage } from "@/lib/system-images";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 import { AdaptiveStudyHub } from "@/components/adaptive-study";
 import { SocialProofBar } from "@/components/conversion-funnel";
 import { AITutorWidget } from "@/components/ai-tutor-widget";
@@ -3516,6 +3517,7 @@ export default function Flashcards({ isTestBank = false }: { isTestBank?: boolea
           {/* ===== SECTION 1: Hero / Study Launcher ===== */}
           <section className="relative overflow-hidden" data-testid="section-flashcards-hero">
             <div className="absolute inset-0 bg-gradient-to-br from-violet-100/50 via-transparent to-blue-100/30 pointer-events-none" />
+            <DecorativeBrandWatermark position="tr" opacity={0.035} />
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 relative">
               <div className="max-w-5xl mb-4">
                 <BreadcrumbNav />

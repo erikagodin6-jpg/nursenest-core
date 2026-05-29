@@ -37,6 +37,7 @@ import {
   normalizeLinearPracticeCreateContract,
 } from "@/lib/practice-tests/practice-session-contract";
 import { withTimeout } from "@/lib/server/with-timeout";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 
 export const dynamic = "force-dynamic";
 
@@ -481,7 +482,13 @@ export async function POST(req: Request) {
     }
     const basis = resolveCatSelectionBasisForPost(d.catPresentationMode, d.catSelectionBasis);
     const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
-    const readinessConfig = await readinessConfigForPathwayId(pathwayIdForCat);
+    const readinessConfig = await safeStudyOptional(
+      "readiness",
+      "practice_tests_create_cat",
+      () => readinessConfigForPathwayId(pathwayIdForCat),
+      null,
+      { timeoutMs: 800, label: "cat_readiness_config" },
+    );
     const pathwayCap =
       d.catPresentationMode === "exam_simulation" && simPathway
         ? nclexRnSimulationBoundsFromConfig(
@@ -686,14 +693,23 @@ export async function POST(req: Request) {
       catAdaptiveSessionType: adaptiveSessionType,
     });
 
-    captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
-      pathway_id: pathwayIdForCat,
-      exam_simulation: d.catPresentationMode === "exam_simulation",
-      cat_exam_feedback_mode: cat.config.catExamFeedbackMode ?? "test",
-      question_cap: enforcedQuestionCount,
-      timed: enforcedTimedMode,
-      ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
-    });
+    await safeStudyOptional(
+      "analytics",
+      "practice_tests_create_cat",
+      async () => {
+        captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
+          pathway_id: pathwayIdForCat,
+          exam_simulation: d.catPresentationMode === "exam_simulation",
+          cat_exam_feedback_mode: cat.config.catExamFeedbackMode ?? "test",
+          question_cap: enforcedQuestionCount,
+          timed: enforcedTimedMode,
+          ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
+        });
+        return true;
+      },
+      false,
+      { timeoutMs: 500, label: "cat_started_analytics" },
+    );
     if (isDev) {
       safeServerLog("practice_tests", "CAT_START_VALIDATION_DEV", {
         userIdPrefix: gate.userId.slice(0, 8),
@@ -848,15 +864,30 @@ export async function POST(req: Request) {
     },
   });
 
-  captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerLinearPracticeTestStarted, {
-    pathway_id: d.pathwayId?.trim() || undefined,
-    selection_mode: d.selectionMode,
-    question_count: d.questionCount,
-    timed: d.timedMode,
-    ...examContextAnalyticsProps(buildGlobalExamContext(d.pathwayId?.trim() || null, "en")),
-  });
+  await safeStudyOptional(
+    "analytics",
+    "practice_tests_create_linear",
+    async () => {
+      captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerLinearPracticeTestStarted, {
+        pathway_id: d.pathwayId?.trim() || undefined,
+        selection_mode: d.selectionMode,
+        question_count: d.questionCount,
+        timed: d.timedMode,
+        ...examContextAnalyticsProps(buildGlobalExamContext(d.pathwayId?.trim() || null, "en")),
+      });
+      return true;
+    },
+    false,
+    { timeoutMs: 500, label: "linear_started_analytics" },
+  );
 
-  await invalidateLearnerPrivateReadCache(gate.userId);
+  await safeStudyOptional(
+    "cache_invalidation",
+    "practice_tests_create_linear",
+    () => invalidateLearnerPrivateReadCache(gate.userId).then(() => true),
+    false,
+    { timeoutMs: 500, label: "linear_create_cache_invalidation" },
+  );
   return NextResponse.json({ id: row.id, questionCount: picked.ids.length, config }, { status: 201 });
   });
 }

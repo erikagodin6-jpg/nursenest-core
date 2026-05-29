@@ -1,4 +1,5 @@
 import { Navigation } from "@/components/navigation";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 import { Footer } from "@/components/footer";
 import { SEO } from "@/components/seo";
 import { Button } from "@/components/ui/button";
@@ -226,6 +227,7 @@ export default function PharmacologyHub() {
 
       <main className="flex-grow">
         <section className="relative overflow-hidden py-20 lg:py-28" data-testid="section-pharma-hero">
+          <DecorativeBrandWatermark position="tr" opacity={0.03} />
           <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
             <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-3xl" />
             <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-teal-500/10 blur-3xl" />

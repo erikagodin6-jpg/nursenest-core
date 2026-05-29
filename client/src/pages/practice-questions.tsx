@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 import { getExamQuestions, type PooledQuestion } from "@/lib/question-pool";
 import {
   ArrowRight, CheckCircle2, XCircle, BookOpen, Target,
@@ -132,8 +133,9 @@ function PracticeQuestionsIndex() {
       />
       <Navigation />
       <main className="flex-1 pb-16">
-        <section className="bg-gradient-to-b from-primary/5 via-white to-white py-12 px-4">
-          <div className="max-w-5xl mx-auto">
+        <section className="bg-gradient-to-b from-primary/5 via-white to-white py-12 px-4 relative overflow-hidden">
+          <DecorativeBrandWatermark position="tr" opacity={0.03} />
+          <div className="max-w-5xl mx-auto relative">
             <BreadcrumbNav items={[
               { name: "Home", url: "https://www.nursenest.ca/" },
               { name: "Free Practice Questions", url: "https://www.nursenest.ca/practice-questions" },

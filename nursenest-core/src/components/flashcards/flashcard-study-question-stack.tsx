@@ -68,6 +68,32 @@ function rationaleKeyConcept(text: string | null | undefined): string {
   return line.length > 120 ? `${line.slice(0, 117).trim()}...` : "Use the highest-risk cue to choose the safest priority action.";
 }
 
+function buildExamTipForMcq(exam: ExamMicroQuestionPayload, pathwayLabel: string): string | null {
+  const kind = (exam.itemKind ?? "").toLowerCase();
+  const stem = (exam.questionStem ?? "").toLowerCase();
+  if (kind.includes("priority") || stem.includes("priority") || stem.includes("first action")) {
+    return `${pathwayLabel}: "priority" items test your ability to identify the highest-risk cue — use ABCs and Maslow's hierarchy as your decision framework.`;
+  }
+  if (kind.includes("delegation") || stem.includes("delegate") || stem.includes("unlicensed")) {
+    return `${pathwayLabel}: delegation items assess scope of practice. Keep assessment, teaching, and unstable patients with the RN.`;
+  }
+  if (stem.includes("contraindicated") || stem.includes("avoid")) {
+    return `${pathwayLabel}: eliminate options that worsen the underlying condition or mask a critical symptom.`;
+  }
+  if (stem.includes("medication") || stem.includes("drug") || stem.includes("administer")) {
+    return `${pathwayLabel}: know the mechanism of action — ask what system the drug affects and what requires monitoring.`;
+  }
+  return null;
+}
+
+function buildMemoryHookForMcq(text: string): string | null {
+  const clean = String(text ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  if (!clean) return null;
+  const sentences = clean.match(/[^.!?]+[.!?]+/g) ?? [];
+  const hook = sentences.slice(0, 2).join(" ").trim();
+  return hook.length > 20 ? hook : null;
+}
+
 type StackLabels = {
   revealHint?: string;
   answerHeading?: string;
@@ -104,6 +130,7 @@ export function FlashcardStudyQuestionStack({
   marked = false,
   onToggleMark,
   onAdvance,
+  examPathwayLabel = "NCLEX",
 }: {
   sessionModeLabel: string;
   topicLine?: string | null;
@@ -121,22 +148,18 @@ export function FlashcardStudyQuestionStack({
   labels?: StackLabels;
   rail?: ReactNode;
   mainFooter?: ReactNode;
-  /** Links shown inline in the reveal zone (lesson, practice questions). Use lg:hidden when mirroring to rail on desktop. */
   revealLinksSection?: ReactNode;
-  /** Fired when the learner commits an MCQ answer (before reveal). */
   onAnswerSubmitted?: (selectedLetter: string, isCorrect: boolean) => void;
-  /** Optional async gate for bank-backed grading. Return false to keep the item unrevealed. */
   onBeforeAnswerReveal?: (selectedLetter: string) => boolean | Promise<boolean>;
-  /** Fired when the learner commits a SATA answer by pressing Reveal. */
   onSataReveal?: (selectedLetters: string[], correctLetters: string[]) => void;
-  /** Optional async gate for bank-backed SATA grading. Return false to keep the item unrevealed. */
   onBeforeSataReveal?: (selectedLetters: string[]) => boolean | Promise<boolean>;
-  /** Fired once when the rationale panel first mounts for this card. */
   onRationaleOpened?: () => void;
   questionLabel?: string;
   marked?: boolean;
   onToggleMark?: () => void;
   onAdvance?: () => void;
+  /** "NCLEX" | "REx-PN" | "CNPLE" — drives Exam Tip badge. */
+  examPathwayLabel?: string;
 }) {
   const isSata = isSataPayload(examMicroQuestion);
   const exam = isSata ? null : (examMicroQuestion as ExamMicroQuestionPayload | null);
@@ -360,8 +383,8 @@ export function FlashcardStudyQuestionStack({
                 </div>
                 {revealed ? (
                   <div className="nn-flashcard-rationale-panel__body">
-                    <section className="nn-flashcard-rationale-key-concept" aria-label="Key concept">
-                      <span>Key concept</span>
+                    <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl">
+                      <span>Clinical Pearl</span>
                       <p>{rationaleKeyConcept(exam.rationaleCorrect || explanation || answer)}</p>
                     </section>
                     <section className="nn-flashcard-rationale-section">
@@ -371,14 +394,14 @@ export function FlashcardStudyQuestionStack({
                       </div>
                     </section>
                     <section className="nn-flashcard-rationale-section">
-                      <h3>Why this is correct</h3>
+                      <h3>Why This Is Correct</h3>
                       <div className="nn-flashcard-inline-rationale__body">
                         <FlashcardRichContent text={exam.rationaleCorrect || explanation || answer} />
                       </div>
                     </section>
                     {exam.rationaleIncorrect.length > 0 ? (
                       <section className="nn-flashcard-rationale-panel__incorrect">
-                        <h3>Why the other options are not priority</h3>
+                        <h3>Why Other Options Are Incorrect</h3>
                         <div>
                           {exam.rationaleIncorrect.map((row) => (
                             <details key={row.letter} open={row.letter === submittedLetter}>
@@ -392,6 +415,26 @@ export function FlashcardStudyQuestionStack({
                         </div>
                       </section>
                     ) : null}
+                    {(() => {
+                      const tip = buildExamTipForMcq(exam, examPathwayLabel);
+                      return tip ? (
+                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip">
+                          <h3>{examPathwayLabel} Tip</h3>
+                          <p className="nn-flashcard-inline-rationale__body text-sm leading-relaxed">{tip}</p>
+                        </section>
+                      ) : null;
+                    })()}
+                    {(() => {
+                      const hook = buildMemoryHookForMcq(exam.rationaleCorrect || explanation || answer);
+                      return hook ? (
+                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook">
+                          <h3>Memory Hook</h3>
+                          <p className="nn-flashcard-inline-rationale__body text-sm italic leading-relaxed">
+                            &ldquo;{hook}&rdquo;
+                          </p>
+                        </section>
+                      ) : null;
+                    })()}
                     {revealLinksSection ? (
                       <div className="mt-3" data-testid="flashcard-reveal-links">
                         {revealLinksSection}
@@ -446,6 +489,7 @@ export function FlashcardStudyQuestionStack({
                         whyIncorrectHeading: labels?.whyIncorrectHeading,
                         takeawayHeading: labels?.takeawayHeading,
                       }}
+                      examPathwayLabel={examPathwayLabel}
                       onRationaleOpened={onRationaleOpened}
                     />
                     {revealLinksSection ? (

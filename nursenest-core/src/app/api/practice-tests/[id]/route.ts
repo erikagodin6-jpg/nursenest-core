@@ -14,7 +14,6 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
  * or replayed answers; completion uses the full question id + answer set once.
  */
 import { isAdaptiveLearningEnabled } from "@/lib/adaptive-learning/adaptive-learning-flags";
-import { buildPracticeAdaptivePostMissPayload } from "@/lib/learner/build-learner-adaptive-wire-bundle";
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-commit-feedback";
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
@@ -45,7 +44,7 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { recordQuestionPeerAnalyticsAndBuildPayload } from "@/lib/questions/question-peer-analytics";
+import { safeStudyOptional } from "@/lib/study-mode/study-mode-fallback";
 import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import { practiceTestRouteDeps } from "./route-deps";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
@@ -385,7 +384,14 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     surface: "practice_test_api_patch",
   });
   const nextExamToolsAdaptiveState = mergePracticeExamTools(row.adaptiveState, parsed.data.examTools);
-  const invalidateHeavyReads = async () => invalidateLearnerPrivateReadCache(gate.userId);
+  const invalidateHeavyReads = async () =>
+    safeStudyOptional(
+      "cache_invalidation",
+      "practice_test_detail",
+      () => invalidateLearnerPrivateReadCache(gate.userId).then(() => true),
+      false,
+      { timeoutMs: 500, label: "practice_test_cache_invalidation" },
+    );
 
   const prePatchContract = practicePatchSessionContract({
     cfg,
@@ -512,37 +518,38 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     await invalidateHeavyReads();
     const committedQuestionIds = getLinearCommittedQuestionIds(nextAdaptive);
     if (cfg.linearDeliveryMode === "practice") {
-      let adaptivePostMiss: Awaited<ReturnType<typeof buildPracticeAdaptivePostMissPayload>> = null;
-      let peerStats: Awaited<ReturnType<typeof recordQuestionPeerAnalyticsAndBuildPayload>> = null;
-      try {
-        peerStats = await recordQuestionPeerAnalyticsAndBuildPayload(prisma, {
-          userId: gate.userId,
-          questionId: qid,
-          questionType: feedback.questionType,
-          pathwayId: cfg.pathwayId ?? null,
-          answer: userAns,
-          isCorrect: feedback.isCorrect,
-          correctKeys: feedback.correctKeys,
-          attemptMode: PracticeQuestionAnswerMode.practice,
-        });
-      } catch (e) {
-        safeServerLog("practice_tests", "linear_peer_analytics_failed", {
-          practiceTestId: id.slice(0, 16),
-          questionId: qid.slice(0, 12),
-          message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
-        });
-      }
+      let adaptivePostMiss: Awaited<ReturnType<typeof practiceTestRouteDeps.buildPracticeAdaptivePostMissPayload>> = null;
+      let peerStats: Awaited<ReturnType<typeof practiceTestRouteDeps.recordQuestionPeerAnalyticsAndBuildPayload>> = null;
+      peerStats = await safeStudyOptional(
+        "analytics",
+        "practice_test_linear_commit",
+        () =>
+          practiceTestRouteDeps.recordQuestionPeerAnalyticsAndBuildPayload(prisma, {
+            userId: gate.userId,
+            questionId: qid,
+            questionType: feedback.questionType,
+            pathwayId: cfg.pathwayId ?? null,
+            answer: userAns,
+            isCorrect: feedback.isCorrect,
+            correctKeys: feedback.correctKeys,
+            attemptMode: PracticeQuestionAnswerMode.practice,
+          }),
+        null,
+        { timeoutMs: 500, label: "linear_peer_analytics" },
+      );
       if (isAdaptiveLearningEnabled() && !feedback.isCorrect) {
         const pid = typeof cfg.pathwayId === "string" ? cfg.pathwayId.trim() : "";
         if (pid) {
-          try {
-            adaptivePostMiss = await buildPracticeAdaptivePostMissPayload(gate.userId, gate.entitlement, {
+          adaptivePostMiss = await safeStudyOptional(
+            "adaptive_learning",
+            "practice_test_linear_commit",
+            () => practiceTestRouteDeps.buildPracticeAdaptivePostMissPayload(gate.userId, gate.entitlement, {
               pathwayId: pid,
               missedTopicKey: feedback.topic,
-            });
-          } catch {
-            adaptivePostMiss = null;
-          }
+            }),
+            null,
+            { timeoutMs: 700, label: "linear_adaptive_post_miss" },
+          );
         }
       }
       return NextResponse.json(
@@ -653,21 +660,20 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       const resultsWithMeta = withCatSessionResultMeta(adv.results, cfg, answeredCount);
       const completedAdaptiveState = mergePracticeExamTools(adv.adaptiveState, parsed.data.examTools) ?? adv.adaptiveState;
       let resultsFinal = resultsWithMeta;
-      try {
-        resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
-          resultsWithMeta,
-          completedAdaptiveState,
-          cfg,
-          gate.entitlement,
-          { practiceTestId: id },
-        );
-      } catch (error) {
-        safeServerLog("cat_runner", "cat_results_enrichment_failed", {
-          event: "cat_results_enrichment_failed",
-          practiceTestId: id.slice(0, 16),
-          reason: error instanceof Error ? error.message : "unknown",
-        });
-      }
+      resultsFinal = await safeStudyOptional(
+        "recommendations",
+        "cat_advance_complete",
+        () =>
+          practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
+            resultsWithMeta,
+            completedAdaptiveState,
+            cfg,
+            gate.entitlement,
+            { practiceTestId: id },
+          ),
+        resultsWithMeta,
+        { timeoutMs: 900, label: "cat_advance_results_coach_enrichment" },
+      );
       const postCatDone = practicePatchSessionContract({
         cfg,
         rowStatus: PracticeTestStatus.COMPLETED,
@@ -693,21 +699,24 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         },
       });
       let topicStatsSynced = true;
-      try {
-        await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
-      } catch {
-        topicStatsSynced = false;
-      }
-      try {
-        practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-        practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-      } catch (error) {
-        safeServerLog("cat_runner", "cat_completion_analytics_failed", {
-          event: "cat_completion_analytics_failed",
-          practiceTestId: id.slice(0, 16),
-          reason: error instanceof Error ? error.message : "unknown",
-        });
-      }
+      topicStatsSynced = await safeStudyOptional(
+        "analytics",
+        "cat_advance_complete",
+        () => practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).then(() => true),
+        false,
+        { timeoutMs: 800, label: "cat_advance_topic_outcomes" },
+      );
+      await safeStudyOptional(
+        "analytics",
+        "cat_advance_complete",
+        async () => {
+          practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+          practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+          return true;
+        },
+        false,
+        { timeoutMs: 500, label: "cat_advance_completion_analytics" },
+      );
       await invalidateHeavyReads();
       return NextResponse.json({
         ok: true,
@@ -810,19 +819,22 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         const finalAdaptiveState = mergePracticeExamTools(fin.adaptiveState, parsed.data.examTools) ?? fin.adaptiveState;
         let resultsFinal = resultsWithMeta;
         try {
-          resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
+          resultsFinal = await safeStudyOptional(
+            "recommendations",
+            "cat_manual_complete",
+            () =>
+              practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
+                resultsWithMeta,
+                finalAdaptiveState,
+                cfg,
+                gate.entitlement,
+                { practiceTestId: id },
+              ),
             resultsWithMeta,
-            finalAdaptiveState,
-            cfg,
-            gate.entitlement,
-            { practiceTestId: id },
+            { timeoutMs: 900, label: "cat_results_coach_enrichment" },
           );
-        } catch (error) {
-          safeServerLog("cat_runner", "cat_results_enrichment_failed", {
-            event: "cat_results_enrichment_failed",
-            practiceTestId: id.slice(0, 16),
-            reason: error instanceof Error ? error.message : "unknown",
-          });
+        } catch {
+          resultsFinal = resultsWithMeta;
         }
         const postManualCatComplete = practicePatchSessionContract({
           cfg,
@@ -848,21 +860,24 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           },
         });
         let topicStatsSynced = true;
-        try {
-          await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
-        } catch {
-          topicStatsSynced = false;
-        }
-        try {
-          practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-          practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-        } catch (error) {
-          safeServerLog("cat_runner", "cat_completion_analytics_failed", {
-            event: "cat_completion_analytics_failed",
-            practiceTestId: id.slice(0, 16),
-            reason: error instanceof Error ? error.message : "unknown",
-          });
-        }
+        topicStatsSynced = await safeStudyOptional(
+          "analytics",
+          "cat_manual_complete",
+          () => practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).then(() => true),
+          false,
+          { timeoutMs: 800, label: "cat_manual_topic_outcomes" },
+        );
+        await safeStudyOptional(
+          "analytics",
+          "cat_manual_complete",
+          async () => {
+            practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+            practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+            return true;
+          },
+          false,
+          { timeoutMs: 500, label: "cat_manual_completion_analytics" },
+        );
         await invalidateHeavyReads();
         return NextResponse.json({ ok: true, results: resultsFinal, topicStatsSynced });
       } catch (error) {
@@ -904,13 +919,23 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       },
     });
 
-    let topicStatsSynced = true;
-    try {
-      await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
-    } catch {
-      topicStatsSynced = false;
-    }
-    practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, results);
+    const topicStatsSynced = await safeStudyOptional(
+      "analytics",
+      "linear_complete",
+      () => practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).then(() => true),
+      false,
+      { timeoutMs: 800, label: "linear_complete_topic_outcomes" },
+    );
+    await safeStudyOptional(
+      "analytics",
+      "linear_complete",
+      async () => {
+        practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, results);
+        return true;
+      },
+      false,
+      { timeoutMs: 500, label: "linear_complete_analytics" },
+    );
     await invalidateHeavyReads();
     return NextResponse.json({ ok: true, results, topicStatsSynced });
   }

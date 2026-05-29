@@ -2,10 +2,13 @@ import "server-only";
 
 import { InternalCourseStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type EcgModuleStatus = "draft" | "qa_preview" | "published" | "archived";
 
 export const ECG_MODULE_COURSE_CODE = "ecg-mastery-module";
+const ECG_MODULE_STATUS_READ_TIMEOUT_MS = 650;
 
 function fromInternalStatus(status: InternalCourseStatus | null | undefined): EcgModuleStatus {
   if (status === InternalCourseStatus.published) return "published";
@@ -21,10 +24,23 @@ function toInternalStatus(status: EcgModuleStatus): InternalCourseStatus {
 }
 
 export async function getEcgModuleStatus(): Promise<EcgModuleStatus> {
-  const row = await prisma.internalCourse.findUnique({
-    where: { code: ECG_MODULE_COURSE_CODE },
-    select: { status: true },
-  });
+  const row = await withDatabaseFallbackTimeout(
+    () =>
+      prisma.internalCourse.findUnique({
+        where: { code: ECG_MODULE_COURSE_CODE },
+        select: { status: true },
+      }),
+    null,
+    ECG_MODULE_STATUS_READ_TIMEOUT_MS,
+    { scope: "ecg_module", label: "module_status" },
+  );
+  if (!row) {
+    safeServerLog("ecg_module", "module_status_fallback", {
+      code: ECG_MODULE_COURSE_CODE,
+      timeoutMs: ECG_MODULE_STATUS_READ_TIMEOUT_MS,
+      fallbackStatus: "draft",
+    });
+  }
   return fromInternalStatus(row?.status);
 }
 

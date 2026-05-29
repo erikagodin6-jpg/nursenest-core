@@ -47,7 +47,7 @@ export type GeneratedScreenshotRecord = {
   fallbackPath: string;
   component: string;
   pages: readonly string[];
-  status: "current" | "needs-authenticated-capture";
+  status: "current" | "needs-authenticated-capture" | "needs-recapture";
   recommendation: string;
 };
 
@@ -166,6 +166,9 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
     {
       component: "GeneratedMarketingScreenshotRegistry",
       pages: ["/", "/pricing"],
+      status: "needs-recapture",
+      recommendation:
+        "Rejected by the hardened screenshot guard because skeleton markers were visible. Keep the fallback image until the homepage can be recaptured without loading UI.",
     },
   ),
   marketingPricing: generated(
@@ -175,6 +178,9 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
     {
       component: "GeneratedMarketingScreenshotRegistry",
       pages: ["/pricing"],
+      status: "needs-recapture",
+      recommendation:
+        "Rejected by the hardened screenshot guard because loading copy was visible. Keep the fallback image until pricing can be recaptured after a completed render.",
     },
   ),
   marketingFaq: generated(
@@ -322,7 +328,10 @@ export const GENERATED_SCREENSHOT_REGISTRY = {
 } as const satisfies Record<GeneratedScreenshotKey, GeneratedScreenshotRecord>;
 
 export const GENERATED_SCREENSHOT_PATHS = Object.fromEntries(
-  Object.entries(GENERATED_SCREENSHOT_REGISTRY).map(([key, value]) => [key, value.path]),
+  Object.entries(GENERATED_SCREENSHOT_REGISTRY).map(([key, value]) => [
+    key,
+    value.status === "current" ? value.path : value.fallbackPath,
+  ]),
 ) as Record<GeneratedScreenshotKey, string>;
 
 export const GENERATED_SCREENSHOT_FALLBACKS = Object.fromEntries(

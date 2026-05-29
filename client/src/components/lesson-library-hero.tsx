@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { LocaleLink } from "@/lib/LocaleLink";
 import { getTierHero } from "@shared/tier-messaging";
+import { DecorativeBrandWatermark } from "@/components/decorative-brand-watermark";
 
 const badgeColors = ["bg-green-100 text-green-800", "bg-blue-100 text-blue-800", "bg-purple-100 text-purple-800"];
 
@@ -13,6 +14,7 @@ export function LessonLibraryHero({ activeTier }: { activeTier: string }) {
       className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-white to-blue-50 py-16 sm:py-20 lg:py-24"
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-100/40 via-transparent to-transparent pointer-events-none" />
+      <DecorativeBrandWatermark position="tr" opacity={0.03} />
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
           {content.badges.map((badge, i) => (

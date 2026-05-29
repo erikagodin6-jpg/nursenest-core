@@ -1,15 +1,15 @@
 # NurseNest Marketing Screenshot Validation Report
 
-**Generated:** 2026-05-28T22:21:02.131Z
+**Generated:** 2026-05-29T02:46:25.944Z
 
 ## Summary
 
 | Status | Count |
 |--------|-------|
-| ✅ Pass | 7 |
-| ⚠️ Warn | 19 |
+| ✅ Pass | 13 |
+| ⚠️ Warn | 15 |
 | ❌ Fail | 19 |
-| Total | 45 |
+| Total | 47 |
 
 ## Recommendations
 
@@ -39,7 +39,7 @@
 | ❌ | `newgrad/newgrad-readiness.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `marketing/marketing-home-desktop.webp` | File not found — run: npm run generate:marketing-screenshots |
 | ❌ | `marketing/pricing.webp` | File not found — run: npm run generate:marketing-screenshots |
-| ❌ | `marketing/faq.webp` | File not found — run: npm run generate:marketing-screenshots |
+| ✅ | `marketing/faq.webp` |  |
 
 ## Mobile Screenshots
 
@@ -59,16 +59,16 @@
 | ⚠️ | `ocean / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `midnight / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `midnight / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `midnight / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `midnight / marketing-home-desktop.webp` |  |
 | ⚠️ | `blossom / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `blossom / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `blossom / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `blossom / marketing-home-desktop.webp` |  |
 | ⚠️ | `aurora / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `aurora / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `aurora / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `aurora / marketing-home-desktop.webp` |  |
 | ⚠️ | `sage-garden / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `sage-garden / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
-| ⚠️ | `sage-garden / marketing-home-desktop.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `sage-garden / marketing-home-desktop.webp` |  |
 
 ## Legacy Fallback Images
 
@@ -81,3 +81,10 @@
 | ✅ | `landing-polish-preview/png/08-flashcards-session-blossom.png` | Legacy fallback in place |
 | ✅ | `landing-polish-preview/png/09-cat-readiness-ocean.png` | Legacy fallback in place |
 | ✅ | `dashboard-redesign-preview/05-kpi-components.png` | Legacy fallback in place |
+
+## Screenshot Readiness Quality Gate
+
+| Status | Asset | Detail |
+|--------|-------|--------|
+| ❌ | `capture errors` | marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (5); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); pricing: screenshot rejected: blocked text: Just a moment; blocked text: Loading |
+| ✅ | `quality gate metadata` |  |

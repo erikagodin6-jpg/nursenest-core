@@ -10,6 +10,7 @@
  *   3. Governed marketing routes have screenshot coverage
  *   4. Generated screenshots are present and not empty (when local dir exists)
  *   5. Manifest freshness (when manifest.json exists)
+ *   6. Manifest quality gates (no loading/error-state captures published)
  *
  * Does NOT make HTTP requests to the CDN (use validate-marketing-screenshots.ts --cdn-check for that).
  *
@@ -196,6 +197,49 @@ function checkManifestFreshness(): void {
   }
 }
 
+function checkManifestQualityGates(): void {
+  console.log("\n[5] Screenshot readiness quality gates …");
+
+  if (!fs.existsSync(MANIFEST_PATH)) {
+    warning("GOV-QUALITY-MANIFEST", "manifest.json not found — cannot prove screenshots passed readiness guards");
+    return;
+  }
+
+  try {
+    const raw = fs.readFileSync(MANIFEST_PATH, "utf8");
+    const manifest = JSON.parse(raw) as {
+      totalErrors?: number;
+      captures?: Array<{ key?: string; qualityGate?: { passed?: boolean; readinessChecks?: string[]; blockedStatesRejected?: string[] } }>;
+      errors?: unknown[];
+    };
+    const errorCount = manifest.totalErrors ?? manifest.errors?.length ?? 0;
+    if (errorCount > 0) {
+      critical("GOV-QUALITY-ERRORS", `Manifest contains ${errorCount} failed capture(s); do not publish partial screenshot sets.`);
+    }
+    const captures = manifest.captures ?? [];
+    if (captures.length === 0) {
+      critical("GOV-QUALITY-EMPTY", "Manifest contains no captures.");
+      return;
+    }
+    const missingGate = captures.filter(
+      (capture) =>
+        capture.qualityGate?.passed !== true ||
+        !capture.qualityGate.readinessChecks?.length ||
+        !capture.qualityGate.blockedStatesRejected?.length,
+    );
+    if (missingGate.length > 0) {
+      critical(
+        "GOV-QUALITY-GATE",
+        `${missingGate.length} screenshot(s) lack readiness qualityGate metadata. Regenerate with the hardened generator before publishing.`,
+      );
+    } else {
+      pass("GOV-QUALITY-GATE", `All ${captures.length} captures passed readiness quality gates`);
+    }
+  } catch {
+    critical("GOV-QUALITY-PARSE", "manifest.json is not valid JSON");
+  }
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 function main(): void {
@@ -206,6 +250,7 @@ function main(): void {
   checkLegacyFallbacks();
   checkGeneratedScreenshots();
   checkManifestFreshness();
+  checkManifestQualityGates();
 
   const criticals = failures.filter((f) => f.severity === "critical");
   const warnings = failures.filter((f) => f.severity === "warning");

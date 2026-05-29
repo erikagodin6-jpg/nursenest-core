@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-28T22:21:02.131Z",
+  "generatedAt": "2026-05-29T02:46:25.944Z",
   "summary": {
-    "total": 45,
-    "pass": 7,
-    "warn": 19,
+    "total": 47,
+    "pass": 13,
+    "warn": 15,
     "fail": 19,
     "skip": 0
   },
@@ -158,8 +158,8 @@
       "category": "local-generated",
       "label": "marketing/faq.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/faq.webp",
-      "status": "fail",
-      "detail": "File not found — run: npm run generate:marketing-screenshots"
+      "status": "pass",
+      "captureDate": "2026-05-29T02:39:20.848Z"
     },
     {
       "id": "mobile-mobile-mobile-homepage-webp",
@@ -238,8 +238,7 @@
       "category": "theme-variant",
       "label": "midnight / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-blossom-learner-dashboard-webp",
@@ -262,8 +261,7 @@
       "category": "theme-variant",
       "label": "blossom / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-aurora-learner-dashboard-webp",
@@ -286,8 +284,7 @@
       "category": "theme-variant",
       "label": "aurora / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-sage-garden-learner-dashboard-webp",
@@ -310,8 +307,7 @@
       "category": "theme-variant",
       "label": "sage-garden / marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "fallback-dashboard-redesign-preview-01-dash-desktop-ocean-png",
@@ -368,6 +364,21 @@
       "assetPath": "/root/nursenest-core/nursenest-core/public/dashboard-redesign-preview/05-kpi-components.png",
       "status": "pass",
       "detail": "Legacy fallback in place"
+    },
+    {
+      "id": "quality-manifest-errors",
+      "category": "quality-gate",
+      "label": "capture errors",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/manifest.json",
+      "status": "fail",
+      "detail": "marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (5); marketing-home-desktop: screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6); pricing: screenshot rejected: blocked text: Just a moment; blocked text: Loading"
+    },
+    {
+      "id": "quality-manifest-gate-metadata",
+      "category": "quality-gate",
+      "label": "quality gate metadata",
+      "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/manifest.json",
+      "status": "pass"
     }
   ],
   "staleAssets": [],

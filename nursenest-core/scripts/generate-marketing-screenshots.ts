@@ -1524,28 +1524,16 @@ async function login(page: Page, email: string, password: string): Promise<void>
 // ─── Theme application ────────────────────────────────────────────────────────
 
 async function applyTheme(page: Page, theme: string): Promise<void> {
-  await page.addInitScript(
-    ({ key, value }: { key: string; value: string }) => {
-      try {
-        localStorage.setItem(key, value);
-      } catch {
-        // Some initial documents (about:blank, opaque error pages) deny storage.
-      }
-      document.documentElement.setAttribute("data-theme", value);
-    },
-    { key: THEME_STORAGE_KEY, value: theme },
-  );
-  await page.evaluate(
-    ({ key, value }: { key: string; value: string }) => {
-      try {
-        localStorage.setItem(key, value);
-      } catch {
-        // Theme attribute is enough for the current document when storage is blocked.
-      }
-      document.documentElement.setAttribute("data-theme", value);
-    },
-    { key: THEME_STORAGE_KEY, value: theme },
-  ).catch(() => {});
+  const key = JSON.stringify(THEME_STORAGE_KEY);
+  const value = JSON.stringify(theme);
+  const script = `(() => {
+    const key = ${key};
+    const value = ${value};
+    try { localStorage.setItem(key, value); } catch {}
+    document.documentElement.setAttribute("data-theme", value);
+  })();`;
+  await page.addInitScript({ content: script });
+  await page.evaluate(script).catch(() => {});
 }
 
 // ─── Page hydration ───────────────────────────────────────────────────────────
@@ -1566,6 +1554,9 @@ async function settle(page: Page, extraMs: number): Promise<void> {
 }
 
 function targetReadinessChecks(target: CaptureTarget): CaptureReadinessCheck[] {
+  if (target.auth === "guest" || target.tier === "marketing") {
+    return [{ name: "marketing page content", selector: "main h1, main h2, main p, main a, main button" }];
+  }
   const keyRoute = `${target.key} ${target.route}`.toLowerCase();
   if (keyRoute.includes("flashcard")) {
     return [
@@ -1607,53 +1598,40 @@ function targetReadinessChecks(target: CaptureTarget): CaptureReadinessCheck[] {
 }
 
 async function countVisible(page: Page, selector: string): Promise<number> {
-  return page.locator(selector).evaluateAll((nodes) =>
-    nodes.filter((node) => {
-      const el = node as HTMLElement;
-      if (el.closest("[aria-hidden='true']")) return false;
-      const style = window.getComputedStyle(el);
-      const rect = el.getBoundingClientRect();
-      return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 && rect.width > 1 && rect.height > 1;
-    }).length,
-  ).catch(() => 0);
+  const loc = page.locator(selector);
+  const total = await loc.count().catch(() => 0);
+  let visible = 0;
+  for (let i = 0; i < Math.min(total, 80); i++) {
+    if (await loc.nth(i).isVisible().catch(() => false)) visible++;
+  }
+  return visible;
 }
 
 async function blockedDomReasons(page: Page): Promise<string[]> {
-  return page.evaluate(
-    ({ blockedText, blockedSelectors }: { blockedText: string[]; blockedSelectors: string[] }) => {
-      function visible(el: Element): boolean {
-        if (el.closest("[aria-hidden='true']")) return false;
-        const h = el as HTMLElement;
-        const style = window.getComputedStyle(h);
-        const rect = h.getBoundingClientRect();
-        return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 && rect.width > 1 && rect.height > 1;
-      }
-
-      const reasons: string[] = [];
-      const bodyText = document.body?.innerText ?? "";
-      for (const text of blockedText) {
-        const re = new RegExp(`\\b${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
-        if (re.test(bodyText)) reasons.push(`blocked text: ${text}`);
-      }
-      for (const selector of blockedSelectors) {
-        const matches = Array.from(document.querySelectorAll(selector)).filter(visible);
-        if (matches.length > 0) reasons.push(`blocked selector: ${selector} (${matches.length})`);
-      }
-      const pathname = window.location.pathname;
-      if (/\/login|\/signup/i.test(pathname)) reasons.push(`authentication redirect: ${pathname}`);
-      if ((document.body?.innerText ?? "").trim().length < 120) reasons.push("blank or near-empty page text");
-      return reasons;
-    },
-    { blockedText: [...BLOCKED_CAPTURE_TEXT], blockedSelectors: [...BLOCKED_CAPTURE_SELECTORS] },
-  );
+  const reasons: string[] = [];
+  const bodyText = await page.locator("body").innerText({ timeout: 5000 }).catch(() => "");
+  for (const text of BLOCKED_CAPTURE_TEXT) {
+    const re = new RegExp(`\\b${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+    if (re.test(bodyText)) reasons.push(`blocked text: ${text}`);
+  }
+  for (const selector of BLOCKED_CAPTURE_SELECTORS) {
+    const count = await countVisible(page, selector);
+    if (count > 0) reasons.push(`blocked selector: ${selector} (${count})`);
+  }
+  const currentUrl = page.url();
+  try {
+    const pathname = new URL(currentUrl).pathname;
+    if (/\/login|\/signup/i.test(pathname)) reasons.push(`authentication redirect: ${pathname}`);
+  } catch {
+    /* ignore unparsable URLs */
+  }
+  if (bodyText.trim().length < 120) reasons.push("blank or near-empty page text");
+  return reasons;
 }
 
 async function waitForScreenshotReady(page: Page, target: CaptureTarget): Promise<void> {
-  await page.waitForFunction(
-    () => document.documentElement.getAttribute("data-loaded") === "true" || document.body?.getAttribute("data-loaded") === "true" || document.readyState === "complete",
-    undefined,
-    { timeout: 20_000 },
-  ).catch(() => {});
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("load").catch(() => {});
 
   const checks = targetReadinessChecks(target);
   for (const check of checks) {
@@ -1664,23 +1642,12 @@ async function waitForScreenshotReady(page: Page, target: CaptureTarget): Promis
     }
   }
 
-  await page.waitForFunction(
-    ({ blockedText, blockedSelectors }: { blockedText: string[]; blockedSelectors: string[] }) => {
-      function visible(el: Element): boolean {
-        if (el.closest("[aria-hidden='true']")) return false;
-        const h = el as HTMLElement;
-        const style = window.getComputedStyle(h);
-        const rect = h.getBoundingClientRect();
-        return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) !== 0 && rect.width > 1 && rect.height > 1;
-      }
-      const text = document.body?.innerText ?? "";
-      const noBlockedText = blockedText.every((phrase) => !new RegExp(`\\b${phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(text));
-      const noBlockedSelectors = blockedSelectors.every((selector) => Array.from(document.querySelectorAll(selector)).filter(visible).length === 0);
-      return noBlockedText && noBlockedSelectors;
-    },
-    { blockedText: [...BLOCKED_CAPTURE_TEXT], blockedSelectors: [...BLOCKED_CAPTURE_SELECTORS] },
-    { timeout: 20_000 },
-  );
+  const clearStartedAt = Date.now();
+  while (Date.now() - clearStartedAt < 20_000) {
+    const reasons = await blockedDomReasons(page);
+    if (reasons.length === 0) break;
+    await page.waitForTimeout(250);
+  }
 
   const reasons = await blockedDomReasons(page);
   if (reasons.length > 0) {

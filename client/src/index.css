@@ -1732,6 +1732,8 @@ input, textarea, [contenteditable="true"], .allow-select {
    LEAF WATERMARK SYSTEM
    Apply .leaf-watermark-bg to any container that should carry
    the NurseNest ambient leaf identity. Position: relative required.
+   Uses the actual NurseNest blossom-leaf asset — no arch shapes,
+   no CSS masking, no geometric approximations.
    ============================================================ */
 
 .leaf-watermark-bg {
@@ -1744,13 +1746,16 @@ input, textarea, [contenteditable="true"], .allow-select {
   position: absolute;
   pointer-events: none;
   z-index: 0;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 10 C140 10 180 50 180 100 C180 150 140 190 100 190 C60 190 20 150 20 100 C20 50 60 10 100 10Z M100 10 C60 30 40 70 50 110 C60 150 90 175 100 190' fill='none' stroke='currentColor' stroke-width='1.5' opacity='0.15'/%3E%3Cpath d='M100 10 Q80 60 90 110 Q95 150 100 190' fill='none' stroke='currentColor' stroke-width='1' opacity='0.1'/%3E%3C/svg%3E");
+  /* Top-right placement; actual leaf PNG — no masking */
+  top: -4%;
+  right: -4%;
+  width: clamp(180px, 28vw, 340px);
+  height: clamp(180px, 28vw, 340px);
+  background-image: url("/branding/blossom-leaf/leaf-128.webp");
   background-repeat: no-repeat;
-  background-size: 340px 340px;
-  background-position: top right;
+  background-size: contain;
+  background-position: center;
   opacity: 0.04;
-  color: var(--theme-primary);
 }
 
 .leaf-watermark-bg > * {
@@ -1760,8 +1765,10 @@ input, textarea, [contenteditable="true"], .allow-select {
 
 /* Larger leaf for hero sections */
 .leaf-watermark-hero::before {
-  background-size: 520px 520px;
-  background-position: -60px -60px;
+  width: clamp(280px, 40vw, 520px);
+  height: clamp(280px, 40vw, 520px);
+  top: -6%;
+  right: -6%;
   opacity: 0.035;
 }
 
@@ -1771,13 +1778,15 @@ input, textarea, [contenteditable="true"], .allow-select {
   position: absolute;
   pointer-events: none;
   z-index: 0;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 10 C140 10 180 50 180 100 C180 150 140 190 100 190 C60 190 20 150 20 100 C20 50 60 10 100 10Z' fill='none' stroke='currentColor' stroke-width='1.5' opacity='0.12'/%3E%3C/svg%3E");
+  bottom: -4%;
+  left: -4%;
+  width: clamp(120px, 20vw, 240px);
+  height: clamp(120px, 20vw, 240px);
+  background-image: url("/branding/blossom-leaf/leaf-128.webp");
   background-repeat: no-repeat;
-  background-size: 240px 240px;
-  background-position: bottom left;
+  background-size: contain;
+  background-position: center;
   opacity: 0.03;
-  color: var(--theme-accent-2, var(--theme-primary));
 }
 
 /* Subtle leaf divider line */
@@ -1929,4 +1938,109 @@ input, textarea, [contenteditable="true"], .allow-select {
 :is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"]) .leaf-watermark-bg::before,
 :is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"]) .leaf-watermark-double::after {
   opacity: 0.06;
+}
+
+/* ============================================================
+   UNIT SYSTEM TOGGLE (SI / CONVENTIONAL)
+   Theme-aware segmented control. Meets WCAG AA contrast.
+   Desktop: min 36px height. Mobile: min 44px height.
+   ============================================================ */
+
+.unit-system-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid var(--semantic-border, var(--theme-border, #e5e7eb));
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--semantic-surface, var(--theme-card-bg, #ffffff));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  /* Ensure it doesn't collapse on small containers */
+  flex-shrink: 0;
+}
+
+.unit-system-toggle__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  /* Desktop minimum */
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--theme-body-text, #6b7280);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  white-space: nowrap;
+}
+
+.unit-system-toggle__btn:hover:not([data-active="true"]) {
+  background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+  color: var(--theme-primary);
+}
+
+.unit-system-toggle__btn[data-active="true"] {
+  background: var(--theme-primary);
+  color: #ffffff;
+  /* Contrast: theme-primary is always dark enough against white */
+}
+
+.unit-system-toggle__btn:focus-visible {
+  outline: 2px solid var(--theme-focus-ring, var(--theme-primary));
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.unit-system-toggle__divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--semantic-border, var(--theme-border, #e5e7eb));
+  flex-shrink: 0;
+}
+
+.unit-system-toggle__indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+/* Mobile: larger touch targets */
+@media (max-width: 640px) {
+  .unit-system-toggle__btn {
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure buttons inside compact toolbars don't overflow */
+.study-toolbar .unit-system-toggle,
+.exam-toolbar .unit-system-toggle {
+  border-radius: 8px;
+}
+
+.study-toolbar .unit-system-toggle__btn,
+.exam-toolbar .unit-system-toggle__btn {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .study-toolbar .unit-system-toggle__btn,
+  .exam-toolbar .unit-system-toggle__btn {
+    min-height: 40px;
+    padding: 0 10px;
+  }
 }

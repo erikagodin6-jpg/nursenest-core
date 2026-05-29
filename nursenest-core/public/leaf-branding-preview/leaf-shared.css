@@ -6,6 +6,9 @@
   user-select: none;
   line-height: 0;
 }
+/* Uses actual leaf PNG — no inline SVG arch shapes */
+.nn-leaf-layer img { display: block; width: 100%; height: auto; object-fit: contain; }
+/* Legacy SVG rules — kept for reference, no longer used */
 .nn-leaf-layer svg { display: block; width: 100%; height: auto; }
 .nn-leaf-fill { fill: var(--leaf-tint, #1ca3d9); }
 .nn-leaf-vein { fill: var(--leaf-vein, rgba(255,255,255,0.35)); }

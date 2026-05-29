@@ -328,6 +328,98 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     assert.equal(captureCoach.mock.callCount(), 1);
   });
 
+  it("completes CAT when recommendation enrichment fails", async () => {
+    const update = mock.fn(async () => ({}));
+
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => catConfig);
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: [Q1, Q2],
+      answers: { [Q1]: "A" },
+      cursorIndex: 1,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: createInitialAdaptiveState(),
+    }));
+    mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
+    mock.method(practiceTestRouteDeps, "finalizeCatPracticeTest", async () => ({
+      results: catResults,
+      adaptiveState: { theta: 0.32, se: 0.58 },
+    }));
+    mock.method(practiceTestRouteDeps, "enrichPracticeTestResultsWithCatCoach", async () => {
+      throw new Error("coach unavailable");
+    });
+    mock.method(practiceTestRouteDeps, "recordTopicOutcomesFromPracticeTest", async () => {});
+    mock.method(practiceTestRouteDeps, "capturePracticeTestCompletedAnalytics", () => {});
+    mock.method(practiceTestRouteDeps, "captureCatCoachGenerationAnalytics", () => {});
+
+    const res = await PATCH(
+      makeRequest({ action: "complete", answers: { [Q1]: "A", [Q2]: "B" }, cursorIndex: 1 }) as never,
+      { params: Promise.resolve({ id: "test_12345678" }) },
+    );
+    const data = (await res.json()) as { ok: boolean; results?: PracticeTestResultsJson };
+
+    assert.equal(res.status, 200);
+    assert.equal(data.ok, true);
+    assert.equal(data.results?.catCoach, undefined);
+    assert.equal(update.mock.callCount(), 1);
+  });
+
+  it("completes CAT when analytics sinks fail", async () => {
+    const update = mock.fn(async () => ({}));
+
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => catConfig);
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: [Q1, Q2],
+      answers: { [Q1]: "A" },
+      cursorIndex: 1,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: createInitialAdaptiveState(),
+    }));
+    mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
+    mock.method(practiceTestRouteDeps, "finalizeCatPracticeTest", async () => ({
+      results: catResults,
+      adaptiveState: { theta: 0.32, se: 0.58 },
+    }));
+    mock.method(practiceTestRouteDeps, "enrichPracticeTestResultsWithCatCoach", async (results: PracticeTestResultsJson) => ({
+      ...results,
+      catCoach,
+    }));
+    mock.method(practiceTestRouteDeps, "recordTopicOutcomesFromPracticeTest", async () => {
+      throw new Error("topic analytics unavailable");
+    });
+    mock.method(practiceTestRouteDeps, "capturePracticeTestCompletedAnalytics", () => {
+      throw new Error("product analytics unavailable");
+    });
+    mock.method(practiceTestRouteDeps, "captureCatCoachGenerationAnalytics", () => {
+      throw new Error("coach analytics unavailable");
+    });
+
+    const res = await PATCH(
+      makeRequest({ action: "complete", answers: { [Q1]: "A", [Q2]: "B" }, cursorIndex: 1 }) as never,
+      { params: Promise.resolve({ id: "test_12345678" }) },
+    );
+    const data = (await res.json()) as { ok: boolean; results?: PracticeTestResultsJson; topicStatsSynced?: boolean };
+
+    assert.equal(res.status, 200);
+    assert.equal(data.ok, true);
+    assert.equal(data.results?.catCoach?.reliabilityLevel, "low");
+    assert.equal(data.topicStatsSynced, false);
+    assert.equal(update.mock.callCount(), 1);
+  });
+
   it("rejects explicit CAT complete with only one answered item on strict adaptive runs", async () => {
     mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
     mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
@@ -359,7 +451,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
 });
 
 describe("PATCH /api/practice-tests/[id] complete empty session", () => {
-  it("rejects complete when the session has zero question ids", async () => {
+  it("rejects complete during session-contract preflight when the session has zero question ids", async () => {
     mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
     mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
     mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
@@ -391,8 +483,8 @@ describe("PATCH /api/practice-tests/[id] complete empty session", () => {
     );
     const data = (await res.json()) as { code?: string };
 
-    assert.equal(res.status, 400);
-    assert.equal(data.code, "complete_no_questions");
+    assert.equal(res.status, 409);
+    assert.equal(data.code, "legacy_linear_in_progress_no_questions");
   });
 });
 

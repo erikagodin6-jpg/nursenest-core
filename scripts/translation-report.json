@@ -2,17 +2,17 @@
   "fr": {
     "name": "French",
     "totalKeys": 17832,
-    "missingKeys": 539,
+    "missingKeys": 544,
     "untranslatedKeys": 3508,
     "mixedKeys": 1310,
-    "coverage": 77.5,
+    "coverage": 77.4,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 10693,
-        "missing": 375,
+        "missing": 379,
         "untranslated": 3429,
-        "coverage": 73.8,
+        "coverage": 73.7,
         "threshold": 90,
         "passed": false
       },
@@ -44,9 +44,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1127,
-        "missing": 65,
+        "missing": 66,
         "untranslated": 38,
         "coverage": 91.6,
         "threshold": 100,
@@ -132,17 +132,17 @@
   "tl": {
     "name": "Filipino",
     "totalKeys": 21293,
-    "missingKeys": 0,
+    "missingKeys": 5,
     "untranslatedKeys": 2486,
     "mixedKeys": 117,
-    "coverage": 86.2,
+    "coverage": 86.1,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 12100,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 2397,
-        "coverage": 83.5,
+        "coverage": 83.4,
         "threshold": 90,
         "passed": false
       },
@@ -174,11 +174,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1220,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 10,
-        "coverage": 99.2,
+        "coverage": 99.1,
         "threshold": 100,
         "passed": false
       },
@@ -192,7 +192,13 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
+    ],
     "untranslated": [
       "allied.alliedDiagnostic.alliedHealthDiagnosticAssessment",
       "allied.alliedHome.alliedHealthCareersCertificationExam",
@@ -241,15 +247,15 @@
   "hi": {
     "name": "Hindi",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 14118,
     "mixedKeys": 11,
-    "coverage": 21.4,
+    "coverage": 21.3,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1148,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13349,
         "coverage": 7.9,
         "threshold": 90,
@@ -283,9 +289,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 591,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 638,
         "coverage": 48,
         "threshold": 100,
@@ -302,7 +308,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -343,15 +354,15 @@
   "es": {
     "name": "Spanish",
     "totalKeys": 21293,
-    "missingKeys": 0,
+    "missingKeys": 5,
     "untranslatedKeys": 12785,
     "mixedKeys": 92,
     "coverage": 28.8,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1940,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 12557,
         "coverage": 13.4,
         "threshold": 90,
@@ -385,9 +396,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1153,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 77,
         "coverage": 93.7,
         "threshold": 100,
@@ -403,7 +414,13 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
+    ],
     "untranslated": [
       "allied.alliedAdmin.active",
       "allied.alliedAdmin.active2",
@@ -452,15 +469,15 @@
   "zh": {
     "name": "Chinese (Simplified)",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 13901,
     "mixedKeys": 3,
     "coverage": 22.6,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1146,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13351,
         "coverage": 7.9,
         "threshold": 90,
@@ -494,9 +511,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 812,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 417,
         "coverage": 66,
         "threshold": 100,
@@ -513,7 +530,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -546,15 +568,15 @@
   "zh-tw": {
     "name": "Chinese (Traditional)",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 14560,
     "mixedKeys": 6,
     "coverage": 18.9,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 618,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13879,
         "coverage": 4.3,
         "threshold": 90,
@@ -588,11 +610,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 681,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 548,
-        "coverage": 55.4,
+        "coverage": 55.3,
         "threshold": 100,
         "passed": false
       },
@@ -607,7 +629,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -643,17 +670,17 @@
   "ar": {
     "name": "Arabic",
     "totalKeys": 21293,
-    "missingKeys": 0,
+    "missingKeys": 5,
     "untranslatedKeys": 3492,
     "mixedKeys": 5,
     "coverage": 80.5,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 11112,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 3385,
-        "coverage": 76.7,
+        "coverage": 76.6,
         "threshold": 90,
         "passed": false
       },
@@ -685,11 +712,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1176,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 54,
-        "coverage": 95.6,
+        "coverage": 95.5,
         "threshold": 100,
         "passed": false
       },
@@ -703,7 +730,13 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
+    ],
     "untranslated": [
       "allied.alliedInstitutions.nameschooledu",
       "allied.alliedPricing.nursenestAlliedVsGenericTest",
@@ -737,15 +770,15 @@
   "ko": {
     "name": "Korean",
     "totalKeys": 4238,
-    "missingKeys": 14094,
+    "missingKeys": 14099,
     "untranslatedKeys": 48,
     "mixedKeys": 13,
     "coverage": 21.2,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 716,
-        "missing": 13775,
+        "missing": 13779,
         "untranslated": 6,
         "coverage": 4.9,
         "threshold": 90,
@@ -779,9 +812,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1003,
-        "missing": 197,
+        "missing": 198,
         "untranslated": 30,
         "coverage": 81.5,
         "threshold": 100,
@@ -860,15 +893,15 @@
   "pt": {
     "name": "Portuguese",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 13753,
     "mixedKeys": 87,
     "coverage": 23.4,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1299,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13198,
         "coverage": 9,
         "threshold": 90,
@@ -902,11 +935,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 836,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 393,
-        "coverage": 68,
+        "coverage": 67.9,
         "threshold": 100,
         "passed": false
       },
@@ -921,7 +954,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -971,15 +1009,15 @@
   "pa": {
     "name": "Punjabi",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 14029,
     "mixedKeys": 13,
     "coverage": 21.8,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1148,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13349,
         "coverage": 7.9,
         "threshold": 90,
@@ -1013,9 +1051,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 683,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 546,
         "coverage": 55.5,
         "threshold": 100,
@@ -1032,7 +1070,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -1075,15 +1118,15 @@
   "vi": {
     "name": "Vietnamese",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 13870,
     "mixedKeys": 84,
     "coverage": 22.7,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1298,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13199,
         "coverage": 9,
         "threshold": 90,
@@ -1117,11 +1160,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 708,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 521,
-        "coverage": 57.6,
+        "coverage": 57.5,
         "threshold": 100,
         "passed": false
       },
@@ -1136,7 +1179,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -1186,15 +1234,15 @@
   "ht": {
     "name": "Haitian Creole",
     "totalKeys": 4238,
-    "missingKeys": 14094,
+    "missingKeys": 14099,
     "untranslatedKeys": 4,
     "mixedKeys": 3,
     "coverage": 21.5,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 722,
-        "missing": 13775,
+        "missing": 13779,
         "untranslated": 0,
         "coverage": 5,
         "threshold": 90,
@@ -1228,9 +1276,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1030,
-        "missing": 197,
+        "missing": 198,
         "untranslated": 3,
         "coverage": 83.7,
         "threshold": 100,
@@ -1283,15 +1331,15 @@
   "ur": {
     "name": "Urdu",
     "totalKeys": 17951,
-    "missingKeys": 1,
+    "missingKeys": 6,
     "untranslatedKeys": 14033,
     "mixedKeys": 7,
     "coverage": 21.8,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1146,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13351,
         "coverage": 7.9,
         "threshold": 90,
@@ -1325,9 +1373,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 682,
-        "missing": 1,
+        "missing": 2,
         "untranslated": 547,
         "coverage": 55.4,
         "threshold": 100,
@@ -1344,7 +1392,12 @@
       }
     },
     "missing": [
-      "dashboard.nextStepMockExams"
+      "dashboard.nextStepMockExams",
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
     ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
@@ -1381,15 +1434,15 @@
   "ja": {
     "name": "Japanese",
     "totalKeys": 21293,
-    "missingKeys": 0,
+    "missingKeys": 5,
     "untranslatedKeys": 14035,
     "mixedKeys": 2,
     "coverage": 21.8,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 1146,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13351,
         "coverage": 7.9,
         "threshold": 90,
@@ -1423,11 +1476,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 680,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 550,
-        "coverage": 55.3,
+        "coverage": 55.2,
         "threshold": 100,
         "passed": false
       },
@@ -1441,7 +1494,13 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1472,15 +1531,15 @@
   "fa": {
     "name": "Farsi",
     "totalKeys": 4238,
-    "missingKeys": 14094,
+    "missingKeys": 14099,
     "untranslatedKeys": 41,
     "mixedKeys": 0,
     "coverage": 21.3,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 719,
-        "missing": 13775,
+        "missing": 13779,
         "untranslated": 3,
         "coverage": 5,
         "threshold": 90,
@@ -1514,11 +1573,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1005,
-        "missing": 197,
+        "missing": 198,
         "untranslated": 28,
-        "coverage": 81.7,
+        "coverage": 81.6,
         "threshold": 100,
         "passed": false
       },
@@ -1581,15 +1640,15 @@
   "de": {
     "name": "German",
     "totalKeys": 21293,
-    "missingKeys": 0,
+    "missingKeys": 5,
     "untranslatedKeys": 14380,
     "mixedKeys": 96,
     "coverage": 19.9,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 813,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 13684,
         "coverage": 5.6,
         "threshold": 90,
@@ -1623,11 +1682,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 712,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 518,
-        "coverage": 57.9,
+        "coverage": 57.8,
         "threshold": 100,
         "passed": false
       },
@@ -1641,7 +1700,13 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1690,15 +1755,15 @@
   "th": {
     "name": "Thai",
     "totalKeys": 3791,
-    "missingKeys": 14633,
+    "missingKeys": 14638,
     "untranslatedKeys": 54,
     "mixedKeys": 25,
     "coverage": 18.2,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 177,
-        "missing": 14316,
+        "missing": 14320,
         "untranslated": 4,
         "coverage": 1.2,
         "threshold": 90,
@@ -1732,11 +1797,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1008,
-        "missing": 195,
+        "missing": 196,
         "untranslated": 27,
-        "coverage": 82,
+        "coverage": 81.9,
         "threshold": 100,
         "passed": false
       },
@@ -1820,15 +1885,15 @@
   "tr": {
     "name": "Turkish",
     "totalKeys": 3317,
-    "missingKeys": 14635,
+    "missingKeys": 14640,
     "untranslatedKeys": 61,
     "mixedKeys": 21,
     "coverage": 18.1,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 176,
-        "missing": 14316,
+        "missing": 14320,
         "untranslated": 5,
         "coverage": 1.2,
         "threshold": 90,
@@ -1862,9 +1927,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1004,
-        "missing": 197,
+        "missing": 198,
         "untranslated": 29,
         "coverage": 81.6,
         "threshold": 100,
@@ -1950,15 +2015,15 @@
   "id": {
     "name": "Indonesian",
     "totalKeys": 21293,
-    "missingKeys": 0,
+    "missingKeys": 5,
     "untranslatedKeys": 3619,
     "mixedKeys": 4,
     "coverage": 79.8,
     "byContentType": {
       "optional": {
-        "total": 14497,
+        "total": 14501,
         "translated": 11109,
-        "missing": 0,
+        "missing": 4,
         "untranslated": 3388,
         "coverage": 76.6,
         "threshold": 90,
@@ -1992,9 +2057,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1230,
+        "total": 1231,
         "translated": 1025,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 205,
         "coverage": 83.3,
         "threshold": 100,
@@ -2010,7 +2075,13 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "nav.marketingPathways",
+      "pages.publicPracticeExams.metaDescriptionCA",
+      "pages.publicPracticeExams.metaDescriptionUS",
+      "pages.publicPracticeExams.metaTitleCA",
+      "pages.publicPracticeExams.metaTitleUS"
+    ],
     "untranslated": [
       "allied.alliedAdmin.adminAccessRequiredToSeed",
       "allied.alliedAdmin.autoflashcards13CardsGeneratedPer",

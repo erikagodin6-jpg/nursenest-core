@@ -1,160 +1,10 @@
 {
-  "generatedAt": "2026-05-29T01:08:29.246Z",
+  "generatedAt": "2026-05-29T02:40:02.681Z",
   "baseUrl": "http://127.0.0.1:3000",
   "outputDir": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots",
-  "totalCaptured": 18,
-  "totalErrors": 0,
+  "totalCaptured": 8,
+  "totalErrors": 5,
   "captures": [
-    {
-      "key": "marketing-home-desktop",
-      "tier": "marketing",
-      "label": "Homepage — desktop hero",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
-        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-768w.webp",
-        "public/marketing/generated-screenshots/marketing/marketing-home-desktop-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:05:33.884Z"
-    },
-    {
-      "key": "marketing-home-desktop",
-      "tier": "marketing",
-      "label": "Homepage — desktop hero",
-      "theme": "midnight",
-      "viewport": "desktop",
-      "route": "/",
-      "files": [
-        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop.webp",
-        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-1200w.webp",
-        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-768w.webp",
-        "public/marketing/generated-screenshots/themes/midnight/marketing-home-desktop-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:05:40.128Z"
-    },
-    {
-      "key": "marketing-home-desktop",
-      "tier": "marketing",
-      "label": "Homepage — desktop hero",
-      "theme": "blossom",
-      "viewport": "desktop",
-      "route": "/",
-      "files": [
-        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop.webp",
-        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-1200w.webp",
-        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-768w.webp",
-        "public/marketing/generated-screenshots/themes/blossom/marketing-home-desktop-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:05:50.159Z"
-    },
-    {
-      "key": "marketing-home-desktop",
-      "tier": "marketing",
-      "label": "Homepage — desktop hero",
-      "theme": "aurora",
-      "viewport": "desktop",
-      "route": "/",
-      "files": [
-        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop.webp",
-        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop-1200w.webp",
-        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop-768w.webp",
-        "public/marketing/generated-screenshots/themes/aurora/marketing-home-desktop-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:00.399Z"
-    },
-    {
-      "key": "marketing-home-desktop",
-      "tier": "marketing",
-      "label": "Homepage — desktop hero",
-      "theme": "sage-garden",
-      "viewport": "desktop",
-      "route": "/",
-      "files": [
-        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop.webp",
-        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop-1200w.webp",
-        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop-768w.webp",
-        "public/marketing/generated-screenshots/themes/sage-garden/marketing-home-desktop-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:07.984Z"
-    },
-    {
-      "key": "pricing",
-      "tier": "marketing",
-      "label": "Pricing page",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/pricing",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/pricing.webp",
-        "public/marketing/generated-screenshots/marketing/pricing-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/pricing-768w.webp",
-        "public/marketing/generated-screenshots/marketing/pricing-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:22.416Z"
-    },
-    {
-      "key": "pricing",
-      "tier": "marketing",
-      "label": "Pricing page",
-      "theme": "midnight",
-      "viewport": "desktop",
-      "route": "/pricing",
-      "files": [
-        "public/marketing/generated-screenshots/themes/midnight/pricing.webp",
-        "public/marketing/generated-screenshots/themes/midnight/pricing-1200w.webp",
-        "public/marketing/generated-screenshots/themes/midnight/pricing-768w.webp",
-        "public/marketing/generated-screenshots/themes/midnight/pricing-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:29.657Z"
-    },
-    {
-      "key": "pricing",
-      "tier": "marketing",
-      "label": "Pricing page",
-      "theme": "blossom",
-      "viewport": "desktop",
-      "route": "/pricing",
-      "files": [
-        "public/marketing/generated-screenshots/themes/blossom/pricing.webp",
-        "public/marketing/generated-screenshots/themes/blossom/pricing-1200w.webp",
-        "public/marketing/generated-screenshots/themes/blossom/pricing-768w.webp",
-        "public/marketing/generated-screenshots/themes/blossom/pricing-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:36.903Z"
-    },
-    {
-      "key": "pricing",
-      "tier": "marketing",
-      "label": "Pricing page",
-      "theme": "aurora",
-      "viewport": "desktop",
-      "route": "/pricing",
-      "files": [
-        "public/marketing/generated-screenshots/themes/aurora/pricing.webp",
-        "public/marketing/generated-screenshots/themes/aurora/pricing-1200w.webp",
-        "public/marketing/generated-screenshots/themes/aurora/pricing-768w.webp",
-        "public/marketing/generated-screenshots/themes/aurora/pricing-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:44.425Z"
-    },
-    {
-      "key": "pricing",
-      "tier": "marketing",
-      "label": "Pricing page",
-      "theme": "sage-garden",
-      "viewport": "desktop",
-      "route": "/pricing",
-      "files": [
-        "public/marketing/generated-screenshots/themes/sage-garden/pricing.webp",
-        "public/marketing/generated-screenshots/themes/sage-garden/pricing-1200w.webp",
-        "public/marketing/generated-screenshots/themes/sage-garden/pricing-768w.webp",
-        "public/marketing/generated-screenshots/themes/sage-garden/pricing-480w.webp"
-      ],
-      "generatedAt": "2026-05-29T01:06:51.349Z"
-    },
     {
       "key": "faq",
       "tier": "marketing",
@@ -168,7 +18,22 @@
         "public/marketing/generated-screenshots/marketing/faq-768w.webp",
         "public/marketing/generated-screenshots/marketing/faq-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:07:00.124Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:21.179Z"
     },
     {
       "key": "rn-marketing-hub",
@@ -183,7 +48,22 @@
         "public/marketing/generated-screenshots/marketing/rn-marketing-hub-768w.webp",
         "public/marketing/generated-screenshots/marketing/rn-marketing-hub-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:07:16.196Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:26.302Z"
     },
     {
       "key": "rn-questions-marketing",
@@ -198,7 +78,22 @@
         "public/marketing/generated-screenshots/marketing/rn-questions-marketing-768w.webp",
         "public/marketing/generated-screenshots/marketing/rn-questions-marketing-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:07:32.246Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:32.008Z"
     },
     {
       "key": "rn-lessons-marketing",
@@ -213,7 +108,22 @@
         "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-768w.webp",
         "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:07:47.293Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:37.975Z"
     },
     {
       "key": "pn-marketing-hub",
@@ -228,7 +138,22 @@
         "public/marketing/generated-screenshots/marketing/pn-marketing-hub-768w.webp",
         "public/marketing/generated-screenshots/marketing/pn-marketing-hub-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:07:54.269Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:43.179Z"
     },
     {
       "key": "np-marketing-hub",
@@ -243,7 +168,22 @@
         "public/marketing/generated-screenshots/marketing/np-marketing-hub-768w.webp",
         "public/marketing/generated-screenshots/marketing/np-marketing-hub-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:08:04.505Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:48.496Z"
     },
     {
       "key": "allied-marketing-hub",
@@ -258,7 +198,22 @@
         "public/marketing/generated-screenshots/marketing/allied-marketing-hub-768w.webp",
         "public/marketing/generated-screenshots/marketing/allied-marketing-hub-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:08:19.295Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:39:54.875Z"
     },
     {
       "key": "new-grad-marketing-hub",
@@ -273,8 +228,54 @@
         "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-768w.webp",
         "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-480w.webp"
       ],
-      "generatedAt": "2026-05-29T01:08:29.173Z"
+      "qualityGate": {
+        "passed": true,
+        "readinessChecks": [
+          "marketing page content"
+        ],
+        "blockedStatesRejected": [
+          "Just a moment",
+          "Loading",
+          "Please wait",
+          "Fetching",
+          "Preparing",
+          "Application error",
+          "Something went wrong"
+        ]
+      },
+      "generatedAt": "2026-05-29T02:40:02.449Z"
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "key": "marketing-home-desktop",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6)"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "theme": "ocean",
+      "viewport": "tablet",
+      "error": "screenshot rejected: blocked selector: [data-testid*='skeleton' i] (5)"
+    },
+    {
+      "key": "marketing-home-desktop",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6)"
+    },
+    {
+      "key": "pricing",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Just a moment; blocked text: Loading"
+    },
+    {
+      "key": "pricing",
+      "theme": "ocean",
+      "viewport": "tablet",
+      "error": "screenshot rejected: blocked text: Just a moment; blocked text: Loading"
+    }
+  ]
 }

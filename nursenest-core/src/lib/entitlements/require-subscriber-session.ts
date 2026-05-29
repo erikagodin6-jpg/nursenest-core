@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { safeAwait } from "@/lib/async/safe-await";
+import { AUTH_NODE_SESSION_READ_TIMEOUT_MS } from "@/lib/auth/auth-session-constants";
 import type { AccessScope, UserAccess } from "@/lib/entitlements/get-user-access";
 import { requireSubscriberSessionDeps } from "@/lib/entitlements/require-subscriber-session-deps";
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
@@ -16,6 +18,9 @@ export type SubscriberSessionOk = { ok: true; userId: string; entitlement: Acces
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
 export type SubscriberSessionResult = SubscriberSessionOk | SubscriberSessionFail;
 
+const SUBSCRIBER_GATE_ACCESS_TIMEOUT_MS = 2_000;
+const SUBSCRIBER_GATE_ACCOUNT_SHARING_TIMEOUT_MS = 500;
+
 export function notSubscribedResponse() {
   return NextResponse.json(
     { code: "not_subscribed", message: "Subscription required" },
@@ -32,7 +37,11 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
 
   let session: unknown = null;
   try {
-    session = await requireSubscriberSessionDeps.auth();
+    session = await safeAwait(
+      requireSubscriberSessionDeps.auth(),
+      "subscriber_gate.auth",
+      AUTH_NODE_SESSION_READ_TIMEOUT_MS,
+    );
   } catch (error) {
     safeServerLog("auth", "subscriber_gate_session_read_failed", {
       surface: "subscriber_gate",
@@ -74,7 +83,15 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
 
   let userAccess: UserAccess;
   try {
-    userAccess = await requireSubscriberSessionDeps.getUserAccess(userId);
+    const access = await safeAwait(
+      requireSubscriberSessionDeps.getUserAccess(userId),
+      "subscriber_gate.getUserAccess",
+      SUBSCRIBER_GATE_ACCESS_TIMEOUT_MS,
+    );
+    if (!access) {
+      throw new Error("subscriber_gate_access_timeout");
+    }
+    userAccess = access;
   } catch (e) {
     productEvent("entitlement_resolve_failed", { surface: "subscriber_api" });
     recordEntitlementResolveFailureSignal("subscriber_api", correlation || undefined);
@@ -125,7 +142,11 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     };
   }
 
-  const block = await requireSubscriberSessionDeps.maybeBlockOrTouchAccountSharingAfterSubscriberOk(userId, userAccess);
+  const block = await safeAwait(
+    requireSubscriberSessionDeps.maybeBlockOrTouchAccountSharingAfterSubscriberOk(userId, userAccess),
+    "subscriber_gate.account_sharing_touch",
+    SUBSCRIBER_GATE_ACCOUNT_SHARING_TIMEOUT_MS,
+  );
   if (block) {
     return { ok: false, response: block };
   }
