@@ -104,6 +104,26 @@ export const THEME_OPTIONS: ThemeOption[] = [
     named: true,
   },
   {
+    id: "alpine",
+    label: "Alpine",
+    color: "#2F5E87",
+    swatchSecondary: "#5F86A8",
+    swatchAccent: "#9CC3E8",
+    group: "light",
+    logoVariant: "blue",
+    named: true,
+  },
+  {
+    id: "sage",
+    label: "Sage",
+    color: "#5F8F79",
+    swatchSecondary: "#7FA79A",
+    swatchAccent: "#3D6B5B",
+    group: "light",
+    logoVariant: "mint",
+    named: true,
+  },
+  {
     id: "forest",
     label: "Forest",
     color: "#12805C",
@@ -210,6 +230,8 @@ export const PUBLIC_MARKETING_THEME_ALLOWLIST = [
   "mint-blossom",
   "aurora",
   "sunset",
+  "alpine",
+  "sage",
 ] as const;
 
 export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {

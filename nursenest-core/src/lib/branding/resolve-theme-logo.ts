@@ -71,6 +71,7 @@ const CDN_LEAF_URLS = {
  * Values intentionally point only at the approved leaf CDN assets.
  */
 export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
+  alpine: CDN_LEAF_URLS["graphite-blue"],
   "arctic-frost": CDN_LEAF_URLS["arctic-frost"],
   berry: CDN_LEAF_URLS.berry,
   "berry-bonbon": CDN_LEAF_URLS["berry-bonbon"],
@@ -101,6 +102,7 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "midnight-indigo": CDN_LEAF_URLS["deep-twilight"],
   "midnight-ink": CDN_LEAF_URLS["midnight-ink"],
   mint: CDN_LEAF_URLS.teal,
+  "mint-blossom": NURSENEST_BLOSSOM_LEAF_LOGO_URL,
   "mint-breeze": CDN_LEAF_URLS.teal,
   "multi-pastel": CDN_LEAF_URLS["rainbow-sherbet"],
   "neutral-sand": CDN_LEAF_URLS["neutral-sand"],
@@ -120,6 +122,7 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "rainbow-sherbet": CDN_LEAF_URLS["rainbow-sherbet"],
   "rose-gold": CDN_LEAF_URLS["dusty-rose"],
   "rose-quartz": CDN_LEAF_URLS["dusty-rose"],
+  sage: CDN_LEAF_URLS["soft-sage"],
   "sage-garden": CDN_LEAF_URLS["soft-sage"],
   "sky-kiss": CDN_LEAF_URLS["sky-kiss"],
   slate: CDN_LEAF_URLS.slate,

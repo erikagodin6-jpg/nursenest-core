@@ -345,7 +345,7 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
     poolDiagnostics: null,
   };
 
-  const PAGE_RENDER_BUDGET_MS = 3_000;
+  const PAGE_RENDER_BUDGET_MS = 700;
 
   let visiblePathwayIds: string[] = [];
   if (userId && catalogPathwayForInventory) {
@@ -359,7 +359,10 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
           }),
           new Promise<null>((resolve) => setTimeout(() => resolve(null), PAGE_RENDER_BUDGET_MS)),
         ]),
-        visiblePathwayIdsForAppLessons(entitlement, learnerPath).catch(() => [] as string[]),
+        Promise.race([
+          visiblePathwayIdsForAppLessons(entitlement, learnerPath).catch(() => [] as string[]),
+          new Promise<string[]>((resolve) => setTimeout(() => resolve([]), PAGE_RENDER_BUDGET_MS)),
+        ]),
       ]);
       visiblePathwayIds = visibleIds;
       if (inv && inv.ok) {
@@ -378,14 +381,20 @@ async function FlashcardsPageContent({ searchParams }: PageProps) {
         error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
       });
       try {
-        visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+        visiblePathwayIds = await Promise.race([
+          visiblePathwayIdsForAppLessons(entitlement, learnerPath),
+          new Promise<string[]>((resolve) => setTimeout(() => resolve([]), PAGE_RENDER_BUDGET_MS)),
+        ]);
       } catch {
         visiblePathwayIds = [];
       }
     }
   } else {
     try {
-      visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+      visiblePathwayIds = await Promise.race([
+        visiblePathwayIdsForAppLessons(entitlement, learnerPath),
+        new Promise<string[]>((resolve) => setTimeout(() => resolve([]), PAGE_RENDER_BUDGET_MS)),
+      ]);
     } catch {
       visiblePathwayIds = [];
     }

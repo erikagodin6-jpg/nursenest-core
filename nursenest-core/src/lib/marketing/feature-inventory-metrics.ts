@@ -1,5 +1,3 @@
-"use server";
-
 import "server-only";
 
 import { ContentStatus } from "@prisma/client";
@@ -18,6 +16,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { isDurabilityDegradedMode } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  TIER_DISPLAY_ORDER,
+  type FeatureMatrixRow,
+} from "@/lib/marketing/feature-inventory-matrix-shared";
 
 /**
  * Centralized feature inventory metrics for marketing surfaces (pricing, SEO, pathway pages).
@@ -191,35 +193,6 @@ export function formatFeatureCount(count: number): string {
   }
   return String(count);
 }
-
-/**
- * Tier display order for premium feature matrix.
- */
-export const TIER_DISPLAY_ORDER = ["newGrad", "rn", "rpn", "np", "allied"] as const;
-export type TierDisplayKey = (typeof TIER_DISPLAY_ORDER)[number];
-
-export const TIER_DISPLAY_LABELS: Record<TierDisplayKey, string> = {
-  newGrad: "New Grad",
-  rn: "RN",
-  rpn: "RPN / PN",
-  np: "NP",
-  allied: "Allied",
-};
-
-/**
- * Feature rows for the premium feature matrix.
- * Each row has a label, description, and tier availability.
- */
-export type FeatureMatrixRow = {
-  /** Display name */
-  label: string;
-  /** Short description */
-  description: string;
-  /** Mapping from tier key to display value (checkmark or count) */
-  values: Record<TierDisplayKey, string | boolean>;
-  /** Whether this is a tier-specific feature */
-  isHighlighted?: boolean;
-};
 
 /**
  * Build the premium feature matrix with live inventory counts.

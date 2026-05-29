@@ -18,7 +18,12 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { withRetry } from "@/lib/resilience/with-retry";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
-import { loadWithManifest, questionDiscoveryManifestKey, questionDiscoverySnapshotPath } from "@/lib/server/manifest-loader";
+import {
+  loadWithManifest,
+  questionDiscoveryManifestKey,
+  questionDiscoverySnapshotPath,
+  type QuestionDiscoveryManifestPayload,
+} from "@/lib/server/manifest-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -107,10 +112,10 @@ export async function GET(req: NextRequest) {
 
         const mp = manifestResult.data;
         const topicsOmittedCount = mp.topicsTruncated
-          ? Math.max(0, mp.total - mp.topicBuckets.reduce((s, b) => s + b.count, 0))
+          ? Math.max(0, mp.total - mp.topicBuckets.reduce((s: number, b: { count: number }) => s + b.count, 0))
           : 0;
         const examsOmittedCount = mp.examsTruncated
-          ? Math.max(0, mp.total - mp.examBuckets.reduce((s, b) => s + b.count, 0))
+          ? Math.max(0, mp.total - mp.examBuckets.reduce((s: number, b: { count: number }) => s + b.count, 0))
           : 0;
 
         const discoveryBody = {

@@ -64,7 +64,8 @@ type AppLessonListRow = {
   pathwayMeta?: { pathwayId: string; slug: string };
 };
 
-const LESSONS_PAGE_DB_TIMEOUT_MS = 1800;
+const LESSONS_PAGE_DB_TIMEOUT_MS = 900;
+const LESSONS_PROGRESS_PERSONALIZATION_BUDGET_MS = 350;
 
 type LessonsListBlock = {
   source: "content_items" | "pathway_lessons" | "legacy_content_map";
@@ -73,6 +74,32 @@ type LessonsListBlock = {
   pageCount: number;
   rows: AppLessonListRow[];
 };
+
+async function withLessonsStartupBudget<T>(work: Promise<T>, fallback: T, label: string): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return Promise.race([
+    work
+      .catch((error) => {
+        safeServerLog("page_lessons", "app_lessons_hub_optional_work_failed", {
+          label,
+          error_message: error instanceof Error ? error.message.slice(0, 240) : String(error).slice(0, 240),
+        });
+        return fallback;
+      })
+      .finally(() => {
+        if (timeout) clearTimeout(timeout);
+      }),
+    new Promise<T>((resolve) => {
+      timeout = setTimeout(() => {
+        safeServerLog("page_lessons", "app_lessons_hub_optional_work_timeout", {
+          label,
+          budget_ms: LESSONS_PROGRESS_PERSONALIZATION_BUDGET_MS,
+        });
+        resolve(fallback);
+      }, LESSONS_PROGRESS_PERSONALIZATION_BUDGET_MS);
+    }),
+  ]);
+}
 
 function pathwayLessonCardSummary(row: {
   seoDescription: string;
@@ -607,17 +634,21 @@ export default async function LessonsPage({ searchParams }: Props) {
       byPathway.set(pm.pathwayId, list);
     }
 
-    await Promise.all(
-      Array.from(byPathway.entries()).map(async ([pathwayId, slugs]) => {
-        const unique = [...new Set(slugs)];
-        const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
-        for (const row of resolvedRenderableLessons) {
-          const pm = row.pathwayMeta;
-          if (pm && pm.pathwayId === pathwayId && pm.slug) {
-            progressByRowId[row.id] = map[pm.slug] ?? "not_started";
+    await withLessonsStartupBudget(
+      Promise.all(
+        Array.from(byPathway.entries()).map(async ([pathwayId, slugs]) => {
+          const unique = [...new Set(slugs)];
+          const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
+          for (const row of resolvedRenderableLessons) {
+            const pm = row.pathwayMeta;
+            if (pm && pm.pathwayId === pathwayId && pm.slug) {
+              progressByRowId[row.id] = map[pm.slug] ?? "not_started";
+            }
           }
-        }
-      }),
+        }),
+      ),
+      [],
+      "progress_personalization",
     );
     lessonsPerfMark("personalization_end", { route: "app_lessons_hub" });
   }

@@ -60,6 +60,7 @@ import {
   parseHubSystemsFromSearchParams,
 } from "@/lib/flashcards/flashcards-hub-url";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
+import { useHubPrefetch } from "@/lib/learner/use-hub-prefetch";
 
 function buildCustomSessionQuery(args: {
   pathwayId: string;
@@ -147,6 +148,12 @@ export function FlashcardsHubClient({
   const searchParams = useSearchParams();
   const prefsHydratedRef = useRef(false);
   const heroEyebrow = flashcardsHeroEyebrow?.trim() || pathwayDisplayName;
+
+  // Prefetch likely next destinations during idle time (Phase 6 — hub prefetch).
+  useHubPrefetch({
+    pathwayId: scopedPathwayId,
+    prefetch: ["practice", "cat", "loft", "lessons", "clinical-skills", "pharmacology", "ecg", "analytics", "readiness"],
+  });
   const heroTitle =
     flashcardsHeroTitle?.trim() || t("learner.flashcards.hub.title");
   const heroSubtitle =

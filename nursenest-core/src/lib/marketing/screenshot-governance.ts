@@ -164,7 +164,7 @@ export function validateScreenshotRegistry(): GovernanceViolation[] {
   }
 
   // Rule 7: Pricing preview must include at least one practice and one CAT screenshot
-  const pricingIds = new Set(SCREENSHOT_GROUPS.pricingPreview);
+  const pricingIds = new Set<ScreenshotId>(SCREENSHOT_GROUPS.pricingPreview);
   const hasPractice = SCREENSHOT_REGISTRY.some(
     (r) => pricingIds.has(r.id) && (r.feature === "question-bank" || r.feature === "rationale"),
   );

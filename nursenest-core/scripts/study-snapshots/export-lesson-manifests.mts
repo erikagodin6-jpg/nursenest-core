@@ -48,9 +48,8 @@ interface LessonMetadataItem {
   id: string;
   title: string;
   slug: string | null;
-  topic: string | null;
+  category: string | null;
   tier: string | null;
-  estimatedDurationMinutes: number | null;
   publishedAt: string | null;
 }
 
@@ -89,11 +88,11 @@ async function exportLessonManifest(
   const scope = syntheticScope(tier, country);
   const where = lessonAccessWhere(scope);
 
-  const [totalLessons, topicGroups, firstPageRows] = await Promise.all([
+  const [totalLessons, categoryGroups, firstPageRows] = await Promise.all([
     prisma.contentItem.count({ where }),
     prisma.contentItem.groupBy({
-      by: ["topic"],
-      where: { ...where, topic: { not: null } },
+      by: ["category"],
+      where: { ...where, category: { not: null } },
       _count: { _all: true },
       orderBy: { _count: { id: "desc" } },
       take: 100,
@@ -104,9 +103,8 @@ async function exportLessonManifest(
         id: true,
         title: true,
         slug: true,
-        topic: true,
+        category: true,
         tier: true,
-        estimatedDurationMinutes: true,
         publishedAt: true,
       },
       orderBy: [{ publishedAt: "desc" }, { id: "asc" }],
@@ -114,17 +112,16 @@ async function exportLessonManifest(
     }),
   ]);
 
-  const topicBreakdown = topicGroups
-    .filter((g) => g.topic !== null)
-    .map((g) => ({ topic: g.topic as string, count: g._count._all }));
+  const topicBreakdown = categoryGroups
+    .filter((g) => g.category !== null)
+    .map((g) => ({ topic: g.category as string, count: g._count._all }));
 
   const firstPage: LessonMetadataItem[] = firstPageRows.map((r) => ({
     id: r.id,
     title: r.title,
     slug: r.slug,
-    topic: r.topic,
+    category: r.category,
     tier: r.tier,
-    estimatedDurationMinutes: r.estimatedDurationMinutes,
     publishedAt: r.publishedAt?.toISOString() ?? null,
   }));
 

@@ -287,14 +287,17 @@ export function emitCacheObservabilitySummary(): void {
   if (stats.length === 0) return;
 
   safeServerLog("perf", "cache_observability_summary", {
-    layers: stats.map((s) => ({
-      layer: s.layer,
-      hitRate: Math.round(s.hitRate * 100),
-      total: s.total,
-      avgLatencyMs: s.avgLatencyMs ? Math.round(s.avgLatencyMs * 10) / 10 : null,
-    })),
+    layerCount: stats.length,
+    layersJson: JSON.stringify(
+      stats.map((s) => ({
+        layer: s.layer,
+        hitRate: Math.round(s.hitRate * 100),
+        total: s.total,
+        avgLatencyMs: s.avgLatencyMs ? Math.round(s.avgLatencyMs * 10) / 10 : null,
+      })),
+    ),
     alertCount: alerts.length,
-    alerts: alerts.map((a) => ({ layer: a.layer, severity: a.severity })),
+    alertsJson: JSON.stringify(alerts.map((a) => ({ layer: a.layer, severity: a.severity }))),
   });
 }
 

@@ -59,6 +59,7 @@ import {
   LearnerShellPathwayPill,
 } from "@/components/layout/learner-shell-primary-nav";
 import { isPrintableStorePublicNavEnabled } from "@/lib/printables/printable-store-flags";
+import { classifyActivityRoute } from "@/lib/performance/activity-route-classification";
 import { LearnerStudyPathStrip } from "@/components/student/learner-study-path-strip";
 import { LearnerPathwayContextBar } from "@/components/student/learner-pathway-context-bar";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
@@ -91,6 +92,7 @@ import { resolveLearnerRequestPathname } from "@/lib/learner/resolve-learner-req
 import { LearnerShellDevDiagnostics } from "@/components/dev/learner-shell-dev-diagnostics";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 import { prisma } from "@/lib/db";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(app)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
@@ -204,8 +206,11 @@ const loadAdminLearnerQaSimulationHelpersSafe = traceProvider(
 const LearnerShellLayout = traceLayout(
   import.meta,
   async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
+  const shellStart = performance.now();
   const requestPathname = await resolveLearnerRequestPathname();
   const shellFlags = learnerShellFlags(requestPathname);
+  const activityRoute = classifyActivityRoute(requestPathname);
+  const isPerformanceSensitiveActivityRoute = activityRoute !== null;
   const isFocusedExamShell = shellFlags.suppressFullChrome;
   const isFocusedStudySurface = shellFlags.suppressStudyWidgets;
   const isLearnerDashboardRoute = shellFlags.isDashboard;
@@ -256,11 +261,40 @@ const LearnerShellLayout = traceLayout(
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
   const shellFallbackStats = getDegradedPublicHomeStatsFallback("learner_shell_route_safe_fallback", { silent: true });
-  const paywallHomeStats =
+
+  if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
+    layoutStderrTrace("learner_shell", "optional_shell_work_skipped", {
+      surface: "study_next_strip_analytics",
+      reason: "durability_degraded_or_core_only",
+    });
+  }
+
+  const cachedNav =
+    entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
+
+  // ── Tier 2 parallel load ─────────────────────────────────────────────────────
+  // paywallStats, pathwayNav, studyNextBlock, and nclexTargetDate all have
+  // no inter-dependencies — run them concurrently to cap layout latency at
+  // max(individual timeout) instead of sum(individual timeouts).
+  // Previously sequential worst-case: 900 + 2500 + 2500 + 900 = 6800 ms.
+  // Parallel worst-case: max(2500, 900) = 2500 ms.
+  const nclexTargetDateEnabled =
+    entitlement !== "error" &&
+    entitlement.hasAccess &&
+    !isFocusedExamShell &&
+    !isPerformanceSensitiveActivityRoute;
+  const shouldLoadStudyNext =
+    !skipNonCritical &&
+    entitlement !== "error" &&
+    entitlement.hasAccess &&
+    !isPerformanceSensitiveActivityRoute;
+
+  const [paywallHomeStats, pathwayNav, studyNextBlock, nclexTargetDateState] = await Promise.all([
+    // Paywall stats — only needed when not subscribed; fast fallback otherwise.
     isFocusedStudySurface
-      ? shellFallbackStats
+      ? Promise.resolve(shellFallbackStats)
       : entitlement === "error" || !entitlement.hasAccess
-        ? await safeOptional(
+        ? safeOptional(
             async () => await withBuildTrace(paywallStatsTrace, () => loadPaywallHomeStatsForShell()),
             shellFallbackStats,
             {
@@ -275,41 +309,54 @@ const LearnerShellLayout = traceLayout(
               },
             },
           )
-        : shellFallbackStats;
+        : Promise.resolve(shellFallbackStats),
 
-  if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
-    layoutStderrTrace("learner_shell", "optional_shell_work_skipped", {
-      surface: "study_next_strip_analytics",
-      reason: "durability_degraded_or_core_only",
-    });
-  }
-
-  const cachedNav =
-    entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
-
-  const pathwayNav = qaShell
-    ? adminQaSimulationHelpers?.learnerPathwayNavFromQaPayload(qaShell) ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA
-    : await safeOptional(
-        async () => {
-          const fresh = await withBuildTrace(learnerPathwayNavTrace, () => loadLearnerPathwayNavMetadata(userId));
-          if (entitlement !== "error") {
-            setLearnerFallback(userId, entitlement, fresh);
-          }
-          return fresh;
-        },
-        cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
-        {
-          label: "learner_pathway_nav_metadata",
-          onUsedFallback: (reason) => {
-            if (cachedNav != null) {
-              layoutStderrTrace("learner_shell", "fallback_used", {
-                surface: "pathway_nav",
-                reason,
-              });
+    // Pathway nav — provides hub links, pathway label, and exam chrome data.
+    qaShell
+      ? Promise.resolve(
+          adminQaSimulationHelpers?.learnerPathwayNavFromQaPayload(qaShell) ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+        )
+      : safeOptional(
+          async () => {
+            const fresh = await withBuildTrace(learnerPathwayNavTrace, () => loadLearnerPathwayNavMetadata(userId));
+            if (entitlement !== "error") {
+              setLearnerFallback(userId, entitlement, fresh);
             }
+            return fresh;
           },
-        },
-      );
+          cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+          {
+            label: "learner_pathway_nav_metadata",
+            onUsedFallback: (reason) => {
+              if (cachedNav != null) {
+                layoutStderrTrace("learner_shell", "fallback_used", {
+                  surface: "pathway_nav",
+                  reason,
+                });
+              }
+            },
+          },
+        ),
+
+    // Study next block — personalised recommendation strip (non-critical).
+    shouldLoadStudyNext
+      ? safeOptional(
+          async () =>
+            await withBuildTrace(learnerStudyNextTrace, () => loadLearnerStudyNextBlock(userId, entitlement)),
+          null,
+          { label: "learner_study_next_block" },
+        )
+      : Promise.resolve(null),
+
+    // NCLEX target date — exam countdown modal data (non-critical).
+    nclexTargetDateEnabled
+      ? safeOptional(() => loadLearnerExamDateState(userId), null, {
+          label: "learner_exam_date_state",
+          timeoutMs: 900,
+        })
+      : Promise.resolve(null),
+  ] as const);
+  // ── End parallel load ────────────────────────────────────────────────────────
 
   const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
   let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
@@ -347,24 +394,6 @@ const LearnerShellLayout = traceLayout(
       }
     }
   }
-
-  /** Tier 2 — study next (optional): skip entirely in degraded / emergency, else safeOptional. */
-  let studyNextBlock: Awaited<ReturnType<typeof loadLearnerStudyNextBlock>> = null;
-  if (!skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
-    studyNextBlock = await safeOptional(
-      async () => await withBuildTrace(learnerStudyNextTrace, () => loadLearnerStudyNextBlock(userId, entitlement)),
-      null,
-      { label: "learner_study_next_block" },
-    );
-  }
-
-  const nclexTargetDateEnabled = entitlement !== "error" && entitlement.hasAccess && !isFocusedExamShell;
-  const nclexTargetDateState = nclexTargetDateEnabled
-    ? await safeOptional(() => loadLearnerExamDateState(userId), null, {
-        label: "learner_exam_date_state",
-        timeoutMs: 900,
-      })
-    : null;
 
   const tutorContext =
     !coreOnlyEmergency &&
@@ -408,6 +437,19 @@ const LearnerShellLayout = traceLayout(
   const LearnerTutorShellComponent = tutorContext
     ? (await import("@/components/learner-tutor")).LearnerTutorShell
     : null;
+
+  if (activityRoute) {
+    const shellServerMs = Math.round(performance.now() - shellStart);
+    safeServerLog("perf", "activity_shell_server_timing", {
+      activity: activityRoute.activity,
+      routeFamily: activityRoute.routeFamily,
+      route: normalizedLearnerPathname.slice(0, 120),
+      shellServerMs,
+      targetBudgetMs: activityRoute.targetBudgetMs,
+      optionalStudyNextSkipped: shouldLoadStudyNext ? "0" : "1",
+      optionalExamDateSkipped: nclexTargetDateEnabled ? "0" : "1",
+    });
+  }
 
   return (
     <SentryLearnerShell userId={userId}>

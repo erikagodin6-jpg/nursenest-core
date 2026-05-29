@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { cacheGet, cacheSet } from "@/lib/server/content-cache";
 import { isOsceLegacyFallbackWhenDbEmptyEnabled } from "@/lib/scenarios/osce-legacy-fallback";
 import {
   getLegacyOsceHubListItems,
@@ -62,6 +64,20 @@ export async function hasAnyPublishedOsceStation(): Promise<boolean> {
 }
 
 const OSCE_LIST_CAP = 200;
+const OSCE_LIST_DB_TIMEOUT_MS = 800;
+const OSCE_LIST_CACHE_TTL_SECONDS = 15 * 60;
+const OSCE_HUB_LIST_CACHE_KEY = `content:loft:hub:list:v1:${OSCE_LIST_CAP}`;
+const OSCE_PUBLIC_DTO_CACHE_KEY = `content:loft:public-dtos:v1:${OSCE_LIST_CAP}`;
+
+type CachedOsceHubList = {
+  items: LegacyOsceStationListItem[];
+  readSource: OsceStationReadSource;
+};
+
+type CachedOscePublicDtos = {
+  readSource: OsceStationReadSource;
+  stations: OsceStationPublicDto[];
+};
 
 /**
  * Hub list items: DB when populated, otherwise legacy bundled JSON (temporary fallback).
@@ -70,22 +86,41 @@ export async function getOsceHubListItemsResolved(): Promise<{
   items: LegacyOsceStationListItem[];
   readSource: OsceStationReadSource;
 }> {
-  if (await hasAnyPublishedOsceStation()) {
-    const rows = await prisma.osceStation.findMany({
-      where: { isPublished: true },
-      orderBy: { title: "asc" },
-      take: OSCE_LIST_CAP,
-    });
-    recordPublicOsceRead({ readSource: "db", usedDbPublishedPrimary: true });
-    return {
-      items: legacyOsceStationsToListItems(rows.map(prismaOsceRowToSkillStation)),
-      readSource: "db",
-    };
+  const cached = await cacheGet<CachedOsceHubList>(OSCE_HUB_LIST_CACHE_KEY);
+  if (cached) {
+    recordPublicOsceRead({ readSource: cached.readSource, usedDbPublishedPrimary: cached.readSource === "db" });
+    return cached;
   }
+
+  const rows = await withDatabaseFallbackTimeout(
+    () =>
+      prisma.osceStation.findMany({
+        where: { isPublished: true },
+        orderBy: { title: "asc" },
+        take: OSCE_LIST_CAP,
+      }),
+    null,
+    OSCE_LIST_DB_TIMEOUT_MS,
+    { scope: "osce", label: "hub_list" },
+  );
+
+  if (rows && rows.length > 0) {
+    recordPublicOsceRead({ readSource: "db", usedDbPublishedPrimary: true });
+    const payload = {
+      items: legacyOsceStationsToListItems(rows.map(prismaOsceRowToSkillStation)),
+      readSource: "db" as const,
+    };
+    await cacheSet(OSCE_HUB_LIST_CACHE_KEY, payload, OSCE_LIST_CACHE_TTL_SECONDS).catch(() => {});
+    return payload;
+  }
+
   if (isOsceLegacyFallbackWhenDbEmptyEnabled()) {
     recordPublicOsceRead({ readSource: "legacy", usedDbPublishedPrimary: false });
-    return { items: getLegacyOsceHubListItems(), readSource: "legacy" };
+    const payload = { items: getLegacyOsceHubListItems(), readSource: "legacy" as const };
+    await cacheSet(OSCE_HUB_LIST_CACHE_KEY, payload, OSCE_LIST_CACHE_TTL_SECONDS).catch(() => {});
+    return payload;
   }
+
   recordPublicOsceRead({ readSource: "empty", usedDbPublishedPrimary: false });
   return { items: [], readSource: "empty" };
 }
@@ -122,23 +157,42 @@ export async function loadPublicOsceStationsDtos(): Promise<{
   readSource: OsceStationReadSource;
   stations: OsceStationPublicDto[];
 }> {
-  if (await hasAnyPublishedOsceStation()) {
-    const rows = await prisma.osceStation.findMany({
-      where: { isPublished: true },
-      orderBy: { title: "asc" },
-      take: OSCE_LIST_CAP,
-    });
-    recordPublicOsceRead({ readSource: "db", usedDbPublishedPrimary: true });
-    return { readSource: "db", stations: rows.map(prismaOsceRowToPublicDto) };
+  const cached = await cacheGet<CachedOscePublicDtos>(OSCE_PUBLIC_DTO_CACHE_KEY);
+  if (cached) {
+    recordPublicOsceRead({ readSource: cached.readSource, usedDbPublishedPrimary: cached.readSource === "db" });
+    return cached;
   }
+
+  const rows = await withDatabaseFallbackTimeout(
+    () =>
+      prisma.osceStation.findMany({
+        where: { isPublished: true },
+        orderBy: { title: "asc" },
+        take: OSCE_LIST_CAP,
+      }),
+    null,
+    OSCE_LIST_DB_TIMEOUT_MS,
+    { scope: "osce", label: "public_dto_list" },
+  );
+
+  if (rows && rows.length > 0) {
+    recordPublicOsceRead({ readSource: "db", usedDbPublishedPrimary: true });
+    const payload = { readSource: "db" as const, stations: rows.map(prismaOsceRowToPublicDto) };
+    await cacheSet(OSCE_PUBLIC_DTO_CACHE_KEY, payload, OSCE_LIST_CACHE_TTL_SECONDS).catch(() => {});
+    return payload;
+  }
+
   if (isOsceLegacyFallbackWhenDbEmptyEnabled()) {
     const merged = getMergedLegacyOsceSkillStations();
     recordPublicOsceRead({ readSource: "legacy", usedDbPublishedPrimary: false });
-    return {
-      readSource: "legacy",
+    const payload = {
+      readSource: "legacy" as const,
       stations: merged.map((s) => skillStationToPublicDto(s, "")),
     };
+    await cacheSet(OSCE_PUBLIC_DTO_CACHE_KEY, payload, OSCE_LIST_CACHE_TTL_SECONDS).catch(() => {});
+    return payload;
   }
+
   recordPublicOsceRead({ readSource: "empty", usedDbPublishedPrimary: false });
   return { readSource: "empty", stations: [] };
 }

@@ -231,12 +231,28 @@ test.describe("Learner activity startup budgets (paid account)", () => {
     expect(r.firstContentMs, `Pharmacology: ${r.firstContentMs}ms > ${r.budgetMs}ms`).toBeLessThanOrEqual(r.budgetMs);
   });
 
+  test("ECG Workstation meets firstContent budget", async ({ page, baseURL }) => {
+    const budget = LEARNER_BUDGETS.find((b) => b.id === "learner-ecg");
+    if (!budget) return test.skip();
+    const r = await measureRoute(page, budget, new URL(baseURL ?? "http://127.0.0.1:3000").origin);
+    results.push(r);
+    expect(r.firstContentMs, `ECG: ${r.firstContentMs}ms > ${r.budgetMs}ms`).toBeLessThanOrEqual(r.budgetMs);
+  });
+
   test("CAT Exam meets firstContent budget", async ({ page, baseURL }) => {
     const budget = LEARNER_BUDGETS.find((b) => b.id === "learner-cat");
     if (!budget) return test.skip();
     const r = await measureRoute(page, budget, new URL(baseURL ?? "http://127.0.0.1:3000").origin);
     results.push(r);
     expect(r.firstContentMs, `CAT: ${r.firstContentMs}ms > ${r.budgetMs}ms budget`).toBeLessThanOrEqual(r.budgetMs);
+  });
+
+  test("LOFT / OSCE meets firstContent budget", async ({ page, baseURL }) => {
+    const budget = LEARNER_BUDGETS.find((b) => b.id === "learner-loft");
+    if (!budget) return test.skip();
+    const r = await measureRoute(page, budget, new URL(baseURL ?? "http://127.0.0.1:3000").origin);
+    results.push(r);
+    expect(r.firstContentMs, `LOFT: ${r.firstContentMs}ms > ${r.budgetMs}ms budget`).toBeLessThanOrEqual(r.budgetMs);
   });
 
   test("Analytics meets firstContent budget", async ({ page, baseURL }) => {

@@ -31,6 +31,7 @@ export async function loadClinicalSkillProgressMap(
   if (!userId || !isDatabaseUrlConfigured()) return initial;
 
   const ids = skills.map((s) => clinicalSkillProgressId(s.slug));
+  const slugByProgressId = new Map(skills.map((skill) => [clinicalSkillProgressId(skill.slug), skill.slug]));
   const map: Record<string, PathwayLessonProgressStatus> = { ...initial };
 
   for (let i = 0; i < ids.length; i += CHUNK) {
@@ -40,7 +41,7 @@ export async function loadClinicalSkillProgressMap(
       select: { lessonId: true, completed: true },
     });
     for (const row of rows) {
-      const slug = skills.find((s) => clinicalSkillProgressId(s.slug) === row.lessonId)?.slug;
+      const slug = slugByProgressId.get(row.lessonId);
       if (slug) map[slug] = pathwayLessonProgressStatusFromRow(row);
     }
   }
@@ -53,6 +54,7 @@ export async function findLatestClinicalSkillProgressTouch(
   if (!userId || !isDatabaseUrlConfigured()) return null;
   const skills = listClinicalSkills();
   const ids = skills.map((s) => clinicalSkillProgressId(s.slug));
+  const slugByProgressId = new Map(skills.map((skill) => [clinicalSkillProgressId(skill.slug), skill.slug]));
   let best: { lessonId: string; completed: boolean; updatedAt: Date } | null = null;
 
   for (let i = 0; i < ids.length; i += CHUNK) {
@@ -66,9 +68,9 @@ export async function findLatestClinicalSkillProgressTouch(
   }
 
   if (!best) return null;
-  const skill = skills.find((s) => clinicalSkillProgressId(s.slug) === best!.lessonId);
-  if (!skill) return null;
-  return { slug: skill.slug, completed: best.completed };
+  const slug = slugByProgressId.get(best.lessonId);
+  if (!slug) return null;
+  return { slug, completed: best.completed };
 }
 
 export function aggregateClinicalSkillProgressCounts(

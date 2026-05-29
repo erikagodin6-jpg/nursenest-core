@@ -132,9 +132,8 @@ export interface LessonManifestPayload {
     id: string;
     title: string;
     slug: string | null;
-    topic: string | null;
+    category: string | null;
     tier: string | null;
-    estimatedDurationMinutes: number | null;
     publishedAt: string | null;
   }[];
   firstPageSize: number;

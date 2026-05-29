@@ -36,7 +36,7 @@ function firstLine(pattern: RegExp): number {
  */
 function findCompleteBlock(themeId: string): number {
   const selector = new RegExp(
-    `^\\[data-theme="${themeId}"\\]\\s*\\{`,
+    `^\\s*(?:html)?\\[data-theme="${themeId}"\\]\\s*\\{`,
   );
   for (let i = 0; i < lines.length; i++) {
     if (!selector.test(lines[i])) continue;
@@ -89,6 +89,8 @@ const EXPECTED_COMPLETE_LIGHT_THEMES = [
   "mint-breeze",
   "rose-quartz",
   "golden-hour",
+  "alpine",
+  "sage",
   "sage-garden",
   "coral-sunset",
   "arctic-frost",

@@ -1,5 +1,5 @@
 /**
- * Contract checks for premium clinical launch palettes (Ocean, Midnight, Aurora, Sunset, Forest).
+ * Contract checks for premium clinical launch palettes (Ocean, Midnight, Aurora, Sunset, Alpine, Sage, Forest).
  *
  * Run: `npx tsx --test src/lib/theme/premium-palettes.contract.test.ts`
  */
@@ -14,8 +14,8 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const PALETTES_PATH = resolve(HERE, "../../app/theme-palettes.css");
 const css = readFileSync(PALETTES_PATH, "utf-8");
 
-const PREMIUM_IDS = ["ocean", "midnight", "blossom", "aurora", "sunset", "forest"] as const;
-const USER_LABELS = ["Ocean", "Midnight", "Blossom", "Aurora", "Sunset", "Forest"] as const;
+const PREMIUM_IDS = ["ocean", "midnight", "blossom", "aurora", "sunset", "alpine", "sage", "forest"] as const;
+const USER_LABELS = ["Ocean", "Midnight", "Blossom", "Aurora", "Sunset", "Alpine", "Sage", "Forest"] as const;
 
 /** Harsh / neon pinks disallowed as primary swatch on these themes */
 const BANNED_PRIMARY_HEX = [/^#ff1493/i, /^#ff00/i, /^#ff2d/i, /^#ec4899/i];
@@ -56,7 +56,9 @@ describe("premium palette registry", () => {
     assert.ok(idx("Midnight") < idx("Blossom"), "Midnight should appear before Blossom");
     assert.ok(idx("Blossom") < idx("Aurora"), "Blossom should appear before Aurora");
     assert.ok(idx("Aurora") < idx("Sunset"), "Aurora should appear before Sunset");
-    assert.ok(idx("Sunset") < idx("Forest"), "Sunset should appear before Forest");
+    assert.ok(idx("Sunset") < idx("Alpine"), "Sunset should appear before Alpine");
+    assert.ok(idx("Alpine") < idx("Sage"), "Alpine should appear before Sage");
+    assert.ok(idx("Sage") < idx("Forest"), "Sage should appear before Forest");
   });
 
   it("does not use banned neon/hot-pink hex values as primary swatch color", () => {

@@ -375,7 +375,85 @@ export const NAMED_THEMES: NurseNestThemeDefinition[] = [
     },
   },
 
-  // ── 9. Sage Garden ────────────────────────────────────────────────────
+  // ── 9. Alpine ────────────────────────────────────────────────────────
+  {
+    id: "alpine",
+    label: "Alpine",
+    group: "light",
+    colors: {
+      primary: "#2F5E87",
+      secondary: "#5F86A8",
+      accent: "#9CC3E8",
+      surface: "#F7F9FB",
+      surfaceSoft: "#EEF4F8",
+      border: "#D8E1EA",
+      text: "#1F2933",
+      textMuted: "#61707E",
+
+      lessonSummary: "#EEF4F8",
+      lessonKeyConcepts: "#E7F0F8",
+      lessonSignsSymptoms: "#F6E8E4",
+      lessonAssessment: "#E4F1EB",
+      lessonDiagnostics: "#E4EEF7",
+      lessonInterventions: "#E4F1EB",
+      lessonMedications: "#F8F0E3",
+      lessonPatientTeaching: "#E8F1ED",
+      lessonExamTips: "#F8F2E2",
+      lessonRedFlags: "#F4DCD6",
+      lessonClinicalPearls: "#E8ECF4",
+      lessonNotes: "#EDF1F4",
+
+      success: "#E3F1E8",
+      warning: "#F8F0E3",
+      info: "#E4EEF7",
+      dangerSoft: "#F6E8E4",
+
+      logoPrimary: "#2F5E87",
+      logoAccent: "#9CC3E8",
+      logoText: "#1F2933",
+    },
+  },
+
+  // ── 10. Sage ──────────────────────────────────────────────────────────
+  {
+    id: "sage",
+    label: "Sage",
+    group: "light",
+    colors: {
+      primary: "#5F8F79",
+      secondary: "#7FA79A",
+      accent: "#3D6B5B",
+      surface: "#F7F8F6",
+      surfaceSoft: "#EEF3F0",
+      border: "#D7DDD9",
+      text: "#22302B",
+      textMuted: "#64716C",
+
+      lessonSummary: "#EEF3F0",
+      lessonKeyConcepts: "#E6EFEB",
+      lessonSignsSymptoms: "#F8E8E4",
+      lessonAssessment: "#E0EFE9",
+      lessonDiagnostics: "#E3ECF2",
+      lessonInterventions: "#DDEDE5",
+      lessonMedications: "#F8F0E3",
+      lessonPatientTeaching: "#E4EFE8",
+      lessonExamTips: "#FAF1DF",
+      lessonRedFlags: "#F4D8D2",
+      lessonClinicalPearls: "#E7E4F0",
+      lessonNotes: "#ECEFEB",
+
+      success: "#E0EFE8",
+      warning: "#F8F0E3",
+      info: "#E3ECF2",
+      dangerSoft: "#F8E8E4",
+
+      logoPrimary: "#5F8F79",
+      logoAccent: "#3D6B5B",
+      logoText: "#22302B",
+    },
+  },
+
+  // ── 11. Sage Garden ───────────────────────────────────────────────────
   {
     id: "sage-garden",
     label: "Sage Garden",

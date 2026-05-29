@@ -28,8 +28,8 @@ export interface EcgManifestPayload {
 }
 
 async function main(): Promise<void> {
-  const baseDir = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR?.trim();
-  if (!baseDir) { console.error("STUDY_PUBLISHED_SNAPSHOT_DIR is required"); process.exit(1); }
+  const { tmpdir } = await import("node:os");
+  const baseDir = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR?.trim() || tmpdir();
 
   const useSpaces = spacesConfigured();
 

@@ -20,6 +20,7 @@ import {
   type ResolvedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
 import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
@@ -139,11 +140,18 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;
 
   try {
-    const rawCompatible = await listPathwaysCompatibleWithSubscription(entitlement);
+    const [rawCompatible, learnerPathRow] = await Promise.all([
+      listPathwaysCompatibleWithSubscription(entitlement),
+      userId
+        ? withDatabaseFallbackTimeout(
+            () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+            null,
+            650,
+            { scope: "practice_tests_page", label: "learner_path" },
+          )
+        : Promise.resolve(null),
+    ]);
     const compatiblePathways = examPathwaysForStudyHubSubscription(entitlement, rawCompatible);
-    const learnerPathRow = userId
-      ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
-      : null;
     const learnerLp = learnerPathRow?.learnerPath?.trim() ?? null;
     pathwayOptions = compatiblePathways.map((p) => ({
       id: p.id,
@@ -295,16 +303,16 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     });
   }
 
-  const PAGE_RENDER_BUDGET_MS = 3_000;
+  const DISCOVERY_BOOTSTRAP_BUDGET_MS = catRequested ? 0 : 650;
 
   let initialDiscovery: { buckets: { topic: string; count: number }[]; total: number } | null = null;
   const scopedPid = defaultPathwayId?.trim() ?? "";
-  if (scopedPid) {
+  if (scopedPid && DISCOVERY_BOOTSTRAP_BUDGET_MS > 0) {
     try {
       const examContext = buildGlobalExamContext(scopedPid, "en");
       const discoveryResult = await Promise.race([
         loadSubscriberDiscoveryAggregates(entitlement, examContext),
-        new Promise<null>((resolve) => setTimeout(() => resolve(null), PAGE_RENDER_BUDGET_MS)),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), DISCOVERY_BOOTSTRAP_BUDGET_MS)),
       ]);
       if (discoveryResult) {
         const { total, topicRows } = discoveryResult;

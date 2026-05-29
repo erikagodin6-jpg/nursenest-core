@@ -27,6 +27,7 @@ import type {
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 import { emitRuntimeEvent } from "@/lib/runtime/client-runtime-event";
 import { safeRouterReplace } from "@/lib/runtime/client-navigation";
+import { useHubPrefetch } from "@/lib/learner/use-hub-prefetch";
 
 type ExamMode = "practice" | "cat";
 type FocusMode = "all" | "weak" | "missed" | "unseen";
@@ -112,6 +113,12 @@ export function PracticeTestsHubClient({
   const searchParamString = useMemo(() => searchParams.toString(), [searchParams]);
 
   const fallbackPathwayId = defaultPathwayId ?? pathwayOptions[0]?.id ?? "";
+
+  // Prefetch flashcard and lesson hubs during idle (Phase 6 — hub prefetch).
+  useHubPrefetch({
+    pathwayId: defaultPathwayId,
+    prefetch: ["questions", "flashcards", "lessons", "clinical-skills", "pharmacology", "ecg", "analytics", "readiness"],
+  });
   const [pathwayId, setPathwayId] = useState(fallbackPathwayId);
   const [examMode, setExamMode] = useState<ExamMode>(() => (initialCatMode ? "cat" : "practice"));
   const [focusMode, setFocusMode] = useState<FocusMode>("all");

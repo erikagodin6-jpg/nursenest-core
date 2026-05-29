@@ -3,13 +3,14 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PharmacologyHubClient } from "@/components/pharmacology/pharmacology-hub-client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const DEFAULT_PHARMACOLOGY_PATHWAY_ID = "ca-rn-nclex-rn";
+const PHARMACOLOGY_PATHWAY_BOOTSTRAP_DB_TIMEOUT_MS = 650;
 
 type PageProps = {
   searchParams: Promise<{ pathwayId?: string | string[] }>;
@@ -70,7 +71,12 @@ export default async function PharmacologyPage({ searchParams }: PageProps) {
   if (userId && isDatabaseUrlConfigured()) {
     const [compatible, user] = await Promise.all([
       listPathwaysCompatibleWithSubscription(entitlement).catch(() => []),
-      prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }).catch(() => null),
+      withDatabaseFallbackTimeout(
+        () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+        null,
+        PHARMACOLOGY_PATHWAY_BOOTSTRAP_DB_TIMEOUT_MS,
+        { scope: "pharmacology_page", label: "learner_path" },
+      ),
     ]);
     const compatibleIds = new Set(compatible.map((pathway) => pathway.id));
     const learnerPath = user?.learnerPath?.trim();

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "1772bedc60d35ec7704cb947c5a6f2d2a835bfbe9ec3c12932f64aad237d3b72",
-  "generatedAt": "2026-05-28T19:52:15.365Z",
+  "fingerprint": "479d7798253a290abe9bfe22b4096a3725be025289f44813d2daf52d842e936f",
+  "generatedAt": "2026-05-29T00:24:30.542Z",
   "inputs": [
     {
       "type": "file",
@@ -3698,6 +3698,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/activity-warm-cache/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/adaptive-loop/route.ts"
     },
     {
@@ -7321,6 +7325,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 19221
+    "durationMs": 34810
   }
 }

@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
   type MouseEvent,
+  type ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -83,7 +84,6 @@ import {
   PricingTrustReassurance,
   PricingCTA,
 } from "@/components/marketing/pricing-sections";
-import { PremiumFeatureMatrixRsc } from "@/components/marketing/premium-feature-matrix-rsc";
 import { TierValueExperience } from "@/components/marketing/tier-value-experience";
 import type { TierValueKey } from "@/lib/marketing/tier-value-experience";
 
@@ -497,6 +497,7 @@ export function PricingPageClient({
   serverTierSubheads = {},
   initialPricingOptions,
   initialSearchParamsString = "",
+  featureMatrix = null,
 }: {
   heading: string;
   intro: string;
@@ -512,6 +513,8 @@ export function PricingPageClient({
   initialPricingOptions: PricingOptionsPayload;
   /** From RSC `searchParams` — avoids `useSearchParams()` (CSR bailout + full-page Suspense skeleton on `/pricing`). */
   initialSearchParamsString?: string;
+  /** Server-rendered feature matrix; kept out of the client bundle because it reads cached inventory. */
+  featureMatrix?: ReactNode;
 }) {
   const hasServerCatalogRef = useRef(
     marketingPricingPayloadHasRenderablePlans(initialPricingOptions),
@@ -1995,7 +1998,7 @@ export function PricingPageClient({
       <PricingSubscriptionFaq />
 
       {/* ── Premium Feature Matrix ── */}
-      <PremiumFeatureMatrixRsc />
+      {featureMatrix}
 
       {/* ── Section 5 (comparison) ── */}
       <FeatureComparisonTable />

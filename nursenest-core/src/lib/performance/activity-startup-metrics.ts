@@ -108,7 +108,7 @@ export const ACTIVITY_DEFINITIONS: readonly ActivityDef[] = [
     key: "ecg",
     label: "ECG Workstation",
     route: "/modules/ecg/basic/lessons",
-    startupBudgetMs: 3000,
+    startupBudgetMs: 2000,
     maxQueryCount: 18,
     description: "ECG module — rhythm catalog, video quiz state, case history.",
   },

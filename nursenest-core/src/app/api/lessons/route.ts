@@ -220,7 +220,7 @@ export async function GET(req: NextRequest) {
               prisma.contentItem.count({ where: whereBase }),
               prisma.contentItem.findMany({
                 where: whereBase,
-                select: { id: true, slug: true, title: true, topic: true, tier: true, estimatedDurationMinutes: true, publishedAt: true },
+                select: { id: true, slug: true, title: true, category: true, tier: true, publishedAt: true },
                 orderBy: LESSON_LIST_ORDER_BY,
                 take: pageSize,
               }),
@@ -230,9 +230,8 @@ export async function GET(req: NextRequest) {
               totalLessons: count,
               topicBreakdown: [],
               firstPage: rows.map((r) => ({
-                id: r.id, title: r.title, slug: r.slug, topic: r.topic,
-                tier: r.tier, estimatedDurationMinutes: r.estimatedDurationMinutes,
-                publishedAt: r.publishedAt?.toISOString() ?? null,
+                id: r.id, title: r.title, slug: r.slug, category: r.category,
+                tier: r.tier, publishedAt: r.publishedAt?.toISOString() ?? null,
               })),
               firstPageSize: pageSize,
             };

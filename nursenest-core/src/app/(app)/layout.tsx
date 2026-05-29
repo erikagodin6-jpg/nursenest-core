@@ -12,6 +12,8 @@ import {
   withBuildTrace,
 } from "@/build/tracing";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
+import { ActivityPerformanceVitals } from "@/components/observability/activity-performance-vitals";
+import { LearnerCacheWarmer } from "@/components/observability/learner-cache-warmer";
 import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
@@ -115,7 +117,11 @@ const AppProviders = traceProvider(
 
     return (
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-        <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
+        <AuthSessionProvider session={session}>
+          <ActivityPerformanceVitals />
+          <LearnerCacheWarmer enabled={Boolean(session?.user?.id)} />
+          {children}
+        </AuthSessionProvider>
       </NursenestRegionRoot>
     );
   },

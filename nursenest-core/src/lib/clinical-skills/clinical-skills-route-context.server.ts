@@ -1,6 +1,8 @@
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
+
+const CLINICAL_SKILLS_CONTEXT_DB_TIMEOUT_MS = 650;
 
 export type ClinicalSkillsRouteContext = {
   userId: string | null;
@@ -13,13 +15,15 @@ export async function loadClinicalSkillsRouteContext(routeKey: string): Promise<
 
   const pathwayRow =
     userId && userId.length > 0
-      ? await withDatabaseFallback(
+      ? await withDatabaseFallbackTimeout(
           () =>
             prisma.user.findUnique({
               where: { id: userId },
               select: { learnerPath: true },
             }),
           null,
+          CLINICAL_SKILLS_CONTEXT_DB_TIMEOUT_MS,
+          { scope: "clinical_skills_route", label: "learner_path" },
         )
       : null;
 

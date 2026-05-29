@@ -2,6 +2,7 @@ import type { TierCode } from "@prisma/client";
 import { cookies } from "next/headers";
 import { PricingPageClient } from "@/components/marketing/pricing-page-client";
 import { PricingPageErrorBoundary } from "@/components/marketing/pricing-page-error-boundary";
+import { PremiumFeatureMatrixRsc } from "@/components/marketing/premium-feature-matrix-rsc";
 import { pricingTierToNarrativeSlug } from "@/lib/conversion/pricing-catalog";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getOptionalPublicMessage } from "@/lib/marketing-i18n-core";
@@ -117,6 +118,7 @@ export async function MarketingPricingPage({
         serverTierSubheads={serverTierSubheads}
         initialPricingOptions={initialPricingOptions}
         initialSearchParamsString={initialSearchParamsString}
+        featureMatrix={<PremiumFeatureMatrixRsc />}
       />
     </PricingPageErrorBoundary>
   );

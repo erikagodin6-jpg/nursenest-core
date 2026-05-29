@@ -17,7 +17,7 @@ import {
   TIER_DISPLAY_LABELS,
   type FeatureMatrixRow,
   type TierDisplayKey,
-} from "@/lib/marketing/feature-inventory-metrics";
+} from "@/lib/marketing/feature-inventory-matrix-shared";
 
 const SURFACE = "var(--semantic-surface)";
 const SURFACE_ELEVATED = "color-mix(in srgb, var(--palette-primary) 3%, var(--semantic-surface))";

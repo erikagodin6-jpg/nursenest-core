@@ -195,6 +195,9 @@ async function main(): Promise<void> {
   // ECG category manifest
   results.push(run("ecg-manifest", `${tsx} scripts/study-snapshots/export-ecg-manifests.mts`));
 
+  // Activity manifests for instant-load shell/prefetch governance
+  results.push(run("activity-manifests:all", `${tsx} scripts/study-snapshots/export-activity-manifests.mts`));
+
   // ─── Stage 7: Build + upload manifest ──────────────────────────────────────
   const manifestJson = await buildManifest(results);
   const manifestPath = path.join(baseDir!, "manifest.json");
@@ -211,6 +214,7 @@ async function main(): Promise<void> {
       { dir: "lessons",         relKeyPrefix: "lessons/"    },
       { dir: "flashcards",      relKeyPrefix: "flashcards/" },
       { dir: "practice-tests",  relKeyPrefix: "practice-tests/" },
+      { dir: "activity-manifests", relKeyPrefix: "activity-manifests/" },
       // question-packs and cat-pools are uploaded within their own scripts
     ];
 

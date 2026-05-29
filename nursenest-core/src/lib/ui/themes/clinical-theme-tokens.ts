@@ -2,15 +2,20 @@ export type LaunchClinicalThemeId =
   | "ocean"
   | "midnight"
   | "blossom"
+  | "mint-blossom"
   | "aurora"
   | "sunset"
+  | "alpine"
+  | "sage"
   | "forest";
 
 export type ClinicalThemeMood =
   | "Soft, motivating, elegant"
   | "Focused, deep, minimal"
   | "Clean, professional, clinical"
+  | "Modern, intelligent, clean"
   | "Grounded, focused, calm"
+  | "Professional, clinical, calming"
   | "Cheerful, premium, clinically bright"
   | "Warm, optimistic, uplifting";
 
@@ -31,8 +36,11 @@ export const LAUNCH_CLINICAL_THEME_IDS = [
   "ocean",
   "midnight",
   "blossom",
+  "mint-blossom",
   "aurora",
   "sunset",
+  "alpine",
+  "sage",
   "forest",
 ] as const;
 
@@ -78,6 +86,18 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
       surface: "#FAF7FC",
     },
   },
+  "mint-blossom": {
+    id: "mint-blossom",
+    label: "Mint Blossom",
+    mood: "Soft, motivating, elegant",
+    group: "light",
+    swatches: {
+      primary: "#FFB7D5",
+      secondary: "#B7EFD1",
+      accent: "#D6F0FF",
+      surface: "#FAF7FC",
+    },
+  },
   aurora: {
     id: "aurora",
     label: "Aurora",
@@ -100,6 +120,30 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
       secondary: "#38BDF8",
       accent: "#E8B44F",
       surface: "#FFF8F3",
+    },
+  },
+  alpine: {
+    id: "alpine",
+    label: "Alpine",
+    mood: "Modern, intelligent, clean",
+    group: "light",
+    swatches: {
+      primary: "#2F5E87",
+      secondary: "#5F86A8",
+      accent: "#9CC3E8",
+      surface: "#F7F9FB",
+    },
+  },
+  sage: {
+    id: "sage",
+    label: "Sage",
+    mood: "Professional, clinical, calming",
+    group: "light",
+    swatches: {
+      primary: "#5F8F79",
+      secondary: "#7FA79A",
+      accent: "#3D6B5B",
+      surface: "#F7F8F6",
     },
   },
   forest: {

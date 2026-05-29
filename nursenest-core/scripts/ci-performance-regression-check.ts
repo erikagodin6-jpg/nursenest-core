@@ -77,6 +77,7 @@ function checkPerformanceModules(): void {
     { path: "src/lib/performance/cache-observability.ts",     label: "Cache observability" },
     { path: "src/lib/performance/connection-pool-monitor.ts", label: "Connection pool monitor" },
     { path: "src/lib/performance/activity-startup-metrics.ts","label": "Activity startup metrics" },
+    { path: "src/lib/performance/instant-load-architecture.ts","label": "Instant-load architecture contract" },
   ] as const;
 
   let allPresent = true;
@@ -118,7 +119,9 @@ function checkRouteRegistry(): void {
     "learner-lessons",
     "learner-clinical-skills",
     "learner-pharmacology",
+    "learner-ecg",
     "learner-cat",
+    "learner-loft",
     "learner-analytics",
   ];
 
@@ -155,6 +158,71 @@ function checkRouteRegistry(): void {
     warning("PERF-REG-CI", `Only ${ciCount} CI-enforced routes — consider adding more coverage`);
   } else {
     pass("PERF-REG-CI", `${ciCount} routes are CI-enforced`);
+  }
+}
+
+// ─── Check 2b: Instant-load governance contract ──────────────────────────────
+
+function checkInstantLoadGovernance(): void {
+  console.log("\n[2b] Instant-load architecture governance …");
+
+  const contractPath = path.join(APP_ROOT, "src/lib/performance/instant-load-architecture.ts");
+  const registryPath = path.join(APP_ROOT, "src/lib/performance/route-registry.ts");
+  if (!fs.existsSync(contractPath) || !fs.existsSync(registryPath)) {
+    critical("PERF-INSTANT-MISSING", "Instant-load contract or route registry missing");
+    return;
+  }
+
+  const contract = fs.readFileSync(contractPath, "utf8");
+  const registry = fs.readFileSync(registryPath, "utf8");
+  const requiredActivities = [
+    "questions",
+    "flashcards",
+    "lessons",
+    "clinical-skills",
+    "pharmacology",
+    "ecg",
+    "cat",
+    "loft",
+  ];
+
+  for (const activity of requiredActivities) {
+    if (!contract.includes(`activity: "${activity}"`)) {
+      critical("PERF-INSTANT-ACTIVITY", `Instant-load budget missing for ${activity}`);
+    }
+  }
+
+  const requiredRouteBudgets = [
+    { id: "learner-questions", ttfb: 500, load: 2000 },
+    { id: "learner-flashcards", ttfb: 500, load: 2000 },
+    { id: "learner-lessons", ttfb: 500, load: 2000 },
+    { id: "learner-clinical-skills", ttfb: 500, load: 2000 },
+    { id: "learner-pharmacology", ttfb: 500, load: 2000 },
+    { id: "learner-ecg", ttfb: 500, load: 2000 },
+    { id: "learner-cat", ttfb: 500, load: 3000 },
+    { id: "learner-loft", ttfb: 500, load: 3000 },
+  ];
+
+  for (const budget of requiredRouteBudgets) {
+    const routeBlock = new RegExp(`id:\\s*"${budget.id}"[\\s\\S]*?ciEnforced:\\s*true`, "m").exec(registry)?.[0] ?? "";
+    if (!routeBlock) {
+      critical("PERF-INSTANT-ROUTE", `Route ${budget.id} is missing or not CI-enforced`);
+      continue;
+    }
+    if (!routeBlock.includes(`ttfbBudgetMs: ${budget.ttfb}`)) {
+      critical("PERF-INSTANT-TTFB", `${budget.id} must keep TTFB budget at ${budget.ttfb}ms`);
+    }
+    if (!routeBlock.includes(`firstContentBudgetMs: ${budget.load}`)) {
+      critical("PERF-INSTANT-LOAD", `${budget.id} must keep load budget at ${budget.load}ms`);
+    }
+  }
+
+  const warmRoute = path.join(APP_ROOT, "src/app/api/learner/activity-warm-cache/route.ts");
+  const warmer = path.join(APP_ROOT, "src/components/observability/learner-cache-warmer.tsx");
+  if (fs.existsSync(warmRoute) && fs.existsSync(warmer)) {
+    pass("PERF-WARM-CACHE", "Login/app-shell cache warmer and API route are present");
+  } else {
+    critical("PERF-WARM-CACHE", "Warm-cache API route or client warmer is missing");
   }
 }
 
@@ -325,6 +393,7 @@ function main(): void {
 
   checkPerformanceModules();
   checkRouteRegistry();
+  checkInstantLoadGovernance();
   checkAlertAlignment();
   checkNPlusOneDetector();
   checkBaselineRegression();
