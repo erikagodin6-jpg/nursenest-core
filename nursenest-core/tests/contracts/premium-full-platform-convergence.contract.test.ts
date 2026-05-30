@@ -193,10 +193,13 @@ describe("premium full platform convergence", () => {
     const resolver = read(PREMIUM_SHELL_RESOLVER_PATH);
     const runnerLoader = read(PRACTICE_RUN_LOADER_PATH);
 
-    assert.match(catAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/cat must preserve CAT intent for the canonical practice hub");
-    assert.match(startAlias, /redirect\(`\/app\/practice-tests\?\$\{q\.toString\(\)\}`\)/, "/app/practice-tests/start must be a redirect alias only");
+    assert.doesNotMatch(catAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/cat must land on the practice-tests launcher without forcing CAT mode");
+    assert.doesNotMatch(catAlias, /catLaunch=1/, "/app/cat must not bypass the shared launcher mode selection");
+    assert.match(startAlias, /redirect\(suffix \? `\/app\/practice-tests\?\$\{suffix\}` : "\/app\/practice-tests"\)/, "/app/practice-tests/start must be a redirect alias only");
     assert.doesNotMatch(startAlias, /q\.set\("catLaunch",\s*"1"\)/, "/app/practice-tests/start must not force a second CAT landing");
-    assert.match(launchAlias, /appPathwayCatSessionStartPath/, "/app/practice-tests/cat-launch must redirect into the hub CAT query");
+    assert.doesNotMatch(launchAlias, /appPathwayCatSessionStartPath/, "/app/practice-tests/cat-launch must not force the inline CAT query");
+    assert.doesNotMatch(launchAlias, /catLaunch=1/, "/app/practice-tests/cat-launch must land on the shared launcher");
+    assert.match(launchAlias, /redirect\(`\/app\/practice-tests\?\$\{q\.toString\(\)\}`\)/, "/app/practice-tests/cat-launch must redirect to the shared launcher with pathway context");
     assert.doesNotMatch(startAlias + launchAlias, /PathwayCatSessionStartClient/, "active aliases must not mount the legacy CAT start client");
     assert.match(practiceClient, /sessionMode:\s*"tutor"/, "canonical practice starts must create rationale-first practice sessions");
     assert.match(bootstrap, /resolvePremiumNclexShellRoute/, "session page must resolve the exam shell from persisted session config");

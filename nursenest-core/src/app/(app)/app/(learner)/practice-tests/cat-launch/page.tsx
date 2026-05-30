@@ -2,13 +2,7 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
-
-import {
-  appPathwayCatSessionStartPath,
-} from "@/lib/exam-pathways/pathway-cat-flow";
-
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
@@ -56,16 +50,18 @@ function isSafeAlliedProfession(
 }
 
 /**
- * @deprecated Prefer `/app/practice-tests?catLaunch=1&pathwayId=...`.
+ * @deprecated Prefer `/app/practice-tests?pathwayId=...`.
  *
- * Direct CAT launch compatibility route.
+ * Direct CAT launch compatibility route. Non-CNPLE learners now land on the
+ * shared practice-tests launcher so they can choose mode, systems, focus, and
+ * question count before starting.
  *
  * Routes:
  * - CNPLE → LOFT cases
- * - all others → inline CAT launch flow
+ * - all others → shared practice-tests launcher
  *
  * Compatibility-only alias. Keep until route access logs confirm direct usage
- * has ended; do not add CAT setup UI here.
+ * has ended; do not add a duplicate setup UI here.
  */
 export default async function CatDirectLaunchRedirectPage({
   searchParams,
@@ -92,34 +88,7 @@ export default async function CatDirectLaunchRedirectPage({
     ? sp.alliedProfession.trim()
     : null;
 
-  let nextPath: string;
-  try {
-    nextPath = appPathwayCatSessionStartPath(
-      pathwayId,
-      {
-        alliedProfession: allied,
-      },
-    );
-  } catch (error) {
-    safeServerLog("learner_activity", "cat_launch_route_resolution_failed", {
-      pathwayIdPrefix: pathwayId.slice(0, 12),
-      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
-    });
-
-    redirect("/app/practice-tests");
-  }
-
-  if (
-    typeof nextPath !== "string" ||
-    !nextPath.startsWith("/app/")
-  ) {
-    safeServerLog("learner_activity", "cat_launch_invalid_redirect_target", {
-      pathwayIdPrefix: pathwayId.slice(0, 12),
-      targetPrefix: String(nextPath).slice(0, 80),
-    });
-
-    redirect("/app/practice-tests");
-  }
-
-  redirect(nextPath);
+  const q = new URLSearchParams({ pathwayId });
+  if (allied) q.set("alliedProfession", allied);
+  redirect(`/app/practice-tests?${q.toString()}`);
 }

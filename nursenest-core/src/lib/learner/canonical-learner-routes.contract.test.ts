@@ -61,10 +61,7 @@ describe("learner practice alias routes — redirect to canonical /app/practice-
         `${relPath} must not directly import or mount PracticeTestsPage — it is a redirect alias`,
       );
       if (relPath.endsWith("/cat/page.tsx")) {
-        assert.ok(
-          src.includes("catLaunch") && src.includes(`q.set("catLaunch", "1")`),
-          `${relPath} must open the canonical hub in CAT mode`,
-        );
+        assert.doesNotMatch(src, /q\.set\("catLaunch",\s*"1"\)/, `${relPath} must not force CAT mode`);
       }
     });
   }
@@ -91,24 +88,27 @@ describe("canonical learner practice hub — /app/practice-tests", () => {
     );
   });
 
-  it("practice-tests/start redirects to hub inline CAT launch", () => {
+  it("practice-tests/start redirects to the shared launcher without forcing CAT mode", () => {
     const startPath = "src/app/(app)/app/(learner)/practice-tests/start/page.tsx";
     assert.ok(exists(startPath), `missing CAT launch alias: ${startPath}`);
     const src = read(startPath);
     assert.ok(
-      src.includes("redirect(") && src.includes("/app/practice-tests") && src.includes("catLaunch"),
-      `practice-tests/start must redirect to the canonical hub inline CAT launch`,
+      src.includes("redirect(") && src.includes("/app/practice-tests"),
+      `practice-tests/start must redirect to the canonical launcher`,
     );
+    assert.doesNotMatch(src, /q\.set\("catLaunch",\s*"1"\)/, "practice-tests/start must not force CAT mode");
   });
 
-  it("practice-tests/cat-launch redirects to hub inline CAT launch", () => {
+  it("practice-tests/cat-launch redirects to the shared launcher with pathway context", () => {
     const launchPath = "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx";
     assert.ok(exists(launchPath), `missing canonical CAT launch shim: ${launchPath}`);
     const src = read(launchPath);
     assert.ok(
-      src.includes("appPathwayCatSessionStartPath") && src.includes("redirect("),
-      `practice-tests/cat-launch must redirect to hub inline launch`,
+      src.includes("redirect(") && src.includes("/app/practice-tests"),
+      `practice-tests/cat-launch must redirect to shared launcher`,
     );
+    assert.doesNotMatch(src, /appPathwayCatSessionStartPath/, "cat-launch alias must not force inline CAT mode");
+    assert.doesNotMatch(src, /catLaunch=1/, "cat-launch alias must not bypass launcher mode selection");
   });
 });
 

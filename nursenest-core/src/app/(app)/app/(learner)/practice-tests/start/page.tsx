@@ -38,6 +38,6 @@ export default async function PracticeTestsStartAliasPage({ searchParams }: Prop
       q.set(key, String(value));
     }
   }
-  q.set("catLaunch", "1");
-  redirect(`/app/practice-tests?${q.toString()}`);
+  const suffix = q.toString();
+  redirect(suffix ? `/app/practice-tests?${suffix}` : "/app/practice-tests");
 }
