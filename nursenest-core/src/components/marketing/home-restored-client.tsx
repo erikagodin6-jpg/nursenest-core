@@ -23,6 +23,12 @@ const PremiumSocialStudy = dynamic(() =>
   import("@/components/marketing/home/premium-social-study").then((m) => m.PremiumSocialStudy),
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-social-study" /> },
 );
+const PremiumPlatformCapabilityStrip = dynamic(() =>
+  import("@/components/marketing/home/premium-platform-capability-strip").then(
+    (m) => m.PremiumPlatformCapabilityStrip,
+  ),
+  { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-capability-strip" short /> },
+);
 const PremiumHomepageEcg = dynamic(() =>
   import("@/components/marketing/home/premium-homepage-ecg").then((m) => m.PremiumHomepageEcg),
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-ecg" /> },
@@ -205,6 +211,7 @@ export default function HomeRestoredClient({
       className="font-sans flex w-full min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)] nn-home-marketing-root"
       data-nn-homepage-branding-revamp
       data-nn-homepage-premium-polish
+      data-nn-homepage-feature-visibility
     >
       <IdleAfterPaint>
         <FunnelHomepageViewBeaconLazy marketingRegion={normalizedMarketingRegion} marketingLocale={locale} />
@@ -215,6 +222,10 @@ export default function HomeRestoredClient({
 
       <LazyWhenVisible fallback={<HomeHeroScreenshotSectionSkeleton />} rootMargin="480px 0px">
         <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
+      </LazyWhenVisible>
+
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-capability-strip" short />}>
+        <PremiumPlatformCapabilityStrip />
       </LazyWhenVisible>
 
       <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-ecg" />}>

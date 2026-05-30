@@ -294,7 +294,7 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.subheadingAdaptive",
-      "Study with lessons, flashcards, rationales, CAT readiness, ECG, labs, and clinical reasoning tools built for RN, PN or RPN, NP, allied health, and pre-nursing learners.",
+      "Study with lessons, NGN practice, simulations, ECG, telemetry, labs, competency tracking, and CAT readiness—built for RN, PN or RPN, NP, allied health, and pre-nursing learners.",
     ),
     locale,
   );

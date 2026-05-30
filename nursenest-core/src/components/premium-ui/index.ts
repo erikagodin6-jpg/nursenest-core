@@ -14,4 +14,25 @@
 export { GlassPanel, type GlassPanelProps } from "./glass-panel";
 export { GradientButton, type GradientButtonProps } from "./gradient-button";
 export { PillBadge, type PillBadgeProps, type PillTone } from "./pill-badge";
+export {
+  PlatformBreadcrumbs,
+  PlatformButton,
+  PlatformFeedback,
+  PlatformIconButton,
+  PlatformInput,
+  PlatformLabel,
+  PlatformPanel,
+  PlatformSegmentedControl,
+  PlatformSelect,
+  PlatformTabs,
+  PlatformTextarea,
+  PlatformText,
+  PlatformTopbar,
+  type PlatformButtonProps,
+  type PlatformFeedbackProps,
+  type PlatformIconButtonProps,
+  type PlatformInputProps,
+  type PlatformPanelProps,
+  type PlatformTextProps,
+} from "./platform-primitives";
 export { SectionShell, type SectionShellProps } from "./section-shell";

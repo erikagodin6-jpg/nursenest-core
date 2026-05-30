@@ -25,7 +25,7 @@ const REQUIRED_KEYS: Record<string, string> = {
   "pages.home.hero.eyebrowAdaptive": "Adaptive Clinical Readiness",
   "pages.home.hero.headlineAdaptive": "Master Nursing. Think Like a Clinician.",
   "pages.home.hero.subheadingAdaptive":
-    "Study with lessons, flashcards, rationales, CAT readiness, ECG, labs, and clinical reasoning tools built for RN, PN or RPN, NP, allied health, and pre-nursing learners.",
+    "Study with lessons, NGN practice, simulations, ECG, telemetry, labs, competency tracking, and CAT readiness—built for RN, PN or RPN, NP, allied health, and pre-nursing learners.",
   "pages.home.hero.panel.tag": "Adaptive Readiness Preview",
   "pages.home.hero.panel.live": "Live Clinical Readiness Preview",
   "pages.home.hero.panel.readinessValue": "78%",
@@ -56,7 +56,7 @@ const REQUIRED_KEYS: Record<string, string> = {
   "pages.home.premium.studyEcosystem.eyebrow": "Adaptive Loop",
   "pages.home.premium.studyEcosystem.heading": "Read → Practice → Detect Weakness → Remediate → Reassess",
   "pages.home.premium.studyEcosystem.body":
-    "The same public study destinations now read as one adaptive clinical workflow instead of a disconnected feature list.",
+    "The same study destinations read as one adaptive clinical workflow—linking lessons, NGN practice, simulations, remediation, and CAT reassessment.",
   "pages.home.premium.studyEcosystem.steps.read.label": "Read",
   "pages.home.premium.studyEcosystem.steps.read.title": "Lessons",
   "pages.home.premium.studyEcosystem.steps.read.body":
@@ -65,12 +65,12 @@ const REQUIRED_KEYS: Record<string, string> = {
   "pages.home.premium.studyEcosystem.steps.practice.label": "Practice",
   "pages.home.premium.studyEcosystem.steps.practice.title": "Questions",
   "pages.home.premium.studyEcosystem.steps.practice.body":
-    "Apply judgment to NGN-style prompts, rationales, and clinical distractors.",
+    "Apply judgment to NGN-style prompts, simulations, rationales, and clinical distractors.",
   "pages.home.premium.studyEcosystem.steps.practice.cta": "Open Questions",
   "pages.home.premium.studyEcosystem.steps.detectWeakness.label": "Detect Weakness",
   "pages.home.premium.studyEcosystem.steps.detectWeakness.title": "Readiness Signals",
   "pages.home.premium.studyEcosystem.steps.detectWeakness.body":
-    "Use recent results, domain trends, and weak-area routing to see what is slipping before exam day.",
+    "Use recent results, domain trends, Harm Index signals, and weak-area routing before exam day.",
   "pages.home.premium.studyEcosystem.steps.detectWeakness.cta": "Open Readiness Signals",
   "pages.home.premium.studyEcosystem.steps.remediate.label": "Remediate",
   "pages.home.premium.studyEcosystem.steps.remediate.title": "Flashcards and Focused Review",
@@ -83,9 +83,9 @@ const REQUIRED_KEYS: Record<string, string> = {
     "Return to adaptive practice to confirm the fix, rebuild confidence, and decide what to study next.",
   "pages.home.premium.studyEcosystem.steps.reassess.cta": "Open CAT Readiness",
   "pages.home.premium.clinicalDepth.eyebrow": "Clinical Readiness Ecosystems",
-  "pages.home.premium.clinicalDepth.heading": "A Guided Clinical Operating System.",
+  "pages.home.premium.clinicalDepth.heading": "A full clinical reasoning ecosystem.",
   "pages.home.premium.clinicalDepth.body":
-    "NurseNest already spans ECG, labs, medication safety, scenarios, clinical skills, and transition-to-practice readiness inside one adaptive platform.",
+    "NurseNest spans ECG and telemetry, NGN judgment, branching simulations, labs, medication safety, clinical skills, competency tracking, and new-graduate readiness—integrated, not siloed.",
   "pages.home.premium.clinicalDepth.priorityCueLabel": "Platform Rule",
   "pages.home.premium.clinicalDepth.priorityCueBody":
     "These readiness domains are integrated into the same learner ecosystem, not broken out into disconnected tools or mini-apps.",

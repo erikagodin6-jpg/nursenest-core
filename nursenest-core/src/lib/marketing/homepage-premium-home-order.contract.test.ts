@@ -15,7 +15,7 @@ import test from "node:test";
 
 const ROOT = process.cwd();
 
-test("HomeRestoredClient section order: hero → product screenshots → ECG → pathways → clinical → study ecosystem → social study → readiness → trust → children → final CTA", () => {
+test("HomeRestoredClient section order: hero → screenshots → capability strip → ECG → pathways → clinical → ecosystem → social → readiness → trust → children → CTA", () => {
   const src = fs.readFileSync(path.join(ROOT, "src/components/marketing/home-restored-client.tsx"), "utf8");
 
   // heroSlot replaces <PremiumHomepageHero — hero is now a server island.
@@ -23,6 +23,7 @@ test("HomeRestoredClient section order: hero → product screenshots → ECG →
   const markers = [
     "{heroSlot}",
     "<HomeHeroScreenshotSectionLazy",
+    "<PremiumPlatformCapabilityStrip",
     "<PremiumHomepageEcg",
     "<PremiumPathwayShowcase",
     "{clinicalDepthSlot}",
@@ -30,7 +31,7 @@ test("HomeRestoredClient section order: hero → product screenshots → ECG →
     "<PremiumSocialStudy",
     "<PremiumReadinessPreview",
     "{trustSlot}",
-    "{children}",
+    "Global hub strip",
     "<PremiumHomepageCta",
   ] as const;
 

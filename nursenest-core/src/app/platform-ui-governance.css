@@ -1,0 +1,229 @@
+/*
+ * Platform UI governance tokens and primitive recipes.
+ * This layer is additive: it standardizes new convergence work without
+ * redesigning existing clinical modules or reducing workstation density.
+ */
+
+:root {
+  --nn-space-0: 0;
+  --nn-space-1: 0.25rem;
+  --nn-space-2: 0.5rem;
+  --nn-space-3: 0.75rem;
+  --nn-space-4: 1rem;
+  --nn-space-5: 1.25rem;
+  --nn-space-6: 1.5rem;
+  --nn-space-8: 2rem;
+  --nn-space-10: 2.5rem;
+  --nn-space-12: 3rem;
+
+  --nn-radius-sm: var(--auth-radius-sm, var(--radius-sm, var(--radius)));
+  --nn-radius-md: var(--auth-radius-md, var(--radius-lg, var(--radius)));
+  --nn-radius-lg: var(--auth-radius-lg, var(--radius-xl, var(--radius)));
+  --nn-radius-pill: var(--auth-radius-pill, 9999px);
+
+  --nn-motion-instant: 0ms;
+  --nn-motion-fast: var(--auth-motion-fast, var(--motion-fast));
+  --nn-motion-base: var(--auth-motion-base, var(--motion-base));
+  --nn-motion-slow: var(--auth-motion-slow, var(--motion-slow));
+  --nn-motion-ease: var(--auth-motion-ease, var(--motion-ease));
+
+  --nn-elevation-flat: none;
+  --nn-elevation-card: var(--auth-shadow-card, var(--elevation-rest));
+  --nn-elevation-raised: var(--auth-shadow-raised, var(--elevation-hover));
+  --nn-elevation-overlay: var(--auth-shadow-overlay, var(--elevation-overlay));
+  --nn-elevation-monitor: var(--auth-shadow-card, var(--elevation-rest));
+}
+
+.nn-platform-button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--nn-radius-md);
+  display: inline-flex;
+  font-weight: var(--nn-font-weight-ui);
+  gap: var(--nn-space-2);
+  justify-content: center;
+  line-height: 1;
+  min-block-size: 2.75rem;
+  padding-block: var(--nn-space-2);
+  padding-inline: var(--nn-space-4);
+  transition:
+    background-color var(--nn-motion-fast) var(--nn-motion-ease),
+    border-color var(--nn-motion-fast) var(--nn-motion-ease),
+    box-shadow var(--nn-motion-fast) var(--nn-motion-ease),
+    color var(--nn-motion-fast) var(--nn-motion-ease),
+    transform var(--nn-motion-fast) var(--nn-motion-ease);
+}
+
+.nn-platform-button:focus-visible,
+.nn-platform-input:focus-visible,
+.nn-platform-segmented-control :where(button, [role="tab"]):focus-visible,
+.nn-platform-tabs :where(button, [role="tab"]):focus-visible {
+  outline: 2px solid var(--focus-halo-strong, var(--focus-halo));
+  outline-offset: 2px;
+}
+
+.nn-platform-button--primary {
+  background: var(--role-cta, var(--semantic-info));
+  color: var(--role-cta-foreground, var(--text-on-accent));
+  box-shadow: var(--nn-elevation-card);
+}
+
+.nn-platform-button--secondary {
+  background: var(--role-secondary-action-bg, var(--surface-accent-soft));
+  border-color: var(--role-secondary-action-border, var(--border-subtle));
+  color: var(--role-secondary-action-text, var(--theme-heading-text));
+}
+
+.nn-platform-button--ghost {
+  background: transparent;
+  color: var(--theme-body-text);
+}
+
+.nn-platform-button--icon {
+  background: var(--surface-interactive-hover);
+  border-color: var(--border-subtle);
+  color: var(--theme-heading-text);
+  inline-size: 2.75rem;
+  padding: var(--nn-space-0);
+}
+
+.nn-platform-button--destructive {
+  background: var(--semantic-danger-soft, var(--surface-alert));
+  border-color: var(--semantic-danger-border, var(--border-subtle));
+  color: var(--semantic-danger, var(--role-danger));
+}
+
+.nn-platform-input {
+  background: var(--surface-input, var(--bg-card));
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--nn-radius-md);
+  color: var(--theme-body-text);
+  inline-size: 100%;
+  line-height: var(--nn-leading-body);
+  min-block-size: 2.75rem;
+  padding-block: var(--nn-space-2);
+  padding-inline: var(--nn-space-3);
+  transition:
+    border-color var(--nn-motion-fast) var(--nn-motion-ease),
+    box-shadow var(--nn-motion-fast) var(--nn-motion-ease);
+}
+
+.nn-platform-input[aria-invalid="true"] {
+  border-color: var(--semantic-danger, var(--role-danger));
+}
+
+.nn-platform-textarea {
+  min-block-size: 7rem;
+  resize: vertical;
+}
+
+.nn-platform-panel {
+  background: var(--surface-card, var(--bg-card));
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--nn-radius-lg);
+  color: var(--theme-body-text);
+  padding: var(--nn-space-5);
+}
+
+.nn-platform-panel--card {
+  box-shadow: var(--nn-elevation-card);
+}
+
+.nn-platform-panel--glass {
+  background: color-mix(in srgb, var(--surface-card, var(--bg-card)) 86%, transparent);
+  box-shadow: var(--nn-elevation-raised);
+}
+
+.nn-platform-panel--monitor {
+  background: var(--surface-monitor, var(--bg-card));
+  box-shadow: var(--nn-elevation-monitor);
+}
+
+.nn-platform-panel--report {
+  background: var(--surface-report, var(--bg-card));
+  box-shadow: var(--nn-elevation-card);
+}
+
+.nn-platform-feedback {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--nn-radius-md);
+  color: var(--theme-body-text);
+  padding: var(--nn-space-4);
+}
+
+.nn-platform-feedback--banner,
+.nn-platform-feedback--toast {
+  background: var(--surface-accent-soft);
+}
+
+.nn-platform-feedback--alert {
+  background: var(--semantic-warning-soft, var(--surface-warning));
+  border-color: var(--semantic-warning-border, var(--border-subtle));
+}
+
+.nn-platform-feedback--inline-validation {
+  background: transparent;
+  border-color: transparent;
+  color: var(--semantic-danger, var(--role-danger));
+  padding: var(--nn-space-0);
+}
+
+.nn-platform-topbar,
+.nn-platform-tabs,
+.nn-platform-segmented-control,
+.nn-platform-breadcrumbs {
+  align-items: center;
+  display: flex;
+  gap: var(--nn-space-3);
+}
+
+.nn-platform-topbar {
+  background: var(--surface-nav, var(--theme-nav-bg));
+  border-block-end: 1px solid var(--theme-nav-border, var(--border-subtle));
+  min-block-size: 3rem;
+  padding-block: var(--nn-space-2);
+  padding-inline: var(--nn-space-4);
+}
+
+.nn-platform-segmented-control {
+  background: var(--surface-chip, var(--surface-input));
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--nn-radius-pill);
+  padding: var(--nn-space-1);
+}
+
+.nn-platform-text {
+  color: var(--theme-body-text);
+  margin: var(--nn-space-0);
+}
+
+.nn-platform-text--heading {
+  color: var(--theme-heading-text);
+  font-weight: var(--nn-font-weight-heading);
+  line-height: 1.18;
+}
+
+.nn-platform-text--label {
+  color: var(--theme-heading-text);
+  font-weight: var(--nn-font-weight-label, var(--nn-font-weight-ui));
+  line-height: 1.25;
+}
+
+.nn-platform-text--helper-text,
+.nn-platform-text--metadata {
+  color: var(--theme-muted-text);
+  font-size: var(--text-marketing-caption);
+  line-height: var(--leading-marketing-body);
+}
+
+.nn-platform-text--educational-copy {
+  color: var(--theme-body-text);
+  line-height: var(--nn-leading-prose);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-platform-button,
+  .nn-platform-input {
+    transition: none;
+  }
+}

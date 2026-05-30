@@ -2,6 +2,7 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
+@import "./platform-ui-governance.css";
 /* premium-redesign-2026.css and premium-allied-newgrad-convergence.css moved to
    (marketing) layout — they contain no learner-specific styles and are only
    needed on marketing routes. This keeps ~224 KB off the learner/admin CSS bundle. */

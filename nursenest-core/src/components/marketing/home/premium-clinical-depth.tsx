@@ -1,4 +1,4 @@
-import { Activity, AlertTriangle, FlaskConical, Lightbulb, Pill, Stethoscope } from "lucide-react";
+import { Activity, AlertTriangle, Brain, FlaskConical, GitBranch, Lightbulb, Pill, Stethoscope } from "lucide-react";
 
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
@@ -45,6 +45,20 @@ const CLINICAL_CARDS = [
     icon: Lightbulb,
     role: "pearls",
   },
+  {
+    titleKey: "ngnJudgment",
+    title: "NGN Clinical Judgment",
+    body: "Practice case studies, matrix grids, bowtie decisions, and NGN-style formats tied to NCJMM reasoning cues.",
+    icon: Brain,
+    role: "diagnostics",
+  },
+  {
+    titleKey: "simulations",
+    title: "Simulations & Deterioration",
+    body: "Branching patient scenarios with telemetry, labs, and deterioration recognition—not static vignettes.",
+    icon: GitBranch,
+    role: "red-flags",
+  },
 ] as const;
 
 /** Resolve a key from a flat messages record with an English fallback. */
@@ -83,7 +97,7 @@ export function PremiumClinicalDepth({
             </p>
             <h2 id="premium-clinical-depth-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
               {formatTitleCase(
-                tr("pages.home.premium.clinicalDepth.heading", "A Guided Clinical Operating System."),
+                tr("pages.home.premium.clinicalDepth.heading", "A full clinical reasoning ecosystem."),
                 locale,
               )}
             </h2>
@@ -91,7 +105,7 @@ export function PremiumClinicalDepth({
               {formatSentenceCase(
                 tr(
                   "pages.home.premium.clinicalDepth.body",
-                  "NurseNest already spans ECG, labs, medication safety, scenarios, clinical skills, and transition-to-practice readiness inside one adaptive platform.",
+                  "NurseNest spans ECG and telemetry, NGN judgment, branching simulations, labs, medication safety, clinical skills, competency tracking, and new-graduate readiness—integrated, not siloed.",
                 ),
                 locale,
               )}

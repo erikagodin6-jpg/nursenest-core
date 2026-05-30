@@ -63,7 +63,7 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
         {safeHomepageMarketingT(
           t,
           "pages.home.carouselHandoff.lead",
-          "Preview lessons, practice questions, flashcards, and study tools.",
+          "Preview lessons, NGN items, simulations, telemetry practice, flashcards, and readiness analytics in one platform.",
         )}
       </p>
       <p className="mt-5">
@@ -130,7 +130,7 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
             {safeHomepageMarketingT(
               t,
               "pages.home.carouselHandoff.lead",
-              "Preview lessons, practice questions, flashcards, and study tools.",
+              "Preview lessons, NGN items, simulations, telemetry practice, flashcards, and readiness analytics in one platform.",
             )}
           </p>
         </div>

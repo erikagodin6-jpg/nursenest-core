@@ -23,7 +23,7 @@ const FLOW_STEPS = [
     key: "practice",
     label: "Practice",
     title: "Questions",
-    body: "Practice who to see first, what to escalate, and which delegation choices are safe under pressure.",
+    body: "Apply judgment to NGN-style prompts, simulations, rationales, and clinical distractors.",
     icon: Brain,
     hrefKey: "questionBank",
     tone: "info",
@@ -32,7 +32,7 @@ const FLOW_STEPS = [
     key: "detectWeakness",
     label: "Detect Weakness",
     title: "Readiness Signals",
-    body: "Use recent results, domain trends, and weak-area routing to see what is slipping before exam day.",
+    body: "Use recent results, domain trends, Harm Index signals, and weak-area routing before exam day.",
     icon: SearchCheck,
     hrefKey: "dashboard",
     tone: "warning",
@@ -86,7 +86,7 @@ export function PremiumStudyEcosystem() {
             {formatSentenceCase(
               tr(
                 "pages.home.premium.studyEcosystem.body",
-                "The same public study destinations now read as one adaptive clinical workflow instead of a disconnected feature list.",
+                "The same study destinations read as one adaptive clinical workflow—linking lessons, NGN practice, simulations, remediation, and CAT reassessment.",
               ),
               locale,
             )}

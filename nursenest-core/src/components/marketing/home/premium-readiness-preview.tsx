@@ -21,6 +21,13 @@ const DOMAINS = [
   { labelKey: "fundamentals", label: "Fundamentals", pct: 90, tone: "success" },
 ] as const;
 
+const READINESS_INTELLIGENCE = [
+  { key: "sessionReports", label: "Session report cards", desc: "Summaries you can revisit and share with instructors" },
+  { key: "harmIndex", label: "Harm Index signals", desc: "Safety-weighted weak areas—not just accuracy percentages" },
+  { key: "replay", label: "Replay & timeline review", desc: "Walk back through decisions and rationales" },
+  { key: "longitudinal", label: "Longitudinal learner intelligence", desc: "Trends across weeks, domains, and study modes" },
+] as const;
+
 export function PremiumReadinessPreview() {
   const { hrefs, region } = usePremiumHomepageRoutes();
   const { t } = useMarketingI18n();
@@ -44,9 +51,30 @@ export function PremiumReadinessPreview() {
             <p className="nn-marketing-body mt-3 max-w-xl text-pretty text-[var(--palette-text-muted)]">
               {tr(
                 "pages.home.premium.readiness.body",
-                "Readiness signals combine domain mastery, recent practice, and study momentum. The preview uses sample data only and avoids outcome guarantees.",
+                "Readiness signals combine domain mastery, NCJMM-aligned judgment cues, competency bands, and study momentum. The preview uses sample data only and avoids outcome guarantees.",
               )}
             </p>
+
+            <div className="nn-home-readiness-intelligence mt-6 rounded-2xl border p-4 sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
+                {tr("pages.home.premium.readiness.intelligenceLabel", "Platform intelligence")}
+              </p>
+              <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                {READINESS_INTELLIGENCE.map((item) => (
+                  <li
+                    key={item.key}
+                    className="nn-home-readiness-intelligence__item rounded-xl border px-3 py-2.5"
+                  >
+                    <p className="text-sm font-semibold text-[var(--palette-heading)]">
+                      {tr(`pages.home.premium.readiness.intelligence.${item.key}.label`, item.label)}
+                    </p>
+                    <p className="nn-marketing-body-sm mt-0.5 text-[var(--palette-text-muted)]">
+                      {tr(`pages.home.premium.readiness.intelligence.${item.key}.desc`, item.desc)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <MarketingTrackedLink
