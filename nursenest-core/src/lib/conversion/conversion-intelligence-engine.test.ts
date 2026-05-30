@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  CONVERSION_COHORTS,
+  CONVERSION_INSTRUMENTATION_CONTRACT,
   buildConversionFunnel,
   buildConversionIntelligenceReport,
   type ConversionStageMetric,
@@ -44,7 +46,27 @@ test("conversion intelligence ranks revenue, feature, pricing, alerts, and recom
   assert.equal(report.topRevenueDrivers[0].page, "/cnple/simulation");
   assert.equal(report.topConvertingFeatures[0].feature, "ecg");
   assert.equal(report.pricingInsights[0].retentionPct, 81.3);
+  assert.equal(report.cohortInsights[0].cohort, "RN");
+  assert.equal(report.instrumentationContract.length >= 10, true);
   assert.ok(report.recommendations.length >= 3);
   assert.equal(report.alerts.some((alert) => alert.title.includes("checkout")), true);
 });
 
+test("conversion intelligence defines all required cohorts and stage instrumentation", () => {
+  assert.deepEqual(CONVERSION_COHORTS, [
+    "RN",
+    "RPN",
+    "NP",
+    "RT",
+    "Allied",
+    "NewGrad",
+    "HESI",
+    "TEAS",
+    "ECGCore",
+    "AdvancedECG",
+  ]);
+  assert.equal(CONVERSION_INSTRUMENTATION_CONTRACT.some((row) => row.stage === "pricing"), true);
+  assert.equal(CONVERSION_INSTRUMENTATION_CONTRACT.some((row) => row.stage === "checkout"), true);
+  assert.equal(CONVERSION_INSTRUMENTATION_CONTRACT.every((row) => row.requiredSignals.length > 0), true);
+  assert.equal(CONVERSION_INSTRUMENTATION_CONTRACT.every((row) => row.requiredProperties.length > 0), true);
+});

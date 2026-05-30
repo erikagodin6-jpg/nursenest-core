@@ -1,5 +1,4 @@
 import {
-  GENERATED_SCREENSHOT_FALLBACKS as FALLBACK_SHOTS,
   GENERATED_SCREENSHOT_PATHS as SHOTS,
 } from "@/lib/marketing/generated-screenshot-registry";
 
@@ -25,7 +24,6 @@ export type TierValueStage = {
   body: string;
   outcome: string;
   screenshot: string;
-  fallbackScreenshot: string;
   screenshotAlt: string;
   links: Array<{ label: string; href: string }>;
 };
@@ -55,15 +53,9 @@ function stages(args: {
   assess: string;
   remediate: string;
   master: string;
-  /** Override hub/dashboard screenshot for the learn stage. Defaults to core learner dashboard. */
   learnShot?: string;
-  learnFallbackShot?: string;
-  /** Override flashcard/practice screenshot for the practice stage. */
   practiceShot?: string;
-  practiceFallbackShot?: string;
-  /** Override for the assess stage (CAT / LOFT variant). */
   assessShot?: string;
-  assessFallbackShot?: string;
 }): TierValueStage[] {
   return [
     {
@@ -74,7 +66,6 @@ function stages(args: {
       outcome:
         "Learners build the language, safety habits, and decision frameworks they need before they start drilling questions.",
       screenshot: args.learnShot ?? SHOTS.coreDashboard,
-      fallbackScreenshot: args.learnFallbackShot ?? FALLBACK_SHOTS.coreDashboard,
       screenshotAlt: `${args.label} learner dashboard with lesson progress and study streaks`,
       links: [
         commonLinks.lessons,
@@ -90,7 +81,6 @@ function stages(args: {
       outcome:
         "Every practice session turns mistakes into a visible next step instead of leaving learners to guess what to review.",
       screenshot: args.practiceShot ?? SHOTS.coreFlashcards,
-      fallbackScreenshot: args.practiceFallbackShot ?? FALLBACK_SHOTS.coreFlashcards,
       screenshotAlt: `${args.label} active recall and practice interface`,
       links: [commonLinks.questions, commonLinks.flashcards],
     },
@@ -103,7 +93,6 @@ function stages(args: {
       outcome:
         "Timed exams, CAT-style progression, LOFT-style simulation where available, and review reports help learners separate familiarity from readiness.",
       screenshot: args.assessShot ?? SHOTS.coreCat,
-      fallbackScreenshot: args.assessFallbackShot ?? FALLBACK_SHOTS.coreCat,
       screenshotAlt: `${args.label} CAT and exam trajectory view`,
       links: [commonLinks.cat, commonLinks.questions],
     },
@@ -115,7 +104,6 @@ function stages(args: {
       outcome:
         "Adaptive recommendations connect weak topics to lessons, question sets, flashcards, and review work so study time stays focused.",
       screenshot: SHOTS.coreCoaching,
-      fallbackScreenshot: FALLBACK_SHOTS.coreCoaching,
       screenshotAlt: `${args.label} coaching panel with targeted recommendations`,
       links: [
         commonLinks.readiness,
@@ -131,7 +119,6 @@ function stages(args: {
       outcome:
         "Readiness scoring, trend tracking, analytics, and performance reports show whether the learner is becoming more consistent over time.",
       screenshot: SHOTS.coreReadiness,
-      fallbackScreenshot: FALLBACK_SHOTS.coreReadiness,
       screenshotAlt: `${args.label} readiness score and analytics dashboard`,
       links: [commonLinks.readiness, commonLinks.cat],
     },
@@ -150,11 +137,8 @@ export const TIER_VALUE_EXPERIENCES: Record<TierValueKey, TierValueExperience> =
       stages: stages({
         label: "RN",
         learnShot: SHOTS.rnMarketingHub,
-        learnFallbackShot: FALLBACK_SHOTS.rnMarketingHub,
         practiceShot: SHOTS.rnQuestionsMarketing,
-        practiceFallbackShot: FALLBACK_SHOTS.rnQuestionsMarketing,
         assessShot: SHOTS.rnCat,
-        assessFallbackShot: FALLBACK_SHOTS.rnCat,
         learn:
           "RN lessons, flashcards, clinical skills, pharmacology, and ECG content frame the concepts behind safe entry-to-practice decisions.",
         practice:
@@ -177,11 +161,8 @@ export const TIER_VALUE_EXPERIENCES: Record<TierValueKey, TierValueExperience> =
       stages: stages({
         label: "RPN / PN",
         learnShot: SHOTS.pnMarketingHub,
-        learnFallbackShot: FALLBACK_SHOTS.pnMarketingHub,
         practiceShot: SHOTS.pnMarketingHub,
-        practiceFallbackShot: FALLBACK_SHOTS.pnMarketingHub,
         assessShot: SHOTS.pnCat,
-        assessFallbackShot: FALLBACK_SHOTS.pnCat,
         learn:
           "Foundational nursing lessons, flashcards, pharmacology, and clinical skills reinforce safe practical-nursing scope before exam drilling.",
         practice:
@@ -204,11 +185,8 @@ export const TIER_VALUE_EXPERIENCES: Record<TierValueKey, TierValueExperience> =
       stages: stages({
         label: "NP",
         learnShot: SHOTS.npMarketingHub,
-        learnFallbackShot: FALLBACK_SHOTS.npMarketingHub,
         practiceShot: SHOTS.npMarketingHub,
-        practiceFallbackShot: FALLBACK_SHOTS.npMarketingHub,
         assessShot: SHOTS.npMarketingHub,
-        assessFallbackShot: FALLBACK_SHOTS.npMarketingHub,
         learn:
           "Advanced lessons and pharmacology refreshers support diagnostic reasoning, management decisions, and scope-aware clinical planning.",
         practice:
@@ -231,7 +209,6 @@ export const TIER_VALUE_EXPERIENCES: Record<TierValueKey, TierValueExperience> =
       stages: stages({
         label: "Allied Health",
         learnShot: SHOTS.alliedMarketingHub,
-        learnFallbackShot: FALLBACK_SHOTS.alliedMarketingHub,
         learn:
           "Profession-specific lessons and skill refreshers build the vocabulary, safety expectations, and applied concepts for each allied pathway.",
         practice:
@@ -254,8 +231,7 @@ export const TIER_VALUE_EXPERIENCES: Record<TierValueKey, TierValueExperience> =
       stages: stages({
         label: "New Grad",
         learnShot: SHOTS.newGradMarketingHub,
-        learnFallbackShot: FALLBACK_SHOTS.newGradMarketingHub,
-        assessFallbackShot: FALLBACK_SHOTS.coreCatReadiness,
+        assessShot: SHOTS.coreCatReadiness,
         learn:
           "Specialty preparation, clinical skills, communication, SBAR, pharmacology, and safety lessons support the jump from school to practice.",
         practice:

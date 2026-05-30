@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Brain, CheckCircle2, ChevronDown, Stethoscope } from "lucide-react";
-import { useState } from "react";
 import { SI_CONV_MARKETING } from "@/lib/marketing/si-conv-clinical-reasoning";
 
 const cardClass =
@@ -78,22 +77,15 @@ export function SiConvPricingFeatureDisclosure() {
 }
 
 function ProofImage() {
-  const [src, setSrc] = useState(SI_CONV_MARKETING.screenshot);
-
   return (
     <Image
-      src={src}
+      src={SI_CONV_MARKETING.screenshot}
       alt={SI_CONV_MARKETING.screenshotAlt}
       fill
       sizes="(min-width: 1024px) 42vw, 100vw"
       className="absolute inset-0 h-full w-full object-cover object-top"
       loading="lazy"
       decoding="async"
-      onError={() => {
-        if (src !== SI_CONV_MARKETING.fallbackScreenshot) {
-          setSrc(SI_CONV_MARKETING.fallbackScreenshot);
-        }
-      }}
     />
   );
 }

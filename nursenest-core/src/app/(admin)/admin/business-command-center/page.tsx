@@ -28,6 +28,9 @@ export default async function AdminBusinessCommandCenterPage() {
           <Link href="/admin/analytics/funnels" className="text-muted-foreground underline">
             Funnel analytics
           </Link>
+          <Link href="/admin/conversion-intelligence" className="text-muted-foreground underline">
+            Conversion intelligence
+          </Link>
           <Link href="/admin/ops-center" className="text-muted-foreground underline">
             Ops center
           </Link>

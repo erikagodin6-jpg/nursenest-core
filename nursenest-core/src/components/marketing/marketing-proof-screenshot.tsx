@@ -18,7 +18,7 @@ export function MarketingProofScreenshot({
   priority?: boolean;
   sizes?: string;
 }) {
-  const chain = [shot.src, shot.fallbackSrc, ...FALLBACK_CHAIN];
+  const chain = [shot.src, ...FALLBACK_CHAIN];
   const [index, setIndex] = useState(0);
   const src = chain[Math.min(index, chain.length - 1)]!;
 

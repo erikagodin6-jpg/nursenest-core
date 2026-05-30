@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import {
   ArrowRight,
   BarChart3,
@@ -28,29 +27,16 @@ const STAGE_ICONS: Record<TierValueStageKey, typeof BookOpen> = {
   master: BarChart3,
 };
 
-function ProofImage({
-  src,
-  fallbackSrc,
-  alt,
-}: {
-  src: string;
-  fallbackSrc: string;
-  alt: string;
-}) {
-  const [currentSrc, setCurrentSrc] = useState(src);
-
+function ProofImage({ src, alt }: { src: string; alt: string }) {
   return (
     <Image
-      src={currentSrc}
+      src={src}
       alt={alt}
       fill
       sizes="(min-width: 1024px) 44vw, 100vw"
       className="absolute inset-0 h-full w-full object-cover object-top"
       loading="lazy"
       decoding="async"
-      onError={() => {
-        if (currentSrc !== fallbackSrc) setCurrentSrc(fallbackSrc);
-      }}
     />
   );
 }
@@ -153,11 +139,7 @@ export function TierValueExperience({
               className="grid overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface-alt)_54%,var(--semantic-surface))] lg:grid-cols-[0.9fr_1.1fr]"
             >
               <div className="relative min-h-[220px] border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-alt)] lg:border-b-0 lg:border-r">
-                <ProofImage
-                  src={stage.screenshot}
-                  fallbackSrc={stage.fallbackScreenshot}
-                  alt={stage.screenshotAlt}
-                />
+                <ProofImage src={stage.screenshot} alt={stage.screenshotAlt} />
               </div>
               <div className="p-5 sm:p-6">
                 <div className="flex items-center gap-3">

@@ -13,7 +13,7 @@ import {
 type FitMode = "cover" | "contain";
 
 /**
- * Reliable below-fold product still: same URL chain as hero (PNG first → WebP → proxy → local SVG).
+ * Reliable below-fold product still: local homepage WebP chain when synced, else CDN PNG/WebP, then hero SVG.
  * Use for any homepage section that previously relied on `MARKETING_SCREENSHOT_SOURCES` WebP bundles (often 403).
  */
 export function MarketingChainScreenshot({

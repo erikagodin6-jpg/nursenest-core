@@ -83,6 +83,12 @@ function AdminFocusLinks() {
       accent: "green",
     },
     {
+      href: "/admin/conversion-intelligence",
+      title: "Conversion intelligence",
+      copy: "Cohort funnels, feature discovery, pricing performance, attribution, alerts, and revenue opportunities.",
+      accent: "yellow",
+    },
+    {
       href: "/admin/hub/publishing",
       title: "Publishing",
       copy: "Manage blog publishing, SEO workflows, and queued content operations.",

@@ -67,6 +67,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/content-overview",
   "/admin/content-coverage",
   "/admin/content-command-center",
+  "/admin/conversion-intelligence",
   "/admin/curriculum-coverage",
   "/admin/blueprint-compliance",
   "/admin/scope-compliance",

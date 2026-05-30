@@ -19,10 +19,10 @@ test("marketing proof screenshots resolve to existing generated WebP assets", ()
 
   for (const shot of Object.values(FLAGSHIP_PROOF_SCREENSHOTS)) {
     if (!shot) continue;
-    paths.add(shot.fallbackSrc);
+    paths.add(shot.src);
   }
   for (const shot of HOME_FEATURE_DEEP_DIVE_PROOFS) {
-    paths.add(shot.fallbackSrc);
+    paths.add(shot.src);
   }
   paths.add(GENERATED_SCREENSHOT_PATHS.rnMarketingHub);
   paths.add(GENERATED_SCREENSHOT_PATHS.pnMarketingHub);
@@ -36,11 +36,26 @@ test("marketing proof screenshots resolve to existing generated WebP assets", ()
   }
 });
 
-test("core marketing proof keys use theme-aware fallbacks", () => {
+test("core marketing proof keys resolve to single canonical theme paths", () => {
   const flashcards = marketingProofFromCoreKey("flashcards", {
     alt: "Flashcards",
     theme: "blossom",
   });
   assert.match(flashcards.src, /themes\/blossom\/flashcards\.webp$/);
-  assert.match(flashcards.fallbackSrc, /core\/flashcards\.webp$/);
+
+  const ecgOcean = marketingProofFromCoreKey("ecg-workstation", {
+    alt: "ECG",
+    theme: "ocean",
+  });
+  assert.match(ecgOcean.src, /core\/ecg-workstation\.webp$/);
+
+  const catMidnight = marketingProofFromCoreKey("cat-exam-session", {
+    alt: "CAT",
+    theme: "midnight",
+  });
+  assert.match(
+    catMidnight.src,
+    /core\/cat-exam-session\.webp$/,
+    "Keys without theme captures use core/ as the sole canonical path",
+  );
 });

@@ -165,7 +165,7 @@ const REQUIRED_MOBILE = [
 const REQUIRED_THEME_VARIANTS = [
   "themes/midnight/learner-dashboard.webp",
   "themes/blossom/learner-dashboard.webp",
-  "themes/ocean/learner-dashboard.webp",
+  "core/learner-dashboard.webp",
 ] as const;
 
 // ─── Product WebP fallbacks (canonical — no deprecated preview PNGs) ───────────

@@ -83,6 +83,10 @@ describe("homepage PageSpeed performance contracts", () => {
 
     assert.match(chain[0] ?? "", /screenshot10-480w\.webp$/);
     assert.ok(
+      !chain.some((src) => /digitaloceanspaces\.com\/screenshot10-\d+w\.webp/.test(src)),
+      "CDN WebP variants must be omitted when local homepage-screenshots exist",
+    );
+    assert.ok(
       chain.findIndex((src) => /screenshot10-480w\.webp$/.test(src)) <
         chain.findIndex((src) => /screenshot10\.png$/.test(src)),
       "optimized WebP variants must be attempted before raw PNG",

@@ -36,6 +36,7 @@
     "marketing:screenshots:refresh": "node scripts/marketing-screenshot-refresh.mjs",
     "marketing:screenshots:sync": "node scripts/sync-homepage-screenshot-variants.mjs",
     "verify:production:marketing-screenshots": "npx tsx scripts/verify-production-marketing-screenshots.mts",
+    "audit:marketing-deployment": "npx tsx scripts/audit-marketing-deployment.mts",
     "test:e2e:production-screenshot-verification": "PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://nursenest.ca npx playwright test tests/e2e/marketing/production-screenshot-verification.spec.ts -c playwright.production-screenshot-verification.config.ts",
     "ci:screenshot-governance": "npx tsx scripts/ci-screenshot-governance-check.ts",
     "test:e2e:marketing-screenshot-governance": "npx playwright test tests/e2e/marketing/marketing-screenshot-governance.spec.ts",

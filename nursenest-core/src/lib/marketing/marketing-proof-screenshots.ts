@@ -10,17 +10,14 @@ import type { FlagshipExperienceId } from "@/lib/discovery/flagship-experiences"
 import { isNewGradTransitionPathway } from "@/lib/marketing/is-new-grad-transition-pathway";
 import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
 import {
-  GENERATED_SCREENSHOT_FALLBACKS,
   GENERATED_SCREENSHOT_PATHS,
 } from "@/lib/marketing/generated-screenshot-registry";
 
 export type MarketingProofTheme = "ocean" | "blossom" | "midnight";
 
 export type MarketingProofShot = {
-  /** Primary image path (prefers theme variant when available). */
+  /** Canonical image path for this proof surface. */
   src: string;
-  /** Secondary path if primary fails to load. */
-  fallbackSrc: string;
   alt: string;
   theme: MarketingProofTheme;
 };
@@ -72,9 +69,35 @@ function corePath(coreKey: string, tier: "core" | "marketing" = "core"): string 
   return `${GENERATED_ROOT}/${tier}/${coreKey}.webp`;
 }
 
+const THEME_VARIANT_CORE_KEYS = new Set([
+  "confidence-analytics",
+  "flashcards",
+  "learner-dashboard",
+  "marketing-home-desktop",
+  "practice-rationale",
+  "pricing",
+  "question-bank",
+  "rn-practice-questions",
+  "smart-review",
+  "study-plan",
+]);
+
+/** Ocean captures live under `core/` — there is no `themes/ocean/` directory. */
+function resolveProofPath(
+  coreKey: string,
+  theme: MarketingProofTheme,
+  tier: "core" | "marketing",
+): string {
+  const core = corePath(coreKey, tier);
+  if (theme === "ocean" || !THEME_VARIANT_CORE_KEYS.has(coreKey)) {
+    return core;
+  }
+  return themeVariantPath(coreKey, theme);
+}
+
 /**
- * Resolve a core capture key to src/fallback, preferring theme variant when present on disk
- * is handled at runtime by MarketingProofScreenshot onError; paths are ordered theme → core.
+ * Resolve a core capture key to the single canonical marketing proof path.
+ * Blossom/Midnight use theme variants; Ocean uses `core/` captures.
  */
 export function marketingProofFromCoreKey(
   coreKey: string,
@@ -87,8 +110,7 @@ export function marketingProofFromCoreKey(
   const theme = args.theme ?? CORE_KEY_THEME[coreKey] ?? "ocean";
   const tier = args.tier ?? "core";
   return {
-    src: themeVariantPath(coreKey, theme),
-    fallbackSrc: corePath(coreKey, tier),
+    src: resolveProofPath(coreKey, theme, tier),
     alt: args.alt,
     theme,
   };
@@ -98,7 +120,6 @@ export function pathwayHubPrimaryProof(pathway: ExamPathwayDefinition): Marketin
   if (isPracticalNursingMarketingPathway(pathway)) {
     return {
       src: GENERATED_SCREENSHOT_PATHS.pnMarketingHub,
-      fallbackSrc: GENERATED_SCREENSHOT_FALLBACKS.pnMarketingHub,
       alt: "RPN and PN exam prep hub with lessons, practice, and CAT readiness on NurseNest",
       theme: "ocean",
     };
@@ -106,7 +127,6 @@ export function pathwayHubPrimaryProof(pathway: ExamPathwayDefinition): Marketin
   if (isNewGradTransitionPathway(pathway)) {
     return {
       src: GENERATED_SCREENSHOT_PATHS.newGradMarketingHub,
-      fallbackSrc: GENERATED_SCREENSHOT_FALLBACKS.newGradMarketingHub,
       alt: "New graduate nursing transition hub with specialty prep and clinical confidence tools",
       theme: "blossom",
     };
@@ -115,21 +135,18 @@ export function pathwayHubPrimaryProof(pathway: ExamPathwayDefinition): Marketin
     case "rn":
       return {
         src: GENERATED_SCREENSHOT_PATHS.rnMarketingHub,
-        fallbackSrc: GENERATED_SCREENSHOT_FALLBACKS.rnMarketingHub,
         alt: "NCLEX-RN study hub with lessons, NGN practice, CAT exams, and readiness analytics",
         theme: "ocean",
       };
     case "np":
       return {
         src: GENERATED_SCREENSHOT_PATHS.npMarketingHub,
-        fallbackSrc: GENERATED_SCREENSHOT_FALLBACKS.npMarketingHub,
         alt: "NP and CNPLE preparation hub with advanced clinical reasoning and LOFT-style assessment",
         theme: "midnight",
       };
     case "allied":
       return {
         src: GENERATED_SCREENSHOT_PATHS.alliedMarketingHub,
-        fallbackSrc: GENERATED_SCREENSHOT_FALLBACKS.alliedMarketingHub,
         alt: "Allied health profession-specific study hub with competency-focused practice",
         theme: "ocean",
       };

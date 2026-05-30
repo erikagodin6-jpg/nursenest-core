@@ -86,6 +86,30 @@ async function fetchHash(url: string): Promise<{ hash: string; bytes: number; co
   }
 }
 
+/** Decode Next.js Image optimizer URLs to the underlying static marketing asset. */
+function resolveMarketingAssetUrl(resolvedUrl: string, base: string): string {
+  try {
+    const u = new URL(resolvedUrl, base);
+    if (u.pathname.includes("_next/image")) {
+      const inner = u.searchParams.get("url");
+      if (inner) {
+        const decoded = decodeURIComponent(inner);
+        return decoded.startsWith("http") ? decoded : `${base}${decoded.startsWith("/") ? decoded : `/${decoded}`}`;
+      }
+    }
+    return u.href;
+  } catch {
+    return resolvedUrl;
+  }
+}
+
+async function productionStaticHash(relPublicPath: string): Promise<{ hash: string; bytes: number } | null> {
+  const url = `${PRODUCTION_BASE}/${relPublicPath.replace(/^public\//, "")}`;
+  const remote = await fetchHash(url);
+  if (!remote?.contentType.includes("image")) return null;
+  return { hash: remote.hash, bytes: remote.bytes };
+}
+
 async function collectMarketingImages(page: Page): Promise<
   Array<{ src: string; alt: string; naturalWidth: number; resolvedUrl: string }>
 > {
@@ -155,19 +179,41 @@ async function auditPage(spec: PageSpec): Promise<Record<string, unknown>> {
         const localHash = hashLocalFile(rel);
         const localStat = existsSync(join(APP_ROOT, rel)) ? statSync(join(APP_ROOT, rel)) : null;
         let matched = false;
-        for (const img of images) {
-          const remote = await fetchHash(img.resolvedUrl);
-          if (remote && localHash && remote.hash === localHash) {
+
+        // 1) Direct static URL on production (authoritative deploy fingerprint)
+        if (localHash) {
+          const staticRemote = await productionStaticHash(rel);
+          if (staticRemote && staticRemote.hash === localHash) {
             (result.fingerprintMatches as unknown[]).push({
               local: rel,
-              url: img.resolvedUrl,
+              url: `${PRODUCTION_BASE}/${rel.replace(/^public\//, "")}`,
               sha256: localHash,
-              bytes: remote.bytes,
+              bytes: staticRemote.bytes,
+              via: "static-probe",
             });
             matched = true;
-            break;
           }
         }
+
+        // 2) Rendered img tags (carousel / lazy sections)
+        if (!matched) {
+          for (const img of images) {
+            const assetUrl = resolveMarketingAssetUrl(img.resolvedUrl, PRODUCTION_BASE);
+            const remote = await fetchHash(assetUrl);
+            if (remote && localHash && remote.hash === localHash) {
+              (result.fingerprintMatches as unknown[]).push({
+                local: rel,
+                url: assetUrl,
+                sha256: localHash,
+                bytes: remote.bytes,
+                via: "dom",
+              });
+              matched = true;
+              break;
+            }
+          }
+        }
+
         if (!matched) {
           (result.fingerprintMismatches as unknown[]).push({
             local: rel,
@@ -175,7 +221,7 @@ async function auditPage(spec: PageSpec): Promise<Record<string, unknown>> {
             localBytes: localStat?.size ?? null,
             localMtime: localStat?.mtime.toISOString() ?? null,
             note: localHash
-              ? "Live page did not render an image matching this repo asset fingerprint"
+              ? "Production static asset did not match repo fingerprint (deploy stale or path wrong)"
               : "Expected local asset missing from repo",
           });
         }

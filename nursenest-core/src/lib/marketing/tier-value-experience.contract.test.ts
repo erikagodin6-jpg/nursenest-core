@@ -70,19 +70,19 @@ test("tier value copy explains outcomes instead of generic feature checklists", 
   }
 });
 
-test("tier value screenshots are wired to generated assets with existing product fallbacks", () => {
+test("tier value screenshots are wired to a single canonical generated asset each", () => {
   for (const experience of Object.values(TIER_VALUE_EXPERIENCES)) {
     for (const stage of experience.stages) {
       assert.match(
         stage.screenshot,
         /^\/marketing\/generated-screenshots\/.+\.webp$/,
-        `${experience.label} ${stage.label} should prefer Playwright-generated marketing screenshots`,
+        `${experience.label} ${stage.label} should use Playwright-generated marketing screenshots`,
       );
 
-      const fallbackPath = path.join(publicDir, stage.fallbackScreenshot);
+      const screenshotPath = path.join(publicDir, stage.screenshot);
       assert.ok(
-        fs.existsSync(fallbackPath),
-        `${experience.label} ${stage.label} fallback proof image does not exist: ${stage.fallbackScreenshot}`,
+        fs.existsSync(screenshotPath),
+        `${experience.label} ${stage.label} proof image does not exist: ${stage.screenshot}`,
       );
     }
   }

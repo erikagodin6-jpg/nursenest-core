@@ -22,6 +22,113 @@ export type ConversionStage =
   | "subscription"
   | "retention";
 
+export const CONVERSION_COHORTS: ConversionCohort[] = [
+  "RN",
+  "RPN",
+  "NP",
+  "RT",
+  "Allied",
+  "NewGrad",
+  "HESI",
+  "TEAS",
+  "ECGCore",
+  "AdvancedECG",
+];
+
+export const CONVERSION_STAGE_LABELS: Record<ConversionStage, string> = {
+  anonymous_visitor: "Anonymous Visitor",
+  marketing_page: "Marketing Page",
+  pricing: "Pricing",
+  signup: "Sign Up",
+  email_verification: "Email Verification",
+  trial_or_free_access: "Trial / Free Access",
+  feature_exploration: "Feature Exploration",
+  checkout: "Checkout",
+  subscription: "Subscription",
+  retention: "Retention",
+};
+
+export type ConversionInstrumentationContract = {
+  stage: ConversionStage;
+  label: string;
+  requiredSignals: string[];
+  requiredProperties: string[];
+  businessQuestion: string;
+};
+
+export const CONVERSION_INSTRUMENTATION_CONTRACT: ConversionInstrumentationContract[] = [
+  {
+    stage: "anonymous_visitor",
+    label: CONVERSION_STAGE_LABELS.anonymous_visitor,
+    requiredSignals: ["$pageview", "funnel_homepage_viewed"],
+    requiredProperties: ["path", "marketing_region", "pathway_id"],
+    businessQuestion: "How many visitors enter the NurseNest journey?",
+  },
+  {
+    stage: "marketing_page",
+    label: CONVERSION_STAGE_LABELS.marketing_page,
+    requiredSignals: ["funnel_exam_hub_viewed", "marketing_pathway_hub_cta", "conversion_cta_click"],
+    requiredProperties: ["page_type", "pathway_id", "cta_text"],
+    businessQuestion: "Which pages and CTAs move visitors toward purchase intent?",
+  },
+  {
+    stage: "pricing",
+    label: CONVERSION_STAGE_LABELS.pricing,
+    requiredSignals: ["pricing_viewed", "pricing_plan_selected", "conversion_cta_click"],
+    requiredProperties: ["plan_code", "plan_type", "pathway_id"],
+    businessQuestion: "Which plans and pricing pages create purchase intent?",
+  },
+  {
+    stage: "signup",
+    label: CONVERSION_STAGE_LABELS.signup,
+    requiredSignals: ["signup_submit_attempt", "signup_success_client"],
+    requiredProperties: ["pathway_id", "auth_method", "error_code"],
+    businessQuestion: "Where does account creation fail or succeed?",
+  },
+  {
+    stage: "email_verification",
+    label: CONVERSION_STAGE_LABELS.email_verification,
+    requiredSignals: ["email_verification_sent", "email_verification_completed"],
+    requiredProperties: ["pathway_id", "verification_state"],
+    businessQuestion: "Do learners complete verification before studying or checkout?",
+  },
+  {
+    stage: "trial_or_free_access",
+    label: CONVERSION_STAGE_LABELS.trial_or_free_access,
+    requiredSignals: ["trial_started", "paywall_viewed", "paywall_cta_clicked"],
+    requiredProperties: ["plan_code", "pathway_id", "paywall_context"],
+    businessQuestion: "Does free access create qualified intent or dead ends?",
+  },
+  {
+    stage: "feature_exploration",
+    label: CONVERSION_STAGE_LABELS.feature_exploration,
+    requiredSignals: ["app_section_view", "learner_question_bank_session_started", "learnerLessonStarted"],
+    requiredProperties: ["feature", "pathway_id", "source_page"],
+    businessQuestion: "Which features are explored before subscription?",
+  },
+  {
+    stage: "checkout",
+    label: CONVERSION_STAGE_LABELS.checkout,
+    requiredSignals: ["checkout_started", "stripe_checkout_session_created"],
+    requiredProperties: ["plan_code", "plan_type", "pathway_id", "checkout_session_id"],
+    businessQuestion: "Which plans produce successful checkout starts?",
+  },
+  {
+    stage: "subscription",
+    label: CONVERSION_STAGE_LABELS.subscription,
+    requiredSignals: ["learner_conversion_subscribed", "checkout.session.completed"],
+    requiredProperties: ["plan_code", "plan_type", "pathway_id", "amount_cents"],
+    businessQuestion: "Which cohorts and plans become paid subscribers?",
+  },
+  {
+    stage: "retention",
+    label: CONVERSION_STAGE_LABELS.retention,
+    requiredSignals: ["funnel_subscription_renewed", "daily_active_signal", "learner_activity_completed"],
+    requiredProperties: ["plan_code", "pathway_id", "activity_type"],
+    businessQuestion: "Which cohorts and features retain subscribers?",
+  },
+];
+
 export type ConversionStageMetric = {
   stage: ConversionStage;
   label: string;
@@ -85,6 +192,16 @@ export type ConversionDropOff = {
   reason: string;
 };
 
+export type ConversionCohortInsight = {
+  cohort: ConversionCohort;
+  visitors: number | null;
+  signups: number | null;
+  checkoutStarts: number | null;
+  subscribers: number | null;
+  conversionPct: number | null;
+  largestDropOffLabel: string | null;
+};
+
 export type ConversionRecommendation = {
   severity: "critical" | "high" | "medium" | "low";
   title: string;
@@ -99,6 +216,8 @@ export type ConversionIntelligenceReport = {
   topRevenueDrivers: Array<ContentAttributionInput & { revenueDollars: number }>;
   topConvertingFeatures: Array<FeatureDiscoveryInput & { conversionPct: number }>;
   pricingInsights: Array<PricingIntelligenceInput & { checkoutCompletionPct: number; revenueDollars: number; retentionPct: number | null }>;
+  cohortInsights: ConversionCohortInsight[];
+  instrumentationContract: ConversionInstrumentationContract[];
   executiveSummary: {
     visitors: number | null;
     signups: number | null;
@@ -202,7 +321,43 @@ export function buildConversionRecommendations(report: Omit<ConversionIntelligen
     });
   }
 
+  const pricingWatch = report.pricingInsights.find((plan) => plan.starts >= 20 && plan.checkoutCompletionPct < 60);
+  if (pricingWatch) {
+    recommendations.push({
+      severity: "high",
+      title: `${pricingWatch.planCode} checkout completion is weak`,
+      evidence: `${pricingWatch.checkoutCompletionPct}% checkout completion across ${pricingWatch.starts} starts.`,
+      suggestedAction: "Audit price clarity, Stripe session creation, plan entitlement copy, and checkout error logs for this plan.",
+    });
+  }
+
+  const missingInstrumentation = report.instrumentationContract.find((stage) => {
+    return !report.funnels.some((funnel) => funnel.steps.some((step) => step.stage === stage.stage && step.count != null));
+  });
+  if (missingInstrumentation) {
+    recommendations.push({
+      severity: "medium",
+      title: `${missingInstrumentation.label} instrumentation needs coverage`,
+      evidence: `No current funnel supplied a measured count for ${missingInstrumentation.stage}.`,
+      suggestedAction: `Ensure ${missingInstrumentation.requiredSignals.join(", ")} are emitted with ${missingInstrumentation.requiredProperties.join(", ")}.`,
+    });
+  }
+
   return recommendations;
+}
+
+export function buildCohortInsights(funnels: ConversionFunnel[]): ConversionCohortInsight[] {
+  return funnels.map((funnel) => ({
+    cohort: funnel.cohort,
+    visitors: funnel.steps.find((step) => step.stage === "anonymous_visitor")?.count ?? null,
+    signups: funnel.steps.find((step) => step.stage === "signup")?.count ?? null,
+    checkoutStarts: funnel.steps.find((step) => step.stage === "checkout")?.count ?? null,
+    subscribers: funnel.steps.find((step) => step.stage === "subscription")?.count ?? null,
+    conversionPct: funnel.overallConversionPct,
+    largestDropOffLabel: funnel.largestDropOff
+      ? `${CONVERSION_STAGE_LABELS[funnel.largestDropOff.from]} → ${CONVERSION_STAGE_LABELS[funnel.largestDropOff.to]}`
+      : null,
+  }));
 }
 
 export function buildConversionIntelligenceReport(input: {
@@ -229,6 +384,7 @@ export function buildConversionIntelligenceReport(input: {
       retentionPct: item.retainedSubscriptions == null ? null : pct(item.retainedSubscriptions, item.completions),
     }))
     .sort((a, b) => b.revenueCents - a.revenueCents);
+  const cohortInsights = buildCohortInsights(input.funnels).sort((a, b) => (b.conversionPct ?? -1) - (a.conversionPct ?? -1));
   const revenueDollars = topRevenueDrivers.reduce((sum, item) => sum + item.revenueDollars, 0);
   const visitors = input.funnels.reduce<number | null>((max, funnel) => {
     const value = funnel.steps.find((step) => step.stage === "anonymous_visitor")?.count;
@@ -253,6 +409,8 @@ export function buildConversionIntelligenceReport(input: {
     topRevenueDrivers,
     topConvertingFeatures,
     pricingInsights,
+    cohortInsights,
+    instrumentationContract: CONVERSION_INSTRUMENTATION_CONTRACT,
     executiveSummary: {
       visitors,
       signups,

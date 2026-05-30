@@ -1,5 +1,4 @@
 import {
-  GENERATED_SCREENSHOT_FALLBACKS as FALLBACK_SHOTS,
   GENERATED_SCREENSHOT_PATHS as SHOTS,
 } from "@/lib/marketing/generated-screenshot-registry";
 
@@ -38,7 +37,6 @@ export const SI_CONV_MARKETING = {
   seoKeywords:
     "clinical reasoning for nurses, nursing clinical judgment, NCLEX clinical reasoning, how to think like a nurse, nursing prioritization practice, nursing decision-making framework",
   screenshot: SHOTS.coreFlashcards,
-  fallbackScreenshot: FALLBACK_SHOTS.coreFlashcards,
   screenshotAlt:
     "NurseNest question workflow showing a question, SI/CONV clinical reasoning support, and teaching rationale",
 } as const;

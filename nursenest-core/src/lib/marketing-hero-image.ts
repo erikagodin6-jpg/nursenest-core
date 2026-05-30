@@ -140,21 +140,31 @@ export function getMarketingHeroImageUrlChain(params: {
     return [MARKETING_HERO_LOCAL_FALLBACK];
   }
 
-  const optimized = [
-    ...localHomeHeroScreenshotOptimizedVariants(objectKey, {
-      widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
-    }),
-    ...homeHeroScreenshotOptimizedVariants(publicCdnUrl, {
-      widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
-    }),
-  ];
+  const localVariants = localHomeHeroScreenshotOptimizedVariants(objectKey, {
+    widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
+  });
+  const match = /^screenshot(\d+)\.png$/i.exec(objectKey);
+  const localBaseWebp =
+    match && LOCAL_HOME_HERO_SCREENSHOT_IDS.has(Number(match[1]))
+      ? [{ key: `marketing/homepage-screenshots/screenshot${match[1]}.webp`, url: `/marketing/homepage-screenshots/screenshot${match[1]}.webp` }]
+      : [];
+  const cdnVariants =
+    localVariants.length > 0
+      ? []
+      : homeHeroScreenshotOptimizedVariants(publicCdnUrl, {
+          widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
+        });
+  const optimized = [...localVariants, ...localBaseWebp, ...cdnVariants];
+  const hasLocalHomeHero = localVariants.length > 0 || localBaseWebp.length > 0;
   const proxyPng = marketingProxyPathForKey(objectKey);
 
   const out: string[] = [];
 
   if (marketingImageUsesProxy()) {
-    out.push(proxyPng);
-    out.push(publicCdnUrl);
+    if (!hasLocalHomeHero) {
+      out.push(proxyPng);
+      out.push(publicCdnUrl);
+    }
     pushOptimizedTiers(out, optimized, true);
     out.push(MARKETING_HERO_LOCAL_FALLBACK);
     return uniqueStrings(out);
@@ -162,14 +172,18 @@ export function getMarketingHeroImageUrlChain(params: {
 
   if (marketingProxyFallbackEnabled()) {
     pushOptimizedTiers(out, optimized, false);
-    out.push(publicCdnUrl);
-    out.push(proxyPng);
+    if (!hasLocalHomeHero) {
+      out.push(publicCdnUrl);
+      out.push(proxyPng);
+    }
     out.push(MARKETING_HERO_LOCAL_FALLBACK);
     return uniqueStrings(out);
   }
 
   pushOptimizedTiers(out, optimized, false);
-  out.push(publicCdnUrl);
+  if (!hasLocalHomeHero) {
+    out.push(publicCdnUrl);
+  }
   out.push(MARKETING_HERO_LOCAL_FALLBACK);
 
   return uniqueStrings(out);

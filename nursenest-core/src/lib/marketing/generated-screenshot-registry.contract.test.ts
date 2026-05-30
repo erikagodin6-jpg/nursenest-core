@@ -15,9 +15,8 @@ function publicPathExists(src: string): boolean {
   return fs.existsSync(path.join(PUBLIC_DIR, src.slice(1)));
 }
 
-test("current generated marketing screenshots exist on disk", () => {
+test("every generated marketing screenshot path exists on disk", () => {
   for (const record of generatedScreenshotInventory()) {
-    if (record.status !== "current") continue;
     assert.ok(
       publicPathExists(record.path),
       `${record.key} should resolve to an existing generated screenshot: ${record.path}`,
@@ -25,11 +24,12 @@ test("current generated marketing screenshots exist on disk", () => {
   }
 });
 
-test("all generated screenshot fallbacks resolve on disk", () => {
+test("registry uses one canonical path per key (no dual primary/fallback paths)", () => {
   for (const record of generatedScreenshotInventory()) {
-    assert.ok(
-      publicPathExists(record.fallbackPath),
-      `${record.key} fallback should resolve on disk: ${record.fallbackPath}`,
+    assert.equal(
+      record.status,
+      "current",
+      `${record.key} should be current — wire only existing captures, not missing tier paths`,
     );
   }
 });
