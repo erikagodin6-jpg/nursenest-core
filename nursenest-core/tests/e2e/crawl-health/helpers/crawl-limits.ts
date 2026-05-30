@@ -29,7 +29,7 @@ export function crawlLinkSampleHtmlPages(): number {
   const raw = process.env.CRAWL_LINK_SAMPLE_HTML_PAGES;
   if (raw === undefined || raw === "") return 10;
   const n = Number(raw);
-  return Number.isFinite(n) && n >= 1 ? Math.min(Math.floor(n), 80) : 10;
+  return Number.isFinite(n) && n >= 0 ? Math.min(Math.floor(n), 80) : 10;
 }
 
 /** Parallel in-flight page fetches (stay low for production courtesy). */
