@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-30T06:11:50.530Z",
+  "generatedAt": "2026-05-30T07:54:11.266Z",
   "summary": {
     "total": 61,
-    "pass": 23,
-    "warn": 12,
+    "pass": 24,
+    "warn": 11,
     "fail": 11,
     "skip": 15
   },
@@ -135,7 +135,7 @@
       "label": "core/learner-dashboard.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/learner-dashboard.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T06:05:32.423Z"
+      "captureDate": "2026-05-30T06:29:18.815Z"
     },
     {
       "id": "local-core-confidence-analytics-webp",
@@ -143,7 +143,7 @@
       "label": "core/confidence-analytics.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/confidence-analytics.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T06:09:43.825Z"
+      "captureDate": "2026-05-30T06:33:35.976Z"
     },
     {
       "id": "local-core-smart-review-webp",
@@ -151,7 +151,7 @@
       "label": "core/smart-review.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/smart-review.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T06:07:53.173Z"
+      "captureDate": "2026-05-30T06:32:20.321Z"
     },
     {
       "id": "local-core-cat-exam-session-webp",
@@ -159,7 +159,7 @@
       "label": "core/cat-exam-session.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/cat-exam-session.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T05:53:53.386Z"
+      "captureDate": "2026-05-30T06:31:20.340Z"
     },
     {
       "id": "local-core-flashcards-webp",
@@ -167,7 +167,7 @@
       "label": "core/flashcards.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/flashcards.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T06:02:44.234Z"
+      "captureDate": "2026-05-30T06:30:57.880Z"
     },
     {
       "id": "local-core-cat-results-webp",
@@ -175,7 +175,7 @@
       "label": "core/cat-results.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/core/cat-results.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T05:54:05.261Z"
+      "captureDate": "2026-05-30T06:31:29.740Z"
     },
     {
       "id": "local-rn-rn-hub-webp",
@@ -263,7 +263,7 @@
       "label": "marketing/marketing-home-desktop.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/marketing-home-desktop.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T05:48:14.716Z"
+      "captureDate": "2026-05-30T06:20:47.525Z"
     },
     {
       "id": "local-marketing-pricing-webp",
@@ -271,7 +271,7 @@
       "label": "marketing/pricing.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/pricing.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T05:48:57.614Z"
+      "captureDate": "2026-05-30T06:21:55.994Z"
     },
     {
       "id": "local-marketing-faq-webp",
@@ -279,7 +279,7 @@
       "label": "marketing/faq.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/marketing/faq.webp",
       "status": "pass",
-      "captureDate": "2026-05-30T05:32:41.344Z"
+      "captureDate": "2026-05-30T06:22:48.385Z"
     },
     {
       "id": "mobile-mobile-mobile-homepage-webp",
@@ -370,8 +370,7 @@
       "category": "theme-variant",
       "label": "blossom / flashcards.webp",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/themes/blossom/flashcards.webp",
-      "status": "warn",
-      "detail": "Theme variant not generated — run with --theme-variants-only"
+      "status": "pass"
     },
     {
       "id": "theme-blossom-marketing-home-desktop-webp",
@@ -480,7 +479,7 @@
       "label": "capture errors",
       "assetPath": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots/manifest.json",
       "status": "fail",
-      "detail": "flashcards: page.goto: Timeout 90000ms exceeded.\nCall log:\n  - navigating to \"https://nursenest.ca/app/flashcards/custom?pathwayId=ca-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20\", waiting until \"networkidle\"\n"
+      "detail": "flashcards: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible\n; rn-hub: screenshot rejected: blocked text: Preparing; rn-hub: screenshot rejected: blocked text: Preparing; rn-hub: screenshot rejected: blocked text: Preparing"
     },
     {
       "id": "quality-manifest-gate-metadata",

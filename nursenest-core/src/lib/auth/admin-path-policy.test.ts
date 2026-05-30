@@ -16,6 +16,7 @@ test("support staff can access /admin root and support-allowlisted routes", () =
   assert.equal(isPathAllowedForStaffTier("support", "/admin"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/operations"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/users"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/content-command-center"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/curriculum-coverage"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/admin/revenue-protection"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/revenue-protection/users/u1/chargeback-package"), true);

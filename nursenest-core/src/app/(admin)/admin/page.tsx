@@ -71,6 +71,12 @@ function AdminFocusLinks() {
       accent: "blue",
     },
     {
+      href: "/admin/content-command-center",
+      title: "Content command center",
+      copy: "Unified content quality, rationale, scope, curriculum, freshness, and review queues.",
+      accent: "blue",
+    },
+    {
       href: "/admin/curriculum-coverage",
       title: "Curriculum coverage",
       copy: "Map questions, flashcards, lessons, simulations, ECG, pharmacology, and clinical skills to exam competencies.",

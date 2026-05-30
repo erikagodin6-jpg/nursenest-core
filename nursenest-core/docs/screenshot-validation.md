@@ -1,13 +1,13 @@
 # NurseNest Marketing Screenshot Validation Report
 
-**Generated:** 2026-05-30T06:11:50.530Z
+**Generated:** 2026-05-30T07:54:11.266Z
 
 ## Summary
 
 | Status | Count |
 |--------|-------|
-| ✅ Pass | 23 |
-| ⚠️ Warn | 12 |
+| ✅ Pass | 24 |
+| ⚠️ Warn | 11 |
 | ❌ Fail | 11 |
 | Total | 61 |
 
@@ -81,7 +81,7 @@
 | ✅ | `midnight / flashcards.webp` |  |
 | ✅ | `midnight / marketing-home-desktop.webp` |  |
 | ✅ | `blossom / learner-dashboard.webp` |  |
-| ⚠️ | `blossom / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
+| ✅ | `blossom / flashcards.webp` |  |
 | ✅ | `blossom / marketing-home-desktop.webp` |  |
 | ⚠️ | `aurora / learner-dashboard.webp` | Theme variant not generated — run with --theme-variants-only |
 | ⚠️ | `aurora / flashcards.webp` | Theme variant not generated — run with --theme-variants-only |
@@ -105,8 +105,8 @@
 
 | Status | Asset | Detail |
 |--------|-------|--------|
-| ❌ | `capture errors` | flashcards: page.goto: Timeout 90000ms exceeded.
+| ❌ | `capture errors` | flashcards: page.waitForSelector: Timeout 30000ms exceeded.
 Call log:
-  - navigating to "https://nursenest.ca/app/flashcards/custom?pathwayId=ca-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20", waiting until "networkidle"
- |
+  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], [data-nn-flashcard-layout-refinement], .nn-question-stem') to be visible
+; rn-hub: screenshot rejected: blocked text: Preparing; rn-hub: screenshot rejected: blocked text: Preparing; rn-hub: screenshot rejected: blocked text: Preparing |
 | ✅ | `quality gate metadata` |  |
