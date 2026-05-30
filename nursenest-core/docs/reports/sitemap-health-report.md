@@ -1,6 +1,6 @@
 # Sitemap Health Report
 
-Generated: 2026-05-30T04:30:35.117Z
+Generated: 2026-05-30T04:51:15.900Z
 
 ## Sitemap Index Children
 
@@ -28,69 +28,55 @@ Generated: 2026-05-30T04:30:35.117Z
 
 - `npm run sitemap:validate` passed on 2026-05-30.
 - Local segment validation emitted 12 approved sitemap children, 1,413 page URLs, 0 duplicate `<loc>` values, 0 invalid private/excluded locs, 0 errors, and 0 warnings.
-- Local metadata spot checks for production-noindex suspects returned indexable metadata in this workspace:
-  - `/canada/np/cnple/pricing`: no page-level `robots: { index: false }` in generated metadata.
-  - `/canada/np/cnple/np-clinical-practice-cardiovascular`: `robots: { index: true, follow: true }`.
+- Local metadata spot checks for production-noindex suspects returned indexable metadata in this workspace.
 
 ## Live Production Smoke Run
 
-Command:
+`SITEMAP_VERIFY_MAX_URLS=500 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap` checked the first 500 production sitemap URLs on 2026-05-30. It found 38 failures: 17 route timeouts and 21 HTML noindex responses.
 
-```bash
-SITEMAP_VERIFY_MAX_URLS=500 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap
-```
+Timeout URLs:
 
-Result on 2026-05-30:
+- https://nursenest.ca/canada/rn/nclex-rn/questions
+- https://nursenest.ca/us/rn/nclex-rn/questions
+- https://nursenest.ca/us/np/fnp/questions
+- https://nursenest.ca/us/np/pmhnp/questions
+- https://nursenest.ca/us/np/whnp/questions
+- https://nursenest.ca/us/np/pnp-pc
+- https://nursenest.ca/us/np/pnp-pc/pricing
+- https://nursenest.ca/us/np/pnp-pc/questions
+- https://nursenest.ca/us/rn/nclex-rn/test-bank
+- https://nursenest.ca/canada/rpn/rex-pn/test-bank
+- https://nursenest.ca/canada/np/cnple/test-bank
+- https://nursenest.ca/us/np/fnp/test-bank
+- https://nursenest.ca/us/np/agpcnp/test-bank
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-cardiovascular
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-respiratory
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-gastrointestinal
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-neurological
 
-- Production sitemap index exposed 2,318 live URLs.
-- First 500 checked URLs produced 38 failures:
-  - 17 route timeouts.
-  - 21 URLs returning HTML `noindex`.
-- The `noindex` failures are not reproduced by current local metadata generation, which indicates production is either behind the current source or serving a production-only metadata fallback/config path.
+HTML noindex URLs:
 
-Live noindex URLs found in the first 500 checked URLs:
-
-- `https://nursenest.ca/canada/np/cnple/pricing`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-cardiovascular`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-respiratory`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-renal-and-fluid`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-gastrointestinal`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-neurological`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-endocrine`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-musculoskeletal`
-- `https://nursenest.ca/canada/np/cnple/np-clinical-practice-immune-and-infection`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-cardiovascular`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-respiratory`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-renal-and-fluid`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-gastrointestinal`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-neurological`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-endocrine`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-musculoskeletal`
-- `https://nursenest.ca/canada/np/cnple/np-lessons-immune-and-infection`
-- `https://nursenest.ca/canada/np/cnple/pharmacology-nursing-cardiac-meds`
-- `https://nursenest.ca/canada/np/cnple/pharmacology-nursing-diabetes-meds`
-- `https://nursenest.ca/canada/np/cnple/pharmacology-nursing-antibiotics`
-- `https://nursenest.ca/canada/np/cnple/pharmacology-nursing-pain-and-sedation`
-
-Live timeout URLs found in the first 500 checked URLs:
-
-- `https://nursenest.ca/canada/rn/nclex-rn/questions`
-- `https://nursenest.ca/us/rn/nclex-rn/questions`
-- `https://nursenest.ca/us/np/fnp/questions`
-- `https://nursenest.ca/us/np/pmhnp/questions`
-- `https://nursenest.ca/us/np/whnp/questions`
-- `https://nursenest.ca/us/np/pnp-pc`
-- `https://nursenest.ca/us/np/pnp-pc/pricing`
-- `https://nursenest.ca/us/np/pnp-pc/questions`
-- `https://nursenest.ca/us/rn/nclex-rn/test-bank`
-- `https://nursenest.ca/canada/rpn/rex-pn/test-bank`
-- `https://nursenest.ca/canada/np/cnple/test-bank`
-- `https://nursenest.ca/us/np/fnp/test-bank`
-- `https://nursenest.ca/us/np/agpcnp/test-bank`
-- `https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-cardiovascular`
-- `https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-respiratory`
-- `https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-gastrointestinal`
-- `https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-neurological`
+- https://nursenest.ca/canada/np/cnple/pricing
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-cardiovascular
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-respiratory
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-renal-and-fluid
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-gastrointestinal
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-neurological
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-endocrine
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-musculoskeletal
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-immune-and-infection
+- https://nursenest.ca/canada/np/cnple/np-lessons-cardiovascular
+- https://nursenest.ca/canada/np/cnple/np-lessons-respiratory
+- https://nursenest.ca/canada/np/cnple/np-lessons-renal-and-fluid
+- https://nursenest.ca/canada/np/cnple/np-lessons-gastrointestinal
+- https://nursenest.ca/canada/np/cnple/np-lessons-neurological
+- https://nursenest.ca/canada/np/cnple/np-lessons-endocrine
+- https://nursenest.ca/canada/np/cnple/np-lessons-musculoskeletal
+- https://nursenest.ca/canada/np/cnple/np-lessons-immune-and-infection
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-cardiac-meds
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-diabetes-meds
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-antibiotics
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-pain-and-sedation
 
 ## Known Exclusions
 

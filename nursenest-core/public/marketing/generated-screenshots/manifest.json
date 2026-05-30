@@ -1,281 +1,118 @@
 {
-  "generatedAt": "2026-05-29T02:40:02.681Z",
-  "baseUrl": "http://127.0.0.1:3000",
+  "generatedAt": "2026-05-30T04:58:14.958Z",
+  "baseUrl": "https://nursenest.ca",
   "outputDir": "/root/nursenest-core/nursenest-core/public/marketing/generated-screenshots",
-  "totalCaptured": 8,
-  "totalErrors": 5,
-  "captures": [
-    {
-      "key": "faq",
-      "tier": "marketing",
-      "label": "FAQ page",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/faq",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/faq.webp",
-        "public/marketing/generated-screenshots/marketing/faq-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/faq-768w.webp",
-        "public/marketing/generated-screenshots/marketing/faq-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:21.179Z"
-    },
-    {
-      "key": "rn-marketing-hub",
-      "tier": "marketing",
-      "label": "RN pathway hub — marketing",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/us/rn/nclex-rn",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/rn-marketing-hub.webp",
-        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-768w.webp",
-        "public/marketing/generated-screenshots/marketing/rn-marketing-hub-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:26.302Z"
-    },
-    {
-      "key": "rn-questions-marketing",
-      "tier": "marketing",
-      "label": "RN Question Bank — marketing",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/us/rn/nclex-rn/questions",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/rn-questions-marketing.webp",
-        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-768w.webp",
-        "public/marketing/generated-screenshots/marketing/rn-questions-marketing-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:32.008Z"
-    },
-    {
-      "key": "rn-lessons-marketing",
-      "tier": "marketing",
-      "label": "RN Lessons — marketing",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/us/rn/nclex-rn/lessons",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing.webp",
-        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-768w.webp",
-        "public/marketing/generated-screenshots/marketing/rn-lessons-marketing-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:37.975Z"
-    },
-    {
-      "key": "pn-marketing-hub",
-      "tier": "marketing",
-      "label": "RPN/PN pathway hub — marketing",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/canada/pn/rex-pn",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/pn-marketing-hub.webp",
-        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-768w.webp",
-        "public/marketing/generated-screenshots/marketing/pn-marketing-hub-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:43.179Z"
-    },
-    {
-      "key": "np-marketing-hub",
-      "tier": "marketing",
-      "label": "NP pathway hub — marketing (CNPLE)",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/canada/np/cnple",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/np-marketing-hub.webp",
-        "public/marketing/generated-screenshots/marketing/np-marketing-hub-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/np-marketing-hub-768w.webp",
-        "public/marketing/generated-screenshots/marketing/np-marketing-hub-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:48.496Z"
-    },
-    {
-      "key": "allied-marketing-hub",
-      "tier": "marketing",
-      "label": "Allied Health hub — marketing",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/allied/allied-health",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/allied-marketing-hub.webp",
-        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-768w.webp",
-        "public/marketing/generated-screenshots/marketing/allied-marketing-hub-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:39:54.875Z"
-    },
-    {
-      "key": "new-grad-marketing-hub",
-      "tier": "marketing",
-      "label": "New Grad hub — marketing",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "route": "/canada/new-grad",
-      "files": [
-        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub.webp",
-        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-1200w.webp",
-        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-768w.webp",
-        "public/marketing/generated-screenshots/marketing/new-grad-marketing-hub-480w.webp"
-      ],
-      "qualityGate": {
-        "passed": true,
-        "readinessChecks": [
-          "marketing page content"
-        ],
-        "blockedStatesRejected": [
-          "Just a moment",
-          "Loading",
-          "Please wait",
-          "Fetching",
-          "Preparing",
-          "Application error",
-          "Something went wrong"
-        ]
-      },
-      "generatedAt": "2026-05-29T02:40:02.449Z"
-    }
-  ],
+  "totalCaptured": 0,
+  "totalErrors": 18,
+  "captures": [],
   "errors": [
     {
-      "key": "marketing-home-desktop",
+      "key": "practice-rationale",
       "theme": "ocean",
       "viewport": "desktop",
-      "error": "screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6)"
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
     },
     {
-      "key": "marketing-home-desktop",
+      "key": "practice-rationale",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
+    },
+    {
+      "key": "practice-rationale",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
+    },
+    {
+      "key": "practice-rationale",
+      "theme": "aurora",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
+    },
+    {
+      "key": "practice-rationale",
+      "theme": "sage-garden",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-question-stem, [data-testid*=\\'question\\' i], [data-nn-question-card]') to be visible\n"
+    },
+    {
+      "key": "flashcards",
       "theme": "ocean",
-      "viewport": "tablet",
-      "error": "screenshot rejected: blocked selector: [data-testid*='skeleton' i] (5)"
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
     },
     {
-      "key": "marketing-home-desktop",
+      "key": "flashcards",
       "theme": "ocean",
       "viewport": "mobile",
-      "error": "screenshot rejected: blocked selector: [data-testid*='skeleton' i] (6)"
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
     },
     {
-      "key": "pricing",
+      "key": "flashcards",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "flashcards",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "flashcards",
+      "theme": "aurora",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "flashcards",
+      "theme": "sage-garden",
+      "viewport": "desktop",
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.nn-flashcard-rich, [data-nn-premium-flashcard-active-session], .nn-question-stem') to be visible\n"
+    },
+    {
+      "key": "learner-dashboard",
       "theme": "ocean",
       "viewport": "desktop",
-      "error": "screenshot rejected: blocked text: Just a moment; blocked text: Loading"
+      "error": "screenshot rejected: blocked text: Preparing"
     },
     {
-      "key": "pricing",
+      "key": "learner-dashboard",
       "theme": "ocean",
       "viewport": "tablet",
-      "error": "screenshot rejected: blocked text: Just a moment; blocked text: Loading"
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "learner-dashboard",
+      "theme": "ocean",
+      "viewport": "mobile",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "learner-dashboard",
+      "theme": "midnight",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "learner-dashboard",
+      "theme": "blossom",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "learner-dashboard",
+      "theme": "aurora",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
+    },
+    {
+      "key": "learner-dashboard",
+      "theme": "sage-garden",
+      "viewport": "desktop",
+      "error": "screenshot rejected: blocked text: Preparing"
     }
   ]
 }

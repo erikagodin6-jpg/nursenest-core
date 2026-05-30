@@ -1,6 +1,6 @@
 # SEO 5xx Audit
 
-Generated: 2026-05-30T04:30:35.117Z
+Generated: 2026-05-30T04:51:15.900Z
 
 ## Search Console Signal
 
@@ -21,14 +21,23 @@ Generated: 2026-05-30T04:30:35.117Z
 
 `SITEMAP_VERIFY_MAX_URLS=500 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap` checked the first 500 production sitemap URLs on 2026-05-30. It found 17 route timeouts. Search Console may classify repeated crawler timeouts as Server Error / 5xx-equivalent availability failures.
 
-| Template / Surface | Example URLs | Likely Failure Cause | Priority |
-| --- | --- | --- | --- |
-| Pathway question landing pages | `/canada/rn/nclex-rn/questions`, `/us/rn/nclex-rn/questions`, `/us/np/fnp/questions`, `/us/np/pmhnp/questions`, `/us/np/whnp/questions`, `/us/np/pnp-pc/questions` | Slow server render, metadata validation, DB/content-loader dependency, or upstream timeout. | P0 |
-| NP pathway hub/pricing | `/us/np/pnp-pc`, `/us/np/pnp-pc/pricing` | Slow pathway resolution or pricing page render for PNP-PC. | P0 |
-| Test-bank marketing pages | `/us/rn/nclex-rn/test-bank`, `/canada/rpn/rex-pn/test-bank`, `/canada/np/cnple/test-bank`, `/us/np/fnp/test-bank`, `/us/np/agpcnp/test-bank` | Commercial landing template timeout. | P0 |
-| REx-PN body-system practice pages | `/canada/pn/rex-pn/rex-pn-practice-questions-cardiovascular`, `/respiratory`, `/gastrointestinal`, `/neurological` | Programmatic topic render timeout. | P0 |
-
-Immediate remediation target: profile these templates in production, enforce bounded data loading and metadata generation, then rerun the live sitemap smoke until timeout count is zero.
+- https://nursenest.ca/canada/rn/nclex-rn/questions
+- https://nursenest.ca/us/rn/nclex-rn/questions
+- https://nursenest.ca/us/np/fnp/questions
+- https://nursenest.ca/us/np/pmhnp/questions
+- https://nursenest.ca/us/np/whnp/questions
+- https://nursenest.ca/us/np/pnp-pc
+- https://nursenest.ca/us/np/pnp-pc/pricing
+- https://nursenest.ca/us/np/pnp-pc/questions
+- https://nursenest.ca/us/rn/nclex-rn/test-bank
+- https://nursenest.ca/canada/rpn/rex-pn/test-bank
+- https://nursenest.ca/canada/np/cnple/test-bank
+- https://nursenest.ca/us/np/fnp/test-bank
+- https://nursenest.ca/us/np/agpcnp/test-bank
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-cardiovascular
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-respiratory
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-gastrointestinal
+- https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-neurological
 
 ## Highest-Risk Templates To Check First
 

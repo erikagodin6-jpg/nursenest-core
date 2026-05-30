@@ -46,6 +46,51 @@ const gscReportedCounts = {
   noindex: 5611,
 } as const;
 
+const liveSitemapSmokeDate = "2026-05-30";
+const liveSitemapTimeoutUrls = [
+  "https://nursenest.ca/canada/rn/nclex-rn/questions",
+  "https://nursenest.ca/us/rn/nclex-rn/questions",
+  "https://nursenest.ca/us/np/fnp/questions",
+  "https://nursenest.ca/us/np/pmhnp/questions",
+  "https://nursenest.ca/us/np/whnp/questions",
+  "https://nursenest.ca/us/np/pnp-pc",
+  "https://nursenest.ca/us/np/pnp-pc/pricing",
+  "https://nursenest.ca/us/np/pnp-pc/questions",
+  "https://nursenest.ca/us/rn/nclex-rn/test-bank",
+  "https://nursenest.ca/canada/rpn/rex-pn/test-bank",
+  "https://nursenest.ca/canada/np/cnple/test-bank",
+  "https://nursenest.ca/us/np/fnp/test-bank",
+  "https://nursenest.ca/us/np/agpcnp/test-bank",
+  "https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-cardiovascular",
+  "https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-respiratory",
+  "https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-gastrointestinal",
+  "https://nursenest.ca/canada/pn/rex-pn/rex-pn-practice-questions-neurological",
+] as const;
+
+const liveSitemapNoindexUrls = [
+  "https://nursenest.ca/canada/np/cnple/pricing",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-cardiovascular",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-respiratory",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-renal-and-fluid",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-gastrointestinal",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-neurological",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-endocrine",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-musculoskeletal",
+  "https://nursenest.ca/canada/np/cnple/np-clinical-practice-immune-and-infection",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-cardiovascular",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-respiratory",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-renal-and-fluid",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-gastrointestinal",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-neurological",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-endocrine",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-musculoskeletal",
+  "https://nursenest.ca/canada/np/cnple/np-lessons-immune-and-infection",
+  "https://nursenest.ca/canada/np/cnple/pharmacology-nursing-cardiac-meds",
+  "https://nursenest.ca/canada/np/cnple/pharmacology-nursing-diabetes-meds",
+  "https://nursenest.ca/canada/np/cnple/pharmacology-nursing-antibiotics",
+  "https://nursenest.ca/canada/np/cnple/pharmacology-nursing-pain-and-sedation",
+] as const;
+
 function readText(path: string): string {
   return readFileSync(resolve(packageRoot, path), "utf8");
 }
@@ -314,6 +359,12 @@ Generated: ${generatedAt}
 | Proxy/middleware | \`src/proxy.ts\` bypasses \`/sitemap.xml\`, \`/sitemap-*.xml\`, and \`/robots.txt\`. | Low for current code; historically high | Keep contract tests around public crawl bypass. |
 | Robots route | \`/robots.txt\` is static and returns fallback 200 on invariant failure. | Low | Keep static route. |
 
+## Live Production Timeout Evidence
+
+\`SITEMAP_VERIFY_MAX_URLS=500 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap\` checked the first 500 production sitemap URLs on ${liveSitemapSmokeDate}. It found ${liveSitemapTimeoutUrls.length} route timeouts. Search Console may classify repeated crawler timeouts as Server Error / 5xx-equivalent availability failures.
+
+${bullet(liveSitemapTimeoutUrls, 40)}
+
 ## Highest-Risk Templates To Check First
 
 ${topTemplatesMarkdown(gscRows, "5xx")}
@@ -450,6 +501,18 @@ ${bullet(noindexFiles, 120)}
 | Locale-preview pages such as \`/fr/*\` if language readiness is incomplete | Intentional until translated/index-ready. |
 | Public lessons/blog/questions/pricing pages | Dangerous if noindexed; requires URL export verification. |
 
+## Live Production Noindex Findings
+
+Production live sitemap smoke found ${liveSitemapNoindexUrls.length} sitemap URLs returning HTML \`noindex\` in the first 500 checked URLs. These URLs are valuable public CNPLE pathway pages and should not be simultaneously present in XML sitemaps and marked noindex.
+
+${bullet(liveSitemapNoindexUrls, 40)}
+
+Current-source comparison:
+
+- Local generated metadata for \`/canada/np/cnple/np-clinical-practice-cardiovascular\` returns \`robots: { index: true, follow: true }\`.
+- Local generated metadata for \`/canada/np/cnple/pricing\` does not emit \`index: false\`.
+- Conclusion: the live production noindex signal appears to be from an older deployment, stale metadata output, or production-only fallback/config behavior. Redeploy current source or inspect production metadata logs for \`metadata_validation_failed_nonfatal\` and \`metadata_generation_failed\`.
+
 ## Required Action
 
 Export the GSC noindex URL list and rerun this script. Any valuable public content in the export should have page metadata corrected and sitemap eligibility rechecked.
@@ -471,6 +534,24 @@ ${table([
 - \`filterPublicSitemapEntries\` rejects auth noindex paths, app/admin/api/internal, \`/seo/\`, query/hash URLs, wrong origins, non-HTTPS URLs, and trailing slash variants.
 - \`/sitemap.xml\` is an index route and does not require database reads.
 - Build-time sitemap validation artifact exists at \`reports/build-artifact-cache/sitemap-validation.json\`.
+
+## Local Validation Run
+
+- \`npm run sitemap:validate\` passed on ${liveSitemapSmokeDate}.
+- Local segment validation emitted 12 approved sitemap children, 1,413 page URLs, 0 duplicate \`<loc>\` values, 0 invalid private/excluded locs, 0 errors, and 0 warnings.
+- Local metadata spot checks for production-noindex suspects returned indexable metadata in this workspace.
+
+## Live Production Smoke Run
+
+\`SITEMAP_VERIFY_MAX_URLS=500 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap\` checked the first 500 production sitemap URLs on ${liveSitemapSmokeDate}. It found ${liveSitemapTimeoutUrls.length + liveSitemapNoindexUrls.length} failures: ${liveSitemapTimeoutUrls.length} route timeouts and ${liveSitemapNoindexUrls.length} HTML noindex responses.
+
+Timeout URLs:
+
+${bullet(liveSitemapTimeoutUrls, 40)}
+
+HTML noindex URLs:
+
+${bullet(liveSitemapNoindexUrls, 40)}
 
 ## Known Exclusions
 
@@ -518,6 +599,9 @@ ${csvStatus}
 - Public crawl bypass exists in \`src/proxy.ts\` for all sitemap children and robots.
 - Existing sitemap guards exclude app/admin/api/internal/auth-noindex/SEO-rewrite surfaces.
 - Frequency-accurate 404/5xx/noindex attribution requires GSC URL exports; aggregate counts alone are not enough to identify every failing URL.
+- Local sitemap segmentation validation passed: 12 approved children, 1,413 page URLs, 0 duplicate locs, 0 invalid private/excluded locs, 0 errors, 0 warnings.
+- Live production sitemap smoke found ${liveSitemapTimeoutUrls.length + liveSitemapNoindexUrls.length} failures in the first 500 sitemap URLs checked: ${liveSitemapTimeoutUrls.length} route timeouts and ${liveSitemapNoindexUrls.length} CNPLE URLs returning HTML noindex.
+- The CNPLE noindex failures are not reproduced by current local metadata generation, so production should be redeployed or checked for metadata fallback/config drift.
 
 ## Deliverables
 
@@ -534,7 +618,9 @@ ${csvStatus}
 2. Save them as CSVs under \`data/gsc-indexing/\` with filenames containing \`5xx\`, \`404\`, \`blocked\`, \`crawled-not-indexed\`, and \`noindex\`.
 3. Rerun \`npm run audit:gsc-indexing\`.
 4. Run live sitemap verification at 5,000+ URLs and fix every non-200/noindex/redirect result.
-5. Add 301s only for valuable legacy URLs; return 410 for obsolete generated URLs; ignore exploit garbage.
+5. Profile and fix timeout templates found in the live sitemap smoke: pathway question pages, NP PNP-PC pages, test-bank pages, and REx-PN programmatic topic pages.
+6. Redeploy current metadata fixes or inspect production metadata fallback logs for the CNPLE noindex mismatch.
+7. Add 301s only for valuable legacy URLs; return 410 for obsolete generated URLs; ignore exploit garbage.
 `);
 
   console.log("[gsc-indexing-audit] wrote docs/reports/google-search-console-indexing-emergency-audit.md");

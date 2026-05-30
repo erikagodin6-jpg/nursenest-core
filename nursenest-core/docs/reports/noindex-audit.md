@@ -1,6 +1,6 @@
 # Noindex Audit
 
-Generated: 2026-05-30T04:30:35.117Z
+Generated: 2026-05-30T04:51:15.900Z
 
 ## Search Console Signal
 
@@ -144,6 +144,38 @@ _No Search Console URL export rows were available for this issue._
 | Auth pages such as login, signup, forgot/reset password | Intentional noindex, follow. |
 | Locale-preview pages such as `/fr/*` if language readiness is incomplete | Intentional until translated/index-ready. |
 | Public lessons/blog/questions/pricing pages | Dangerous if noindexed; requires URL export verification. |
+
+## Live Production Noindex Findings
+
+Production live sitemap smoke found 21 sitemap URLs returning HTML `noindex` in the first 500 checked URLs. These URLs are valuable public CNPLE pathway pages and should not be simultaneously present in XML sitemaps and marked noindex.
+
+- https://nursenest.ca/canada/np/cnple/pricing
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-cardiovascular
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-respiratory
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-renal-and-fluid
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-gastrointestinal
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-neurological
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-endocrine
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-musculoskeletal
+- https://nursenest.ca/canada/np/cnple/np-clinical-practice-immune-and-infection
+- https://nursenest.ca/canada/np/cnple/np-lessons-cardiovascular
+- https://nursenest.ca/canada/np/cnple/np-lessons-respiratory
+- https://nursenest.ca/canada/np/cnple/np-lessons-renal-and-fluid
+- https://nursenest.ca/canada/np/cnple/np-lessons-gastrointestinal
+- https://nursenest.ca/canada/np/cnple/np-lessons-neurological
+- https://nursenest.ca/canada/np/cnple/np-lessons-endocrine
+- https://nursenest.ca/canada/np/cnple/np-lessons-musculoskeletal
+- https://nursenest.ca/canada/np/cnple/np-lessons-immune-and-infection
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-cardiac-meds
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-diabetes-meds
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-antibiotics
+- https://nursenest.ca/canada/np/cnple/pharmacology-nursing-pain-and-sedation
+
+Current-source comparison:
+
+- Local generated metadata for `/canada/np/cnple/np-clinical-practice-cardiovascular` returns `robots: { index: true, follow: true }`.
+- Local generated metadata for `/canada/np/cnple/pricing` does not emit `index: false`.
+- Conclusion: the live production noindex signal appears to be from an older deployment, stale metadata output, or production-only fallback/config behavior. Redeploy current source or inspect production metadata logs for `metadata_validation_failed_nonfatal` and `metadata_generation_failed`.
 
 ## Required Action
 

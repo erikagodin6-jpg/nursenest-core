@@ -1,6 +1,6 @@
 # Google Search Console Indexing Emergency Audit
 
-Generated: 2026-05-30T04:30:35.117Z
+Generated: 2026-05-30T04:51:15.900Z
 
 ## Executive Summary
 
@@ -21,6 +21,9 @@ No local GSC URL CSV exports found. Reports use the aggregate counts from the pr
 - Public crawl bypass exists in `src/proxy.ts` for all sitemap children and robots.
 - Existing sitemap guards exclude app/admin/api/internal/auth-noindex/SEO-rewrite surfaces.
 - Frequency-accurate 404/5xx/noindex attribution requires GSC URL exports; aggregate counts alone are not enough to identify every failing URL.
+- Local sitemap segmentation validation passed: 12 approved children, 1,413 page URLs, 0 duplicate locs, 0 invalid private/excluded locs, 0 errors, 0 warnings.
+- Live production sitemap smoke found 38 failures in the first 500 sitemap URLs checked: 17 route timeouts and 21 CNPLE URLs returning HTML noindex.
+- The CNPLE noindex failures are not reproduced by current local metadata generation, so production should be redeployed or checked for metadata fallback/config drift.
 
 ## Deliverables
 
@@ -37,4 +40,6 @@ No local GSC URL CSV exports found. Reports use the aggregate counts from the pr
 2. Save them as CSVs under `data/gsc-indexing/` with filenames containing `5xx`, `404`, `blocked`, `crawled-not-indexed`, and `noindex`.
 3. Rerun `npm run audit:gsc-indexing`.
 4. Run live sitemap verification at 5,000+ URLs and fix every non-200/noindex/redirect result.
-5. Add 301s only for valuable legacy URLs; return 410 for obsolete generated URLs; ignore exploit garbage.
+5. Profile and fix timeout templates found in the live sitemap smoke: pathway question pages, NP PNP-PC pages, test-bank pages, and REx-PN programmatic topic pages.
+6. Redeploy current metadata fixes or inspect production metadata fallback logs for the CNPLE noindex mismatch.
+7. Add 301s only for valuable legacy URLs; return 410 for obsolete generated URLs; ignore exploit garbage.

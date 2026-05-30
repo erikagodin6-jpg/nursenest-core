@@ -9,7 +9,11 @@ test("collectExamPathwayUrls includes US RN, CA RN, US NCLEX-PN, and CA REx-PN m
   const origin = "https://www.example.test";
   const script = `
     (async () => {
-      const { collectExamPathwayUrls } = await import("./src/lib/seo/sitemap-static-xml.ts");
+      const mod = await import("./src/lib/seo/sitemap-static-xml.ts");
+      const collectExamPathwayUrls = mod.collectExamPathwayUrls ?? mod.default?.collectExamPathwayUrls;
+      if (typeof collectExamPathwayUrls !== "function") {
+        throw new TypeError("collectExamPathwayUrls is not exported");
+      }
       const urls = await collectExamPathwayUrls(${JSON.stringify(origin)});
       process.stdout.write(JSON.stringify(urls));
     })().catch((error) => {
