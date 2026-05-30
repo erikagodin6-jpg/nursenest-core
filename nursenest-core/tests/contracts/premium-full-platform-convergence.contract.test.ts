@@ -157,7 +157,15 @@ describe("premium full platform convergence", () => {
       "practice setup must expose one canonical Start action",
     );
     assert.match(flashcardsClient, /LearnerStudyPageShell/, "flashcards must remain on the original learner study shell");
-    assert.match(flashcardsClient, /data-nn-e2e-flashcards-setup-panel/, "flashcards must keep the collapsible session setup panel");
+    assert.match(flashcardsClient, /data-nn-e2e-flashcards-launcher/, "flashcards must render the setup launcher before the session");
+    assert.match(flashcardsClient, /Choose What to Study/, "flashcards launcher must keep the original setup headline");
+    assert.match(flashcardsClient, /1\. Systems &amp; Categories/, "flashcards launcher must expose system selection as step 1");
+    assert.match(flashcardsClient, /2\. Study Filters/, "flashcards launcher must expose study filters as step 2");
+    assert.match(flashcardsClient, /3\. Card Count/, "flashcards launcher must expose card count as step 3");
+    assert.match(flashcardsClient, /Start Flashcards/, "flashcards launcher must expose the original Start Flashcards CTA");
+    assert.doesNotMatch(flashcardsClient, /Fine-tune session length/, "flashcards setup must not be hidden in a collapsed fine-tune drawer");
+    assert.match(flashcardsClient, /data-nn-e2e-flashcards-system-card/, "flashcards launcher must expose clickable system cards");
+    assert.match(flashcardsClient, /data-nn-e2e-session-size-preset/, "flashcards launcher must expose visible card-count presets");
     assert.doesNotMatch(flashcardsClient, /SharedStudySetupLayout/, "flashcards must not use the converged shared setup shell");
   });
 

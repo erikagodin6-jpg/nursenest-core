@@ -18,7 +18,7 @@ export type FlashcardsHubPreferencesV1 = {
   notStudiedOnly: boolean;
 };
 
-export const FLASHCARD_SESSION_PRESETS = [10, 20, 50, 100] as const;
+export const FLASHCARD_SESSION_PRESETS = [10, 25, 50, 100, 250] as const;
 
 export function flashcardsHubPrefsStorageKey(pathwayId: string): string {
   return `nn_flashcards_hub_prefs_v1_${pathwayId.trim()}`;
@@ -27,7 +27,7 @@ export function flashcardsHubPrefsStorageKey(pathwayId: string): string {
 export function defaultFlashcardsHubPreferences(): FlashcardsHubPreferencesV1 {
   return {
     v: 1,
-    cardLimit: 20,
+    cardLimit: 25,
     customCardLimit: null,
     shuffleOn: true,
     selectedCanonicalIds: [],
@@ -39,14 +39,14 @@ export function defaultFlashcardsHubPreferences(): FlashcardsHubPreferencesV1 {
 }
 
 function clampCustomLimit(n: number): number {
-  if (!Number.isFinite(n)) return 20;
+  if (!Number.isFinite(n)) return 25;
   return Math.min(500, Math.max(10, Math.floor(n)));
 }
 
 function parseCardLimit(raw: unknown): FlashcardsHubCardLimit {
   if (raw === "all") return "all";
   const n = Number(raw);
-  if (!Number.isFinite(n)) return 20;
+  if (!Number.isFinite(n)) return 25;
   if (FLASHCARD_SESSION_PRESETS.includes(n as (typeof FLASHCARD_SESSION_PRESETS)[number])) {
     return n;
   }

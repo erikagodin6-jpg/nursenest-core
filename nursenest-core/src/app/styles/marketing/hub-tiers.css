@@ -682,6 +682,7 @@ html[data-theme="deep-twilight"] [data-nn-nursing-tier-hub="surface"] {
   max-width: min(100%, 78rem);
   margin-top: clamp(1.5rem, 2.5vw, 2rem);
   padding: clamp(1.25rem, 2.6vw, 2rem);
+  grid-auto-rows: 1fr;
   border-radius: var(--nn-nursing-hub-radius-lg);
   border-color: color-mix(in srgb, var(--semantic-brand) 12%, var(--nn-nursing-hub-border));
   background:
@@ -700,7 +701,9 @@ html[data-theme="deep-twilight"] [data-nn-nursing-tier-hub="surface"] {
 }
 
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card {
+  height: 100%;
   min-height: 12.75rem;
+  justify-content: space-between;
   border-radius: var(--nn-nursing-hub-radius);
   border-color: var(--nn-nursing-hub-border);
   background: var(--nn-nursing-hub-surface);
@@ -734,6 +737,7 @@ html[data-theme="deep-twilight"] [data-nn-nursing-tier-hub="surface"] {
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card__icon {
   width: 3rem;
   height: 3rem;
+  flex: 0 0 auto;
   border-radius: 0.875rem;
   color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
 }
@@ -749,6 +753,7 @@ html[data-theme="deep-twilight"] [data-nn-nursing-tier-hub="surface"] {
 }
 
 [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-study-card-cta {
+  align-self: center;
   min-height: 2.75rem;
   border-radius: 0.875rem;
   transition:
@@ -830,9 +835,11 @@ html[data-theme="deep-twilight"] [data-nn-nursing-tier-hub="surface"] {
   }
 
   [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-study-card-cta {
+    align-self: stretch;
     width: 100%;
   }
 }
+/* End nursing hub clinical polish pass. */
 
 [data-theme="midnight"]
   [data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence)

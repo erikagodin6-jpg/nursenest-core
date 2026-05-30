@@ -46,7 +46,7 @@ async function gotoPracticeHub(page: import("@playwright/test").Page, baseURL: s
 }
 
 test.describe("Launcher restoration — flashcards hub", () => {
-  test("shows canonical grid, setup panel, and start CTA before study session", async ({ page, baseURL }, testInfo) => {
+  test("shows original setup steps, system grid, and start CTA before study session", async ({ page, baseURL }, testInfo) => {
     test.setTimeout(180_000);
     const observers = attachPageObservers(page, { profile: "app" });
     try {
@@ -54,7 +54,12 @@ test.describe("Launcher restoration — flashcards hub", () => {
       test.skip(!ok, "Hub not accessible.");
       const main = learnerAppMainLandmark(page);
       await expect(main.locator("[data-nn-e2e-flashcards-hub]")).toBeVisible({ timeout: 60_000 });
+      await expect(main.getByRole("heading", { name: "Choose What to Study" })).toBeVisible();
+      await expect(main.getByText("1. Systems & Categories")).toBeVisible();
+      await expect(main.getByText("2. Study Filters")).toBeVisible();
+      await expect(main.getByText("3. Card Count")).toBeVisible();
       await expect(main.locator("[data-nn-e2e-flashcards-canonical-grid]")).toBeVisible();
+      await expect(main.locator("[data-nn-e2e-flashcards-system-card]").first()).toBeVisible();
       await expect(main.locator("[data-nn-e2e-flashcards-setup-panel]")).toBeVisible();
       await expect(main.locator("[data-nn-e2e-start-review]").first()).toBeVisible();
       await expect(page.locator(".nn-premium-flashcard-session-root.nn-flashcard-study-premium")).toHaveCount(0);
@@ -71,10 +76,9 @@ test.describe("Launcher restoration — flashcards hub", () => {
       const ok = await gotoFlashcardsHub(page, baseURL);
       test.skip(!ok, "Hub not accessible.");
       const main = learnerAppMainLandmark(page);
-      await main.locator("[data-nn-e2e-flashcards-setup-panel] summary").click();
-      await main.locator('[data-nn-e2e-session-size-preset="20"]').click();
+      await main.locator('[data-nn-e2e-session-size-preset="25"]').click();
       const href = await main.locator("[data-nn-e2e-start-review]").first().getAttribute("href");
-      expect(href ?? "").toMatch(/cardLimit=20/);
+      expect(href ?? "").toMatch(/cardLimit=25/);
     } finally {
       observers.dispose();
       await logObserverDiagnostics(observers, testInfo.title);
