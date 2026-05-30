@@ -25,7 +25,7 @@ export type QuickActionGuided = {
   weakAreasFlashcardsHref?: string | null;
   /** A completed mock/practice item in the recent window. */
   hasRecentCompletion?: boolean;
-  /** Pathway-specific CAT start href (e.g. `/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1`). */
+  /** Pathway-specific practice launcher href (e.g. `/app/practice-tests?pathwayId=us-rn-nclex-rn`). */
   catStartHref?: string | null;
   /** Whether the CAT CTA is pathway-scoped or still needs explicit pathway selection. */
   catDestinationKind?: "app_start" | "generic_chooser";
@@ -86,7 +86,7 @@ export function QuickActionPanel({
   const weakHref = hasWeakAreas
     ? (guided?.weakAreasFlashcardsHref?.trim() || "/app/flashcards/weak-areas")
     : "/app/questions";
-  const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests?catLaunch=1";
+  const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests";
   const catScoped =
     guided?.catDestinationKind === "app_start" && Boolean(guided?.catPathwayLabel?.trim() && guided?.catPathwayLine?.trim());
 

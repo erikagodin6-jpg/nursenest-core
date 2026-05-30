@@ -26,6 +26,10 @@ type GscUrlRow = {
   pathname: string;
   issue: GscIssueKind;
   sourceFile: string;
+  errorCode?: string;
+  frequency?: string;
+  firstSeen?: string;
+  lastSeen?: string;
 };
 
 type PatternFinding = {
@@ -193,6 +197,56 @@ function urlColumn(row: CsvRow): string | null {
   return keys[0] ?? null;
 }
 
+function csvField(row: CsvRow, candidates: readonly string[]): string | undefined {
+  const entries = Object.entries(row);
+  for (const candidate of candidates) {
+    const exact = entries.find(([key]) => key.toLowerCase() === candidate.toLowerCase());
+    const value = exact?.[1]?.trim();
+    if (value) return value;
+  }
+  for (const candidate of candidates) {
+    const needle = candidate.toLowerCase();
+    const fuzzy = entries.find(([key]) => key.toLowerCase().includes(needle));
+    const value = fuzzy?.[1]?.trim();
+    if (value) return value;
+  }
+  return undefined;
+}
+
+function routeTypeForPathname(pathname: string): string {
+  if (/^\/api(\/|$)/i.test(pathname)) return "API Routes";
+  if (/\/blog(\/|$)/i.test(pathname)) return "Blog";
+  if (/\/lessons?(\/|$)|\/np-lessons-|\/lesson-/i.test(pathname)) return "Lessons";
+  if (/\/questions?(\/|$)|practice-questions/i.test(pathname)) return "Questions";
+  if (/\/flashcards?(\/|$)/i.test(pathname)) return "Flashcards";
+  if (/\/practice-exams?(\/|$)|\/cat(\/|$)|\/test-bank(\/|$)/i.test(pathname)) return "Practice Tests";
+  if (/\/simulations?(\/|$)|\/loft(\/|$)/i.test(pathname)) return "Simulation Pages";
+  if (/\/ecg(\/|$)|ecg-/i.test(pathname)) return "ECG";
+  if (/\/(fr|es)(\/|$)/i.test(pathname)) return "Localized Pages";
+  if (/^\/(canada|us)\/[^/]+\/[^/]+/i.test(pathname)) return "Marketing Pages";
+  return "Marketing Pages";
+}
+
+function severityFor5xx(row: GscUrlRow): string {
+  const code = (row.errorCode ?? "").toLowerCase();
+  const freq = Number.parseInt(row.frequency ?? "", 10);
+  if (/500|502|503|504|timeout/.test(code) || Number.isNaN(freq)) return "Critical";
+  if (freq >= 100) return "Critical";
+  if (freq >= 25) return "High";
+  return "High";
+}
+
+function templateForPathname(pathname: string): string {
+  return pathname
+    .replace(/\/[0-9a-f]{16,}(?=\/|$)/gi, "/:id")
+    .replace(/\/\d+(?=\/|$)/g, "/:number")
+    .replace(/\/[^/]+\.(?:png|jpg|jpeg|webp|gif|svg|css|js)$/i, "/:asset")
+    .replace(/\/blog\/[^/]+$/i, "/blog/:slug")
+    .replace(/\/questions\/[^/]+$/i, "/questions/:slug")
+    .replace(/\/resources\/[^/]+$/i, "/resources/:slug")
+    .replace(/\/tools\/[^/]+$/i, "/tools/:slug");
+}
+
 function collectGscRows(): GscUrlRow[] {
   const dirs = [
     process.env.GSC_EXPORT_DIR,
@@ -219,11 +273,37 @@ function collectGscRows(): GscUrlRow[] {
         } catch {
           pathname = raw.startsWith("/") ? raw : `/${raw}`;
         }
-        rows.push({ url: raw, pathname, issue, sourceFile: relative(packageRoot, abs) });
+        const errorCode = csvField(row, ["Error Code", "HTTP Status", "Status Code", "Response Code", "Status", "Type"]);
+        rows.push({
+          url: raw,
+          pathname,
+          issue,
+          sourceFile: relative(packageRoot, abs),
+          errorCode,
+          frequency: csvField(row, ["Frequency", "Count", "Occurrences", "Affected URLs", "Pages"]),
+          firstSeen: csvField(row, ["First Seen", "First detected", "First Detected", "Detected"]),
+          lastSeen: csvField(row, ["Last Seen", "Last crawled", "Last Crawled", "Last detected", "Updated"]),
+        });
       }
     }
   }
   return rows;
+}
+
+function provisional5xxRowsFromLiveTimeouts(): GscUrlRow[] {
+  return liveSitemapTimeoutUrls.map((url) => {
+    const pathname = new URL(url).pathname;
+    return {
+      url,
+      pathname,
+      issue: "5xx",
+      sourceFile: "docs/reports/seo-5xx-audit.md",
+      errorCode: "timeout",
+      frequency: "Unable To Verify",
+      firstSeen: liveSitemapSmokeDate,
+      lastSeen: liveSitemapSmokeDate,
+    };
+  });
 }
 
 async function getRobotsBody(): Promise<string> {
@@ -271,15 +351,7 @@ function classify404Path(pathname: string): PatternFinding {
 function classifyByTemplate(rows: GscUrlRow[], issue: GscIssueKind): Map<string, number> {
   const map = new Map<string, number>();
   for (const row of rows.filter((r) => r.issue === issue || issue === "unknown")) {
-    const path = row.pathname;
-    const template = path
-      .replace(/\/[0-9a-f]{16,}(?=\/|$)/gi, "/:id")
-      .replace(/\/\d+(?=\/|$)/g, "/:number")
-      .replace(/\/[^/]+\.(?:png|jpg|jpeg|webp|gif|svg|css|js)$/i, "/:asset")
-      .replace(/\/blog\/[^/]+$/i, "/blog/:slug")
-      .replace(/\/questions\/[^/]+$/i, "/questions/:slug")
-      .replace(/\/resources\/[^/]+$/i, "/resources/:slug")
-      .replace(/\/tools\/[^/]+$/i, "/tools/:slug");
+    const template = templateForPathname(row.pathname);
     map.set(template, (map.get(template) ?? 0) + 1);
   }
   return new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
@@ -313,6 +385,67 @@ function topTemplatesMarkdown(rows: GscUrlRow[], issue: GscIssueKind): string {
   return table([["Template", "Count"], ...templates.map(([template, count]) => [template, String(count)])]);
 }
 
+function fiveXxInventoryMarkdown(rows: readonly GscUrlRow[], exactGscExportLoaded: boolean): string {
+  const grouped = new Map<string, GscUrlRow[]>();
+  for (const row of rows) {
+    const routeType = routeTypeForPathname(row.pathname);
+    const bucket = grouped.get(routeType) ?? [];
+    bucket.push(row);
+    grouped.set(routeType, bucket);
+  }
+  const sections = [...grouped.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([routeType, bucket]) => {
+      const sorted = [...bucket].sort((a, b) => a.pathname.localeCompare(b.pathname));
+      return `## ${routeType}
+
+${table([
+  ["URL", "Route Type", "Error Code", "Frequency", "First Seen", "Last Seen", "Severity"],
+  ...sorted.map((row) => [
+    row.url,
+    routeTypeForPathname(row.pathname),
+    row.errorCode ?? "5xx",
+    row.frequency ?? (exactGscExportLoaded ? "" : "Unable To Verify"),
+    row.firstSeen ?? (exactGscExportLoaded ? "" : "Unable To Verify"),
+    row.lastSeen ?? (exactGscExportLoaded ? "" : "Unable To Verify"),
+    severityFor5xx(row),
+  ]),
+])}`;
+    });
+  return sections.length > 0 ? sections.join("\n\n") : "_No 5xx URLs available from local GSC exports or live sitemap evidence._";
+}
+
+function fiveXxRootCauseMarkdown(rows: readonly GscUrlRow[], exactGscExportLoaded: boolean): string {
+  const templates = new Map<string, { routeType: string; count: number; examples: string[] }>();
+  for (const row of rows) {
+    const template = templateForPathname(row.pathname);
+    const current = templates.get(template) ?? { routeType: routeTypeForPathname(row.pathname), count: 0, examples: [] };
+    current.count += 1;
+    if (current.examples.length < 3) current.examples.push(row.url);
+    templates.set(template, current);
+  }
+  const templateRows = [...templates.entries()]
+    .sort((a, b) => b[1].count - a[1].count)
+    .map(([template, info]) => [
+      template,
+      info.routeType,
+      String(info.count),
+      info.examples.join("<br>"),
+      exactGscExportLoaded
+        ? "GSC 5xx export row. Exact exception still requires production logs for this template."
+        : "Live production sitemap verifier observed timeout. Exact exception unavailable without production logs.",
+      info.routeType === "Questions"
+        ? "Keep public question hubs DB-budgeted; degrade to cached/skeleton aggregates if Prisma reads exceed route budget."
+        : info.routeType === "Practice Tests"
+          ? "Missing test-bank config must return 404/notFound, not throw. Keep page rendering static and DB-free where possible."
+          : "Audit SSR data dependencies and ensure missing content falls back to 404 or degraded public shell.",
+    ]);
+  return table([
+    ["Route Template", "Route Type", "Affected URLs In Evidence", "Examples", "Verified Cause", "Required Fix"],
+    ...templateRows,
+  ]);
+}
+
 function writeReport(path: string, body: string): void {
   const abs = resolve(packageRoot, path);
   mkdirSync(dirname(abs), { recursive: true });
@@ -329,6 +462,9 @@ function bullet(items: readonly string[], limit = 60): string {
 async function main() {
   const generatedAt = new Date().toISOString();
   const gscRows = collectGscRows();
+  const exact5xxRows = gscRows.filter((r) => r.issue === "5xx");
+  const fiveXxRows = exact5xxRows.length > 0 ? exact5xxRows : provisional5xxRowsFromLiveTimeouts();
+  const exact5xxExportLoaded = exact5xxRows.length > 0;
   const robotsBody = await getRobotsBody();
   const robotsRules = extractRobotsRules(robotsBody);
   const { notFoundCalls, noindexFiles, routeErrorFiles } = sourceFindings();
@@ -339,6 +475,72 @@ async function main() {
   const noPublicBlocked = robotsRules.every((r) => r.classification === "Should be blocked");
   const redirectSource = readText("next.config.mjs");
   const redirectCount = (redirectSource.match(/destination:/g) ?? []).length;
+
+  writeReport("docs/reports/seo-5xx-inventory.md", `# SEO 5xx Inventory
+
+Generated: ${generatedAt}
+
+## Evidence Status
+
+- Search Console reported Server Errors (5xx): ${gscReportedCounts.serverErrors5xx.toLocaleString()}
+- Exact GSC 5xx URL export loaded: ${exact5xxExportLoaded ? "Yes" : "No"}
+- Local GSC CSV status: ${csvStatus}
+- Inventory source used for this run: ${exact5xxExportLoaded ? "GSC 5xx CSV export rows." : `Verified live production sitemap timeouts from ${liveSitemapSmokeDate}. Frequency, first-seen, and last-seen values remain Unable To Verify until GSC URL exports are added.`}
+
+## Inventory
+
+${fiveXxInventoryMarkdown(fiveXxRows, exact5xxExportLoaded)}
+`);
+
+  writeReport("docs/reports/seo-5xx-root-cause-analysis.md", `# SEO 5xx Root Cause Analysis
+
+Generated: ${generatedAt}
+
+## Evidence Sources
+
+- Search Console aggregate count supplied in prompt: ${gscReportedCounts.serverErrors5xx.toLocaleString()} Server Errors (5xx).
+- Local GSC 5xx URL export: ${exact5xxExportLoaded ? `${exact5xxRows.length} rows loaded.` : "Unavailable in this workspace."}
+- Live production sitemap verifier evidence: ${liveSitemapTimeoutUrls.length} timeout URLs observed on ${liveSitemapSmokeDate}.
+- Production exception logs / APM traces: Unable To Verify from this workspace. Export \`crawl_surface public_route\`, \`exam_pathway_hub hub_data_load_timeout\`, route 5xx logs, and platform request logs to complete exact exception attribution.
+
+## Route Template Analysis
+
+${fiveXxRootCauseMarkdown(fiveXxRows, exact5xxExportLoaded)}
+
+## Root-Cause Findings Implemented In This Pass
+
+| Surface | Failure Mode | Fix |
+| --- | --- | --- |
+| Public pathway question hubs | Body-system aggregate DB reads could hold the route open until crawler timeout. | Added a bounded database fallback for pathway practice body-system aggregates. Slow/unreachable DB now degrades to skeleton aggregates instead of holding public crawler responses. |
+| Static test-bank pages | Missing page config threw an exception, which produces a 500. | Missing test-bank config now calls \`notFound()\` so missing content returns 404 instead of 500. |
+| Crawl regression seeds | Known failing production route classes were not all represented in the seed set. | Added question hubs, test-bank pages, NP pages, REx-PN topic pages, lessons, glossary, about, and localized public routes to the crawl-health seed list. |
+
+## Dynamic Route Hardening Contract
+
+- Missing content must return \`notFound()\`, a 404 route, or a degraded public shell.
+- Missing content must never throw an uncaught exception.
+- Public crawler routes must not perform unbounded DB scans.
+- Optional marketing aggregates must use cached reads, bounded reads, or safe fallback data.
+- Sitemap URLs must return 200 indexable HTML/XML, not 5xx, redirects, or noindex HTML.
+
+## Crawler Route Budgets
+
+| Route Class | Budget | Required Degradation |
+| --- | --- | --- |
+| Sitemap index and robots | 500 ms target, DB-free | Static fallback XML/text if invariants fail. |
+| Public marketing hubs | 2500 ms max before slow telemetry | Render shell with cached/skeleton optional blocks. |
+| Question hubs | 2500 ms max before slow telemetry | Render launcher with skeleton body-system counts if aggregate reads time out. |
+| Test-bank pages | Static/content-registry only | Return 404 for missing registry entries. |
+| Blog/lesson/topic pages | 2500 ms max before slow telemetry | Return 404 for missing slug; use cached snapshots for optional related content. |
+
+## Remaining Verification Required
+
+1. Add the GSC 5xx export to \`data/gsc-indexing/5xx.csv\`.
+2. Export production request/error logs for the affected URLs.
+3. Rerun \`npm run audit:gsc-indexing\`.
+4. Run \`PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://nursenest.ca npm run qa:crawl-health:remote\`.
+5. Run \`SITEMAP_VERIFY_MAX_URLS=5000 SITEMAP_VERIFY_CONCURRENCY=4 npm run verify:sitemap\`.
+`);
 
   writeReport("docs/reports/seo-5xx-audit.md", `# SEO 5xx Audit
 
@@ -368,6 +570,11 @@ ${bullet(liveSitemapTimeoutUrls, 40)}
 ## Highest-Risk Templates To Check First
 
 ${topTemplatesMarkdown(gscRows, "5xx")}
+
+## Phase 1 Inventory And Root Cause Reports
+
+- \`docs/reports/seo-5xx-inventory.md\`
+- \`docs/reports/seo-5xx-root-cause-analysis.md\`
 
 ## Source Files With SEO/Crawl Error-Handling Surfaces
 
@@ -569,6 +776,7 @@ npm run verify:robots
 SITEMAP_VERIFY_MAX_URLS=5000 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap
 npm run sitemap:validate
 npm run test:seo-sitemap
+npm run qa:crawl-health
 \`\`\`
 
 ## Required Sitemap Cleanliness
@@ -605,6 +813,8 @@ ${csvStatus}
 
 ## Deliverables
 
+- \`docs/reports/seo-5xx-inventory.md\`
+- \`docs/reports/seo-5xx-root-cause-analysis.md\`
 - \`docs/reports/seo-5xx-audit.md\`
 - \`docs/reports/robots-audit.md\`
 - \`docs/reports/404-audit.md\`
@@ -623,13 +833,50 @@ ${csvStatus}
 7. Add 301s only for valuable legacy URLs; return 410 for obsolete generated URLs; ignore exploit garbage.
 `);
 
+  writeReport("docs/reports/search-console-recovery-checklist.md", `# Search Console Recovery Checklist
+
+Generated: ${generatedAt}
+
+## Before Validation
+
+- [ ] Export GSC Server Error URL rows to \`data/gsc-indexing/5xx.csv\`.
+- [ ] Run \`npm run audit:gsc-indexing\` and verify \`docs/reports/seo-5xx-inventory.md\` contains frequency-accurate rows.
+- [ ] Run \`npm run test:seo-sitemap\`.
+- [ ] Run \`npm run qa:crawl-health\` against local/staging.
+- [ ] Run \`SITEMAP_VERIFY_MAX_URLS=5000 SITEMAP_VERIFY_CONCURRENCY=4 npm run verify:sitemap\` against production.
+- [ ] Confirm all sitemap URLs return 200 indexable responses.
+- [ ] Confirm no public route logs \`crawl_surface public_route outcome=error\`.
+
+## Search Console Actions
+
+- [ ] Resubmit \`https://nursenest.ca/sitemap.xml\`.
+- [ ] Validate fix for Server Error (5xx).
+- [ ] Request indexing only for high-value URLs after the route responds 200.
+- [ ] Monitor Crawl Stats for server connectivity errors, DNS errors, and page fetch failures.
+- [ ] Track daily 5xx count until it reaches zero.
+
+## Deployment Gate
+
+- [ ] CI blocks if public crawl health returns 5xx.
+- [ ] CI blocks if sitemap contract tests fail.
+- [ ] CI blocks if crawler path seeds fail.
+- [ ] Production release notes include route-health artifacts and affected templates.
+
+## Recovery Target
+
+Search Console Server Errors (5xx): ${gscReportedCounts.serverErrors5xx.toLocaleString()} -> 0.
+`);
+
   console.log("[gsc-indexing-audit] wrote docs/reports/google-search-console-indexing-emergency-audit.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/seo-5xx-inventory.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/seo-5xx-root-cause-analysis.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/seo-5xx-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/robots-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/404-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/crawled-not-indexed-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/noindex-audit.md");
   console.log("[gsc-indexing-audit] wrote docs/reports/sitemap-health-report.md");
+  console.log("[gsc-indexing-audit] wrote docs/reports/search-console-recovery-checklist.md");
 }
 
 main().catch((error) => {

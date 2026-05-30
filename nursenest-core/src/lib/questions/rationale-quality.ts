@@ -6,6 +6,12 @@ export type SimpleRationaleContext = {
 };
 
 const GENERIC_RATIONALE_PATTERNS = [
+  /\bis correct because\b/i,
+  /\bconcept being tested\b/i,
+  /\bconnect it directly\b/i,
+  /\bmatch the answer choice\b/i,
+  /\bgeneric priority framework\b/i,
+  /\bthe correct answer is\b/i,
   /\bthis option does not address the priority assessment or intervention implied by the stem\b/i,
   /\bthis option does not address the priority\b/i,
   /\bresponds to the priority cue\b/i,
@@ -25,6 +31,9 @@ const GENERIC_RATIONALE_PATTERNS = [
   /\bno separate rationale is available\b/i,
   /\brationale unavailable\b/i,
   /\banswer shown\b/i,
+  /\bclinical reasoning is not yet on file\b/i,
+  /\bdetailed distractor explanations are not available\b/i,
+  /\bconcise clinical pearl is not available\b/i,
 ] as const;
 
 const REASONING_PATTERN =
@@ -45,6 +54,46 @@ function firstSentence(value: string, fallback: string): string {
     .split(/(?<=[.!?])\s+/)
     .find((part) => part.trim().length >= 12);
   return sentence?.trim() || fallback;
+}
+
+function wordCount(value: string): number {
+  return text(value).split(/\s+/).filter(Boolean).length;
+}
+
+function sentenceList(value: string): string[] {
+  return text(value)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function removeRepeatedSentences(value: string): string {
+  const seen = new Set<string>();
+  const kept: string[] = [];
+  for (const sentence of sentenceList(value)) {
+    const key = sentence.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    kept.push(sentence);
+  }
+  return kept.join(" ").trim();
+}
+
+function summarizeStemCue(stem: string): string {
+  const first = firstSentence(stem, "The patient-specific cue in the stem guides the safest next action.");
+  const clean = first.replace(/\s+/g, " ").trim();
+  if (clean.length <= 150) return clean;
+  return `${clean.slice(0, 147).trim()}...`;
+}
+
+function answerRepeatedExcessively(rationale: string, answerText: string | null | undefined): boolean {
+  const answer = stripOptionLead(answerText ?? "");
+  if (!answer || answer.length < 8) return false;
+  const escaped = answer.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const matches = text(rationale).match(new RegExp(escaped, "gi")) ?? [];
+  return matches.length > 1;
 }
 
 function inferPrinciple(stem: string): string {
@@ -117,8 +166,8 @@ function inferTestedConcept(context: SimpleRationaleContext): string {
     return "Thyroid questions test feedback physiology: TSH rises when thyroid hormone is low and is suppressed when circulating T3/T4 is high.";
   }
   return correct
-    ? `${sentenceCase(correct)} is the concept being tested; connect it directly to the finding or mechanism described in the stem.`
-    : "The tested concept should be tied directly to the stem finding, not to a generic priority rule.";
+    ? "This answer fits the finding or mechanism described in the stem and should be judged against the patient's current risk, not against a loosely related fact."
+    : "The explanation should connect the patient-specific cue to the safest nursing action, expected physiology, or required monitoring.";
 }
 
 function answerConceptToken(value: string | null | undefined): string {
@@ -138,6 +187,25 @@ export function isGenericRationaleText(value: string | null | undefined): boolea
   return rationale.length > 0 && GENERIC_RATIONALE_PATTERNS.some((pattern) => pattern.test(rationale));
 }
 
+export function validateFlashcardRationaleContent(input: {
+  rationale: string | null | undefined;
+  answerText?: string | null;
+  minWords?: number;
+}): {
+  pass: boolean;
+  issues: Array<"placeholder_phrase" | "duplicate_sentence" | "answer_repeated" | "too_short">;
+} {
+  const original = text(input.rationale);
+  const clean = removeRepeatedSentences(original);
+  const minWords = input.minWords ?? 40;
+  const issues: Array<"placeholder_phrase" | "duplicate_sentence" | "answer_repeated" | "too_short"> = [];
+  if (isGenericRationaleText(clean)) issues.push("placeholder_phrase");
+  if (sentenceList(original).length !== sentenceList(clean).length) issues.push("duplicate_sentence");
+  if (answerRepeatedExcessively(clean, input.answerText)) issues.push("answer_repeated");
+  if (wordCount(clean) < minWords) issues.push("too_short");
+  return { pass: issues.length === 0, issues };
+}
+
 export function hasSimpleRationaleTeachingShape(value: string | null | undefined): boolean {
   const rationale = text(value);
   if (rationale.length < 90) return false;
@@ -146,25 +214,35 @@ export function hasSimpleRationaleTeachingShape(value: string | null | undefined
 }
 
 export function buildSimpleCorrectRationale(context: SimpleRationaleContext): string {
-  const stemCue = firstSentence(context.stem, "The stem points to the tested clinical concept.");
+  const stemCue = summarizeStemCue(context.stem);
   const correct = text(context.correctOptionText) || "the correct option";
   const concept = inferTestedConcept(context);
+  const answerLead = sentenceCase(stripOptionLead(correct));
+  const safetyFrame =
+    "A strong nursing rationale links the client cue to expected physiology, bedside monitoring, patient teaching, medication safety, or timely escalation before comparing lower-value options.";
   if (!PRIORITY_STEM_PATTERN.test(context.stem)) {
-    return `${correct} is correct because ${concept} In this question, match the answer choice to the underlying physiology or clinical rule being tested rather than applying a generic priority framework.`;
+    return removeRepeatedSentences(
+      `${answerLead} is the best answer. ${concept} The key cue is: ${stemCue} ${safetyFrame}`,
+    );
   }
   const principle = inferPrinciple(context.stem);
-  return `${correct} is correct because it directly addresses the cue in the stem: ${stemCue} ${principle}`;
+  return removeRepeatedSentences(
+    `${answerLead} is the best answer. The key cue is: ${stemCue} ${principle} This choice addresses the most time-sensitive patient need before routine teaching, comfort measures, or delayed reassessment.`,
+  );
 }
 
 export function buildSimpleDistractorRationale(context: SimpleRationaleContext): string {
   const option = text(context.optionText) || "This option";
-  const correct = text(context.correctOptionText) || "the supported answer";
   const optionConcept = inferTestedConcept({ ...context, correctOptionText: option });
   if (!PRIORITY_STEM_PATTERN.test(context.stem)) {
-    return `${option} can seem tempting if it is confused with ${correct}, but ${optionConcept} The stem supports ${correct}, so this option does not explain the specific concept being tested.`;
+    return removeRepeatedSentences(
+      `${sentenceCase(stripOptionLead(option))} may look plausible, but it points to a different mechanism or a less relevant cue. ${optionConcept} The supported answer better fits the patient-specific finding, expected physiology, or safety implication in the stem.`,
+    );
   }
   const principle = inferPrinciple(context.stem);
-  return `${option} can seem reasonable, but the stem supports ${correct} more directly. Choosing it first could delay the assessment, monitoring, or intervention linked to the client's specific risk pattern. ${principle}`;
+  return removeRepeatedSentences(
+    `${sentenceCase(stripOptionLead(option))} may look reasonable, but it is not the safest first response for the risk pattern in this stem. Choosing it first could delay the assessment, monitoring, intervention, or escalation the client needs now. ${principle}`,
+  );
 }
 
 export function validateRationaleQuality(context: SimpleRationaleContext, rationale: string | null | undefined): {

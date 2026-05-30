@@ -7,12 +7,16 @@ import {
   FLAGSHIP_PROOF_SCREENSHOTS,
   HOME_FEATURE_DEEP_DIVE_PROOFS,
   marketingProofFromCoreKey,
+  pathwayHubPrimaryProof,
+  pathwayHubSecondaryProofs,
 } from "@/lib/marketing/marketing-proof-screenshots";
 import {
   GENERATED_SCREENSHOT_PATHS,
 } from "@/lib/marketing/generated-screenshot-registry";
+import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 
 const publicDir = path.resolve(process.cwd(), "public");
+const nextConfig = fs.readFileSync(path.join(process.cwd(), "next.config.mjs"), "utf8");
 
 test("marketing proof screenshots resolve to existing generated WebP assets", () => {
   const paths = new Set<string>();
@@ -33,6 +37,29 @@ test("marketing proof screenshots resolve to existing generated WebP assets", ()
   for (const rel of paths) {
     const abs = path.join(publicDir, rel.replace(/^\//, ""));
     assert.ok(fs.existsSync(abs), `Missing marketing proof asset: ${rel}`);
+  }
+});
+
+test("Next image optimizer allows local marketing proof screenshots", () => {
+  assert.match(
+    nextConfig,
+    /pathname:\s*"\/marketing\/\*\*"/,
+    "local marketing screenshots must be allowed by next.config images.localPatterns",
+  );
+});
+
+test("every pathway hub proof screenshot resolves to an allowed local asset", () => {
+  for (const pathway of EXAM_PATHWAYS) {
+    const shots = [pathwayHubPrimaryProof(pathway), ...pathwayHubSecondaryProofs(pathway)];
+    for (const shot of shots) {
+      const abs = path.join(publicDir, shot.src.replace(/^\//, ""));
+      assert.ok(fs.existsSync(abs), `${pathway.id} proof asset should exist: ${shot.src}`);
+      assert.match(
+        shot.src,
+        /^\/marketing\//,
+        `${pathway.id} proof asset should be under allowed /marketing/** image path`,
+      );
+    }
   }
 });
 

@@ -73,6 +73,7 @@ test.describe("Flashcards study header layout", () => {
           rationaleWidth: Math.round(rationaleRect?.width ?? 0),
           nestedEducationalScrollers: educationalContainers
             .filter((el) => {
+              if (el.classList.contains("nn-flashcard-rationale-panel__body")) return false;
               const style = getComputedStyle(el);
               return ["auto", "scroll", "hidden"].includes(style.overflowY) || el.scrollHeight > el.clientHeight + 2;
             })
@@ -144,6 +145,6 @@ test.describe("Flashcards study header layout", () => {
     expect(visibility.dockInViewport).toBe(true);
     expect(visibility.footerOverflow).toBeLessThanOrEqual(2);
     expect(visibility.clinicalPearlFullyVisible).toBe(true);
-    expect(visibility.rationaleBodyScrollsInternally).toBe(false);
+    expect(visibility.rationaleBodyScrollsInternally).toBe(true);
   });
 });

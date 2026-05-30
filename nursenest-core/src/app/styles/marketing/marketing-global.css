@@ -1176,10 +1176,18 @@
 }
 [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card {
   border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, color-mix(in srgb, var(--semantic-brand) 10%, transparent));
-  background: color-mix(in srgb, var(--theme-card-bg) 96%, var(--semantic-surface));
+  background: var(--semantic-surface);
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-surface) 84%, transparent),
     0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-pathway-hub-product-preview-card {
+  background: var(--semantic-surface);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-pathway-hub-product-preview-frame {
+  background: var(--semantic-surface);
 }
 [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card:hover {
   border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));

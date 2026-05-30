@@ -30,7 +30,7 @@ export function MarketingPathwayHubProductPreview({
     >
       <LearnerSurfaceCard
         variant="secondary"
-        className="overflow-hidden border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] p-0 shadow-[var(--semantic-shadow-soft)]"
+        className="nn-pathway-hub-product-preview-card overflow-hidden border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] p-0 shadow-[var(--semantic-shadow-soft)]"
       >
         <div className="border-b border-[var(--semantic-border-soft)] px-5 py-3 sm:px-6">
           <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
@@ -40,7 +40,7 @@ export function MarketingPathwayHubProductPreview({
             Real {pathway.shortName} study surfaces — not mockups.
           </p>
         </div>
-        <div className="relative aspect-[16/10] w-full min-h-[220px] bg-[var(--semantic-panel-muted)]">
+        <div className="nn-pathway-hub-product-preview-frame relative aspect-[16/10] w-full min-h-[220px] bg-[var(--semantic-panel-muted)]">
           <MarketingProofScreenshot shot={primary} priority sizes="(min-width: 1024px) 56vw, 100vw" />
         </div>
       </LearnerSurfaceCard>
@@ -51,9 +51,9 @@ export function MarketingPathwayHubProductPreview({
             <LearnerSurfaceCard
               key={shot.src}
               variant="secondary"
-              className="overflow-hidden p-0 shadow-[var(--semantic-shadow-soft)]"
+              className="nn-pathway-hub-product-preview-card overflow-hidden p-0 shadow-[var(--semantic-shadow-soft)]"
             >
-              <div className="relative aspect-[16/11] w-full bg-[var(--semantic-panel-muted)]">
+              <div className="nn-pathway-hub-product-preview-frame relative aspect-[16/11] w-full bg-[var(--semantic-panel-muted)]">
                 <MarketingProofScreenshot shot={shot} sizes="(min-width: 1024px) 28vw, 50vw" />
               </div>
             </LearnerSurfaceCard>

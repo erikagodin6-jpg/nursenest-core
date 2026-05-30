@@ -13,6 +13,12 @@ import {
   buildSimpleDistractorRationale,
   isGenericRationaleText,
 } from "@/lib/questions/rationale-quality";
+import {
+  buildFlashcardClinicalPearl,
+  buildFlashcardHint,
+  buildFlashcardMemoryHook,
+  buildFlashcardNclexTakeaway,
+} from "@/lib/flashcards/flashcard-support-block-quality";
 import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 import type { AdaptiveCaseSimulation } from "@/lib/questions/adaptive-case-simulation";
@@ -104,46 +110,6 @@ function resolveDistractorRationales(exam: ExamMicroQuestionPayload): Array<{ le
           : authored,
       };
     });
-}
-
-function rationaleKeyConcept(text: string | null | undefined): string {
-  const line = firstTeachingLine(text);
-  if (!line || isGenericRationaleText(line)) {
-    return "Start with the cue that changes immediate safety, then choose the nursing action that protects the client before routine care.";
-  }
-  return line.length > 120 ? `${line.slice(0, 117).trim()}...` : line;
-}
-
-function buildExamTipForMcq(exam: ExamMicroQuestionPayload, pathwayLabel: string): string | null {
-  const kind = (exam.itemKind ?? "").toLowerCase();
-  const stem = (exam.questionStem ?? "").toLowerCase();
-  if (kind.includes("priority") || stem.includes("priority") || stem.includes("first action")) {
-    return `${pathwayLabel}: "priority" items test your ability to identify the highest-risk cue — use ABCs and Maslow's hierarchy as your decision framework.`;
-  }
-  if (kind.includes("delegation") || stem.includes("delegate") || stem.includes("unlicensed")) {
-    return `${pathwayLabel}: delegation items assess scope of practice. Keep assessment, teaching, and unstable patients with the RN.`;
-  }
-  if (stem.includes("contraindicated") || stem.includes("avoid")) {
-    return `${pathwayLabel}: eliminate options that worsen the underlying condition or mask a critical symptom.`;
-  }
-  if (stem.includes("medication") || stem.includes("drug") || stem.includes("administer")) {
-    return `${pathwayLabel}: know the mechanism of action — ask what system the drug affects and what requires monitoring.`;
-  }
-  return `${pathwayLabel}: read the stem for timing, safety, scope, and stability cues before comparing answer choices.`;
-}
-
-function buildMemoryHookForMcq(text: string, exam?: ExamMicroQuestionPayload | null): string {
-  const clean = String(text ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-  if (!clean && exam?.questionStem) {
-    const stem = exam.questionStem.toLowerCase();
-    if (/\b(o2|oxygen|spo2|dyspnea|airway|respiratory)\b/.test(stem)) return "Breathing problems move before paperwork, teaching, or delayed reassessment.";
-    if (/\b(delegate|assignment|uap|psw|assistive personnel|scope)\b/.test(stem)) return "Stable and predictable can be delegated; assessment and teaching stay with the nurse.";
-    if (/\b(medication|dose|administer|insulin|warfarin|heparin|opioid|digoxin)\b/.test(stem)) return "Before giving a drug, check the risk cue that could make the medication unsafe.";
-  }
-  if (!clean) return "Cue, action, reassess: connect the stem finding to the next nursing step.";
-  const sentences = clean.match(/[^.!?]+[.!?]+/g) ?? [];
-  const hook = sentences.slice(0, 2).join(" ").trim();
-  return hook.length > 20 ? hook : "Cue, action, reassess: connect the stem finding to the next nursing step.";
 }
 
 function buildResultFeedback(input: {
@@ -293,6 +259,23 @@ export function FlashcardStudyQuestionStack({
   const promptBody = promptSplit.remainingPrompt || String(prompt ?? "");
   const resolvedCorrectRationale = exam ? resolveCorrectRationale(exam, explanation || answer) : "";
   const resolvedDistractorRationales = exam ? resolveDistractorRationales(exam) : [];
+  const correctOptionText = exam ? answerOptionText(exam, exam.correctLetter) : "";
+  const supportBlockContext = exam
+    ? {
+        stem: exam.questionStem,
+        topic: topicLine,
+        answerText: correctOptionText,
+        correctLetter: exam.correctLetter,
+        rationale: resolvedCorrectRationale,
+        pathwayLabel: examPathwayLabel,
+      }
+    : {
+        stem: promptBody,
+        topic: topicLine,
+        answerText: answer,
+        rationale: explanation,
+        pathwayLabel: examPathwayLabel,
+      };
 
   const showUnsupportedCardAlert = !exam && !sata;
   return (
@@ -377,7 +360,13 @@ export function FlashcardStudyQuestionStack({
                     rationaleByLetter={revealed ? sata.rationaleByLetter : []}
                     revealed={revealed}
                     answerChoicesHeading={labels?.answerChoicesHeading ?? "Select all that apply"}
-                    revealHint={labels?.revealHint ?? "Choose all correct options, then reveal."}
+                    revealHint={labels?.revealHint ?? buildFlashcardHint({
+                      stem: sata.questionStem,
+                      topic: topicLine,
+                      answerText: "",
+                      rationale: sata.rationaleCorrect,
+                      pathwayLabel: examPathwayLabel,
+                    })}
                     onSelectionsChange={(letters) => { sataSelectionsRef.current = letters; }}
                   />
                   {!revealed && typeof onReveal === "function" ? (
@@ -473,7 +462,7 @@ export function FlashcardStudyQuestionStack({
                         <Gem className="h-3.5 w-3.5" aria-hidden />
                         Clinical Pearl
                       </span>
-                      <p>{rationaleKeyConcept(resolvedCorrectRationale)}</p>
+                      <p>{buildFlashcardClinicalPearl(supportBlockContext, pearl)}</p>
                     </section>
                     <section className="nn-flashcard-rationale-section" data-nn-educational-content-container="">
                       <h3>Correct Answer</h3>
@@ -505,7 +494,7 @@ export function FlashcardStudyQuestionStack({
                       </section>
                     ) : null}
                     {(() => {
-                      const tip = buildExamTipForMcq(exam, examPathwayLabel);
+                      const tip = buildFlashcardNclexTakeaway(supportBlockContext);
                       return tip ? (
                         <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip" data-nn-educational-content-container="">
                           <h3 className="nn-flashcard-takeaway-heading">
@@ -517,7 +506,7 @@ export function FlashcardStudyQuestionStack({
                       ) : null;
                     })()}
                     {(() => {
-                      const hook = buildMemoryHookForMcq(resolvedCorrectRationale, exam);
+                      const hook = buildFlashcardMemoryHook(supportBlockContext);
                       return (
                         <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook" data-nn-educational-content-container="">
                           <summary>Memory Hook</summary>

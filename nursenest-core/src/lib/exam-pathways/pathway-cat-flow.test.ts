@@ -8,12 +8,12 @@ import {
   resolveStudySurfaceCatHref,
 } from "@/lib/exam-pathways/pathway-cat-flow";
 
-test("appPathwayCatSessionStartPath always encodes pathwayId and inline launch on hub", () => {
+test("appPathwayCatSessionStartPath encodes pathwayId on the shared setup launcher", () => {
   const href = appPathwayCatSessionStartPath("us-rn-nclex-rn");
   assert.ok(href.startsWith("/app/practice-tests?"));
   const q = new URLSearchParams(href.slice("/app/practice-tests?".length));
   assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
-  assert.equal(q.get("catLaunch"), "1");
+  assert.equal(q.get("catLaunch"), null);
 });
 
 test("appCatWeakFocusPath keeps cat mode and pathway context", () => {
@@ -31,7 +31,7 @@ test("resolveStudySurfaceCatHref scopes CAT start when the pathway is unambiguou
     resolveStudySurfaceCatHref({
       availablePathwayIds: ["us-rn-nclex-rn"],
     }),
-    "/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1",
+    "/app/practice-tests?pathwayId=us-rn-nclex-rn",
   );
 });
 
@@ -40,7 +40,7 @@ test("resolveStudySurfaceCatHref keeps the explicit chooser when multiple pathwa
     resolveStudySurfaceCatHref({
       availablePathwayIds: ["us-rn-nclex-rn", "us-np-fnp"],
     }),
-    "/app/practice-tests?catLaunch=1",
+    "/app/practice-tests",
   );
 });
 
@@ -49,7 +49,7 @@ test("appPathwayCatFullSetupHref uses the unified practice setup surface", () =>
   assert.ok(href.startsWith("/app/practice-tests?"));
   const q = new URLSearchParams(href.slice("/app/practice-tests?".length));
   assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
-  assert.equal(q.get("catLaunch"), "1");
+  assert.equal(q.get("catLaunch"), null);
 });
 
 test("isForcedCatFullSetupReviewParam: only 1 and true (trimmed, case-insensitive)", () => {

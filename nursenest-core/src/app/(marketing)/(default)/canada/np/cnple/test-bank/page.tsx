@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { HealthcareTestBankPage, metadataForHealthcareTestBankPage } from "@/components/seo/healthcare-test-bank-page";
 import { getHealthcareTestBankPageByPath } from "@/lib/seo/healthcare-test-bank-pages";
 
@@ -11,6 +12,6 @@ export function generateMetadata() {
 }
 
 export default function CnpleTestBankPage() {
-  if (!page) throw new Error(`Missing healthcare test bank page config: ${PATH}`);
+  if (!page) notFound();
   return <HealthcareTestBankPage page={page} />;
 }

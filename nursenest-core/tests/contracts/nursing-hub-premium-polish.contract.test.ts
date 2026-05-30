@@ -5,7 +5,12 @@ import test from "node:test";
 
 const root = process.cwd();
 const css = readFileSync(join(root, "src/app/styles/marketing/hub-tiers.css"), "utf8");
+const marketingGlobalCss = readFileSync(join(root, "src/app/styles/marketing/marketing-global.css"), "utf8");
 const component = readFileSync(join(root, "src/components/marketing/nursing-tier-hub-page.tsx"), "utf8");
+const productPreviewComponent = readFileSync(
+  join(root, "src/components/marketing/marketing-pathway-hub-product-preview.tsx"),
+  "utf8",
+);
 const polishStart = css.indexOf("Nursing hub clinical polish pass");
 const polishEnd = css.indexOf("End nursing hub clinical polish pass.", polishStart);
 const polishBlock = polishStart >= 0 && polishEnd > polishStart ? css.slice(polishStart, polishEnd) : "";
@@ -44,4 +49,22 @@ test("nursing hub polish includes focus, motion, and mobile safeguards", () => {
   assert.match(polishBlock, /@media \(max-width: 640px\)/);
   assert.match(polishBlock, /text-align: left/);
   assert.match(polishBlock, /align-self: stretch/);
+});
+
+test("nursing hub cards and screenshot preview use white semantic surfaces", () => {
+  assert.match(component, /MarketingPathwayHubProductPreview/);
+  assert.match(productPreviewComponent, /nn-pathway-hub-product-preview-card/);
+  assert.match(productPreviewComponent, /nn-pathway-hub-product-preview-frame/);
+  assert.match(
+    marketingGlobalCss,
+    /\[data-nn-nursing-tier-hub="surface"\] \[data-nn-hub-section="quick-actions"\] \.nn-exam-hub-study-card\s*\{[\s\S]*background:\s*var\(--semantic-surface\)/,
+  );
+  assert.match(
+    marketingGlobalCss,
+    /\.nn-pathway-hub-product-preview-card\s*\{[\s\S]*background:\s*var\(--semantic-surface\)/,
+  );
+  assert.match(
+    marketingGlobalCss,
+    /\.nn-pathway-hub-product-preview-frame\s*\{[\s\S]*background:\s*var\(--semantic-surface\)/,
+  );
 });

@@ -33,7 +33,7 @@ type PageProps = {
   searchParams: Promise<{
     pathwayId?: string | string[] | undefined;
     topic?: string | string[] | undefined;
-    /** Canonical CAT-launch param set by appPathwayCatSessionStartPath. */
+    /** Optional legacy CAT-launch param for deep links; hub entries should use the setup launcher. */
     catLaunch?: string | string[] | undefined;
   }>;
 };
@@ -283,7 +283,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     );
   }
 
-  let catHref = "/app/practice-tests?catLaunch=1";
+  let catHref = "/app/practice-tests";
   try {
     catHref = resolveStudyLoopCatHref({
       authState: "signed_in",
@@ -294,8 +294,8 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   } catch (error) {
     const fallbackPathway = defaultPathwayId?.trim();
     catHref = fallbackPathway
-      ? `/app/practice-tests?pathwayId=${encodeURIComponent(fallbackPathway)}&catLaunch=1`
-      : "/app/practice-tests?catLaunch=1";
+      ? `/app/practice-tests?pathwayId=${encodeURIComponent(fallbackPathway)}`
+      : "/app/practice-tests";
     safeServerLog("learner_practice_tests", "cat_href_resolve_failed", {
       loader_name: "practice_tests_hub_page",
       pathway_id: fallbackPathway ?? "",

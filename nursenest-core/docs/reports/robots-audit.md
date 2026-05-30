@@ -1,6 +1,6 @@
 # Robots.txt Audit
 
-Generated: 2026-05-30T04:51:15.900Z
+Generated: 2026-05-30T14:13:50.086Z
 
 ## Current Rules
 

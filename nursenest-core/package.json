@@ -20,6 +20,8 @@
     "runtime:standalone:start": "node scripts/runtime/start-standalone.mjs",
     "qa:local:standalone:validate-env": "npm run runtime:env:validate",
     "qa:local:standalone:node": "npm run runtime:standalone:start",
+    "qa:crawl-health": "npx playwright test -c playwright.crawl-health.config.ts",
+    "qa:crawl-health:remote": "PLAYWRIGHT_SKIP_WEB_SERVER=1 npx playwright test -c playwright.crawl-health.config.ts",
     "capture:marketing-screenshots:qa": "node scripts/wait-for-app-ready.mjs && node scripts/capture-marketing-screenshots.mjs",
     "generate:marketing-screenshots": "npx tsx scripts/generate-marketing-screenshots.ts",
     "generate:marketing-screenshots:rn": "npx tsx scripts/generate-marketing-screenshots.ts --tier=rn,core",

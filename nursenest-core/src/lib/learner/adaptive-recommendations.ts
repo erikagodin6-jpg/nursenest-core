@@ -262,7 +262,7 @@ export function buildAdaptiveRecommendations(args: {
     availablePathwayIds: args.availablePathwayIds,
     intent: "start",
   });
-  const catNeedsPathwayChoice = catStartHref === "/app/practice-tests?catLaunch=1";
+  const catNeedsPathwayChoice = catStartHref === "/app/practice-tests";
   const quizHref = topic
     ? `/app/questions?preset=topic_drill&topic=${encodeTopic(topic)}`
     : weakMixedBankHref;

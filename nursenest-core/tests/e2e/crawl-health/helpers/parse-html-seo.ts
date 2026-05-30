@@ -3,7 +3,8 @@ export function urlsSeoMatch(a: string, b: string): boolean {
   try {
     const ua = new URL(a);
     const ub = new URL(b);
-    if (ua.origin !== ub.origin) return false;
+    const localOrigin = /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(ub.origin);
+    if (ua.origin !== ub.origin && !localOrigin) return false;
     const pa = ua.pathname.replace(/\/$/, "") || "/";
     const pb = ub.pathname.replace(/\/$/, "") || "/";
     if (pa !== pb) return false;

@@ -55,7 +55,7 @@ test("study links wire into flashcards, questions, CAT, and lab drills", () => {
   assert.equal(links.questionBankHref, "/app/questions?pathwayId=ca-rn-nclex-rn&topic=potassium");
   assert.equal(links.practiceTestsTopicHref, "/app/practice-tests?pathwayId=ca-rn-nclex-rn&topic=potassium");
   assert.equal(links.lessonsHubHref, "/app/lessons?pathwayId=ca-rn-nclex-rn&topicSlug=potassium");
-  assert.equal(links.catLaunchHref, "/app/practice-tests?pathwayId=ca-rn-nclex-rn&catLaunch=1");
+  assert.equal(links.catLaunchHref, "/app/practice-tests?pathwayId=ca-rn-nclex-rn");
   assert.match(links.catHref, /\/app\/practice-tests\?/);
   assert.equal(links.labDrillsHref, "/app/lab-drills?pathwayId=ca-rn-nclex-rn");
 });
@@ -63,7 +63,7 @@ test("study links wire into flashcards, questions, CAT, and lab drills", () => {
 test("study links fall back safely when pathway is unknown", () => {
   const links = buildLabsStudyLinks(null, null);
   assert.equal(links.lessonsHubHref, "/app/lessons");
-  assert.equal(links.catLaunchHref, "/app/practice-tests?catLaunch=1");
+  assert.equal(links.catLaunchHref, "/app/practice-tests");
 });
 
 test("NP track receives deeper electrolyte and synthesis lessons than RN alone", () => {

@@ -150,11 +150,11 @@ describe("tier-scoped app hrefs", () => {
   it("RN hub CAT start href carries pathwayId only", () => {
     assert.match(
       appPathwayCatSessionStartPath(RN),
-      /^\/app\/practice-tests\?pathwayId=us-rn-nclex-rn&catLaunch=1$/,
+      /^\/app\/practice-tests\?pathwayId=us-rn-nclex-rn$/,
     );
   });
 
-  it("learner nav practice + CAT stay on same pathwayId when shell provides it", () => {
+  it("learner nav practice-tests + CAT stay on same pathwayId when shell provides it", () => {
     const items = buildLearnerPrimaryNavItems(RN, { examsLabel: "CAT Exams" });
     const practice = items.find((i) => i.key === "practice");
     const cat = items.find((i) => i.key === "cat");
@@ -162,9 +162,9 @@ describe("tier-scoped app hrefs", () => {
     assert.ok(cat?.href.includes("pathwayId=us-rn-nclex-rn"));
   });
 
-  it("without shell pathwayId, practice nav href is unscoped /app/questions (page shows study-preferences empty state when ambiguous)", () => {
+  it("without shell pathwayId, practice nav href is the shared practice-tests launcher", () => {
     const items = buildLearnerPrimaryNavItems(null, { examsLabel: "CAT Exams" });
     const practice = items.find((i) => i.key === "practice");
-    assert.equal(practice?.href, "/app/questions");
+    assert.equal(practice?.href, "/app/practice-tests");
   });
 });

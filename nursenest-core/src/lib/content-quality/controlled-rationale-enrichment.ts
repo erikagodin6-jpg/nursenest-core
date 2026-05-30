@@ -411,7 +411,7 @@ function buildWhyCorrect(seed: ControlledRationaleSeed): string {
     ...chooseSubstantiveSentences(seed.rationale, 2),
     ...chooseSubstantiveSentences(seed.clinicalReasoning, 2),
   ]);
-  if (candidates.length === 0) return "Clinical reasoning is not yet on file for this item.";
+  if (candidates.length === 0) return "";
   return clipWords(candidates.join(" "), 70);
 }
 
@@ -420,7 +420,7 @@ function buildWhyWrong(seed: ControlledRationaleSeed): string {
   if (wordCount(distractor) >= 10 && !containsFiller(distractor)) {
     return clipWords(distractor, 85);
   }
-  return "Detailed distractor explanations are not available for this item yet.";
+  return "";
 }
 
 function buildClinicalPearl(seed: ControlledRationaleSeed, batchId: HighYieldRationaleBatchId | null): string {
@@ -430,7 +430,7 @@ function buildClinicalPearl(seed: ControlledRationaleSeed, batchId: HighYieldRat
   ]);
   const batchTip = batchId ? HIGH_YIELD_RATIONALE_BATCHES.find((x) => x.id === batchId)?.examTip ?? null : null;
   const merged = dedupeSentences([...(candidates.length ? [candidates[0] ?? ""] : []), ...(batchTip ? [batchTip] : [])]).filter(Boolean);
-  if (merged.length === 0) return "A concise clinical pearl is not available for this item yet.";
+  if (merged.length === 0) return "";
   return clipWords(merged.join(" "), 55);
 }
 
@@ -497,9 +497,9 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     return {
       batchId,
       applied: false,
-      whyCorrect: "Clinical reasoning is not yet on file for this item.",
-      whyWrong: "Detailed distractor explanations are not available for this item yet.",
-      clinicalPearl: "A concise clinical pearl is not available for this item yet.",
+      whyCorrect: "",
+      whyWrong: "",
+      clinicalPearl: "",
       topicAnchor: buildTopicAnchor(seed),
       skippedReason: "no_source_anchor",
       diagnostics: {
@@ -523,9 +523,9 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     return {
       batchId,
       applied: false,
-      whyCorrect: "Clinical reasoning is not yet on file for this item.",
-      whyWrong: "Detailed distractor explanations are not available for this item yet.",
-      clinicalPearl: "A concise clinical pearl is not available for this item yet.",
+      whyCorrect: "",
+      whyWrong: "",
+      clinicalPearl: "",
       topicAnchor: buildTopicAnchor(seed),
       skippedReason: "source_content_too_weak",
       diagnostics: {
@@ -555,9 +555,9 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     return {
       batchId,
       applied: false,
-      whyCorrect: "Clinical reasoning is not yet on file for this item.",
-      whyWrong: "Detailed distractor explanations are not available for this item yet.",
-      clinicalPearl: "A concise clinical pearl is not available for this item yet.",
+      whyCorrect: "",
+      whyWrong: "",
+      clinicalPearl: "",
       topicAnchor,
       skippedReason: "below_minimum_substance_threshold",
       diagnostics: {

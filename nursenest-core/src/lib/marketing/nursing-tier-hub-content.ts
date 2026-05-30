@@ -10,6 +10,7 @@ import {
   resolveMarketingTierHubStudyActionHref,
   type MarketingTierHubStudyActionId,
 } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
+import { pathwayHubAppFlashcardsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { resolveMarketingDisplayCopy } from "@/lib/public-display-copy";
 import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
 
@@ -70,16 +71,6 @@ export function resolveNursingTierHubActionHref(pathway: ExamPathwayDefinition, 
   return resolveMarketingTierHubStudyActionHref(pathway, action.id, action.href);
 }
 
-function appPathwayFlashcardsSessionStartPath(pathwayId: string): string {
-  const q = new URLSearchParams({
-    pathwayId,
-    includeCards: "1",
-    shuffle: "1",
-    cardLimit: "20",
-  });
-  return `/app/flashcards/custom?${q.toString()}`;
-}
-
 /**
  * Hub `StudyCard` href: guests use `loginWithCallback` for in-app surfaces (`/app/*`); marketing
  * lessons and question-bank hubs stay direct URLs.
@@ -103,7 +94,7 @@ export function resolveNursingTierHubStudyCardHref(
     return opts.viewerSignedIn ? appPathwayCatSessionStartPath(pathway.id) : base;
   }
   if (action.id === "flashcards") {
-    return opts.viewerSignedIn ? appPathwayFlashcardsSessionStartPath(pathway.id) : base;
+    return opts.viewerSignedIn ? pathwayHubAppFlashcardsHref(pathway.id) : base;
   }
   return base;
 }

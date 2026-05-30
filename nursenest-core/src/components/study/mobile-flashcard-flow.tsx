@@ -28,6 +28,12 @@ import {
   buildSimpleDistractorRationale,
   isGenericRationaleText,
 } from "@/lib/questions/rationale-quality";
+import {
+  buildFlashcardClinicalPearl,
+  buildFlashcardHint,
+  buildFlashcardNclexTakeaway,
+  buildFlashcardWhyThisMatters,
+} from "@/lib/flashcards/flashcard-support-block-quality";
 
 /** Minimal card shape needed by the mobile flow — matches ActiveStudyCard. */
 type MobileCard = {
@@ -56,13 +62,56 @@ const RATING_META: Array<{ key: RatingKey; label: string; icon: React.ReactNode;
 /* ── Helpers ───────────────────────────────────────────────────────────────── */
 
 function buildPearl(card: MobileCard): string {
-  const src: string =
-    (card.examMicroQuestion as ExamMicroQuestionPayload | null)?.rationaleCorrect ||
-    card.explanation ||
-    card.answer ||
-    "";
-  const first = src.split(".").map((s: string) => s.trim()).find(Boolean);
-  return first ? (first.endsWith(".") ? first : `${first}.`) : "Review the rationale carefully.";
+  return buildFlashcardClinicalPearl({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+  });
+}
+
+function buildHint(card: MobileCard): string {
+  return buildFlashcardHint({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+  });
+}
+
+function buildWhyThisMatters(card: MobileCard): string {
+  return buildFlashcardWhyThisMatters({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+  });
+}
+
+function buildExamTakeaway(card: MobileCard, pathwayLabel: string): string {
+  return buildFlashcardNclexTakeaway({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+    pathwayLabel,
+  });
 }
 
 function correctAnswerSummary(exam: ExamMicroQuestionPayload): string {
@@ -260,7 +309,7 @@ export function MobileFlashcardFlow({
         </div>
         {hintOpen ? (
           <p className="nn-mobile-fc-meta-row__body">
-            {topicLabel ? `Connect this to ${topicLabel}.` : "Look for the safest clinical priority."}
+            {buildHint(card)}
           </p>
         ) : (
           <button type="button" className="nn-mobile-hint-pill" onClick={() => setHintOpen(true)}>
@@ -276,11 +325,9 @@ export function MobileFlashcardFlow({
           <span>Why This Matters</span>
         </div>
         <ChevronRight className="nn-mobile-fc-meta-row__chevron h-4 w-4" aria-hidden />
-        {card.topic ? (
-          <p className="nn-mobile-fc-meta-row__body">
-            {`This concept connects ${card.topic.toLowerCase()} to direct clinical judgment.`}
-          </p>
-        ) : null}
+        <p className="nn-mobile-fc-meta-row__body">
+          {buildWhyThisMatters(card)}
+        </p>
       </div>
 
       {/* Related Lesson */}
@@ -394,7 +441,7 @@ export function MobileFlashcardFlow({
           <Lightbulb className="h-4 w-4" aria-hidden />
           <span>{examPathwayLabel}/REx-PN Takeaway</span>
         </div>
-        <p>{card.topic ? `Prioritize ${card.topic.toLowerCase()} concepts when you see these clinical cues.` : "Connect the stem finding to the action that prevents the most immediate harm."}</p>
+        <p>{buildExamTakeaway(card, examPathwayLabel)}</p>
       </div>
     </div>
   );
@@ -451,7 +498,7 @@ export function MobileFlashcardFlow({
                 rationaleByLetter={revealed ? sata.rationaleByLetter : []}
                 revealed={revealed}
                 answerChoicesHeading="Select all that apply"
-                revealHint="Choose all correct options, then reveal."
+                revealHint={buildHint(card)}
                 onSelectionsChange={(letters) => { sataSelectionsRef.current = letters; }}
               />
             </div>

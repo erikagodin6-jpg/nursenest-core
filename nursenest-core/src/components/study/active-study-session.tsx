@@ -54,6 +54,11 @@ import {
   summarizeStudyStreak,
   type FlashcardLearningSignal,
 } from "@/lib/flashcards/learning-insight-engine";
+import {
+  buildFlashcardClinicalPearl,
+  buildFlashcardHint,
+  buildFlashcardWhyThisMatters,
+} from "@/lib/flashcards/flashcard-support-block-quality";
 
 /* ================= TYPES ================= */
 
@@ -143,14 +148,46 @@ function resolveExamPathwayLabel(pathwayId: string | null): string {
 }
 
 function buildClinicalPearl(card: ActiveStudyCard, fallback: string): string {
-  const src =
-    card.examMicroQuestion?.rationaleCorrect ||
-    card.explanation ||
-    card.answer ||
-    "";
+  const support = buildFlashcardClinicalPearl({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+    pathwayLabel: resolveExamPathwayLabel(card.pathwayId ?? null),
+  });
+  return support || fallback;
+}
 
-  const first = src.split(".").map((s) => s.trim()).find(Boolean);
-  return first ? (first.endsWith(".") ? first : `${first}.`) : fallback;
+function buildSupportHint(card: ActiveStudyCard): string {
+  return buildFlashcardHint({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+    pathwayLabel: resolveExamPathwayLabel(card.pathwayId ?? null),
+  });
+}
+
+function buildWhyThisMatters(card: ActiveStudyCard): string {
+  return buildFlashcardWhyThisMatters({
+    stem: card.examMicroQuestion?.questionStem ?? card.prompt,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    answerText: card.answer,
+    correctLetter: card.examMicroQuestion && !isSataPayload(card.examMicroQuestion)
+      ? card.examMicroQuestion.correctLetter
+      : null,
+    rationale: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+    pathwayLabel: resolveExamPathwayLabel(card.pathwayId ?? null),
+  });
 }
 
 function formatElapsed(s: number) {
@@ -850,7 +887,7 @@ export function ActiveStudySession({
               <div className="nn-flashcard-coach-panel__section">
                 <span>Hint</span>
                 {hintOpen ? (
-                  <p>{formatTopicLine(current) ? `Connect this to ${formatTopicLine(current)}.` : "Look for the safest clinical priority before choosing."}</p>
+                  <p>{buildSupportHint(current)}</p>
                 ) : (
                   <button type="button" className="nn-flashcard-hint-reveal" onClick={() => setHintOpen(true)}>
                     Reveal hint
@@ -859,7 +896,7 @@ export function ActiveStudySession({
               </div>
               <div className="nn-flashcard-coach-panel__section">
                 <span>Why This Matters</span>
-                <p>{buildClinicalPearl(current, "This concept connects recall to clinical judgment.")}</p>
+                <p>{buildWhyThisMatters(current)}</p>
               </div>
               <div className="nn-flashcard-coach-panel__section">
                 <span>Related Lesson</span>

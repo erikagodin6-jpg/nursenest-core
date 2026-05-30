@@ -121,8 +121,8 @@ test("public crawl — sitemap + seeds (status, redirects, canonical, robots, li
         }
         const bl = body.toLowerCase();
         if (
-          bl.includes("page not found") ||
-          (bl.includes("404") && /<title[^>]*>[^<]*\b404\b/i.test(body))
+          /<title[^>]*>[^<]*(?:\b404\b|page not found)[^<]*<\/title>/i.test(body) ||
+          /<h1[^>]*>[^<]*(?:\b404\b|page not found)[^<]*<\/h1>/i.test(body)
         ) {
           obviousBroken = true;
         }

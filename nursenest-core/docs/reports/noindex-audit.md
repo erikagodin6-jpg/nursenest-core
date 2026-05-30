@@ -1,6 +1,6 @@
 # Noindex Audit
 
-Generated: 2026-05-30T04:51:15.900Z
+Generated: 2026-05-30T14:13:50.086Z
 
 ## Search Console Signal
 
@@ -112,6 +112,7 @@ _No Search Console URL export rows were available for this issue._
 - /nursing-mechanisms/[slug] (src/app/(marketing)/(default)/nursing-mechanisms/[slug]/page.tsx)
 - /nursing-mechanisms (src/app/(marketing)/(default)/nursing-mechanisms/page.tsx)
 - /nursing/[careerSlug]/blog/[postSlug] (src/app/(marketing)/(default)/nursing/[careerSlug]/blog/[postSlug]/page.tsx)
+- /pre-nursing/[slug] (src/app/(marketing)/(default)/pre-nursing/[slug]/page.tsx)
 - /pre-nursing/lessons (src/app/(marketing)/(default)/pre-nursing/lessons/page.tsx)
 - /questions/[slug] (src/app/(marketing)/(default)/questions/[slug]/page.tsx)
 - /reset-password (src/app/(marketing)/(default)/reset-password/page.tsx)
@@ -132,8 +133,7 @@ _No Search Console URL export rows were available for this issue._
 - /preview/figma-navigation (src/app/(preview)/preview/figma-navigation/page.tsx)
 - /preview/flashcard-session-live (src/app/(preview)/preview/flashcard-session-live/page.tsx)
 - /preview/homepage-live (src/app/(preview)/preview/homepage-live/page.tsx)
-- /preview (src/app/(preview)/preview/layout.tsx)
-- ... 29 more
+- ... 30 more
 
 ## Classification
 

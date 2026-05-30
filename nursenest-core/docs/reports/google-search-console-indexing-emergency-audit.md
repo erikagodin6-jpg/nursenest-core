@@ -1,6 +1,6 @@
 # Google Search Console Indexing Emergency Audit
 
-Generated: 2026-05-30T04:51:15.900Z
+Generated: 2026-05-30T14:13:50.086Z
 
 ## Executive Summary
 
@@ -27,6 +27,8 @@ No local GSC URL CSV exports found. Reports use the aggregate counts from the pr
 
 ## Deliverables
 
+- `docs/reports/seo-5xx-inventory.md`
+- `docs/reports/seo-5xx-root-cause-analysis.md`
 - `docs/reports/seo-5xx-audit.md`
 - `docs/reports/robots-audit.md`
 - `docs/reports/404-audit.md`

@@ -27,7 +27,7 @@ function renderHub(
 }
 
 describe("NursingTierHubPage", () => {
-  it("Flashcards tile starts an app session when SSR guest but client authenticated", () => {
+  it("Flashcards tile opens the app setup launcher when SSR guest but client authenticated", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -46,7 +46,7 @@ describe("NursingTierHubPage", () => {
     assert.ok(link);
     assert.equal(
       link.getAttribute("href"),
-      "/app/flashcards/custom?pathwayId=us-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20",
+      "/app/flashcards?pathwayId=us-rn-nclex-rn",
     );
   });
 
@@ -144,7 +144,7 @@ describe("NursingTierHubPage", () => {
     assert.ok(container.querySelector('[data-nn-marketing-hub-guided-path="1"]'));
   });
 
-  it("Flashcards card is interactive app-session link for signed-in SSR, not locked article", () => {
+  it("Flashcards card is interactive app launcher link for signed-in SSR, not locked article", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -165,7 +165,7 @@ describe("NursingTierHubPage", () => {
     assert.equal(link.getAttribute("role"), null);
     assert.equal(
       link.getAttribute("href"),
-      "/app/flashcards/custom?pathwayId=us-rn-nclex-rn&includeCards=1&shuffle=1&cardLimit=20",
+      "/app/flashcards?pathwayId=us-rn-nclex-rn",
     );
   });
 });

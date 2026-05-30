@@ -607,6 +607,15 @@ const nextConfig = {
         pathname: "/branding/blossom-leaf/**",
         search: "?v=2026-05-21-opt1",
       },
+      {
+        pathname: "/marketing/**",
+      },
+      {
+        pathname: "/landing-polish-preview/png/**",
+      },
+      {
+        pathname: "/dashboard-redesign-preview/**",
+      },
     ],
     remotePatterns: [
       {

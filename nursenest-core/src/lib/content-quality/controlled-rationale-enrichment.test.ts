@@ -20,7 +20,7 @@ describe("buildControlledRationaleEnrichment", () => {
     assert.ok(out.clinicalPearl.length > 20);
   });
 
-  it("uses honest distractor fallback when option-level reasoning is unavailable", () => {
+  it("does not emit placeholder distractor copy when option-level reasoning is unavailable", () => {
     const out = buildControlledRationaleEnrichment({
       stem: "Which action is first in septic shock management?",
       topic: "Shock / Sepsis",
@@ -30,7 +30,7 @@ describe("buildControlledRationaleEnrichment", () => {
         "Prioritizing fluids, cultures, and antibiotics in sequence reduces time-to-treatment delays and supports tissue perfusion.",
     });
     assert.equal(out.applied, true);
-    assert.equal(out.whyWrong, "Detailed distractor explanations are not available for this item yet.");
+    assert.equal(out.whyWrong, "");
   });
 });
 

@@ -40,10 +40,11 @@ export function FlashcardSataAnswerList({
 }: FlashcardSataAnswerListProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const correctSet = new Set(correctLetters);
+  const optionLetterKey = options.map((o) => o.letter).join(",");
 
   useEffect(() => {
     setSelected(new Set());
-  }, [options.map((o) => o.letter).join(",")]);
+  }, [optionLetterKey]);
 
   function toggleLetter(letter: string) {
     if (revealed) return;
@@ -84,7 +85,7 @@ export function FlashcardSataAnswerList({
 
   return (
     <div className="nn-flashcard-sata-premium mt-4 space-y-3" data-nn-premium-flashcard-sata>
-      <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
+      <p className="text-[0.7rem] font-semibold tracking-normal text-[var(--semantic-text-muted)]">
         {answerChoicesHeading}
       </p>
 

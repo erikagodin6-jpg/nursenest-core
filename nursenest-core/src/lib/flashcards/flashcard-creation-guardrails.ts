@@ -1,5 +1,9 @@
 import type { FlashcardItemKind, TierCode } from "@prisma/client";
-import { hasSimpleRationaleTeachingShape, isGenericRationaleText } from "@/lib/questions/rationale-quality";
+import {
+  hasSimpleRationaleTeachingShape,
+  isGenericRationaleText,
+  validateFlashcardRationaleContent,
+} from "@/lib/questions/rationale-quality";
 
 export type FlashcardCreationGuardrailExamSlice = {
   itemKind: FlashcardItemKind;
@@ -142,6 +146,18 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
       error: "RN/NP flashcards must include a substantive correct rationale (at least ~50 characters teaching the decision).",
     };
   }
+  const correctQuality = validateFlashcardRationaleContent({
+    rationale: exam.rationaleCorrect,
+    minWords: 40,
+  });
+  if (!correctQuality.pass) {
+    return {
+      ok: false,
+      code: "flashcard_guardrail_rn_np_rationale_content_quality",
+      error:
+        "RN/NP flashcards must not contain placeholder rationale phrases, repeated sentences, excessive answer echoing, or correct rationales under 40 words.",
+    };
+  }
   if (isGenericRationaleText(exam.rationaleCorrect) || !hasSimpleRationaleTeachingShape(exam.rationaleCorrect)) {
     return {
       ok: false,
@@ -172,6 +188,21 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
       ok: false,
       code: "flashcard_guardrail_rn_np_distractor_rationale_quality",
       error: `Distractor rationale for option ${genericDistractor.letter} is vague or placeholder-like. Explain why it is tempting, what stem detail it misses, and what clinical misconception it represents.`,
+    };
+  }
+  const lowQualityDistractor = exam.rationaleIncorrect.find((d) => {
+    const optionText = exam.answerOptions.find((option) => option.letter === d.letter)?.text ?? "";
+    return !validateFlashcardRationaleContent({
+      rationale: d.rationale,
+      answerText: optionText,
+      minWords: 18,
+    }).pass;
+  });
+  if (lowQualityDistractor) {
+    return {
+      ok: false,
+      code: "flashcard_guardrail_rn_np_distractor_rationale_content_quality",
+      error: `Distractor rationale for option ${lowQualityDistractor.letter} must avoid placeholder phrases, duplicate sentences, answer echoing, and overly thin explanations.`,
     };
   }
   return { ok: true };

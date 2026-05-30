@@ -16,6 +16,7 @@ const PRACTICE_START_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner
 const CAT_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/cat/page.tsx");
 const CAT_LAUNCH_ALIAS_PATH = path.resolve(ROOT, "src/app/(app)/app/(learner)/practice-tests/cat-launch/page.tsx");
 const HUB_LINKS_PATH = path.resolve(ROOT, "src/lib/marketing/pathway-hub-app-questions-href.ts");
+const PATHWAY_CAT_FLOW_PATH = path.resolve(ROOT, "src/lib/exam-pathways/pathway-cat-flow.ts");
 
 function read(filePath: string): string {
   return fs.readFileSync(filePath, "utf8");
@@ -28,6 +29,7 @@ describe("practice tests launcher restoration", () => {
   const catAlias = read(CAT_ALIAS_PATH);
   const catLaunchAlias = read(CAT_LAUNCH_ALIAS_PATH);
   const hubLinks = read(HUB_LINKS_PATH);
+  const pathwayCatFlow = read(PATHWAY_CAT_FLOW_PATH);
 
   it("keeps tier hub practice CTAs pointed at the shared launcher route", () => {
     assert.match(hubLinks, /pathwayHubAppPracticeTestsHref/, "pathway practice-tests href helper must exist");
@@ -35,6 +37,17 @@ describe("practice tests launcher restoration", () => {
     assert.doesNotMatch(hubLinks, /\/app\/practice-tests\/start/, "tier practice CTAs must not use the start alias");
     assert.doesNotMatch(hubLinks, /\/app\/practice-tests\/cat-launch/, "tier practice CTAs must not use the cat-launch alias");
     assert.doesNotMatch(hubLinks, /catLaunch/, "tier practice CTAs must not force CAT mode");
+  });
+
+  it("keeps pathway-scoped practice test entries on setup instead of forced CAT launch", () => {
+    const sessionStartFunction = pathwayCatFlow.slice(
+      pathwayCatFlow.indexOf("export function appPathwayCatSessionStartPath"),
+      pathwayCatFlow.indexOf("/** Deep-link shim only"),
+    );
+    assert.match(sessionStartFunction, /\/app\/practice-tests\?\$\{q\.toString\(\)\}/);
+    assert.doesNotMatch(sessionStartFunction, /catLaunch|PRACTICE_TESTS_HUB_CAT_LAUNCH_PARAM/);
+    assert.match(pathwayCatFlow, /resolvedPathwayId \? appPathwayCatSessionStartPath\(resolvedPathwayId\) : "\/app\/practice-tests"/);
+    assert.doesNotMatch(pathwayCatFlow, /\/app\/practice-tests\?catLaunch=1/);
   });
 
   it("renders the shared setup launcher before a practice or CAT session starts", () => {

@@ -30,20 +30,20 @@ html[data-theme="blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :h
 html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-accent-peach)) 0%,
-    color-mix(in srgb, var(--semantic-chart-5) 6%, color-mix(in srgb, var(--semantic-accent-peach) 18%, var(--semantic-warning-soft))) 38%,
+    color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-panel-cool)) 42%,
     color-mix(in srgb, var(--semantic-brand) 3%, var(--nn-flashcard-refinement-card)) 72%,
     var(--nn-flashcard-refinement-card) 100%
   );
   --nn-flashcard-refinement-card-border: color-mix(
     in srgb,
     var(--semantic-brand) 14%,
-    color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-accent-peach))
+    color-mix(in srgb, var(--semantic-border-soft) 80%, var(--semantic-panel-cool))
   );
   --nn-flashcard-refinement-option-border: color-mix(
     in srgb,
     var(--semantic-brand) 24%,
-    color-mix(in srgb, var(--semantic-text-muted) 12%, var(--semantic-accent-peach))
+    color-mix(in srgb, var(--semantic-text-muted) 12%, var(--semantic-panel-cool))
   );
 }
 
@@ -208,8 +208,8 @@ html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-layout-refinement]
 [data-nn-flashcard-layout-refinement] .nn-flashcard-chip--mode {
   flex-shrink: 0;
   font-size: 0.68rem !important;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-topbar-focus-note {
@@ -802,8 +802,8 @@ html[data-theme="blossom"]:where(:has([data-nn-flashcard-premium-visual-refineme
 html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-premium-visual-refinement])) {
   --nn-flashcard-refinement-canvas: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-panel-warm)) 0%,
-    color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-bg-base)) 48%,
+    color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-panel-cool)) 46%,
     var(--semantic-bg-base) 100%
   );
 }
@@ -1057,5 +1057,172 @@ html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-premium-visual-re
   [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel,
   [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Flashcard viewport fit + metric alignment recovery ──────────────────────
+   Keep Progress, Focus, and Elapsed on one shared baseline while tightening the
+   vertical budget above the study cards. Educational containers remain content-led. */
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session]
+  .nn-flashcard-learning-topbar {
+  display: grid !important;
+  grid-template-columns: minmax(15rem, 1fr) max-content !important;
+  align-items: center !important;
+  min-height: 3.125rem !important;
+  height: auto !important;
+  padding: 0.25rem clamp(0.85rem, 1.4vw, 1.35rem) !important;
+  gap: clamp(0.6rem, 1vw, 1rem) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: max-content !important;
+  align-items: center !important;
+  gap: clamp(0.45rem, 0.8vw, 0.75rem) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta > div {
+  display: grid !important;
+  grid-template-rows: 0.9rem 1.1rem;
+  align-items: start !important;
+  align-content: center !important;
+  min-height: 2.35rem !important;
+  padding-inline: clamp(0.5rem, 0.75vw, 0.8rem) !important;
+  row-gap: 0.1rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-stat-label {
+  align-self: end !important;
+  line-height: 0.9rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta strong {
+  align-self: start !important;
+  line-height: 1.1rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress {
+  grid-template-columns: max-content minmax(3.75rem, 5.25rem) !important;
+  grid-template-rows: 0.9rem 1.1rem;
+  column-gap: 0.55rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress .nn-flashcard-topbar-stat-label {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress strong {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-progress-track {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center !important;
+  width: 100% !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-measurement-toggle,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-shell-action {
+  min-height: 2.35rem !important;
+  height: 2.35rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-measurement-toggle button {
+  min-height: 2.35rem !important;
+  height: 2.35rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-premium-flashcard-stack-outer {
+  padding: clamp(0.65rem, 1vw, 0.95rem) clamp(1rem, 1.8vw, 1.6rem) clamp(0.85rem, 1.35vw, 1.2rem) !important;
+  gap: clamp(0.6rem, 0.95vw, 0.85rem) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading {
+  margin: 0 0 0.35rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading h1 {
+  font-size: clamp(1.35rem, 1.65vw, 1.7rem) !important;
+  line-height: 1.1 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading p {
+  margin-top: 0.15rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
+.nn-flashcard-study-premium
+  .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session]
+  .nn-flashcard-learning-grid {
+  gap: clamp(0.9rem, 1.4vw, 1.35rem) !important;
+  margin-block: 0.35rem 0 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-hero-surface,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel {
+  background: var(--semantic-surface) !important;
+  background-image: none !important;
+  padding: clamp(1.1rem, 1.65vw, 1.55rem) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-session-main-footer {
+  gap: 0.75rem !important;
+  margin-top: 0.75rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel {
+  gap: 0.65rem !important;
+  padding: 0.8rem 0.95rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel__section,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-confidence-scale {
+  padding: 0.45rem 0.6rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock {
+  gap: 0.65rem !important;
+  padding: 0.55rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock button {
+  min-height: 2.5rem !important;
+}
+
+/* ── Static rationale reading window ──────────────────────────────────────────
+   Latest learner requirement: keep the rationale in a stable panel and allow
+   the rationale body to scroll inside that panel. The question surface remains
+   content-led and white; only the rationale reading area receives internal scroll. */
+@media (min-width: 761px) {
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel,
+  .nn-flashcard-study-premium
+    .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session]
+    .nn-flashcard-rationale-panel {
+    position: sticky !important;
+    top: 3.75rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: clamp(22rem, calc(100dvh - 16rem), 34rem) !important;
+    overflow: hidden !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__header {
+    flex: 0 0 auto !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__body,
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__body--reserved {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    scrollbar-gutter: stable !important;
   }
 }

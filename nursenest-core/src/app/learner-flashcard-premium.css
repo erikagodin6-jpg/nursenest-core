@@ -669,8 +669,8 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-exam-mcq-premium[d
   margin: 0;
   font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--semantic-brand);
 }
 
@@ -835,8 +835,8 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-exam-mcq-premium[d
   gap: 0.45rem;
   font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--semantic-text-primary);
 }
 
@@ -1013,8 +1013,8 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-exam-mcq-premium[d
   margin-bottom: 0.45rem;
   font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--semantic-text-muted);
 }
 
@@ -1514,8 +1514,8 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-exam-mcq-premium[d
   display: block;
   font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--semantic-text-muted);
 }
 
@@ -3620,8 +3620,8 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
   margin-bottom: 0.08rem;
   font-size: 0.66rem;
   font-weight: 750;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .nn-flashcard-answer-feedback--correct {
@@ -3793,10 +3793,10 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
   cursor: pointer;
   font-size: 0.62rem !important;
   font-weight: 750;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   line-height: 1.2;
   list-style: none;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .nn-flashcard-answer-feedback > summary::-webkit-details-marker {
@@ -4411,8 +4411,8 @@ html[data-theme="deep-twilight"] .nn-flashcard-study-canvas {
   margin: 0 0 0.35rem !important;
   font-size: 0.64rem !important;
   font-weight: 750 !important;
-  letter-spacing: 0.04em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: var(--semantic-text-muted) !important;
 }
 
@@ -4942,8 +4942,8 @@ html:has([data-nn-flashcard-study-session]) .nn-learner-app main {
   margin: 0 !important;
   font-size: 0.68rem !important;
   font-weight: 750 !important;
-  letter-spacing: 0.07em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: var(--semantic-text-muted) !important;
 }
 
@@ -6797,7 +6797,7 @@ html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
   margin-bottom: 0.15rem !important;
 }
 
-/* Pearl label row: icon + "CLINICAL PEARL" */
+/* Pearl label row: icon + "Clinical Pearl" */
 .nn-flashcard-study-premium .nn-flashcard-rationale-key-concept span,
 .nn-flashcard-rationale-key-concept .nn-clinical-pearl-label {
   display: inline-flex !important;
@@ -6806,8 +6806,8 @@ html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
   margin: 0 !important;
   font-size: 0.67rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 88%, var(--semantic-text-primary)) !important;
 }
 
@@ -6882,8 +6882,8 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
   margin: 0 !important;
   font-size: 0.66rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: var(--semantic-text-muted) !important;
 }
 
@@ -7000,9 +7000,9 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
 .nn-flashcard-confidence-scale > span {
   font-size: 0.67rem !important;
   font-weight: 750 !important;
-  letter-spacing: 0.04em !important;
+  letter-spacing: 0 !important;
   color: var(--semantic-text-muted) !important;
-  text-transform: uppercase !important;
+  text-transform: none !important;
 }
 
 /* ── Rating dock: proportional, icon-aware ───────────────────────────────────── */
@@ -7054,8 +7054,8 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
   color: var(--semantic-brand);
   font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .nn-flashcard-deck-launcher h1,
@@ -7792,8 +7792,8 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
   display: block;
   font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--semantic-text-muted);
 }
 
@@ -7873,8 +7873,8 @@ html[data-theme="sunset"] .nn-flashcard-study-premium .nn-flashcard-rationale-ke
   gap: 0.4rem;
   font-size: 0.67rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: color-mix(in srgb, var(--semantic-info, var(--semantic-brand)) 85%, var(--semantic-text-primary));
 }
 

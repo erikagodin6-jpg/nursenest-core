@@ -1,6 +1,6 @@
 # Sitemap Health Report
 
-Generated: 2026-05-30T04:51:15.900Z
+Generated: 2026-05-30T14:13:50.086Z
 
 ## Sitemap Index Children
 
@@ -94,6 +94,7 @@ npm run verify:robots
 SITEMAP_VERIFY_MAX_URLS=5000 SITEMAP_VERIFY_CONCURRENCY=8 npm run verify:sitemap
 npm run sitemap:validate
 npm run test:seo-sitemap
+npm run qa:crawl-health
 ```
 
 ## Required Sitemap Cleanliness

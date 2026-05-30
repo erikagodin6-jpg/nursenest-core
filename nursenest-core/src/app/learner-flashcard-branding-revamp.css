@@ -527,8 +527,8 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
   gap: 0.28rem !important;
   font-size: 0.62rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: var(--semantic-brand-strong, var(--semantic-brand)) !important;
   margin-bottom: 0.3rem !important;
 }
@@ -559,7 +559,7 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
   padding: 0.85rem 1rem !important;
 }
 
-/* ── Rationale section headings — consistent uppercase labels ─────── */
+/* ── Rationale section headings — consistent Title Case labels ─────── */
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section {
   margin-top: 0.75rem !important;
   gap: 0.28rem !important;
@@ -568,8 +568,8 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
 .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] .nn-flashcard-rationale-section h3 {
   font-size: 0.62rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: var(--semantic-text-muted) !important;
   margin: 0 !important;
 }
@@ -640,8 +640,8 @@ html[data-theme] .nn-active-flashcard-session[data-nn-unified-exam-workspace] .n
   gap: 0.28rem !important;
   font-size: 0.62rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
   color: color-mix(in srgb, var(--semantic-brand) 80%, var(--semantic-text-muted)) !important;
   margin: 0 0 0.28rem !important;
 }
@@ -876,13 +876,13 @@ html[data-theme] .nn-flashcard-study-premium .nn-flashcard-rationale-panel[data-
   min-width: 0;
 }
 
-/* "STUDY" — uppercase micro-label in brand color */
+/* "Study" — Title Case micro-label in brand color */
 .nn-flashcard-card-surface-label {
   display: block;
   font-size: 0.6rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--semantic-brand);
   line-height: 1.2;
   margin-bottom: 0.1rem;
@@ -1053,7 +1053,7 @@ html[data-theme="midnight"] .nn-flashcard-card-topic-subtitle {
   font-weight: 800;
   letter-spacing: 0.09em;
   line-height: 1;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .nn-flashcard-study-heading h1,

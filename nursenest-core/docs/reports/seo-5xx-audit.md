@@ -1,6 +1,6 @@
 # SEO 5xx Audit
 
-Generated: 2026-05-30T04:51:15.900Z
+Generated: 2026-05-30T14:13:50.086Z
 
 ## Search Console Signal
 
@@ -42,6 +42,11 @@ Generated: 2026-05-30T04:51:15.900Z
 ## Highest-Risk Templates To Check First
 
 _No Search Console URL export rows were available for this issue._
+
+## Phase 1 Inventory And Root Cause Reports
+
+- `docs/reports/seo-5xx-inventory.md`
+- `docs/reports/seo-5xx-root-cause-analysis.md`
 
 ## Source Files With SEO/Crawl Error-Handling Surfaces
 
@@ -125,7 +130,7 @@ _No Search Console URL export rows were available for this issue._
 - /modules/labs-advanced (src/app/(app)/modules/labs-advanced/layout.tsx)
 - /modules/labs-advanced (src/app/(app)/modules/labs-advanced/page.tsx)
 - /modules/rt-ventilator (src/app/(app)/modules/rt-ventilator/layout.tsx)
-- ... 111 more
+- ... 104 more
 
 ## P0 Remediation Plan
 

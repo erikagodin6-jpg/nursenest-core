@@ -39,17 +39,19 @@ function entryTypeForHref(href: string): StudyLoopCatEntryType {
   if (pathname === "/app/practice-tests/cat-launch") {
     return searchParams.get("pathwayId") ? "pathway_scoped_start" : "pathway_chooser";
   }
+  if (pathname === "/app/practice-tests" && searchParams.get("cat") === "1") {
+    return "weak_focus";
+  }
   if (
     pathname === "/app/practice-tests" &&
-    (searchParams.get("catLaunch") === "1" || searchParams.get("catLaunch")?.toLowerCase() === "true")
+    (searchParams.get("pathwayId") ||
+      searchParams.get("catLaunch") === "1" ||
+      searchParams.get("catLaunch")?.toLowerCase() === "true")
   ) {
     return searchParams.get("pathwayId") ? "pathway_scoped_start" : "pathway_chooser";
   }
   if (pathname === "/app/practice-tests/start") {
     return searchParams.get("pathwayId") ? "pathway_scoped_start" : "pathway_chooser";
-  }
-  if (pathname === "/app/practice-tests" && searchParams.get("cat") === "1") {
-    return "weak_focus";
   }
   if (pathname === "/app/practice-tests/cat-insights") return "history";
   return "other";

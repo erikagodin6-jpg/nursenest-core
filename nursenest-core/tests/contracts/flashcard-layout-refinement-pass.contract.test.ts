@@ -20,8 +20,37 @@ test("flashcard layout refinement pass is wired", () => {
   assert.match(css, /data-nn-flashcard-premium-visual-refinement/);
   assert.match(css, /grid-template-columns: minmax\(0, 1\.42fr\) minmax\(28rem, 1fr\)/);
   assert.match(css, /--nn-flashcard-refinement-card: var\(--semantic-surface\)/);
+  assert.match(css, /Flashcard viewport fit \+ metric alignment recovery/);
+  assert.match(css, /grid-template-rows: 0\.9rem 1\.1rem/);
+  assert.match(css, /\.nn-flashcard-topbar-progress-track[\s\S]*?grid-row: 2/);
+  assert.match(css, /\.nn-flashcard-hero-surface,[\s\S]*?\.nn-flashcard-rationale-panel[\s\S]*?background: var\(--semantic-surface\) !important/);
+  assert.match(css, /Static rationale reading window/);
+  assert.match(css, /\.nn-flashcard-rationale-panel__body[\s\S]*?overflow-y: auto !important/);
   assert.match(css, /\[data-nn-clinical-pearl\]/);
-  assert.match(css, /overflow-y: visible !important/);
+
+  const blossomLayoutStart = css.indexOf(
+    'html[data-theme="blossom"]:where(:has([data-nn-flashcard-layout-refinement])',
+  );
+  const blossomLayoutEnd = css.indexOf('html[data-theme="ocean"]:where(:has([data-nn-flashcard-layout-refinement])');
+  assert.ok(blossomLayoutStart >= 0 && blossomLayoutEnd > blossomLayoutStart, "Blossom flashcard layout theme block must exist");
+  const blossomLayoutBlock = css.slice(blossomLayoutStart, blossomLayoutEnd);
+  assert.match(blossomLayoutBlock, /var\(--semantic-brand\) 16%/, "Blossom gradient must start with pink brand tint");
+  assert.match(blossomLayoutBlock, /var\(--semantic-info\) 7%/, "Blossom gradient must fade through a cool blue tint");
+  assert.doesNotMatch(
+    blossomLayoutBlock,
+    /accent-peach|panel-warm|warning-soft/,
+    "Blossom flashcard layout background must not use apricot/peach tokens",
+  );
+
+  const blossomPremiumStart = css.indexOf(
+    'html[data-theme="blossom"]:where(:has([data-nn-flashcard-premium-visual-refinement])),',
+  );
+  const blossomPremiumEnd = css.indexOf('html[data-theme="forest"]:where(:has([data-nn-flashcard-premium-visual-refinement]))');
+  assert.ok(blossomPremiumStart >= 0 && blossomPremiumEnd > blossomPremiumStart, "Blossom premium visual theme block must exist");
+  const blossomPremiumBlock = css.slice(blossomPremiumStart, blossomPremiumEnd);
+  assert.match(blossomPremiumBlock, /var\(--semantic-brand\) 16%/);
+  assert.match(blossomPremiumBlock, /var\(--semantic-info\) 7%/);
+  assert.doesNotMatch(blossomPremiumBlock, /accent-peach|panel-warm|warning-soft/);
 
   const session = readFileSync(
     join(root, "src/components/study/active-study-session.tsx"),

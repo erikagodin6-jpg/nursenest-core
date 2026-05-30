@@ -74,7 +74,7 @@ function mergeWhyCorrectBlocks(
   add(correctAnswerExplanation);
   add(rationale);
   add(clinicalReasoning);
-  if (parts.length === 0) return "Clinical reasoning is not yet on file for this item.";
+  if (parts.length === 0) return "";
   return parts.join("\n\n");
 }
 

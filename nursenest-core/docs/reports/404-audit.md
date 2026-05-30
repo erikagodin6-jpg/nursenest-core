@@ -1,12 +1,12 @@
 # 404 Audit
 
-Generated: 2026-05-30T04:51:15.900Z
+Generated: 2026-05-30T14:13:50.086Z
 
 ## Search Console Signal
 
 - Reported 404s: 18,985
 - URL export status: No local GSC URL CSV exports found. Reports use the aggregate counts from the prompt plus source/sitemap/robots analysis. Export affected URLs from GSC into data/gsc-indexing/ for frequency-accurate grouping.
-- Existing redirect declarations in `next.config.mjs`: 28
+- Existing redirect declarations in `next.config.mjs`: 42
 
 ## Top Templates
 
@@ -20,6 +20,7 @@ _No top-500 GSC export was available._
 
 These route files call `notFound()` and should be checked against sitemap/internal-link emission:
 
+- next.config.mjs (next.config.mjs)
 - /admin/clinical-scenarios/[scenarioId] (src/app/(admin)/admin/clinical-scenarios/[scenarioId]/page.tsx)
 - /admin/osce-stations/[id] (src/app/(admin)/admin/osce-stations/[id]/page.tsx)
 - /admin/printables/[id]/analytics (src/app/(admin)/admin/printables/[id]/analytics/page.tsx)
@@ -41,6 +42,7 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /app/practice-tests/[id]/results (src/app/(app)/app/(learner)/practice-tests/[id]/results/page.tsx)
 - /app/printables (src/app/(app)/app/(learner)/printables/page.tsx)
 - /app/strategy/[strategyKey] (src/app/(app)/app/(learner)/strategy/[strategyKey]/page.tsx)
+- /app/topics/[topicKey] (src/app/(app)/app/(learner)/topics/[topicKey]/page.tsx)
 - /modules/ecg/pediatric/cases/[id] (src/app/(app)/modules/ecg/pediatric/cases/[id]/page.tsx)
 - /modules/labs-advanced/[slug] (src/app/(app)/modules/labs-advanced/[slug]/page.tsx)
 - /[locale]/[slug]/[examCode]/[exam] (src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/[exam]/page.tsx)
@@ -82,9 +84,11 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /blog/tag/[tag] (src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx)
 - /canada/new-grad/[workArea] (src/app/(marketing)/(default)/canada/new-grad/[workArea]/page.tsx)
 - /canada/np/cnple/[topic] (src/app/(marketing)/(default)/canada/np/cnple/[topic]/page.tsx)
+- /canada/np/cnple/test-bank (src/app/(marketing)/(default)/canada/np/cnple/test-bank/page.tsx)
 - /canada/rn/nclex-rn/guide/[topic] (src/app/(marketing)/(default)/canada/rn/nclex-rn/guide/[topic]/page.tsx)
 - /canada/rpn/rex-pn/[topic] (src/app/(marketing)/(default)/canada/rpn/rex-pn/[topic]/page.tsx)
 - /canada/rpn/rex-pn (src/app/(marketing)/(default)/canada/rpn/rex-pn/page.tsx)
+- /canada/rpn/rex-pn/test-bank (src/app/(marketing)/(default)/canada/rpn/rex-pn/test-bank/page.tsx)
 - /china/[topic] (src/app/(marketing)/(default)/china/[topic]/page.tsx)
 - /clinical-interpretation/[slug] (src/app/(marketing)/(default)/clinical-interpretation/[slug]/page.tsx)
 - /compare/[slug] (src/app/(marketing)/(default)/compare/[slug]/page.tsx)
@@ -116,11 +120,7 @@ These route files call `notFound()` and should be checked against sitemap/intern
 - /tools/[slug] (src/app/(marketing)/(default)/tools/[slug]/page.tsx)
 - /us/new-grad/[workArea] (src/app/(marketing)/(default)/us/new-grad/[workArea]/page.tsx)
 - /[locale]/[slug]/[examCode]/[exam]/blog/[postSlug] (src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx)
-- /[locale]/[slug]/[examCode]/[exam]/blog (src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/page.tsx)
-- /[locale]/[slug] (src/app/(marketing)/[locale]/[slug]/page.tsx)
-- /[locale]/australia/[topic] (src/app/(marketing)/[locale]/australia/[topic]/page.tsx)
-- /[locale]/blog/[slug] (src/app/(marketing)/[locale]/blog/[slug]/page.tsx)
-- ... 36 more
+- ... 40 more
 
 ## Remediation Rules
 

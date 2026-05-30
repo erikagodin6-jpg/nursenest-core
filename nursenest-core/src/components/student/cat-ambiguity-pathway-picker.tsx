@@ -12,7 +12,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
  * Shown when the API returns `cat_pathway_ambiguous` — the user's subscription has more than
  * one CAT-eligible pathway and the client did not (or could not) pass a `pathwayId`.
  *
- * Renders one CTA per eligible pathway linking to `/app/practice-tests?pathwayId=<id>&catLaunch=1`.
+ * Renders one CTA per eligible pathway linking to `/app/practice-tests?pathwayId=<id>`.
  * Never auto-selects a pathway or falls back to the generic hub.
  *
  * Each option label shows full country + tier + exam copy (e.g. "US RN · NCLEX-RN") so
@@ -31,7 +31,6 @@ export function CatAmbiguityPathwayPicker({
   useEffect(() => {
     if (catEligibleOptions.length === 0) {
       // Contract violation: cat_pathway_ambiguous but no options — log for debugging.
-      // eslint-disable-next-line no-console
       console.error(
         "[CatAmbiguityPathwayPicker] cat_pathway_ambiguous received but catEligibleOptions is empty. " +
           "The server indicates multiple CAT-eligible pathways exist yet the client has no options to render. " +
@@ -64,7 +63,7 @@ export function CatAmbiguityPathwayPicker({
         className="mt-2 text-xs text-[var(--semantic-text-secondary)]"
       >
         Your account has multiple exam tracks but none could be loaded here.{" "}
-        <Link href="/app/practice-tests?catLaunch=1" className="font-medium text-[var(--semantic-brand)] underline underline-offset-2">
+        <Link href="/app/practice-tests" className="font-medium text-[var(--semantic-brand)] underline underline-offset-2">
           Open the practice setup
         </Link>{" "}
         to choose.

@@ -210,7 +210,7 @@ function deriveNextStep(
       title: "Take a readiness check",
       why: "Your practice scores are solid. A CAT session confirms where you really stand.",
       ctaLabel: "Start",
-      href: "/app/practice-tests?catLaunch=1",
+      href: "/app/practice-tests",
       urgency: "low",
     };
   }
@@ -304,7 +304,7 @@ function buildStudyStack(
       title: "Take a CAT readiness check",
       why: "Adaptive testing reveals your real exam readiness more accurately than practice alone.",
       ctaLabel: "Start",
-      href: "/app/practice-tests?catLaunch=1",
+      href: "/app/practice-tests",
       urgency: "low",
     });
   }
@@ -377,7 +377,7 @@ function buildRetestRec(
         message:
           "You're close. Take a CAT session in your next study block to see your exact readiness score before scheduling.",
         ctaLabel: "Take a CAT now",
-        href: "/app/practice-tests?catLaunch=1",
+        href: "/app/practice-tests",
         urgency: "soon",
       };
     case "exam_ready":

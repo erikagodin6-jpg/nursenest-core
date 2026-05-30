@@ -47,7 +47,7 @@ function buildPrefetchHref(target: HubPrefetchTarget, pathwayId: string | null |
     case "practice":
       return `/app/practice-tests${pidParam}`;
     case "cat":
-      return `/app/practice-tests${pidParam}${pid ? "&catLaunch=1" : "?catLaunch=1"}`;
+      return `/app/practice-tests${pidParam}`;
     case "loft":
       return "/app/osce";
     case "lessons":

@@ -81,10 +81,18 @@ test("RN exam-style accepts priority stem with teaching rationale", () => {
         { letter: "C", text: "Chronic pain 3/10 after scheduled analgesic" },
       ],
       rationaleCorrect:
-        "Airway and oxygenation threats plus acute mental status change represent the highest risk and should be assessed before stable or chronic complaints.",
+        "New confusion with a falling oxygen saturation is the highest-risk presentation because it combines airway or breathing compromise with an acute neurological change. The nurse should assess this client first, initiate oxygenation support as indicated, and escalate if the client remains unstable before addressing stable discharge needs or controlled chronic pain.",
       rationaleIncorrect: [
-        { letter: "A", rationale: "Stable findings are lower priority than acute deterioration." },
-        { letter: "C", rationale: "Controlled chronic pain is lower priority than acute physiological compromise." },
+        {
+          letter: "A",
+          rationale:
+            "A stable post-operative client awaiting discharge may still need education and routine assessment, but there is no acute cue suggesting immediate physiological compromise.",
+        },
+        {
+          letter: "C",
+          rationale:
+            "Controlled chronic pain requires follow-up, but a 3/10 pain score after scheduled analgesia is less urgent than a new change in mentation with worsening oxygenation.",
+        },
       ],
     },
   });

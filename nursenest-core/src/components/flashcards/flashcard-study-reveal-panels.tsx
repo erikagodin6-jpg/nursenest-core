@@ -5,6 +5,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+import {
+  buildFlashcardClinicalPearl,
+  buildFlashcardMemoryHook,
+  buildFlashcardNclexTakeaway,
+} from "@/lib/flashcards/flashcard-support-block-quality";
 import { ChevronDown, ChevronUp, Gem } from "lucide-react";
 
 type StackLabels = {
@@ -13,42 +18,6 @@ type StackLabels = {
   whyIncorrectHeading?: string;
   takeawayHeading?: string;
 };
-
-/* Derive a 1-2 sentence memory hook from the rationale / answer text. */
-function buildMemoryHook(text: string): string | null {
-  const clean = String(text ?? "")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  if (!clean) return null;
-  const sentences = clean.match(/[^.!?]+[.!?]+/g) ?? [];
-  const hook = sentences.slice(0, 2).join(" ").trim();
-  return hook.length > 20 ? hook : null;
-}
-
-/* Build an exam-strategy tip from item kind and question stem cues. */
-function buildExamTip(exam: ExamMicroQuestionPayload | null | undefined, pathwayLabel: string): string | null {
-  if (!exam) return null;
-  const kind = (exam.itemKind ?? "").toLowerCase();
-  const stem = (exam.questionStem ?? "").toLowerCase();
-
-  if (kind.includes("priority") || stem.includes("priority") || stem.includes("first action")) {
-    return `${pathwayLabel} questions that ask "which action is the priority" test your ability to identify the highest-risk clinical cue. Use the ABCs and Maslow's hierarchy as your decision framework.`;
-  }
-  if (kind.includes("delegation") || stem.includes("delegate") || stem.includes("unlicensed")) {
-    return `${pathwayLabel} delegation questions assess scope of practice. Delegate stable, predictable tasks to UAP. Keep assessment, teaching, and unstable patients with the RN.`;
-  }
-  if (stem.includes("contraindicated") || stem.includes("avoid")) {
-    return `${pathwayLabel} "contraindicated" questions often test safety knowledge. Eliminate options that worsen the underlying condition or mask a critical symptom.`;
-  }
-  if (stem.includes("sata") || exam.answerOptions?.length > 4) {
-    return `${pathwayLabel} Select-All-That-Apply items are scored all-or-nothing. Treat each option as a standalone true/false — do not look for patterns.`;
-  }
-  if (stem.includes("medication") || stem.includes("drug") || stem.includes("administer")) {
-    return `${pathwayLabel} pharmacology questions reward knowing mechanism of action, not just drug names. Ask yourself: what system does this drug affect, and what should I monitor?`;
-  }
-  return null;
-}
 
 /* Collapsible section for mobile with smooth expand. */
 function CollapsibleSection({
@@ -71,7 +40,7 @@ function CollapsibleSection({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
-        <span className="text-xs font-bold uppercase tracking-wide">{label}</span>
+        <span className="text-xs font-bold tracking-normal">{label}</span>
         <span className="sm:hidden">
           {open
             ? <ChevronUp className="h-3.5 w-3.5" aria-hidden />
@@ -121,9 +90,16 @@ export function FlashcardStudyRevealPanels({
     (exam?.rationaleCorrect && String(exam.rationaleCorrect).trim()) ||
     "";
 
-  const pearlText = pearl?.trim() || null;
-  const memoryHook = buildMemoryHook(whyCorrect || answer);
-  const examTip = buildExamTip(exam, examPathwayLabel);
+  const supportBlockContext = {
+    stem: exam?.questionStem ?? null,
+    answerText: correctOptionText || answer,
+    correctLetter: exam?.correctLetter ?? null,
+    rationale: whyCorrect,
+    pathwayLabel: examPathwayLabel,
+  };
+  const pearlText = buildFlashcardClinicalPearl(supportBlockContext, pearl);
+  const memoryHook = buildFlashcardMemoryHook(supportBlockContext);
+  const examTip = exam ? buildFlashcardNclexTakeaway(supportBlockContext) : null;
 
   return (
     <motion.div

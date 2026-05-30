@@ -16,12 +16,15 @@ test("flashcard premium refinement uses content-led page flow instead of fixed s
   assert.doesNotMatch(stack, /nn-premium-flashcard-prompt-panel[^\n"]*overflow-hidden/);
 });
 
-test("flashcard educational containers are protected from nested scrolling and clipping", () => {
+test("flashcard rationale uses a static scrollable reading window", () => {
   assert.match(stack, /data-nn-educational-content-container/);
   assert.match(stack, /data-nn-clinical-pearl/);
-  assert.match(css, /\[data-nn-educational-content-container\][\s\S]*?max-height: none !important/);
-  assert.match(css, /\[data-nn-educational-content-container\][\s\S]*?overflow-y: visible !important/);
-  assert.match(css, /\[data-nn-clinical-pearl\][\s\S]*?overflow-y: visible !important/);
+  assert.match(css, /Static rationale reading window/);
+  assert.match(css, /\.nn-flashcard-rationale-panel[\s\S]*?position: sticky !important/);
+  assert.match(css, /\.nn-flashcard-rationale-panel[\s\S]*?max-height: clamp\(22rem, calc\(100dvh - 16rem\), 34rem\) !important/);
+  assert.match(css, /\.nn-flashcard-rationale-panel[\s\S]*?overflow: hidden !important/);
+  assert.match(css, /\.nn-flashcard-rationale-panel__body[\s\S]*?overflow-y: auto !important/);
+  assert.match(css, /scrollbar-gutter: stable !important/);
   assert.match(css, /-webkit-line-clamp: unset !important/);
 });
 

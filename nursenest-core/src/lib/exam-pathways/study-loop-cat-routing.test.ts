@@ -11,7 +11,7 @@ describe("resolveStudyLoopCatDestination", () => {
     });
 
     assert.equal(destination.kind, "app_start");
-    assert.equal(destination.href, "/app/practice-tests?pathwayId=us-rn-nclex-rn&catLaunch=1");
+    assert.equal(destination.href, "/app/practice-tests?pathwayId=us-rn-nclex-rn");
     assert.equal(destination.pathwayId, "us-rn-nclex-rn");
     assert.equal(destination.isPathwayScoped, true);
   });
@@ -54,7 +54,7 @@ describe("resolveStudyLoopCatDestination", () => {
     });
 
     assert.equal(destination.kind, "generic_chooser");
-    assert.equal(destination.href, "/app/practice-tests?catLaunch=1");
+    assert.equal(destination.href, "/app/practice-tests");
     assert.equal(destination.pathwayId, null);
     assert.equal(destination.isPathwayScoped, false);
   });
@@ -122,7 +122,7 @@ describe("resolveStudyLoopCatDestination", () => {
     });
 
     assert.equal(signedIn.kind, "generic_chooser");
-    assert.equal(signedIn.href, "/app/practice-tests?catLaunch=1");
+    assert.equal(signedIn.href, "/app/practice-tests");
     assert.equal(loggedOut.kind, "generic_chooser");
     assert.equal(loggedOut.href, "/practice-exams");
   });

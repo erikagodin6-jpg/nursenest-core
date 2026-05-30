@@ -182,9 +182,10 @@ describe("FlashcardStudyQuestionStack — MCQ rationale placement", () => {
     );
 
     assert.match(html, /Clinical Pearl/);
-    assert.match(html, /Correct Answer Explanation/);
+    assert.match(html, /Correct Answer/);
+    assert.match(html, /Why This Is Correct/);
     assert.match(html, /Why Other Options Are Incorrect/);
-    assert.match(html, /NCLEX Tip/);
+    assert.match(html, /NCLEX Takeaway/);
     assert.match(html, /Memory Hook/);
     assert.doesNotMatch(html, /responds to the priority cue/i);
     assert.doesNotMatch(html, /clinical reasoning is to choose the action/i);
