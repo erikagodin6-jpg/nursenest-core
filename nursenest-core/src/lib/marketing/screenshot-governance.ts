@@ -47,12 +47,12 @@ export const SCREENSHOT_STALENESS_THRESHOLD_DAYS = 30;
  */
 export const CRITICAL_CDN_SLOTS: readonly ScreenshotId[] = [
   1,  // Practice rationale — used on homepage + pricing + FAQ
-  3,  // Learner dashboard — used on homepage + FAQ
+  3,  // Readiness report — used on homepage + FAQ
   6,  // CAT exam — used on homepage + pricing
   7,  // CAT results — used on homepage + pricing + FAQ
-  10, // Question bank — used on homepage + FAQ
+  10, // Answered question — used on homepage + FAQ
   12, // Lesson detail — used on homepage + FAQ
-  14, // Marketing homepage — used on homepage carousel
+  14, // Deep product demonstration — used on homepage carousel
 ];
 
 // ─── Expected screenshot count per page ──────────────────────────────────────
@@ -230,20 +230,38 @@ export type RequiredGeneratedPath = (typeof REQUIRED_GENERATED_PATHS)[number];
  */
 export const CDN_SLOT_CAPTURE_ROUTES: Record<ScreenshotId, string> = {
   1:  "/app/questions/session",
-  2:  "/app/flashcards",
-  3:  "/app",
-  4:  "/app/questions/bank",
+  2:  "/app/flashcards?deepCapture=active-rationale",
+  3:  "/app/account/readiness",
+  4:  "/app/questions/session?itemType=bowtie",
   5:  "/app/account/report",
   6:  "/app/practice-tests/cat-launch",
   7:  "/app/practice-tests/cat-insights",
   8:  "/app/study-plan",
   9:  "/app/review",
-  10: "/app/questions",
+  10: "/app/questions/session?showRationale=true",
   11: "/app/analytics",
-  12: "/app/lessons",
-  13: "/app/lessons",
-  14: "/",
-  15: "/modules/ecg/basic/lessons",
+  12: "/app/lessons?deepCapture=open-lesson",
+  13: "/app/lessons?deepCapture=knowledge-check",
+  14: "/app/questions/session?itemType=matrix&showRationale=true",
+  15: "/modules/ecg/interactive",
+};
+
+export const CDN_SLOT_CAPTURE_STATES: Record<ScreenshotId, "learning-activity" | "educational-content" | "analytics-report"> = {
+  1: "learning-activity",
+  2: "learning-activity",
+  3: "analytics-report",
+  4: "learning-activity",
+  5: "analytics-report",
+  6: "learning-activity",
+  7: "analytics-report",
+  8: "analytics-report",
+  9: "analytics-report",
+  10: "learning-activity",
+  11: "analytics-report",
+  12: "educational-content",
+  13: "educational-content",
+  14: "learning-activity",
+  15: "learning-activity",
 };
 
 // ─── Theme coverage requirements ─────────────────────────────────────────────

@@ -21,6 +21,7 @@ import {
   PAGE_SCREENSHOT_MINIMUMS,
   CRITICAL_CDN_SLOTS,
   CDN_SLOT_CAPTURE_ROUTES,
+  CDN_SLOT_CAPTURE_STATES,
   REQUIRED_THEME_COVERAGE,
   isScreenshotFresh,
   screenshotAgeLabel,
@@ -150,6 +151,20 @@ test("critical CDN slots all have capture routes", () => {
     const route = CDN_SLOT_CAPTURE_ROUTES[id];
     assert.ok(route, `Critical slot ${id} has no capture route`);
   }
+});
+
+test("CDN capture routes prioritize deep educational states over navigation surfaces", () => {
+  const forbiddenRoutePatterns = [/^\/$/, /\/app$/, /\/app\/questions$/, /\/app\/questions\/bank$/, /\/modules\/ecg\/basic\/lessons$/];
+  for (const [id, route] of Object.entries(CDN_SLOT_CAPTURE_ROUTES)) {
+    for (const pattern of forbiddenRoutePatterns) {
+      assert.doesNotMatch(route, pattern, `Slot ${id} must not capture a shallow navigation surface`);
+    }
+    assert.ok(CDN_SLOT_CAPTURE_STATES[Number(id) as keyof typeof CDN_SLOT_CAPTURE_STATES], `Slot ${id} is missing a capture state`);
+  }
+  assert.equal(CDN_SLOT_CAPTURE_STATES[1], "learning-activity");
+  assert.equal(CDN_SLOT_CAPTURE_STATES[4], "learning-activity");
+  assert.equal(CDN_SLOT_CAPTURE_STATES[14], "learning-activity");
+  assert.equal(CDN_SLOT_CAPTURE_STATES[15], "learning-activity");
 });
 
 // ─── Local fallback image existence ──────────────────────────────────────────

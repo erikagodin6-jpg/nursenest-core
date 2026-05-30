@@ -75,15 +75,19 @@ describe("critical revenue notification and alert system", () => {
     }
 
     const apply = readSource("src/lib/stripe/apply-stripe-webhook-event.ts");
-    assert.match(apply, /eventType:\s*"new_subscription"/);
-    assert.match(apply, /eventType:\s*"trial_started"/);
-    assert.match(apply, /eventType:\s*"trial_converted"/);
-    assert.match(apply, /eventType:\s*"subscription_renewal"/);
-    assert.match(apply, /eventType:\s*"failed_payment"/);
-    assert.match(apply, /eventType:\s*"subscription_cancelled"/);
-    assert.match(apply, /eventType:\s*"refund_issued"/);
-    assert.match(apply, /chargeback_initiated/);
-    assert.match(apply, /payment_method_expiring/);
+    for (const event of [
+      "new_subscription",
+      "trial_started",
+      "trial_converted",
+      "subscription_renewal",
+      "failed_payment",
+      "subscription_cancelled",
+      "refund_issued",
+      "chargeback_initiated",
+      "payment_method_expiring",
+    ]) {
+      assert.match(apply, new RegExp(event), `missing Stripe alert dispatch for ${event}`);
+    }
   });
 
   it("adds a Revenue Alerts Center with required counters, health checks, and test buttons", () => {

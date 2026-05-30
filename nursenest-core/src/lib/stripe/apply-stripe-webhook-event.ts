@@ -1056,6 +1056,7 @@ export async function applyStripeWebhookEvent(
           updatedAt: true,
           currentPeriodEnd: true,
           pastDueSince: true,
+          trialEnd: true,
           planTier: true,
           planCountry: true,
           billingRegionSlug: true,

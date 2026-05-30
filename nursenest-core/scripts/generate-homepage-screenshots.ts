@@ -16,6 +16,12 @@ import sharp from "sharp";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  assertMarketingScreenshotDepth,
+  marketingScreenshotReviewGate,
+  type MarketingScreenshotCaptureSurface,
+  type MarketingScreenshotDepthLevel,
+} from "./lib/marketing-screenshot-depth";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,8 +36,16 @@ type Target = {
   title: string;
   waitFor: string;
   theme: "ocean" | "midnight" | "blossom";
-  prepare?: (page: Page) => Promise<void>;
+  depthLevel: MarketingScreenshotDepthLevel;
+  captureSurface: MarketingScreenshotCaptureSurface;
+  educationalState: string;
+  demonstrates: readonly string[];
+  preparationRequired: true;
+  reviewGate: readonly string[];
+  prepare: (page: Page) => Promise<void>;
 };
+
+const REVIEW_GATE = marketingScreenshotReviewGate();
 
 const TARGETS: Target[] = [
   {
@@ -40,7 +54,13 @@ const TARGETS: Target[] = [
     title: "Question Bank",
     waitFor: "main",
     theme: "ocean",
-    prepare: submitFirstPracticeQuestion,
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "answered NCLEX-style question with selected answer, correct answer, rationale, and clinical pearl visible",
+    demonstrates: ["question stem", "answer choices", "selected answer", "correct answer", "rationale", "clinical pearl"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureAnsweredQuestion,
   },
   {
     name: "ngn-bowtie-demo",
@@ -48,6 +68,13 @@ const TARGETS: Target[] = [
     title: "Next Generation NCLEX",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "completed bowtie item with condition, actions, monitoring priorities, and rationale visible",
+    demonstrates: ["clinical scenario", "bowtie selections", "condition", "actions", "monitoring priorities", "rationale"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureBowtieQuestion,
   },
   {
     name: "ngn-matrix-demo",
@@ -55,6 +82,13 @@ const TARGETS: Target[] = [
     title: "NGN Matrix",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "completed matrix item with selections and explanation visible",
+    demonstrates: ["matrix rows", "completed selections", "clinical scenario", "rationale"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureMatrixQuestion,
   },
   {
     name: "cat-exam-demo",
@@ -62,6 +96,13 @@ const TARGETS: Target[] = [
     title: "CAT Exam",
     waitFor: "main",
     theme: "midnight",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "CAT question in progress with timer, progress, and adaptation indicators visible",
+    demonstrates: ["question in progress", "timer", "progress", "adaptive difficulty", "answer choices"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureCatQuestionInProgress,
   },
   {
     name: "lesson-demo",
@@ -69,27 +110,55 @@ const TARGETS: Target[] = [
     title: "Lessons",
     waitFor: "main",
     theme: "blossom",
+    depthLevel: 2,
+    captureSurface: "educational-content",
+    educationalState: "opened lesson with clinical pearl, educational content, and knowledge check visible",
+    demonstrates: ["lesson title", "educational content", "clinical pearl", "knowledge check"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureLessonLearningState,
   },
   {
     name: "ecg-demo",
-    route: "/modules/ecg/basic/lessons",
+    route: "/modules/ecg/interactive",
     title: "ECG Module",
     waitFor: "main",
     theme: "midnight",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "ECG Detective Mode with rhythm strip, interpretation workflow, and clinical reasoning visible",
+    demonstrates: ["ECG strip", "rate analysis", "PR analysis", "QRS analysis", "rhythm reasoning"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureEcgDetectiveMode,
   },
   {
     name: "telemetry-shift-demo",
-    route: "/modules/ecg/basic/lessons",
+    route: "/modules/ecg/advanced/scenarios",
     title: "Telemetry Shift Simulator",
     waitFor: "main",
     theme: "midnight",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "telemetry shift scenario with monitored patients, prioritization, escalation, and decisions visible",
+    demonstrates: ["monitored patients", "telemetry strips", "prioritization", "escalation", "clinical decisions"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureTelemetryShift,
   },
   {
     name: "lab-workstation-demo",
-    route: "/app/clinical-skills",
+    route: "/app/labs",
     title: "Clinical Lab Workstation",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "abnormal lab interpretation activity with clinical analysis and nursing priorities visible",
+    demonstrates: ["abnormal labs", "interpretation workflow", "clinical analysis", "nursing priorities"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureLabInterpretation,
   },
   {
     name: "med-math-demo",
@@ -97,6 +166,13 @@ const TARGETS: Target[] = [
     title: "Medication Math",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "medication calculation activity with formula setup, calculator, and answer validation visible",
+    demonstrates: ["dosage problem", "formula setup", "calculator", "answer validation"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureMedicationMathActivity,
   },
   {
     name: "pharmacology-demo",
@@ -104,6 +180,13 @@ const TARGETS: Target[] = [
     title: "Pharmacology",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "pharmacology learning workflow with nursing considerations, monitoring, and rationale visible",
+    demonstrates: ["medication class", "nursing considerations", "monitoring", "rationale"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: capturePharmacologyWorkflow,
   },
   {
     name: "clinical-skills-demo",
@@ -111,6 +194,13 @@ const TARGETS: Target[] = [
     title: "Clinical Skills",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 1,
+    captureSurface: "learning-activity",
+    educationalState: "interactive clinical skills scenario with assessment and decision-making visible",
+    demonstrates: ["patient scenario", "assessment", "decision point", "feedback"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureClinicalSkillsScenario,
   },
   {
     name: "readiness-report-demo",
@@ -118,6 +208,13 @@ const TARGETS: Target[] = [
     title: "Readiness Report",
     waitFor: "main",
     theme: "ocean",
+    depthLevel: 3,
+    captureSurface: "analytics-report",
+    educationalState: "readiness report with trends, strengths, weak areas, and recommendations populated",
+    demonstrates: ["readiness score", "trends", "strengths", "weak areas", "recommendations"],
+    preparationRequired: true,
+    reviewGate: REVIEW_GATE,
+    prepare: captureReadinessReport,
   },
 ];
 
@@ -138,6 +235,7 @@ async function main() {
   try {
     await login(context);
     for (const target of TARGETS) {
+      assertMarketingScreenshotDepth({ key: target.name, ...target });
       for (const viewport of VIEWPORTS) {
         const page = await context.newPage();
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -151,7 +249,8 @@ async function main() {
         );
         await page.goto(`${BASE_URL}${target.route}`, { waitUntil: "networkidle" });
         await page.locator(target.waitFor).first().waitFor({ state: "visible", timeout: 45_000 });
-        await target.prepare?.(page);
+        await target.prepare(page);
+        await verifyEducationalState(page, target);
         await page.waitForTimeout(WAIT_MS);
         await hideTransientChrome(page);
 
@@ -190,6 +289,108 @@ async function login(context: BrowserContext) {
   await page.close();
 }
 
+async function captureAnsweredQuestion(page: Page) {
+  await openFirstActivity(page);
+  await submitFirstPracticeQuestion(page);
+  await revealEducationalExplanations(page);
+}
+
+async function captureBowtieQuestion(page: Page) {
+  await openQuestionType(page, /bowtie|next generation|ngn/i);
+  await selectVisibleChoices(page, ".nn-bowtie-option, [data-testid*='bowtie' i] button, button[aria-pressed]");
+  await submitFirstPracticeQuestion(page);
+  await revealEducationalExplanations(page);
+}
+
+async function captureMatrixQuestion(page: Page) {
+  await openQuestionType(page, /matrix|next generation|ngn/i);
+  await selectVisibleChoices(page, ".nn-matrix-option-row, .nn-matrix-radio, [data-testid*='matrix' i] button, [role='radio']");
+  await submitFirstPracticeQuestion(page);
+  await revealEducationalExplanations(page);
+}
+
+async function captureCatQuestionInProgress(page: Page) {
+  await clickFirstVisible(page, [/start cat|begin cat|start exam|begin exam|start/i]);
+  await page.waitForTimeout(1500);
+  await clickFirstVisible(page, [/adaptive|difficulty|next question/i]).catch(() => {});
+}
+
+async function captureLessonLearningState(page: Page) {
+  await openFirstActivity(page);
+  await scrollToLearningSignal(page, /clinical pearl|knowledge check|pathophysiology|assessment|interventions/i);
+  await clickFirstVisible(page, [/knowledge check|show answer|reveal|check/i]).catch(() => {});
+}
+
+async function captureEcgDetectiveMode(page: Page) {
+  await clickFirstVisible(page, [/detective|start|practice|rhythm|interpret/i]);
+  await selectVisibleChoices(page, "button, [role='button'], input");
+  await clickFirstVisible(page, [/reveal|submit|check|interpretation|reasoning/i]).catch(() => {});
+}
+
+async function captureTelemetryShift(page: Page) {
+  await clickFirstVisible(page, [/telemetry|shift|scenario|start|begin/i]);
+  await selectVisibleChoices(page, "button, [role='button']");
+  await clickFirstVisible(page, [/escalate|notify|prioritize|submit|continue/i]).catch(() => {});
+}
+
+async function captureLabInterpretation(page: Page) {
+  await openFirstActivity(page);
+  await selectVisibleChoices(page, "button, [role='button'], input");
+  await clickFirstVisible(page, [/interpret|submit|check|analyze|reveal/i]).catch(() => {});
+}
+
+async function captureMedicationMathActivity(page: Page) {
+  await openFirstActivity(page);
+  const input = page.locator("input[type='number'], input[inputmode='decimal'], input[name*='answer' i]").first();
+  if (await input.isVisible().catch(() => false)) await input.fill("2");
+  await clickFirstVisible(page, [/calculate|submit|check|validate|answer/i]).catch(() => {});
+}
+
+async function capturePharmacologyWorkflow(page: Page) {
+  await openFirstActivity(page);
+  await scrollToLearningSignal(page, /nursing considerations|monitoring|contraindication|side effects|rationale/i);
+  await clickFirstVisible(page, [/reveal|check|start|practice/i]).catch(() => {});
+}
+
+async function captureClinicalSkillsScenario(page: Page) {
+  await openFirstActivity(page);
+  await selectVisibleChoices(page, "button, [role='button'], input");
+  await clickFirstVisible(page, [/assess|intervene|submit|continue|feedback/i]).catch(() => {});
+}
+
+async function captureReadinessReport(page: Page) {
+  await scrollToLearningSignal(page, /weak areas|recommendations|readiness|trend|strengths/i);
+}
+
+async function openQuestionType(page: Page, name: RegExp) {
+  await clickFirstVisible(page, [name, /start|begin|practice/i]).catch(async () => {
+    await openFirstActivity(page);
+  });
+}
+
+async function openFirstActivity(page: Page) {
+  const activityLink = page
+    .locator(
+      [
+        "a[href*='/session']",
+        "a[href*='/practice']",
+        "a[href*='/lessons/']",
+        "a[href*='/labs/'][href*='/']",
+        "a[href*='/clinical-skills/']",
+        "a[href*='/med-calculations/'][href*='/']",
+        "a[href*='/flashcards/'][href*='/']",
+      ].join(", "),
+    )
+    .first();
+  if (await activityLink.isVisible().catch(() => false)) {
+    await activityLink.click();
+    await page.waitForLoadState("networkidle").catch(() => {});
+    await page.waitForTimeout(1000);
+    return;
+  }
+  await clickFirstVisible(page, [/start|begin|practice|continue|open|study/i]).catch(() => {});
+}
+
 async function submitFirstPracticeQuestion(page: Page) {
   const start = page.getByRole("button", { name: /start|begin|practice/i }).first();
   if (await start.isVisible().catch(() => false)) {
@@ -202,6 +403,64 @@ async function submitFirstPracticeQuestion(page: Page) {
     await firstOption.click().catch(() => {});
     await page.getByRole("button", { name: /submit answer|check answer|submit/i }).first().click().catch(() => {});
     await page.waitForTimeout(1200);
+  }
+}
+
+async function revealEducationalExplanations(page: Page) {
+  await clickFirstVisible(page, [/show rationale|view rationale|rationale|clinical pearl|explanation|why/i]).catch(() => {});
+  await scrollToLearningSignal(page, /rationale|clinical pearl|why this is correct|why incorrect|takeaway/i).catch(() => {});
+}
+
+async function selectVisibleChoices(page: Page, selector: string) {
+  const choices = page.locator(selector);
+  const count = Math.min(await choices.count().catch(() => 0), 4);
+  for (let i = 0; i < count; i += 1) {
+    const choice = choices.nth(i);
+    if (await choice.isVisible().catch(() => false)) {
+      await choice.click().catch(() => {});
+      await page.waitForTimeout(150);
+    }
+  }
+}
+
+async function clickFirstVisible(page: Page, names: RegExp[]) {
+  for (const name of names) {
+    const button = page.getByRole("button", { name }).first();
+    if (await button.isVisible().catch(() => false)) {
+      await button.click();
+      await page.waitForTimeout(600);
+      return;
+    }
+    const link = page.getByRole("link", { name }).first();
+    if (await link.isVisible().catch(() => false)) {
+      await link.click();
+      await page.waitForLoadState("networkidle").catch(() => {});
+      await page.waitForTimeout(600);
+      return;
+    }
+  }
+  throw new Error("No visible learning action matched");
+}
+
+async function scrollToLearningSignal(page: Page, signal: RegExp) {
+  const locator = page.getByText(signal).first();
+  if (await locator.isVisible().catch(() => false)) {
+    await locator.scrollIntoViewIfNeeded().catch(() => {});
+    await page.waitForTimeout(500);
+  }
+}
+
+async function verifyEducationalState(page: Page, target: Target) {
+  const escapedSignals = target.demonstrates.map((value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const signal = new RegExp(escapedSignals.join("|"), "i");
+  const hasTextSignal = await page.getByText(signal).first().isVisible().catch(() => false);
+  const hasVisualSignal = await page
+    .locator(".nn-bowtie-workspace, .nn-matrix-workspace, .nn-flashcard-rationale-panel, canvas, svg, table, [data-testid*='rationale' i]")
+    .first()
+    .isVisible()
+    .catch(() => false);
+  if (!hasTextSignal && !hasVisualSignal) {
+    throw new Error(`${target.name} did not reach a visually meaningful educational state before capture.`);
   }
 }
 

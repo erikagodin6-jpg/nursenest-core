@@ -1,6 +1,6 @@
 import "server-only";
 
-import { UserRole } from "@prisma/client";
+import { Prisma, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { htmlEmailShell, sendTransactionalEmailHtml } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -82,6 +82,19 @@ function money(amountCents: number | null | undefined, currency: string | null |
 
 function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function jsonSafeRecord(value: Record<string, unknown> | undefined): Prisma.InputJsonObject {
+  if (!value) return {};
+  try {
+    const parsed = JSON.parse(JSON.stringify(value)) as unknown;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Prisma.InputJsonObject;
+    }
+  } catch {
+    return { serializationError: "metadata_not_json_serializable" };
+  }
+  return {};
 }
 
 function ownerEmail(): string | null {
@@ -245,7 +258,7 @@ async function writeAuditLog(input: RevenueAlertPayload, result: Omit<RevenueAle
         cancellationReason: input.cancellationReason ?? null,
         timeAsSubscriber: input.timeAsSubscriber ?? null,
         totalRevenueCents: input.totalRevenueCents ?? null,
-        metadata: input.metadata ?? {},
+        metadata: jsonSafeRecord(input.metadata),
       },
     },
   });
@@ -254,7 +267,7 @@ async function writeAuditLog(input: RevenueAlertPayload, result: Omit<RevenueAle
 
 export async function sendRevenueAlert(input: RevenueAlertPayload): Promise<RevenueAlertSendResult> {
   const emailTo = ownerEmail();
-  const email = emailTo
+  const email: ChannelResult = emailTo
     ? await sendTransactionalEmailHtml({
         to: emailTo,
         subject: input.subject,
@@ -274,16 +287,16 @@ export async function sendRevenueAlert(input: RevenueAlertPayload): Promise<Reve
     "slack",
   );
 
-  const channels = {
+  let channels: RevenueAlertSendResult["channels"] = {
     email,
     sms,
-    adminDashboard: { status: "sent" as const },
+    adminDashboard: { status: "skipped" as const, detail: "audit_pending" },
     discord,
     slack,
   };
-  const delivered = Object.values(channels).some((channel) => channel.status === "sent");
-  const base = { delivered, channels };
-  const auditLogId = await writeAuditLog(input, base).catch((e) => {
+  const externalDelivered = Object.values(channels).some((channel) => channel.status === "sent");
+  const auditChannels = { ...channels, adminDashboard: { status: "sent" as const } };
+  const auditLogId = await writeAuditLog(input, { delivered: true, channels: auditChannels }).catch((e) => {
     safeServerLog(LOG_SCOPE, "audit_log_failed", {
       eventType: input.eventType,
       message: e instanceof Error ? e.message.slice(0, 180) : "unknown",
@@ -291,6 +304,10 @@ export async function sendRevenueAlert(input: RevenueAlertPayload): Promise<Reve
     });
     return null;
   });
+  channels = auditLogId
+    ? auditChannels
+    : { ...channels, adminDashboard: { status: "failed" as const, detail: "audit_log_failed" } };
+  const delivered = externalDelivered || Boolean(auditLogId);
 
   if (!delivered) {
     safeServerLog(LOG_SCOPE, "no_channel_delivered", {
@@ -300,7 +317,7 @@ export async function sendRevenueAlert(input: RevenueAlertPayload): Promise<Reve
     });
   }
 
-  return { ...base, auditLogId };
+  return { delivered, channels, auditLogId };
 }
 
 export async function sendRevenueAlertOrThrow(input: RevenueAlertPayload): Promise<RevenueAlertSendResult> {
