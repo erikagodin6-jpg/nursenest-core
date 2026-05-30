@@ -2,6 +2,7 @@
 
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { formatDisplayTitle } from "@/lib/format/text-case";
 
 export type LabLearningBlockTone = "neutral" | "info" | "success" | "warning" | "danger" | "brand";
 
@@ -47,8 +48,8 @@ export function LabLearningBlock({
           </span>
         ) : null}
         <div className="min-w-0">
-          {eyebrow ? <p className="nn-lab-block__eyebrow">{eyebrow}</p> : null}
-          <h2 className="nn-lab-block__title">{title}</h2>
+          {eyebrow ? <p className="nn-lab-block__eyebrow">{formatDisplayTitle(eyebrow)}</p> : null}
+          <h2 className="nn-lab-block__title">{formatDisplayTitle(title)}</h2>
         </div>
       </header>
       <div className="nn-lab-block__body">{children}</div>

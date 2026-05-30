@@ -3,6 +3,8 @@
  * polished, title-case (or sentence-case) labels without changing persisted values.
  */
 
+import { formatDisplayTitle } from "@/lib/format/text-case";
+
 export type DisplayLabelMode = "title" | "sentence";
 
 export type FormatDisplayLabelOpts = {
@@ -128,7 +130,7 @@ function splitIdentifierTokens(raw: string): string[] {
 }
 
 function titleCaseWords(words: string[]): string {
-  return words
+  return formatDisplayTitle(words
     .map((w) => {
       const lower = w.toLowerCase();
       if (ACRONYM_LOWER.has(lower)) return ACRONYM_LOWER.get(lower)!;
@@ -136,7 +138,7 @@ function titleCaseWords(words: string[]): string {
       return lower.charAt(0).toUpperCase() + lower.slice(1);
     })
     .filter(Boolean)
-    .join(" ");
+    .join(" "));
 }
 
 function sentenceCaseWords(words: string[]): string {

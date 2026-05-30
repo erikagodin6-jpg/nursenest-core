@@ -50,6 +50,7 @@ import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-fai
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { logAppLessonsHubListSource } from "@/lib/observability/content-source-trace";
+import { buildAppLessonsCatalogFallbackBlock } from "@/lib/lessons/app-lessons-catalog-fallback";
 
 /** Align with lesson detail — list should reflect admin publish without stale RSC cache. */
 export const dynamic = "force-dynamic";
@@ -487,7 +488,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     { scope: "page_lessons", label: "lesson_list_block" },
   );
 
-  let lessonsHubInventorySource: "primary" | "degraded_snapshot" = "primary";
+  let lessonsHubInventorySource: "primary" | "degraded_snapshot" | "bundled_catalog_fallback" = "primary";
   let lessonsBlock: LessonsListBlock;
 
   if (lessonsBlockFromDb !== null) {
@@ -544,36 +545,66 @@ export default async function LessonsPage({ searchParams }: Props) {
         rows: fromSnap.rows,
       };
     } else {
-      safeServerLog("page_lessons", "critical_study_load_diagnostics", {
-        event: "critical_study_load_diagnostics",
-        operation: "app_lessons_hub_list",
-        feature_surface: "learner_app_lessons",
-        live_outcome: "timeout",
-        snapshot_used: "false",
-        final_outcome: "error",
-        fallback_used: "false",
-        pathway_id: pathwayForSnap ?? undefined,
-        locale: marketingLocale,
-        exam: String(entitlement.country ?? ""),
+      const fromCatalog = buildAppLessonsCatalogFallbackBlock({
+        visiblePathwayIds,
+        pathwayIdFilter,
+        learnerPath,
+        qEffective,
+        topicSlugFilter,
+        topicFilter,
+        alliedProfessionKey: alliedProfessionForAppList,
+        pageRequested,
+        pageSize: limitParsed,
       });
 
-      return (
-        <div
-          className="nn-premium-lessons-system nn-app-lessons-hub-premium nn-premium-lessons-app-list mx-auto w-full max-w-6xl space-y-6 px-4 py-8"
-          data-nn-premium-full-platform-convergence=""
-          data-nn-premium-platform-family="exam-study"
-          data-nn-premium-platform-module="lessons"
-          data-nn-premium-lessons-system="app-hub"
-        >
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
-          <ContentEmptyState
-            variant="generic"
-            headline="Could not load your lesson list"
-            body="The live lesson catalog timed out and no last-synced snapshot is available for this view. This is not an empty library — please retry."
-            primaryCta={{ label: "Retry", href: "/app/lessons" }}
-          />
-        </div>
-      );
+      if (fromCatalog) {
+        lessonsHubInventorySource = "bundled_catalog_fallback";
+        safeServerLog("page_lessons", "critical_study_load_diagnostics", {
+          event: "critical_study_load_diagnostics",
+          operation: "app_lessons_hub_list",
+          feature_surface: "learner_app_lessons",
+          live_outcome: "timeout",
+          snapshot_used: "false",
+          final_outcome: "bundled_catalog_fallback",
+          fallback_used: "true",
+          pathway_id: pathwayForSnap ?? undefined,
+          locale: marketingLocale,
+          exam: String(entitlement.country ?? ""),
+        });
+
+        lessonsBlock = fromCatalog;
+      } else {
+        safeServerLog("page_lessons", "critical_study_load_diagnostics", {
+          event: "critical_study_load_diagnostics",
+          operation: "app_lessons_hub_list",
+          feature_surface: "learner_app_lessons",
+          live_outcome: "timeout",
+          snapshot_used: "false",
+          final_outcome: "error",
+          fallback_used: "false",
+          pathway_id: pathwayForSnap ?? undefined,
+          locale: marketingLocale,
+          exam: String(entitlement.country ?? ""),
+        });
+
+        return (
+          <div
+            className="nn-premium-lessons-system nn-app-lessons-hub-premium nn-premium-lessons-app-list mx-auto w-full max-w-6xl space-y-6 px-4 py-8"
+            data-nn-premium-full-platform-convergence=""
+            data-nn-premium-platform-family="exam-study"
+            data-nn-premium-platform-module="lessons"
+            data-nn-premium-lessons-system="app-hub"
+          >
+            <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
+            <ContentEmptyState
+              variant="generic"
+              headline="Could not load your lesson list"
+              body="The live lesson catalog timed out and no last-synced snapshot is available for this view. This is not an empty library — please retry."
+              primaryCta={{ label: "Retry", href: "/app/lessons" }}
+            />
+          </div>
+        );
+      }
     }
   }
 
@@ -683,7 +714,9 @@ export default async function LessonsPage({ searchParams }: Props) {
         </p>
       </div>
 
-      {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
+      {lessonsHubInventorySource === "degraded_snapshot" || lessonsHubInventorySource === "bundled_catalog_fallback" ? (
+        <LearnerStudyLiveSyncBanner />
+      ) : null}
 
       <LearnerLessonsResponsiveResults
         initialRows={resolvedRenderableLessons}

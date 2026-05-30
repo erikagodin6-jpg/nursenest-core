@@ -22,6 +22,7 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { buildAppLessonsCatalogFallbackBlock } from "@/lib/lessons/app-lessons-catalog-fallback";
 
 export const dynamic = "force-dynamic";
 
@@ -128,6 +129,20 @@ export async function GET(req: Request) {
         : null;
 
     const marketingLocale = await getMarketingLocaleForDefaultRoute();
+    const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+
+    const catalogFallback = () =>
+      buildAppLessonsCatalogFallbackBlock({
+        visiblePathwayIds,
+        pathwayIdFilter,
+        learnerPath,
+        qEffective,
+        topicSlugFilter,
+        topicFilter,
+        alliedProfessionKey: alliedProfessionForAppList,
+        pageRequested,
+        pageSize: limitParsed,
+      });
 
     const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
       topic: topicFilter,
@@ -183,6 +198,28 @@ export async function GET(req: Request) {
     });
 
     if (listSource !== "pathway_lessons") {
+      const fallback = catalogFallback();
+      if (fallback) {
+        return NextResponse.json({
+          source: "pathway_lessons" as const,
+          inventory: "bundled_catalog_fallback" as const,
+          total: fallback.total,
+          page: fallback.page,
+          pageCount: fallback.pageCount,
+          pageSize: limitParsed,
+          defaultPageSize: LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT,
+          scanCapped: false,
+          rows: fallback.rows,
+          progressByPathwaySlug: null,
+          includeProgress,
+          entitlement: {
+            hasAccess: entitlement.hasAccess,
+            canShowLessonProgress: entitlement.hasAccess === true,
+          },
+          visiblePathwayIds,
+        });
+      }
+
       return NextResponse.json(
         {
           error: "Pathway lesson list unavailable for this account filter (legacy hub mode).",
@@ -193,14 +230,45 @@ export async function GET(req: Request) {
       );
     }
 
-    let paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
-      where: pathwayWhereWithSafety,
-      page: pageRequested,
-      pageSize: limitParsed,
-      entitlement,
-      learnerPath,
-      marketingLocale,
-    });
+    let paginated = await withDatabaseFallbackTimeout(
+      async () =>
+        paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+          where: pathwayWhereWithSafety,
+          page: pageRequested,
+          pageSize: limitParsed,
+          entitlement,
+          learnerPath,
+          marketingLocale,
+        }),
+      null,
+      HUB_DB_TIMEOUT_MS,
+      { scope: "api_pathway_lessons", label: "pathway_paginated" },
+    );
+
+    if (!paginated) {
+      const fallback = catalogFallback();
+      if (!fallback) {
+        return NextResponse.json({ error: "Lesson list temporarily unavailable", code: "lesson_list_timeout" }, { status: 503 });
+      }
+      return NextResponse.json({
+        source: "pathway_lessons" as const,
+        inventory: "bundled_catalog_fallback" as const,
+        total: fallback.total,
+        page: fallback.page,
+        pageCount: fallback.pageCount,
+        pageSize: limitParsed,
+        defaultPageSize: LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT,
+        scanCapped: false,
+        rows: fallback.rows,
+        progressByPathwaySlug: null,
+        includeProgress,
+        entitlement: {
+          hasAccess: entitlement.hasAccess,
+          canShowLessonProgress: entitlement.hasAccess === true,
+        },
+        visiblePathwayIds,
+      });
+    }
 
     const pathwayTotal = paginated.totalResolvable;
     const pageCount = Math.max(1, Math.ceil(pathwayTotal / limitParsed) || 1);
@@ -255,10 +323,9 @@ export async function GET(req: Request) {
       }
     }
 
-    const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
-
     return NextResponse.json({
       source: "pathway_lessons" as const,
+      inventory: "primary" as const,
       total: pathwayTotal,
       page: safePage,
       pageCount,

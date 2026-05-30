@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { LabCategorySlug } from "@/lib/labs/labs-engine";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import { estimateLabLessonMinutes, labLessonStatusLabel, labProgressStatusLabel } from "@/lib/labs/labs-display";
+import { estimateLabLessonMinutes, labProgressStatusLabel } from "@/lib/labs/labs-display";
+import { formatDisplayTitle } from "@/lib/format/text-case";
 
 export type LabsWorkstationNavCategory = {
   slug: LabCategorySlug;
@@ -69,14 +70,14 @@ export function LabsWorkstationSidebar({
   return (
     <aside className="nn-labs-workstation__sidebar" aria-label="Labs navigation">
       <Link href={continueHref} className="nn-labs-workstation__continue">
-        <span className="nn-labs-workstation__continue-label">Continue studying</span>
+        <span className="nn-labs-workstation__continue-label">{formatDisplayTitle("Continue studying")}</span>
         <span className="nn-labs-workstation__continue-title">{continueTitle}</span>
       </Link>
 
       <div className="nn-labs-workstation__nav-head">
-        <p className="nn-labs-workstation__nav-title">Clinical lab workstation</p>
+        <p className="nn-labs-workstation__nav-title">{formatDisplayTitle("Clinical lab workstation")}</p>
         <Link href="/app/labs" className="nn-labs-workstation__nav-home" data-active={onHub ? "true" : undefined}>
-          Labs overview
+          {formatDisplayTitle("Labs overview")}
         </Link>
       </div>
 

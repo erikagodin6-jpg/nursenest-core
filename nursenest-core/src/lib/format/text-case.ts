@@ -38,6 +38,10 @@ const PRESERVE_CASE: Readonly<Record<string, string>> = {
   iv: "IV",
   icu: "ICU",
   nicu: "NICU",
+  picu: "PICU",
+  er: "ER",
+  ed: "ED",
+  osce: "OSCE",
   faq: "FAQ",
   nursenest: "NurseNest",
   applynest: "ApplyNest",
@@ -114,6 +118,16 @@ export function formatTitleCase(text: string, locale?: string): string {
     .join(" ");
 }
 
+/**
+ * Canonical user-facing title formatter for NurseNest UI chrome, cards, headings,
+ * metadata titles, and generated labels. Keep prose on `formatSentenceCase`.
+ */
+export function formatDisplayTitle(text: string, locale?: string): string {
+  const title = formatTitleCase(text, locale);
+  if (!title || !isEnglishLocale(locale)) return title;
+  return title.replace(/\bto\b/g, "To");
+}
+
 export function formatSentenceCase(text: string, locale?: string): string {
   const compact = normalizeWhitespace(text);
   if (!compact || !isEnglishLocale(locale)) return compact;
@@ -154,7 +168,7 @@ export function validateEnglishCapitalization(
     return { ok: true, normalized: compact, issues: compact ? [] : ["empty"] };
   }
 
-  const normalized = formatTitleCase(compact, locale);
+  const normalized = formatDisplayTitle(compact, locale);
   const issues: CapitalizationPolicyResult["issues"] = [];
   if (!compact) issues.push("empty");
   if (compact && normalized !== compact) issues.push("not-title-case");

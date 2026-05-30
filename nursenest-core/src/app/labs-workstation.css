@@ -4,7 +4,8 @@
  */
 
 [data-nn-labs-workstation] {
-  --nn-labs-sidebar-width: 17.5rem;
+  --nn-labs-sidebar-width: clamp(15rem, 18vw, 17rem);
+  --nn-labs-workstation-gap: clamp(1.5rem, 3vw, 2.5rem);
   --nn-labs-rail-width: 18rem;
   position: relative;
   isolation: isolate;
@@ -45,6 +46,12 @@
 
 @media (min-width: 1024px) {
   .nn-labs-workstation__frame {
+    gap: var(--nn-labs-workstation-gap);
+  }
+}
+
+@media (min-width: 1200px) {
+  .nn-labs-workstation__frame {
     grid-template-columns: var(--nn-labs-sidebar-width) minmax(0, 1fr);
     align-items: start;
   }
@@ -56,7 +63,7 @@
   min-height: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .nn-labs-workstation__sidebar {
     display: block;
     position: sticky;
@@ -64,7 +71,9 @@
     max-height: calc(100dvh - var(--nn-learner-sticky-offset, 4.5rem) - 1.5rem);
     overflow: auto;
     overscroll-behavior: contain;
-    border-radius: 1.25rem;
+    width: var(--nn-labs-sidebar-width);
+    max-width: var(--nn-labs-sidebar-width);
+    border-radius: 1rem;
     border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-brand) 10%);
     background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool));
     box-shadow: var(--semantic-shadow-soft);
@@ -86,7 +95,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .nn-labs-workstation__mobile-strip {
     display: none;
   }

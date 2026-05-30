@@ -7,12 +7,14 @@ import { auth } from "@/lib/auth";
 import { buildLabsWorkstationNav, pickLabsContinueTarget } from "@/lib/labs/labs-workstation-nav";
 import { findLatestLabProgressTouch, loadLabLessonProgressMap } from "@/lib/labs/lab-lesson-progress";
 import { listLabLessonsForTrack } from "@/lib/labs/labs-engine";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 
 export default async function LabsWorkstationLayout({ children }: { children: ReactNode }) {
   let context;
   try {
     context = await loadLabsRouteContext("(student).app.(learner).labs.layout");
-  } catch {
+  } catch (error) {
+    rethrowNextNavigationControlFlow(error);
     return <div className="px-4 py-8 text-sm text-[var(--semantic-text-secondary)]">{children}</div>;
   }
 

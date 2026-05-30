@@ -7,6 +7,7 @@ import {
   listLabCategoriesForTrack,
 } from "@/lib/labs/labs-engine";
 import { loadLabsRouteContext } from "@/lib/labs/labs-route-loader";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 
 export const metadata: Metadata = {
   title: "Labs | NurseNest",
@@ -18,7 +19,8 @@ export default async function LabsHubRoute() {
   let context;
   try {
     context = await loadLabsRouteContext("(student).app.(learner).labs");
-  } catch {
+  } catch (error) {
+    rethrowNextNavigationControlFlow(error);
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 text-center text-sm text-[var(--semantic-text-secondary)]">
         Labs could not load right now. Please try again in a moment.

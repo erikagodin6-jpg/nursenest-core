@@ -3,6 +3,7 @@ import { normalizeAlliedTaxonomySlugForProfession } from "@/lib/allied/allied-pr
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
+import { appLessonCatalogFallbackId } from "@/lib/lessons/app-lessons-catalog-fallback";
 
 /**
  * Snapshot listOpts must match `stableListOptsKey` / export job (`export-pathway-lessons-hub-snapshot.mts`).
@@ -71,7 +72,7 @@ export function lessonsListBlockFromPathwayHubSnapshot(
     const r = raw as PathwayLessonRecord;
     if (!r?.slug || !r.title) continue;
     rows.push({
-      id: r.slug,
+      id: appLessonCatalogFallbackId(pathwayId, r.slug),
       title: r.title,
       summary: pathwayLessonCardSummary({
         seoDescription: r.seoDescription ?? "",

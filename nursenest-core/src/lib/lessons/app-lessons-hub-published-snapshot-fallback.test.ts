@@ -80,5 +80,6 @@ test("lessonsListBlockFromPathwayHubSnapshot maps rows for app hub", () => {
   assert.equal(block?.source, "pathway_lessons");
   assert.equal(block?.total, 5);
   assert.equal(block?.rows.length, 1);
+  assert.equal(block?.rows[0]?.id, "catalog:pathway-x:lesson-a");
   assert.equal(block?.rows[0]?.pathwayMeta.slug, "lesson-a");
 });

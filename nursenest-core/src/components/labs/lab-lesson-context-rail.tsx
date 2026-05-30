@@ -3,6 +3,7 @@ import type { LabLessonDefinition, LabsStudyLinks } from "@/lib/labs/labs-engine
 import { estimateLabLessonMinutes, labProgressStatusLabel, labTrackFocusLabel } from "@/lib/labs/labs-display";
 import type { LabTrack } from "@/lib/labs/labs-engine";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { formatDisplayTitle } from "@/lib/format/text-case";
 
 export function LabLessonContextRail({
   lesson,
@@ -37,13 +38,13 @@ export function LabLessonContextRail({
   return (
     <aside className="nn-labs-lesson-rail" aria-label="Related clinical context">
       <div className="nn-labs-lesson-rail__card">
-        <h3>Learning state</h3>
+        <h3>{formatDisplayTitle("Learning state")}</h3>
         <ul className="mt-2 space-y-1 text-sm text-[var(--semantic-text-secondary)]">
           <li>
-            <span className="font-semibold text-[var(--semantic-text-primary)]">Estimated time:</span> {minutes} min
+            <span className="font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Estimated time")}:</span> {minutes} min
           </li>
           <li>
-            <span className="font-semibold text-[var(--semantic-text-primary)]">Track lens:</span>{" "}
+            <span className="font-semibold text-[var(--semantic-text-primary)]">{formatDisplayTitle("Track lens")}:</span>{" "}
             {labTrackFocusLabel(labTrack)}
           </li>
           <li>
@@ -61,7 +62,7 @@ export function LabLessonContextRail({
 
       {escalation.length > 0 ? (
         <div className="nn-labs-lesson-rail__card">
-          <h3>Escalation cues</h3>
+        <h3>{formatDisplayTitle("Escalation cues")}</h3>
           <ul>
             {escalation.map((row) => (
               <li key={row.label}>
@@ -74,7 +75,7 @@ export function LabLessonContextRail({
 
       {relatedLabs.length > 0 ? (
         <div className="nn-labs-lesson-rail__card">
-          <h3>Related labs</h3>
+          <h3>{formatDisplayTitle("Related labs")}</h3>
           <ul>
             {relatedLabs.map((item) => (
               <li key={item}>{item}</li>
@@ -85,7 +86,7 @@ export function LabLessonContextRail({
 
       {trends.length > 0 ? (
         <div className="nn-labs-lesson-rail__card">
-          <h3>Trend interpretation</h3>
+          <h3>{formatDisplayTitle("Trend interpretation")}</h3>
           <ul>
             {trends.map((item) => (
               <li key={item}>{item}</li>
@@ -96,16 +97,16 @@ export function LabLessonContextRail({
 
       {ecgHint ? (
         <div className="nn-labs-lesson-rail__card">
-          <h3>ECG association</h3>
+          <h3>{formatDisplayTitle("ECG association")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{ecgHint}</p>
           <Link href="/app/ecg" className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] hover:underline">
-            Open ECG hub →
+            {formatDisplayTitle("Open ECG hub")} →
           </Link>
         </div>
       ) : null}
 
       <div className="nn-labs-lesson-rail__card">
-        <h3>Study loops</h3>
+        <h3>{formatDisplayTitle("Study loops")}</h3>
         <ul className="space-y-2">
           <li>
             <Link href={studyLinks.flashcardsHref} className="text-sm font-semibold text-[var(--semantic-brand)] hover:underline">
@@ -114,12 +115,12 @@ export function LabLessonContextRail({
           </li>
           <li>
             <Link href={studyLinks.questionBankHref} className="text-sm font-semibold text-[var(--semantic-brand)] hover:underline">
-              Practice questions
+              {formatDisplayTitle("Practice questions")}
             </Link>
           </li>
           <li>
             <Link href={studyLinks.labDrillsHref} className="text-sm font-semibold text-[var(--semantic-brand)] hover:underline">
-              Lab drills
+              {formatDisplayTitle("Lab drills")}
             </Link>
           </li>
         </ul>

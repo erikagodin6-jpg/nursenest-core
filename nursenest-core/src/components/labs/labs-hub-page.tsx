@@ -6,6 +6,7 @@ import { MeasurementSystemToggle } from "@/components/measurements/measurement-s
 import type { LabCategoryDefinition, LabLessonDefinition, LabTrack, LabsStudyLinks } from "@/lib/labs/labs-engine";
 import { labLessonStatusLabel, labTrackFocusLabel } from "@/lib/labs/labs-display";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import { formatDisplayTitle } from "@/lib/format/text-case";
 
 export type LabsHubPageProps = {
   trackLabel: string;
@@ -93,13 +94,23 @@ function TopicCard({
   const tierLines = lesson.tierFocus[labTrack] ?? [];
   const accent = chartBorderVar(accentIndex);
   const trendHint = lesson.trendInterpretation[0] ?? lesson.clinicalPearls[0] ?? "";
+  const href = hasAccess ? `/app/labs/${lesson.category}/${lesson.slug}` : "/pricing?feature=labs";
+  const cta = hasAccess ? "Start" : "Upgrade to Access Labs";
   return (
-    <article
-      className="flex min-h-full flex-col rounded-2xl border bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transform-none sm:p-5"
+    <Link
+      href={href}
+      className="group flex min-h-full flex-col rounded-2xl border bg-[var(--semantic-surface)] p-4 text-left no-underline shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--semantic-brand)] motion-reduce:transform-none sm:p-5"
       style={{
         borderColor: `color-mix(in srgb, var(${accent}) 30%, var(--semantic-border-soft))`,
       }}
       data-nn-labs-topic-card={lesson.slug}
+      data-nn-labs-card-access={hasAccess ? "subscribed" : "locked"}
+      aria-label={`${hasAccess ? "Start" : "Upgrade to access"} ${lesson.shortTitle}`}
+      onKeyDown={(event) => {
+        if (event.key !== " ") return;
+        event.preventDefault();
+        event.currentTarget.click();
+      }}
     >
       <div className="flex items-start justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-3">
         <div className="space-y-1">
@@ -158,13 +169,13 @@ function TopicCard({
         </span>
       </div>
 
-      <Link
-        href={`/app/labs/${lesson.category}/${lesson.slug}`}
-        className="mt-4 inline-flex text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-text-primary))] underline-offset-4 hover:underline"
+      <span
+        className="mt-4 inline-flex w-fit rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] px-3 py-1.5 text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-text-primary))] transition-colors group-hover:bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
+        aria-hidden="true"
       >
-        Open lesson →
-      </Link>
-    </article>
+        {cta} →
+      </span>
+    </Link>
   );
 }
 
@@ -194,7 +205,9 @@ export function LabsHubPage({ trackLabel, labTrack, hasAccess, categories, inven
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-2xl space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-info)]">Labs</p>
-            <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-4xl">Clinical lab workstation</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-4xl">
+              {formatDisplayTitle("Clinical lab workstation")}
+            </h1>
             <p className="text-base leading-relaxed text-[var(--semantic-text-secondary)]">
               Premium Labs clinical reasoning engine for {trackLabel}: prioritization, critical-value recognition, trend interpretation, and study loops wired into
               lessons, flashcards, practice, CAT, and drills — one NurseNest surface, not a side utility.
@@ -235,7 +248,7 @@ export function LabsHubPage({ trackLabel, labTrack, hasAccess, categories, inven
                 borderColor: `color-mix(in srgb, var(${chartBorderVar(i)}) 28%, var(--semantic-border-soft))`,
               }}
             >
-              {label}
+              {formatDisplayTitle(label)}
             </Link>
           ))}
         </nav>

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  formatDisplayTitle,
   formatSentenceCase,
   formatTitleCase,
   validateEnglishCapitalization,
@@ -16,6 +17,14 @@ test("formatTitleCase preserves medical acronyms and clinical chrome labels", ()
   assert.equal(formatTitleCase("view all languages"), "View All Languages");
   assert.equal(formatTitleCase("open iv medication review"), "Open IV Medication Review");
   assert.equal(formatTitleCase("launch cat exam"), "Launch CAT Exam");
+});
+
+test("formatDisplayTitle is the canonical NurseNest title renderer", () => {
+  assert.equal(formatDisplayTitle("clinical lab workstation"), "Clinical Lab Workstation");
+  assert.equal(formatDisplayTitle("medication calculation practice"), "Medication Calculation Practice");
+  assert.equal(formatDisplayTitle("everything you need to pass"), "Everything You Need To Pass");
+  assert.equal(formatDisplayTitle("ecg interpretation hub"), "ECG Interpretation Hub");
+  assert.equal(formatDisplayTitle("osce practice in picu and ed"), "OSCE Practice in PICU and ED");
 });
 
 test("formatSentenceCase leaves mixed-case authored prose and acronyms intact", () => {

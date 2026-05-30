@@ -11,6 +11,7 @@ import { LabLessonArticle } from "@/components/labs/lab-lesson-article";
 import { useLabLessonProgressActions } from "@/components/labs/lab-lesson-progress-client";
 import { labLessonStatusLabel, labProgressStatusLabel } from "@/lib/labs/labs-display";
 import { labQuestionsToPathwayQuizItems } from "@/lib/labs/lab-quiz-pathway-bridge";
+import { formatDisplayTitle } from "@/lib/format/text-case";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import type {
   LabFlashcard,
@@ -33,11 +34,8 @@ export type LabLessonPageProps = {
 
 export function LabLessonPreview({
   lesson,
-  questions,
   measurementSystem = "SI",
-}: Pick<LabLessonPageProps, "lesson" | "questions"> & { measurementSystem?: "US" | "SI" }) {
-  const previewQuestions = questions.slice(0, 2);
-
+}: Pick<LabLessonPageProps, "lesson"> & { measurementSystem?: "US" | "SI" }) {
   return (
     <div className="space-y-4">
       <section className="nn-lab-block">
@@ -51,7 +49,7 @@ export function LabLessonPreview({
           <p className="text-sm text-[var(--semantic-text-secondary)]">{lesson.freePreviewBlurb}</p>
           <p className="text-sm font-medium text-[var(--semantic-text-primary)]">Normal range: {lesson.normalRange}</p>
           <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--semantic-text-secondary)]">
-            {lesson.physiology.slice(0, 2).map((item) => (
+            {lesson.physiology.slice(0, 1).map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -60,19 +58,26 @@ export function LabLessonPreview({
       <section className="nn-lab-block">
         <header className="nn-lab-block__head">
           <div>
-            <p className="nn-lab-block__eyebrow">Preview questions</p>
-            <h2 className="nn-lab-block__title">Reasoning sample</h2>
+            <p className="nn-lab-block__eyebrow">Locked activity</p>
+            <h2 className="nn-lab-block__title">Included in RN Premium</h2>
           </div>
         </header>
         <div className="nn-lab-block__body space-y-3">
-          {previewQuestions.map((question) => (
-            <article key={question.id} className="nn-lab-scenario-card">
-              <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{question.stem}</p>
-              <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
-                {question.type.replaceAll("_", " ")} · {question.difficulty}
-              </p>
-            </article>
-          ))}
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Upgrade to access the full lab interpretation lesson, clinical cases, practice questions, rationales,
+            flashcards, and report-card progress.
+          </p>
+          <div className="flex flex-wrap gap-2 text-xs text-[var(--semantic-text-secondary)]">
+            <span className="rounded-full border border-[var(--semantic-border-soft)] px-2.5 py-1">
+              Difficulty: clinical reasoning
+            </span>
+            <span className="rounded-full border border-[var(--semantic-border-soft)] px-2.5 py-1">
+              Estimated time: 10-15 min
+            </span>
+            <span className="rounded-full border border-[var(--semantic-border-soft)] px-2.5 py-1">
+              Includes trends, escalation, and safety checks
+            </span>
+          </div>
         </div>
       </section>
     </div>
@@ -99,7 +104,6 @@ export function LabLessonPage({
     initialStatus: initialProgress,
   });
   const quizItemsFull = useMemo(() => labQuestionsToPathwayQuizItems(questions), [questions]);
-  const quizItemsPreview = useMemo(() => labQuestionsToPathwayQuizItems(questions.slice(0, 3)), [questions]);
 
   return (
     <div className="nn-labs-lesson-workspace space-y-6">
@@ -129,7 +133,7 @@ export function LabLessonPage({
             {lesson.category}
           </Link>
           <Link href="/app/labs" className="nn-lab-study-loop-link">
-            Labs overview
+            {formatDisplayTitle("Labs overview")}
           </Link>
         </div>
       </header>
@@ -171,17 +175,7 @@ export function LabLessonPage({
             </>
           ) : (
             <div className="space-y-5">
-              <LabLessonPreview lesson={lesson} questions={questions} measurementSystem={measurementSystem} />
-              <section className="nn-lab-quiz-module">
-                <PathwayLessonQuizSet
-                  title="Try three preview questions"
-                  subtitle="Upgrade to unlock the full bank, rationales, and report card sync."
-                  items={quizItemsPreview}
-                  fullAccess={false}
-                  variant="post"
-                  postMode="practice"
-                />
-              </section>
+              <LabLessonPreview lesson={lesson} measurementSystem={measurementSystem} />
               <SubscriptionPaywall context="lessons" />
             </div>
           )}

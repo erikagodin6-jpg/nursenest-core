@@ -6,7 +6,7 @@
 import { randomUUID } from "node:crypto";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
-import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
+import { ContentStatus, ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
@@ -29,6 +29,11 @@ import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { resolveAppSubscriberPathwayLessonForDetail } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
 import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
+import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import {
+  getAppCatalogFallbackLesson,
+  parseAppLessonCatalogFallbackId,
+} from "@/lib/lessons/app-lessons-catalog-fallback";
 import { filterLearnerPresentablePathwaySections } from "@/lib/lessons/lesson-section-presentability";
 import {
   canAccessLegacyContentMapLesson,
@@ -327,6 +332,29 @@ async function LessonDetailPageInner({ params }: Props) {
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
 
   const resolved = await withDatabaseFallback(async () => {
+    const catalogRef = parseAppLessonCatalogFallbackId(id);
+    if (catalogRef) {
+      const catalogLesson = getAppCatalogFallbackLesson(catalogRef.pathwayId, catalogRef.slug);
+      if (!catalogLesson) return { kind: "not_found" as const };
+      const visible = await appPathwayLessonVisibleToSubscriber(
+        entitlement,
+        {
+          pathwayId: catalogRef.pathwayId,
+          countryCode: null,
+          tierCode: null,
+          alliedProfessionKey: catalogLesson.alliedProfessionKey ?? null,
+          status: ContentStatus.PUBLISHED,
+        },
+        learnerPath,
+      );
+      if (!visible) return { kind: "out_of_plan" as const };
+      return {
+        kind: "pathway_ok" as const,
+        record: catalogLesson,
+        pathwayId: catalogRef.pathwayId,
+      };
+    }
+
     const learnerPathRow = userId
       ? await prisma.user.findUnique({
           where: { id: userId },
