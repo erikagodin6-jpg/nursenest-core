@@ -21,7 +21,7 @@
  * THEMES:   ocean · blossom · midnight
  * VIEWPORTS: desktop (1440×900) · tablet (768×1024) · mobile (390×844)
  *
- * MARKETING CROPS: 1600×900 · 1200×675 · 1200×1200 (social) · 1080×1350 (portrait)
+ * MARKETING CROPS: Instagram · LinkedIn/Facebook · Open Graph · Hero · source crops
  *
  * USAGE
  *   npx tsx scripts/generate-assessment-screenshots.ts
@@ -137,6 +137,11 @@ const MARKETING_CROPS = {
   "landscape-social": { width: 1200, height: 675 },
   "social-square": { width: 1200, height: 1200 },
   "portrait-story": { width: 1080, height: 1350 },
+  "instagram-portrait": { width: 1080, height: 1350 },
+  "linkedin-square": { width: 1200, height: 1200 },
+  "facebook-square": { width: 1200, height: 1200 },
+  "open-graph": { width: 1200, height: 675 },
+  "hero": { width: 1600, height: 900 },
 } as const;
 
 // ── Question Fixtures ─────────────────────────────────────────────────────────
@@ -250,6 +255,164 @@ function caseStudyFallbackFixture(overrides: Record<string, unknown> = {}): Reco
   };
 }
 
+function structuredAssessmentFixture(
+  questionType: string,
+  stem: string,
+  options: Record<string, unknown>,
+  rationale: string,
+  overrides: Record<string, unknown> = {},
+): Record<string, unknown> {
+  return {
+    questionType,
+    stem,
+    options,
+    correctAnswer: options.correctAnswer ?? null,
+    rationale,
+    ...overrides,
+  };
+}
+
+function prioritizationFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return structuredAssessmentFixture(
+    "PRIORITIZATION",
+    "Four clients arrive at the emergency department. Rank the clients in the order the nurse should assess them.",
+    {
+      format: "prioritization",
+      items: [
+        { id: "p1", label: "Client with chest pain, diaphoresis, and nausea", correctRank: 1 },
+        { id: "p2", label: "Client with sudden unilateral weakness and slurred speech", correctRank: 2 },
+        { id: "p3", label: "Client with a sprained ankle and intact circulation", correctRank: 4 },
+        { id: "p4", label: "Client with fever and productive cough, SpO₂ 95%", correctRank: 3 },
+      ],
+      correctAnswer: ["p1", "p2", "p4", "p3"],
+    },
+    "Chest pain with diaphoresis suggests acute coronary syndrome and requires immediate assessment. Stroke symptoms are also time-sensitive. Stable respiratory symptoms and isolated musculoskeletal injuries are lower acuity.",
+    overrides,
+  );
+}
+
+function sequencingFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return structuredAssessmentFixture(
+    "ORDERING",
+    "Place the steps for safe nasogastric tube medication administration in the correct order.",
+    {
+      format: "ordered_response",
+      items: [
+        { id: "s1", label: "Verify tube placement according to policy", correctRank: 1 },
+        { id: "s2", label: "Check medication compatibility and crushability", correctRank: 2 },
+        { id: "s3", label: "Flush the tube with water", correctRank: 3 },
+        { id: "s4", label: "Administer each medication separately", correctRank: 4 },
+        { id: "s5", label: "Flush after administration", correctRank: 5 },
+      ],
+      correctAnswer: ["s1", "s2", "s3", "s4", "s5"],
+    },
+    "Tube placement must be verified before medication administration. Medication preparation and flushing reduce obstruction risk and support safe delivery.",
+    overrides,
+  );
+}
+
+function delegationFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return structuredAssessmentFixture(
+    "DELEGATION",
+    "A registered nurse is assigning care for four clients. Which task is appropriate to delegate to assistive personnel?",
+    {
+      format: "delegation",
+      items: [
+        { id: "d1", label: "Ambulate a stable post-operative client who has already walked with the nurse" },
+        { id: "d2", label: "Assess a new onset of shortness of breath" },
+        { id: "d3", label: "Teach insulin injection technique" },
+        { id: "d4", label: "Evaluate response to IV furosemide" },
+      ],
+      correctAnswer: "d1",
+    },
+    "Delegation is appropriate for routine tasks in stable clients when assessment, teaching, and evaluation remain with the nurse.",
+    overrides,
+  );
+}
+
+function trendFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return structuredAssessmentFixture(
+    "TREND_CHART",
+    "Review the arterial blood gas trend. Which trend requires immediate escalation?",
+    {
+      format: "trend_chart",
+      table: [
+        { time: "0800", pH: "7.40", PaCO2: "40", PaO2: "88", HCO3: "24" },
+        { time: "1000", pH: "7.36", PaCO2: "48", PaO2: "72", HCO3: "25" },
+        { time: "1200", pH: "7.30", PaCO2: "56", PaO2: "60", HCO3: "26" },
+        { time: "1400", pH: "7.25", PaCO2: "62", PaO2: "55", HCO3: "27" },
+      ],
+      options: [
+        "Increasing PaCO₂ with decreasing pH",
+        "Stable bicarbonate",
+        "Slightly improving oxygenation",
+        "Normalizing respiratory rate",
+      ],
+      correctAnswer: "Increasing PaCO₂ with decreasing pH",
+    },
+    "A rising PaCO₂ with falling pH indicates worsening respiratory acidosis and ventilatory failure, especially when oxygenation is also declining.",
+    overrides,
+  );
+}
+
+function medicationCalculationFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    questionType: "FIB_NUMERIC",
+    stem: "The provider prescribes 1,000 mL normal saline over 8 hours. The drop factor is 20 gtt/mL. Calculate the flow rate in gtt/min.",
+    options: [],
+    correctAnswer: "42",
+    rationale: "Use mL/hr × drop factor ÷ 60. 1,000 mL ÷ 8 hr = 125 mL/hr; 125 × 20 ÷ 60 = 41.7, rounded to 42 gtt/min.",
+    ...overrides,
+  };
+}
+
+function hotspotFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return structuredAssessmentFixture(
+    "HOTSPOT",
+    "Click the assessment area most associated with decompression for suspected tension pneumothorax.",
+    {
+      format: "hotspot",
+      imageAlt: "Anterior chest anatomy",
+      regions: [
+        { id: "h1", label: "Second intercostal space midclavicular line", correct: true },
+        { id: "h2", label: "Right lower quadrant" },
+        { id: "h3", label: "Left lateral abdomen" },
+      ],
+      correctAnswer: "h1",
+    },
+    "Needle decompression targets the pleural space in an emergency. Learners must recognize landmarks rather than relying on a text-only cue.",
+    overrides,
+  );
+}
+
+function clinicalJudgmentFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return structuredAssessmentFixture(
+    "CLINICAL_JUDGMENT",
+    "A client with pneumonia becomes increasingly confused, RR rises from 22 to 32/min, and SpO₂ falls from 94% to 88% despite oxygen. Which clinical judgment action comes first?",
+    {
+      format: "clinical_judgment",
+      cues: ["new confusion", "increasing respiratory rate", "falling oxygen saturation"],
+      options: [
+        "Recognize respiratory deterioration and escalate immediately",
+        "Delay reassessment until the next scheduled vital signs",
+        "Encourage oral fluids and recheck in 2 hours",
+        "Document the findings only",
+      ],
+      correctAnswer: "Recognize respiratory deterioration and escalate immediately",
+    },
+    "The combined trend of altered mentation, tachypnea, and hypoxemia indicates respiratory deterioration. The nurse should stay with the client, increase support within scope, and escalate according to policy.",
+    overrides,
+  );
+}
+
+function dragDropFallbackFixture(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return sequencingFallbackFixture({
+    questionType: "DRAG_DROP",
+    stem: "Drag the airway-management preparation steps into the correct order.",
+    ...overrides,
+  });
+}
+
 // ── CLI Argument Parsing ──────────────────────────────────────────────────────
 
 interface CliArgs {
@@ -306,11 +469,33 @@ type QuestionState =
 type CaptureSpec = {
   /** Unique slug → used for filename and gallery */
   slug: string;
-  category: "cat" | "practice-exams" | "flashcards" | "ecg" | "pharmacology" | "clinical-skills" | "loft";
+  category:
+    | "cat"
+    | "practice-exams"
+    | "flashcards"
+    | "ecg"
+    | "pharmacology"
+    | "clinical-skills"
+    | "loft"
+    | "tier-showcase"
+    | "learner-journey"
+    | "clinical-judgment-showcase"
+    | "simulation-showcase"
+    | "ecg-marketing"
+    | "pricing-assets"
+    | "marketing-composites"
+    | "qa-visual-regression";
+  /** Optional nested folder under OUT_ROOT. Used for tier and journey folders. */
+  outputSubdir?: string;
   label: string;
   route: string;
   theme: Theme;
   viewport: Viewport;
+  tier?: ScreenshotTier;
+  journeyStep?: number;
+  assetKind?: "source" | "pricing" | "composite-source" | "qa-capture";
+  approvalStatus?: "pending" | "approved" | "needs-revision";
+  reviewChecklist?: readonly string[];
   /** Question type being showcased (for gallery metadata) */
   questionType?: string;
   /** Question state being showcased */
@@ -331,12 +516,193 @@ type CaptureSpec = {
   notes?: string;
 };
 
+type ScreenshotTier =
+  | "rn"
+  | "rpn"
+  | "np"
+  | "allied"
+  | "rt"
+  | "new-grad"
+  | "ecg"
+  | "advanced-ecg";
+
+type TierCaptureConfig = {
+  label: string;
+  pathwayId: string;
+  hubRoute: string;
+  practiceRoute: string;
+  flashcardsRoute: string;
+  lessonsRoute: string;
+  catOrSimulationRoute: string;
+  analyticsRoute: string;
+  weakAreasRoute: string;
+  progressRoute: string;
+  featureHighlights: readonly string[];
+};
+
+const TIER_CAPTURE_CONFIGS: Record<ScreenshotTier, TierCaptureConfig> = {
+  rn: {
+    label: "RN",
+    pathwayId: "us-rn-nclex-rn",
+    hubRoute: "/app",
+    practiceRoute: "/app/questions/bank?pathwayId=us-rn-nclex-rn",
+    flashcardsRoute: "/app/flashcards?pathwayId=us-rn-nclex-rn",
+    lessonsRoute: "/app/lessons?pathwayId=us-rn-nclex-rn",
+    catOrSimulationRoute: "/app/practice-tests?cat=1&pathwayId=us-rn-nclex-rn",
+    analyticsRoute: "/app/account/analytics?pathwayId=us-rn-nclex-rn",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=us-rn-nclex-rn",
+    progressRoute: "/app/account/progress?pathwayId=us-rn-nclex-rn",
+    featureHighlights: ["Adaptive CAT Exams", "Clinical Judgment Questions", "Detailed Rationales", "Weak Area Detection", "Progress Analytics"],
+  },
+  rpn: {
+    label: "RPN",
+    pathwayId: "ca-rpn-rex-pn",
+    hubRoute: "/app?pathwayId=ca-rpn-rex-pn",
+    practiceRoute: "/app/questions/bank?pathwayId=ca-rpn-rex-pn",
+    flashcardsRoute: "/app/flashcards?pathwayId=ca-rpn-rex-pn",
+    lessonsRoute: "/app/lessons?pathwayId=ca-rpn-rex-pn",
+    catOrSimulationRoute: "/app/practice-tests?cat=1&pathwayId=ca-rpn-rex-pn",
+    analyticsRoute: "/app/account/analytics?pathwayId=ca-rpn-rex-pn",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=ca-rpn-rex-pn",
+    progressRoute: "/app/account/progress?pathwayId=ca-rpn-rex-pn",
+    featureHighlights: ["REx-PN Practice", "Entry-Level Clinical Judgment", "Focused Flashcards", "Weak Area Detection", "Progress Analytics"],
+  },
+  np: {
+    label: "NP",
+    pathwayId: "ca-np-cnple",
+    hubRoute: "/app?pathwayId=ca-np-cnple",
+    practiceRoute: "/app/questions/bank?pathwayId=ca-np-cnple",
+    flashcardsRoute: "/app/flashcards?pathwayId=ca-np-cnple",
+    lessonsRoute: "/app/lessons?pathwayId=ca-np-cnple",
+    catOrSimulationRoute: "/app/osce?pathwayId=ca-np-cnple",
+    analyticsRoute: "/app/account/analytics?pathwayId=ca-np-cnple",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=ca-np-cnple",
+    progressRoute: "/app/account/progress?pathwayId=ca-np-cnple",
+    featureHighlights: ["CNPLE LOFT Practice", "Advanced Clinical Reasoning", "Diagnostic Readiness", "Case Simulations", "Progress Analytics"],
+  },
+  allied: {
+    label: "Allied Health",
+    pathwayId: "allied-health",
+    hubRoute: "/app?pathwayId=allied-health",
+    practiceRoute: "/app/questions/bank?pathwayId=allied-health",
+    flashcardsRoute: "/app/flashcards?pathwayId=allied-health",
+    lessonsRoute: "/app/lessons?pathwayId=allied-health",
+    catOrSimulationRoute: "/app/clinical-skills?pathwayId=allied-health",
+    analyticsRoute: "/app/account/analytics?pathwayId=allied-health",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=allied-health",
+    progressRoute: "/app/account/progress?pathwayId=allied-health",
+    featureHighlights: ["Profession-Specific Skills", "Practice Questions", "Flashcards", "Competency Tracking", "Progress Analytics"],
+  },
+  rt: {
+    label: "Respiratory Therapy",
+    pathwayId: "respiratory-therapy",
+    hubRoute: "/app?pathwayId=respiratory-therapy",
+    practiceRoute: "/app/questions/bank?pathwayId=respiratory-therapy",
+    flashcardsRoute: "/app/flashcards?pathwayId=respiratory-therapy",
+    lessonsRoute: "/app/lessons?pathwayId=respiratory-therapy",
+    catOrSimulationRoute: "/app/clinical-skills?pathwayId=respiratory-therapy",
+    analyticsRoute: "/app/account/analytics?pathwayId=respiratory-therapy",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=respiratory-therapy",
+    progressRoute: "/app/account/progress?pathwayId=respiratory-therapy",
+    featureHighlights: ["ABG Practice", "Ventilation Readiness", "Respiratory Scenarios", "Competency Tracking", "Progress Analytics"],
+  },
+  "new-grad": {
+    label: "New Graduate",
+    pathwayId: "new-grad",
+    hubRoute: "/app?pathwayId=new-grad",
+    practiceRoute: "/app/questions/bank?pathwayId=new-grad",
+    flashcardsRoute: "/app/flashcards?pathwayId=new-grad",
+    lessonsRoute: "/app/lessons?pathwayId=new-grad",
+    catOrSimulationRoute: "/app/osce?pathwayId=new-grad",
+    analyticsRoute: "/app/account/analytics?pathwayId=new-grad",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=new-grad",
+    progressRoute: "/app/account/progress?pathwayId=new-grad",
+    featureHighlights: ["First-Year Residency", "Medication Confidence", "Shift Readiness", "Clinical Skills", "Simulation Practice"],
+  },
+  ecg: {
+    label: "ECG Mastery",
+    pathwayId: "ecg-core",
+    hubRoute: "/modules/ecg",
+    practiceRoute: "/modules/ecg-interpretation/practice",
+    flashcardsRoute: "/app/flashcards?pathwayId=ecg-core",
+    lessonsRoute: "/modules/ecg/basic/lessons",
+    catOrSimulationRoute: "/modules/ecg-interpretation",
+    analyticsRoute: "/app/account/analytics?pathwayId=ecg-core",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=ecg-core",
+    progressRoute: "/app/account/progress?pathwayId=ecg-core",
+    featureHighlights: ["Rhythm Interpretation", "ECG Lessons", "Practice Strips", "Detailed Rationales", "Progress Analytics"],
+  },
+  "advanced-ecg": {
+    label: "Advanced ECG",
+    pathwayId: "advanced-ecg",
+    hubRoute: "/modules/ecg/advanced",
+    practiceRoute: "/modules/ecg-interpretation/practice?level=advanced",
+    flashcardsRoute: "/app/flashcards?pathwayId=advanced-ecg",
+    lessonsRoute: "/modules/ecg/advanced/lessons",
+    catOrSimulationRoute: "/modules/ecg/advanced/scenarios",
+    analyticsRoute: "/app/account/analytics?pathwayId=advanced-ecg",
+    weakAreasRoute: "/app/flashcards/weak-areas?pathwayId=advanced-ecg",
+    progressRoute: "/app/account/progress?pathwayId=advanced-ecg",
+    featureHighlights: ["Complex Rhythms", "Blocks and Pacemakers", "Telemetry Cases", "Advanced Interpretation", "Progress Analytics"],
+  },
+};
+
+const EXECUTIVE_REVIEW_CHECKLIST = [
+  "Branding visible",
+  "Theme colors present",
+  "No clipping",
+  "No overlap",
+  "Mobile compliant",
+  "Readable text",
+  "Accurate content",
+  "Production-ready",
+] as const;
+
+const QA_VISUAL_ROUTES = [
+  { slug: "homepage", label: "Homepage", route: "/" },
+  { slug: "pricing", label: "Pricing", route: "/pricing" },
+  { slug: "lessons", label: "Lessons", route: "/app/lessons" },
+  { slug: "flashcards", label: "Flashcards", route: "/app/flashcards" },
+  { slug: "practice-questions", label: "Practice Questions", route: "/app/questions/bank" },
+  { slug: "cat", label: "CAT", route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}` },
+  { slug: "analytics", label: "Analytics", route: "/app/account/analytics" },
+  { slug: "simulation", label: "Simulation", route: "/app/osce" },
+  { slug: "ecg", label: "ECG", route: "/modules/ecg" },
+] as const;
+
+const LEARNER_JOURNEY_STEPS = [
+  { step: 1, slug: "landing-page", label: "Landing page", route: "/" },
+  { step: 2, slug: "tier-selection", label: "Tier selection", route: "/pricing" },
+  { step: 3, slug: "hub-selection", label: "Hub selection", route: "/app" },
+  { step: 4, slug: "choose-activity", label: "Choose activity", route: "/app/questions/bank" },
+  { step: 5, slug: "question-screen", label: "Question screen", route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}` },
+  { step: 6, slug: "submit-answer", label: "Submit answer", route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}` },
+  { step: 7, slug: "view-rationale", label: "View rationale", route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}` },
+  { step: 8, slug: "continue-studying", label: "Continue studying", route: "/app/flashcards" },
+  { step: 9, slug: "analytics", label: "Analytics", route: "/app/account/analytics" },
+  { step: 10, slug: "improvement-dashboard", label: "Improvement dashboard", route: "/app/account/progress" },
+  { step: 11, slug: "weak-area-remediation", label: "Weak area remediation", route: "/app/flashcards/weak-areas" },
+  { step: 12, slug: "return-to-learning", label: "Return to learning", route: "/app" },
+] as const;
+
+function specOutputSubdir(spec: CaptureSpec): string {
+  return spec.outputSubdir ?? spec.category;
+}
+
 const QUESTION_FIXTURES = {
   mcq: mcqFixture,
   sata: sataFixture,
   bowtie: bowtieFixture,
   matrixFallback: matrixFallbackFixture,
   caseStudyFallback: caseStudyFallbackFixture,
+  prioritizationFallback: prioritizationFallbackFixture,
+  sequencingFallback: sequencingFallbackFixture,
+  delegationFallback: delegationFallbackFixture,
+  trendFallback: trendFallbackFixture,
+  medicationCalculation: medicationCalculationFixture,
+  hotspotFallback: hotspotFallbackFixture,
+  clinicalJudgmentFallback: clinicalJudgmentFallbackFixture,
+  dragDropFallback: dragDropFallbackFixture,
 } as const;
 
 // ── Interaction Scripts ───────────────────────────────────────────────────────
@@ -380,6 +746,17 @@ async function selectFirstMcqOption(page: Page): Promise<void> {
   if (count > 0) {
     await radios.first().check({ force: true }).catch(() => {});
     await page.waitForTimeout(300);
+  }
+}
+
+async function selectCorrectMcqOption(page: Page): Promise<void> {
+  const radios = page.locator('input[type="radio"]');
+  const count = await radios.count();
+  if (count > 1) {
+    await radios.nth(1).check({ force: true }).catch(() => {});
+    await page.waitForTimeout(300);
+  } else {
+    await selectFirstMcqOption(page);
   }
 }
 
@@ -428,15 +805,46 @@ async function clickWrongMcqOption(page: Page): Promise<void> {
   }
 }
 
+async function selectCorrectMcqAndSubmit(page: Page): Promise<void> {
+  await selectCorrectMcqOption(page);
+  await clickSubmitAnswer(page);
+}
+
+async function selectWrongMcqAndSubmit(page: Page): Promise<void> {
+  await clickWrongMcqOption(page);
+  await clickSubmitAnswer(page);
+}
+
+async function selectCorrectSataAndSubmit(page: Page): Promise<void> {
+  await selectAllCorrectSataOptions(page);
+  await clickSubmitAnswer(page);
+}
+
+async function selectPartialSataAndSubmit(page: Page): Promise<void> {
+  await selectFirstSataOption(page);
+  await clickSubmitAnswer(page);
+}
+
+async function fillBowtieAndSubmit(page: Page): Promise<void> {
+  await fillBowtieAllSlots(page);
+  await clickSubmitAnswer(page);
+}
+
 const INTERACTIONS: Record<string, InteractionFn> = {
   selectFirstSata: selectFirstSataOption,
   selectMultipleSata: selectMultipleSataOptions,
   selectAllCorrectSata: selectAllCorrectSataOptions,
   selectFirstMcq: selectFirstMcqOption,
+  selectCorrectMcq: selectCorrectMcqOption,
   selectWrongMcq: clickWrongMcqOption,
   bowtiePartial: fillBowtieConditionOnly,
   bowtieComplete: fillBowtieAllSlots,
   submitAnswer: clickSubmitAnswer,
+  mcqCorrectSubmit: selectCorrectMcqAndSubmit,
+  mcqWrongSubmit: selectWrongMcqAndSubmit,
+  sataCorrectSubmit: selectCorrectSataAndSubmit,
+  sataPartialSubmit: selectPartialSataAndSubmit,
+  bowtieSubmit: fillBowtieAndSubmit,
 };
 
 // ── Spec Builder ──────────────────────────────────────────────────────────────
@@ -517,6 +925,38 @@ function buildCaptureSpecs(): CaptureSpec[] {
         cropSelector: "[data-cat-exam-root]",
         notes: "MCQ with a selection made, submit button enabled.",
       });
+
+      add({
+        slug: `cat-mcq-correct-${vp}-${theme}`,
+        category: "cat",
+        label: `CAT MCQ — Correct Submitted — ${theme} — ${vp}`,
+        route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+        theme,
+        viewport: vp,
+        questionType: "MCQ",
+        questionState: "correct",
+        fixtureKey: "mcq",
+        requiresExamSession: true,
+        interactionKey: "mcqCorrectSubmit",
+        cropSelector: "[data-cat-exam-root]",
+        notes: "MCQ after a correct submission, capturing locked state and feedback/rationale where enabled.",
+      });
+
+      add({
+        slug: `cat-mcq-incorrect-${vp}-${theme}`,
+        category: "cat",
+        label: `CAT MCQ — Incorrect Submitted — ${theme} — ${vp}`,
+        route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+        theme,
+        viewport: vp,
+        questionType: "MCQ",
+        questionState: "incorrect",
+        fixtureKey: "mcq",
+        requiresExamSession: true,
+        interactionKey: "mcqWrongSubmit",
+        cropSelector: "[data-cat-exam-root]",
+        notes: "MCQ after an incorrect submission, capturing current feedback state.",
+      });
     }
   }
 
@@ -569,6 +1009,38 @@ function buildCaptureSpecs(): CaptureSpec[] {
         interactionKey: "selectMultipleSata",
         cropSelector: "[data-cat-exam-root]",
         notes: "SATA with multiple options selected, ready to submit.",
+      });
+
+      add({
+        slug: `cat-sata-correct-${vp}-${theme}`,
+        category: "cat",
+        label: `CAT SATA — Correct Submitted — ${theme} — ${vp}`,
+        route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+        theme,
+        viewport: vp,
+        questionType: "SATA",
+        questionState: "correct",
+        fixtureKey: "sata",
+        requiresExamSession: true,
+        interactionKey: "sataCorrectSubmit",
+        cropSelector: "[data-cat-exam-root]",
+        notes: "SATA correct-answer submitted state with option-level feedback/rationale where enabled.",
+      });
+
+      add({
+        slug: `cat-sata-incorrect-${vp}-${theme}`,
+        category: "cat",
+        label: `CAT SATA — Incorrect Submitted — ${theme} — ${vp}`,
+        route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+        theme,
+        viewport: vp,
+        questionType: "SATA",
+        questionState: "incorrect",
+        fixtureKey: "sata",
+        requiresExamSession: true,
+        interactionKey: "sataPartialSubmit",
+        cropSelector: "[data-cat-exam-root]",
+        notes: "SATA partial/incorrect submitted state for review of incorrect feedback and rationale.",
       });
     }
   }
@@ -624,6 +1096,22 @@ function buildCaptureSpecs(): CaptureSpec[] {
         marketingCrop: vp === "desktop" && theme === "blossom",
         notes: "Bowtie with all three slots assigned — submit enabled.",
       });
+
+      add({
+        slug: `cat-bowtie-rationale-${vp}-${theme}`,
+        category: "cat",
+        label: `CAT Bowtie — Rationale State — ${theme} — ${vp}`,
+        route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+        theme,
+        viewport: vp,
+        questionType: "Bowtie",
+        questionState: "rationale",
+        fixtureKey: "bowtie",
+        requiresExamSession: true,
+        interactionKey: "bowtieSubmit",
+        cropSelector: "[data-cat-exam-root]",
+        notes: "Bowtie submitted state showing the current rationale/feedback treatment.",
+      });
     }
   }
 
@@ -658,6 +1146,107 @@ function buildCaptureSpecs(): CaptureSpec[] {
       cropSelector: "[data-cat-exam-root]",
       notes: "NGN unfolding case study shown in graceful unsupported fallback.",
     });
+  }
+
+  const structuredCatFormats: Array<{
+    key: keyof typeof QUESTION_FIXTURES;
+    slug: string;
+    type: string;
+    label: string;
+    notes: string;
+  }> = [
+    {
+      key: "matrixFallback",
+      slug: "matrix",
+      type: "Matrix",
+      label: "Matrix/Grid",
+      notes: "Matrix/grid structured item captured in the app's current safe fallback UI when a dedicated renderer is not active.",
+    },
+    {
+      key: "caseStudyFallback",
+      slug: "case-study",
+      type: "Case Study",
+      label: "Case Study",
+      notes: "Unfolding case study/chart review captured as current app UI with patient overview, labs, vitals, orders, and question prompt metadata.",
+    },
+    {
+      key: "prioritizationFallback",
+      slug: "prioritization",
+      type: "Prioritization",
+      label: "Prioritization",
+      notes: "Prioritization/ranking item captured as current app UI for audit of specialized-format support.",
+    },
+    {
+      key: "sequencingFallback",
+      slug: "sequencing",
+      type: "Sequencing",
+      label: "Sequencing",
+      notes: "Ordered-response sequencing item captured as current app UI for workflow and fallback review.",
+    },
+    {
+      key: "delegationFallback",
+      slug: "delegation",
+      type: "Delegation",
+      label: "Delegation",
+      notes: "Delegation item captured as current app UI for scope/prioritization review.",
+    },
+    {
+      key: "clinicalJudgmentFallback",
+      slug: "clinical-judgment",
+      type: "Clinical Judgment",
+      label: "Clinical Judgment",
+      notes: "Clinical judgment cue-recognition item captured as current app UI.",
+    },
+    {
+      key: "trendFallback",
+      slug: "trend-interpretation",
+      type: "Trend Interpretation",
+      label: "Trend Interpretation",
+      notes: "Trend/table interpretation item captured as current app UI.",
+    },
+    {
+      key: "medicationCalculation",
+      slug: "medication-calculation",
+      type: "Medication Calculation",
+      label: "Medication Calculation",
+      notes: "Numerical medication-calculation item captured as current app UI.",
+    },
+    {
+      key: "hotspotFallback",
+      slug: "hotspot",
+      type: "Hotspot",
+      label: "Hotspot",
+      notes: "Hotspot/image-selection item captured as current app UI when supported or safe fallback when not.",
+    },
+    {
+      key: "dragDropFallback",
+      slug: "drag-drop",
+      type: "Drag and Drop",
+      label: "Drag and Drop",
+      notes: "Drag-and-drop/ordering item captured as current app UI when supported or safe fallback when not.",
+    },
+  ];
+
+  for (const theme of THEMES) {
+    for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+      for (const format of structuredCatFormats) {
+        add({
+          slug: `cat-${format.slug}-current-${vp}-${theme}`,
+          category: "cat",
+          label: `CAT ${format.label} — Current UI — ${theme} — ${vp}`,
+          route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+          theme,
+          viewport: vp,
+          questionType: format.type,
+          questionState: "unanswered",
+          fixtureKey: format.key,
+          requiresExamSession: true,
+          cropSelector: "[data-cat-exam-root]",
+          marketingCrop: vp === "desktop" && theme === "ocean",
+          notes: format.notes,
+        });
+      }
+    }
   }
 
   // CAT insights / results
@@ -700,6 +1289,50 @@ function buildCaptureSpecs(): CaptureSpec[] {
         marketingCrop: vp === "desktop" && theme === "ocean",
         notes: "Practice exam hub with available exam sets.",
       });
+    }
+
+    const practiceExamFormats: Array<{
+      key: keyof typeof QUESTION_FIXTURES;
+      slug: string;
+      type: string;
+      label: string;
+      interactionKey?: keyof typeof INTERACTIONS;
+      state?: QuestionState;
+    }> = [
+      { key: "mcq", slug: "mcq", type: "MCQ", label: "Standard MCQ", interactionKey: "selectFirstMcq", state: "complete" },
+      { key: "sata", slug: "sata", type: "SATA", label: "SATA", interactionKey: "selectMultipleSata", state: "complete" },
+      { key: "bowtie", slug: "bowtie", type: "Bowtie", label: "Bowtie", interactionKey: "bowtieComplete", state: "complete" },
+      { key: "matrixFallback", slug: "matrix", type: "Matrix", label: "Matrix/Grid", state: "unanswered" },
+      { key: "caseStudyFallback", slug: "case-study", type: "Case Study", label: "Case Study", state: "unanswered" },
+      { key: "prioritizationFallback", slug: "prioritization", type: "Prioritization", label: "Prioritization", state: "unanswered" },
+      { key: "sequencingFallback", slug: "sequencing", type: "Sequencing", label: "Sequencing", state: "unanswered" },
+      { key: "delegationFallback", slug: "delegation", type: "Delegation", label: "Delegation", state: "unanswered" },
+      { key: "clinicalJudgmentFallback", slug: "clinical-judgment", type: "Clinical Judgment", label: "Clinical Judgment", state: "unanswered" },
+      { key: "trendFallback", slug: "trend-interpretation", type: "Trend Interpretation", label: "Trend Interpretation", state: "unanswered" },
+      { key: "medicationCalculation", slug: "medication-calculation", type: "Medication Calculation", label: "Medication Calculation", state: "unanswered" },
+      { key: "hotspotFallback", slug: "hotspot", type: "Hotspot", label: "Hotspot", state: "unanswered" },
+      { key: "dragDropFallback", slug: "drag-drop", type: "Drag and Drop", label: "Drag and Drop", state: "unanswered" },
+    ];
+
+    for (const vp of ["desktop", "mobile"] as Viewport[]) {
+      for (const format of practiceExamFormats) {
+        add({
+          slug: `practice-exam-${format.slug}-current-${vp}-${theme}`,
+          category: "practice-exams",
+          label: `Practice Exam ${format.label} — Current UI — ${theme} — ${vp}`,
+          route: `/app/practice-tests?pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+          theme,
+          viewport: vp,
+          questionType: format.type,
+          questionState: format.state ?? "unanswered",
+          fixtureKey: format.key,
+          requiresExamSession: true,
+          interactionKey: format.interactionKey,
+          cropSelector: "[data-cat-exam-root]",
+          marketingCrop: vp === "desktop" && theme === "ocean",
+          notes: "Practice exam runner capture using seeded QA content and the current production renderer/fallback behavior.",
+        });
+      }
     }
 
     add({
@@ -927,6 +1560,259 @@ function buildCaptureSpecs(): CaptureSpec[] {
     }
   }
 
+  // ── Screenshot System 2.0: Tier Showcase ─────────────────────────────────
+
+  const tierActivities: Array<{
+    key: string;
+    label: string;
+    routeKey: keyof TierCaptureConfig;
+    questionType: string;
+  }> = [
+    { key: "hub", label: "Hub", routeKey: "hubRoute", questionType: "hub" },
+    { key: "practice-questions", label: "Practice Questions", routeKey: "practiceRoute", questionType: "questions" },
+    { key: "flashcards", label: "Flashcards", routeKey: "flashcardsRoute", questionType: "flashcards" },
+    { key: "lessons", label: "Lessons", routeKey: "lessonsRoute", questionType: "lessons" },
+    { key: "cat-or-simulation", label: "CAT or Simulation", routeKey: "catOrSimulationRoute", questionType: "cat-or-simulation" },
+    { key: "analytics", label: "Analytics", routeKey: "analyticsRoute", questionType: "analytics" },
+    { key: "weak-areas", label: "Weak Areas", routeKey: "weakAreasRoute", questionType: "weak-areas" },
+    { key: "progress", label: "Progress", routeKey: "progressRoute", questionType: "progress" },
+  ];
+
+  for (const [tier, config] of Object.entries(TIER_CAPTURE_CONFIGS) as Array<[ScreenshotTier, TierCaptureConfig]>) {
+    for (const activity of tierActivities) {
+      for (const vp of ["desktop", "mobile"] as Viewport[]) {
+        add({
+          slug: `${tier}-${activity.key}-${vp}-ocean`,
+          category: "tier-showcase",
+          outputSubdir: `tiers/${tier}`,
+          label: `${config.label} — ${activity.label} — ${vp}`,
+          route: String(config[activity.routeKey]),
+          theme: "ocean",
+          viewport: vp,
+          tier,
+          questionType: activity.questionType,
+          assetKind: "source",
+          marketingCrop: vp === "desktop",
+          approvalStatus: "pending",
+          reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+          notes: `Tier-specific capture for ${config.label}; uses pathway ${config.pathwayId} and avoids cross-tier content injection.`,
+        });
+      }
+    }
+  }
+
+  // ── Screenshot System 2.0: Complete Learner Journey ──────────────────────
+
+  for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+    for (const step of LEARNER_JOURNEY_STEPS) {
+      const isQuestionStep = step.slug === "question-screen" || step.slug === "submit-answer" || step.slug === "view-rationale";
+      add({
+        slug: `${String(step.step).padStart(2, "0")}-${step.slug}-${vp}-blossom`,
+        category: "learner-journey",
+        outputSubdir: `learner-journey/${vp}`,
+        label: `Learner Journey ${step.step}: ${step.label} — ${vp}`,
+        route: step.route,
+        theme: "blossom",
+        viewport: vp,
+        journeyStep: step.step,
+        questionType: isQuestionStep ? "MCQ" : step.slug,
+        questionState: step.slug === "submit-answer" ? "complete" : step.slug === "view-rationale" ? "rationale" : undefined,
+        fixtureKey: isQuestionStep ? "mcq" : undefined,
+        interactionKey: step.slug === "submit-answer" ? "selectCorrectMcq" : step.slug === "view-rationale" ? "mcqCorrectSubmit" : undefined,
+        requiresExamSession: isQuestionStep,
+        cropSelector: isQuestionStep ? "[data-cat-exam-root]" : undefined,
+        marketingCrop: vp === "desktop",
+        assetKind: "source",
+        approvalStatus: "pending",
+        reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+        notes: "Sequential learner journey capture for pricing, sales, SEO, investor, affiliate, and onboarding use.",
+      });
+    }
+  }
+
+  // ── Screenshot System 2.0: Clinical Judgment Showcase ────────────────────
+
+  const clinicalJudgmentFormats: Array<{
+    key: keyof typeof QUESTION_FIXTURES;
+    slug: string;
+    type: string;
+    states: Array<{ state: QuestionState; interactionKey?: keyof typeof INTERACTIONS }>;
+  }> = [
+    { key: "sata", slug: "sata", type: "SATA", states: [{ state: "unanswered" }, { state: "partial", interactionKey: "selectFirstSata" }, { state: "complete", interactionKey: "selectMultipleSata" }, { state: "rationale", interactionKey: "sataCorrectSubmit" }] },
+    { key: "bowtie", slug: "bowtie", type: "Bowtie", states: [{ state: "unanswered" }, { state: "partial", interactionKey: "bowtiePartial" }, { state: "complete", interactionKey: "bowtieComplete" }, { state: "rationale", interactionKey: "bowtieSubmit" }] },
+    { key: "matrixFallback", slug: "matrix", type: "Matrix", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+    { key: "prioritizationFallback", slug: "prioritization", type: "Prioritization", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+    { key: "sequencingFallback", slug: "sequencing", type: "Sequencing", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+    { key: "delegationFallback", slug: "delegation", type: "Delegation", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+    { key: "clinicalJudgmentFallback", slug: "clinical-judgment", type: "Clinical Judgment", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+    { key: "clinicalJudgmentFallback", slug: "ngn-reasoning", type: "NGN-style reasoning", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+    { key: "caseStudyFallback", slug: "case-study", type: "Case Study", states: [{ state: "unanswered" }, { state: "partial" }, { state: "complete" }, { state: "rationale" }] },
+  ];
+
+  for (const theme of THEMES) {
+    for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+      for (const format of clinicalJudgmentFormats) {
+        for (const state of format.states) {
+          add({
+            slug: `${format.slug}-${state.state}-${vp}-${theme}`,
+            category: "clinical-judgment-showcase",
+            outputSubdir: `clinical-judgment-showcase/${format.slug}`,
+            label: `${format.type} — ${state.state} — ${theme} — ${vp}`,
+            route: `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
+            theme,
+            viewport: vp,
+            questionType: format.type,
+            questionState: state.state,
+            fixtureKey: format.key,
+            requiresExamSession: true,
+            interactionKey: state.interactionKey,
+            cropSelector: "[data-cat-exam-root]",
+            marketingCrop: vp === "desktop" && (state.state === "unanswered" || state.state === "rationale"),
+            assetKind: "source",
+            approvalStatus: "pending",
+            reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+            notes: "Clinical judgment showcase captures actual current UI; incomplete dedicated renderers are shown honestly as production fallback behavior.",
+          });
+        }
+      }
+    }
+  }
+
+  // ── Screenshot System 2.0: CNPLE / LOFT Simulation Showcase ──────────────
+
+  const simulationMoments = [
+    "scenario-overview",
+    "patient-chart",
+    "clinical-data",
+    "decision-point",
+    "outcome-consequence",
+    "documentation-panel",
+    "team-communication",
+    "handoff-screen",
+    "simulation-report",
+  ] as const;
+
+  for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+    for (const moment of simulationMoments) {
+      add({
+        slug: `cnple-loft-${moment}-${vp}-midnight`,
+        category: "simulation-showcase",
+        outputSubdir: "simulation-showcase/cnple-loft",
+        label: `CNPLE / LOFT — ${moment.replace(/-/g, " ")} — ${vp}`,
+        route: `/app/osce?moment=${moment}&pathwayId=ca-np-cnple`,
+        theme: "midnight",
+        viewport: vp,
+        tier: "np",
+        questionType: moment,
+        marketingCrop: vp === "desktop",
+        assetKind: "source",
+        approvalStatus: "pending",
+        reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+        notes: "Simulation showcase capture from the real LOFT/OSCE route; moment query is non-mutating and used only to stabilize review naming.",
+      });
+    }
+  }
+
+  // ── Screenshot System 2.0: ECG Marketing System ──────────────────────────
+
+  const ecgMarketingRoutes = [
+    { slug: "core-rhythm-interpretation", label: "Core ECG Rhythm Interpretation", route: "/modules/ecg-interpretation", tier: "ecg" as ScreenshotTier },
+    { slug: "core-lesson", label: "Core ECG Lesson", route: "/modules/ecg/basic/lessons", tier: "ecg" as ScreenshotTier },
+    { slug: "core-rationale", label: "Core ECG Rationale", route: "/modules/ecg-interpretation/practice", tier: "ecg" as ScreenshotTier },
+    { slug: "core-analytics", label: "Core ECG Analytics", route: "/app/account/analytics?pathwayId=ecg-core", tier: "ecg" as ScreenshotTier },
+    { slug: "advanced-complex-rhythms", label: "Advanced ECG Complex Rhythms", route: "/modules/ecg/advanced", tier: "advanced-ecg" as ScreenshotTier },
+    { slug: "advanced-blocks", label: "Advanced ECG Blocks", route: "/modules/ecg/advanced/lessons?topic=blocks", tier: "advanced-ecg" as ScreenshotTier },
+    { slug: "advanced-pacemakers", label: "Advanced ECG Pacemakers", route: "/modules/ecg/advanced/lessons?topic=pacemakers", tier: "advanced-ecg" as ScreenshotTier },
+    { slug: "advanced-telemetry", label: "Advanced ECG Telemetry", route: "/modules/ecg/advanced/scenarios?topic=telemetry", tier: "advanced-ecg" as ScreenshotTier },
+    { slug: "advanced-interpretation", label: "Advanced ECG Interpretation", route: "/modules/ecg-interpretation/practice?level=advanced", tier: "advanced-ecg" as ScreenshotTier },
+  ];
+
+  for (const theme of THEMES) {
+    for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+      for (const item of ecgMarketingRoutes) {
+        add({
+          slug: `${item.slug}-${vp}-${theme}`,
+          category: "ecg-marketing",
+          outputSubdir: `ecg-marketing/${item.tier}`,
+          label: `${item.label} — ${theme} — ${vp}`,
+          route: item.route,
+          theme,
+          viewport: vp,
+          tier: item.tier,
+          questionType: item.slug,
+          marketingCrop: vp === "desktop",
+          assetKind: "source",
+          approvalStatus: "pending",
+          reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+          notes: "ECG marketing capture for Core ECG and Advanced ECG promotional pages.",
+        });
+      }
+    }
+  }
+
+  // ── Screenshot System 2.0: Pricing Assets and Composite Sources ──────────
+
+  for (const [tier, config] of Object.entries(TIER_CAPTURE_CONFIGS) as Array<[ScreenshotTier, TierCaptureConfig]>) {
+    add({
+      slug: `pricing-${tier}`,
+      category: "pricing-assets",
+      outputSubdir: "pricing",
+      label: `Pricing Page Asset — ${config.label}`,
+      route: `/pricing?highlight=${tier}`,
+      theme: "ocean",
+      viewport: "desktop",
+      tier,
+      questionType: "pricing",
+      marketingCrop: true,
+      assetKind: "pricing",
+      approvalStatus: "pending",
+      reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+      notes: `Marketing-ready pricing capture for ${config.label}.`,
+    });
+
+    for (const theme of THEMES) {
+      add({
+        slug: `${tier}-marketing-composite-source-${theme}`,
+        category: "marketing-composites",
+        outputSubdir: `marketing-composites/sources/${tier}`,
+        label: `${config.label} Marketing Composite Source — ${theme}`,
+        route: config.practiceRoute,
+        theme,
+        viewport: "desktop",
+        tier,
+        questionType: "composite-source",
+        marketingCrop: true,
+        assetKind: "composite-source",
+        approvalStatus: "pending",
+        reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+        notes: `Composite source screenshot. Highlights: ${config.featureHighlights.join(", ")}.`,
+      });
+    }
+  }
+
+  // ── Screenshot System 2.0: Nightly QA Visual Regression ──────────────────
+
+  for (const theme of THEMES) {
+    for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+      for (const qaRoute of QA_VISUAL_ROUTES) {
+        add({
+          slug: `qa-${qaRoute.slug}-${vp}-${theme}`,
+          category: "qa-visual-regression",
+          outputSubdir: `qa-visual-regression/${theme}/${vp}`,
+          label: `QA Visual Regression — ${qaRoute.label} — ${theme} — ${vp}`,
+          route: qaRoute.route,
+          theme,
+          viewport: vp,
+          questionType: qaRoute.slug,
+          assetKind: "qa-capture",
+          approvalStatus: "pending",
+          reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+          notes: "Nightly visual regression capture for overflow, cut-off UI, missing controls, theme regressions, contrast, layout shifts, missing content, and broken images.",
+        });
+      }
+    }
+  }
+
   return specs;
 }
 
@@ -1034,11 +1920,8 @@ async function installQuestionFixture(
   });
 }
 
-async function startCatExamSession(page: Page, origin: string): Promise<boolean> {
-  await page.goto(
-    `${origin}/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PATHWAY_ID)}`,
-    { waitUntil: "domcontentloaded", timeout: 180_000 },
-  );
+async function startExamSession(page: Page, origin: string, routePath: string): Promise<boolean> {
+  await page.goto(`${origin}${routePath}`, { waitUntil: "domcontentloaded", timeout: 180_000 });
 
   if (page.url().includes("/login")) {
     console.warn("  ⚠ Auth redirect — re-seeding login");
@@ -1313,7 +2196,7 @@ async function captureSpec(
   outputDir: string,
   creds: { email: string; password: string },
 ): Promise<CaptureResult> {
-  const dir = path.join(outputDir, spec.category);
+  const dir = path.join(outputDir, specOutputSubdir(spec));
   mkdirSync(dir, { recursive: true });
 
   const filePath = path.join(dir, `${spec.slug}.png`);
@@ -1329,7 +2212,7 @@ async function captureSpec(
       const factory = QUESTION_FIXTURES[spec.fixtureKey];
       await installQuestionFixture(page, factory);
 
-      const sessionStarted = await startCatExamSession(page, origin);
+      const sessionStarted = await startExamSession(page, origin, spec.route);
       if (!sessionStarted) {
         await page.unroute("**/api/practice-tests/*/question**").catch(() => {});
         return { slug: spec.slug, filePath, success: false, error: "Could not start exam session" };
@@ -1406,7 +2289,7 @@ async function generateMarketingCrops(
   sourcePath: string,
   outputDir: string,
 ): Promise<void> {
-  const cropsDir = path.join(outputDir, "marketing-crops", spec.category);
+  const cropsDir = path.join(outputDir, "marketing-crops", specOutputSubdir(spec));
   mkdirSync(cropsDir, { recursive: true });
 
   try {
@@ -1444,6 +2327,68 @@ async function generateMarketingCrops(
   }
 }
 
+async function generateMarketingComposite(
+  spec: CaptureSpec,
+  sourcePath: string,
+  outputDir: string,
+): Promise<void> {
+  if (spec.category !== "marketing-composites" || !spec.tier) return;
+
+  const config = TIER_CAPTURE_CONFIGS[spec.tier];
+  const compositesDir = path.join(outputDir, "marketing-composites", spec.tier);
+  mkdirSync(compositesDir, { recursive: true });
+
+  try {
+    const sharp = await import("sharp").catch(() => null);
+    if (!sharp) {
+      console.warn("  ⚠ sharp not available — skipping marketing composite");
+      return;
+    }
+
+    const width = 1600;
+    const height = 900;
+    const themeAccent = spec.theme === "blossom" ? "#db2777" : spec.theme === "midnight" ? "#7c3aed" : "#0f8ea5";
+    const themeSoft = spec.theme === "blossom" ? "#fdf2f8" : spec.theme === "midnight" ? "#f5f3ff" : "#ecfeff";
+    const featureRows = config.featureHighlights
+      .map((feature, index) => `<text x="1010" y="${342 + index * 52}" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="650" fill="#0f172a">✓ ${escapeSvgText(feature)}</text>`)
+      .join("");
+
+    const overlaySvg = Buffer.from(`
+      <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="${width}" height="${height}" rx="0" fill="#ffffff"/>
+        <rect x="54" y="54" width="910" height="792" rx="30" fill="${themeSoft}" stroke="${themeAccent}" stroke-opacity="0.28"/>
+        <rect x="1002" y="118" width="420" height="62" rx="31" fill="${themeSoft}" stroke="${themeAccent}" stroke-opacity="0.35"/>
+        <text x="1032" y="158" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" fill="${themeAccent}">${escapeSvgText(config.label.toUpperCase())}</text>
+        <text x="1002" y="252" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="800" fill="#0f172a">NurseNest ${escapeSvgText(config.label)}</text>
+        ${featureRows}
+        <path d="M1390 706c38-22 76-22 114 0-15 46-53 77-114 92-61-15-99-46-114-92 38-22 76-22 114 0Z" fill="${themeAccent}" opacity="0.11"/>
+      </svg>
+    `);
+
+    const screenshotBuffer = await sharp.default(sourcePath)
+      .resize(820, 640, { fit: "cover", position: "top" })
+      .png()
+      .toBuffer();
+
+    await sharp.default(overlaySvg)
+      .composite([
+        { input: screenshotBuffer, left: 100, top: 130 },
+      ])
+      .png({ compressionLevel: 8 })
+      .toFile(path.join(compositesDir, `${spec.tier}-marketing-composite-${spec.theme}.png`));
+  } catch (err) {
+    console.warn(`  ⚠ Composite failed for ${spec.slug}: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+function escapeSvgText(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 // ── Gallery HTML Generator ────────────────────────────────────────────────────
 
 function generateGalleryHtml(
@@ -1463,6 +2408,14 @@ function generateGalleryHtml(
     "pharmacology": "Pharmacology",
     "clinical-skills": "Clinical Skills",
     "loft": "LOFT / OSCE Simulation",
+    "tier-showcase": "Tier Showcase",
+    "learner-journey": "Learner Journey",
+    "clinical-judgment-showcase": "Clinical Judgment Showcase",
+    "simulation-showcase": "CNPLE / LOFT Simulation Showcase",
+    "ecg-marketing": "ECG Marketing",
+    "pricing-assets": "Pricing Page Assets",
+    "marketing-composites": "Marketing Composites",
+    "qa-visual-regression": "Nightly QA Visual Regression",
   };
 
   const checklist = [
@@ -1500,19 +2453,26 @@ function generateGalleryHtml(
 
     const cardHtml = catResults.map(({ spec, result }) => {
       const ok = result?.success ?? false;
-      const relPath = `../${spec.category}/${spec.slug}.png`;
+      const relPath = `../${specOutputSubdir(spec)}/${spec.slug}.png`;
       const stateColor = questionStateColors[spec.questionState ?? spec.questionType ?? "hub"] ?? "#334155";
 
       const badges = [
+        spec.tier && `<span class="badge badge-tier">${spec.tier}</span>`,
         spec.viewport && `<span class="badge badge-vp">${spec.viewport}</span>`,
         spec.theme && `<span class="badge badge-theme badge-theme-${spec.theme}">${spec.theme}</span>`,
+        spec.assetKind && `<span class="badge badge-asset">${spec.assetKind}</span>`,
         spec.questionType && `<span class="badge badge-qt">${spec.questionType}</span>`,
         spec.questionState && `<span class="badge badge-state" style="background:${stateColor}">${spec.questionState}</span>`,
         spec.marketingCrop && `<span class="badge badge-crop">marketing crop</span>`,
+        spec.approvalStatus && `<span class="badge badge-approval">${spec.approvalStatus}</span>`,
       ].filter(Boolean).join("\n          ");
 
+      const reviewChecklist = (spec.reviewChecklist ?? EXECUTIVE_REVIEW_CHECKLIST).map((item) =>
+        `<label><input type="checkbox"> ${item}</label>`
+      ).join("");
+
       return `
-        <div class="card ${ok ? "card-ok" : "card-fail"}">
+        <div class="card ${ok ? "card-ok" : "card-fail"}" data-tier="${spec.tier ?? "all"}" data-theme="${spec.theme}" data-device="${spec.viewport}" data-activity="${spec.category}" data-question-type="${spec.questionType ?? "none"}" data-asset-kind="${spec.assetKind ?? "source"}" data-approval="${spec.approvalStatus ?? "pending"}">
           <div class="card-img-wrap">
             ${ok
               ? `<a href="${relPath}" target="_blank"><img src="${relPath}" alt="${spec.label}" loading="lazy" /></a>`
@@ -1525,6 +2485,12 @@ function generateGalleryHtml(
           ${badges}
             </div>
             ${spec.notes ? `<div class="card-notes">${spec.notes}</div>` : ""}
+            <div class="approval-controls" aria-label="Approval workflow">
+              <button type="button" data-status="pending">Pending</button>
+              <button type="button" data-status="approved">Approved</button>
+              <button type="button" data-status="needs-revision">Needs Revision</button>
+            </div>
+            <div class="visual-checklist">${reviewChecklist}</div>
             ${result?.bytes ? `<div class="card-size">${(result.bytes / 1024).toFixed(1)} KB</div>` : ""}
           </div>
         </div>`;
@@ -1546,6 +2512,19 @@ ${cardHtml}
   const checklistHtml = checklist.map((item) =>
     `<li><label><input type="checkbox"> ${item}</label></li>`
   ).join("\n      ");
+
+  const tierOptions = ["all", ...Object.keys(TIER_CAPTURE_CONFIGS)]
+    .map((value) => `<option value="${value}">${value}</option>`)
+    .join("");
+  const themeOptions = ["all", ...THEMES]
+    .map((value) => `<option value="${value}">${value}</option>`)
+    .join("");
+  const deviceOptions = ["all", ...Object.keys(VIEWPORTS)]
+    .map((value) => `<option value="${value}">${value}</option>`)
+    .join("");
+  const activityOptions = ["all", ...categories]
+    .map((value) => `<option value="${value}">${categoryLabels[value] ?? value}</option>`)
+    .join("");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1607,9 +2586,20 @@ ${cardHtml}
     .badge-theme-ocean { background: #0c4a6e; }
     .badge-theme-blossom { background: #831843; }
     .badge-theme-midnight { background: #1e1b4b; }
+    .badge-tier { background: #312e81; color: #c7d2fe; }
+    .badge-asset { background: #0f766e; color: #ccfbf1; }
     .badge-qt { background: #1c1917; color: #d6d3d1; }
     .badge-state { color: #fff; }
     .badge-crop { background: #78350f; color: #fcd34d; }
+    .badge-approval { background: #4c1d95; color: #ddd6fe; }
+    .filters { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 32px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .filters label { color: var(--muted); font-size: 12px; display: flex; align-items: center; gap: 6px; }
+    .filters select { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; }
+    .approval-controls { display: flex; gap: 6px; flex-wrap: wrap; }
+    .approval-controls button { background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
+    .approval-controls button:hover { color: var(--text); border-color: var(--accent); }
+    .visual-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; padding-top: 6px; border-top: 1px solid var(--border); }
+    .visual-checklist label { color: var(--muted); font-size: 11px; display: flex; gap: 5px; align-items: center; }
 
     aside.checklist { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 40px; }
     aside.checklist h3 { font-size: 16px; margin-bottom: 16px; }
@@ -1635,6 +2625,17 @@ ${cardHtml}
     ${navLinks}
   </nav>
 
+  <div class="filters" aria-label="Screenshot gallery filters">
+    <label>Tier <select data-filter="tier">${tierOptions}</select></label>
+    <label>Theme <select data-filter="theme">${themeOptions}</select></label>
+    <label>Device <select data-filter="device">${deviceOptions}</select></label>
+    <label>Activity <select data-filter="activity">${activityOptions}</select></label>
+    <label>Question Type <select data-filter="question-type"><option value="all">all</option></select></label>
+    <label>Marketing Asset <select data-filter="asset-kind"><option value="all">all</option><option value="source">source</option><option value="pricing">pricing</option><option value="composite-source">composite-source</option><option value="qa-capture">qa-capture</option></select></label>
+    <label>Simulation <select data-filter="simulation"><option value="all">all</option><option value="simulation-showcase">simulation</option><option value="loft">loft</option></select></label>
+    <label>ECG <select data-filter="ecg"><option value="all">all</option><option value="ecg">ecg</option><option value="ecg-marketing">ecg-marketing</option></select></label>
+  </div>
+
   <main>
     <aside class="checklist">
       <h3>Review Checklist — check each item as you audit</h3>
@@ -1648,6 +2649,31 @@ ${categoryHtml}
   <div class="generated">
     Generated by generate-assessment-screenshots.ts · NurseNest · ${new Date().toISOString()}
   </div>
+  <script>
+    const filters = Array.from(document.querySelectorAll("[data-filter]"));
+    const cards = Array.from(document.querySelectorAll(".card"));
+    const questionTypeSelect = document.querySelector('[data-filter="question-type"]');
+    if (questionTypeSelect) {
+      const types = Array.from(new Set(cards.map((card) => card.dataset.questionType).filter(Boolean))).sort();
+      questionTypeSelect.innerHTML += types.map((type) => '<option value="' + type + '">' + type + '</option>').join('');
+    }
+    function matches(card, name, value) {
+      if (value === "all") return true;
+      if (name === "simulation") return card.dataset.activity === value;
+      if (name === "ecg") return card.dataset.activity === value;
+      if (name === "question-type") return card.dataset.questionType === value;
+      if (name === "asset-kind") return card.dataset.assetKind === value;
+      return card.dataset[name] === value;
+    }
+    function applyFilters() {
+      const active = filters.map((select) => [select.dataset.filter, select.value]);
+      for (const card of cards) {
+        const visible = active.every(([name, value]) => matches(card, name, value));
+        card.style.display = visible ? "" : "none";
+      }
+    }
+    filters.forEach((select) => select.addEventListener("change", applyFilters));
+  </script>
 </body>
 </html>`;
 }
@@ -1673,9 +2699,14 @@ async function writeManifest(
       return {
         slug: r.slug,
         category: spec.category,
+        outputSubdir: specOutputSubdir(spec),
         label: spec.label,
         theme: spec.theme,
         viewport: spec.viewport,
+        tier: spec.tier,
+        journeyStep: spec.journeyStep,
+        assetKind: spec.assetKind,
+        approvalStatus: spec.approvalStatus,
         questionType: spec.questionType,
         questionState: spec.questionState,
         success: r.success,
@@ -1736,6 +2767,203 @@ async function writeValidationReport(
   ].join("\n");
 
   await fs.writeFile(path.join(outputDir, "screenshot-validation-report.md"), report);
+}
+
+async function writeAuditCoverageReport(
+  specs: CaptureSpec[],
+  results: CaptureResult[],
+  outputDir: string,
+): Promise<void> {
+  const resultMap = new Map(results.map((result) => [result.slug, result]));
+  const requiredCategories: CaptureSpec["category"][] = [
+    "cat",
+    "practice-exams",
+    "flashcards",
+    "clinical-skills",
+    "pharmacology",
+    "ecg",
+    "loft",
+    "tier-showcase",
+    "learner-journey",
+    "clinical-judgment-showcase",
+    "simulation-showcase",
+    "ecg-marketing",
+    "pricing-assets",
+    "marketing-composites",
+    "qa-visual-regression",
+  ];
+  const requiredThemes: Theme[] = ["blossom", "ocean", "midnight"];
+  const requiredViewports: Viewport[] = ["desktop", "mobile"];
+  const requiredAssessmentTypes = [
+    "MCQ",
+    "SATA",
+    "Bowtie",
+    "Matrix",
+    "Case Study",
+    "Prioritization",
+    "Sequencing",
+    "Delegation",
+    "Clinical Judgment",
+    "Trend Interpretation",
+    "Medication Calculation",
+    "Hotspot",
+    "Drag and Drop",
+  ];
+  const requiredStates: QuestionState[] = [
+    "unanswered",
+    "partial",
+    "complete",
+    "correct",
+    "incorrect",
+    "rationale",
+  ];
+  const requiredCropNames = Object.keys(MARKETING_CROPS);
+
+  const rows = requiredCategories.map((category) => {
+    const categorySpecs = specs.filter((spec) => spec.category === category);
+    const successful = categorySpecs.filter((spec) => resultMap.get(spec.slug)?.success).length;
+    const themes = requiredThemes.map((theme) => {
+      const hasSpec = categorySpecs.some((spec) => spec.theme === theme);
+      return `${theme}: ${hasSpec ? "planned" : "missing"}`;
+    }).join(", ");
+    const viewports = requiredViewports.map((viewport) => {
+      const hasSpec = categorySpecs.some((spec) => spec.viewport === viewport);
+      return `${viewport}: ${hasSpec ? "planned" : "missing"}`;
+    }).join(", ");
+    return `| ${category} | ${categorySpecs.length} | ${successful} | ${themes} | ${viewports} |`;
+  });
+
+  const assessmentRows = requiredAssessmentTypes.map((type) => {
+    const catSpecs = specs.filter((spec) => spec.category === "cat" && spec.questionType === type);
+    const practiceSpecs = specs.filter((spec) => spec.category === "practice-exams" && spec.questionType === type);
+    const states = requiredStates
+      .filter((state) => specs.some((spec) => spec.questionType === type && spec.questionState === state))
+      .join(", ") || "current-state only";
+    const supportNote =
+      catSpecs.some((spec) => /current|fallback/i.test(`${spec.slug} ${spec.notes ?? ""}`)) ||
+      practiceSpecs.some((spec) => /current|fallback/i.test(`${spec.slug} ${spec.notes ?? ""}`))
+        ? "captures current production renderer/fallback honestly"
+        : "direct interaction capture";
+    return `| ${type} | ${catSpecs.length} | ${practiceSpecs.length} | ${states} | ${supportNote} |`;
+  });
+
+  const cropSpecCount = specs.filter((spec) => spec.marketingCrop).length;
+  const failed = results.filter((result) => !result.success);
+  const rejected = results.filter((result) => result.validation?.passed === false);
+
+  const report = [
+    "# CAT & Practice Exam Visual Audit Coverage Report",
+    "",
+    `Generated: ${new Date().toISOString()}`,
+    `Base URL: ${BASE_URL}`,
+    `Output root: ${outputDir}`,
+    "",
+    "## Inventory Coverage",
+    "",
+    "| Area | Planned captures | Successful captures | Theme coverage | Viewport coverage |",
+    "| --- | ---: | ---: | --- | --- |",
+    ...rows,
+    "",
+    "## Assessment Interaction Coverage",
+    "",
+    "| Interaction type | CAT specs | Practice exam specs | States represented | Capture note |",
+    "| --- | ---: | ---: | --- | --- |",
+    ...assessmentRows,
+    "",
+    "## Marketing Export Coverage",
+    "",
+    `- Crop presets: ${requiredCropNames.join(", ")}`,
+    `- Specs marked for marketing crops: ${cropSpecCount}`,
+    "- Source screenshots are captured from the running application through Playwright using seeded QA content.",
+    "- Specialized formats that are not fully supported in the runner are captured as the current production UI/fallback, not as mockups.",
+    "",
+    "## Quality Gate",
+    "",
+    `- Failed captures: ${failed.length}`,
+    `- Rejected loading/error/blank captures: ${rejected.length}`,
+    "- The capture gate rejects visible loading text, skeleton loaders, spinner classes, auth redirects, and near-empty pages.",
+    "",
+    "## Review Checklist",
+    "",
+    "- Visual Quality",
+    "- Theme Awareness",
+    "- Branding",
+    "- Readability",
+    "- Mobile UX",
+    "- Spacing",
+    "- Alignment",
+    "- Rationale Layout",
+    "- Accessibility",
+    "",
+  ].join("\n");
+
+  await fs.writeFile(path.join(outputDir, "assessment-screenshot-audit-report.md"), report);
+}
+
+async function writeQaVisualReport(
+  specs: CaptureSpec[],
+  results: CaptureResult[],
+  outputDir: string,
+): Promise<void> {
+  const qaSpecs = specs.filter((spec) => spec.category === "qa-visual-regression");
+  const resultMap = new Map(results.map((result) => [result.slug, result]));
+  const rows = qaSpecs.map((spec) => {
+    const result = resultMap.get(spec.slug);
+    const passed = result?.success && result.validation?.passed !== false;
+    const reasons = result?.validation?.rejectedReasons.length
+      ? result.validation.rejectedReasons.join("; ")
+      : result?.error ?? "Passed readiness checks";
+    const relPath = `${specOutputSubdir(spec)}/${spec.slug}.png`;
+    return `
+      <tr class="${passed ? "pass" : "fail"}">
+        <td>${spec.questionType ?? spec.slug}</td>
+        <td>${spec.theme}</td>
+        <td>${spec.viewport}</td>
+        <td>${passed ? "Pass" : "Fail"}</td>
+        <td>${escapeHtml(reasons)}</td>
+        <td>${result?.success ? `<a href="${escapeHtml(relPath)}">Screenshot</a>` : "Not captured"}</td>
+      </tr>`;
+  }).join("");
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NurseNest QA Visual Report</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 32px; }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    p { color: #475569; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+    th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; vertical-align: top; }
+    th { background: #f1f5f9; font-weight: 700; }
+    tr.pass td:nth-child(4) { color: #15803d; font-weight: 700; }
+    tr.fail td:nth-child(4) { color: #b91c1c; font-weight: 700; }
+    a { color: #0369a1; }
+  </style>
+</head>
+<body>
+  <h1>NurseNest QA Visual Regression Report</h1>
+  <p>Generated ${new Date().toISOString()}. Gate covers overflow proxies, cut-off UI proxies, missing controls, theme regressions, loading states, missing content, and broken activity pages.</p>
+  <table>
+    <thead>
+      <tr><th>Route</th><th>Theme</th><th>Device</th><th>Status</th><th>Validation</th><th>Artifact</th></tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>
+</body>
+</html>`;
+
+  await fs.writeFile(path.join(outputDir, "qa-visual-report.html"), html);
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -1801,8 +3029,9 @@ Env:
 
   // Set up output directories
   mkdirSync(OUT_ROOT, { recursive: true });
-  for (const cat of ["cat", "practice-exams", "flashcards", "ecg", "pharmacology", "clinical-skills", "loft", "gallery", "marketing-crops"]) {
-    mkdirSync(path.join(OUT_ROOT, cat), { recursive: true });
+  const outputSubdirs = new Set(allSpecs.map((spec) => specOutputSubdir(spec)));
+  for (const dir of [...outputSubdirs, "gallery", "marketing-crops", "marketing-composites"]) {
+    mkdirSync(path.join(OUT_ROOT, dir), { recursive: true });
   }
 
   const browser: Browser = await chromium.launch({ headless: true });
@@ -1841,6 +3070,7 @@ Env:
         if (!args.noCrops && spec.marketingCrop) {
           await generateMarketingCrops(spec, result.filePath, OUT_ROOT);
         }
+        await generateMarketingComposite(spec, result.filePath, OUT_ROOT);
       } else {
         console.log(`✗ ${result.error?.slice(0, 60) ?? "failed"}`);
       }
@@ -1867,6 +3097,7 @@ Env:
         if (!args.noCrops && spec.marketingCrop) {
           await generateMarketingCrops(spec, result.filePath, OUT_ROOT);
         }
+        await generateMarketingComposite(spec, result.filePath, OUT_ROOT);
       } else {
         console.log(`✗ ${result.error?.slice(0, 60) ?? "failed"}`);
       }
@@ -1879,6 +3110,8 @@ Env:
   // Write manifest
   await writeManifest(allSpecs, results, OUT_ROOT);
   await writeValidationReport(allSpecs, results, OUT_ROOT);
+  await writeAuditCoverageReport(allSpecs, results, OUT_ROOT);
+  await writeQaVisualReport(allSpecs, results, OUT_ROOT);
 
   // Generate gallery
   if (!args.noGallery) {
@@ -1902,6 +3135,8 @@ Env:
   }
   console.log(`  Output: ${OUT_ROOT}`);
   console.log(`  Validation report: ${path.join(OUT_ROOT, "screenshot-validation-report.md")}`);
+  console.log(`  Audit report: ${path.join(OUT_ROOT, "assessment-screenshot-audit-report.md")}`);
+  console.log(`  QA visual report: ${path.join(OUT_ROOT, "qa-visual-report.html")}`);
   console.log("─────────────────────────────────────────\n");
 
   if (failCount > 0) {

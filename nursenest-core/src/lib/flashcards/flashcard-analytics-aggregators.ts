@@ -29,6 +29,12 @@ export type FlashcardTelemetryEventRecord = {
   sata_partial_accuracy?: number;
   /** ms on card front before reveal */
   reveal_dwell_ms?: number;
+  /** ms from reveal/rationale open to recall rating */
+  dwell_reveal_ms?: number;
+  /** ms from card display to answer submission when available */
+  time_to_answer_ms?: number;
+  /** ms spent in rationale/teaching sections when available */
+  rationale_dwell_ms?: number;
   /** SRS segment: "new" | "due" | "overdue" | "lapsing" */
   segment?: string;
   remediation_boosted?: boolean;

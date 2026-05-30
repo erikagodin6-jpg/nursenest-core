@@ -16,6 +16,13 @@ import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-sy
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import type { PublicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { newGradMarketingHubBase, type NewGradMarketingShell } from "@/lib/navigation/new-grad-marketing-hub-paths";
+import {
+  NEW_GRAD_COMPETENCY_DOMAINS,
+  NEW_GRAD_READINESS_DIMENSIONS,
+  NEW_GRAD_RESIDENCY_TRACKS,
+  NEW_GRAD_ROADMAP_MILESTONES,
+  NEW_GRAD_SHIFT_READINESS_MODULES,
+} from "@/lib/new-grad/new-grad-residency-program";
 import { listNewGradWorkAreas } from "@/lib/new-grad/new-grad-work-areas";
 
 export function NewGradMarketingLanding({
@@ -55,6 +62,106 @@ export function NewGradMarketingLanding({
 
       {/* ── First-Year Success Framework ─────────────────────────────── */}
       <NewGradFirstYearFramework lessonsHref={study.lessons} />
+
+      {/* ── Residency Program Foundation ─────────────────────────────── */}
+      <section
+        className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8"
+        aria-labelledby="ng-residency-program-heading"
+        data-nn-new-grad-residency-program="1"
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-chart-4)]">
+              Digital nurse residency
+            </p>
+            <h2 id="ng-residency-program-heading" className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">
+              First-year transition roadmap
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              The New Grad pathway is organized around real orientation milestones, specialty tracks, competency evidence,
+              shift-readiness modules, and practical simulation practice.
+            </p>
+          </div>
+          <Link
+            href={study.lessons}
+            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-4)_30%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--semantic-chart-4)] hover:bg-[color-mix(in_srgb,var(--semantic-chart-4)_8%,var(--semantic-surface))]"
+          >
+            Open residency lessons
+          </Link>
+        </div>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_20%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] p-4 sm:p-5">
+            <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">30 / 60 / 90 / 180 / 365-day roadmaps</h3>
+            <ol className="mt-4 grid list-none gap-3 p-0 sm:grid-cols-2">
+              {NEW_GRAD_ROADMAP_MILESTONES.map((milestone) => (
+                <li
+                  key={milestone.window}
+                  className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3"
+                >
+                  <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-4)]">
+                    {milestone.label}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{milestone.focus}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4 sm:p-5">
+            <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Residency dashboard signals</h3>
+            <ul className="mt-4 grid list-none gap-2 p-0">
+              {NEW_GRAD_READINESS_DIMENSIONS.map((dimension) => (
+                <li key={dimension.id} className="flex items-center justify-between gap-3 text-sm">
+                  <span className="text-[var(--semantic-text-secondary)]">{dimension.label}</span>
+                  <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-2.5 py-1 text-xs font-bold text-[var(--semantic-info)]">
+                    {dimension.weight}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Specialty tracks</h3>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+              {NEW_GRAD_RESIDENCY_TRACKS.length} dedicated transition pathways.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {NEW_GRAD_RESIDENCY_TRACKS.slice(0, 8).map((track) => (
+                <span
+                  key={track.id}
+                  className="rounded-full border border-[var(--semantic-border-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--semantic-text-secondary)]"
+                >
+                  {track.title}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Competency checklist</h3>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+              Knowledge, skills, communication, documentation, professional practice, judgment, time management,
+              delegation, and prioritization.
+            </p>
+            <p className="mt-3 text-xs font-bold uppercase tracking-wide text-[var(--semantic-success)]">
+              {NEW_GRAD_COMPETENCY_DOMAINS.length} competency domains
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">Shift readiness</h3>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+              Practical modules for first shift, first night shift, first charge shift, first ICU assignment, and first
+              telemetry assignment.
+            </p>
+            <p className="mt-3 text-xs font-bold uppercase tracking-wide text-[var(--semantic-warning)]">
+              {NEW_GRAD_SHIFT_READINESS_MODULES.length} readiness modules
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ── Real Clinical Scenarios ──────────────────────────────────── */}
       <NewGradClinicalScenarios simulationsHref="/clinical-scenarios" />

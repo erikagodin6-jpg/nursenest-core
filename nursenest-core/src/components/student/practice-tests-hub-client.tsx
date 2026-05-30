@@ -527,8 +527,9 @@ export function PracticeTestsHubClient({
       },
     });
   }, [pathwayId, resumeHref, router]);
+  const restoreOriginalLauncherFlow = true;
 
-  if (examMode !== "cat") return (
+  if (!restoreOriginalLauncherFlow && examMode !== "cat") return (
     <SharedStudySetupLayout
       mode="practice-exam"
       className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
@@ -636,7 +637,7 @@ export function PracticeTestsHubClient({
     </SharedStudySetupLayout>
   );
 
-  if (examMode === "cat") {
+  if (!restoreOriginalLauncherFlow && examMode === "cat") {
     return (
       <SharedStudySetupLayout
         mode="cat"
@@ -753,7 +754,7 @@ export function PracticeTestsHubClient({
 
   return (
     <SharedStudySetupLayout
-      mode="practice-exam"
+      mode={examMode === "cat" ? "cat" : "practice-exam"}
       className="nn-practice-tests-hub-premium space-y-5 py-2 pb-24 sm:space-y-6 sm:py-3 md:pb-6"
       data-nn-e2e-practice-tests-hub
       data-nn-practice-exam-hub-convergence=""
@@ -793,61 +794,39 @@ export function PracticeTestsHubClient({
             </div>
           </div>
 
-          <div
-            className="nn-flashcards-hero-action-row border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_65%,transparent)] pt-5"
-            data-nn-e2e-practice-exam-band
-          >
-            <p
-              className="max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]"
-              data-nn-e2e-practice-session-preview
+          {resumeHref ? (
+            <div
+              className="nn-flashcards-resume-spotlight flex flex-col gap-4 border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] pt-5 sm:flex-row sm:items-center sm:justify-between"
+              data-nn-e2e-practice-resume
             >
-              {sessionPreviewCopy}
-            </p>
-            <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0 flex-1">
-                <button
-                  type="button"
-                  onClick={createTest}
-                  disabled={startDisabled}
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 py-3.5 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
-                  data-nn-qa-practice-hub-start-test
-                >
-                  {isLaunching ? (
-                    <>
-                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Opening {modeLabel}…
-                    </>
-                  ) : creating ? (
-                    <>
-                      <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
-                      Starting…
-                    </>
-                  ) : (
-                    <>
-                      <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
-                      Start
-                    </>
-                  )}
-                </button>
-                <p
-                  className="mt-2 text-center text-xs text-[var(--semantic-text-muted)] sm:text-left"
-                  data-nn-e2e-practice-cta-subline
-                >
-                  {ctaSubline}
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-info)]">
+                  Active session
+                </p>
+                <p className="mt-1 text-lg font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
+                  Continue where you left off
+                </p>
+                <p className="mt-1.5 text-sm text-[var(--semantic-text-secondary)]">
+                  {modeLabel}
+                  {" · "}
+                  {questionCount} question{questionCount === 1 ? "" : "s"}
+                  {selectedCanonicalIds.length > 0
+                    ? ` · ${selectedCanonicalIds.length} system${selectedCanonicalIds.length > 1 ? "s" : ""}`
+                    : ""}
                 </p>
               </div>
-              <div className="nn-flashcards-deck-match-inline flex items-center gap-3 text-xs text-[var(--semantic-text-secondary)] lg:shrink-0">
-                <span>
-                  <span className="font-semibold text-[var(--semantic-text-primary)]">Question pool </span>
-                  <span className="tabular-nums text-base font-bold text-[var(--semantic-text-primary)]">
-                    {discoveryTotal != null ? discoveryTotal : "—"}
-                  </span>
-                </span>
-                <span className="hidden h-4 w-px bg-[var(--semantic-border-soft)] sm:inline" aria-hidden />
-                <span className="hidden sm:inline">{setupSummary}</span>
+              <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[12rem]">
+                <button
+                  type="button"
+                  onClick={resumeSession}
+                  data-nn-e2e-practice-resume-session
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-info)_88%,var(--semantic-text-primary))] px-8 text-sm font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-info)_24%,transparent)] transition hover:brightness-[1.03] sm:w-auto"
+                >
+                  Resume session
+                </button>
               </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </header>
 
@@ -922,17 +901,21 @@ export function PracticeTestsHubClient({
         ) : null}
       </SharedStudySetupSurface>
 
-      <details
-        className="nn-flashcards-setup-panel nn-flashcards-hub-setup-panel nn-flashcards-collapsed-panel rounded-2xl border shadow-[var(--semantic-shadow-soft)]"
+      <SharedStudySetupSurface
+        className="nn-premium-practice-hub-builder"
+        aria-labelledby="nn-practice-session-heading"
         data-nn-e2e-practice-setup-panel
       >
-        <summary className="cursor-pointer list-none rounded-xl px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,transparent)] sm:px-5">
-          Fine-tune session length &amp; filters
-          <span className="mt-0.5 block text-xs font-normal text-[var(--semantic-text-muted)]">
-            Optional — most learners start with the defaults
-          </span>
-        </summary>
-        <div className="space-y-6 border-t border-[var(--semantic-border-soft)] px-4 pb-5 pt-4 sm:px-5 sm:pb-6">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <h2
+            id="nn-practice-session-heading"
+            className="text-lg font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-xl"
+          >
+            Configure session
+          </h2>
+          <span className="text-xs font-medium text-[var(--semantic-text-muted)]">{setupSummary}</span>
+        </div>
+        <div className="space-y-5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]">
             <LearnerFilterBar
               title="Exam mode"
@@ -1028,55 +1011,58 @@ export function PracticeTestsHubClient({
                 id="practice-exam-count"
                 data-nn-e2e-question-count
                 type="number"
-                min={PRACTICE_COUNT_MIN}
-                max={PRACTICE_COUNT_MAX}
+                min={examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN}
+                max={examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX}
                 value={questionCount}
                 onChange={(event) =>
                   setQuestionCount(
                     Math.max(
-                      PRACTICE_COUNT_MIN,
-                      Math.min(PRACTICE_COUNT_MAX, Number(event.target.value) || 50),
+                      examMode === "cat" ? CAT_COUNT_MIN : PRACTICE_COUNT_MIN,
+                      Math.min(examMode === "cat" ? CAT_COUNT_MAX : PRACTICE_COUNT_MAX, Number(event.target.value) || 50),
                     ),
                   )
                 }
                 className="nn-flashcards-custom-limit-input h-9 w-24 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
               />
               <span>
-                {PRACTICE_COUNT_MIN}-{PRACTICE_COUNT_MAX} allowed
+                {examMode === "cat" ? `${CAT_COUNT_MIN}-${CAT_COUNT_MAX}` : `${PRACTICE_COUNT_MIN}-${PRACTICE_COUNT_MAX}`} allowed
               </span>
             </div>
           </div>
+          {examMode === "cat" && !catAvailableForPathway ? (
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,rgba(15,23,42,0.06))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,white)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+              CAT requires an eligible pathway. Choose an eligible pathway or switch to Practice Exam.
+            </div>
+          ) : null}
+          <div className="flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-[var(--semantic-text-secondary)]">{setupSummary}</p>
+            <button
+              type="button"
+              onClick={createTest}
+              disabled={startDisabled}
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-sm font-bold text-white shadow-[0_10px_22px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+              data-nn-qa-practice-hub-start-test
+            >
+              {isLaunching ? (
+                <>
+                  <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                  Opening {modeLabel}…
+                </>
+              ) : creating ? (
+                <>
+                  <LineChart className="mr-2 h-4 w-4 animate-pulse" aria-hidden />
+                  Starting…
+                </>
+              ) : (
+                <>
+                  <PlayCircle className="mr-2 h-4 w-4" aria-hidden />
+                  Start {modeLabel}
+                </>
+              )}
+            </button>
+          </div>
         </div>
-      </details>
-
-      <div
-        className="nn-flashcards-sticky-start hidden fixed inset-x-0 bottom-0 z-20 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,transparent)] px-4 py-3 shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_85%,transparent)] sm:px-6 md:hidden"
-        data-nn-e2e-practice-sticky-cta
-        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
-      >
-        <p className="mb-2 line-clamp-2 text-center text-[11px] text-[var(--semantic-text-muted)]">{ctaSubline}</p>
-        {resumeHref ? (
-          <button
-            type="button"
-            onClick={resumeSession}
-            disabled={creating || isLaunching}
-            data-nn-e2e-practice-resume-bottom
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isLaunching ? `Opening ${modeLabel}...` : "Resume session"}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={createTest}
-            disabled={startDisabled}
-            data-nn-e2e-practice-start-bottom
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--semantic-brand)] px-8 text-base font-bold text-white shadow-[0_12px_28px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-55"
-          >
-            {isLaunching ? `Opening ${modeLabel}...` : creating ? "Starting..." : `Start ${modeLabel}`}
-          </button>
-        )}
-      </div>
+      </SharedStudySetupSurface>
 
       {/* Error display */}
       {error ? (

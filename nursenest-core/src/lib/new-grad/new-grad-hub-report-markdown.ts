@@ -9,6 +9,17 @@ import {
   loadNewGradTransitionCatalog,
   newGradCatalogLessonCount,
 } from "./new-grad-hub-program-model";
+import {
+  NEW_GRAD_COMMERCIAL_PACKAGES,
+  NEW_GRAD_COMPETENCY_DOMAINS,
+  NEW_GRAD_READINESS_DIMENSIONS,
+  NEW_GRAD_RESIDENCY_TRACKS,
+  NEW_GRAD_ROADMAP_MILESTONES,
+  NEW_GRAD_SHIFT_READINESS_MODULES,
+  NEW_GRAD_SIMULATION_CASES,
+  NEW_GRAD_SURVIVAL_GUIDES,
+  listNewGradResidencyTracksMissingWorkAreaHubs,
+} from "./new-grad-residency-program";
 
 function yesNo(v: boolean): string {
   return v ? "Yes" : "No";
@@ -60,6 +71,66 @@ export function buildNewGradHubProgramMarkdown(args: { generatedAtIso: string })
   lines.push("- **Public marketing URLs:** transition lessons, questions, CAT landing, and new-grad strip cards with `wrapGuestWithLoginCallback: false` stay on marketing hosts.");
   lines.push("- **Subscriber app surfaces:** flashcards, practice exams, labs, med calc, weak areas, medication drills use `/login?callbackUrl=` for guests (no admin/staff hrefs).");
   lines.push("- **OSCE:** Tile remains visible for nursing pathways; when the public OSCE flag is off, `resolvePremiumCardHref` keeps locked navigation safe (`/` or login callback per card).");
+  lines.push("");
+  lines.push("## Part 1B — Digital residency foundation");
+  lines.push("");
+  lines.push("### Specialty transition tracks");
+  lines.push("");
+  lines.push("| Track | Work-area slug | Package | First-month priorities | Signature simulations |");
+  lines.push("| --- | --- | --- | --- | --- |");
+  for (const track of NEW_GRAD_RESIDENCY_TRACKS) {
+    lines.push(
+      `| ${track.title} | \`${track.slug}\` | ${track.packageKey} | ${track.firstMonthPriorities.join(", ")} | ${track.signatureSimulations.join(", ")} |`,
+    );
+  }
+  const missingWorkAreaHubs = listNewGradResidencyTracksMissingWorkAreaHubs();
+  lines.push("");
+  lines.push(`- **Specialty tracks:** ${NEW_GRAD_RESIDENCY_TRACKS.length}`);
+  lines.push(`- **Tracks without matching New Grad work-area hub slug:** ${missingWorkAreaHubs.length}`);
+  lines.push("");
+  lines.push("### Residency roadmap");
+  lines.push("");
+  lines.push("| Window | Focus | Learner questions answered |");
+  lines.push("| --- | --- | --- |");
+  for (const milestone of NEW_GRAD_ROADMAP_MILESTONES) {
+    lines.push(`| ${milestone.label} | ${milestone.focus} | ${milestone.learnerCanAnswer.join("<br>")} |`);
+  }
+  lines.push("");
+  lines.push("### Competency checklist domains");
+  lines.push("");
+  lines.push(NEW_GRAD_COMPETENCY_DOMAINS.map((domain) => `- **${domain.label}:** ${domain.description}`).join("\n"));
+  lines.push("");
+  lines.push("### Shift-readiness modules");
+  lines.push("");
+  lines.push(NEW_GRAD_SHIFT_READINESS_MODULES.map((module) => `- **${module.title}:** ${module.focus}`).join("\n"));
+  lines.push("");
+  lines.push("### Clinical survival guides");
+  lines.push("");
+  lines.push(NEW_GRAD_SURVIVAL_GUIDES.map((guide) => `- **${guide.title}:** ${guide.riskFocus}`).join("\n"));
+  lines.push("");
+  lines.push("### Simulation center seed map");
+  lines.push("");
+  lines.push("| Simulation | Track | Judgment focus |");
+  lines.push("| --- | --- | --- |");
+  for (const scenario of NEW_GRAD_SIMULATION_CASES) {
+    lines.push(`| ${scenario.title} | ${scenario.trackId} | ${scenario.judgmentFocus.join(", ")} |`);
+  }
+  lines.push("");
+  lines.push("### Readiness dimensions");
+  lines.push("");
+  lines.push("| Dimension | Weight | Evidence sources |");
+  lines.push("| --- | ---: | --- |");
+  for (const dimension of NEW_GRAD_READINESS_DIMENSIONS) {
+    lines.push(`| ${dimension.label} | ${dimension.weight}% | ${dimension.evidenceSources.join(", ")} |`);
+  }
+  lines.push("");
+  lines.push("### Commercial package mapping");
+  lines.push("");
+  lines.push("| Package | Included tracks | Entitlement strategy |");
+  lines.push("| --- | --- | --- |");
+  for (const pkg of NEW_GRAD_COMMERCIAL_PACKAGES) {
+    lines.push(`| ${pkg.title} | ${pkg.includedTracks.join(", ")} | ${pkg.entitlementHint} |`);
+  }
   lines.push("");
   lines.push("### Counts from checked-in catalog (not live DB)");
   lines.push("");

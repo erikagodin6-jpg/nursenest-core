@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { TrialStatus } from "@prisma/client";
+import { SubscriptionStatus, TrialStatus } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import {
   LearnerAccountPageHero,
@@ -19,9 +19,18 @@ import { LearnerProfileAccountActions } from "@/components/student/learner-profi
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
+import { SubscriptionValueDashboard } from "@/components/discovery/subscription-value-dashboard";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { isAdvancedEcgPlanCode } from "@/lib/advanced-ecg/advanced-ecg-module-config";
+import { loadFeatureValueActivitySnapshot } from "@/lib/discovery/feature-value-activity-events.server";
+import {
+  buildFeatureUsageSnapshot,
+  buildFeatureValueProfile,
+  mergeFeatureUsageSnapshot,
+  normalizeFeatureDiscoveryPathway,
+} from "@/lib/discovery/feature-value-communication";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
@@ -68,6 +77,28 @@ function tierLabel(t: string): string {
   return t.replace(/_/g, " ");
 }
 
+function advancedEcgRowIsActive(row: {
+  status: SubscriptionStatus;
+  planCode: string | null;
+  currentPeriodEnd: Date | null;
+  trialEnd: Date | null;
+}): boolean {
+  if (!isAdvancedEcgPlanCode(row.planCode)) return false;
+  if (
+    row.status === SubscriptionStatus.ACTIVE ||
+    row.status === SubscriptionStatus.GRACE ||
+    row.status === SubscriptionStatus.PAST_DUE
+  ) {
+    return true;
+  }
+  if (row.status !== SubscriptionStatus.CANCELLED) return false;
+  const nowMs = Date.now();
+  return Boolean(
+    (row.currentPeriodEnd && row.currentPeriodEnd.getTime() > nowMs) ||
+      (row.trialEnd && row.trialEnd.getTime() > nowMs),
+  );
+}
+
 export default async function LearnerAccountOverviewPage() {
   const { t, locale } = await getLearnerMarketingBundle();
   const nowMs = Date.now();
@@ -94,7 +125,7 @@ export default async function LearnerAccountOverviewPage() {
     );
   }
 
-  const [userRow, subscription, activity] = await Promise.all([
+  const [userRow, subscription, activity, featureActivitySnapshot, advancedEcgRows] = await Promise.all([
     withDatabaseFallbackTimeout(
       () =>
         prisma.user.findUnique({
@@ -130,6 +161,7 @@ export default async function LearnerAccountOverviewPage() {
             status: true,
             planTier: true,
             planCountry: true,
+            planCode: true,
             stripeCustomerId: true,
             stripeSubscriptionId: true,
             createdAt: true,
@@ -140,6 +172,34 @@ export default async function LearnerAccountOverviewPage() {
       { scope: "learner_account_overview", label: "subscription_summary" },
     ),
     loadLearnerProfileActivity(userId).catch(() => EMPTY_PROFILE_ACTIVITY),
+    loadFeatureValueActivitySnapshot(userId).catch(() => ({})),
+    withDatabaseFallbackTimeout(
+      () =>
+        prisma.subscription.findMany({
+          where: {
+            userId,
+            status: {
+              in: [
+                SubscriptionStatus.ACTIVE,
+                SubscriptionStatus.GRACE,
+                SubscriptionStatus.PAST_DUE,
+                SubscriptionStatus.CANCELLED,
+              ],
+            },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 16,
+          select: {
+            status: true,
+            planCode: true,
+            currentPeriodEnd: true,
+            trialEnd: true,
+          },
+        }),
+      [],
+      ACCOUNT_OVERVIEW_DB_TIMEOUT_MS,
+      { scope: "learner_account_overview", label: "advanced_ecg_entitlements" },
+    ),
   ]);
 
   let premiumSnapshot = null;
@@ -193,6 +253,38 @@ export default async function LearnerAccountOverviewPage() {
   const lessons = premiumSnapshot?.overallLessons;
   const fc = premiumSnapshot?.flashcards;
   const weakTop3 = topicPerf?.weakTopics.slice(0, 3) ?? [];
+  const featureValueProfile =
+    entitlement !== "error" && entitlement.hasAccess
+      ? buildFeatureValueProfile({
+          pathway: normalizeFeatureDiscoveryPathway({
+            tier: entitlement.tier,
+            learnerPath: userRow?.learnerPath,
+            alliedCareer: entitlement.alliedCareer,
+          }),
+          hasBaseAccess: entitlement.hasAccess,
+          hasAdvancedEcgEntitlement: advancedEcgRows.some(advancedEcgRowIsActive),
+          weakTopics: weakTop3.map((topic) => topic.normalizedTopic ?? topic.topic),
+          usage: mergeFeatureUsageSnapshot(
+            buildFeatureUsageSnapshot({
+              questionsAnswered: practice?.gradedTotal ?? 0,
+              practiceSessions: practice?.sessionCount ?? activity.practiceTests.length,
+              flashcardsReviewed: fc?.cardsReviewedTotal ?? 0,
+              lessonsCompleted: lessons?.completed ?? activity.lessons.filter((lesson) => lesson.completed).length,
+              catSessions: premiumSnapshot?.mockCount ?? activity.mocks.length,
+              readinessScoreAvailable: readiness?.score != null,
+              studyPlanConfigured: Boolean(
+                userRow?.examDatePlanType ||
+                  userRow?.studyCadencePreference ||
+                  userRow?.dailyQuestionGoal ||
+                  userRow?.examFocus,
+              ),
+              analyticsAvailable: Boolean(premiumSnapshot?.insights || practice?.gradedTotal || topicPerf),
+              progressReportAvailable: Boolean(premiumSnapshot || activity.lessons.length || activity.practiceTests.length),
+            }),
+            featureActivitySnapshot,
+          ),
+        })
+      : null;
   const primaryWeakTopic =
     weakTop3[0]?.normalizedTopic?.trim() ||
     weakTop3[0]?.topic?.trim() ||
@@ -353,6 +445,8 @@ export default async function LearnerAccountOverviewPage() {
           ) : null}
         </div>
       </LearnerProfileSummaryCard>
+
+      {featureValueProfile ? <SubscriptionValueDashboard profile={featureValueProfile} /> : null}
 
       <LearnerProfileSummaryCard
         title={t("learner.profile.studyProfile.title")}

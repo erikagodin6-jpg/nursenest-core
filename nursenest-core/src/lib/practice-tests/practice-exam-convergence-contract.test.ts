@@ -37,6 +37,38 @@ describe("Practice exam — premium convergence hooks", () => {
     assert.equal(hubSrc.includes("data-nn-practice-exam-hub-convergence"), true);
   });
 
+  it("keeps the original launcher setup flow active before practice/CAT sessions", () => {
+    assert.equal(
+      hubSrc.includes('const restoreOriginalLauncherFlow = true;'),
+      true,
+      "practice hub must keep the restored setup flow active",
+    );
+    assert.equal(
+      hubSrc.includes('if (!restoreOriginalLauncherFlow && examMode !== "cat")'),
+      true,
+      "simplified practice one-button landing must remain gated off",
+    );
+    assert.equal(
+      hubSrc.includes('if (!restoreOriginalLauncherFlow && examMode === "cat")'),
+      true,
+      "simplified CAT one-button landing must remain gated off",
+    );
+    assert.equal(hubSrc.includes("data-nn-e2e-practice-canonical-grid"), true);
+    assert.equal(hubSrc.includes("data-nn-e2e-practice-setup-panel"), true);
+    assert.equal(hubSrc.includes("Configure session"), true);
+    assert.equal(hubSrc.includes("Select categories"), true);
+    assert.equal(hubSrc.includes("Exam mode"), true);
+    assert.equal(hubSrc.includes("Question count"), true);
+    assert.equal(hubSrc.includes("data-nn-e2e-question-count"), true);
+    assert.equal(hubSrc.includes("data-nn-e2e-practice-resume-session"), true);
+    assert.equal(hubSrc.includes('mode={examMode === "cat" ? "cat" : "practice-exam"}'), true);
+    assert.equal(
+      hubSrc.includes("data-nn-e2e-practice-sticky-cta"),
+      false,
+      "restored setup flow should not be replaced by a separate sticky-only CTA launcher",
+    );
+  });
+
   it("defines English practice hub copy so title-cased i18n fallback labels never render", () => {
     const marketingEn = JSON.parse(readFileSync(marketingEnPath, "utf8")) as Record<string, string>;
     const requiredKeys = [
