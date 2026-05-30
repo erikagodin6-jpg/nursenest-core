@@ -1,0 +1,26 @@
+{
+  "generatedAt": "2026-05-30T09:05:45.823Z",
+  "mode": "dry-run",
+  "database": {
+    "status": "Database Unreachable",
+    "explanation": "Database Unreachable: \nInvalid `prisma.$queryRaw()` invocation:\n\n\nCan't reach database server at `HOST:5432`\n\nPlease make sure your database server is running at `HOST:5432`."
+  },
+  "sourceOfTruth": "CanonicalTopic",
+  "summary": {
+    "topicsLoaded": 0,
+    "assetsInspected": 0,
+    "mappedContent": 0,
+    "unmappedContent": 0,
+    "duplicateTopics": 0,
+    "orphanedContent": 0,
+    "taxonomyConflicts": 0,
+    "appliedLinks": 0
+  },
+  "topicCompleteness": [],
+  "mappedContent": [],
+  "unmappedContent": [],
+  "duplicateTopics": [],
+  "orphanedContent": [],
+  "taxonomyConflicts": [],
+  "coverageGapReport": []
+}

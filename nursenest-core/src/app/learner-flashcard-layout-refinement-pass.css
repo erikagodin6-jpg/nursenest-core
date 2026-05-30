@@ -6,7 +6,7 @@
 /* Warm canvas + white card tokens — page gradient, cards always white */
 html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-exam-layout-refinement])) {
   /* Learner study cards: intentional white surface (question + rationale panels). */
-  --nn-flashcard-refinement-card: #ffffff;
+  --nn-flashcard-refinement-card: var(--semantic-surface);
   --nn-flashcard-refinement-card-border: color-mix(
     in srgb,
     var(--theme-border, var(--semantic-border-soft)) 72%,
@@ -784,4 +784,278 @@ html:where(:has([data-nn-flashcard-layout-refinement]), :has([data-nn-learner-ex
 html:where(:has([data-nn-learner-exam-layout-refinement])) .nn-learner-exam-focus-column,
 html:where(:has([data-nn-learner-exam-layout-refinement])) .nn-learner-exam-focus-body {
   background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+/* ── Premium visual hardening: content-led clinical learning workspace ── */
+html:where(:has([data-nn-flashcard-premium-visual-refinement])) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-panel-cool)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-bg-base)) 44%,
+    var(--semantic-bg-base) 100%
+  );
+  --nn-flashcard-workspace-gap: clamp(1.5rem, 2.2vw, 2rem);
+  --nn-flashcard-workspace-padding: clamp(1.5rem, 2.4vw, 2rem);
+}
+
+html[data-theme="blossom"]:where(:has([data-nn-flashcard-premium-visual-refinement])),
+html[data-theme="mint-blossom"]:where(:has([data-nn-flashcard-premium-visual-refinement])) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-panel-warm)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-bg-base)) 48%,
+    var(--semantic-bg-base) 100%
+  );
+}
+
+html[data-theme="forest"]:where(:has([data-nn-flashcard-premium-visual-refinement])) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-panel-muted)) 0%,
+    color-mix(in srgb, var(--semantic-success) 3%, var(--semantic-bg-base)) 46%,
+    var(--semantic-bg-base) 100%
+  );
+}
+
+html[data-theme="midnight"]:where(:has([data-nn-flashcard-premium-visual-refinement])),
+html[data-theme="midnight-indigo"]:where(:has([data-nn-flashcard-premium-visual-refinement])),
+html[data-theme="deep-twilight"]:where(:has([data-nn-flashcard-premium-visual-refinement])) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--semantic-brand) 15%, var(--semantic-bg-base)) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 20%, var(--semantic-bg-base)) 52%,
+    var(--semantic-bg-base) 100%
+  );
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-unified-exam-workspace] {
+  position: relative !important;
+  inset: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100dvh !important;
+  overflow: visible !important;
+  padding: 0 0 max(1.5rem, env(safe-area-inset-bottom, 0px)) !important;
+  background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-premium-flashcard-stack-outer {
+  max-width: min(96vw, 104rem) !important;
+  padding: var(--nn-flashcard-workspace-padding) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar {
+  min-height: 3.5rem !important;
+  max-height: none !important;
+  padding: 0.5rem clamp(1rem, 1.8vw, 1.5rem) !important;
+  gap: 1rem !important;
+  overflow: visible !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-left,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta {
+  align-items: center !important;
+  min-height: 2.75rem !important;
+  overflow: visible !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-return-link,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-chip--mode,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-focus-note,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta > div,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar__meta [role="group"],
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-shell-action,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-measurement-toggle {
+  min-height: 2.75rem !important;
+  height: auto !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-measurement-toggle button {
+  min-height: 2.75rem !important;
+  height: auto !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading {
+  display: block !important;
+  margin: 0 0 0.75rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading__eyebrow {
+  display: block;
+  margin-bottom: 0.25rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading h1 {
+  margin: 0 !important;
+  font-size: clamp(1.65rem, 2vw, 2rem) !important;
+  line-height: 1.15 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-study-heading p {
+  margin: 0.35rem 0 0 !important;
+  width: auto !important;
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
+.nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session] .nn-flashcard-learning-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.42fr) minmax(28rem, 1fr) !important;
+  gap: var(--nn-flashcard-workspace-gap) !important;
+  align-items: start !important;
+  min-height: auto !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  margin-block: 0.75rem 0 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-hero-surface,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel {
+  min-height: auto !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: clamp(1.5rem, 2.2vw, 2rem) !important;
+  border-radius: 1rem !important;
+  border-width: 1px !important;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 88%, transparent),
+    0 1rem 2.5rem -1.5rem color-mix(in srgb, var(--semantic-text-primary) 18%, transparent) !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel {
+  max-width: none !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-hero-stem {
+  font-size: clamp(1.125rem, 1.35vw, 1.25rem) !important;
+  line-height: 1.35 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__body,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__body--reserved,
+[data-nn-flashcard-premium-visual-refinement] [data-nn-educational-content-container],
+[data-nn-flashcard-premium-visual-refinement] [data-nn-clinical-pearl] {
+  min-height: auto !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  overflow-y: visible !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__body {
+  padding: 1.5rem !important;
+  max-width: 78ch !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-key-concept {
+  padding: 1.25rem !important;
+  line-height: 1.6 !important;
+  max-width: 78ch !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-key-concept p {
+  font-size: clamp(1rem, 1.08vw, 1.125rem) !important;
+  line-height: 1.6 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-section,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-panel__incorrect {
+  margin-top: 1.25rem !important;
+  max-width: 78ch !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-inline-rationale__body,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-distractor-body,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rationale-section p {
+  font-size: clamp(0.95rem, 1vw, 1rem) !important;
+  line-height: 1.65 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-session-main-footer {
+  gap: 1.5rem !important;
+  margin-top: 1.5rem !important;
+  overflow: visible !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel {
+  grid-template-columns: repeat(4, minmax(10rem, 1fr)) !important;
+  gap: 1rem !important;
+  min-height: auto !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 1.25rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel__section,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-confidence-scale {
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0.75rem 0.875rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel__section p,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel__section a {
+  display: block !important;
+  overflow: visible !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-confidence-scale button,
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock button {
+  min-height: 2.75rem !important;
+}
+
+[data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock {
+  min-height: auto !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  gap: 1rem !important;
+  padding: 1rem !important;
+}
+
+@media (max-width: 1365px) {
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
+  .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session] .nn-flashcard-learning-grid {
+    grid-template-columns: minmax(0, 1.38fr) minmax(24rem, 1fr) !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-topbar-focus-note {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-grid,
+  .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-premium-visual-refinement][data-nn-flashcard-study-session] .nn-flashcard-learning-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  [data-nn-flashcard-premium-visual-refinement] .nn-premium-flashcard-stack-outer {
+    padding: 1rem !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-learning-topbar {
+    flex-wrap: wrap !important;
+  }
+
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-coach-panel,
+  [data-nn-flashcard-premium-visual-refinement] .nn-flashcard-rating-dock {
+    grid-template-columns: 1fr !important;
+  }
 }

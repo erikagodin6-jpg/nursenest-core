@@ -585,6 +585,7 @@ export function ActiveStudySession({
       data-nn-premium-flashcard-active-session
       data-nn-flashcard-branding-revamp=""
       data-nn-flashcard-layout-refinement=""
+      data-nn-flashcard-premium-visual-refinement=""
       {...learnerExamLayoutRefinementProps()}
       data-nn-flashcard-study-session=""
       data-nn-canonical-learner-surface={CANONICAL_LEARNER_SURFACE_VERSION}

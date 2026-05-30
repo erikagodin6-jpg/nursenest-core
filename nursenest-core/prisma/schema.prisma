@@ -1549,14 +1549,53 @@ model CanonicalTopic {
   /// * Blog topic slug for SEO cross-linking.
   blogTopicKey         String? @map("blog_topic_key") @db.VarChar(120)
 
+  // ── Master academic graph metadata ─────────────────────────────────────
+  /// * Topic-level metadata shared across lessons, questions, flashcards, CAT,
+  /// * simulations, pharmacology, clinical skills, ECG, med math, labs,
+  /// * analytics, remediation, and study plan recommendation systems.
+  metadata              Json     @default("{}")
+  learningObjectives    String[] @default([]) @map("learning_objectives")
+  professionMappings    String[] @default([]) @map("profession_mappings")
+  examMappings          String[] @default([]) @map("exam_mappings")
+  difficultyMappings    String[] @default([]) @map("difficulty_mappings")
+  systemMappings        String[] @default([]) @map("system_mappings")
+  prerequisiteTopicKeys String[] @default([]) @map("prerequisite_topic_keys")
+  relatedTopicKeys      String[] @default([]) @map("related_topic_keys")
+  weakAreaTopicKeys     String[] @default([]) @map("weak_area_topic_keys")
+
   // ── Relations ─────────────────────────────────────────────────────────
   sharedSections   CanonicalTopicSharedSection[]
   lessons          PathwayLesson[]
+  assetLinks       AcademicContentAssetLink[]
 
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@map("canonical_topics")
+}
+
+/// * Single academic content graph attachment table.
+/// * Each educational asset has exactly one `primary` canonical topic link.
+/// * Additional relationships can be attached as `prerequisite`, `remediation`,
+/// * `related`, or future governed relationship labels without creating
+/// * duplicate taxonomies or activity-specific topic structures.
+model AcademicContentAssetLink {
+  id               String         @id @default(cuid())
+  canonicalTopicId String         @map("canonical_topic_id")
+  canonicalTopic   CanonicalTopic @relation(fields: [canonicalTopicId], references: [id], onDelete: Cascade)
+  assetType        String         @map("asset_type") @db.VarChar(64)
+  assetId          String         @map("asset_id") @db.VarChar(128)
+  relationship     String         @default("primary") @db.VarChar(40)
+  source           String         @default("migration") @db.VarChar(80)
+  confidence       Float?
+  evidence         Json           @default("{}")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  @@unique([assetType, assetId, relationship], map: "academic_content_asset_links_asset_relationship_key")
+  @@index([canonicalTopicId, assetType], map: "academic_content_asset_links_topic_asset_idx")
+  @@index([assetType, assetId], map: "academic_content_asset_links_asset_idx")
+  @@map("academic_content_asset_links")
 }
 
 /// * Reusable clinical foundation sections shared across all tier/country variants of a topic.

@@ -312,8 +312,10 @@ export function FlashcardStudyQuestionStack({
           </div>
           <div className="nn-flashcard-learning-grid min-w-0 min-h-0">
             <article
-              className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] min-w-0 min-h-0 overflow-hidden p-5 sm:p-7 lg:p-8"
+              className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] min-w-0 p-6 sm:p-8 lg:p-8"
               data-nn-flashcard-branding-revamp=""
+              data-nn-flashcard-question-workspace=""
+              data-nn-educational-content-container=""
             >
               <div className="nn-flashcard-card-action-row relative z-[1] flex items-start justify-between gap-2">
                 {itemKindCaption ? (
@@ -453,6 +455,7 @@ export function FlashcardStudyQuestionStack({
               <aside
                 className={`nn-flashcard-rationale-panel nn-flashcard-rationale-panel--mcq min-w-0 min-h-0${revealed ? "" : " nn-flashcard-rationale-panel--reserved"}`}
                 data-nn-flashcard-branding-revamp=""
+                data-nn-flashcard-rationale-workspace=""
                 data-nn-rationale-state={revealed ? "revealed" : "locked"}
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
                 {...(revealed ? { "data-nn-premium-flashcard-reveal": "" } : {})}
@@ -464,28 +467,28 @@ export function FlashcardStudyQuestionStack({
                   </div>
                 </div>
                 {revealed ? (
-                  <div className="nn-flashcard-rationale-panel__body">
-                    <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl">
+                  <div className="nn-flashcard-rationale-panel__body" data-nn-educational-content-container="">
+                    <section className="nn-flashcard-rationale-key-concept" aria-label="Clinical Pearl" data-nn-clinical-pearl="" data-nn-educational-content-container="">
                       <span className="nn-clinical-pearl-label">
                         <Gem className="h-3.5 w-3.5" aria-hidden />
                         Clinical Pearl
                       </span>
                       <p>{rationaleKeyConcept(resolvedCorrectRationale)}</p>
                     </section>
-                    <section className="nn-flashcard-rationale-section">
+                    <section className="nn-flashcard-rationale-section" data-nn-educational-content-container="">
                       <h3>Correct Answer</h3>
                       <div className="nn-flashcard-inline-rationale__answer">
                         {correctAnswerSummary(exam)}
                       </div>
                     </section>
-                    <section className="nn-flashcard-rationale-section">
+                    <section className="nn-flashcard-rationale-section" data-nn-educational-content-container="">
                       <h3>Why This Is Correct</h3>
                       <div className="nn-flashcard-inline-rationale__body">
                         <FlashcardRichContent text={resolvedCorrectRationale} />
                       </div>
                     </section>
                     {resolvedDistractorRationales.length > 0 ? (
-                      <section className="nn-flashcard-rationale-panel__incorrect">
+                      <section className="nn-flashcard-rationale-panel__incorrect" data-nn-educational-content-container="">
                         <h3>Why Other Options Are Incorrect</h3>
                         <ul className="nn-flashcard-distractor-list">
                           {resolvedDistractorRationales.map((row) => (
@@ -504,7 +507,7 @@ export function FlashcardStudyQuestionStack({
                     {(() => {
                       const tip = buildExamTipForMcq(exam, examPathwayLabel);
                       return tip ? (
-                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip">
+                        <section className="nn-flashcard-rationale-section nn-flashcard-rationale-section--exam-tip" data-nn-educational-content-container="">
                           <h3 className="nn-flashcard-takeaway-heading">
                             <GraduationCap className="h-3.5 w-3.5" aria-hidden />
                             {examPathwayLabel} Takeaway
@@ -516,7 +519,7 @@ export function FlashcardStudyQuestionStack({
                     {(() => {
                       const hook = buildMemoryHookForMcq(resolvedCorrectRationale, exam);
                       return (
-                        <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook">
+                        <details className="nn-flashcard-rationale-section nn-flashcard-rationale-section--memory-hook" data-nn-educational-content-container="">
                           <summary>Memory Hook</summary>
                           <p className="nn-flashcard-inline-rationale__body text-sm italic leading-relaxed">
                             &ldquo;{hook}&rdquo;
@@ -531,7 +534,7 @@ export function FlashcardStudyQuestionStack({
                     ) : null}
                   </div>
                 ) : (
-                  <div className="nn-flashcard-rationale-panel__body nn-flashcard-rationale-panel__body--reserved">
+                  <div className="nn-flashcard-rationale-panel__body nn-flashcard-rationale-panel__body--reserved" data-nn-educational-content-container="">
                     <div className="nn-flashcard-rationale-locked">
                       <BookOpen className="h-5 w-5" aria-hidden />
                       <p>Choose an answer to unlock clinical teaching, option-level feedback, and exam takeaways.</p>
@@ -545,6 +548,7 @@ export function FlashcardStudyQuestionStack({
               <aside
                 className="nn-flashcard-rationale-panel min-w-0 min-h-0"
                 data-nn-flashcard-branding-revamp=""
+                data-nn-flashcard-rationale-workspace=""
                 data-nn-rationale-state="revealed"
                 aria-label={labels?.answerHeading ?? "Answer and rationale"}
                 data-nn-premium-flashcard-reveal=""
@@ -566,7 +570,7 @@ export function FlashcardStudyQuestionStack({
                 </div>
 
                 {rationaleOpen ? (
-                  <div className="nn-flashcard-rationale-panel__body">
+                  <div className="nn-flashcard-rationale-panel__body" data-nn-educational-content-container="">
                     {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
                       <div className="nn-flashcard-rationale-image" data-nn-flashcard-media="image">
                         <div>Clinical figure</div>

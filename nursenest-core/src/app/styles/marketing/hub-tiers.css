@@ -584,6 +584,256 @@ html[data-theme="blossom"] .nn-pricing-plan-card[data-highlight="popular"] {
   }
 }
 
+/* ---------------------------------------------------------------------
+   Nursing hub clinical polish pass — additive convergence only.
+   Preserves hub IA and study density while aligning rhythm, surfaces,
+   motion, focus, and mobile scanability with the premium auth reference.
+   --------------------------------------------------------------------- */
+[data-nn-nursing-tier-hub="surface"] {
+  --nn-nursing-hub-surface: var(--semantic-surface);
+  --nn-nursing-hub-panel: color-mix(in srgb, var(--semantic-surface) 92%, var(--theme-page-bg));
+  --nn-nursing-hub-panel-muted: color-mix(in srgb, var(--semantic-panel-muted) 68%, var(--semantic-surface));
+  --nn-nursing-hub-border: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-surface));
+  --nn-nursing-hub-border-strong: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  --nn-nursing-hub-shadow: 0 18px 42px -34px color-mix(in srgb, var(--palette-heading) 26%, transparent);
+  --nn-nursing-hub-shadow-hover: 0 22px 52px -36px color-mix(in srgb, var(--palette-heading) 30%, transparent);
+  --nn-nursing-hub-radius: 1rem;
+  --nn-nursing-hub-radius-lg: 1.25rem;
+  --nn-nursing-hub-motion: 160ms ease;
+  position: relative;
+  isolation: isolate;
+}
+
+html[data-theme="midnight"] [data-nn-nursing-tier-hub="surface"],
+html[data-theme="midnight-indigo"] [data-nn-nursing-tier-hub="surface"],
+html[data-theme="deep-twilight"] [data-nn-nursing-tier-hub="surface"] {
+  --nn-nursing-hub-panel: color-mix(in srgb, var(--semantic-surface) 82%, var(--theme-page-bg));
+  --nn-nursing-hub-panel-muted: color-mix(in srgb, var(--semantic-panel-muted) 54%, var(--semantic-surface));
+  --nn-nursing-hub-border: color-mix(in srgb, var(--semantic-border-soft) 74%, var(--semantic-info));
+  --nn-nursing-hub-shadow: 0 18px 42px -34px color-mix(in srgb, var(--semantic-brand) 24%, transparent);
+  --nn-nursing-hub-shadow-hover: 0 22px 52px -36px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band {
+  display: block;
+  max-width: min(100%, 78rem);
+  margin-inline: auto;
+  padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band > :where(.nn-non-pn-hero-wrapper, .grid) {
+  margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-non-pn-hero-wrapper > .mb-1,
+[data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band > .grid > .mb-1 {
+  margin-bottom: 0.75rem;
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-non-pn-hero-wrapper > .mb-1 a,
+[data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band > .grid > .mb-1 a {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  color: var(--semantic-text-muted);
+  font-weight: 700;
+  letter-spacing: 0;
+  outline: none;
+  transition:
+    color var(--nn-nursing-hub-motion),
+    background-color var(--nn-nursing-hub-motion),
+    box-shadow var(--nn-nursing-hub-motion);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-non-pn-hero-wrapper > .mb-1 a:hover,
+[data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band > .grid > .mb-1 a:hover {
+  color: var(--semantic-brand);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-non-pn-hero-wrapper > .mb-1 a:focus-visible,
+[data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band > .grid > .mb-1 a:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band {
+  border-radius: var(--nn-nursing-hub-radius-lg);
+  border-color: var(--nn-nursing-hub-border-strong);
+  box-shadow:
+    var(--nn-nursing-hub-shadow),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent) inset;
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band .nn-premium-home-eyebrow {
+  line-height: 1.25;
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band .nn-marketing-h1 {
+  max-width: min(100%, 44rem);
+  line-height: 1.05;
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band :where(p, li) {
+  line-height: 1.6;
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] {
+  max-width: min(100%, 78rem);
+  margin-top: clamp(1.5rem, 2.5vw, 2rem);
+  padding: clamp(1.25rem, 2.6vw, 2rem);
+  border-radius: var(--nn-nursing-hub-radius-lg);
+  border-color: color-mix(in srgb, var(--semantic-brand) 12%, var(--nn-nursing-hub-border));
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--semantic-brand) 3%, var(--nn-nursing-hub-panel-muted)),
+      var(--nn-nursing-hub-panel)
+    );
+  box-shadow:
+    var(--nn-nursing-hub-shadow),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 70%, transparent) inset;
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] li {
+  min-width: 0;
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card {
+  min-height: 12.75rem;
+  border-radius: var(--nn-nursing-hub-radius);
+  border-color: var(--nn-nursing-hub-border);
+  background: var(--nn-nursing-hub-surface);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 84%, transparent),
+    var(--nn-nursing-hub-shadow);
+  transition:
+    border-color var(--nn-nursing-hub-motion),
+    box-shadow var(--nn-nursing-hub-motion),
+    transform var(--nn-nursing-hub-motion),
+    background-color var(--nn-nursing-hub-motion);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--semantic-brand) 20%, var(--nn-nursing-hub-border));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 88%, transparent),
+    var(--nn-nursing-hub-shadow-hover);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card:focus-visible,
+[data-nn-nursing-tier-hub="surface"] .nn-study-card-cta:focus-visible,
+[data-nn-nursing-tier-hub="surface"] a:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--semantic-brand) 22%, transparent),
+    var(--nn-nursing-hub-shadow);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card__icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.875rem;
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-text-primary));
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-marketing-h3 {
+  margin-top: 0.875rem;
+  line-height: 1.25;
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-marketing-body-sm,
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card :where(p, span) {
+  line-height: 1.55;
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-study-card-cta {
+  min-height: 2.75rem;
+  border-radius: 0.875rem;
+  transition:
+    border-color var(--nn-nursing-hub-motion),
+    background-color var(--nn-nursing-hub-motion),
+    color var(--nn-nursing-hub-motion),
+    box-shadow var(--nn-nursing-hub-motion);
+}
+
+[data-nn-nursing-tier-hub="surface"] :where(.nn-study-callout, [data-nn-new-grad-today-focus="1"], [data-nn-pn-hub-readiness-band="1"] > div) {
+  border-radius: var(--nn-nursing-hub-radius-lg);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 76%, transparent) inset,
+    var(--nn-nursing-hub-shadow);
+}
+
+[data-nn-nursing-tier-hub="surface"] :where(.nn-study-callout, [data-nn-new-grad-today-focus="1"]) {
+  border-color: var(--nn-nursing-hub-border);
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-pn-hub-readiness-band="1"] {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-pn-hub-readiness-band="1"] :where(h2, .nn-marketing-h4) {
+  line-height: 1.2;
+}
+
+[data-nn-nursing-tier-hub="surface"] [data-nn-pn-hub-readiness-band="1"] :where(p, li) {
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nn-nursing-tier-hub="surface"] :where(.nn-exam-hub-study-card, .nn-study-card-cta, a) {
+    transition: none;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  [data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band {
+    padding-block: clamp(1.25rem, 4vw, 2rem);
+  }
+
+  [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  [data-nn-nursing-tier-hub="surface"] .nn-hub-tier-study-band {
+    padding-inline: 0;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band,
+  [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] {
+    border-radius: 1rem;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] {
+    padding: 1rem;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card {
+    min-height: auto;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-exam-hub-study-card__icon {
+    margin-inline: 0;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-marketing-h3 {
+    text-align: left;
+  }
+
+  [data-nn-nursing-tier-hub="surface"] [data-nn-hub-section="quick-actions"] .nn-study-card-cta {
+    width: 100%;
+  }
+}
+
 [data-theme="midnight"]
   [data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence)
   .nn-nursing-tier-hub-hero-band,

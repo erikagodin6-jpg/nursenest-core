@@ -17,13 +17,17 @@ test("flashcard layout refinement pass is wired", () => {
     "utf8",
   );
   assert.match(css, /data-nn-flashcard-layout-refinement/);
-  assert.match(css, /max-height: 4rem/);
-  assert.match(css, /grid-template-columns: minmax\(0, 1\.62fr\)/);
+  assert.match(css, /data-nn-flashcard-premium-visual-refinement/);
+  assert.match(css, /grid-template-columns: minmax\(0, 1\.42fr\) minmax\(28rem, 1fr\)/);
+  assert.match(css, /--nn-flashcard-refinement-card: var\(--semantic-surface\)/);
+  assert.match(css, /\[data-nn-clinical-pearl\]/);
+  assert.match(css, /overflow-y: visible !important/);
 
   const session = readFileSync(
     join(root, "src/components/study/active-study-session.tsx"),
     "utf8",
   );
   assert.match(session, /data-nn-flashcard-layout-refinement/);
+  assert.match(session, /data-nn-flashcard-premium-visual-refinement/);
   assert.match(session, /header\.hubLabel/);
 });
