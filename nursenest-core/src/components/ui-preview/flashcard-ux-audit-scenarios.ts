@@ -1,5 +1,9 @@
 import type { ActiveStudyCard } from "@/components/study/active-study-session";
-import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import {
+  isSataPayload,
+  type ExamMicroQuestionPayload,
+  type SataQuestionPayload,
+} from "@/lib/flashcards/flashcard-exam-style";
 
 /** Real clinical stems — bank-style payloads for UX audit captures (not lorem ipsum). */
 
@@ -98,7 +102,7 @@ function cardFromExam(
   exam: ExamMicroQuestionPayload | SataQuestionPayload,
   explanation: string,
 ): ActiveStudyCard {
-  const isSata = "correctLetters" in exam && Array.isArray(exam.correctLetters);
+  const isSata = isSataPayload(exam);
   return {
     id,
     prompt: exam.questionStem,
@@ -110,7 +114,8 @@ function cardFromExam(
     topicSlug: topic.toLowerCase().replace(/\s+/g, "-"),
     lessonHref: "/app/lessons/cardiovascular-lesson-4-6",
     lessonTitle: `${topic} — linked lesson`,
-    examMicroQuestion: exam,
+    // ActiveStudyCard types MCQ only; question stack accepts SATA via runtime guard.
+    examMicroQuestion: exam as ExamMicroQuestionPayload,
   };
 }
 

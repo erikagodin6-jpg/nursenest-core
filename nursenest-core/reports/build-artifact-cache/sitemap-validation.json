@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "0ac9f86d13b9afa713bfe18f33a60a5882d92fcee2f21d60c352488d7971de55",
-  "generatedAt": "2026-05-29T12:11:33.909Z",
+  "fingerprint": "30d5fa4dc0bb0634c8a266672806b2b45076b0baf24fa2a09b6973556896e43c",
+  "generatedAt": "2026-05-30T03:55:56.291Z",
   "inputs": [
     {
       "type": "file",
@@ -138,6 +138,14 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/blueprint-compliance/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/business-command-center/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/clinical-scenarios/[scenarioId]/page.tsx"
     },
     {
@@ -239,6 +247,10 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/i18n/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/institutions/page.tsx"
     },
     {
       "type": "file",
@@ -386,6 +398,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(admin)/admin/question-quality/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(admin)/admin/questions/import/page.tsx"
     },
     {
@@ -407,6 +423,10 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/referrals/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/scope-compliance/page.tsx"
     },
     {
       "type": "file",
@@ -922,6 +942,18 @@
     },
     {
       "type": "file",
+      "path": "src/app/(app)/app/(learner)/physiology-monitor/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/physiology-monitor/physiology-monitor-client-boundary.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/physiology-monitor/physiology-monitor-client.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(app)/app/(learner)/practice-exams/page.tsx"
     },
     {
@@ -1043,6 +1075,30 @@
     {
       "type": "file",
       "path": "src/app/(app)/app/(learner)/review/review-queue-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/simulation-center/clearances/clearance-center-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/simulation-center/clearances/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/simulation-center/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/simulation-center/readiness/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/simulation-center/readiness/readiness-dashboard-client.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(app)/app/(learner)/simulation-center/simulation-center-client.tsx"
     },
     {
       "type": "file",
@@ -2998,6 +3054,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/blueprint-compliance/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/cat-blueprint-sessions/route.ts"
     },
     {
@@ -3107,6 +3167,18 @@
     {
       "type": "file",
       "path": "src/app/api/admin/insights/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/institutions/[institutionId]/license/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/institutions/[institutionId]/seats/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/institutions/route.ts"
     },
     {
       "type": "file",
@@ -3379,6 +3451,10 @@
     {
       "type": "file",
       "path": "src/app/api/admin/scalability-report/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/scope-compliance/route.ts"
     },
     {
       "type": "file",
@@ -3890,6 +3966,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/learner/monitor-session-reports/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/learner/notes/recent/route.ts"
     },
     {
@@ -3967,6 +4047,10 @@
     {
       "type": "file",
       "path": "src/app/api/learner/rn-coaching-state/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/learner/simulation-events/route.ts"
     },
     {
       "type": "file",
@@ -7453,6 +7537,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 30391
+    "durationMs": 23280
   }
 }

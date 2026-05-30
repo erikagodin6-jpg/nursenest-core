@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { trackSimulationEvent, type SimulationConversionEvent } from "@/lib/physiology-monitor/simulation-conversion-events";
+import {
+  trackSimulationEvent,
+  type SimulationConversionEvent,
+} from "@/lib/physiology-monitor/simulation-conversion-events.server";
 
 export const dynamic = "force-dynamic";
 

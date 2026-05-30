@@ -36,7 +36,7 @@ const THEMES = (process.env.SCREENSHOT_THEMES ?? "ocean,blossom,midnight")
   .map((t) => t.trim())
   .filter(Boolean);
 
-const EXTRA_WAIT_MS = Number(process.env.SCREENSHOT_WAIT_MS ?? "1600");
+const EXTRA_WAIT_MS = Number(process.env.SCREENSHOT_WAIT_MS ?? "900");
 const SKIP_AUTH = process.env.SCREENSHOT_SKIP_AUTH === "1";
 const DEMO_EMAIL = process.env.SCREENSHOT_DEMO_EMAIL ?? "demo-screenshots@internal.nursenest.io";
 const DEMO_PASSWORD = process.env.SCREENSHOT_DEMO_PASSWORD ?? "DemoScreenshot2024!";
@@ -288,7 +288,12 @@ async function capturePreviewMatrix(page, manifest, measurements) {
         await settle(page);
 
         ensureDir(dirname(out));
-        await page.screenshot({ path: out, fullPage: true, animations: "disabled" });
+        await page.screenshot({
+          path: out,
+          fullPage: false,
+          animations: "disabled",
+          timeout: 45_000,
+        });
         manifest.files.push({ path: out, scenario: scenario.id, theme, viewport: vp.id, bucket: vp.bucket });
 
         const shouldMeasure =
@@ -297,15 +302,19 @@ async function capturePreviewMatrix(page, manifest, measurements) {
           (scenario.id === "mcq-unanswered" || scenario.id === "mcq-long-rationale");
 
         if (shouldMeasure) {
-          const layout = await measureLayout(page);
-          const touch = vp.bucket === "mobile" ? await measureTouchTargets(page) : [];
-          measurements.push({
-            scenario: scenario.id,
-            theme,
-            viewport: vp.id,
-            layout,
-            touchTargetViolations: touch,
-          });
+          try {
+            const layout = await measureLayout(page);
+            const touch = vp.bucket === "mobile" ? await measureTouchTargets(page) : [];
+            measurements.push({
+              scenario: scenario.id,
+              theme,
+              viewport: vp.id,
+              layout,
+              touchTargetViolations: touch,
+            });
+          } catch (e) {
+            measurements.push({ scenario: scenario.id, theme, viewport: vp.id, error: String(e) });
+          }
         }
 
         process.stdout.write(`  ✓ ${vp.bucket}/${filename}\n`);

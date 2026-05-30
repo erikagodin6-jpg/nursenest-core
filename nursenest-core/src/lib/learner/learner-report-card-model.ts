@@ -22,6 +22,21 @@ export type LearnerReportCardViewModel = {
   recommendedActions: string[];
   links: LearnerReportCardLink[];
   continueCta: LearnerReportCardLink | null;
+  simulationSummary?: LearnerReportCardSimulationSummary;
+};
+
+export type LearnerReportCardSimulationSummary = {
+  simulationGpa: number | null;
+  readinessScore: number | null;
+  readinessTrend: "improving" | "declining" | "stable" | null;
+  ncjmmTrend: "improving" | "declining" | "stable" | null;
+  completionRate: number | null;
+  clearancesEarned: string[];
+  clearanceProgress: Array<{ label: string; progress: number; nearestGap: string }>;
+  patientHarmReductionTrend: "improving" | "declining" | "stable" | null;
+  topConditions: string[];
+  weakConditions: string[];
+  recommendedSimulations: LearnerReportCardLink[];
 };
 
 function readinessPctFromSnapshot(s: PremiumDashboardSnapshot): number | null {
@@ -41,8 +56,9 @@ export function buildLearnerReportCardViewModel(input: {
   continueCheckpoint?: ContinueStudyCheckpoint | null;
   labsLessonsCompleted?: number;
   labsLessonsTotal?: number;
+  simulationSummary?: LearnerReportCardSimulationSummary;
 }): LearnerReportCardViewModel {
-  const { pathwayId, snapshot, studySnap, continueCheckpoint, labsLessonsCompleted, labsLessonsTotal } = input;
+  const { pathwayId, snapshot, studySnap, continueCheckpoint, labsLessonsCompleted, labsLessonsTotal, simulationSummary } = input;
   const pid = pathwayId.trim();
   const pct = readinessPctFromSnapshot(snapshot);
   const readinessLabel =
@@ -71,6 +87,9 @@ export function buildLearnerReportCardViewModel(input: {
   if ((snapshot.overallLessons.pct ?? 0) < 40) recommendedActions.push("Complete more pathway lessons");
   if (snapshot.practice.accuracyPct != null && snapshot.practice.accuracyPct < 65) {
     recommendedActions.push("Review rationales on missed bank items");
+  }
+  if (simulationSummary?.recommendedSimulations.length) {
+    recommendedActions.push("Complete your recommended simulation");
   }
   if (recommendedActions.length === 0) recommendedActions.push("Keep your daily streak");
 
@@ -130,5 +149,6 @@ export function buildLearnerReportCardViewModel(input: {
     recommendedActions: recommendedActions.slice(0, 4),
     links: linksDeduped.slice(0, 6),
     continueCta,
+    simulationSummary,
   };
 }

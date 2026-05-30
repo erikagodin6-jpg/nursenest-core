@@ -5,6 +5,7 @@ import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/li
 
 const SHOWCASE_IDS = new Set([
   "advanced-ecg",
+  "telemetry-simulation",
   "prioritization-delegation",
   "branching-scenarios",
   "labs-workstation",

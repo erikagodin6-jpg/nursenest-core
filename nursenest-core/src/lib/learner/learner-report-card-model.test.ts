@@ -73,9 +73,55 @@ describe("learner report card model", () => {
         const h = l.href;
         return (
           h.startsWith("/app/") &&
-          (h.includes("pathwayId=" + encodeURIComponent("p1")) || /^\/app\/lessons\/[^?]+$/.test(h))
+          (h === "/app/labs" || h.includes("pathwayId=" + encodeURIComponent("p1")) || /^\/app\/lessons\/[^?]+$/.test(h))
         );
       }),
     );
+  });
+
+  it("carries simulation report-card metrics into the learner report card", () => {
+    const snapshot = {
+      learnerPath: "p1",
+      pathways: [],
+      overallLessons: { completed: 10, total: 10, pct: 100 },
+      readiness: { score: 82 },
+      practice: { gradedCorrect: 8, gradedTotal: 10, sessionCount: 2, accuracyPct: 80 },
+      recentMocks: [],
+      studyStreakDays: 3,
+      momentumMessages: [],
+      examReadyHeadline: null,
+      milestones: [],
+      mockCount: 0,
+      continueLesson: null,
+      recommendedQuizTopic: null,
+      flashcards: null,
+      insights: null,
+      lessonContinuations: [],
+      topicPerformance: null,
+      examDimensions: EMPTY_EXAM_DIMENSION_BREAKDOWN,
+      studyBootstrap: { alliedProfessionKey: null, tier: null, learnerPath: "p1", examDate: null, examDatePlanType: null },
+    } as unknown as PremiumDashboardSnapshot;
+
+    const model = buildLearnerReportCardViewModel({
+      pathwayId: "p1",
+      snapshot,
+      studySnap: null,
+      simulationSummary: {
+        simulationGpa: 3.4,
+        readinessScore: 78,
+        readinessTrend: "improving",
+        ncjmmTrend: "stable",
+        completionRate: 62,
+        clearancesEarned: ["Telemetry Ready"],
+        clearanceProgress: [{ label: "ICU Ready", progress: 70, nearestGap: "Complete 2 more ICU sessions" }],
+        patientHarmReductionTrend: "improving",
+        topConditions: ["STEMI"],
+        weakConditions: ["Sepsis"],
+        recommendedSimulations: [{ label: "Repeat sepsis simulation", href: "/app/physiology-monitor?condition=sepsis" }],
+      },
+    });
+
+    assert.equal(model.simulationSummary?.readinessScore, 78);
+    assert.ok(model.recommendedActions.includes("Complete your recommended simulation"));
   });
 });

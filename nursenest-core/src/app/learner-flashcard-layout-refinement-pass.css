@@ -3,6 +3,82 @@
  * Scoped to [data-nn-flashcard-layout-refinement]; does not alter study logic.
  */
 
+/* Warm canvas + white card tokens — page gradient, cards always white */
+html:has([data-nn-flashcard-layout-refinement]) {
+  /* Learner study cards: intentional white surface (question + rationale panels). */
+  --nn-flashcard-refinement-card: #ffffff;
+  --nn-flashcard-refinement-card-border: color-mix(
+    in srgb,
+    var(--theme-border, var(--semantic-border-soft)) 72%,
+    var(--semantic-brand) 10%
+  );
+  --nn-flashcard-refinement-option-border: color-mix(
+    in srgb,
+    var(--theme-muted-text, var(--semantic-text-muted)) 18%,
+    var(--theme-border, var(--semantic-border-soft))
+  );
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-panel-muted)) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 38%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement]),
+html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement]) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-accent-peach)) 0%,
+    color-mix(in srgb, var(--semantic-chart-5) 16%, color-mix(in srgb, var(--semantic-accent-peach) 42%, var(--semantic-warning-soft))) 46%,
+    color-mix(in srgb, var(--semantic-brand) 8%, color-mix(in srgb, var(--semantic-chart-8) 22%, var(--semantic-warning-soft))) 100%
+  );
+  --nn-flashcard-refinement-card-border: color-mix(
+    in srgb,
+    var(--semantic-brand) 14%,
+    color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-accent-peach))
+  );
+  --nn-flashcard-refinement-option-border: color-mix(
+    in srgb,
+    var(--semantic-brand) 24%,
+    color-mix(in srgb, var(--semantic-text-muted) 12%, var(--semantic-accent-peach))
+  );
+}
+
+html[data-theme="ocean"]:has([data-nn-flashcard-layout-refinement]) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-panel-cool)) 0%,
+    color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-panel-aqua)) 44%,
+    color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="midnight"]:has([data-nn-flashcard-layout-refinement]),
+html[data-theme="midnight-indigo"]:has([data-nn-flashcard-layout-refinement]),
+html[data-theme="deep-twilight"]:has([data-nn-flashcard-layout-refinement]) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 38%, var(--semantic-bg-base)) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 62%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="aurora"]:has([data-nn-flashcard-layout-refinement]) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-chart-5) 14%, var(--semantic-panel-warm)) 0%,
+    color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--semantic-bg-base)) 100%
+  );
+}
+
+html[data-theme="sunset"]:has([data-nn-flashcard-layout-refinement]) {
+  --nn-flashcard-refinement-canvas: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-panel-warm)) 0%,
+    color-mix(in srgb, var(--semantic-panel-peach) 16%, var(--semantic-bg-base)) 100%
+  );
+}
+
 /* ── Hide duplicate exam chrome bar (merged into study topbar) ─────── */
 html:has([data-nn-flashcard-layout-refinement]) .nn-exam-minimal-nav {
   display: none !important;
@@ -18,20 +94,58 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-learner-exam-focus-body {
 
 /* ── White page canvas ───────────────────────────────────────────── */
 html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
-  background: var(--semantic-surface) !important;
+  background: var(--nn-flashcard-refinement-canvas) !important;
   padding-block: 0 !important;
+}
+
+html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher),
+html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-study-canvas:not(.nn-flashcard-study-canvas--launcher) {
+  background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+/* Exam shell: no blue/cool ambient wash on flashcard study */
+html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-premium.nn-exam-session-premium.nn-learner-exam-shell,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-study-premium.nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="practice"],
+html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-premium .nn-exam-session-premium.nn-learner-exam-shell,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-study-premium
+  .nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="practice"] {
+  background: var(--nn-flashcard-refinement-canvas) !important;
+  border-color: var(--nn-flashcard-refinement-option-border) !important;
+  box-shadow: none !important;
+}
+
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-study-premium
+  .nn-exam-session-premium.nn-learner-exam-shell::before {
+  opacity: 0 !important;
+}
+
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
+  background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement])
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp],
+html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
+  .nn-active-flashcard-session[data-nn-unified-exam-workspace][data-nn-flashcard-branding-revamp] {
+  background: var(--nn-flashcard-refinement-canvas) !important;
 }
 
 .nn-flashcard-study-premium:has([data-nn-flashcard-layout-refinement]) .nn-premium-flashcard-session-root,
 .nn-flashcard-study-premium [data-nn-flashcard-layout-refinement].nn-active-flashcard-session {
-  background: var(--semantic-surface) !important;
+  background: var(--nn-flashcard-refinement-canvas) !important;
   border: 0 !important;
   box-shadow: none !important;
 }
 
 [data-nn-flashcard-layout-refinement].nn-active-flashcard-session {
-  gap: 0 !important;
-  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  gap: clamp(0.65rem, 1.1vw, 0.9rem) !important;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
 }
 
 /* ── Compact sticky topbar (≤64px) ───────────────────────────────── */
@@ -47,8 +161,8 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.
   max-height: 4rem !important;
   height: auto !important;
   padding: 0 clamp(0.85rem, 1.5vw, 1.5rem) !important;
-  border-bottom: 1px solid var(--semantic-border-soft) !important;
-  background: var(--semantic-surface) !important;
+  border-bottom: 1px solid var(--nn-flashcard-refinement-option-border) !important;
+  background: var(--nn-flashcard-refinement-card) !important;
   box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent) !important;
 }
 
@@ -187,8 +301,8 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.
 
 /* ── Tighter study heading ───────────────────────────────────────── */
 [data-nn-flashcard-layout-refinement] .nn-premium-flashcard-stack-outer {
-  gap: 0.55rem !important;
-  padding: clamp(0.55rem, 1vw, 0.85rem) clamp(0.85rem, 1.5vw, 1.5rem) clamp(1rem, 1.5vw, 1.25rem) !important;
+  gap: clamp(0.85rem, 1.35vw, 1.15rem) !important;
+  padding: clamp(1rem, 1.65vw, 1.45rem) clamp(1.15rem, 2.1vw, 2rem) clamp(1.25rem, 2vw, 1.65rem) !important;
 }
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-study-heading {
@@ -218,30 +332,111 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.
 /* ── Question-dominant column split (≈62 / 38) ───────────────────── */
 [data-nn-flashcard-layout-refinement] .nn-flashcard-learning-grid {
   grid-template-columns: minmax(0, 1.62fr) minmax(14rem, 1fr) !important;
-  gap: clamp(0.65rem, 1.1vw, 1rem) !important;
+  gap: clamp(1.25rem, 2vw, 1.75rem) !important;
   align-items: stretch !important;
-  min-height: clamp(16rem, 42vh, 28rem);
+  min-height: clamp(17rem, 44vh, 30rem);
+  margin-block: clamp(0.35rem, 0.8vw, 0.65rem);
 }
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface,
 [data-nn-flashcard-layout-refinement] .nn-flashcard-rationale-panel {
-  background: var(--semantic-surface) !important;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-brand) 8%) !important;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-surface) 80%, transparent),
-    0 0.45rem 1.25rem -0.85rem color-mix(in srgb, var(--semantic-text-primary) 16%, transparent) !important;
+  background: var(--nn-flashcard-refinement-card) !important;
+  border: 1px solid var(--nn-flashcard-refinement-card-border) !important;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--nn-flashcard-refinement-card) 88%, transparent),
+    0 0.65rem 1.75rem -1rem color-mix(in srgb, var(--semantic-text-primary) 12%, transparent) !important;
+  padding: clamp(1.35rem, 2vw, 1.85rem) !important;
+  border-radius: 1rem !important;
+}
+
+/* MCQ options — theme-tinted borders, not near-black */
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] ul {
+  gap: 0.85rem !important;
+  margin-top: 0.35rem !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div {
+  border-color: var(--nn-flashcard-refinement-option-border) !important;
+  background: var(--nn-flashcard-refinement-card) !important;
+}
+
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(1)
+  button,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(1)
+  .flex.w-full,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(2)
+  button,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(2)
+  .flex.w-full,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(3)
+  button,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(3)
+  .flex.w-full,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(4)
+  button,
+html:has([data-nn-flashcard-layout-refinement])
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq]
+  li:nth-child(4)
+  .flex.w-full {
+  background: var(--nn-flashcard-refinement-card) !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button[data-selected="true"],
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 46%, var(--nn-flashcard-refinement-option-border)) !important;
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--nn-flashcard-refinement-card)) !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button span[aria-hidden="true"],
+[data-nn-flashcard-layout-refinement] .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li > div span[aria-hidden="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--nn-flashcard-refinement-option-border)) !important;
+  background: var(--nn-flashcard-refinement-card) !important;
+  color: color-mix(in srgb, var(--semantic-text-muted) 72%, var(--semantic-brand)) !important;
+}
+
+[data-nn-flashcard-layout-refinement] .nn-flashcard-learning-topbar,
+[data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp],
+[data-nn-flashcard-layout-refinement] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp] {
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Branding-revamp radial washes must not tint white question cards */
+[data-nn-flashcard-layout-refinement] .nn-flashcard-hero-surface[data-nn-flashcard-branding-revamp],
+[data-nn-flashcard-layout-refinement] .nn-flashcard-rationale-panel[data-nn-flashcard-branding-revamp],
+[data-nn-flashcard-layout-refinement] .nn-flashcard-coach-panel[data-nn-flashcard-branding-revamp] {
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
 }
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-card-action-row {
-  margin-bottom: 0.55rem !important;
+  margin-bottom: 0.85rem !important;
+  margin-top: 0.25rem !important;
 }
 
 /* ── Footer flow: coach → SM-2, no clipping ─────────────────────── */
 [data-nn-flashcard-layout-refinement] .nn-flashcard-session-main-footer {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem !important;
-  margin-top: 0.35rem;
-  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  gap: clamp(1rem, 1.5vw, 1.2rem) !important;
+  margin-top: clamp(0.75rem, 1.2vw, 1rem);
+  padding-bottom: max(0.85rem, env(safe-area-inset-bottom, 0px));
   overflow: visible !important;
 }
 
@@ -252,20 +447,23 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.
 [data-nn-flashcard-layout-refinement] .nn-flashcard-coach-panel {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 0.55rem !important;
+  gap: clamp(0.85rem, 1.25vw, 1.05rem) !important;
   min-height: 0 !important;
   max-height: none !important;
-  padding: 0.65rem 0.75rem !important;
-  background: var(--semantic-surface) !important;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-brand) 8%) !important;
-  border-radius: 0.85rem !important;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 60%, transparent) !important;
+  padding: clamp(1rem, 1.35vw, 1.2rem) clamp(1.05rem, 1.5vw, 1.35rem) !important;
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
+  border: 1px solid var(--nn-flashcard-refinement-card-border) !important;
+  border-radius: 1rem !important;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--nn-flashcard-refinement-card) 88%, transparent),
+    0 0.55rem 1.5rem -1rem color-mix(in srgb, var(--semantic-text-primary) 10%, transparent) !important;
 }
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-coach-panel__section,
 [data-nn-flashcard-layout-refinement] .nn-flashcard-confidence-scale {
   min-width: 0;
-  padding: 0.35rem 0.45rem !important;
+  padding: 0.5rem 0.55rem !important;
   border-left: 1px solid color-mix(in srgb, var(--semantic-border-soft) 80%, transparent) !important;
 }
 
@@ -305,13 +503,16 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas:not(.
   position: relative !important;
   inset: auto !important;
   flex-shrink: 0;
-  gap: 0.4rem !important;
-  padding: 0.45rem !important;
-  margin-top: 0.15rem;
-  background: var(--semantic-surface) !important;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-brand) 8%) !important;
-  border-radius: 0.85rem !important;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 60%, transparent) !important;
+  gap: 0.55rem !important;
+  padding: 0.65rem !important;
+  margin-top: 0.25rem;
+  background: var(--nn-flashcard-refinement-card) !important;
+  background-image: none !important;
+  border: 1px solid var(--nn-flashcard-refinement-card-border) !important;
+  border-radius: 1rem !important;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--nn-flashcard-refinement-card) 88%, transparent),
+    0 0.55rem 1.5rem -1rem color-mix(in srgb, var(--semantic-text-primary) 10%, transparent) !important;
 }
 
 [data-nn-flashcard-layout-refinement] .nn-flashcard-rating-dock button {
@@ -404,5 +605,5 @@ html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-study-canvas > .fl
 }
 
 .nn-flashcard-study-premium .nn-active-flashcard-session[data-nn-flashcard-layout-refinement][data-nn-flashcard-study-session] {
-  background: var(--semantic-surface) !important;
+  background: var(--nn-flashcard-refinement-canvas) !important;
 }

@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-05-30",
+  "baseUrl": "http://127.0.0.1:3000",
+  "route": "/preview/flashcard-session-live?audit=1&scenario=…&theme=…",
+  "measurements": [
+    {
+      "scenario": "mcq-unanswered",
+      "viewport": "1440x900",
+      "theme": "ocean",
+      "topbarHeightPx": 52,
+      "headingHeightPx": 57,
+      "gridTopPx": 156,
+      "gridHeightPx": 370,
+      "heroHeightPx": 370,
+      "rationaleHeightPx": 370,
+      "coachTopPx": 571,
+      "coachHeightPx": 106,
+      "sm2TopPx": 711,
+      "sm2HeightPx": 59,
+      "bottomGapPx": 130,
+      "sectionGapCoachToSm2Px": 34,
+      "aboveFoldContentBottomPx": 525,
+      "horizontalScroll": false
+    },
+    {
+      "scenario": "mcq-long-rationale",
+      "viewport": "1440x900",
+      "theme": "ocean",
+      "topbarHeightPx": 52,
+      "headingHeightPx": 54,
+      "gridTopPx": 152,
+      "gridHeightPx": 373,
+      "bottomGapPx": 130,
+      "horizontalScroll": false
+    }
+  ],
+  "notes": "Mobile measurements pending; run scripts/measure-flashcard-layout.mjs after capture completes."
+}

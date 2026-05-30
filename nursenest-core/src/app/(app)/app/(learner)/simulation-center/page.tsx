@@ -7,7 +7,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { SimulationCenterClient } from "./simulation-center-client";
 import { SIMULATION_CATALOG, SIMULATION_COUNT } from "@/lib/physiology-monitor/simulation-catalog";
 import type { SimulationCenterData } from "./simulation-center-client";
-import { trackSimulationEvent } from "@/lib/physiology-monitor/simulation-conversion-events";
+import { trackSimulationEvent } from "@/lib/physiology-monitor/simulation-conversion-events.server";
 
 export const metadata: Metadata = {
   title: "Simulation Center | NurseNest",

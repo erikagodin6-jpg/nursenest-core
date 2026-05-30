@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { trackSimulationEventClient } from "@/lib/physiology-monitor/simulation-conversion-events";
+import { trackSimulationEventClient } from "@/lib/physiology-monitor/simulation-conversion-events.client";
 import { MonitorWorkstation } from "@/components/physiology-monitor/monitor-workstation";
 import { MonitorSessionReport } from "@/components/physiology-monitor/monitor-session-report";
 import { MonitorEngine } from "@/lib/physiology-monitor/monitor-engine";

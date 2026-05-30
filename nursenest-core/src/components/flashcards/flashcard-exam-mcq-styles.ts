@@ -6,6 +6,28 @@ const ROW_BASE =
 const LETTER_BASE =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold tabular-nums transition-all duration-150";
 
+/** Soft theme border — no text-primary mix (avoids harsh black outlines). */
+const BORDER_REST =
+  "border-[color-mix(in_srgb,var(--semantic-border-soft)_82%,var(--semantic-brand)_14%)]";
+
+const BORDER_HOVER =
+  "hover:border-[color-mix(in_srgb,var(--semantic-border-soft)_62%,var(--semantic-brand)_32%)]";
+
+const BORDER_SELECTED =
+  "border-[color-mix(in_srgb,var(--semantic-brand)_44%,var(--semantic-border-soft))]";
+
+const BG_SELECTED =
+  "bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))]";
+
+const LETTER_BORDER_REST =
+  "border-[color-mix(in_srgb,var(--semantic-border-soft)_78%,var(--semantic-brand)_16%)]";
+
+const LETTER_BORDER_SELECTED =
+  "border-[color-mix(in_srgb,var(--semantic-brand)_48%,var(--semantic-border-soft))]";
+
+const LETTER_BG_SELECTED =
+  "bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))]";
+
 type McqVisualStateArgs = {
   letter: string;
   exam: ExamMicroQuestionPayload;
@@ -21,24 +43,14 @@ export function flashcardExamMcqOptionClass(args: McqVisualStateArgs): string {
     const selected = pickedLetter === letter;
 
     if (selected) {
-      return `${ROW_BASE}
-        border-[color-mix(in_srgb,#E88CAB_48%,var(--semantic-border-soft))]
-        bg-[color-mix(in_srgb,#E88CAB_12%,var(--semantic-surface))]
-        shadow-[inset_0_0_0_1px_color-mix(in_srgb,#E88CAB_22%,transparent)]`;
+      return `${ROW_BASE} ${BORDER_SELECTED} ${BG_SELECTED}`;
     }
 
     if (interactive) {
-      return `${ROW_BASE}
-        border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))]
-        bg-[var(--semantic-surface)]
-        hover:border-[color-mix(in_srgb,#E88CAB_34%,var(--semantic-border-soft))]
-        hover:bg-[color-mix(in_srgb,#E88CAB_7%,var(--semantic-surface))]
-        cursor-pointer`;
+      return `${ROW_BASE} ${BORDER_REST} bg-[var(--semantic-surface)] ${BORDER_HOVER} hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] cursor-pointer`;
     }
 
-    return `${ROW_BASE}
-      border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))]
-      bg-[var(--semantic-surface)]`;
+    return `${ROW_BASE} ${BORDER_REST} bg-[var(--semantic-surface)]`;
   }
 
   const isCorrect = letter === exam.correctLetter;
@@ -59,8 +71,8 @@ export function flashcardExamMcqOptionClass(args: McqVisualStateArgs): string {
   }
 
   return `${ROW_BASE}
-    border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,var(--semantic-text-primary))]
-    bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))]
+    border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-muted)_8%)]
+    bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--semantic-surface))]
     opacity-70`;
 }
 
@@ -71,23 +83,14 @@ export function optionLetterCircleClass(args: McqVisualStateArgs): string {
     const selected = pickedLetter === letter;
 
     if (selected) {
-      return `${LETTER_BASE}
-        border-[color-mix(in_srgb,#E88CAB_52%,var(--semantic-border-soft))]
-        bg-[color-mix(in_srgb,#E88CAB_18%,var(--semantic-surface))]
-        text-[var(--semantic-text-primary)]`;
+      return `${LETTER_BASE} ${LETTER_BORDER_SELECTED} ${LETTER_BG_SELECTED} text-[var(--semantic-text-primary)]`;
     }
 
     if (interactive) {
-      return `${LETTER_BASE}
-        border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-text-primary))]
-        bg-[var(--semantic-surface)]
-        text-[var(--semantic-text-secondary)]`;
+      return `${LETTER_BASE} ${LETTER_BORDER_REST} bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]`;
     }
 
-    return `${LETTER_BASE}
-      border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-text-primary))]
-      bg-[var(--semantic-surface)]
-      text-[var(--semantic-text-secondary)]`;
+    return `${LETTER_BASE} ${LETTER_BORDER_REST} bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]`;
   }
 
   const isCorrect = letter === exam.correctLetter;
@@ -108,7 +111,7 @@ export function optionLetterCircleClass(args: McqVisualStateArgs): string {
   }
 
   return `${LETTER_BASE}
-    border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))]
+    border-[color-mix(in_srgb,var(--semantic-border-soft)_82%,var(--semantic-text-muted)_10%)]
     bg-[var(--semantic-surface)]
     text-[var(--semantic-text-muted)]`;
 }

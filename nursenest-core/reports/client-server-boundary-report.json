@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-29T12:11:00.047Z",
+  "generatedAt": "2026-05-30T03:55:29.373Z",
   "scope": "phase11",
   "clientEntrypoints": [
     "src/components/admin/admin-activity-timeline-panel.tsx",

@@ -1713,6 +1713,40 @@ function buildCaptureSpecs(): CaptureSpec[] {
     }
   }
 
+  // ── Simulation Ecosystem Phase 7: revenue and learner-experience assets ──
+
+  const phase7SimulationAssets = [
+    { slug: "simulation-center", label: "Simulation Center", route: "/app/simulation-center" },
+    { slug: "readiness-dashboard", label: "Readiness Dashboard", route: "/app/simulation-center/readiness" },
+    { slug: "clearance-center", label: "Clearance Center", route: "/app/simulation-center/clearances" },
+    { slug: "replay-engine", label: "Replay Engine", route: "/app/physiology-monitor?condition=sepsis&mode=general&sim=rn-sepsis-early&replay=demo" },
+    { slug: "telemetry-deterioration", label: "Telemetry Deterioration", route: "/app/physiology-monitor?condition=stemi&mode=telemetry&sim=rn-stemi" },
+    { slug: "adaptive-recommendations", label: "Adaptive Recommendations", route: "/app/simulation-center/readiness?focus=recommendations" },
+    { slug: "institutional-analytics", label: "Institutional Analytics", route: "/app/account/report-card?focus=simulations" },
+  ] as const;
+
+  for (const theme of THEMES) {
+    for (const vp of ["desktop", "tablet", "mobile"] as Viewport[]) {
+      for (const asset of phase7SimulationAssets) {
+        add({
+          slug: `${asset.slug}-${vp}-${theme}`,
+          category: "simulation-showcase",
+          outputSubdir: "simulation-showcase/phase7",
+          label: `${asset.label} — ${theme} — ${vp}`,
+          route: asset.route,
+          theme,
+          viewport: vp,
+          questionType: asset.slug,
+          marketingCrop: vp === "desktop",
+          assetKind: "source",
+          approvalStatus: "pending",
+          reviewChecklist: EXECUTIVE_REVIEW_CHECKLIST,
+          notes: "Simulation Phase 7 asset captured from the real learner/admin route for pricing, homepage, investor, and sales use.",
+        });
+      }
+    }
+  }
+
   // ── Screenshot System 2.0: ECG Marketing System ──────────────────────────
 
   const ecgMarketingRoutes = [

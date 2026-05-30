@@ -387,6 +387,13 @@ html[data-theme="aurora"] .nn-flashcard-study-premium {
     var(--semantic-shadow-soft);
 }
 
+html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button,
+html:has([data-nn-flashcard-layout-refinement]) .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li .flex.w-full {
+  border-color: var(--nn-flashcard-refinement-option-border) !important;
+  background: var(--nn-flashcard-refinement-card) !important;
+  box-shadow: none !important;
+}
+
 .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button,
 .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li .flex.w-full {
   border-radius: var(--nn-flashcard-radius-control);
@@ -6758,8 +6765,19 @@ html[data-theme="sunset"] .nn-mobile-fc-cta-btn {
     0 4px 16px -8px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent) !important;
 }
 
-/* ── Workspace background: slightly tinted, not flat grey ────────────────────── */
-.nn-active-flashcard-session[data-nn-flashcard-study-session] {
+/* ── Workspace background: white-first on layout refinement study ─────────────── */
+html:has([data-nn-flashcard-layout-refinement]) .nn-active-flashcard-session[data-nn-flashcard-study-session] {
+  background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+html[data-theme="blossom"]:has([data-nn-flashcard-layout-refinement])
+  .nn-active-flashcard-session[data-nn-flashcard-study-session],
+html[data-theme="mint-blossom"]:has([data-nn-flashcard-layout-refinement])
+  .nn-active-flashcard-session[data-nn-flashcard-study-session] {
+  background: var(--nn-flashcard-refinement-canvas) !important;
+}
+
+.nn-active-flashcard-session[data-nn-flashcard-study-session]:not([data-nn-flashcard-layout-refinement]) {
   background: color-mix(in srgb, var(--semantic-surface) 60%, var(--semantic-panel-muted)) !important;
 }
 
