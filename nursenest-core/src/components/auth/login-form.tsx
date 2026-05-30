@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getCsrfToken, getSession, useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -12,6 +11,13 @@ import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
+import {
+  AuthCheckbox,
+  AuthField,
+  AuthInput,
+  AuthPrimaryButton,
+  AuthTextLink,
+} from "@/components/auth/auth-experience/auth-primitives";
 import { OAuthProviderButtonsServer } from "@/components/auth/oauth-provider-buttons-server";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 import { isPlaceholderAuthCopy } from "@/lib/ui/is-placeholder-auth-copy";
@@ -302,61 +308,52 @@ export function LoginForm({
         />
       ) : null}
 
-      <div className="space-y-1.5">
-        <label htmlFor="login-identifier" className="text-sm font-medium text-foreground">
-          {t("pages.login.fieldIdentifierLabel")}
-        </label>
-        <input
+      <AuthField
+        id="login-identifier"
+        label={t("pages.login.fieldIdentifierLabel")}
+        hint={t("pages.login.identifierHint")}
+        hintId="login-identifier-hint"
+      >
+        <AuthInput
           id="login-identifier"
-          className="nn-premium-auth-input w-full rounded-xl px-3 py-2.5 text-sm"
           type="text"
           name="email"
           placeholder={t("pages.login.placeholderIdentifier")}
           required={!alreadySignedIn}
           autoComplete="username"
           aria-describedby="login-identifier-hint"
+          invalid={Boolean(error)}
+          disabled={pending || alreadySignedIn}
         />
-        <p id="login-identifier-hint" className="text-xs leading-relaxed text-muted-foreground">
-          {t("pages.login.identifierHint")}
-        </p>
-      </div>
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between gap-2">
-          <label htmlFor="login-password" className="text-sm font-medium text-foreground">
+      </AuthField>
+      <div className="nn-premium-auth-field">
+        <div className="nn-premium-auth-label-row">
+          <label htmlFor="login-password" className="nn-premium-auth-label">
             {t("pages.login.fieldPasswordLabel")}
           </label>
-          <Link href={forgotPasswordHref} className="text-sm font-medium text-primary hover:underline">
-            {t("pages.login.forgotPasswordLink")}
-          </Link>
+          <AuthTextLink href={forgotPasswordHref}>{t("pages.login.forgotPasswordLink")}</AuthTextLink>
         </div>
-        <input
+        <AuthInput
           id="login-password"
-          className="nn-premium-auth-input w-full rounded-xl px-3 py-2.5 text-sm"
           type="password"
           name="password"
           placeholder={t("pages.login.placeholderPassword")}
           required={!alreadySignedIn}
           autoComplete="current-password"
+          invalid={Boolean(error)}
+          disabled={pending || alreadySignedIn}
         />
       </div>
-      <div className="flex items-start gap-2.5">
-        <input
-          id="login-remember"
-          className="nn-premium-auth-checkbox mt-1 h-4 w-4 shrink-0 rounded border border-border text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
-          type="checkbox"
-          name="rememberMe"
-          defaultChecked
-          aria-describedby="login-remember-hint"
-        />
-        <div className="min-w-0 space-y-0.5">
-          <label htmlFor="login-remember" className="text-sm font-medium text-foreground">
-            {t("pages.login.rememberMe")}
-          </label>
-          <p id="login-remember-hint" className="text-xs text-muted-foreground">
-            {t("pages.login.rememberMeHint")}
-          </p>
-        </div>
-      </div>
+      <AuthCheckbox
+        id="login-remember"
+        name="rememberMe"
+        defaultChecked
+        aria-describedby="login-remember-hint"
+        label={t("pages.login.rememberMe")}
+        hint={t("pages.login.rememberMeHint")}
+        hintId="login-remember-hint"
+        disabled={pending || alreadySignedIn}
+      />
       {pending ? (
         <AuthTransitionShell
           kind="sign-in-success"
@@ -376,14 +373,9 @@ export function LoginForm({
       ) : null}
 
       <div className="nn-premium-auth-sticky-cta">
-        <button
-          className="nn-premium-auth-primary-button w-full rounded-xl px-4 py-3 text-sm font-semibold transition disabled:pointer-events-none disabled:opacity-60"
-          type="submit"
-          disabled={pending || !clientReady || alreadySignedIn}
-          aria-busy={pending}
-        >
+        <AuthPrimaryButton type="submit" disabled={pending || !clientReady || alreadySignedIn} aria-busy={pending}>
           {pending ? t("pages.login.signingIn") : t("pages.login.submit")}
-        </button>
+        </AuthPrimaryButton>
       </div>
 
       {!alreadySignedIn ? (
@@ -399,14 +391,12 @@ export function LoginForm({
 
       {!alreadySignedIn ? (
         <>
-          <p className="nn-premium-auth-mobile-trust text-center text-sm text-muted-foreground">
+          <p className="nn-premium-auth-mobile-trust text-center text-sm">
             Trusted by nursing students nationwide
           </p>
-          <p className="text-center text-sm text-muted-foreground">
+          <p className="nn-premium-auth-switch-copy text-center text-sm">
             {t("pages.login.signUpPrompt")}{" "}
-            <Link href={signupHrefWithResume} className="font-semibold text-primary underline-offset-4 hover:underline">
-              {signUpLabel}
-            </Link>
+            <AuthTextLink href={signupHrefWithResume}>{signUpLabel}</AuthTextLink>
           </p>
         </>
       ) : null}

@@ -79,7 +79,7 @@ export function PremiumHomepageCta() {
                 </MarketingTrackedLink>
               </div>
 
-              <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-[var(--palette-text-muted)]">
+              <ul className="nn-premium-cta-assurance mt-5 flex flex-wrap gap-x-5 gap-y-2">
                 {assurances.map((item) => (
                   <li key={item} className="inline-flex min-w-0 items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />

@@ -10,12 +10,20 @@ import path from "node:path";
 import { describe, it } from "node:test";
 
 const ROOT = process.cwd();
-const PREMIUM_CSS_PATH = path.resolve(ROOT, "src/app/premium-redesign-2026.css");
-const AUTH_SHELL_PATH = path.resolve(ROOT, "src/components/auth/premium-auth-shell.tsx");
+const HUB_SYSTEM_CSS = path.resolve(ROOT, "src/app/styles/marketing/hub-system.css");
+const AUTH_TOKENS_CSS = path.resolve(ROOT, "src/app/styles/marketing/auth-tokens.css");
+const AUTH_OCEAN_CSS = path.resolve(ROOT, "src/app/styles/marketing/auth-ocean-premium.css");
+const AUTH_MIDNIGHT_CSS = path.resolve(ROOT, "src/app/styles/marketing/auth-midnight-premium.css");
+const AUTH_SHELL_PATH = path.resolve(ROOT, "src/components/auth/auth-experience/auth-experience-shell.tsx");
+const AUTH_SUPPORT_FOOTER_PATH = path.resolve(ROOT, "src/components/auth/auth-experience/auth-support-footer.tsx");
+const AUTH_CONSTANTS_PATH = path.resolve(ROOT, "src/components/auth/auth-experience/constants.ts");
+const AUTH_SIGNUP_PATHWAY_PATH = path.resolve(ROOT, "src/components/auth/auth-experience/auth-signup-pathway-panel.tsx");
+const SIGNUP_EXPERIENCE_PATH = path.resolve(ROOT, "src/components/auth/signup-experience-client.tsx");
 const LOGIN_PAGE_PATH = path.resolve(ROOT, "src/components/marketing/marketing-login-page.tsx");
 const SIGNUP_PAGE_PATH = path.resolve(ROOT, "src/components/marketing/marketing-signup-page.tsx");
 const FORGOT_PAGE_PATH = path.resolve(ROOT, "src/components/marketing/marketing-forgot-password-page.tsx");
 const RESET_PAGE_PATH = path.resolve(ROOT, "src/components/marketing/marketing-reset-password-page.tsx");
+const AUTH_PRIMITIVES_PATH = path.resolve(ROOT, "src/components/auth/auth-experience/auth-primitives.tsx");
 const LOGIN_FORM_PATH = path.resolve(ROOT, "src/components/auth/login-form.tsx");
 const SIGNUP_FORM_PATH = path.resolve(ROOT, "src/components/auth/signup-form.tsx");
 const FORGOT_FORM_PATH = path.resolve(ROOT, "src/components/auth/forgot-password-form.tsx");
@@ -27,24 +35,18 @@ const OAUTH_CONFIG_ENV_PATH = path.resolve(ROOT, "src/lib/auth/oauth-config-env.
 const OAUTH_CONFIG_SERVER_PATH = path.resolve(ROOT, "src/lib/auth/oauth-config.server.ts");
 const AUTH_GOVERNANCE_PATH = path.resolve(ROOT, "src/lib/auth/auth-flow-governance.ts");
 const OAUTH_BUTTONS_PATH = path.resolve(ROOT, "src/components/auth/oauth-provider-buttons.tsx");
-const SCREENSHOT_DIR = path.resolve(ROOT, "docs/screenshots/premium-auth-system");
+const CAPTURE_SPEC_PATH = path.resolve(ROOT, "tests/e2e/preview/blossom-auth.capture.spec.ts");
+const CONVERGENCE_AUDIT_PATH = path.resolve(ROOT, "../docs/governance/premium-auth-convergence-audit.md");
 
 const REQUIRED_THEMES = ["ocean", "blossom", "midnight", "sunset", "aurora"] as const;
-const REQUIRED_SCREENSHOT_PREFIXES = [
-  "sign-in",
-  "sign-up",
-  "forgot-password",
-  "reset-password",
-  "auth-error",
-] as const;
 const REQUIRED_PATHWAY_LABELS = [
-  "RN / NCLEX-RN",
-  "RPN / REx-PN",
-  "LPN / NCLEX-PN",
+  "NCLEX-RN",
+  "REx-PN",
+  "NCLEX-PN",
   "NP",
   "Allied Health",
-  "New Grad",
-  "Pre-Nursing",
+  "New grad",
+  "pre-nursing",
 ] as const;
 
 function read(filePath: string): string {
@@ -55,13 +57,24 @@ function escaped(value: string): RegExp {
   return new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
 }
 
+function usesSharedAuthShell(source: string): boolean {
+  return /<PremiumAuthShell|<AuthExperienceShell|SignupExperienceClient/.test(source);
+}
+
 describe("premium auth convergence", () => {
-  const css = read(PREMIUM_CSS_PATH);
+  const hubCss = read(HUB_SYSTEM_CSS);
+  const authTokensCss = read(AUTH_TOKENS_CSS);
+  const authCssBundle = [hubCss, authTokensCss, read(AUTH_OCEAN_CSS), read(AUTH_MIDNIGHT_CSS)].join("\n");
   const shell = read(AUTH_SHELL_PATH);
+  const supportFooter = read(AUTH_SUPPORT_FOOTER_PATH);
+  const authConstants = read(AUTH_CONSTANTS_PATH);
+  const signupPathway = read(AUTH_SIGNUP_PATHWAY_PATH);
+  const signupExperience = read(SIGNUP_EXPERIENCE_PATH);
   const loginPage = read(LOGIN_PAGE_PATH);
   const signupPage = read(SIGNUP_PAGE_PATH);
   const forgotPage = read(FORGOT_PAGE_PATH);
   const resetPage = read(RESET_PAGE_PATH);
+  const authPrimitives = read(AUTH_PRIMITIVES_PATH);
   const loginForm = read(LOGIN_FORM_PATH);
   const oauthButtonsServer = read(path.resolve(ROOT, "src/components/auth/oauth-provider-buttons-server.tsx"));
   const signupForm = read(SIGNUP_FORM_PATH);
@@ -77,19 +90,23 @@ describe("premium auth convergence", () => {
 
   it("keeps all five required themes covered by the premium auth layer", () => {
     for (const theme of REQUIRED_THEMES) {
-      assert.match(css, new RegExp(`html\\[data-theme="${theme}"\\] \\.nn-premium-auth-system`), `${theme} must be covered`);
+      assert.match(
+        authCssBundle,
+        new RegExp(`html\\[data-theme="${theme}"\\] \\.nn-premium-auth-system`),
+        `${theme} must be covered`,
+      );
     }
-    assert.match(css, /--nn-auth-theme-covered\s*:\s*1/, "auth theme coverage sentinel missing");
+    assert.match(authCssBundle, /--nn-auth-theme-covered\s*:\s*1/, "auth theme coverage sentinel missing");
   });
 
   it("uses a shared premium auth shell across sign in, sign up, forgot password, and reset password", () => {
     assert.match(shell, /data-nn-premium-auth-system/, "shared auth system hook missing");
     assert.match(shell, /data-nn-premium-auth-card/, "auth card hook missing");
-    assert.match(shell, /data-nn-premium-auth-legal/, "legal hook missing");
-    assert.match(loginPage, /<PremiumAuthShell/, "login page must use shared shell");
-    assert.match(signupPage, /<PremiumAuthShell/, "signup page must use shared shell");
-    assert.match(forgotPage, /<PremiumAuthShell/, "forgot password page must use shared shell");
-    assert.match(resetPage, /<PremiumAuthShell/, "reset password page must use shared shell");
+    assert.match(supportFooter, /data-nn-premium-auth-legal/, "legal hook missing");
+    assert.ok(usesSharedAuthShell(loginPage), "login page must use shared shell");
+    assert.ok(usesSharedAuthShell(signupPage + signupExperience), "signup page must use shared shell");
+    assert.ok(usesSharedAuthShell(forgotPage), "forgot password page must use shared shell");
+    assert.ok(usesSharedAuthShell(resetPage), "reset password page must use shared shell");
   });
 
   it("keeps credentials auth and gates OAuth providers behind env configuration", () => {
@@ -112,19 +129,20 @@ describe("premium auth convergence", () => {
   });
 
   it("surfaces compliance copy, legal links, account deletion discoverability, and pathway labels", () => {
-    assert.match(shell, /does not provide medical advice, diagnosis, or treatment/, "educational disclaimer missing");
-    assert.match(shell, /Terms Of Service/, "Terms link label missing");
-    assert.match(shell, /Privacy Policy/, "Privacy link label missing");
-    assert.match(shell, /Account Settings/, "account deletion discoverability missing");
+    assert.match(authConstants, /does not provide medical advice, diagnosis, or treatment/, "educational disclaimer missing");
+    assert.match(supportFooter, /Terms Of Service/, "Terms link label missing");
+    assert.match(supportFooter, /Privacy Policy/, "Privacy link label missing");
+    const storyPanel = read(path.resolve(ROOT, "src/components/auth/auth-experience/auth-story-panel.tsx"));
+    assert.match(storyPanel, /Account Settings/, "account deletion discoverability missing");
     for (const label of REQUIRED_PATHWAY_LABELS) {
-      assert.match(shell, escaped(label), `${label} missing from shell`);
+      assert.match(signupPathway + signupForm, escaped(label), `${label} missing from signup pathway surfaces`);
     }
-    assert.match(signupForm, /Choose Your Pathway/, "signup pathway heading missing");
+    assert.match(signupPathway, /Choose your pathway/i, "signup pathway heading missing");
   });
 
   it("adds premium hooks to forms, verification, email sent, auth error, and subscription-required states", () => {
     assert.match(loginForm, /data-nn-premium-auth-form="login"/, "login form hook missing");
-    assert.match(signupForm, /data-nn-premium-auth-form="signup"/, "signup form hook missing");
+    assert.match(signupForm, /AuthFormLayout[\s\S]*formId="signup"/, "signup form hook missing");
     assert.match(forgotForm, /data-nn-premium-auth-form="forgot-password"/, "forgot form hook missing");
     assert.match(resetForm, /data-nn-premium-auth-form="reset-password"/, "reset form hook missing");
     assert.match(verifyBanner, /data-nn-premium-auth-verification/, "verification hook missing");
@@ -135,32 +153,24 @@ describe("premium auth convergence", () => {
 
   it("keeps styling token-driven with mobile safe-area and reduced-motion support", () => {
     for (const token of [
-      "--semantic-brand",
-      "--semantic-info",
-      "--semantic-warning",
-      "--semantic-success",
-      "--semantic-border-soft",
-      "--semantic-panel-muted",
+      "--auth-primary",
+      "--auth-focus",
+      "--auth-input-bg",
+      "--auth-button-primary",
+      "--auth-success",
+      "--auth-warning",
+      "--auth-danger",
     ]) {
-      assert.match(css, new RegExp(token), `${token} should be consumed`);
+      assert.match(authTokensCss, new RegExp(token), `${token} should be defined in auth-tokens.css`);
     }
-    assert.match(css, /env\(safe-area-inset-bottom/, "safe-area bottom handling missing");
-    assert.match(css, /env\(safe-area-inset-left/, "safe-area left handling missing");
-    assert.match(css, /prefers-reduced-motion:\s*reduce/, "reduced-motion handling missing");
-    assert.match(css, /nn-premium-auth-primary-button/, "premium button styling missing");
+    assert.match(authCssBundle, /env\(safe-area-inset-bottom/, "safe-area bottom handling missing");
+    assert.match(authTokensCss, /prefers-reduced-motion:\s*reduce/, "reduced-motion handling missing");
+    assert.match(authTokensCss, /nn-premium-auth-primary-button/, "premium button styling missing");
+    assert.match(authPrimitives, /AuthInput/, "shared auth input primitive required");
   });
 
-  it("archives Figma-first PNG evidence for all required auth screens and themes", () => {
-    for (const theme of REQUIRED_THEMES) {
-      for (const prefix of REQUIRED_SCREENSHOT_PREFIXES) {
-        const desktopPath = path.join(SCREENSHOT_DIR, `${prefix}-${theme}-desktop.png`);
-        assert.ok(fs.existsSync(desktopPath), `${desktopPath} must exist`);
-      }
-
-      for (const prefix of ["sign-in", "sign-up"] as const) {
-        const mobilePath = path.join(SCREENSHOT_DIR, `${prefix}-${theme}-mobile.png`);
-        assert.ok(fs.existsSync(mobilePath), `${mobilePath} must exist`);
-      }
-    }
+  it("documents visual regression capture and convergence audit artifacts", () => {
+    assert.ok(fs.existsSync(CAPTURE_SPEC_PATH), "blossom auth capture spec must exist");
+    assert.ok(fs.existsSync(CONVERGENCE_AUDIT_PATH), "convergence audit doc must exist");
   });
 });

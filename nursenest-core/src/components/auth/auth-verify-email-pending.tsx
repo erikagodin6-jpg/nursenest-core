@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import Link from "next/link";
 import { Mail } from "lucide-react";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
+import { AuthField, AuthInput, AuthTextLink } from "@/components/auth/auth-experience/auth-primitives";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
@@ -62,19 +62,21 @@ export function AuthVerifyEmailPending({ email, loginHref, callbackUrl }: AuthVe
       />
 
       <div className="nn-auth-verify-pending__resend">
-        <label htmlFor="verify-email-address" className="nn-auth-verify-pending__label">
-          {t("auth.emailVerification.resendLabel") ?? "Resend to"}
-        </label>
-        <input
+        <AuthField
           id="verify-email-address"
-          className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
-          type="email"
-          name="email"
-          autoComplete="email"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder={t("auth.emailVerification.emailPlaceholder") ?? "Email on your account"}
-        />
+          label={t("auth.emailVerification.resendLabel") ?? "Resend to"}
+        >
+          <AuthInput
+            id="verify-email-address"
+            type="email"
+            name="email"
+            autoComplete="email"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder={t("auth.emailVerification.emailPlaceholder") ?? "Email on your account"}
+            invalid={Boolean(error)}
+          />
+        </AuthField>
         {resent ? (
           <p className="nn-auth-verify-pending__sent" role="status" aria-live="polite">
             {t("auth.emailVerification.sent")}
@@ -91,17 +93,15 @@ export function AuthVerifyEmailPending({ email, loginHref, callbackUrl }: AuthVe
           </button>
         )}
         {error ? (
-          <p className="mt-2 text-sm text-[var(--auth-danger)]" role="alert">
+          <p className="nn-auth-verify-pending__error" role="alert">
             {error}
           </p>
         ) : null}
       </div>
 
-      <p className="nn-auth-verify-pending__signin text-center text-sm text-[var(--auth-subtext)]">
+      <p className="nn-auth-verify-pending__signin">
         {t("auth.emailVerification.alreadyVerified") ?? "Already verified?"}{" "}
-        <Link href={loginHref} className="font-semibold text-[var(--auth-primary)] underline-offset-2 hover:underline">
-          {t("auth.emailVerification.signInLink") ?? "Sign in"}
-        </Link>
+        <AuthTextLink href={loginHref}>{t("auth.emailVerification.signInLink") ?? "Sign in"}</AuthTextLink>
       </p>
     </div>
   );

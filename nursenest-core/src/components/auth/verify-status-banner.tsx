@@ -13,31 +13,37 @@ export function VerifyStatusBanner() {
   if (status && VERIFY_STATUSES.has(status)) {
     if (status === "success") {
       return (
-        <AuthTransitionShell
-          kind="email-verified"
-          layout="inline"
-          verifyStatus="success"
-          className="mb-4"
-        />
+        <div data-nn-premium-auth-verification="">
+          <AuthTransitionShell
+            kind="email-verified"
+            layout="inline"
+            verifyStatus="success"
+            className="mb-4"
+          />
+        </div>
       );
     }
     if (status === "rate_limited") {
       return (
-        <AuthTransitionShell
-          kind="authentication-error"
-          layout="inline"
-          verifyStatus="rate_limited"
-          className="mb-4"
-        />
+        <div data-nn-premium-auth-verification="">
+          <AuthTransitionShell
+            kind="authentication-error"
+            layout="inline"
+            verifyStatus="rate_limited"
+            className="mb-4"
+          />
+        </div>
       );
     }
     return (
-      <AuthTransitionShell
-        kind="magic-link-confirmation"
-        layout="inline"
-        magicLinkVariant={status === "expired" ? "expired" : "invalid"}
-        className="mb-4"
-      />
+      <div data-nn-premium-auth-verification="">
+        <AuthTransitionShell
+          kind="magic-link-confirmation"
+          layout="inline"
+          magicLinkVariant={status === "expired" ? "expired" : "invalid"}
+          className="mb-4"
+        />
+      </div>
     );
   }
 

@@ -76,7 +76,7 @@ export function AuthTransitionShell({
               {presentation.watermarkStyle.hero !== "none" ? <AuthLeafBackground placement="panel-hero" /> : null}
               <div className="relative z-[1]">
                 <div className="nn-premium-auth-verified__success-ring nn-auth-transition-success-ring" aria-hidden>
-                  <Check className="h-12 w-12 text-[var(--nn-auth-accent-success,#6ec9a0)]" strokeWidth={2.5} />
+                  <Check className="h-12 w-12 text-[var(--auth-success)]" strokeWidth={2.5} />
                 </div>
                 <p className="nn-premium-auth-eyebrow">{presentation.eyebrow}</p>
                 <h1 id="auth-transition-heading">{presentation.title}</h1>
@@ -191,15 +191,12 @@ export function AuthTransitionShell({
         aria-label={presentation.accessibilityAnnouncement}
         {...telemetry}
       >
-        <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-brand)]">{presentation.eyebrow}</p>
-        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{presentation.title}</h2>
-        <p className="text-sm text-[var(--semantic-text-secondary)]">{presentation.body}</p>
-        {presentation.help ? <p className="text-sm text-[var(--semantic-text-muted)]">{presentation.help}</p> : null}
+        <p className="nn-auth-transition-panel__eyebrow">{presentation.eyebrow}</p>
+        <h2 className="nn-auth-transition-panel__title">{presentation.title}</h2>
+        <p className="nn-auth-transition-panel__body">{presentation.body}</p>
+        {presentation.help ? <p className="nn-auth-transition-panel__help">{presentation.help}</p> : null}
         {presentation.primaryAction ? (
-          <Link
-            href={presentation.primaryAction.href}
-            className="inline-flex text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
-          >
+          <Link href={presentation.primaryAction.href} className="nn-auth-transition-panel__action">
             {presentation.primaryAction.label}
           </Link>
         ) : null}

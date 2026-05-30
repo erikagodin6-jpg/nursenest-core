@@ -258,7 +258,7 @@ export function SignupForm({
       ) : null}
       <div className="grid gap-3 sm:grid-cols-2">
         <input
-          className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+          className="nn-premium-auth-input nn-premium-auth-input--block"
           type="text"
           name="firstName"
           aria-label={firstNamePlaceholder}
@@ -267,7 +267,7 @@ export function SignupForm({
           autoComplete="given-name"
         />
         <input
-          className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+          className="nn-premium-auth-input nn-premium-auth-input--block"
           type="text"
           name="lastName"
           aria-label={lastNamePlaceholder}
@@ -276,7 +276,7 @@ export function SignupForm({
         />
       </div>
       <input
-        className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        className="nn-premium-auth-input nn-premium-auth-input--block"
         type="text"
         name="username"
         placeholder={t("pages.signup.placeholderUsername")}
@@ -284,14 +284,14 @@ export function SignupForm({
         autoComplete="username"
       />
       <input
-        className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        className="nn-premium-auth-input nn-premium-auth-input--block"
         type="email"
         name="email"
         placeholder={t("pages.signup.placeholderEmail")}
         required
       />
       <input
-        className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        className="nn-premium-auth-input nn-premium-auth-input--block"
         type="password"
         name="password"
         placeholder={t("pages.signup.placeholderPassword")}
@@ -299,7 +299,7 @@ export function SignupForm({
       />
       <div className="grid gap-3 sm:grid-cols-2">
         <select
-          className="nn-premium-auth-input rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
+          className="nn-premium-auth-input nn-premium-auth-input--block"
           name="country"
           value={country}
           onChange={(e) => {
@@ -311,7 +311,7 @@ export function SignupForm({
           <option value="US">{t("pages.signup.countryUs")}</option>
         </select>
         <select
-          className="nn-premium-auth-input rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
+          className="nn-premium-auth-input nn-premium-auth-input--block"
           name="tier"
           value={tier}
           onChange={(e) => {
@@ -326,7 +326,7 @@ export function SignupForm({
           <option value="ALLIED">{t("pages.signup.tierAllied")}</option>
         </select>
       </div>
-      <details className="nn-premium-auth-signup-fine-tune rounded-xl border border-[var(--auth-border-soft)] bg-[color-mix(in_srgb,var(--auth-surface)_88%,transparent)] px-3 py-2.5">
+      <details className="nn-premium-auth-signup-fine-tune rounded-[var(--auth-radius-input)] border border-[var(--auth-border-soft)] bg-[color-mix(in_srgb,var(--auth-surface)_88%,transparent)] px-3 py-2.5">
         <summary className="cursor-pointer text-xs font-semibold text-[var(--auth-subtext)]">
           {t("pages.signup.onboardingTitle")}
         </summary>
@@ -383,13 +383,13 @@ export function SignupForm({
             message={errorHelp}
           />
           <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium">
-            <Link href={loginAfterSignupHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+            <Link href={loginAfterSignupHref} className="nn-premium-auth-link">
               {t("pages.signup.errorLinkSignIn")}
             </Link>
-            <Link href={forgotPasswordHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+            <Link href={forgotPasswordHref} className="nn-premium-auth-link">
               {t("pages.signup.errorLinkForgot")}
             </Link>
-            <Link href={contactHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+            <Link href={contactHref} className="nn-premium-auth-link">
               {t("pages.signup.errorLinkContact")}
             </Link>
           </div>
@@ -409,7 +409,7 @@ export function SignupForm({
       </p>
       <div className="nn-premium-auth-signup-cta">
         <button
-          className="nn-premium-auth-primary-button nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
+          className="nn-premium-auth-primary-button nn-premium-auth-primary-button--block nn-btn-primary disabled:pointer-events-none disabled:opacity-60"
           type="submit"
           disabled={pending || !clientReady || (turnstileGateActive && !captchaToken?.trim())}
           aria-busy={pending}

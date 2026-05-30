@@ -1,9 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
+import {
+  AuthField,
+  AuthInlineLink,
+  AuthInput,
+  AuthPrimaryButton,
+} from "@/components/auth/auth-experience/auth-primitives";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 
@@ -20,6 +25,7 @@ type Props = {
   errorServer?: string;
   notEmailMessage?: string;
   emailPlaceholder: string;
+  emailLabel?: string;
 };
 
 export function ForgotPasswordForm({
@@ -32,6 +38,7 @@ export function ForgotPasswordForm({
   errorServer,
   notEmailMessage = "Password reset uses the email on your account. Please enter your email address, not your username.",
   emailPlaceholder,
+  emailLabel = "Email address",
 }: Props) {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -104,11 +111,9 @@ export function ForgotPasswordForm({
       <div className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-email-sent>
         <AuthTransitionShell kind="account-recovery" layout="panel" primaryActionHref={backToLoginHref} />
         {devUrl ? (
-          <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs break-all text-amber-950">
+          <p className="nn-premium-auth-dev-notice">
             <span className="font-semibold">Development only:</span> reset link{" "}
-            <a className="underline" href={devUrl}>
-              open reset page
-            </a>
+            <a href={devUrl}>open reset page</a>
           </p>
         ) : null}
       </div>
@@ -119,22 +124,27 @@ export function ForgotPasswordForm({
     <form
       className="nn-premium-auth-form mt-6 space-y-4"
       data-nn-premium-auth-form="forgot-password"
+      data-nn-auth-pending={loading ? "true" : undefined}
+      aria-busy={loading}
       onSubmit={(e) => {
         e.preventDefault();
         if (loading) return;
         void submitForgotPassword(new FormData(e.currentTarget));
       }}
     >
-      <input
-        className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
-        type="text"
-        name="email"
-        inputMode="email"
-        placeholder={emailPlaceholder}
-        required
-        autoComplete="email"
-        disabled={loading}
-      />
+      <AuthField id="forgot-email" label={emailLabel}>
+        <AuthInput
+          id="forgot-email"
+          type="text"
+          name="email"
+          inputMode="email"
+          placeholder={emailPlaceholder}
+          required
+          autoComplete="email"
+          disabled={loading}
+          invalid={Boolean(error)}
+        />
+      </AuthField>
       {error ? (
         <AuthMessageBanner
           tone={authTransitionMessageTone("authentication-error")}
@@ -142,17 +152,10 @@ export function ForgotPasswordForm({
           title={error}
         />
       ) : null}
-      <button
-        className="nn-premium-auth-primary-button w-full rounded-xl px-4 py-2 font-semibold disabled:pointer-events-none disabled:opacity-60"
-        type="submit"
-        disabled={loading}
-        aria-busy={loading}
-      >
+      <AuthPrimaryButton type="submit" disabled={loading} aria-busy={loading}>
         {loading ? sendingLabel : submitLabel}
-      </button>
-      <Link className="block text-center text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>
-        {backToLoginLabel}
-      </Link>
+      </AuthPrimaryButton>
+      <AuthInlineLink href={backToLoginHref}>{backToLoginLabel}</AuthInlineLink>
     </form>
   );
 }

@@ -95,4 +95,39 @@ test.describe("Premium auth convergence", () => {
       await expectNoHorizontalOverflow(page);
     }
   });
+
+  test("login form supports keyboard focus order and visible focus rings", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "domcontentloaded" });
+    await page.keyboard.press("Tab");
+    const focused = page.locator(":focus");
+    await expect(focused).toBeVisible();
+    const outline = await focused.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return `${style.outlineWidth}|${style.boxShadow}`;
+    });
+    expect(outline).not.toBe("0px|none");
+  });
+
+  test("reduced motion disables auth transition animations", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/login", { waitUntil: "domcontentloaded" });
+    const anim = await page.evaluate(() => {
+      const el = document.querySelector(".nn-auth-leaf-watermark--drift, .nn-auth-leaf-watermark--drift-slow");
+      if (!el) return "none";
+      return window.getComputedStyle(el).animationName;
+    });
+    expect(anim === "none" || anim === "").toBeTruthy();
+  });
+
+  test("forgot password idle state exposes labeled email field", async ({ page }) => {
+    await page.goto("/forgot-password", { waitUntil: "domcontentloaded" });
+    await expect(page.getByLabel(/email/i)).toBeVisible();
+    await expect(page.locator('[data-nn-premium-auth-form="forgot-password"]')).toBeVisible();
+  });
+
+  test("auth error banner uses alert semantics on login validation", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: /sign in/i }).click();
+    await expect(page.locator('[data-nn-auth-message-banner][role="alert"]')).toBeVisible({ timeout: 10_000 });
+  });
 });

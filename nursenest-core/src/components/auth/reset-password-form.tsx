@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { AuthMessageBanner } from "@/components/auth/auth-experience/auth-message-banner";
 import { AuthTransitionShell } from "@/components/auth/auth-experience/auth-transition-shell";
+import { AuthField, AuthInput, AuthPrimaryButton } from "@/components/auth/auth-experience/auth-primitives";
 import { authTransitionMessageTone } from "@/lib/auth/auth-transition-governance";
 
 type Props = {
@@ -95,33 +96,41 @@ export function ResetPasswordForm({
     <form
       className="nn-premium-auth-form mt-6 space-y-4"
       data-nn-premium-auth-form="reset-password"
+      data-nn-auth-pending={loading ? "true" : undefined}
       method="post"
+      aria-busy={loading}
       onSubmit={(e) => {
         e.preventDefault();
         if (loading) return;
         void onSubmit(new FormData(e.currentTarget));
       }}
     >
-      <input
-        className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
-        type="password"
-        name="password"
-        placeholder={passwordLabel}
-        required
-        minLength={8}
-        autoComplete="new-password"
-        disabled={loading}
-      />
-      <input
-        className="nn-premium-auth-input w-full rounded-xl px-3 py-2"
-        type="password"
-        name="confirm"
-        placeholder={confirmLabel}
-        required
-        minLength={8}
-        autoComplete="new-password"
-        disabled={loading}
-      />
+      <AuthField id="reset-password" label={passwordLabel}>
+        <AuthInput
+          id="reset-password"
+          type="password"
+          name="password"
+          placeholder={passwordLabel}
+          required
+          minLength={8}
+          autoComplete="new-password"
+          disabled={loading}
+          invalid={Boolean(error)}
+        />
+      </AuthField>
+      <AuthField id="reset-password-confirm" label={confirmLabel}>
+        <AuthInput
+          id="reset-password-confirm"
+          type="password"
+          name="confirm"
+          placeholder={confirmLabel}
+          required
+          minLength={8}
+          autoComplete="new-password"
+          disabled={loading}
+          invalid={Boolean(error)}
+        />
+      </AuthField>
       {error ? (
         <AuthMessageBanner
           tone={authTransitionMessageTone("authentication-error")}
@@ -129,14 +138,9 @@ export function ResetPasswordForm({
           title={error}
         />
       ) : null}
-      <button
-        className="nn-premium-auth-primary-button w-full rounded-xl px-4 py-2 font-semibold disabled:pointer-events-none disabled:opacity-60"
-        type="submit"
-        disabled={loading}
-        aria-busy={loading}
-      >
+      <AuthPrimaryButton type="submit" disabled={loading} aria-busy={loading}>
         {loading ? savingLabel : submitLabel}
-      </button>
+      </AuthPrimaryButton>
     </form>
   );
 }

@@ -9,7 +9,7 @@ html[data-theme="mint-blossom"] .nn-premium-auth-system {
   --nn-auth-accent-primary: var(--theme-brand-strong, #e88cab);
   --nn-auth-accent-secondary: var(--theme-accent-foreground, #5eb8f0);
   --nn-auth-accent-warm: var(--theme-brand-accent, #b7efd1);
-  --nn-auth-accent-success: #6ec9a0;
+  --nn-auth-accent-success: var(--semantic-success);
   --nn-auth-theme-covered: 1;
 }
 

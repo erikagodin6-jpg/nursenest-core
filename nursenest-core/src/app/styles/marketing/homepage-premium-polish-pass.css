@@ -1,0 +1,285 @@
+/**
+ * Homepage premium polish pass — refinement only (2026-05).
+ * Scoped: .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+ * Semantic tokens only. No section order, grid, or copy changes.
+ * See docs/governance/homepage-premium-refinement-audit.md
+ */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish] {
+  --nn-home-prose-max: 42rem;
+  --nn-home-lead-max: 38rem;
+  --nn-home-header-stack: clamp(0.625rem, 1.15vw, 0.875rem);
+  --nn-home-section-intro-gap: clamp(0.75rem, 1.35vw, 1rem);
+  --nn-home-cta-gap: clamp(0.75rem, 1.6vw, 1rem);
+  --nn-home-motion-interact: 160ms;
+  --nn-home-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Typography — calmer, clinically credible ─────────────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-h2 {
+  font-weight: 650;
+  letter-spacing: -0.022em;
+  line-height: 1.12;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-h1.nn-hero-headline--premium {
+  letter-spacing: -0.028em;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-eyebrow {
+  font-weight: 650;
+  letter-spacing: 0.075em;
+  color: color-mix(in srgb, var(--semantic-brand) 70%, var(--palette-text-muted));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-h2 {
+  font-weight: 650;
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-depth-card h3,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-pathway-card h3,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-flow-card > span.mt-1 {
+  font-weight: 650;
+}
+
+/* ── Section intro rhythm ─────────────────────────────────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-eyebrow + .nn-marketing-h2 {
+  margin-top: var(--nn-home-header-stack);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-h2 + .nn-marketing-body,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-h2 + .nn-marketing-lead {
+  margin-top: var(--nn-home-section-intro-gap);
+  max-width: var(--nn-home-lead-max);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-section-shell .nn-marketing-body.max-w-2xl,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-section-shell .nn-marketing-body.max-w-3xl {
+  max-width: min(var(--nn-home-prose-max), 100%);
+}
+
+/* ── Card & surface interaction ───────────────────────────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(
+    .nn-premium-depth-card,
+    .nn-premium-flow-card,
+    .nn-premium-pathway-card,
+    .nn-premium-trust-card,
+    .nn-premium-clinical-note
+  ) {
+  transition:
+    transform var(--nn-home-motion-interact) var(--nn-home-motion-ease),
+    border-color var(--nn-home-motion-interact) ease,
+    box-shadow var(--nn-home-motion-interact) ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    :where(
+      .nn-premium-depth-card,
+      .nn-premium-flow-card,
+      .nn-premium-pathway-card,
+      .nn-premium-trust-card
+    ):hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--semantic-brand) 8%, transparent),
+      0 22px 48px -34px color-mix(in srgb, var(--semantic-chart-3) 16%, transparent);
+  }
+}
+
+/* ── CTA hierarchy & focus ────────────────────────────────────────────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-home-marketing-rich-hero .flex.flex-wrap,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-final-cta .flex.flex-col {
+  gap: var(--nn-home-cta-gap);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-cta-primary,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-cta-secondary {
+  transition:
+    filter var(--nn-home-motion-interact) ease,
+    transform var(--nn-home-motion-interact) var(--nn-home-motion-ease),
+    box-shadow var(--nn-home-motion-interact) ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    .nn-marketing-cta-primary:hover,
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    .nn-marketing-cta-secondary:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-cta-primary:focus-visible,
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-marketing-cta-secondary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--semantic-brand) 26%, transparent),
+    0 1px 2px color-mix(in srgb, var(--semantic-chart-3) 10%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-final-cta {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-brand) 14%);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-brand) 6%, transparent),
+    0 28px 64px -40px color-mix(in srgb, var(--semantic-chart-2) 18%, transparent);
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-cta-tile {
+  min-height: 44px;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+  background: color-mix(in srgb, var(--semantic-surface-elevated) 90%, transparent);
+  transition:
+    transform var(--nn-home-motion-interact) var(--nn-home-motion-ease),
+    border-color var(--nn-home-motion-interact) ease,
+    background-color var(--nn-home-motion-interact) ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    .nn-premium-cta-tile:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-border-soft));
+  }
+}
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-cta-assurance {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--palette-text-muted);
+}
+
+/* ── Clinical identity — sparing telemetry grid on ECG band only ──────────── */
+
+.nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-section--ecg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--semantic-border-soft) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--semantic-border-soft) 10%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 78% 58% at 50% 42%, black 0%, transparent 72%);
+  opacity: 0.5;
+}
+
+/* ── Theme parity ─────────────────────────────────────────────────────────── */
+
+html[data-theme="midnight"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  :where(.nn-premium-depth-card, .nn-premium-flow-card, .nn-premium-pathway-card) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 52%, var(--semantic-info) 14%);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-2) 10%, transparent),
+    0 20px 48px -36px color-mix(in srgb, var(--semantic-chart-5) 22%, transparent);
+}
+
+html[data-theme="midnight"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-final-cta {
+  background:
+    radial-gradient(
+      520px 260px at 0% 0%,
+      color-mix(in srgb, var(--semantic-info) 12%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      520px 260px at 100% 0%,
+      color-mix(in srgb, var(--semantic-brand) 10%, transparent),
+      transparent 65%
+    ),
+    color-mix(in srgb, var(--semantic-surface-elevated) 92%, var(--semantic-panel-cool));
+}
+
+html[data-theme="ocean"]
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-section::before {
+  opacity: 0.92;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="mint-blossom"])
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+  .nn-premium-home-eyebrow {
+  color: color-mix(in srgb, var(--semantic-brand) 78%, var(--palette-text-muted));
+}
+
+/* ── Mobile & accessibility ───────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    .nn-section-shell {
+    padding-inline: max(1rem, env(safe-area-inset-left, 0px))
+      max(1rem, env(safe-area-inset-right, 0px));
+  }
+
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    .nn-marketing-h2 {
+    letter-spacing: -0.018em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    :where(
+      .nn-premium-depth-card,
+      .nn-premium-flow-card,
+      .nn-premium-pathway-card,
+      .nn-premium-trust-card,
+      .nn-premium-cta-tile,
+      .nn-marketing-cta-primary,
+      .nn-marketing-cta-secondary
+    ) {
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  }
+
+  .nn-home-marketing-root[data-nn-homepage-branding-revamp][data-nn-homepage-premium-polish]
+    :where(
+      .nn-premium-depth-card:hover,
+      .nn-premium-flow-card:hover,
+      .nn-premium-pathway-card:hover,
+      .nn-premium-trust-card:hover,
+      .nn-premium-cta-tile:hover,
+      .nn-marketing-cta-primary:hover,
+      .nn-marketing-cta-secondary:hover
+    ) {
+    transform: none;
+  }
+}
