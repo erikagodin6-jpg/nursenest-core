@@ -482,12 +482,22 @@ function clinicalSkillObjects(): UniversalContentObject[] {
 async function studyPlanAndRemediationObjects(): Promise<UniversalContentObject[]> {
   const [remediationEvents, remediationQueue] = await Promise.all([
     prisma.userRemediationEvent.findMany({
-      select: { id: true, pathwayId: true, topic: true, actionType: true, createdAt: true },
+      select: { id: true, pathwayId: true, topic: true, bodySystem: true, mistakeType: true, createdAt: true },
       orderBy: { createdAt: "desc" },
       take: 300,
     }),
     prisma.userRemediationQueue.findMany({
-      select: { id: true, pathwayId: true, topic: true, reason: true, createdAt: true, updatedAt: true },
+      select: {
+        id: true,
+        pathwayId: true,
+        topic: true,
+        bodySystem: true,
+        source: true,
+        priorityScore: true,
+        mistakeCount: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: { updatedAt: "desc" },
       take: 300,
     }),
@@ -498,22 +508,33 @@ async function studyPlanAndRemediationObjects(): Promise<UniversalContentObject[
       contentType: "remediation" as const,
       pathway: normalizePathway({ pathwayId: event.pathwayId }),
       topic: event.topic,
+      subtopic: event.bodySystem,
       createdAt: iso(event.createdAt),
       updatedAt: iso(event.createdAt),
-      title: `${event.actionType} remediation`,
-      body: [event.pathwayId, event.topic, event.actionType].filter(Boolean).join("\n"),
-      tags: ["remediation", event.actionType],
+      title: `${event.mistakeType.replace(/_/g, " ")} remediation`,
+      body: [event.pathwayId, event.topic, event.bodySystem, event.mistakeType].filter(Boolean).join("\n"),
+      tags: ["remediation", event.mistakeType],
     })),
     ...remediationQueue.map((row) => ({
       id: row.id,
       contentType: "study_plan" as const,
       pathway: normalizePathway({ pathwayId: row.pathwayId }),
       topic: row.topic,
+      subtopic: row.bodySystem,
       createdAt: iso(row.createdAt),
       updatedAt: iso(row.updatedAt),
       title: `${row.topic ?? "Study plan"} remediation queue`,
-      body: [row.pathwayId, row.topic, row.reason].filter(Boolean).join("\n"),
-      tags: ["study_plan", "remediation"],
+      body: [
+        row.pathwayId,
+        row.topic,
+        row.bodySystem,
+        row.source,
+        `priority ${row.priorityScore}`,
+        `mistakes ${row.mistakeCount}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      tags: ["study_plan", "remediation", row.source],
     })),
   ];
 }
